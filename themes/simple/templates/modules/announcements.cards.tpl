@@ -30,7 +30,7 @@
                 </div>
                 <div class="col admidio-info-category">
                     <span class="admidio-info-created">{$l10n->get('SYS_CREATED_BY_AND_AT', array($announcement.userCreatedName, $announcement.userCreatedTimestamp))}</span>
-                    {$l10n->get('SYS_CATEGORY')} <a href="{$urlAdmidio}/adm_program/modules/announcements.php?category_uuid={$announcement.categoryUUID}">{$announcement.category}</a>
+                    {$l10n->get('SYS_CATEGORY')} <a href="{$urlAdmidio}/modules/announcements.php?category_uuid={$announcement.categoryUUID}">{$announcement.category}</a>
                 </div>
             </div>
         </div>

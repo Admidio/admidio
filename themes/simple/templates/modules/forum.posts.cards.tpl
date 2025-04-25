@@ -24,7 +24,7 @@
             <div class="col-lg-2 col-sm-3 col-4">
                 <div class="card-body admidio-forum-entry-info">
                     <img class="rounded-circle d-block pb-1" src="{$post.userProfilePhotoUrl}" />
-                    <a class="d-block pb-1" href="{$urlAdmidio}/adm_program/modules/profile/profile.php?user_uuid={$post.userUUID}">{$post.userName}</a>
+                    <a class="d-block pb-1" href="{$urlAdmidio}/modules/profile/profile.php?user_uuid={$post.userUUID}">{$post.userName}</a>
                     <span class="d-block">{$l10n->get('SYS_CREATED_AT_VAR', array($post.timestampCreated))}</span>
                 </div>
             </div>

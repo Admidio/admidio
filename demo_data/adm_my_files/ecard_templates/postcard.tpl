@@ -19,7 +19,7 @@
                                     <table border="0" cellpadding="0" cellspacing="2">
                                         <tbody>
                                             <tr>
-                                                <td><%ecard_greeting_card_from%>: <strong><a href="<%g_root_path%>/adm_program/modules/messages/messages_write.php?user_uuid=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></strong></td>
+                                                <td><%ecard_greeting_card_from%>: <strong><a href="<%g_root_path%>/modules/messages/messages_write.php?user_uuid=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></strong></td>
                                             </tr>
                                             <tr>
                                                 <td align="center">

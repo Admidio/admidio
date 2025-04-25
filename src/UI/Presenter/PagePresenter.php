@@ -6,22 +6,22 @@ use Admidio\Menu\ValueObject\MenuNode;
 use Smarty\Smarty;
 
 /**
- * @brief Creates an Admidio specific complete html page with the template engine Smarty.
+ * @brief Creates an Admidio specific complete HTML page with the template engine Smarty.
  *
- * This class creates a html page with head and body and integrates some Admidio
- * specific elements like css files, javascript files and javascript code. The class is derived
- * from the Smarty class. It provides method to add new html data to the page and also set or
+ * This class creates an HTML page with head and body and integrates some Admidio
+ * specific elements like CSS files, JavaScript files and JavaScript code. The class is derived
+ * from the Smarty class. It provides a method to add new HTML data to the page and also set or
  * choose the necessary template files. The generated page will automatically integrate the
- * chosen theme. You can also create a html reduces page without menu header and footer
+ * chosen theme. You can also create an HTML reduces page without a menu header and footer
  * information.
  *
  * **Code example**
  * ```
- * // create a simple html page with some text
+ * // create a simple HTML page with some text
  * $page = PagePresenter::withHtmlIDAndHeadline('admidio-example');
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery/jquery.min.js');
- * $page->setHeadline('A simple Html page');
- * $page->addHtml('<strong>This is a simple Html page!</strong>');
+ * $page->setHeadline('A simple HTML page');
+ * $page->addHtml('<strong>This is a simple HTML page!</strong>');
  * $page->show();
  * ```
  * @copyright The Admidio Team
@@ -31,35 +31,35 @@ use Smarty\Smarty;
 class PagePresenter
 {
     /**
-     * @var Smarty An object ot the Smarty template engine.
+     * @var Smarty An object of the Smarty template engine.
      */
     protected Smarty $smarty;
     /**
-     * @var string The id of the html page that will be set within the <body> tag.
+     * @var string The id of the HTML page that will be set within the <body> tag.
      */
     protected string $id = '';
     /**
-     * @var string The title for the html page and the headline for the Admidio content.
+     * @var string The title for the HTML page and the headline for the Admidio content.
      */
     protected string $title = '';
     /**
-     * @var bool Per default the content of the page is limited to a width of 1000px. If you want to have a full width page than set this flag to true.
+     * @var bool Per default, the content of the page is limited to a width of 1000 px. If you want to have a full-width page, then set this flag to true.
      */
     protected bool $fullWidth = false;
     /**
-     * @var string UUID of an object that represents the page. The data shown at the page will belong to this object.
+     * @var string UUID of an object that represents the page. The data shown on the page will belong to this object.
      */
     protected string $objectUUID = '';
     /**
-     * @var string Additional header that could not be set with the other methods. This content will be added to head of html page without parsing.
+     * @var string Additional header that could not be set with the other methods. This content will be added to the head of the HTML page without parsing.
      */
     protected string $header = '';
     /**
-     * @var string The main headline for the html page.
+     * @var string The main headline for the HTML page.
      */
     protected string $headline = '';
     /**
-     * @var string Contains the custom html of the current page. This will be added to the default html of each page.
+     * @var string Contains the custom HTML of the current page. This will be added to the default HTML of each page.
      */
     protected string $pageContent = '';
     /**
@@ -67,31 +67,31 @@ class PagePresenter
      */
     protected MenuNode $menuNodePageFunctions;
     /**
-     * @var array<int,string> An array with all necessary cascading style sheets files for the html page.
+     * @var array<int,string> An array with all necessary cascading style sheets files for the HTML page.
      */
     protected array $cssFiles = array();
     /**
-     * @var array<int,string> An array with all necessary javascript files for the html page.
+     * @var array<int,string> An array with all necessary JavaScript files for the HTML page.
      */
     protected array $jsFiles = array();
     /**
-     * @var array<int|string,string> An array with all necessary rss files for the html page.
+     * @var array<int|string,string> An array with all necessary rss files for the HTML page.
      */
     protected array $rssFiles = array();
     /**
-     * @var bool A flag that indicates if the page should be styled in print mode then no colors will be shown
+     * @var bool A flag that indicates if the page should be styled in print mode, then no colors will be shown
      */
     protected bool $printView = false;
     /**
-     * @var string Contains the custom javascript of the current page. This will be added to the header part of the page.
+     * @var string Contains the custom JavaScript of the current page. This will be added to the header part of the page.
      */
     protected string $javascriptContent = '';
     /**
-     * @var string Contains the custom javascript of the current page that should be executed after page load. This will be added to the header part of the page.
+     * @var string Contains the custom JavaScript of the current page that should be executed after a page load. This will be added to the header part of the page.
      */
     protected string $javascriptContentExecute = '';
     /**
-     * @var bool If set to true then a page without header menu and sidebar menu will be created. The main template file will be index_inline.tpl
+     * @var bool If set to true, then a page without a header menu and sidebar menu will be created. The main template file will be index_inline.tpl
      */
     protected bool $modeInline = false;
     /**
@@ -111,7 +111,8 @@ class PagePresenter
      *                         and also set the title of the page.
      * @throws Exception
      */
-    public static function withHtmlIDAndHeadline(string $htmlID, string $headline = '') {
+    public static function withHtmlIDAndHeadline(string $htmlID, string $headline = ''): PagePresenter
+    {
         $instance = new self();
         $instance->setHtmlID($htmlID);
         $instance->setHeadline($headline);
@@ -120,7 +121,7 @@ class PagePresenter
 
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $objectUUID UUID of an object that represents the page. The data shown at the page will belong
+     * @param string $objectUUID UUID of an object that represents the page. The data shown on the page will belong
      *                           to this object.
      * @throws Exception
      */
@@ -143,10 +144,10 @@ class PagePresenter
     }
 
     /**
-     * Adds a cascading style sheets file to the html page.
-     * @param string $cssFile The url with filename or the relative path starting with **adm_program** of the css file.
+     * Adds a cascading style sheets file to the HTML page.
+     * @param string $cssFile The url with the filename or the relative path (starting in the root folder of Admidio) of the CSS file.
      */
-    public function addCssFile(string $cssFile)
+    public function addCssFile(string $cssFile): void
     {
         if (!in_array($cssFile, $this->cssFiles, true)) {
             if (str_starts_with($cssFile, 'http')) {
@@ -158,11 +159,11 @@ class PagePresenter
     }
 
     /**
-     * Adds an RSS file to the html page.
-     * @param string $rssFile The url with filename of the rss file.
+     * Adds an RSS file to the HTML page.
+     * @param string $rssFile The url with the filename of the rss file.
      * @param string $title   (optional) Set a title. This is the name of the feed and will be shown when adding the rss feed.
      */
-    public function addRssFile(string $rssFile, string $title = '')
+    public function addRssFile(string $rssFile, string $title = ''): void
     {
         if ($title !== '') {
             $this->rssFiles[$title] = $rssFile;
@@ -172,10 +173,10 @@ class PagePresenter
     }
 
     /**
-     * Adds a javascript file to the html page.
-     * @param string $jsFile The url with filename or the relative path starting with **adm_program** of the javascript file.
+     * Adds a JavaScript file to the HTML page.
+     * @param string $jsFile The url with the filename or the relative path (starting in the root folder of Admidio) of the JavaScript file.
      */
-    public function addJavascriptFile(string $jsFile)
+    public function addJavascriptFile(string $jsFile): void
     {
         if (!in_array($jsFile, $this->jsFiles, true)) {
             if (str_starts_with($jsFile, 'http')) {
@@ -187,12 +188,12 @@ class PagePresenter
     }
 
     /**
-     * Adds any javascript content to the page. The javascript will be added in the order you call this method.
-     * @param string $javascriptCode       A valid javascript code that will be added to the header of the page.
-     * @param bool $executeAfterPageLoad (optional) If set to **true** the javascript code will be executed after
+     * Adds any JavaScript content to the page. The JavaScript will be added in the order you call this method.
+     * @param string $javascriptCode       A valid JavaScript code that will be added to the header of the page.
+     * @param bool $executeAfterPageLoad (optional) If set to **true** the JavaScript code will be executed after
      *                                     the page is fully loaded.
      */
-    public function addJavascript(string $javascriptCode, bool $executeAfterPageLoad = false)
+    public function addJavascript(string $javascriptCode, bool $executeAfterPageLoad = false): void
     {
         if ($executeAfterPageLoad) {
             $this->javascriptContentExecute .= $javascriptCode. "\n";
@@ -202,33 +203,33 @@ class PagePresenter
     }
 
     /**
-     * Add content to the header segment of a html page.
-     * @param string $header Content for the html header segment.
+     * Add content to the header segment of an HTML page.
+     * @param string $header Content for the HTML header segment.
      */
-    public function addHeader(string $header)
+    public function addHeader(string $header): void
     {
         $this->header .= $header;
     }
 
     /**
-     * Adds any html content to the page. The content will be added in the order
+     * Adds any HTML content to the page. The content will be added in the order
      * you call this method. The first call will place the content at the top of
      * the page. The second call below the first etc.
-     * @param string $html A valid html code that will be added to the page.
+     * @param string $html A valid HTML code that will be added to the page.
      */
-    public function addHtml(string $html)
+    public function addHtml(string $html): void
     {
         $this->pageContent .= $html;
     }
 
 
     /**
-     * Adds html content from a Smarty template file. Therefore, the template file will be fetched and
-     * the html content will be added to the page content.
-     * @param string $template Template name with relative template path that should be fetched.
+     * Adds HTML content from a Smarty template file. Therefore, the template file will be fetched and
+     * the HTML content will be added to the page content.
+     * @param string $template Template name with a relative template path that should be fetched.
      * @throws \Smarty\Exception
      */
-    public function addHtmlByTemplate(string $template)
+    public function addHtmlByTemplate(string $template): void
     {
         $this->pageContent .= $this->smarty->fetch($template);
     }
@@ -236,39 +237,39 @@ class PagePresenter
     /**
      * Add a new menu item to the page menu part. This is only the menu that will show functions of the
      * current page. The menu header will automatically the name of the page. If a dropdown menu item should
-     * be created than $parentMenuItemId must be set to each entry of the dropdown. If a badge should
-     * be shown at this menu item than set the $badgeCount.
-     * @param string $id .         ID of the menu item that will be the html id of the <a> tag
+     * be created, then $parentMenuItemId must be set to each entry of the dropdown. If a badge should
+     * be shown at this menu item, then set the $badgeCount.
+     * @param string $id .         ID of the menu item that will be the HTML id of the <a> tag
      * @param string $name Name of the menu node that will be shown in the menu
-     * @param string $url The url of this menu item that will be called if someone click the menu item
+     * @param string $url The url of this menu item that will be called if someone clicks the menu item
      * @param string $icon An icon that will be shown together with the name in the menu
      * @param string $parentMenuItemId The id of the parent item to which this item will be added.
      * @param int $badgeCount If set > 0 than a small badge with the number will be shown after the menu item name
      * @param string $description An optional description of the menu node that could be shown in some output cases
      * @throws Exception
      */
-    public function addPageFunctionsMenuItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = '')
+    public function addPageFunctionsMenuItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = ''): void
     {
         $this->menuNodePageFunctions->addItem($id, $name, $url, $icon, $parentMenuItemId, $badgeCount, $description);
     }
 
     /**
-     * This method add a specific template file of the themes folder to the current page. The default
-     * template will be loaded and this file will be included after the main page content.
+     * This method adds a specific template file of the themes folder to the current page. The default
+     * template will be loaded, and this file will be included after the main page content.
      * @param string $templateFile The name of the template file in the templates folder of
      *                             the current theme that should be loaded within the current page.
      */
-    public function addTemplateFile(string $templateFile)
+    public function addTemplateFile(string $templateFile): void
     {
         $this->templateFile = $templateFile;
     }
 
     /**
-     * This method add a specific template folder to the current page. The default
-     * template will be loaded and this file will be included after the main page content.
+     * This method adds a specific template folder to the current page. The default
+     * template will be loaded, and this file will be included after the main page content.
      * @param string $templateFolder The name of the template folder that should be added to the template folder list.
      */
-    public function addTemplateFolder(string $templateFolder)
+    public function addTemplateFolder(string $templateFolder): void
     {
         $this->smarty->addTemplateDir($templateFolder);
     }
@@ -278,7 +279,7 @@ class PagePresenter
      * @return void
      * @throws Exception
      */
-    private function assignBasicSmartyVariables()
+    private function assignBasicSmartyVariables(): void
     {
         global $gDebug, $gCurrentOrganization, $gCurrentUser, $gValidLogin, $gL10n, $gSettingsManager,
                $gSetCookieForDomain, $gCurrentSession;
@@ -330,7 +331,7 @@ class PagePresenter
             }
         }
 
-        // add translation object
+        // add a translation object
         $this->smarty->assign('l10n', $gL10n);
         $this->smarty->assign('settings', $gSettingsManager);
     }
@@ -338,10 +339,10 @@ class PagePresenter
     /**
      * Public method to assign new variables to the Smarty template of the PagePresenter.
      * @param string $variable Name of the variable within the Smarty template.
-     * @param string|array $value Value of the variable.
+     * @param array|string $value Value of the variable.
      * @return void
      */
-    public function assignSmartyVariable(string $variable, $value)
+    public function assignSmartyVariable(string $variable, array|string $value): void
     {
         $this->smarty->assign($variable, $value);
     }
@@ -375,8 +376,8 @@ class PagePresenter
     }
 
     /**
-     * The method will return the filename. If you are in debug mode than it will return the
-     * not minified version of the filename otherwise it will return the minified version.
+     * The method will return the filename. If you are in debug mode, then it will return the
+     * not minified version of the filename, otherwise it will return the minified version.
      * Therefore, you must provide 2 versions of the file. One with a **min** before the file extension
      * and one version without the **min**.
      * @param string $filepath Filename of the NOT minified file.
@@ -402,7 +403,7 @@ class PagePresenter
     /**
      * Returns the content of the page. Menu, page header and page footer will not be returned.
      * Just the specific content of the page.
-     * @return string Returns the html of the page content.
+     * @return string Returns the HTML of the page content.
      */
     public function getPageContent(): string
     {
@@ -419,9 +420,9 @@ class PagePresenter
     }
 
     /**
-     * Add page specific javascript files, css files or rss files to the header. Also, specific header
+     * Add page-specific JavaScript files, CSS files or RSS files to the header. Also, specific header
      * information will also be added
-     * @return string Html string with all additional header information
+     * @return string HTML string with all additional header information
      */
     public function getHtmlAdditionalHeader(): string
     {
@@ -438,8 +439,8 @@ class PagePresenter
     }
 
     /**
-     * Returns the title of the html page.
-     * @return string Returns the title of the html page.
+     * Returns the title of the HTML page.
+     * @return string Returns the title of the HTML page.
      */
     public function getTitle(): string
     {
@@ -447,32 +448,31 @@ class PagePresenter
     }
 
     /**
-     * If this method is called than the back link to the previous page will not be shown.
+     * If this method is called than the backlink to the previous page will not be shown.
      */
-    public function hideBackLink()
+    public function hideBackLink(): void
     {
         $this->showBackLink = false;
     }
 
     /**
-     * Per default the content of the page is limited to a width of 1000px. If you want to have a full width
-     * page than you can call this method.
+     * Per default, the content of the page is limited to a width of 1000 px. If you want to have a full-width
+     * page, then you can call this method.
      * @return void
-     * @throws Exception
      */
-    public function setContentFullWidth()
+    public function setContentFullWidth(): void
     {
         $this->fullWidth = true;
     }
 
     /**
-     * Set the h1 headline of the current html page. If the title of the page
-     * was not set until now than this will also be the title.
+     * Set the h1 headline of the current HTML page. If the title of the page
+     * was not set until now, then this will also be the title.
      * @param string $headline A string that contains the headline for the page.
      * @return void
      * @throws Exception
      */
-    public function setHeadline(string $headline)
+    public function setHeadline(string $headline): void
     {
         if ($this->title === '') {
             $this->setTitle($headline);
@@ -490,30 +490,30 @@ class PagePresenter
 
 
     /**
-     * Set the HTML ID of the current html page.
+     * Set the HTML ID of the current HTML page.
      * @param string $htmlID The HTML ID of the current page.
      * @return void
      */
-    public function setHtmlID(string $htmlID)
+    public function setHtmlID(string $htmlID): void
     {
         $this->id = $htmlID;
     }
 
-    /** If set to true then a page without header menu and sidebar menu will be created.
+    /** If set to true, then a page without a header menu and sidebar menu will be created.
      *  The main template file will be **index.reduced.tpl** instead of index.tpl.
      */
-    public function setInlineMode()
+    public function setInlineMode(): void
     {
         $this->modeInline = true;
     }
 
     /**
-     * Set the title of the html page that will be shown in the <title> tag.
+     * Set the title of the HTML page that will be shown in the <title> tag.
      * @param string $title A string that contains the title for the page.
      * @return void
      * @throws Exception
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         global $gCurrentOrganization;
 
@@ -529,23 +529,23 @@ class PagePresenter
     }
 
     /**
-     * If print mode is set then the reduced template file **index.reduced.tpl** will be loaded with
-     * a print specific css file **print.css**. All styles will be more print compatible and are
+     * If print mode is set, then the reduced template file **index.reduced.tpl** will be loaded with
+     * a print specific CSS file **print.css**. All styles will be more print-compatible and are
      * only black, grey and white.
      * @return void
      */
-    public function setPrintMode()
+    public function setPrintMode(): void
     {
         $this->setInlineMode();
         $this->printView = true;
     }
 
     /**
-     * This method will set all variables for the Smarty engine and then send the whole html
-     * content also to the template engine which will generate the html page.
+     * This method will set all variables for the Smarty engine and then send the whole HTML
+     * content also to the template engine, which will generate the HTML page.
      * Call this method if you have finished your page layout.
      */
-    public function show()
+    public function show(): void
     {
         global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation;
 
