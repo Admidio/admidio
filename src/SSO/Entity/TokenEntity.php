@@ -165,11 +165,11 @@ class TokenEntity extends Entity implements TokenInterface
             
             // If no user with that identifier can be found -> thow exception
             if ($this->user->isNewRecord()) { // user with given identifier couldn't be loaded
-                throw new OAuthServerException('User not found', 6, 'invalid_user');
+                throw new OAuthServerException("User '$identifier' not found", 6, 'invalid_user');
             }
             $this->setValue($this->columnPrefix . '_usr_id', $this->user->getValue($this->user->getKeyColumnName()));
         } else {
-            throw new OAuthServerException('Client not set', 6, 'invalid_client');
+            throw new OAuthServerException('Client not set in TokenEntity->setUserIdentifier()', 6, 'invalid_client');
         }
     }
 
@@ -209,7 +209,7 @@ class TokenEntity extends Entity implements TokenInterface
     public function setClient(ClientEntityInterface $client): void
     {
         if (!($client instanceof OIDCClient)) {
-            throw new OAuthServerException('Client must be an instance of OIDCClient', 6, 'invalid_client');
+            throw new OAuthServerException('Client \'' . $client->getIdentifier() . '\' must be an instance of OIDCClient', 6, 'invalid_client');
         }
         // We cannot be sure that $client is an OIDCClient object, so we create a copy of type OIDCClient with the same identifier
         $this->client = $client;

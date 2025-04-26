@@ -33,7 +33,7 @@ class RefreshTokenRepository extends TokenRepository implements RefreshTokenRepo
      */
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshToken): void{
         if (!$refreshToken instanceof RefreshTokenEntity) {
-            throw OAuthServerException::serverError('Invalid auth code');
+            throw OAuthServerException::serverError('Invalid refresh token (ID \'' . $refreshToken->getIdentifier() . '\': not an instance of RefreshTokenEntity in RefreshTokenRepository->persistNewRefreshToken()');
         }
         /** @var RefreshTokenEntity $accessToken */
         $this->persistNewToken($refreshToken);

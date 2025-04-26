@@ -49,7 +49,7 @@ use Admidio\Infrastructure\Database;
 
     public function persistNewAccessToken(AccessTokenEntityInterface $accessToken): void {
         if (!$accessToken instanceof AccessTokenEntity) {
-            throw OAuthServerException::serverError('Invalid access token');
+            throw OAuthServerException::serverError('Invalid access token (not an instance of AccessTokenEntity in AccessTokenRepository->persistNewAccessToken())');
         }
         /** @var AccessTokenEntity $accessToken */
         $this->persistNewToken($accessToken);

@@ -114,7 +114,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
     {
         $client = $this->getClient();
         if (!$client) {
-            throw new OAuthServerException('Client not set', 6, 'invalid_client');
+            throw new OAuthServerException('Client not set in UserEntity->getClaims()', 6, 'invalid_client');
         }
 
         $groups =  $this->client->getMappedRoleMemberships($this);

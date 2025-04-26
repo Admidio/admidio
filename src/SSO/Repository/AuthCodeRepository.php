@@ -33,7 +33,7 @@ class AuthCodeRepository extends TokenRepository implements AuthCodeRepositoryIn
      */
     public function persistNewAuthCode(AuthCodeEntityInterface $authCode): void {
         if (!$authCode instanceof AuthCodeEntity) {
-            throw OAuthServerException::serverError('Invalid auth code');
+            throw OAuthServerException::serverError('Invalid auth code (ID \'' . $authCode->getIdentifier() . '\': not an instance of AuthCodeEntity in AuthCodeRepository->persistNewAuthCode()');
         }
         /** @var AuthCodeEntity $accessToken */
         $this->persistNewToken($authCode);

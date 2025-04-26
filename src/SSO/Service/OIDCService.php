@@ -539,7 +539,7 @@ class OIDCService extends SSOService {
             "jwks_uri" => "{$issuer}/jwks",
             "scopes_supported" => ["openid", "profile", "email", "phone", "address", "groups", "custom"],
             "response_types_supported" => ["code"],
-            "grant_types_supported" => ["authorization_code", "refresh_token"], // TODO_RK: Everything is prepared for all different types of grants!
+            "grant_types_supported" => ["authorization_code", "refresh_token", "client_credentials"],
             "subject_types_supported" => ["public"],
             "id_token_signing_alg_values_supported" => ["RS256"],
             "token_endpoint_auth_methods_supported" => ["client_secret_post", "client_secret_basic"],

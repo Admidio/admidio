@@ -189,8 +189,17 @@ class SAMLService extends SSOService {
         $sloUrl = $this->getSloEndpoint();
         $metadataUrl = $this->getMetadataUrl();
 
-        if (!$entityId || !$ssoUrl || !$keys['idpCert'] || !$keys['idpPrivateKey']) {
-            throw new Exception("SAML IDP settings are not configured properly.");
+        if (!$entityId) {
+            throw new Exception("SAML IDP settings are not configured properly: The SAML Entity ID is missing");
+        }
+        if (!$ssoUrl) {
+            throw new Exception("SAML IDP settings are not configured properly: The Single-Sign-On URL is missing");
+        }
+        if (!$keys['idpCert']) {
+            throw new Exception("SAML IDP settings are not configured properly: The IdP certificate is missing");
+        }
+        if (!$keys['idpPrivateKey']) {
+            throw new Exception("SAML IDP settings are not configured properly: The IdP private key is missing");
         }
 
 
@@ -353,7 +362,7 @@ class SAMLService extends SSOService {
 
         $request = $this->receiveMessage();
         if (!$request instanceof AuthnRequest) {
-            throw new Exception("Invalid request (not an AuthnRequest)");
+            throw new Exception("Invalid request (not an AuthnRequest) in SAMLService->handleSSORequest()");
         }
         // Load the SAML client data (entityID is in $request->issuer->getValue())
         $entityIdClient = $request->getIssuer()->getValue();
@@ -542,7 +551,7 @@ class SAMLService extends SSOService {
 
         $request = $this->receiveMessage();
         if (!$request instanceof LogoutRequest) {
-            throw new Exception("Invalid request (not a LogoutRequest)");
+            throw new Exception("Invalid request (not a LogoutRequest) in SAMLService->handleSLORequest()");
         }
 
 
@@ -686,7 +695,7 @@ class SAMLService extends SSOService {
 
         $request = $this->receiveMessage();
         if (!$request instanceof Message) {
-            throw new Exception("Invalid request (not an AttributeQuery)");
+            throw new Exception("Invalid request (not an AttributeQuery) in SAMLService->handleAttributeQuery()");
         }
 
 

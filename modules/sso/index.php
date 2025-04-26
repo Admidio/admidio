@@ -45,21 +45,21 @@ try {
 
         try {
             $response = null;
-            if (strpos($requestUri, '/oidc/authorize') !== false && $method === 'GET') {
+            if (strpos($requestUri, '/oidc/authorize') !== false) {
                 $response = $oidcService->handleAuthorizationRequest();
-            } elseif (strpos($requestUri, '/oidc/token') !== false && $method === 'POST') {
+            } elseif (strpos($requestUri, '/oidc/token') !== false) {
                 $response = $oidcService->handleTokenRequest();
             } elseif (strpos($requestUri, '/oidc/userinfo') !== false) {
                 $response = $oidcService->handleUserInfoRequest();
-            } elseif (strpos($requestUri, '/oidc/jwks') !== false && $method === 'GET') {
+            } elseif (strpos($requestUri, '/oidc/jwks') !== false) {
                 $response = $oidcService->handleJWKSRequest();
-            } elseif (strpos($requestUri, '/oidc/.well-known/openid-configuration') !== false && $method === 'GET') {
+            } elseif (strpos($requestUri, '/oidc/.well-known/openid-configuration') !== false) {
                 $response = $oidcService->handleDiscoveryRequest();
-            } elseif (strpos($requestUri, '/oidc/introspect') !== false && $method === 'POST') {
+            } elseif (strpos($requestUri, '/oidc/introspect') !== false) {
                 $response = $oidcService->handleIntrospectionRequest();
-            } elseif (strpos($requestUri, '/oidc/revoke') !== false && $method === 'POST') {
+            } elseif (strpos($requestUri, '/oidc/revoke') !== false) {
                 $response = $oidcService->handleRevocationRequest();
-            } elseif (strpos($requestUri, '/oidc/logout') !== false && $method === 'GET') {
+            } elseif (strpos($requestUri, '/oidc/logout') !== false) {
                 $response = $oidcService->handleLogoutRequest();
             } else {
                 $response = new JsonResponse(['error' => 'Endpoint not found'], 404);
