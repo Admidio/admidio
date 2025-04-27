@@ -439,7 +439,7 @@ function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCr
             $userUuidCreated = $userCreate->getValue('usr_uuid');
 
             if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
-                $htmlCreateName = $userCreate->getValue('FIRST_NAME') . ' function.php' . $userCreate->getValue('LAST_NAME');
+                $htmlCreateName = $userCreate->getValue('FIRST_NAME') . ' ' . $userCreate->getValue('LAST_NAME');
             } else {
                 $htmlCreateName = $userCreate->getValue('usr_login_name');
             }
@@ -457,7 +457,7 @@ function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCr
             $userUuidEdited = $userEdit->getValue('usr_uuid');
 
             if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
-                $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' function.php' . $userEdit->getValue('LAST_NAME');
+                $htmlEditName = $userEdit->getValue('FIRST_NAME') . ' ' . $userEdit->getValue('LAST_NAME');
             } else {
                 $htmlEditName = $userEdit->getValue('usr_login_name');
             }

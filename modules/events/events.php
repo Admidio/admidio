@@ -367,7 +367,7 @@ try {
                     <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID)) . '">
                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
                     $outputButtonDelete = '
-                    <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' events.php' . $dateHeadline)) . '" data-buttons="yes-no"
+                    <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
                         data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
                 }
@@ -507,7 +507,7 @@ try {
                 // if current user is allowed to participate or user could edit this event then show buttons for participation
                 if ($event->possibleToParticipate() || $gCurrentUser->isAdministratorEvents() || $participants->isLeader($gCurrentUserId)) {
                     if ($event->getValue('dat_deadline') !== null) {
-                        $outputDeadline = $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' events.php' . $gSettingsManager->getString('system_time'));
+                        $outputDeadline = $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                     }
 
                     // Links for the participation only in html mode
@@ -706,7 +706,7 @@ try {
                                             <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID)) . '">
                                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                                             </li>
-                                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' events.php' . $dateHeadline)) . '" data-buttons="yes-no"
+                                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
                                                 data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                                             </li>');

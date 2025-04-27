@@ -519,7 +519,7 @@ try {
                 $delList->delete();
             } else {
                 // now add configuration to array
-                $configurationsArray[] = array($configuration['lst_uuid'], $objListTimestamp->format($gSettingsManager->getString('system_date') . ' mylist.php' . $gSettingsManager->getString('system_time')), $actualGroup);
+                $configurationsArray[] = array($configuration['lst_uuid'], $objListTimestamp->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), $actualGroup);
             }
         } else {
             // now add configuration to array

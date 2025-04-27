@@ -86,7 +86,7 @@ try {
 
         // check if the member has a valid email address
         if (!StringUtils::strValidCharacters($user->getValue('EMAIL'), 'email')) {
-            throw new Exception('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ecards.php' . $user->getValue('LAST_NAME')));
+            throw new Exception('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         }
     }
 
@@ -214,7 +214,7 @@ try {
     $form->addInput(
         'name_from',
         $gL10n->get('SYS_YOUR_NAME'),
-        $gCurrentUser->getValue('FIRST_NAME') . ' ecards.php' . $gCurrentUser->getValue('LAST_NAME'),
+        $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
         array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
     );
     $form->addInput(
