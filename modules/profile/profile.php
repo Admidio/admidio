@@ -121,9 +121,9 @@ try {
                 profileJS.formerRoleCount--;
                 if (profileJS.formerRoleCount === 0) {
                     /* Tabs */
-                    $("#adm_profile_role_memberships_former").fadeOut("slow");
+                    $("#adm_profile_role_memberships_former_pane_content").fadeOut("slow");
                     /* Accordions */
-                    $("#adm_collapse_profile_role_memberships_former").fadeOut("slow");
+                    $("#adm_profile_role_memberships_former_accordion_content").fadeOut("slow");
                 }
             }
         }
@@ -133,9 +133,9 @@ try {
                 profileJS.futureRoleCount--;
                 if (profileJS.futureRoleCount === 0) {
                     /* Tabs */
-                    $("#adm_profile_role_memberships_future").fadeOut("slow");
+                    $("#adm_profile_role_memberships_future_pane_content").fadeOut("slow");
                     /* Accordions */
-                    $("#adm_collapse_profile_role_memberships_future").fadeOut("slow");
+                    $("#adm_profile_role_memberships_future_accordion_content").fadeOut("slow");
                 }
             }
         }
@@ -214,16 +214,6 @@ try {
         true
     );
 
-    // if user has right then show link to edit profile
-    if ($gCurrentUser->hasRightEditProfile($user)) {
-        $page->addPageFunctionsMenuItem(
-            'menu_item_profile_edit',
-            $gL10n->get('SYS_EDIT_PROFILE'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $user->getValue('usr_uuid'))),
-            'bi-pencil-square'
-        );
-    }
-
     // Password of own user could be changed
     if ($userId === $gCurrentUserId) {
         $page->addPageFunctionsMenuItem(
@@ -280,34 +270,6 @@ try {
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => 'export', 'user_uuid' => $getUserUuid)),
         'bi-download'
     );
-
-    // show link to create relations
-    if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->isAdministratorUsers()) {
-        $page->addPageFunctionsMenuItem(
-            'menu_item_profile_user_relation_types',
-            $gL10n->get('SYS_CREATE_RELATIONSHIP'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)),
-            'bi-person-heart'
-        );
-    }
-
-    // show link to edit role memberships
-    if ($gCurrentUser->isAdministratorUsers()) {
-        $page->addJavascript('
-            $("#menu_item_profile_role_memberships").attr("href", "javascript:void(0);");
-            $("#menu_item_profile_role_memberships").attr("data-class", "modal-lg");
-            $("#menu_item_profile_role_memberships").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)) .'");
-            $("#menu_item_profile_role_memberships").attr("class", "nav-link btn btn-secondary openPopup");
-            ', true
-        );
-
-        $page->addPageFunctionsMenuItem(
-            'menu_item_profile_role_memberships',
-            $gL10n->get('SYS_ROLE_MEMBERSHIPS_CHANGE'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)),
-            'bi-person-gear'
-        );
-    }
 
 
     // *******************************************************************************
@@ -415,8 +377,9 @@ try {
     $page->assignSmartyVariable('profileData', $profileData);
     $page->assignSmartyVariable('lastLoginInfo', $gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
     $page->assignSmartyVariable('urlProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'timestamp' => $user->getValue('usr_timestamp_change', 'Y-m-d-H-i-s'))));
-    // Only authorized users are allowed to edit the profile photo
+    // Only authorized users are allowed to edit the profile and the profile photo
     if ($gCurrentUser->hasRightEditProfile($user)) {
+        $page->assignSmartyVariable('urlEditProfile', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $user->getValue('usr_uuid'))));
         $page->assignSmartyVariable('urlProfilePhotoUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)));
         // the image can only be deleted if corresponding rights exist
         if (
@@ -569,6 +532,7 @@ try {
             }
         }
         $page->assignSmartyVariable('userRights', $userRightsArray);
+        $page->assignSmartyVariable('urlEditRoles', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
     }
 
 
@@ -658,9 +622,6 @@ try {
         $count = (int) $statement->fetchColumn();
 
         if ($count > 0) {
-            $page->assignSmartyVariable('showUserRelations', true);
-            $page->assignSmartyVariable('urlAssignUserRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)));
-
             $sql = 'SELECT *
                   FROM ' . TBL_USER_RELATIONS . '
             INNER JOIN ' . TBL_USER_RELATION_TYPES . '
@@ -722,8 +683,8 @@ try {
             $page->assignSmartyVariable('userRelations', $userRelations);
         }
         $page->assignSmartyVariable('urlAssignRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
-    } else {
-        $page->assignSmartyVariable('showUserRelations', false);
+        $page->assignSmartyVariable('urlAssignUserRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)));
+
     }
 
     // show information about user who creates the recordset and changed it
