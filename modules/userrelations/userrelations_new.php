@@ -178,7 +178,7 @@ try {
     $form->addInput(
         'selectedUser',
         $gL10n->get('SYS_CURRENT_MEMBER'),
-        $user->getValue('FIRST_NAME') . ' userrelations_new.php' . $user->getValue('LAST_NAME'),
+        $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'),
         array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
     );
 
