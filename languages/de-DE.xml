@@ -1109,6 +1109,7 @@
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
   <string name="SYS_PROFILE">Profil</string>
+  <string name="SYS_PROFILE_DATA">Profildaten</string>
   <string name="SYS_PROFILE_FIELD">Profilfeld</string>
   <string name="SYS_PROFILE_FROM">Profil von #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformationen</string>
