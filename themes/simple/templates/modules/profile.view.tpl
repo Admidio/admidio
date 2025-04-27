@@ -19,13 +19,11 @@
                 </button>
             </li>
         {/if}
-{*         {if $showUserRelations} *}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="adm_profile_user_relations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_user_relations_pane" type="button" role="tab" aria-controls="adm_profile_user_relations" aria-selected="false">
-                    {$l10n->get('SYS_USER_RELATIONS')}
-                </button>
-            </li>
-{*         {/if} *}
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="adm_profile_user_relations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_user_relations_pane" type="button" role="tab" aria-controls="adm_profile_user_relations" aria-selected="false">
+                {$l10n->get('SYS_USER_RELATIONS')}
+            </button>
+        </li>
     </ul>
 
     <!-- Tab Content -->
