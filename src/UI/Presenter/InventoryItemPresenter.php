@@ -85,7 +85,7 @@ class InventoryItemPresenter extends PagePresenter
                 $fieldProperty = FormPresenter::FIELD_DEFAULT;
             }
         
-            if (!$gCurrentUser->editInventory() && !in_array($itemField->getValue('inf_name_intern'), $gSettingsManager->get('inventory_allowed_keeper_edit_fields'))) {
+            if (!$gCurrentUser->isAdministratorInventory() && !in_array($itemField->getValue('inf_name_intern'), $gSettingsManager->get('inventory_allowed_keeper_edit_fields'))) {
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
             }
             

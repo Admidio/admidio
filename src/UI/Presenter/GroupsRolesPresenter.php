@@ -526,9 +526,9 @@ class GroupsRolesPresenter extends PagePresenter
             }
             if ($gSettingsManager->get('inventory_module_enabled') > 0) {
                 $form->addCheckbox(
-                    'rol_edit_inventory',
+                    'rol_inventory_admin',
                     $gL10n->get('SYS_RIGHT_INVENTORY'),
-                    (bool)$role->getValue('rol_edit_inventory'),
+                    (bool)$role->getValue('rol_inventory_admin'),
                     array('helpTextId' => 'SYS_RIGHT_INVENTORY_DESC', 'icon' => 'bi-box-seam-fill')
                 );
             }
@@ -657,7 +657,7 @@ class GroupsRolesPresenter extends PagePresenter
             if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getBool('documents_files_module_enabled')) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
-            if ($role->getValue('rol_edit_inventory') == 1 && (int)$gSettingsManager->get('inventory_module_enabled') > 0) {
+            if ($role->getValue('rol_inventory_admin') == 1 && (int)$gSettingsManager->get('inventory_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-box-seam-fill', 'title' => $gL10n->get('SYS_RIGHT_INVENTORY'));
             }
             if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getInt('forum_module_enabled') > 0) {

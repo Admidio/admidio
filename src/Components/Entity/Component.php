@@ -143,10 +143,10 @@ class Component extends Entity
                     break;
 
                 case 'INVENTORY':
-                        if ($gCurrentUser->editInventory()) {
-                            return true;
-                        }
-                        break;
+                    if ($gCurrentUser->isAdministratorInventory()) {
+                        return true;
+                    }
+                    break;
     
                 case 'FORUM':
                     if ($gCurrentUser->isAdministratorForum()) {

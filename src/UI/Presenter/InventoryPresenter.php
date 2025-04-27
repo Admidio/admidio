@@ -266,7 +266,7 @@ class InventoryPresenter extends PagePresenter
             $this->getFilterKeeper = 0;
         }
 
-        if ($gCurrentUser->editInventory()) {
+        if ($gCurrentUser->isAdministratorInventory()) {
 /*             if ($gSettingsManager->getBool('changelog_module_enabled')) {
                 $this->addPageFunctionsMenuItem(
                     'menu_item_inventory_change_history',
@@ -293,9 +293,7 @@ class InventoryPresenter extends PagePresenter
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'import_file_selection')),
                 'bi-upload'
             );
-        }
-        
-        if ($gCurrentUser->isAdministrator()) {
+
             // show link to maintain fields
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_item_fields',
@@ -303,9 +301,7 @@ class InventoryPresenter extends PagePresenter
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'field_list')),
                 'bi-ui-radios'
             );
-        }
 
-        if ($gCurrentUser->editInventory()) {
             $this->addJavascript('
                 $("#export_and_filter").change(function() {
                     $("#adm_navbar_filter_form").submit();

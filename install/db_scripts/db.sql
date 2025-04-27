@@ -662,7 +662,7 @@ CREATE TABLE %PREFIX%_roles
     rol_announcements           boolean             NOT NULL    DEFAULT false,
     rol_events                  boolean             NOT NULL    DEFAULT false,
     rol_documents_files         boolean             NOT NULL    DEFAULT false,
-    rol_edit_inventory          boolean             NOT NULL    DEFAULT false,
+    rol_inventory_admin         boolean             NOT NULL    DEFAULT false,
     rol_edit_user               boolean             NOT NULL    DEFAULT false,
     rol_forum_admin             boolean             NOT NULL    DEFAULT false,
     rol_mail_to_all             boolean             NOT NULL    DEFAULT false,

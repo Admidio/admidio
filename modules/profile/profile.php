@@ -415,6 +415,7 @@ try {
             'rol_assign_roles',
             'rol_events',
             'rol_documents_files',
+            'rol_inventory_admin',
             'rol_edit_user',
             'rol_forum_admin',
             'rol_mail_to_all',
@@ -519,6 +520,13 @@ try {
                     'roles' => $rightsOrigin['rol_documents_files'],
                     'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
                     'icon' => 'bi-file-earmark-arrow-down-fill'
+                );
+            }
+            if ($user->checkRolesRight('rol_inventory_admin') && (int) $gSettingsManager->getInt('inventory_module_enabled') > 0) {
+                $userRightsArray[] = array(
+                    'roles' => $rightsOrigin['rol_inventory_admin'],
+                    'right' => $gL10n->get('SYS_RIGHT_INVENTORY'),
+                    'icon' => 'bi-box-seam-fill'
                 );
             }
             if ($user->checkRolesRight('rol_forum_admin') && $gSettingsManager->getInt('forum_module_enabled') > 0) {

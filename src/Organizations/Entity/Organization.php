@@ -259,7 +259,7 @@ class Organization extends Entity
         $roleAdministrator->setValue('rol_forum_admin', 1);
         $roleAdministrator->setValue('rol_photo', 1);
         $roleAdministrator->setValue('rol_weblinks', 1);
-        $roleAdministrator->setValue('rol_edit_inventory', 1);
+        $roleAdministrator->setValue('rol_inventory_admin', 1);
         $roleAdministrator->setValue('rol_edit_user', 1);
         $roleAdministrator->setValue('rol_mail_to_all', 1);
         $roleAdministrator->setValue('rol_mail_this_role', 3);
@@ -290,7 +290,7 @@ class Organization extends Entity
         $roleManagement->setValue('rol_announcements', 1);
         $roleManagement->setValue('rol_events', 1);
         $roleManagement->setValue('rol_weblinks', 1);
-        $roleManagement->setValue('rol_edit_inventory', 1);
+        $roleManagement->setValue('rol_inventory_admin', 1);
         $roleManagement->setValue('rol_edit_user', 1);
         $roleManagement->setValue('rol_mail_to_all', 1);
         $roleManagement->setValue('rol_mail_this_role', 2);
