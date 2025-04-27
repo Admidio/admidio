@@ -264,6 +264,10 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_key_org         FOREIGN KEY (key_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_key_usr_change  FOREIGN KEY (key_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_key_usr_create  FOREIGN KEY (key_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
-    <step id="1040">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/announcements.php' WHERE men_name_intern = 'announcements'</step>
+    <step id="1040">UPDATE %PREFIX%_menu SET men_url = '/modules/announcements.php' WHERE men_name_intern = 'announcements'</step>
+    <step id="1050">UPDATE %PREFIX%_preferences SET prf_value = 'modules/overview.php' WHERE prf_name IN ('homepage_login', 'homepage_logout') AND prf_value = 'adm_program/overview.php'</step>
+    <step id="1060">UPDATE %PREFIX%_preferences SET prf_value = REPLACE(prf_value, 'adm_program/', '') WHERE prf_name IN ('homepage_login', 'homepage_logout') AND prf_value LIKE '%adm_program/%'</step>
+    <step id="1070">UPDATE %PREFIX%_menu SET men_url = '/modules/overview.php' WHERE men_url = '/adm_program/overview.php'</step>
+    <step id="1080">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_program', '') WHERE men_url LIKE '%/adm_program%'</step>
     <step>stop</step>
 </update>

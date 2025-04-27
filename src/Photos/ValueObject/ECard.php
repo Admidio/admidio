@@ -131,7 +131,7 @@ class ECard
         $pregRepArray['/<%theme_root_path%>/']            = THEME_URL;
         $pregRepArray['/<%ecard_sender_id%>/']            = $gCurrentUser->getValue('usr_uuid');
         $pregRepArray['/<%ecard_sender_email%>/']         = $gCurrentUser->getValue('EMAIL');
-        $pregRepArray['/<%ecard_sender_name%>/']          = $gCurrentUser->getValue('FIRST_NAME') . ' ECard.php' .$gCurrentUser->getValue('LAST_NAME');
+        $pregRepArray['/<%ecard_sender_name%>/']          = $gCurrentUser->getValue('FIRST_NAME') . ' ' .$gCurrentUser->getValue('LAST_NAME');
         $pregRepArray['/<%ecard_reciepient_email%>/']     = SecurityUtils::encodeHTML($recipientEmail);
         $pregRepArray['/<%ecard_reciepient_name%>/']      = SecurityUtils::encodeHTML($recipientName);
         $pregRepArray['/<%ecard_image_name%>/']           = $imageName;

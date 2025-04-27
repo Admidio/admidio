@@ -19,7 +19,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Photos\Entity\Album;
 
-require_once(__DIR__ . '/../adm_program/system/common.php');
+require_once(__DIR__ . '/../system/common.php');
 
 try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');

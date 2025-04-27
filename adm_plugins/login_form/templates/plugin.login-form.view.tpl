@@ -7,7 +7,7 @@
         </div>
         <div>
             <strong>
-                <a href="{$urlAdmidio}/adm_program/modules/profile/profile.php?user_uuid={$userUUID}" title="{$l10n->get('SYS_SHOW_PROFILE')}">{$userName}</a>
+                <a href="{$urlAdmidio}/modules/profile/profile.php?user_uuid={$userUUID}" title="{$l10n->get('SYS_SHOW_PROFILE')}">{$userName}</a>
             </strong>
         </div>
     </div>
@@ -36,6 +36,6 @@
         </div>
     </div>
     {if $showLogoutLink}
-        <a id="adm_logout_link" class="icon-link" href="{$urlAdmidio}/adm_program/system/logout.php"><i class="bi bi-box-arrow-right"></i>{$l10n->get('SYS_LOGOUT')}</a>
+        <a id="adm_logout_link" class="icon-link" href="{$urlAdmidio}/system/logout.php"><i class="bi bi-box-arrow-right"></i>{$l10n->get('SYS_LOGOUT')}</a>
     {/if}
 </div>

@@ -78,7 +78,7 @@ class RegistrationPresenter extends PagePresenter
                 'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
             );
             $templateRow['actions'][] = array(
-                'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/registration.php', array('mode' => 'delete_user', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration.php', array('mode' => 'delete_user', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                 'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($user->getValue('FIRST_NAME', 'database') . ' ' .$user->getValue('LAST_NAME'))),
                 'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_DELETE')
