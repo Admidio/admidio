@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mb-3">
     {if count($userRights) > 0}
         {foreach $userRights as $userRight}
         <div class="col-sm-6 col-md-4 admidio-profile-user-right" data-bs-toggle="popover" data-bs-html="true"
