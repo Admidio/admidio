@@ -21,11 +21,11 @@ function ProfileJS(gRootPath) {
             dataType: "html",
             success: function(responseText) {
                 /* Tabs */
-                $("#adm_profile_role_memberships_current .card-body").html(responseText);
-                formSubmitEvent('#adm_profile_role_memberships_current .card-body');
+                $("#adm_profile_role_memberships_current_pane_content .card-body").html(responseText);
+                formSubmitEvent('#adm_profile_role_memberships_current_pane_content .card-body');
                 /* Accordions */
-                $("#adm_collapse_profile_role_memberships_current .accordion-body").html(responseText);
-                formSubmitEvent('#adm_collapse_profile_role_memberships_current .accordion-body');
+                $("#adm_profile_role_memberships_current_accordion_content .card-body").html(responseText);
+                formSubmitEvent('#adm_profile_role_memberships_current_accordion_content .card-body');
             }
         });
     };
@@ -36,11 +36,11 @@ function ProfileJS(gRootPath) {
                 dataType: "html",
                 success: function(responseText) {
                     /* Tabs */
-                    $("#adm_profile_role_memberships_former .card-body").html(responseText);
-                    formSubmitEvent('#adm_profile_role_memberships_former .card-body');
+                    $("#adm_profile_role_memberships_former_pane_content .card-body").html(responseText);
+                    formSubmitEvent('#adm_profile_role_memberships_former_pane_content .card-body');
                     /* Accordions */
-                    $("#adm_collapse_profile_role_memberships_former .accordion-body").html(responseText);
-                    formSubmitEvent('#adm_collapse_profile_role_memberships_former .accordion-body');
+                    $("#adm_profile_role_memberships_former_accordion_content .card-body").html(responseText);
+                    formSubmitEvent('#adm_profile_role_memberships_former_accordion_content .card-body');
                 }
             }
         );
@@ -52,11 +52,11 @@ function ProfileJS(gRootPath) {
                 dataType: "html",
                 success: function(responseText) {
                     /* Tabs */
-                    $("#adm_profile_role_memberships_future .card-body").html(responseText);
-                    formSubmitEvent('#adm_profile_role_memberships_future .card-body');
+                    $("#adm_profile_role_memberships_future_pane_content .card-body").html(responseText);
+                    formSubmitEvent('#adm_profile_role_memberships_future_pane_content .card-body');
                     /* Accordions */
-                    $("#adm_collapse_profile_role_memberships_future .accordion-body").html(responseText);
-                    formSubmitEvent('#adm_collapse_profile_role_memberships_future .accordion-body');
+                    $("#adm_profile_role_memberships_future_accordion_content .card-body").html(responseText);
+                    formSubmitEvent('#adm_profile_role_memberships_future_accordion_content .card-body');
                 }
             }
         );
