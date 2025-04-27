@@ -619,6 +619,9 @@ class SAMLService extends SSOService {
 
             $logoutResponse = new LogoutResponse();
             $logoutResponse->setIssuer(new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId()));
+            $logoutResponse->setID('ID' . \LightSaml\Helper::generateID());
+            $logoutResponse->setIssueInstant(new \DateTime());
+            $logoutResponse->setDestination($client->getValue('smc_slo_url'));
             $logoutResponse->setInResponseTo($request->getID());
             $statusSuccess = new \LightSaml\Model\Protocol\Status(
                 new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));

@@ -2054,7 +2054,7 @@ class PreferencesPresenter extends PagePresenter
         );
 
         if (empty($formValues['sso_oidc_issuer_url'])) {
-            $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . '/adm_program/modules/sso/index.php/oidc';
+            $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
         }
         if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
             $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);

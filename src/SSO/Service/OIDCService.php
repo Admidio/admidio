@@ -89,7 +89,7 @@ class OIDCService extends SSOService {
         // Attention: IssuerURL must be the base URL, where ./well-known/openid-configuration is located!
         $this->issuerURL = $gSettingsManager->get('sso_oidc_issuer_url') ?: ADMIDIO_URL;
         if (empty($this->issuerURL)) {
-            $this->issuerURL = ADMIDIO_URL . '/adm_program/modules/sso/index.php/oidc';
+            $this->issuerURL = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
             $gSettingsManager->set('sso_oidc_issuer_url', $this->issuerURL);
         }
         $this->authorizationEndpoint = $this->issuerURL  . "/authorize";

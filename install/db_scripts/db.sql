@@ -562,30 +562,6 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 
--- CREATE TABLE %PREFIX%_oidc_scopes (
---     osc_id                      integer unsigned    AUTO_INCREMENT,
---     osc_scope                   varchar(100),
---     osc_description             text                NOT NULL,
---     PRIMARY KEY (osc_id)
--- )
--- ENGINE = InnoDB
--- DEFAULT character SET = utf8
--- COLLATE = utf8_unicode_ci;
-
-
--- -- 6️⃣ Table: OIDC User Consents (Tracks user consent for OIDC clients)
--- CREATE TABLE %PREFIX%_oidc_user_consents (
---     ouc_id                      integer unsigned AUTO_INCREMENT PRIMARY KEY,       -- Unique record ID
---     ouc_usr_id                  integer unsigned NOT NULL,                    -- User who gave consent
---     ouc_ocl_id                  integer unsigned NOT NULL,                  -- Client to which consent was given
---     ouc_scope                   text NOT NULL,                     -- JSON array of granted scopes
---     oac_usr_id_create           integer unsigned,
---     oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
---     -- FOREIGN KEY (osc_user_id) REFERENCES adm_users (usr_id) ON DELETE CASCADE,
---     -- FOREIGN KEY (osc_client_id) REFERENCES adm_oidc_clients (ocl_id) ON DELETE CASCADE
--- );
-
-
 
 /*==============================================================*/
 /* Tables: adm_saml_clients                                     */

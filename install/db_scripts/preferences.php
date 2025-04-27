@@ -201,7 +201,7 @@ $defaultOrgPreferences = array(
     'sso_saml_signing_key' => '0',
     'sso_saml_encryption_key' => '0',
     'sso_oidc_enabled' => '0',
-    'sso_oidc_issuer_url' => ADMIDIO_URL . '/adm_program/modules/sso/index.php',
+    'sso_oidc_issuer_url' => ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php',
     'sso_oidc_signing_key' => '0',
     'sso_oidc_encryption_key' => '',
 
