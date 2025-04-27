@@ -189,19 +189,9 @@ try {
         profileJS.reloadFormerRoleMemberships();
         profileJS.reloadFutureRoleMemberships();
 
-        $("#menu_item_profile_password").attr("href", "javascript:void(0);");
-        $("#menu_item_profile_password").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '");
-        $("#menu_item_profile_password").attr("class", "nav-link btn btn-primary openPopup");
-
         $("#menu_item_profile_tfa").attr("href", "javascript:void(0);");
         $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
         $("#menu_item_profile_tfa").attr("class", "nav-link btn btn-primary openPopup");
-
-        $("#menu_item_profile_send_password").attr("href", "javascript:void(0);");
-        $("#menu_item_profile_send_password").attr("data-buttons", "yes-no");
-        $("#menu_item_profile_send_password").attr("data-message", "' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' profile.php' . $user->getValue('LAST_NAME'))) . '");
-        $("#menu_item_profile_send_password").attr("data-href", "callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')");
-        $("#menu_item_profile_send_password").attr("class", "nav-link btn btn-primary admidio-messagebox");
 
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
@@ -213,36 +203,6 @@ try {
         formSubmitEvent();',
         true
     );
-
-    // Password of own user could be changed
-    if ($userId === $gCurrentUserId) {
-        $page->addPageFunctionsMenuItem(
-            'menu_item_profile_password',
-            $gL10n->get('SYS_CHANGE_PASSWORD'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)),
-            'bi-key-fill'
-        );
-    } elseif ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0) {
-        // Administrators can change or send password if login is configured and user is member of current organization
-
-        if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
-            // if email is set and systemmails are activated then administrator can send a new password to user
-            $page->addPageFunctionsMenuItem(
-                'menu_item_profile_send_password',
-                $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-                'javascript:void(0)',
-                'bi-key-fill'
-            );
-        } else {
-            // if user has no email or send email is disabled then administrator could set a new password
-            $page->addPageFunctionsMenuItem(
-                'menu_item_profile_password',
-                $gL10n->get('SYS_CHANGE_PASSWORD'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)),
-                'bi-key-fill'
-            );
-        }
-    }
 
     // show link to TFA settings if Two Factor authentication activated in global settings AND
     // - user is current user OR
@@ -306,6 +266,29 @@ try {
                         $value = $user->getValue('usr_login_name');
                     }
                     $masterData['usr_login_name'] = array('id' => 'usr_login_name', 'label' => $gL10n->get('SYS_USERNAME'), 'value' => $value);
+
+                    // pseudo password field
+                    $value = '';
+                    if ($userId === $gCurrentUserId) {
+                            $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
+                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
+                    } elseif ($gCurrentUser->isAdministrator() && isMember($userId) &&  strlen($user->getValue('usr_login_name')) > 0) {
+                        // Administrators can change or send password if login is configured and user is member of current organization
+                        if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
+                            $value = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0)" data-buttons="yes-no"
+                                data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '"
+                                data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">' .
+                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('ORG_SEND_NEW_PASSWORD') . '</a>';
+                        } else {
+                            // if user has no email or send email is disabled then administrator could set a new password       
+                            $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
+                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
+                        }
+                    }
+                    if ($value !== '') {
+                        $masterData['usr_password'] = array('id' => 'usr_password', 'label' => $gL10n->get('SYS_PASSWORD'), 'icon' => '', 'value' => $value);
+                    }
+
                     if (
                         !empty($user->getValue('usr_actual_login'))
                         && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())
