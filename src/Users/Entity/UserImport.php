@@ -175,9 +175,9 @@ class UserImport extends User
         } elseif (strlen($this->getValue('usr_login_name')) > 0) {
             throw new Exception('Contact ' . $this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' already has a username and password.');
         } elseif (strlen($password) < PASSWORD_MIN_LENGTH) {
-            throw new Exception($this->getValue('FIRST_NAME') . ' UserImport.php' .$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum length of '.PASSWORD_MIN_LENGTH.' characters.');
+            throw new Exception($this->getValue('FIRST_NAME') . ' ' .$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum length of '.PASSWORD_MIN_LENGTH.' characters.');
         } elseif (PasswordUtils::passwordStrength($password, $this->getPasswordUserData()) < $gSettingsManager->getInt('password_min_strength')) {
-            throw new Exception($this->getValue('FIRST_NAME') . ' UserImport.php' .$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum passwort strength.');
+            throw new Exception($this->getValue('FIRST_NAME') . ' ' .$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum passwort strength.');
         } else {
             $this->setValue('usr_login_name', $loginName);
             $this->setPassword($password);

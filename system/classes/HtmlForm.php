@@ -704,7 +704,7 @@ class HtmlForm
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
-            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' HtmlForm.php' . $gSettingsManager->getString('system_time'), $value);
+            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
 
             // now add a date and a time field to the form
             $attributes['dateValue'] = null;

@@ -313,7 +313,7 @@ class PreferencesService
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname', 'database'))));
         $email->setTemplateText(
             $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),
-            $gCurrentUser->getValue('FIRSTNAME') . ' PreferencesService.php' . $gCurrentUser->getValue('LASTNAME'),
+            $gCurrentUser->getValue('FIRSTNAME') . ' ' . $gCurrentUser->getValue('LASTNAME'),
             $gCurrentUser->getValue('EMAIL'),
             $gCurrentUser->getValue('usr_uuid'),
             $gL10n->get('SYS_ADMINISTRATOR')
