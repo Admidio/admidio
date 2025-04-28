@@ -78,6 +78,38 @@ class Item extends Entity
     }
 
     /**
+     * Reads a record out of the table in database selected by the unique id column in the table.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param int $id Unique id of id column of the table.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataByUuid
+     */
+    public function readDataById(int $id): bool
+    {
+        $this->itemId = $id;
+        return parent::readDataById($id);
+    }
+
+    /**
+     * Return a human-readable representation of this record.
+     * If a column [prefix]_name exists, it is returned, otherwise the id.
+     * This method can be overridden in child classes for custom behavior.
+     * 
+     * @return string The readable representation of the record (can also be a translatable identifier)
+     */
+    public function readableName(): string
+    {
+        global $gDb;
+        // check if mItemsData is set
+        $itemData = new ItemData($gDb, $this->mItemsData, $this);
+        $itemData->readDataByColumns(array('ind_ini_id' => $this->itemId, 'ind_inf_id' => $this->mItemsData->getProperty('ITEMNAME', 'inf_id')));
+        return $itemData->getValue('ind_value'); 
+    }
+    
+    /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns.

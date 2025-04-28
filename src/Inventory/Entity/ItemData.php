@@ -80,6 +80,38 @@ class ItemData extends Entity
     }
  
     /**
+     * Reads a record out of the table in database selected by the unique id column in the table.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param int $id Unique id of id column of the table.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataByUuid
+     */
+    public function readDataById(int $id): bool
+    {
+        global $gDb;
+        $this->itemId = $id;
+        $this->mItem = new Item($gDb, $this->mItemsData, $this->itemId);
+        return parent::readDataById($id);
+    }
+
+    /**
+     * Return a human-readable representation of this record.
+     * If a column [prefix]_name exists, it is returned, otherwise the id.
+     * This method can be overridden in child classes for custom behavior.
+     * 
+     * @return string The readable representation of the record (can also be a translatable identifier)
+     */
+    public function readableName(): string
+    {
+        // check if mItemsData is set
+        $this->readDataByColumns(array('ind_ini_id' => $this->itemId, 'ind_inf_id' => $this->mItemsData->getProperty('ITEMNAME', 'inf_id')));
+        return $this->getValue('ind_value');
+    }
+
+    /**
      * Changes to user data could be sent as a notification email to a specific role if this
      * function is enabled in the settings. If you want to suppress this logic you can
      * explicit disable it with this method for this user. So no changes to this user object will
