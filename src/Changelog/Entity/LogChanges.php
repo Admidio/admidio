@@ -126,8 +126,14 @@ class LogChanges extends Entity
             case 'roles_rights_data':
                 $this->connectAdditionalTable(TBL_ROLES_RIGHTS_DATA, 'rrd_id', 'log_record_id');
                 break;
+            case 'inventory_fields':
+                $this->connectAdditionalTable(TBL_INVENTORY_FIELDS, 'inf_id', 'log_record_id');
+                break;
             case 'inventory_items':
-                $this->connectAdditionalTable(TBL_INVENTORY_DATA, 'ini_id', 'ind_ini_id');
+                $this->connectAdditionalTable(TBL_INVENTORY_ITEMS, 'ini_id', 'log_record_id');
+                break;
+            case 'inventory_data':
+                $this->connectAdditionalTable(TBL_INVENTORY_DATA, 'ind_id', 'log_record_id');
                 break;
             case 'rooms':
                 $this->connectAdditionalTable(TBL_ROOMS, 'room_id', 'log_record_id');

@@ -870,6 +870,7 @@
   <string name="SYS_INVENTORY_ITEM_CREATE">Neuen Gegenstand anlegen</string>
   <string name="SYS_INVENTORY_ITEM_CREATED">Neuer Gegenstand erfolgreich angelegt</string>
   <string name="SYS_INVENTORY_ITEM_CREATE_DESC">Hier kannst du einzelne Gegenstände dem Inventar hinzufügen.\n\nHinweis: In der Ansicht "Gegenstand ändern" ist es über den Menüpunkt "Gegenstand kopieren" möglich, einen vorhandenen Gegenstand einfach oder mehrfach zu kopieren.</string>
+  <string name="SYS_INVENTORY_ITEM_DATA">Gegenstandsdaten</string>
   <string name="SYS_INVENTORY_ITEM_DELETE">Gegenstand löschen</string>
   <string name="SYS_INVENTORY_ITEM_DELETE_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten dieses Gegenstandes gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
   <string name="SYS_INVENTORY_ITEM_DELETED">Gegenstand gelöscht</string>
