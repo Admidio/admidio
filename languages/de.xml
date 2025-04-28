@@ -806,6 +806,8 @@
   <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der erwarteten Syntax. Ein Icon von Font Awesome muss dem Schema fa-iconname entsprechen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <!--Phrases only in Inventory Module-->
+  <string name="SYS_RIGHT_INVENTORY">Inventar verwalten</string>
+  <string name="SYS_RIGHT_INVENTORY_DESC">Rollen mit dieser Berechtigung können im Modul für Inventarverwaltung Rechte vergeben und die Inventarverwaltung parametrieren.</string>
   <string name="SYS_INVENTORY_ACCESS_PREFERENCES">Zugriffsberechtigung für Plugin-Einstellungen</string>
   <string name="SYS_INVENTORY_ACCESS_PREFERENCES_DESC">Hier kannst du, zusätzlich zur Rolle "Administrator", weitere Rollen für den Zugriff auf die Plugin-Einstellungen berechtigen.</string>   
   <string name="SYS_INVENTORY_ACCESS_EDIT">Editierberechtigung für den Verwalter</string>
@@ -861,15 +863,18 @@
   <string name="SYS_INVENTORY_IMPORT_PROGRESS">Der Gegenstand #VAR1_BOLD# wurde #VAR2_BOLD# importiert.</string>
   <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">Folgenden Spalten der Importdatei sind keine Felder in der Inventarverwaltung zugeordnet:</string>
   <string name="SYS_INVENTORY">Inventarverwaltung</string>
+  <string name="SYS_INVENTORY_DESC">Die Inventarverwaltung ermöglicht es, Gegenstände zu organisieren, zu verwalten und zu verfolgen.</string>
   <string name="SYS_INVENTORY_ITEM">Gegenstand</string>
+  <string name="SYS_INVENTORY_ITEM_COPIED">Gegenstand erfolgreich kopiert</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Gegenstand kopieren</string>
   <string name="SYS_INVENTORY_ITEM_CREATE">Neuen Gegenstand anlegen</string>
-  <string name="SYS_INVENTORY_ITEM_CREATED">Neuer Gegenstand angelegt</string>
+  <string name="SYS_INVENTORY_ITEM_CREATED">Neuer Gegenstand erfolgreich angelegt</string>
   <string name="SYS_INVENTORY_ITEM_CREATE_DESC">Hier kannst du einzelne Gegenstände dem Inventar hinzufügen.\n\nHinweis: In der Ansicht "Gegenstand ändern" ist es über den Menüpunkt "Gegenstand kopieren" möglich, einen vorhandenen Gegenstand einfach oder mehrfach zu kopieren.</string>
   <string name="SYS_INVENTORY_ITEM_DELETE">Gegenstand löschen</string>
   <string name="SYS_INVENTORY_ITEM_DELETE_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten dieses Gegenstandes gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
   <string name="SYS_INVENTORY_ITEM_DELETED">Gegenstand gelöscht</string>
   <string name="SYS_INVENTORY_ITEM_EDIT">Gegenstand ändern</string>
+  <string name="SYS_INVENTORY_ITEM_EDITED">Gegenstand erfolgreich geändert</string>
   <string name="SYS_INVENTORY_ITEM_MADE_FORMER">Gegenstand ausgesondert</string>    
   <string name="SYS_INVENTORY_ITEM_PRINT">Gegenstandsdaten drucken</string>
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER">Aussonderung des Gegenstandes rückgängig gemacht</string>    

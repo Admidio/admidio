@@ -144,13 +144,20 @@ try {
         case 'item_save':
             if ($getiniId !== 0 && $getCopy) {
                 $getiniId = 0;
+                $message = $gL10n->get('SYS_INVENTORY_ITEM_COPIED');
+            }
+            elseif ($getiniId !== 0) {
+                $message = $gL10n->get('SYS_INVENTORY_ITEM_EDITED');
+            }
+            else {
+                $message = $gL10n->get('SYS_INVENTORY_ITEM_CREATED');
             }
 
             $itemModule = new ItemService($gDb, $getiniId, $postCopyField, $postCopyNumber, $postImported);
             $itemModule->save();
 
             $gNavigation->deleteLastUrl();
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_CREATED'),'url' => $gNavigation->getUrl()));
+            echo json_encode(array('status' => 'success', 'message' => $message,'url' => $gNavigation->getUrl()));
             break;
 
         case 'item_delete_explain_msg':
