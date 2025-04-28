@@ -275,8 +275,8 @@ class InventoryPresenter extends PagePresenter
                     'bi-clock-history'
                 );
             } */
-            // show link to view profile field change history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items');
+            // show link to view inventory history
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items,inventory_data');
            
             // show link to create new item
             $this->addPageFunctionsMenuItem(

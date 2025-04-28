@@ -9,6 +9,7 @@ use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -165,10 +166,11 @@ class InventoryFieldsPresenter extends PagePresenter
         $this->assignSmartyVariable('fieldNameIntern', $infNameIntern);
         $this->assignSmartyVariable('systemField', $itemField->getValue('inf_system'));
         $this->assignSmartyVariable('sequenceField', $itemField->getValue('inf_sequence'));
-        $this->assignSmartyVariable('nameUserCreated', $itemField->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $itemField->getValue('ann_timestamp_create'));
-        $this->assignSmartyVariable('nameLastUserEdited', $itemField->getNameOfLastEditingUser());
-        $this->assignSmartyVariable('timestampLastUserEdited', $itemField->getValue('ann_timestamp_change'));
+        $this->assignSmartyVariable('userCreatedName', $itemField->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $itemField->getValue('inf_timestamp_create'));
+        $this->assignSmartyVariable('lastUserEditedName', $itemField->getNameOfLastEditingUser());
+        $this->assignSmartyVariable('lastUserEditedTimestamp', $itemField->getValue('inf_timestamp_change'));
+
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -180,7 +182,7 @@ class InventoryFieldsPresenter extends PagePresenter
      */
     public function createList()
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentUser;
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
@@ -205,6 +207,9 @@ class InventoryFieldsPresenter extends PagePresenter
                 );
             });', true
         );
+
+        // show link to view inventory fields history
+        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields', $gCurrentUser->isAdministratorInventory());
 
         // define link to create new item field
         $this->addPageFunctionsMenuItem(

@@ -5,10 +5,12 @@ namespace Admidio\UI\Presenter;
 // Admidio namespaces
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -49,6 +51,9 @@ class InventoryItemPresenter extends PagePresenter
                 throw new Exception('SYS_NO_RIGHTS');
             }
         }
+
+        // show link to view inventory fields history
+        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_items,inventory_data', $gCurrentUser->isAdministratorInventory(), array('id' => $itemID));
 
         foreach ($items->getItemFields() as $itemField) {  
             $infNameIntern = $itemField->getValue('inf_name_intern');
@@ -423,154 +428,13 @@ class InventoryItemPresenter extends PagePresenter
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
-        $this->assignSmartyVariable('nameUserCreated', $itemField->getNameOfCreatingUser());
-        $this->assignSmartyVariable('timestampUserCreated', $itemField->getValue('ann_timestamp_create'));
-        $this->assignSmartyVariable('nameLastUserEdited', $itemField->getNameOfLastEditingUser());
-        $this->assignSmartyVariable('timestampLastUserEdited', $itemField->getValue('ann_timestamp_change'));
+        $item = new Item($gDb,  $items, $items->getItemId());
+        $this->assignSmartyVariable('userCreatedName', $item->getNameOfCreatingUser());
+        $this->assignSmartyVariable('userCreatedTimestamp', $item->getValue('ini_timestamp_create'));
+        $this->assignSmartyVariable('lastUserEditedName', $item->getNameOfLastEditingUser());
+        $this->assignSmartyVariable('lastUserEditedTimestamp', $item->getValue('ini_timestamp_change'));
+        
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
-    }
-
-    /**
-     * Create the list with all item fields and their preferences.
-     * @throws Exception
-     * @throws \Smarty\Exception
-     */
-    public function createList()
-    {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession;
-
-        $this->addJavascript('
-            $(".admidio-open-close-caret").click(function() {
-                showHideBlock($(this));
-            });
-            $("tbody.admidio-sortable").sortable({
-                axis: "y",
-                handle: ".handle",
-                stop: function(event, ui) {
-                    const order = $(this).sortable("toArray", {attribute: "data-uuid"});
-                    const id = ui.item.attr("data-uuid");
-                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=field_sequence&uuid=" + id + "&order=" + order,
-                        {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
-                    );
-                }
-            });
-            $(".admidio-field-move").click(function() {
-                moveTableRow(
-                    $(this),
-                    "' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php",
-                    "' . $gCurrentSession->getCsrfToken() . '"
-                );
-            });', true
-        );
-
-        // define link to create new item field
-        $this->addPageFunctionsMenuItem(
-            'menu_item_new_field',
-            $gL10n->get('ORG_CREATE_PROFILE_FIELD'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit')),
-            'bi-plus-circle-fill'
-        );
-
-        $items = new ItemsData($gDb, $gCurrentOrgId);
-        $templateItemFieldsCategories = array();
-        $templateItemFields = array();
-        $itemFieldCategoryID = -1;
-        $prevItemFieldCategoryID = -1;
-
-        foreach ($items->getItemFields() as $itemField) {
-            $prevItemFieldCategoryID = $itemFieldCategoryID;
-            $itemFieldCategoryID = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;
-
-            if ($itemFieldCategoryID !== $prevItemFieldCategoryID &&  count($templateItemFields) > 0) {
-                $templateItemFieldsCategories[] = array(
-                    'id' => $templateItemFields[0]['categoryID'],
-                    'name' => $templateItemFields[0]['categoryName'],
-                    'entries' => $templateItemFields
-                );
-                //$prevItemFieldCategoryID = $itemFieldCategoryID; // = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;
-                $templateItemFields = array();
-            }
-
-            $itemFieldText = array('CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
-                'DATE' => $gL10n->get('SYS_DATE'),
-                'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
-                'EMAIL' => $gL10n->get('SYS_EMAIL'),
-                'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
-                'PHONE' => $gL10n->get('SYS_PHONE'),
-                'TEXT' => $gL10n->get('SYS_TEXT') . ' (100)',
-                'TEXT_BIG' => $gL10n->get('SYS_TEXT') . ' (4000)',
-                'URL' => $gL10n->get('SYS_URL'),
-                'NUMBER' => $gL10n->get('SYS_NUMBER'),
-                'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER')
-            );
-
-            $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES');
-
-            $templateRowItemField = array(
-                'categoryID' => ((bool)$itemField->getValue('inf_system')) ? 1 : 2,
-                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS')  /* $itemField->getValue('cat_name') */,
-                'id' => $itemField->getValue('inf_id'),
-                'name' => $itemField->getValue('inf_name'),
-                'description' => $itemField->getValue('inf_description'),
-                'urlEdit' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_id'))),
-                'dataType' => $itemFieldText[$itemField->getValue('inf_type')],
-                'mandatory' => $gL10n->get($mandatoryFieldValues[$itemField->getValue('inf_required_input')]),
-            );
-
-            $templateRowItemField['actions'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_id'))),
-                'icon' => 'bi bi-pencil-square',
-                'tooltip' => $gL10n->get('SYS_EDIT')
-            );
-            if ($itemField->getValue('inf_system') == 1) {
-                $templateRowItemField['actions'][] = array(
-                    'url' => '',
-                    'icon' => 'bi bi-trash invisible',
-                    'tooltip' => ''
-                );
-            } else {
-                $templateRowItemField['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'adm_item_field_' . $itemField->getValue('inf_id') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_delete', 'uuid' => $itemField->getValue('inf_id'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($itemField->getValue('usf_name', 'database'))),
-                    'icon' => 'bi bi-trash',
-                    'tooltip' => $gL10n->get('SYS_DELETE')
-                );
-            }
-
-            $templateItemFields[] = $templateRowItemField;
-        }
-
-        $templateItemFieldsCategories[] = array(
-            'id' => $templateItemFields[0]['categoryID'],
-            'name' => $templateItemFields[0]['categoryName'],
-            'entries' => $templateItemFields
-        );
-
-        $this->smarty->assign('list', $templateItemFieldsCategories);
-        $this->smarty->assign('l10n', $gL10n);
-        $this->addJavascript('
-            function checkEmptyCategories() {
-                const categories = document.querySelectorAll("[id^=\'adm_item_fields_\']"); // Ersetzen Sie "category-" durch das tatsächliche ID-Präfix der Kategorien
-                categories.forEach(category => {
-                    const entries = category.querySelectorAll("[id^=\'adm_item_field_\']"); // Ersetzen Sie "entry-" durch das tatsächliche ID-Präfix der Einträge
-                    let hasVisibleEntries = false;
-                    entries.forEach(entry => {
-                        if (entry.style.display !== "none") {
-                            hasVisibleEntries = true;
-                        }
-                    });
-                    if (!hasVisibleEntries) {
-                        category.style.display = "none";
-                    }
-                });
-            }
-
-            document.addEventListener("DOMContentLoaded", function() {
-                checkEmptyCategories();
-            });
-            ', true
-        );
-        $this->pageContent .= $this->smarty->fetch('modules/item-fields.list.tpl');
     }
 }
