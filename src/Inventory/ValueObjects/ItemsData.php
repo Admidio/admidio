@@ -11,6 +11,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\ItemField;
 
 // PHP namespaces
@@ -65,7 +66,7 @@ class ItemsData
      */
     protected array $itemFieldsSort = array();
     /**
-     * @var array<int,Entity> Array with all user data objects
+     * @var array<int,ItemData> Array with all user data objects
      */
     protected array $mItemData = array();
 
@@ -179,7 +180,8 @@ class ItemsData
 
             while ($row = $itemDataStatement->fetch()) {
                 if (!array_key_exists($row['ind_inf_id'], $this->mItemData)) {
-                    $this->mItemData[$row['ind_inf_id']] = new Entity($this->mDb, TBL_INVENTORY_DATA, 'ind');
+                    $item = new Item($this->mDb, $this, $this->mItemId);
+                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this, $item);
                 }
                 $this->mItemData[$row['ind_inf_id']]->setArray($row);
             }
@@ -474,14 +476,7 @@ class ItemsData
             $infType = $this->mItemFields[$fieldNameIntern]->getValue('inf_type');
             switch ($infType) {
                 case 'CHECKBOX':
-                    $htmlValue = $value == 1 ? '<span class="fa-stack">
-                                                    <i class="fas fa-square-full fa-stack-1x"></i>
-                                                    <i class="fas fa-check-square fa-stack-1x fa-inverse"></i>
-                                                </span>'
-                        : '<span class="fa-stack">
-                                                    <i class="fas fa-square-full fa-stack-1x"></i>
-                                                    <i class="fas fa-square fa-stack-1x fa-inverse"></i>
-                                                </span>';
+                    $htmlValue = $value == 1 ? '<i class="bi bi-check-square"></i>' : '<i class="bi bi-square"></i>';
                     break;
 
                 case 'DATE':
@@ -562,7 +557,7 @@ class ItemsData
         } else {
             // special case for type CHECKBOX and no value is there, then show unchecked checkbox
             if ($this->mItemFields[$fieldNameIntern]->getValue('inf_type') === 'CHECKBOX') {
-                $value = '<i class="fas fa-square"></i>';
+                $value = '<i class="bi bi-square"></i>';
             }
         }
 
@@ -780,7 +775,8 @@ class ItemsData
         }
 
         if (!array_key_exists($infId, $this->mItemData)) {
-            $this->mItemData[$infId] = new Entity($this->mDb, TBL_INVENTORY_DATA, 'ind');
+            $item = new Item($this->mDb, $this, $this->mItemId);
+            $this->mItemData[$infId] = new ItemData($this->mDb, $this, $item);
             $this->mItemData[$infId]->setValue('ind_inf_id', $infId);
             $this->mItemData[$infId]->setValue('ind_ini_id', $this->mItemId);
         }
@@ -804,13 +800,13 @@ class ItemsData
         $statement = $this->mDb->queryPrepared($sql);
 
         while ($row = $statement->fetch()) {
-            $delItem = new Entity($this->mDb, TBL_INVENTORY_ITEMS, 'ini', $row['ini_id']);
+            $delItem = new Item($this->mDb, $this, $row['ini_id']);
             $delItem->delete();
         }
 
         // generate a new ItemId
         if ($this->mItemCreated) {
-            $newItem = new Entity($this->mDb, TBL_INVENTORY_ITEMS, 'ini');
+            $newItem = new Item($this->mDb, $this, 0);
             $newItem->setValue('ini_org_id', $this->organizationId);
             $newItem->setValue('ini_former', 0);
             $newItem->save();
@@ -831,6 +827,10 @@ class ItemsData
      */
     public function deleteItem($itemId): void
     {
+        // Log record deletion, then delete
+        $item = new Item($this->mDb, $this, $itemId);
+        $item->logDeletion();
+
         $sql = 'DELETE FROM ' . TBL_INVENTORY_DATA . ' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($itemId));
 
@@ -848,8 +848,9 @@ class ItemsData
      */
     public function makeItemFormer($itemId): void
     {
-        $sql = 'UPDATE ' . TBL_INVENTORY_ITEMS . ' SET ini_former = 1 WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-        $this->mDb->queryPrepared($sql, array($itemId, $this->organizationId));
+        $item = new Item($this->mDb, $this, $itemId);
+        $item->setValue('ini_former', 1);
+        $item->save();
 
         $this->mItemMadeFormer = true;
         $this->mItemUndoMadeFormer = false;
@@ -863,8 +864,9 @@ class ItemsData
      */
     public function undoItemFormer($itemId): void
     {
-        $sql = 'UPDATE ' . TBL_INVENTORY_ITEMS . ' SET ini_former = 0 WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-        $this->mDb->queryPrepared($sql, array($itemId, $this->organizationId));
+        $item = new Item($this->mDb, $this, $itemId);
+        $item->setValue('ini_former', 0);
+        $item->save();
 
         $this->mItemMadeFormer = false;
         $this->mItemUndoMadeFormer = true;
@@ -877,6 +879,7 @@ class ItemsData
      */
     public function saveItemData(): void
     {
+        global $gCurrentUser;
         $this->mDb->startTransaction();
 
         foreach ($this->mItemData as $value) {
@@ -897,7 +900,7 @@ class ItemsData
         // why !$this->mItemCreated -> updateFingerPrint will be done in getNewItemId
         if (!$this->mItemCreated && $this->columnsValueChanged) {
             $updateItem = new Item($this->mDb, $this, $this->mItemId);
-            $updateItem->setValue('ini_usr_id_change', null, false);
+            $updateItem->setValue('ini_usr_id_change', $gCurrentUser->getValue('usr_id'), false);
             $updateItem->save();
         }
 

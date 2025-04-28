@@ -23,7 +23,7 @@ use Admidio\Changelog\Entity\LogChanges;
 class Item extends Entity
 {
     /**
-     * @var ItemsData object with current user field structure
+     * @var ItemsData object with current item field structure
      */
     protected ItemsData $mItemsData;
     /**
@@ -31,7 +31,11 @@ class Item extends Entity
      */
     protected int $organizationId;
     /**
-     * @var bool Flag if the changes to the user data should be handled by the ChangeNotification service.
+     * @var int the id of the item which should be loaded. If id isn't set than an empty object with no specific item is created.
+     */
+    protected int $itemId;
+    /**
+     * @var bool Flag if the changes to the item data should be handled by the ChangeNotification service.
      */
     protected bool $changeNotificationEnabled;
 
@@ -56,10 +60,21 @@ class Item extends Entity
         }
 
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
-        // read also data of assigned item data
-        $this->connectAdditionalTable(TBL_INVENTORY_DATA, 'ini_id', 'ind_ini_id');
-
+        $this->itemId = $itemId;
+        
         parent::__construct($database, TBL_INVENTORY_ITEMS, 'ini', $itemId);
+    }
+ 
+    /**
+     * Changes to user data could be sent as a notification email to a specific role if this
+     * function is enabled in the settings. If you want to suppress this logic you can
+     * explicit disable it with this method for this user. So no changes to this user object will
+     * result in a notification email.
+     * @return void
+     */
+    public function disableChangeNotification()
+    {
+        $this->changeNotificationEnabled = false;
     }
 
     /**
@@ -85,8 +100,14 @@ class Item extends Entity
      * @throws Exception
      */
     protected function adjustLogEntry(LogChanges $logEntry): void
-    {
-/*         $fotEntry = new ItemField($this->db, (int)$this->getValue('fot_fop_id_first_post'));
-        $logEntry->setLogRelated($fotEntry->getValue('fop_uuid'), $fotEntry->getValue('fop_text'));
- */    }
+    {      
+        $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
+        if (isset( $_POST['inf-1']) && $itemName === '') {
+            $itemName = $_POST['inf-1'];
+        }
+        elseif (!isset( $_POST['inf-1']) && $itemName === '') {
+            $itemName =  $logEntry->getValue('log_record_name');
+        }
+        $logEntry->setValue('log_record_name', $itemName);
+    }
 }
