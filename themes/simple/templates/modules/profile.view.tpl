@@ -3,7 +3,7 @@
     <!-- Tab Navigation -->
     <ul class="nav nav-tabs profile-tabs" id="adm_profile_tabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="adm_profile_basic_data_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_basic_data_pane" type="button" role="tab" aria-controls="adm_profile_basic_data" aria-selected="true">
+            <button class="nav-link active" id="adm_profile_basic_informations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_basic_informations_pane" type="button" role="tab" aria-controls="adm_profile_basic_data" aria-selected="true">
                 {$l10n->get('SYS_BASIC_DATA')}
             </button>
         </li>
@@ -29,7 +29,7 @@
     <!-- Tab Content -->
     <div class="tab-content" id="adm_profile_tabs_content">
         <!-- Basic Data Tab -->
-        <div class="tab-pane fade show active" id="adm_profile_basic_data_pane" role="tabpanel" aria-labelledby="adm_profile_basic_data_tab">
+        <div class="tab-pane fade show active" id="adm_profile_basic_informations_pane" role="tabpanel" aria-labelledby="adm_profile_basic_informations_tab">
             <!-- Profile Data Card -->
             <div class="card admidio-tabbed-field-group">
                 <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
@@ -39,15 +39,15 @@
                     {/if}
                 </div>
                 <div class="card-body">
-                    {include file="modules/profile.view.profile-data.tpl"}
+                    {include file="modules/profile.view.basic-informations.tpl"}
                 </div>
             </div>
-            <!-- Dynamic Cards for additional Profile Data -->
+            <!-- Dynamic Cards for additional Profile Data categories -->
             {foreach $profileData as $categoryName => $category}
                 <div class="card admidio-tabbed-field-group">
                     <div class="card-header">{$categoryName}</div>
                     <div class="card-body">
-                        {include file="modules/profile.view.dynamic-data.tpl"}
+                        {include file="modules/profile.view.categories.tpl"}
                     </div>
                 </div>
             {/foreach}
@@ -55,7 +55,7 @@
 
         <!-- Permissions Tab -->
         <div class="tab-pane fade" id="adm_profile_permissions_pane" role="tabpanel" aria-labelledby="adm_profile_permissions_tab">
-            {include file="modules/profile.view.permissions-data.tpl"}
+            {include file="modules/profile.view.permissions.tpl"}
         </div>
 
         <!-- Role Memberships Tab -->
@@ -96,7 +96,7 @@
                         data-bs-content="{$l10n->get('SYS_VIEW_ROLES_OTHER_ORGAS')}"></i>
                     </div>
                     <div class="card-body">
-                        {include file="modules/profile.view.other-org-memberships-data.tpl"}
+                        {include file="modules/profile.view.other-org-memberships.tpl"}
                     </div>
                 </div>
             {/if}
@@ -111,7 +111,7 @@
                     {/if}
                 </div>
                 <div class="card-body">
-                    {include file="modules/profile.view.relations-data.tpl"}
+                    {include file="modules/profile.view.relations.tpl"}
                 </div>
             </div>
         </div>
@@ -123,12 +123,12 @@
     <div class="accordion" id="adm_profile_accordion">
         <!-- Basic Data Accordion -->
         <div class="accordion-item">
-            <h2 class="accordion-header" id="adm_profile_basic_data_accordion_heading">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_basic_data_accordion" aria-expanded="true" aria-controls="adm_profile_basic_data_accordion">
+            <h2 class="accordion-header" id="adm_profile_basic_informations_accordion_heading">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_basic_informations_accordion" aria-expanded="true" aria-controls="adm_profile_basic_informations_accordion">
                     {$l10n->get('SYS_BASIC_DATA')}
                 </button>
             </h2>
-            <div id="adm_profile_basic_data_accordion" class="accordion-collapse collapse show" aria-labelledby="adm_profile_basic_data_accordion_heading" data-bs-parent="#adm_profile_accordion">
+            <div id="adm_profile_basic_informations_accordion" class="accordion-collapse collapse show" aria-labelledby="adm_profile_basic_informations_accordion_heading" data-bs-parent="#adm_profile_accordion">
                 <div class="accordion-body">
                     <div class="card admidio-accordion-field-group">
                     <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
@@ -138,15 +138,15 @@
                         {/if}
                     </div>
                     <div class="card-body">
-                        {include file="modules/profile.view.profile-data.tpl"}
+                        {include file="modules/profile.view.basic-informations.tpl"}
                     </div>
                 </div>
-                <!-- Dynamic Cards for additional Profile Data -->
+                <!-- Dynamic Cards for additional Profile Data categories -->
                 {foreach $profileData as $categoryName => $category}
                     <div class="card admidio-accordion-field-group">
                         <div class="card-header">{$categoryName}</div>
                         <div class="card-body">
-                            {include file="modules/profile.view.dynamic-data.tpl"}
+                            {include file="modules/profile.view.categories.tpl"}
                         </div>
                     </div>
                 {/foreach}
@@ -162,7 +162,7 @@
             </h2>
             <div id="adm_profile_role_permissions_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_role_permissions_accordion_heading" data-bs-parent="#adm_profile_accordion">
                 <div class="accordion-body">
-                    {include file="modules/profile.view.permissions-data.tpl"}
+                    {include file="modules/profile.view.permissions.tpl"}
                 </div>
             </div>
         </div>
@@ -213,7 +213,7 @@
                                 data-bs-content="{$l10n->get('SYS_VIEW_ROLES_OTHER_ORGAS')}"></i>
                             </div>
                             <div class="card-body">
-                                {include file="modules/profile.view.other-org-memberships-data.tpl"}
+                                {include file="modules/profile.view.other-org-memberships.tpl"}
                             </div>
                         </div>
                     {/if}
@@ -238,7 +238,7 @@
                             {/if}
                         </div>
                         <div class="card-body">
-                            {include file="modules/profile.view.relations-data.tpl"}
+                            {include file="modules/profile.view.relations.tpl"}
                         </div>
                     </div>
                 </div>
