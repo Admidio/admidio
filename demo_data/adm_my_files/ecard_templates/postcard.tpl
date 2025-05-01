@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{$languageIsoCode}">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><%ecard_greeting_card_string%></title>
