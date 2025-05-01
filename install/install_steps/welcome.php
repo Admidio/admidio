@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
@@ -43,7 +44,7 @@ if ($mode === 'html') {
         'adm_system_language',
         $gL10n->get('INS_PLEASE_CHOOSE_LANGUAGE'),
         $gL10n->getAvailableLanguages(),
-        array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
+        array('defaultValue' => Language::determineBrowserLanguage('en'), 'showContextDependentFirstEntry' => false)
     );
     $form->addSubmitButton(
         'adm_next_page',
