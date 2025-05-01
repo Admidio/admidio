@@ -345,6 +345,9 @@ class OIDCService extends SSOService {
             // Validate the HTTP request and return an AuthorizationRequest object.
             $authRequest = $this->authServer->validateAuthorizationRequest($request);
             self::$client = $authRequest->getClient();
+            if (!self::$client->isEnabled()) {
+                throw OAuthServerException::invalidClient($request, 'Client "' . self::$client->getIdentifier() . '" is valid, but disabled. Login is not allowed.');
+            }
             
             // Redirect the user to a login endpoint if not logged in yet.
             if (!$gValidLogin) {

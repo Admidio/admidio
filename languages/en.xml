@@ -1457,6 +1457,7 @@
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentication Endpoint</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token Endpoint</string>
   <string name="SYS_SSO_OIDC_USERINFO_ENDPOINT">Userinfo Endpoint</string>
+  <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
 
   <string name="SYS_SSO_NAME_PROPERTIES">Client (Service Provider) name and properties</string>
   <string name="SYS_SSO_USERDATA_ACCESS">User data and access permissions</string>

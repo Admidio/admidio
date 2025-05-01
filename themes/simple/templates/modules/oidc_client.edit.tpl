@@ -7,6 +7,7 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_SSO_NAME_PROPERTIES')}</div>
         <div class="card-body">
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_enabled']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_name']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_id']}
             {include 'sys-template-parts/form.custom-content.tpl' data=$elements['ocl_client_secret']}

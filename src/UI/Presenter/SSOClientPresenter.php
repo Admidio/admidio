@@ -3,6 +3,7 @@ namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Service\SAMLService;
@@ -190,6 +191,12 @@ class SSOClientPresenter extends PagePresenter
             $this
         );
 
+        $form->addCheckbox(
+            'smc_enabled',
+            $gL10n->get('SYS_ENABLED'),
+            $client->getValue('smc_enabled'),
+            array()
+        );
         $form->addInput(
             'smc_client_name',
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
@@ -519,6 +526,12 @@ class SSOClientPresenter extends PagePresenter
             $this
         );
 
+        $form->addCheckbox(
+            'ocl_enabled',
+            $gL10n->get('SYS_ENABLED'),
+            $client->getValue('ocl_enabled'),
+            array()
+        );
         $form->addInput(
             'ocl_client_name',
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
@@ -732,6 +745,26 @@ class SSOClientPresenter extends PagePresenter
     }
 
 
+    /** 
+     * Display a toggle to enable/disable a client (via a json call).
+     * @param  $name
+     */
+    protected function generateEnableLink(SSOClient $client) {
+        global $gL10n;
+        $enabled = $client->isEnabled();
+        $uuid = $client->getValue($client->getColumnPrefix() . '_uuid');
+
+        $clientToggleURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'enable', 'uuid' => $uuid, 'enabled' => !$enabled));
+        $actions = '
+        <a href="#" 
+           class="admidio-icon-link toggle-client-status" 
+           data-uuid="' . $uuid . '" 
+           data-enabled="' . ($enabled ? '1' : '0') . '" 
+           title="' . $gL10n->get($enabled ? 'SYS_DISABLE' : 'SYS_ENABLE') . '">
+           <i class="bi bi-toggle-' . ($enabled ? 'on' : 'off') . ' fs-2"></i>
+        </a>';
+        return $actions;
+    } 
 
     /**
      * Create the list of SAML and OIDC clients to show to the user.
@@ -782,6 +815,7 @@ class SSOClientPresenter extends PagePresenter
         $table = new \HtmlTable('adm_saml_clients_table', $this, true, false);
     
         $table->addRowHeadingByArray(array(
+            $gL10n->get('SYS_ENABLED'),
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
             $gL10n->get('SYS_SSO_CLIENT_ID'),
             $gL10n->get('SYS_SSO_ACS_URL'),
@@ -803,6 +837,7 @@ class SSOClientPresenter extends PagePresenter
             $client = new SAMLClient($gDb);
             $client->readDataByUuid($clientUUID);
             $templateClient = array();
+            $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('smc_client_name') . '</a>';
             $templateClient[] = $client->getValue('smc_client_id');
             $templateClient[] = $client->getValue('smc_acs_url');
@@ -839,6 +874,7 @@ class SSOClientPresenter extends PagePresenter
         $table = new \HtmlTable('adm_oidc_clients_table', $this, true, false);
     
         $table->addRowHeadingByArray(array(
+            $gL10n->get('SYS_ENABLED'),
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
             $gL10n->get('SYS_SSO_CLIENT_ID'),
             $gL10n->get('SYS_SSO_REDIRECT_URI'),
@@ -860,6 +896,7 @@ class SSOClientPresenter extends PagePresenter
             $client = $OIDCService->createClientObject($clientUUID);
             $client->readDataByUuid($clientUUID);
             $templateClient = array();
+            $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('ocl_client_name') . '</a>';
             $templateClient[] = $client->getValue('ocl_client_id');
             $templateClient[] = $client->getValue('ocl_redirect_uri');
@@ -881,7 +918,45 @@ class SSOClientPresenter extends PagePresenter
 
             $table->addRowByArray($templateClient, 'adm_saml_client_' . $clientUUID, array('nobr' => 'true'));
         }
-    
+
+        // Add JS for toggling clients (enabled/disabled)
+        $this->addJavascript("
+            $('.toggle-client-status').on('click', function (e) {
+              e.preventDefault();
+          
+              var \$link = $(this);
+              var \$icon = \$link.find('i');
+              var currentlyEnabled = \$link.data('enabled') === 1 || \$link.data('enabled') === '1';
+              var newEnabled = currentlyEnabled ? 0 : 1;
+          
+              $.get('clients.php?mode=enable', {
+                uuid: \$link.data('uuid'),
+                enabled: newEnabled
+              })
+              .done(function (response) {
+                var data = typeof response === 'string' ? JSON.parse(response) : response;
+          
+                if (data.success) {
+                  // Toggle icon class
+                  \$icon.removeClass('bi-toggle-' + (currentlyEnabled ? 'on' : 'off'))
+                       .addClass('bi-toggle-' + (currentlyEnabled ? 'off' : 'on'));
+          
+                  // Update tooltip title (you might want to localize this)
+                  \$link.attr('title', currentlyEnabled ? 'Enable' : 'Disable');
+                  \$link.tooltip('dispose').tooltip(); // Refresh tooltip if Bootstrap tooltip is used
+          
+                  // Update data-enabled attribute
+                  \$link.data('enabled', newEnabled);
+                } else {
+                  alert('Update failed: ' + (data.message || 'Unknown error'));
+                }
+              })
+              .fail(function () {
+                alert('Server communication error.');
+              });
+            });
+          ", true);
+          
         // add table to the form
         $this->addHtml(html: $table->show());
 

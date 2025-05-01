@@ -11,6 +11,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Service\SAMLService;
 use Admidio\SSO\Entity\OIDCClient;
@@ -18,7 +19,7 @@ use Admidio\SSO\Service\OIDCService;
 use Admidio\UI\Presenter\SSOClientPresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit_saml', 'save_saml', 'delete_saml', 'edit_oidc', 'save_oidc', 'delete_oidc', 'sequence')));
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit_saml', 'save_saml', 'delete_saml', 'edit_oidc', 'save_oidc', 'delete_oidc', 'sequence', 'enable')));
 
 try {
     
@@ -94,9 +95,25 @@ try {
             $client->delete();
             echo json_encode(array('status' => 'success'));
             break;
+        case 'enable':
+            $enabled = admFuncVariableIsValid($_GET, 'enabled', 'boolean');
+            $client = new SAMLClient($gDb);
+            $client->readDataByUuid($getClientUUID);
+            if ($client->isNewRecord()) {
+                // Not a SAML record, so try OIDC:
+                $client = new OIDCClient($gDb);
+                $client->readDataByUuid($getClientUUID);
+            }
+            if ($client->isNewRecord()) {
+                throw new Exception('SYS_SSO_INVALID_CLIENT');
+            }
+            $client->enable($enabled);
+            $client->save();
+            echo json_encode(['success' => true]);
+            break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('save', 'delete', 'save_saml', 'delete_saml', 'save_oidc', 'delete_oidc'))) {
+    if (in_array($getMode, array('save', 'delete', 'save_saml', 'delete_saml', 'save_oidc', 'delete_oidc', 'enable'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());

@@ -34,6 +34,15 @@ class SSOClient extends Entity
         }
     }
 
+    public function getIdentifier(): string {
+        return $this->getValue($this->columnPrefix . '_client_id')??'';
+    }
+
+    public function getName(): string {
+        return $this->getValue($this->columnPrefix . '_client_name')??'';
+    }
+
+
     /**
      * Deletes the selected record of the table and all references in other tables.
      * @return bool **true** if no error occurred
@@ -46,6 +55,24 @@ class SSOClient extends Entity
             $this->rolesAccess->delete();
         }
         return parent::delete();
+    }
+
+    /**
+     * Enables/disables the selected record of the table and all references in other tables.
+     * @throws Exception
+     */
+    public function enable(bool $enabled = true)
+    {
+        $this->setValue($this->columnPrefix . '_enabled', $enabled);
+    }
+
+    /**
+     * Returns whether the client is enabled or not.
+     * @return bool Whether the client is enabled
+     */
+    public function isEnabled(): bool
+    {
+        return $this->getValue($this->columnPrefix . '_enabled');
     }
 
    /**

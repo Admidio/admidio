@@ -285,7 +285,14 @@ class SAMLService extends SSOService {
         $response->setID('ID' . \LightSaml\Helper::generateID());
         $response->setInResponseTo($request->getID());
         $response->setIssueInstant(new \DateTime());
-        $response->setDestination($request->getAssertionConsumerServiceURL());
+        if ($request instanceof LogoutRequest) {
+            $response->setDestination($client->getValue('smc_slo_url'));
+        } elseif (method_exists($request, 'getAssertionConsumerServiceURL')) {
+            $response->setDestination($request->getAssertionConsumerServiceURL());
+        } else {
+            $response->setDestination($client->getValue('smc_acs_url'));
+        }
+        $response->setRelayState($request->getRelayState());
 
 
         $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
@@ -369,6 +376,10 @@ class SAMLService extends SSOService {
         $client = $this->getClientFromID($entityIdClient);
 
         try {
+            if (!$client->isEnabled()) {
+                throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Login is no possible.");
+            }
+
             // Validate signatures. Will throw an exception
             if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
                 $this->validateSignature($client, $request, $client->getValue('smc_require_auth_signed'));
@@ -412,6 +423,7 @@ class SAMLService extends SSOService {
             $response->setDestination($clientACS);
             $response->setIssuer($issuer);
             $response->setInResponseTo($requestId);
+            $response->setRelayState($request->getRelayState());
             $assertion = new Assertion();
 
             // Create SubjectConfirmationData
@@ -560,6 +572,9 @@ class SAMLService extends SSOService {
         $client = $this->getClientFromID($entityIdClient);
 
         try {
+            if (!$client->isEnabled()) {
+                throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Logout is no possible.");
+            }
             // Validate signatures. Will throw an exception
             if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
                 $this->validateSignature($client, $request, $client->getValue('smc_require_auth_signed'));
@@ -604,9 +619,11 @@ class SAMLService extends SSOService {
                 // Notify all registered SPs for logout
                 foreach ($this->getIds() as $spId) {
                     // Don't send a logout request to the client that initiated the logout request
-                    if ($spId != $entityIdClient) {
+                    if (spId != $entityIdClient) {
                         $sp = new SAMLClient($this->db, $spId);
-                        $this->sendLogoutRequest($sp, $gCurrentUser);
+                        if ($sp->isEnabled()) {
+                            $this->sendLogoutRequest($sp, $gCurrentUser);
+                        }
                     }
                 }
 
@@ -709,6 +726,9 @@ class SAMLService extends SSOService {
         $client = $this->getClientFromID($entityIdClient);
 
         try{
+            if (!$client->isEnabled()) {
+                throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Query is no possible.");
+            }
             if (!$gCurrentUserId) {
                 require_once($rootPath . '/system/login_valid.php');
             }

@@ -15,14 +15,6 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         }
     }
 
-    public function getIdentifier(): string {
-        return $this->getValue($this->columnPrefix . '_client_id')??'';
-    }
-
-    public function getName(): string {
-        return $this->getValue($this->columnPrefix . '_client_name')??'';
-    }
-
     public function getRedirectUri(): string
     {
         return $this->getValue($this->columnPrefix . '_redirect_uri')??'';
@@ -34,26 +26,8 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         return true;
     }
 
-    public function getUseridField(): string
-    {
-        return $this->getValue($this->columnPrefix . '_userid_field')??'';
-    }
-
     public function getFieldMappingNoDefault(): bool
     {
         return $this->getFieldMappingCatchall();
-    }
-
-
-    /**
-     * Retrieve the list of database fields that are ignored for the changelog.
-     * In addition to the default ignored columns, don't log fot_views
-     *
-     * @return true Returns the list of database columns to be ignored for logging.
-     */
-    public function getIgnoredLogColumns(): array
-    {
-        return array_merge(parent::getIgnoredLogColumns(),
-        ($this->newRecord)?[$this->columnPrefix.'_name']:[]);
     }
 }
