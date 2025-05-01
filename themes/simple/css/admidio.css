@@ -492,7 +492,6 @@ label {
     --bs-accordion-btn-color: var(--bs-link-color);
     --bs-accordion-active-color: var(--bs-tertiary);
     --bs-accordion-active-bg: var(--bs-secondary);
-    --accordion-icon-color: var(--bs-link-color);
 }
 
 .accordion-button::after {
