@@ -79,6 +79,10 @@
     padding-left: 1rem;
     padding-right: 1rem;
     max-width: 1000px;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 }
 
 .admidio-max-content {
@@ -207,6 +211,14 @@ a {
 .dt-container, .admidio-margin-bottom, .admidio-content-header,
 .admidio-content-subheader, .tab-content {
     margin-bottom: 2rem;
+}
+
+.admidio-tabbed-field-group, .admidio-accordion-field-group {
+    margin-bottom: 1rem;
+}
+
+.admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group){
+    margin-bottom: 0;
 }
 
 /* add 5px distance to all icons within a icon text combination */
@@ -345,9 +357,11 @@ label {
 /* Cards */
 /***********************************/
 
-.admidio-blog, .admidio-field-group, .admidio-blog .card-header, .admidio-blog .card-body,
+.admidio-blog, .admidio-field-group, .admidio-tabbed-field-group, .admidio-accordion-field-group, .admidio-blog .card-header, .admidio-blog .card-body,
 .admidio-blog .card-footer, .admidio-field-group .card-header, .admidio-field-group .card-body,
-.admidio-field-group .card-footer {
+.admidio-field-group .card-footer, .admidio-tabbed-field-group .card-header, .admidio-tabbed-field-group .card-body,
+.admidio-tabbed-field-group .card-footer, .admidio-accordion-field-group .card-header, .admidio-accordion-field-group .card-body,
+.admidio-accordion-field-group .card-footer {
     border: none;
     background-color: var(--bs-tertiary);
 }
@@ -376,6 +390,43 @@ label {
 }
 
 .admidio-field-group .list-group-item .list-group-item {
+    padding: 0;
+}
+
+
+.profile-tabs {
+    flex-wrap: nowrap;     /* never wrap */
+    width: 100%;
+}
+
+.profile-tabs .nav-link {
+    max-width: 250px;
+}
+
+.profile-tabs .dropdown-toggle {
+    white-space: normal;
+    text-align: center;
+    align-content: center;
+}
+
+.admidio-tabbed-field-group .card-body, .admidio-accordion-field-group .card-body {
+    border-radius: var(--bs-card-inner-border-radius);
+}
+
+.admidio-tabbed-field-group .card-body .list-group-item, .admidio-accordion-field-group .card-body .list-group-item {
+    background-color: var(--bs-tertiary);
+}
+
+.admidio-tabbed-field-group .list-group-item, .admidio-accordion-field-group .list-group-item {
+    border: none;
+    padding: 0 0 1rem 0;
+}
+
+.admidio-tabbed-field-group .button, .admidio-accordion-field-group .button {
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.admidio-tabbed-field-group .list-group-item .list-group-item, .admidio-accordion-field-group .list-group-item .list-group-item {
     padding: 0;
 }
 
@@ -426,6 +477,22 @@ label {
 }
 
 /***********************************/
+/* Tabs */
+/***********************************/
+
+.tab-content {
+    border-left: var(--bs-border-width) solid var(--bs-border-color);
+    border-right: var(--bs-border-width) solid var(--bs-border-color);
+    border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: 0px 0px var(--bs-border-radius) var(--bs-border-radius);
+    padding: 1rem 1rem 0 1rem;
+}
+
+.tab-content:has( > .tab-pane > .accordion) {
+    padding: unset;
+}
+
+/***********************************/
 /* Accordion */
 /***********************************/
 
@@ -436,6 +503,20 @@ label {
     --bs-accordion-active-bg: var(--bs-secondary);
 }
 
+.accordion-button::after {
+    background-image: none !important;
+    background-color: var(--bs-accordion-btn-color);
+    mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='black'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") no-repeat center;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-color: var(--bs-accordion-active-color);
+}
+
+.accordion-body {
+    padding: 1rem 1rem 0 1rem;
+}
+
 .accordion-button {
     font-size: 1.3rem;
 }
@@ -443,6 +524,24 @@ label {
 .accordion-button:focus {
     box-shadow: none;
 }
+
+.tab-content .accordion .accordion-item:first-child {
+    border-top: unset;
+}
+
+.tab-content .accordion .accordion-item:last-child {
+    border-bottom: unset;
+}
+
+.tab-content .accordion .accordion-item {
+    border-left: unset;
+    border-right: unset;
+}
+
+.tab-content .accordion .accordion-item:first-of-type > .accordion-header .accordion-button {
+    border-radius: unset;
+}
+
 
 /***********************************/
 /* Navbar */
@@ -456,8 +555,13 @@ label {
     background-color: var(--bs-tertiary);
 }
 
+.nav-tabs {
+    margin-bottom: 0;
+}
+
 .nav-tabs .nav-link {
     background-color: var(--bs-tertiary);
+    border-color: var(--bs-nav-tabs-border-color);
     font-weight: bold;
 }
 

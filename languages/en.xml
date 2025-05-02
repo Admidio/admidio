@@ -483,7 +483,6 @@
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
-  <string name="SYS_DELETE_VAR">Delete #VAR1#</string>
   <string name="SYS_DELETED">Deleted</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
@@ -855,6 +854,7 @@
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">One of the configurations specified here can be used to display the members administration. The columns of the selected list configuration are then displayed in the members administration.</string>
   <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>
+  <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Current role memberships</string>
   <string name="SYS_MEMBERS_PER_PAGE">Members displayed per page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Found #VAR1# members with a similar name.</string>
@@ -1073,6 +1073,7 @@
   <string name="SYS_PROCESS_CANCELED">Process canceled.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">The following problem has occurred when processing the data.</string>
   <string name="SYS_PROFILE">Profile</string>
+  <string name="SYS_PROFILE_DATA">Profile data</string>
   <string name="SYS_PROFILE_FIELD">Profile field</string>
   <string name="SYS_PROFILE_FROM">Profile of #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profile information</string>

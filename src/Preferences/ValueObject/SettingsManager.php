@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Preferences\ValueObject;
 
 use Admidio\Infrastructure\Database;
@@ -83,7 +84,7 @@ class SettingsManager
      */
     private function delete(string $name)
     {
-        $sql = 'DELETE FROM '.TBL_PREFERENCES.'
+        $sql = 'DELETE FROM ' . TBL_PREFERENCES . '
                  WHERE prf_org_id = ? -- $orgId
                    AND prf_name   = ? -- $name';
         $this->db->queryPrepared($sql, array($this->orgId, $name));
@@ -147,7 +148,7 @@ class SettingsManager
             throw new Exception('Settings name "' . $name . '" does not exist!');
         }
 
-        return $this->settings[$name];
+        return (string)$this->settings[$name];
     }
 
     /**
@@ -252,7 +253,7 @@ class SettingsManager
      */
     private static function isValidName(string $name): bool
     {
-        return (bool) preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
+        return (bool)preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
     }
 
     /**
@@ -273,7 +274,7 @@ class SettingsManager
     private function loadAll(): array
     {
         $sql = 'SELECT prf_name, prf_value
-                  FROM '.TBL_PREFERENCES.'
+                  FROM ' . TBL_PREFERENCES . '
                  WHERE prf_org_id = ? -- $this->orgId';
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId));
 
@@ -295,7 +296,7 @@ class SettingsManager
     private function load(string $name): string|null
     {
         $sql = 'SELECT prf_value
-                  FROM '.TBL_PREFERENCES.'
+                  FROM ' . TBL_PREFERENCES . '
                  WHERE prf_org_id = ? -- $this->orgId
                    AND prf_name   = ? -- $name';
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
@@ -353,7 +354,7 @@ class SettingsManager
         $this->db->startTransaction();
 
         foreach ($settings as $name => $value) {
-            $this->updateOrInsertSetting($name, (string) $value, $update);
+            $this->updateOrInsertSetting($name, (string)$value, $update);
         }
 
         $this->db->endTransaction();
@@ -378,12 +379,12 @@ class SettingsManager
         if (is_array($value)) {
             $value = implode(',', $value);
         }
-        
+
         if (!self::isValidValue($value)) {
             throw new Exception('Settings value "' . $value . '" is an invalid value!');
         }
 
-        $this->updateOrInsertSetting($name, (string) $value, $update);
+        $this->updateOrInsertSetting($name, (string)$value, $update);
 
         try {
             $this->settings[$name] = $this->load($name);

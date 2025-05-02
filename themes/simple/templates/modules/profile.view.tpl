@@ -1,245 +1,250 @@
-<div id="adm_user_data_panel" class="card admidio-field-group">
-    <div class="card-header">{$l10n->get('SYS_BASIC_DATA')}</div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-sm-8">
-                {$showName = true}
-                {$showUsername = true}
-                {$showAddress = true}
-                {foreach $masterData as $profileField}
-                    {if {$profileField.id} == 'LAST_NAME' || {$profileField.id} == 'FIRST_NAME' || {$profileField.id} == 'GENDER'}
-                        {if $showName}
-                            {$showName = false}
-                            <div class="admidio-form-group row mb-3">
-                                <div class="col-sm-3">
-                                    {$l10n->get('SYS_NAME')}
-                                </div>
-                                <div class="col-sm-9">
-                                    <strong>
-                                    {$masterData.FIRST_NAME.value} {$masterData.LAST_NAME.value}
-                                    {if isset($masterData.GENDER)}
-                                        {$masterData.GENDER.value}
-                                    {/if}
-                                    </strong>
-                                </div>
-                            </div>
-                        {/if}
-                    {elseif {$profileField.id} == 'usr_login_name' || {$profileField.id} == 'usr_actual_login'}
-                        {if $showUsername}
-                            {$showUsername = false}
-                            <div class="admidio-form-group row mb-3">
-                                <div class="col-sm-3">
-                                    {$profileField.label}
-                                </div>
-                                <div class="col-sm-9">
-                                    <strong>{$profileField.value}</strong>
-                                    {if isset($masterData.usr_actual_login)}
-                                        <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
-                                           data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
-                                           data-bs-content="{$lastLoginInfo}"></i>
-                                    {/if}
-                                </div>
-                            </div>
-                        {/if}
-                    {elseif {$profileField.id} == 'STREET' || {$profileField.id} == 'POSTCODE' || {$profileField.id} == 'CITY' || {$profileField.id} == 'COUNTRY'}
-                            {if $showAddress}
-                                {$showAddress = false}
-                                <div class="admidio-form-group row mb-3">
-                                    <div class="col-sm-3">
-                                        {$l10n->get('SYS_ADDRESS')}
-                                    </div>
-                                    <div class="col-sm-9"><strong>
-                                        {$masterData.STREET.value}<br />
-                                        {$masterData.POSTCODE.value}  {$masterData.CITY.value}<br />
-                                        {$masterData.COUNTRY.value}</strong>
-                                        {if isset($urlMapAddress)}
-                                            <br />
-                                            <a class="icon-link" href="{$urlMapAddress}" target="_blank" title="{$l10n->get('SYS_MAP_LINK_HOME_DESC')}">
-                                                <i class="bi bi-pin-map-fill"></i>{$l10n->get('SYS_MAP')}</a>
-                                            {if isset($urlMapRoute)}
-                                                &nbsp;-&nbsp;
-                                                <a class="icon-link" href="{$urlMapRoute}" target="_blank" title="{$l10n->get('SYS_MAP_LINK_ROUTE_DESC')}">
-                                                    <i class="bi bi-sign-turn-right-fill"></i>{$l10n->get('SYS_SHOW_ROUTE')}</a>
-                                            {/if}
-                                        {/if}
-                                    </div>
-                                </div>
-                            {/if}
-                    {else}
-                        <div class="admidio-form-group row mb-3">
-                            <div class="col-sm-3">
-                                {if strlen($profileField.icon) > 0}
-                                    {$profileField.icon}
-                                {/if}
-                                {$profileField.label}
-                            </div>
-                            <div class="col-sm-9">
-                                <strong>{$profileField.value}</strong>
-                            </div>
-                        </div>
+<!-- Responsive Tabs and Accordions -->
+<div class="d-none d-md-block">
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs profile-tabs" id="adm_profile_tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="adm_profile_basic_informations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_basic_informations_pane" type="button" role="tab" aria-controls="adm_profile_basic_data" aria-selected="true">
+                {$l10n->get('SYS_BASIC_DATA')}
+            </button>
+        </li>
+        {if $showCurrentRoles || $showExternalRoles}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="adm_profile_role_permissions_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_permissions_pane" type="button" role="tab" aria-controls="adm_profile_permissions" aria-selected="false">
+                    {$l10n->get('SYS_PERMISSIONS')}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="adm_profile_role_memberships_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_role_memberships_pane" type="button" role="tab" aria-controls="adm_profile_role_memberships" aria-selected="false">
+                    {$l10n->get('SYS_ROLE_MEMBERSHIPS')}
+                </button>
+            </li>
+        {/if}
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="adm_profile_user_relations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_user_relations_pane" type="button" role="tab" aria-controls="adm_profile_user_relations" aria-selected="false">
+                {$l10n->get('SYS_USER_RELATIONS')}
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="adm_profile_tabs_content">
+        <!-- Basic Data Tab -->
+        <div class="tab-pane fade show active" id="adm_profile_basic_informations_pane" role="tabpanel" aria-labelledby="adm_profile_basic_informations_tab">
+            <!-- Profile Data Card -->
+            <div class="card admidio-tabbed-field-group">
+                <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
+                    {if isset($urlEditProfile)}
+                        <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlEditProfile}">
+                            <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_PROFILE')}</a>
                     {/if}
-                {/foreach}
+                </div>
+                <div class="card-body">
+                    {include file="modules/profile.view.basic-informations.tpl"}
+                </div>
             </div>
-            <div class="col-sm-4 text-end">
-                <img id="adm_profile_photo" class="rounded" src="{$urlProfilePhoto}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
-                {if isset($urlProfilePhotoUpload)}
-                    <ul class="list-unstyled">
-                        <li><a class="icon-link" href="{$urlProfilePhotoUpload}">
-                                <i class="bi bi-upload"></i>{$l10n->get('SYS_UPLOAD_PROFILE_PICTURE')}</a></li>
-                        {if isset($urlProfilePhotoDelete)}
-                            <li><a id="adm_button_delete_photo" class="icon-link admidio-messagebox" href="javascript:void(0);"
-                                   data-buttons="yes-no" data-message="{$l10n->get('SYS_WANT_DELETE_PHOTO')}"
-                                   data-href="{$urlProfilePhotoDelete}"><i class="bi bi-trash"></i>{$l10n->get('SYS_DELETE_PROFILE_PICTURE')}</a></li>
+            <!-- Dynamic Cards for additional Profile Data categories -->
+            {foreach $profileData as $categoryName => $category}
+                <div class="card admidio-tabbed-field-group">
+                    <div class="card-header">{$categoryName}</div>
+                    <div class="card-body">
+                        {include file="modules/profile.view.categories.tpl"}
+                    </div>
+                </div>
+            {/foreach}
+        </div>
+
+        <!-- Permissions Tab -->
+        <div class="tab-pane fade" id="adm_profile_permissions_pane" role="tabpanel" aria-labelledby="adm_profile_permissions_tab">
+            {include file="modules/profile.view.permissions.tpl"}
+        </div>
+
+        <!-- Role Memberships Tab -->
+        <div class="tab-pane fade" id="adm_profile_role_memberships_pane" role="tabpanel" aria-labelledby="adm_profile_role_memberships_tab">
+            {if $showCurrentRoles}
+                <!-- Current Role Memberships Card -->
+                <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_current_pane_content">
+                    <div class="card-header">{$l10n->get('SYS_CURRENT_ROLE_MEMBERSHIP')}
+                        {if $isAdministratorRoles}
+                            <a class="btn btn-secondary float-end openPopup" id="adm_profile_role_memberships_change"
+                            data-class="modal-lg" href="javascript:void(0);" data-href="{$urlEditRoles}">
+                                <i class="bi bi-person-gear me-1"></i>{$l10n->get('SYS_ROLE_MEMBERSHIPS_CHANGE')}</a>
                         {/if}
-                    </ul>
-                {/if}
+                    </div>
+                    <div class="card-body">
+                    </div>
+                </div>
+                <!-- Future Role Memberships Card -->
+                <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_future_pane_content">
+                    <div class="card-header">{$l10n->get('SYS_FUTURE_ROLE_MEMBERSHIP')}</div>
+                    <div class="card-body">
+                    </div>
+                </div>
+                <!-- Former Role Memberships Card -->
+                <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_former_pane_content">
+                    <div class="card-header">{$l10n->get('SYS_FORMER_ROLE_MEMBERSHIP')}</div>
+                    <div class="card-body">
+                    </div>
+                </div>
+            {/if}
+            {if $showExternalRoles}
+                <!-- Other Org Role Memberships Card -->
+                <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_other_org_pane_content">
+                    <div class="card-header">
+                        {$l10n->get('SYS_ROLE_MEMBERSHIP_OTHER_ORG')}
+                        <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
+                        data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+                        data-bs-content="{$l10n->get('SYS_VIEW_ROLES_OTHER_ORGAS')}"></i>
+                    </div>
+                    <div class="card-body">
+                        {include file="modules/profile.view.other-org-memberships.tpl"}
+                    </div>
+                </div>
+            {/if}
+        </div>
+        <!-- User Relations Tab -->
+        <div class="tab-pane fade" id="adm_profile_user_relations_pane" role="tabpanel" aria-labelledby="adm_profile_user_relations_tab">
+            <div class="card admidio-tabbed-field-group">
+                <div class="card-header">
+                    {if $isAdministratorUsers}
+                        <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlAssignUserRelations}">
+                            <i class="bi bi-person-heart me-1"></i>{$l10n->get('SYS_CREATE_RELATIONSHIP')}</a>
+                    {/if}
+                </div>
+                <div class="card-body">
+                    {include file="modules/profile.view.relations.tpl"}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-{foreach $profileData as $categoryName => $category}
-    <div class="card admidio-field-group">
-        <div class="card-header">{$categoryName}</div>
-        <div class="card-body">
-            {$fieldGroupOpened = false}
-            {foreach $category as $profileField}
-                {if $fieldGroupOpened eq false}
-                    <div class="admidio-form-group row mb-3">
-                {/if}
-                <div class="col-sm-2">
-                    {if strlen($profileField.icon) > 0}
-                        {$profileField.icon}
-                    {/if}
-                    {$profileField.label}
-                </div>
-                <div class="col-sm-4">
-                    <strong>{$profileField.value}</strong>
-                </div>
-                {if $fieldGroupOpened eq false}
-                    {$fieldGroupOpened = true}
-                {else}
-                    {$fieldGroupOpened = false}
+<div class="d-block d-md-none">
+    <!-- Accordion Navigation -->
+    <div class="accordion" id="adm_profile_accordion">
+        <!-- Basic Data Accordion -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="adm_profile_basic_informations_accordion_heading">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_basic_informations_accordion" aria-expanded="true" aria-controls="adm_profile_basic_informations_accordion">
+                    {$l10n->get('SYS_BASIC_DATA')}
+                </button>
+            </h2>
+            <div id="adm_profile_basic_informations_accordion" class="accordion-collapse collapse show" aria-labelledby="adm_profile_basic_informations_accordion_heading" data-bs-parent="#adm_profile_accordion">
+                <div class="accordion-body">
+                    <div class="card admidio-accordion-field-group">
+                    <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
+                        {if isset($urlEditProfile)}
+                            <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlEditProfile}">
+                                <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_PROFILE')}</a>
+                        {/if}
                     </div>
-                {/if}
-
-            {/foreach}
-            {if $fieldGroupOpened}
+                    <div class="card-body">
+                        {include file="modules/profile.view.basic-informations.tpl"}
+                    </div>
                 </div>
-            {/if}
+                <!-- Dynamic Cards for additional Profile Data categories -->
+                {foreach $profileData as $categoryName => $category}
+                    <div class="card admidio-accordion-field-group">
+                        <div class="card-header">{$categoryName}</div>
+                        <div class="card-body">
+                            {include file="modules/profile.view.categories.tpl"}
+                        </div>
+                    </div>
+                {/foreach}
+                </div>
+            </div>
         </div>
-    </div>
-{/foreach}
-
-{if $showCurrentRoles}
-    <div class="card admidio-field-group" id="adm_profile_authorizations_box">
-        <div class="card-header">{$l10n->get('SYS_PERMISSIONS')}</div>
-        <div class="card-body">
-            <div class="row">
-                {if count($userRights) > 0}
-                    {foreach $userRights as $userRight}
-                        <div class="col-sm-6 col-md-4 admidio-profile-user-right" data-bs-toggle="popover" data-bs-html="true"
-                             data-bs-trigger="hover click" data-bs-placement="auto" data-bs-content="{$l10n->get('SYS_ASSIGNED_BY_ROLES')}:
-                            <strong>{$userRight.roles}</strong>"><i class="bi {$userRight.icon}"></i>{$userRight.right}</div>
-                    {/foreach}
-                {else}
-                    <div class="col-sm-12">{$l10n->get('SYS_NO_PERMISSIONS_ASSIGNED')}</div>
-                {/if}
+        <!-- Permissions Accordion -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="adm_profile_role_permissions_accordion_heading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_role_permissions_accordion" aria-expanded="false" aria-controls="adm_profile_role_permissions_accordion">
+                    {$l10n->get('SYS_PERMISSIONS')}
+                </button>
+            </h2>
+            <div id="adm_profile_role_permissions_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_role_permissions_accordion_heading" data-bs-parent="#adm_profile_accordion">
+                <div class="accordion-body">
+                    {include file="modules/profile.view.permissions.tpl"}
+                </div>
+            </div>
+        </div>
+        {if $showCurrentRoles || $showExternalRoles}
+            <!-- Role Memberships Accordion -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="adm_profile_role_memberships_accordion_heading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_role_memberships_accordion" aria-expanded="false" aria-controls="adm_profile_role_memberships_accordion">
+                        {$l10n->get('SYS_ROLE_MEMBERSHIPS')}
+                    </button>
+                </h2>
+                <div id="adm_profile_role_memberships_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_role_memberships_accordion_heading" data-bs-parent="#adm_profile_accordion">
+                    <div class="accordion-body">
+                    {if $showCurrentRoles}
+                        <!-- Current Role Memberships Card -->
+                        <div class="card admidio-accordion-field-group" id="adm_profile_role_memberships_current_accordion_content">
+                            <div class="card-header">{$l10n->get('SYS_CURRENT_ROLE_MEMBERSHIP')}
+                                {if $isAdministratorRoles}
+                                    <a class="btn btn-secondary float-end openPopup" id="adm_profile_role_memberships_change"
+                                    data-class="modal-lg" href="javascript:void(0);" data-href="{$urlEditRoles}">
+                                        <i class="bi bi-person-gear me-1"></i>{$l10n->get('SYS_ROLE_MEMBERSHIPS_CHANGE')}</a>
+                                {/if}
+                            </div>
+                            <div class="card-body">
+                            </div>
+                        </div>
+                        <!-- Future Role Memberships Card -->
+                        <div class="card admidio-accordion-field-group" id="adm_profile_role_memberships_future_accordion_content">
+                            <div class="card-header">{$l10n->get('SYS_FUTURE_ROLE_MEMBERSHIP')}</div>
+                            <div class="card-body">
+                            </div>
+                        </div>
+                        <!-- Former Role Memberships Card -->
+                        <div class="card admidio-accordion-field-group" id="adm_profile_role_memberships_former_accordion_content">
+                            <div class="card-header">{$l10n->get('SYS_FORMER_ROLE_MEMBERSHIP')}</div>
+                            <div class="card-body">
+                            </div>
+                        </div>
+                    {/if}
+                    
+                    {if $showExternalRoles}
+                        <!-- Other Org Role Memberships Card -->
+                        <div class="card admidio-accordion-field-group" id="adm_profile_role_memberships_other_org_accordion_content">
+                            <div class="card-header">
+                                {$l10n->get('SYS_ROLE_MEMBERSHIP_OTHER_ORG')}
+                                <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
+                                data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+                                data-bs-content="{$l10n->get('SYS_VIEW_ROLES_OTHER_ORGAS')}"></i>
+                            </div>
+                            <div class="card-body">
+                                {include file="modules/profile.view.other-org-memberships.tpl"}
+                            </div>
+                        </div>
+                    {/if}
+                    </div>
+                </div>
+            </div>
+        {/if}
+        <!-- User Relations Accordion -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="adm_profile_user_relations_accordion_heading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_user_relations_accordion" aria-expanded="false" aria-controls="adm_profile_user_relations_accordion">
+                    {$l10n->get('SYS_USER_RELATIONS')}
+                </button>
+            </h2>
+            <div id="adm_profile_user_relations_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_user_relations_accordion_heading" data-bs-parent="#adm_profile_accordion">
+                <div class="accordion-body">
+                    <div class="card admidio-accordion-field-group">
+                        <div class="card-header">
+                            {if $isAdministratorUsers}
+                                <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlAssignUserRelations}">
+                                    <i class="bi bi-person-heart me-1"></i>{$l10n->get('SYS_CREATE_RELATIONSHIP')}</a>
+                            {/if}
+                        </div>
+                        <div class="card-body">
+                            {include file="modules/profile.view.relations.tpl"}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="card admidio-field-group" id="adm_profile_roles_box">
-        <div class="card-header">{$l10n->get('SYS_ROLE_MEMBERSHIPS')}
-            {if $isAdministratorRoles}
-                <a class="btn btn-secondary float-end openPopup" id="profile_role_memberships_change"
-                   data-class="modal-lg" href="javascript:void(0);" data-href="{$urlEditRoles}">
-                    <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT')}</a>
-            {/if}
-        </div>
-        <div class="card-body">
-        </div>
-    </div>
-    <div class="card admidio-field-group" id="adm_profile_future_roles_box" style="display: none;">
-        <div class="card-header">{$l10n->get('SYS_FUTURE_ROLE_MEMBERSHIP')}</div>
-        <div class="card-body">
-        </div>
-    </div>
-{/if}
-
-{if $showCurrentRoles}
-    <div class="card admidio-field-group" id="adm_profile_former_roles_box" style="display: none;">
-        <div class="card-header">{$l10n->get('SYS_FORMER_ROLE_MEMBERSHIP')}</div>
-        <div class="card-body">
-        </div>
-    </div>
-{/if}
-
-{if $showExternalRoles}
-    <div class="card admidio-field-group" id="profile_other_orga_roles_box">
-        <div class="card-header">
-            {$l10n->get('SYS_ROLE_MEMBERSHIP_OTHER_ORG')}
-            <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
-               data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
-               data-bs-content="{$l10n->get('SYS_VIEW_ROLES_OTHER_ORGAS')}"></i>
-        </div>
-        <div class="card-body" id="profile_other_orga_roles_box_body">
-            <ul class="list-group admidio-list-roles-assign">
-                {foreach $externalRoles as $externalRole}
-                    <li class="list-group-item">
-                        <span>{$externalRole.organization} - {$externalRole.category} - {$externalRole.role}
-                            {if $externalRole.leader}
-                                &nbsp;-&nbsp;{$l10n->get('SYS_LEADER')}
-                            {/if}
-                        </span>
-                        <span class="float-end">{$externalRole.timestamp}</span>
-                    </li>
-                {/foreach}
-            </ul>
-        </div>
-    </div>
-{/if}
-
-{if $showUserRelations}
-    <div class="card admidio-field-group" id="profile_user_relations_box">
-        <div class="card-header">{$l10n->get('SYS_USER_RELATIONS')}
-            {if $isAdministratorUsers}
-                <a class="admidio-icon-link float-end" id="profile_relations_new_entry" href="{$urlAssignUserRelations}">
-                    <i class="bi bi-plus-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_CREATE_RELATIONSHIP')}"></i></a>
-            {/if}
-        </div>
-        <div class="card-body" id="profile_user_relations_box_body">
-            <ul class="list-group admidio-list-roles-assign">
-            {foreach $userRelations as $userRelation}
-                <li id="row_ure_{$userRelation.uuid}" class="list-group-item">
-                    <div>
-                        <span>{$userRelation.relationName} - <a href="{$userRelation.urlUserProfile}">{$userRelation.userFirstName} {$userRelation.userLastName}</a>
-                            {if isset($userRelation.urlUserEdit)}
-                                <a class="admidio-icon-link" href="{$userRelation.urlUserEdit}"><i
-                                    class="bi bi-pencil-square" data-bs-toggle="tooltip" title="{$l10n->get('SYS_EDIT_USER_IN_RELATION')}"></i></a>
-                            {/if}
-                        </span>
-                        <span class="float-end text-end">
-                            {if $isAdministratorUsers}
-                                <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                                   data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$userRelation.relationName}))}" data-href="{$userRelation.urlRelationDelete}"><i
-                                    class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_CANCEL_RELATIONSHIP')}"></i></a>
-                            {/if}
-                            {if $showRelationsCreateEdit}
-                                <a class="admidio-icon-link admidio-create-edit-info" id="relation_info_{$userRelation.uuid}" href="javascript:void(0)"><i
-                                    class="bi bi-info-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_INFORMATIONS')}"></i></a>
-                            {/if}
-                        </span>
-                    </div>
-                    {if $showRelationsCreateEdit}
-                        <div id="relation_info_{$userRelation.uuid}_Content" style="display: none;">
-                            {include file="sys-template-parts/system.info-create-edit.tpl" userCreatedName=$userRelation.userCreatedName userCreatedTimestamp=$userRelation.userCreatedTimestamp lastUserEditedName=$userRelation.lastUserEditedName lastUserEditedTimestamp=$userRelation.lastUserEditedTimestamp}
-                        </div>
-                    {/if}
-                </li>
-            {/foreach}
-            </ul>
-        </div>
-    </div>
-{/if}
+</div>
 
 {include file="sys-template-parts/system.info-create-edit.tpl"}

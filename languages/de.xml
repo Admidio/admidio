@@ -1051,6 +1051,7 @@
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
   <string name="SYS_CONTACTS_DESC">Hier können alle aktiven und ehemaligen Mitglieder angezeigt und organisiert werden. Neue Kontakte können importiert oder erstellt werden.</string>
+  <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Aktuelle Rollenmitgliedschaften</string>
   <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmende pro Seite</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Es wurden #VAR1# Mitglieder mit einem ähnlichen Namen gefunden.</string>
@@ -1266,6 +1267,7 @@
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
   <string name="SYS_PROFILE">Profil</string>
+  <string name="SYS_PROFILE_DATA">Profildaten</string>
   <string name="SYS_PROFILE_FIELD">Profilfeld</string>
   <string name="SYS_PROFILE_FROM">Profil von #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformationen</string>

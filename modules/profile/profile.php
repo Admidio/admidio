@@ -120,7 +120,10 @@ try {
             if (profileJS) {
                 profileJS.formerRoleCount--;
                 if (profileJS.formerRoleCount === 0) {
-                    $("#adm_profile_former_roles_box").fadeOut("slow");
+                    /* Tabs */
+                    $("#adm_profile_role_memberships_former_pane_content").fadeOut("slow");
+                    /* Accordions */
+                    $("#adm_profile_role_memberships_former_accordion_content").fadeOut("slow");
                 }
             }
         }
@@ -129,7 +132,10 @@ try {
             if (profileJS) {
                 profileJS.futureRoleCount--;
                 if (profileJS.futureRoleCount === 0) {
-                    $("#adm_profile_future_roles_box").fadeOut("slow");
+                    /* Tabs */
+                    $("#adm_profile_role_memberships_future_pane_content").fadeOut("slow");
+                    /* Accordions */
+                    $("#adm_profile_role_memberships_future_accordion_content").fadeOut("slow");
                 }
             }
         }
@@ -183,19 +189,9 @@ try {
         profileJS.reloadFormerRoleMemberships();
         profileJS.reloadFutureRoleMemberships();
 
-        $("#menu_item_profile_password").attr("href", "javascript:void(0);");
-        $("#menu_item_profile_password").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '");
-        $("#menu_item_profile_password").attr("class", "nav-link btn btn-primary openPopup");
-
         $("#menu_item_profile_tfa").attr("href", "javascript:void(0);");
         $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
         $("#menu_item_profile_tfa").attr("class", "nav-link btn btn-primary openPopup");
-
-        $("#menu_item_profile_send_password").attr("href", "javascript:void(0);");
-        $("#menu_item_profile_send_password").attr("data-buttons", "yes-no");
-        $("#menu_item_profile_send_password").attr("data-message", "' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' profile.php' . $user->getValue('LAST_NAME'))) . '");
-        $("#menu_item_profile_send_password").attr("data-href", "callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')");
-        $("#menu_item_profile_send_password").attr("class", "nav-link btn btn-primary admidio-messagebox");
 
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
@@ -207,46 +203,6 @@ try {
         formSubmitEvent();',
         true
     );
-
-    // if user has right then show link to edit profile
-    if ($gCurrentUser->hasRightEditProfile($user)) {
-        $page->addPageFunctionsMenuItem(
-            'menu_item_profile_edit',
-            $gL10n->get('SYS_EDIT_PROFILE'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $user->getValue('usr_uuid'))),
-            'bi-pencil-square'
-        );
-    }
-
-    // Password of own user could be changed
-    if ($userId === $gCurrentUserId) {
-        $page->addPageFunctionsMenuItem(
-            'menu_item_profile_password',
-            $gL10n->get('SYS_CHANGE_PASSWORD'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)),
-            'bi-key-fill'
-        );
-    } elseif ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0) {
-        // Administrators can change or send password if login is configured and user is member of current organization
-
-        if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
-            // if email is set and systemmails are activated then administrator can send a new password to user
-            $page->addPageFunctionsMenuItem(
-                'menu_item_profile_send_password',
-                $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-                'javascript:void(0)',
-                'bi-key-fill'
-            );
-        } else {
-            // if user has no email or send email is disabled then administrator could set a new password
-            $page->addPageFunctionsMenuItem(
-                'menu_item_profile_password',
-                $gL10n->get('SYS_CHANGE_PASSWORD'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)),
-                'bi-key-fill'
-            );
-        }
-    }
 
     // show link to TFA settings if Two Factor authentication activated in global settings AND
     // - user is current user OR
@@ -275,15 +231,6 @@ try {
         'bi-download'
     );
 
-    // show link to create relations
-    if ($gSettingsManager->getBool('contacts_user_relations_enabled') && $gCurrentUser->isAdministratorUsers()) {
-        $page->addPageFunctionsMenuItem(
-            'menu_item_profile_user_relation_types',
-            $gL10n->get('SYS_CREATE_RELATIONSHIP'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)),
-            'bi-person-heart'
-        );
-    }
 
     // *******************************************************************************
     // User data block
@@ -319,6 +266,29 @@ try {
                         $value = $user->getValue('usr_login_name');
                     }
                     $masterData['usr_login_name'] = array('id' => 'usr_login_name', 'label' => $gL10n->get('SYS_USERNAME'), 'value' => $value);
+
+                    // pseudo password field
+                    $value = '';
+                    if ($userId === $gCurrentUserId) {
+                            $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
+                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
+                    } elseif ($gCurrentUser->isAdministrator() && isMember($userId) &&  strlen($user->getValue('usr_login_name')) > 0) {
+                        // Administrators can change or send password if login is configured and user is member of current organization
+                        if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
+                            $value = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0)" data-buttons="yes-no"
+                                data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '"
+                                data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">' .
+                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('ORG_SEND_NEW_PASSWORD') . '</a>';
+                        } else {
+                            // if user has no email or send email is disabled then administrator could set a new password       
+                            $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
+                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
+                        }
+                    }
+                    if ($value !== '') {
+                        $masterData['usr_password'] = array('id' => 'usr_password', 'label' => $gL10n->get('SYS_PASSWORD'), 'icon' => '', 'value' => $value);
+                    }
+
                     if (
                         !empty($user->getValue('usr_actual_login'))
                         && ($userId === $gCurrentUserId || $gCurrentUser->isAdministrator())
@@ -390,8 +360,9 @@ try {
     $page->assignSmartyVariable('profileData', $profileData);
     $page->assignSmartyVariable('lastLoginInfo', $gL10n->get('SYS_LAST_LOGIN_ON', array($user->getValue('usr_actual_login', $gSettingsManager->getString('system_date')), $user->getValue('usr_actual_login', $gSettingsManager->getString('system_time')))));
     $page->assignSmartyVariable('urlProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'timestamp' => $user->getValue('usr_timestamp_change', 'Y-m-d-H-i-s'))));
-    // Only authorized users are allowed to edit the profile photo
+    // Only authorized users are allowed to edit the profile and the profile photo
     if ($gCurrentUser->hasRightEditProfile($user)) {
+        $page->assignSmartyVariable('urlEditProfile', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $user->getValue('usr_uuid'))));
         $page->assignSmartyVariable('urlProfilePhotoUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)));
         // the image can only be deleted if corresponding rights exist
         if (
@@ -642,9 +613,6 @@ try {
         $count = (int) $statement->fetchColumn();
 
         if ($count > 0) {
-            $page->assignSmartyVariable('showUserRelations', true);
-            $page->assignSmartyVariable('urlAssignUserRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)));
-
             $sql = 'SELECT *
                   FROM ' . TBL_USER_RELATIONS . '
             INNER JOIN ' . TBL_USER_RELATION_TYPES . '
@@ -706,8 +674,8 @@ try {
             $page->assignSmartyVariable('userRelations', $userRelations);
         }
         $page->assignSmartyVariable('urlAssignRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
-    } else {
-        $page->assignSmartyVariable('showUserRelations', false);
+        $page->assignSmartyVariable('urlAssignUserRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)));
+
     }
 
     // show information about user who creates the recordset and changed it
