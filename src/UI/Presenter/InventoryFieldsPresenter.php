@@ -76,7 +76,7 @@ class InventoryFieldsPresenter extends PagePresenter
             $this
         );
 
-        if ($itemField->getValue('inf_system') == 1 && $gSettingsManager->getBool('inventory_system_field_names_editable') == false) {
+        if ($itemField->getValue('inf_system') == 1 && !$gSettingsManager->getBool('inventory_system_field_names_editable')) {
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
@@ -194,7 +194,7 @@ class InventoryFieldsPresenter extends PagePresenter
                 stop: function(event, ui) {
                     const order = $(this).sortable("toArray", {attribute: "data-uuid"});
                     const id = ui.item.attr("data-uuid");
-                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=field_sequence&uuid=" + id + "&order=" + order,
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=sequence&uuid=" + id + "&order=" + order,
                         {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
                     );
                 }

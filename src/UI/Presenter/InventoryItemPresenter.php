@@ -90,12 +90,13 @@ class InventoryItemPresenter extends PagePresenter
                 $fieldProperty = FormPresenter::FIELD_DEFAULT;
             }
         
-            if (!$gCurrentUser->isAdministratorInventory() && !in_array($itemField->getValue('inf_name_intern'), $gSettingsManager->get('inventory_allowed_keeper_edit_fields'))) {
+            $allowedFields = explode(',', $gSettingsManager->getString('inventory_allowed_keeper_edit_fields'));
+            if (!$gCurrentUser->isAdministratorInventory() && !in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
             }
             
             if (isset($pimInInventoryId, $pimLastReceiverId, $pimReceivedOnId, $pimReceivedBackOnId) && $infNameIntern === 'IN_INVENTORY') {
-                $gSettingsManager->get('inventory_field_date_time_format') === 'datetime' ? $datetime = 'true' : $datetime = 'false';
+                /* $gSettingsManager->getString('inventory_field_date_time_format') === 'datetime' ? $datetime = 'true' : $datetime = 'false'; */
         
                 // Add JavaScript to check the LAST_RECEIVER field and set the required attribute for pimReceivedOnId and pimReceivedBackOnId
                 $this->addJavascript('
@@ -222,7 +223,7 @@ class InventoryItemPresenter extends PagePresenter
             }
         
             if ($itemField->getValue('inf_type') === 'DATE' && $itemField->getValue('inf_sequence') === '1') {
-                $form->addInput('dummy', 'dummy', 'dummy', ['type' => $gSettingsManager->get('inventory_field_date_time_format'), 'property' => FormPresenter::FIELD_HIDDEN]);
+                $form->addInput('dummy', 'dummy', 'dummy', ['type' => $gSettingsManager->getString('inventory_field_date_time_format'), 'property' => FormPresenter::FIELD_HIDDEN]);
             }
         
             switch ($items->getProperty($infNameIntern, 'inf_type')) {
@@ -289,7 +290,7 @@ class InventoryItemPresenter extends PagePresenter
         
                     if ($infNameIntern === 'KEEPER') {
                         $sql = $items->getSqlOrganizationsUsersComplete();
-                        if ($gSettingsManager->getBool('inventory_current_user_default_keeper') === true) {
+                        if ($gSettingsManager->getBool('inventory_current_user_default_keeper')) {
                             $user = new User($gDb, $gProfileFields);
                             $user->readDataByUuid($gCurrentUser->getValue('usr_uuid'));
                         }
@@ -303,7 +304,7 @@ class InventoryItemPresenter extends PagePresenter
                                 'property' => $fieldProperty,
                                 'helpTextId' => $helpId,
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
-                                'defaultValue' => ($gSettingsManager->getBool('inventory_current_user_default_keeper') === true) ? $user->getValue('usr_id') : $items->getValue($infNameIntern),
+                                'defaultValue' => ($gSettingsManager->getBool('inventory_current_user_default_keeper')) ? $user->getValue('usr_id') : $items->getValue($infNameIntern),
                                 'multiselect' => false
                             )
                         );
@@ -375,7 +376,7 @@ class InventoryItemPresenter extends PagePresenter
                     }
                     else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
-                            $fieldType = $gSettingsManager->get('inventory_field_date_time_format');
+                            $fieldType = $gSettingsManager->getString('inventory_field_date_time_format');
                             $maxlength = null;
                         }
                         elseif ($items->getProperty($infNameIntern, 'inf_type') === 'NUMBER') {
@@ -386,7 +387,7 @@ class InventoryItemPresenter extends PagePresenter
                         elseif ($items->getProperty($infNameIntern, 'inf_type') === 'DECIMAL') {
                             $fieldType = 'number';
                             $minNumber = $gSettingsManager->getBool('inventory_allow_negative_numbers') ? null : '0';
-                            $step = pow(10, -$gSettingsManager->get('inventory_decimal_places'));
+                            $step = pow(10, -$gSettingsManager->getInt('inventory_decimal_places'));
                         }
                         $form->addInput(
                             'inf-' . $items->getProperty($infNameIntern, 'inf_id'),

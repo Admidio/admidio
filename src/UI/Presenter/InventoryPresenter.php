@@ -87,10 +87,10 @@ class InventoryPresenter extends PagePresenter
 #endregion
 
 #region Initialize some special mode parameters
-        $this->filename = $gSettingsManager->get('inventory_export_filename');
+        $this->filename = $gSettingsManager->getString('inventory_export_filename');
         if ($gSettingsManager->getBool('inventory_add_date')) {
             // add system date format to filename
-            $this->filename .= '_' . date($gSettingsManager->get('system_date'));
+            $this->filename .= '_' . date($gSettingsManager->getString('system_date'));
         }
 
         $this->modeSettings = array(
@@ -267,14 +267,6 @@ class InventoryPresenter extends PagePresenter
         }
 
         if ($gCurrentUser->isAdministratorInventory()) {
-/*             if ($gSettingsManager->getBool('changelog_module_enabled')) {
-                $this->addPageFunctionsMenuItem(
-                    'menu_item_inventory_change_history',
-                    $gL10n->get('SYS_CHANGE_HISTORY'),
-                    ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory_history.php',
-                    'bi-clock-history'
-                );
-            } */
             // show link to view inventory history
             ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items,inventory_data');
            
@@ -583,7 +575,7 @@ class InventoryPresenter extends PagePresenter
     {
         global $gSettingsManager, $gCurrentUser;
 
-        if ($gSettingsManager->get('inventory_allow_keeper_edit') === 1) {
+        if ($gSettingsManager->getBool('inventory_allow_keeper_edit')) {
             if (isset($keeper) && $keeper === $gCurrentUser->getValue('usr_id')) {
                 return true;
             }
@@ -782,8 +774,8 @@ class InventoryPresenter extends PagePresenter
                 } */
 
                 // show link to edit, make former or undo former and delete item (if authorized)
-                if ($gCurrentUser->isAdministrator() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                    if ($gCurrentUser->isAdministrator() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
+                if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
+                    if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
                         $tempValue .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'item_edit', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])) . '">
                                         <i class="bi bi-pencil-square" title="' . $gL10n->get('SYS_INVENTORY_ITEM_EDIT') . '"></i>
                                     </a>';
@@ -803,7 +795,7 @@ class InventoryPresenter extends PagePresenter
                                     </a>';
                     }
 
-                    if ($gCurrentUser->isAdministrator() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
+                    if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
                         $tempValue .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                             data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])) .'">
                                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i>
