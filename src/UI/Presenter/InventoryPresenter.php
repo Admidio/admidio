@@ -15,6 +15,7 @@ use TCPDF;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Presenter\FormPresenter;
@@ -697,7 +698,7 @@ class InventoryPresenter extends PagePresenter
                     $found = $user->readDataById($content);
                     if (!$found) {
                         $orgName = '"' . $gCurrentOrganization->getValue('org_longname'). '"';
-                        $content = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION',array($orgName));
+                        $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION',array($orgName)))) . '</i>';
                     }
                     else {
                         if ($this->mode == 'html') {
