@@ -47,8 +47,8 @@ class ItemData extends Entity
             $this->mItemsData = new ItemsData($database, $gCurrentOrgId);
         }
 
-        parent::__construct($database, TBL_INVENTORY_DATA, 'ind', $id);
         $this->connectAdditionalTable(TBL_INVENTORY_FIELDS, 'inf_id', 'ind_inf_id');
+        parent::__construct($database, TBL_INVENTORY_DATA, 'ind', $id);
     }
 
     /**

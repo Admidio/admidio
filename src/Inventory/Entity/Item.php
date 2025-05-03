@@ -104,7 +104,7 @@ class Item extends Entity
     {
         global $gDb;
         // check if mItemsData is set
-        $itemData = new ItemData($gDb, $this->mItemsData, $this);
+        $itemData = new ItemData($gDb, $this->mItemsData);
         $itemData->readDataByColumns(array('ind_ini_id' => $this->itemId, 'ind_inf_id' => $this->mItemsData->getProperty('ITEMNAME', 'inf_id')));
         return $itemData->getValue('ind_value'); 
     }
