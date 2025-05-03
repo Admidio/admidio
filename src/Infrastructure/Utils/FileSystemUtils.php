@@ -689,7 +689,7 @@ final class FileSystemUtils
     /**
      * Gets the total, free and used disk space in bytes
      * @param string $path Path of the filesystem
-     * @return array<string,float> Returns the total, free and used disk space in bytes
+     * @return array<string,int> Returns the total, free and used disk space in bytes
      * @throws \RuntimeException Throws if the given path is not in an allowed directory or disk-space could not be determined
      * @see https://www.php.net/manual/en/function.disk-total-space.php
      * @see https://www.php.net/manual/en/function.disk-free-space.php
@@ -711,7 +711,7 @@ final class FileSystemUtils
 
         $used = $total - $free;
 
-        return array('total' => $total, 'free' => $free, 'used' => $used);
+        return array('total' => intval($total), 'free' => intval($free), 'used' => intval($used));
     }
 
     /**
