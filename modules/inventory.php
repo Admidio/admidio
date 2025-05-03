@@ -68,7 +68,8 @@ try {
         case 'field_list':
             $headline = $gL10n->get('SYS_INVENTORY_ITEMFIELDS');
             $gNavigation->addUrl(CURRENT_URL, $headline);
-            $itemFields = new InventoryFieldsPresenter('adm_inventory_item_fields', $headline);
+            $itemFields = new InventoryFieldsPresenter('adm_inventory_item_fields');
+            $itemFields->setHeadline($headline);
             $itemFields->createList();
             $itemFields->show();
             break;
@@ -83,6 +84,7 @@ try {
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $itemFields = new InventoryFieldsPresenter('adm_item_fields_edit');
+            $itemFields->setHeadline($headline);
             $itemFields->createEditForm($getinfId, $getFieldName);
             $itemFields->show();
             break;
@@ -140,6 +142,7 @@ try {
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $item = new InventoryItemPresenter('adm_item_edit');
+            $item->setHeadline($headline);
             $item->createEditForm($getiniId, $getCopy);
             $item->show();
             break;
@@ -220,9 +223,11 @@ try {
                  break;
             }
 
-            $import = new InventoryImportPresenter('adm_inventory_import', $gL10n->get('SYS_IMPORT'));
+            $headline = $gL10n->get('SYS_IMPORT');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
 
-            $gNavigation->addUrl(CURRENT_URL, $import->getHeadline());
+            $import = new InventoryImportPresenter('adm_inventory_import');
+            $import->setHeadline($headline);
             $import->createImportFileSelectionForm();
             $import->show();
             break;
@@ -243,9 +248,11 @@ try {
             break;
 
         case 'import_assign_fields':
-            $import = new InventoryImportPresenter('adm_inventory_import_assign_fields', $gL10n->get('SYS_ASSIGN_FIELDS'));
-            $gNavigation->addUrl(CURRENT_URL, $import->getHeadline());
+            $headline = $gL10n->get('SYS_ASSIGN_FIELDS');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
 
+            $import = new InventoryImportPresenter('adm_inventory_import_assign_fields');
+            $import->setHeadline($headline);
             $import->createAssignFieldsForm();
             $import->show();
             break;

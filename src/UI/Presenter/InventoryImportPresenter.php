@@ -39,7 +39,7 @@ class InventoryImportPresenter extends PagePresenter
      *                           to this object.
      * @throws Exception
      */
-    public function __construct(string $objectUUID = 'adm_inventory_import', string $headline = '')
+    public function __construct(string $objectUUID = 'adm_inventory_import')
     {
         global $gL10n;
 
@@ -103,12 +103,6 @@ class InventoryImportPresenter extends PagePresenter
             '"' => $gL10n->get('SYS_DQUOTE'),
             '\'' => $gL10n->get('SYS_QUOTE')
         );
-
-        // set headline
-        if (empty($headline)) {
-            $headline = $gL10n->get('SYS_IMPORT');
-        }
-        $this->setHeadline($headline);
 
         parent::__construct($objectUUID);
     }
