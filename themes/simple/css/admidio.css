@@ -384,17 +384,26 @@ label {
     padding: 0;
 }
 
-
-.profile-tabs {
+.admidio-tabs {
+/*     overflow: hidden;
+    overflow-x: auto; */
     flex-wrap: nowrap;     /* never wrap */
     width: 100%;
 }
-
-.profile-tabs .nav-link {
+  
+.admidio-tabs .nav-item, .admidio-tabs .nav-link {
+    display: flex;
+}
+  
+.admidio-tabs .nav-link {
+    flex-direction: column; 
+    justify-content: center;
+    text-align: center;
+    /* min-width: 120px; */
     max-width: 250px;
 }
 
-.profile-tabs .dropdown-toggle {
+.admidio-tabs .dropdown-toggle {
     white-space: normal;
     text-align: center;
     align-content: center;
