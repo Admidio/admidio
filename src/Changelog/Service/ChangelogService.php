@@ -775,7 +775,7 @@ class ChangelogService {
      * @throws Exception
      */
     public static function formatValue($value, $type, $entries = []) {
-        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n;
+        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n, $gCurrentOrganization;
         if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping']) ) {
             $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
         }
@@ -876,8 +876,13 @@ class ChangelogService {
                     $htmlValue = self::createLink($obj->readableName(), 'categories', $obj->getValue('cat_id'), $obj->getValue('cat_uuid'));
                     break;
                 case 'USER':
-                    $obj = new User($gDb, $gProfileFields, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
+                    if ($value > 0) {
+                        $obj = new User($gDb, $gProfileFields, $value);
+                        $htmlValue = self::createLink($obj->readableName(), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
+                    } else {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname'). '"';
+                        $htmlValue = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION',array($orgName)))) . '</i>';
+                    }
                     break;
                 case 'ROOM':
                     $obj = new Room($gDb, $value);
