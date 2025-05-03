@@ -130,6 +130,8 @@ try {
                 $object->readDataByUuid($getUuid);
             } elseif (!empty($getId)) {
                 $object->readDataById($getId);
+            } elseif (!empty($getRelatedId)) {  // fallback if nothing else is set
+                $object->readDataById($getRelatedId);
             }
             $objName = $object->readableName();
         }
