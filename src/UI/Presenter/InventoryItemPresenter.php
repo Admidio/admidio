@@ -53,7 +53,7 @@ class InventoryItemPresenter extends PagePresenter
         }
 
         // show link to view inventory item data history
-        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_data', $gCurrentUser->isAdministratorInventory(), array('related_id' => $itemID));
+        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_data', ($gCurrentUser->isAdministratorInventory() && $itemID !== '0'), array('related_id' => $itemID));
 
         foreach ($items->getItemFields() as $itemField) {  
             $infNameIntern = $itemField->getValue('inf_name_intern');
