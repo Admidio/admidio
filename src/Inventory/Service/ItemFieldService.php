@@ -19,13 +19,16 @@ use Admidio\Inventory\Entity\ItemField;
  */
 class ItemFieldService
 {
+    public const MOVE_UP = 'UP';
+    public const MOVE_DOWN = 'DOWN';
+
     protected ItemField $itemFieldRessource;
     protected Database $db;
     protected string $ID;
 
     /**
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string $profileFieldUUID UUID if the profile field that should be managed within this class
+     * @param string $itemFieldID UUID if the profile field that should be managed within this class
      * @throws Exception
      */
     public function __construct(Database $database, string $itemFieldID = '')
@@ -36,19 +39,85 @@ class ItemFieldService
     }
 
     /**
-     * Delete the current profile field form into the database.
+     * Delete the current item field form database.
      * @throws Exception
      */
-    public function delete(): void
+    public function delete(): bool
     {
-        $this->itemFieldRessource->delete();
+        return $this->itemFieldRessource->delete();
+    }
+
+   /**
+     * Profile field will change the sequence one step up or one step down.
+     * @param string $mode mode if the item field move up or down, values are ProfileField::MOVE_UP, ProfileField::MOVE_DOWN
+     * @return bool Return true if the sequence of the category could be changed, otherwise false.
+     * @throws Exception
+     */
+    public function moveSequence(string $mode): bool
+    {
+        global $gCurrentOrgId;
+
+        $infSequence = (int)$this->itemFieldRessource->getValue('inf_sequence');
+        $sql = 'UPDATE ' . TBL_INVENTORY_FIELDS . '
+                   SET inf_sequence = ? -- $usfSequence
+                 WHERE inf_org_id   = ? -- $OrgId
+                   AND inf_sequence = ? -- $usfSequence -/+ 1';
+
+        // item field will get one number lower and therefore move a position up in the list
+        if ($mode === self::MOVE_UP) {
+            $newSequence = $infSequence - 1;
+        } // item field will get one number higher and therefore move a position down in the list
+        elseif ($mode === self::MOVE_DOWN) {
+            $newSequence = $infSequence + 1;
+        }
+
+        // update the existing entry with the sequence of the field that should get the new sequence
+        $this->db->queryPrepared($sql, array($infSequence, $gCurrentOrgId, $newSequence));
+
+        $this->itemFieldRessource->setValue('inf_sequence', $newSequence);
+        return $this->itemFieldRessource->save();
     }
 
     /**
-     * Save data from the profile field form into the database.
+     * Iem field will change the complete sequence.
+     * @param array $sequence the new sequence of item fields (field IDs)
+     * @return bool Return true if the sequence of the category could be changed, otherwise false.
      * @throws Exception
      */
-    public function save(): void
+    public function setSequence(array $sequence): bool
+    {
+        global $gCurrentOrgId;
+        //$usfCatId = $this->getValue('usf_cat_id');
+        $infId = $this->itemFieldRessource->getValue('inf_id');
+
+        $sql = 'UPDATE ' . TBL_INVENTORY_FIELDS . '
+                   SET inf_sequence = ? -- new order sequence
+                 WHERE inf_id     = ? -- field ID;
+                   AND inf_org_id   = ? -- $OrgId;
+            ';
+
+        $newSequence = -1;
+        foreach ($sequence as $pos => $id) {
+            if ($id == $infId) {
+                // Store position for later update
+                $newSequence = $pos;
+            } else {
+                $this->db->queryPrepared($sql, array($pos, $id, $gCurrentOrgId));
+            }
+        }
+
+        if ($newSequence >= 0) {
+            $this->itemFieldRessource->setValue('inf_sequence', $newSequence);
+        }
+
+        return $this->itemFieldRessource->save();
+    }
+
+    /**
+     * Save data from the item field into database.
+     * @throws Exception
+     */
+    public function save(): bool
     {
         global $gCurrentSession, $gCurrentOrgId, $gDb;
 
@@ -80,6 +149,6 @@ class ItemFieldService
             }
         }
 
-        $this->itemFieldRessource->save();
+        return $this->itemFieldRessource->save();
     }
 }

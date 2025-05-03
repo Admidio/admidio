@@ -50,8 +50,10 @@ try {
     $getRedirectToImport = admFuncVariableIsValid($_GET, 'redirect_to_import', 'bool', array('defaultValue' => false));
     
 
-    // only authorized users can edit the item fields
-    if (!$gCurrentUser->isAdministrator()) {
+    // check if module is active
+    if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
+        throw new Exception('SYS_MODULE_DISABLED');
+    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 1 && !$gValidLogin) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
@@ -97,10 +99,10 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemFields = new ItemField($gDb);
-            $itemFields->readDataById($getinfId);
-            $itemFields->delete();
-            echo json_encode(array('status' => 'success'));
+            $itemFieldsModule = new ItemFieldService($gDb, $getinfId);
+            $ret = $itemFieldsModule->delete();
+
+            echo json_encode(array('status' =>  ($ret ? 'success' : 'error')));
             break;
 
         case 'sequence':
@@ -111,15 +113,16 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemFields = new ItemField($gDb);
-            $itemFields->readDataById($getinfId);
+            $itemFieldsModule = new ItemFieldService($gDb, $getinfId);
+
             if (!empty($getOrder)) {
                 // set new order (drag and drop)
-                $itemFields->setSequence(explode(',', $getOrder));
+                $ret = $itemFieldsModule->setSequence(explode(',', $getOrder));
             } else {
-                $itemFields->moveSequence($postDirection);
+                $ret = $itemFieldsModule->moveSequence($postDirection);
             }
-            echo json_encode(array('status' => 'success'));
+
+            echo json_encode(array('status' =>  ($ret ? 'success' : 'error')));
             break;
 #endregion
 #region items

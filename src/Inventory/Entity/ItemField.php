@@ -25,9 +25,6 @@ use Admidio\Changelog\Entity\LogChanges;
  */
 class ItemField extends Entity
 {
-    public const MOVE_UP = 'UP';
-    public const MOVE_DOWN = 'DOWN';
-
     /**
      * @var Database An object of the class Database for communication with the database
      */
@@ -204,71 +201,6 @@ class ItemField extends Entity
         }
 
         return $value;
-    }
-
-    /**
-     * Profile field will change the sequence one step up or one step down.
-     * @param string $mode mode if the item field move up or down, values are ProfileField::MOVE_UP, ProfileField::MOVE_DOWN
-     * @return bool Return true if the sequence of the category could be changed, otherwise false.
-     * @throws Exception
-     */
-    public function moveSequence(string $mode): bool
-    {
-        global $gCurrentOrgId;
-
-        $infSequence = (int)$this->getValue('inf_sequence');
-        $sql = 'UPDATE ' . TBL_INVENTORY_FIELDS . '
-                   SET inf_sequence = ? -- $usfSequence
-                 WHERE inf_org_id   = ? -- $OrgId
-                   AND inf_sequence = ? -- $usfSequence -/+ 1';
-
-        // item field will get one number lower and therefore move a position up in the list
-        if ($mode === self::MOVE_UP) {
-            $newSequence = $infSequence - 1;
-        } // item field will get one number higher and therefore move a position down in the list
-        elseif ($mode === self::MOVE_DOWN) {
-            $newSequence = $infSequence + 1;
-        }
-
-        // update the existing entry with the sequence of the field that should get the new sequence
-        $this->db->queryPrepared($sql, array($infSequence, $gCurrentOrgId, $newSequence));
-
-        $this->setValue('inf_sequence', $newSequence);
-        return $this->save();
-    }
-
-    /**
-     * Profile field will change the complete sequence.
-     * @param array $sequence the new sequence of item fields (field IDs)
-     * @return bool Return true if the sequence of the category could be changed, otherwise false.
-     * @throws Exception
-     */
-    public function setSequence(array $sequence): bool
-    {
-        global $gCurrentOrgId;
-        //$usfCatId = $this->getValue('usf_cat_id');
-        $infId = $this->getValue('inf_id');
-
-        $sql = 'UPDATE ' . TBL_USER_FIELDS . '
-                   SET usf_sequence = ? -- new order sequence
-                 WHERE usf_id     = ? -- field ID;
-                   AND inf_org_id   = ? -- $OrgId;
-            ';
-
-        $newSequence = -1;
-        foreach ($sequence as $pos => $id) {
-            if ($id == $infId) {
-                // Store position for later update
-                $newSequence = $pos + 1;
-            } else {
-                $this->db->queryPrepared($sql, array($pos + 1, $id, $gCurrentOrgId));
-            }
-        }
-
-        if ($newSequence > 0) {
-            $this->setValue('inf_sequence', $newSequence);
-        }
-        return $this->save();
     }
 
     /**
