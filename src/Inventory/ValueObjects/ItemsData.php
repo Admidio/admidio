@@ -180,8 +180,7 @@ class ItemsData
 
             while ($row = $itemDataStatement->fetch()) {
                 if (!array_key_exists($row['ind_inf_id'], $this->mItemData)) {
-                    $item = new Item($this->mDb, $this, $this->mItemId);
-                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this, $item);
+                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this, $row['ind_inf_id']);
                 }
                 $this->mItemData[$row['ind_inf_id']]->setArray($row);
             }
@@ -775,8 +774,7 @@ class ItemsData
         }
 
         if (!array_key_exists($infId, $this->mItemData)) {
-            $item = new Item($this->mDb, $this, $this->mItemId);
-            $this->mItemData[$infId] = new ItemData($this->mDb, $this, $item);
+            $this->mItemData[$infId] = new ItemData($this->mDb, $this);
             $this->mItemData[$infId]->setValue('ind_inf_id', $infId);
             $this->mItemData[$infId]->setValue('ind_ini_id', $this->mItemId);
         }

@@ -30,242 +30,186 @@ class ItemData extends Entity
      * @var ItemsData object with current item field structure
      */
     protected ItemsData $mItemsData;
-    /**
-     * @var Item object with current item structure
-     */
-    protected Item $mItem;
-    /**
-     * @var int the organization for which the rights are read, could be changed with method **setOrganization**
-     */
-    protected int $organizationId;
-    /**
-     * @var int the id of the item which should be loaded. If id isn't set than an empty object with no specific item is created.
-     */
-    protected int $itemId;
-    /**
-     * @var bool Flag if the changes to the item data should be handled by the ChangeNotification service.
-     */
-    protected bool $changeNotificationEnabled;
 
     /**
-     * Constructor that will create an object of a recordset of the users table.
-     * If the id is set than this recordset will be loaded.
+     * Constructor that will create an object of a recordset of the table adm_user_data.
+     * If the id is set than the specific profile field will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param ItemsData|null $itemFields An object of the ItemsData class with the profile field structure
-     *                                  of the current organization.
-     * @param int $itemId The id of the item which should be loaded. If id isn't set than an empty
-     *                                  object with no specific item is created.
+     * @param int $id The id of the profile field. If 0, an empty object of the table is created.
      * @throws Exception
      */
-    public function __construct(Database $database, ?ItemsData $itemsData = null,  ?Item $item = null)
+    public function __construct(Database $database, ?ItemsData $itemsData = null, int $id = 0)
     {
-        $this->changeNotificationEnabled = true;
-        $this->organizationId = $GLOBALS['gCurrentOrgId'];
-
+        global $gCurrentOrgId;
         if ($itemsData !== null) {
             $this->mItemsData = clone $itemsData; // create explicit a copy of the object (param is in PHP5 a reference)
         } else {
-            $this->mItemsData = new ItemsData($database, $this->organizationId);
+            $this->mItemsData = new ItemsData($database, $gCurrentOrgId);
         }
 
-        if ($item !== null) {
-            $this->mItem = clone $item; // create explicit a copy of the object (param is in PHP5 a reference)
-        } else {
-            $this->mItem = new Item($database, $this->mItemsData);
+        parent::__construct($database, TBL_INVENTORY_DATA, 'ind', $id);
+        $this->connectAdditionalTable(TBL_INVENTORY_FIELDS, 'inf_id', 'ind_inf_id');
+    }
+
+    /**
+     * Since creation means setting value from NULL to something, deletion mean setting the field to empty,
+     * we need one generic change log function that is called on creation, deletion and modification.
+     * 
+     * The log entries are: record ID for ind_id, but uuid and link point to User id.
+     * log_field is the inf_id and log_field_name is the fields external name.
+     * 
+     * @param string $oldval previous value before the change (can be null)
+     * @param string $newval new value after the change (can be null)
+     * @return true returns **true** if no error occurred
+     */
+    protected function logUserfieldChange(?string $oldval = null, ?string $newval = null) : bool {
+        global $gCurrentOrganization, $gL10n, $gProfileFields;
+
+        if ($oldval === $newval) {
+            // No change, nothing to log
+            return true;
         }
 
-        $this->itemId = $this->mItem->getValue('ini_id', 'database');
-        
-        parent::__construct($database, TBL_INVENTORY_DATA, 'ind');
-    }
- 
-    /**
-     * Reads a record out of the table in database selected by the unique id column in the table.
-     * Per default all columns of the default table will be read and stored in the object.
-     * @param int $id Unique id of id column of the table.
-     * @return bool Returns **true** if one record is found
-     * @throws Exception
-     * @see Entity#readDataByColumns
-     * @see Entity#readData
-     * @see Entity#readDataByUuid
-     */
-    public function readDataById(int $id): bool
-    {
-        global $gDb;
-        $this->itemId = $id;
-        $this->mItem = new Item($gDb, $this->mItemsData, $this->itemId);
-        return parent::readDataById($id);
-    }
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
 
-    /**
-     * Return a human-readable representation of this record.
-     * If a column [prefix]_name exists, it is returned, otherwise the id.
-     * This method can be overridden in child classes for custom behavior.
-     * 
-     * @return string The readable representation of the record (can also be a translatable identifier)
-     */
-    public function readableName(): string
-    {
-        // check if mItemsData is set
-        $this->readDataByColumns(array('ind_ini_id' => $this->itemId, 'ind_inf_id' => $this->mItemsData->getProperty('ITEMNAME', 'inf_id')));
-        return $this->getValue('ind_value');
-    }
-
-    /**
-     * Changes to user data could be sent as a notification email to a specific role if this
-     * function is enabled in the settings. If you want to suppress this logic you can
-     * explicit disable it with this method for this user. So no changes to this user object will
-     * result in a notification email.
-     * @return void
-     */
-    public function disableChangeNotification()
-    {
-        $this->changeNotificationEnabled = false;
-    }
-
-    /**
-     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
-     * a new record or if only an update is necessary. The update statement will only update
-     * the changed columns. If the table has columns for creator or editor than these column
-     * with their timestamp will be updated.
-     * For new records the name intern will be set per default.
-     * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if table has columns like **usr_id_create** or **usr_id_changed**
-     * @return bool If an update or insert into the database was done then return true, otherwise false.
-     * @throws Exception
-     */
-    public function save(bool $updateFingerPrint = true): bool
-    {
-/*         $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
-
- 
-        $logEntry = new LogChanges($this->db);
-        $logEntry->setLogModification($table, $this->keyColumnName,
-            $this->mItem->getValue('ini_id', 'database'), $this->mItem->readableName(),
-            'ind_ini_id', 'SYS_INVENTORY_DATA', 
-            null, $this->mItemsData->getValue('ITEMNAME', 'database')
-        ); */
-        if ($this->newRecord) {
-            // remove log entry for new record
-            
-        }
-
-        return parent::save($updateFingerPrint);
-    }
-
-    /**
-     * Logs Creation of the DB record -> Changes to the log table are NOT logged!
-     * 
-     * @return true Returns **false**, since no logging occurs
-     */
-    public function logCreation(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Logs deletion of the DB record -> Changes to the log table are NOT logged!
-     * 
-     * @return true Returns **false**, since no logging occurs
-     */
-    public function logDeletion(): bool
-    {
-        global $gDb;
-
-        $retVal = true;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $itemID = $this->getValue('ind_ini_id');
+        /* $item = new Item($this->db, $this->mItemsData, $itemID); */
         $id = $this->dbColumns[$this->keyColumnName];
-        $record_name = $this->readableName();
-        if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
-            $uuid = (string) $this->getValue($this->columnPrefix . '_uuid');
-        } else {
-            $uuid = null;
-        }
+/*         $uuid = $user ? ($user->getValue('usr_uuid')) : null;*/
+/*         $record_name =  $this->mItemsData->getValue('ITEMNAME', 'database');
+ */
 
-        $logEntry = new LogChanges($this->db, $table);
-        $field = 'ind_value';
-
-        $sql = 'SELECT ind_value FROM ' . TBL_INVENTORY_DATA . ' WHERE ind_id = ? AND ind_inf_id = ?';
-        $queryParameters = array($id, $this->getValue('ind_inf_id'));
-        $result = $gDb->queryPrepared($sql, $queryParameters);
-        while ($row = $result->fetch()) {
-            $logEntry->setLogModification($table, $id, $uuid, $record_name, $field, $field, $row['ind_value'], null);
-        }
-
-        //$logEntry->setLogModification($table, $id, $uuid, $record_name, $field, $field, $this->getValue($field), null);
-        $this->adjustLogEntry($logEntry);
-        $retVal = $retVal && $logEntry->save();
-        $logEntry->clear();
-        $logEntry->saveChangesWithoutRights();
-
-        return $retVal;
-    }
-
-    /**
-     * Retrieve the list of database fields that are ignored for the changelog.
-     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
-     * to log changes to these columns.
-     * The guestbook table also contains gbc_org_id and gbc_ip_address columns,
-     * which we don't want to log.
-     * @return array Returns the list of database columns to be ignored for logging.
-     */
-    public function getIgnoredLogColumns(): array
-    {
-        return array_merge(parent::getIgnoredLogColumns(),
-            ['ini_id', 'ini_org_id', 'ind_id', 'ind_inf_id', 'ind_ini_id']/* ,
-            ($this->newRecord)?[$this->columnPrefix.'_text']:[] */
-        );
-    }
-
-    /**
-     * Adjust the changelog entry for this db record: Add the first forum post as a related object
-     * @param LogChanges $logEntry The log entry to adjust
-     * @return void
-     * @throws Exception
-     */
-    protected function adjustLogEntry(LogChanges $logEntry): void
-    {
-        // get the name of the field which was changed
-        $infNameIntern = $this->mItemsData->getPropertyById($this->getValue('ind_inf_id'), 'inf_name_intern');
-        $infType = $this->mItemsData->getPropertyById($this->getValue('ind_inf_id'), 'inf_type');
+        $field = $this->getValue('ind_inf_id');
+        $fieldName = 'ind_value';
+        $objectName = $this->mItemsData->getPropertyById($field, 'inf_name', 'database');
+        $fieldNameIntern = $this->mItemsData->getPropertyById($field, 'inf_name_intern', 'database');
+        $infType = $this->mItemsData->getPropertyById($field, 'inf_type');
         $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
 
         if ($infType === 'DROPDOWN' || $infType === 'RADIOBUTTON') {
-            $vallist = $this->mItemsData->getProperty($infNameIntern, 'inf_value_list');
-            if (isset($vallist[$logEntry->getValue('log_value_old')])) {
-                $logEntry->setValue('log_value_old', $vallist[$logEntry->getValue('log_value_old')]);
+            $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'inf_value_list');
+            if (isset($vallist[$oldval])) {
+                $oldval = $vallist[$oldval];
             }
-            if (isset($vallist[$logEntry->getValue('log_value_new')])) {
-                $logEntry->setValue('log_value_new', $vallist[$logEntry->getValue('log_value_new')]);
+            if (isset($vallist[$newval])) {
+                $newval = $vallist[$newval];
             }
-        }
+        } 
         elseif ($infType === 'CHECKBOX') {
-            $logEntry->setValue('log_field_name', $logEntry->getValue('log_field_name') . '_bool');
+            $fieldName = $fieldName . '_bool';
         }
         elseif ($infType === 'TEXT') {
-            if ($infNameIntern === 'ITEMNAME' && $itemName === '') {
-                $itemName = $logEntry->getValue('log_value_new');
+            if ($fieldNameIntern === 'ITEMNAME' && $itemName === '') {
+                $itemName = $newval;
             }
-            elseif ($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') {
-                $logEntry->setValue('log_field_name', $logEntry->getValue('log_field_name') . '_usr');
+            elseif ($fieldNameIntern === 'KEEPER') {
+                $fieldName = $fieldName . '_usr';
+            }
+            elseif ($fieldNameIntern === 'LAST_RECEIVER') {
+                $user = new User($this->db, $gProfileFields);
+                if (is_numeric($oldval) && is_numeric($newval)) {
+                    $foundOld = $user->readDataById($oldval);
+                    $foundNew = $user->readDataById($newval);
+                    if ($foundOld && $foundNew) {
+                        $fieldName = $fieldName . '_usr';
+                    }
+                }
+                elseif (is_numeric($oldval)) {
+                    if ($user->readDataById($oldval)) {
+                        $oldval = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                        /* $fieldName = $fieldName . '_href'; */
+                    }
+                } elseif (is_numeric($newval)) {
+                    if ($user->readDataById($newval)) {
+                        $newval = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                        /* $fieldName = $fieldName . '_href'; */
+                    }
+                }
             }
         }
         elseif ($infType === 'DATE') {
-            $logEntry->setValue('log_field_name', $logEntry->getValue('log_field_name') . '_date');
+            $fieldName = $fieldName . '_date';
         }
         elseif ($infType === 'EMAIL') {
-            $logEntry->setValue('log_field_name', $logEntry->getValue('log_field_name') . '_mail');
+            $fieldName = $fieldName . '_mail';
         }
         elseif ($infType === 'URL') {
-            $logEntry->setValue('log_field_name', $logEntry->getValue('log_field_name') . '_url');
+            $fieldName = $fieldName . '_url';
         }
         elseif ($infType === 'ICON') {
-            $logEntry->setValue('log_field_name', $logEntry->getValue('log_field_name') . '_icon');
+            $fieldName = $fieldName . '_icon';
         }
 
-        $logEntry->setLogRelated($this->mItem->getValue('ini_id', 'database'), $itemName);
-        $logEntry->setValue('log_record_name', $this->mItemsData->getPropertyById($this->getValue('ind_inf_id'), 'inf_name'));
-        $logEntry->setLogLinkID($this->mItem->getValue('ini_id', 'database'));
+
+
+       
+
+
+
+
+
+        $logEntry = new LogChanges($this->db, $table);
+        $logEntry->setLogModification($table, $id, null, $objectName, $field, $fieldName, $oldval, $newval);
+        $logEntry->setLogRelated($itemID, $itemName);
+        $logEntry->setLogLinkID($itemID);
+        return $logEntry->save();
     }
+
+
+    /**
+     * Logs creation of the DB record -> For user fields, no need to log anything as
+     * the actual value change from NULL to something will be logged as a modification
+     * immediately after creation, anyway.
+     * 
+     * @return true Returns **true** if no error occurred
+     * @throws Exception
+     */
+    public function logCreation(): bool { return true; }
+
+    /**
+     * Logs deletion of the DB record
+     * Deletion actually means setting the user field to an empty value, so log a change to empty instead of deletion!
+     * 
+     * @return true Returns **true** if no error occurred
+     */
+    public function logDeletion(): bool
+    {
+        $oldval = $this->columnsInfos['ind_value']['previousValue'];
+        return $this->logUserfieldChange($oldval, null);
+    }
+
+
+    /**
+     * Logs all modifications of the DB record
+     * @param array $logChanges Array of all changes, generated by the save method
+     * @return true Returns **true** if no error occurred
+     * @throws Exception
+     */
+    public function logModifications(array $logChanges): bool
+    {
+        if ($logChanges['ind_value']) {
+            return $this->logUserfieldChange($logChanges['ind_value']['oldValue'], $logChanges['ind_value']['newValue']);
+        } else {
+            // Nothing to log at all!
+            return true;
+        }
+    }
+
+
+    /**
+     * Return a human-readable representation of the given database field/column.
+     * By default, the column name is returned unmodified. Subclasses can override this method.
+     * @param string $field The database column
+     * @return string The readable representation of the DB column (can also be a translatable identifier)
+     */
+/*     public function getFieldTitle(string $field): string
+    {
+        global $gProfileFields;
+        if ($this->dbColumns['ind_inf_id']) {
+            $fieldName = $gProfileFields->getPropertyById($field, 'inf_name');  
+            return $fieldName;
+        } else {
+            return parent::getFieldTitle($field);
+        }
+    } */
 }
