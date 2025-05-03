@@ -33,17 +33,16 @@ use RuntimeException;
 class PreferencesPresenter extends PagePresenter
 {
     /**
-     * @var array Array with all possible accordion entries for the system preferences.
-     *            Each accordion entry consists of an array that has the following structure:
-     *            array ('id' => 'xzy', 'title' => 'xyz', 'icon' => 'xyz')
+     * @var array Array with all possible entries for the preferences.
+     *            Each entry consists of an array that has the following structure:
+     *            array ('key' => 'xzy', 'label' => 'xyz', 'panels' => array('id' => 'xyz', 'title' => 'xyz', 'icon' => 'xyz'))
+     * 
+     *            There are thwo different visualizations of the preferences:
+     *              1) a nested tab structure (main tabs created by 'key' and 'label' and sub tabs created by 'panels')
+     *              2) a accordion structure when the @media query (max-width: 768px) is active ('key' and 'label' are used for card header
+     *                 and 'panels' for accordions inside the card) 
      */
-    protected array $accordionCommonPanels = array();
-    /**
-     * @var array Array with all possible accordion entries for the module preferences.
-     *            Each accordion entry consists of an array that has the following structure:
-     *            array ('id' => 'xzy', 'title' => 'xyz', 'icon' => 'xyz')
-     */
-    protected array $accordionModulePanels = array();
+    protected array $preferenceTabs = array();
     /**
      * @var string Name of the preference panel that should be shown after page loading.
      *             If this parameter is empty, then show the common preferences.
@@ -74,124 +73,77 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n;
 
-        $this->accordionCommonPanels = array(
-            'common' => array(
-                'id' => 'common',
-                'title' => $gL10n->get('SYS_COMMON'),
-                'icon' => 'bi-gear-fill'
+        $this->preferenceTabs = array(
+            // === 1) Konfiguration ===
+            array(
+                'key'    => 'configuration',
+                'label'  => $gL10n->get('SYS_CONFIGURATION'),
+                'panels' => array(
+                    array('id'=>'common',          'title'=>$gL10n->get('SYS_COMMON'),               'icon'=>'bi-gear-fill'),
+                    array('id'=>'regional_settings',   'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),         'icon'=>'bi-globe2'),
+                    array('id'=>'system_notifications', 'title'=>$gL10n->get('SYS_SYSTEM_MAILS'),            'icon'=>'bi-broadcast-pin'),
+                    array('id'=>'email_dispatch',       'title'=>$gL10n->get('SYS_MAIL_DISPATCH'),           'icon'=>'bi-envelope-open-fill'),
+                    array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),          'icon'=>'bi-clock-history'),
+                ),
             ),
-            'security' => array(
-                'id' => 'security',
-                'title' => $gL10n->get('SYS_SECURITY'),
-                'icon' => 'bi-shield-fill'
+        
+            // === 2) Sicherheit ===
+            array(
+                'key'    => 'login_security',
+                'label'  =>  $gL10n->get('SYS_LOGIN') . ' & ' . $gL10n->get('SYS_SECURITY'),
+                'panels' => array(
+                    array('id'=>'security', 'title'=>$gL10n->get('SYS_SECURITY'), 'icon'=>'bi-shield-fill'),
+                    array('id'=>'registration',    'title'=>$gL10n->get('SYS_REGISTRATION'),         'icon'=>'bi-card-checklist'),
+                    array('id'=>'captcha',  'title'=>$gL10n->get('SYS_CAPTCHA'),  'icon'=>'bi-fonts'),
+                    array('id'=>'sso',      'title'=>$gL10n->get('SYS_SSO'),      'icon'=>'bi-key'),
+                ),
             ),
-            'regional_settings' => array(
-                'id' => 'regional_settings',
-                'title' => $gL10n->get('ORG_REGIONAL_SETTINGS'),
-                'icon' => 'bi-globe2'
+
+            // === 2) Kommunikation ===
+            array(
+                'key'    => 'communication',
+                'label'  => $gL10n->get('SYS_COMMUNICATION'),
+                'panels' => array(
+                    array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),           'icon'=>'bi-newspaper'),
+                    array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),                'icon'=>'bi-envelope-fill'),
+                    array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                   'icon'=>'bi-chat-dots-fill'),
+                ),
             ),
-            'changelog' => array(
-                'id' => 'changelog',
-                'title' => $gL10n->get('SYS_CHANGE_HISTORY'),
-                'icon' => 'bi-clock-history'
+        
+            // === 3) Inhaltsverwaltung ===
+            array(
+                'key'    => 'content_management',
+                'label'  => $gL10n->get('SYS_CONTENTS'),
+                'panels' => array(
+                    array('id'=>'documents_files', 'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),      'icon'=>'bi-file-earmark-arrow-down-fill'),
+                    array('id'=>'photos',          'title'=>$gL10n->get('SYS_PHOTOS'),               'icon'=>'bi-image-fill'),
+                    array('id'=>'links',           'title'=>$gL10n->get('SYS_WEBLINKS'),             'icon'=>'bi-link-45deg'),
+                    array('id'=>'events',          'title'=>$gL10n->get('SYS_EVENTS'),               'icon'=>'bi-calendar-week-fill'),
+                ),
             ),
-            'registration' => array(
-                'id' => 'registration',
-                'title' => $gL10n->get('SYS_REGISTRATION'),
-                'icon' => 'bi-card-checklist'
+        
+            // === 4) Benutzerverwaltung ===
+            array(
+                'key'    => 'user_management',
+                'label'  => $gL10n->get('SYS_USERS'),
+                'panels' => array(
+                    array('id'=>'contacts',        'title'=>$gL10n->get('SYS_CONTACTS'),             'icon'=>'bi-person-vcard-fill'),
+                    array('id'=>'profile',         'title'=>$gL10n->get('SYS_PROFILE'),              'icon'=>'bi-person-fill'),
+                    array('id'=>'groups_roles',    'title'=>$gL10n->get('SYS_GROUPS_ROLES'),         'icon'=>'bi-people-fill'),
+                    array('id'=>'category_report', 'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),      'icon'=>'bi-list-stars'),
+                ),
             ),
-            'email_dispatch' => array(
-                'id' => 'email_dispatch',
-                'title' => $gL10n->get('SYS_MAIL_DISPATCH'),
-                'icon' => 'bi-envelope-open-fill'
+
+            // === 5) Wartung und Info ===
+            array(
+                'key'    => 'maintenance',
+                'label'  => $gL10n->get('SYS_UPDATE') . ' & ' . $gL10n->get('SYS_INFORMATIONS'),
+                'panels' => array(
+                    array('id'=>'admidio_update',     'title'=>$gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'),  'icon'=>'bi-cloud-arrow-down-fill'),
+                    array('id'=>'system_information','title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),       'icon'=>'bi-info-circle-fill'),
+                    array('id'=>'php',                'title'=>$gL10n->get('SYS_PHP'),                    'icon'=>'bi-filetype-php'),
+                ),
             ),
-            'system_notifications' => array(
-                'id' => 'system_notifications',
-                'title' => $gL10n->get('SYS_SYSTEM_MAILS'),
-                'icon' => 'bi-broadcast-pin'
-            ),
-            'captcha' => array(
-                'id' => 'captcha',
-                'title' => $gL10n->get('SYS_CAPTCHA'),
-                'icon' => 'bi-fonts'
-            ),
-            'sso' => array(
-                'id' => 'sso',
-                'title' => $gL10n->get('SYS_SSO'),
-                'icon' => 'bi-key'
-            ),
-            'admidio_update' => array(
-                'id' => 'admidio_update',
-                'title' => $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'),
-                'icon' => 'bi-cloud-arrow-down-fill'
-            ),
-            'php' => array(
-                'id' => 'php',
-                'title' => $gL10n->get('SYS_PHP'),
-                'icon' => 'bi-filetype-php'
-            ),
-            'system_information' => array(
-                'id' => 'system_information',
-                'title' => $gL10n->get('SYS_SYSTEM_INFORMATION'),
-                'icon' => 'bi-info-circle-fill'
-            )
-        );
-        $this->accordionModulePanels = array(
-            'announcements' => array(
-                'id' => 'announcements',
-                'title' => $gL10n->get('SYS_ANNOUNCEMENTS'),
-                'icon' => 'bi-newspaper'
-            ),
-            'contacts' => array(
-                'id' => 'contacts',
-                'title' => $gL10n->get('SYS_CONTACTS'),
-                'icon' => 'bi-person-vcard-fill'
-            ),
-            'documents_files' => array(
-                'id' => 'documents_files',
-                'title' => $gL10n->get('SYS_DOCUMENTS_FILES'),
-                'icon' => 'bi-file-earmark-arrow-down-fill'
-            ),
-            'photos' => array(
-                'id' => 'photos',
-                'title' => $gL10n->get('SYS_PHOTOS'),
-                'icon' => 'bi-image-fill'
-            ),
-            'forum' => array(
-                'id' => 'forum',
-                'title' => $gL10n->get('SYS_FORUM'),
-                'icon' => 'bi-chat-dots-fill'
-            ),
-            'groups_roles' => array(
-                'id' => 'groups_roles',
-                'title' => $gL10n->get('SYS_GROUPS_ROLES'),
-                'icon' => 'bi-people-fill'
-            ),
-            'category_report' => array(
-                'id' => 'category_report',
-                'title' => $gL10n->get('SYS_CATEGORY_REPORT'),
-                'icon' => 'bi-list-stars'
-            ),
-            'messages' => array(
-                'id' => 'messages',
-                'title' => $gL10n->get('SYS_MESSAGES'),
-                'icon' => 'bi-envelope-fill'
-            ),
-            'profile' => array(
-                'id' => 'profile',
-                'title' => $gL10n->get('SYS_PROFILE'),
-                'icon' => 'bi-person-fill'
-            ),
-            'events' => array(
-                'id' => 'events',
-                'title' => $gL10n->get('SYS_EVENTS'),
-                'icon' => 'bi-calendar-week-fill'
-            ),
-            'links' => array(
-                'id' => 'links',
-                'title' => $gL10n->get('SYS_WEBLINKS'),
-                'icon' => 'bi-link-45deg'
-            )
         );
     }
 
@@ -2011,7 +1963,7 @@ class PreferencesPresenter extends PagePresenter
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
             '<table id="sso_saml_sso_staticsettings" style="width: 100%" class="if-saml-enabled">' . implode('',
-                array_map(function ($key, $value) use ($gL10n) {
+                array_map(function (string $key, array $value) use ($gL10n) {
                     return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' .
                         (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
             }, array_keys($staticSettings), $staticSettings)) . '</table>',
@@ -2276,7 +2228,7 @@ class PreferencesPresenter extends PagePresenter
 
         if ($this->preferencesPanelToShow !== '') {
             // open the module tab if the options of a module should be shown
-            if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
+/*             if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
                 $this->addJavascript(
                     '
                 $("#adm_tabs_nav_modules").attr("class", "nav-link active");
@@ -2306,53 +2258,138 @@ class PreferencesPresenter extends PagePresenter
                     ',
                     true
                 );
+            } */
+
+            // 1) Ermitteln, zu welchem Haupt-Tab ($tabKey) das ausgewählte Panel gehört:
+            $tabKey = null;
+            foreach ($this->preferenceTabs as $tab) {
+                foreach ($tab['panels'] as $panel) {
+                    if ($panel['id'] === $this->preferencesPanelToShow) {
+                        $tabKey = $tab['key'];
+                        break 2;
+                    }
+                }
+            }
+
+            // 2) Einfügen des JS, das
+            //    - alle Haupt-Tabs/Sub-Tabs de-aktiviert
+            //    - dann den ermittelten Haupt-Tab und Sub-Tab aktiviert
+            //    - für Mobile: das entsprechende Accordion öffnet
+            //    - und per AJAX das Formular lädt
+            if ($tabKey !== null) {
+                $this->addJavascript("
+                    // --- Haupt-Tabs zurücksetzen
+                    \$('#adm_preferences_tabs .nav-link').removeClass('active');
+                    \$('#adm_preferences_tab_content .tab-pane').removeClass('show active');
+            
+                    // --- Gewünschten Haupt-Tab aktivieren
+                    \$('#adm_tabs_{$tabKey}').addClass('active');
+                    \$('#adm_tab_{$tabKey}').addClass('show active');
+            
+                    // --- Sub-Tabs zurücksetzen
+                    \$('#adm_subtabs_{$tabKey} .nav-link').removeClass('active');
+                    \$('#adm_preferences_subtab_content_{$tabKey} .tab-pane').removeClass('show active');
+            
+                    // --- Gewünschten Sub-Tab aktivieren
+                    \$('#adm_tab_{$this->preferencesPanelToShow}_nav').addClass('active');
+                    \$('#adm_tab_{$this->preferencesPanelToShow}_content').addClass('show active');
+            
+                    // --- Mobile Accordion öffnen
+                    \$('#collapse_{$this->preferencesPanelToShow}').addClass('show');
+            
+                    // --- AJAX nachladen
+                    \$.get(
+                        '" . ADMIDIO_URL . FOLDER_MODULES . "/preferences.php?mode=html_form&panel={$this->preferencesPanelToShow}',
+                        function(data) {
+                            \$('#adm_panel_preferences_{$this->preferencesPanelToShow} .accordion-body, \\
+                            #adm_panel_preferences_{$this->preferencesPanelToShow}').html(data);
+                        }
+                    );
+            
+                    // --- Hash setzen, damit Bookmark/Scroll stimmt
+                    location.hash = '#adm_panel_preferences_{$this->preferencesPanelToShow}';
+                ", true);
             }
         }
 
-        $this->addJavascript(
-            '
-            var panels = ["common", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
-                "announcements", "contacts", "documents_files", "photos", "forum", "groups_roles", "category_report", "messages", "profile", "sso", "events", "links"];
+        $this->addJavascript('
+            // === 1) Panel laden und Events binden ===
+            function loadPreferencesPanel(panelId) {
+                var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+                if (!panelContainer.length) return;
 
-            for(var i = 0; i < panels.length; i++) {
-                $("#adm_panel_preferences_" + panels[i] + " .accordion-header").click(function (e) {
-                    var id = $(this).data("preferences-panel");
-                    if ($("#adm_panel_preferences_" + id + " h2").attr("aria-expanded") == "true") {
-                        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=" + id, function (data) {
-                            $("#adm_panel_preferences_" + id + " .accordion-body").html(data);
-                        });
+                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {
+                    mode: "html_form",
+                    panel: panelId
+                }, function(htmlContent) {
+                    panelContainer.html(htmlContent);
+                    initializePanelInteractions(panelId);
+                }).fail(function() {
+                    panelContainer.html("<div class=\"text-danger\">Fehler beim Laden</div>");
+                });
+            }
+        
+            // === 2) Innerhalb eines Panels die Klick-Handler anmelden ===
+            function initializePanelInteractions(panelId) {
+                var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+            
+                // Captcha-Refresh
+                panelContainer.off("click", "#adm_captcha_refresh").on("click", "#adm_captcha_refresh", function(event) {
+                    event.preventDefault();
+                    var captchaImg = panelContainer.find("#adm_captcha");
+                    if (captchaImg.length) {
+                        captchaImg.attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" + "?" + Math.random());
                     }
                 });
-
-                $(document).on("submit", "#adm_preferences_form_" + panels[i], formSubmit);
+            
+                // Update-Check
+                panelContainer.off("click", "#adm_link_check_update").on("click", "#adm_link_check_update", function(event) {
+                    event.preventDefault();
+                    var versionInfoContainer = panelContainer.find("#adm_version_content");
+                    versionInfoContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
+                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "update_check" }, function(htmlVersion) {
+                        versionInfoContainer.html(htmlVersion);
+                    });
+                });
+            
+                // Verzeichnis-Schutz prüfen
+                panelContainer.off("click", "#link_directory_protection").on("click", "#link_directory_protection", function(event) {
+                    event.preventDefault();
+                    var statusContainer = panelContainer.find("#directory_protection_status");
+                    statusContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
+                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "htaccess" }, function(statusText) {
+                        var directoryProtection = panelContainer.find("#directoryProtection");
+                        directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
+                    });
+                });
             }
-
-            $(document).on("click", "#adm_captcha_refresh", (function() {
-                document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
-            }));
-
-            $(document).on("click", "#adm_link_check_update", (function() {
-                var admVersionContent = $("#adm_version_content");
-
-                admVersionContent.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {mode: "update_check"}, function(htmlVersion) {
-                    admVersionContent.html(htmlVersion);
-                });
-                return false;
-            }));
-
-            $(document).on("click", "#link_directory_protection", (function() {
-                var dirProtectionStatus = $("#directory_protection_status");
-
-                dirProtectionStatus.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {mode: "htaccess"}, function(statusText) {
-                    var directoryProtection = dirProtectionStatus.parent().parent().parent();
-                    directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
-                });
-                return false;
-            }));',
-            true
-        );
+        
+            // === 3) Hooks für Desktop-Tabs ===
+            $(document).on("shown.bs.tab", "ul.nav-tabs[id^=\"adm_subtabs_\"] button.nav-link", function(e) {
+                var match = e.target.getAttribute("data-bs-target").match(/^#adm_tab_(.+)_content$/);
+                if (match) loadPreferencesPanel(match[1]);
+            });
+            // initial: aktiven Sub-Tab laden
+            $("ul.nav-tabs[id^=\"adm_subtabs_\"] button.nav-link.active").each(function() {
+                var match = this.getAttribute("data-bs-target").match(/^#adm_tab_(.+)_content$/);
+                if (match) loadPreferencesPanel(match[1]);
+            });
+        
+            // === 4) Hooks für Mobile-Accordion ===
+            $(document).on("shown.bs.collapse", "#adm_preferences_accordion .accordion-collapse", function() {
+                var panelId = this.id.replace(/^collapse_/, "");
+                loadPreferencesPanel(panelId);
+            });
+            // initial: geöffnetes Accordion-Panel laden
+            $("#adm_preferences_accordion .accordion-collapse.show").each(function() {
+                var panelId = this.id.replace(/^collapse_/, "");
+                loadPreferencesPanel(panelId);
+            });
+        
+            // === 5) Formular-Submit per AJAX ===
+            $(document).on("submit", "form[id^=\"adm_preferences_form_\"]", formSubmit);
+      ', true);
+      
 
         ChangelogService::displayHistoryButton($this, 'preferences', 'preferences,texts');
 
@@ -2365,8 +2402,7 @@ class PreferencesPresenter extends PagePresenter
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
 
-        $this->assignSmartyVariable('accordionCommonPanels', $this->accordionCommonPanels);
-        $this->assignSmartyVariable('accordionModulePanels', $this->accordionModulePanels);
+        $this->assignSmartyVariable('preferenceTabs', $this->preferenceTabs);
         $this->addTemplateFile('preferences/preferences.tpl');
 
         parent::show();
