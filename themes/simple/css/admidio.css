@@ -481,10 +481,6 @@ label {
 /***********************************/
 
 .tab-content {
-    border-left: var(--bs-border-width) solid var(--bs-border-color);
-    border-right: var(--bs-border-width) solid var(--bs-border-color);
-    border-bottom: var(--bs-border-width) solid var(--bs-border-color);
-    border-radius: 0px 0px var(--bs-border-radius) var(--bs-border-radius);
     padding: 1rem 1rem 0 1rem;
 }
 

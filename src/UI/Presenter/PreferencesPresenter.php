@@ -2318,6 +2318,9 @@ class PreferencesPresenter extends PagePresenter
                 var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
                 if (!panelContainer.length) return;
 
+                // Schritt 1: Spinner einfügen
+                panelContainer.html("<div class=\"d-flex justify-content-center align-items-center\" style=\"height: 200px;\"><div class=\"spinner-border text-primary\" role=\"status\"><span class=\"visually-hidden\">Lade...</span></div></div>");
+
                 $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {
                     mode: "html_form",
                     panel: panelId
@@ -2401,6 +2404,8 @@ class PreferencesPresenter extends PagePresenter
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/js/bootstrap-tabs-x-admidio.js');
 
         $this->assignSmartyVariable('preferenceTabs', $this->preferenceTabs);
         $this->addTemplateFile('preferences/preferences.tpl');
