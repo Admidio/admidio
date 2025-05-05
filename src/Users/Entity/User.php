@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Users\Entity;
 
 use Admidio\Infrastructure\Database;
@@ -202,7 +203,7 @@ class User extends Entity
     {
         global $gSettingsManager;
 
-        if ((int) $this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('contacts_user_relations_enabled')) {
+        if ((int)$this->getValue('usr_id') === 0 || !$gSettingsManager->getBool('contacts_user_relations_enabled')) {
             return false;
         }
 
@@ -213,14 +214,14 @@ class User extends Entity
                 INNER JOIN ' . TBL_USER_RELATION_TYPES . '
                         ON urt_id = ure_urt_id
                      WHERE ure_usr_id1  = ? -- $this->getValue(\'usr_id\') ';
-            $queryParams = array((int) $this->getValue('usr_id'));
+            $queryParams = array((int)$this->getValue('usr_id'));
             $relationsStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $relationsStatement->fetch()) {
                 $this->relationships[] = array(
-                    'relation_type' => (int) $row['urt_id'],
-                    'user_id' => (int) $row['ure_usr_id2'],
-                    'edit_user' => (bool) $row['urt_edit_user']
+                    'relation_type' => (int)$row['urt_id'],
+                    'user_id' => (int)$row['ure_usr_id2'],
+                    'edit_user' => (bool)$row['urt_edit_user']
                 );
             }
 
@@ -246,7 +247,7 @@ class User extends Entity
     {
         $sqlFetchedRows = array();
 
-        if ((int) $this->getValue('usr_id') === 0) {
+        if ((int)$this->getValue('usr_id') === 0) {
             return false;
         }
 
@@ -281,17 +282,17 @@ class User extends Entity
                      WHERE rol_valid  = true
                        AND (  cat_org_id = ? -- $this->organizationId
                            OR cat_org_id IS NULL )';
-            $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+            $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
             $rolesStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $rolesStatement->fetch()) {
-                $roleId = (int) $row['rol_id'];
+                $roleId = (int)$row['rol_id'];
                 $sqlFetchedRows[] = $row;
 
                 if ($row['mem_usr_id'] > 0) {
                     // Sql selects all roles. Only consider roles where user is a member.
                     if ($row['mem_leader']) {
-                        $rolLeaderRights = (int) $row['rol_leader_rights'];
+                        $rolLeaderRights = (int)$row['rol_leader_rights'];
 
                         // if user is leader in this role than add role id and leader rights to array
                         $this->rolesMembershipLeader[$roleId] = $rolLeaderRights;
@@ -320,12 +321,12 @@ class User extends Entity
                     unset($value);
 
                     // set flag assignRoles of user can manage roles
-                    if ((int) $row['rol_assign_roles'] === 1) {
+                    if ((int)$row['rol_assign_roles'] === 1) {
                         $this->assignRoles = true;
                     }
 
                     // set administrator flag
-                    if ((int) $row['rol_administrator'] === 1) {
+                    if ((int)$row['rol_administrator'] === 1) {
                         $this->administrator = true;
                     }
                 }
@@ -334,21 +335,21 @@ class User extends Entity
 
             // go again through all roles, but now the rolesRights are set and can be evaluated
             foreach ($sqlFetchedRows as $sqlRow) {
-                $roleId = (int) $sqlRow['rol_id'];
+                $roleId = (int)$sqlRow['rol_id'];
                 $roleUUID = $sqlRow['rol_uuid'];
-                $memLeader = (bool) $sqlRow['mem_leader'];
+                $memLeader = (bool)$sqlRow['mem_leader'];
 
                 if (array_key_exists('rol_view_memberships', $sqlRow)) {
                     // Remember roles view setting
-                    if ((int) $sqlRow['rol_view_memberships'] === Role::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
+                    if ((int)$sqlRow['rol_view_memberships'] === Role::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
                         // only role members are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
                         $this->rolesViewMembershipsUUID[] = $roleUUID;
-                    } elseif ((int) $sqlRow['rol_view_memberships'] === Role::VIEW_LOGIN_USERS) {
+                    } elseif ((int)$sqlRow['rol_view_memberships'] === Role::VIEW_LOGIN_USERS) {
                         // all registered users are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
                         $this->rolesViewMembershipsUUID[] = $roleUUID;
-                    } elseif ((int) $sqlRow['rol_view_memberships'] === Role::VIEW_LEADERS && $memLeader) {
+                    } elseif ((int)$sqlRow['rol_view_memberships'] === Role::VIEW_LEADERS && $memLeader) {
                         // only leaders are allowed to view memberships
                         $this->rolesViewMemberships[] = $roleId;
                         $this->rolesViewMembershipsUUID[] = $roleUUID;
@@ -359,15 +360,15 @@ class User extends Entity
                     }
 
                     // Remember profile view setting
-                    if ((int) $sqlRow['rol_view_members_profiles'] === Role::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
+                    if ((int)$sqlRow['rol_view_members_profiles'] === Role::VIEW_ROLE_MEMBERS && $sqlRow['mem_usr_id'] > 0) {
                         // only role members are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
                         $this->rolesViewProfilesUUID[] = $roleUUID;
-                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === Role::VIEW_LOGIN_USERS) {
+                    } elseif ((int)$sqlRow['rol_view_members_profiles'] === Role::VIEW_LOGIN_USERS) {
                         // all registered users are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
                         $this->rolesViewProfilesUUID[] = $roleUUID;
-                    } elseif ((int) $sqlRow['rol_view_members_profiles'] === Role::VIEW_LEADERS && $memLeader) {
+                    } elseif ((int)$sqlRow['rol_view_members_profiles'] === Role::VIEW_LEADERS && $memLeader) {
                         // only leaders are allowed to view memberships
                         $this->rolesViewProfiles[] = $roleId;
                         $this->rolesViewProfilesUUID[] = $roleUUID;
@@ -474,18 +475,18 @@ class User extends Entity
      * @param string|null $totpCode The current totp code for the current user.
      * @return true Return true if totp code was correct
      * @throws Exception SYS_TFA_TOTP_CODE_MISSING
-     * @throws Exception SYS_SECURITY_CODE_INVALID
+     * @throws Exception|\RobThree\Auth\TwoFactorAuthException SYS_SECURITY_CODE_INVALID
      */
     private function checkTotp(string|null $totpCode): bool
     {
         global $gSettingsManager;
 
-        if (!$gSettingsManager->getBool('two_factor_authentication_enabled')) {
+        if ($gSettingsManager->has('two_factor_authentication_enabled') && !$gSettingsManager->getBool('two_factor_authentication_enabled')) {
             return true;
         }
 
         $secret = $this->getValue('usr_tfa_secret');
-        // return true if user did not set up two factor authentication
+        // return true if the user did not set up two-factor authentication
         if (!$secret) {
             return true;
         }
@@ -516,7 +517,7 @@ class User extends Entity
         global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($updateSessionCookies) {
-            $gCurrentSession->setValue('ses_usr_id', (int) $this->getValue('usr_id'));
+            $gCurrentSession->setValue('ses_usr_id', (int)$this->getValue('usr_id'));
             $gCurrentSession->save();
         }
 
@@ -825,7 +826,7 @@ class User extends Entity
             if ($idType === 'uuid') {
                 $arrEditableCategories[] = $row['cat_uuid'];
             } else {
-                $arrEditableCategories[] = (int) $row['cat_id'];
+                $arrEditableCategories[] = (int)$row['cat_id'];
             }
         }
 
@@ -885,7 +886,7 @@ class User extends Entity
             if ($idType === 'uuid') {
                 $arrVisibleCategories[] = $row['cat_uuid'];
             } else {
-                $arrVisibleCategories[] = (int) $row['cat_id'];
+                $arrVisibleCategories[] = (int)$row['cat_id'];
             }
         }
 
@@ -1025,8 +1026,8 @@ class User extends Entity
             return $this->mProfileFieldsData->getValue($columnName, $format);
         }
 
-        if ($columnName === 'usr_photo' && (int) $gSettingsManager->get('profile_photo_storage') === 0) {
-            $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int) $this->getValue('usr_id') . '.jpg';
+        if ($columnName === 'usr_photo' && (int)$gSettingsManager->get('profile_photo_storage') === 0) {
+            $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int)$this->getValue('usr_id') . '.jpg';
             if (is_file($file)) {
                 return file_get_contents($file);
             }
@@ -1112,8 +1113,8 @@ class User extends Entity
         if ($gCurrentUser->allowedViewProfileField($this, 'EMAIL') && $this->getValue('EMAIL') !== '') {
             $vCard[] = 'EMAIL;TYPE=home:' . $this->getValue('EMAIL');
         }
-        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int) $this->getValue('usr_id') . '.jpg';
-        if ((int) $gSettingsManager->get('profile_photo_storage') === 1 && is_file($file)) {
+        $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int)$this->getValue('usr_id') . '.jpg';
+        if ((int)$gSettingsManager->get('profile_photo_storage') === 1 && is_file($file)) {
             $imgHandle = fopen($file, 'rb');
             if ($imgHandle !== false) {
                 $base64Image = base64_encode(fread($imgHandle, filesize($file)));
@@ -1121,16 +1122,16 @@ class User extends Entity
                 $vCard[] = 'PHOTO;TYPE=JPEG;ENCODING=b:' . $base64Image;
             }
         }
-        if ((int) $gSettingsManager->get('profile_photo_storage') === 0 && !is_null($this->getValue('usr_photo'))) {
-            $vCard[] = 'PHOTO;TYPE=JPEG;ENCODING=b:' . base64_encode((string) $this->getValue('usr_photo'));
+        if ((int)$gSettingsManager->get('profile_photo_storage') === 0 && !is_null($this->getValue('usr_photo'))) {
+            $vCard[] = 'PHOTO;TYPE=JPEG;ENCODING=b:' . base64_encode((string)$this->getValue('usr_photo'));
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && (int) $this->getValue('GENDER', 'database') > 0) {
+        if ($gCurrentUser->allowedViewProfileField($this, 'GENDER') && (int)$this->getValue('GENDER', 'database') > 0) {
             // https://datatracker.ietf.org/doc/html/rfc6350#section-6.2.7
-            if ((int) $this->getValue('GENDER', 'database') === 1) {
+            if ((int)$this->getValue('GENDER', 'database') === 1) {
                 $vCard[] = 'GENDER:M';
-            } elseif ((int) $this->getValue('GENDER', 'database') === 2) {
+            } elseif ((int)$this->getValue('GENDER', 'database') === 2) {
                 $vCard[] = 'GENDER:F';
-            } elseif ((int) $this->getValue('GENDER', 'database') === 3) {
+            } elseif ((int)$this->getValue('GENDER', 'database') === 3) {
                 $vCard[] = 'GENDER:O';
             }
         }
@@ -1215,8 +1216,8 @@ class User extends Entity
      */
     public function hasRightEditProfile(self $user, bool $checkOwnProfile = true): bool
     {
-        $usrId = (int) $this->getValue('usr_id');
-        $userId = (int) $user->getValue('usr_id');
+        $usrId = (int)$this->getValue('usr_id');
+        $userId = (int)$user->getValue('usr_id');
 
         // edit own profile ?
         if ($usrId > 0 && $usrId === $userId && $checkOwnProfile && $this->checkRolesRight('rol_profile')) {
@@ -1310,13 +1311,13 @@ class User extends Entity
         global $gSettingsManager;
 
         if (
-            (int) $gSettingsManager->get('groups_roles_show_former_members') !== 1
+            (int)$gSettingsManager->get('groups_roles_show_former_members') !== 1
             && ($this->checkRolesRight('rol_assign_roles')
                 || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3), true)))
         ) {
             return true;
         } elseif (
-            (int) $gSettingsManager->get('groups_roles_show_former_members') !== 2
+            (int)$gSettingsManager->get('groups_roles_show_former_members') !== 2
             && ($this->checkRolesRight('rol_edit_user')
                 || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3), true)))
         ) {
@@ -1344,7 +1345,7 @@ class User extends Entity
         }
 
         // every user is allowed to view his own profile
-        if ((int) $user->getValue('usr_id') === (int) $this->getValue('usr_id') && (int) $this->getValue('usr_id') > 0) {
+        if ((int)$user->getValue('usr_id') === (int)$this->getValue('usr_id') && (int)$this->getValue('usr_id') > 0) {
             return true;
         }
 
@@ -1365,13 +1366,13 @@ class User extends Entity
                    AND mem_end    > ? -- DATE_NOW
                    AND (  cat_org_id = ? -- $this->organizationId
                        OR cat_org_id IS NULL ) ';
-        $queryParams = array((int) $user->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int)$user->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $listViewStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($listViewStatement->rowCount() > 0) {
             while ($row = $listViewStatement->fetch()) {
-                $rolId = (int) $row['rol_id'];
-                $rolThisProfileView = (int) $row['rol_view_members_profiles'];
+                $rolId = (int)$row['rol_id'];
+                $rolThisProfileView = (int)$row['rol_view_members_profiles'];
 
                 if ($rolThisProfileView === Role::VIEW_LOGIN_USERS && $gValidLogin) {
                     // all logged-in users can see role lists/profiles
@@ -1633,7 +1634,7 @@ class User extends Entity
                    AND mem_end    > ? -- DATE_NOW
                    AND cat_org_id = ? -- $this->organizationId
                    AND ' . $administratorColumn . ' = true ';
-        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($pdoStatement->rowCount() > 0) {
@@ -1673,7 +1674,7 @@ class User extends Entity
                    AND mem_begin <= ? -- DATE_NOW
                    AND mem_end    > ? -- DATE_NOW
                    AND cat_org_id = ? -- $this->organizationId';
-        $queryParams = array((int) $this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($pdoStatement->rowCount() > 0) {
@@ -1823,7 +1824,7 @@ class User extends Entity
         $newRecord = $this->newRecord;
 
         $returnValue = parent::save($updateFingerPrint);
-        $usrId = (int) $this->getValue('usr_id'); // if a new user was created get the new id
+        $usrId = (int)$this->getValue('usr_id'); // if a new user was created get the new id
 
         // if this was a registration then set this user id to create user id
         if ($updateCreateUserId) {
@@ -1997,7 +1998,7 @@ class User extends Entity
         if (!$doHashing) {
             if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
                 $gChangeNotification->logUserChange(
-                    (int) $this->getValue('usr_id'),
+                    (int)$this->getValue('usr_id'),
                     'usr_password',
                     $this->getValue('usr_password'),
                     $newPassword,
@@ -2022,7 +2023,7 @@ class User extends Entity
 
         if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
             $gChangeNotification->logUserChange(
-                (int) $this->getValue('usr_id'),
+                (int)$this->getValue('usr_id'),
                 'usr_password',
                 $this->getValue('usr_password'),
                 $newPasswordHash,
@@ -2051,7 +2052,7 @@ class User extends Entity
 
         if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
             $gChangeNotification->logUserChange(
-                (int) $this->getValue('usr_id'),
+                (int)$this->getValue('usr_id'),
                 'usr_tfa_secret',
                 $this->getValue('usr_tfa_secret'),
                 $newSecret || 'null',
@@ -2133,8 +2134,8 @@ class User extends Entity
                 $gChangeNotification->logUserChange(
                     $this->getValue('usr_id'),
                     $columnName,
-                    (string) $this->getValue($columnName),
-                    (string) $newValue,
+                    (string)$this->getValue($columnName),
+                    (string)$newValue,
                     "MODIFIED",
                     $this
                 );
@@ -2147,7 +2148,7 @@ class User extends Entity
         $oldFieldValue = $this->mProfileFieldsData->getValue($columnName);
         $oldFieldValue_db = $this->mProfileFieldsData->getValue($columnName, 'database');
 
-        $newValue = (string) $newValue;
+        $newValue = (string)$newValue;
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE') {
@@ -2176,8 +2177,8 @@ class User extends Entity
         // can edit the profile are allowed to save and change data.
         if (
             ($this->getValue('usr_id') === 0 && $GLOBALS['gCurrentUserId'] === 0)
-            || (int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
-            || ((int) $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
+            || (int)$this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
+            || ((int)$this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
                 && $GLOBALS['gCurrentUser']->hasRightEditProfile($this, false))
             || $this->saveChangesWithoutRights === true
         ) {
@@ -2195,11 +2196,11 @@ class User extends Entity
                 $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
                 $columnName, // TODO: is $columnName the internal name or the human-readable?
                 // Old and new values in human-readable version:
-                (string) $oldFieldValue,
-                (string) $this->mProfileFieldsData->getValue($columnName),
+                (string)$oldFieldValue,
+                (string)$this->mProfileFieldsData->getValue($columnName),
                 // Old and new values in raw database:
-                (string) $oldFieldValue_db,
-                (string) $newValue,
+                (string)$oldFieldValue_db,
+                (string)$newValue,
                 "MODIFIED",
                 $this
             );
@@ -2218,7 +2219,7 @@ class User extends Entity
     {
         $this->saveChangesWithoutRights();
         $this->setValue('usr_last_login', $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
-        $this->setValue('usr_number_login', (int) $this->getValue('usr_number_login') + 1);
+        $this->setValue('usr_number_login', (int)$this->getValue('usr_number_login') + 1);
         $this->setValue('usr_actual_login', DATETIME_NOW);
         $this->save(false); // Zeitstempel nicht aktualisieren // TODO Exception handling
 
