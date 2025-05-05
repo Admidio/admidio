@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Infrastructure\Entity;
 
 use Admidio\Infrastructure\Database;
@@ -58,7 +59,7 @@ class Entity
      */
     protected Database $db;
 
-    /**     
+    /**
      * @var bool Flag whether a new data set or existing data set is being edited
      */
     protected bool $newRecord;
@@ -85,7 +86,7 @@ class Entity
     protected bool $saveChangesWithoutRights;
 
     /**
-     * Flag to enable/disable logging changes to the database. 
+     * Flag to enable/disable logging changes to the database.
      * @var bool If this flag is set (default), all changes will be logged to the database, if the corresponding preferences item is set.
      * Setting this to false will disable logging in all cases, even with the preference set.
      */
@@ -102,8 +103,8 @@ class Entity
      */
     public function __construct(Database $database, string $tableName, string $columnPrefix, $id = '')
     {
-        $this->db          =& $database;
-        $this->tableName    = $tableName;
+        $this->db =& $database;
+        $this->tableName = $tableName;
         $this->columnPrefix = $columnPrefix;
 
         // if an ID is committed, then read data out of database
@@ -157,9 +158,9 @@ class Entity
      * Adds a table with the connected fields to a member array. This table will be added to the
      * select statement if data is read and the connected record is available in this class.
      * The connected table must have a foreign key in the class table.
-     * @param string $table                     Database table name that should be connected.
+     * @param string $table Database table name that should be connected.
      * @param string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
-     * @param string $columnNameClassTable      Name of the column in the class table that has the foreign key to the connected table
+     * @param string $columnNameClassTable Name of the column in the class table that has the foreign key to the connected table
      *
      * **Code example**
      * ```
@@ -174,9 +175,9 @@ class Entity
     public function connectAdditionalTable(string $table, string $columnNameAdditionalTable, string $columnNameClassTable)
     {
         $this->additionalTables[] = array(
-            'table'                     => $table,
+            'table' => $table,
             'columnNameAdditionalTable' => $columnNameAdditionalTable,
-            'columnNameClassTable'      => $columnNameClassTable
+            'columnNameClassTable' => $columnNameClassTable
         );
     }
 
@@ -184,7 +185,8 @@ class Entity
      * Get the name of the underlying database table. This can be used to construct sql queries  without hardcoding the table.
      * @return string The name of the underlying database table
      */
-    public function getTableName(): string {
+    public function getTableName(): string
+    {
         return $this->tableName;
     }
 
@@ -192,7 +194,8 @@ class Entity
      * Get the column prefix of the underlying table. This can be used to construct column names without hardcoding the prefix.
      * @return string The column prefix used for the underlying database table
      */
-    public function getColumnPrefix(): string {
+    public function getColumnPrefix(): string
+    {
         return $this->columnPrefix;
     }
 
@@ -200,7 +203,8 @@ class Entity
      * Get the key column of the underlying database table. This can be used to construct sql queries names without hardcoding the column name.
      * @return string The key column name used for the underlying database table
      */
-    public function getKeyColumnName(): string {
+    public function getKeyColumnName(): string
+    {
         return $this->keyColumnName;
     }
 
@@ -211,29 +215,29 @@ class Entity
      */
     public function countAllRecords(): int
     {
-        $sql = 'SELECT COUNT(*) AS count FROM '.$this->tableName;
+        $sql = 'SELECT COUNT(*) AS count FROM ' . $this->tableName;
         $countStatement = $this->db->queryPrepared($sql);
 
-        return (int) $countStatement->fetchColumn();
+        return (int)$countStatement->fetchColumn();
     }
 
     /**
      * Return a human-readable representation of this record.
      * If a column [prefix]_name exists, it is returned, otherwise the id.
      * This method can be overridden in child classes for custom behavior.
-     * 
+     *
      * @return string The readable representation of the record (can also be a translatable identifier)
      */
     public function readableName(): string
     {
-        if (array_key_exists($this->columnPrefix.'_name', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_name'] ?? '';
-        } elseif (array_key_exists($this->columnPrefix.'_title', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_title'] ?? '';
-        } elseif (array_key_exists($this->columnPrefix.'_headline', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_headline'] ?? '';
-        } elseif (array_key_exists($this->columnPrefix.'_text', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_text'] ?? '';
+        if (array_key_exists($this->columnPrefix . '_name', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix . '_name'] ?? '';
+        } elseif (array_key_exists($this->columnPrefix . '_title', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix . '_title'] ?? '';
+        } elseif (array_key_exists($this->columnPrefix . '_headline', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix . '_headline'] ?? '';
+        } elseif (array_key_exists($this->columnPrefix . '_text', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix . '_text'] ?? '';
         } else {
             return $this->dbColumns[$this->keyColumnName] ?? '';
         }
@@ -255,17 +259,18 @@ class Entity
      * @param mixed $enabled Whether logging should be enabled or not.
      * @return void
      */
-    public static function setLoggingEnabled($enabled) {
+    public static function setLoggingEnabled($enabled)
+    {
         self::$loggingEnabled = $enabled;
     }
-    
+
     /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
-     * to log changes to these columns. Subclasses can also add further fields 
-     * (e.g. the users table stores and auto-increments the login count, which 
+     * to log changes to these columns. Subclasses can also add further fields
+     * (e.g. the users table stores and auto-increments the login count, which
      * we do not want to log)
-     * 
+     *
      * @return true Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
@@ -274,9 +279,9 @@ class Entity
             $this->columnPrefix . '_uuid',
             $this->columnPrefix . '_usr_id_create',
             $this->columnPrefix . '_timestamp_create',
-            $this->columnPrefix . '_usr_id_change', 
+            $this->columnPrefix . '_usr_id_change',
             $this->columnPrefix . '_timestamp_change',
-            $this->columnPrefix . '_usr_id', 
+            $this->columnPrefix . '_usr_id',
             $this->columnPrefix . '_timestamp'
         ];
         return $ignored;
@@ -285,19 +290,21 @@ class Entity
     /**
      * Adjust the changelog entry for this db record. By default, record_id, record_name are taken
      * from this record, linkid and related are left empty, and the field is the column name of each change.
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {}
+    protected function adjustLogEntry(LogChanges $logEntry)
+    {
+    }
 
 
     /**
      * Logs creation of the DB record
      * @param integer $id the unique index of the new record in the database table
      * @param string $record_name the human-readable representation of the record
-     * 
+     *
      * @return true Returns **true** if no error occurred
      * @throws Exception
      */
@@ -308,20 +315,20 @@ class Entity
         $table = str_replace(TABLE_PREFIX . '_', '', $table);
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
-            $uuid = (string) $this->getValue($this->columnPrefix . '_uuid');
+            $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
         } else {
             $uuid = null;
         }
 
         $logEntry = new LogChanges($this->db);
-        $logEntry->setLogCreation($table, $this->dbColumns[$this->keyColumnName]??0, $uuid, $record_name);
+        $logEntry->setLogCreation($table, $this->dbColumns[$this->keyColumnName] ?? 0, $uuid, $record_name);
         $this->adjustLogEntry($logEntry);
         return $logEntry->save();
     }
 
     /**
      * Logs deletion of the DB record
-     * 
+     *
      * @return true Returns **true** if no error occurred
      */
     public function logDeletion(): bool
@@ -331,14 +338,14 @@ class Entity
         $table = str_replace(TABLE_PREFIX . '_', '', $table);
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
-            $uuid = (string) $this->getValue($this->columnPrefix . '_uuid');
+            $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
         } else {
             $uuid = null;
         }
 
 
         $logEntry = new LogChanges($this->db);
-        $logEntry->setLogDeletion($table, $this->dbColumns[$this->keyColumnName]??0, $uuid, $record_name);
+        $logEntry->setLogDeletion($table, $this->dbColumns[$this->keyColumnName] ?? 0, $uuid, $record_name);
         $this->adjustLogEntry($logEntry);
         return $logEntry->save();
     }
@@ -353,13 +360,14 @@ class Entity
     public function logModifications(array $logChanges): bool
     {
         if (!self::$loggingEnabled) return false;
+        if (count($logChanges) === 0) return false;
         $retVal = true;
         $table = $this->tableName;
         $table = str_replace(TABLE_PREFIX . '_', '', $table);
         $id = $this->dbColumns[$this->keyColumnName];
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
-            $uuid = (string) $this->getValue($this->columnPrefix . '_uuid');
+            $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
         } else {
             $uuid = null;
         }
@@ -390,8 +398,8 @@ class Entity
         if (array_key_exists($this->keyColumnName, $this->dbColumns) && $this->dbColumns[$this->keyColumnName] !== '') {
             // Log record deletion, then delete
             $this->logDeletion();
-            $sql = 'DELETE FROM '.$this->tableName.'
-                     WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
+            $sql = 'DELETE FROM ' . $this->tableName . '
+                     WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
             $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
         }
 
@@ -417,7 +425,7 @@ class Entity
             if ((int)$this->getValue($this->columnPrefix . '_usr_id_create') > 0) {
                 $userCreated = new User($gDb, $gProfileFields, $this->getValue($this->columnPrefix . '_usr_id_create'));
 
-                if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
+                if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
                     $nameOfCreatingUser = $userCreated->getValue('FIRST_NAME') . ' ' . $userCreated->getValue('LAST_NAME');
                 } else {
                     $nameOfCreatingUser = $userCreated->getValue('usr_login_name');
@@ -453,7 +461,7 @@ class Entity
             if ((int)$this->getValue($this->columnPrefix . '_usr_id_change') > 0) {
                 $userLastEdited = new User($gDb, $gProfileFields, $this->getValue($this->columnPrefix . '_usr_id_change'));
 
-                if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
+                if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
                     $nameOfLastEditingUser = $userLastEdited->getValue('FIRST_NAME') . ' ' . $userLastEdited->getValue('LAST_NAME');
                 } else {
                     $nameOfLastEditingUser = $userLastEdited->getValue('usr_login_name');
@@ -505,7 +513,7 @@ class Entity
                 case 'text':
                     if ($format !== 'database') {
                         // if text field and format not 'database' then convert all quotes to html syntax
-                        $columnValue = SecurityUtils::encodeHTML((string) $columnValue);
+                        $columnValue = SecurityUtils::encodeHTML((string)$columnValue);
                     }
                     break;
 
@@ -591,8 +599,8 @@ class Entity
         // create sql to connect additional tables to the select statement
         if (count($this->additionalTables) > 0) {
             foreach ($this->additionalTables as $arrAdditionalTable) {
-                $sqlAdditionalTables .= ', '.$arrAdditionalTable['table'];
-                $sqlWhereCondition   .= ' AND '.$arrAdditionalTable['columnNameAdditionalTable'].' = '.$arrAdditionalTable['columnNameClassTable'].' ';
+                $sqlAdditionalTables .= ', ' . $arrAdditionalTable['table'];
+                $sqlWhereCondition .= ' AND ' . $arrAdditionalTable['columnNameAdditionalTable'] . ' = ' . $arrAdditionalTable['columnNameClassTable'] . ' ';
             }
         }
 
@@ -603,9 +611,9 @@ class Entity
 
         if ($sqlWhereCondition !== '') {
             $sql = 'SELECT *
-                      FROM '.$this->tableName.'
-                           '.$sqlAdditionalTables.'
-                     WHERE '.$sqlWhereCondition;
+                      FROM ' . $this->tableName . '
+                           ' . $sqlAdditionalTables . '
+                     WHERE ' . $sqlWhereCondition;
             $readDataStatement = $this->db->queryPrepared($sql, $queryParams); // TODO add more params
 
             if ($readDataStatement->rowCount() === 1) {
@@ -616,13 +624,13 @@ class Entity
                 // move data to class column value array
                 foreach ($row as $key => $value) {
                     if ($this->columnsInfos[$key]['type'] === 'boolean'
-                            || $this->columnsInfos[$key]['type'] === 'tinyint') {
-                        $this->dbColumns[$key] = (bool) $value;
+                        || $this->columnsInfos[$key]['type'] === 'tinyint') {
+                        $this->dbColumns[$key] = (bool)$value;
                     } elseif (($this->columnsInfos[$key]['type'] === 'integer'
                             || $this->columnsInfos[$key]['type'] === 'smallint')
-                    && $value != '') {
+                        && $value != '') {
                         // only convert to int if it's not a null value
-                        $this->dbColumns[$key] = (int) $value;
+                        $this->dbColumns[$key] = (int)$value;
                     } else {
                         $this->dbColumns[$key] = $value;
                     }
@@ -736,7 +744,7 @@ class Entity
         // if no record was found then save the array fields in the object
         if (!$returnCode) {
             foreach ($columnArray as $columnName => $columnValue) {
-                if(str_starts_with($columnName, $this->columnPrefix . '_')) {
+                if (str_starts_with($columnName, $this->columnPrefix . '_')) {
                     $this->setValue($columnName, $columnValue);
                 }
             }
@@ -763,9 +771,9 @@ class Entity
 
         // if new role then set create the uuid
         if ($this->isNewRecord()
-        && array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)
-        && (string) $this->getValue($this->columnPrefix . '_uuid') === '') {
-            $this->setValue($this->columnPrefix . '_uuid', (string) Uuid::uuid4());
+            && array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)
+            && (string)$this->getValue($this->columnPrefix . '_uuid') === '') {
+            $this->setValue($this->columnPrefix . '_uuid', (string)Uuid::uuid4());
         }
 
         // TODO check if "$gCurrentUser instanceof User"
@@ -779,7 +787,7 @@ class Entity
             } elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns)) {
                 // Do not update data if the same user has done so within 15 minutes
                 if ($GLOBALS['gCurrentUserId'] !== $this->getValue($this->columnPrefix . '_usr_id_create')
-                || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900)) {
+                    || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900)) {
                     $this->setValue($this->columnPrefix . '_timestamp_change', DATETIME_NOW);
                     $this->setValue($this->columnPrefix . '_usr_id_change', $GLOBALS['gCurrentUserId']);
                 }
@@ -825,7 +833,7 @@ class Entity
                     }
                     // Ignore the usr_id_create and timestamp_create (and *_change) columns in the change log...
                     if (!in_array($key, $this->getIgnoredLogColumns())) {
-                        $logChanges[$key] = array('oldValue' => $this->columnsInfos[$key]['previousValue'], 'newValue' => $value); 
+                        $logChanges[$key] = array('oldValue' => $this->columnsInfos[$key]['previousValue'], 'newValue' => $value);
                     }
 
                     $this->columnsInfos[$key]['changed'] = false;
@@ -835,9 +843,9 @@ class Entity
 
         if ($this->insertRecord) {
             // insert record and remember the new id
-            $sql = 'INSERT INTO '.$this->tableName.'
-                           ('.implode(',', $sqlFieldArray).')
-                    VALUES ('.Database::getQmForValues($sqlFieldArray).')';
+            $sql = 'INSERT INTO ' . $this->tableName . '
+                           (' . implode(',', $sqlFieldArray) . ')
+                    VALUES (' . Database::getQmForValues($sqlFieldArray) . ')';
             if ($this->db->queryPrepared($sql, $queryParams) !== false) {
                 $returnCode = true;
                 if ($this->keyColumnName !== '') {
@@ -848,9 +856,9 @@ class Entity
                 $this->insertRecord = false;
             }
         } else {
-            $sql = 'UPDATE '.$this->tableName.'
-                       SET '.implode(', ', $sqlSetArray).'
-                     WHERE '.$this->keyColumnName.' = ? -- $this->dbColumns[$this->keyColumnName]';
+            $sql = 'UPDATE ' . $this->tableName . '
+                       SET ' . implode(', ', $sqlSetArray) . '
+                     WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
             $queryParams[] = $this->dbColumns[$this->keyColumnName];
             if ($this->db->queryPrepared($sql, $queryParams) !== false) {
                 $returnCode = true;
@@ -947,7 +955,7 @@ class Entity
                 }
                 $this->columnsInfos[$columnName]['changed'] = false;
                 $this->columnsInfos[$columnName]['previousValue'] = null;
-                if(strpos($property['type'], '(') > 0) {
+                if (strpos($property['type'], '(') > 0) {
                     $this->columnsInfos[$columnName]['type'] = substr($property['type'], 0, strpos($property['type'], '('));
                 } else {
                     $this->columnsInfos[$columnName]['type'] = $property['type'];
@@ -974,7 +982,7 @@ class Entity
             $this->setValue($this->columnPrefix . '_id', 0);
         }
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
-            $this->setValue($this->columnPrefix . '_uuid', (string) Uuid::uuid4());
+            $this->setValue($this->columnPrefix . '_uuid', (string)Uuid::uuid4());
         }
     }
 
@@ -983,7 +991,7 @@ class Entity
      * You must call the method **save** to store the new value to the database. If the unique key
      * column is set to 0 than this record will be a new record and all other columns are marked as changed.
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue   The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception If **columnName** doesn't exist. exception->text contains a string with the reason why the login failed.
@@ -1006,7 +1014,7 @@ class Entity
                     }
 
                     // Key fields should not contain 0
-                    if ((int) $newValue === 0 &&
+                    if ((int)$newValue === 0 &&
                         ($this->columnsInfos[$columnName]['key'] || $this->columnsInfos[$columnName]['null'])) {
                         $newValue = '';
                     }
@@ -1028,13 +1036,13 @@ class Entity
         }
 
         // if the key field was set to 0, then a new record is to be created
-        if ($this->keyColumnName === $columnName && (int) $newValue === 0) {
+        if ($this->keyColumnName === $columnName && (int)$newValue === 0) {
             $this->newRecord = true;
             $this->insertRecord = true;
 
             // now mark all other columns with values of this object as changed
             foreach ($this->dbColumns as $column => $value) {
-                if ((is_array($value) && count($value)>0) || (strlen((string) $value) > 0)) {
+                if ((is_array($value) && count($value) > 0) || (strlen((string)$value) > 0)) {
                     $this->columnsInfos[$column]['changed'] = true;
                 }
             }
@@ -1062,7 +1070,7 @@ class Entity
      * @param string $newValue the new value to set
      * @return bool Whether the $newValue can be considered differnt from the current value
      */
-    protected function valueChanged(string $columnName, ?string $newValue) : bool
+    protected function valueChanged(string $columnName, ?string $newValue): bool
     {
         global $gSettingsManager;
         $oldValue = $this->dbColumns[$columnName];
@@ -1097,7 +1105,7 @@ class Entity
                 }
             default:
                 // only mark as "changed" if the value is different (DON'T use binary safe function!)
-                return strcmp((string) $oldValue, (string) $newValue) !== 0;
+                return strcmp((string)$oldValue, (string)$newValue) !== 0;
         }
     }
 
