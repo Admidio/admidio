@@ -100,17 +100,10 @@ class ExportService
                 $exportTable->addAttribute('cellpadding', '1');
 
                 $exportTable->setColumnAlignByArray($data['column_align']);
-                $exportTable->addTableHeader();
-                $exportTable->addRow();
-                foreach ($data['headers'] as $column) {
-                    $exportTable->addColumn($column, array('style' => 'text-align:center;font-size:10;font-weight:bold;background-color:#C7C7C7;'), 'th');
-                }
-        
+                $exportTable->addRowHeadingByArray($data['headers'],'', array('style' => 'font-size:10;font-weight:bold;background-color:#C7C7C7;'));
+
                 foreach ($data['rows'] as $row) {
-                    $exportTable->addRow();
-                    foreach ($row as $column) {
-                        $exportTable->addColumn($column, array('style' => 'text-align:center;font-size:10;'));
-                    }
+                    $exportTable->addRowByArray($row, '', array('style' => 'font-size:10;'));
                 }
 
                 $pdf->writeHTML($exportTable->getHtmlTable(), true, false, true);
