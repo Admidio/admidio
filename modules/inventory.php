@@ -5,7 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Menu\Entity\MenuEntry;
-use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Service\ExportService;
 use Admidio\Inventory\Service\ImportService;
 use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\Inventory\Service\ItemService;
@@ -38,7 +38,7 @@ try {
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'show_html', 'validValues' => array('show_html', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit', 'item_save', 'item_delete_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit', 'item_save', 'item_delete_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfId = admFuncVariableIsValid($_GET, 'uuid', 'int', array('defaultValue' => 0));
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
     $getiniId = admFuncVariableIsValid($_GET, 'item_id', 'int', array('defaultValue' => 0));
@@ -58,10 +58,13 @@ try {
     }
 
     switch ($getMode) {
-        case 'show_html':    
+        case 'list':
+            $headline = $gL10n->get('SYS_INVENTORY');
+            $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-box-seam-fill');
             $page = new InventoryPresenter('admidio-inventory');
-            $page->createHTMLPage();
-            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-box-seam-fill');
+            $page->setHeadline($headline);
+            $page->setContentFullWidth();
+            $page->createList();
             $page->show();
             break;
 #region fields
@@ -291,7 +294,7 @@ try {
         case 'print_preview':
             $page = new InventoryPresenter('adm-inventory-print-preview');
             $page->setPrintMode();
-            $page->createPrintPreview();
+            $page->createList();
             $page->show();
             break;
 
@@ -301,7 +304,7 @@ try {
         case 'print_csv-oo':
         case 'print_pdf':
         case 'print_pdfl':
-            $page = new InventoryPresenter('adm-inventory-print');
+            $page = new ExportService();
             $exportMode = str_replace('print_', '', $getMode);
             $page->createExport($exportMode);
             break;
