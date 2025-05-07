@@ -114,7 +114,7 @@ class ItemService
             $this->itemRessource->readItemData($this->ID);
 
             if ($this->ID == 0) {
-                $this->ID = $this->itemRessource->getNewItemId();
+                $this->itemRessource->getNewItemId();
             }
 
             // check all item fields

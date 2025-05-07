@@ -141,5 +141,6 @@ class Item extends Entity
             $itemName =  $logEntry->getValue('log_record_name');
         }
         $logEntry->setValue('log_record_name', $itemName);
+        $logEntry->setValue('log_related_id', $logEntry->getValue('log_record_id'));
     }
 }
