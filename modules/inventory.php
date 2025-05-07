@@ -292,7 +292,9 @@ try {
 #endregion
 #region print
         case 'print_preview':
+            $headline = $gL10n->get('SYS_INVENTORY');
             $page = new InventoryPresenter('adm-inventory-print-preview');
+            $page->setHeadline($headline);
             $page->setPrintMode();
             $page->createList();
             $page->show();
