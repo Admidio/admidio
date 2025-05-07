@@ -306,9 +306,9 @@ try {
         case 'print_csv-oo':
         case 'print_pdf':
         case 'print_pdfl':
-            $page = new ExportService();
+            $export = new ExportService();
             $exportMode = str_replace('print_', '', $getMode);
-            $page->createExport($exportMode);
+            $export->createExport($exportMode);
             break;
 #endregion
         default:
