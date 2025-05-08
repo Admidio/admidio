@@ -1318,8 +1318,7 @@
   <string name="SYS_SMTP_USER">SMTP username</string>
   <string name="SYS_SMTP_USER_DESC">The username that is used in the SMTP authentication.</string>
   <string name="SYS_SOCIAL_NETWORKS">Social networks</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Here you can enter your username that you use in this social network. Other members will then be able to find you in this network.</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Would you like to set a link to your #VAR1# profile? Your #VAR1# login name is required. Log in to your #VAR1# account and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your #VAR1# profile directly.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Would you like to set a link to your profile of this social network? Your login name is required. Log in to your account of the social network and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your profile directly.</string>
   <string name="SYS_SSO_KEY">SSO Key</string>
   <string name="SYS_SSO_KEYS">SSO Keys</string>
   <string name="SYS_SSO_KEY_ADMIN">SSO Cryptographic Keys Administration</string>
