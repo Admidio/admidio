@@ -293,6 +293,7 @@ try {
 #region print
         case 'print_preview':
             $headline = $gL10n->get('SYS_INVENTORY');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
             $page = new InventoryPresenter('adm-inventory-print-preview');
             $page->setHeadline($headline);
             $page->setPrintMode();
