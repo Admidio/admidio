@@ -21,6 +21,9 @@ use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\UI\Presenter\InventoryPresenter;
+use Admidio\UI\Component\DataTables;
+use Admidio\Inventory\ValueObjects\ItemsData;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -181,7 +184,6 @@ try {
     ');
     $page->addJavascript('
         $(document).on("click", ".admidio-create-edit-info", function() {
-        var test = $(this).attr("id");
             $("#" + $(this).attr("id") + "_Content").toggle("fast");
         });
 
@@ -370,6 +372,85 @@ try {
             || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $userId . '.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1
         ) {
             $page->assignSmartyVariable('urlProfilePhotoDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackProfilePhoto\')');
+        }
+    }
+
+    if ($gSettingsManager->getInt('inventory_module_enabled') > 0) {
+        // ******************************************************************************
+        // Block with inventory items (optimized)
+        // ******************************************************************************
+        $itemsKeeper = new ItemsData($gDb, $gCurrentOrgId);
+        $itemsReceiver = new ItemsData($gDb, $gCurrentOrgId);
+        
+        // Read items by user
+        $itemsKeeper->readItemsByUser($user->getValue('usr_id'), array('KEEPER'));
+        $itemsReceiver->readItemsByUser($user->getValue('usr_id'), array('LAST_RECEIVER'));
+        
+        // Determine creation mode based on available items
+        $creationMode = 'none';
+        if (!empty($itemsKeeper->getItems()) && empty($itemsReceiver->getItems())) {
+            $creationMode = 'keeper';
+        } elseif (empty($itemsKeeper->getItems()) && !empty($itemsReceiver->getItems())) {
+            $creationMode = 'receiver';
+        } elseif (!empty($itemsKeeper->getItems()) && !empty($itemsReceiver->getItems())) {
+            $creationMode = 'both';
+        }
+        
+        // Helper function to set up DataTables
+        function setupDataTable($page, $tableId, $templateData) 
+        {
+            // create DataTable objects for tabs and accordions
+            foreach (['_tab','_accordion'] as $suffix) {
+                $dt = new DataTables($page, $tableId . $suffix);
+                $headerCount = count($templateData['headers']);
+                $dt->disableColumnsSort(array($headerCount));
+                $dt->setColumnsNotHideResponsive(array($headerCount));
+                $dt->createJavascript(count($templateData['rows']), $headerCount);
+                $dt->setColumnAlignByArray($templateData['column_align']);
+                $dt->setRowsPerPage(10);
+            }
+        }
+        
+        switch($creationMode) {
+            case 'keeper':
+                $inventoryPage = new InventoryPresenter('adm-inventory-table-keeper');
+                $templateData = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
+                setupDataTable($page, 'adm_inventory_table_keeper', $templateData);
+            
+                $page->assignSmartyVariable('keeperList', $templateData);
+                $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
+                $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+                break;
+        
+            case 'receiver':
+                $inventoryPage = new InventoryPresenter('adm-inventory-table-receiver');
+                $templateData = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
+                setupDataTable($page, 'adm_inventory_table_receiver', $templateData);
+            
+                $page->assignSmartyVariable('receiverList', $templateData);
+                $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
+                $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                break;
+        
+            case 'both':
+                $inventoryPage = new InventoryPresenter('adm-inventory-table-keeper-reveicer');
+                $templateDataKeeper = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
+                $templateDataReceiver = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
+            
+                setupDataTable($page, 'adm_inventory_table_keeper', $templateDataKeeper);
+                setupDataTable($page, 'adm_inventory_table_receiver', $templateDataReceiver);
+            
+                $page->assignSmartyVariable('keeperList', $templateDataKeeper);
+                $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
+                $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+            
+                $page->assignSmartyVariable('receiverList', $templateDataReceiver);
+                $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
+                $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                break;
+        
+            default:
+                break;
         }
     }
 
