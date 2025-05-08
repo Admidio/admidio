@@ -170,22 +170,28 @@ try {
             break;
 
         case 'item_delete_explain_msg':
-            echo '
+            $msg =  '
                 <div class="modal-header">
                     <h3 class="modal-title">' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE') . '</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><i class="bi bi-person-fill-dash"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_FORMER_DESC', array($gL10n->get('SYS_INVENTORY_FORMER'))) . '</p>
-                    <p><i class="bi bi-trash"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE_DESC', array($gL10n->get('SYS_DELETE'))) . '</p>
-                </div>
+                        <p><i class="bi bi-person-fill-dash"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_FORMER_DESC', array($gL10n->get('SYS_INVENTORY_FORMER'))) . '</p>';
+                if ($gCurrentUser->isAdministratorInventory()) {
+                    $msg.= '<p><i class="bi bi-trash"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE_DESC', array($gL10n->get('SYS_DELETE'))) . '</p>';
+                }
+                $msg.='</div>
                 <div class="modal-footer">
                     <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                        <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_INVENTORY_FORMER') . '</button>
-                    <button id="adm_button_delete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'adm_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                        <i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE') . '</button>
-                    <div id="adm_status_message" class="mt-4 w-100"></div>
+                        <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_INVENTORY_FORMER') . '</button>';
+                if ($gCurrentUser->isAdministratorInventory()) {
+                    $msg.= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'adm_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                        <i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE') . '</button>';
+                }
+                $msg.='<div id="adm_status_message" class="mt-4 w-100"></div>
                 </div>';
+
+                echo $msg;
             break;
 
         case 'item_make_former':
