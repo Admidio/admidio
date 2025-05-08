@@ -1094,9 +1094,6 @@ class User extends Entity
         if ($gCurrentUser->allowedViewProfileField($this, 'YOUTUBE') && $this->getValue('YOUTUBE') !== '') {
             $vCard[] = 'X-SOCIALPROFILE;TYPE=YOUTUBE:' . $this->getValue('YOUTUBE');
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'SKYPE') && $this->getValue('SKYPE') !== '') {
-            $vCard[] = 'X-SOCIALPROFILE;TYPE=SKYPE:' . $this->getValue('SKYPE');
-        }
         if ($gCurrentUser->allowedViewProfileField($this, 'LINKEDIN') && $this->getValue('LINKEDIN') !== '') {
             $vCard[] = 'X-SOCIALPROFILE;TYPE=LINKEDIN:' . $this->getValue('LINKEDIN');
         }
