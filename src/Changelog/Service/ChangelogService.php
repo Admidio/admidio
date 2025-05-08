@@ -1218,7 +1218,60 @@ class ChangelogService {
         );
     }
 
+    /**
+     * Returns a string containing an icon-link "Change History" button to implement in a DataTable if changelog functionality
+     * is enabled at all, the table has logging enabled and the current user is allowed to view
+     * those objects. If these conditions are not satisfied, this function returns an empty string.
+     *
+     * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple())
+     * @param bool $condition Additional condition to display/hide
+     * @param array $params
+     * @return string
+     * @throws Exception
+     */
+    public static function displayHistoryButtonTable(string|array $table, bool $condition = true, array $params = array()) : string {
+        global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
 
+        // Changelog disabled globally
+        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+            return '';
+        }
+        // Changelog only enabled for admins
+        if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
+            return '';
+        }
+
+        // Required tables is/are not logged at all, or condition for history button not met
+        if (!self::isTableLogged($table) || !$condition)
+            return '';
+
+
+        if (!is_array($table))
+            $table = explode(',', $table);
+
+        $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
+        // Admin always has acces. Other users can have permissions per table.
+        $hasAccess = $gCurrentUser->isAdministrator() ||
+            (!empty($table) && empty(array_diff($table, $tablesPermitted)));
+
+        // No explicit table permissions. But user data can be accessed on a per-user permission level.
+        $isUserLog = (!empty($table) && empty(array_diff($table, ['users', 'user_data', 'user_relations', 'members'])));
+        if (!$hasAccess && $isUserLog && !empty($params['uuid'])) {
+            $user = new User($gDb, $gProfileFields);
+            $user->readDataByUuid($params['uuid']);
+            // If a user UUID is given, we need access to that particular user
+            if ($gCurrentUser->hasRightEditProfile($user)) {
+                $hasAccess = true;
+            }
+        }
+
+        if (!$hasAccess)
+            return '';
+
+        return '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)) . '">
+                    <i class="bi bi-clock-history" title="' . $gL10n->get('SYS_CHANGE_HISTORY') . '"></i>
+                </a>';
+    }
 }
 
 
