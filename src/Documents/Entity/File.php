@@ -288,7 +288,7 @@ class File extends Entity
      * When a file is created, we also don't need to log some columns, because they are already
      * in the creation log record.
      *
-     * @return true Returns the list of database columns to be ignored for logging.
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {

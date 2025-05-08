@@ -119,7 +119,7 @@ class Text extends Entity
      * to log changes to these columns.
      * The textx table also contains txt_org_id and txt_name, which we don't want to log.
      *
-     * @return true Returns the list of database columns to be ignored for logging.
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {
