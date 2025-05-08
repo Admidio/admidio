@@ -88,10 +88,13 @@ class InventoryPresenter extends PagePresenter
         // link to print overlay and exports
         $this->addPageFunctionsMenuItem(
             'menu_item_lists_print_view',
-            $gL10n->get('SYS_PRINT_PREVIEW_EXPORT'),
+            $gL10n->get('SYS_PRINT_PREVIEW'),
             'javascript:void(0);',
             'bi-printer-fill'
         );
+
+        // dropdown menu for export options
+        $this->createExportDropdown(false);
 
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to view inventory history
@@ -172,8 +175,8 @@ class InventoryPresenter extends PagePresenter
 
                         form.submit();
                     });
-                
-                   // fill the DataTable filter string with the current search value
+
+                    // fill the DataTable filter string with the current search value
                     var table = $("#adm_inventory_table").DataTable();            
                     var initFilter = "' . $initialFilter . '";
                     if (initFilter !== "") {
@@ -270,86 +273,141 @@ class InventoryPresenter extends PagePresenter
         }
     }
 
+    /**
+     * Create the export dropdown menu for the inventory items.
+     * This method adds various export options to the page functions menu.
+     *
+     * @return void
+     * @throws Exception
+     */
     protected function createExportDropdown() : void
     {
         global $gL10n;
+        // create the export dropdown menu
+        $this->addPageFunctionsMenuItem(
+            'menu_item_lists_export',
+            $gL10n->get('SYS_EXPORT_TO'),
+            '#',
+            'bi-download'
+        );
+        $this->addPageFunctionsMenuItem(
+            'menu_item_lists_xlsx',
+            $gL10n->get('SYS_MICROSOFT_EXCEL') .' (*.xlsx)',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                    'items_filter_string'   => $this->getFilterString,
+                    'items_filter_category' => $this->getFilterCategory,
+                    'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items'                 => $this->getAllItems,
+                    'mode'                  => 'print_xlsx'
+                )
+            ),
+            'bi-filetype-xlsx',
+            'menu_item_lists_export'
+        );
+        $this->addPageFunctionsMenuItem(
+            'menu_item_lists_ods',
+            $gL10n->get('SYS_ODF_SPREADSHEET'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                    'items_filter_string'   => $this->getFilterString,
+                    'items_filter_category' => $this->getFilterCategory,
+                    'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items'                 => $this->getAllItems,
+                    'mode'                  => 'print_ods'
+                )
+            ),
+            'bi-file-earmark-spreadsheet',
+            'menu_item_lists_export'
+        );
+        $this->addPageFunctionsMenuItem(
+            'menu_item_lists_csv_ms',
+            $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_ISO_8859_1') . ')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                    'items_filter_string'   => $this->getFilterString,
+                    'items_filter_category' => $this->getFilterCategory,
+                    'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items'                 => $this->getAllItems,
+                    'mode'                  => 'print_csv-ms'
+                )
+            ),
+            'bi-filetype-csv',
+            'menu_item_lists_export'
+        );
+        $this->addPageFunctionsMenuItem(
+            'menu_item_lists_csv',
+            $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_UTF8') . ')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                    'items_filter_string'   => $this->getFilterString,
+                    'items_filter_category' => $this->getFilterCategory,
+                    'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items'                 => $this->getAllItems,
+                    'mode'                  => 'print_csv-oo'
+                )
+            ),
+            'bi-filetype-csv',
+            'menu_item_lists_export'
+        );
+        $this->addPageFunctionsMenuItem(
+            'menu_item_lists_pdf',
+            $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_PORTRAIT') . ')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                    'items_filter_string'   => $this->getFilterString,
+                    'items_filter_category' => $this->getFilterCategory,
+                    'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items'                 => $this->getAllItems,
+                    'mode'                  => 'print_pdf'
+                )
+            ),
+            'bi-filetype-pdf',
+            'menu_item_lists_export'
+        );
+        $this->addPageFunctionsMenuItem(
+            'menu_item_lists_pdfl',
+            $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_LANDSCAPE') . ')',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                    'items_filter_string'   => $this->getFilterString,
+                    'items_filter_category' => $this->getFilterCategory,
+                    'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items'                 => $this->getAllItems,
+                    'mode'                  => 'print_pdfl'
+                )
+            ),
+            'bi-filetype-pdf',
+            'menu_item_lists_export'
+        );
 
-        $this->pageContent .= '
-        <div class="table d-flex justify-content-end" style="border:none;">
-            <div class="dropdown " style="margin-bottom: 1rem;">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    ' . $gL10n->get('SYS_EXPORT_TO') . '
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="exportDropdown">
-                    <li>
-                        <a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
-                                                            'items_filter_string'   => $this->getFilterString,
-                                                            'items_filter_category' => $this->getFilterCategory,
-                                                            'items_filter_keeper'   => $this->getFilterKeeper,
-                                                            'items'                 => $this->getAllItems,
-                                                            'mode'                  => 'print_xlsx'
-                                                )) . '">
-                                <i class="bi bi-filetype-xlsx"></i> ' . $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
-                                                            'items_filter_string'   => $this->getFilterString,
-                                                            'items_filter_category' => $this->getFilterCategory,
-                                                            'items_filter_keeper'   => $this->getFilterKeeper,
-                                                            'items'                 => $this->getAllItems,
-                                                            'mode'                  => 'print_ods'
-                                                )) . '">
-                                <i class="bi bi-file-earmark-spreadsheet"></i> ' . $gL10n->get('SYS_ODF_SPREADSHEET') . '
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
-                                                            'items_filter_string'   => $this->getFilterString,
-                                                            'items_filter_category' => $this->getFilterCategory,
-                                                            'items_filter_keeper'   => $this->getFilterKeeper,
-                                                            'items'                 => $this->getAllItems,
-                                                            'mode'                  => 'print_csv-ms'
-                                                )) . '">
-                                <i class="bi bi-filetype-csv"></i> ' . $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_ISO_8859_1') . ')
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
-                                                            'items_filter_string'   => $this->getFilterString,
-                                                            'items_filter_category' => $this->getFilterCategory,
-                                                            'items_filter_keeper'   => $this->getFilterKeeper,
-                                                            'items'                 => $this->getAllItems,
-                                                            'mode'                  => 'print_csv-oo'
-                                                )) . '">
-                                <i class="bi bi-filetype-csv"></i> ' . $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_UTF8') . ')
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
-                                                            'items_filter_string'   => $this->getFilterString,
-                                                            'items_filter_category' => $this->getFilterCategory,
-                                                            'items_filter_keeper'   => $this->getFilterKeeper,
-                                                            'items'                 => $this->getAllItems,
-                                                            'mode'                  => 'print_pdf'
-                                                )) . '">
-                                <i class="bi bi-filetype-pdf"></i> ' . $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_PORTRAIT') . ')
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
-                                                            'items_filter_string'   => $this->getFilterString,
-                                                            'items_filter_category' => $this->getFilterCategory,
-                                                            'items_filter_keeper'   => $this->getFilterKeeper,
-                                                            'items'                 => $this->getAllItems,
-                                                            'mode'                  => 'print_pdfl'
-                                                )) . '">
-                                <i class="bi bi-filetype-pdf"></i> ' . $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_LANDSCAPE') . ')
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>';
+        // add javascript for the export dropdown menu to change the URL of the export link
+        $this->addJavascript('
+            $(document).ready(function(){
+                var buttons = {
+                    xlsx:    "print_xlsx",
+                    ods:     "print_ods",
+                    csv_ms:  "print_csv-ms",
+                    csv:     "print_csv-oo",
+                    pdf:     "print_pdf",
+                    pdfl:    "print_pdfl"
+                };
+
+                $.each(buttons, function(suffix, modeValue){
+                    var selector = "#menu_item_lists_" + suffix;
+                    $(selector).on("click", function(e){
+                        var textFilter = $("#items_filter_string").val()            || "";
+                        var category   = $("#items_filter_category").val()         || "";
+                        var keeper     = $("#items_filter_keeper").val()           || "";
+                        var showAll    = $("#items_show_all").is(":checked") ? 1 : 0;
+                        var base = this.href.split("?")[0];
+                        var qs = [
+                        "items_filter_string="   + encodeURIComponent(textFilter),
+                        "items_filter_category=" + encodeURIComponent(category),
+                        "items_filter_keeper="   + encodeURIComponent(keeper),
+                        "items="                 + showAll,
+                        "mode="                  + modeValue
+                        ].join("&");
+                        this.href = base + "?" + qs;
+                    });
+                });
+            });',
+            true
+        );
     }
 
     /**
@@ -376,7 +434,6 @@ class InventoryPresenter extends PagePresenter
             $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
         }
         else {
-            $this->createExportDropdown();
             $templateData = $this->prepareData('print');
         }
         
