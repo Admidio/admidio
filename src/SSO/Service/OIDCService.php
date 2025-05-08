@@ -25,6 +25,10 @@ use Psr\Http\Server\RequestHandlerInterface; // May be useful for middleware in 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\Grant\ClientCredentialsGrant;
+use League\OAuth2\Server\Grant\PasswordGrant;
+use League\OAuth2\Server\Grant\ImplicitGrant;
+use League\OAuth2\Server\Grant\RefreshTokenGrant;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
@@ -251,7 +255,7 @@ class OIDCService extends SSOService {
          * Client Credentials Grant
          */
         $server->enableGrantType(
-            new \League\OAuth2\Server\Grant\ClientCredentialsGrant(),
+            new ClientCredentialsGrant(),
             new \DateInterval('PT1H') // access tokens will expire after 1 hour
         );
         
@@ -259,7 +263,7 @@ class OIDCService extends SSOService {
         /* ***********************************************************************
         * Resource owner Password Grant
         */
-        $grant = new \League\OAuth2\Server\Grant\PasswordGrant(
+        $grant = new PasswordGrant(
             $userRepository,
             $refreshTokenRepository
         );
@@ -275,7 +279,7 @@ class OIDCService extends SSOService {
         */
         // Enable the implicit grant on the server
         $server->enableGrantType(
-            new \League\OAuth2\Server\Grant\ImplicitGrant(new \DateInterval('PT1H')),
+            new ImplicitGrant(new \DateInterval('PT1H')),
             new \DateInterval('PT1H') // access tokens will expire after 1 hour
         );
         
@@ -283,7 +287,7 @@ class OIDCService extends SSOService {
         /* ***********************************************************************
         * RefreshToken Grant
         */
-        $grant = new \League\OAuth2\Server\Grant\RefreshTokenGrant($refreshTokenRepository);
+        $grant = new RefreshTokenGrant($refreshTokenRepository);
         $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // new refresh tokens will expire after 1 month
         
         // Enable the refresh token grant on the server

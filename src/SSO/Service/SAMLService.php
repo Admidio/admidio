@@ -619,7 +619,7 @@ class SAMLService extends SSOService {
                 // Notify all registered SPs for logout
                 foreach ($this->getIds() as $spId) {
                     // Don't send a logout request to the client that initiated the logout request
-                    if (spId != $entityIdClient) {
+                    if ($spId != $entityIdClient) {
                         $sp = new SAMLClient($this->db, $spId);
                         if ($sp->isEnabled()) {
                             $this->sendLogoutRequest($sp, $gCurrentUser);
