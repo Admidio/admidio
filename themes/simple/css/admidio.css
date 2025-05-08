@@ -217,7 +217,9 @@ a {
     margin-bottom: 1rem;
 }
 
-.admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group){
+.admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group),
+.admidio-tabbed-field-group .table-responsive, .admidio-accordion-field-group .table-responsive,
+.admidio-tabbed-field-group .table-responsive .dt-container, .admidio-accordion-field-group .table-responsive .dt-container {
     margin-bottom: 0;
 }
 

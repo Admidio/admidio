@@ -96,7 +96,10 @@ class InventoryPresenter extends PagePresenter
         // dropdown menu for export options
         $this->createExportDropdown(false);
 
+        $showFilterForm = FormPresenter::FIELD_DISABLED;
         if ($gCurrentUser->isAdministratorInventory()) {
+            $showFilterForm = FormPresenter::FIELD_DEFAULT;
+
             // show link to view inventory history
             ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items,inventory_data');
            
@@ -123,6 +126,7 @@ class InventoryPresenter extends PagePresenter
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'field_list')),
                 'bi-ui-radios'
             );
+        }
 
             $form = new FormPresenter(
                 'adm_navbar_filter_form',
@@ -225,6 +229,7 @@ class InventoryPresenter extends PagePresenter
                         $gL10n->get('SYS_CATEGORY'),
                         $arrListValues,
                         array(
+                            'property' => $showFilterForm,
                             'defaultValue'    => $this->getFilterCategory,
                             'showContextDependentFirstEntry' => true
                         )
@@ -258,7 +263,11 @@ class InventoryPresenter extends PagePresenter
                 $gL10n->get('SYS_INVENTORY_KEEPER'),
                 $gDb,
                 $sql,
-                array('defaultValue' => $this->getFilterKeeper , 'showContextDependentFirstEntry' => true)
+                array(
+                    'property' => $showFilterForm,
+                    'defaultValue' => $this->getFilterKeeper,
+                    'showContextDependentFirstEntry' => true
+                )
             );
 
             // filter all items
@@ -266,11 +275,13 @@ class InventoryPresenter extends PagePresenter
                 'items_show_all',
                 $gL10n->get('SYS_SHOW_ALL'),
                 $this->getAllItems,
-                array('helpTextId' => 'SYS_SHOW_ALL_DESC')
+                array(
+                    'property' => $showFilterForm,
+                    'helpTextId' => 'SYS_SHOW_ALL_DESC'
+                )
             );
 
             $form->addToHtmlPage();
-        }
     }
 
     /**
@@ -736,6 +747,214 @@ class InventoryPresenter extends PagePresenter
                 }
             }
 
+            $listRowNumber++;
+        }
+
+        $preparedData['rows'] = $rows;
+        $preparedData['strikethroughs'] = $strikethroughs;
+
+        return $preparedData;
+    }
+
+    /**
+     * Populate the inventory table with the data of the inventory items in HTML mode.
+     * This method uses a predefined ItemsData element and always returns the HTML version
+     * of the table.
+     *
+     * @return array Returns an array with the following keys:
+     *               - headers: array of header labels for the table
+     *               - column_align: array indicating the alignment for each column
+     *               - rows: array containing all the table rows data
+     *               - strikethroughs: array indicating which rows should have strikethrough formatting
+     * @throws Exception
+     */
+    public function prepareDataProfile(ItemsData $itemsData, string $itemFieldFilter = 'KEEPER') : array
+    {
+        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
+
+        // Create a user object for later use
+        $user = new User($gDb, $gProfileFields);
+
+        // Initialize the result array
+        $preparedData = array(
+            'headers'         => array(),
+            'column_align'    => array(),
+            'rows'            => array(),
+            'strikethroughs'  => array()
+        );
+
+        // Build headers and set column alignment (only for HTML mode)
+        $columnAlign = array('left'); // first column alignment
+        $headers     = array();
+        $columnNumber = 1;
+
+        // create array with all column heading values
+        $profileItemFields = array('ITEMNAME');
+
+        foreach (explode(',', $gSettingsManager->getString('inventory_profile_view')) as $itemField) {
+            // we are in the keeper view, so we dont need the keeper field in the table
+            if ($itemField !== $itemFieldFilter && $itemField !== "0") {
+                $profileItemFields[] = $itemField;
+            }
+        }
+
+        foreach ($itemsData->getItemFields() as $itemField) {
+            $infNameIntern = $itemField->getValue('inf_name_intern');
+
+            if (!in_array($infNameIntern, $profileItemFields, true)) {
+                continue;
+            }
+
+            $columnHeader  = $itemsData->getProperty($infNameIntern, 'inf_name');
+
+            // Decide alignment based on field type
+            switch ($itemsData->getProperty($infNameIntern, 'inf_type')) {
+                case 'CHECKBOX':
+                case 'RADIO_BUTTON':
+                case 'GENDER':
+                    $columnAlign[] = 'center';
+                    break;
+                case 'NUMBER':
+                case 'DECIMAL':
+                    $columnAlign[] = 'right';
+                    break;
+                default:
+                    $columnAlign[] = 'left';
+                    break;
+            }
+
+            // For the first column, add a specific header
+            if ($columnNumber === 1) {
+                $headers[] = $gL10n->get('SYS_ABR_NO');
+            }
+
+            $headers[] = $columnHeader;
+            $columnNumber++;
+        }
+
+        // Append the admin action column
+        $columnAlign[] = 'right';
+        $headers[]     = '&nbsp;';
+
+        $preparedData['headers']      = $headers;
+        $preparedData['column_align'] = $columnAlign;
+
+        // Build table rows from the predefined ItemsData element (HTML mode only)
+        $rows          = array();
+        $strikethroughs = array();
+        $listRowNumber = 1;
+
+        foreach ($itemsData->getItems() as $item) {
+            $itemsData->readItemData($item['ini_id']);
+            $rowValues     = array();
+            $strikethrough = $item['ini_former'];
+            $columnNumber  = 1;
+
+            foreach ($itemsData->getItemFields() as $itemField) {
+                $infNameIntern = $itemField->getValue('inf_name_intern');
+
+                if (!in_array($infNameIntern, $profileItemFields, true)) {
+                    continue;
+                }
+                
+                // For the first column, add a row number
+                if ($columnNumber === 1) {
+                    $rowValues[] = $listRowNumber;
+                }
+
+                $content = $itemsData->getValue($infNameIntern, 'database');
+                $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
+
+                // Process the KEEPER column
+                if ($infNameIntern === 'KEEPER' && strlen($content) > 0) {
+                    $found = $user->readDataById($content);
+                    if (!$found) {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                    } else {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(
+                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                            ['user_uuid' => $user->getValue('usr_uuid')]
+                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                    }
+                }
+
+                // Process the LAST_RECEIVER column
+                if ($infNameIntern === 'LAST_RECEIVER' && strlen($content) > 0 && is_numeric($content)) {
+                    $found = $user->readDataById($content);
+                    if ($found) {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(
+                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                            ['user_uuid' => $user->getValue('usr_uuid')]
+                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                    }
+                }
+
+                // Format the content based on the field type
+                if ($infType === 'CHECKBOX') {
+                    $content = ($content != 1) ? 0 : 1;
+                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif (in_array($infType, ['DATE', 'DROPDOWN'])) {
+                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif ($infType === 'RADIO_BUTTON') {
+                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
+                }
+
+                $rowValues[] = ($strikethrough) ? '<s>' . $content . '</s>' : $content;
+                $columnNumber++;
+            }
+
+            // Append admin action column
+            $tempValue = '';
+            $tempValue .= ChangelogService::displayHistoryButtonTable(
+                'inventory_items,inventory_data',
+                $gCurrentUser->isAdministratorInventory(),
+                ['related_id' => $item['ini_id']]
+            );
+
+            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
+                if ($gCurrentUser->isAdministratorInventory() || (!$item['ini_former'] && $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database')))) {
+                    $tempValue .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(
+                        ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',
+                        ['mode' => 'item_edit', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former']]
+                    ) . '">
+                        <i class="bi bi-pencil-square" title="' . $gL10n->get('SYS_INVENTORY_ITEM_EDIT') . '"></i>
+                    </a>';
+                    $tempValue .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(
+                        ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',
+                        ['mode' => 'item_edit', 'item_id' => $item['ini_id'], 'copy' => true]
+                    ) . '">
+                        <i class="bi bi-copy" title="' . $gL10n->get('SYS_COPY') . '"></i>
+                    </a>';
+                }
+
+                if ($item['ini_former']) {
+                    $tempValue .= '<a class="admidio-icon-link admidio-messagebox"
+                        href="javascript:void(0);"
+                        data-buttons="yes-no"
+                        data-message="' . $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM') . '"
+                        data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(
+                            ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',
+                            ['mode' => 'item_undo_former', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former']]
+                        ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                        <i class="bi bi-eye" title="' . $gL10n->get('SYS_INVENTORY_UNDO_FORMER') . '"></i>
+                    </a>';
+                }
+
+                if ($gCurrentUser->isAdministratorInventory() || (!$item['ini_former'] && $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database')))) {
+                    $tempValue .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
+                        data-href="' . SecurityUtils::encodeUrl(
+                            ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',
+                            ['mode' => 'item_delete_explain_msg', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former']]
+                        ) . '">
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i>
+                    </a>';
+                }
+            }
+
+            $rowValues[] = $tempValue;
+            $rows[] = $rowValues;
+            $strikethroughs[] = $strikethrough;
             $listRowNumber++;
         }
 

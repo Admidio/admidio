@@ -1,3 +1,28 @@
+{* reusable function to render tables *}
+{function name="render_table" headers="" rows="" align="" tableId=""}
+    <div class="table-responsive">
+        <table id="{$tableId}" class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    {foreach from=$headers key=colIndex item=header}
+                        <th class="text-{$align[$colIndex]}">{$header}</th>
+                    {/foreach}
+                </tr>
+            </thead>
+            <tbody>
+                {foreach from=$rows item=row}
+                    <tr>
+                        {foreach from=$row key=colIndex item=cell}
+                            <td class="text-{$align[$colIndex]}">{$cell|raw}</td>
+                        {/foreach}
+                    </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+{/function}
+
+
 <!-- Responsive Tabs and Accordions -->
 <div class="d-none d-md-block">
     <!-- Tab Navigation -->
@@ -51,6 +76,38 @@
                     </div>
                 </div>
             {/foreach}
+
+            <!-- Inventory Keeper Cards -->
+            {if isset($keeperList)}
+                <div class="card admidio-tabbed-field-group">
+                    <div class="card-header">
+                        {$keeperListHeader}
+                        <a class="admidio-icon-link float-end" href="{$urlInventoryKeeper}">
+                            <i class="bi bi-box-seam-fill" title="{$keeperListHeader}"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <p>{$l10n->get('SYS_INVENTORY_ADDIN_KEEPER_DESC')}</p>
+                        {render_table headers=$keeperList.headers rows=$keeperList.rows align=$keeperList.column_align tableId="adm_inventory_table_keeper_tab"}
+                    </div>
+                </div>
+            {/if}
+
+            <!-- Inventory Receiver Cards -->
+            {if isset($receiverList)}
+                <div class="card admidio-tabbed-field-group">
+                    <div class="card-header">
+                        {$receiverListHeader}
+                        <a class="admidio-icon-link float-end" href="{$urlInventoryReceiver}">
+                            <i class="bi bi-box-seam-fill" title="{$receiverListHeader}"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <p>{$l10n->get('SYS_INVENTORY_ADDIN_LAST_RECEIVER_DESC')}</p>
+                        {render_table headers=$receiverList.headers rows=$receiverList.rows align=$receiverList.column_align tableId="adm_inventory_table_receiver_tab"}
+                    </div>
+                </div>
+            {/if}
         </div>
 
         <!-- Permissions Tab -->
@@ -131,25 +188,57 @@
             <div id="adm_profile_basic_informations_accordion" class="accordion-collapse collapse show" aria-labelledby="adm_profile_basic_informations_accordion_heading" data-bs-parent="#adm_profile_accordion">
                 <div class="accordion-body">
                     <div class="card admidio-accordion-field-group">
-                    <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
-                        {if isset($urlEditProfile)}
-                            <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlEditProfile}">
-                                <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_PROFILE')}</a>
-                        {/if}
-                    </div>
-                    <div class="card-body">
-                        {include file="modules/profile.view.basic-informations.tpl"}
-                    </div>
-                </div>
-                <!-- Dynamic Cards for additional Profile Data categories -->
-                {foreach $profileData as $categoryName => $category}
-                    <div class="card admidio-accordion-field-group">
-                        <div class="card-header">{$categoryName}</div>
+                        <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
+                            {if isset($urlEditProfile)}
+                                <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlEditProfile}">
+                                    <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_PROFILE')}</a>
+                            {/if}
+                        </div>
                         <div class="card-body">
-                            {include file="modules/profile.view.categories.tpl"}
+                            {include file="modules/profile.view.basic-informations.tpl"}
                         </div>
                     </div>
-                {/foreach}
+                    <!-- Dynamic Cards for additional Profile Data categories -->
+                    {foreach $profileData as $categoryName => $category}
+                        <div class="card admidio-accordion-field-group">
+                            <div class="card-header">{$categoryName}</div>
+                            <div class="card-body">
+                                {include file="modules/profile.view.categories.tpl"}
+                            </div>
+                        </div>
+                    {/foreach}
+
+                    <!-- Inventory Keeper Cards -->
+                    {if isset($keeperList)}
+                        <div class="card admidio-accordion-field-group">
+                            <div class="card-header">
+                                {$keeperListHeader}
+                                <a class="admidio-icon-link float-end" href="{$urlInventoryKeeper}">
+                                    <i class="bi bi-box-seam-fill" title="{$keeperListHeader}"></i>
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <p>{$l10n->get('SYS_INVENTORY_ADDIN_KEEPER_DESC')}</p>
+                                {render_table headers=$keeperList.headers rows=$keeperList.rows align=$keeperList.column_align tableId="adm_inventory_table_keeper_accordion"}
+                            </div>
+                        </div>
+                    {/if}
+
+                    <!-- Inventory Receiver Cards -->
+                    {if isset($receiverList)}
+                        <div class="card admidio-accordion-field-group">
+                            <div class="card-header">
+                                {$receiverListHeader}
+                                <a class="admidio-icon-link float-end" href="{$urlInventoryReceiver}">
+                                    <i class="bi bi-box-seam-fill" title="{$receiverListHeader}"></i>
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <p>{$l10n->get('SYS_INVENTORY_ADDIN_LAST_RECEIVER_DESC')}</p>
+                                {render_table headers=$receiverList.headers rows=$receiverList.rows align=$receiverList.column_align tableId="adm_inventory_table_receiver_accordion"}
+                            </div>
+                        </div>
+                    {/if}
                 </div>
             </div>
         </div>
