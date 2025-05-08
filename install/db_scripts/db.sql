@@ -550,6 +550,7 @@ CREATE TABLE %PREFIX%_oidc_auth_codes (
     oac_ocl_id                  integer unsigned    NOT NULL,
     oac_token                   text,
     oac_scope                   text,
+    oac_nonce                   varchar(2550)       NULL,
     oac_expires_at              timestamp           NOT NULL,
     oac_revoked                 boolean             DEFAULT FALSE,
     oac_redirect_uri            text                NOT NULL,

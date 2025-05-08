@@ -38,6 +38,7 @@ use Admidio\SSO\Entity\UserEntity;
 use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\IdTokenResponse;
+use Admidio\SSO\Grants\OIDCAuthCodeGrant;
 
 /** ***************************************************************************
  * Properly handle scopes and claims
@@ -237,7 +238,7 @@ class OIDCService extends SSOService {
         /* ***********************************************************************
          * Auth Code Grant
          */
-        $grant = new \League\OAuth2\Server\Grant\AuthCodeGrant(
+        $grant = new OIDCAuthCodeGrant(
              $authCodeRepository,
              $refreshTokenRepository,
              new \DateInterval('PT10M') // authorization codes will expire after 10 minutes
