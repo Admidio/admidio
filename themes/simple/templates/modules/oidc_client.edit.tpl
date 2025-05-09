@@ -5,44 +5,24 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     <div class="card admidio-field-group">
-        <div class="card-header">{$l10n->get('SYS_SSO_AUTO_SETUP')}</div>
-        <div class="card-body">
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_metadata_url']}
-            {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_metadata_setup']}
-        </div>
-    </div>
-    <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_SSO_NAME_PROPERTIES')}</div>
         <div class="card-body">
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_enabled']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_client_name']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_client_id']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_acs_url']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_slo_url']}
-        </div>
-    </div>
-    <div class="card admidio-field-group">
-        <div class="card-header">{$l10n->get('SYS_SSO_SIGNATURE_ENCRYPTION')}</div>
-        <div class="card-body">
-            {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_certificate']}
-
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_require_auth_signed']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_validate_signatures']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_sign_assertions']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_encrypt_assertions']}
-
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_assertion_lifetime']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_allowed_clock_skew']}
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_enabled']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_name']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_id']}
+            {include 'sys-template-parts/form.custom-content.tpl' data=$elements['ocl_client_secret']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_redirect_uri']}
         </div>
     </div>
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_SSO_USERDATA_ACCESS')}</div>
         <div class="card-body">
-            {include 'sys-template-parts/form.select.tpl' data=$elements['smc_userid_field']}
+        {include 'sys-template-parts/form.select.tpl' data=$elements['ocl_userid_field']}
+        {include 'sys-template-parts/form.select.tpl' data=$elements['ocl_scope']}
 
             <div class="admidio-form-group admidio-form-custom-content row mb-3">
                 <label class="col-sm-3 col-form-label">
-                    {$l10n->get('SYS_SSO_ATTRIBUTES')}
+                    {$l10n->get('SYS_SSO_OIDC_ATTRIBUTES')}
                 </label>
                 <div class="col-sm-9">
                     <div class="table-responsive">
@@ -50,19 +30,20 @@
                             <thead>
                             <tr class="nosort">
                                 <th style="width: 50%;">{$l10n->get('SYS_PROFILE_FIELD')}</th>
-                                <th style="width: 43%;">{$l10n->get('SYS_SSO_ATTRIBUTE')}</th>
+                                <th style="width: 43%;">{$l10n->get('SYS_SSO_OIDC_CLAIM')}</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody id="fieldsmap_tbody"></tbody>
                             <tfoot>
                             <tr id="table_row_button nosort">
+                            {assign var='data' value=$elements['sso_fields_no_other']}
                                 <td colspan="3">
-                                    <input id="{$elements['sso_fields_all_other'].id}" name="{$elements['sso_fields_all_other'].id}" class="form-check-input focus-ring " type="checkbox" value="1" 
-                                    {foreach $elements['sso_fields_all_other'].attributes as $itemvar}
+                                    <input id="{$data.id}" name="{$data.id}" class="form-check-input focus-ring " type="checkbox" value="1" 
+                                    {foreach $data.attributes as $itemvar}
                                         {$itemvar@key}="{$itemvar}"
                                     {/foreach} >
-                                    <label class="form-check-label fw-normal" for="sso_fields_all_other"> {$l10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER')}</label>
+                                    <label class="form-check-label fw-normal" for="{$data.id}"> {$data.label}</label>
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">
@@ -72,7 +53,7 @@
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <div class="form-text">{$l10n->get('SYS_SSO_ATTRIBUTES_DESC')}</div>
+                                    <div class="form-text">{$l10n->get('SYS_SSO_OIDC_ATTRIBUTES_DESC')}</div>
                                 </td>
                             </tr>
                             </tfoot>
@@ -90,7 +71,7 @@
                             <thead>
                             <tr class="nosort">
                                 <th style="width: 50%;">{$l10n->get('SYS_ROLE')}</th>
-                                <th style="width: 43%;">{$l10n->get('SYS_SSO_SAML_ROLE')}</th>
+                                <th style="width: 43%;">{$l10n->get('SYS_SSO_OIDC_ROLE')}</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -112,7 +93,7 @@
                             </tr>
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
-                                    <div class="form-text">{$l10n->get('SYS_SSO_ROLES_DESC')}</div>
+                                    <div class="form-text">{$l10n->get('SYS_SSO_ROLESMAP_DESC')}</div>
                                 </td>
                             </tr>
                             </tfoot>

@@ -78,6 +78,15 @@
         }
     });
     $('#sso_saml_enabled').trigger('change');
+    $('#sso_oidc_enabled').on('change', function() {
+        if ($('#sso_oidc_enabled').is(':checked')) {
+            $('.admidio-form-group:has(.if-oidc-enabled)').show();
+        } else {
+            $('.admidio-form-group:has(.if-oidc-enabled)').hide();
+        }
+    });
+    $('#sso_oidc_enabled').trigger('change');
+    
 </script>
 
 <form {foreach $attributes as $attribute}
@@ -101,6 +110,22 @@
 
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_saml_sso_staticsettings']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_saml_clients']}
+
+
+
+
+{* ********************************************************************************** 
+ * OIDC settings 
+ * **********************************************************************************}
+
+    {$elements['sso_oidc_settings'].content}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_oidc_enabled']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_issuer_url']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['sso_oidc_signing_key']}
+
+    {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_oidc_sso_staticsettings']}
+    {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_oidc_clients']}
+    
 
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_sso']}
     <div class="form-alert" style="display: none;">&nbsp;</div>

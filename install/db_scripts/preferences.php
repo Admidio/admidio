@@ -75,6 +75,7 @@ $defaultOrgPreferences = array(
     'changelog_table_forum_topics' => '0',
     'changelog_table_forum_posts' => '0',
     'changelog_table_saml_clients' => '0',
+    'changelog_table_oidc_clients' => '0',
     'changelog_table_others' => '0',
 
     // E-mail dispatch
@@ -199,6 +200,11 @@ $defaultOrgPreferences = array(
     'sso_saml_want_requests_signed' => '1',
     'sso_saml_signing_key' => '0',
     'sso_saml_encryption_key' => '0',
+    'sso_oidc_enabled' => '0',
+    'sso_oidc_issuer_url' => ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php',
+    'sso_oidc_signing_key' => '0',
+    'sso_oidc_encryption_key' => '',
+
 
     // Weblinks
     'enable_weblinks_module' => '1',
