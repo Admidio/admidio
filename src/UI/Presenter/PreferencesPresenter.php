@@ -2011,7 +2011,7 @@ class PreferencesPresenter extends PagePresenter
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
             '<table id="sso_saml_sso_staticsettings" style="width: 100%" class="if-saml-enabled">' . implode('',
-                array_map(function ($key, $value) use ($gL10n) {
+                array_map(function (string $key, array $value) use ($gL10n) {
                     return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' .
                         (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
             }, array_keys($staticSettings), $staticSettings)) . '</table>',
@@ -2110,7 +2110,7 @@ class PreferencesPresenter extends PagePresenter
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
             '<table id="sso_oidc_sso_staticsettings" style="width: 100%" class="if-oidc-enabled">' . implode('', 
-                array_map(function ($key, $value) use ($gL10n) {
+                array_map(function (string $key, array $value) use ($gL10n) {
                     return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' . 
                         (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
             }, array_keys($staticSettings), $staticSettings)) . '</table>',
