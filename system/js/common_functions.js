@@ -283,6 +283,33 @@ function messageBox(message, title, type, buttons, href) {
 }
 
 /**
+ * This function will redirect the user's browser to the given URL. If post data is provided,
+ * a hidden form is submitted to achieve a html POST, otherwise self.location.href is set to load the URL.
+ */
+function redirectToURL(url, args = null) {
+    if (!args) {
+        self.location.href = url;
+    } else {
+        // Simulate a POST redirect
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = url;
+        form.style.display = "none";
+
+        for (const key in args) {
+            if (Object.hasOwn(args, key)) {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = args[key];
+                form.appendChild(input);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+/**
  * The function will override the submitting of a form. It will call the action url and handle the response
  * of that url. Therefore, a json with status and message key is expected. Also a url key must be provided to
  * which the user will be guided if the form was successfully processed.
@@ -308,15 +335,9 @@ function formSubmit(event) {
             try {
                 var returnData = JSON.parse(data);
                 var returnStatus = returnData.status;
-                var returnMessage = "";
-                var forwardUrl = "";
-
-                if (typeof returnData.message !== "undefined") {
-                    returnMessage = returnData.message;
-                }
-                if (typeof returnData.url !== "undefined") {
-                    forwardUrl = returnData.url;
-                }
+                var returnMessage = returnData.message || "";
+                var forwardUrl = returnData.url || "";
+                var forwardPost = returnData.url_post || null;
             } catch (e) {
                 if (typeof $(".modal-body") !== "undefined") {
                     $(".modal-body").html(data);
@@ -333,7 +354,7 @@ function formSubmit(event) {
                     formAlert.fadeIn("slow");
                     if (forwardUrl !== "") {
                         setTimeout(function () {
-                            self.location.href = forwardUrl;
+                            redirectToURL(forwardUrl, forwardPost);
                         }, 2500);
                     } else {
                         $("#" + submitButtonID).attr("disabled", false);
@@ -344,7 +365,7 @@ function formSubmit(event) {
                         }, 2500);
                     }
                 } else {
-                    self.location.href = forwardUrl;
+                    redirectToURL(forwardUrl, forwardPost);
                 }
             } else {
                 if ($("#adm_captcha").length > 0) {

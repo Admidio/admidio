@@ -195,6 +195,10 @@ class SSOService {
 
         if (!isset($_SESSION['login_forward_url'])) {
             $_SESSION['login_forward_url'] = CURRENT_URL;
+            // GET variables are included in the current URL, but POST variables need to be added
+            if (!empty($_POST)) {
+                $_SESSION['login_forward_url_post'] = $_POST;
+            }
         }
         $headline = $gL10n->get('SYS_LOGIN_TO', array($client->readableName()));
 
