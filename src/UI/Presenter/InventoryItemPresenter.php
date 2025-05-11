@@ -240,14 +240,17 @@ class InventoryItemPresenter extends PagePresenter
         
                 case 'DROPDOWN':
                     if ($infNameIntern === 'CATEGORY') {
-                        if ($categoryService->count() > 1) {
+                        if ($categoryService->count() > 0) {
                             $form->addSelectBoxForCategories(
-                               'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                               'INF-' . $infNameIntern,
                                 $gL10n->get('SYS_CATEGORY'),
                                 $gDb,
                                 'IVT',
                                 FormPresenter::SELECT_BOX_MODUS_EDIT,
-                                array('property' => FormPresenter::FIELD_REQUIRED)
+                                array(
+                                    'property' => FormPresenter::FIELD_REQUIRED,
+                                    'defaultValue' => $items->getValue($infNameIntern)
+                                )
                             );
                         }
                     }else {

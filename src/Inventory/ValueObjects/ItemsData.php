@@ -658,7 +658,7 @@ class ItemsData
                 case 'DROPDOWN':
                 case 'RADIO_BUTTON':
                     // the value in db is only the position, now search for the text
-                    if ($value > 0 && $format !== 'html') {
+                    if ($value > 0 && $format !== 'html' && $fieldNameIntern !== 'CATEGORY') {
                         $valueList = $this->mItemFields[$fieldNameIntern]->getValue('inf_value_list', $format);
                         $arrListValues = $this->getListValue($fieldNameIntern, $valueList, $format);
                         $value = $arrListValues[$value];
