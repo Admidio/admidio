@@ -183,6 +183,10 @@ a {
     border-color: var(--bs-link-color);
 }
 
+.dropdown-toggle {
+    white-space: normal;
+}
+
 .btn-primary:hover {
     background-color: var(--bs-link-hover-color);
     border-color: var(--bs-link-hover-color);
