@@ -1226,24 +1226,24 @@ class ChangelogService {
      * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple())
      * @param bool $condition Additional condition to display/hide
      * @param array $params
-     * @return string
+     * @return array
      * @throws Exception
      */
-    public static function displayHistoryButtonTable(string|array $table, bool $condition = true, array $params = array()) : string {
+    public static function displayHistoryButtonTable(string|array $table, bool $condition = true, array $params = array()) : array {
         global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
 
         // Changelog disabled globally
         if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
-            return '';
+            return array();
         }
         // Changelog only enabled for admins
         if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
-            return '';
+            return array();
         }
 
         // Required tables is/are not logged at all, or condition for history button not met
         if (!self::isTableLogged($table) || !$condition)
-            return '';
+            return array();
 
 
         if (!is_array($table))
@@ -1266,11 +1266,14 @@ class ChangelogService {
         }
 
         if (!$hasAccess)
-            return '';
+            return array();
 
-        return '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)) . '">
-                    <i class="bi bi-clock-history" title="' . $gL10n->get('SYS_CHANGE_HISTORY') . '"></i>
-                </a>';
+        // If the user has access to the changelog, create the link to the changelog page
+        return array(
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)),
+            'icon' => 'bi bi-clock-history',
+            'tooltip' => $gL10n->get('SYS_CHANGE_HISTORY'),
+        );
     }
 }
 
