@@ -383,7 +383,7 @@ class ImportService
             $ItemData = array();
             if (count($assignedFieldColumn) > 0) {
          
-                $itemModule = new ItemService($gDb, '0', 0, 1, 1);
+                $itemModule = new ItemService($gDb, '', 0, 1, 1);
                 $itemModule->save();
         
                 $importSuccess = true;
