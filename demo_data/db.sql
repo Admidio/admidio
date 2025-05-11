@@ -57,6 +57,10 @@ DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_data       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_access_tokens   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_auth_codes      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_clients         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_refresh_tokens  CASCADE;
 
 
 
