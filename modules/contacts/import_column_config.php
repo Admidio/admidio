@@ -45,14 +45,14 @@ try {
         '
         $(".admidio-import-field").change(function() {
             var available = [];
-            $("#contacts_import_assign_fields_form .admidio-import-field").first().children("option").each(function() {
-                if ($(this).text() != "") {
+            $("#adm_contacts_import_assign_fields_form .admidio-import-field").first().children("option").each(function() {
+                if ($(this).val() != "") {
                     available.push($(this).text());
                 }
             });
             var used = [];
-            $("#contacts_import_assign_fields_form .admidio-import-field").children("option:selected").each(function() {
-                if ($(this).text() != "") {
+            $("#adm_contacts_import_assign_fields_form .admidio-import-field").children("option:selected").each(function() {
+                if ($(this).val() != "") {
                     used.push($(this).text());
                 }
             });
