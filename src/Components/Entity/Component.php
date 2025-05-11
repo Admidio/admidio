@@ -260,8 +260,9 @@ class Component extends Entity
                 break;
 
             case 'INVENTORY':
-                if ((int) $gSettingsManager->get('inventory_module_enabled') === 1
-                || ((int) $gSettingsManager->get('inventory_module_enabled') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('inventory_module_enabled') === 1
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 2 && $gValidLogin)
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
                     return true;
                 }
                 break;

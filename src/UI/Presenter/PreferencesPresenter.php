@@ -796,8 +796,7 @@ class PreferencesPresenter extends PagePresenter
      */
     public function createInventoryForm(): string
     {
-        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession;
-        static $inventoryArrayDbToken = '#_#';
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
 
         $formInventory = new FormPresenter(
@@ -812,7 +811,8 @@ class PreferencesPresenter extends PagePresenter
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
             '1' => $gL10n->get('SYS_ENABLED'),
-            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
+            '3' => $gL10n->get('ORG_ONLY_FOR_INVENTORY_ADMINS')
         );
         $formInventory->addSelectBox(
             'inventory_module_enabled',
@@ -849,26 +849,28 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
         );
 
-        $formInventory->addCheckbox(
-            'inventory_allow_keeper_edit',
-            $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
-            $formValues['inventory_allow_keeper_edit'],
-            array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
-        );
-        
-        // create array of possible fields for keeper edit
-        $items = new ItemsData($gDb, $gCurrentOrgId);
-        $selectBoxEntries = array();
-        foreach ($items->getItemFields() as $itemField) {
-            $selectBoxEntries[$itemField->getValue('inf_name_intern')] = $itemField->getValue('inf_name');
+        if ($formValues['inventory_module_enabled'] !== 3  || ($formValues['inventory_module_enabled'] === 3 && $gCurrentUser->isAdministratorInventory())) {
+            $formInventory->addCheckbox(
+                'inventory_allow_keeper_edit',
+                $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
+                $formValues['inventory_allow_keeper_edit'],
+                array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
+            );
+            
+            // create array of possible fields for keeper edit
+            $items = new ItemsData($gDb, $gCurrentOrgId);
+            $selectBoxEntries = array();
+            foreach ($items->getItemFields() as $itemField) {
+                $selectBoxEntries[$itemField->getValue('inf_name_intern')] = $itemField->getValue('inf_name');
+            }
+                
+            $formInventory->addSelectBox(
+                'inventory_allowed_keeper_edit_fields',
+                $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
+                $selectBoxEntries,
+                array('defaultValue' => explode(',', $formValues['inventory_allowed_keeper_edit_fields']), 'helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
+            );
         }
-               
-        $formInventory->addSelectBox(
-            'inventory_allowed_keeper_edit_fields',
-            $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
-            $selectBoxEntries,
-            array('defaultValue' => explode(',', $formValues['inventory_allowed_keeper_edit_fields']), 'helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
-        );
 
         $formInventory->addCheckbox(
             'inventory_current_user_default_keeper',
@@ -896,7 +898,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_field_date_time_format',
             $gL10n->get('SYS_INVENTORY_DATETIME_FORMAT'),
             $selectBoxEntries,
-            array('defaultValue' => explode(',', $formValues['inventory_field_date_time_format']), 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_DATETIME_FORMAT_DESC')
+            array('defaultValue' => $formValues['inventory_field_date_time_format'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_DATETIME_FORMAT_DESC')
         );
 
         // profile view settings
