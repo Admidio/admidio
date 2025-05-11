@@ -269,8 +269,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1060">UPDATE %PREFIX%_preferences SET prf_value = REPLACE(prf_value, 'adm_program/', '') WHERE prf_name IN ('homepage_login', 'homepage_logout') AND prf_value LIKE '%adm_program/%'</step>
     <step id="1070">UPDATE %PREFIX%_menu SET men_url = '/modules/overview.php' WHERE men_url = '/adm_program/overview.php'</step>
     <step id="1080">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_program', '') WHERE men_url LIKE '%/adm_program%'</step>
-    <step id="1090">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/announcements.php' WHERE men_name_intern = 'announcements'</step>
-    <step id="1100">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+    <step id="1090">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
                    VALUES ('sso_oidc_access', '%PREFIX%_oidc_clients')</step>
     <step id="1110">CREATE TABLE %PREFIX%_oidc_clients (
             ocl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
@@ -294,7 +293,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci;</step>
-    <step id="1120">ALTER TABLE %PREFIX%_oidc_clients
+    <step id="1110">ALTER TABLE %PREFIX%_oidc_clients
             ADD CONSTRAINT %PREFIX%_fk_ocl_usr_create  FOREIGN KEY (ocl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_ocl_usr_change  FOREIGN KEY (ocl_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
     <step id="1130">CREATE TABLE %PREFIX%_oidc_access_tokens (
@@ -312,7 +311,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci;</step>
-    <step id="1140">ALTER TABLE %PREFIX%_oidc_access_tokens
+    <step id="1130">ALTER TABLE %PREFIX%_oidc_access_tokens
             ADD CONSTRAINT %PREFIX%_fk_oat_usr_id      FOREIGN KEY (oat_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_oat_ocl_id      FOREIGN KEY (oat_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_oat_usr_create  FOREIGN KEY (oat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
@@ -331,7 +330,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci;</step>
-    <step id="1160">ALTER TABLE %PREFIX%_oidc_refresh_tokens
+    <step id="1150">ALTER TABLE %PREFIX%_oidc_refresh_tokens
             ADD CONSTRAINT %PREFIX%_fk_ort_usr_id      FOREIGN KEY (ort_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_ort_ocl_id      FOREIGN KEY (ort_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_ort_usr_create  FOREIGN KEY (ort_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
