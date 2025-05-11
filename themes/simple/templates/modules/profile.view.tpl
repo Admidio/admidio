@@ -11,10 +11,26 @@
             </thead>
             <tbody>
                 {foreach from=$rows item=row}
-                    <tr>
-                        {foreach from=$row key=colIndex item=cell}
-                            <td class="text-{$align[$colIndex]}">{$cell|raw}</td>
+                    <tr id="adm_inventory_item_{$row.item_id}">
+                        {foreach from=$row.data item=cell name=table}
+                            <td class="text-{$align[$smarty.foreach.table.index]}">{$cell|raw}</td>
                         {/foreach}
+                        {if isset($row.actions)}
+                            <td class="text-end">
+                                {foreach $row.actions as $actionItem}
+                                        <a
+                                            {if isset($actionItem.popup)}
+                                                class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
+                                            {elseif isset($actionItem.dataHref)}
+                                                class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
+                                            {else}
+                                                class="admidio-icon-link" href="{$actionItem.url}"
+                                            {/if}
+                                            ><i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i>
+                                        </a>
+                                {/foreach}
+                            </td>
+                        {/if}
                     </tr>
                 {/foreach}
             </tbody>
@@ -82,9 +98,11 @@
                 <div class="card admidio-tabbed-field-group">
                     <div class="card-header">
                         {$keeperListHeader}
-                        <a class="admidio-icon-link float-end" href="{$urlInventoryKeeper}">
-                            <i class="bi bi-box-seam-fill" title="{$keeperListHeader}"></i>
-                        </a>
+                        {if isset($urlInventoryKeeper)}
+                            <a class="admidio-icon-link float-end" href="{$urlInventoryKeeper}">
+                                <i class="bi bi-box-seam-fill" title="{$keeperListHeader}"></i>
+                            </a>
+                        {/if}
                     </div>
                     <div class="card-body">
                         <p>{$l10n->get('SYS_INVENTORY_ADDIN_KEEPER_DESC')}</p>
@@ -98,9 +116,11 @@
                 <div class="card admidio-tabbed-field-group">
                     <div class="card-header">
                         {$receiverListHeader}
-                        <a class="admidio-icon-link float-end" href="{$urlInventoryReceiver}">
-                            <i class="bi bi-box-seam-fill" title="{$receiverListHeader}"></i>
-                        </a>
+                        {if isset($urlInventoryReceiver)}
+                            <a class="admidio-icon-link float-end" href="{$urlInventoryReceiver}">
+                                <i class="bi bi-box-seam-fill" title="{$receiverListHeader}"></i>
+                            </a>
+                        {/if}
                     </div>
                     <div class="card-body">
                         <p>{$l10n->get('SYS_INVENTORY_ADDIN_LAST_RECEIVER_DESC')}</p>
@@ -213,9 +233,11 @@
                         <div class="card admidio-accordion-field-group">
                             <div class="card-header">
                                 {$keeperListHeader}
-                                <a class="admidio-icon-link float-end" href="{$urlInventoryKeeper}">
-                                    <i class="bi bi-box-seam-fill" title="{$keeperListHeader}"></i>
-                                </a>
+                                {if isset($urlInventoryKeeper)}
+                                    <a class="admidio-icon-link float-end" href="{$urlInventoryKeeper}">
+                                        <i class="bi bi-box-seam-fill" title="{$keeperListHeader}"></i>
+                                    </a>
+                                {/if}
                             </div>
                             <div class="card-body">
                                 <p>{$l10n->get('SYS_INVENTORY_ADDIN_KEEPER_DESC')}</p>
@@ -229,9 +251,11 @@
                         <div class="card admidio-accordion-field-group">
                             <div class="card-header">
                                 {$receiverListHeader}
-                                <a class="admidio-icon-link float-end" href="{$urlInventoryReceiver}">
-                                    <i class="bi bi-box-seam-fill" title="{$receiverListHeader}"></i>
-                                </a>
+                                {if isset($urlInventoryReceiver)}
+                                    <a class="admidio-icon-link float-end" href="{$urlInventoryReceiver}">
+                                        <i class="bi bi-box-seam-fill" title="{$receiverListHeader}"></i>
+                                    </a>
+                                {/if}
                             </div>
                             <div class="card-body">
                                 <p>{$l10n->get('SYS_INVENTORY_ADDIN_LAST_RECEIVER_DESC')}</p>

@@ -411,29 +411,31 @@ try {
             }
         }
         
+        $inventoryPage = new InventoryPresenter();
         switch($creationMode) {
             case 'keeper':
-                $inventoryPage = new InventoryPresenter('adm-inventory-table-keeper');
                 $templateData = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
                 setupDataTable($page, 'adm_inventory_table_keeper', $templateData);
             
                 $page->assignSmartyVariable('keeperList', $templateData);
                 $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
-                $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+                }
                 break;
         
             case 'receiver':
-                $inventoryPage = new InventoryPresenter('adm-inventory-table-receiver');
                 $templateData = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
                 setupDataTable($page, 'adm_inventory_table_receiver', $templateData);
             
                 $page->assignSmartyVariable('receiverList', $templateData);
                 $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
-                $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                }
                 break;
         
             case 'both':
-                $inventoryPage = new InventoryPresenter('adm-inventory-table-keeper-reveicer');
                 $templateDataKeeper = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
                 $templateDataReceiver = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
             
@@ -442,11 +444,15 @@ try {
             
                 $page->assignSmartyVariable('keeperList', $templateDataKeeper);
                 $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
-                $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                }  
             
                 $page->assignSmartyVariable('receiverList', $templateDataReceiver);
                 $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
-                $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_show_all' => true, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                }
                 break;
         
             default:
