@@ -6,7 +6,8 @@ namespace Admidio\Inventory\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
-use Admidio\Inventory\Entity\Item;
+use Admidio\Categories\Entity\Category;
+use Admidio\Infrastructure\Language;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Users\Entity\User;
@@ -63,7 +64,7 @@ class ItemData extends Entity
      * @return true returns **true** if no error occurred
      */
     protected function logUserfieldChange(?string $oldval = null, ?string $newval = null) : bool {
-        global $gCurrentOrganization, $gL10n, $gProfileFields;
+        global $gDb, $gProfileFields;
 
         if ($oldval === $newval) {
             // No change, nothing to log
@@ -73,12 +74,7 @@ class ItemData extends Entity
         $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
 
         $itemID = $this->getValue('ind_ini_id');
-        /* $item = new Item($this->db, $this->mItemsData, $itemID); */
         $id = $this->dbColumns[$this->keyColumnName];
-/*         $uuid = $user ? ($user->getValue('usr_uuid')) : null;*/
-/*         $record_name =  $this->mItemsData->getValue('ITEMNAME', 'database');
- */
-
         $field = $this->getValue('ind_inf_id');
         $fieldName = 'ind_value';
         $objectName = $this->mItemsData->getPropertyById($field, 'inf_name', 'database');
@@ -87,12 +83,23 @@ class ItemData extends Entity
         $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
 
         if ($infType === 'DROPDOWN' || $infType === 'RADIOBUTTON') {
-            $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'inf_value_list');
-            if (isset($vallist[$oldval])) {
-                $oldval = $vallist[$oldval];
+            if ($fieldNameIntern === 'CATEGORY') {
+                $category = new Category($gDb);
+                $category->readDataByUuid($oldval);
+                $oldval = Language::translateIfTranslationStrId($category->getValue('cat_name'));
+
+                $category->readDataByUuid($newval);
+                $newval = Language::translateIfTranslationStrId($category->getValue('cat_name'));
+
             }
-            if (isset($vallist[$newval])) {
-                $newval = $vallist[$newval];
+            else {
+                $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'inf_value_list');
+                if (isset($vallist[$oldval])) {
+                    $oldval = $vallist[$oldval];
+                }
+                if (isset($vallist[$newval])) {
+                    $newval = $vallist[$newval];
+                }
             }
         } 
         elseif ($infType === 'CHECKBOX') {
@@ -117,12 +124,10 @@ class ItemData extends Entity
                 elseif (is_numeric($oldval)) {
                     if ($user->readDataById($oldval)) {
                         $oldval = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
-                        /* $fieldName = $fieldName . '_href'; */
                     }
                 } elseif (is_numeric($newval)) {
                     if ($user->readDataById($newval)) {
                         $newval = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
-                        /* $fieldName = $fieldName . '_href'; */
                     }
                 }
             }
@@ -139,14 +144,6 @@ class ItemData extends Entity
         elseif ($infType === 'ICON') {
             $fieldName = $fieldName . '_icon';
         }
-
-
-
-       
-
-
-
-
 
         $logEntry = new LogChanges($this->db, $table);
         $logEntry->setLogModification($table, $id, null, $objectName, $field, $fieldName, $oldval, $newval);
@@ -194,22 +191,4 @@ class ItemData extends Entity
             return true;
         }
     }
-
-
-    /**
-     * Return a human-readable representation of the given database field/column.
-     * By default, the column name is returned unmodified. Subclasses can override this method.
-     * @param string $field The database column
-     * @return string The readable representation of the DB column (can also be a translatable identifier)
-     */
-/*     public function getFieldTitle(string $field): string
-    {
-        global $gProfileFields;
-        if ($this->dbColumns['ind_inf_id']) {
-            $fieldName = $gProfileFields->getPropertyById($field, 'inf_name');  
-            return $fieldName;
-        } else {
-            return parent::getFieldTitle($field);
-        }
-    } */
 }

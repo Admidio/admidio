@@ -55,13 +55,15 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 1 && !$gValidLogin) {
         throw new Exception('SYS_NO_RIGHTS');
+    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 3 && !$gCurrentUser->isAdministratorInventory()) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     switch ($getMode) {
         case 'list':
             $headline = $gL10n->get('SYS_INVENTORY');
             $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-box-seam-fill');
-            $page = new InventoryPresenter('admidio-inventory');
+            $page = new InventoryPresenter();
             $page->setHeadline($headline);
             $page->setContentFullWidth();
             $page->createList();
@@ -182,10 +184,10 @@ try {
                 }
                 $msg.='</div>
                 <div class="modal-footer">
-                    <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_INVENTORY_FORMER') . '</button>';
                 if ($gCurrentUser->isAdministratorInventory()) {
-                    $msg.= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'adm_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    $msg.= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE') . '</button>';
                 }
                 $msg.='<div id="adm_status_message" class="mt-4 w-100"></div>
@@ -299,8 +301,7 @@ try {
 #region print
         case 'print_preview':
             $headline = $gL10n->get('SYS_INVENTORY');
-            $gNavigation->addUrl(CURRENT_URL, $headline);
-            $page = new InventoryPresenter('adm-inventory-print-preview');
+            $page = new InventoryPresenter();
             $page->setHeadline($headline);
             $page->setPrintMode();
             $page->createList();

@@ -3,7 +3,7 @@
 {/if} *}
 
 <div class="table-responsive">
-<table id="adm_inventory_table" class="table table-condensed{if $print} table-striped{else} table-hover{/if}">
+    <table id="adm_inventory_table" class="table table-condensed{if $print} table-striped{else} table-hover{/if}">
         <thead>
             <tr>
                 {foreach from=$list.headers key=colIndex item=header}
@@ -13,10 +13,26 @@
         </thead>
         <tbody>
             {foreach from=$list.rows item=row}
-                <tr>
-                    {foreach from=$row key=colIndex item=cell}
-                        <td class="text-{$list.column_align[$colIndex]}">{$cell|raw}</td>
+                <tr id="adm_inventory_item_{$row.item_id}">
+                    {foreach from=$row.data item=cell name=table}
+                        <td class="text-{$list.column_align[$smarty.foreach.table.index]}">{$cell|raw}</td>
                     {/foreach}
+                    {if isset($row.actions)}
+                        <td class="text-end">
+                            {foreach $row.actions as $actionItem}
+                                    <a
+                                        {if isset($actionItem.popup)}
+                                            class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
+                                        {elseif isset($actionItem.dataHref)}
+                                            class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
+                                        {else}
+                                            class="admidio-icon-link" href="{$actionItem.url}"
+                                        {/if}
+                                        ><i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i>
+                                    </a>
+                            {/foreach}
+                        </td>
+                    {/if}
                 </tr>
             {/foreach}
         </tbody>

@@ -103,7 +103,7 @@ class ExportService
                 $exportTable->addRowHeadingByArray($data['headers'],'', array('style' => 'font-size:10;font-weight:bold;background-color:#C7C7C7;'));
 
                 foreach ($data['rows'] as $row) {
-                    $exportTable->addRowByArray($row, '', array('style' => 'font-size:10;'));
+                    $exportTable->addRowByArray($row['data'], '', array('style' => 'font-size:10;'));
                 }
 
                 $pdf->writeHTML($exportTable->getHtmlTable(), true, false, true);
@@ -164,7 +164,7 @@ class ExportService
                 foreach ($data['rows'] as $rowIndex => $row) {
                     $currentRow = $startRow + $rowIndex;
                     $currentCol = 1;
-                    foreach ($row as $cell) {
+                    foreach ($row['data'] as $cell) {
                         $hasIndent = false;
                         if (strpos($cell, '<i') !== false) {
                             $cell = str_replace(['<i>', '</i>'], '', $cell);
@@ -186,8 +186,7 @@ class ExportService
                                 ->getFont()->setStrikethrough(true);
                         }
                     }
-        
-                    $this->formatSpreadsheet($spreadsheet, $data['rows'], true);
+                    $this->formatSpreadsheet($spreadsheet, count($data['rows'][0]['data']), true);
                 }
         
                 $writer = new $writerClass($spreadsheet);
@@ -206,10 +205,9 @@ class ExportService
      * @param array $data
      * @param bool $containsHeadline
      */
-    function formatSpreadsheet($spreadsheet, $data, $containsHeadline) : void
+    function formatSpreadsheet($spreadsheet, $columnCount, $containsHeadline) : void
     {
         $activeSheet = $spreadsheet->getActiveSheet();
-        $columnCount = count($data[0]);
         $lastColumn  = Coordinate::stringFromColumnIndex($columnCount);
         
         if ($containsHeadline) {

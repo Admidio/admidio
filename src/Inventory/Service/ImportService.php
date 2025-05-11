@@ -11,8 +11,9 @@ use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Html;
 
 // Admidio namespaces
+use Admidio\Categories\Service\CategoryService;
+use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
-use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\ValueObjects\ItemsData;
 
@@ -190,6 +191,16 @@ class ImportService
             $line = next($_SESSION['import_data']);
         }
         
+        // cleanup the assigned field column array
+        $assignedFieldColumn = array_filter($assignedFieldColumn, function($row) {
+            foreach ($row as $value) {
+                if (trim($value) !== '') {
+                    return true;
+                }
+            }
+            return false;
+        });
+
         $items = new ItemsData($gDb, $gCurrentOrgId);
         $items->readItems();
         $importSuccess = false;
@@ -207,14 +218,9 @@ class ImportService
                 }
                 
                 if ($itemData->getValue('inf_name_intern') === 'CATEGORY') {
-                    $imfNameIntern = $itemData->getValue('inf_name_intern');
-                    // get value list of the item field
-                    $valueList = $items->getProperty($imfNameIntern, 'inf_value_list');
-        
-                    // select the value from the value list
-                    $val = $valueList[$itemValue];
-        
-                    $itemValues[] = array($itemData->getValue('inf_name_intern') => $val);
+                    $category = new Category($gDb);
+                    if ($category->readDataByUuid($itemValue));
+                        $itemValues[] = array($itemData->getValue('inf_name_intern') => $category->getValue('cat_name'));
                     continue;
                 }
         
@@ -227,7 +233,7 @@ class ImportService
             }
         
             foreach($assignedFieldColumn as $key => $value) {
-                $ret = $this->compareArrays($value, $itemValues);
+                $ret = $this->compareArrays($itemValues, $value);
                 if (!$ret) {
                     unset($assignedFieldColumn[$key]);
                     continue;
@@ -236,7 +242,6 @@ class ImportService
         }
         
         // get all values of the item fields
-        $valueList = array();
         $importedItemData = array();
         
         foreach ($assignedFieldColumn as $row => $values) {
@@ -298,40 +303,30 @@ class ImportService
                         }
                     }
                     elseif($imfNameIntern === 'CATEGORY') {
-                        // Merge the arrays
-                        $valueList = array_merge($items->getProperty($imfNameIntern, 'inf_value_list'), $valueList);
-                        // Remove duplicates
-                        $valueList = array_unique($valueList);
-                        // Re-index the array starting from 1
-                        $valueList = array_combine(range(1, count($valueList)), array_values($valueList));
-        
-                        $val = array_search($values[$infId], $valueList);
-        
-                        if ($val === false) {
-                            if ($values[$infId] == '') {
-                                $val = array_search($valueList[1], $valueList);
+                        $catName = $values[$infId];
+                        $val = '';
+
+                        if ($catName !== '') {
+                            $categoryService = new CategoryService($gDb, 'IVT');
+                            $allCategories = $categoryService->getVisibleCategories();
+                            foreach ($allCategories as $key => $category) {
+                                if ($category['cat_name'] === $catName) {
+                                    $val = $category['cat_uuid'];
+                                    break;
+                                }
                             }
-                            else {
-                                $itemField = new ItemField($gDb);
-                                $itemField->readDataById($items->getItemFields()[$imfNameIntern]->getValue('inf_id'));
-                                $valueList[] = $values[$infId];
-                                $itemField->setValue("inf_value_list", implode("\n", $valueList));
-        
-                                // Save data to the database
-                                $returnCode = $itemField->save();
-        
-                                if ($returnCode < 0) {
-                                    $returnMessage['success'] = 'error';
-                                    $returnMessage['message'] = $gL10n->get('SYS_NO_RIGHTS');
-                        
-                                    return $returnMessage;
-                                    // => EXIT
-                                }
-                                else {
-                                    $val = array_search($values[$infId], $valueList);
-                                }
+                            if ($val === '') {
+                                $category = new Category($gDb);
+                                $category->setValue('cat_name', $catName);
+                                $category->setValue('cat_org_id', $gCurrentOrgId);
+                                $category->setValue('cat_type', 'IVT');
+                                $category->save();
+
+                                // get the uuid of the new category
+                                $val = $category->getValue('cat_uuid');
                             }
                         }
+    
                     }
                     elseif($imfNameIntern === 'RECEIVED_ON' || $imfNameIntern === 'RECEIVED_BACK_ON') {
                         $val = $values[$infId];
@@ -368,7 +363,7 @@ class ImportService
                                 // check if date is right formatted
                                 $date = DateTime::createFromFormat('Y-m-d', $val);
                                 if ($date instanceof DateTime) {
-                                    $htmlValue = $date->format($gSettingsManager->getString('system_date'));
+                                    $val = $date->format($gSettingsManager->getString('system_date'));
                                 }
                             }
                         }
