@@ -120,6 +120,7 @@ $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
              , (\'event_participation\', \'adm_events\')
              , (\'menu_view\',     \'adm_menu\')
              , (\'sso_saml_access\', \'adm_saml_clients\')
+             , (\'sso_oidc_access\', \'adm_oidc_clients\')
              ';
 $db->queryPrepared($sql);
 

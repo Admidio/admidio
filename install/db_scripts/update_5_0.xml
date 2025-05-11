@@ -211,6 +211,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             smc_org_id                  integer unsigned    NOT NULL,
             smc_client_id               varchar(255)        NOT NULL UNIQUE,
             smc_client_name             varchar(255)        NOT NULL,
+            smc_enabled                 bool                DEFAULT true,
             smc_metadata_url            text                NULL,
             smc_acs_url                 text                NOT NULL,
             smc_slo_url                 text                NULL,
@@ -269,5 +270,94 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1060">UPDATE %PREFIX%_preferences SET prf_value = REPLACE(prf_value, 'adm_program/', '') WHERE prf_name IN ('homepage_login', 'homepage_logout') AND prf_value LIKE '%adm_program/%'</step>
     <step id="1070">UPDATE %PREFIX%_menu SET men_url = '/modules/overview.php' WHERE men_url = '/adm_program/overview.php'</step>
     <step id="1080">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_program', '') WHERE men_url LIKE '%/adm_program%'</step>
+    <step id="1090">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/announcements.php' WHERE men_name_intern = 'announcements'</step>
+    <step id="1100">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+                   VALUES ('sso_oidc_access', '%PREFIX%_oidc_clients')</step>
+    <step id="1110">CREATE TABLE %PREFIX%_oidc_clients (
+            ocl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            ocl_uuid                    varchar(36)         NOT NULL,
+            ocl_client_id               varchar(64)         NOT NULL,
+            ocl_client_name             varchar(255)        NOT NULL,
+            ocl_enabled                 bool                DEFAULT true,
+            ocl_client_secret           varchar(255)        NOT NULL,
+            ocl_redirect_uri            text                NOT NULL,
+            ocl_grant_types             varchar(255)        NOT NULL,
+            ocl_scope                   varchar(255)        DEFAULT NULL,
+            ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
+            ocl_field_mapping           text                NULL,
+            ocl_role_mapping            text                NULL,
+            ocl_usr_id_create           integer unsigned,
+            ocl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            ocl_usr_id_change           integer unsigned,
+            ocl_timestamp_change        timestamp           NULL        DEFAULT NULL,
+            PRIMARY KEY (ocl_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1120">ALTER TABLE %PREFIX%_oidc_clients
+            ADD CONSTRAINT %PREFIX%_fk_ocl_usr_create  FOREIGN KEY (ocl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+            ADD CONSTRAINT %PREFIX%_fk_ocl_usr_change  FOREIGN KEY (ocl_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+    <step id="1130">CREATE TABLE %PREFIX%_oidc_access_tokens (
+            oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            oat_usr_id                  integer unsigned    NOT NULL,
+            oat_ocl_id                  integer unsigned    NOT NULL,
+            oat_token                   text,
+            oat_scope                   text,
+            oat_expires_at              timestamp           NOT NULL,
+            oat_revoked                 boolean             DEFAULT FALSE,
+            oat_usr_id_create           integer unsigned,
+            oat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (oat_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1140">ALTER TABLE %PREFIX%_oidc_access_tokens
+            ADD CONSTRAINT %PREFIX%_fk_oat_usr_id      FOREIGN KEY (oat_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_oat_ocl_id      FOREIGN KEY (oat_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_oat_usr_create  FOREIGN KEY (oat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+    <step id="1150">CREATE TABLE %PREFIX%_oidc_refresh_tokens (
+            ort_id                      integer unsigned    AUTO_INCREMENT,
+            ort_usr_id                  integer unsigned    NOT NULL,
+            ort_ocl_id                  integer unsigned    NOT NULL,
+            ort_token                   text,
+            ort_scope                   text,
+            ort_expires_at              timestamp           NOT NULL,
+            ort_revoked                 boolean             DEFAULT FALSE,
+            ort_usr_id_create           integer unsigned,
+            ort_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (ort_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1160">ALTER TABLE %PREFIX%_oidc_refresh_tokens
+            ADD CONSTRAINT %PREFIX%_fk_ort_usr_id      FOREIGN KEY (ort_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_ort_ocl_id      FOREIGN KEY (ort_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_ort_usr_create  FOREIGN KEY (ort_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+    <step id="1170">CREATE TABLE %PREFIX%_oidc_auth_codes (
+            oac_id                      integer unsigned    AUTO_INCREMENT,
+            oac_usr_id                  integer unsigned    NOT NULL,
+            oac_ocl_id                  integer unsigned    NOT NULL,
+            oac_token                   text,
+            oac_scope                   text,
+            oac_nonce                   varchar(2550)       NULL,
+            oac_expires_at              timestamp           NOT NULL,
+            oac_revoked                 boolean             DEFAULT FALSE,
+            oac_redirect_uri            text                NOT NULL,
+            oac_used                    boolean             DEFAULT FALSE,
+            oac_usr_id_create           integer unsigned,
+            oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (oac_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1180">ALTER TABLE %PREFIX%_oidc_auth_codes
+            ADD CONSTRAINT %PREFIX%_fk_oac_usr_id      FOREIGN KEY (oac_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_oac_ocl_id      FOREIGN KEY (oac_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_oac_usr_create  FOREIGN KEY (oac_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+
     <step>stop</step>
 </update>

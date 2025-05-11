@@ -259,6 +259,14 @@ class PreferencesService
                 }
                 break;
 
+            case 'Sso':
+                if (empty($formData['sso_oidc_issuer_url'])) {
+                    $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+                }
+                if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
+                    $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
+                }
+                break;
         }
 
         // then update the database with the new values

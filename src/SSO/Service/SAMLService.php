@@ -189,8 +189,17 @@ class SAMLService extends SSOService {
         $sloUrl = $this->getSloEndpoint();
         $metadataUrl = $this->getMetadataUrl();
 
-        if (!$entityId || !$ssoUrl || !$keys['idpCert'] || !$keys['idpPrivateKey']) {
-            throw new Exception("SAML IDP settings are not configured properly.");
+        if (!$entityId) {
+            throw new Exception("SAML IDP settings are not configured properly: The SAML Entity ID is missing");
+        }
+        if (!$ssoUrl) {
+            throw new Exception("SAML IDP settings are not configured properly: The Single-Sign-On URL is missing");
+        }
+        if (!$keys['idpCert']) {
+            throw new Exception("SAML IDP settings are not configured properly: The IdP certificate is missing");
+        }
+        if (!$keys['idpPrivateKey']) {
+            throw new Exception("SAML IDP settings are not configured properly: The IdP private key is missing");
         }
 
 
@@ -276,7 +285,14 @@ class SAMLService extends SSOService {
         $response->setID('ID' . \LightSaml\Helper::generateID());
         $response->setInResponseTo($request->getID());
         $response->setIssueInstant(new \DateTime());
-        $response->setDestination($request->getAssertionConsumerServiceURL());
+        if ($request instanceof LogoutRequest) {
+            $response->setDestination($client->getValue('smc_slo_url'));
+        } elseif (method_exists($request, 'getAssertionConsumerServiceURL')) {
+            $response->setDestination($request->getAssertionConsumerServiceURL());
+        } else {
+            $response->setDestination($client->getValue('smc_acs_url'));
+        }
+        $response->setRelayState($request->getRelayState());
 
 
         $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
@@ -353,13 +369,17 @@ class SAMLService extends SSOService {
 
         $request = $this->receiveMessage();
         if (!$request instanceof AuthnRequest) {
-            throw new Exception("Invalid request (not an AuthnRequest)");
+            throw new Exception("Invalid request (not an AuthnRequest) in SAMLService->handleSSORequest()");
         }
         // Load the SAML client data (entityID is in $request->issuer->getValue())
         $entityIdClient = $request->getIssuer()->getValue();
         $client = $this->getClientFromID($entityIdClient);
 
         try {
+            if (!$client->isEnabled()) {
+                throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Login is no possible.");
+            }
+
             // Validate signatures. Will throw an exception
             if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
                 $this->validateSignature($client, $request, $client->getValue('smc_require_auth_signed'));
@@ -377,7 +397,6 @@ class SAMLService extends SSOService {
                     '</div>';
                 $this->showSSOLoginForm($client, $message);
                 // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
-
                 exit;
             }
 
@@ -404,6 +423,7 @@ class SAMLService extends SSOService {
             $response->setDestination($clientACS);
             $response->setIssuer($issuer);
             $response->setInResponseTo($requestId);
+            $response->setRelayState($request->getRelayState());
             $assertion = new Assertion();
 
             // Create SubjectConfirmationData
@@ -543,7 +563,7 @@ class SAMLService extends SSOService {
 
         $request = $this->receiveMessage();
         if (!$request instanceof LogoutRequest) {
-            throw new Exception("Invalid request (not a LogoutRequest)");
+            throw new Exception("Invalid request (not a LogoutRequest) in SAMLService->handleSLORequest()");
         }
 
 
@@ -552,6 +572,9 @@ class SAMLService extends SSOService {
         $client = $this->getClientFromID($entityIdClient);
 
         try {
+            if (!$client->isEnabled()) {
+                throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Logout is no possible.");
+            }
             // Validate signatures. Will throw an exception
             if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
                 $this->validateSignature($client, $request, $client->getValue('smc_require_auth_signed'));
@@ -598,7 +621,9 @@ class SAMLService extends SSOService {
                     // Don't send a logout request to the client that initiated the logout request
                     if ($spId != $entityIdClient) {
                         $sp = new SAMLClient($this->db, $spId);
-                        $this->sendLogoutRequest($sp, $gCurrentUser);
+                        if ($sp->isEnabled()) {
+                            $this->sendLogoutRequest($sp, $gCurrentUser);
+                        }
                     }
                 }
 
@@ -611,10 +636,14 @@ class SAMLService extends SSOService {
 
             $logoutResponse = new LogoutResponse();
             $logoutResponse->setIssuer(new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId()));
+            $logoutResponse->setID('ID' . \LightSaml\Helper::generateID());
+            $logoutResponse->setIssueInstant(new \DateTime());
+            $logoutResponse->setDestination($client->getValue('smc_slo_url'));
             $logoutResponse->setInResponseTo($request->getID());
             $statusSuccess = new \LightSaml\Model\Protocol\Status(
                 new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));
             $logoutResponse->setStatus($statusSuccess);
+            $logoutResponse->setRelayState($request->getRelayState());
             // Sign the whole response!
             $keys = $this->getKeysCertificates();
             $signAssertions = $client->getValue('smc_sign_assertions');
@@ -642,7 +671,7 @@ class SAMLService extends SSOService {
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setIssuer(new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId()));
         $logoutRequest->setId(\LightSaml\Helper::generateId());
-
+        $logoutRequest->setIssueInstant(new \DateTime());
         $logoutRequest->setNameID(new NameID($login, SamlConstants::NAME_ID_FORMAT_UNSPECIFIED));
         $logoutRequest->setDestination($sloUrl);
 
@@ -672,7 +701,6 @@ class SAMLService extends SSOService {
         curl_close($ch);
 
         print $responseContent;
-
     }
 
 /*
@@ -688,7 +716,7 @@ class SAMLService extends SSOService {
 
         $request = $this->receiveMessage();
         if (!$request instanceof Message) {
-            throw new Exception("Invalid request (not an AttributeQuery)");
+            throw new Exception("Invalid request (not an AttributeQuery) in SAMLService->handleAttributeQuery()");
         }
 
 
@@ -698,6 +726,9 @@ class SAMLService extends SSOService {
         $client = $this->getClientFromID($entityIdClient);
 
         try{
+            if (!$client->isEnabled()) {
+                throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Query is no possible.");
+            }
             if (!$gCurrentUserId) {
                 require_once($rootPath . '/system/login_valid.php');
             }
@@ -753,21 +784,8 @@ class SAMLService extends SSOService {
             $att->setName($samlAttribute);
 //            $att->setFriendlyName($friendlyName ?: $gL10n->get('SYS_ROLES'));
 
-            // Loop throu all roles of the user. If it is part of the mapping, or catchall is set, append it to the attribute
-            $roles = $user->getRoleMemberships();
-            $roleMapping = $client->getRoleMapping();
-            $allRoles = $client->getRoleMappingCatchall();
-
-            foreach ($roles as $roleId) {
-                $samlRolesFound = array_keys($roleMapping, $roleId);
-                foreach ($samlRolesFound as $samlRole) {
-                    $att->addAttributeValue($samlRole);
-                }
-                if (empty($samlRolesFound) && $allRoles) {
-                    // CATCHALL: Add role with its admidio role name
-                    $role = new Role($this->db, $roleId);
-                    $att->addAttributeValue($role->getValue('rol_name'));
-                }
+            foreach ($client->getMappedRoleMemberships($user) as $r) {
+                $att->addAttributeValue($r);
             }
         } else {
             // User profile fields or user fields

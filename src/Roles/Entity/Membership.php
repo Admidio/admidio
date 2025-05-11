@@ -362,7 +362,7 @@ class Membership extends Entity
      * so their initial setting on creation should not be logged. Instead, they will be used
      * when displaying the log entry.
      *
-     * @return true Returns the list of database columns to be ignored for logging.
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {
