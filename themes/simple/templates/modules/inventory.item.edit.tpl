@@ -7,14 +7,14 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_DESIGNATION')}</div>
         <div class="card-body">
-            {include 'sys-template-parts/form.input.tpl' data=$elements['inf-1']}  {* Name *}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['INF-ITEMNAME']}  {* Name *}
         </div>
     </div>
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_PROPERTIES')}</div>
         <div class="card-body">
             {foreach $elements as $key => $itemField}
-                {if {string_contains haystack=$key needle="inf-"} && $key != "inf-1"}
+                {if {string_contains haystack=$key needle="INF-"} && $key != "INF-ITEMNAME"}
                     {if $itemField.type == 'checkbox'}
                         {include 'sys-template-parts/form.checkbox.tpl' data=$itemField}
                     {elseif $itemField.type == 'multiline'}

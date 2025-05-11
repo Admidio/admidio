@@ -92,19 +92,6 @@ class InventoryPresenter extends PagePresenter
     {
         global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields;
 
-        // link to print overlay and exports
-        $this->addPageFunctionsMenuItem(
-            'menu_item_lists_print_view',
-            $gL10n->get('SYS_PRINT_PREVIEW'),
-            'javascript:void(0);',
-            'bi-printer-fill'
-        );
-
-        // dropdown menu for export options
-        $this->createExportDropdown(false);
-
-        $keeper = ($this->isCurrentUserKeeper()) ? $gCurrentUser->getValue('usr_id') : null;
-        $showFilterForm = ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($keeper)) ? FormPresenter::FIELD_DEFAULT : FormPresenter::FIELD_DISABLED;
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to view inventory history
             ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items,inventory_data');
@@ -116,21 +103,26 @@ class InventoryPresenter extends PagePresenter
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'item_edit')),
                 'bi-plus-circle-fill'
             );
+        }
+        
+        // link to print overlay and exports
+        $this->addPageFunctionsMenuItem(
+            'menu_item_lists_print_view',
+            $gL10n->get('SYS_PRINT_PREVIEW'),
+            'javascript:void(0);',
+            'bi-printer-fill'
+        );
 
-            // show link to import users
+        // dropdown menu for export options
+        $this->createExportDropdown(false);
+
+        if ($gCurrentUser->isAdministratorInventory()) {
+            // show link to import items
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_import_items',
                 $gL10n->get('SYS_INVENTORY_IMPORT_ITEMS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php' , array('mode' => 'import_file_selection')),
                 'bi-upload'
-            );
-
-            // show link to maintain categories
-            $this->addPageFunctionsMenuItem(
-                'menu_item_inventory_categories',
-                $gL10n->get('SYS_EDIT_CATEGORIES'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'IVT')),
-                'bi-hdd-stack-fill'
             );
 
             // show link to maintain fields
@@ -141,6 +133,10 @@ class InventoryPresenter extends PagePresenter
                 'bi-ui-radios'
             );
         }
+
+        // filter form
+        $keeper = ($this->isCurrentUserKeeper()) ? $gCurrentUser->getValue('usr_id') : null;
+        $showFilterForm = ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($keeper)) ? FormPresenter::FIELD_DEFAULT : FormPresenter::FIELD_DISABLED;
 
         $form = new FormPresenter(
             'adm_navbar_filter_form',
@@ -583,9 +579,9 @@ class InventoryPresenter extends PagePresenter
 
         // Iterate over each item to fill the table rows
         foreach ($this->itemsData->getItems() as $item) {
-            $this->itemsData->readItemData($item['ini_id']);
+            $this->itemsData->readItemData($item['ini_uuid']);
             $rowValues = array();
-            $rowValues['item_id'] = $item['ini_id'];
+            $rowValues['item_uuid'] = $item['ini_uuid'];
             $strikethrough = $item['ini_former'];
             $columnNumber = 1;
 
@@ -704,14 +700,14 @@ class InventoryPresenter extends PagePresenter
                     if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
                         // Add edit action
                         $rowValues['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
                             'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                         );
 
                         // Add copy action
                         $rowValues['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_id' => $item['ini_id'], 'copy' => true)),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'copy' => true)),
                             'icon' => 'bi bi-file-earmark-plus',
                             'tooltip' => $gL10n->get('SYS_COPY')
                         );
@@ -720,7 +716,7 @@ class InventoryPresenter extends PagePresenter
                     if ($item['ini_former']) {
                         // Add undo former action
                         $rowValues['actions'][] = array(
-                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_id'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_id'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                             'dataMessage' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM'),
                             'icon' => 'bi bi-eye',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER')
@@ -731,7 +727,7 @@ class InventoryPresenter extends PagePresenter
                         // Add delete/make former action
                         $rowValues['actions'][] = array(
                             'popup' => true,
-                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])),
+                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
                             'icon' => 'bi bi-trash',
                             'tooltip' => $gL10n->get('SYS_DELETE')
                         );
@@ -874,9 +870,9 @@ class InventoryPresenter extends PagePresenter
         $listRowNumber = 1;
 
         foreach ($itemsData->getItems() as $item) {
-            $itemsData->readItemData($item['ini_id']);
+            $itemsData->readItemData($item['ini_uuid']);
             $rowValues     = array();
-            $rowValues['item_id'] = $item['ini_id'];
+            $rowValues['item_uuid'] = $item['ini_uuid'];
             $strikethrough = $item['ini_former'];
             $columnNumber  = 1;
 
@@ -957,14 +953,14 @@ class InventoryPresenter extends PagePresenter
                 if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
                     // Add edit action
                     $rowValues['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])),
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                     );
 
                     // Add copy action
                     $rowValues['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_id' => $item['ini_id'], 'copy' => true)),
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'copy' => true)),
                         'icon' => 'bi bi-file-earmark-plus',
                         'tooltip' => $gL10n->get('SYS_COPY')
                     );
@@ -973,7 +969,7 @@ class InventoryPresenter extends PagePresenter
                 if ($item['ini_former']) {
                     // Add undo former action
                     $rowValues['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_id'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_id'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM'),
                         'icon' => 'bi bi-eye',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER')
@@ -984,7 +980,7 @@ class InventoryPresenter extends PagePresenter
                     // Add delete/make former action
                     $rowValues['actions'][] = array(
                         'popup' => true,
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_id' => $item['ini_id'], 'item_former' => $item['ini_former'])),
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE')
                     );

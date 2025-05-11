@@ -914,6 +914,7 @@ CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_data (ind_
 CREATE TABLE %PREFIX%_inventory_fields
 (
     inf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inf_uuid                    varchar(36)         NOT NULL,
     inf_org_id                  integer unsigned    NOT NULL,
     inf_type                    varchar(30)         NOT NULL,
     inf_name_intern             varchar(110)        NOT NULL,
@@ -934,6 +935,7 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (inf_org_id, inf_name_intern);
+CREATE UNIQUE INDEX %PREFIX%_idx_inf_uuid ON %PREFIX%_inventory_fields (inf_uuid);
 
 /*==============================================================*/
 /* Table: adm_inventory_items                                   */
@@ -941,6 +943,7 @@ CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (i
 CREATE TABLE %PREFIX%_inventory_items
 (
     ini_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ini_uuid                    varchar(36)         NOT NULL,
     ini_org_id                  integer unsigned    NOT NULL,
     ini_former                  boolean             NOT NULL    DEFAULT false,
     ini_usr_id_create           integer unsigned,
@@ -953,6 +956,7 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
+CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);
 
 /*==============================================================*/
 /* Foreign Key Constraints                                      */

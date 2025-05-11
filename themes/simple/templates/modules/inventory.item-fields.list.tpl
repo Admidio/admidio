@@ -25,18 +25,18 @@
             </tbody>
             <tbody id="adm_item_fields_{$itemFieldsCategory.id}" class="admidio-sortable">
                 {foreach $itemFieldsCategory.entries as $itemField}
-                    <tr id="adm_item_field_{$itemField.id}" data-uuid="{$itemField.id}">
+                    <tr id="adm_item_field_{$itemField.uuid}" data-uuid="{$itemField.uuid}">
                         <td>
                             <a href="{$itemField.urlEdit}">{$itemField.name}</a>
                             {assign var="data" value=['helpTextId' => $itemField.description]}
                             {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
                         </td>
                         <td>
-                            <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$itemField.id}"
-                               data-direction="UP" data-target="adm_item_field_{$itemField.id}">
+                            <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$itemField.uuid}"
+                               data-direction="UP" data-target="adm_item_field_{$itemField.uuid}">
                                 <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD'))}"></i></a>
-                            <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$itemField.id}"
-                               data-direction="DOWN" data-target="adm_item_field_{$itemField.id}">
+                            <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$itemField.uuid}"
+                               data-direction="DOWN" data-target="adm_item_field_{$itemField.uuid}">
                                 <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD'))}"></i></a>
                             <a class="admidio-icon-link">
                                 <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD'))}"></i></a>

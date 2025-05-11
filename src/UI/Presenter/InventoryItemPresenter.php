@@ -36,7 +36,7 @@ class InventoryItemPresenter extends PagePresenter
      * @param string $itemFieldID ID of the item field that should be edited.
      * @throws Exception
      */
-    public function createEditForm(string $itemID = '', bool $getCopy = false)
+    public function createEditForm(string $itemUUID = '', bool $getCopy = false)
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
 
@@ -44,8 +44,8 @@ class InventoryItemPresenter extends PagePresenter
         $items = new ItemsData($gDb, $gCurrentOrgId);
         $categoryService = new CategoryService($gDb, 'IVT');
     
-        if ($itemID !== '') {
-            $items->readItemData($itemID);
+        if ($itemUUID !== '') {
+            $items->readItemData($itemUUID);
             // Check whether the field belongs to the current organization
              if ($items->getValue('ini_org_id') > 0
                 && (int)$items->getItemFields()[0]->getValue('ini_org_id') !== $gCurrentOrgId) {
@@ -56,16 +56,16 @@ class InventoryItemPresenter extends PagePresenter
         foreach ($items->getItemFields() as $itemField) {  
             $infNameIntern = $itemField->getValue('inf_name_intern');
             if($infNameIntern === 'IN_INVENTORY') {
-                $pimInInventoryId = $items->getProperty($infNameIntern, 'inf_id');
+                $pimInInventory = $infNameIntern;
             }
             if($infNameIntern === 'LAST_RECEIVER') {
-                $pimLastReceiverId = $items->getProperty($infNameIntern, 'inf_id');
+                $pimLastReceiver = $infNameIntern;
             }
             if ($infNameIntern === 'RECEIVED_ON') {
-                $pimReceivedOnId = $items->getProperty($infNameIntern, 'inf_id');
+                $pimReceivedOn = $infNameIntern;
             }
             if ($infNameIntern === 'RECEIVED_BACK_ON') {
-                $pimReceivedBackOnId = $items->getProperty($infNameIntern, 'inf_id');
+                $pimReceivedBackOn = $infNameIntern;
             }
         }
 
@@ -73,7 +73,7 @@ class InventoryItemPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_item_edit_form',
             'modules/inventory.item.edit.tpl',
-            ($getCopy) ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_id' => $itemID, 'mode' => 'item_save', 'copy' => true)) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_id' => $itemID, 'mode' => 'item_save')),
+            ($getCopy) ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_uuid' => $itemUUID, 'mode' => 'item_save', 'copy' => true)) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_uuid' => $itemUUID, 'mode' => 'item_save')),
             $this
         );
         
@@ -93,33 +93,33 @@ class InventoryItemPresenter extends PagePresenter
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
             }
             
-            if (isset($pimInInventoryId, $pimLastReceiverId, $pimReceivedOnId, $pimReceivedBackOnId) && $infNameIntern === 'IN_INVENTORY') {
+            if (isset($pimInInventory, $pimLastReceiver, $pimReceivedOn, $pimReceivedBackOn) && $infNameIntern === 'IN_INVENTORY') {
                 /* $gSettingsManager->getString('inventory_field_date_time_format') === 'datetime' ? $datetime = 'true' : $datetime = 'false'; */
         
                 // Add JavaScript to check the LAST_RECEIVER field and set the required attribute for pimReceivedOnId and pimReceivedBackOnId
                 $this->addJavascript('
                     document.addEventListener("DOMContentLoaded", function() {
-                        if (document.querySelector("[id=\'inf-' . $pimReceivedOnId . '_time\']")) {
+                        if (document.querySelector("[id=\'INF-' . $pimReceivedOn . '_time\']")) {
                             var pDateTime = "true";
                         } else {
                             var pDateTime = "false";
                         }
         
-                        var pimInInventoryField = document.querySelector("[id=\'inf-' . $pimInInventoryId . '\']");
-                        var pimInInventoryGroup = document.getElementById("inf-' . $pimInInventoryId . '_group");
-                        var pimLastReceiverField = document.querySelector("[id=\'inf-' . $pimLastReceiverId . '\']");
-                        var pimLastReceiverFieldHidden = document.querySelector("[id=\'inf-' . $pimLastReceiverId . '-hidden\']");
-                        var pimLastReceiverGroup = document.getElementById("inf-' . $pimLastReceiverId . '_group");
-                        var pimReceivedOnField = document.querySelector("[id=\'inf-' . $pimReceivedOnId . '\']");
+                        var pimInInventoryField = document.querySelector("[id=\'INF-' . $pimInInventory . '\']");
+                        var pimInInventoryGroup = document.getElementById("INF-' . $pimInInventory . '_group");
+                        var pimLastReceiverField = document.querySelector("[id=\'INF-' . $pimLastReceiver . '\']");
+                        var pimLastReceiverFieldHidden = document.querySelector("[id=\'INF-' . $pimLastReceiver . '-hidden\']");
+                        var pimLastReceiverGroup = document.getElementById("INF-' . $pimLastReceiver . '_group");
+                        var pimReceivedOnField = document.querySelector("[id=\'INF-' . $pimReceivedOn . '\']");
         
                         if (pDateTime === "true") {
-                            var pimReceivedOnFieldTime = document.querySelector("[id=\'inf-' . $pimReceivedOnId . '_time\']");
-                            var pimReceivedBackOnFieldTime = document.querySelector("[id=\'inf-' . $pimReceivedBackOnId . '_time\']");
+                            var pimReceivedOnFieldTime = document.querySelector("[id=\'INF-' . $pimReceivedOn . '_time\']");
+                            var pimReceivedBackOnFieldTime = document.querySelector("[id=\'INF-' . $pimReceivedBackOn . '_time\']");
                         }
         
-                        var pimReceivedOnGroup = document.getElementById("inf-' . $pimReceivedOnId . '_group");
-                        var pimReceivedBackOnField = document.querySelector("[id=\'inf-' . $pimReceivedBackOnId . '\']");
-                        var pimReceivedBackOnGroup = document.getElementById("inf-' . $pimReceivedBackOnId . '_group");
+                        var pimReceivedOnGroup = document.getElementById("INF-' . $pimReceivedOn . '_group");
+                        var pimReceivedBackOnField = document.querySelector("[id=\'INF-' . $pimReceivedBackOn . '\']");
+                        var pimReceivedBackOnGroup = document.getElementById("INF-' . $pimReceivedBackOn . '_group");
         
                         function setRequired(field, group, required) {
                             if (required) {
@@ -227,9 +227,9 @@ class InventoryItemPresenter extends PagePresenter
             switch ($items->getProperty($infNameIntern, 'inf_type')) {
                 case 'CHECKBOX':
                     $form->addCheckbox(
-                        'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                        'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemID === 0) ? true : (bool) $items->getValue($infNameIntern),
+                        ($itemUUID === '') ? true : (bool) $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
@@ -252,7 +252,7 @@ class InventoryItemPresenter extends PagePresenter
                         }
                     }else {
                         $form->addSelectBox(
-                            'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                            'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
                             $items->getProperty($infNameIntern, 'inf_value_list'),
                             array(
@@ -267,7 +267,7 @@ class InventoryItemPresenter extends PagePresenter
         
                 case 'RADIO_BUTTON':
                     $form->addRadioButton(
-                        'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                        'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
                         $items->getProperty($infNameIntern, 'inf_value_list', 'html'),
                         array(
@@ -282,7 +282,7 @@ class InventoryItemPresenter extends PagePresenter
         
                 case 'TEXT_BIG':
                     $form->addMultilineTextInput(
-                        'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                        'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
                         $items->getValue($infNameIntern),
                         3,
@@ -306,8 +306,8 @@ class InventoryItemPresenter extends PagePresenter
                             $user->readDataByUuid($gCurrentUser->getValue('usr_uuid'));
                         }
                         
-                                $form->addSelectBoxFromSql(
-                            'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                        $form->addSelectBoxFromSql(
+                            'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
                             $gDb,
                             $sql,
@@ -324,7 +324,7 @@ class InventoryItemPresenter extends PagePresenter
                         $sql = $items->getSqlOrganizationsUsersComplete();
         
                         $form->addSelectBoxFromSql(
-                            'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                            'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
                             $gDb,
                             $sql,
@@ -338,7 +338,7 @@ class InventoryItemPresenter extends PagePresenter
                         );
         
                         $form->addInput(
-                            'inf-' . $items->getProperty($infNameIntern, 'inf_id') . '-hidden',
+                            'INF-' . $infNameIntern . '-hidden',
                             '',
                             $items->getValue($infNameIntern),
                             array(
@@ -349,15 +349,15 @@ class InventoryItemPresenter extends PagePresenter
             
                         $this->addJavascript('
                         $(document).ready(function() {
-                            var selectId = "#inf-' . $pimLastReceiverId . '";
+                            var selectId = "#INF-' . $pimLastReceiver . '";
         
                             var defaultValue = "' . htmlspecialchars($items->getValue($infNameIntern)) . '";
                             var defaultText = "' . htmlspecialchars($items->getValue($infNameIntern)) . '"; // Der Text für den Default-Wert
         
                             function isSelect2Empty(selectId) {
                                 // Hole den aktuellen Wert des Select2-Feldes
-                                var lastReceiverValueHidden = document.querySelector("[id=\'inf-' . $pimLastReceiverId . '-hidden\']");
-                                var renderedElement = $("#select2-inf-' . $pimLastReceiverId .'-container");
+                                var lastReceiverValueHidden = document.querySelector("[id=\'INF-' . $pimLastReceiver . '-hidden\']");
+                                var renderedElement = $("#select2-INF-' . $pimLastReceiver .'-container");
                                 if (renderedElement.length) {
                                     lastReceiverValueHidden.value = renderedElement.attr("title");
                                     console.log("Hidden: " + lastReceiverValueHidden.value);
@@ -371,7 +371,7 @@ class InventoryItemPresenter extends PagePresenter
                                 $(selectId).append(newOption).trigger("change");
                             }
         
-                            $("#inf-' . $pimLastReceiverId .'").select2({
+                            $("#INF-' . $pimLastReceiver .'").select2({
                                 theme: "bootstrap-5",
                                 allowClear: true,
                                 placeholder: "",
@@ -401,7 +401,7 @@ class InventoryItemPresenter extends PagePresenter
                             $step = pow(10, -$gSettingsManager->getInt('inventory_decimal_places'));
                         }
                         $form->addInput(
-                            'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                            'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
                             $items->getValue($infNameIntern),
                             array(

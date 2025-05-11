@@ -20,7 +20,7 @@ class ItemService
 {
     protected ItemsData $itemRessource;
     protected Database $db;
-    protected string $ID;
+    protected string $itemUUID;
     protected int $postCopyField;
     protected int $postCopyNumber;
     protected int $postImported;
@@ -30,18 +30,18 @@ class ItemService
      * @param string $profileFieldUUID UUID if the profile field that should be managed within this class
      * @throws Exception
      */
-    public function __construct(Database $database, string $itemID = '', int $postCopyField = 0, int $postCopyNumber = 1, int $postImported = 0)
+    public function __construct(Database $database, string $itemUUID = '', int $postCopyField = 0, int $postCopyNumber = 1, int $postImported = 0)
     {
         global $gCurrentOrgId;
 
         $this->db = $database;
-        $this->ID = $itemID;
+        $this->itemUUID = $itemUUID;
         $this->postCopyField = $postCopyField;
         $this->postCopyNumber = $postCopyNumber;
         $this->postImported = $postImported;
 
         $this->itemRessource = new ItemsData($database, $gCurrentOrgId);
-        $this->itemRessource->readItemData($itemID);
+        $this->itemRessource->readItemData($itemUUID);
     }
 
     /**
@@ -51,7 +51,7 @@ class ItemService
      */
     public function makeItemFormer(): void
     {
-        $this->itemRessource->makeItemFormer($this->ID);
+        $this->itemRessource->makeItemFormer();
 
         // Send notification to all users
         $this->itemRessource->sendNotification();
@@ -63,7 +63,7 @@ class ItemService
      */
     public function undoItemFormer(): void
     {
-        $this->itemRessource->undoItemFormer($this->ID);
+        $this->itemRessource->undoItemFormer();
 
         // Send notification to all users
          $this->itemRessource->sendNotification();
@@ -76,7 +76,7 @@ class ItemService
      */
     public function delete(): void
     {
-        $this->itemRessource->deleteItem($this->ID);
+        $this->itemRessource->deleteItem();
 
         // Send notification to all users
         $this->itemRessource->sendNotification();
@@ -103,40 +103,52 @@ class ItemService
         }
 
         $startIdx = 1;
-        if ($this->postCopyField > 0 && isset($formValues['inf-' . $this->postCopyField])) {
-            $startIdx = (int)$formValues['inf-' . $this->postCopyField] + 1;
+        if ($this->postCopyField > 0) {
+            foreach ($this->itemRessource->getItemFields() as $itemField) {
+                if ($itemField->getValue('inf_id') == $this->postCopyField) {
+                    $itemCopyFieldName = $itemField->getValue('inf_name_intern');
+                    break;
+                }      
+            }
+
+            if (isset($itemCopyField)) {
+                $startIdx = (int)$formValues['INF-' . $itemCopyFieldName] + 1;
+            }
         }
         $stopIdx = $startIdx + $this->postCopyNumber;
 
         for ($i = $startIdx; $i < $stopIdx; ++$i) {
-            $formValues['inf-' . $this->postCopyField] = $i;
+            if (isset($itemCopyFieldName)) {
+                $formValues['INF-' . $itemCopyFieldName] = $i;
+            }
 
-            $this->itemRessource->readItemData($this->ID);
+            $this->itemRessource->readItemData($this->itemUUID);
 
-            if ($this->ID == 0) {
-                $this->itemRessource->getNewItemId();
+            if ($this->itemUUID === '') {
+                $this->itemRessource->createNewItem();
             }
 
             // check all item fields
             foreach ($this->itemRessource->getItemFields() as $itemField) {
-                $postId = 'inf-' . $itemField->getValue('inf_id');
+                $infNameIntern = $itemField->getValue('inf_name_intern');
+                $postKey = 'INF-' . $infNameIntern;
 
-                if (isset($formValues[$postId])) {
-                    if (strlen($formValues[$postId]) === 0 && $itemField->getValue('inf_required_input') == 1) {
+                if (isset($formValues[$postKey])) {
+                    if (strlen($formValues[$postKey]) === 0 && $itemField->getValue('inf_required_input') == 1) {
                         throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name'))));
                     }
 
                     if ($itemField->getValue('inf_type') === 'DATE' && $gSettingsManager->get('inventory_field_date_time_format') == 'datetime') {
                         // Check if time is set separately
-                        isset($formValues[$postId . '_time']) ? $dateValue = $formValues[$postId] . ' ' . $formValues[$postId . '_time'] : $dateValue = $formValues[$postId];
+                        isset($formValues[$postKey . '_time']) ? $dateValue = $formValues[$postKey] . ' ' . $formValues[$postKey . '_time'] : $dateValue = $formValues[$postKey];
 
                         // Write value from field to the item class object with time
-                        if (!$this->itemRessource->setValue($itemField->getValue('inf_name_intern'), $dateValue)) {
+                        if (!$this->itemRessource->setValue($infNameIntern, $dateValue)) {
                             throw new Exception($gL10n->get('SYS_DATABASE_ERROR'), $gL10n->get('SYS_ERROR'));
                         }
                     } else {
                         // Write value from field to the item class object
-                        if (!$this->itemRessource->setValue($itemField->getValue('inf_name_intern'), $formValues[$postId])) {
+                        if (!$this->itemRessource->setValue($infNameIntern, $formValues[$postKey])) {
                             throw new Exception($gL10n->get('SYS_DATABASE_ERROR'), $gL10n->get('SYS_ERROR'));
                         }
                     }

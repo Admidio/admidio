@@ -35,17 +35,18 @@ class InventoryFieldsPresenter extends PagePresenter
      * @param string $itemFieldID ID of the item field that should be edited.
      * @throws Exception
      */
-    public function createEditForm(string $itemFieldID = '', string $itemFieldName = '')
+    public function createEditForm(string $itemFieldUUID = '', string $itemFieldName = '')
     {
         global $gCurrentSession, $gSettingsManager, $gL10n, $gCurrentOrgId, $gDb;
 
         // Create user-defined field object
-        $itemField = new ItemField($gDb, intval($itemFieldID));
+        $itemField = new ItemField($gDb);
+        $itemField->readDataByUuid($itemFieldUUID);
 
-        if ($itemFieldID === "0" && !empty($itemFieldName)) {
+        if ($itemFieldUUID === "0" && !empty($itemFieldName)) {
             $itemField->setValue('inf_name', $itemFieldName);
         }
-        if ($itemFieldID !== '') {
+        if ($itemFieldUUID !== '') {
             // Check whether the field belongs to the current organization
             if ($itemField->getValue('inf_org_id') > 0
                 && (int)$itemField->getValue('inf_org_id') !== $gCurrentOrgId) {
@@ -72,7 +73,7 @@ class InventoryFieldsPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_item_fields_edit_form',
             'modules/inventory.item-fields.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('uuid' => $itemFieldID, 'mode' => 'field_save')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('uuid' => $itemFieldUUID, 'mode' => 'field_save')),
             $this
         );
 
@@ -94,7 +95,7 @@ class InventoryFieldsPresenter extends PagePresenter
 
         $infNameIntern = $itemField->getValue('inf_name_intern');
         // show internal field name for information
-        if ($itemFieldID !== '0') {
+        if ($itemFieldUUID !== '') {
             $form->addInput(
                 'inf_name_intern',
                 $gL10n->get('SYS_INTERNAL_NAME'),
@@ -193,8 +194,8 @@ class InventoryFieldsPresenter extends PagePresenter
                 handle: ".handle",
                 stop: function(event, ui) {
                     const order = $(this).sortable("toArray", {attribute: "data-uuid"});
-                    const id = ui.item.attr("data-uuid");
-                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=sequence&uuid=" + id + "&order=" + order,
+                    const uuid = ui.item.attr("data-uuid");
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=sequence&uuid=" + uuid + "&order=" + order,
                         {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
                     );
                 }
@@ -253,22 +254,27 @@ class InventoryFieldsPresenter extends PagePresenter
 
             $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES');
 
+            // set Edit URL depending on the type of field
+            // if the field is a category, the edit URL is different from the other fields
+            $editUrl = ($itemField->getValue('inf_name_intern') === 'CATEGORY') ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'IVT')) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_uuid')));
+
             $templateRowItemField = array(
                 'categoryID' => ((bool)$itemField->getValue('inf_system')) ? 1 : 2,
                 'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS')  /* $itemField->getValue('cat_name') */,
-                'id' => $itemField->getValue('inf_id'),
+                'uuid' => $itemField->getValue('inf_uuid'),
                 'name' => $itemField->getValue('inf_name'),
                 'description' => $itemField->getValue('inf_description'),
-                'urlEdit' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_id'))),
+                'urlEdit' => $editUrl,
                 'dataType' => $itemFieldText[$itemField->getValue('inf_type')],
                 'mandatory' => $gL10n->get($mandatoryFieldValues[$itemField->getValue('inf_required_input')]),
             );
 
             $templateRowItemField['actions'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_id'))),
+                'url' =>  $editUrl,
                 'icon' => 'bi bi-pencil-square',
                 'tooltip' => $gL10n->get('SYS_EDIT')
             );
+
             if ($itemField->getValue('inf_system') == 1) {
                 $templateRowItemField['actions'][] = array(
                     'url' => '',
@@ -277,7 +283,7 @@ class InventoryFieldsPresenter extends PagePresenter
                 );
             } else {
                 $templateRowItemField['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'adm_item_field_' . $itemField->getValue('inf_id') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_delete', 'uuid' => $itemField->getValue('inf_id'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataHref' => 'callUrlHideElement(\'adm_item_field_' . $itemField->getValue('inf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_delete', 'uuid' => $itemField->getValue('inf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($itemField->getValue('usf_name', 'database'))),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')

@@ -79,6 +79,10 @@ class ItemsData
      */
     protected int $mItemId = 0;
     /**
+     * @var string UUID of the current item of this object
+     */
+    protected string $mItemUUID = '';
+    /**
      * @var bool flag if a value of one field had changed
      */
     protected bool $columnsValueChanged = false;
@@ -156,10 +160,10 @@ class ItemsData
      * and adds an object for each field data to the @b mItemData array.
      * If profile fields structure wasn't read, this will be done before.
      * 
-     * @param int $itemId               The id of the item for which the item data should be read.
+     * @param string $itemUUID               The uuid of the item for which the item data should be read.
      * @return void
      */
-    public function readItemData($itemId): void
+    public function readItemData(string $itemUUID = ''): void
     {
         if (count($this->mItemFields) === 0) {
             $this->readItemFields();
@@ -167,9 +171,14 @@ class ItemsData
 
         $this->mItemData = array();
 
-        if ($itemId > 0) {
+        if ($itemUUID !== '') {
+            $item = new Item($this->mDb, $this);
+            $item->readDataByUuid($itemUUID);
+            $itemId = $item->getValue('ini_id');
+
             // remember the item
             $this->mItemId = $itemId;
+            $this->mItemUUID = $itemUUID;
 
             // read all item data
             $sql = 'SELECT * FROM ' . TBL_INVENTORY_DATA . '
@@ -205,7 +214,7 @@ class ItemsData
             $sqlWhereCondition .= 'AND ini_former = 0';
         }
 
-        $sql = 'SELECT DISTINCT ini_id, ini_former FROM ' . TBL_INVENTORY_ITEMS . '
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_former FROM ' . TBL_INVENTORY_ITEMS . '
                 INNER JOIN ' . TBL_INVENTORY_DATA . '
                     ON ind_ini_id = ini_id
                 WHERE ini_org_id IS NULL
@@ -214,7 +223,7 @@ class ItemsData
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
         while ($row = $statement->fetch()) {
-            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_former' => $row['ini_former']);
+            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_former' => $row['ini_former']);
         }
     }
 
@@ -787,7 +796,7 @@ class ItemsData
      * 
      * @return int mItemId
      */
-    public function getNewItemId(): int
+    public function createNewItem(): void
     {
         // If an error occurred while generating an item, there is an ItemId but no data for that item.
         // the following routine deletes these unused ItemIds
@@ -810,11 +819,11 @@ class ItemsData
             $newItem->save();
 
             $this->mItemId = $newItem->getValue('ini_id');
+            $this->mItemUUID = $newItem->getValue('ini_uuid');
 
             // update item table
             $this->readItems();
         }
-        return $this->mItemId;
     }
 
     /**
@@ -823,17 +832,17 @@ class ItemsData
      * @param int $itemId               The id of the item that should be deleted
      * @return void
      */
-    public function deleteItem($itemId): void
+    public function deleteItem(): void
     {
         // Log record deletion, then delete
-        $item = new Item($this->mDb, $this, $itemId);
+        $item = new Item($this->mDb, $this, $this->mItemId);
         $item->logDeletion();
 
         $sql = 'DELETE FROM ' . TBL_INVENTORY_DATA . ' WHERE ind_ini_id = ?;';
-        $this->mDb->queryPrepared($sql, array($itemId));
+        $this->mDb->queryPrepared($sql, array($this->mItemId));
 
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-        $this->mDb->queryPrepared($sql, array($itemId, $this->organizationId));
+        $this->mDb->queryPrepared($sql, array($this->mItemId, $this->organizationId));
 
         $this->mItemDeleted = true;
     }
@@ -844,9 +853,9 @@ class ItemsData
      * @param int $itemId 		    The ID of the item to be marked as former.
      * @return void
      */
-    public function makeItemFormer($itemId): void
+    public function makeItemFormer(): void
     {
-        $item = new Item($this->mDb, $this, $itemId);
+        $item = new Item($this->mDb, $this, $this->mItemId);
         $item->setValue('ini_former', 1);
         $item->save();
 
@@ -860,9 +869,9 @@ class ItemsData
      * @param int $itemId               The ID of the item to be marked as no longer former.
      * @return void
      */
-    public function undoItemFormer($itemId): void
+    public function undoItemFormer(): void
     {
-        $item = new Item($this->mDb, $this, $itemId);
+        $item = new Item($this->mDb, $this, $this->mItemId);
         $item->setValue('ini_former', 0);
         $item->save();
 
@@ -903,7 +912,7 @@ class ItemsData
         }
 
         $this->columnsValueChanged = false;
-        $this->readItemData($this->mItemId);
+        $this->readItemData($this->mItemUUID);
         $this->mDb->endTransaction();
     }
 

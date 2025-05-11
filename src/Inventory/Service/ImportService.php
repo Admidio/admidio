@@ -207,7 +207,7 @@ class ImportService
         
         // check if the item already exists
         foreach ($items->getItems() as $fieldId => $value) {
-            $items->readItemData($value['ini_id']);
+            $items->readItemData($value['ini_uuid']);
             $itemValues = array();
             foreach ($items->getItemData() as $key => $itemData) {
                 $itemValue = $itemData->getValue('ind_value');
@@ -375,7 +375,7 @@ class ImportService
                 else {
                     $val = '';
                 }
-                $_POST['inf-' . $fields->getValue('inf_id')] = '' . $val . '';
+                $_POST['INF-' . $imfNameIntern] = '' . $val . '';
                 $ItemData[] = array($items->getItemFields()[$imfNameIntern]->getValue('inf_name') => array('oldValue' => "", 'newValue' => $val));
             }
         

@@ -706,10 +706,10 @@ class ChangelogService {
                 case 'forum_posts' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'post_edit', 'post_uuid' => $uuid)); break;
                 case 'inventory_fields' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'field_edit', 'uuid' => $id)); break;
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'field_edit', 'uuid' => $uuid)); break;
                 case 'inventory_data' : // Fall through
                 case 'inventory_items' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_id' => $id)); break;
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $uuid)); break;
                 case 'links' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
                 case 'lists' :

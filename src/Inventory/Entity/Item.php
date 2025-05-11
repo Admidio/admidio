@@ -35,6 +35,10 @@ class Item extends Entity
      */
     protected int $itemId;
     /**
+     * @var string the uuid of the item which should be loaded. If uuid isn't set than an empty object with no specific item is created.
+     */
+    protected string $itemUUID = '';
+    /**
      * @var bool Flag if the changes to the item data should be handled by the ChangeNotification service.
      */
     protected bool $changeNotificationEnabled;
@@ -90,7 +94,20 @@ class Item extends Entity
     public function readDataById(int $id): bool
     {
         $this->itemId = $id;
-        return parent::readDataById($id);
+        $ret = parent::readDataById($id);
+        if ($ret) {
+            $this->itemUUID = $this->getValue('ini_uuid');
+        }
+        return $ret;
+    }
+
+    public function readDataByUuid(string $uuid): bool
+    {
+        $ret = parent::readDataByUuid($uuid);
+        if ($ret) {
+            $this->itemId = $this->getValue('ini_id');
+        }
+        return $ret;
     }
 
     /**
@@ -120,7 +137,7 @@ class Item extends Entity
     public function getIgnoredLogColumns(): array
     {
         return array_merge(parent::getIgnoredLogColumns(),
-            ['ini_id', 'ini_org_id', 'ind_id', 'ind_inf_id', 'ind_ini_id']/* ,
+            ['ini_id', 'ini_uuid', 'ini_org_id', 'ind_id', 'ind_inf_id', 'ind_ini_id']/* ,
             ($this->newRecord)?[$this->columnPrefix.'_text']:[] */
         );
     }
@@ -134,10 +151,10 @@ class Item extends Entity
     protected function adjustLogEntry(LogChanges $logEntry): void
     {      
         $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
-        if (isset( $_POST['inf-1']) && $itemName === '') {
-            $itemName = $_POST['inf-1'];
+        if (isset($_POST['INF-ITEMNAME']) && $itemName === '') {
+            $itemName = $_POST['INF-ITEMNAME'];
         }
-        elseif (!isset( $_POST['inf-1']) && $itemName === '') {
+        elseif (!isset( $_POST['INF-ITEMNAME']) && $itemName === '') {
             $itemName =  $logEntry->getValue('log_record_name');
         }
         $logEntry->setValue('log_record_name', $itemName);

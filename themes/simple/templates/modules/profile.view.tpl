@@ -11,7 +11,7 @@
             </thead>
             <tbody>
                 {foreach from=$rows item=row}
-                    <tr id="adm_inventory_item_{$row.item_id}">
+                    <tr id="adm_inventory_item_{$row.item_uuid}">
                         {foreach from=$row.data item=cell name=table}
                             <td class="text-{$align[$smarty.foreach.table.index]}">{$cell|raw}</td>
                         {/foreach}

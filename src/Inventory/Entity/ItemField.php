@@ -286,7 +286,7 @@ class ItemField extends Entity
     public function getIgnoredLogColumns(): array
     {
         return array_merge(parent::getIgnoredLogColumns(),
-            ['inf_id', 'inf_org_id', 'inf_name_intern', 'inf_system']/* ,
+            ['inf_id', 'inf_uuid', 'inf_org_id', 'inf_name_intern', 'inf_system']/* ,
             ($this->newRecord)?[$this->columnPrefix.'_text']:[] */
         );
     }

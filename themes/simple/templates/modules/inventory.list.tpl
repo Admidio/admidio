@@ -3,7 +3,7 @@
 {/if} *}
 
 <div class="table-responsive">
-    <table id="adm_inventory_table" class="table table-condensed{if $print} table-striped{else} table-hover{/if}">
+    <table id="adm_inventory_table" class="table table-condensed{if $print} table-striped{else} table-hover{/if}" style="max-width: 100%;">
         <thead>
             <tr>
                 {foreach from=$list.headers key=colIndex item=header}
@@ -13,7 +13,7 @@
         </thead>
         <tbody>
             {foreach from=$list.rows item=row}
-                <tr id="adm_inventory_item_{$row.item_id}">
+                <tr id="adm_inventory_item_{$row.item_uuid}">
                     {foreach from=$row.data item=cell name=table}
                         <td class="text-{$list.column_align[$smarty.foreach.table.index]}">{$cell|raw}</td>
                     {/foreach}

@@ -24,18 +24,19 @@ class ItemFieldService
 
     protected ItemField $itemFieldRessource;
     protected Database $db;
-    protected string $ID;
+    protected string $UUID;
 
     /**
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string $itemFieldID UUID if the profile field that should be managed within this class
+     * @param string $itemFieldUUID UUID if the profile field that should be managed within this class
      * @throws Exception
      */
-    public function __construct(Database $database, string $itemFieldID = '')
+    public function __construct(Database $database, string $itemFieldUUID = '')
     {
         $this->db = $database;
-        $this->ID = $itemFieldID;
-        $this->itemFieldRessource = new ItemField($database, $itemFieldID);
+        $this->UUID = $itemFieldUUID;
+        $this->itemFieldRessource = new ItemField($database);
+        $this->itemFieldRessource->readDataByUuid($itemFieldUUID);
     }
 
     /**
@@ -88,21 +89,21 @@ class ItemFieldService
     {
         global $gCurrentOrgId;
         //$usfCatId = $this->getValue('usf_cat_id');
-        $infId = $this->itemFieldRessource->getValue('inf_id');
+        $infUUID = $this->itemFieldRessource->getValue('inf_uuid');
 
         $sql = 'UPDATE ' . TBL_INVENTORY_FIELDS . '
                    SET inf_sequence = ? -- new order sequence
-                 WHERE inf_id     = ? -- field ID;
+                 WHERE inf_uuid     = ? -- field uuid;
                    AND inf_org_id   = ? -- $OrgId;
             ';
 
         $newSequence = -1;
-        foreach ($sequence as $pos => $id) {
-            if ($id == $infId) {
+        foreach ($sequence as $pos => $uuid) {
+            if ($uuid == $infUUID) {
                 // Store position for later update
                 $newSequence = $pos;
             } else {
-                $this->db->queryPrepared($sql, array($pos, $id, $gCurrentOrgId));
+                $this->db->queryPrepared($sql, array($pos, $uuid, $gCurrentOrgId));
             }
         }
 
@@ -131,8 +132,8 @@ class ItemFieldService
             WHERE inf_name = ? -- $_POST[\'inf_name\']
             AND (inf_org_id = ? -- $gCurrentOrgId
                 OR inf_org_id IS NULL)
-            AND inf_id <> ? -- $getimfId;';
-            $pdoStatement = $gDb->queryPrepared($sql, array($_POST['inf_name'], $gCurrentOrgId, $this->ID));
+            AND inf_uuid <> ? -- $this->UUID;';
+            $pdoStatement = $gDb->queryPrepared($sql, array($_POST['inf_name'], $gCurrentOrgId, $this->UUID));
 
             if ($pdoStatement->fetchColumn() > 0) {
                 throw new Exception('ORG_FIELD_EXIST');

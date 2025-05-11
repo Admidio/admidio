@@ -39,9 +39,9 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit', 'item_save', 'item_delete_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
-    $getinfId = admFuncVariableIsValid($_GET, 'uuid', 'int', array('defaultValue' => 0));
+    $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
-    $getiniId = admFuncVariableIsValid($_GET, 'item_id', 'int', array('defaultValue' => 0));
+    $getiniUUID = admFuncVariableIsValid($_GET, 'item_uuid', 'uuid');
     $postCopyNumber = admFuncVariableIsValid($_POST, 'item_copy_number', 'numeric', array('defaultValue' => 1));
     $postCopyField = admFuncVariableIsValid($_POST, 'item_copy_field', 'int', array('defaultValue' => 0));
     $postRedirect = admFuncVariableIsValid($_POST, 'redirect', 'numeric', array('defaultValue' => 1));
@@ -81,7 +81,7 @@ try {
 
         case 'field_edit':
             // set headline of the script
-            if ($getinfId !== 0) {
+            if ($getinfUUID !== '') {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEMFIELD_EDIT');
             } else {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEMFIELD_CREATE');
@@ -90,12 +90,12 @@ try {
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $itemFields = new InventoryFieldsPresenter('adm_item_fields_edit');
             $itemFields->setHeadline($headline);
-            $itemFields->createEditForm($getinfId, $getFieldName);
+            $itemFields->createEditForm($getinfUUID, $getFieldName);
             $itemFields->show();
             break;
 
         case 'field_save':
-            $itemFieldsModule = new ItemFieldService($gDb, $getinfId);
+            $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
             $itemFieldsModule->save();
 
             $gNavigation->deleteLastUrl();
@@ -106,7 +106,7 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemFieldsModule = new ItemFieldService($gDb, $getinfId);
+            $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
             $ret = $itemFieldsModule->delete();
 
             echo json_encode(array('status' =>  ($ret ? 'success' : 'error')));
@@ -120,7 +120,7 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemFieldsModule = new ItemFieldService($gDb, $getinfId);
+            $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
 
             if (!empty($getOrder)) {
                 // set new order (drag and drop)
@@ -135,10 +135,10 @@ try {
 #region items
         case 'item_edit':
             // set headline of the script
-            if ($getiniId !== 0 && $getCopy) {
+            if ($getiniUUID !== '' && $getCopy) {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_COPY');
             }
-            elseif ($getiniId !== 0) {
+            elseif ($getiniUUID !== '') {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_EDIT');
             }
             else {
@@ -148,23 +148,23 @@ try {
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $item = new InventoryItemPresenter('adm_item_edit');
             $item->setHeadline($headline);
-            $item->createEditForm($getiniId, $getCopy);
+            $item->createEditForm($getiniUUID, $getCopy);
             $item->show();
             break;
 
         case 'item_save':
-            if ($getiniId !== 0 && $getCopy) {
-                $getiniId = 0;
+            if ($getiniUUID !== '' && $getCopy) {
+                $getiniUUID = '';
                 $message = $gL10n->get('SYS_INVENTORY_ITEM_COPIED');
             }
-            elseif ($getiniId !== 0) {
+            elseif ($getiniUUID !== '') {
                 $message = $gL10n->get('SYS_INVENTORY_ITEM_EDITED');
             }
             else {
                 $message = $gL10n->get('SYS_INVENTORY_ITEM_CREATED');
             }
 
-            $itemModule = new ItemService($gDb, $getiniId, $postCopyField, $postCopyNumber, $postImported);
+            $itemModule = new ItemService($gDb, $getiniUUID, $postCopyField, $postCopyNumber, $postImported);
             $itemModule->save();
 
             $gNavigation->deleteLastUrl();
@@ -184,10 +184,10 @@ try {
                 }
                 $msg.='</div>
                 <div class="modal-footer">
-                    <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-person-fill-dash"></i>' . $gL10n->get('SYS_INVENTORY_FORMER') . '</button>';
                 if ($gCurrentUser->isAdministratorInventory()) {
-                    $msg.= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniId . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_id' => $getiniId)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                    $msg.= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash"></i>' . $gL10n->get('SYS_DELETE') . '</button>';
                 }
                 $msg.='<div id="adm_status_message" class="mt-4 w-100"></div>
@@ -200,7 +200,7 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemModule = new ItemService($gDb, $getiniId);
+            $itemModule = new ItemService($gDb, $getiniUUID);
             $itemModule->makeItemFormer();
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_MADE_FORMER')));
@@ -210,7 +210,7 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemModule = new ItemService($gDb, $getiniId);
+            $itemModule = new ItemService($gDb, $getiniUUID);
             $itemModule->undoItemFormer();
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER')));
@@ -220,7 +220,7 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemModule = new ItemService($gDb, $getiniId);
+            $itemModule = new ItemService($gDb, $getiniUUID);
             $itemModule->delete();
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_DELETE_DATA')));
             break;
