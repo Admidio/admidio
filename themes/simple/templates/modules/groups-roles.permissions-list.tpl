@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="admRolePermissionsTable" class="table table-hover" width="100%" style="width: 100%;">
+    <table id="adm_role_permissions_table" class="table table-hover" width="100%" style="width: 100%;">
         <thead>
             <tr>
                 <th>{$l10n->get('SYS_CATEGORY')}</th>
