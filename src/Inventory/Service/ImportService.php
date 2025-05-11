@@ -34,36 +34,40 @@ class ImportService
 {
     public function readImportFile(): void
     {
-        global $gL10n, $gMessage;
+        global $gL10n, $gMessage, $gCurrentSession;
+        
+        // check the CSRF token of the form against the session token
+        $inventoryImportFileForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+        $formValues = $inventoryImportFileForm->validate($_POST);
         
         // Initialize and check the parameters
         $postImportFormat   = admFuncVariableIsValid(
-            $_POST,
+            $formValues,
             'format',
             'string',
             array('requireValue' => true,
                 'validValues' => array('AUTO', 'XLSX', 'XLS', 'ODS', 'CSV', 'HTML'))
         );
         $postImportCoding   = admFuncVariableIsValid(
-            $_POST,
+            $formValues,
             'import_encoding',
             'string',
             array('validValues' => array('', 'GUESS', 'UTF-8', 'UTF-16BE', 'UTF-16LE', 'UTF-32BE', 'UTF-32LE', 'CP1252', 'ISO-8859-1'))
         );
         $postSeparator      = admFuncVariableIsValid(
-            $_POST,
+            $formValues,
             'import_separator',
             'string',
             array('validValues' => array('', ',', ';', '\t', '|'))
         );
         $postEnclosure      = admFuncVariableIsValid(
-            $_POST,
+            $formValues,
             'import_enclosure',
             'string',
             array('validValues' => array('', 'AUTO', '"', '\|'))
         );
 
-        $postWorksheet      = admFuncVariableIsValid($_POST, 'import_sheet', 'string');
+        $postWorksheet      = admFuncVariableIsValid($formValues, 'import_sheet', 'string');
 
         $importfile = $_FILES['userfile']['tmp_name'][0];
         if (strlen($importfile) === 0) {
@@ -149,18 +153,22 @@ class ImportService
 
     public function importItems(): array
     {
-        global $gL10n, $gDb, $gCurrentOrgId, $gSettingsManager;
-        $_SESSION['import_csv_request'] = $_POST;
+        global $gL10n, $gDb, $gCurrentOrgId, $gSettingsManager, $gCurrentSession;
+        // check form field input and sanitized it from malicious content
+        $itemFieldsImportForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+        $formValues = $itemFieldsImportForm->validate($_POST);
+        
+        $_SESSION['import_csv_request'] = $formValues;
         
         $returnMessage = array();
 
         // go through each line from the file one by one and create the user in the DB
         $line = reset($_SESSION['import_data']);
-        $firstRowTitle = array_key_exists('first_row', $_POST);
+        $firstRowTitle = array_key_exists('first_row', $formValues);
         $startRow = 0;
         
         // create array with all profile fields that where assigned to columns of the import file
-        foreach ($_POST as $formFieldId => $importFileColumn) {
+        foreach ($formValues as $formFieldId => $importFileColumn) {
             if ($importFileColumn !== '' && $formFieldId !== 'adm_csrf_token' && $formFieldId !== 'first_row') {
                 $importItemFields[$formFieldId] = (int)$importFileColumn;
             }
@@ -375,7 +383,7 @@ class ImportService
                 else {
                     $val = '';
                 }
-                $_POST['INF-' . $imfNameIntern] = '' . $val . '';
+                $formValues['INF-' . $imfNameIntern] = '' . $val . '';
                 $ItemData[] = array($items->getItemFields()[$imfNameIntern]->getValue('inf_name') => array('oldValue' => "", 'newValue' => $val));
             }
         
