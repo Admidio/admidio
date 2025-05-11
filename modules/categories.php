@@ -38,7 +38,7 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit', 'save', 'delete', 'sequence')));
-    $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('validValues' => array('ANN', 'AWA', 'EVT', 'FOT', 'LNK', 'ROL', 'USF')));
+    $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('validValues' => array('ANN', 'AWA', 'EVT', 'FOT', 'LNK', 'ROL', 'USF', 'IVT')));
     $getCategoryUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
 
     // check rights of the type
@@ -48,7 +48,8 @@ try {
         || ($getType === 'FOT' && !$gCurrentUser->isAdministratorForum())
         || ($getType === 'LNK' && !$gCurrentUser->isAdministratorWeblinks())
         || ($getType === 'ROL' && !$gCurrentUser->isAdministratorRoles())
-        || ($getType === 'USF' && !$gCurrentUser->isAdministratorUsers())) {
+        || ($getType === 'USF' && !$gCurrentUser->isAdministratorUsers())
+        || ($getType === 'IVT' && !$gCurrentUser->isAdministratorInventory())) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

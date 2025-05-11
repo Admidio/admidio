@@ -806,6 +806,7 @@
   <string name="SYS_INVALID_FONT_AWESOME">Der eingegebene Icon-Name entspricht nicht der erwarteten Syntax. Ein Icon von Font Awesome muss dem Schema fa-iconname entsprechen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <!--Phrases only in Inventory Module-->
+  <string name="SYS_EDIT_INVENTORY">Inventar bearbeiten</string>
   <string name="SYS_RIGHT_INVENTORY">Inventar verwalten</string>
   <string name="SYS_RIGHT_INVENTORY_DESC">Rollen mit dieser Berechtigung können im Modul für Inventarverwaltung Rechte vergeben und die Inventarverwaltung parametrieren.</string>
   <string name="SYS_INVENTORY_ACCESS_PREFERENCES">Zugriffsberechtigung für Plugin-Einstellungen</string>

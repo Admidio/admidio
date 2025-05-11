@@ -797,6 +797,7 @@ class User extends Entity
             || ($categoryType === 'LNK' && $this->isAdministratorWeblinks())
             || ($categoryType === 'USF' && $this->isAdministratorUsers())
             || ($categoryType === 'ROL' && $this->isAdministratorRoles())
+            || ($categoryType === 'IVT' && $this->isAdministratorInventory())
         ) {
             $condition = '';
         } else {
@@ -851,6 +852,7 @@ class User extends Entity
             || ($categoryType === 'LNK' && $this->isAdministratorWeblinks())
             || ($categoryType === 'USF' && $this->isAdministratorUsers())
             || ($categoryType === 'ROL' && $this->isAdministratorRoles())
+            || ($categoryType === 'IVT' && $this->isAdministratorInventory())
         ) {
             $condition = '';
         } else {

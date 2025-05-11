@@ -176,7 +176,8 @@ class Organization extends Entity
                      , (?, ?, \'FOT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'EVT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'EVT\', \'TRAINING\',  \'INS_TRAINING\',  false, false, 2, ?, ?)
-                     , (?, ?, \'EVT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)';
+                     , (?, ?, \'EVT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)
+                     , (?, ?, \'IVT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)';
         $queryParams = array(
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
@@ -189,7 +190,8 @@ class Organization extends Entity
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
-            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
         );
         $this->db->queryPrepared($sql, $queryParams);
 

@@ -127,6 +127,14 @@ class CategoriesPresenter extends PagePresenter
                 $rolesRightsName = 'SYS_RIGHT_EDIT_USER';
                 break;
 
+            case 'IVT':
+                $component = 'INVENTORY';
+                $headline = $gL10n->get('SYS_INVENTORY') . ' - ' . $headlineSuffix;
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_INVENTORY');
+                $rolesRightsColumn = 'rol_inventory_admin';
+                $rolesRightsName = 'SYS_RIGHT_INVENTORY';
+                break;
+
             default:
                 $headline = $headlineSuffix;
         }
@@ -427,7 +435,14 @@ class CategoriesPresenter extends PagePresenter
                 $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
                 $editableHeadline = $gL10n->get('SYS_EDIT_PROFILE_FIELDS_PREF');
                 break;
-
+                
+            case 'IVT':
+                $component = 'INVENTORY';
+                $rolesRightsColumn = 'rol_inventory_admin';
+                $headline = $gL10n->get('SYS_INVENTORY') . ' - ' . $gL10n->get('SYS_CATEGORIES');
+                $editableHeadline = $gL10n->get('SYS_EDIT_INVENTORY');
+                break;
+                
             default:
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
