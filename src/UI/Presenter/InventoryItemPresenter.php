@@ -10,7 +10,7 @@ use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
-use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Categories\Service\CategoryService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -42,6 +42,7 @@ class InventoryItemPresenter extends PagePresenter
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
+        $categoryService = new CategoryService($gDb, 'IVT');
     
         if ($itemID !== '') {
             $items->readItemData($itemID);
@@ -238,17 +239,30 @@ class InventoryItemPresenter extends PagePresenter
                     break;
         
                 case 'DROPDOWN':
-                    $form->addSelectBox(
-                        'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
-                        $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'inf_value_list'),
-                        array(
-                            'property' => $fieldProperty,
-                            'defaultValue' => $items->getValue($infNameIntern, 'database'),
-                            'helpTextId' => $helpId,
-                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
-                        )
-                    );
+                    if ($infNameIntern === 'CATEGORY') {
+                        if ($categoryService->count() > 1) {
+                            $form->addSelectBoxForCategories(
+                               'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                                $gL10n->get('SYS_CATEGORY'),
+                                $gDb,
+                                'IVT',
+                                FormPresenter::SELECT_BOX_MODUS_EDIT,
+                                array('property' => FormPresenter::FIELD_REQUIRED)
+                            );
+                        }
+                    }else {
+                        $form->addSelectBox(
+                            'inf-' . $items->getProperty($infNameIntern, 'inf_id'),
+                            $items->getProperty($infNameIntern, 'inf_name'),
+                            $items->getProperty($infNameIntern, 'inf_value_list'),
+                            array(
+                                'property' => $fieldProperty,
+                                'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                'helpTextId' => $helpId,
+                                'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                            )
+                        );
+                    }
                     break;
         
                 case 'RADIO_BUTTON':
