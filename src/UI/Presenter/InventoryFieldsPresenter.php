@@ -105,6 +105,7 @@ class InventoryFieldsPresenter extends PagePresenter
         }
 
         $itemFieldText = array(
+            'CATEGORY' => $gL10n->get('SYS_CATEGORY'),
             'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
             'DATE' => $gL10n->get('SYS_DATE'),
             'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER'),
@@ -239,7 +240,9 @@ class InventoryFieldsPresenter extends PagePresenter
                 $templateItemFields = array();
             }
 
-            $itemFieldText = array('CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
+            $itemFieldText = array(
+                'CATEGORY' => $gL10n->get('SYS_CATEGORY'),
+                'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
                 'DATE' => $gL10n->get('SYS_DATE'),
                 'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
                 'EMAIL' => $gL10n->get('SYS_EMAIL'),
@@ -256,7 +259,7 @@ class InventoryFieldsPresenter extends PagePresenter
 
             // set Edit URL depending on the type of field
             // if the field is a category, the edit URL is different from the other fields
-            $editUrl = ($itemField->getValue('inf_name_intern') === 'CATEGORY') ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'IVT')) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_uuid')));
+            $editUrl = ($itemField->getValue('inf_type') === 'CATEGORY') ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'IVT')) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_uuid')));
 
             $templateRowItemField = array(
                 'categoryID' => ((bool)$itemField->getValue('inf_system')) ? 1 : 2,

@@ -94,7 +94,7 @@ class InventoryPresenter extends PagePresenter
 
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to view inventory history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items,inventory_data');
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items,inventory_item_data');
            
             // show link to create new item
             $this->addPageFunctionsMenuItem(
@@ -243,7 +243,7 @@ class InventoryPresenter extends PagePresenter
                 WHEN ind_value = -1 THEN \'n/a\'
                 ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
             END as keeper_name
-            FROM '.TBL_INVENTORY_DATA.'
+            FROM '.TBL_INVENTORY_ITEM_DATA.'
             INNER JOIN '.TBL_INVENTORY_FIELDS.'
                 ON inf_id = ind_inf_id
             LEFT JOIN '. TBL_USER_DATA. ' as last_name
@@ -475,7 +475,7 @@ class InventoryPresenter extends PagePresenter
     {
         global $gCurrentUser, $gDb;
 
-        $sql = 'SELECT COUNT(*) as count FROM '.TBL_INVENTORY_DATA.' WHERE ind_value = ? AND ind_inf_id = ?';
+        $sql = 'SELECT COUNT(*) as count FROM '.TBL_INVENTORY_ITEM_DATA.' WHERE ind_value = ? AND ind_inf_id = ?';
         $params = array($gCurrentUser->getValue('usr_id'), $this->itemsData->getProperty('KEEPER', 'inf_id'));
         $result =$gDb->queryPrepared($sql, $params);
         $row = $result->fetch();
@@ -662,16 +662,12 @@ class InventoryPresenter extends PagePresenter
                         ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
                         : $this->itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif (in_array($infType, ['DATE', 'DROPDOWN'])) {
-                    if ($infNameIntern === 'CATEGORY') {
-                        // Process CATEGORY column
-                        $categoryUUID = $this->itemsData->getValue($infNameIntern, 'database');
-                        $category = new Category($gDb);
-                        $category->readDataByUuid($categoryUUID);
-                        $content = Language::translateIfTranslationStrId($category->getValue('cat_name'));
-                    }else {
-                        $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
-                    }
+                    $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif ($infType === 'RADIO_BUTTON') {
+                    $content = $mode === 'html'
+                        ? $this->itemsData->getHtmlValue($infNameIntern, $content)
+                        : $this->itemsData->getValue($infNameIntern, 'database');
+                } elseif ($infType === 'CATEGORY') {
                     $content = $mode === 'html'
                         ? $this->itemsData->getHtmlValue($infNameIntern, $content)
                         : $this->itemsData->getValue($infNameIntern, 'database');
@@ -685,11 +681,10 @@ class InventoryPresenter extends PagePresenter
 
             // Append admin action column for HTML mode
             if ($mode === 'html') {
-
                 $historyButton = ChangelogService::displayHistoryButtonTable(
-                    'inventory_items,inventory_data',
+                    'inventory_items,inventory_item_data',
                     $gCurrentUser->isAdministratorInventory(),
-                    ['related_id' => $item['ini_id']]
+                    ['uuid' => $item['ini_uuid']]
                 );
 
                 if (!empty($historyButton)) {
@@ -919,16 +914,10 @@ class InventoryPresenter extends PagePresenter
                     $content = ($content != 1) ? 0 : 1;
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif (in_array($infType, ['DATE', 'DROPDOWN'])) {
-                    if ($infNameIntern === 'CATEGORY') {
-                        // Process CATEGORY column
-                        $categoryUUID = $this->itemsData->getValue($infNameIntern, 'database');
-                        $category = new Category($gDb);
-                        $category->readDataByUuid($categoryUUID);
-                        $content = Language::translateIfTranslationStrId($category->getValue('cat_name'));
-                    }else {
-                        $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
-                    }
+                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif ($infType === 'RADIO_BUTTON') {
+                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif ($infType === 'CATEGORY') {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 }
 
@@ -938,9 +927,9 @@ class InventoryPresenter extends PagePresenter
 
             // Append admin action column
             $historyButton = ChangelogService::displayHistoryButtonTable(
-                'inventory_items,inventory_data',
+                'inventory_items,inventory_item_data',
                 $gCurrentUser->isAdministratorInventory(),
-                ['related_id' => $item['ini_id']]
+                ['uuid' => $item['ini_uuid']]
             );
 
             if (!empty($historyButton)) {

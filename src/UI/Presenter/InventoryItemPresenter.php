@@ -55,16 +55,19 @@ class InventoryItemPresenter extends PagePresenter
 
         foreach ($items->getItemFields() as $itemField) {  
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            if($infNameIntern === 'IN_INVENTORY') {
+            if ($infNameIntern === 'KEEPER') {
+                $pimKeeper = $infNameIntern;
+            }
+            elseif($infNameIntern === 'IN_INVENTORY') {
                 $pimInInventory = $infNameIntern;
             }
-            if($infNameIntern === 'LAST_RECEIVER') {
+            elseif($infNameIntern === 'LAST_RECEIVER') {
                 $pimLastReceiver = $infNameIntern;
             }
-            if ($infNameIntern === 'RECEIVED_ON') {
+            elseif ($infNameIntern === 'RECEIVED_ON') {
                 $pimReceivedOn = $infNameIntern;
             }
-            if ($infNameIntern === 'RECEIVED_BACK_ON') {
+            elseif ($infNameIntern === 'RECEIVED_BACK_ON') {
                 $pimReceivedBackOn = $infNameIntern;
             }
         }
@@ -239,33 +242,17 @@ class InventoryItemPresenter extends PagePresenter
                     break;
         
                 case 'DROPDOWN':
-                    if ($infNameIntern === 'CATEGORY') {
-                        if ($categoryService->count() > 0) {
-                            $form->addSelectBoxForCategories(
-                               'INF-' . $infNameIntern,
-                                $gL10n->get('SYS_CATEGORY'),
-                                $gDb,
-                                'IVT',
-                                FormPresenter::SELECT_BOX_MODUS_EDIT,
-                                array(
-                                    'property' => FormPresenter::FIELD_REQUIRED,
-                                    'defaultValue' => $items->getValue($infNameIntern)
-                                )
-                            );
-                        }
-                    }else {
-                        $form->addSelectBox(
-                            'INF-' . $infNameIntern,
-                            $items->getProperty($infNameIntern, 'inf_name'),
-                            $items->getProperty($infNameIntern, 'inf_value_list'),
-                            array(
-                                'property' => $fieldProperty,
-                                'defaultValue' => $items->getValue($infNameIntern, 'database'),
-                                'helpTextId' => $helpId,
-                                'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
-                            )
-                        );
-                    }
+                    $form->addSelectBox(
+                        'INF-' . $infNameIntern,
+                        $items->getProperty($infNameIntern, 'inf_name'),
+                        $items->getProperty($infNameIntern, 'inf_value_list'),
+                        array(
+                            'property' => $fieldProperty,
+                            'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                            'helpTextId' => $helpId,
+                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                        )
+                    );
                     break;
         
                 case 'RADIO_BUTTON':
@@ -297,7 +284,22 @@ class InventoryItemPresenter extends PagePresenter
                         )
                     );
                     break;
-        
+                
+                case 'CATEGORY':
+                    if ($categoryService->count() > 0) {
+                        $form->addSelectBoxForCategories(
+                            'INF-' . $infNameIntern,
+                            $gL10n->get('SYS_CATEGORY'),
+                            $gDb,
+                            'IVT',
+                            FormPresenter::SELECT_BOX_MODUS_EDIT,
+                            array(
+                                'property' => FormPresenter::FIELD_REQUIRED,
+                                'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                            )
+                        );
+                    }
+                    break;
                 default:
                     $fieldType = 'text';
                     $maxlength = '50';
@@ -352,7 +354,7 @@ class InventoryItemPresenter extends PagePresenter
             
                         $this->addJavascript('
                         $(document).ready(function() {
-                            var selectId = "#INF-' . $pimLastReceiver . '";
+                            var selectIdLastReceiver = "#INF-' . $pimLastReceiver . '";
         
                             var defaultValue = "' . htmlspecialchars($items->getValue($infNameIntern)) . '";
                             var defaultText = "' . htmlspecialchars($items->getValue($infNameIntern)) . '"; // Der Text für den Default-Wert
@@ -368,10 +370,10 @@ class InventoryItemPresenter extends PagePresenter
                                 }
                             }
                             // Prüfe, ob der Default-Wert in den Optionen enthalten ist
-                            if ($(selectId + " option[value=\'" + defaultValue + "\']").length === 0) {
+                            if ($(selectIdLastReceiver + " option[value=\'" + defaultValue + "\']").length === 0) {
                                 // Füge den Default-Wert als neuen Tag hinzu
                                 var newOption = new Option(defaultText, defaultValue, true, true);
-                                $(selectId).append(newOption).trigger("change");
+                                $(selectIdLastReceiver).append(newOption).trigger("change");
                             }
         
                             $("#INF-' . $pimLastReceiver .'").select2({
@@ -383,8 +385,16 @@ class InventoryItemPresenter extends PagePresenter
                             });
         
                             // Überwache Änderungen im Select2-Feld
-                            $(selectId).on("change.select2", function() {
-                                isSelect2Empty(selectId);
+                            $(selectIdLastReceiver).on("change.select2", function() {
+                                isSelect2Empty(selectIdLastReceiver);
+                            });
+                            
+                            // Select2 für KEEPER initialisieren
+                            $("#INF-' . $pimKeeper .'").select2({
+                                theme: "bootstrap-5",
+                                allowClear: true,
+                                placeholder: "",
+                                language: "' . $gL10n->getLanguageLibs() . '",
                             });
                         });', true);
                     }
