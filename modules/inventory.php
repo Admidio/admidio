@@ -49,6 +49,7 @@ try {
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool', array('defaultValue' => false));
     $getFormer = admFuncVariableIsValid($_GET, 'item_former', 'bool', array('defaultValue' => false));
     $getRedirectToImport = admFuncVariableIsValid($_GET, 'redirect_to_import', 'bool', array('defaultValue' => false));
+    $getItemsToDelete = admFuncVariableIsValid($_GET, 'items_to_delete', 'array', array('defaultValue' => array()));
     
 
     // check if module is active
@@ -240,12 +241,23 @@ try {
             break;
     
         case 'item_delete':
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            if (count($getItemsToDelete) > 0) {
+                foreach ($getItemsToDelete as $itemUuid) {
+                    $itemModule = new ItemService($gDb, $itemUuid);
+                    $itemModule->delete();
+                }
+                $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', 2000);
+                $gMessage->show($gL10n->get('SYS_INVENTORY_SELECTION_DELETED'));
+            }
+            else {
+                // check the CSRF token of the form against the session token
+                SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemModule = new ItemService($gDb, $getiniUUID);
-            $itemModule->delete();
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_DELETED')));
+                $itemModule = new ItemService($gDb, $getiniUUID);
+                $itemModule->delete();
+
+                echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_DELETED')));
+            }
             break;
 #endregion
 #region import

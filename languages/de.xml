@@ -824,6 +824,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Hier kannst du die Datumsdarstellung festlegen.</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES">Anzahl Dezimalstellen</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Hier kannst du die Anzahl an Dezimalstellen für Felder des Typs "Dezimalzahl" festlegen.</string>
+  <string name="SYS_INVENTORY_DELETE_SELECTION">Auswahl löschen</string>
 <!--   <string name="SYS_INVENTORY_DEINST_ACTORGONLY">Nur Daten der aktuellen Organisation löschen.</string>
   <string name="SYS_INVENTORY_DEINST_ALLORG">Daten in allen Organisationen löschen.</string>
   <string name="SYS_INVENTORY_DEINST_CONFIGTABLE_DELETE_NOTPOSSIBLE">- Die Tabelle #VAR1_BOLD# konnte nicht gelöscht werden, da sich darin noch Daten einer weiteren Organisation oder eines anderen Plugins befinden.\n</string> 
@@ -921,7 +922,8 @@
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESCRIPTION">Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde</string>
   <string name="SYS_INVENTORY_RECEIVED_ON">verliehen am</string>
   <string name="SYS_INVENTORY_RECEIVED_ON_DESCRIPTION">Das Verleihdatum des Gegenstandes an den letzten Empfänger</string>
-  <!--END-->  
+    <string name="SYS_INVENTORY_SELECTION_DELETED">Die ausgewählten Gegenstände wurden gelöscht.</string>
+<!--END-->  
   <string name="SYS_IO_ERROR">E/A Fehler</string>
   <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
