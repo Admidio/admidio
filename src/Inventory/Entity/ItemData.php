@@ -6,12 +6,11 @@ namespace Admidio\Inventory\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
-use Admidio\Categories\Entity\Category;
-use Admidio\Infrastructure\Language;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Item;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -49,7 +48,7 @@ class ItemData extends Entity
         }
 
         $this->connectAdditionalTable(TBL_INVENTORY_FIELDS, 'inf_id', 'ind_inf_id');
-        parent::__construct($database, TBL_INVENTORY_DATA, 'ind', $id);
+        parent::__construct($database, TBL_INVENTORY_ITEM_DATA, 'ind', $id);
     }
 
     /**
@@ -74,6 +73,9 @@ class ItemData extends Entity
         $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
 
         $itemID = $this->getValue('ind_ini_id');
+        $item = new Item($gDb, $this->mItemsData, $itemID);
+        $itemUUID = $item->getValue('ini_uuid');
+
         $id = $this->dbColumns[$this->keyColumnName];
         $field = $this->getValue('ind_inf_id');
         $fieldName = 'ind_value';
@@ -82,24 +84,17 @@ class ItemData extends Entity
         $infType = $this->mItemsData->getPropertyById($field, 'inf_type');
         $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
 
-        if ($infType === 'DROPDOWN' || $infType === 'RADIOBUTTON') {
-            if ($fieldNameIntern === 'CATEGORY') {
-                $category = new Category($gDb);
-                $category->readDataByUuid($oldval);
-                $oldval = Language::translateIfTranslationStrId($category->getValue('cat_name'));
-
-                $category->readDataByUuid($newval);
-                $newval = Language::translateIfTranslationStrId($category->getValue('cat_name'));
-
+        if ($infType === 'CATEGORY') {
+            // Category changes are logged in the inventory items table
+            return true;
+        }
+        elseif ($infType === 'DROPDOWN' || $infType === 'RADIOBUTTON') {
+            $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'inf_value_list');
+            if (isset($vallist[$oldval])) {
+                $oldval = $vallist[$oldval];
             }
-            else {
-                $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'inf_value_list');
-                if (isset($vallist[$oldval])) {
-                    $oldval = $vallist[$oldval];
-                }
-                if (isset($vallist[$newval])) {
-                    $newval = $vallist[$newval];
-                }
+            if (isset($vallist[$newval])) {
+                $newval = $vallist[$newval];
             }
         } 
         elseif ($infType === 'CHECKBOX') {
@@ -146,8 +141,8 @@ class ItemData extends Entity
         }
 
         $logEntry = new LogChanges($this->db, $table);
-        $logEntry->setLogModification($table, $id, null, $objectName, $field, $fieldName, $oldval, $newval);
-        $logEntry->setLogRelated($itemID, $itemName);
+        $logEntry->setLogModification($table, $id, $itemUUID, $objectName, $field, $fieldName, $oldval, $newval);
+        /* $logEntry->setLogRelated($itemUUID, $itemName); */
         $logEntry->setLogLinkID($itemID);
         return $logEntry->save();
     }
