@@ -16,6 +16,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Entity\Item;
 
 // PHP namespaces
 use DateTime;
@@ -226,8 +227,10 @@ class ImportService
                 }
                 
                 if ($itemData->getValue('inf_name_intern') === 'CATEGORY') {
+                    $item = new Item($gDb,  $items, $items->getItemId());
+                    $catID = $item->getValue('ini_cat_id');
                     $category = new Category($gDb);
-                    if ($category->readDataByUuid($itemValue));
+                    if ($category->readDataById($catID));
                         $itemValues[] = array($itemData->getValue('inf_name_intern') => $category->getValue('cat_name'));
                     continue;
                 }
@@ -383,7 +386,7 @@ class ImportService
                 else {
                     $val = '';
                 }
-                $formValues['INF-' . $imfNameIntern] = '' . $val . '';
+                $_POST['INF-' . $imfNameIntern] = '' . $val . '';
                 $ItemData[] = array($items->getItemFields()[$imfNameIntern]->getValue('inf_name') => array('oldValue' => "", 'newValue' => $val));
             }
         

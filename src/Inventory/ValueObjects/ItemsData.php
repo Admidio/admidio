@@ -13,6 +13,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\ItemField;
+use Admidio\Categories\Entity\Category;
 
 // PHP namespaces
 use DateTime;
@@ -181,7 +182,7 @@ class ItemsData
             $this->mItemUUID = $itemUUID;
 
             // read all item data
-            $sql = 'SELECT * FROM ' . TBL_INVENTORY_DATA . '
+            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_DATA . '
                     INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                         ON inf_id = ind_inf_id
                     WHERE ind_ini_id = ?;';
@@ -214,8 +215,8 @@ class ItemsData
             $sqlWhereCondition .= 'AND ini_former = 0';
         }
 
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_former FROM ' . TBL_INVENTORY_ITEMS . '
-                INNER JOIN ' . TBL_INVENTORY_DATA . '
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEMS . '
+                INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
                     ON ind_ini_id = ini_id
                 WHERE ini_org_id IS NULL
                 OR ini_org_id = ?
@@ -223,7 +224,7 @@ class ItemsData
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
         while ($row = $statement->fetch()) {
-            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_former' => $row['ini_former']);
+            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
         }
     }
 
@@ -253,7 +254,7 @@ class ItemsData
             $sqlImfIds = substr($sqlImfIds, 0, -4) . ')';
         }
 
-        $sql = 'SELECT DISTINCT ini_id, ini_former FROM ' . TBL_INVENTORY_DATA . '
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEM_DATA . '
                 INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                     ON inf_id = ind_inf_id
                     ' . $sqlImfIds . '
@@ -266,7 +267,7 @@ class ItemsData
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
 
         while ($row = $statement->fetch()) {
-            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_former' => $row['ini_former']);
+            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
         }
     }
 
@@ -559,6 +560,16 @@ class ItemsData
                 case 'TEXT_BIG':
                     $htmlValue = nl2br($value);
                     break;
+
+                case 'CATEGORY':
+                    $category = new Category($this->mDb);
+                    $category->readDataByUuid($value);
+                    if ($category->getValue('cat_id') > 0) {
+                        $htmlValue = $category->getValue('cat_name');
+                    } else {
+                        $htmlValue = $value;
+                    }
+                    break;
             }
 
             $value = $htmlValue;
@@ -610,60 +621,73 @@ class ItemsData
 
         // exists a item field with that name ?
         // then check if item has a data object for this field and then read value of this object
-        if (
-            array_key_exists($fieldNameIntern, $this->mItemFields)
-            && array_key_exists($this->mItemFields[$fieldNameIntern]->getValue('inf_id'), $this->mItemData)
-        ) {
-            $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('ind_value', $format);
-
-            if ($format === 'database') {
-                return $value;
+        if (array_key_exists($fieldNameIntern, $this->mItemFields)) {
+            if ($fieldNameIntern === 'CATEGORY') {
+                // special case for category
+                $item = new Item($this->mDb, $this, $this->mItemId);
+                $catID = $item->getValue('ini_cat_id');
+                if ($catID > 0) {
+                    $category = new Category($this->mDb);
+                    $category->readDataById($catID);
+                    if ($format === 'database') {
+                        $value = $category->getValue('cat_uuid');
+                    }else {
+                        $value = $category->getValue('cat_name');
+                    }
+                }
             }
+            elseif (array_key_exists($this->mItemFields[$fieldNameIntern]->getValue('inf_id'), $this->mItemData)) {
+                $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('ind_value', $format);
 
-            switch ($this->mItemFields[$fieldNameIntern]->getValue('inf_type')) {
-                case 'DATE':
-                    if ($value !== '') {
-                        // if date field then the current date format must be used
-                        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
-                            //check if date is datetime or only date
-                            if (strpos($value, ' ') === false) {
-                                $value .= ' 00:00';
-                            }
-                            $date = DateTime::createFromFormat('Y-m-d H:i', $value);
-                        } else {
-                            // check if date is date or datetime
-                            if (strpos($value, ' ') !== false) {
-                                $value = substr($value, 0, 10);
-                            }
-                            $date = DateTime::createFromFormat('Y-m-d', $value);
-                        }
+                if ($format === 'database') {
+                    return $value;
+                }
 
-                        if ($date === false) {
-                            return $value;
-                        }
-
-                        // if no format or html is set then show date format from Admidio settings
-                        if ($format === '' || $format === 'html') {
+                switch ($this->mItemFields[$fieldNameIntern]->getValue('inf_type')) {
+                    case 'DATE':
+                        if ($value !== '') {
+                            // if date field then the current date format must be used
                             if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
-                                $value = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+                                //check if date is datetime or only date
+                                if (strpos($value, ' ') === false) {
+                                    $value .= ' 00:00';
+                                }
+                                $date = DateTime::createFromFormat('Y-m-d H:i', $value);
                             } else {
-                                $value = $date->format($gSettingsManager->getString('system_date'));
+                                // check if date is date or datetime
+                                if (strpos($value, ' ') !== false) {
+                                    $value = substr($value, 0, 10);
+                                }
+                                $date = DateTime::createFromFormat('Y-m-d', $value);
                             }
-                        } else {
-                            $value = $date->format($format);
-                        }
-                    }
-                    break;
 
-                case 'DROPDOWN':
-                case 'RADIO_BUTTON':
-                    // the value in db is only the position, now search for the text
-                    if ($value > 0 && $format !== 'html' && $fieldNameIntern !== 'CATEGORY') {
-                        $valueList = $this->mItemFields[$fieldNameIntern]->getValue('inf_value_list', $format);
-                        $arrListValues = $this->getListValue($fieldNameIntern, $valueList, $format);
-                        $value = $arrListValues[$value];
-                    }
-                    break;
+                            if ($date === false) {
+                                return $value;
+                            }
+
+                            // if no format or html is set then show date format from Admidio settings
+                            if ($format === '' || $format === 'html') {
+                                if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                                    $value = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+                                } else {
+                                    $value = $date->format($gSettingsManager->getString('system_date'));
+                                }
+                            } else {
+                                $value = $date->format($format);
+                            }
+                        }
+                        break;
+
+                    case 'DROPDOWN':
+                    case 'RADIO_BUTTON':
+                        // the value in db is only the position, now search for the text
+                        if ($value > 0 && $format !== 'html') {
+                            $valueList = $this->mItemFields[$fieldNameIntern]->getValue('inf_value_list', $format);
+                            $arrListValues = $this->getListValue($fieldNameIntern, $valueList, $format);
+                            $value = $arrListValues[$value];
+                        }
+                        break;
+                }
             }
         }
 
@@ -796,12 +820,12 @@ class ItemsData
      * 
      * @return int mItemId
      */
-    public function createNewItem(): void
+    public function createNewItem(string $catUUID): void
     {
         // If an error occurred while generating an item, there is an ItemId but no data for that item.
         // the following routine deletes these unused ItemIds
         $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEMS . '
-                LEFT JOIN ' . TBL_INVENTORY_DATA . '
+                LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . '
                     ON ind_ini_id = ini_id
                 WHERE ind_ini_id is NULL;';
         $statement = $this->mDb->queryPrepared($sql);
@@ -813,9 +837,13 @@ class ItemsData
 
         // generate a new ItemId
         if ($this->mItemCreated) {
+            $category = new Category($this->mDb);
+            $category->readDataByUuid($catUUID);
+
             $newItem = new Item($this->mDb, $this, 0);
             $newItem->setValue('ini_org_id', $this->organizationId);
             $newItem->setValue('ini_former', 0);
+            $newItem->setValue('ini_cat_id', $category->getValue('cat_id'));
             $newItem->save();
 
             $this->mItemId = $newItem->getValue('ini_id');
@@ -838,7 +866,7 @@ class ItemsData
         $item = new Item($this->mDb, $this, $this->mItemId);
         $item->logDeletion();
 
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_DATA . ' WHERE ind_ini_id = ?;';
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
 
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
@@ -880,7 +908,7 @@ class ItemsData
     }
 
     /**
-     * Save data of every item field
+     * Save data of every item data field
      * 
      * @return void
      */
@@ -895,11 +923,23 @@ class ItemsData
                 $this->mItemChanged = true;
             }
 
-            // if value exists and new value is empty then delete entry
-            if ($value->getValue('ind_id') > 0 && $value->getValue('ind_value') === '') {
+            // dont safe CATEGORY field to items data
+            if ($value->getValue('ind_inf_id') === 2) {
+                $category = new Category($this->mDb);
+                $category->readDataByUuid($value->getValue('ind_value'));
+                $catID = $category->getValue('cat_id');
+
+                $item = new Item($this->mDb, $this, $this->mItemId);
+                $item->setValue('ini_cat_id', $catID);
                 $value->delete();
-            } else {
-                $value->save();
+            }
+            else {
+                // if value exists and new value is empty then delete entry
+                if ($value->getValue('ind_id') > 0 && $value->getValue('ind_value') === '') {
+                    $value->delete();
+                } else {
+                    $value->save();
+                }
             }
         }
 
