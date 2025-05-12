@@ -50,8 +50,8 @@ DROP TABLE IF EXISTS %PREFIX%_users                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_organizations        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_ids                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_data       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_data  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_clients         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys             CASCADE;
@@ -1012,23 +1012,6 @@ CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_uuid ON %PREFIX%_user_relations (ure_uuid);
 
 /*==============================================================*/
-/* Table: adm_inventory_data                                    */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_data
-(
-    ind_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    ind_inf_id                  integer unsigned    NOT NULL,
-    ind_ini_id                  integer unsigned    NOT NULL,
-    ind_value                   varchar(4000),
-    PRIMARY KEY (ind_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_data (ind_inf_id, ind_ini_id);
-
-/*==============================================================*/
 /* Table: adm_inventory_fields                                  */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_inventory_fields
@@ -1058,12 +1041,30 @@ CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (i
 CREATE UNIQUE INDEX %PREFIX%_idx_inf_uuid ON %PREFIX%_inventory_fields (inf_uuid);
 
 /*==============================================================*/
+/* Table: adm_inventory_item_data                               */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_item_data
+(
+    ind_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ind_inf_id                  integer unsigned    NOT NULL,
+    ind_ini_id                  integer unsigned    NOT NULL,
+    ind_value                   varchar(4000),
+    PRIMARY KEY (ind_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
+
+/*==============================================================*/
 /* Table: adm_inventory_items                                   */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_inventory_items
 (
     ini_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     ini_uuid                    varchar(36)         NOT NULL,
+    ini_cat_id                  integer unsigned    NOT NULL,
     ini_org_id                  integer unsigned    NOT NULL,
     ini_former                  boolean             NOT NULL    DEFAULT false,
     ini_usr_id_create           integer unsigned,
@@ -1161,7 +1162,7 @@ ALTER TABLE %PREFIX%_folders
 
 ALTER TABLE %PREFIX%_forum_topics
     ADD CONSTRAINT %PREFIX%_fk_fot_cat         FOREIGN KEY (fot_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_fop_id_first_post)   REFERENCES %PREFIX%_forum_posts (fop_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_fop_id_first_post)   REFERENCES %PREFIX%_forum_posts (fop_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_forum_posts
@@ -1310,15 +1311,16 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_inventory_data
-    ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
-
 ALTER TABLE %PREFIX%_inventory_fields
     ADD CONSTRAINT %PREFIX%_fk_inf_org         FOREIGN KEY (inf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_inf_usr_create  FOREIGN KEY (inf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_inf_usr_change  FOREIGN KEY (inf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_inventory_item_data
+    ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_inventory_items
+    ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;

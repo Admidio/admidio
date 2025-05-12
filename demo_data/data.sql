@@ -2981,63 +2981,58 @@ INSERT INTO %PREFIX%_user_log (usl_id, usl_usr_id, usl_usf_id, usl_value_new, us
 
 
 --
--- Daten für Tabelle adm_inventory_data
---
-
-INSERT INTO %PREFIX%_inventory_data (ind_id, ind_inf_id, ind_ini_id, ind_value) VALUES
-(1, 1, 1, 'Beamer'),
-(2, 2, 1, '5c37b5fe-25a2-494f-ad81-8cc0a83cab77'),
-(3, 3, 1, '202'),
-(4, 4, 1, '1'),
-(5, 1, 2, 'Leinwand'),
-(6, 2, 2, 'c1d3ab6b-7800-4574-93f8-65839e61dd20'),
-(7, 3, 2, '355'),
-(8, 4, 2, '0'),
-(9, 5, 2, '202'),
-(10, 6, 2, '28.01.2025'),
-(11, 8, 3, 'Beamer'),
-(12, 9, 3, '28956326-5d40-4d19-a7af-5120cedd8fdf'),
-(13, 10, 3, '202'),
-(14, 11, 3, '1'),
-(15, 8, 4, 'Leinwand'),
-(16, 9, 4, '4c2d9c21-679c-4da8-875e-3169476f31ae'),
-(17, 10, 4, '355'),
-(18, 11, 4, '0'),
-(19, 12, 4, '202'),
-(20, 13, 4, '28.01.2025');
-
-
-
-
---
 -- Daten für Tabelle adm_inventory_fields
 --
 
 INSERT INTO %PREFIX%_inventory_fields (inf_id, inf_uuid, inf_org_id, inf_type, inf_name_intern, inf_name, inf_description, inf_value_list, inf_system, inf_required_input, inf_sequence, inf_usr_id_create, inf_timestamp_create, inf_usr_id_change, inf_timestamp_change) VALUES
-(1, 'f786669b-d3a2-43af-a22a-79976db2cceb', 1, 'TEXT', 'ITEMNAME', 'SYS_ITEMNAME', 'Der Name des Gegenstandes', NULL, 1, 1, 0, 1, '2025-01-24 21:19:59', NULL, NULL),
-(2, 'eac563b3-b352-49a4-a72f-d906615080dd', 1, 'DROPDOWN', 'CATEGORY', 'SYS_CATEGORY', 'Die Kategorie des Gegenstandes', NULL, 1, 1, 1, 1, '2025-01-24 21:19:59', NULL, NULL),
+(1, 'f786669b-d3a2-43af-a22a-79976db2cceb', 1, 'TEXT', 'ITEMNAME', 'SYS_INVENTORY_ITEMNAME', 'Der Name des Gegenstandes', NULL, 1, 1, 0, 1, '2025-01-24 21:19:59', NULL, NULL),
+(2, 'eac563b3-b352-49a4-a72f-d906615080dd', 1, 'CATEGORY', 'CATEGORY', 'SYS_CATEGORY', 'Die Kategorie des Gegenstandes', NULL, 1, 1, 1, 1, '2025-01-24 21:19:59', NULL, NULL),
 (3, 'e90f1a92-99b3-4052-845d-71abcd170ec5', 1, 'TEXT', 'KEEPER', 'SYS_INVENTORY_KEEPER', 'Der Verwalter des Gegenstandes', NULL, 1, 0, 2, 1, '2025-01-24 21:19:59', NULL, NULL),
 (4, 'df04df4b-4483-413f-857e-dcd1f6665d58', 1, 'CHECKBOX', 'IN_INVENTORY', 'SYS_INVENTORY_IN_INVENTORY', 'Gegenstand befindet sich im Inventar', NULL, 1, 0, 3, 1, '2025-01-24 21:19:59', NULL, NULL),
 (5, '3aa02fb0-d3db-4061-b679-e5c693ece391', 1, 'TEXT', 'LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER', 'Der letzte Empfänger des Gegenstandes', NULL, 1, 0, 4, 1, '2025-01-24 21:19:59', NULL, NULL),
 (6, 'dd1541fb-c57a-412e-aada-5e0c50d766ea', 1, 'DATE', 'RECEIVED_ON', 'SYS_INVENTORY_RECEIVED_ON', 'Das Verleihdatum des Gegenstandes an den letzten Empfänger', NULL, 1, 0, 5, 1, '2025-01-24 21:19:59', NULL, NULL),
 (7, '3aa9c574-f1a9-4fa5-b00e-d8abf89b5cde', 1, 'DATE', 'RECEIVED_BACK_ON', 'SYS_INVENTORY_RECEIVED_BACK_ON', 'Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde', NULL, 1, 0, 6, 1, '2025-01-24 21:19:59', NULL, NULL),
 (8, '9d6faac1-4f4b-461a-bc06-b0381522edd2', 2, 'TEXT', 'ITEMNAME', 'SYS_INVENTORY_ITEMNAME', 'Der Name des Gegenstandes', NULL, 1, 1, 0, 1, '2025-01-24 21:19:59', NULL, NULL),
-(9, '83e1d1d7-e1d5-4599-8cc5-e4d7ba0cb25c', 2, 'DROPDOWN', 'CATEGORY', 'SYS_INVENTORY_CATEGORY', 'Die Kategorie des Gegenstandes', NULL, 1, 1, 1, 1, '2025-01-24 21:19:59', NULL, NULL),
+(9, '83e1d1d7-e1d5-4599-8cc5-e4d7ba0cb25c', 2, 'CATEGORY', 'CATEGORY', 'SYS_CATEGORY', 'Die Kategorie des Gegenstandes', NULL, 1, 1, 1, 1, '2025-01-24 21:19:59', NULL, NULL),
 (10, '6e9b4c00-6555-476f-8809-0beed315fc3e', 2, 'TEXT', 'KEEPER', 'SYS_INVENTORY_KEEPER', 'Der Verwalter des Gegenstandes', NULL, 1, 0, 2, 1, '2025-01-24 21:19:59', NULL, NULL),
 (11, '7972cd4d-97a4-453f-8888-8febc06d424a', 2, 'CHECKBOX', 'IN_INVENTORY', 'SYS_INVENTORY_IN_INVENTORY', 'Gegenstand befindet sich im Inventar', NULL, 1, 0, 3, 1, '2025-01-24 21:19:59', NULL, NULL),
 (12, '871d4503-e876-442e-a7ef-99cc0c817652', 2, 'TEXT', 'LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER', 'Der letzte Empfänger des Gegenstandes', NULL, 1, 0, 4, 1, '2025-01-24 21:19:59', NULL, NULL),
 (13, '1d68fa5c-1ed9-424a-9e3a-7264011430ae', 2, 'DATE', 'RECEIVED_ON', 'SYS_INVENTORY_RECEIVED_ON', 'Das Verleihdatum des Gegenstandes an den letzten Empfänger', NULL, 1, 0, 5, 1, '2025-01-24 21:19:59', NULL, NULL),
 (14, 'dafa5e6e-0c02-4d83-b3fc-5b6f9a8268cb', 2, 'DATE', 'RECEIVED_BACK_ON', 'SYS_INVENTORY_RECEIVED_BACK_ON', 'Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde', NULL, 1, 0, 6, 1, '2025-01-24 21:19:59', NULL, NULL);
 
+
+--
+-- Daten für Tabelle adm_inventory_item_data
+--
+
+INSERT INTO %PREFIX%_inventory_item_data (ind_id, ind_inf_id, ind_ini_id, ind_value) VALUES
+(1, 1, 1, 'Beamer'),
+(3, 3, 1, '202'),
+(4, 4, 1, '1'),
+(5, 1, 2, 'Leinwand'),
+(7, 3, 2, '355'),
+(8, 4, 2, '0'),
+(9, 5, 2, '202'),
+(10, 6, 2, '28.01.2025'),
+(11, 8, 3, 'Beamer'),
+(13, 10, 3, '202'),
+(14, 11, 3, '1'),
+(15, 8, 4, 'Leinwand'),
+(17, 10, 4, '355'),
+(18, 11, 4, '0'),
+(19, 12, 4, '202'),
+(20, 13, 4, '28.01.2025');
+
+
 --
 -- Daten für Tabelle adm_inventory_items
 --
 
-INSERT INTO %PREFIX%_inventory_items (ini_id, ini_uuid, ini_org_id, ini_former, ini_usr_id_create, ini_timestamp_create, ini_usr_id_change, ini_timestamp_change) VALUES
-(1, '77e95410-3267-4fe3-b448-455b09e51a4d', 1, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
-(2, '80f82bb3-10f4-494c-b9cc-55221b11f39e', 1, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
-(3, 'eee177ca-71b1-4366-a980-c06f2f02b438', 2, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
-(4, '273e1f36-c015-45f2-9b81-21d6319c6965', 2, 0, 1, '2025-01-24 21:20:14', NULL, NULL);
+INSERT INTO %PREFIX%_inventory_items (ini_id, ini_uuid, ini_cat_id, ini_org_id, ini_former, ini_usr_id_create, ini_timestamp_create, ini_usr_id_change, ini_timestamp_change) VALUES
+(1, '77e95410-3267-4fe3-b448-455b09e51a4d', 16, 1, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
+(2, '80f82bb3-10f4-494c-b9cc-55221b11f39e', 15, 1, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
+(3, 'eee177ca-71b1-4366-a980-c06f2f02b438', 112, 2, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
+(4, '273e1f36-c015-45f2-9b81-21d6319c6965', 111, 2, 0, 1, '2025-01-24 21:20:14', NULL, NULL);
 
 
 
