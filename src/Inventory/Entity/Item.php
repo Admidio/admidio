@@ -66,6 +66,8 @@ class Item extends Entity
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
         $this->itemId = $itemId;
         
+        $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'ini_cat_id');
+
         parent::__construct($database, TBL_INVENTORY_ITEMS, 'ini', $itemId);
     }
  
@@ -96,6 +98,7 @@ class Item extends Entity
         $this->itemId = $id;
         $ret = parent::readDataById($id);
         if ($ret) {
+            $this->itemId = $id;
             $this->itemUUID = $this->getValue('ini_uuid');
         }
         return $ret;
@@ -105,6 +108,7 @@ class Item extends Entity
     {
         $ret = parent::readDataByUuid($uuid);
         if ($ret) {
+            $this->itemUUID = $uuid;
             $this->itemId = $this->getValue('ini_id');
         }
         return $ret;
