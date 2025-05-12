@@ -100,8 +100,8 @@
   <string name="INS_WARNING_BETA_VERSION">Це бета-версія Admidio.\n\nВикористання може бути ризикованим через можливу нестабільність та втрату даних. Будь ласка, використовуйте лише як тестове середовище!</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Ласкаво просимо на сторінку встановлення Admidio</string>
   <string name="INS_WELCOME_TO_UPDATE">Ласкаво просимо на сторінку оновлення Admidio</string>
-  <string name="INS_WELCOME_TEXT">Цей помічник допоможе вам налаштувати керування учасниками Admidio. Всі необхідні дані будуть запрошені, щоб система була повністю налаштована і ви могли увійти в неї як адміністратор.
-  <string name="INS_WELCOME_TEXT_UPDATE">Ви вже оновили каталоги Admidio на нову версію. Тепер необхідно оновити базу даних з поточної версії #VAR2# до версії #VAR1#, щоб Admidio могла працювати з новою версією.
+  <string name="INS_WELCOME_TEXT">Цей помічник допоможе вам налаштувати керування учасниками Admidio. Всі необхідні дані будуть запрошені, щоб система була повністю налаштована і ви могли увійти в неї як адміністратор.</string>
+  <string name="INS_WELCOME_TEXT_UPDATE">Ви вже оновили каталоги Admidio на нову версію. Тепер необхідно оновити базу даних з поточної версії #VAR2# до версії #VAR1#, щоб Admidio могла працювати з новою версією.</string>
   <string name="INS_WRONG_MYSQL_VERSION">Для роботи Admidio #VAR1# потрібно MySQL версії не нижче #VAR2#. Будь ласка, спробуйте оновити вашу базу даних MySQL або використати більш стару версію Admidio #VAR3# #VAR4# для забезпечення сумісності.</string>
   <string name="INS_BOYFRIEND">Хлопець</string>
   <string name="INS_BROTHER">Брат</string>
@@ -135,7 +135,7 @@
   <string name="ORG_ADMIDIO_THEME">Тема Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Тут можна вибрати поточну тему Admidio. З'являються всі макети з папки adm_themes. (за замовчуванням: проста)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Автоматичний вихід із системи через</string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Це значення показує, через скільки хвилин неактивний користувач автоматично виходить з системи, доки він не звертається до жодної сторінки системи Admidio.
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Це значення показує, через скільки хвилин неактивний користувач автоматично виходить з системи, доки він не звертається до жодної сторінки системи Admidio.</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Повідомлення про оновлення для застарілого браузера</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Після активації користувачам із застарілими браузерами рекомендується запустити оновлення браузера. Нові браузери гарантують найкращий захист від шахрайства, вірусів, троянів, крадіжки особистих даних та інших загроз вашій конфіденційності та безпеці. Кожне нове покоління браузерів підвищує швидкість роботи та підтримує все більше нових веб-технологій, що призводить до покращення якості роботи в Інтернеті. Для цього використовується https://browser-update.org/.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Колір фону</string>
@@ -183,17 +183,17 @@
   <string name="ORG_FIELD_DISABLED_DESC">Заблоковане поле профілю більше не може бути відредаговано користувачем у власному профілі. Його можуть редагувати лише учасники, які мають право редагувати всіх учасників. Керівники ролі, які мають право редагувати профілі учасників, також можуть редагувати це поле профілю.</string>
   <string name="ORG_FIELD_EXIST">Поле з такою самою назвою вже існує в цій категорії.</string>
   <string name="ORG_FIELD_HIDDEN">Поле доступне для перегляду лише авторизованим користувачам (власний профіль та права на роль)</string>
-  <string name="ORG_FIELD_HIDDEN_DESC">Зазвичай поле видно всім, кому можна переглядати профіль. Якщо цей параметр не вибраний, поле можуть бачити тільки користувачі, яким дозволено редагувати цей профіль.
+  <string name="ORG_FIELD_HIDDEN_DESC">Зазвичай поле видно всім, кому можна переглядати профіль. Якщо цей параметр не вибраний, поле можуть бачити тільки користувачі, яким дозволено редагувати цей профіль.</string>
   <string name="ORG_FIELD_NOT_DISABLED">Поле може бути відредаговано самими користувачами.</string>
   <string name="ORG_FIELD_NOT_HIDDEN">Поле, видиме для всіх користувачів.</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Поле не відображається під час реєстрації</string>
   <string name="ORG_FIELD_REGISTRATION">Поле відображається під час реєстрації</string>
-  <string name="ORG_FIELD_URL_DESC">Введена URL згодом посилається у профілі на контент, який користувач ввів у це поле. Як опція URL може бути заданий навіть підстановковий знак #user_content#. Це вміст, який користувач ввів у поле.
+  <string name="ORG_FIELD_URL_DESC">Введена URL згодом посилається у профілі на контент, який користувач ввів у це поле. Як опція URL може бути заданий навіть підстановковий знак #user_content#. Це вміст, який користувач ввів у поле.</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Ця сторінка з'являється, коли користувач увійшов до системи. Шлях має бути вказаний як відносний шлях до головної папки Admidio.\n(наприклад: adm_program/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Ця сторінка є сторінкою Admidio для відвідувачів за промовчанням. Шлях має бути вказаний як відносний шлях до головної папки Admidio.\n(наприклад: adm_program/overview.php)</string>
   <string name="ORG_INVALID_THEME">Не вдалося знайти валідну тему.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Колір редактора JavaScript</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Задати колір фону редактора JavaScript можна тут.
+  <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Задати колір фону редактора JavaScript можна тут.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Використання редактора JavaScript</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">У багатьох модулях Admidio використовується повнофункціональний JavaScript-редактор. Події, новини і т.д. можуть бути відредаговані у зручному для користувача вигляді. У разі активації редактора відображається просте багаторядкове текстове поле.</string>
   <string name="ORG_LAST_UPDATE_STEP">Останній крок оновлення</string>
@@ -410,7 +410,7 @@
   <string name="SYS_CONFIRM_PASSWORD">Підтвердити пароль</string>
   <string name="SYS_CONFIRM_REGISTRATION">Підтвердити реєстрацію</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Підтвердити значення</string>
-  <string name="SYS_CONNECTION_ERROR">Не вдалося встановити з'єднання зі сторінкою оновлення Admidio. Будь ласка, перевірте підключення до Інтернету або повторіть спробу пізніше.
+  <string name="SYS_CONNECTION_ERROR">Не вдалося встановити з'єднання зі сторінкою оновлення Admidio. Будь ласка, перевірте підключення до Інтернету або повторіть спробу пізніше.</string>
   <string name="SYS_CONTACT_DETAILS">Контактна інформація</string>
   <string name="SYS_CONTACT_NO_VALID_LOGIN">У цього контакту ще немає реєстрації.\nЧи хочете ви призначити дані цієї реєстрації?</string>
   <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">Якщо новий контакт не може бути призначений існуючому контакту з аналогічним ім'ям, ви можете створити новий контакт і призначити йому відповідні ролі.</string>
@@ -478,7 +478,7 @@
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Не вдалося встановити з'єднання з базою даних!\n\nБудь ласка, перевірте дані доступу у файлі config.php у папці adm_my_files. Якщо файл залишився від іншої установки, будь ласка, видаліть config.php з папки, тому що новий файл буде створено за допомогою майстра інсталяції. Після цього ви можете продовжити інсталяцію.\n\nСталася така помилка: \n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Версія бази даних</string>
   <string name="SYS_DATABASE_VERSION_AFTER_UPDATE">Версія бази даних після оновлення</string>
-  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 та Var4 створюють link to update">Версія бази даних #VAR1# нижче версії скриптів Admidio #VAR2#.\n\nБудь ласка, виконайте оновлення бази даних #VAR3# до версії #V>
+  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 та Var4 створюють link to update">Версія бази даних #VAR1# нижче версії скриптів Admidio #VAR2#.\n\nБудь ласка, виконайте оновлення бази даних #VAR3# до версії #VAR4#.</string>
   <string name="SYS_DATABASE_VERSION_REQUIRED">Для Admidio потрібно #VAR1# або вище</string>
   <string name="SYS_DATE">Дата</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">Дата закінчення раніше дати початку.</string>
@@ -487,7 +487,7 @@
   <string name="SYS_DATE_MODIFIED">Дата зміни</string>
   <string name="SYS_DATE_TO">до</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Період часу за промовчанням для історії полів (дні)</string>
-  <string name="SYS_DAYS_FIELD_HISTORY_DESC">Зміни в полях профілю будуть перелічені за вказаний період часу в днях.
+  <string name="SYS_DAYS_FIELD_HISTORY_DESC">Зміни в полях профілю будуть перелічені за вказаний період часу в днях.</string>
   <string name="SYS_DAYS_VAR">#VAR1# днів</string>
   <string name="SYS_DEACTIVATE_ROLE">Деактивувати роль</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Якщо ви деактивуєте роль #VAR1_BOLD#, її більше не можна використовувати та призначати об'єктам. Аналогічно всі права цієї ролі більше не діють. Однак роль з її налаштуваннями та всіма зіставленнями членів залишається і може бути активована пізніше.</string>
@@ -711,7 +711,7 @@
   <string name="SYS_FOLDER_NO_FILES">Папка не містить файлів.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Вам не дозволено відображати вибрану папку.</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Для відвідувачів немає документів або файлів.</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Папка #VAR1_BOLD# не може бути створена.\n\nБудь ласка, зверніться до #VAR2#адміністратору#VAR3# за допомогою, щоб перевірити</strong>
+  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Папка #VAR1_BOLD# не може бути створена.\n\nБудь ласка, зверніться до #VAR2#адміністратору#VAR3# за допомогою, щоб перевірити</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Папка більше не існує на сервері. Її слід видалити з бази даних.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Папку (ID #VAR1#) не знайдено.</string>
   <string name="SYS_FOLDER_NOT_WRITABLE">Для папки #VAR1_BOLD# немає прав на запис. Не вдалося автоматично встановити потрібні права доступу до папки. Будь ласка, надайте папці #VAR1_BOLD# права на запис (через FTP встановіть атрибути файлу на 0777 або drwxrwxrwx).</string>
