@@ -56,9 +56,14 @@ class InventoryPresenter extends PagePresenter
      */
     protected int $getFilterKeeper = 0;
     /**
-     * @var bool filter for all items
+     * @var int filter for all items
      */
-    protected bool $getAllItems =  false;
+    protected int $getFilterItems = 0;
+    /**
+     * @var bool true if all items should be shown
+     */
+    protected bool $showFormerItems = false;
+
 
     /**
      * Constructor creates the page object and initialized all parameters.
@@ -72,10 +77,12 @@ class InventoryPresenter extends PagePresenter
         $this->getFilterString = admFuncVariableIsValid($_GET, 'items_filter_string', 'string', array('defaultValue' => ''));
         $this->getFilterCategoryUUID = admFuncVariableIsValid($_GET, 'items_filter_category', 'string', array('defaultValue' => ''));
         $this->getFilterKeeper = admFuncVariableIsValid($_GET, 'items_filter_keeper', 'int', array('defaultValue' => 0));
-        $this->getAllItems = admFuncVariableIsValid($_GET, 'items_show_all', 'bool', array('defaultValue' => false));
+        $this->getFilterItems = admFuncVariableIsValid($_GET, 'items_filter', 'int', array('defaultValue' => 0));
 
         $this->itemsData = new ItemsData($gDb, $gCurrentOrgId);
-        $this->itemsData->showFormerItems($this->getAllItems);
+        
+        $this->showFormerItems = ($this->getFilterItems >= 1) ? true : false;
+        $this->itemsData->showFormerItems($this->showFormerItems);
         $this->itemsData->readItems();
 
         $this->categoryService = new CategoryService($gDb, 'IVT');
@@ -152,39 +159,39 @@ class InventoryPresenter extends PagePresenter
         $this->addJavascript('
             $(document).ready(function(){
                 // only submit non-empty filter values
-                $("#items_filter_category, #items_filter_keeper, #items_show_all").on("change", function(){
+                $("#items_filter_category, #items_filter_keeper, #items_filter").on("change", function(){
                     var form = $("#adm_navbar_filter_form");
 
                     // Text-Filter
                     var textFilterInput = $("#items_filter_string");
                     if (textFilterInput.val() === "") {
-                    textFilterInput.removeAttr("name");
+                        textFilterInput.removeAttr("name");
                     } else {
-                    textFilterInput.attr("name", "items_filter_string");
+                        textFilterInput.attr("name", "items_filter_string");
                     }
 
                     // Category
                     var categorySelect = $("#items_filter_category");
                     if (categorySelect.val() === "") {
-                    categorySelect.removeAttr("name");
+                        categorySelect.removeAttr("name");
                     } else {
-                    categorySelect.attr("name", "items_filter_category");
+                        categorySelect.attr("name", "items_filter_category");
                     }
 
                     // Keeper
                     var keeperSelect = $("#items_filter_keeper");
                     if (keeperSelect.val() === "") {
-                    keeperSelect.removeAttr("name");
+                        keeperSelect.removeAttr("name");
                     } else {
-                    keeperSelect.attr("name", "items_filter_keeper");
+                        keeperSelect.attr("name", "items_filter_keeper");
                     }
 
-                    // Show All
-                    var showAllCheckbox = $("#items_show_all");
-                    if (!showAllCheckbox.is(":checked")) {
-                    showAllCheckbox.removeAttr("name");
+                    // items filter
+                    var itemsSelect = $("#items_filter");
+                    if (itemsSelect.val() === "") {
+                        itemsSelect.removeAttr("name");
                     } else {
-                    showAllCheckbox.attr("name", "items_show_all");
+                        itemsSelect.attr("name", "items_filter");
                     }
 
                     form.submit();
@@ -211,12 +218,12 @@ class InventoryPresenter extends PagePresenter
                     var textFilter     = $("#items_filter_string").val() || "";
                     var category     = $("#items_filter_category").val()   || "";
                     var keeper  = $("#items_filter_keeper").val()     || "";
-                    var showAll = $("#items_show_all").is(":checked") ? 1 : 0;
+                    var filterItems = $("#items_filter").val()     || "";
                     var url = "' . $printBaseUrl . '"
                             + "&items_filter_string="   + encodeURIComponent(textFilter)
                             + "&items_filter_category=" + encodeURIComponent(category)
                             + "&items_filter_keeper="   + encodeURIComponent(keeper)
-                            + "&items_show_all="        + showAll;
+                            + "&items_filter="        + encodeURIComponent(filterItems);
                 
                     window.open(url, "_blank");
                 });
@@ -270,14 +277,20 @@ class InventoryPresenter extends PagePresenter
             )
         );
 
+        $selectBoxValues = array(
+            '0' => $gL10n->get('SYS_INVENTORY_SHOW_CURRENT_ITEMS'),
+            '1' => $gL10n->get('SYS_INVENTORY_SHOW_ONLY_FORMER_ITEMS'),
+            '2' => $gL10n->get('SYS_INVENTORY_SHOW_ALL_ITEMS')
+        );
         // filter all items
-        $form->addCheckbox(
-            'items_show_all',
-            $gL10n->get('SYS_SHOW_ALL'),
-            $this->getAllItems,
+        $form->addSelectBox(
+            'items_filter',
+            $gL10n->get('SYS_INVENTORY_SHOW_ITEMS_FILER'),
+            $selectBoxValues,
             array(
                 'property' => $showFilterForm,
-                'helpTextId' => 'SYS_INVENTORY_SHOW_ALL_DESC'
+                'defaultValue' => $this->getFilterItems,
+                'showContextDependentFirstEntry' => false
             )
         );
 
@@ -308,7 +321,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items'                 => $this->getAllItems,
+                    'items_filter'          => $this->getFilterItems,
                     'mode'                  => 'print_xlsx'
                 )
             ),
@@ -322,7 +335,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items'                 => $this->getAllItems,
+                    'items_filter'          => $this->getFilterItems,
                     'mode'                  => 'print_ods'
                 )
             ),
@@ -336,7 +349,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items'                 => $this->getAllItems,
+                    'items_filter'          => $this->getFilterItems,
                     'mode'                  => 'print_csv-ms'
                 )
             ),
@@ -350,7 +363,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items'                 => $this->getAllItems,
+                    'items_filter'          => $this->getFilterItems,
                     'mode'                  => 'print_csv-oo'
                 )
             ),
@@ -364,7 +377,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items'                 => $this->getAllItems,
+                    'items_filter'          => $this->getFilterItems,
                     'mode'                  => 'print_pdf'
                 )
             ),
@@ -378,7 +391,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items'                 => $this->getAllItems,
+                    'items_filter'          => $this->getFilterItems,
                     'mode'                  => 'print_pdfl'
                 )
             ),
@@ -404,13 +417,13 @@ class InventoryPresenter extends PagePresenter
                         var textFilter = $("#items_filter_string").val()            || "";
                         var category   = $("#items_filter_category").val()         || "";
                         var keeper     = $("#items_filter_keeper").val()           || "";
-                        var showAll    = $("#items_show_all").is(":checked") ? 1 : 0;
+                        var filterItems = $("#items_filter").val()     || "";
                         var base = this.href.split("?")[0];
                         var qs = [
                         "items_filter_string="   + encodeURIComponent(textFilter),
                         "items_filter_category=" + encodeURIComponent(category),
                         "items_filter_keeper="   + encodeURIComponent(keeper),
-                        "items="                 + showAll,
+                        "items_filter="          + encodeURIComponent(filterItems),
                         "mode="                  + modeValue
                         ].join("&");
                         this.href = base + "?" + qs;
@@ -438,7 +451,7 @@ class InventoryPresenter extends PagePresenter
 
             // initialize and set the parameter for DataTables
             $dataTables = new DataTables($this, 'adm_inventory_table');
-            if ($this->getAllItems) {
+            if ($this->getFilterItems == 2) {
                 $this->addJavascript('
                     var deleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete")) . '";
                     var $table   = $("#adm_inventory_table");
@@ -603,8 +616,8 @@ class InventoryPresenter extends PagePresenter
         );
 
         // Set default alignment and headers for the first column (abbreviation)
-        $columnAlign[] = ($this->getAllItems) ? 'center' : 'end';
-        $headers     =  ($this->getAllItems) ? array(0 => '<input type="checkbox" data-bs-toggle="tooltip" data-bs-original-title="This is the text of the tooltip"/>') : array();
+        $columnAlign[] = ($this->getFilterItems === 2) ? 'center' : 'end';
+        $headers     =  ($this->getFilterItems === 2) ? array(0 => '<input type="checkbox" data-bs-toggle="tooltip" data-bs-original-title="This is the text of the tooltip"/>') : array();
         $exportHeaders = array();
         $columnNumber = 1;
 
@@ -615,7 +628,7 @@ class InventoryPresenter extends PagePresenter
 
             // For the first column, add specific header configurations for export modes
             if ($columnNumber === 1) {
-                if ($this->getAllItems) {
+                if ($this->getFilterItems === 2) {
                     $columnAlign[] = 'end';
                 }
                 
@@ -683,14 +696,16 @@ class InventoryPresenter extends PagePresenter
                 // Apply filters for CATEGORY and KEEPER
                 if (
                     ($this->getFilterCategoryUUID !== '' && $infNameIntern === 'CATEGORY' && $this->getFilterCategoryUUID != $this->itemsData->getValue($infNameIntern, 'database')) ||
-                    ($this->getFilterKeeper !== 0 && $infNameIntern === 'KEEPER' && $this->getFilterKeeper != $this->itemsData->getValue($infNameIntern))
+                    ($this->getFilterKeeper !== 0 && $infNameIntern === 'KEEPER' && $this->getFilterKeeper != $this->itemsData->getValue($infNameIntern)) ||
+                    ($this->getFilterItems === 0 && $item['ini_former']) ||
+                    ($this->getFilterItems === 1 && !$item['ini_former'])
                 ) {
                     // skip to the next iteration of the next-outer loop
                     continue 2;
                 }
 
                 if ($columnNumber === 1) {
-                    if ($this->getAllItems) {
+                    if ($this->getFilterItems === 2) {
                         $rowValues['data'][] = '<input type="checkbox"/>';
                     }
                     $rowValues['data'][] = $listRowNumber;

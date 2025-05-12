@@ -922,7 +922,11 @@
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESCRIPTION">Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde</string>
   <string name="SYS_INVENTORY_RECEIVED_ON">verliehen am</string>
   <string name="SYS_INVENTORY_RECEIVED_ON_DESCRIPTION">Das Verleihdatum des Gegenstandes an den letzten Empfänger</string>
-    <string name="SYS_INVENTORY_SELECTION_DELETED">Die ausgewählten Gegenstände wurden gelöscht.</string>
+  <string name="SYS_INVENTORY_SELECTION_DELETED">Die ausgewählten Gegenstände wurden gelöscht.</string>
+  <string name="SYS_INVENTORY_SHOW_CURRENT_ITEMS">Aktuelle</string>
+  <string name="SYS_INVENTORY_SHOW_ONLY_FORMER_ITEMS">Ausgesonderte</string>
+  <string name="SYS_INVENTORY_SHOW_ALL_ITEMS">Alle</string>
+  <string name="SYS_INVENTORY_SHOW_ITEMS_FILER">Gegenstandsfilter</string>
 <!--END-->  
   <string name="SYS_IO_ERROR">E/A Fehler</string>
   <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
