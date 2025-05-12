@@ -277,7 +277,7 @@ class InventoryPresenter extends PagePresenter
             $this->getAllItems,
             array(
                 'property' => $showFilterForm,
-                'helpTextId' => 'SYS_SHOW_ALL_DESC'
+                'helpTextId' => 'SYS_INVENTORY_SHOW_ALL_DESC'
             )
         );
 
@@ -704,27 +704,41 @@ class InventoryPresenter extends PagePresenter
                         $rowValues['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'copy' => true)),
                             'icon' => 'bi bi-file-earmark-plus',
-                            'tooltip' => $gL10n->get('SYS_COPY')
+                            'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_COPY')
                         );
                     }
 
                     if ($item['ini_former']) {
+                        $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_UNDO_FORMER_DESC', array('SYS_INVENTORY_UNDO_FORMER_CONFIRM')) : $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM');
                         // Add undo former action
                         $rowValues['actions'][] = array(
                             'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                            'dataMessage' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM'),
+                            'dataMessage' => $dataMessage,
                             'icon' => 'bi bi-eye',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER')
                         );
                     }
 
-                    // Add delete/make former action
-                    $rowValues['actions'][] = array(
-                        'popup' => true,
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
-                        'icon' => 'bi bi-trash',
-                        'tooltip' => $gL10n->get('SYS_DELETE')
-                    );
+                    if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
+                        if (!$item['ini_former']) {
+                            // Add make former action
+                            $rowValues['actions'][] = array(
+                                'popup' => true,
+                                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $item['ini_uuid'])),
+                                'icon' => 'bi bi-trash',
+                                'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
+                            );
+                        }
+                    }
+                    else {
+                        // Add delete/make former action
+                        $rowValues['actions'][] = array(
+                            'popup' => true,
+                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
+                            'icon' => 'bi bi-trash',
+                            'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
+                        );
+                    }
                 }
             }
 
@@ -949,27 +963,39 @@ class InventoryPresenter extends PagePresenter
                     $rowValues['actions'][] = array(
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'copy' => true)),
                         'icon' => 'bi bi-file-earmark-plus',
-                        'tooltip' => $gL10n->get('SYS_COPY')
+                        'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_COPY')
                     );
                 }
 
                 if ($item['ini_former']) {
+                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_UNDO_FORMER_DESC', array('SYS_INVENTORY_UNDO_FORMER_CONFIRM')) : $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM');
                     // Add undo former action
                     $rowValues['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_id'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM'),
+                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataMessage' => $dataMessage,
                         'icon' => 'bi bi-eye',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER')
                     );
                 }
 
-                if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
+                if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
+                    if (!$item['ini_former']) {
+                        // Add make former action
+                        $rowValues['actions'][] = array(
+                            'popup' => true,
+                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $item['ini_uuid'])),
+                            'icon' => 'bi bi-trash',
+                            'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
+                        );
+                    }
+                }
+                else {
                     // Add delete/make former action
                     $rowValues['actions'][] = array(
                         'popup' => true,
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
                         'icon' => 'bi bi-trash',
-                        'tooltip' => $gL10n->get('SYS_DELETE')
+                        'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                     );
                 }
             }

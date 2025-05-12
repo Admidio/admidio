@@ -105,7 +105,7 @@
                         {/if}
                     </div>
                     <div class="card-body">
-                        <p>{$l10n->get('SYS_INVENTORY_ADDIN_KEEPER_DESC')}</p>
+                        <p>{$l10n->get('SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC')}</p>
                         {render_table headers=$keeperList.headers rows=$keeperList.rows align=$keeperList.column_align tableId="adm_inventory_table_keeper_tab"}
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                         {/if}
                     </div>
                     <div class="card-body">
-                        <p>{$l10n->get('SYS_INVENTORY_ADDIN_LAST_RECEIVER_DESC')}</p>
+                        <p>{$l10n->get('SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC')}</p>
                         {render_table headers=$receiverList.headers rows=$receiverList.rows align=$receiverList.column_align tableId="adm_inventory_table_receiver_tab"}
                     </div>
                 </div>
@@ -240,7 +240,7 @@
                                 {/if}
                             </div>
                             <div class="card-body">
-                                <p>{$l10n->get('SYS_INVENTORY_ADDIN_KEEPER_DESC')}</p>
+                                <p>{$l10n->get('SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC')}</p>
                                 {render_table headers=$keeperList.headers rows=$keeperList.rows align=$keeperList.column_align tableId="adm_inventory_table_keeper_accordion"}
                             </div>
                         </div>
@@ -258,7 +258,7 @@
                                 {/if}
                             </div>
                             <div class="card-body">
-                                <p>{$l10n->get('SYS_INVENTORY_ADDIN_LAST_RECEIVER_DESC')}</p>
+                                <p>{$l10n->get('SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC')}</p>
                                 {render_table headers=$receiverList.headers rows=$receiverList.rows align=$receiverList.column_align tableId="adm_inventory_table_receiver_accordion"}
                             </div>
                         </div>

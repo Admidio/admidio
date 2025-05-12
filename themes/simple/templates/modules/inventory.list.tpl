@@ -17,22 +17,22 @@
                     {foreach from=$row.data item=cell name=table}
                         <td class="text-{$list.column_align[$smarty.foreach.table.index]}">{$cell|raw}</td>
                     {/foreach}
-                    {if isset($row.actions)}
-                        <td class="text-end">
+                    <td class="text-end">
+                        {if isset($row.actions)}
                             {foreach $row.actions as $actionItem}
-                                    <a
-                                        {if isset($actionItem.popup)}
-                                            class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
-                                        {elseif isset($actionItem.dataHref)}
-                                            class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
-                                        {else}
-                                            class="admidio-icon-link" href="{$actionItem.url}"
-                                        {/if}
-                                        ><i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i>
-                                    </a>
+                                <a
+                                    {if isset($actionItem.popup)}
+                                        class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
+                                    {elseif isset($actionItem.dataHref)}
+                                        class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
+                                    {else}
+                                        class="admidio-icon-link" href="{$actionItem.url}"
+                                    {/if}
+                                    ><i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i>
+                                </a>
                             {/foreach}
-                        </td>
-                    {/if}
+                        {/if}
+                    </td>
                 </tr>
             {/foreach}
         </tbody>

@@ -287,9 +287,9 @@ class InventoryFieldsPresenter extends PagePresenter
             } else {
                 $templateRowItemField['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_item_field_' . $itemField->getValue('inf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_delete', 'uuid' => $itemField->getValue('inf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($itemField->getValue('usf_name', 'database'))),
+                    'dataMessage' => $gL10n->get('SYS_INVENTORY_ITEMFIELD_DELETE_DESC', array($itemField->getValue('inf_name', 'database'))),
                     'icon' => 'bi bi-trash',
-                    'tooltip' => $gL10n->get('SYS_DELETE')
+                    'tooltip' => $gL10n->get('SYS_INVENTORY_ITEMFIELD_DELETE')
                 );
             }
 
