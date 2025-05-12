@@ -155,7 +155,7 @@ const TBL_USER_DATA = TABLE_PREFIX . '_user_data';
 const TBL_USER_FIELDS = TABLE_PREFIX . '_user_fields';
 const TBL_USER_RELATIONS = TABLE_PREFIX . '_user_relations';
 const TBL_USER_RELATION_TYPES = TABLE_PREFIX . '_user_relation_types';
-const TBL_INVENTORY_DATA = TABLE_PREFIX . '_inventory_data';
+const TBL_INVENTORY_ITEM_DATA = TABLE_PREFIX . '_inventory_item_data';
 const TBL_INVENTORY_FIELDS = TABLE_PREFIX . '_inventory_fields';
 const TBL_INVENTORY_ITEMS = TABLE_PREFIX . '_inventory_items';
 

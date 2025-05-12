@@ -132,8 +132,8 @@ class LogChanges extends Entity
             case 'inventory_items':
                 $this->connectAdditionalTable(TBL_INVENTORY_ITEMS, 'ini_id', 'log_record_id');
                 break;
-            case 'inventory_data':
-                $this->connectAdditionalTable(TBL_INVENTORY_DATA, 'ind_id', 'log_record_id');
+            case 'inventory_item_data':
+                $this->connectAdditionalTable(TBL_INVENTORY_ITEM_DATA, 'ind_id', 'log_record_id');
                 break;
             case 'rooms':
                 $this->connectAdditionalTable(TBL_ROOMS, 'room_id', 'log_record_id');

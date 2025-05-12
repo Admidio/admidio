@@ -186,9 +186,9 @@ class ChangelogService {
             'folders' => 'SYS_FOLDER',
             'files' => 'SYS_FILE',
 
-            'inventory_fields' => 'SYS_INVENTORY_ITEMFIELD',
-            'inventory_items' => 'SYS_INVENTORY_ITEM',
-            'inventory_data' => 'SYS_INVENTORY_ITEM_DATA',
+            'inventory_fields' => 'SYS_INVENTORY_ITEMFIELDS',
+            'inventory_items' => 'SYS_INVENTORY_ITEMS',
+            'inventory_item_data' => 'SYS_INVENTORY_ITEM_DATA',
 
             'organizations' => 'SYS_ORGANIZATION',
             'menu' => 'SYS_MENU_ITEM',
@@ -320,7 +320,7 @@ class ChangelogService {
                 return new ItemField($gDb);
             case 'inventory_items':
                 return new Item($gDb);
-            case 'inventory_data':
+            case 'inventory_item_data':
                 return new ItemData($gDb);
             default:
                 return null;
@@ -516,6 +516,7 @@ class ChangelogService {
             'inf_value_list' =>            'SYS_VALUE_LIST',
             'inf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
             'inf_sequence' =>              'SYS_ORDER',
+            'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'ini_former' =>                array('name' => 'SYS_INVENTORY_ITEM_MADE_FORMER', 'type' => 'BOOL'),
             'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
             'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
@@ -707,7 +708,7 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'post_edit', 'post_uuid' => $uuid)); break;
                 case 'inventory_fields' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'field_edit', 'uuid' => $uuid)); break;
-                case 'inventory_data' : // Fall through
+                case 'inventory_item_data' : // Fall through
                 case 'inventory_items' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $uuid)); break;
                 case 'links' :

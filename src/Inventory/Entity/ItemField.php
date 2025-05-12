@@ -70,7 +70,7 @@ class ItemField extends Entity
         $this->db->queryPrepared($sql, array($gCurrentOrgId, (int)$this->getValue('inf_sequence')));
 
         $infId = (int)$this->getValue('inf_id');
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_DATA . '
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . '
                  WHERE ind_inf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($infId));
 
