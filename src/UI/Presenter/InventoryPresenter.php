@@ -668,9 +668,9 @@ class InventoryPresenter extends PagePresenter
                         ? $this->itemsData->getHtmlValue($infNameIntern, $content)
                         : $this->itemsData->getValue($infNameIntern, 'database');
                 } elseif ($infType === 'CATEGORY') {
-                    $content = $mode === 'html'
-                        ? $this->itemsData->getHtmlValue($infNameIntern, $content)
-                        : $this->itemsData->getValue($infNameIntern, 'database');
+                    $content = $mode === 'database'
+                        ? $this->itemsData->getValue($infNameIntern, 'database')
+                        : $this->itemsData->getHtmlValue($infNameIntern, $content);
                 }
 
                 $rowValues['data'][] = ($strikethrough && !in_array($mode, ['csv', 'ods', 'xlsx']))
