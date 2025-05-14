@@ -443,7 +443,7 @@ class InventoryPresenter extends PagePresenter
      */
     public function createList() : void
     {
-        global $gSettingsManager, $gL10n;
+        global $gSettingsManager;
 
         if (!$this->printView) {
             $this->createHeader();
@@ -453,81 +453,117 @@ class InventoryPresenter extends PagePresenter
             $dataTables = new DataTables($this, 'adm_inventory_table');
             if ($this->getFilterItems == 2) {
                 $this->addJavascript('
-                    var deleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete")) . '";
-                    var $table   = $("#adm_inventory_table");
-                    var $button = $("#delete-selected");
-                    
-                    // button remove style="display: none;"
-                    $button.css("display", "block");
+                    $(document).ready(function() {
+                        // base URLs
+                        var explainUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg")) . '";
 
-                    var $headChk = $table.find(\'thead input[type="checkbox"]\');
-                    var $rowChks = function() {
-                        return $table.find(\'tbody input[type="checkbox"]\');
-                    };
-                    var $actions = $("#adm_inventory_table_select_actions");
+                        // cache jQuery objects
+                        var $table     = $("#adm_inventory_table");
+                        var tableApi   = new $.fn.dataTable.Api($table);
+                        var $button    = $("#delete-selected").css("display","block");
+                        var $headChk   = $table.find("thead input[type=checkbox]");
+                        var $rowChks   = function(){ return $table.find("tbody input[type=checkbox]"); };
+                        var $actions   = $("#adm_inventory_table_select_actions");
 
-                    // Prüfen, ob Zeilen selektiert sind
-                    function anySelected() {
-                        return $rowChks().filter(":checked").length > 0;
-                    }
+                        // master list of selected IDs
+                        var selectedIds = [];
 
-                    // Actions aktualisieren
-                    function refreshActions() {
-                        if (anySelected()) {
-                            $button.prop("disabled", false);
+                        function anySelected() {
+                            return selectedIds.length > 0;
                         }
-                        else {
-                            $button.prop("disabled", true);
-                        }
-                    }
 
-                    // 1) Header-Checkbox toggelt alle Rows
-                    $headChk.on("change", function(){
-                        var checked = this.checked;
-                        $rowChks().prop("checked", checked);
-                        refreshActions();
-                    });
+                        function refreshActions() {
+                            $button.prop("disabled", !anySelected());
+                        }
 
-                    // 2) Einzelne Row toggelt Header-State & Actions
-                    $table.on("change", \'tbody input[type="checkbox"]\', function(){
-                        var total   = $rowChks().length;
-                        var checked = $rowChks().filter(":checked").length;
-                        if (checked === 0) {
-                            $headChk.prop({ checked: false, indeterminate: false });
+                        function updateHeaderState() {
+                            var total   = $rowChks().length;
+                            var checked = $rowChks().filter(":checked").length;
+                            if (checked === 0) {
+                                $headChk.prop({ checked: false, indeterminate: false });
+                            }
+                            else if (checked === total) {
+                                $headChk.prop({ checked: true,  indeterminate: false });
+                            }
+                            else {
+                                $headChk.prop({ checked: false, indeterminate: true });
+                            }
                         }
-                        else if (checked === total) {
-                            $headChk.prop({ checked: true, indeterminate: false });
-                        }
-                        else {
-                            $headChk.prop({ checked: false, indeterminate: true });
-                        }
-                        refreshActions();
-                    });
 
-                    // 3) Klick auf den Delete-Button
-                    $actions.on("click", "#delete-selected", function(){
-                        var ids = $rowChks()
-                            .filter(":checked")
-                            .closest("tr")
-                            .map(function(){
-                                return this.id.replace(/^adm_inventory_item_/, "");
+                        // header-checkbox → select/unselect *all* rows across all pages
+                        $headChk.on("change", function(){
+                            var checkAll = this.checked;
+                            selectedIds = [];
+
+                            if (checkAll) {
+                                // grab every row (even on other pages)
+                                tableApi.rows().every(function(){
+                                    selectedIds.push(this.node().id.replace(/^adm_inventory_item_/, ""));
+                                });
+                            }
+
+                            // toggel checked state of all row checkboxes
+                            $rowChks().prop("checked", checkAll);
+
+                            updateHeaderState();
+                            refreshActions();
+                        });
+
+                        // individual row-checkbox → toggle just that ID
+                        $table.on("change", "tbody input[type=checkbox]", function(){
+                            var id  = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
+                            var idx = selectedIds.indexOf(id);
+                            if (this.checked && idx === -1) {
+                                selectedIds.push(id);
+                            }
+                            else if (!this.checked && idx !== -1) {
+                                selectedIds.splice(idx,1);
+                            }
+
+                            updateHeaderState();
+                            refreshActions();
+                        });
+
+                        // on each draw (paging/filter/sort): re-check boxes from list
+                        tableApi.on("draw", function(){
+                            $rowChks().each(function(){
+                                var id = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
+                                $(this).prop("checked", selectedIds.indexOf(id) !== -1);
+                            });
+                            updateHeaderState();
+                            refreshActions();
+                        });
+
+                        // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
+                        $actions
+                            .off("click", "#delete-selected")
+                            .on("click", "#delete-selected", function(){
+                            // build uuids[] querystring
+                            var qs = selectedIds
+                                .map(function(id){
+                                return "uuids[]=" + encodeURIComponent(id);
+                                })
+                                .join("&");
+
+                            // full URL to your explain_msg endpoint
+                            var popupUrl = explainUrlBase + "&" + qs;
+
+                            // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
+                            $("<a>", {
+                                href: "javascript:void(0);",
+                                class: "admidio-icon-link openPopup",
+                                "data-href": popupUrl
                             })
-                            .get();
+                            .appendTo("body")
+                            .click()    // trigger the built-in openPopup handler
+                            .remove();
+                            });
 
-                        var params = ids
-                            .map(function(id){
-                                return "items_to_delete[]=" + encodeURIComponent(id);
-                            })
-                            .join("&");
-
-                        // weiterleiten
-                        window.location.href = deleteUrlBase + "&" + params;
-                    });
-
-                    // initialer Zustand
-                    refreshActions();
-                ', true);
-
+                        // initialize button state
+                        refreshActions();
+                    });'
+                    , true
+                );
 
                 $dataTables->disableColumnsSort(array(1, count($templateData['headers'])));
                 $dataTables->setColumnsNotHideResponsive(array(1, count($templateData['headers'])));
@@ -617,7 +653,7 @@ class InventoryPresenter extends PagePresenter
 
         // Set default alignment and headers for the first column (abbreviation)
         $columnAlign[] = ($this->getFilterItems === 2) ? 'center' : 'end';
-        $headers     =  ($this->getFilterItems === 2) ? array(0 => '<input type="checkbox" data-bs-toggle="tooltip" data-bs-original-title="This is the text of the tooltip"/>') : array();
+        $headers     =  ($this->getFilterItems === 2) ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="This is the text of the tooltip"/>') : array();
         $exportHeaders = array();
         $columnNumber = 1;
 

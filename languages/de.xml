@@ -824,7 +824,6 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Hier kannst du die Datumsdarstellung festlegen.</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES">Anzahl Dezimalstellen</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Hier kannst du die Anzahl an Dezimalstellen für Felder des Typs "Dezimalzahl" festlegen.</string>
-  <string name="SYS_INVENTORY_DELETE_SELECTION">Auswahl löschen</string>
 <!--   <string name="SYS_INVENTORY_DEINST_ACTORGONLY">Nur Daten der aktuellen Organisation löschen.</string>
   <string name="SYS_INVENTORY_DEINST_ALLORG">Daten in allen Organisationen löschen.</string>
   <string name="SYS_INVENTORY_DEINST_CONFIGTABLE_DELETE_NOTPOSSIBLE">- Die Tabelle #VAR1_BOLD# konnte nicht gelöscht werden, da sich darin noch Daten einer weiteren Organisation oder eines anderen Plugins befinden.\n</string> 
@@ -849,7 +848,7 @@
   <string name="SYS_INVENTORY_FILENAME">Dateiname</string>
   <string name="SYS_INVENTORY_FILENAME_DESC">Hier kannst du den Dateinamen der Exportdatei (ohne Endung) festlegen.</string>
   <string name="SYS_INVENTORY_MAKE_FORMER">Gegenstand aussondern</string>
-  <string name="SYS_INVENTORY_MAKE_FORMER_DESC">Du kannst den #VAR1#. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, wer diesen Gegenstand ausgeliehen hat.</string>
+  <string name="SYS_INVENTORY_MAKE_FORMER_DESC">Du kannst den #VAR1_BOLD#. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, wer diesen Gegenstand ausgeliehen hat.</string>
 <!--   <string name="SYS_INVENTORY_IMPORT_DESC">Hier kannst du Gegenstände aus einer vorherigen Exportdatei oder einer eigenen Datei importieren.</string> -->
   <string name="SYS_INVENTORY_IMPORT_ASSIGN_FIELDS_DESC">In der linken Spalte der nachfolgenden Tabelle werden alle Eigenschaftsfelder angezeigt. In der rechten Spalte werden in einer Auswahlliste die Spalten aus der zu importierenden Datei angezeigt. Alle Spalten aus der Datei, die du importieren möchtest, solltest du nun einem Eigenschaftsfeld zuordnen.</string>
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Gegenstände importieren</string>
@@ -922,7 +921,15 @@
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESCRIPTION">Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde</string>
   <string name="SYS_INVENTORY_RECEIVED_ON">verliehen am</string>
   <string name="SYS_INVENTORY_RECEIVED_ON_DESCRIPTION">Das Verleihdatum des Gegenstandes an den letzten Empfänger</string>
+  <string name="SYS_INVENTORY_SELECTION_DELETE">Auswahl löschen</string>
+  <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">Wenn du #VAR1_BOLD# auswählst, werden die Gegenstände zusammen mit den dazugehörigen Datensätzen unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Gegenstände einzusehen.</string>
+  <string name="SYS_INVENTORY_SELECTION_MAKE_FORMER">Auswahl aussondern</string>
+  <string name="SYS_INVENTORY_SELECTION_MAKE_FORMER_DESC">Du kannst die ausgewählten Gegenstände auch aussondern, indem du #VAR1_BOLD# auswählst. Dies hat den Vorteil, dass die Daten erhalten bleiben und du später immer wieder sehen kannst, wer diesen Gegenstand ausgeliehen hat.</string>
+  <string name="SYS_INVENTORY_SELECTION_UNDO_FORMER">Aussonderung rückgängig machen</string>
+  <string name="SYS_INVENTORY_SELECTION_UNDO_FORMER_DESC">Du kannst die ausgewählten Gegenstände wieder in die Inventarverwaltung aufnehmen, indem du #VAR1_BOLD# auswählst.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">Die ausgewählten Gegenstände wurden gelöscht.</string>
+  <string name="SYS_INVENTORY_SELECTION_MADE_FORMER">Die ausgewählten Gegenstände wurden ausgesondert.</string>
+  <string name="SYS_INVENTORY_SELECTION_UNDONE_FORMER">Die Aussonderung der ausgewählten Gegenstände wurde rückgängig gemacht.</string>
   <string name="SYS_INVENTORY_SHOW_CURRENT_ITEMS">Aktuelle</string>
   <string name="SYS_INVENTORY_SHOW_ONLY_FORMER_ITEMS">Ausgesonderte</string>
   <string name="SYS_INVENTORY_SHOW_ALL_ITEMS">Alle</string>

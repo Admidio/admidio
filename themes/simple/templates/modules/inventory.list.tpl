@@ -5,7 +5,7 @@
 <div class="table-responsive">
     <div id="adm_inventory_table_select_actions" class="mb-3">
         <button id="delete-selected" class="btn btn-primary" style="display: none;">
-            <i class="bi bi-trash me-1"></i>{$l10n->get('SYS_INVENTORY_DELETE_SELECTION')}
+            <i class="bi bi-trash me-1"></i>{$l10n->get('SYS_INVENTORY_SELECTION_DELETE')}
         </button>
     </div>
     <table id="adm_inventory_table" class="table table-condensed{if $print} table-striped{else} table-hover{/if}" style="max-width: 100%;">

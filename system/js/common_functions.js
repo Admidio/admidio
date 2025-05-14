@@ -145,6 +145,84 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
 }
 
 /**
+ * This function can be used to call a specific url and hide multiple html elements
+ * in dependence from the returned data. If the data received is "done" then
+ * the elements will be hidden otherwise the data will be shown in an error block.
+ * @param {string}   elementPrefix This is the prefix of the html elements ids that should be hidden.
+ * @param {array}   elementId  This is the array of ids of the html elements that should be hidden.
+ * @param {string}   url        This is the url that will be called.
+ * @param {string}   csrfToken  If this is set than it will be added to the post request.
+ */
+function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
+    // 1) normalize to an array
+    var rawIds = Array.isArray(elementIds)
+        ? elementIds.slice()         // clone the array if it already is one
+        : [ elementIds ];            // wrap single value into array
+
+    // 2) prefix each entry
+    var ids = rawIds.map(function(id){
+        return elementPrefix + id;
+    });
+    // helper: fade out one row (and optional callback) by id
+    function _fadeOutById(id) {
+        var entry = document.getElementById(id) || document.getElementById("row_" + id);
+        if (!entry) {
+            return;
+        }
+
+        // do the fade
+        $(entry).fadeOut("slow");
+
+        // then check if its <tbody> is now empty
+        var tb = entry.closest("tbody");
+        if (tb && tb.children.length === 0) {
+            $(tb).fadeOut("slow");
+            $(tb.previousElementSibling).fadeOut("slow");
+        }
+    }
+
+    // send AJAX
+    $.post(url, {
+        "adm_csrf_token": csrfToken,
+        "uuids[]": ids   // PHP will see $_POST['uuids'] as an array
+    }, function(responseData) {
+        var status = "error", msg = "";
+        try {
+            var d = typeof responseData === "object" ? responseData : JSON.parse(responseData);
+            status = d.status || status;
+            msg    = d.message || "";
+        } catch (e) {
+            if (responseData === "done") {
+                status = "success";
+            }
+            else {
+                msg = responseData;
+            }
+        }
+
+        var $modalMsg = $("#adm_status_message");
+        if (status === "success") {
+            if (msg) {
+                $modalMsg.html('<div class="alert alert-success"><i class="bi bi-check-lg"></i> '+msg+'</div>');
+                setTimeout(function(){
+                    $("#adm_modal, #adm_modal_messagebox").modal("hide");
+                    // fade out each
+                    ids.forEach(_fadeOutById);
+                }, 1500);
+            } else {
+                $("#adm_modal, #adm_modal_messagebox").modal("hide");
+                ids.forEach(_fadeOutById);
+            }
+        } else {
+            if (!msg) {
+                msg = "Error: Undefined error occurred!";
+            }
+            $modalMsg.html('<div class="alert alert-danger"><i class="bi bi-exclamation-circle-fill"></i> '+msg+'</div>');
+        }
+    });
+}
+
+/**
  * The function converts the format of the php date() function
  * to the format that is used of the luxon.js script.
  * @param {string} format A string with the format definition of the php date() function
