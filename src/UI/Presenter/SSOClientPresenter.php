@@ -132,7 +132,7 @@ class SSOClientPresenter extends PagePresenter
     }
 
     protected function getAvailableRoles(): array {
-        global $gDb;
+        global $gDb, $gL10n;
         // Access restrictions by role/group are handled through role rights
         $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
                        FROM ' . TBL_ROLES . '
@@ -151,6 +151,12 @@ class SSOClientPresenter extends PagePresenter
             $allRolesSet[] = array(
                 $rowViewRoles['rol_id'], // ID 
                 $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
+                $rowViewRoles['cat_name'] // Group
+            );
+            // Leader has the role ID with negative sign!
+            $allRolesSet[] = array(
+                -$rowViewRoles['rol_id'], // ID 
+                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ') - ' . $gL10n->get('SYS_LEADER'), // Value
                 $rowViewRoles['cat_name'] // Group
             );
         }
@@ -374,7 +380,7 @@ class SSOClientPresenter extends PagePresenter
         $form->addSelectBox(
             'sso_roles_access',
             $gL10n->get('SYS_SSO_ROLES'),
-            $allRolesSet,
+            array_filter($allRolesSet, function($role) { return $role[0] > 0; } ),
             array(
                 'property' => FormPresenter::FIELD_DEFAULT,
                 'defaultValue' => $client->getAccessRolesIds(),
