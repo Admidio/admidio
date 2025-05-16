@@ -61,8 +61,11 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
 
         // Load the AuthCode from the DB (including the nonce) and pass on the nonce to the response type ()
         $authCode = $this->authCodeRepository->getToken($authCodePayload->auth_code_id);
-        if (empty($this->nonce) && !($authCode->isNewRecord())) {
-            $responseType->setNonce($authCode->getValue($authCode->getColumnPrefix() . '_nonce'));
+        if (!($authCode->isNewRecord())) {
+            $nonce = $authCode->getValue($authCode->getColumnPrefix() . '_nonce');
+            if (!empty($nonce)) {
+                $responseType->setNonce($nonce);
+            }
         }
         return $responseType;
     }
