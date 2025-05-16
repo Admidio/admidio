@@ -69,5 +69,46 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         }
         return $responseType;
     }
+
+    /**
+     * WORKAROUND for clients using basic http authorization and clientIDs that 
+     * contain colons... The OIDC spec (rather: basic auth spec) does not allow
+     * usernames with colon, but the URL contains a colon and is used by many 
+     * OpenID RPs. -> Disregard the spec if the credentials string starts with 
+     * http: or https: and treat the first colon as part of the username!
+     * 
+     * Retrieve HTTP Basic Auth credentials with the Authorization header
+     * of a request. First index of the returned array is the username,
+     * second is the password (so list() will work). If the header does
+     * not exist, or is otherwise an invalid HTTP Basic header, return
+     * [null, null].
+     *
+     * @return array{0:non-empty-string,1:string}|array{0:null,1:null}
+     */
+    protected function getBasicAuthCredentials(ServerRequestInterface $request): array
+    {
+        [$username, $password] = parent::getBasicAuthCredentials($request);
+        // Workaround for clients that use URL-encoding of the http basic auth (even though the spec says to directly base64-encode the user:password string!)
+        if (!empty($username)) {
+            $decoded = urldecode($username);
+            if (urlencode($decoded) == $username) {
+                $username = $decoded;
+            }
+        }
+        if (!empty($password)) {
+            $decoded = urldecode($password);
+            if (urlencode($decoded) == $password) {
+                $password = $decoded;
+            }
+        }
+
+        if (($username == "http" || $username == "https") && 
+            str_starts_with($password, "//") &&
+            str_contains($password, ':') ) {
+            [$username2, $password] = explode(':', $password, 2);
+            $username = $username . ':' . $username2;
+        }
+        return [$username, $password];
+    }
 }
 
