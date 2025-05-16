@@ -199,23 +199,24 @@ class OIDCService extends SSOService {
         $userRepository = new UserRepository($this->db); // instance of UserRepositoryInterface // TODO_RK: Add user ID field and allowed Roles!
         $refreshTokenRepository = new RefreshTokenRepository(database: $this->db); // instance of RefreshTokenRepositoryInterface
 
+        // Private key for signing
+        $privateKeyID = $gSettingsManager->get('sso_oidc_signing_key');
+        $privateKeyObject = new Key($this->db, $privateKeyID);
+        $privateKey = new CryptKey($privateKeyObject->getValue('key_private'));
+        $publicKey = new CryptKey($privateKeyObject->getValue('key_public'));
+
         // Provide the groups as a groups scope and claim
         $claimsExtractor = new ClaimExtractor([
             // new ClaimSetEntity('openid', ['sub']),
             new ClaimSetEntity('groups', ['groups'])
         ]);
-        $responseType = new IdTokenResponse($userRepository, $claimsExtractor);
+        $responseType = new IdTokenResponse($userRepository, $claimsExtractor, $privateKeyObject->getValue('key_uuid'));
 
         // Keep references to the relevant objects for later use
         $this->accessTokenRepository = $accessTokenRepository;
         $this->claimExtractor = $claimsExtractor;
         $this->clientRepository = $clientRepository;
 
-        // Private key for signing
-        $privateKeyID = $gSettingsManager->get('sso_oidc_signing_key');
-        $privateKeyObject = new Key($this->db, $privateKeyID);
-        $privateKey = new CryptKey($privateKeyObject->getValue('key_private'));
-        $publicKey = new CryptKey($privateKeyObject->getValue('key_public'));
 
         // The encryption key is used to store tokens encrypted to the DB.
         $encryptionKey = $gSettingsManager->get('sso_oidc_encryption_key');
@@ -524,8 +525,8 @@ class OIDCService extends SSOService {
         $jwks = [
             'keys' => [[
                 'kty' => 'RSA',
-                'use' => 'sig', // Mark as a signing key
-                'kid' => 'key-2025', // You can rotate this
+                'use' => 'sig',
+                'kid' => $signatureKey->getValue('key_uuid'),
                 'alg' => 'RS256',
                 'n'   => $modulus,
                 'e'   => $exponent
