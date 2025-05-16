@@ -161,7 +161,7 @@ class TokenEntity extends Entity implements TokenInterface
         if ($this->client) {
             $userIDfield = $this->client->getUseridField();
             $this->user = new UserEntity($this->db, $gProfileFields, $this->client);
-            $this->user->readDataByColumns([$userIDfield => $identifier]);
+            $this->user->readDataByUserIDfield($userIDfield, $identifier);
             
             // If no user with that identifier can be found -> thow exception
             if ($this->user->isNewRecord()) { // user with given identifier couldn't be loaded
