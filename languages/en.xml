@@ -859,6 +859,7 @@
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Found #VAR1# members with a similar name.</string>
   <string name="SYS_MEMBERSHIP_APPROVED">Membership approved</string>
+  <string name="SYS_MEMBERSHIP_DURATION">Duration of membership</string>
   <string name="SYS_MEMBERSHIP_END">End of membership</string>
   <string name="SYS_MEMBERSHIP_DELETE">Would you like to end membership in role #VAR1_BOLD#?</string>
   <string name="SYS_MEMBERSHIP_START">Start of membership</string>

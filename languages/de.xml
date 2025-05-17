@@ -906,6 +906,7 @@
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Es wurden #VAR1# Mitglieder mit einem ähnlichen Namen gefunden.</string>
   <string name="SYS_MEMBERSHIP_APPROVED">Mitgliedschaft genehmigt</string>
+  <string name="SYS_MEMBERSHIP_DURATION">Dauer der Mitgliedschaft</string>
   <string name="SYS_MEMBERSHIP_END">Mitgliedschaftsende</string>
   <string name="SYS_MEMBERSHIP_DELETE">Willst du die Mitgliedschaft bei der Rolle #VAR1_BOLD# wirklich beenden?</string>
   <string name="SYS_MEMBERSHIP_START">Mitgliedschaftsbeginn</string>
