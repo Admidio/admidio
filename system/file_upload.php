@@ -48,12 +48,12 @@ try {
             throw new Exception('SYS_MODULE_DISABLED');
         }
 
-        // check if current user has right to upload photos
+        // check if the current user has the right to upload photos
         if (!$gCurrentUser->isAdministratorPhotos()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        // create photo object or read it from session
+        // create a photo object or read it from the session
         if (isset($_SESSION['photo_album']) && (int)$_SESSION['photo_album']->getValue('pho_uuid') === $getUuid) {
             $photoAlbum =& $_SESSION['photo_album'];
         } else {
@@ -73,7 +73,7 @@ try {
         $headline = $gL10n->get('SYS_UPLOAD_PHOTOS');
 
         if ($getMode === 'choose_files') {
-            // delete old stuff in upload folder
+            // delete old stuff in the upload folder
             try {
                 FileSystemUtils::deleteDirectoryContentIfExists(ADMIDIO_PATH . FOLDER_DATA . '/photos/upload');
             } catch (RuntimeException $exception) {
@@ -89,7 +89,7 @@ try {
         $folder = new Folder($gDb);
         $folder->readDataByUuid($getUuid);
 
-        // check if current user has right to upload files
+        // check if the current user has the right to upload files
         if (!$folder->hasUploadRight()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -101,14 +101,14 @@ try {
 
         // get recordset of current folder from database
         $folder->getFolderForDownload($getUuid);
-        $folderPath = $folder->getFolderPath() . 'file_upload.php/';
+        $folderPath = $folder->getFolderPath() . '/';
         $uploadDir = ADMIDIO_PATH . $folderPath;
         $uploadUrl = ADMIDIO_URL . $folderPath;
         $destinationName = $folder->getValue('fol_name');
         $headline = $gL10n->get('SYS_UPLOAD_FILES');
     }
 
-    // check if the server allow file uploads
+    // check if the server allows file uploads
     if (!PhpIniUtils::isFileUploadEnabled()) {
         throw new Exception('SYS_SERVER_NO_UPLOAD');
     }
@@ -116,7 +116,7 @@ try {
     if ($getMode === 'choose_files') {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
-        // create html page object
+        // create an HTML page object
         $page = PagePresenter::withHtmlIDAndHeadline('admidio-file-upload', $headline);
 
         $fileUpload = new FileUpload($page, $getModule, $getUuid);
@@ -125,7 +125,7 @@ try {
         $page->addHtml($fileUpload->getHtml($destinationName));
         $page->show();
     } elseif ($getMode === 'upload_files') {
-        // upload files to temp upload folder
+        // upload files to a temporary upload folder
         if ($getModule === 'photos') {
             $uploadHandler = new UploadHandlerPhoto(
                 array(
