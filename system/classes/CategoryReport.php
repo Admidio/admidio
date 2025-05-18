@@ -2,6 +2,7 @@
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Entity\Membership;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Users\Entity\User;
@@ -289,14 +290,8 @@ class CategoryReport
                         if ($membershipData) {
                             $startDate = $membership->getValue('mem_begin', 'Y-m-d');
                             $endDate = $membership->getValue('mem_end', 'Y-m-d');
-                            
-                            if (function_exists('calculateMembershipDuration')) {
-                                $duration = calculateMembershipDuration($startDate, $endDate);
-                                $this->listData[$member][$key] .= $role->getValue('rol_name') . ': ' . $duration['formatted'] . '; ';
-                            } else {
-                                // Fallback if function is not available
-                                $this->listData[$member][$key] .= $role->getValue('rol_name') . ': ' . $startDate . ' - ' . $endDate . '; ';
-                            }
+                              $duration = $membership->calculateDuration();
+                            $this->listData[$member][$key] .= $role->getValue('rol_name') . ': ' . $duration['formatted'] . '; ';
                         }
                     }
                     $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
@@ -404,7 +399,7 @@ class CategoryReport
         $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_MEMBERSHIPS');
         $i++;
         
-        //Zusatzspalte für die Dauer der Mitgliedschaft
+        //Custom column for membership duration
         $this->headerSelection[$i]['id'] = 'ddummy';          //d wie duration
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
         $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION');

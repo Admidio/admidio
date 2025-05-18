@@ -167,10 +167,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             }
             if ($member->getValue('mem_leader') == 1) {
                 $membership['leader'] = $gL10n->get('SYS_LEADER');
-            }
-
+            }            
             // Calculate membership duration
-            $membershipDuration = calculateMembershipDuration($member->getValue('mem_begin', 'Y-m-d'), $member->getValue('mem_end', 'Y-m-d'));
+            $membershipDuration = $member->calculateDuration();
             $membership['duration'] = $membershipDuration['formatted'];
             
             if ($showRoleEndDate) {
@@ -254,63 +253,4 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
     }
 }
 
-/**
- * Calculates the duration of a membership in years, months and days
- * @param string $startDate Start date of the membership in format YYYY-MM-DD
- * @param string $endDate End date of the membership in format YYYY-MM-DD, if DATE_MAX then current date is used
- * @return array with years, months, days and a formatted string
- */
-function calculateMembershipDuration(string $startDate, string $endDate): array
-{
-    global $gL10n;
-    
-    $startDateTime = new DateTime($startDate);
-    
-    // If membership is ongoing, use current date as end date
-    if ($endDate === DATE_MAX) {
-        $endDateTime = new DateTime();
-    } else {
-        $endDateTime = new DateTime($endDate);
-    }
-    
-    // If end date is in the future, use current date for duration calculation
-    $now = new DateTime();
-    if ($endDateTime > $now && $endDate !== DATE_MAX) {
-        $endDateTime = $now;
-    }
-    
-    // Calculate difference
-    $interval = $startDateTime->diff($endDateTime);
-    
-    $years = $interval->y;
-    $months = $interval->m;
-    $days = $interval->d;
-    
-    // Format a human-readable string
-    $durationText = '';
-    
-    if ($years > 0) {
-        $durationText .= $years . ' ' . ($years === 1 ? $gL10n->get('SYS_YEAR') : $gL10n->get('SYS_YEARS'));
-    }
-    
-    if ($months > 0) {
-        if ($durationText !== '') {
-            $durationText .= ', ';
-        }
-        $durationText .= $months . ' ' . ($months === 1 ? $gL10n->get('SYS_MONTH') : $gL10n->get('SYS_MONTHS'));
-    }
-    
-    if ($days > 0 || ($years === 0 && $months === 0)) {
-        if ($durationText !== '') {
-            $durationText .= ', ';
-        }
-        $durationText .= $days . ' ' . ($days === 1 ? $gL10n->get('SYS_DAY') : $gL10n->get('SYS_DAYS'));
-    }
-    
-    return [
-        'years' => $years,
-        'months' => $months,
-        'days' => $days,
-        'formatted' => $durationText
-    ];
-}
+// This function has been moved to the Membership class as calculateDuration() method
