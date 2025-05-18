@@ -216,6 +216,8 @@
   <string name="SYS_ADDRESS">Address</string>
   <string name="SYS_ADDITIONAL_COLUMNS">Additional columns</string>
   <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
+  <string name="SYS_ADDITIONAL_CSS_FILE">Additional CSS File</string>
+  <string name="SYS_ADDITIONAL_CSS_FILE_DESC">The path to a .css file with additional style definitions. This file will be loaded last, even after the theme's admidio.css file. (default: empty)</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Go to the Admidio download page</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
@@ -339,6 +341,10 @@
   <string name="SYS_COLUMN">Column</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
+  <string name="SYS_COLOR_PRIMARY">Primary Color</string>
+  <string name="SYS_COLOR_PRIMARY_DESC">The main color used for admidio. The title bar will use this color, as well as headlines.</string>
+  <string name="SYS_COLOR_SECONDARY">Secondary Color</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">The secondary color used for admidio. The side bar will use this color, as well as the preferences sections.</string>
   <string name="SYS_COMPACT">Compact</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
@@ -491,6 +497,7 @@
   <string name="SYS_DEPENDENCIES">Dependencies</string>
   <string name="SYS_DEPENDENT">Dependent</string>
   <string name="SYS_DESCRIPTION">Description</string>
+  <string name="SYS_DESIGN">Design</string>
   <string name="SYS_DESIGNATION">Name</string>
   <string name="SYS_DETAILED">Detailed</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
@@ -634,6 +641,8 @@
   <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FADE_IN">Fade in</string>
+  <string name="SYS_FAVICON_FILE">Favicon File</string>
+  <string name="SYS_FAVICON_FILE_DESC">The path to the favicon file for your installation. The path should be relative to your installation's root directory. If left empty, the default favicon of the theme will be used. (default: empty)</string>
   <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Female</string>
   <string name="SYS_FIELD">Field</string>
@@ -812,6 +821,8 @@
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
   <string name="SYS_LOGIN_WITH_EMAIL">Allow e-mail address instead of username for login</string>
   <string name="SYS_LOGIN_WITH_EMAIL_DESC">If a user has an e-mail address stored in their profile field, and the address is unique, it can be used as the user name for logging in. (default: no)</string>
+  <string name="SYS_LOGO_FILE">Logo File</string>
+  <string name="SYS_LOGO_FILE_DESC">The path to the logo file that is displayed in the top left corner. The path should be relative to your installation's root directory. If left empty, the default logo of the theme will be used. (default: empty)</string>
   <string name="SYS_LOGOUT">Sign out</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Signing out was successful.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">You already signed in. Therefore you must already have the correct password!</string>
