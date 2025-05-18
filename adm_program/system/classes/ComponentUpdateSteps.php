@@ -29,6 +29,31 @@ final class ComponentUpdateSteps
     }
 
     /**
+     * Repair the path of the folders
+     */
+    public static function updateStep43RepairDocumentsPath()
+    {
+        $sql = 'SELECT fol_id, fol_name, fol_path
+                  FROM ' . TBL_FOLDERS . '
+                 WHERE fol_fol_id_parent IS NULL ';
+        $rootFolderStatement = self::$db->queryPrepared($sql);
+
+        while ($rowRootFolder = $rootFolderStatement->fetch()) {
+            $rootFolder = new TableFolder(self::$db, $rowRootFolder['fol_id']);
+
+            $sql = 'SELECT fol_id, fol_name, fol_path
+                  FROM ' . TBL_FOLDERS . '
+                 WHERE fol_fol_id_parent = ? -- $rowRootFolder[\'fol_id\']';
+            $folderStatement = self::$db->queryPrepared($sql, array($rowRootFolder['fol_id']));
+
+            while ($row = $folderStatement->fetch()) {
+                $folder = new TableFolder(self::$db, $row['fol_id']);
+                $folder->rename($row['fol_name'], $rootFolder->getValue('fol_path') . '/' . $rowRootFolder['fol_name']);
+            }
+        }
+    }
+
+    /**
      * This method removes wrong configured visible roles of category Basic_Data
      */
     public static function updateStep43RemoveInvalidVisibleRoleRights()

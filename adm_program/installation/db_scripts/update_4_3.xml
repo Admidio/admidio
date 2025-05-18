@@ -125,5 +125,6 @@
     <step id="1240">UPDATE %PREFIX%_categories SET cat_type = 'EVT' WHERE cat_type = 'DAT'</step>
     <step id="1250">UPDATE %PREFIX%_categories SET cat_org_id = 1 WHERE cat_org_id IS NULL AND cat_name_intern = 'EVENTS'</step>
     <step id="1255">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_events' WHERE ror_table = '%PREFIX%_dates'</step>
+    <step id="1260">ComponentUpdateSteps::updateStep43RepairDocumentsPath</step>
     <step>stop</step>
 </update>

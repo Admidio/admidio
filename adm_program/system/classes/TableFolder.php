@@ -682,6 +682,9 @@ class TableFolder extends TableAccess
             $this->setValue('fol_locked', $folder->getValue('fol_locked'));
             $this->save();
 
+            // set new path to all subfolders
+            $this->rename($this->getValue('fol_name'), $folder->getValue('fol_path') . '/' . $folder->getValue('fol_name'));
+
             // adopt the role rights of the new parent folder
             $this->removeRolesOnFolder('folder_view', $this->getViewRolesIds());
             $this->removeRolesOnFolder('folder_upload', $this->getUploadRolesIds());
