@@ -95,6 +95,9 @@ class SSOClientPresenter extends PagePresenter
                     }
                      htmlAdmidioValues += "<option value=\"" +  arr_' . $type . '[counter]["id"] + "\" " + selected + ">" +  arr_' . $type . '[counter]["data"] + "</option>";
                 }
+                if(category.length > 0) {
+                    htmlAdmidioValues += "</optgroup>";
+                }
                 htmlAdmidioValues += "</select>";
                 newCellAdmidio.innerHTML = htmlAdmidioValues;
         
