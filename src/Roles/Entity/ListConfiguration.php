@@ -395,6 +395,7 @@ class ListConfiguration extends Entity
             'usr_uuid' => 'left',
             'mem_begin' => 'left',
             'mem_end' => 'left',
+            'mem_duration' => 'left',
             'mem_leader' => 'left',
             'mem_approved' => 'left',
             'mem_usr_id_change' => 'left',
@@ -450,6 +451,7 @@ class ListConfiguration extends Entity
             'usr_uuid' => $gL10n->get('SYS_UNIQUE_ID'),
             'mem_begin' => $gL10n->get('SYS_START'),
             'mem_end' => $gL10n->get('SYS_END'),
+            'mem_duration' => $gL10n->get('SYS_MEMBERSHIP_DURATION'),
             'mem_leader' => $gL10n->get('SYS_LEADERS'),
             'mem_approved' => $gL10n->get('SYS_PARTICIPATION_STATUS'),
             'mem_usr_id_change' => $gL10n->get('SYS_CHANGED_BY'),
@@ -680,8 +682,16 @@ class ListConfiguration extends Entity
                 $sqlColumnName = $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
             } else {
                 // Special fields like usr_photo, mem_begin ...
-                $dbColumnName = $listColumn->getValue('lsc_special_field');
-                $sqlColumnName = $listColumn->getValue('lsc_special_field');
+                $specialField = $listColumn->getValue('lsc_special_field');
+                
+                // Handle special case for membership duration calculation
+                if ($specialField === 'mem_duration') {
+                    // Calculate the difference between current date (or end date) and begin date in years
+                    $dbColumnName = "TIMESTAMPDIFF(YEAR, mem_begin, CASE WHEN mem_end >= '" . DATE_NOW . "' THEN NOW() ELSE mem_end END)";
+                } else {
+                    $dbColumnName = $specialField;
+                }
+                $sqlColumnName = $specialField;
             }
 
             if (in_array($sqlColumnName, $arrSqlColumnNames)) {
@@ -936,11 +946,11 @@ class ListConfiguration extends Entity
 
             // only add columns to the array if the current user is allowed to view them
             if ($usfId === 0
+            // if only names should be shown, then check if it's a name field
                 || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->isAdministratorUsers())) {
-                // if only names should be shown, then check if it's a name field
                 if (!$this->showOnlyNames
                     || ($usfId > 0 && in_array($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), array('FIRST_NAME', 'LAST_NAME')))
-                    || ($usfId === 0 && in_array($lscRow['lsc_special_field'], array('mem_begin', 'mem_end', 'mem_leader', 'mem_usr_id_change', 'mem_timestamp_change', 'mem_approved', 'mem_comment', 'mem_count_guests')))) {
+                    || ($usfId === 0 && in_array($lscRow['lsc_special_field'], array('mem_begin', 'mem_end', 'mem_duration', 'mem_leader', 'mem_usr_id_change', 'mem_timestamp_change', 'mem_approved', 'mem_comment', 'mem_count_guests')))) {
                     // some user fields should only be viewed by users that could edit roles
                     if (!in_array($lscRow['lsc_special_field'], array('usr_login_name', 'usr_usr_id_create', 'usr_timestamp_create', 'usr_usr_id_change', 'usr_timestamp_change', 'usr_login_name', 'usr_uuid'))
                         || $gCurrentUser->isAdministratorUsers()) {

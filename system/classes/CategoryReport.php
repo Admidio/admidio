@@ -2,6 +2,7 @@
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Entity\Membership;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Users\Entity\User;
@@ -201,6 +202,9 @@ class CategoryReport
                 case 'a':                    //a=additional
                     $number_col[$key + 1] = '';
                     break;
+                case 'd':                    //d=duration
+                    $number_col[$key + 1] = '';
+                    break;
             }
         }
 
@@ -269,6 +273,24 @@ class CategoryReport
                     foreach ($memberShips as $rol_id) {
                         $role->readDataById($rol_id);
                         $this->listData[$member][$key] .= $role->getValue('rol_name') . '; ';
+                    }
+                    $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
+                } elseif ($data['type'] == 'd') {              //Sonderfall: Mitgliedschaftsdauer
+                    // Get membership durations for all roles
+                    $this->listData[$member][$key] = '';
+                    $membership = new Membership($gDb);
+                    
+                    foreach ($memberShips as $rol_id) {
+                        $role = new Role($gDb);
+                        $role->readDataById($rol_id);
+                        
+                        // Get membership data for this role
+                        $membershipData = $membership->readDataByColumns(array('mem_rol_id' => $rol_id, 'mem_usr_id' => $member));
+                        
+                        if ($membershipData) {
+                              $duration = $membership->calculateDuration();
+                            $this->listData[$member][$key] .= $role->getValue('rol_name') . ': ' . $duration['formatted'] . '; ';
+                        }
                     }
                     $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
                 } elseif ($data['type'] == 'n') {              //Sonderfall: Anzahlspalte
@@ -373,6 +395,12 @@ class CategoryReport
         $this->headerSelection[$i]['id'] = 'adummy';          //a wie additional
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
         $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_MEMBERSHIPS');
+        $i++;
+        
+        //Custom column for membership duration
+        $this->headerSelection[$i]['id'] = 'ddummy';          //d wie duration
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION');
         $i++;
 
         //Zusatzspalte fuer die Anzahl erzeugen

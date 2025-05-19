@@ -167,8 +167,11 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             }
             if ($member->getValue('mem_leader') == 1) {
                 $membership['leader'] = $gL10n->get('SYS_LEADER');
-            }
-
+            }            
+            // Calculate membership duration
+            $membershipDuration = $member->calculateDuration();
+            $membership['duration'] = $membershipDuration['formatted'];
+            
             if ($showRoleEndDate) {
                 $membership['period'] = $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));
             } elseif ($futureMembership) {
@@ -249,3 +252,5 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
         throw new \Admidio\Infrastructure\Exception($e->getMessage());
     }
 }
+
+// This function has been moved to the Membership class as calculateDuration() method
