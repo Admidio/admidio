@@ -288,8 +288,6 @@ class CategoryReport
                         $membershipData = $membership->readDataByColumns(array('mem_rol_id' => $rol_id, 'mem_usr_id' => $member));
                         
                         if ($membershipData) {
-                            $startDate = $membership->getValue('mem_begin', 'Y-m-d');
-                            $endDate = $membership->getValue('mem_end', 'Y-m-d');
                               $duration = $membership->calculateDuration();
                             $this->listData[$member][$key] .= $role->getValue('rol_name') . ': ' . $duration['formatted'] . '; ';
                         }
