@@ -189,6 +189,7 @@ $defaultOrgPreferences = array(
 
     // Profile
     'profile_show_map_link' => '0',
+    'profile_show_empty_fields' => '1',
     'profile_show_roles' => '1',
     'profile_show_former_roles' => '1',
     'profile_show_extern_roles' => '1',

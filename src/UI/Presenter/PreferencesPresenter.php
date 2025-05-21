@@ -1665,6 +1665,12 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_SHOW_MAP_LINK_PROFILE_DESC')
         );
         $formProfile->addCheckbox(
+            'profile_show_empty_fields',
+            $gL10n->get('SYS_SHOW_EMPTY_PROFILE_FIELDS'),
+            (bool) $formValues['profile_show_empty_fields'],
+            array('helpTextId' => 'SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC')
+        );
+        $formProfile->addCheckbox(
             'profile_show_roles',
             $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP'),
             (bool) $formValues['profile_show_roles'],
