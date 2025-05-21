@@ -248,6 +248,11 @@ try {
     foreach ($gProfileFields->getProfileFields() as $field) {
         // Display only fields of the basic data
         if ($gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern'))) {
+            // if profile_show_empty_fields is set to 0 then skip empty profile fields
+            if (!$gSettingsManager->getBool('profile_show_empty_fields') && $user->getValue($field->getValue('usf_name_intern'), 'html') === '') {
+                continue;
+            }
+
             if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
                 $masterData[$field->getValue('usf_name_intern')] = array(
                     'id' => $field->getValue('usf_name_intern'),
@@ -297,11 +302,6 @@ try {
                     }
                 }
             } else {
-                // if profile_show_empty_fields is set to 0 then skip empty additional fields
-                if (!$gSettingsManager->getBool('profile_show_empty_fields') && $user->getValue($field->getValue('usf_name_intern'), 'html') === '') {
-                    continue;
-                }
-
                 if ($category !== $field->getValue('cat_name')) {
                     if ($category !== '') {
                         $profileData[$category] = $categoryData;

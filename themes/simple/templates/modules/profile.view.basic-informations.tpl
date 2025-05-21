@@ -46,9 +46,25 @@
                                 {$l10n->get('SYS_ADDRESS')}
                             </div>
                             <div class="col-sm-9"><strong>
-                                {$masterData.STREET.value}<br />
-                                {$masterData.POSTCODE.value}  {$masterData.CITY.value}<br />
-                                {$masterData.COUNTRY.value}</strong>
+                                {if $masterData.STREET.value !== ''}
+                                    {$masterData.STREET.value}<br />
+                                {/if}
+                                {if $masterData.POSTCODE.value !== '' || $masterData.CITY.value !== ''}
+                                    {if $masterData.POSTCODE.value !== ''}
+                                        {$masterData.POSTCODE.value}
+                                    {/if}
+                                    {if $masterData.POSTCODE.value !== '' && $masterData.CITY.value !== ''}
+                                        &nbsp;
+                                    {/if}
+                                    {if $masterData.CITY.value !== ''}
+                                        {$masterData.CITY.value}
+                                    {/if}
+                                    <br />
+                                {/if}
+                                {if $masterData.COUNTRY.value !== ''}
+                                    {$masterData.COUNTRY.value}
+                                {/if}
+                                </strong>
                                 {if isset($urlMapAddress)}
                                     <br />
                                     <a class="icon-link" href="{$urlMapAddress}" target="_blank" title="{$l10n->get('SYS_MAP_LINK_HOME_DESC')}">
@@ -65,7 +81,7 @@
             {else}
                 <div class="admidio-form-group row mb-3">
                     <div class="col-sm-3">
-                        {if strlen($profileField.icon) > 0}
+                        {if isset($profileField.icon) && strlen($profileField.icon) > 0}
                             {$profileField.icon}
                         {/if}
                         {$profileField.label}
