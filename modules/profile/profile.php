@@ -297,6 +297,11 @@ try {
                     }
                 }
             } else {
+                // if profile_show_empty_fields is set to 0 then skip empty additional fields
+                if (!$gSettingsManager->getBool('profile_show_empty_fields') && $user->getValue($field->getValue('usf_name_intern'), 'html') === '') {
+                    continue;
+                }
+
                 if ($category !== $field->getValue('cat_name')) {
                     if ($category !== '') {
                         $profileData[$category] = $categoryData;
@@ -662,12 +667,15 @@ try {
                 }
                 $userRelations[] = $userRelation;
             }
+            $page->assignSmartyVariable('showRelations', true);
             $page->assignSmartyVariable('showRelationsCreateEdit', $gSettingsManager->get('system_show_create_edit') > 0);
             $page->assignSmartyVariable('userRelations', $userRelations);
         }
         $page->assignSmartyVariable('urlAssignRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
         $page->assignSmartyVariable('urlAssignUserRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)));
-
+    }
+    else {
+        $page->assignSmartyVariable('showRelations', false);
     }
 
     // show information about user who creates the recordset and changed it
