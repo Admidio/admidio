@@ -439,6 +439,8 @@
   <string name="SYS_DATE_INVALID">Invalid date in field #VAR1_BOLD#.\n\nDate has to comply with this formatting: #VAR2_BOLD#.</string>
   <string name="SYS_DATE_MODIFIED">Date of modification</string>
   <string name="SYS_DATE_TO">to</string>
+  <string name="SYS_DAY">Day</string>
+  <string name="SYS_DAYS">Days</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Default time period for field history (days)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
@@ -882,6 +884,8 @@
   <string name="SYS_MODULE_RIGHTS">Module rights</string>
   <string name="SYS_MODULES">Modules</string>
   <string name="SYS_MONDAY">Monday</string>
+  <string name="SYS_MONTH">Month</string>
+  <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MONTHLY">Monthly</string>
   <string name="SYS_MORE">More</string>
   <string name="SYS_MOVE_FILE">Move file</string>
@@ -1266,6 +1270,8 @@
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
+  <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
+  <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_DESC">This setting can be used to determine who can view former roles. However, the user must also have the right to see the role itself. Leaders of a role may also view former members of their role, if they have permission to be set here. (Default: #VAR1#)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Only show former members</string>
@@ -1617,6 +1623,7 @@
   <string name="SYS_WRITE_ENTRY">Write entry</string>
   <string name="SYS_WRITE_PM">Write private message</string>
   <string name="SYS_XING">Xing</string>
+  <string name="SYS_YEAR">Year</string>
   <string name="SYS_YEARS">Years</string>
   <string name="SYS_YES">Yes</string>
   <string name="SYS_YOUR_CONFIGURATION">Your configuration</string>

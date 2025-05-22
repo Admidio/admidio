@@ -491,6 +491,8 @@
   <string name="SYS_DATE_INVALID">Es wurde kein gültiges Datum in das Feld #VAR1_BOLD# eingegeben.\n\nDas Datum muss dem folgenden Format #VAR2_BOLD# entsprechen.</string>
   <string name="SYS_DATE_MODIFIED">Änderungsdatum</string>
   <string name="SYS_DATE_TO">bis</string>
+  <string name="SYS_DAY">Tag</string>
+  <string name="SYS_DAYS">Tage</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Standardzeitraum in der Änderungshistorie (Tage)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Zeitraum in Tagen in denen in der Änderungshistorie der Profilfelder die Veränderungen angezeigt werden. Dies ist der Standardfilter, welcher durch die Benutzerin oder den Benutzer nachher beliebig geändert werden kann. Bei großen Datenbanken dient dies dazu die Datenmenge bei normalen Aufruf der Änderungshistorie einzuschränken. (Voreinstellung: 365)</string>
   <string name="SYS_DAYS_VAR">#VAR1# Tagen</string>
@@ -930,6 +932,8 @@
   <string name="SYS_MODULE_RIGHTS">Modulrechte</string>
   <string name="SYS_MODULES">Module</string>
   <string name="SYS_MONDAY">Montag</string>
+  <string name="SYS_MONTH">Monat</string>
+  <string name="SYS_MONTHS">Monate</string>
   <string name="SYS_MONTHLY">Monatlich</string>
   <string name="SYS_MORE">Mehr</string>
   <string name="SYS_MOVE_FILE">Datei verschieben</string>
@@ -1309,6 +1313,8 @@
   <string name="SYS_SHOW_ALL_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer:innen wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss die Benutzerin oder der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
+  <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Leere Profilfelder anzeigen</string>
+  <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">Mit dieser Einstellung kann festgelegt werden, ob leere Profilfelder in der Profilansicht angezeigt werden sollen. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer ehemalige Rollenmitglieder sehen darf. Die Benutzerin bzw. der Benutzer muss allerdings auch das Recht haben die Rolle selber zu sehen. Leiter:innen einer Rolle dürfen die Ehemaligen ihrer Rolle auch sehen, wenn sie für die Rolle dasselbe Recht gesetzt bekommen haben, welches hier eingestellt ist. (Voreinstellung: #VAR1#)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Zeige nur ehemalige Mitglieder</string>
@@ -1505,6 +1511,7 @@
   <string name="SYS_WRITE_ENTRY">Eintrag schreiben</string>
   <string name="SYS_WRITE_PM">Private Nachricht schreiben</string>
   <string name="SYS_XING">Xing</string>
+  <string name="SYS_YEAR">Jahr</string>
   <string name="SYS_YEARS">Jahre</string>
   <string name="SYS_YES">Ja</string>
   <string name="SYS_YOUR_CONFIGURATION">Deine Konfigurationen</string>
