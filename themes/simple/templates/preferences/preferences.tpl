@@ -1,52 +1,53 @@
-{* === Für große Bildschirme: Tabs === *}
+<!-- === Für große Bildschirme: Tabs === -->
 <div class="d-none d-md-block">
     <div class="tabs-x tabs-left tab-bordered">
-        <ul id="adm_preferences_tabs" class="nav nav-tabs" role="tablist">
-        {foreach $preferenceTabs as $tab name=tabLoop}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link{if $smarty.foreach.tabLoop.first} active{/if}" id="adm_tabs_{$tab.key|escape:'url'}" data-bs-toggle="tab" data-bs-target="#adm_tab_{$tab.key|escape:'url'}" type="button" role="tab" aria-controls="adm_tab_{$tab.key|escape:'url'}" aria-selected="{if $smarty.foreach.tabLoop.first}true{else}false{/if}">
-                    {$tab.label|replace:' ':'<br>' nofilter}
-                </button>
-            </li>
-        {/foreach}
+        <!-- variable set the first tab active -->
+        {assign var="globalFirst" value=true}
+        <ul id="adm_preferences_tabs" class="nav nav-tabs flex-column list-group admidio-preferences-group" role="tablist">
+            {foreach $preferenceTabs as $tab}
+                <li class="list-group-item group-heading" role="presentation">
+                    <h5 class="mb-0">{$tab.label}</h5>
+                </li>
+
+                {foreach $tab.panels as $panel name=pList}
+                    <li class="list-group-item nav-item{if $smarty.foreach.pList.last} group-last{/if}" role="presentation">
+                        <button class="nav-link text-start{if $globalFirst} active{/if}" id="adm_tab_{$panel.id}" data-bs-toggle="tab" data-bs-target="#adm_tab_{$panel.id}_content" type="button" role="tab" aria-controls="adm_tab_{$panel.id}_content" aria-selected="{if $globalFirst}true{else}false{/if}" {if not $globalFirst}tabindex="-1"{/if}>
+                            <i class="bi {$panel.icon} me-1"></i>{$panel.title}
+                        </button>
+                    </li>
+                    {if $globalFirst}{assign var="globalFirst" value=false}{/if}
+                {/foreach}
+            {/foreach}
         </ul>
 
-        <div class="tab-content" id="adm_preferences_tab_content">
-            {foreach $preferenceTabs as $tab name=contentLoop}
-                <div class="tab-pane fade{if $smarty.foreach.contentLoop.first} show active{/if}" id="adm_tab_{$tab.key|escape:'url'}" role="tabpanel">
-                    {* === Unter-Tabs === *}
-                    <div class="tabs-x tabs-above">
-                        <ul id="adm_subtabs_{$tab.key|escape:'url'}" class="nav nav-tabs admidio-tabs" role="tablist">
-                            {foreach $tab.panels as $panel name=panelLoop}
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link{if $smarty.foreach.panelLoop.first} active{/if}" id="adm_tab_{$panel.id}_nav" data-bs-toggle="tab" data-bs-target="#adm_tab_{$panel.id}_content" type="button" role="tab" aria-controls="adm_tab_{$panel.id}_content" aria-selected="{if $smarty.foreach.panelLoop.first}true{else}false{/if}">
-                                        <i class="bi {$panel.icon}"></i>&nbsp;{$panel.title}
-                                    </button>
-                                </li>
-                            {/foreach}
-                        </ul>
-
-                        <div class="tab-content" id="adm_preferences_subtab_content_{$tab.key|escape:'url'}">
-                            {foreach $tab.panels as $panel name=panelContentLoop}
-                                <div class="tab-pane fade{if $smarty.foreach.panelContentLoop.first} show active{/if}" id="adm_tab_{$panel.id}_content" role="tabpanel">
-                                    <div id="adm_panel_preferences_{$panel.id}" data-preferences-panel="{$panel.id}">
-                                        {* AJAX-Container für Formular *}
-                                    </div>
+        <!-- Tab Content -->
+        <div id="adm_preferences_tab_content" class="tab-content">
+            {assign var="globalFirst" value=true}
+            {foreach $preferenceTabs as $tab}
+                {foreach $tab.panels as $panel}
+                    <div class="tab-pane fade{if $globalFirst} active show{/if}" id="adm_tab_{$panel.id}_content" role="tabpanel" aria-labelledby="tab-{$panel.id}">
+                        <!-- Überschrift für jede Tab-Gruppe -->
+                        <div class="card admidio-tabbed-field-group">
+                            <div class="card-header">{$panel.title}</div>
+                            <div class="card-body">
+                                <div id="adm_panel_preferences_{$panel.id}" data-preferences-panel="{$panel.id}">
+                                    <!-- AJAX-Container für Formular -->
                                 </div>
-                            {/foreach}
+                            </div>
                         </div>
                     </div>
-                </div>
+                    {if $globalFirst}{assign var="globalFirst" value=false}{/if}
+                {/foreach}
             {/foreach}
         </div>
     </div>
 </div>
 
-{* === Für kleine Bildschirme: ein globales Accordion === *}
+<!-- === Für kleine Bildschirme: ein globales Accordion === -->
 <div class="d-block d-md-none">
     <div class="accordion" id="adm_preferences_accordion">
         {foreach $preferenceTabs as $tab name=outer}
-            {** Überschrift für jede Tab-Gruppe **}
+            <!-- Überschrift für jede Tab-Gruppe -->
             <div class="card admidio-accordion-field-group">
                 <div class="card-header">{$tab.label}</div>
                 <div class="card-body">
@@ -60,7 +61,7 @@
                             <div class="accordion-collapse collapse{if $smarty.foreach.outer.first && $smarty.foreach.inner.first} show{/if}" id="collapse_{$panel.id}" aria-labelledby="heading_{$panel.id}" data-bs-parent="#adm_preferences_accordion">
                                 <div class="accordion-body">
                                     <div id="adm_panel_preferences_{$panel.id}" data-preferences-panel="{$panel.id}" >
-                                        {* AJAX-Container *}
+                                        <!-- AJAX-Container für Formular -->
                                     </div>
                                 </div>
                             </div>

@@ -2227,88 +2227,39 @@ class PreferencesPresenter extends PagePresenter
         global $gL10n;
 
         if ($this->preferencesPanelToShow !== '') {
-            // open the module tab if the options of a module should be shown
-/*             if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
-                $this->addJavascript(
-                    '
-                $("#adm_tabs_nav_modules").attr("class", "nav-link active");
-                $("#adm_tabs_modules").attr("class", "tab-pane fade show active");
-                $("#adm_tabs_nav_common").attr("class", "nav-link");
-                $("#adm_tabs_common").attr("class", "tab-pane fade");
-                $("#adm_collapse_preferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
-                        $("#adm_panel_preferences_' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
-                        $("#adm_collapse_preferences_' . $this->preferencesPanelToShow . '").addClass("show");
-                    });
-                location.hash = "#adm_panel_preferences_' . $this->preferencesPanelToShow . '";
-                    ',
-                    true
-                );
-            } else {
-                $this->addJavascript(
-                    '
-                $("#adm_tabs_nav_common").attr("class", "nav-link active");
-                $("#adm_tabs_common").attr("class", "tab-pane fade show active");
-                $("#adm_collapse_preferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
-                        $("#adm_panel_preferences_' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
-                        $("#adm_collapse_preferences_' . $this->preferencesPanelToShow . '").addClass("show");
-                    });
-                location.hash = "#adm_panel_preferences_' . $this->preferencesPanelToShow . '";
-                    ',
-                    true
-                );
-            } */
+            // open the selected panel
+            if ($this->preferencesPanelToShow !== '') {
+                $this->addJavascript('
+                    // --- Reset Tab active states for large screens
+                    $("#adm_preferences_tabs .nav-link").removeClass("active");
+                    $("#adm_preferences_tab_content .tab-pane").removeClass("active show");
 
-            // 1) Ermitteln, zu welchem Haupt-Tab ($tabKey) das ausgewählte Panel gehört:
-            $tabKey = null;
-            foreach ($this->preferenceTabs as $tab) {
-                foreach ($tab['panels'] as $panel) {
-                    if ($panel['id'] === $this->preferencesPanelToShow) {
-                        $tabKey = $tab['key'];
-                        break 2;
+                    // --- Reset Accordion active states for small screens
+                    $("#adm_preferences_accordion [aria-expanded=\'true\']").attr("aria-expanded", "false");
+                    $("#adm_preferences_accordion .accordion-button").addClass("collapsed");
+                    $("#adm_preferences_accordion .accordion-item").removeClass("show");
+                    $("#adm_preferences_accordion .accordion-collapse").removeClass("show");
+                    
+                    // --- Activate the selected Tab and its content
+                    $("#adm_tab_' . $this->preferencesPanelToShow . '").addClass("active");
+                    $("#adm_tab_' . $this->preferencesPanelToShow . '_content").addClass("active show");
+                    
+                    // --- For Mobile Accordion: open the desired accordion panel
+                    $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show");
+                                        
+                    // --- Desktop vs. Mobile via jQuery visibility
+                    if ($(".d-none.d-md-block").is(":visible")) {
+                        // Desktop mode
+                        $("#adm_preferences_tabs .nav-link[data-bs-target=\'#adm_tab_' . $this->preferencesPanelToShow . '_content\']").addClass("active");
+                        $("#adm_preferences_tab_content .tab-pane#adm_tab_' . $this->preferencesPanelToShow . '_content").addClass("active show");
+                    } else {
+                        // Mobile mode
+                        $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show").attr("aria-expanded", "true");
+                        $("#heading_' . $this->preferencesPanelToShow . ' .accordion-button").removeClass("collapsed").attr("aria-expanded", "true");
+                        // --- Hash setzen, damit Bookmark/Scroll stimmt und zum Element scrollen
+                        location.hash = "#heading_' . $this->preferencesPanelToShow . '";
                     }
-                }
-            }
-
-            // 2) Einfügen des JS, das
-            //    - alle Haupt-Tabs/Sub-Tabs de-aktiviert
-            //    - dann den ermittelten Haupt-Tab und Sub-Tab aktiviert
-            //    - für Mobile: das entsprechende Accordion öffnet
-            //    - und per AJAX das Formular lädt
-            if ($tabKey !== null) {
-                $this->addJavascript("
-                    // --- Haupt-Tabs zurücksetzen
-                    \$('#adm_preferences_tabs .nav-link').removeClass('active');
-                    \$('#adm_preferences_tab_content .tab-pane').removeClass('show active');
-            
-                    // --- Gewünschten Haupt-Tab aktivieren
-                    \$('#adm_tabs_{$tabKey}').addClass('active');
-                    \$('#adm_tab_{$tabKey}').addClass('show active');
-            
-                    // --- Sub-Tabs zurücksetzen
-                    \$('#adm_subtabs_{$tabKey} .nav-link').removeClass('active');
-                    \$('#adm_preferences_subtab_content_{$tabKey} .tab-pane').removeClass('show active');
-            
-                    // --- Gewünschten Sub-Tab aktivieren
-                    \$('#adm_tab_{$this->preferencesPanelToShow}_nav').addClass('active');
-                    \$('#adm_tab_{$this->preferencesPanelToShow}_content').addClass('show active');
-            
-                    // --- Mobile Accordion öffnen
-                    \$('#collapse_{$this->preferencesPanelToShow}').addClass('show');
-            
-                    // --- AJAX nachladen
-                    \$.get(
-                        '" . ADMIDIO_URL . FOLDER_MODULES . "/preferences.php?mode=html_form&panel={$this->preferencesPanelToShow}',
-                        function(data) {
-                            \$('#adm_panel_preferences_{$this->preferencesPanelToShow} .accordion-body, \\
-                            #adm_panel_preferences_{$this->preferencesPanelToShow}').html(data);
-                        }
-                    );
-            
-                    // --- Hash setzen, damit Bookmark/Scroll stimmt
-                    location.hash = '#adm_panel_preferences_{$this->preferencesPanelToShow}';
-                ", true);
+                ', true);
             }
         }
 
@@ -2368,14 +2319,24 @@ class PreferencesPresenter extends PagePresenter
             }
         
             // === 3) Hooks für Desktop-Tabs ===
-            $(document).on("shown.bs.tab", "ul.nav-tabs[id^=\"adm_subtabs_\"] button.nav-link", function(e) {
-                var match = e.target.getAttribute("data-bs-target").match(/^#adm_tab_(.+)_content$/);
-                if (match) loadPreferencesPanel(match[1]);
+            $(document).on("shown.bs.tab", "ul#adm_preferences_tabs button.nav-link", function(e) {
+                var target = e.target.getAttribute("data-bs-target");
+                var match = target && target.match(/^#adm_tab_(.+)_content$/);
+                if (match) {
+                    loadPreferencesPanel(match[1]);
+                }
+                // scroll to the top of the page
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 500);
             });
-            // initial: aktiven Sub-Tab laden
-            $("ul.nav-tabs[id^=\"adm_subtabs_\"] button.nav-link.active").each(function() {
-                var match = this.getAttribute("data-bs-target").match(/^#adm_tab_(.+)_content$/);
-                if (match) loadPreferencesPanel(match[1]);
+            // initial: load the active tab panel
+            $("ul#adm_preferences_tabs button.nav-link.active").each(function() {
+                var target = this.getAttribute("data-bs-target");
+                var match = target && target.match(/^#adm_tab_(.+)_content$/);
+                if (match) {
+                    loadPreferencesPanel(match[1]);
+                }
             });
         
             // === 4) Hooks für Mobile-Accordion ===

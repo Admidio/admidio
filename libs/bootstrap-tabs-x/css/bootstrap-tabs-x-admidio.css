@@ -64,7 +64,8 @@
 .tabs-left > .nav-tabs, .tabs-right > .nav-tabs {
     border-bottom: none;
     /* width: 9rem; */
-    flex: 0 !important; /* prevent flex-grow */
+    max-width: 25%;
+    flex: 1 1 auto !important;
     text-align: center;
 }
 
@@ -75,8 +76,18 @@
 
 .tabs-left > .nav-tabs .nav-item > .nav-link {
     border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius);
-    white-space: nowrap;
+    /* white-space: nowrap; */
     width: inherit;
+}
+
+.tabs-left > .nav-tabs .list-group-item.nav-item > .nav-link {
+    border-radius: 0 0 0 0;
+    border-left: none;
+    width: inherit;
+}
+
+.tabs-left > .nav-tabs .list-group-item.group-last.nav-item > .nav-link {
+    border-radius: 0 0 0 var(--bs-border-radius);
 }
 
 .tabs-left > .nav-tabs .nav-item > .nav-link.active {
@@ -85,7 +96,7 @@
 
 .tabs-right > .nav-tabs .nav-item > .nav-link {
     border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     width: inherit;
 }
 

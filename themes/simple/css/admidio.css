@@ -745,6 +745,31 @@ tr.admidio-event-highlight {
     margin-bottom: 1rem;
 }
 
+/***********************************/
+/* Preferences page */
+/***********************************/
+
+.admidio-preferences-group {
+    width: 100%;
+}
+
+.admidio-preferences-group .list-group-item.nav-item {
+    border-right: none;
+    border-bottom: none;
+    padding: 0 0 0 0;
+}
+
+.admidio-preferences-group .list-group-item.group-heading {
+    border-bottom: none;
+    border-top: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+    border-top-left-radius: var(--bs-list-group-border-radius);
+    border-top-right-radius: unset;
+}
+
+.admidio-preferences-group .list-group-item.group-last {
+    margin-bottom: 1rem;
+    border-bottom-left-radius: var(--bs-list-group-border-radius);
+}
 
 /***********************************/
 /* Changelog configuration  */
