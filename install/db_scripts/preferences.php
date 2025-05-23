@@ -39,6 +39,7 @@ $defaultOrgPreferences = array(
 
     // Theme
     'theme' => 'simple',
+    'theme_fallback' => 'simple',
     'color_primary' => '#349aaa',
     'color_secondary' => '#263340',
     'logo_link' => '{$urlTheme}/images/admidio_logo.png',
