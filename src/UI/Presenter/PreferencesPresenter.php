@@ -764,6 +764,12 @@ class PreferencesPresenter extends PagePresenter
             $themes,
             array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
         );
+        $formCommon->addSelectBox(
+            'theme_fallback',
+            $gL10n->get('ORG_ADMIDIO_THEME_FALLBACK'),
+            $themes,
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC')
+        );
         $formCommon->addInput(
             'color_primary',
             $gL10n->get('SYS_COLOR_PRIMARY'),

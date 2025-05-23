@@ -6,17 +6,17 @@
 
     <!-- (c) The Admidio Team - https://www.admidio.org -->
 
-    <link rel="shortcut icon" type="image/x-icon" href="{$urlTheme}/images/favicon.ico" />
-    <link rel="apple-touch-icon" type="image/png" href="{$urlTheme}/images/apple-touch-icon.png" sizes="180x180" />
+    <link rel="shortcut icon" type="image/x-icon" href="{get_themed_file filepath='/images/favicon.ico'}" />
+    <link rel="apple-touch-icon" type="image/png" href="{get_themed_file filepath='/images/apple-touch-icon.png'}" sizes="180x180" />
 
     <title>{$title}</title>
 
     {include file="system/js_css_files.tpl"}
 
     {if $printView}
-        <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/print.css" />
+        <link rel="stylesheet" type="text/css" href="{get_themed_file filepath='/css/print.css'}" />
     {else}
-        <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/admidio.css" />
+        <link rel="stylesheet" type="text/css" href="{get_themed_file filepath='/css/admidio.css'}" />
     {/if}
 
     <script type="text/javascript">

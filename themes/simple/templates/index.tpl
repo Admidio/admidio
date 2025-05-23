@@ -6,8 +6,8 @@
 
     <!-- (c) The Admidio Team - https://www.admidio.org -->
 
-    <link rel="shortcut icon" type="image/x-icon" href="{if ($favicon_file)}{$urlAdmidio}/{$favicon_file}{else}{$urlTheme}/images/favicon.ico{/if}" />
-    <link rel="apple-touch-icon" type="image/png" href="{$urlTheme}/images/apple-touch-icon.png" sizes="180x180" />
+    <link rel="shortcut icon" type="image/x-icon" href="{if ($favicon_file)}{$urlAdmidio}/{$favicon_file}{else}{get_themed_file filepath='/images/favicon.ico'}{/if}" />
+    <link rel="apple-touch-icon" type="image/png" href="{get_themed_file filepath='/images/apple-touch-icon.png'}" sizes="180x180" />
 
     <title>{$title}</title>
 
@@ -32,7 +32,7 @@
         {/foreach}
     {/if}
 
-    <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/admidio.css" />
+    <link rel="stylesheet" type="text/css" href="{get_themed_file filepath='/css/admidio.css'}" />
     {if ($additional_styles_file)}
     <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/{$additional_styles_file}" />
     {/if}
@@ -91,7 +91,7 @@
 
     <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">
         <a class="navbar-brand d-none d-md-block" href="{$urlAdmidio}/modules/overview.php">
-            <img src="{if ($logo_file)}{$urlAdmidio}/{$logo_file}{else}{$urlTheme}/images/admidio_logo.png{/if}" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
+            <img src="{if ($logo_file)}{$urlAdmidio}/{$logo_file}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
         </a>
         <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
         <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>
@@ -161,7 +161,7 @@
 
                 <div id="adm_content" class="admidio-content {$contentClass}" role="main">
                     <div class="admidio-content-header">
-                        <h1 class="admidio-module-headline">{$headline}</h1>
+                        <h1 class="admidio-module-headline">SIMPLE HEADLINE: {$headline}</h1>
                         {include file='sys-template-parts/menu.functions.tpl'}
                     </div>
 

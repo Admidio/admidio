@@ -95,6 +95,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">The current Admidio theme can be selected here. All layouts from the themes folder are displayed. (default: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_FALLBACK">Fallback Theme</string>
+  <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">The theme that is used as a fallback if the selected theme does not contain a requested template. If a fallack theme is selected, the main theme only has to contain those templates that it really wants to override. All other templates can be taken from the fallback theme, which in most cases can be the default 'simple' theme. (default: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatic logout after</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">This value indicates after how many minutes an inactive user is automatically logged out. Inactive is a user as long as he does not call any page of the Admidio system. This setting is ignored if the user has selected #VAR1_BOLD#. (Default: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
@@ -150,6 +152,7 @@
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
+  <string name="ORG_INVALID_THEME_FALLBACK">The fallback theme selected is not valid.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Using the JavaScript editor</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">A full-featured JavaScript editor is being used in many modules of Admidio. Events, Announcements etc. can be edited in a comfortable way by the user. In case the editor has been activated, a simple multi-lin text box is being displayed.</string>
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>

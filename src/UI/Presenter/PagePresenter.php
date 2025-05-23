@@ -295,6 +295,11 @@ class PagePresenter
         $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
         $this->smarty->assign('urlTheme', THEME_URL);
+        if (defined('THEME_FALLBACK_URL')) {
+            $this->smarty->assign('urlThemeFallback', THEME_FALLBACK_URL);
+        } else {
+            $this->smarty->assign('urlThemeFallback', '');
+        }
         $this->smarty->assign('csrfToken', $gCurrentSession->getCsrfToken());
 
         $this->smarty->assign('currentUser', $gCurrentUser);
@@ -385,12 +390,16 @@ class PagePresenter
             if (defined('THEME_PATH')) {
                 $smartyObject->setTemplateDir(THEME_PATH . '/templates/');
             }
-
+            if (defined('THEME_FALLBACK_PATH')) {
+                $smartyObject->addTemplateDir(THEME_FALLBACK_PATH . '/templates/');
+            }
+            
             $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
             $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
             $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
             $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'Admidio\Infrastructure\Plugins\Smarty::loadAdmidioPlugin');
+            $smartyObject->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
             return $smartyObject;
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
