@@ -308,9 +308,9 @@ class PagePresenter
         $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
         
         // Design variables
-        $this->smarty->assign('additional_styles_file',  $gSettingsManager->getString('additional_styles_file'));
-        $this->smarty->assign('logo_file',  $gSettingsManager->getString('logo_file'));
-        $this->smarty->assign('favicon_file',  $gSettingsManager->getString('favicon_file'));
+        $this->smarty->assign('additionalStylesFile',  $gSettingsManager->getString('additional_styles_file'));
+        $this->smarty->assign('logoFile',  $gSettingsManager->getString('logo_file'));
+        $this->smarty->assign('faviconFile',  $gSettingsManager->getString('favicon_file'));
 
         function isValidHexColor($color) {
             return preg_match('/^#([a-fA-F0-9]{6})$/', $color);
