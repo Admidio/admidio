@@ -161,7 +161,7 @@
 
                 <div id="adm_content" class="admidio-content {$contentClass}" role="main">
                     <div class="admidio-content-header">
-                        <h1 class="admidio-module-headline">SIMPLE HEADLINE: {$headline}</h1>
+                        <h1 class="admidio-module-headline">{$headline}</h1>
                         {include file='sys-template-parts/menu.functions.tpl'}
                     </div>
 
