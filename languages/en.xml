@@ -96,7 +96,7 @@
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">The current Admidio theme can be selected here. All layouts from the themes folder are displayed. (default: simple)</string>
   <string name="ORG_ADMIDIO_THEME_FALLBACK">Fallback Theme</string>
-  <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">The theme that is used as a fallback if the selected theme does not contain a requested template. If a fallack theme is selected, the main theme only has to contain those templates that it really wants to override. All other templates can be taken from the fallback theme, which in most cases can be the default 'simple' theme. (default: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">The theme that is used as a fallback if the selected theme does not contain a requested template. If a fallback theme is selected, the main theme only has to contain those templates that it really wants to override. All other templates can be taken from the fallback theme, which in most cases can be the default 'simple' theme. (default: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatic logout after</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">This value indicates after how many minutes an inactive user is automatically logged out. Inactive is a user as long as he does not call any page of the Admidio system. This setting is ignored if the user has selected #VAR1_BOLD#. (Default: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>

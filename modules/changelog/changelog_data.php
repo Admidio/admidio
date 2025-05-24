@@ -438,7 +438,7 @@ try {
         // 6. User and date of the change
         $columnValues[] = ChangelogService::createLink($row['create_last_name'].', '.$row['create_first_name'], 'users', 0, $row['uuid_usr_create']);
         // $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'..'</a>';
-        $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date') . ' changelog_data.php' .$gSettingsManager->getString('system_time'));
+        $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date') . ' ' .$gSettingsManager->getString('system_time'));
         $jsonArray['data'][] = $columnValues;
     }
 
