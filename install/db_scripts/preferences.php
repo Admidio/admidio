@@ -44,7 +44,7 @@ $defaultOrgPreferences = array(
     'color_secondary' => '#263340',
     'logo_link' => '{$urlTheme}/images/admidio_logo.png',
     'favicon_link' => '{$urlTheme}/images/favicon.ico',
-    'additional_syles_file' => '',
+    'additional_styles_file' => '',
 
     // Registration
     'registration_adopt_all_data' => '1',
