@@ -80,6 +80,11 @@ class PreferencesPresenter extends PagePresenter
                 'title' => $gL10n->get('SYS_COMMON'),
                 'icon' => 'bi-gear-fill'
             ),
+            'design' => array(
+                'id' => 'design',
+                'title' => $gL10n->get('SYS_DESIGN'),
+                'icon' => 'bi-palette'
+            ),
             'security' => array(
                 'id' => 'security',
                 'title' => $gL10n->get('SYS_SECURITY'),
@@ -569,17 +574,6 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
 
-        // search all available themes in the theme folder
-        $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
-        if (count($themes) === 0) {
-            throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
-        }
-        $formCommon->addSelectBox(
-            'theme',
-            $gL10n->get('ORG_ADMIDIO_THEME'),
-            $themes,
-            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
-        );
         $formCommon->addInput(
             'homepage_logout',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('SYS_VISITORS') . ')',
@@ -737,6 +731,86 @@ class PreferencesPresenter extends PagePresenter
         $formContacts->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formContacts);
         return $smarty->fetch('preferences/preferences.contacts.tpl');
+    }
+
+    /**
+     * Generates the HTML of the form from the design preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the design preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createDesignForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gCurrentSession;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formCommon = new FormPresenter(
+            'adm_preferences_form_design',
+            'preferences/preferences.design.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'design')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        // search all available themes in the theme folder
+        $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
+        if (count($themes) === 0) {
+            throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
+        }
+        $formCommon->addSelectBox(
+            'theme',
+            $gL10n->get('ORG_ADMIDIO_THEME'),
+            $themes,
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
+        );
+        $formCommon->addSelectBox(
+            'theme_fallback',
+            $gL10n->get('ORG_ADMIDIO_THEME_FALLBACK'),
+            $themes,
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC')
+        );
+        $formCommon->addInput(
+            'color_primary',
+            $gL10n->get('SYS_COLOR_PRIMARY'),
+            $formValues['color_primary']??'',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_PRIMARY_DESC')
+        );
+        $formCommon->addInput(
+            'color_secondary',
+            $gL10n->get('SYS_COLOR_SECONDARY'),
+            $formValues['color_secondary']??'',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_SECONDARY_DESC')
+        );
+
+        $formCommon->addInput(
+            'additional_styles_file',
+            $gL10n->get('SYS_ADDITIONAL_CSS_FILE'),
+            $formValues['additional_styles_file']??'',
+            array('helpTextId' => 'SYS_ADDITIONAL_CSS_FILE_DESC')
+        );
+        $formCommon->addInput(
+            'logo_file',
+            $gL10n->get('SYS_LOGO_FILE'),
+            $formValues['logo_file']??'',
+            array('helpTextId' => 'SYS_LOGO_FILE_DESC')
+        );
+        $formCommon->addInput(
+            'favicon_file',
+            $gL10n->get('SYS_FAVICON_FILE'),
+            $formValues['favicon_file']??'',
+            array('helpTextId' => 'SYS_FAVICON_FILE_DESC')
+        );
+        $formCommon->addSubmitButton(
+            'adm_button_save_design',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formCommon->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formCommon);
+        return $smarty->fetch('preferences/preferences.design.tpl');
     }
 
     /**
@@ -2418,7 +2492,7 @@ class PreferencesPresenter extends PagePresenter
 
         $this->addJavascript(
             '
-            var panels = ["common", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
+            var panels = ["common", "design", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
                 "announcements", "contacts", "documents_files", "photos", "forum", "groups_roles", "category_report", "messages", "profile", "sso", "events", "links"];
 
             for(var i = 0; i < panels.length; i++) {

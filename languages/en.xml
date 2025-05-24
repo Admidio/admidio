@@ -95,6 +95,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">The current Admidio theme can be selected here. All layouts from the themes folder are displayed. (default: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_FALLBACK">Fallback Theme</string>
+  <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">The theme that is used as a fallback if the selected theme does not contain a requested template. If a fallack theme is selected, the main theme only has to contain those templates that it really wants to override. All other templates can be taken from the fallback theme, which in most cases can be the default 'simple' theme. (default: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatic logout after</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">This value indicates after how many minutes an inactive user is automatically logged out. Inactive is a user as long as he does not call any page of the Admidio system. This setting is ignored if the user has selected #VAR1_BOLD#. (Default: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
@@ -150,6 +152,7 @@
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
+  <string name="ORG_INVALID_THEME_FALLBACK">The fallback theme selected is not valid.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Using the JavaScript editor</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">A full-featured JavaScript editor is being used in many modules of Admidio. Events, Announcements etc. can be edited in a comfortable way by the user. In case the editor has been activated, a simple multi-lin text box is being displayed.</string>
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
@@ -216,6 +219,8 @@
   <string name="SYS_ADDRESS">Address</string>
   <string name="SYS_ADDITIONAL_COLUMNS">Additional columns</string>
   <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
+  <string name="SYS_ADDITIONAL_CSS_FILE">Additional CSS File</string>
+  <string name="SYS_ADDITIONAL_CSS_FILE_DESC">The path to a .css file with additional style definitions. This file will be loaded last, even after the theme's admidio.css file. (default: empty)</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Go to the Admidio download page</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
@@ -339,6 +344,10 @@
   <string name="SYS_COLUMN">Column</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
+  <string name="SYS_COLOR_PRIMARY">Primary Color</string>
+  <string name="SYS_COLOR_PRIMARY_DESC">The main color used for admidio. The title bar will use this color, as well as headlines.</string>
+  <string name="SYS_COLOR_SECONDARY">Secondary Color</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">The secondary color used for admidio. The side bar will use this color, as well as the preferences sections.</string>
   <string name="SYS_COMPACT">Compact</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
@@ -493,6 +502,7 @@
   <string name="SYS_DEPENDENCIES">Dependencies</string>
   <string name="SYS_DEPENDENT">Dependent</string>
   <string name="SYS_DESCRIPTION">Description</string>
+  <string name="SYS_DESIGN">Design</string>
   <string name="SYS_DESIGNATION">Name</string>
   <string name="SYS_DETAILED">Detailed</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
@@ -636,6 +646,8 @@
   <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FADE_IN">Fade in</string>
+  <string name="SYS_FAVICON_FILE">Favicon File</string>
+  <string name="SYS_FAVICON_FILE_DESC">The path to the favicon file for your installation. The path should be relative to your installation's root directory. If left empty, the default favicon of the theme will be used. (default: empty)</string>
   <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Female</string>
   <string name="SYS_FIELD">Field</string>
@@ -814,6 +826,8 @@
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
   <string name="SYS_LOGIN_WITH_EMAIL">Allow e-mail address instead of username for login</string>
   <string name="SYS_LOGIN_WITH_EMAIL_DESC">If a user has an e-mail address stored in their profile field, and the address is unique, it can be used as the user name for logging in. (default: no)</string>
+  <string name="SYS_LOGO_FILE">Logo File</string>
+  <string name="SYS_LOGO_FILE_DESC">The path to the logo file that is displayed in the top left corner. The path should be relative to your installation's root directory. If left empty, the default logo of the theme will be used. (default: empty)</string>
   <string name="SYS_LOGOUT">Sign out</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Signing out was successful.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">You already signed in. Therefore you must already have the correct password!</string>

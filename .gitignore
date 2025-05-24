@@ -35,3 +35,4 @@ php-cs-fixer
 # For custom configuration
 /.php_cs
 /.idea
+custom_*.*

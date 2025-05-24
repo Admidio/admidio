@@ -21,7 +21,6 @@ $defaultOrgPreferences = array(
     'logout_minutes' => '20',
     'homepage_logout' => 'modules/overview.php',
     'homepage_login' => 'modules/overview.php',
-    'theme' => 'simple',
     'enable_password_recovery' => '1',
     'two_factor_authentication_enabled' => '0',
     'system_browser_update_check' => '0',
@@ -37,6 +36,15 @@ $defaultOrgPreferences = array(
     'system_url_imprint' => '',
     'system_url_data_protection' => '',
     'password_min_strength' => '1',
+
+    // Theme
+    'theme' => 'simple',
+    'theme_fallback' => 'simple',
+    'color_primary' => '#349aaa',
+    'color_secondary' => '#263340',
+    'logo_link' => '{$urlTheme}/images/admidio_logo.png',
+    'favicon_link' => '{$urlTheme}/images/favicon.ico',
+    'additional_css_file' => '',
 
     // Registration
     'registration_adopt_all_data' => '1',
