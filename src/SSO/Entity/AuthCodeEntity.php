@@ -18,7 +18,7 @@ class AuthCodeEntity extends TokenEntity implements AuthCodeEntityInterface
      */
     public function getRedirectUri(): string|null
     {
-        return $this->getValue($this->columnPrefix . '_redirect_uri');
+        return $this->getValue($this->columnPrefix . '_redirect_uri', 'database');
     }
 
     /**
