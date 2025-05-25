@@ -53,7 +53,7 @@ try {
         throw new Exception('SYS_CURRENT_USER_NO_EMAIL', array('<a href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php">', '</a>'));
     }
 
-    $senderName  = $gCurrentUser->getValue('FIRST_NAME') . ' ecard_send.php' . $gCurrentUser->getValue('LAST_NAME');
+    $senderName  = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
     $senderEmail = $gCurrentUser->getValue('EMAIL');
 
     // check form field input and sanitized it from malicious content
