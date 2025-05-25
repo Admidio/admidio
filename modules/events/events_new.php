@@ -256,13 +256,13 @@ try {
     $form->addInput(
         'event_from',
         $gL10n->get('SYS_START'),
-        $event->getValue('dat_begin', $gSettingsManager->getString('system_date') . ' events_new.php' . $gSettingsManager->getString('system_time')),
+        $event->getValue('dat_begin', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
         array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'event_to',
         $gL10n->get('SYS_END'),
-        $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' events_new.php' . $gSettingsManager->getString('system_time')),
+        $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
         array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addSelectBoxForCategories(
@@ -336,7 +336,7 @@ try {
     $form->addInput(
         'event_deadline',
         $gL10n->get('SYS_DEADLINE'),
-        $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' events_new.php' . $gSettingsManager->getString('system_time')),
+        $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
         array('type' => 'datetime', 'helpTextId' => 'SYS_EVENT_DEADLINE_DESC')
     );
     $form->addCheckbox('event_right_list_view', $gL10n->get('SYS_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);

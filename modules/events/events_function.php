@@ -128,7 +128,7 @@ try {
             if (!$startDateTime) {
                 throw new Exception('SYS_DATE_INVALID', array('SYS_START', 'YYYY-MM-DD'));
             } else {
-                throw new Exception('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' events_function.php' . $gL10n->get('SYS_START'), 'HH:ii'));
+                throw new Exception('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_START'), 'HH:ii'));
             }
         } else {
             // now write date and time with database format to date object
@@ -152,7 +152,7 @@ try {
             if (!$endDateTime) {
                 throw new Exception('SYS_DATE_INVALID', array('SYS_END', 'YYYY-MM-DD'));
             } else {
-                throw new Exception('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' events_function.php' . $gL10n->get('SYS_END'), 'HH:ii'));
+                throw new Exception('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_END'), 'HH:ii'));
             }
         } else {
             // now write date and time with database format to date object
@@ -273,7 +273,7 @@ try {
                 // if the data of the role must be changed
                 $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
 
-                $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' events_function.php' . $event->getValue('dat_headline'));
+                $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
                 $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
@@ -316,7 +316,7 @@ try {
                     $role->setValue('rol_max_members', (int)$formValues['dat_max_members']);
                 }
 
-                $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' events_function.php' . $event->getValue('dat_headline', 'database'));
+                $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline', 'database'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description', 'database'), 0, 3999));
 
                 $role->save();

@@ -453,7 +453,7 @@ try {
 
 // Settings for export file
     if ($getMode === 'csv' || $getMode === 'pdf') {
-        $filename = FileSystemUtils::getSanitizedPathEntry($filename) . 'category-report' . $getMode;
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
 
         header('Content-Disposition: attachment; filename="' . $filename . '"');
 

@@ -53,7 +53,7 @@ try {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $filename = $user->getValue('FIRST_NAME') . ' profile_function.php' . $user->getValue('LAST_NAME');
+        $filename = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
 
         $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.vcf';
 

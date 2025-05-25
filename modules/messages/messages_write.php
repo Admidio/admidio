@@ -265,7 +265,7 @@ try {
         if ($getUserUuid !== '') {
             // check if the user has email address for receiving an email
             if (!$user->hasEmail()) {
-                throw new Exception('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' messages_write.php' . $user->getValue('LAST_NAME')));
+                throw new Exception('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
             }
         } elseif ($getRoleUuid !== '') {
             // if a certain role is called, then check if the rights for it are available
@@ -477,7 +477,7 @@ try {
             $form->addInput(
                 'namefrom',
                 $gL10n->get('SYS_YOUR_NAME'),
-                $gCurrentUser->getValue('FIRST_NAME') . ' messages_write.php' . $gCurrentUser->getValue('LAST_NAME'),
+                $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
                 array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
             );
 
@@ -602,9 +602,9 @@ try {
 
             if ($getMsgType === Message::MESSAGE_TYPE_PM) {
                 if ($messageContent->getValue('msc_usr_id') === $gCurrentUserId) {
-                    $sentUser = $gCurrentUser->getValue('FIRST_NAME') . ' messages_write.php' . $gCurrentUser->getValue('LAST_NAME');
+                    $sentUser = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
                 } else {
-                    $sentUser = $user->getValue('FIRST_NAME') . ' messages_write.php' . $user->getValue('LAST_NAME');
+                    $sentUser = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
                 }
 
                 $messageHeader = $gL10n->get('SYS_USERNAME_WITH_TIMESTAMP', array($sentUser,
@@ -613,7 +613,7 @@ try {
                 ));
                 $messageIcon = 'bi-chat-left-fill';
             } else {
-                $messageHeader = $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' messages_write.php' . $gSettingsManager->getString('system_time')) . '<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
+                $messageHeader = $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
                 $messageIcon = 'bi-envelope-fill';
                 $attachments = $message->getAttachmentsInformations();
 
