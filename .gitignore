@@ -21,6 +21,10 @@
 !/adm_plugins/who-is-online/
 !/adm_plugins/category_report/
 
+# Only allow commit of official themes
+/themes/*
+!/themes/simple/
+
 # Don't commit the external libs from vendor folder
 /vendor
 
