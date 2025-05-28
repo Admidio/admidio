@@ -117,29 +117,25 @@ class SSOService {
         $this->db->startTransaction();
         $this->saveCustomClientSettings($formValues, $client);
 
-        if (array_key_exists('fieldsmap_Admidio', $formValues)) {
-            // Collect all field mappings and the catch-all checkbox
-            // If a SSO field is left empty, use the admidio name!
-            $ssoFields = $formValues['fieldsmap_sso']??[];
-            $admFields = $formValues['fieldsmap_Admidio']??[];
-            $ssoFields = array_map(function ($a, $b) { return (!empty($a)) ? $a : $b;}, $ssoFields, $admFields);
-            $client->setFieldMapping(array_combine($ssoFields, $admFields), $formValues['sso_fields_all_other']??false);
-        }
-
-        if (array_key_exists('rolesmap_Admidio', $formValues)) {
-            // Collect all role mappings and the catch-all checkbox
-            $ssoRoles = $formValues['rolesmap_sso']??[];
-            $admRoles = $formValues['rolesmap_Admidio']??[];
-            $ssoRoles = array_map( function($s, $a) { 
-                    if (empty($s)) {
-                        $role = new Role($this->db, $a);
-                        return $role->readableName();
-                    } else { 
-                        return $s; 
-                    }
-                }, $ssoRoles, $admRoles);
-            $client->setRoleMapping(array_combine($ssoRoles, $admRoles), $formValues['sso_roles_all_other']??false);
-        }
+        // Collect all field mappings and the catch-all checkbox
+        // If a SSO field is left empty, use the admidio name!
+        $ssoFields = $formValues['fieldsmap_sso']??[];
+        $admFields = $formValues['fieldsmap_Admidio']??[];
+        $ssoFields = array_map(function ($a, $b) { return (!empty($a)) ? $a : $b;}, $ssoFields, $admFields);
+        $client->setFieldMapping(array_combine($ssoFields, $admFields), $formValues['sso_fields_no_other']??false);
+        
+        // Collect all role mappings and the catch-all checkbox
+        $ssoRoles = $formValues['rolesmap_sso']??[];
+        $admRoles = $formValues['rolesmap_Admidio']??[];
+        $ssoRoles = array_map( function($s, $a) { 
+                if (empty($s)) {
+                    $role = new Role($this->db, $a);
+                    return $role->readableName();
+                } else { 
+                    return $s; 
+                }
+            }, $ssoRoles, $admRoles);
+        $client->setRoleMapping(array_combine($ssoRoles, $admRoles), $formValues['sso_roles_all_other']??false);
 
         // write all other form values
         foreach ($formValues as $key => $value) {
