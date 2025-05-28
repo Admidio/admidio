@@ -1,4 +1,7 @@
 <script>
+    $(".admidio-open-close-caret").click(function() {
+        showHideBlock($(this));
+    });
     $(".copy-container").each(function () {
         let $element = $(this);
 
