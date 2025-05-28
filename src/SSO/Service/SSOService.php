@@ -55,8 +55,52 @@ class SSOService {
         return $client;
     }
 
+    /**
+     * Returns an associative array with labels and links for the static IdP configuration data 
+     * (metadata/discovery URL, SSO/SLO endpoints, etc.).
+     * @return array Associative arry, the keys will be the displayed labels, each entry has the form
+     *     ['value' => 'linkHTML', 'id' => 'uniqueIDinForm', 'style' => 'additionalCSSstyles']
+     *   where the 'style' key is optional, but 'value' and 'id' are required.
+     */
+    public function getStaticSettings() : array {
+        return [];
+    }
 
-    
+    /**
+     * Returns a HTML array representation with labels and links for the static IdP configuration data 
+     * (metadata/discovery URL, SSO/SLO endpoints, etc.).
+     * @return array HTML array of the static IdP settings, including copy images, links, etc.
+     */
+    public function getStaticSettingsHTML(string $id = 'sso_staticsettings', string $class = '') : string {
+        global $gL10n;
+        $staticSettings = $this->getStaticSettings();
+ 
+
+        $first = true;
+        $html = '<table id="' . $id . '" style="width: 100%" class="' . $class . '"><tbody>';
+        
+        foreach ($staticSettings as $label => $value) {
+            $html .= '<tr><td>';
+            if ($first) {
+                $html .= '<a id="' . $id . '_caret" class="admidio-icon-link admidio-open-close-caret" data-target="' . $id . '_contents">
+                        <i class="bi bi-caret-right-fill"></i>
+                    </a>';
+            }
+            $html .= $gL10n->get($label) . ':&nbsp;</td>
+            <td><div class="copy-container" id="' . $value['id'] . '"' . 
+                        (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .
+                '>' . $value['value'] . '</div></td></tr>';
+            if ($first) {
+                $html .= '</tbody>
+                        <tbody id="' . $id . '_contents" style="display: none">
+                ';
+            }
+            $first = false;
+        }
+        $html .= '</tbody></table>';
+        return $html;
+    }
+
     /**
      * Save data from the SSO client edit form into the database (works for both SAML and OIDC).
      * @throws Exception

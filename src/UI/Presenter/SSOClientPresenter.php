@@ -172,7 +172,7 @@ class SSOClientPresenter extends PagePresenter
      */
     public function createSAMLEditForm(): void
     {
-        global $gDb, $gL10n, $gCurrentSession, $gProfileFields;
+        global $gDb, $gL10n, $gCurrentSession, $gProfileFields, $gCurrentUser;
 
         // create SAML client object
         $client = new SAMLClient($gDb);
@@ -198,6 +198,14 @@ class SSOClientPresenter extends PagePresenter
             'modules/saml_client.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_saml')),
             $this
+        );
+
+        $SAMLService = new SAMLService($gDb, $gCurrentUser);
+        $form->addCustomContent(
+            'sso_saml_sso_staticsettings',
+            $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
+            $SAMLService->getStaticSettingsHTML('sso_saml_sso_staticsettings', "if-saml-enabled"),
+            array()
         );
 
         $form->addCheckbox(
@@ -509,7 +517,7 @@ class SSOClientPresenter extends PagePresenter
      */
     public function createOIDCEditForm(): void
     {
-        global $gDb, $gL10n, $gCurrentSession, $gProfileFields;
+        global $gDb, $gL10n, $gCurrentSession, $gProfileFields, $gCurrentUser;
 
         // create OIDC client object
         $client = new OIDCClient($gDb);
@@ -533,6 +541,14 @@ class SSOClientPresenter extends PagePresenter
             'modules/oidc_client.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_oidc')),
             $this
+        );
+
+        $OIDCService = new OIDCService($gDb, $gCurrentUser);
+        $form->addCustomContent(
+            'sso_oidc_sso_staticsettings',
+            $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
+            $OIDCService->getStaticSettingsHTML('sso_oidc_sso_staticsettings', "if-oidc-enabled"),
+            array()
         );
 
         $form->addCheckbox(

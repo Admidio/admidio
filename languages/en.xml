@@ -508,6 +508,7 @@
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISABLED">Disabled</string>
+  <string name="SYS_DISABLE">Disabled</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Show redirect</string>
@@ -586,6 +587,7 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail to list</string>
   <string name="SYS_EMPTY">Empty</string>
+  <string name="SYS_ENABLE">Enable</string>
   <string name="SYS_ENABLED">Enabled</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Enable category report</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">The category report creates a list of all roles and categories to which a member is assigned. The permission #VAR1_BOLD# is required for access to the category report. (Default: yes)</string>
@@ -1409,7 +1411,7 @@
   <string name="SYS_SSO_ACS_URL_DESC">The Assertion Consumer Servicer (ACS) URL is the client's main entry point. After successful login at Admidio, the user will be redirected to that URL and logged in at the client.</string>
   <string name="SYS_SSO_SLO_URL">Single Log-Out URL (optional)</string>
   <string name="SYS_SSO_SLO_URL_DESC">The SLO URL is the client's end point to inform the client about a user logout from Admidio. For security reasons, all client application with an SLO URL will be informed about the log out and shall log out the user from the client app, too. Not all SAML client apps provide a single-log-out URL.</string>
-  <string name="SYS_SSO_AUTO_SETUP">Automatic setup from client metadata</string>
+  <string name="SYS_SSO_AUTO_SETUP">Automatic setup from metadata</string>
   <string name="SYS_SSO_LOAD_METADATA">Load Client Metadata</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Some clients offer a metadata file with all required settings. The automatic retrieval of this metadata URL only works if the URL is available to the admidio server.</string>
@@ -1477,6 +1479,8 @@
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentication Endpoint</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token Endpoint</string>
   <string name="SYS_SSO_OIDC_USERINFO_ENDPOINT">Userinfo Endpoint</string>
+  <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpoint</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Logout Endpoint</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
 
   <string name="SYS_SSO_NAME_PROPERTIES">Client (Service Provider) name and properties</string>

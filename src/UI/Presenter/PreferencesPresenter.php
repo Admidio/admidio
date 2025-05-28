@@ -2076,25 +2076,10 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'if-saml-enabled')
         );
 
-
-        $metaURL = $samlService->getMetadataUrl();
-        $staticSettings = array(
-            'SYS_SSO_SAML_METADATA_URL' => ['value' => '<a href="' . $metaURL . '">' . $metaURL . '</a>', 'id' => 'metadata_URL'],
-            'SYS_SSO_SAML_SSO_ENDPOINT' => ['value' => $samlService->getSsoEndpoint(), 'id' => 'SSO_endpoint'],
-            'SYS_SSO_SAML_SLO_ENDPOINT' => ['value' => $samlService->getSloEndpoint(),'id' => 'SLO_endpoint'],
-            'SYS_SSO_KEY_CERTIFICATE'   => ['value' => '',  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa;
-                    border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
-                    max-height: 150px; overflow: auto; border-radius: 0.375rem; font-size: smaller;']
-        );
-
         $formSSO->addCustomContent(
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            '<table id="sso_saml_sso_staticsettings" style="width: 100%" class="if-saml-enabled">' . implode('',
-                array_map(function (string $key, array $value) use ($gL10n) {
-                    return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' .
-                        (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
-            }, array_keys($staticSettings), $staticSettings)) . '</table>',
+            $samlService->getStaticSettingsHTML('sso_saml_sso_staticsettings', "if-saml-enabled"),
             array()
         );
 
@@ -2167,33 +2152,11 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['sso_oidc_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'), 
                 'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
         );
-        // $formSSO->addSelectBox(
-        //     'sso_oidc_encryption_key',
-        //     $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
-        //     $keys,
-        //     array('defaultValue' => $formValues['sso_oidc_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
-        //         'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
-        // );
-
-        $discoveryURL = $oidcService->getDiscoveryURL();
-        $staticSettings = array(
-            'SYS_SSO_OIDC_DISCOVERY_URL' => ['value' => '<a href="' . $discoveryURL . '">' . $discoveryURL . '</a>', 'id' => 'discovery_URL'],
-            'SYS_SSO_OIDC_AUTH_ENDPOINT' => ['value' => $oidcService->getAuthorizationEndpoint(), 'id' => 'auth_endpoint'],
-            'SYS_SSO_OIDC_TOKEN_ENDPOINT' => ['value' => $oidcService->getTokenEndpoint(),'id' => 'token_endpoint'],
-            'SYS_SSO_OIDC_USERINFO_ENDPOINT' => ['value' => $oidcService->getUserinfoEndpoint(),'id' => 'userinfo_endpoint'],
-            // 'SYS_SSO_KEY_CERTIFICATE'   => ['value' => '',  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa; 
-            //         border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
-            //         max-height: 150px; overflow: auto; border-radius: 0.375rem; font-size: smaller;']
-        );
 
         $formSSO->addCustomContent(
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            '<table id="sso_oidc_sso_staticsettings" style="width: 100%" class="if-oidc-enabled">' . implode('', 
-                array_map(function (string $key, array $value) use ($gL10n) {
-                    return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' . 
-                        (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
-            }, array_keys($staticSettings), $staticSettings)) . '</table>',
+            $oidcService->getStaticSettingsHTML('sso_oidc_sso_staticsettings', "if-oidc-enabled"),
             array()
         );
 
