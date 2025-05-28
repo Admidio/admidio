@@ -229,7 +229,7 @@ class OIDCService extends SSOService {
 
 
     public function setupService() {
-        global $gSettingsManager;
+        global $gSettingsManager, $gLogger;
 
         // Init our repositories
         $clientRepository = new ClientRepository($this->db);            // instance of ClientRepositoryInterface
@@ -375,7 +375,7 @@ class OIDCService extends SSOService {
     }
 
     public function handleAuthorizationRequest(): ResponseInterface {
-        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n;
+        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger;
 
         if ($gSettingsManager->get('sso_oidc_enabled') !== '1') {
             throw new \Exception("SSO OIDC is not enabled");
@@ -427,7 +427,7 @@ class OIDCService extends SSOService {
             return $this->authServer->completeAuthorizationRequest($authRequest, $response);
             
         } catch (OAuthServerException $exception) {
-        
+            $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
             
@@ -442,6 +442,7 @@ class OIDCService extends SSOService {
     }
 
     public function handleTokenRequest() {
+        global $gLogger;
         $request = $this->getRequest();
         $response = new Response();
         try {
@@ -452,6 +453,7 @@ class OIDCService extends SSOService {
             return $this->authServer->respondToAccessTokenRequest($request, $response);
 
         } catch (OAuthServerException $exception) {
+            $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
@@ -463,6 +465,7 @@ class OIDCService extends SSOService {
     }
 
     public function handleUserInfoRequest() {
+        global $gLogger;
         $request = $this->getRequest();
         $response = new Response();
         try {
@@ -527,6 +530,7 @@ class OIDCService extends SSOService {
             return new JsonResponse($claims);
 
         } catch (OAuthServerException $exception) {
+            $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
