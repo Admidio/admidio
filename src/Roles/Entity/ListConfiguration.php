@@ -238,9 +238,31 @@ class ListConfiguration extends Entity
             } else {
                 if ($format === 'html') {
                     $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
-                } else {
-                    $content = $htmlText;
+                } else {                    $content = $htmlText;
                 }
+            }        } elseif ($column->getValue('lsc_special_field') === 'mem_duration') {
+            // Handle membership duration formatting
+            if (!empty($content)) {
+                try {
+                    // Parse the concatenated mem_begin|mem_end format
+                    $parts = explode('|', $content);
+                    if (count($parts) === 2) {
+                        $memBegin = $parts[0];
+                        $memEnd = $parts[1] === 'ongoing' ? null : $parts[1];
+                        
+                        // Create a temporary membership object to use its calculateDuration method
+                        $membership = new Membership($gDb);
+                        $duration = $membership->calculateDuration($memBegin, $memEnd);
+                        $content = $duration['formatted'];
+                    } else {
+                        $content = '';
+                    }
+                } catch (Exception $e) {
+                    // If calculation fails, show empty content
+                    $content = '';
+                }
+            } else {
+                $content = '';
             }
         } elseif (in_array($column->getValue('lsc_special_field'), array('usr_usr_id_create', 'usr_usr_id_change', 'mem_usr_id_change')) && (int)$content) {
             // Get User Information and store information in array
@@ -682,12 +704,10 @@ class ListConfiguration extends Entity
                 $sqlColumnName = $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
             } else {
                 // Special fields like usr_photo, mem_begin ...
-                $specialField = $listColumn->getValue('lsc_special_field');
-                
-                // Handle special case for membership duration calculation
+                $specialField = $listColumn->getValue('lsc_special_field');                // Handle special case for membership duration calculation
                 if ($specialField === 'mem_duration') {
-                    // Calculate the difference between current date (or end date) and begin date in years
-                    $dbColumnName = "TIMESTAMPDIFF(YEAR, mem_begin, CASE WHEN mem_end >= '" . DATE_NOW . "' THEN NOW() ELSE mem_end END)";
+                    // Display membership duration as formatted string mem_begin|mem_end
+                    $dbColumnName = 'CONCAT(mem_begin, \'|\', CASE WHEN mem_end >= \'' . DATE_NOW . '\' THEN \'ongoing\' ELSE mem_end END)';
                 } else {
                     $dbColumnName = $specialField;
                 }
