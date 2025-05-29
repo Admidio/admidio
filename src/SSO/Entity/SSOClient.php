@@ -243,12 +243,14 @@ class SSOClient extends Entity
         $mappedRoles = array();
         // Loop through all roles of the user. If it is part of the mapping, or catchall is set, append it to the attribute
         foreach ($user->getRoleMemberships() as $roleId) {
-            $isLeader = $user->isLeaderOfRole($roleId);
 
             $rolesFound = array_keys($mapping, $roleId);
             $mappedRoles = array_merge($mappedRoles, $rolesFound);
-            $rolesLeaderFound = array_keys($mapping, -$roleId);
-            $mappedRoles = array_merge($mappedRoles, $rolesLeaderFound);
+            $isLeader = $user->isLeaderOfRole($roleId);
+            if ($isLeader) {
+                $rolesLeaderFound = array_keys($mapping, -$roleId);
+                $mappedRoles = array_merge($mappedRoles, $rolesLeaderFound);
+            }
 
             // The catchall applies only to "normal" group memberships. Role leaderships are not implicitly
             // added, only when they are explicitly mapped to a particular role.
