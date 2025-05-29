@@ -77,7 +77,7 @@ class SSOService {
  
 
         $first = true;
-        $html = '<table id="' . $id . '" style="width: 100%" class="' . $class . '"><tbody>';
+        $html = '<table id="' . $id . '" style="width: 100%" class="' . $class . ' table table-sm table-striped"><tbody>';
         foreach ($staticSettings as $label => $value) {
             $html .= '<tr><td>';
             if ($first) {
