@@ -78,12 +78,11 @@ class SSOService {
 
         $first = true;
         $html = '<table id="' . $id . '" style="width: 100%" class="' . $class . '"><tbody>';
-        
         foreach ($staticSettings as $label => $value) {
             $html .= '<tr><td>';
             if ($first) {
-                $html .= '<a id="' . $id . '_caret" class="admidio-icon-link admidio-open-close-caret" data-target="' . $id . '_contents">
-                        <i class="bi bi-caret-right-fill"></i>
+                $html .= '<a id="' . $id . '_caret" class=" admidio-open-close-caret" data-target="' . $id . '_contents">
+                        <i class="bi bi-caret-right-fill" style="margin-right: 0"></i>
                     </a>';
             }
             $html .= $gL10n->get($label) . ':&nbsp;</td>
