@@ -1,0 +1,232 @@
+/*!
+ * bootstrap-tabs-x v1.3.6
+ * http://plugins.krajee.com/tabs-x
+ *
+ * Krajee default Bootstrap 5.x and 4.x styling for bootstrap-tabs-x.
+ *
+ * Author: Kartik Visweswaran
+ * Copyright: 2014 - 2021, Kartik Visweswaran, Krajee.com
+ *
+ * Licensed under the BSD 3-Clause
+ * https://github.com/kartik-v/bootstrap-tabs-x/blob/master/LICENSE.md
+ */
+.tab-content {
+    padding: 0.625rem;
+}
+
+.tabs-x .tab-content > .tab-pane {
+    display: none;
+}
+
+.tabs-x .tab-content > .active {
+    display: block;
+}
+
+.tabs-x .nav-link.disabled {
+    pointer-events: auto;
+    cursor: not-allowed;
+}
+
+.tabs-x .nav-tabs {
+    display: flex;
+}
+
+/**
+ * Tabs Left & Right
+ */
+.tabs-left, .tabs-right {
+    display: flex;
+    align-items: start;
+}
+
+.tabs-left .nav-tabs, .tabs-right .nav-tabs {
+    height: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.tabs-left .tab-content, .tabs-right .tab-content {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+.tabs-left .tab-content {
+    margin-left: -0.0625rem;
+    border-left: 1px solid rgba(0,0,0,.15);
+}
+
+.tabs-right .tab-content {
+    margin-right: -0.0625rem;
+    border-right: 1px solid rgba(0,0,0,.15);
+}
+
+.tabs-left > .nav-tabs, .tabs-right > .nav-tabs {
+    border-bottom: none;
+    width: 9rem;
+}
+
+.tabs-left > .nav-tabs .nav-item, .tabs-right > .nav-tabs .nav-item {
+    position: relative;
+    width: 100%;
+}
+
+.tabs-left > .nav-tabs .nav-item > .nav-link {
+    border-radius: 0.25rem 0 0 0.25rem;
+    white-space: nowrap;
+}
+
+.tabs-left > .nav-tabs .nav-item > .nav-link.active {
+    border-color: rgba(0,0,0,.15) #fff rgba(0,0,0,.15) rgba(0,0,0,.15);
+}
+
+.tabs-right > .nav-tabs .nav-item > .nav-link {
+    border-radius: 0 0.25rem 0.25rem 0;
+    white-space: nowrap;
+}
+
+.tabs-right > .nav-tabs .nav-link.active {
+    border-color: rgba(0,0,0,.15) rgba(0,0,0,.15) rgba(0,0,0,.15) #fff;
+}
+
+/**
+ * Tab Alignments
+ */
+.tab-align-center .nav-tabs {
+    justify-content: center;
+}
+
+.tab-align-right .nav-tabs {
+    justify-content: flex-end;
+}
+
+/**
+ * Tab Heights / Sizes
+ */
+.tab-height-xs .tab-content {
+    height: 135px !important;
+    overflow: auto;
+}
+
+.tab-height-sm .tab-content {
+    height: 195px !important;
+    overflow: auto;
+}
+
+.tab-height-md .tab-content {
+    height: 17.5rem !important;
+    overflow: auto;
+}
+
+.tab-height-lg .tab-content {
+    height: 25rem !important;
+    overflow: auto;
+}
+
+/**
+ * Tabs orientations
+ */
+.tabs-below > .nav-tabs {
+    border-bottom: none;
+    border-top: 0.0625rem solid rgba(0,0,0,.15);
+}
+
+.tabs-below .nav-tabs .nav-link {
+    border-radius: 0 0 0.25rem 0.25rem;
+    margin-top: -0.0625rem;
+}
+
+.tabs-below .nav-tabs .nav-link.active {
+    border-color: #fff rgba(0,0,0,.15) rgba(0,0,0,.15);
+}
+
+/**
+ * Bordered tabs
+ */
+.tabs-above.tab-bordered .tab-content {
+    border: 0.0625rem solid rgba(0,0,0,.15);
+    border-top: none;
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+
+.tabs-below.tab-bordered .tab-content {
+    border: 0.0625rem solid rgba(0,0,0,.15);
+    border-bottom: none;
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.tabs-left.tab-bordered .tab-content {
+    border: 0.0625rem solid rgba(0,0,0,.15);
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.tabs-left.tab-bordered .tab-content .tab-pane {
+    margin-left: 0;
+}
+
+.tabs-right.tab-bordered .tab-content {
+    border: 0.0625rem solid rgba(0,0,0,.15);
+    border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.tabs-right.tab-bordered .tab-content .tab-pane {
+    margin-left: 0;
+}
+
+/**
+ * Sideways tabs
+ */
+.tab-sideways .nav-tabs,
+.tab-sideways .nav-tabs .nav-item {
+    height: 100%;
+    width: 34px;
+}
+.tab-sideways .nav-link {
+    overflow:hidden;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    min-height: 6rem;
+    width: 2rem;
+}
+
+.tab-sideways .nav-link .nav-link-text {
+    display: inline-block;
+    font-size: 0.8rem;
+    height: 6rem;
+    width: 6rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tab-sideways.tabs-left .nav-link.dropdown-toggle:after {
+    position: absolute;
+    left: 30%;
+    top: 10%;
+}
+
+.tab-sideways.tabs-right .nav-link.dropdown-toggle:after {
+    position: absolute;
+    right: 15%;
+    bottom: 10%;
+}
+
+.tabs-left.tab-sideways .nav-link.dropdown-toggle:after,
+.tabs-left.tab-sideways .nav-link .nav-link-text {
+    transform: translateX(-10%) translateY(5%) rotate(-90deg);
+}
+
+.tabs-right.tab-sideways .nav-link.dropdown-toggle:after,
+.tabs-right.tab-sideways .nav-link .nav-link-text {
+    transform: translateX(-90%) translateY(0%) rotate(90deg);
+}
+
+.tabs-x .nav-tabs .nav-link.kv-tab-loading {
+    background-image: url('../img/loading.gif');
+    background-position: right 0.125rem center;
+    background-repeat: no-repeat;
+    z-index: 15000;
+    cursor: wait;
+    opacity: 0.6;
+}
