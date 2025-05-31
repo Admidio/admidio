@@ -42,21 +42,11 @@ try {
                 $values['number_col'] = isset($_POST['number_col' . $conf]) ? 1 : 0;
                 $values['default_conf'] = (bool)$_POST['default_conf' . $conf];
 
-                $allColumnsEmpty = true;
-
-                $fields = '';
-                for ($number = 0; isset($_POST['column' . $conf . '_' . $number]); $number++) {
-                    if (strlen($_POST['column' . $conf . '_' . $number]) > 0) {
-                        $allColumnsEmpty = false;
-                        $fields .= $_POST['column' . $conf . '_' . $number] . ',';
-                    }
-                }
-
-                if ($allColumnsEmpty) {
+                if (empty($_POST['columns' . $conf])) {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
                 }
-
-                $values['col_fields'] = substr($fields, 0, -1);
+                
+                $values['col_fields'] = implode(',', $_POST['columns' . $conf]);
                 $config[] = $values;
             }
 

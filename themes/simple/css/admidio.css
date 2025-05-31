@@ -24,10 +24,8 @@
     --bs-success: #04e01a;
     --bs-body-color: #263340;
     --bs-body-bg: #ffffff;
-    --bs-link-color: #349aaa;
-    --bs-link-color-rgb: 52, 154, 170;
-    --bs-link-hover-color: #4fb8c9;
-    --bs-link-hover-color-rgb: 79, 184, 201;
+    --bs-link-color: var(--bs-primary);
+    --bs-link-hover-color: color-mix(in srgb, var(--bs-link-color) 80%, white);
     --bs-focus-ring-color: #c4e9ef;
 }
 

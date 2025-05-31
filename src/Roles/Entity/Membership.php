@@ -355,6 +355,71 @@ class Membership extends Entity
     }
 
     /**
+     * Calculates the duration of a membership in years, months and days
+     * @param string|null $startDate Start date of the membership in format YYYY-MM-DD (if null, uses mem_begin)
+     * @param string|null $endDate End date of the membership in format YYYY-MM-DD (if null, uses mem_end)
+     * @return array Array with years, months, days and a formatted string
+     * @throws Exception
+     */
+    public function calculateDuration(?string $startDate = null, ?string $endDate = null): array
+    {
+        global $gL10n;
+        
+        $startDate = $startDate ?? $this->getValue('mem_begin', 'Y-m-d');
+        $endDate = $endDate ?? $this->getValue('mem_end', 'Y-m-d');
+        
+        $startDateTime = new \DateTime($startDate);
+        
+        // If membership is ongoing, use current date as end date
+        if ($endDate === DATE_MAX) {
+            $endDateTime = new \DateTime();
+        } else {
+            $endDateTime = new \DateTime($endDate);
+        }
+        
+        // If end date is in the future, use current date for duration calculation
+        $now = new \DateTime();
+        if ($endDateTime > $now && $endDate !== DATE_MAX) {
+            $endDateTime = $now;
+        }
+        
+        // Calculate difference
+        $interval = $startDateTime->diff($endDateTime);
+        
+        $years = $interval->y;
+        $months = $interval->m;
+        $days = $interval->d;
+        
+        // Format a human-readable string
+        $durationText = '';
+        
+        if ($years > 0) {
+            $durationText .= $years . ' ' . ($years === 1 ? $gL10n->get('SYS_YEAR') : $gL10n->get('SYS_YEARS'));
+        }
+        
+        if ($months > 0) {
+            if ($durationText !== '') {
+                $durationText .= ', ';
+            }
+            $durationText .= $months . ' ' . ($months === 1 ? $gL10n->get('SYS_MONTH') : $gL10n->get('SYS_MONTHS'));
+        }
+        
+        if ($days > 0 || ($years === 0 && $months === 0)) {
+            if ($durationText !== '') {
+                $durationText .= ', ';
+            }
+            $durationText .= $days . ' ' . ($days === 1 ? $gL10n->get('SYS_DAY') : $gL10n->get('SYS_DAYS'));
+        }
+        
+        return [
+            'years' => $years,
+            'months' => $months,
+            'days' => $days,
+            'formatted' => $durationText
+        ];
+    }
+
+    /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns.
@@ -362,7 +427,7 @@ class Membership extends Entity
      * so their initial setting on creation should not be logged. Instead, they will be used
      * when displaying the log entry.
      *
-     * @return true Returns the list of database columns to be ignored for logging.
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {

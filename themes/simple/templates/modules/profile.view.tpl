@@ -8,23 +8,27 @@
                     {$l10n->get('SYS_BASIC_DATA')}
                 </button>
             </li>
-            {if $showCurrentRoles || $showExternalRoles}
+            {if $showCurrentRoles}
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="adm_profile_role_permissions_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_permissions_pane" type="button" role="tab" aria-controls="adm_profile_permissions" aria-selected="false">
                         {$l10n->get('SYS_PERMISSIONS')}
                     </button>
                 </li>
+        {/if}
+        {if $showCurrentRoles || $showExternalRoles}
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="adm_profile_role_memberships_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_role_memberships_pane" type="button" role="tab" aria-controls="adm_profile_role_memberships" aria-selected="false">
                         {$l10n->get('SYS_ROLE_MEMBERSHIPS')}
                     </button>
                 </li>
             {/if}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="adm_profile_user_relations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_user_relations_pane" type="button" role="tab" aria-controls="adm_profile_user_relations" aria-selected="false">
-                    {$l10n->get('SYS_USER_RELATIONS')}
-                </button>
-            </li>
+        {if $showRelations}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="adm_profile_user_relations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_user_relations_pane" type="button" role="tab" aria-controls="adm_profile_user_relations" aria-selected="false">
+                        {$l10n->get('SYS_USER_RELATIONS')}
+                    </button>
+                </li>
+        {/if}
         </ul>
 
         <!-- Tab Content -->
@@ -54,12 +58,15 @@
                 {/foreach}
             </div>
 
-            <!-- Permissions Tab -->
+        <!-- Permissions Tab -->
+        {if $showCurrentRoles}
             <div class="tab-pane fade" id="adm_profile_permissions_pane" role="tabpanel" aria-labelledby="adm_profile_permissions_tab">
                 {include file="modules/profile.view.permissions.tpl"}
             </div>
+        {/if}
 
-            <!-- Role Memberships Tab -->
+        <!-- Role Memberships Tab -->
+        {if $showCurrentRoles || $showExternalRoles}
             <div class="tab-pane fade" id="adm_profile_role_memberships_pane" role="tabpanel" aria-labelledby="adm_profile_role_memberships_tab">
                 {if $showCurrentRoles}
                     <!-- Current Role Memberships Card -->
@@ -102,7 +109,9 @@
                     </div>
                 {/if}
             </div>
-            <!-- User Relations Tab -->
+        {/if}
+        <!-- User Relations Tab -->
+        {if $showRelations}
             <div class="tab-pane fade" id="adm_profile_user_relations_pane" role="tabpanel" aria-labelledby="adm_profile_user_relations_tab">
                 <div class="card admidio-tabbed-field-group">
                     <div class="card-header">
@@ -116,7 +125,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        {/if}
     </div>
 </div>
 
@@ -156,20 +165,22 @@
             </div>
         </div>
         <!-- Permissions Accordion -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="adm_profile_role_permissions_accordion_heading">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_role_permissions_accordion" aria-expanded="false" aria-controls="adm_profile_role_permissions_accordion">
-                    {$l10n->get('SYS_PERMISSIONS')}
-                </button>
-            </h2>
-            <div id="adm_profile_role_permissions_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_role_permissions_accordion_heading" data-bs-parent="#adm_profile_accordion">
-                <div class="accordion-body">
-                    {include file="modules/profile.view.permissions.tpl"}
+        {if $showCurrentRoles}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="adm_profile_role_permissions_accordion_heading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_role_permissions_accordion" aria-expanded="false" aria-controls="adm_profile_role_permissions_accordion">
+                        {$l10n->get('SYS_PERMISSIONS')}
+                    </button>
+                </h2>
+                <div id="adm_profile_role_permissions_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_role_permissions_accordion_heading" data-bs-parent="#adm_profile_accordion">
+                    <div class="accordion-body">
+                        {include file="modules/profile.view.permissions.tpl"}
+                    </div>
                 </div>
             </div>
-        </div>
+        {/if}
+        <!-- Role Memberships Accordion -->
         {if $showCurrentRoles || $showExternalRoles}
-            <!-- Role Memberships Accordion -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="adm_profile_role_memberships_accordion_heading">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_role_memberships_accordion" aria-expanded="false" aria-controls="adm_profile_role_memberships_accordion">
@@ -224,28 +235,30 @@
             </div>
         {/if}
         <!-- User Relations Accordion -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="adm_profile_user_relations_accordion_heading">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_user_relations_accordion" aria-expanded="false" aria-controls="adm_profile_user_relations_accordion">
-                    {$l10n->get('SYS_USER_RELATIONS')}
-                </button>
-            </h2>
-            <div id="adm_profile_user_relations_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_user_relations_accordion_heading" data-bs-parent="#adm_profile_accordion">
-                <div class="accordion-body">
-                    <div class="card admidio-accordion-field-group">
-                        <div class="card-header">
-                            {if $isAdministratorUsers}
-                                <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlAssignUserRelations}">
-                                    <i class="bi bi-person-heart me-1"></i>{$l10n->get('SYS_CREATE_RELATIONSHIP')}</a>
-                            {/if}
-                        </div>
-                        <div class="card-body">
-                            {include file="modules/profile.view.relations.tpl"}
+        {if $showRelations}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="adm_profile_user_relations_accordion_heading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_user_relations_accordion" aria-expanded="false" aria-controls="adm_profile_user_relations_accordion">
+                        {$l10n->get('SYS_USER_RELATIONS')}
+                    </button>
+                </h2>
+                <div id="adm_profile_user_relations_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_user_relations_accordion_heading" data-bs-parent="#adm_profile_accordion">
+                    <div class="accordion-body">
+                        <div class="card admidio-accordion-field-group">
+                            <div class="card-header">
+                                {if $isAdministratorUsers}
+                                    <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlAssignUserRelations}">
+                                        <i class="bi bi-person-heart me-1"></i>{$l10n->get('SYS_CREATE_RELATIONSHIP')}</a>
+                                {/if}
+                            </div>
+                            <div class="card-body">
+                                {include file="modules/profile.view.relations.tpl"}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {/if}
     </div>
 </div>
 

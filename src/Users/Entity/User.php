@@ -2234,7 +2234,7 @@ class User extends Entity
      * Retrieve the list of database fields that are ignored for the changelog.
      * For the users table, we also ignore usr_valid, usr_*_login, etc.
      *
-     * @return true Returns the list of database columns to be ignored for logging.
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {

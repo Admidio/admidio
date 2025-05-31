@@ -223,10 +223,16 @@ class PreferencesService
 
         // first check the fields of the submitted form
         switch ($panel) {
-            case 'Common':
+            case 'design':
                 if (!StringUtils::strIsValidFolderName($formData['theme'])
                     || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme'] . '/index.html')) {
                     throw new Exception('ORG_INVALID_THEME');
+                }
+                if (!empty($formData['theme_fallback'])) {
+                    if (!StringUtils::strIsValidFolderName($formData['theme_fallback'])
+                        || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme_fallback'] . '/index.html')) {
+                        throw new Exception('ORG_INVALID_THEME_FALLBACK');
+                    }
                 }
                 break;
 
@@ -259,6 +265,14 @@ class PreferencesService
                 }
                 break;
 
+            case 'Sso':
+                if (empty($formData['sso_oidc_issuer_url'])) {
+                    $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+                }
+                if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
+                    $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
+                }
+                break;
         }
 
         // then update the database with the new values

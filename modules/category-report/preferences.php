@@ -66,115 +66,111 @@ try {
 
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-preferences', $headline);
-    $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();';
-
     ChangelogService::displayHistoryButton($page, 'categoryreport', 'category_report');
+
+    $javascriptCode = '';
+    $javascriptCodeExecute = '';
+
+
+    $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();
+        function createUserFieldSelect(config, val = null)
+        {
+        	var category = "";
+            var htmlCboFields = "<select class=\"form-control\"  size=\"1\" name=\"columns" + config + "[]\" class=\"ListProfileField\" >" +
+                "<option value=\"\"></option>";
+        	for (const field of arr_user_fields) {
+            	if (category != field.cat_name) {
+                	if (category.length > 0) {
+                    	htmlCboFields += "</optgroup>";
+                	}    
+                	htmlCboFields += "<optgroup label=\"" + field.cat_name + "\">";
+                	category = field.cat_name;
+            	}    
+            	var selected = ((val != null) && (field.id == val)) ? " selected=\"selected\" " : "";
+             	htmlCboFields += "<option value=\"" + field.id + "\" " + selected + ">" + field.data + "</option>";
+        	}
+            if (category.length > 0) {
+                htmlCboFields += "</optgroup>";
+            }
+        	htmlCboFields += "</select>";
+            return htmlCboFields;
+        };
+    ';
+    $javascriptCode .= '
+        function addColumnToConfiguration(config, val = null)
+        {
+        	var table = document.getElementById("mylist_fields_tbody" + config);
+        	var newTableRow = table.insertRow();
+        	newTableRow.setAttribute("class", "CategoryReportColumnDefinition");
+        	var newCellCount = newTableRow.insertCell();
+            newCellCount.setAttribute("class", "CategoryReportColumnNumber");
+        	var newCellField = newTableRow.insertCell(-1);
+        	newCellField.innerHTML = createUserFieldSelect(config, val);
+            var newCellButtons = newTableRow.insertCell(-1);
+            newCellButtons.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+                        "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
+                        "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+                        "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
+
+        	$(newTableRow).fadeIn("slow");
+            updateNumbering();
+        };
+    ';
 
     // create an array with the necessary data
     foreach ($config as $key => $value) {
         $catReportConfigs[$key] = $value['name'];
-        $javascriptCode .= '
 
-        var arr_default_fields' . $key . ' = createColumnsArray' . $key . '();
-        var fieldNumberIntern' . $key . '  = 0;
-
-    	// Function adds a new row for assigning columns to the list
-    	function addColumn' . $key . '()
-    	{
-        	var category = "";
-        	var table = document.getElementById("mylist_fields_tbody' . $key . '");
-        	var newTableRow = table.insertRow(fieldNumberIntern' . $key . ');
-        	newTableRow.setAttribute("id", "row" + (fieldNumberIntern' . $key . '))
-        	var newCellCount = newTableRow.insertCell(-1);
-        	newCellCount.innerHTML = (fieldNumberIntern' . $key . ' + 1) + ".&nbsp;' . $gL10n->get('SYS_COLUMN') . ':";
-
-        	// New column for selecting the profile field
-        	var newCellField = newTableRow.insertCell(-1);
-        	htmlCboFields = "<select class=\"form-control\"  size=\"1\" id=\"column" + fieldNumberIntern' . $key . ' + "\" class=\"ListProfileField\" name=\"column' . $key . '_" + fieldNumberIntern' . $key . ' + "\">" +
-                "<option value=\"\"></option>";
-        	for(var counter = 1; counter < arr_user_fields.length; counter++)
-        	{
-            	if(category != arr_user_fields[counter]["cat_name"])
-            	{
-                	if(category.length > 0)
-                	{
-                    	htmlCboFields += "</optgroup>";
-                	}
-                	htmlCboFields += "<optgroup label=\"" + arr_user_fields[counter]["cat_name"] + "\">";
-                	category = arr_user_fields[counter]["cat_name"];
-            	}
-
-            	var selected = "";
-
-            	// for saved lists, select the corresponding profile field and add the field name to the list array
-            	if(arr_default_fields' . $key . '[fieldNumberIntern' . $key . '])
-            	{
-                	if(arr_user_fields[counter]["id"] == arr_default_fields' . $key . '[fieldNumberIntern' . $key . ']["id"])
-                	{
-                    	selected = " selected=\"selected\" ";
-                   	 arr_default_fields' . $key . '[fieldNumberIntern' . $key . ']["data"] = arr_user_fields[counter]["data"];
-                	}
-            	}
-             	htmlCboFields += "<option value=\"" + arr_user_fields[counter]["id"] + "\" " + selected + ">" + arr_user_fields[counter]["data"] + "</option>";
-        	}
-        	htmlCboFields += "</select>";
-        	newCellField.innerHTML = htmlCboFields;
-
-        	$(newTableRow).fadeIn("slow");
-        	fieldNumberIntern' . $key . '++;
-    	}
-
-    	function createColumnsArray' . $key . '()
-    	{
-        	var default_fields = new Array(); ';
+        // Function to generate the list of selected fields
         $fields = explode(',', $value['col_fields']);
-        for ($number = 0; $number < count($fields); $number++) {
-            // this is only to check whether this release still exists
-            // it could be that a profile field or role has been deleted since the last save
-            $found = $report->isInHeaderSelection($fields[$number]);
-            if ($found > 0) {
-                $javascriptCode .= '
-                	default_fields[' . $number . '] 		  = new Object();
-                	default_fields[' . $number . ']["id"]   = "' . $report->headerSelection[$found]["id"] . '";
-                	default_fields[' . $number . ']["data"] = "' . $report->headerSelection[$found]["data"] . '";
-                	';
-            }
-        }
-        $javascriptCode .= '
-        	return default_fields;
-    	}
-    	';
+        $validFieldIds = array_filter($fields, function ($fieldId) use ($report) {
+                return $report->isInHeaderSelection($fieldId) > 0;
+            });
+        $jsArray = json_encode(array_values($validFieldIds));
+        $javascriptCode .= "
+        function createColumnsArray{$key}() {
+            return {$jsArray};
+        }";
+
+        $javascriptCodeExecute .= "
+        createColumnsArray{$key}().forEach(item => addColumnToConfiguration({$key}, item));
+        $(\"#mylist_fields_tbody{$key}\").sortable({
+            handle: \".admidio-move-row\", 
+            items: \"tr\",
+            update: updateNumbering
+        });
+    	";
     }
 
+    // $report->headerSelection has integer indices starting at 1. We don't need them anyway, so ignore them
+    // before converting the whole data structure to a JSON object.
     $javascriptCode .= '
     function createProfileFieldsArray()
     {
-        var user_fields = new Array(); ';
+        return ' . json_encode(array_values($report->headerSelection), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ';
+    };
+    function updateNumbering() {
+        $(".catreport-columns-table").each(function() {
+            $(this).find("tbody tr").each(function(index) {
+                $(this).find("td:first").text((index + 1) + ". ' . $gL10n->get('SYS_COLUMN') . ':");
+            });
+        });
+    }
+    ';
+    // Delete button handler, automatically number rows on load;
+    $javascriptCodeExecute .= '
+    $(document).on("click", ".admidio-delete", function(){
+        let row = $(this).closest("tr").fadeOut(300, function() {
+            $(this).remove();
+            updateNumbering();
+        });
+    });
+    updateNumbering();
+    ';
 
-// create an array for all columns with the necessary data
-    foreach ($report->headerSelection as $key => $value) {
-        $javascriptCode .= '
-                user_fields[' . $key . '] 			= new Object();
-                user_fields[' . $key . ']["id"]   	= "' . $report->headerSelection[$key]['id'] . '";
-                user_fields[' . $key . ']["cat_name"] = "' . $report->headerSelection[$key]['cat_name'] . '";
-                user_fields[' . $key . ']["data"]   	= "' . $report->headerSelection[$key]['data'] . '";
-                ';
-    }
-    $javascriptCode .= '
-        return user_fields;
-    }
-';
     $page->addJavascript($javascriptCode);
-    $javascriptCodeExecute = '';
-
-    foreach ($config as $key => $value) {
-        $javascriptCodeExecute .= '
-    	for(var counter = 0; counter < ' . count(explode(',', $value['col_fields'])) . '; counter++) {
-        	addColumn' . $key . '();
-    	}
-    	';
-    }
     $page->addJavascript($javascriptCodeExecute, true);
+
 
     $formConfigurations = new FormPresenter(
         'adm_configurations_preferences_form',

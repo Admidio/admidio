@@ -5,6 +5,9 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Roles\Entity\RolesRights;
+use Admidio\Roles\Entity\Role;
+use Admidio\Users\Entity\User;
+
 
 
 class SSOClient extends Entity 
@@ -16,6 +19,7 @@ class SSOClient extends Entity
     protected string $ssoType = '';
 
     public function __construct(Database $database, string $tableName, string $columnPrefix, $client_id = null) {
+        $this->ssoType = 'saml';
         if (is_numeric($client_id)) {
             parent::__construct($database, $tableName, $columnPrefix, $client_id);
         } else {
@@ -30,6 +34,15 @@ class SSOClient extends Entity
         }
     }
 
+    public function getIdentifier(): string {
+        return $this->getValue($this->columnPrefix . '_client_id')??'';
+    }
+
+    public function getName(): string {
+        return $this->getValue($this->columnPrefix . '_client_name')??'';
+    }
+
+
     /**
      * Deletes the selected record of the table and all references in other tables.
      * @return bool **true** if no error occurred
@@ -42,6 +55,24 @@ class SSOClient extends Entity
             $this->rolesAccess->delete();
         }
         return parent::delete();
+    }
+
+    /**
+     * Enables/disables the selected record of the table and all references in other tables.
+     * @throws Exception
+     */
+    public function enable(bool $enabled = true)
+    {
+        $this->setValue($this->columnPrefix . '_enabled', $enabled);
+    }
+
+    /**
+     * Returns whether the client is enabled or not.
+     * @return bool Whether the client is enabled
+     */
+    public function isEnabled(): bool
+    {
+        return $this->getValue($this->columnPrefix . '_enabled');
     }
 
    /**
@@ -108,6 +139,15 @@ class SSOClient extends Entity
         } else {
             return $this->rolesAccess->getRolesNames();
         }
+    }
+
+    /**
+     * Returns the User/Profile field that is used by the particular client to identify users.
+     * @return string
+     */
+    public function getUserIdField(): string
+    {
+        return $this->getValue($this->columnPrefix . '_userid_field')??'';
     }
 
     /**
@@ -195,6 +235,34 @@ class SSOClient extends Entity
         $this->setValue($this->columnPrefix . '_role_mapping', json_encode($roles));
     }
 
+    public function getMappedRoleMemberships(User $user): array
+    {
+        $mapping = $this->getRoleMapping();
+        $includeAll = $this->getRoleMappingCatchall();
+
+        $mappedRoles = array();
+        // Loop through all roles of the user. If it is part of the mapping, or catchall is set, append it to the attribute
+        foreach ($user->getRoleMemberships() as $roleId) {
+
+            $rolesFound = array_keys($mapping, $roleId);
+            $mappedRoles = array_merge($mappedRoles, $rolesFound);
+            $isLeader = $user->isLeaderOfRole($roleId);
+            if ($isLeader) {
+                $rolesLeaderFound = array_keys($mapping, -$roleId);
+                $mappedRoles = array_merge($mappedRoles, $rolesLeaderFound);
+            }
+
+            // The catchall applies only to "normal" group memberships. Role leaderships are not implicitly
+            // added, only when they are explicitly mapped to a particular role.
+            if (empty($rolesFound) && $includeAll) {
+                // CATCHALL: Add role with its admidio role name
+                $role = new Role($this->db, $roleId);
+                $mappedRoles[] = $role->getValue('rol_name');
+            }
+        }
+        return $mappedRoles;
+    }
+
     /**
      * Checks if the current user has access rights to the SAML client.
      * @return bool Return **true** if the user has access rights to the SAML client
@@ -253,7 +321,7 @@ class SSOClient extends Entity
      * Retrieve the list of database fields that are ignored for the changelog.
      * In addition to the default ignored columns, don't log fot_views
      *
-     * @return true Returns the list of database columns to be ignored for logging.
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {

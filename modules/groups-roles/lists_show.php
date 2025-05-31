@@ -686,7 +686,7 @@ try {
             $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
         }
 
-        $filename = FileSystemUtils::getSanitizedPathEntry($filename) . 'groups-roles' . $getMode;
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
         $file = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
 
         header('Content-Type: application/pdf');
@@ -743,7 +743,7 @@ try {
                 // Appointment
                 $value = '';
                 if ($role->getValue('rol_weekday') > 0) {
-                    $value = RolesService::getWeekdays($role->getValue('rol_weekday')) . ' lists_show.php';
+                    $value = RolesService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                 }
                 if ((string)$role->getValue('rol_start_time') !== '') {
                     $value = $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
@@ -759,7 +759,7 @@ try {
 
                 // Member Fee
                 if ((string)$role->getValue('rol_cost') !== '') {
-                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTIONv'), 'value' => $role->getValue('rol_cost') . ' lists_show.php' . $gSettingsManager->getString('system_currency'));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTIONv'), 'value' => $role->getValue('rol_cost') . ' ' . $gSettingsManager->getString('system_currency'));
                 }
 
                 // Fee period

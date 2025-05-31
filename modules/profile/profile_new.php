@@ -86,7 +86,7 @@ try {
             // if we want to copy the user than set id = 0
             $user->setValue('usr_id', 0);
             $getUserUuid = '';
-            $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' profile_new.php' . $user->getValue('LAST_NAME')));
+            $headline = $gL10n->get('SYS_COPY_VAR', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         } elseif ($getUserUuid === '' && $gValidLogin) {
             $headline = $gL10n->get('SYS_CREATE_MEMBER');
         } elseif ($getUserUuid === '' && !$gValidLogin) {

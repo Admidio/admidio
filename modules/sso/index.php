@@ -1,5 +1,6 @@
 <?php
 
+use Laminas\Diactoros\Response\JsonResponse;    
 
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\SAMLService;
@@ -34,29 +35,53 @@ try {
     // Login checks will be done in the individual endpoint handler functions!
 
     if ($type === 'oidc') {
-/*        $oidcService = new OIDCService($gDb, $gCurrentUser);
-
-        if (strpos($requestUri, '/authorize') !== false && $method === 'GET') {
-            $oidcService->handleAuthorizationRequest();
-        } elseif (strpos($requestUri, '/token') !== false && $method === 'POST') {
-            $oidcService->handleTokenRequest();
-        } elseif (strpos($requestUri, '/userinfo') !== false && $method === 'GET') {
-            $oidcService->handleUserInfoRequest();
-        } elseif (strpos($requestUri, '/.well-known/jwks.json') !== false && $method === 'GET') {
-            $oidcService->handleJWKSRequest();
-        } elseif (strpos($requestUri, '/.well-known/openid-configuration') !== false && $method === 'GET') {
-            $oidcService->handleDiscoveryRequest();
-        } elseif (strpos($requestUri, '/introspect') !== false && $method === 'POST') {
-            $oidcService->handleIntrospectionRequest();
-        } elseif (strpos($requestUri, '/revoke') !== false && $method === 'POST') {
-            $oidcService->handleRevocationRequest();
-        } elseif (strpos($requestUri, '/logout') !== false && $method === 'GET') {
-            $oidcService->handleLogoutRequest();
-        } else {
-            header('HTTP/1.1 404 Not Found');
-            echo json_encode(['error' => 'Endpoint not found']);
+        try {
+            $oidcService = new OIDCService($gDb, $gCurrentUser);
+            $oidcService->setupService();
+        } catch (Exception $e) {
+            echo json_encode(['error' => 'OIDC service setup failed: ' . $e->getMessage()]);
+            exit;
         }
-*/     
+
+        try {
+            $response = null;
+            if (strpos($requestUri, '/oidc/authorize') !== false) {
+                $response = $oidcService->handleAuthorizationRequest();
+            } elseif (strpos($requestUri, '/oidc/token') !== false) {
+                $response = $oidcService->handleTokenRequest();
+            } elseif (strpos($requestUri, '/oidc/userinfo') !== false) {
+                $response = $oidcService->handleUserInfoRequest();
+            } elseif (strpos($requestUri, '/oidc/jwks') !== false) {
+                $response = $oidcService->handleJWKSRequest();
+            } elseif (strpos($requestUri, '/oidc/.well-known/openid-configuration') !== false) {
+                $response = $oidcService->handleDiscoveryRequest();
+            } elseif (strpos($requestUri, '/oidc/introspect') !== false) {
+                $response = $oidcService->handleIntrospectionRequest();
+            } elseif (strpos($requestUri, '/oidc/revoke') !== false) {
+                $response = $oidcService->handleRevocationRequest();
+            } elseif (strpos($requestUri, '/oidc/logout') !== false) {
+                $response = $oidcService->handleLogoutRequest();
+            } else {
+                $response = new JsonResponse(['error' => 'Endpoint not found'], 404);
+            }
+            if (!empty($response)) {
+                http_response_code($response->getStatusCode());
+                foreach ($response->getHeaders() as $name => $values) {
+                    foreach ($values as $value) {
+                        header(sprintf('%s: %s', $name, $value), false);
+                    }
+                }
+                $body = (string) $response->getBody();
+                echo (string) $response->getBody();
+                exit;
+            }
+
+        } catch (Exception $e) {
+            echo json_encode(['error' => 'OIDC Error in Admidio: ' . $e->getMessage()]);
+            exit;
+        }
+
+     
     } elseif ($type === 'saml') {
 
         $samlService = new SAMLService($gDb, $gCurrentUser);

@@ -116,7 +116,7 @@ try {
             $role->stopMembership($row['mem_usr_id']);
         }
 
-        echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' contacts_function.php' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')))));
+        echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')))));
         exit();
     } elseif ($getMode === 'delete') {
         // User must not be in any other organization

@@ -296,6 +296,12 @@ try {
             "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
             "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_END') . '",
             "usf_name_intern": "mem_end"
+        };
+        
+        userFields[' . ++$i . '] = {
+            "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
+            "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_DURATION') . '",
+            "usf_name_intern": "mem_duration"
         };';
 
     // add new category with participant information of events
