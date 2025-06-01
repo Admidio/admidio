@@ -402,6 +402,8 @@
   <string name="SYS_COMMA_SEPARATED_FILE">Kommagetrennte Datei (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
+  <string name="SYS_COMMON_SETTINGS">Allgemeine Einstellungen</string>
+  <string name="SYS_COMMUNICATION">Kommunikation</string>
   <string name="SYS_COMPLEMENT">Ergänzen</string>
   <string name="SYS_CONDITION">Bedingung</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
@@ -421,6 +423,7 @@
   <string name="SYS_CONTACT_SIMILAR_NAME">Es wurde ein Kontakt mit einem ähnlichen Namen gefunden.</string>
   <string name="SYS_CONTACTS">Kontakte</string>
   <string name="SYS_CONTENT">Inhalt</string>
+  <string name="SYS_CONTENTS">Inhalte</string>
   <string name="SYS_CONTRIBUTION">Beitrag</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Beitragszeitraum</string>
   <string name="SYS_CONVERSATION_PARTNER">Gesprächspartner</string>
@@ -1450,6 +1453,7 @@
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER">Benutzer:in</string>
+  <string name="SYS_USERS">Benutzer:innen</string>
   <string name="SYS_USER_COULD_BE_CREATED">Die Person kann angelegt werden.</string>
   <string name="SYS_USER_DELETE_DESC">Wollen Sie #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_DELETE_DESC">Willst du #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>

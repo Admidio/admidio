@@ -69,7 +69,7 @@ class SSOService {
     /**
      * Returns a HTML array representation with labels and links for the static IdP configuration data 
      * (metadata/discovery URL, SSO/SLO endpoints, etc.).
-     * @return array HTML array of the static IdP settings, including copy images, links, etc.
+     * @return string HTML array of the static IdP settings, including copy images, links, etc.
      */
     public function getStaticSettingsHTML(string $id = 'sso_staticsettings', string $class = '') : string {
         global $gL10n;

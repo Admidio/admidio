@@ -684,6 +684,9 @@ try {
     $page->assignSmartyVariable('lastUserEditedName', $user->getNameOfLastEditingUser());
     $page->assignSmartyVariable('lastUserEditedTimestamp', $user->getValue('usr_timestamp_change'));
 
+    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/js/bootstrap-tabs-x-admidio.js');
+
     $page->show();
 } catch (Exception $e) {
     $gMessage->show($e->getMessage());

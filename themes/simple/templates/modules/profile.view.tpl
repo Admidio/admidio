@@ -1,61 +1,62 @@
 <!-- Responsive Tabs and Accordions -->
 <div class="d-none d-md-block">
     <!-- Tab Navigation -->
-    <ul class="nav nav-tabs profile-tabs" id="adm_profile_tabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="adm_profile_basic_informations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_basic_informations_pane" type="button" role="tab" aria-controls="adm_profile_basic_data" aria-selected="true">
-                {$l10n->get('SYS_BASIC_DATA')}
-            </button>
-        </li>
-        {if $showCurrentRoles}
+    <div class="tabs-x tabs-above tab-bordered">
+        <ul class="nav nav-tabs admidio-tabs" id="adm_profile_tabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="adm_profile_role_permissions_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_permissions_pane" type="button" role="tab" aria-controls="adm_profile_permissions" aria-selected="false">
-                    {$l10n->get('SYS_PERMISSIONS')}
+                <button class="nav-link active" id="adm_profile_basic_informations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_basic_informations_pane" type="button" role="tab" aria-controls="adm_profile_basic_data" aria-selected="true">
+                    {$l10n->get('SYS_BASIC_DATA')}
                 </button>
             </li>
+            {if $showCurrentRoles}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="adm_profile_role_permissions_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_permissions_pane" type="button" role="tab" aria-controls="adm_profile_permissions" aria-selected="false">
+                        {$l10n->get('SYS_PERMISSIONS')}
+                    </button>
+                </li>
         {/if}
         {if $showCurrentRoles || $showExternalRoles}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="adm_profile_role_memberships_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_role_memberships_pane" type="button" role="tab" aria-controls="adm_profile_role_memberships" aria-selected="false">
-                    {$l10n->get('SYS_ROLE_MEMBERSHIPS')}
-                </button>
-            </li>
-        {/if}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="adm_profile_role_memberships_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_role_memberships_pane" type="button" role="tab" aria-controls="adm_profile_role_memberships" aria-selected="false">
+                        {$l10n->get('SYS_ROLE_MEMBERSHIPS')}
+                    </button>
+                </li>
+            {/if}
         {if $showRelations}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="adm_profile_user_relations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_user_relations_pane" type="button" role="tab" aria-controls="adm_profile_user_relations" aria-selected="false">
-                    {$l10n->get('SYS_USER_RELATIONS')}
-                </button>
-            </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="adm_profile_user_relations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_user_relations_pane" type="button" role="tab" aria-controls="adm_profile_user_relations" aria-selected="false">
+                        {$l10n->get('SYS_USER_RELATIONS')}
+                    </button>
+                </li>
         {/if}
-    </ul>
+        </ul>
 
-    <!-- Tab Content -->
-    <div class="tab-content" id="adm_profile_tabs_content">
-        <!-- Basic Data Tab -->
-        <div class="tab-pane fade show active" id="adm_profile_basic_informations_pane" role="tabpanel" aria-labelledby="adm_profile_basic_informations_tab">
-            <!-- Profile Data Card -->
-            <div class="card admidio-tabbed-field-group">
-                <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
-                    {if isset($urlEditProfile)}
-                        <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlEditProfile}">
-                            <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_PROFILE')}</a>
-                    {/if}
-                </div>
-                <div class="card-body">
-                    {include file="modules/profile.view.basic-informations.tpl"}
-                </div>
-            </div>
-            <!-- Dynamic Cards for additional Profile Data categories -->
-            {foreach $profileData as $categoryName => $category}
+        <!-- Tab Content -->
+        <div class="tab-content" id="adm_profile_tabs_content">
+            <!-- Basic Data Tab -->
+            <div class="tab-pane fade show active" id="adm_profile_basic_informations_pane" role="tabpanel" aria-labelledby="adm_profile_basic_informations_tab">
+                <!-- Profile Data Card -->
                 <div class="card admidio-tabbed-field-group">
-                    <div class="card-header">{$categoryName}</div>
+                    <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
+                        {if isset($urlEditProfile)}
+                            <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlEditProfile}">
+                                <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_PROFILE')}</a>
+                        {/if}
+                    </div>
                     <div class="card-body">
-                        {include file="modules/profile.view.categories.tpl"}
+                        {include file="modules/profile.view.basic-informations.tpl"}
                     </div>
                 </div>
-            {/foreach}
-        </div>
+                <!-- Dynamic Cards for additional Profile Data categories -->
+                {foreach $profileData as $categoryName => $category}
+                    <div class="card admidio-tabbed-field-group">
+                        <div class="card-header">{$categoryName}</div>
+                        <div class="card-body">
+                            {include file="modules/profile.view.categories.tpl"}
+                        </div>
+                    </div>
+                {/foreach}
+            </div>
 
         <!-- Permissions Tab -->
         {if $showCurrentRoles}

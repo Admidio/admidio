@@ -355,6 +355,8 @@
   <string name="SYS_COMMA_SEPARATED_FILE">Comma-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
+  <string name="SYS_COMMON_SETTINGS">General settings</string>
+  <string name="SYS_COMMUNICATION">Communication</string>
   <string name="SYS_COMPLEMENT">Complement</string>
   <string name="SYS_CONDITION">Condition</string>
   <string name="SYS_CONFIGURATION">Configuration</string>
@@ -374,6 +376,7 @@
   <string name="SYS_CONTACT_SIMILAR_NAME">A contact with a similar name was found.</string>
   <string name="SYS_CONTACTS">Contacts</string>
   <string name="SYS_CONTENT">Content</string>
+  <string name="SYS_CONTENTS">Contents</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Contribution period</string>
   <string name="SYS_CONVERSATION_PARTNER">Conversation partner</string>
@@ -1578,6 +1581,7 @@
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
+  <string name="SYS_USERS">Users</string>
   <string name="SYS_USER_COULD_BE_CREATED">The Person could be created.</string>
   <string name="SYS_USER_DELETE_DESC">Would you like to delete #VAR1_BOLD#?\n\nUser is going to be physically deleted in the database which makes later access impossible.</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
