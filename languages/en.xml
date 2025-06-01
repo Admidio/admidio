@@ -345,9 +345,9 @@
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
   <string name="SYS_COLOR_PRIMARY">Primary Color</string>
-  <string name="SYS_COLOR_PRIMARY_DESC">The main color used for admidio. The title bar will use this color, as well as headlines.</string>
+  <string name="SYS_COLOR_PRIMARY_DESC">The main color used for Admidio. The title bar will use this color, as well as headlines.</string>
   <string name="SYS_COLOR_SECONDARY">Secondary Color</string>
-  <string name="SYS_COLOR_SECONDARY_DESC">The secondary color used for admidio. The side bar will use this color, as well as the preferences sections.</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">The secondary color used for Admidio. The side bar will use this color, as well as the preferences sections.</string>
   <string name="SYS_COMPACT">Compact</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
@@ -1392,7 +1392,7 @@
   <string name="SYS_SSO_CLIENT_DELETE">Delete SSO client</string>
   <string name="SYS_SSO_CLIENT_ADD_SAML">New SAML 2.0 client</string>
   <string name="SYS_SSO_CLIENT_ADMIN">Single-Sign-On Client Administration (SAML 2.0, OIDC)</string>
-  <string name="SYS_SSO_CLIENT_ADMIN_DESC">Admidio can be used as an "id Provider" for single-sign-on using the SAML 2.0 or OIDC protocols. This means that other web applications ("clients") can user Admidio's user accounts for authentification and authorization. Each client needs to be registered here, and the client needs to be set up for SSO with admidio, too. When a user wants to log into a client application, instead of the client's login screen, they are redirected to Admidio. If the user is already logged into Admidio, the logged-in user is returned to the client and given access. Otherwise the user can login to Admidio and is then redirected back to the client application.</string>
+  <string name="SYS_SSO_CLIENT_ADMIN_DESC">Admidio can be used as an "ID Provider" for single-sign-on using the SAML 2.0 or OIDC protocols. This means that other web applications ("clients") can user Admidio's user accounts for authentification and authorization. Each client needs to be registered here, and the client needs to be set up for SSO with Admidio, too. When a user wants to log into a client application, instead of the client's login screen, they are redirected to Admidio. If the user is already logged into Admidio, the logged-in user is returned to the client and given access. Otherwise the user can login to Admidio and is then redirected back to the client application.</string>
   <string name="SYS_SSO_CLIENT_NAME">Client Name</string>
   <string name="SYS_SSO_CLIENT_NAME_DESC">The human-readable name of the client. This is a purely descriptive attribute and will not be used to identify clients.</string>
   <string name="SYS_SSO_CLIENT_ID">Client ID</string>
@@ -1417,7 +1417,7 @@
   <string name="SYS_SSO_AUTO_SETUP">Automatic setup from metadata</string>
   <string name="SYS_SSO_LOAD_METADATA">Load Client Metadata</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Some clients offer a metadata file with all required settings. The automatic retrieval of this metadata URL only works if the URL is available to the admidio server.</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Some clients offer a metadata file with all required settings. The automatic retrieval of this metadata URL only works if the URL is available to the Admidio server.</string>
   <string name="SYS_SSO_ROLES">Restrict Access to Roles</string>
   <string name="SYS_SSO_ROLES_DESC">Only the selected roles are permitted to log in to the client through Single-sign-on. If empty, all valid Admidio users can log in.</string>
   <string name="SYS_SSO_NO_SAML_CLIENTS_FOUND">No SAML clients (Service Providers) configured!</string>
@@ -1428,7 +1428,7 @@
   <string name="SYS_SSO">Single-Sign-On (SAML 2.0, OpenId Connect)</string>
   <string name="SYS_SSO_SAML">Single-Sign-On with SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED">Enable Single-Sign-On via SAML2.0</string>
-  <string name="SYS_SSO_SAML_ENABLED_DESC">This setting turns Admidio into a SAML 2.0 identity provider (idP) for single-sign-on, which allows other web applications to authenticate users agains the admidio user list.</string>
+  <string name="SYS_SSO_SAML_ENABLED_DESC">This setting turns Admidio into a SAML 2.0 identity provider (idP) for single-sign-on, which allows other web applications to authenticate users agains the Admidio user list.</string>
   <string name="SYS_SSO_SAML_ENTITY_ID">SAML Entity Id</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">The unique identifier for SAML of this Admidio instance. Typically this is the URL of your installation. The client needs to be set up with the exact same entity ID, otherwise login will not work.</string>
   <string name="SYS_SSO_STATIC_SETTINGS">IdP metadata for client setup</string>
@@ -1489,15 +1489,15 @@
   <string name="SYS_SSO_NAME_PROPERTIES">Client (Service Provider) name and properties</string>
   <string name="SYS_SSO_USERDATA_ACCESS">User data and access permissions</string>
   <string name="SYS_SSO_USERID_FIELD">User ID field</string>
-  <string name="SYS_SSO_USERID_FIELD_DESC">Select the admidio field that should uniquely identify the user in the client system (Service Provider). Some systems expect a login name (string), some systems work with numeric IDs, etc. Please consult the manual of the Service Provider app.</string>
+  <string name="SYS_SSO_USERID_FIELD_DESC">Select the Admidio field that should uniquely identify the user in the client system (Service Provider). Some systems expect a login name (string), some systems work with numeric IDs, etc. Please consult the manual of the Service Provider app.</string>
   <string name="SYS_SSO_USERID_FIELDS">User ID fields</string>
-  <string name="SYS_SSO_USERID_ID">User id (numeric)</string>
+  <string name="SYS_SSO_USERID_ID">User ID (numeric)</string>
   <string name="SYS_SSO_USERID_UUID">User UUID (random 32-character string)</string>
   <string name="SYS_SSO_USERID_LOGIN">Login name</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID missing</string>
   <string name="SYS_SSO_OIDC">Single-Sign-On with OpenId Connect (OIDC)</string>
   <string name="SYS_SSO_OIDC_ENABLED">Enable Single-Sign-On via OpenId Connect (OIDC)</string>
-  <string name="SYS_SSO_OIDC_ENABLED_DESC">This setting turns Admidio into a OIDC identity provider (idP) for single-sign-on, which allows other web applications to authenticate users agains the admidio user list.</string>
+  <string name="SYS_SSO_OIDC_ENABLED_DESC">This setting turns Admidio into a OIDC identity provider (idP) for single-sign-on, which allows other web applications to authenticate users agains the Admidio user list.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# characters</string>
