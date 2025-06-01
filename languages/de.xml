@@ -238,6 +238,7 @@
   <string name="SYS_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Gästen und Mitgliedern aus diesem Grund nicht angezeigt.</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_DAY">Ganztägig</string>
+  <string name="SYS_ALL_MEMBERS">Alle Mitglieder</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Veranstaltung, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">Alle anderen</string>
@@ -682,6 +683,7 @@
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
+  <string name="SYS_FILTER_MEMBERS">Mitglieder filtern</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
   <string name="SYS_FIRSTNAME">Vorname</string>
@@ -968,6 +970,7 @@
   <string name="SYS_NONE">Keiner</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nicht bei Registrierung</string>
   <string name="SYS_NOT_EMPTY">Nicht leer</string>
+  <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Kein Mitglied einer Organisation</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Nicht Mitglied der Organisation #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
   <string name="SYS_NOT_REGISTERED">nicht registriert</string>
@@ -1285,7 +1288,7 @@
   <string name="SYS_SETTINGS">Einstellungen</string>
   <string name="SYS_SHOW_ALL">Alle anzeigen</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional alle Kontakte anzeigen</string>
-  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den aktiven Kontakten der aktuellen Organisation optional auch ehemalige Kontakte und Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den Kontakten der aktuellen Organisation optional auch Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive und inaktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer:innen wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss die Benutzerin oder der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>

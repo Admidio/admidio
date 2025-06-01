@@ -238,6 +238,7 @@
   <string name="SYS_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors and members for this reason.</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALL_DAY">Full time</string>
+  <string name="SYS_ALL_MEMBERS">All members</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, web link, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">All others</string>
@@ -682,6 +683,7 @@
   <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
+  <string name="SYS_FILTER_MEMBERS">Filter members</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
   <string name="SYS_FIRSTNAME">First name</string>
@@ -968,6 +970,7 @@
   <string name="SYS_NONE">None</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
+  <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not member of any organization</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Not member of organization #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Please use a valid number as condition for field #VAR1_BOLD#.</string>
   <string name="SYS_NOT_REGISTERED">Not registered</string>
@@ -1285,7 +1288,7 @@
   <string name="SYS_SETTINGS">Preferences</string>
   <string name="SYS_SHOW_ALL">Show all</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional show all contacts</string>
-  <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, former contacts and contacts of other organizations can optionally be displayed in the member administration in addition to the active contacts of the current organization. Otherwise, only active contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
