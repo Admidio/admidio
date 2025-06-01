@@ -9,8 +9,9 @@
  *
  * Parameters:
  *
- * members - true : (Default) Show only active contacts of the current organization
- *           false  : Show active and inactive contacts of all organizations in database
+ * mem_show_filter - 0  : (Default) Show only active contacts for current or all organizations
+ *                   1  : Show only inactive contacts for current or all organizations
+ *                   2  : Show active and inactive contacts for current or all organizations
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
@@ -25,11 +26,7 @@ try {
     require_once(__DIR__ . '/../../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));// if only active members should be shown then set parameter
-
-    if (!$gSettingsManager->getBool('contacts_show_all')) {
-        $getMembers = true;
-    }
+    $getMembersShowFiler = admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0));
 
     // set headline of the script
     $headline = $gL10n->get('SYS_CONTACTS');// Navigation of the module starts here
@@ -42,7 +39,6 @@ try {
     $_SESSION['contacts_list_configuration'] = $contactsListConfig;
 
     // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
-    $flagShowMembers = !$getMembers;// create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-contacts', $headline);
     $page->setContentFullWidth();
 
@@ -53,8 +49,11 @@ try {
             $("#menu_item_contacts_create_contact").attr("class", "nav-link btn btn-secondary openPopup");
 
             // change mode of users that should be shown
-            $("#mem_show_all").click(function() {
-                window.location.replace("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts.php', array('members' => $flagShowMembers)) . '");
+            $("#mem_show_filter").on("change", function() {
+                var form = $("#adm_navbar_filter_form");
+                var contactsSelect = $("#mem_show_filter");
+                contactsSelect.attr("name", "mem_show_filter");
+                form.submit();
             });', true);
 
         $page->addPageFunctionsMenuItem(
@@ -66,19 +65,32 @@ try {
 
         ChangelogService::displayHistoryButton($page, 'contacts', 'users,user_data,members');
 
-        // show checkbox to select all users or only active members
-        if ($gSettingsManager->getBool('contacts_show_all')) {
-            // create filter menu with elements for category
-            $form = new FormPresenter(
-                'adm_navbar_filter_form',
-                'sys-template-parts/form.filter.tpl',
-                '',
-                $page,
-                array('type' => 'navbar', 'setFocus' => false)
-            );
-            $form->addCheckbox('mem_show_all', $gL10n->get('SYS_SHOW_ALL'), $flagShowMembers, array('helpTextId' => 'SYS_SHOW_ALL_DESC'));
-            $form->addToHtmlPage();
-        }
+        // create filter menu with elements for category
+        $form = new FormPresenter(
+            'adm_navbar_filter_form',
+            'sys-template-parts/form.filter.tpl',
+            '',
+            $page,
+            array('type' => 'navbar', 'setFocus' => false)
+        );
+        
+        $selectBoxValues = array(
+            '0' => $gL10n->get('SYS_ACTIVE_MEMBERS'),
+            '1' => $gL10n->get('SYS_FORMER_MEMBERS'),
+            '2' => $gL10n->get('SYS_ALL_MEMBERS')
+        );
+
+        // filter all items
+        $form->addSelectBox(
+            'mem_show_filter',
+            $gL10n->get('SYS_FILTER_MEMBERS'),
+            $selectBoxValues,
+            array(
+                'defaultValue' => $getMembersShowFiler,
+                'showContextDependentFirstEntry' => false
+            )
+        );
+        $form->addToHtmlPage();
 
         // show link to import users
         $page->addPageFunctionsMenuItem(
@@ -112,7 +124,7 @@ try {
     $columnAlignment = $contactsListConfig->getColumnAlignments();
     array_unshift($columnAlignment, 'left', 'left');
     $columnAlignment[] = 'right';
-    $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('members' => $getMembers)));
+    $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('mem_show_filter' => $getMembersShowFiler)));
     $contactsTable->setColumnAlignByArray($columnAlignment);
     $contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
     $contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
