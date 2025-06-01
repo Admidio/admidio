@@ -119,6 +119,7 @@ class PreferencesPresenter extends PagePresenter
                 'panels' => array(
                     array('id'=>'events',               'title'=>$gL10n->get('SYS_EVENTS'),                 'icon'=>'bi-calendar-week-fill',            'subcards'=>false),
                     array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false),
+                    array('id'=>'inventory',            'title'=>$gL10n->get('SYS_INVENTORY'),              'icon'=>'bi-box-seam-fill',                 'subcards'=>false),
                     array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
                     array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
                 ),
