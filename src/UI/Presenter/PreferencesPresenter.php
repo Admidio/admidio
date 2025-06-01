@@ -72,114 +72,69 @@ class PreferencesPresenter extends PagePresenter
     private function initialize(): void
     {
         global $gL10n;
-
         $this->preferenceTabs = array(
-            // === 1) Konfiguration ===
+            // === 1) Common ===
             array(
-                'key'    => 'configuration',
-                'label'  => $gL10n->get('SYS_CONFIGURATION'),
+                'key'    => 'common',
+                'label'  => $gL10n->get('SYS_COMMON'),
                 'panels' => array(
-                    array('id'=>'common',          'title'=>$gL10n->get('SYS_COMMON'),               'icon'=>'bi-gear-fill'),
-                    array('id'=>'design',        'title'=>$gL10n->get('SYS_DESIGN'),                'icon'=>'bi-palette'),
-                    array('id'=>'regional_settings',   'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),         'icon'=>'bi-globe2'),
-                    array('id'=>'system_notifications', 'title'=>$gL10n->get('SYS_SYSTEM_MAILS'),            'icon'=>'bi-broadcast-pin'),
-                    array('id'=>'email_dispatch',       'title'=>$gL10n->get('SYS_MAIL_DISPATCH'),           'icon'=>'bi-envelope-open-fill'),
-                    array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),          'icon'=>'bi-clock-history'),
+                    array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON_SETTINGS'),        'icon'=>'bi-gear-fill',                     'subcards'=>false),
+                    array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
+                    array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
+                    array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
+                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),     'icon'=>'bi-info-circle-fill',              'subcards'=>true),
                 ),
             ),
         
-            // === 2) Sicherheit ===
+            // === 2) Login and Security ===
             array(
                 'key'    => 'login_security',
                 'label'  =>  $gL10n->get('SYS_LOGIN') . ' & ' . $gL10n->get('SYS_SECURITY'),
                 'panels' => array(
-                    array('id'=>'security', 'title'=>$gL10n->get('SYS_SECURITY'), 'icon'=>'bi-shield-fill'),
-                    array('id'=>'registration',    'title'=>$gL10n->get('SYS_REGISTRATION'),         'icon'=>'bi-card-checklist'),
-                    array('id'=>'captcha',  'title'=>$gL10n->get('SYS_CAPTCHA'),  'icon'=>'bi-fonts'),
-                    array('id'=>'sso',      'title'=>$gL10n->get('SYS_SSO'),      'icon'=>'bi-key'),
+                    array('id'=>'security',             'title'=>$gL10n->get('SYS_SECURITY'),               'icon'=>'bi-shield-fill',                   'subcards'=>false),
+                    array('id'=>'registration',         'title'=>$gL10n->get('SYS_REGISTRATION'),           'icon'=>'bi-card-checklist',                'subcards'=>false),
+                    array('id'=>'captcha',              'title'=>$gL10n->get('SYS_CAPTCHA'),                'icon'=>'bi-fonts',                         'subcards'=>false),
+                    array('id'=>'sso',                  'title'=>$gL10n->get('SYS_SSO'),                    'icon'=>'bi-key',                           'subcards'=>false),
                 ),
             ),
 
-            // === 2) Kommunikation ===
+            // === 2) Communication ===
             array(
                 'key'    => 'communication',
                 'label'  => $gL10n->get('SYS_COMMUNICATION'),
                 'panels' => array(
-                    array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),           'icon'=>'bi-newspaper'),
-                    array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),                'icon'=>'bi-envelope-fill'),
-                    array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                   'icon'=>'bi-chat-dots-fill'),
+                    array('id'=>'system_notifications', 'title'=>$gL10n->get('SYS_SYSTEM_MAILS'),           'icon'=>'bi-broadcast-pin',                 'subcards'=>false),
+                    array('id'=>'email_dispatch',       'title'=>$gL10n->get('SYS_MAIL_DISPATCH'),          'icon'=>'bi-envelope-open-fill',            'subcards'=>false),
+                    array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),               'icon'=>'bi-envelope-fill',                 'subcards'=>false),
+                    array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),          'icon'=>'bi-newspaper',                     'subcards'=>false),
+                    array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                  'icon'=>'bi-chat-dots-fill',                'subcards'=>false),
                 ),
             ),
         
-            // === 3) Inhaltsverwaltung ===
+            // === 3) Contents ===
             array(
                 'key'    => 'content_management',
                 'label'  => $gL10n->get('SYS_CONTENTS'),
                 'panels' => array(
-                    array('id'=>'documents_files', 'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),      'icon'=>'bi-file-earmark-arrow-down-fill'),
-                    array('id'=>'photos',          'title'=>$gL10n->get('SYS_PHOTOS'),               'icon'=>'bi-image-fill'),
-                    array('id'=>'links',           'title'=>$gL10n->get('SYS_WEBLINKS'),             'icon'=>'bi-link-45deg'),
-                    array('id'=>'events',          'title'=>$gL10n->get('SYS_EVENTS'),               'icon'=>'bi-calendar-week-fill'),
+                    array('id'=>'events',               'title'=>$gL10n->get('SYS_EVENTS'),                 'icon'=>'bi-calendar-week-fill',            'subcards'=>false),
+                    array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false),
+                    array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
+                    array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
                 ),
             ),
         
-            // === 4) Benutzerverwaltung ===
+            // === 4) User Management ===
             array(
                 'key'    => 'user_management',
                 'label'  => $gL10n->get('SYS_USERS'),
                 'panels' => array(
-                    array('id'=>'contacts',        'title'=>$gL10n->get('SYS_CONTACTS'),             'icon'=>'bi-person-vcard-fill'),
-                    array('id'=>'profile',         'title'=>$gL10n->get('SYS_PROFILE'),              'icon'=>'bi-person-fill'),
-                    array('id'=>'groups_roles',    'title'=>$gL10n->get('SYS_GROUPS_ROLES'),         'icon'=>'bi-people-fill'),
-                    array('id'=>'category_report', 'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),      'icon'=>'bi-list-stars'),
-                ),
-            ),
-
-            // === 5) Wartung und Info ===
-            array(
-                'key'    => 'maintenance',
-                'label'  => $gL10n->get('SYS_UPDATE') . ' & ' . $gL10n->get('SYS_INFORMATIONS'),
-                'panels' => array(
-                    array('id'=>'admidio_update',     'title'=>$gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'),  'icon'=>'bi-cloud-arrow-down-fill'),
-                    array('id'=>'system_information','title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),       'icon'=>'bi-info-circle-fill'),
-                    array('id'=>'php',                'title'=>$gL10n->get('SYS_PHP'),                    'icon'=>'bi-filetype-php'),
+                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
+                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
+                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
+                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
                 ),
             ),
         );
-    }
-
-    /**
-     * Generates the HTML of the form from the Admidio update preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the Admidio update preferences.
-     * @throws Exception
-     * @throws \Smarty\Exception
-     */
-    public function createAdmidioUpdateForm(): string
-    {
-        global $gDb, $gSystemComponent;
-
-        $component = new ComponentUpdate($gDb);
-        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
-        $updateStep = (int) $gSystemComponent->getValue('com_update_step');
-        $maxStep = $component->getMaxUpdateStep();
-        $updateStepText = $updateStep . ' / ' . $maxStep;
-        if ($updateStep === $maxStep) {
-            $updateStepColorClass = 'text-success';
-        } elseif ($updateStep > $maxStep) {
-            $updateStepColorClass = 'text-warning';
-        } else {
-            $updateStepColorClass = 'text-danger';
-        }
-
-        $this->assignSmartyVariable('admidioVersion', ADMIDIO_VERSION_TEXT);
-        $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
-        $this->assignSmartyVariable('updateStepText', $updateStepText);
-        $this->assignSmartyVariable('databaseEngine', DB_ENGINE);
-        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
-        $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
-
-        $smarty = $this->getSmartyTemplate();
-        return $smarty->fetch('preferences/preferences.admidio-update.tpl');
     }
 
     /**
@@ -1567,93 +1522,6 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the HTML of the form from the PHP preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the PHP preferences.
-     * @throws Exception
-     * @throws \Smarty\Exception
-     */
-    public function createPHPForm(): string
-    {
-        global $gL10n;
-
-        if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
-            $phpVersionColorClass = 'text-danger';
-            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION));
-        } elseif (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
-            $phpVersionColorClass = 'text-warning';
-            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>'));
-        } else {
-            $phpVersionColorClass = 'text-success';
-            $phpVersionInfo = '';
-        }
-        $this->assignSmartyVariable('phpVersionColorClass', $phpVersionColorClass);
-        $this->assignSmartyVariable('phpVersionText', PHP_VERSION);
-        $this->assignSmartyVariable('phpVersionInfo', $phpVersionInfo);
-
-        $postMaxSize = PhpIniUtils::getPostMaxSize();
-        if (is_infinite($postMaxSize)) {
-            $postMaxSizeColorClass = 'text-warning';
-            $postMaxSizeText = $gL10n->get('SYS_NOT_SET');
-        } else {
-            $postMaxSizeColorClass = 'text-success';
-            $postMaxSizeText = FileSystemUtils::getHumanReadableBytes($postMaxSize);
-        }
-        $this->assignSmartyVariable('postMaxSizeColorClass', $postMaxSizeColorClass);
-        $this->assignSmartyVariable('postMaxSizeText', $postMaxSizeText);
-
-        $memoryLimit = PhpIniUtils::getMemoryLimit();
-        if (is_infinite($memoryLimit)) {
-            $memoryLimitColorClass = 'text-warning';
-            $memoryLimitText = $gL10n->get('SYS_NOT_SET');
-        } else {
-            $memoryLimitColorClass = 'text-success';
-            $memoryLimitText = FileSystemUtils::getHumanReadableBytes($memoryLimit);
-        }
-        $this->assignSmartyVariable('memoryLimitColorClass', $memoryLimitColorClass);
-        $this->assignSmartyVariable('memoryLimitText', $memoryLimitText);
-
-        if (PhpIniUtils::isFileUploadEnabled()) {
-            $fileUploadsColorClass = 'text-success';
-            $fileUploadsText = $gL10n->get('SYS_ON');
-        } else {
-            $fileUploadsColorClass = 'text-danger';
-            $fileUploadsText = $gL10n->get('SYS_OFF');
-        }
-        $this->assignSmartyVariable('fileUploadsColorClass', $fileUploadsColorClass);
-        $this->assignSmartyVariable('fileUploadsText', $fileUploadsText);
-
-        $fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
-        if (is_infinite($fileUploadMaxFileSize)) {
-            $uploadMaxFilesizeColorClass = 'text-warning';
-            $uploadMaxFilesizeText = $gL10n->get('SYS_NOT_SET');
-        } else {
-            $uploadMaxFilesizeColorClass = 'text-success';
-            $uploadMaxFilesizeText = FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize);
-        }
-        $this->assignSmartyVariable('uploadMaxFilesizeColorClass', $uploadMaxFilesizeColorClass);
-        $this->assignSmartyVariable('uploadMaxFilesizeText', $uploadMaxFilesizeText);
-
-        try {
-            SecurityUtils::getRandomInt(0, 1, true);
-            $prnGeneratorColorClass = 'text-success';
-            $prnGeneratorText = $gL10n->get('SYS_SECURE');
-            $prnGeneratorInfo = '';
-        } catch (Exception $e) {
-            $prnGeneratorColorClass = 'text-danger';
-            $prnGeneratorText = $gL10n->get('SYS_PRNG_INSECURE');
-            $prnGeneratorInfo = '<br />' . $e->getMessage();
-        }
-        $this->assignSmartyVariable('prnGeneratorColorClass', $prnGeneratorColorClass);
-        $this->assignSmartyVariable('prnGeneratorText', $prnGeneratorText);
-        $this->assignSmartyVariable('prnGeneratorInfo', $prnGeneratorInfo);
-
-        $this->assignSmartyVariable('admidioUrl', ADMIDIO_URL);
-
-        $smarty = $this->getSmartyTemplate();
-        return $smarty->fetch('preferences/preferences.php.tpl');
-    }
-
-    /**
      * Generates the HTML of the form from the profile preferences and will return the complete HTML.
      * @return string Returns the complete HTML of the form from the profile preferences.
      * @throws Exception
@@ -2138,15 +2006,37 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the HTML of the form from the system information preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the system information preferences.
+     * Generates the HTML of the form from the Admidio update preferences, system information preferences and PHP preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the  Admidio update preferences, system information preferences and PHP preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
     public function createSystemInformationForm(): string
     {
-        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData;
+        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData, $gSystemComponent;
 
+        // Admidio Version and Update
+        $component = new ComponentUpdate($gDb);
+        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+        $updateStep = (int) $gSystemComponent->getValue('com_update_step');
+        $maxStep = $component->getMaxUpdateStep();
+        $updateStepText = $updateStep . ' / ' . $maxStep;
+        if ($updateStep === $maxStep) {
+            $updateStepColorClass = 'text-success';
+        } elseif ($updateStep > $maxStep) {
+            $updateStepColorClass = 'text-warning';
+        } else {
+            $updateStepColorClass = 'text-danger';
+        }
+
+        $this->assignSmartyVariable('admidioVersion', ADMIDIO_VERSION_TEXT);
+        $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
+        $this->assignSmartyVariable('updateStepText', $updateStepText);
+        $this->assignSmartyVariable('databaseEngine', DB_ENGINE);
+        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
+        $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
+
+        // Admidio System Information
         $this->assignSmartyVariable('operatingSystemName', SystemInfoUtils::getOS());
         $this->assignSmartyVariable('operatingSystemUserName', SystemInfoUtils::getUname());
 
@@ -2243,8 +2133,89 @@ class PreferencesPresenter extends PagePresenter
         }
         $this->assignSmartyVariable('diskSpaceContent', $diskSpaceContent);
 
+        // Admidio PHP Information
+                if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+            $phpVersionColorClass = 'text-danger';
+            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION));
+        } elseif (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+            $phpVersionColorClass = 'text-warning';
+            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>'));
+        } else {
+            $phpVersionColorClass = 'text-success';
+            $phpVersionInfo = '';
+        }
+        $this->assignSmartyVariable('phpVersionColorClass', $phpVersionColorClass);
+        $this->assignSmartyVariable('phpVersionText', PHP_VERSION);
+        $this->assignSmartyVariable('phpVersionInfo', $phpVersionInfo);
+
+        $postMaxSize = PhpIniUtils::getPostMaxSize();
+        if (is_infinite($postMaxSize)) {
+            $postMaxSizeColorClass = 'text-warning';
+            $postMaxSizeText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $postMaxSizeColorClass = 'text-success';
+            $postMaxSizeText = FileSystemUtils::getHumanReadableBytes($postMaxSize);
+        }
+        $this->assignSmartyVariable('postMaxSizeColorClass', $postMaxSizeColorClass);
+        $this->assignSmartyVariable('postMaxSizeText', $postMaxSizeText);
+
+        $memoryLimit = PhpIniUtils::getMemoryLimit();
+        if (is_infinite($memoryLimit)) {
+            $memoryLimitColorClass = 'text-warning';
+            $memoryLimitText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $memoryLimitColorClass = 'text-success';
+            $memoryLimitText = FileSystemUtils::getHumanReadableBytes($memoryLimit);
+        }
+        $this->assignSmartyVariable('memoryLimitColorClass', $memoryLimitColorClass);
+        $this->assignSmartyVariable('memoryLimitText', $memoryLimitText);
+
+        if (PhpIniUtils::isFileUploadEnabled()) {
+            $fileUploadsColorClass = 'text-success';
+            $fileUploadsText = $gL10n->get('SYS_ON');
+        } else {
+            $fileUploadsColorClass = 'text-danger';
+            $fileUploadsText = $gL10n->get('SYS_OFF');
+        }
+        $this->assignSmartyVariable('fileUploadsColorClass', $fileUploadsColorClass);
+        $this->assignSmartyVariable('fileUploadsText', $fileUploadsText);
+
+        $fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
+        if (is_infinite($fileUploadMaxFileSize)) {
+            $uploadMaxFilesizeColorClass = 'text-warning';
+            $uploadMaxFilesizeText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $uploadMaxFilesizeColorClass = 'text-success';
+            $uploadMaxFilesizeText = FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize);
+        }
+        $this->assignSmartyVariable('uploadMaxFilesizeColorClass', $uploadMaxFilesizeColorClass);
+        $this->assignSmartyVariable('uploadMaxFilesizeText', $uploadMaxFilesizeText);
+
+        try {
+            SecurityUtils::getRandomInt(0, 1, true);
+            $prnGeneratorColorClass = 'text-success';
+            $prnGeneratorText = $gL10n->get('SYS_SECURE');
+            $prnGeneratorInfo = '';
+        } catch (Exception $e) {
+            $prnGeneratorColorClass = 'text-danger';
+            $prnGeneratorText = $gL10n->get('SYS_PRNG_INSECURE');
+            $prnGeneratorInfo = '<br />' . $e->getMessage();
+        }
+        $this->assignSmartyVariable('prnGeneratorColorClass', $prnGeneratorColorClass);
+        $this->assignSmartyVariable('prnGeneratorText', $prnGeneratorText);
+        $this->assignSmartyVariable('prnGeneratorInfo', $prnGeneratorInfo);
+        $this->assignSmartyVariable('admidioUrl', ADMIDIO_URL);
+
+        //assign card titles and corresponding template files
+        $cards = array(
+            array('title'=>$gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
+            array('title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),        'icon'=>'bi-info-circle-fill', 'templateFile'=>'preferences/preferences.system-information.tpl'),
+            array('title'=>$gL10n->get('SYS_PHP'),                 'icon'=>'bi-filetype-php', 'templateFile'=>'preferences/preferences.php.tpl'),
+        );
+
+        $this->assignSmartyVariable('cards', $cards);
         $smarty = $this->getSmartyTemplate();
-        return $smarty->fetch('preferences/preferences.system-information.tpl');
+        return $smarty->fetch('preferences/preferences.system-informations.tpl');
     }
 
     /**

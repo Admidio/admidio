@@ -1,4 +1,4 @@
-<!-- === Für große Bildschirme: Tabs === -->
+<!-- for big screens: Tabs -->
 <div class="d-none d-md-block">
     <div class="tabs-x tabs-left tab-bordered">
         <!-- variable set the first tab active -->
@@ -26,15 +26,19 @@
             {foreach $preferenceTabs as $tab}
                 {foreach $tab.panels as $panel}
                     <div class="tab-pane fade{if $globalFirst} active show{/if}" id="adm_tab_{$panel.id}_content" role="tabpanel" aria-labelledby="tab-{$panel.id}">
-                        <!-- Überschrift für jede Tab-Gruppe -->
-                        <div class="card admidio-tabbed-field-group">
-                            <div class="card-header">{$panel.title}</div>
-                            <div class="card-body">
-                                <div id="adm_panel_preferences_{$panel.id}" data-preferences-panel="{$panel.id}">
-                                    <!-- AJAX-Container für Formular -->
+                        <!-- heading for each tab group -->
+                        {if !$panel.subcards}                                              
+                            <div class="card admidio-tabbed-field-group">
+                                <div class="card-header">{$panel.title}</div>
+                                <div class="card-body">
+                        {/if} 
+                                    <div id="adm_panel_preferences_{$panel.id}" data-preferences-panel="{$panel.id}">
+                                        <!-- AJAX-Container for panel content -->
+                                    </div>
+                        {if !$panel.subcards}
                                 </div>
                             </div>
-                        </div>
+                        {/if}
                     </div>
                     {if $globalFirst}{assign var="globalFirst" value=false}{/if}
                 {/foreach}
@@ -43,11 +47,11 @@
     </div>
 </div>
 
-<!-- === Für kleine Bildschirme: ein globales Accordion === -->
+<!-- for small screens: Accordions -->
 <div class="d-block d-md-none">
     <div class="accordion" id="adm_preferences_accordion">
         {foreach $preferenceTabs as $tab name=outer}
-            <!-- Überschrift für jede Tab-Gruppe -->
+            <!-- heading for each accordion group -->
             <div class="card admidio-accordion-field-group">
                 <div class="card-header">{$tab.label}</div>
                 <div class="card-body">
@@ -61,7 +65,7 @@
                             <div class="accordion-collapse collapse{if $smarty.foreach.outer.first && $smarty.foreach.inner.first} show{/if}" id="collapse_{$panel.id}" aria-labelledby="heading_{$panel.id}" data-bs-parent="#adm_preferences_accordion">
                                 <div class="accordion-body">
                                     <div id="adm_panel_preferences_{$panel.id}" data-preferences-panel="{$panel.id}" >
-                                        <!-- AJAX-Container für Formular -->
+                                        <!-- AJAX-Container for panel content -->
                                     </div>
                                 </div>
                             </div>
