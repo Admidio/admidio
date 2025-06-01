@@ -56,7 +56,7 @@
                     </button>
                 </li>
         {/if}
-        {if $showCurrentRoles || $showExternalRoles}
+        {if $showCurrentRoles || $showFormerRoles || $showExternalRoles}
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="adm_profile_role_memberships_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_role_memberships_pane" type="button" role="tab" aria-controls="adm_profile_role_memberships" aria-selected="false">
                         {$l10n->get('SYS_ROLE_MEMBERSHIPS')}
@@ -107,7 +107,7 @@
         {/if}
 
         <!-- Role Memberships Tab -->
-        {if $showCurrentRoles || $showExternalRoles}
+        {if $showCurrentRoles || $showFormerRoles || $showExternalRoles}
             <div class="tab-pane fade" id="adm_profile_role_memberships_pane" role="tabpanel" aria-labelledby="adm_profile_role_memberships_tab">
                 {if $showCurrentRoles}
                     <!-- Current Role Memberships Card -->
@@ -128,6 +128,8 @@
                         <div class="card-body">
                         </div>
                     </div>
+                {/if}
+                {if $showFormerRoles}
                     <!-- Former Role Memberships Card -->
                     <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_former_pane_content">
                         <div class="card-header">{$l10n->get('SYS_FORMER_ROLE_MEMBERSHIP')}</div>
@@ -257,7 +259,7 @@
             </div>
         {/if}
         <!-- Role Memberships Accordion -->
-        {if $showCurrentRoles || $showExternalRoles}
+        {if $showCurrentRoles || $showFormerRoles || $showExternalRoles}
             <div class="accordion-item">
                 <h2 class="accordion-header" id="adm_profile_role_memberships_accordion_heading">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#adm_profile_role_memberships_accordion" aria-expanded="false" aria-controls="adm_profile_role_memberships_accordion">
@@ -285,6 +287,8 @@
                             <div class="card-body">
                             </div>
                         </div>
+                    {/if}
+                    {if $showFormerRoles}
                         <!-- Former Role Memberships Card -->
                         <div class="card admidio-accordion-field-group" id="adm_profile_role_memberships_former_accordion_content">
                             <div class="card-header">{$l10n->get('SYS_FORMER_ROLE_MEMBERSHIP')}</div>
@@ -292,7 +296,6 @@
                             </div>
                         </div>
                     {/if}
-                    
                     {if $showExternalRoles}
                         <!-- Other Org Role Memberships Card -->
                         <div class="card admidio-accordion-field-group" id="adm_profile_role_memberships_other_org_accordion_content">

@@ -361,6 +361,7 @@ try {
     }
 
     $page->assignSmartyVariable('showCurrentRoles', $gSettingsManager->getBool('profile_show_roles'));
+    $page->assignSmartyVariable('showFormerRoles', $gSettingsManager->getBool('profile_show_former_roles'));
     $page->assignSmartyVariable('isAdministratorRoles', $gCurrentUser->isAdministratorRoles());
     $page->assignSmartyVariable('isAdministratorUsers', $gCurrentUser->isAdministratorUsers());
     $page->assignSmartyVariable('masterData', $masterData);
