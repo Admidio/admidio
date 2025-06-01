@@ -93,7 +93,7 @@ try {
 
         // if user is logged in then show sender name and email
         if ($gCurrentUserId > 0) {
-            $formValues['namefrom'] = $gCurrentUser->getValue('FIRST_NAME') . ' messages_send.php' . $gCurrentUser->getValue('LAST_NAME');
+            $formValues['namefrom'] = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
             if (!isset($formValues['mailfrom']) || !StringUtils::strValidCharacters((string) $formValues['mailfrom'], 'email')) {
                 $formValues['mailfrom'] = $gCurrentUser->getValue('EMAIL');
             }
@@ -163,7 +163,7 @@ try {
                     // only send email to user if current user is allowed to view this user, and he has a valid email address
                     if ($gCurrentUser->hasRightViewProfile($user)) {
                         // add user to the message object
-                        $message->addUser($user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' messages_send.php' . $user->getValue('LAST_NAME'));
+                        $message->addUser($user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
 
                         // add user as recipients to the email
                         $email->addRecipientsByUser($user->getValue('usr_uuid'));
@@ -325,7 +325,7 @@ try {
 
         // message if sending was OK
         if ($getMsgType === Message::MESSAGE_TYPE_PM) {
-            $successMessage = $gL10n->get('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' messages_send.php' . $user->getValue('LAST_NAME')));
+            $successMessage = $gL10n->get('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
         } else {
             $successMessage = $gL10n->get('SYS_EMAIL_SEND');
         }
@@ -333,7 +333,7 @@ try {
         exit();
     } else {
         if ($getMsgType === Message::MESSAGE_TYPE_PM) {
-            throw new Exception('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' messages_send.php' . $user->getValue('LAST_NAME'), $sendResult));
+            throw new Exception('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult));
         } else {
             throw new Exception('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
         }

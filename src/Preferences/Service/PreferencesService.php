@@ -223,10 +223,16 @@ class PreferencesService
 
         // first check the fields of the submitted form
         switch ($panel) {
-            case 'Common':
+            case 'design':
                 if (!StringUtils::strIsValidFolderName($formData['theme'])
                     || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme'] . '/index.html')) {
                     throw new Exception('ORG_INVALID_THEME');
+                }
+                if (!empty($formData['theme_fallback'])) {
+                    if (!StringUtils::strIsValidFolderName($formData['theme_fallback'])
+                        || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme_fallback'] . '/index.html')) {
+                        throw new Exception('ORG_INVALID_THEME_FALLBACK');
+                    }
                 }
                 break;
 

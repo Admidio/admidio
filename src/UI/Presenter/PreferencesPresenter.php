@@ -34,17 +34,16 @@ use RuntimeException;
 class PreferencesPresenter extends PagePresenter
 {
     /**
-     * @var array Array with all possible accordion entries for the system preferences.
-     *            Each accordion entry consists of an array that has the following structure:
-     *            array ('id' => 'xzy', 'title' => 'xyz', 'icon' => 'xyz')
+     * @var array Array with all possible entries for the preferences.
+     *            Each entry consists of an array that has the following structure:
+     *            array ('key' => 'xzy', 'label' => 'xyz', 'panels' => array('id' => 'xyz', 'title' => 'xyz', 'icon' => 'xyz'))
+     * 
+     *            There are thwo different visualizations of the preferences:
+     *              1) a nested tab structure (main tabs created by 'key' and 'label' and sub tabs created by 'panels')
+     *              2) a accordion structure when the @media query (max-width: 768px) is active ('key' and 'label' are used for card header
+     *                 and 'panels' for accordions inside the card) 
      */
-    protected array $accordionCommonPanels = array();
-    /**
-     * @var array Array with all possible accordion entries for the module preferences.
-     *            Each accordion entry consists of an array that has the following structure:
-     *            array ('id' => 'xzy', 'title' => 'xyz', 'icon' => 'xyz')
-     */
-    protected array $accordionModulePanels = array();
+    protected array $preferenceTabs = array();
     /**
      * @var string Name of the preference panel that should be shown after page loading.
      *             If this parameter is empty, then show the common preferences.
@@ -74,165 +73,69 @@ class PreferencesPresenter extends PagePresenter
     private function initialize(): void
     {
         global $gL10n;
+        $this->preferenceTabs = array(
+            // === 1) Common ===
+            array(
+                'key'    => 'common',
+                'label'  => $gL10n->get('SYS_COMMON'),
+                'panels' => array(
+                    array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON_SETTINGS'),        'icon'=>'bi-gear-fill',                     'subcards'=>false),
+                    array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
+                    array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
+                    array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
+                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),     'icon'=>'bi-info-circle-fill',              'subcards'=>true),
+                ),
+            ),
+        
+            // === 2) Login and Security ===
+            array(
+                'key'    => 'login_security',
+                'label'  =>  $gL10n->get('SYS_LOGIN') . ' & ' . $gL10n->get('SYS_SECURITY'),
+                'panels' => array(
+                    array('id'=>'security',             'title'=>$gL10n->get('SYS_SECURITY'),               'icon'=>'bi-shield-fill',                   'subcards'=>false),
+                    array('id'=>'registration',         'title'=>$gL10n->get('SYS_REGISTRATION'),           'icon'=>'bi-card-checklist',                'subcards'=>false),
+                    array('id'=>'captcha',              'title'=>$gL10n->get('SYS_CAPTCHA'),                'icon'=>'bi-fonts',                         'subcards'=>false),
+                    array('id'=>'sso',                  'title'=>$gL10n->get('SYS_SSO'),                    'icon'=>'bi-key',                           'subcards'=>false),
+                ),
+            ),
 
-        $this->accordionCommonPanels = array(
-            'common' => array(
-                'id' => 'common',
-                'title' => $gL10n->get('SYS_COMMON'),
-                'icon' => 'bi-gear-fill'
+            // === 2) Communication ===
+            array(
+                'key'    => 'communication',
+                'label'  => $gL10n->get('SYS_COMMUNICATION'),
+                'panels' => array(
+                    array('id'=>'system_notifications', 'title'=>$gL10n->get('SYS_SYSTEM_MAILS'),           'icon'=>'bi-broadcast-pin',                 'subcards'=>false),
+                    array('id'=>'email_dispatch',       'title'=>$gL10n->get('SYS_MAIL_DISPATCH'),          'icon'=>'bi-envelope-open-fill',            'subcards'=>false),
+                    array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),               'icon'=>'bi-envelope-fill',                 'subcards'=>false),
+                    array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),          'icon'=>'bi-newspaper',                     'subcards'=>false),
+                    array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                  'icon'=>'bi-chat-dots-fill',                'subcards'=>false),
+                ),
             ),
-            'security' => array(
-                'id' => 'security',
-                'title' => $gL10n->get('SYS_SECURITY'),
-                'icon' => 'bi-shield-fill'
+        
+            // === 3) Contents ===
+            array(
+                'key'    => 'content_management',
+                'label'  => $gL10n->get('SYS_CONTENTS'),
+                'panels' => array(
+                    array('id'=>'events',               'title'=>$gL10n->get('SYS_EVENTS'),                 'icon'=>'bi-calendar-week-fill',            'subcards'=>false),
+                    array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false),
+                    array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
+                    array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
+                ),
             ),
-            'regional_settings' => array(
-                'id' => 'regional_settings',
-                'title' => $gL10n->get('ORG_REGIONAL_SETTINGS'),
-                'icon' => 'bi-globe2'
+        
+            // === 4) User Management ===
+            array(
+                'key'    => 'user_management',
+                'label'  => $gL10n->get('SYS_USERS'),
+                'panels' => array(
+                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
+                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
+                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
+                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
+                ),
             ),
-            'changelog' => array(
-                'id' => 'changelog',
-                'title' => $gL10n->get('SYS_CHANGE_HISTORY'),
-                'icon' => 'bi-clock-history'
-            ),
-            'registration' => array(
-                'id' => 'registration',
-                'title' => $gL10n->get('SYS_REGISTRATION'),
-                'icon' => 'bi-card-checklist'
-            ),
-            'email_dispatch' => array(
-                'id' => 'email_dispatch',
-                'title' => $gL10n->get('SYS_MAIL_DISPATCH'),
-                'icon' => 'bi-envelope-open-fill'
-            ),
-            'system_notifications' => array(
-                'id' => 'system_notifications',
-                'title' => $gL10n->get('SYS_SYSTEM_MAILS'),
-                'icon' => 'bi-broadcast-pin'
-            ),
-            'captcha' => array(
-                'id' => 'captcha',
-                'title' => $gL10n->get('SYS_CAPTCHA'),
-                'icon' => 'bi-fonts'
-            ),
-            'sso' => array(
-                'id' => 'sso',
-                'title' => $gL10n->get('SYS_SSO'),
-                'icon' => 'bi-key'
-            ),
-            'admidio_update' => array(
-                'id' => 'admidio_update',
-                'title' => $gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'),
-                'icon' => 'bi-cloud-arrow-down-fill'
-            ),
-            'php' => array(
-                'id' => 'php',
-                'title' => $gL10n->get('SYS_PHP'),
-                'icon' => 'bi-filetype-php'
-            ),
-            'system_information' => array(
-                'id' => 'system_information',
-                'title' => $gL10n->get('SYS_SYSTEM_INFORMATION'),
-                'icon' => 'bi-info-circle-fill'
-            )
         );
-        $this->accordionModulePanels = array(
-            'announcements' => array(
-                'id' => 'announcements',
-                'title' => $gL10n->get('SYS_ANNOUNCEMENTS'),
-                'icon' => 'bi-newspaper'
-            ),
-            'contacts' => array(
-                'id' => 'contacts',
-                'title' => $gL10n->get('SYS_CONTACTS'),
-                'icon' => 'bi-person-vcard-fill'
-            ),
-            'documents_files' => array(
-                'id' => 'documents_files',
-                'title' => $gL10n->get('SYS_DOCUMENTS_FILES'),
-                'icon' => 'bi-file-earmark-arrow-down-fill'
-            ),
-            'inventory' => array(
-                'id' => 'inventory',
-                'title' => $gL10n->get('SYS_INVENTORY'),
-                'icon' => 'bi-box-seam-fill'
-            ),
-            'photos' => array(
-                'id' => 'photos',
-                'title' => $gL10n->get('SYS_PHOTOS'),
-                'icon' => 'bi-image-fill'
-            ),
-            'forum' => array(
-                'id' => 'forum',
-                'title' => $gL10n->get('SYS_FORUM'),
-                'icon' => 'bi-chat-dots-fill'
-            ),
-            'groups_roles' => array(
-                'id' => 'groups_roles',
-                'title' => $gL10n->get('SYS_GROUPS_ROLES'),
-                'icon' => 'bi-people-fill'
-            ),
-            'category_report' => array(
-                'id' => 'category_report',
-                'title' => $gL10n->get('SYS_CATEGORY_REPORT'),
-                'icon' => 'bi-list-stars'
-            ),
-            'messages' => array(
-                'id' => 'messages',
-                'title' => $gL10n->get('SYS_MESSAGES'),
-                'icon' => 'bi-envelope-fill'
-            ),
-            'profile' => array(
-                'id' => 'profile',
-                'title' => $gL10n->get('SYS_PROFILE'),
-                'icon' => 'bi-person-fill'
-            ),
-            'events' => array(
-                'id' => 'events',
-                'title' => $gL10n->get('SYS_EVENTS'),
-                'icon' => 'bi-calendar-week-fill'
-            ),
-            'links' => array(
-                'id' => 'links',
-                'title' => $gL10n->get('SYS_WEBLINKS'),
-                'icon' => 'bi-link-45deg'
-            )
-        );
-    }
-
-    /**
-     * Generates the HTML of the form from the Admidio update preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the Admidio update preferences.
-     * @throws Exception
-     * @throws \Smarty\Exception
-     */
-    public function createAdmidioUpdateForm(): string
-    {
-        global $gDb, $gSystemComponent;
-
-        $component = new ComponentUpdate($gDb);
-        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
-        $updateStep = (int) $gSystemComponent->getValue('com_update_step');
-        $maxStep = $component->getMaxUpdateStep();
-        $updateStepText = $updateStep . ' / ' . $maxStep;
-        if ($updateStep === $maxStep) {
-            $updateStepColorClass = 'text-success';
-        } elseif ($updateStep > $maxStep) {
-            $updateStepColorClass = 'text-warning';
-        } else {
-            $updateStepColorClass = 'text-danger';
-        }
-
-        $this->assignSmartyVariable('admidioVersion', ADMIDIO_VERSION_TEXT);
-        $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
-        $this->assignSmartyVariable('updateStepText', $updateStepText);
-        $this->assignSmartyVariable('databaseEngine', DB_ENGINE);
-        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
-        $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
-
-        $smarty = $this->getSmartyTemplate();
-        return $smarty->fetch('preferences/preferences.admidio-update.tpl');
     }
 
     /**
@@ -575,17 +478,6 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
 
-        // search all available themes in the theme folder
-        $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
-        if (count($themes) === 0) {
-            throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
-        }
-        $formCommon->addSelectBox(
-            'theme',
-            $gL10n->get('ORG_ADMIDIO_THEME'),
-            $themes,
-            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
-        );
         $formCommon->addInput(
             'homepage_logout',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('SYS_VISITORS') . ')',
@@ -743,6 +635,86 @@ class PreferencesPresenter extends PagePresenter
         $formContacts->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formContacts);
         return $smarty->fetch('preferences/preferences.contacts.tpl');
+    }
+
+    /**
+     * Generates the HTML of the form from the design preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the design preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createDesignForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gCurrentSession;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formCommon = new FormPresenter(
+            'adm_preferences_form_design',
+            'preferences/preferences.design.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'design')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        // search all available themes in the theme folder
+        $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
+        if (count($themes) === 0) {
+            throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
+        }
+        $formCommon->addSelectBox(
+            'theme',
+            $gL10n->get('ORG_ADMIDIO_THEME'),
+            $themes,
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
+        );
+        $formCommon->addSelectBox(
+            'theme_fallback',
+            $gL10n->get('ORG_ADMIDIO_THEME_FALLBACK'),
+            $themes,
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC')
+        );
+        $formCommon->addInput(
+            'color_primary',
+            $gL10n->get('SYS_COLOR_PRIMARY'),
+            $formValues['color_primary']??'',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_PRIMARY_DESC')
+        );
+        $formCommon->addInput(
+            'color_secondary',
+            $gL10n->get('SYS_COLOR_SECONDARY'),
+            $formValues['color_secondary']??'',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_SECONDARY_DESC')
+        );
+
+        $formCommon->addInput(
+            'additional_styles_file',
+            $gL10n->get('SYS_ADDITIONAL_CSS_FILE'),
+            $formValues['additional_styles_file']??'',
+            array('helpTextId' => 'SYS_ADDITIONAL_CSS_FILE_DESC')
+        );
+        $formCommon->addInput(
+            'logo_file',
+            $gL10n->get('SYS_LOGO_FILE'),
+            $formValues['logo_file']??'',
+            array('helpTextId' => 'SYS_LOGO_FILE_DESC')
+        );
+        $formCommon->addInput(
+            'favicon_file',
+            $gL10n->get('SYS_FAVICON_FILE'),
+            $formValues['favicon_file']??'',
+            array('helpTextId' => 'SYS_FAVICON_FILE_DESC')
+        );
+        $formCommon->addSubmitButton(
+            'adm_button_save_design',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formCommon->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formCommon);
+        return $smarty->fetch('preferences/preferences.design.tpl');
     }
 
     /**
@@ -1718,93 +1690,6 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the HTML of the form from the PHP preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the PHP preferences.
-     * @throws Exception
-     * @throws \Smarty\Exception
-     */
-    public function createPHPForm(): string
-    {
-        global $gL10n;
-
-        if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
-            $phpVersionColorClass = 'text-danger';
-            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION));
-        } elseif (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
-            $phpVersionColorClass = 'text-warning';
-            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>'));
-        } else {
-            $phpVersionColorClass = 'text-success';
-            $phpVersionInfo = '';
-        }
-        $this->assignSmartyVariable('phpVersionColorClass', $phpVersionColorClass);
-        $this->assignSmartyVariable('phpVersionText', PHP_VERSION);
-        $this->assignSmartyVariable('phpVersionInfo', $phpVersionInfo);
-
-        $postMaxSize = PhpIniUtils::getPostMaxSize();
-        if (is_infinite($postMaxSize)) {
-            $postMaxSizeColorClass = 'text-warning';
-            $postMaxSizeText = $gL10n->get('SYS_NOT_SET');
-        } else {
-            $postMaxSizeColorClass = 'text-success';
-            $postMaxSizeText = FileSystemUtils::getHumanReadableBytes($postMaxSize);
-        }
-        $this->assignSmartyVariable('postMaxSizeColorClass', $postMaxSizeColorClass);
-        $this->assignSmartyVariable('postMaxSizeText', $postMaxSizeText);
-
-        $memoryLimit = PhpIniUtils::getMemoryLimit();
-        if (is_infinite($memoryLimit)) {
-            $memoryLimitColorClass = 'text-warning';
-            $memoryLimitText = $gL10n->get('SYS_NOT_SET');
-        } else {
-            $memoryLimitColorClass = 'text-success';
-            $memoryLimitText = FileSystemUtils::getHumanReadableBytes($memoryLimit);
-        }
-        $this->assignSmartyVariable('memoryLimitColorClass', $memoryLimitColorClass);
-        $this->assignSmartyVariable('memoryLimitText', $memoryLimitText);
-
-        if (PhpIniUtils::isFileUploadEnabled()) {
-            $fileUploadsColorClass = 'text-success';
-            $fileUploadsText = $gL10n->get('SYS_ON');
-        } else {
-            $fileUploadsColorClass = 'text-danger';
-            $fileUploadsText = $gL10n->get('SYS_OFF');
-        }
-        $this->assignSmartyVariable('fileUploadsColorClass', $fileUploadsColorClass);
-        $this->assignSmartyVariable('fileUploadsText', $fileUploadsText);
-
-        $fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
-        if (is_infinite($fileUploadMaxFileSize)) {
-            $uploadMaxFilesizeColorClass = 'text-warning';
-            $uploadMaxFilesizeText = $gL10n->get('SYS_NOT_SET');
-        } else {
-            $uploadMaxFilesizeColorClass = 'text-success';
-            $uploadMaxFilesizeText = FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize);
-        }
-        $this->assignSmartyVariable('uploadMaxFilesizeColorClass', $uploadMaxFilesizeColorClass);
-        $this->assignSmartyVariable('uploadMaxFilesizeText', $uploadMaxFilesizeText);
-
-        try {
-            SecurityUtils::getRandomInt(0, 1, true);
-            $prnGeneratorColorClass = 'text-success';
-            $prnGeneratorText = $gL10n->get('SYS_SECURE');
-            $prnGeneratorInfo = '';
-        } catch (Exception $e) {
-            $prnGeneratorColorClass = 'text-danger';
-            $prnGeneratorText = $gL10n->get('SYS_PRNG_INSECURE');
-            $prnGeneratorInfo = '<br />' . $e->getMessage();
-        }
-        $this->assignSmartyVariable('prnGeneratorColorClass', $prnGeneratorColorClass);
-        $this->assignSmartyVariable('prnGeneratorText', $prnGeneratorText);
-        $this->assignSmartyVariable('prnGeneratorInfo', $prnGeneratorInfo);
-
-        $this->assignSmartyVariable('admidioUrl', ADMIDIO_URL);
-
-        $smarty = $this->getSmartyTemplate();
-        return $smarty->fetch('preferences/preferences.php.tpl');
-    }
-
-    /**
      * Generates the HTML of the form from the profile preferences and will return the complete HTML.
      * @return string Returns the complete HTML of the form from the profile preferences.
      * @throws Exception
@@ -1836,6 +1721,12 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_SHOW_MAP_LINK'),
             (bool) $formValues['profile_show_map_link'],
             array('helpTextId' => 'SYS_SHOW_MAP_LINK_PROFILE_DESC')
+        );
+        $formProfile->addCheckbox(
+            'profile_show_empty_fields',
+            $gL10n->get('SYS_SHOW_EMPTY_PROFILE_FIELDS'),
+            (bool) $formValues['profile_show_empty_fields'],
+            array('helpTextId' => 'SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC')
         );
         $formProfile->addCheckbox(
             'profile_show_roles',
@@ -2169,25 +2060,10 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'if-saml-enabled')
         );
 
-
-        $metaURL = $samlService->getMetadataUrl();
-        $staticSettings = array(
-            'SYS_SSO_SAML_METADATA_URL' => ['value' => '<a href="' . $metaURL . '">' . $metaURL . '</a>', 'id' => 'metadata_URL'],
-            'SYS_SSO_SAML_SSO_ENDPOINT' => ['value' => $samlService->getSsoEndpoint(), 'id' => 'SSO_endpoint'],
-            'SYS_SSO_SAML_SLO_ENDPOINT' => ['value' => $samlService->getSloEndpoint(),'id' => 'SLO_endpoint'],
-            'SYS_SSO_KEY_CERTIFICATE'   => ['value' => '',  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa;
-                    border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
-                    max-height: 150px; overflow: auto; border-radius: 0.375rem; font-size: smaller;']
-        );
-
         $formSSO->addCustomContent(
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            '<table id="sso_saml_sso_staticsettings" style="width: 100%" class="if-saml-enabled">' . implode('',
-                array_map(function (string $key, array $value) use ($gL10n) {
-                    return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' .
-                        (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
-            }, array_keys($staticSettings), $staticSettings)) . '</table>',
+            $samlService->getStaticSettingsHTML('sso_saml_sso_staticsettings', "if-saml-enabled"),
             array()
         );
 
@@ -2260,33 +2136,11 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['sso_oidc_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'), 
                 'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
         );
-        // $formSSO->addSelectBox(
-        //     'sso_oidc_encryption_key',
-        //     $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
-        //     $keys,
-        //     array('defaultValue' => $formValues['sso_oidc_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
-        //         'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
-        // );
-
-        $discoveryURL = $oidcService->getDiscoveryURL();
-        $staticSettings = array(
-            'SYS_SSO_OIDC_DISCOVERY_URL' => ['value' => '<a href="' . $discoveryURL . '">' . $discoveryURL . '</a>', 'id' => 'discovery_URL'],
-            'SYS_SSO_OIDC_AUTH_ENDPOINT' => ['value' => $oidcService->getAuthorizationEndpoint(), 'id' => 'auth_endpoint'],
-            'SYS_SSO_OIDC_TOKEN_ENDPOINT' => ['value' => $oidcService->getTokenEndpoint(),'id' => 'token_endpoint'],
-            'SYS_SSO_OIDC_USERINFO_ENDPOINT' => ['value' => $oidcService->getUserinfoEndpoint(),'id' => 'userinfo_endpoint'],
-            // 'SYS_SSO_KEY_CERTIFICATE'   => ['value' => '',  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa; 
-            //         border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
-            //         max-height: 150px; overflow: auto; border-radius: 0.375rem; font-size: smaller;']
-        );
 
         $formSSO->addCustomContent(
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            '<table id="sso_oidc_sso_staticsettings" style="width: 100%" class="if-oidc-enabled">' . implode('', 
-                array_map(function (string $key, array $value) use ($gL10n) {
-                    return '<tr><td>' . $gL10n->get($key) . ':&nbsp;</td><td><div class="copy-container" id="' . $value['id'] . '"' . 
-                        (array_key_exists('style', $value) ? (' style="' . $value['style'] . '"') : '') .'>' . $value['value'] . '</div></td></tr>';
-            }, array_keys($staticSettings), $staticSettings)) . '</table>',
+            $oidcService->getStaticSettingsHTML('sso_oidc_sso_staticsettings', "if-oidc-enabled"),
             array()
         );
 
@@ -2320,15 +2174,37 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
-     * Generates the HTML of the form from the system information preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the system information preferences.
+     * Generates the HTML of the form from the Admidio update preferences, system information preferences and PHP preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the  Admidio update preferences, system information preferences and PHP preferences.
      * @throws Exception
      * @throws \Smarty\Exception
      */
     public function createSystemInformationForm(): string
     {
-        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData;
+        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData, $gSystemComponent;
 
+        // Admidio Version and Update
+        $component = new ComponentUpdate($gDb);
+        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+        $updateStep = (int) $gSystemComponent->getValue('com_update_step');
+        $maxStep = $component->getMaxUpdateStep();
+        $updateStepText = $updateStep . ' / ' . $maxStep;
+        if ($updateStep === $maxStep) {
+            $updateStepColorClass = 'text-success';
+        } elseif ($updateStep > $maxStep) {
+            $updateStepColorClass = 'text-warning';
+        } else {
+            $updateStepColorClass = 'text-danger';
+        }
+
+        $this->assignSmartyVariable('admidioVersion', ADMIDIO_VERSION_TEXT);
+        $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
+        $this->assignSmartyVariable('updateStepText', $updateStepText);
+        $this->assignSmartyVariable('databaseEngine', DB_ENGINE);
+        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
+        $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
+
+        // Admidio System Information
         $this->assignSmartyVariable('operatingSystemName', SystemInfoUtils::getOS());
         $this->assignSmartyVariable('operatingSystemUserName', SystemInfoUtils::getUname());
 
@@ -2425,8 +2301,89 @@ class PreferencesPresenter extends PagePresenter
         }
         $this->assignSmartyVariable('diskSpaceContent', $diskSpaceContent);
 
+        // Admidio PHP Information
+                if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+            $phpVersionColorClass = 'text-danger';
+            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION));
+        } elseif (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+            $phpVersionColorClass = 'text-warning';
+            $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_EOL', array('<a href="https://www.php.net/supported-versions.php" target="_blank">Supported Versions</a>'));
+        } else {
+            $phpVersionColorClass = 'text-success';
+            $phpVersionInfo = '';
+        }
+        $this->assignSmartyVariable('phpVersionColorClass', $phpVersionColorClass);
+        $this->assignSmartyVariable('phpVersionText', PHP_VERSION);
+        $this->assignSmartyVariable('phpVersionInfo', $phpVersionInfo);
+
+        $postMaxSize = PhpIniUtils::getPostMaxSize();
+        if (is_infinite($postMaxSize)) {
+            $postMaxSizeColorClass = 'text-warning';
+            $postMaxSizeText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $postMaxSizeColorClass = 'text-success';
+            $postMaxSizeText = FileSystemUtils::getHumanReadableBytes($postMaxSize);
+        }
+        $this->assignSmartyVariable('postMaxSizeColorClass', $postMaxSizeColorClass);
+        $this->assignSmartyVariable('postMaxSizeText', $postMaxSizeText);
+
+        $memoryLimit = PhpIniUtils::getMemoryLimit();
+        if (is_infinite($memoryLimit)) {
+            $memoryLimitColorClass = 'text-warning';
+            $memoryLimitText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $memoryLimitColorClass = 'text-success';
+            $memoryLimitText = FileSystemUtils::getHumanReadableBytes($memoryLimit);
+        }
+        $this->assignSmartyVariable('memoryLimitColorClass', $memoryLimitColorClass);
+        $this->assignSmartyVariable('memoryLimitText', $memoryLimitText);
+
+        if (PhpIniUtils::isFileUploadEnabled()) {
+            $fileUploadsColorClass = 'text-success';
+            $fileUploadsText = $gL10n->get('SYS_ON');
+        } else {
+            $fileUploadsColorClass = 'text-danger';
+            $fileUploadsText = $gL10n->get('SYS_OFF');
+        }
+        $this->assignSmartyVariable('fileUploadsColorClass', $fileUploadsColorClass);
+        $this->assignSmartyVariable('fileUploadsText', $fileUploadsText);
+
+        $fileUploadMaxFileSize = PhpIniUtils::getFileUploadMaxFileSize();
+        if (is_infinite($fileUploadMaxFileSize)) {
+            $uploadMaxFilesizeColorClass = 'text-warning';
+            $uploadMaxFilesizeText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            $uploadMaxFilesizeColorClass = 'text-success';
+            $uploadMaxFilesizeText = FileSystemUtils::getHumanReadableBytes($fileUploadMaxFileSize);
+        }
+        $this->assignSmartyVariable('uploadMaxFilesizeColorClass', $uploadMaxFilesizeColorClass);
+        $this->assignSmartyVariable('uploadMaxFilesizeText', $uploadMaxFilesizeText);
+
+        try {
+            SecurityUtils::getRandomInt(0, 1, true);
+            $prnGeneratorColorClass = 'text-success';
+            $prnGeneratorText = $gL10n->get('SYS_SECURE');
+            $prnGeneratorInfo = '';
+        } catch (Exception $e) {
+            $prnGeneratorColorClass = 'text-danger';
+            $prnGeneratorText = $gL10n->get('SYS_PRNG_INSECURE');
+            $prnGeneratorInfo = '<br />' . $e->getMessage();
+        }
+        $this->assignSmartyVariable('prnGeneratorColorClass', $prnGeneratorColorClass);
+        $this->assignSmartyVariable('prnGeneratorText', $prnGeneratorText);
+        $this->assignSmartyVariable('prnGeneratorInfo', $prnGeneratorInfo);
+        $this->assignSmartyVariable('admidioUrl', ADMIDIO_URL);
+
+        //assign card titles and corresponding template files
+        $cards = array(
+            array('title'=>$gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
+            array('title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),        'icon'=>'bi-info-circle-fill', 'templateFile'=>'preferences/preferences.system-information.tpl'),
+            array('title'=>$gL10n->get('SYS_PHP'),                 'icon'=>'bi-filetype-php', 'templateFile'=>'preferences/preferences.php.tpl'),
+        );
+
+        $this->assignSmartyVariable('cards', $cards);
         $smarty = $this->getSmartyTemplate();
-        return $smarty->fetch('preferences/preferences.system-information.tpl');
+        return $smarty->fetch('preferences/preferences.system-informations.tpl');
     }
 
     /**
@@ -2549,84 +2506,133 @@ class PreferencesPresenter extends PagePresenter
         global $gL10n;
 
         if ($this->preferencesPanelToShow !== '') {
-            // open the module tab if the options of a module should be shown
-            if (array_key_exists($this->preferencesPanelToShow, $this->accordionModulePanels)) {
-                $this->addJavascript(
-                    '
-                $("#adm_tabs_nav_modules").attr("class", "nav-link active");
-                $("#adm_tabs_modules").attr("class", "tab-pane fade show active");
-                $("#adm_tabs_nav_common").attr("class", "nav-link");
-                $("#adm_tabs_common").attr("class", "tab-pane fade");
-                $("#adm_collapse_preferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
-                        $("#adm_panel_preferences_' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
-                        $("#adm_collapse_preferences_' . $this->preferencesPanelToShow . '").addClass("show");
-                    });
-                location.hash = "#adm_panel_preferences_' . $this->preferencesPanelToShow . '";
-                    ',
-                    true
-                );
-            } else {
-                $this->addJavascript(
-                    '
-                $("#adm_tabs_nav_common").attr("class", "nav-link active");
-                $("#adm_tabs_common").attr("class", "tab-pane fade show active");
-                $("#adm_collapse_preferences' . $this->preferencesPanelToShow . '").attr("class", "collapse show");
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=' . $this->preferencesPanelToShow . '", function (data) {
-                        $("#adm_panel_preferences_' . $this->preferencesPanelToShow . ' .accordion-body").html(data);
-                        $("#adm_collapse_preferences_' . $this->preferencesPanelToShow . '").addClass("show");
-                    });
-                location.hash = "#adm_panel_preferences_' . $this->preferencesPanelToShow . '";
-                    ',
-                    true
-                );
+            // open the selected panel
+            if ($this->preferencesPanelToShow !== '') {
+                $this->addJavascript('
+                    // --- Reset Tab active states for large screens
+                    $("#adm_preferences_tabs .nav-link").removeClass("active");
+                    $("#adm_preferences_tab_content .tab-pane").removeClass("active show");
+
+                    // --- Reset Accordion active states for small screens
+                    $("#adm_preferences_accordion [aria-expanded=\'true\']").attr("aria-expanded", "false");
+                    $("#adm_preferences_accordion .accordion-button").addClass("collapsed");
+                    $("#adm_preferences_accordion .accordion-item").removeClass("show");
+                    $("#adm_preferences_accordion .accordion-collapse").removeClass("show");
+                    
+                    // --- Activate the selected Tab and its content
+                    $("#adm_tab_' . $this->preferencesPanelToShow . '").addClass("active");
+                    $("#adm_tab_' . $this->preferencesPanelToShow . '_content").addClass("active show");
+                    
+                    // --- For Mobile Accordion: open the desired accordion panel
+                    $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show");
+                                        
+                    // --- Desktop vs. Mobile via jQuery visibility
+                    if ($(".d-none.d-md-block").is(":visible")) {
+                        // Desktop mode
+                        $("#adm_preferences_tabs .nav-link[data-bs-target=\'#adm_tab_' . $this->preferencesPanelToShow . '_content\']").addClass("active");
+                        $("#adm_preferences_tab_content .tab-pane#adm_tab_' . $this->preferencesPanelToShow . '_content").addClass("active show");
+                    } else {
+                        // Mobile mode
+                        $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show").attr("aria-expanded", "true");
+                        $("#heading_' . $this->preferencesPanelToShow . ' .accordion-button").removeClass("collapsed").attr("aria-expanded", "true");
+                        // --- Hash setzen, damit Bookmark/Scroll stimmt und zum Element scrollen
+                        location.hash = "#heading_' . $this->preferencesPanelToShow . '";
+                    }
+                ', true);
             }
         }
 
-        $this->addJavascript(
-            '
-            var panels = ["common", "security", "regional_settings", "changelog", "registration", "email_dispatch", "system_notifications", "captcha", "admidio_update", "php", "system_information",
-                "announcements", "contacts", "documents_files", "inventory", "photos", "forum", "groups_roles", "category_report", "messages", "profile", "sso", "events", "links"];
+        $this->addJavascript('
+            // === 1) Panel laden und Events binden ===
+            function loadPreferencesPanel(panelId) {
+                var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+                if (!panelContainer.length) return;
 
-            for(var i = 0; i < panels.length; i++) {
-                $("#adm_panel_preferences_" + panels[i] + " .accordion-header").click(function (e) {
-                    var id = $(this).data("preferences-panel");
-                    if ($("#adm_panel_preferences_" + id + " h2").attr("aria-expanded") == "true") {
-                        $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=html_form&panel=" + id, function (data) {
-                            $("#adm_panel_preferences_" + id + " .accordion-body").html(data);
-                        });
+                // Schritt 1: Spinner einfügen
+                panelContainer.html("<div class=\"d-flex justify-content-center align-items-center\" style=\"height: 200px;\"><div class=\"spinner-border text-primary\" role=\"status\"><span class=\"visually-hidden\">Lade...</span></div></div>");
+
+                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {
+                    mode: "html_form",
+                    panel: panelId
+                }, function(htmlContent) {
+                    panelContainer.html(htmlContent);
+                    initializePanelInteractions(panelId);
+                }).fail(function() {
+                    panelContainer.html("<div class=\"text-danger\">Fehler beim Laden</div>");
+                });
+            }
+        
+            // === 2) Innerhalb eines Panels die Klick-Handler anmelden ===
+            function initializePanelInteractions(panelId) {
+                var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+            
+                // Captcha-Refresh
+                panelContainer.off("click", "#adm_captcha_refresh").on("click", "#adm_captcha_refresh", function(event) {
+                    event.preventDefault();
+                    var captchaImg = panelContainer.find("#adm_captcha");
+                    if (captchaImg.length) {
+                        captchaImg.attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" + "?" + Math.random());
                     }
                 });
-
-                $(document).on("submit", "#adm_preferences_form_" + panels[i], formSubmit);
+            
+                // Update-Check
+                panelContainer.off("click", "#adm_link_check_update").on("click", "#adm_link_check_update", function(event) {
+                    event.preventDefault();
+                    var versionInfoContainer = panelContainer.find("#adm_version_content");
+                    versionInfoContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
+                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "update_check" }, function(htmlVersion) {
+                        versionInfoContainer.html(htmlVersion);
+                    });
+                });
+            
+                // Verzeichnis-Schutz prüfen
+                panelContainer.off("click", "#link_directory_protection").on("click", "#link_directory_protection", function(event) {
+                    event.preventDefault();
+                    var statusContainer = panelContainer.find("#directory_protection_status");
+                    statusContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
+                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "htaccess" }, function(statusText) {
+                        var directoryProtection = panelContainer.find("#directoryProtection");
+                        directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
+                    });
+                });
             }
-
-            $(document).on("click", "#adm_captcha_refresh", (function() {
-                document.getElementById("captcha").src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php?" + Math.random();
-            }));
-
-            $(document).on("click", "#adm_link_check_update", (function() {
-                var admVersionContent = $("#adm_version_content");
-
-                admVersionContent.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {mode: "update_check"}, function(htmlVersion) {
-                    admVersionContent.html(htmlVersion);
-                });
-                return false;
-            }));
-
-            $(document).on("click", "#link_directory_protection", (function() {
-                var dirProtectionStatus = $("#directory_protection_status");
-
-                dirProtectionStatus.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {mode: "htaccess"}, function(statusText) {
-                    var directoryProtection = dirProtectionStatus.parent().parent().parent();
-                    directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
-                });
-                return false;
-            }));',
-            true
-        );
+        
+            // === 3) Hooks für Desktop-Tabs ===
+            $(document).on("shown.bs.tab", "ul#adm_preferences_tabs button.nav-link", function(e) {
+                var target = e.target.getAttribute("data-bs-target");
+                var match = target && target.match(/^#adm_tab_(.+)_content$/);
+                if (match) {
+                    loadPreferencesPanel(match[1]);
+                }
+                // scroll to the top of the page
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 500);
+            });
+            // initial: load the active tab panel
+            $("ul#adm_preferences_tabs button.nav-link.active").each(function() {
+                var target = this.getAttribute("data-bs-target");
+                var match = target && target.match(/^#adm_tab_(.+)_content$/);
+                if (match) {
+                    loadPreferencesPanel(match[1]);
+                }
+            });
+        
+            // === 4) Hooks für Mobile-Accordion ===
+            $(document).on("shown.bs.collapse", "#adm_preferences_accordion .accordion-collapse", function() {
+                var panelId = this.id.replace(/^collapse_/, "");
+                loadPreferencesPanel(panelId);
+            });
+            // initial: geöffnetes Accordion-Panel laden
+            $("#adm_preferences_accordion .accordion-collapse.show").each(function() {
+                var panelId = this.id.replace(/^collapse_/, "");
+                loadPreferencesPanel(panelId);
+            });
+        
+            // === 5) Formular-Submit per AJAX ===
+            $(document).on("submit", "form[id^=\"adm_preferences_form_\"]", formSubmit);
+      ', true);
+      
 
         ChangelogService::displayHistoryButton($this, 'preferences', 'preferences,texts');
 
@@ -2638,9 +2644,10 @@ class PreferencesPresenter extends PagePresenter
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/js/bootstrap-tabs-x-admidio.js');
 
-        $this->assignSmartyVariable('accordionCommonPanels', $this->accordionCommonPanels);
-        $this->assignSmartyVariable('accordionModulePanels', $this->accordionModulePanels);
+        $this->assignSmartyVariable('preferenceTabs', $this->preferenceTabs);
         $this->addTemplateFile('preferences/preferences.tpl');
 
         parent::show();

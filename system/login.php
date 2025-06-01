@@ -63,10 +63,16 @@ try {
 
         unset($_SESSION['login_forward_url']);
 
-        echo json_encode(array(
+        $payload = array(
             'status' => 'success',
             'url' => $forwardUrl
-        ));
+        );
+        if (array_key_exists('login_forward_url_post', $_SESSION)) {
+            $payload['url_post'] = $_SESSION['login_forward_url_post'];
+            unset($_SESSION['login_forward_url_post']);
+        }
+
+        echo json_encode($payload);
         exit();
     }
 } catch (Exception $e) {

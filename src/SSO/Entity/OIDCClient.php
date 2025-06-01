@@ -17,7 +17,7 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
 
     public function getRedirectUri(): string
     {
-        return $this->getValue($this->columnPrefix . '_redirect_uri')??'';
+        return $this->getValue($this->columnPrefix . '_redirect_uri', 'database')??'';
     }
 
     public function isConfidential(): bool

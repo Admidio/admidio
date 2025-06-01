@@ -628,3 +628,28 @@ function getExecutionTime(float $startTime): string
 
     return number_format(($stopTime - $startTime) * 1000, 6, '.', '') . ' ms';
 }
+
+/**
+ * Return the proper path for a file provided by themes
+ * (main theme, optionally with a fallback theme that
+ * provides all files/templates not overridden by the main
+ * theme). As the fallback theme will be used, when the main
+ * theme does not contain a file, each file needs to be
+ * checked separately!
+ * @param string filename desired file name relative to the theme path
+ * @return string the path to the file including the theme /
+ *                fallback theme, depening on which of them provides
+ *                the file for real. If the file is not found in either 
+ *                the theme and the fallback theme, the path inside
+ *                the fallback theme is returned without error.
+ */
+function getThemedFile(string $filepath): string
+{
+    $themepath = THEME_PATH . $filepath;
+    if (!file_exists($themepath) && defined('THEME_FALLBACK_PATH')) {
+        $themepath = THEME_FALLBACK_PATH . $filepath;
+    }
+    return $themepath;
+}
+
+

@@ -95,6 +95,8 @@
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">The current Admidio theme can be selected here. All layouts from the themes folder are displayed. (default: simple)</string>
+  <string name="ORG_ADMIDIO_THEME_FALLBACK">Fallback Theme</string>
+  <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">The theme that is used as a fallback if the selected theme does not contain a requested template. If a fallback theme is selected, the main theme only has to contain those templates that it really wants to override. All other templates can be taken from the fallback theme, which in most cases can be the default 'simple' theme. (default: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatic logout after</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">This value indicates after how many minutes an inactive user is automatically logged out. Inactive is a user as long as he does not call any page of the Admidio system. This setting is ignored if the user has selected #VAR1_BOLD#. (Default: 20 minutes)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
@@ -150,6 +152,7 @@
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
   <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
+  <string name="ORG_INVALID_THEME_FALLBACK">The fallback theme selected is not valid.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Using the JavaScript editor</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">A full-featured JavaScript editor is being used in many modules of Admidio. Events, Announcements etc. can be edited in a comfortable way by the user. In case the editor has been activated, a simple multi-lin text box is being displayed.</string>
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
@@ -216,6 +219,8 @@
   <string name="SYS_ADDRESS">Address</string>
   <string name="SYS_ADDITIONAL_COLUMNS">Additional columns</string>
   <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
+  <string name="SYS_ADDITIONAL_CSS_FILE">Additional CSS File</string>
+  <string name="SYS_ADDITIONAL_CSS_FILE_DESC">The path to a .css file with additional style definitions. This file will be loaded last, even after the theme's admidio.css file. (default: empty)</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Go to the Admidio download page</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
@@ -339,6 +344,10 @@
   <string name="SYS_COLUMN">Column</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
+  <string name="SYS_COLOR_PRIMARY">Primary Color</string>
+  <string name="SYS_COLOR_PRIMARY_DESC">The main color used for admidio. The title bar will use this color, as well as headlines.</string>
+  <string name="SYS_COLOR_SECONDARY">Secondary Color</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">The secondary color used for admidio. The side bar will use this color, as well as the preferences sections.</string>
   <string name="SYS_COMPACT">Compact</string>
   <string name="SYS_CONFIGURATIONS">Configurations</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
@@ -346,6 +355,8 @@
   <string name="SYS_COMMA_SEPARATED_FILE">Comma-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
+  <string name="SYS_COMMON_SETTINGS">General settings</string>
+  <string name="SYS_COMMUNICATION">Communication</string>
   <string name="SYS_COMPLEMENT">Complement</string>
   <string name="SYS_CONDITION">Condition</string>
   <string name="SYS_CONFIGURATION">Configuration</string>
@@ -365,6 +376,7 @@
   <string name="SYS_CONTACT_SIMILAR_NAME">A contact with a similar name was found.</string>
   <string name="SYS_CONTACTS">Contacts</string>
   <string name="SYS_CONTENT">Content</string>
+  <string name="SYS_CONTENTS">Contents</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Contribution period</string>
   <string name="SYS_CONVERSATION_PARTNER">Conversation partner</string>
@@ -439,6 +451,8 @@
   <string name="SYS_DATE_INVALID">Invalid date in field #VAR1_BOLD#.\n\nDate has to comply with this formatting: #VAR2_BOLD#.</string>
   <string name="SYS_DATE_MODIFIED">Date of modification</string>
   <string name="SYS_DATE_TO">to</string>
+  <string name="SYS_DAY">Day</string>
+  <string name="SYS_DAYS">Days</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Default time period for field history (days)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
@@ -491,11 +505,13 @@
   <string name="SYS_DEPENDENCIES">Dependencies</string>
   <string name="SYS_DEPENDENT">Dependent</string>
   <string name="SYS_DESCRIPTION">Description</string>
+  <string name="SYS_DESIGN">Design</string>
   <string name="SYS_DESIGNATION">Name</string>
   <string name="SYS_DETAILED">Detailed</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISABLED">Disabled</string>
+  <string name="SYS_DISABLE">Disabled</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Show redirect</string>
@@ -574,6 +590,7 @@
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail to members</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail to list</string>
   <string name="SYS_EMPTY">Empty</string>
+  <string name="SYS_ENABLE">Enable</string>
   <string name="SYS_ENABLED">Enabled</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT">Enable category report</string>
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">The category report creates a list of all roles and categories to which a member is assigned. The permission #VAR1_BOLD# is required for access to the category report. (Default: yes)</string>
@@ -634,6 +651,8 @@
   <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FADE_IN">Fade in</string>
+  <string name="SYS_FAVICON_FILE">Favicon File</string>
+  <string name="SYS_FAVICON_FILE_DESC">The path to the favicon file for your installation. The path should be relative to your installation's root directory. If left empty, the default favicon of the theme will be used. (default: empty)</string>
   <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Female</string>
   <string name="SYS_FIELD">Field</string>
@@ -812,6 +831,8 @@
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
   <string name="SYS_LOGIN_WITH_EMAIL">Allow e-mail address instead of username for login</string>
   <string name="SYS_LOGIN_WITH_EMAIL_DESC">If a user has an e-mail address stored in their profile field, and the address is unique, it can be used as the user name for logging in. (default: no)</string>
+  <string name="SYS_LOGO_FILE">Logo File</string>
+  <string name="SYS_LOGO_FILE_DESC">The path to the logo file that is displayed in the top left corner. The path should be relative to your installation's root directory. If left empty, the default logo of the theme will be used. (default: empty)</string>
   <string name="SYS_LOGOUT">Sign out</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Signing out was successful.</string>
   <string name="SYS_LOSTPW_AREADY_LOGGED_ID">You already signed in. Therefore you must already have the correct password!</string>
@@ -859,6 +880,7 @@
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Found #VAR1# members with a similar name.</string>
   <string name="SYS_MEMBERSHIP_APPROVED">Membership approved</string>
+  <string name="SYS_MEMBERSHIP_DURATION">Duration of membership</string>
   <string name="SYS_MEMBERSHIP_END">End of membership</string>
   <string name="SYS_MEMBERSHIP_DELETE">Would you like to end membership in role #VAR1_BOLD#?</string>
   <string name="SYS_MEMBERSHIP_START">Start of membership</string>
@@ -881,6 +903,8 @@
   <string name="SYS_MODULE_RIGHTS">Module rights</string>
   <string name="SYS_MODULES">Modules</string>
   <string name="SYS_MONDAY">Monday</string>
+  <string name="SYS_MONTH">Month</string>
+  <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MONTHLY">Monthly</string>
   <string name="SYS_MORE">More</string>
   <string name="SYS_MOVE_FILE">Move file</string>
@@ -1265,6 +1289,8 @@
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
+  <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
+  <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_DESC">This setting can be used to determine who can view former roles. However, the user must also have the right to see the role itself. Leaders of a role may also view former members of their role, if they have permission to be set here. (Default: #VAR1#)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Only show former members</string>
@@ -1388,7 +1414,7 @@
   <string name="SYS_SSO_ACS_URL_DESC">The Assertion Consumer Servicer (ACS) URL is the client's main entry point. After successful login at Admidio, the user will be redirected to that URL and logged in at the client.</string>
   <string name="SYS_SSO_SLO_URL">Single Log-Out URL (optional)</string>
   <string name="SYS_SSO_SLO_URL_DESC">The SLO URL is the client's end point to inform the client about a user logout from Admidio. For security reasons, all client application with an SLO URL will be informed about the log out and shall log out the user from the client app, too. Not all SAML client apps provide a single-log-out URL.</string>
-  <string name="SYS_SSO_AUTO_SETUP">Automatic setup from client metadata</string>
+  <string name="SYS_SSO_AUTO_SETUP">Automatic setup from metadata</string>
   <string name="SYS_SSO_LOAD_METADATA">Load Client Metadata</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Some clients offer a metadata file with all required settings. The automatic retrieval of this metadata URL only works if the URL is available to the admidio server.</string>
@@ -1456,6 +1482,8 @@
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentication Endpoint</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token Endpoint</string>
   <string name="SYS_SSO_OIDC_USERINFO_ENDPOINT">Userinfo Endpoint</string>
+  <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpoint</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Logout Endpoint</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
 
   <string name="SYS_SSO_NAME_PROPERTIES">Client (Service Provider) name and properties</string>
@@ -1553,6 +1581,7 @@
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
+  <string name="SYS_USERS">Users</string>
   <string name="SYS_USER_COULD_BE_CREATED">The Person could be created.</string>
   <string name="SYS_USER_DELETE_DESC">Would you like to delete #VAR1_BOLD#?\n\nUser is going to be physically deleted in the database which makes later access impossible.</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
@@ -1616,6 +1645,7 @@
   <string name="SYS_WRITE_ENTRY">Write entry</string>
   <string name="SYS_WRITE_PM">Write private message</string>
   <string name="SYS_XING">Xing</string>
+  <string name="SYS_YEAR">Year</string>
   <string name="SYS_YEARS">Years</string>
   <string name="SYS_YES">Yes</string>
   <string name="SYS_YOUR_CONFIGURATION">Your configuration</string>

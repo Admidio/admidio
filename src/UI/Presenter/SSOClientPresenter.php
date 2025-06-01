@@ -95,6 +95,9 @@ class SSOClientPresenter extends PagePresenter
                     }
                      htmlAdmidioValues += "<option value=\"" +  arr_' . $type . '[counter]["id"] + "\" " + selected + ">" +  arr_' . $type . '[counter]["data"] + "</option>";
                 }
+                if(category.length > 0) {
+                    htmlAdmidioValues += "</optgroup>";
+                }
                 htmlAdmidioValues += "</select>";
                 newCellAdmidio.innerHTML = htmlAdmidioValues;
         
@@ -132,7 +135,7 @@ class SSOClientPresenter extends PagePresenter
     }
 
     protected function getAvailableRoles(): array {
-        global $gDb;
+        global $gDb, $gL10n;
         // Access restrictions by role/group are handled through role rights
         $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
                        FROM ' . TBL_ROLES . '
@@ -153,6 +156,12 @@ class SSOClientPresenter extends PagePresenter
                 $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
                 $rowViewRoles['cat_name'] // Group
             );
+            // Leader has the role ID with negative sign!
+            $allRolesSet[] = array(
+                -$rowViewRoles['rol_id'], // ID 
+                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ') - ' . $gL10n->get('SYS_LEADER'), // Value
+                $rowViewRoles['cat_name'] // Group
+            );
         }
         return $allRolesSet;
     }
@@ -163,7 +172,7 @@ class SSOClientPresenter extends PagePresenter
      */
     public function createSAMLEditForm(): void
     {
-        global $gDb, $gL10n, $gCurrentSession, $gProfileFields;
+        global $gDb, $gL10n, $gCurrentSession, $gProfileFields, $gCurrentUser;
 
         // create SAML client object
         $client = new SAMLClient($gDb);
@@ -189,6 +198,14 @@ class SSOClientPresenter extends PagePresenter
             'modules/saml_client.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_saml')),
             $this
+        );
+
+        $SAMLService = new SAMLService($gDb, $gCurrentUser);
+        $form->addCustomContent(
+            'sso_saml_sso_staticsettings',
+            $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
+            $SAMLService->getStaticSettingsHTML('sso_saml_sso_staticsettings', "if-saml-enabled"),
+            array()
         );
 
         $form->addCheckbox(
@@ -374,7 +391,7 @@ class SSOClientPresenter extends PagePresenter
         $form->addSelectBox(
             'sso_roles_access',
             $gL10n->get('SYS_SSO_ROLES'),
-            $allRolesSet,
+            array_filter($allRolesSet, function($role) { return $role[0] > 0; } ),
             array(
                 'property' => FormPresenter::FIELD_DEFAULT,
                 'defaultValue' => $client->getAccessRolesIds(),
@@ -500,7 +517,7 @@ class SSOClientPresenter extends PagePresenter
      */
     public function createOIDCEditForm(): void
     {
-        global $gDb, $gL10n, $gCurrentSession, $gProfileFields;
+        global $gDb, $gL10n, $gCurrentSession, $gProfileFields, $gCurrentUser;
 
         // create OIDC client object
         $client = new OIDCClient($gDb);
@@ -524,6 +541,14 @@ class SSOClientPresenter extends PagePresenter
             'modules/oidc_client.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_oidc')),
             $this
+        );
+
+        $OIDCService = new OIDCService($gDb, $gCurrentUser);
+        $form->addCustomContent(
+            'sso_oidc_sso_staticsettings',
+            $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
+            $OIDCService->getStaticSettingsHTML('sso_oidc_sso_staticsettings', "if-oidc-enabled"),
+            array()
         );
 
         $form->addCheckbox(

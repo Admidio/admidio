@@ -3,8 +3,8 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
-use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -105,6 +105,15 @@ final class UpdateStepsCode
         }
 
         self::$db->initializeTableColumnProperties();
+    }
+
+    /**
+     * Repair the path of the folders
+     */
+    public static function updateStep43RepairDocumentsPath()
+    {
+        $maintenance = new Maintenance(self::$db);
+        $maintenance->repairDocumentsFilesPath();
     }
 
     /**

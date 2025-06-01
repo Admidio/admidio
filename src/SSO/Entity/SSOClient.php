@@ -18,7 +18,7 @@ class SSOClient extends Entity
     protected ?RolesRights $rolesAccess;
     protected string $ssoType = '';
 
-    public function __construct(Database $database, string $tableName, string $columnPrefix, $client_id = null) {
+    public function __construct(Database $database, ?string $tableName, string $columnPrefix, $client_id = null) {
         $this->ssoType = 'saml';
         if (is_numeric($client_id)) {
             parent::__construct($database, $tableName, $columnPrefix, $client_id);
@@ -243,8 +243,17 @@ class SSOClient extends Entity
         $mappedRoles = array();
         // Loop through all roles of the user. If it is part of the mapping, or catchall is set, append it to the attribute
         foreach ($user->getRoleMemberships() as $roleId) {
+
             $rolesFound = array_keys($mapping, $roleId);
             $mappedRoles = array_merge($mappedRoles, $rolesFound);
+            $isLeader = $user->isLeaderOfRole($roleId);
+            if ($isLeader) {
+                $rolesLeaderFound = array_keys($mapping, -$roleId);
+                $mappedRoles = array_merge($mappedRoles, $rolesLeaderFound);
+            }
+
+            // The catchall applies only to "normal" group memberships. Role leaderships are not implicitly
+            // added, only when they are explicitly mapped to a particular role.
             if (empty($rolesFound) && $includeAll) {
                 // CATCHALL: Add role with its admidio role name
                 $role = new Role($this->db, $roleId);

@@ -3,7 +3,6 @@
     {/foreach}>
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['theme']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['homepage_logout']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['homepage_login']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['enable_rss']}

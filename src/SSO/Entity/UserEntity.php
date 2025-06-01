@@ -7,6 +7,7 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use OpenIDConnectServer\Entities\ClaimSetInterface;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Users\Entity\User;
 use Admidio\Roles\Entity\Role;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
@@ -74,6 +75,32 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
         } else {
             return '';
         }
+    }
+
+    public function readDataByUserIDfield(string $field, string $id): bool
+    {
+        global $gProfileFields;
+        if (str_starts_with($field, $this->getColumnPrefix())) {
+            return $this->readDataByColumns([$field => $id]);
+        } else {
+            // Profile data field -> need to search the user data table and extract the user id ifrst!
+            // 1. From the field name, read the user field ID usf_id from the PREFIX_user_fields table => Result is $usf_id
+            // 2. Read the profile field, where the usd_value is $id, and the usd_usf_id is $usf_id => Column 'usd_usr_id' is $usr_id
+            // 3. Read the user with user $usr_id and return success or failure
+            $usf_id = $gProfileFields->getProperty($field, 'usf_id');
+            if (!($usf_id > 0)) {
+                return false;
+            }
+            $userData = new Entity($this->db, TBL_USER_DATA, 'usd');
+            $userData->readDataByColumns(['usd_usf_id' => $usf_id, 'usd_value' => $id]);
+            $usr_id = $userData->getValue('usd_usr_id');
+            if ($userData->isNewRecord() || ($usr_id <= 0)) {
+                return false;
+            }
+            $this->readDataById($usr_id);
+            return $this->isNewRecord();
+        }
+
     }
 
     /**

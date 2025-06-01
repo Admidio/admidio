@@ -78,6 +78,8 @@ class OIDCService extends SSOService {
     private string $authorizationEndpoint;
     private string $tokenEndpoint;
     private string $userinfoEndpoint;
+    private string $jwksEndpoint;
+    private string $logoutEndpoint;
     private string $discoveryURL;
 
     public static ?OIDCClient $client = null;
@@ -100,6 +102,8 @@ class OIDCService extends SSOService {
         $this->authorizationEndpoint = $this->issuerURL  . "/authorize";
         $this->tokenEndpoint = $this->issuerURL . "/token";
         $this->userinfoEndpoint = $this->issuerURL . "/userinfo";
+        $this->jwksEndpoint = $this->issuerURL . "/jwks";
+        $this->logoutEndpoint = $this->issuerURL . "/logout";
         $this->discoveryURL = $this->issuerURL . "/.well-known/openid-configuration";
 
     }
@@ -162,12 +166,48 @@ class OIDCService extends SSOService {
         return $this->userinfoEndpoint;
     }
     /**
+     * Return the JWKS endpoint
+     * @return string
+     */
+    public function getJWKSEndpoint() {
+        return $this->jwksEndpoint;
+    }
+    /**
+     * Return the userinfo endpoint
+     * @return string
+     */
+    public function getLogoutEndpoint() {
+        return $this->logoutEndpoint;
+    }
+    /**
      * Return the discovery URL
      * @return string
      */
     public function getDiscoveryURL() {
         return $this->discoveryURL;
     }
+
+
+    /**
+     * Returns an associative array with labels and links for the static IdP configuration data 
+     * (metadata/discovery URL, SSO/SLO endpoints, etc.).
+     * @return array Associative arry, the keys will be the displayed labels, each entry has the form
+     *     ['value' => 'linkHTML', 'id' => 'uniqueIDinForm', 'style' => 'additionalCSSstyles']
+     *   where the 'style' key is optional, but 'value' and 'id' are required.
+     */
+    public function getStaticSettings() : array {
+        $discoveryURL = $this->getDiscoveryURL();
+        $staticSettings = array(
+            'SYS_SSO_OIDC_DISCOVERY_URL' => ['value' => '<a href="' . $discoveryURL . '">' . $discoveryURL . '</a>', 'id' => 'discovery_URL'],
+            'SYS_SSO_OIDC_AUTH_ENDPOINT' => ['value' => $this->getAuthorizationEndpoint(), 'id' => 'auth_endpoint'],
+            'SYS_SSO_OIDC_TOKEN_ENDPOINT' => ['value' => $this->getTokenEndpoint(),'id' => 'token_endpoint'],
+            'SYS_SSO_OIDC_USERINFO_ENDPOINT' => ['value' => $this->getUserinfoEndpoint(),'id' => 'userinfo_endpoint'],
+            'SYS_SSO_OIDC_JWKS_ENDPOINT' => ['value' => $this->getJWKSEndpoint(),'id' => 'jwks_endpoint'],
+            'SYS_SSO_OIDC_LOGOUT_ENDPOINT' => ['value' => $this->getLogoutEndpoint(),'id' => 'logout_endpoint'],
+        );
+        return $staticSettings;
+    }
+
 
     /**
      * Returns a PSR-7 request for the OAuth2 server while ensuring Admidio compatibility
@@ -189,7 +229,7 @@ class OIDCService extends SSOService {
 
 
     public function setupService() {
-        global $gSettingsManager;
+        global $gSettingsManager, $gLogger;
 
         // Init our repositories
         $clientRepository = new ClientRepository($this->db);            // instance of ClientRepositoryInterface
@@ -199,23 +239,24 @@ class OIDCService extends SSOService {
         $userRepository = new UserRepository($this->db); // instance of UserRepositoryInterface // TODO_RK: Add user ID field and allowed Roles!
         $refreshTokenRepository = new RefreshTokenRepository(database: $this->db); // instance of RefreshTokenRepositoryInterface
 
+        // Private key for signing
+        $privateKeyID = $gSettingsManager->get('sso_oidc_signing_key');
+        $privateKeyObject = new Key($this->db, $privateKeyID);
+        $privateKey = new CryptKey($privateKeyObject->getValue('key_private'));
+        $publicKey = new CryptKey($privateKeyObject->getValue('key_public'));
+
         // Provide the groups as a groups scope and claim
         $claimsExtractor = new ClaimExtractor([
             // new ClaimSetEntity('openid', ['sub']),
             new ClaimSetEntity('groups', ['groups'])
         ]);
-        $responseType = new IdTokenResponse($userRepository, $claimsExtractor);
+        $responseType = new IdTokenResponse($userRepository, $claimsExtractor, $privateKeyObject->getValue('key_uuid'));
 
         // Keep references to the relevant objects for later use
         $this->accessTokenRepository = $accessTokenRepository;
         $this->claimExtractor = $claimsExtractor;
         $this->clientRepository = $clientRepository;
 
-        // Private key for signing
-        $privateKeyID = $gSettingsManager->get('sso_oidc_signing_key');
-        $privateKeyObject = new Key($this->db, $privateKeyID);
-        $privateKey = new CryptKey($privateKeyObject->getValue('key_private'));
-        $publicKey = new CryptKey($privateKeyObject->getValue('key_public'));
 
         // The encryption key is used to store tokens encrypted to the DB.
         $encryptionKey = $gSettingsManager->get('sso_oidc_encryption_key');
@@ -334,7 +375,7 @@ class OIDCService extends SSOService {
     }
 
     public function handleAuthorizationRequest(): ResponseInterface {
-        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n;
+        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger;
 
         if ($gSettingsManager->get('sso_oidc_enabled') !== '1') {
             throw new \Exception("SSO OIDC is not enabled");
@@ -386,7 +427,7 @@ class OIDCService extends SSOService {
             return $this->authServer->completeAuthorizationRequest($authRequest, $response);
             
         } catch (OAuthServerException $exception) {
-        
+            $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
             
@@ -401,6 +442,7 @@ class OIDCService extends SSOService {
     }
 
     public function handleTokenRequest() {
+        global $gLogger;
         $request = $this->getRequest();
         $response = new Response();
         try {
@@ -411,6 +453,7 @@ class OIDCService extends SSOService {
             return $this->authServer->respondToAccessTokenRequest($request, $response);
 
         } catch (OAuthServerException $exception) {
+            $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
@@ -422,6 +465,7 @@ class OIDCService extends SSOService {
     }
 
     public function handleUserInfoRequest() {
+        global $gLogger;
         $request = $this->getRequest();
         $response = new Response();
         try {
@@ -486,6 +530,7 @@ class OIDCService extends SSOService {
             return new JsonResponse($claims);
 
         } catch (OAuthServerException $exception) {
+            $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
@@ -524,8 +569,8 @@ class OIDCService extends SSOService {
         $jwks = [
             'keys' => [[
                 'kty' => 'RSA',
-                'use' => 'sig', // Mark as a signing key
-                'kid' => 'key-2025', // You can rotate this
+                'use' => 'sig',
+                'kid' => $signatureKey->getValue('key_uuid'),
                 'alg' => 'RS256',
                 'n'   => $modulus,
                 'e'   => $exponent

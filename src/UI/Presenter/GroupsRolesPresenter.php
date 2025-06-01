@@ -169,7 +169,7 @@ class GroupsRolesPresenter extends PagePresenter
 
                 if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
                     if ($role->getValue('rol_weekday') > 0) {
-                        $html .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' GroupsRolesPresenter.php';
+                        $html .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                     }
                     if (!empty($role->getValue('rol_start_time'))) {
                         $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));

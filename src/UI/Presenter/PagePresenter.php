@@ -295,12 +295,41 @@ class PagePresenter
         $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
         $this->smarty->assign('urlTheme', THEME_URL);
+        if (defined('THEME_FALLBACK_URL')) {
+            $this->smarty->assign('urlThemeFallback', THEME_FALLBACK_URL);
+        } else {
+            $this->smarty->assign('urlThemeFallback', '');
+        }
         $this->smarty->assign('csrfToken', $gCurrentSession->getCsrfToken());
 
         $this->smarty->assign('currentUser', $gCurrentUser);
         $this->smarty->assign('validLogin', $gValidLogin);
         $this->smarty->assign('debug', $gDebug);
         $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
+        
+        // Design variables
+        $this->smarty->assign('additionalStylesFile',  $gSettingsManager->getString('additional_styles_file'));
+        $this->smarty->assign('logoFile',  $gSettingsManager->getString('logo_file'));
+        $this->smarty->assign('faviconFile',  $gSettingsManager->getString('favicon_file'));
+
+        function isValidHexColor($color) {
+            return preg_match('/^#([a-fA-F0-9]{6})$/', $color);
+        };
+        $styles = '';
+        $color_primary = $gSettingsManager->getString('color_primary');
+        if ($color_primary && isValidHexColor($color_primary)) {
+            $styles .= '    --bs-primary: ' . $color_primary . ";\n";
+            $styles .= '    --bs-primary-rgb: ' . hexdec(substr($color_primary, 1, 2)) . ', ' . hexdec(substr($color_primary, 3, 2)) . ', ' . hexdec(substr($color_primary, 5, 2)) . ";\n";
+        }
+        $color_secondary = $gSettingsManager->getString('color_secondary');
+        if ($color_secondary && isValidHexColor($color_secondary)) {
+            $styles .= '    --bs-secondary: ' . $color_secondary . ";\n";
+            $styles .= '    --bs-secondary-rgb: ' . hexdec(substr($color_secondary, 1, 2)) . ', ' . hexdec(substr($color_secondary, 3, 2)) . ', ' . hexdec(substr($color_secondary, 5, 2)) . ";\n";
+        }
+        if (!empty($styles)) {
+            $this->smarty->assign('additionalStyles', ":root {\n$styles};");
+        }
+
 
         // add imprint and data protection
         if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {
@@ -363,13 +392,17 @@ class PagePresenter
             if (defined('THEME_PATH')) {
                 $smartyObject->setTemplateDir(THEME_PATH . '/templates/');
             }
-
+            if (defined('THEME_FALLBACK_PATH')) {
+                $smartyObject->addTemplateDir(THEME_FALLBACK_PATH . '/templates/');
+            }
+            
             $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
             $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
             $smartyObject->registerPlugin('function', 'string_contains', 'Admidio\Infrastructure\Plugins\Smarty::stringContains');
             $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
             $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'Admidio\Infrastructure\Plugins\Smarty::loadAdmidioPlugin');
+            $smartyObject->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
             return $smartyObject;
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());

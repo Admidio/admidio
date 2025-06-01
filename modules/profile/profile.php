@@ -250,6 +250,11 @@ try {
     foreach ($gProfileFields->getProfileFields() as $field) {
         // Display only fields of the basic data
         if ($gCurrentUser->allowedViewProfileField($user, $field->getValue('usf_name_intern'))) {
+            // if profile_show_empty_fields is set to 0 then skip empty profile fields
+            if (!$gSettingsManager->getBool('profile_show_empty_fields') && $user->getValue($field->getValue('usf_name_intern'), 'html') === '') {
+                continue;
+            }
+
             if ($field->getValue('cat_name_intern') === 'BASIC_DATA') {
                 $masterData[$field->getValue('usf_name_intern')] = array(
                     'id' => $field->getValue('usf_name_intern'),
@@ -757,12 +762,15 @@ try {
                 }
                 $userRelations[] = $userRelation;
             }
+            $page->assignSmartyVariable('showRelations', true);
             $page->assignSmartyVariable('showRelationsCreateEdit', $gSettingsManager->get('system_show_create_edit') > 0);
             $page->assignSmartyVariable('userRelations', $userRelations);
         }
         $page->assignSmartyVariable('urlAssignRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
         $page->assignSmartyVariable('urlAssignUserRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)));
-
+    }
+    else {
+        $page->assignSmartyVariable('showRelations', false);
     }
 
     // show information about user who creates the recordset and changed it
@@ -770,6 +778,9 @@ try {
     $page->assignSmartyVariable('userCreatedTimestamp', $user->getValue('usr_timestamp_create'));
     $page->assignSmartyVariable('lastUserEditedName', $user->getNameOfLastEditingUser());
     $page->assignSmartyVariable('lastUserEditedTimestamp', $user->getValue('usr_timestamp_change'));
+
+    $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
+    $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/js/bootstrap-tabs-x-admidio.js');
 
     $page->show();
 } catch (Exception $e) {

@@ -100,12 +100,12 @@ try {
             }
         } else {
             // if no image was passed, then display NoPix
-            $image = new Image(THEME_PATH . '/images/no_photo_found.png');
+            $image = new Image(getThemedFile('/images/no_photo_found.png'));
             $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
         }
     } else {
         if (!is_file($picPath)) {
-            $picPath = THEME_PATH . '/images/no_photo_found.png';
+            $picPath = getThemedFile('/images/no_photo_found.png');
         }
 
         // read image from filesystem and scale it if necessary
