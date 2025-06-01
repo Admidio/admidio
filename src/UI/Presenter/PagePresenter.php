@@ -319,10 +319,12 @@ class PagePresenter
         $color_primary = $gSettingsManager->getString('color_primary');
         if ($color_primary && isValidHexColor($color_primary)) {
             $styles .= '    --bs-primary: ' . $color_primary . ";\n";
+            $styles .= '    --bs-primary-rgb: ' . hexdec(substr($color_primary, 1, 2)) . ', ' . hexdec(substr($color_primary, 3, 2)) . ', ' . hexdec(substr($color_primary, 5, 2)) . ";\n";
         }
         $color_secondary = $gSettingsManager->getString('color_secondary');
         if ($color_secondary && isValidHexColor($color_secondary)) {
             $styles .= '    --bs-secondary: ' . $color_secondary . ";\n";
+            $styles .= '    --bs-secondary-rgb: ' . hexdec(substr($color_secondary, 1, 2)) . ', ' . hexdec(substr($color_secondary, 3, 2)) . ', ' . hexdec(substr($color_secondary, 5, 2)) . ";\n";
         }
         if (!empty($styles)) {
             $this->smarty->assign('additionalStyles', ":root {\n$styles};");
