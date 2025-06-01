@@ -16,8 +16,9 @@
  *            If id is null then the default list of the role will be shown.
  * role_list: Comma separated UUID list of all roles whose members should be shown
  * relation_type_list:  Comma separated UUID list of the relation type whose members should be shown
- * show_former_members: 0 - (Default) show members of role that are active within the selected date range
- *                      1 - show only former members of the role
+ * mem_show_filter - 0  : (Default) show members of role that are active within the selected date range
+ *                   1  : show only former members of the role
+ *                   2  : show active and former members of the role
  ***********************************************************************************************
  */
 
@@ -49,7 +50,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'ods', 'csv', 'html', 'print', 'pdf', 'pdfl')));
     $getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'uuid');
     $getRoleList = admFuncVariableIsValid($_GET, 'role_list', 'string');
-    $getShowFormerMembers = admFuncVariableIsValid($_GET, 'show_former_members', 'bool', array('defaultValue' => false));
+    $getMembersShowFiler = admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0));
     $getRelationTypeList = admFuncVariableIsValid($_GET, 'relation_type_list', 'string'); // could be int or int[], so string is necessary
 
     // check if the module is enabled and disallow access if it's disabled
@@ -140,7 +141,7 @@ try {
 
     // if user should not view former roles members then disallow it
     if (!$hasRightViewFormerMembers) {
-        $getShowFormerMembers = false;
+        $getMembersShowFiler = 0;
         $getDateFrom = DATE_NOW;
         $getDateTo = DATE_NOW;
     }
@@ -227,7 +228,8 @@ try {
         // set SQL options for export
         $sqlOptions = array(
             'showRolesMembers' => $roleUuidList,
-            'showFormerMembers' => $getShowFormerMembers,
+            'showAllMembersThisOrga' => ($getMembersShowFiler === 2 ? true : false),
+            'showFormerMembers' => ($getMembersShowFiler > 0 ? true : false),
             'showRelationTypes' => $relationTypeUuidList,
             'startDate' => $startDateEnglishFormat,
             'endDate' => $endDateEnglishFormat
@@ -236,7 +238,8 @@ try {
         // set SQL options for displaying
         $sqlOptions = array(
             'showRolesMembers' => $roleUuidList,
-            'showFormerMembers' => $getShowFormerMembers,
+            'showAllMembersThisOrga' => ($getMembersShowFiler === 2 ? true : false),
+            'showFormerMembers' => ($getMembersShowFiler > 0 ? true : false),
             'showUserUUID' => true,
             'showLeaderFlag' => true,
             'showRelationTypes' => $relationTypeUuidList,
@@ -335,8 +338,10 @@ try {
     $hoverRows = false;
 
     if ($getMode !== 'html') {
-        if ($getShowFormerMembers === 1) {
+        if ($getMembersShowFiler === 1) {
             $htmlSubHeadline .= ' - ' . $gL10n->get('SYS_FORMER_MEMBERS');
+        } elseif ($getMembersShowFiler === 2) {
+            $htmlSubHeadline .= ' - ' . $gL10n->get('SYS_ALL_MEMBERS');
         } else {
             if ($getDateFrom === DATE_NOW && $getDateTo === DATE_NOW) {
                 $htmlSubHeadline .= ' - ' . $gL10n->get('SYS_ACTIVE_MEMBERS');
@@ -445,13 +450,30 @@ try {
 
         // Only for active members of a role and if user has right to view former members
         if ($hasRightViewFormerMembers) {
+            // create filter menu with elements for role, relation type and date
+            $selectBoxValues = array(
+                '0' => $gL10n->get('SYS_ACTIVE_MEMBERS'),
+                '1' => $gL10n->get('SYS_FORMER_MEMBERS'),
+                '2' => $gL10n->get('SYS_ALL_MEMBERS')
+            );
+
+            // filter all items
+            $form->addSelectBox(
+                'mem_show_filter',
+                $gL10n->get('SYS_FILTER_MEMBERS'),
+                $selectBoxValues,
+                array(
+                    'defaultValue' => $getMembersShowFiler,
+                    'showContextDependentFirstEntry' => false
+                )
+            );
+
             // create filter menu with elements for start-/end date
             $form->addInput('date_from', $gL10n->get('SYS_ROLE_MEMBERSHIP_IN_PERIOD'), $dateFrom, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('date_to', $gL10n->get('SYS_ROLE_MEMBERSHIP_TO'), $dateTo, array('type' => 'date', 'maxLength' => 10));
             $form->addInput('list_uuid', '', $getListUuid, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addInput('role_list', '', $getRoleList, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addInput('relation_type_list', '', $getRelationTypeList, array('property' => FormPresenter::FIELD_HIDDEN));
-            $form->addCheckbox('show_former_members', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_ONLY'), $getShowFormerMembers);
             $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
         }
 
@@ -467,8 +489,16 @@ try {
             if ($(this).val() === "mylist") {
                 self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php', array('role_list' => $getRoleList)) . '";
             } else {
-                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
+                self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mem_show_filter' => $getMembersShowFiler, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '&list_uuid=" + $(this).val();
             }
+        });
+
+        // change mode of members that should be shown
+        $("#mem_show_filter").on("change", function() {
+            var form = $("#adm_navbar_filter_form");
+            var membersSelect = $("#mem_show_filter");
+            membersSelect.attr("name", "mem_show_filter");
+            form.submit();
         });
 
         $("#menu_item_mail_to_list").click(function() {
@@ -477,7 +507,7 @@ try {
         });
 
         $("#menu_item_lists_print_view").click(function() {
-            window.open("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mode' => 'print', 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '", "_blank");
+            window.open("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mode' => 'print', 'mem_show_filter' => $getMembersShowFiler, 'date_from' => $getDateFrom, 'date_to' => $getDateTo)) . '", "_blank");
         });',
             true
         );
@@ -492,35 +522,35 @@ try {
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_excel',
                 $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mem_show_filter' => $getMembersShowFiler, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'xlsx')),
                 'bi-file-earmark-excel',
                 'menu_item_lists_export'
             );
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_odf',
                 $gL10n->get('SYS_ODF_SPREADSHEET'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mem_show_filter' => $getMembersShowFiler, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'ods')),
                 'bi-file-earmark-spreadsheet',
                 'menu_item_lists_export'
             );
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_csv',
                 $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mem_show_filter' => $getMembersShowFiler, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'csv')),
                 'bi-filetype-csv',
                 'menu_item_lists_export'
             );
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_pdf',
                 $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_PORTRAIT') . ')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mem_show_filter' => $getMembersShowFiler, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdf')),
                 'bi-file-earmark-pdf',
                 'menu_item_lists_export'
             );
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_pdfl',
                 $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_LANDSCAPE') . ')',
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'show_former_members' => $getShowFormerMembers, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('list_uuid' => $getListUuid, 'role_list' => $getRoleList, 'relation_type_list' => $getRelationTypeList, 'mem_show_filter' => $getMembersShowFiler, 'date_from' => $getDateFrom, 'date_to' => $getDateTo, 'mode' => 'pdfl')),
                 'bi-file-earmark-pdf',
                 'menu_item_lists_export'
             );
