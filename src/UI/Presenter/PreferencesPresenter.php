@@ -676,13 +676,13 @@ class PreferencesPresenter extends PagePresenter
         $formCommon->addInput(
             'color_primary',
             $gL10n->get('SYS_COLOR_PRIMARY'),
-            $formValues['color_primary']??'',
+            $formValues['color_primary']??'#349aaa',
             array('type' => 'color', 'helpTextId' => 'SYS_COLOR_PRIMARY_DESC')
         );
         $formCommon->addInput(
             'color_secondary',
             $gL10n->get('SYS_COLOR_SECONDARY'),
-            $formValues['color_secondary']??'',
+            $formValues['color_secondary']??'#263340',
             array('type' => 'color', 'helpTextId' => 'SYS_COLOR_SECONDARY_DESC')
         );
 
