@@ -25,7 +25,9 @@
     --bs-body-color: #263340;
     --bs-body-bg: #ffffff;
     --bs-link-color: var(--bs-primary);
+    --bs-link-color-rgb: var(--bs-primary-rgb);
     --bs-link-hover-color: color-mix(in srgb, var(--bs-link-color) 80%, white);
+    --bs-link-hover-color-rgb: color-mix(in srgb, var(--bs-link-color-rgb) 80%, white);
     --bs-focus-ring-color: #c4e9ef;
 }
 
@@ -382,17 +384,26 @@ label {
     padding: 0;
 }
 
-
-.profile-tabs {
+.admidio-tabs {
+/*     overflow: hidden;
+    overflow-x: auto; */
     flex-wrap: nowrap;     /* never wrap */
     width: 100%;
 }
-
-.profile-tabs .nav-link {
+  
+.admidio-tabs .nav-item, .admidio-tabs .nav-link {
+    display: flex;
+}
+  
+.admidio-tabs .nav-link {
+    flex-direction: column; 
+    justify-content: center;
+    text-align: center;
+    /* min-width: 120px; */
     max-width: 250px;
 }
 
-.profile-tabs .dropdown-toggle {
+.admidio-tabs .dropdown-toggle {
     white-space: normal;
     text-align: center;
     align-content: center;
@@ -470,10 +481,6 @@ label {
 /***********************************/
 
 .tab-content {
-    border-left: var(--bs-border-width) solid var(--bs-border-color);
-    border-right: var(--bs-border-width) solid var(--bs-border-color);
-    border-bottom: var(--bs-border-width) solid var(--bs-border-color);
-    border-radius: 0px 0px var(--bs-border-radius) var(--bs-border-radius);
     padding: 1rem 1rem 0 1rem;
 }
 
@@ -738,6 +745,31 @@ tr.admidio-event-highlight {
     margin-bottom: 1rem;
 }
 
+/***********************************/
+/* Preferences page */
+/***********************************/
+
+.admidio-preferences-group {
+    width: 100%;
+}
+
+.admidio-preferences-group .list-group-item.nav-item {
+    border-right: none;
+    border-bottom: none;
+    padding: 0 0 0 0;
+}
+
+.admidio-preferences-group .list-group-item.group-heading {
+    border-bottom: none;
+    border-top: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+    border-top-left-radius: var(--bs-list-group-border-radius);
+    border-top-right-radius: unset;
+}
+
+.admidio-preferences-group .list-group-item.group-last {
+    margin-bottom: 1rem;
+    border-bottom-left-radius: var(--bs-list-group-border-radius);
+}
 
 /***********************************/
 /* Changelog configuration  */
