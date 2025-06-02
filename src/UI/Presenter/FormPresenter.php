@@ -440,6 +440,24 @@ class FormPresenter
     }
 
     /**
+     * Add a description to the form. The description will be placed in the form
+     * without a label and without a form control.
+     * @param string $id ID of the description. This will also be the name of the description.
+     * @param string $content A simple Text that would be placed instead of a form element.
+     * @param array $options (optional) An array with the following possible entries:
+     *                        - **class** : An css classname. As default no class is set.
+     */
+    public function addDescripion(string $id, string $content, array $options = array()): void
+    {
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'type' => 'description',
+            'id' => $id,
+            'content' => $content
+        ), $options));
+
+        $this->elements[$id] = $optionsAll;
+    }
+    /**
      * Add a new CKEditor element to the form.
      * @param string $id ID of the password field. This will also be the name of the password field.
      * @param string $label The label of the password field.
