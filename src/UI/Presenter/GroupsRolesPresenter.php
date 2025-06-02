@@ -83,7 +83,7 @@ class GroupsRolesPresenter extends PagePresenter
             $templateRow['title'] = $role->getValue('rol_name');
 
             // send a mail to all role members
-            if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getBool('enable_mail_module')) {
+            if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getInt('mail_module_enabled') > 0) {
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $row['rol_uuid'])),
                     'icon' => 'bi bi-envelope',
@@ -359,7 +359,7 @@ class GroupsRolesPresenter extends PagePresenter
             FormPresenter::SELECT_BOX_MODUS_EDIT,
             array('property' => ($eventRole ? FormPresenter::FIELD_READONLY : FormPresenter::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
         );
-        if ($gSettingsManager->getBool('enable_mail_module')) {
+        if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
             $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'));
             $form->addSelectBox(
                 'rol_mail_this_role',
@@ -472,7 +472,7 @@ class GroupsRolesPresenter extends PagePresenter
                 (bool)$role->getValue('rol_approve_users'),
                 array('icon' => 'bi-card-checklist')
             );
-            if ($gSettingsManager->getBool('enable_mail_module')) {
+            if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_mail_to_all',
                     $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'),

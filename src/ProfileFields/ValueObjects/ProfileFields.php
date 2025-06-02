@@ -268,7 +268,7 @@ class ProfileFields
                 case 'EMAIL':
                     // the value in db is only the position, now search for the text
                     if ($value !== '') {
-                        if (!$gSettingsManager->getBool('enable_mail_module')) {
+                        if (!$gSettingsManager->getInt('mail_module_enabled') > 0) {
                             $emailLink = 'mailto:' . $value;
                         } else {
                             // set value2 to user id because we need a second parameter in the link to mail module

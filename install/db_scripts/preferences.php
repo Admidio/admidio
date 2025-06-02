@@ -165,9 +165,9 @@ $defaultOrgPreferences = array(
     'groups_roles_show_former_members' => '2',
 
     // Messages
-    'enable_mail_module' => '1',
-    'enable_pm_module' => '1',
-    'enable_mail_captcha' => '1',
+    'mail_module_enabled' => '1',
+    'pm_module_enabled' => '1',
+    'mail_captcha_enabled' => '1',
     'mail_delivery_confirmation' => '0',
     'mail_html_registered_users' => '1',
     'mail_max_receiver' => '10',

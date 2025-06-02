@@ -275,8 +275,8 @@ class Component extends Entity
                 break;
 
             case 'MESSAGES':
-                if ($gSettingsManager->getBool('enable_mail_module')
-                || ($gSettingsManager->getBool('enable_pm_module') && $gValidLogin)) {
+                if (($gSettingsManager->getInt('mail_module_enabled') === 1 || ($gSettingsManager->getInt('mail_module_enabled') === 2 && $gValidLogin))
+                || ($gSettingsManager->getBool('pm_module_enabled') && $gValidLogin)) {
                     return true;
                 }
                 break;

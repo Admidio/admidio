@@ -1306,22 +1306,27 @@ class PreferencesPresenter extends PagePresenter
             null,
             array('class' => 'form-preferences')
         );
-        $formMessages->addCheckbox(
-            'enable_mail_module',
-            $gL10n->get('SYS_ENABLE_EMAILS'),
-            (bool) $formValues['enable_mail_module'],
-            array('helpTextId' => 'SYS_ENABLE_EMAILS_DESC')
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formMessages->addSelectBox(
+            'mail_module_enabled',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
         $formMessages->addCheckbox(
-            'enable_pm_module',
+            'pm_module_enabled',
             $gL10n->get('SYS_ENABLE_PM_MODULE'),
-            (bool) $formValues['enable_pm_module'],
+            (bool) $formValues['pm_module_enabled'],
             array('helpTextId' => 'SYS_ENABLE_PM_MODULE_DESC')
         );
         $formMessages->addCheckbox(
-            'enable_mail_captcha',
+            'mail_captcha_enabled',
             $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool) $formValues['enable_mail_captcha'],
+            (bool) $formValues['mail_captcha_enabled'],
             array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
         );
 

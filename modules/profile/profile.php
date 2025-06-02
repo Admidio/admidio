@@ -264,7 +264,7 @@ try {
                 if ($field->getValue('usf_name_intern') === 'LAST_NAME') {
                     if ($user->getValue('usr_login_name') === '') {
                         $value = $gL10n->get('SYS_NOT_REGISTERED');
-                    } elseif ($userId !== $gCurrentUserId && $gSettingsManager->getBool('enable_pm_module')) {
+                    } elseif ($userId !== $gCurrentUserId && $gSettingsManager->getBool('pm_module_enabled')) {
                         $value = '<a class="icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_type' => 'PM', 'user_uuid' => $getUserUuid)) . '" title="' . $gL10n->get('SYS_WRITE_PM') . '">' .
                             '<i class="bi bi-chat-left-fill"></i>' . $user->getValue('usr_login_name') . '</a>';
                     } else {

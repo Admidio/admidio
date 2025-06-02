@@ -61,12 +61,12 @@ try {
     }
 
     // Stop if pm should be sent pm module is disabled
-    if ($getMsgType === Message::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('enable_pm_module')) {
+    if ($getMsgType === Message::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('pm_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // Stop if mail should be sent and mail module is disabled
-    if ($getMsgType === Message::MESSAGE_TYPE_EMAIL && !$gSettingsManager->getBool('enable_mail_module')) {
+    if ($getMsgType === Message::MESSAGE_TYPE_EMAIL && !($gSettingsManager->getInt('mail_module_enabled') === 1 || ($gSettingsManager->getInt('mail_module_enabled') === 2 && $gValidLogin))) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
