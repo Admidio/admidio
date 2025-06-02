@@ -516,7 +516,7 @@ class GroupsRolesPresenter extends PagePresenter
                     array('icon' => 'bi-image-fill')
                 );
             }
-            if ($gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($gSettingsManager->getInt('documents_files_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_documents_files',
                     $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
@@ -646,7 +646,7 @@ class GroupsRolesPresenter extends PagePresenter
             if ($role->getValue('rol_photo') == 1 && $gSettingsManager->getInt('photo_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-image-fill', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
             }
-            if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getInt('documents_files_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
             if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getInt('forum_module_enabled') > 0) {

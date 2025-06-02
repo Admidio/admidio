@@ -242,7 +242,8 @@ class Component extends Entity
                 break;
 
             case 'DOCUMENTS-FILES':
-                if ($gSettingsManager->getBool('documents_files_module_enabled')) {
+                if ($gSettingsManager->getInt('documents_files_module_enabled') === 1
+                || ($gSettingsManager->getInt('documents_files_module_enabled') === 2 && $gValidLogin)) {
                     try {
                         $documentsRootFolder = new Folder($gDb);
                         $documentsRootFolder->getFolderForDownload('');

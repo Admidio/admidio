@@ -735,11 +735,16 @@ class PreferencesPresenter extends PagePresenter
             null,
             array('class' => 'form-preferences')
         );
-        $formDocumentsFiles->addCheckbox(
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formDocumentsFiles->addSelectBox(
             'documents_files_module_enabled',
-            $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'),
-            (bool) $formValues['documents_files_module_enabled'],
-            array('helpTextId' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['documents_files_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
         $formDocumentsFiles->addInput(
             'documents_files_max_upload_size',

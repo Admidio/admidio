@@ -470,28 +470,28 @@ try {
                     'icon' => 'bi-person-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_announcements') && (int) $gSettingsManager->get('announcements_module_enabled') > 0) {
+            if ($user->checkRolesRight('rol_announcements') && $gSettingsManager->getInt('announcements_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_announcements'],
                     'right' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
                     'icon' => 'bi-newspaper'
                 );
             }
-            if ($user->checkRolesRight('rol_events') && (int) $gSettingsManager->get('events_module_enabled') > 0) {
+            if ($user->checkRolesRight('rol_events') && $gSettingsManager->getInt('events_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_events'],
                     'right' => $gL10n->get('SYS_RIGHT_DATES'),
                     'icon' => 'bi-calendar-week-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_photo') && (int) $gSettingsManager->get('photo_module_enabled') > 0) {
+            if ($user->checkRolesRight('rol_photo') && $gSettingsManager->getInt('photo_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_photo'],
                     'right' => $gL10n->get('SYS_RIGHT_PHOTOS'),
                     'icon' => 'bi-image-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_documents_files') && (int) $gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($user->checkRolesRight('rol_documents_files') && $gSettingsManager->getInt('documents_files_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_documents_files'],
                     'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
@@ -505,7 +505,7 @@ try {
                     'icon' => 'bi-chat-dots-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_weblinks') && (int) $gSettingsManager->get('enable_weblinks_module') > 0) {
+            if ($user->checkRolesRight('rol_weblinks') && $gSettingsManager->getInt('enable_weblinks_module') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_weblinks'],
                     'right' => $gL10n->get('SYS_RIGHT_WEBLINKS'),
