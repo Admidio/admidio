@@ -224,6 +224,13 @@ class PreferencesService
         // first check the fields of the submitted form
         switch ($panel) {
             case 'design':
+                // check if the style form or the overview form was submitted
+                foreach ($formData as $key => $value) {
+                    if (str_starts_with($key, 'overview_')) {
+                        break 2; // break out of loop and case
+                    }
+                }
+
                 if (!StringUtils::strIsValidFolderName($formData['theme'])
                     || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme'] . '/index.html')) {
                     throw new Exception('ORG_INVALID_THEME');
@@ -236,7 +243,7 @@ class PreferencesService
                 }
                 break;
 
-            case 'Security':
+            case 'security':
                 if (!isset($formData['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login')) {
                     // if auto login was deactivated than delete all saved logins
                     $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
@@ -244,28 +251,28 @@ class PreferencesService
                 }
                 break;
 
-            case 'RegionalSettings':
+            case 'regional_settings':
                 if (!StringUtils::strIsValidFolderName($formData['system_language'])
                     || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $formData['system_language'] . '.xml')) {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
                 }
                 break;
 
-            case 'Messages':
+            case 'messages':
                 // get real filename of the template file
                 if ($formData['mail_template'] !== $gSettingsManager->getString('mail_template')) {
                     $formValues['mail_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $formData['mail_template']);
                 }
                 break;
 
-            case 'Photos':
+            case 'photos':
                 // get real filename of the template file
                 if ($formData['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
                     $formValues['photo_ecard_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $formData['photo_ecard_template']);
                 }
                 break;
 
-            case 'Sso':
+            case 'sso':
                 if (empty($formData['sso_oidc_issuer_url'])) {
                     $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
                 }
