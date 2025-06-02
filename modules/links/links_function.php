@@ -27,7 +27,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create', 'delete')));
 
     // check if the module is enabled for use
-    if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
+    if ($gSettingsManager->getInt('weblinks_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 

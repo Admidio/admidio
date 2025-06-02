@@ -1243,10 +1243,10 @@ class PreferencesPresenter extends PagePresenter
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
         );
         $formWeblinks->addSelectBox(
-            'enable_weblinks_module',
+            'weblinks_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['enable_weblinks_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+            array('defaultValue' => $formValues['weblinks_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
         $formWeblinks->addInput(
             'weblinks_per_page',

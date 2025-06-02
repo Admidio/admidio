@@ -505,7 +505,7 @@ try {
                     'icon' => 'bi-chat-dots-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_weblinks') && $gSettingsManager->getInt('enable_weblinks_module') > 0) {
+            if ($user->checkRolesRight('rol_weblinks') && $gSettingsManager->getInt('weblinks_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_weblinks'],
                     'right' => $gL10n->get('SYS_RIGHT_WEBLINKS'),

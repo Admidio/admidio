@@ -216,7 +216,7 @@ $defaultOrgPreferences = array(
 
 
     // Weblinks
-    'enable_weblinks_module' => '1',
+    'weblinks_module_enabled' => '1',
     'weblinks_per_page' => '0',
     'weblinks_redirect_seconds' => '10',
     'weblinks_target' => '_blank'

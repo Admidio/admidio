@@ -262,8 +262,8 @@ class Component extends Entity
                 break;
 
             case 'LINKS':
-                if ($gSettingsManager->getInt('enable_weblinks_module') === 1
-                || ($gSettingsManager->getInt('enable_weblinks_module') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('weblinks_module_enabled') === 1
+                || ($gSettingsManager->getInt('weblinks_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;

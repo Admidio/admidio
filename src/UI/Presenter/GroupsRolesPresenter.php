@@ -532,7 +532,7 @@ class GroupsRolesPresenter extends PagePresenter
                     array('helpTextId' => 'SYS_RIGHT_FORUM_DESC', 'icon' => 'bi-chat-dots-fill')
                 );
             }
-            if ($gSettingsManager->getInt('enable_weblinks_module') > 0) {
+            if ($gSettingsManager->getInt('weblinks_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_weblinks',
                     $gL10n->get('SYS_RIGHT_WEBLINKS'),
@@ -652,7 +652,7 @@ class GroupsRolesPresenter extends PagePresenter
             if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_FORUM'));
             }
-            if ($role->getValue('rol_weblinks') == 1 && $gSettingsManager->getInt('enable_weblinks_module') > 0) {
+            if ($role->getValue('rol_weblinks') == 1 && $gSettingsManager->getInt('weblinks_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-link-45deg', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));
             }
 
