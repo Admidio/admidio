@@ -1,6 +1,8 @@
 <form {foreach $attributes as $attribute}
         {$attribute@key}="{$attribute}"
     {/foreach}>
+    
+    {include 'sys-template-parts/form.description.tpl' data=$elements['adm_inventory_import_description']}
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}

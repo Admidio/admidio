@@ -120,6 +120,11 @@ class InventoryImportPresenter extends PagePresenter
             array('enableFileUpload' => true)
         );
 
+        $form->addDescription(
+            'adm_inventory_import_description',
+            $gL10n->get('SYS_INVENTORY_IMPORT_DESC')
+        );
+
         $form->addSelectBox(
             'format',
             $gL10n->get('SYS_FORMAT'),
