@@ -447,7 +447,7 @@ class FormPresenter
      * @param array $options (optional) An array with the following possible entries:
      *                        - **class** : An css classname. As default no class is set.
      */
-    public function addDescripion(string $id, string $content, array $options = array()): void
+    public function addDescription(string $id, string $content, array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type' => 'description',

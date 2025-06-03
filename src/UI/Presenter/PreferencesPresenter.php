@@ -663,7 +663,7 @@ class PreferencesPresenter extends PagePresenter
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
         );
 
-        $formOverviewDesign->addDescripion(
+        $formOverviewDesign->addDescription(
             'overview_design_description',
             $gL10n->get('ORG_ACCESS_TO_PLUGINS_DESC', array($gL10n->get('SYS_OVERVIEW'))),
         );
