@@ -152,6 +152,7 @@ $defaultOrgPreferences = array(
     'inventory_allow_negative_numbers'      => '1',
     'inventory_decimal_places'              => '1',
     'inventory_field_date_time_format'      => 'date',
+    'inventory_profile_view_enabled'        => '1',
     'inventory_profile_view'                => 'LAST_RECEIVER',
     'inventory_export_filename'            => 'Inventory',
     'inventory_add_date'                    => '0',

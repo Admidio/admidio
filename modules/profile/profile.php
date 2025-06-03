@@ -381,7 +381,7 @@ try {
         }
     }
 
-    if ($gSettingsManager->getInt('inventory_module_enabled') > 0) {
+    if ($gSettingsManager->getInt('inventory_module_enabled') > 0 && $gSettingsManager->getBool('inventory_profile_view_enabled')) {
         // ******************************************************************************
         // Block with inventory items (optimized)
         // ******************************************************************************
@@ -464,6 +464,7 @@ try {
             default:
                 break;
         }
+        $page->assignSmartyVariable('showInventoryOnProfile', $gSettingsManager->getBool('inventory_profile_view_enabled'));
     }
 
     if ($gSettingsManager->getBool('profile_show_roles')) {

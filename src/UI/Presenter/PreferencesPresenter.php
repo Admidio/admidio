@@ -99,7 +99,19 @@ class PreferencesPresenter extends PagePresenter
                 ),
             ),
 
-            // === 2) Communication ===
+            // === 3) User Management ===
+            array(
+                'key'    => 'user_management',
+                'label'  => $gL10n->get('SYS_USERS'),
+                'panels' => array(
+                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
+                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
+                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
+                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
+                ),
+            ),
+
+            // === 4) Communication ===
             array(
                 'key'    => 'communication',
                 'label'  => $gL10n->get('SYS_COMMUNICATION'),
@@ -112,7 +124,7 @@ class PreferencesPresenter extends PagePresenter
                 ),
             ),
         
-            // === 3) Contents ===
+            // === 5) Contents ===
             array(
                 'key'    => 'content_management',
                 'label'  => $gL10n->get('SYS_CONTENTS'),
@@ -122,18 +134,6 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'inventory',            'title'=>$gL10n->get('SYS_INVENTORY'),              'icon'=>'bi-box-seam-fill',                 'subcards'=>false),
                     array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
                     array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
-                ),
-            ),
-        
-            // === 4) User Management ===
-            array(
-                'key'    => 'user_management',
-                'label'  => $gL10n->get('SYS_USERS'),
-                'panels' => array(
-                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
-                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
-                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
-                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
                 ),
             ),
         );
@@ -880,6 +880,12 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_INVENTORY_PROFILE_VIEW')
         );
 
+        $formInventory->addCheckbox(
+            'inventory_profile_view_enabled',
+            $gL10n->get('SYS_INVENTORY_PROFILE_VIEW_ENABLED'),
+            (bool)$formValues['inventory_profile_view_enabled'],
+            array('helpTextId' => 'SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC')
+        );
         // create array of possible fields for profile view
         $selectBoxEntries = array();
         foreach ($items->getItemFields() as $itemField) {

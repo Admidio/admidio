@@ -15,6 +15,7 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_decimal_places']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_field_date_time_format']}
     {include 'sys-template-parts/form.seperator.tpl' data=$elements['inventory_seperator_profile_view_settings']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_profile_view_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_profile_view']}
     {include 'sys-template-parts/form.seperator.tpl' data=$elements['inventory_seperator_export_settings']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_export_filename']}
