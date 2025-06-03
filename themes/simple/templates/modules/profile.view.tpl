@@ -14,23 +14,22 @@
                         {$l10n->get('SYS_PERMISSIONS')}
                     </button>
                 </li>
-        {/if}
-        {if $showCurrentRoles || $showFormerRoles || $showExternalRoles}
+            {/if}
+            {if $showCurrentRoles || $showFormerRoles || $showExternalRoles}
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="adm_profile_role_memberships_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_role_memberships_pane" type="button" role="tab" aria-controls="adm_profile_role_memberships" aria-selected="false">
                         {$l10n->get('SYS_ROLE_MEMBERSHIPS')}
                     </button>
                 </li>
             {/if}
-        {if $showRelations}
+            {if $showRelations}
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="adm_profile_user_relations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_user_relations_pane" type="button" role="tab" aria-controls="adm_profile_user_relations" aria-selected="false">
                         {$l10n->get('SYS_USER_RELATIONS')}
                     </button>
                 </li>
-        {/if}
+            {/if}
         </ul>
-
         <!-- Tab Content -->
         <div class="tab-content" id="adm_profile_tabs_content">
             <!-- Basic Data Tab -->
@@ -57,77 +56,76 @@
                     </div>
                 {/foreach}
             </div>
-
-        <!-- Permissions Tab -->
-        {if $showCurrentRoles}
-            <div class="tab-pane fade" id="adm_profile_permissions_pane" role="tabpanel" aria-labelledby="adm_profile_permissions_tab">
-                {include file="modules/profile.view.permissions.tpl"}
-            </div>
-        {/if}
-
-        <!-- Role Memberships Tab -->
-        {if $showCurrentRoles || $showFormerRoles || $showExternalRoles}
-            <div class="tab-pane fade" id="adm_profile_role_memberships_pane" role="tabpanel" aria-labelledby="adm_profile_role_memberships_tab">
-                {if $showCurrentRoles}
-                    <!-- Current Role Memberships Card -->
-                    <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_current_pane_content">
-                        <div class="card-header">{$l10n->get('SYS_CURRENT_ROLE_MEMBERSHIP')}
-                            {if $isAdministratorRoles}
-                                <a class="btn btn-secondary float-end openPopup" id="adm_profile_role_memberships_change"
-                                data-class="modal-lg" href="javascript:void(0);" data-href="{$urlEditRoles}">
-                                    <i class="bi bi-person-gear me-1"></i>{$l10n->get('SYS_ROLE_MEMBERSHIPS_CHANGE')}</a>
+            <!-- Permissions Tab -->
+            {if $showCurrentRoles}
+                <div class="tab-pane fade" id="adm_profile_permissions_pane" role="tabpanel" aria-labelledby="adm_profile_permissions_tab">
+                    {include file="modules/profile.view.permissions.tpl"}
+                </div>
+            {/if}
+            <!-- Role Memberships Tab -->
+            {if $showCurrentRoles || $showFormerRoles || $showExternalRoles}
+                <div class="tab-pane fade" id="adm_profile_role_memberships_pane" role="tabpanel" aria-labelledby="adm_profile_role_memberships_tab">
+                    {if $showCurrentRoles}
+                        <!-- Current Role Memberships Card -->
+                        <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_current_pane_content">
+                            <div class="card-header">{$l10n->get('SYS_CURRENT_ROLE_MEMBERSHIP')}
+                                {if $isAdministratorRoles}
+                                    <a class="btn btn-secondary float-end openPopup" id="adm_profile_role_memberships_change"
+                                    data-class="modal-lg" href="javascript:void(0);" data-href="{$urlEditRoles}">
+                                        <i class="bi bi-person-gear me-1"></i>{$l10n->get('SYS_ROLE_MEMBERSHIPS_CHANGE')}</a>
+                                {/if}
+                            </div>
+                            <div class="card-body">
+                            </div>
+                        </div>
+                        <!-- Future Role Memberships Card -->
+                        <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_future_pane_content">
+                            <div class="card-header">{$l10n->get('SYS_FUTURE_ROLE_MEMBERSHIP')}</div>
+                            <div class="card-body">
+                            </div>
+                        </div>
+                    {/if}
+                    {if $showFormerRoles}
+                        <!-- Former Role Memberships Card -->
+                        <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_former_pane_content">
+                            <div class="card-header">{$l10n->get('SYS_FORMER_ROLE_MEMBERSHIP')}</div>
+                            <div class="card-body">
+                            </div>
+                        </div>
+                    {/if}
+                    {if $showExternalRoles}
+                        <!-- Other Org Role Memberships Card -->
+                        <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_other_org_pane_content">
+                            <div class="card-header">
+                                {$l10n->get('SYS_ROLE_MEMBERSHIP_OTHER_ORG')}
+                                <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
+                                data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+                                data-bs-content="{$l10n->get('SYS_VIEW_ROLES_OTHER_ORGAS')}"></i>
+                            </div>
+                            <div class="card-body">
+                                {include file="modules/profile.view.other-org-memberships.tpl"}
+                            </div>
+                        </div>
+                    {/if}
+                </div>
+            {/if}
+            <!-- User Relations Tab -->
+            {if $showRelations}
+                <div class="tab-pane fade" id="adm_profile_user_relations_pane" role="tabpanel" aria-labelledby="adm_profile_user_relations_tab">
+                    <div class="card admidio-tabbed-field-group">
+                        <div class="card-header">
+                            {if $isAdministratorUsers}
+                                <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlAssignUserRelations}">
+                                    <i class="bi bi-person-heart me-1"></i>{$l10n->get('SYS_CREATE_RELATIONSHIP')}</a>
                             {/if}
                         </div>
                         <div class="card-body">
+                            {include file="modules/profile.view.relations.tpl"}
                         </div>
-                    </div>
-                    <!-- Future Role Memberships Card -->
-                    <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_future_pane_content">
-                        <div class="card-header">{$l10n->get('SYS_FUTURE_ROLE_MEMBERSHIP')}</div>
-                        <div class="card-body">
-                        </div>
-                    </div>
-                {/if}
-                {if $showFormerRoles}
-                    <!-- Former Role Memberships Card -->
-                    <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_former_pane_content">
-                        <div class="card-header">{$l10n->get('SYS_FORMER_ROLE_MEMBERSHIP')}</div>
-                        <div class="card-body">
-                        </div>
-                    </div>
-                {/if}
-                {if $showExternalRoles}
-                    <!-- Other Org Role Memberships Card -->
-                    <div class="card admidio-tabbed-field-group" id="adm_profile_role_memberships_other_org_pane_content">
-                        <div class="card-header">
-                            {$l10n->get('SYS_ROLE_MEMBERSHIP_OTHER_ORG')}
-                            <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
-                            data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
-                            data-bs-content="{$l10n->get('SYS_VIEW_ROLES_OTHER_ORGAS')}"></i>
-                        </div>
-                        <div class="card-body">
-                            {include file="modules/profile.view.other-org-memberships.tpl"}
-                        </div>
-                    </div>
-                {/if}
-            </div>
-        {/if}
-        <!-- User Relations Tab -->
-        {if $showRelations}
-            <div class="tab-pane fade" id="adm_profile_user_relations_pane" role="tabpanel" aria-labelledby="adm_profile_user_relations_tab">
-                <div class="card admidio-tabbed-field-group">
-                    <div class="card-header">
-                        {if $isAdministratorUsers}
-                            <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlAssignUserRelations}">
-                                <i class="bi bi-person-heart me-1"></i>{$l10n->get('SYS_CREATE_RELATIONSHIP')}</a>
-                        {/if}
-                    </div>
-                    <div class="card-body">
-                        {include file="modules/profile.view.relations.tpl"}
                     </div>
                 </div>
-            </div>
-        {/if}
+            {/if}
+        </div>
     </div>
 </div>
 
