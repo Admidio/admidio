@@ -750,6 +750,15 @@ class InventoryPresenter extends PagePresenter
                 $content = $this->itemsData->getValue($infNameIntern, 'database');
                 $infType = $this->itemsData->getProperty($infNameIntern, 'inf_type');
 
+                // Process ITEMNAME column
+                if ($infNameIntern === 'ITEMNAME' && strlen($content) > 0) {
+                    if ($mode === 'html') {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
+                    } else {
+                        $content = SecurityUtils::encodeHTML($content);
+                    }
+                }
+
                 // Process KEEPER column
                 if ($infNameIntern === 'KEEPER' && strlen($content) > 0) {
                     $found = $user->readDataById($content);
