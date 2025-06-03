@@ -1020,8 +1020,10 @@ class InventoryPresenter extends PagePresenter
         }
 
         // Append the admin action column
-        $columnAlign[] = 'end';
-        $headers[]     = '&nbsp;';
+        if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
+            $columnAlign[] = 'end';
+            $headers[]     = '&nbsp;';
+        }
 
         $preparedData['headers']      = $headers;
         $preparedData['column_align'] = $columnAlign;
