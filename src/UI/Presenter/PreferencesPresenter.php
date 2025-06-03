@@ -785,13 +785,13 @@ class PreferencesPresenter extends PagePresenter
             '0' => $gL10n->get('SYS_DISABLED'),
             '1' => $gL10n->get('SYS_ENABLED'),
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
-            '3' => $gL10n->get('ORG_ONLY_FOR_INVENTORY_ADMINS')
+            '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR')
         );
         $formInventory->addSelectBox(
             'inventory_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+            array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ACCESS_TO_MODULE_DESC')
         );
 
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
