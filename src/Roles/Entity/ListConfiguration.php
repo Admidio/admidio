@@ -192,11 +192,22 @@ class ListConfiguration extends Entity
             }
         } elseif (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true)
             && ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
+                || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN_MULTISELECT'
                 || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON')) {
             if (strlen($content) > 0) {
                 // show selected text of option field or combobox
                 $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
-                $content = $arrListValues[$content];
+                // if the contnent is a list of values then explode it
+                if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN_MULTISELECT') {
+                    // explode the content by comma
+                    $content = explode(',', $content);
+                    $content = array_map(function ($value) use ($arrListValues) {
+                        return isset($arrListValues[$value]) ? $arrListValues[$value] : '';
+                    }, $content);
+                    $content = implode(', ', $content);
+                } else {
+                    $content = $arrListValues[$content];
+                }
             }
         } elseif (in_array($column->getValue('lsc_special_field'), array('usr_timestamp_create', 'usr_timestamp_change', 'mem_timestamp_change'))) {
             if (strlen($content) > 0) {
