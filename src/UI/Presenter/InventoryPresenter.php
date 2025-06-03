@@ -653,7 +653,7 @@ class InventoryPresenter extends PagePresenter
 
         // Set default alignment and headers for the first column (abbreviation)
         $columnAlign[] = ($this->getFilterItems === 2) ? 'center' : 'end';
-        $headers     =  ($this->getFilterItems === 2) ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="This is the text of the tooltip"/>') : array();
+        $headers     =  ($this->getFilterItems === 2) ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>') : array();
         $exportHeaders = array();
         $columnNumber = 1;
 
