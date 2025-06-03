@@ -2133,7 +2133,12 @@ class User extends Entity
         $oldFieldValue = $this->mProfileFieldsData->getValue($columnName);
         $oldFieldValue_db = $this->mProfileFieldsData->getValue($columnName, 'database');
 
-        $newValue = (string)$newValue;
+        // check if the value is an array, if so then convert it to a string and remove empty values
+        if (is_array($newValue)) {
+            $newValue = implode(',', array_filter($newValue));
+        } else {
+            $newValue = (string)$newValue;
+        }
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE') {

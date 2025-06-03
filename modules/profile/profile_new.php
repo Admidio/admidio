@@ -243,7 +243,7 @@ try {
                             'category' => $category
                         )
                     );
-                } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $usfNameIntern === 'COUNTRY') {
+                } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN' || $gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT' || $usfNameIntern === 'COUNTRY') {
                     // set array with values and set default value
                     if ($usfNameIntern === 'COUNTRY') {
                         $arrListValues = $gL10n->getCountries();
@@ -257,8 +257,13 @@ try {
                     } else {
                         $arrListValues = $gProfileFields->getProperty($usfNameIntern, 'usf_value_list');
                         $defaultValue = $user->getValue($usfNameIntern, 'database');
+                        // if the field is a dropdown multiselect then convert the values to an array
+                        if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') {
+                            // prevent adding an empty string to the selectbox
+                            $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
+                        }
                     }
-
+                    
                     $form->addSelectBox(
                         $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
                         $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
@@ -268,7 +273,9 @@ try {
                             'defaultValue' => $defaultValue,
                             'helpTextId' => $helpId,
                             'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
-                            'category' => $category
+                            'category' => $category,
+                            'multiselect' => ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'maximumSelectionNumber' => ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') ? count($arrListValues) : 0,
                         )
                     );
                 } elseif ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'RADIO_BUTTON') {

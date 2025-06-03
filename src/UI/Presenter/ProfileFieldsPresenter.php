@@ -62,7 +62,7 @@ class ProfileFieldsPresenter extends PagePresenter
 
         $this->addJavascript('
             $("#usf_type").change(function() {
-                if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "RADIO_BUTTON") {
+                if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "DROPDOWN_MULTISELECT" || $("#usf_type").val() === "RADIO_BUTTON") {
                     $("#usf_value_list").attr("required", "required");
                     $("#usf_value_list_group").addClass("admidio-form-group-required");
                     $("#usf_value_list_group").show("slow");
@@ -134,6 +134,7 @@ class ProfileFieldsPresenter extends PagePresenter
             'DATE' => $gL10n->get('SYS_DATE'),
             'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER'),
             'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+            'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
             'EMAIL' => $gL10n->get('SYS_EMAIL'),
             'NUMBER' => $gL10n->get('SYS_NUMBER'),
             'PHONE' => $gL10n->get('SYS_PHONE'),
@@ -343,9 +344,11 @@ class ProfileFieldsPresenter extends PagePresenter
                 $templateProfileFields = array();
             }
 
-            $userFieldText = array('CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
+            $userFieldText = array(
+                'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
                 'DATE' => $gL10n->get('SYS_DATE'),
                 'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+                'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
                 'EMAIL' => $gL10n->get('SYS_EMAIL'),
                 'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
                 'PHONE' => $gL10n->get('SYS_PHONE'),
@@ -354,7 +357,8 @@ class ProfileFieldsPresenter extends PagePresenter
                 'URL' => $gL10n->get('SYS_URL'),
                 'NUMBER' => $gL10n->get('SYS_NUMBER'),
                 'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER'));
-            $mandatoryFieldValues = array(0 => 'SYS_NO',
+            $mandatoryFieldValues = array(
+                0 => 'SYS_NO',
                 1 => 'SYS_YES',
                 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE',
                 3 => 'SYS_NOT_AT_REGISTRATION');
