@@ -199,7 +199,7 @@ try {
                 }
                 else {
                     if (!$getFormer) {
-                        $msg.= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_MAKE_FORMER_DESC', array($gL10n->get('SYS_INVENTORY_MAKE_FORMER'))) . '</p>';
+                        $msg.= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_MAKE_FORMER_DESC', array($gL10n->get('SYS_INVENTORY_ITEM_MAKE_FORMER'))) . '</p>';
                     }
                     if ($gCurrentUser->isAdministratorInventory()) {
                         $msg.= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE_DESC', array($gL10n->get('SYS_INVENTORY_ITEM_DELETE'))) . '</p>';
@@ -218,7 +218,7 @@ try {
                 else {
                     if (!$getFormer) {
                         $msg .= '<button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="' . $formerOnClick . '">
-                            <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_MAKE_FORMER') . '</button>';
+                            <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_ITEM_MAKE_FORMER') . '</button>';
                     }
                     if ($gCurrentUser->isAdministratorInventory()) {
                         $msg.= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
@@ -234,7 +234,7 @@ try {
         case 'item_delete_keeper_explain_msg':
             $msg =  '
                 <div class="modal-header">
-                    <h3 class="modal-title">' . $gL10n->get('SYS_INVENTORY_MAKE_FORMER') . '</h3>
+                    <h3 class="modal-title">' . $gL10n->get('SYS_INVENTORY_ITEM_MAKE_FORMER') . '</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -242,7 +242,7 @@ try {
                 </div>
                 <div class="modal-footer">
                 <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                        <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_MAKE_FORMER') . '</button>
+                        <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_ITEM_MAKE_FORMER') . '</button>
                 <div id="adm_status_message" class="mt-4 w-100"></div>
                 </div>';
 
@@ -280,7 +280,7 @@ try {
             else {
                 $itemModule = new ItemService($gDb, $getiniUUID);
                 $itemModule->undoItemFormer();
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER')));
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_UNDONE_FORMER')));
            }
 
             break;

@@ -864,13 +864,13 @@ class InventoryPresenter extends PagePresenter
                     }
 
                     if ($item['ini_former']) {
-                        $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_UNDO_FORMER_DESC', array('SYS_INVENTORY_UNDO_FORMER_CONFIRM')) : $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM');
+                        $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_UNDO_FORMER_DESC', array('SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM');
                         // Add undo former action
                         $rowValues['actions'][] = array(
                             'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                             'dataMessage' => $dataMessage,
                             'icon' => 'bi bi-eye',
-                            'tooltip' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER')
+                            'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER')
                         );
                     }
 
@@ -1125,13 +1125,13 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 if ($item['ini_former']) {
-                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_UNDO_FORMER_DESC', array('SYS_INVENTORY_UNDO_FORMER_CONFIRM')) : $gL10n->get('SYS_INVENTORY_UNDO_FORMER_CONFIRM');
+                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_UNDO_FORMER_DESC', array('SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM');
                     // Add undo former action
                     $rowValues['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $dataMessage,
                         'icon' => 'bi bi-eye',
-                        'tooltip' => $gL10n->get('SYS_INVENTORY_UNDO_FORMER')
+                        'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER')
                     );
                 }
 

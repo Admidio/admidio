@@ -839,7 +839,7 @@ class PreferencesPresenter extends PagePresenter
                 
             $formInventory->addSelectBox(
                 'inventory_allowed_keeper_edit_fields',
-                $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
+                $gL10n->get('SYS_INVENTORY_ACCESS_EDIT_FIELDS'),
                 $selectBoxEntries,
                 array('defaultValue' => explode(',', $formValues['inventory_allowed_keeper_edit_fields']), 'helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
             );
@@ -897,7 +897,7 @@ class PreferencesPresenter extends PagePresenter
                
         $formInventory->addSelectBox(
             'inventory_profile_view',
-            $gL10n->get('SYS_INVENTORY_ITEMFIELD'),
+            $gL10n->get('SYS_INVENTORY_PROFILE_VIEW_FIELDS'),
             $selectBoxEntries,
             array('defaultValue' => explode(',', $formValues['inventory_profile_view']), 'helpTextId' => 'SYS_INVENTORY_PROFILE_VIEW_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
         );
