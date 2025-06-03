@@ -22,8 +22,8 @@
                     {foreach from=$row.data item=cell name=table}
                         <td class="text-{$list.column_align[$smarty.foreach.table.index]}">{$cell|raw}</td>
                     {/foreach}
-                    <td class="text-end">
-                        {if isset($row.actions)}
+                    {if isset($row.actions)}
+                        <td class="text-end">
                             {foreach $row.actions as $actionItem}
                                 <a
                                     {if isset($actionItem.popup)}
@@ -36,8 +36,8 @@
                                     ><i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i>
                                 </a>
                             {/foreach}
-                        {/if}
-                    </td>
+                        </td>
+                    {/if}
                 </tr>
             {/foreach}
         </tbody>
