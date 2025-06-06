@@ -1895,8 +1895,8 @@ class PreferencesPresenter extends PagePresenter
         $formSSO->addCustomContent(
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            $samlService->getStaticSettingsHTML('sso_saml_sso_staticsettings', "if-saml-enabled"),
-            array()
+            '',
+            array('data' => $samlService->getStaticSettings())
         );
 
         // Link to SAML Client administration
@@ -1972,8 +1972,8 @@ class PreferencesPresenter extends PagePresenter
         $formSSO->addCustomContent(
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            $oidcService->getStaticSettingsHTML('sso_oidc_sso_staticsettings', "if-oidc-enabled"),
-            array()
+            '',
+            array('data' => $oidcService->getStaticSettings())
         );
 
         // Link to OIDC Client administration
