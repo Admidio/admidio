@@ -35,7 +35,7 @@ class ExportService
 {
     public function createExport(string $mode = 'pdf'): void
     {
-        global  $gLogger, $gCurrentUser, $gL10n, $gCurrentOrganization, $gSettingsManager;
+        global  $gDb, $gLogger, $gCurrentUser, $gL10n, $gCurrentOrganization, $gSettingsManager;
 
         $modeSettings = array(
         //  Mode                 mode,      charset,        orientation
@@ -59,6 +59,17 @@ class ExportService
         }
 
         $inventoryPage = new InventoryPresenter('adm-inventory-print');
+        // check if there are multiple organizations defined
+        $sql = 'SELECT COUNT(org_id) AS count FROM ' . TBL_ORGANIZATIONS;
+        $result = $gDb->queryPrepared($sql);
+
+        if (($row = $result->fetch()) !== false && $row['count'] > 1) {
+            // if there are multiple organizations, add the organization name to the filename
+            $inventoryPage->setHeadline($gL10n->get('SYS_INVENTORY') . ' (' . $gCurrentOrganization->getValue('org_longname') . ')');
+        } else {
+            // if there is only one organization, do not add the organization name to the headline
+            $inventoryPage->setHeadline($gL10n->get('SYS_INVENTORY'));
+        }
         $data = $inventoryPage->prepareData($exportMode);
 
         switch ($exportMode) {
