@@ -204,8 +204,8 @@ class SSOClientPresenter extends PagePresenter
         $form->addCustomContent(
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            $SAMLService->getStaticSettingsHTML('sso_saml_sso_staticsettings', "if-saml-enabled"),
-            array()
+            '',
+            array('data' => $SAMLService->getStaticSettings())
         );
 
         $form->addCheckbox(
@@ -547,8 +547,8 @@ class SSOClientPresenter extends PagePresenter
         $form->addCustomContent(
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            $OIDCService->getStaticSettingsHTML('sso_oidc_sso_staticsettings', "if-oidc-enabled"),
-            array()
+            '',
+            array('data' => $OIDCService->getStaticSettings())
         );
 
         $form->addCheckbox(
