@@ -81,14 +81,14 @@ class InventoryFieldsPresenter extends PagePresenter
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
-                htmlentities($itemField->getValue('inf_name', 'database'), ENT_QUOTES),
+                htmlentities($itemField->getValue('inf_name'), ENT_QUOTES),
                 array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
-                htmlentities($itemField->getValue('inf_name', 'database'), ENT_QUOTES),
+                htmlentities($itemField->getValue('inf_name'), ENT_QUOTES),
                 array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         }
@@ -263,7 +263,7 @@ class InventoryFieldsPresenter extends PagePresenter
 
             $templateRowItemField = array(
                 'categoryID' => ((bool)$itemField->getValue('inf_system')) ? 1 : 2,
-                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS')  /* $itemField->getValue('cat_name') */,
+                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS'),
                 'uuid' => $itemField->getValue('inf_uuid'),
                 'name' => $itemField->getValue('inf_name'),
                 'description' => $itemField->getValue('inf_description'),
@@ -287,7 +287,7 @@ class InventoryFieldsPresenter extends PagePresenter
             } else {
                 $templateRowItemField['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_item_field_' . $itemField->getValue('inf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_delete', 'uuid' => $itemField->getValue('inf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_INVENTORY_ITEMFIELD_DELETE_DESC', array($itemField->getValue('inf_name', 'database'))),
+                    'dataMessage' => $gL10n->get('SYS_INVENTORY_ITEMFIELD_DELETE_DESC', array($itemField->getValue('inf_name'))),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_INVENTORY_ITEMFIELD_DELETE')
                 );

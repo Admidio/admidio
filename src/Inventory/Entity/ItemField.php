@@ -127,9 +127,9 @@ class ItemField extends Entity
             if (!isset($this->dbColumns['inf_description'])) {
                 $value = '';
             } elseif ($format === 'database') {
-                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['inf_description']), ENT_QUOTES, 'UTF-8');
+                $value = html_entity_decode(StringUtils::strStripTags(Language::translateIfTranslationStrId($this->dbColumns['inf_description'])), ENT_QUOTES, 'UTF-8');
             } else {
-                $value = $this->dbColumns['inf_description'];
+                $value = Language::translateIfTranslationStrId($this->dbColumns['inf_description']);
             }
         } elseif ($fieldNameIntern === 'inf_name_intern') {
             // internal name should be read with no conversion
