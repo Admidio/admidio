@@ -5,6 +5,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\Maintenance;
+use Admidio\Inventory\Entity\ItemField;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -39,6 +40,82 @@ final class UpdateStepsCode
     public static function setDatabase(Database $database)
     {
         self::$db = $database;
+    }
+
+    /**
+     * Add default fields for the inventory module.
+     * @throws Exception
+     */
+    public static function updateStep50AddInventoryFields()
+    {
+        $arrItemFields = array(
+            array('inf_type' => 'TEXT', 'inf_name_intern' => 'ITEMNAME', 'inf_name' => 'SYS_INVENTORY_ITEMNAME', 'inf_description' => 'SYS_INVENTORY_ITEMNAME_DESC', 'inf_required_input' => 1, 'inf_sequence' => 0),
+            array('inf_type' => 'CATEGORY', 'inf_name_intern' => 'CATEGORY', 'inf_name' => 'SYS_CATEGORY', 'inf_description' => 'SYS_INVENTORY_CATEGORY_DESC', 'inf_required_input' => 1, 'inf_sequence' => 1),
+            array('inf_type' => 'TEXT', 'inf_name_intern' => 'KEEPER', 'inf_name' => 'SYS_INVENTORY_KEEPER', 'inf_description' => 'SYS_INVENTORY_KEEPER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 2),
+            array('inf_type' => 'CHECKBOX', 'inf_name_intern' => 'IN_INVENTORY', 'inf_name' => 'SYS_INVENTORY_IN_INVENTORY', 'inf_description' => 'SYS_INVENTORY_IN_INVENTORY_DESC', 'inf_required_input' => 0, 'inf_sequence' => 3),
+            array('inf_type' => 'TEXT', 'inf_name_intern' => 'LAST_RECEIVER', 'inf_name' => 'SYS_INVENTORY_LAST_RECEIVER', 'inf_description' => 'SYS_INVENTORY_LAST_RECEIVER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 4),
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 5),
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_BACK_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_BACK_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_BACK_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 6)
+        );
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+        // create item fields for each organization
+        while ($row = $organizationStatement->fetch()) {
+            foreach ($arrItemFields as $itemFieldData) {
+                $itemField = new ItemField(self::$db);
+                $itemField->saveChangesWithoutRights();
+                $itemField->setValue('inf_org_id', (int)$row['org_id']);
+                $itemField->setValue('inf_type', $itemFieldData['inf_type']);
+                $itemField->setValue('inf_name_intern', $itemFieldData['inf_name_intern']);
+                $itemField->setValue('inf_name', $itemFieldData['inf_name']);
+                $itemField->setValue('inf_description', $itemFieldData['inf_description']);
+                $itemField->setValue('inf_system', 1);
+                $itemField->setValue('inf_required_input', (int)$itemFieldData['inf_required_input']);
+                $itemField->setValue('inf_sequence', (int)$itemFieldData['inf_sequence']);
+                $itemField->save();
+            }
+        }
+
+    }
+    
+    /**
+     * Create categories for the inventory for each organization.
+     * @throws Exception
+     */
+    public static function updateStep50InventoryCategories()
+    {
+        global $gL10n;
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $organizationStatement->fetch()) {
+            // create organization depending on category for inventory
+            $category = new Category(self::$db);
+            $category->setValue('cat_org_id', (int)$row['org_id']);
+            $category->setValue('cat_type', 'IVT');
+            $category->setValue('cat_name_intern', 'COMMON');
+            $category->setValue('cat_name', $gL10n->get('SYS_COMMON'));
+            $category->setValue('cat_system', '1');
+            $category->setValue('cat_default', '1');
+            $category->setValue('cat_sequence', '0');
+            $category->save();
+   
+            // set edit role rights to inventory categories for administrator role
+            $sql = 'SELECT rol_id
+                    FROM ' . TBL_ROLES . '
+                    INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                    AND cat_org_id = ? -- $row[\'org_id\']
+                    AND cat_type = \'ROL\'
+                    WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\') ';
+            $pdoStatement = self::$db->queryPrepared($sql, array($row['org_id'], $gL10n->get('SYS_ADMINISTRATOR')));
+            if (($row = $pdoStatement->fetch()) !== false) {
+                // set edit role rights to inventory categories for role administrator
+                $rightCategoryView = new RolesRights(self::$db, 'category_edit', $category->getValue('cat_id'));
+                $rightCategoryView->saveRoles(array($row['rol_id']));
+            }
+        }
     }
 
     /**
