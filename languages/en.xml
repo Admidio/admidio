@@ -683,7 +683,7 @@
   <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
-  <string name="SYS_FILTER_MEMBERS">Filter members</string>
+  <string name="SYS_FILTER_MEMBERS">members</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
   <string name="SYS_FIRSTNAME">First name</string>

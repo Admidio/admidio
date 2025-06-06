@@ -683,7 +683,7 @@
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
-  <string name="SYS_FILTER_MEMBERS">Mitglieder filtern</string>
+  <string name="SYS_FILTER_MEMBERS">Mitglieder</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
   <string name="SYS_FIRSTNAME">Vorname</string>
