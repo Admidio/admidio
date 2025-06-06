@@ -108,7 +108,7 @@ class SAMLService extends SSOService {
      *   where the 'style' key is optional, but 'value' and 'id' are required.
      */
     public function getStaticSettings() : array {
-        global $gSettingsManager;
+        global $gSettingsManager, $gL10n;
 
         // Load Certificate PEM
         $signatureKeyID = $gSettingsManager->get('sso_saml_signing_key');
@@ -117,10 +117,10 @@ class SAMLService extends SSOService {
 
         $metaURL = $this->getMetadataUrl();
         $staticSettings = array(
-            'SYS_SSO_SAML_METADATA_URL' => ['value' => '<a href="' . $metaURL . '">' . $metaURL . '</a>', 'id' => 'metadata_URL'],
-            'SYS_SSO_SAML_SSO_ENDPOINT' => ['value' => $this->getSsoEndpoint(), 'id' => 'SSO_endpoint'],
-            'SYS_SSO_SAML_SLO_ENDPOINT' => ['value' => $this->getSloEndpoint(),'id' => 'SLO_endpoint'],
-            'SYS_SSO_KEY_CERTIFICATE'   => ['value' => $idpCertPem,  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa;
+            $gL10n->get('SYS_SSO_SAML_METADATA_URL') => ['value' => '<a href="' . $metaURL . '">' . $metaURL . '</a>', 'id' => 'metadata_URL'],
+            $gL10n->get('SYS_SSO_SAML_SSO_ENDPOINT') => ['value' => $this->getSsoEndpoint(), 'id' => 'SSO_endpoint'],
+            $gL10n->get('SYS_SSO_SAML_SLO_ENDPOINT') => ['value' => $this->getSloEndpoint(),'id' => 'SLO_endpoint'],
+            $gL10n->get('SYS_SSO_KEY_CERTIFICATE')   => ['value' => $idpCertPem,  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa;
                     border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
                     max-height: 120px; overflow: auto; border-radius: 0.375rem; font-size: smaller;']
         );

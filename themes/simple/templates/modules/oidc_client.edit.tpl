@@ -7,7 +7,7 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_SSO_AUTO_SETUP')}</div>
         <div class="card-body">
-            {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_oidc_sso_staticsettings']}
+            {include 'sys-template-parts/form.static-subinformation.tpl' data=$elements['sso_oidc_sso_staticsettings']}
         </div>
     </div>
     <div class="card admidio-field-group">
