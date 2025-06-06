@@ -61,10 +61,6 @@ DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_data  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items      CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_oidc_access_tokens   CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_oidc_auth_codes      CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_oidc_clients         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_oidc_refresh_tokens  CASCADE;
 
 
 
@@ -612,7 +608,6 @@ CREATE TABLE %PREFIX%_roles
     rol_announcements           boolean             NOT NULL    DEFAULT false,
     rol_events                  boolean             NOT NULL    DEFAULT false,
     rol_documents_files         boolean             NOT NULL    DEFAULT false,
-    rol_inventory_admin         boolean             NOT NULL    DEFAULT false,
     rol_edit_user               boolean             NOT NULL    DEFAULT false,
     rol_guestbook               boolean             NOT NULL    DEFAULT false,
     rol_guestbook_comments      boolean             NOT NULL    DEFAULT false,
@@ -896,74 +891,6 @@ CREATE TABLE %PREFIX%_user_relations
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt_id, ure_usr_id1, ure_usr_id2);
 
 /*==============================================================*/
-/* Table: adm_inventory_fields                                  */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_fields
-(
-    inf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    inf_uuid                    varchar(36)         NOT NULL,
-    inf_org_id                  integer unsigned    NOT NULL,
-    inf_type                    varchar(30)         NOT NULL,
-    inf_name_intern             varchar(110)        NOT NULL,
-    inf_name                    varchar(100)        NOT NULL,
-    inf_description             text,
-    inf_value_list              text,
-    inf_system                  boolean             NOT NULL    DEFAULT false,
-    inf_required_input          smallint            NOT NULL    DEFAULT 0,
-    inf_sequence                smallint            NOT NULL,
-    inf_usr_id_create           integer unsigned,
-    inf_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    inf_usr_id_change           integer unsigned,
-    inf_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (inf_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (inf_org_id, inf_name_intern);
-CREATE UNIQUE INDEX %PREFIX%_idx_inf_uuid ON %PREFIX%_inventory_fields (inf_uuid);
-
-/*==============================================================*/
-/* Table: adm_inventory_item_data                                    */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_item_data
-(
-    ind_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    ind_inf_id                  integer unsigned    NOT NULL,
-    ind_ini_id                  integer unsigned    NOT NULL,
-    ind_value                   varchar(4000),
-    PRIMARY KEY (ind_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
-
-/*==============================================================*/
-/* Table: adm_inventory_items                                   */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_items
-(
-    ini_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    ini_uuid                    varchar(36)         NOT NULL,
-    ini_cat_id                  integer unsigned    NOT NULL,
-    ini_org_id                  integer unsigned    NOT NULL,
-    ini_former                  boolean             NOT NULL    DEFAULT false,
-    ini_usr_id_create           integer unsigned,
-    ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    ini_usr_id_change           integer unsigned,
-    ini_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (ini_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);
-
-/*==============================================================*/
 /* Foreign Key Constraints                                      */
 /*==============================================================*/
 ALTER TABLE %PREFIX%_announcements
@@ -1125,17 +1052,3 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr2        FOREIGN KEY (ure_usr_id2)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_inventory_fields
-    ADD CONSTRAINT %PREFIX%_fk_inf_org         FOREIGN KEY (inf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_inf_usr_create  FOREIGN KEY (inf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_inf_usr_change  FOREIGN KEY (inf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_inventory_item_data
-    ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_inventory_items
-    ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;

@@ -11,15 +11,14 @@ INSERT INTO %PREFIX%_components (com_id, com_type, com_name, com_name_intern, co
                               , (50, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '4.3.0', 0, 0, true)
                               , (60, 'MODULE', 'SYS_CONTACTS', 'CONTACTS', '4.3.0', 0, 0, true)
                               , (70, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '4.3.0', 0, 0, true)
-                              , (80, 'MODULE', 'SYS_INVENTORY', 'INVENTORY', '4.3.0', 0, 0, true)
-                              , (90, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.3.0', 0, 0, true)
-                              , (100, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.3.0', 0, 0, true)
-                              , (110, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.3.0', 0, 0, true)
-                              , (120, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.3.0', 0, 0, true)
-                              , (130, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.3.0', 0, 0, true)
-                              , (140, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.3.0', 0, 0, true)
-                              , (150, 'MODULE', 'SYS_MENU', 'MENU', '4.3.0', 0, 0, true)
-                              , (160, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.3.0', 0, 0, true)
+                              , (80, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '4.3.0', 0, 0, true)
+                              , (90, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '4.3.0', 0, 0, true)
+                              , (100, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '4.3.0', 0, 0, true)
+                              , (110, 'MODULE', 'GBO_GUESTBOOK', 'GUESTBOOK', '4.3.0', 0, 0, true)
+                              , (120, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '4.3.0', 0, 0, true)
+                              , (130, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '4.3.0', 0, 0, true)
+                              , (140, 'MODULE', 'SYS_MENU', 'MENU', '4.3.0', 0, 0, true)
+                              , (150, 'MODULE', 'SYS_DATABASE_BACKUP', 'BACKUP', '4.3.0', 0, 0, true)
                               , (200, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '4.3.0', 0, 0, true)
                               , (210, 'MODULE', 'SYS_PROFILE', 'PROFILE', '4.3.0', 0, 0, true)
                               , (220, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '4.3.0', 0, 0, true);
@@ -47,15 +46,14 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (50, 1, false, 5, true, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 'ebd216b3-26eb-48ec-a082-d1d9645bb051'),
 (60, 1, false, 6, true, 'contacts', '/adm_program/modules/contacts/contacts.php', 'fa-address-card', 'SYS_CONTACTS', 'SYS_CONTACTS_DESC', '168ad66e-e34d-4f14-8a65-a78dd7dbd058'),
 (70, 1, false, 7, true, 'documents-files', '/adm_program/modules/documents-files/documents_files.php', 'fa-file-download', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', '187c7c07-4b2a-4f3f-925c-6f40c03e740b'),
-(80, 1, false, 8, true, 'inventory', '/adm_program/modules/inventory.php', 'fa-warehouse', 'SYS_INVENTORY', 'SYS_INVENTORY_DESC', 'f5ea2952-6286-48e0-b8c3-d5eeefa677c0'),
-(90, 1, false, 9, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', '21db7ac5-7aae-4616-bf88-5b29507d4a02'),
-(100, 1, false, 10, true, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b'),
-(110, 1, false, 11, true, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', '5b8b3e60-bc71-4375-bfc3-a9783a63bb72'),
-(120, 1, false, 12, true, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC', 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e'),
-(130, 2, false, 1, true, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', '2965d083-8dd3-4a43-9b27-53018e5f22c1'),
-(140, 2, false, 2, true, 'registration', '/adm_program/modules/registration/registration.php', 'fa-file-signature', 'SYS_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', '62330cbc-4c15-4860-b841-10a35d88cd3c'),
-(150, 2, false, 3, true, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC', 'ef4b5380-3500-4ec4-a432-a7f4099a2a92'),
-(160, 2, false, 4, true, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC', '9c6d01e3-b104-4f75-8562-7e7ebe7a929b');
+(80, 1, false, 8, true, 'photo', '/adm_program/modules/photos/photos.php', 'fa-image', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', '21db7ac5-7aae-4616-bf88-5b29507d4a02'),
+(90, 1, false, 9, true, 'category-report', '/adm_program/modules/category-report/category_report.php', 'fa-list-ul', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b'),
+(100, 1, false, 10, true, 'weblinks', '/adm_program/modules/links/links.php', 'fa-link', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', '5b8b3e60-bc71-4375-bfc3-a9783a63bb72'),
+(110, 1, false, 11, true, 'guestbook', '/adm_program/modules/guestbook/guestbook.php', 'fa-book', 'GBO_GUESTBOOK', 'GBO_GUESTBOOK_DESC', 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e'),
+(120, 2, false, 1, true, 'orgprop', '/adm_program/modules/preferences/preferences.php', 'fa-cog', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', '2965d083-8dd3-4a43-9b27-53018e5f22c1'),
+(130, 2, false, 2, true, 'registration', '/adm_program/modules/registration/registration.php', 'fa-file-signature', 'SYS_REGISTRATIONS', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', '62330cbc-4c15-4860-b841-10a35d88cd3c'),
+(140, 2, false, 3, true, 'menu', '/adm_program/modules/menu/menu.php', 'fa-stream', 'SYS_MENU', 'SYS_MENU_DESC', 'ef4b5380-3500-4ec4-a432-a7f4099a2a92'),
+(150, 2, false, 4, true, 'dbback', '/adm_program/modules/backup/backup.php', 'fa-database', 'SYS_DATABASE_BACKUP', 'SYS_DATABASE_BACKUP_DESC', '9c6d01e3-b104-4f75-8562-7e7ebe7a929b');
 
 
 --
@@ -242,7 +240,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (2500, 1, 'events_module_enabled', '1'),
     (2600, 1, 'documents_files_module_enabled', '1'),
     (2700, 1, 'photo_ecard_enabled', '1'),
-    (2800, 1, 'inventory_module_enabled', '2'),
     (2950, 1, 'system_notifications_new_entries', '0'),
     (2955, 1, 'system_notifications_role', 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16'),
     (2960, 1, 'system_notifications_profile_changes', '0'),
@@ -315,15 +312,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (7300, 1, 'photo_image_text', '© demo.admidio.org'),
     (7305, 1, 'photo_image_text_size', '40'),
     (7350, 1, 'photo_albums_per_page', '24'),
-    (7400, 1, 'inventory_items_per_page', '25'),
-    (7410, 1, 'inventory_field_history_days', '365'),
-    (7420, 1, 'inventory_system_field_names_editable', '0'),
-    (7430, 1, 'inventory_current_user_default_keeper', '0'),
-    (7440, 1, 'inventory_allow_negative_numbers', '1'),
-    (7450, 1, 'inventory_decimal_places', '1'),
-    (7460, 1, 'inventory_field_date_time_format', 'date'),
-    (7470, 1, 'inventory_export_filename', 'Inventory'),
-    (7480, 1, 'inventory_add_date', '0'),
     (7500, 1, 'photo_show_width', '1200'),
     (7600, 1, 'photo_show_height', '1200'),
     (7700, 1, 'photo_show_mode', '1'),
@@ -334,7 +322,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (8200, 1, 'profile_log_edit_fields', '1'),
     (8300, 1, 'profile_photo_storage', '0'),
     (8400, 1, 'profile_show_map_link', '1'),
-    (8410, 1, 'profile_show_empty_fields', '1'),
     (8500, 1, 'profile_show_roles', '1'),
     (8600, 1, 'profile_show_former_roles', '1'),
     (8700, 1, 'profile_show_extern_roles', '1'),
@@ -371,7 +358,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (24001, 2, 'events_ical_export_enabled', '1'),
     (25001, 2, 'events_module_enabled', '1'),
     (26001, 2, 'documents_files_module_enabled', '1'),
-    (28001, 2, 'inventory_module_enabled', '2'),
     (27001, 2, 'photo_ecard_enabled', '1'),
     (29501, 2, 'system_notifications_new_entries', '0'),
     (29550, 2, 'system_notifications_role', '7a9e3ff4-197a-48db-9abc-c32c4cc79567'),
@@ -445,15 +431,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (73000, 2, 'photo_albums_per_page', '24'),
     (73025, 2, 'photo_image_text', '© demo.admidio.org'),
     (73050, 2, 'photo_image_text_size', '40'),
-    (74000, 2, 'inventory_items_per_page', '25'),
-    (74100, 2, 'inventory_field_history_days', '365'),
-    (74200, 2, 'inventory_system_field_names_editable', '0'),
-    (74300, 2, 'inventory_current_user_default_keeper', '0'),
-    (74400, 2, 'inventory_allow_negative_numbers', '1'),
-    (74500, 2, 'inventory_decimal_places', '1'),
-    (74600, 2, 'inventory_field_date_time_format', 'date'),
-    (74700, 2, 'inventory_export_filename', 'Inventory'),
-    (74800, 2, 'inventory_add_date', '0'),
     (75001, 2, 'photo_show_width', '1200'),
     (76001, 2, 'photo_show_height', '1200'),
     (77001, 2, 'photo_show_mode', '1'),
@@ -464,7 +441,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (82001, 2, 'profile_log_edit_fields', '1'),
     (83001, 2, 'profile_photo_storage', '0'),
     (84001, 2, 'profile_show_map_link', '1'),
-    (84010, 2, 'profile_show_empty_fields', '1'),
     (85001, 2, 'profile_show_roles', '1'),
     (86001, 2, 'profile_show_former_roles', '1'),
     (87001, 2, 'profile_show_extern_roles', '1'),
@@ -560,19 +536,19 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_uuid, cat_org_id, cat_type, cat_nam
 -- Data for table adm_roles
 --
 
-INSERT INTO %PREFIX%_roles (rol_id, rol_uuid, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_events, rol_documents_files, rol_inventory_admin, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_view_memberships, rol_view_members_profiles, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
-(1 , 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',     true, true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', true, false, true),
-(2 , 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 3, 'SYS_MEMBER', 'INS_DESCRIPTION_MEMBER',                  false, false, false, false, false, false, false, false, true, false, 2, false, true, false, 0, 0, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', true, false, false),
-(3 , '621fa25f-2fac-4310-af52-af939041cb66', 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD',                     false, false, true, true, true, true, true, true, true, true, 3, true, true, true, 2, 2, true, 1, false, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', true, false, false),
-(4 , '685c8a84-e58c-4d40-8297-8d2671e1fb89', 6, 'DDT_ROL_1_YOUTH_TEAM', 'DDT_ROL_1_YOUTH_TEAM_CONTENT',   false, false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, 1, false, 3, false, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', true, false, false),
-(5 , '5f4fb933-806c-4161-a333-212cba85ae6c', 6, 'DDT_ROL_2_YOUTH_TEAM', 'DDT_ROL_2_YOUTH_TEAM_CONTENT',   false, false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, 1, false, 3, false, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', true, false, false),
-(6 , '7a9e3ff4-197a-48db-9abc-c32c4cc79567', 100, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',   true, true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', true, false, true),
-(7 , '77b0c6cc-cc66-4384-a34e-3277cdf081c6', 100, 'SYS_MEMBER', 'INS_DESCRIPTION_MEMBER',                false, false, false, false, false, false, false, false, true, false, 2, false, true, false, 0, 0, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', true, false, false),
-(8 , '515c99a1-28d6-4395-b966-4b04cd512f12', 200, '2017-02-06 19:00 DDT_DAT_BARBECUE', 'DDT_DAT_BARBECUE_CONTENT', false, false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(9 , '1b3d4123-2898-40e5-b9c4-b4db65207133', 200, '2017-04-13 13:00 DDT_DAT_YOGA', 'DDT_DAT_YOGA_CONTENT', false, false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, true, false, false),
-(10, '040b4f49-2e45-460a-a354-1004d8bef27e', 200, '2017-05-15 19:00 DDT_DAT_BOARD_MEETING', NULL,         false, false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(11, '7450a81b-5b69-43c6-906b-47e343ecb55f', 200, '2017-05-26 19:00 DDT_DAT_BOARD_MEETING', NULL,         false, false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
-(12, '3c16c9da-9425-4ee3-9b53-8aed1c19bc34', 200, '2017-05-26 20:00 DDT_DAT_TEAM_EVENING', NULL,          false, false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, true, false, false);
+INSERT INTO %PREFIX%_roles (rol_id, rol_uuid, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_events, rol_documents_files, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_view_memberships, rol_view_members_profiles, rol_all_lists_view, rol_leader_rights, rol_default_registration, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_administrator) VALUES
+(1 , 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 3, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',     true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', true, false, true),
+(2 , 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 3, 'SYS_MEMBER', 'INS_DESCRIPTION_MEMBER',                  false, false, false, false, false, false, false, true, false, 2, false, true, false, 0, 0, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', true, false, false),
+(3 , '621fa25f-2fac-4310-af52-af939041cb66', 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD',                     false, false, true, true, true, true, true, true, true, 3, true, true, true, 2, 2, true, 1, false, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', true, false, false),
+(4 , '685c8a84-e58c-4d40-8297-8d2671e1fb89', 6, 'DDT_ROL_1_YOUTH_TEAM', 'DDT_ROL_1_YOUTH_TEAM_CONTENT',   false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, 1, false, 3, false, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', true, false, false),
+(5 , '5f4fb933-806c-4161-a333-212cba85ae6c', 6, 'DDT_ROL_2_YOUTH_TEAM', 'DDT_ROL_2_YOUTH_TEAM_CONTENT',   false, false, false, false, false, false, false, true, false, 2, false, true, false, 1, 1, false, 3, false, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', true, false, false),
+(6 , '7a9e3ff4-197a-48db-9abc-c32c4cc79567', 100, 'SYS_ADMINISTRATOR', 'INS_DESCRIPTION_ADMINISTRATOR',   true, true, true, true, true, true, true, true, true, 3, true, true, true, 1, 1, true, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', true, false, true),
+(7 , '77b0c6cc-cc66-4384-a34e-3277cdf081c6', 100, 'SYS_MEMBER', 'INS_DESCRIPTION_MEMBER',                false, false, false, false, false, false, false, true, false, 2, false, true, false, 0, 0, false, 1, true, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', true, false, false),
+(8 , '515c99a1-28d6-4395-b966-4b04cd512f12', 200, '2017-02-06 19:00 DDT_DAT_BARBECUE', 'DDT_DAT_BARBECUE_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(9 , '1b3d4123-2898-40e5-b9c4-b4db65207133', 200, '2017-04-13 13:00 DDT_DAT_YOGA', 'DDT_DAT_YOGA_CONTENT', false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 12:08:23', NULL, NULL, true, false, false),
+(10, '040b4f49-2e45-460a-a354-1004d8bef27e', 200, '2017-05-15 19:00 DDT_DAT_BOARD_MEETING', NULL,         false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(11, '7450a81b-5b69-43c6-906b-47e343ecb55f', 200, '2017-05-26 19:00 DDT_DAT_BOARD_MEETING', NULL,         false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, true, false, false),
+(12, '3c16c9da-9425-4ee3-9b53-8aed1c19bc34', 200, '2017-05-26 20:00 DDT_DAT_TEAM_EVENING', NULL,          false, false, false, false, false, false, false, false, false, 0, false, false, false, 1, 1, false, 1, false, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 18:38:18', NULL, NULL, true, false, false);
 
 --
 -- Data for table adm_roles_rights
@@ -2980,61 +2956,3 @@ INSERT INTO %PREFIX%_user_log (usl_id, usl_usr_id, usl_usf_id, usl_value_new, us
 (7, 213, 8, '0181-457412', '0183-342342', 1, '2022-02-03 15:52:35', NULL),
 (8, 213, 13, NULL, 'www.example.org', 1, '2021-10-01 04:02:35', NULL),
 (9, 213, 22, NULL, 'begunk', 1, '2021-10-01 04:02:35', NULL);
-
-
---
--- Daten für Tabelle adm_inventory_fields
---
-
-INSERT INTO %PREFIX%_inventory_fields (inf_id, inf_uuid, inf_org_id, inf_type, inf_name_intern, inf_name, inf_description, inf_value_list, inf_system, inf_required_input, inf_sequence, inf_usr_id_create, inf_timestamp_create, inf_usr_id_change, inf_timestamp_change) VALUES
-(1, 'f786669b-d3a2-43af-a22a-79976db2cceb', 1, 'TEXT', 'ITEMNAME', 'SYS_INVENTORY_ITEMNAME', 'SYS_INVENTORY_ITEMNAME_DESC', NULL, 1, 1, 0, 1, '2025-01-24 21:19:59', NULL, NULL),
-(2, 'eac563b3-b352-49a4-a72f-d906615080dd', 1, 'CATEGORY', 'CATEGORY', 'SYS_CATEGORY', 'SYS_INVENTORY_CATEGORY_DESC', NULL, 1, 1, 1, 1, '2025-01-24 21:19:59', NULL, NULL),
-(3, 'e90f1a92-99b3-4052-845d-71abcd170ec5', 1, 'TEXT', 'KEEPER', 'SYS_INVENTORY_KEEPER', 'SYS_INVENTORY_KEEPER_DESC', NULL, 1, 0, 2, 1, '2025-01-24 21:19:59', NULL, NULL),
-(4, 'df04df4b-4483-413f-857e-dcd1f6665d58', 1, 'CHECKBOX', 'IN_INVENTORY', 'SYS_INVENTORY_IN_INVENTORY', 'SYS_INVENTORY_IN_INVENTORY_DESC', NULL, 1, 0, 3, 1, '2025-01-24 21:19:59', NULL, NULL),
-(5, '3aa02fb0-d3db-4061-b679-e5c693ece391', 1, 'TEXT', 'LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER_DESC', NULL, 1, 0, 4, 1, '2025-01-24 21:19:59', NULL, NULL),
-(6, 'dd1541fb-c57a-412e-aada-5e0c50d766ea', 1, 'DATE', 'RECEIVED_ON', 'SYS_INVENTORY_RECEIVED_ON', 'SYS_INVENTORY_RECEIVED_ON_DESC', NULL, 1, 0, 5, 1, '2025-01-24 21:19:59', NULL, NULL),
-(7, '3aa9c574-f1a9-4fa5-b00e-d8abf89b5cde', 1, 'DATE', 'RECEIVED_BACK_ON', 'SYS_INVENTORY_RECEIVED_BACK_ON', 'SYS_INVENTORY_RECEIVED_BACK_ON_DESC', NULL, 1, 0, 6, 1, '2025-01-24 21:19:59', NULL, NULL),
-(8, '9d6faac1-4f4b-461a-bc06-b0381522edd2', 2, 'TEXT', 'ITEMNAME', 'SYS_INVENTORY_ITEMNAME', 'SYS_INVENTORY_ITEMNAME_DESC', NULL, 1, 1, 0, 1, '2025-01-24 21:19:59', NULL, NULL),
-(9, '83e1d1d7-e1d5-4599-8cc5-e4d7ba0cb25c', 2, 'CATEGORY', 'CATEGORY', 'SYS_CATEGORY', 'SYS_INVENTORY_CATEGORY_DESC', NULL, 1, 1, 1, 1, '2025-01-24 21:19:59', NULL, NULL),
-(10, '6e9b4c00-6555-476f-8809-0beed315fc3e', 2, 'TEXT', 'KEEPER', 'SYS_INVENTORY_KEEPER', 'SYS_INVENTORY_KEEPER_DESC', NULL, 1, 0, 2, 1, '2025-01-24 21:19:59', NULL, NULL),
-(11, '7972cd4d-97a4-453f-8888-8febc06d424a', 2, 'CHECKBOX', 'IN_INVENTORY', 'SYS_INVENTORY_IN_INVENTORY', 'SYS_INVENTORY_IN_INVENTORY_DESC', NULL, 1, 0, 3, 1, '2025-01-24 21:19:59', NULL, NULL),
-(12, '871d4503-e876-442e-a7ef-99cc0c817652', 2, 'TEXT', 'LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER_DESC', NULL, 1, 0, 4, 1, '2025-01-24 21:19:59', NULL, NULL),
-(13, '1d68fa5c-1ed9-424a-9e3a-7264011430ae', 2, 'DATE', 'RECEIVED_ON', 'SYS_INVENTORY_RECEIVED_ON', 'SYS_INVENTORY_RECEIVED_ON_DESC', NULL, 1, 0, 5, 1, '2025-01-24 21:19:59', NULL, NULL),
-(14, 'dafa5e6e-0c02-4d83-b3fc-5b6f9a8268cb', 2, 'DATE', 'RECEIVED_BACK_ON', 'SYS_INVENTORY_RECEIVED_BACK_ON', 'SYS_INVENTORY_RECEIVED_BACK_ON_DESC', NULL, 1, 0, 6, 1, '2025-01-24 21:19:59', NULL, NULL);
-
-
---
--- Daten für Tabelle adm_inventory_item_data
---
-
-INSERT INTO %PREFIX%_inventory_item_data (ind_id, ind_inf_id, ind_ini_id, ind_value) VALUES
-(1, 1, 1, 'Beamer'),
-(3, 3, 1, '202'),
-(4, 4, 1, '1'),
-(5, 1, 2, 'Leinwand'),
-(7, 3, 2, '355'),
-(8, 4, 2, '0'),
-(9, 5, 2, '202'),
-(10, 6, 2, '28.01.2025'),
-(11, 8, 3, 'Beamer'),
-(13, 10, 3, '202'),
-(14, 11, 3, '1'),
-(15, 8, 4, 'Leinwand'),
-(17, 10, 4, '355'),
-(18, 11, 4, '0'),
-(19, 12, 4, '202'),
-(20, 13, 4, '28.01.2025');
-
-
---
--- Daten für Tabelle adm_inventory_items
---
-
-INSERT INTO %PREFIX%_inventory_items (ini_id, ini_uuid, ini_cat_id, ini_org_id, ini_former, ini_usr_id_create, ini_timestamp_create, ini_usr_id_change, ini_timestamp_change) VALUES
-(1, '77e95410-3267-4fe3-b448-455b09e51a4d', 16, 1, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
-(2, '80f82bb3-10f4-494c-b9cc-55221b11f39e', 15, 1, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
-(3, 'eee177ca-71b1-4366-a980-c06f2f02b438', 112, 2, 0, 1, '2025-01-24 21:20:14', NULL, NULL),
-(4, '273e1f36-c015-45f2-9b81-21d6319c6965', 111, 2, 0, 1, '2025-01-24 21:20:14', NULL, NULL);
-
-
-
