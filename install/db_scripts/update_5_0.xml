@@ -356,6 +356,21 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_oac_usr_id      FOREIGN KEY (oac_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_oac_ocl_id      FOREIGN KEY (oac_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_oac_usr_create  FOREIGN KEY (oac_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
-
+    <!-- rename enable_mail_module to mail_module_enabled -->
+    <step id="1180" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_mail_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_module_enabled'</step>
+    <step id="1190" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_mail_module' AND pr1.prf_name = 'mail_module_enabled'</step>
+    <step id="1200">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_mail_module'</step>
+    <!-- rename enable_pm_module to pm_module_enabled -->
+    <step id="1210" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_pm_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'pm_module_enabled'</step>
+    <step id="1220" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_pm_module' AND pr1.prf_name = 'pm_module_enabled'</step>
+    <step id="1230">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_pm_module'</step>
+    <!-- rename enable_mail_captcha to mail_captcha_enabled -->
+    <step id="1240" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_mail_captcha' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_captcha_enabled'</step>
+    <step id="1250" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_mail_captcha' AND pr1.prf_name = 'mail_captcha_enabled'</step>
+    <step id="1260">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_mail_captcha'</step>
+    <!-- rename enable_weblinks_module to weblinks_module_enabled -->
+    <step id="1270" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_weblinks_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'weblinks_module_enabled'</step>
+    <step id="1280" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_weblinks_module' AND pr1.prf_name = 'weblinks_module_enabled'</step>
+    <step id="1290">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_weblinks_module'</step>
     <step>stop</step>
 </update>

@@ -82,8 +82,11 @@ try {
             }
         }
     } elseif ($getModule === 'documents_files') {
-        if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
+        // Check if the module is activated
+        if ($gSettingsManager->getInt('documents_files_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
+        } elseif ($gSettingsManager->getInt('documents_files_module_enabled') === 2 && !$gValidLogin) {
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $folder = new Folder($gDb);

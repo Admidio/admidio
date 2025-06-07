@@ -25,8 +25,10 @@ try {
     $getView = admFuncVariableIsValid($_GET, 'view', 'bool');
 
     // check if the call of the page was allowed
-    if (!$gSettingsManager->getBool('enable_mail_module')) {
+    if ($gSettingsManager->getInt('mail_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
+    } elseif ($gSettingsManager->getInt('mail_module_enabled') === 2 && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // read data from database

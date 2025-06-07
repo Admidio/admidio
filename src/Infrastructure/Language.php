@@ -198,8 +198,8 @@ class Language
      * than you must set more parameters to replace them.
      * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
      * @param array<int,string> $params Optional parameter to replace placeholders in the text.
-     *                                  $params[0] will replace **#VAR1#** or **#VAR1_BOLD#**,
-     *                                  $params[1] will replace **#VAR2#** or **#VAR2_BOLD#** etc.
+     *                                  $params[0] will replace **#VAR1#**, **#VAR1_BOLD#** or **#VAR1_ITALIC#**,
+     *                                  $params[1] will replace **#VAR2#**, **#VAR2_BOLD#** or **#VAR2_ITALIC#** etc.
      * @return string Returns the text string with replaced placeholders of the text id.
      *
      * **Code example**
@@ -474,7 +474,8 @@ class Language
 
             $replaces = array(
                 '#VAR' . $paramNr . '#'      => $param,
-                '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
+                '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>',
+                '#VAR' . $paramNr . '_ITALIC#' => '<em>' . $param . '</em>'
             );
             $text = StringUtils::strMultiReplace($text, $replaces);
         }

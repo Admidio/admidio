@@ -289,7 +289,7 @@ try {
         );
 
         // if captchas are enabled then visitors of the website must resolve this
-        if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
+        if (!$gValidLogin && $gSettingsManager->getBool('mail_captcha_enabled')) {
             $form->addCaptcha('adm_captcha_code');
         }
 

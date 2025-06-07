@@ -46,6 +46,15 @@ $defaultOrgPreferences = array(
     'favicon_file' => '',
     'additional_styles_file' => '',
 
+    // Overview plugins
+    'overview_plugin_birthday_enabled' => '1',
+    'overview_plugin_calendar_enabled' => '1',
+    'overview_plugin_random_photo_enabled' => '1',
+    'overview_plugin_latest_documents_files_enabled' => '1',
+    'overview_plugin_announcement_list_enabled' => '1',
+    'overview_plugin_event_list_enabled' => '1',
+    'overview_plugin_who_is_online_enabled' => '1',
+
     // Registration
     'registration_adopt_all_data' => '1',
     'registration_enable_captcha' => '1',
@@ -165,9 +174,9 @@ $defaultOrgPreferences = array(
     'groups_roles_show_former_members' => '2',
 
     // Messages
-    'enable_mail_module' => '1',
-    'enable_pm_module' => '1',
-    'enable_mail_captcha' => '1',
+    'mail_module_enabled' => '1',
+    'pm_module_enabled' => '1',
+    'mail_captcha_enabled' => '1',
     'mail_delivery_confirmation' => '0',
     'mail_html_registered_users' => '1',
     'mail_max_receiver' => '10',
@@ -216,7 +225,7 @@ $defaultOrgPreferences = array(
 
 
     // Weblinks
-    'enable_weblinks_module' => '1',
+    'weblinks_module_enabled' => '1',
     'weblinks_per_page' => '0',
     'weblinks_redirect_seconds' => '10',
     'weblinks_target' => '_blank'

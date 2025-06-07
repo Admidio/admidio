@@ -67,7 +67,7 @@ class ModuleLogin
         if ($gSettingsManager->getBool('enable_password_recovery') && $gSettingsManager->getBool('system_notifications_enabled')) {
             // request to reset the password
             $forgotPasswordLink = ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php';
-        } elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
+        } elseif ($gSettingsManager->getInt('mail_module_enabled') === 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
             // show link of message module to send mail to administrator role
             $forgotPasswordLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
         } else {

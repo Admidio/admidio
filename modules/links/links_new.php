@@ -27,7 +27,7 @@ try {
     $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
 
     // check if the module is enabled for use
-    if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
+    if ($gSettingsManager->getInt('weblinks_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 

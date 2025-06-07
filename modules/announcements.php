@@ -46,6 +46,8 @@ try {
     } elseif ($gSettingsManager->getInt('announcements_module_enabled') === 1
         && !in_array($getMode, array('cards', 'list')) && !$gValidLogin) {
         throw new Exception('SYS_NO_RIGHTS');
+    } elseif ($gSettingsManager->getInt('announcements_module_enabled') === 2 && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     switch ($getMode) {

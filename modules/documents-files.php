@@ -69,8 +69,10 @@ try {
     $getFileUUID = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
 
     // Check if the module is activated
-    if (!$gSettingsManager->getBool('documents_files_module_enabled')) {
+    if ($gSettingsManager->getInt('documents_files_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
+    } elseif ($gSettingsManager->getInt('documents_files_module_enabled') === 2 && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     switch ($getMode) {

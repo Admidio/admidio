@@ -30,7 +30,7 @@ try {
     }
 
     // check if module is active or is public
-    if ((int)$gSettingsManager->get('enable_weblinks_module') !== 1) {
+    if ($gSettingsManager->getInt('weblinks_module_enabled') !== 1) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
