@@ -1307,13 +1307,13 @@ class User extends Entity
         global $gSettingsManager;
 
         if (
-            (int)$gSettingsManager->get('groups_roles_show_former_members') !== 1
+            (int)$gSettingsManager->get('groups_roles_show_former_members') === 1
             && ($this->checkRolesRight('rol_assign_roles')
                 || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3), true)))
         ) {
             return true;
         } elseif (
-            (int)$gSettingsManager->get('groups_roles_show_former_members') !== 2
+            (int)$gSettingsManager->get('groups_roles_show_former_members') === 2
             && ($this->checkRolesRight('rol_edit_user')
                 || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3), true)))
         ) {
