@@ -73,7 +73,7 @@ try {
             $page,
             array('type' => 'navbar', 'setFocus' => false)
         );
-        
+
         $selectBoxValues = array(
             '0' => $gL10n->get('SYS_ACTIVE_MEMBERS'),
             '1' => $gL10n->get('SYS_FORMER_MEMBERS'),
@@ -83,7 +83,7 @@ try {
         // filter all items
         $form->addSelectBox(
             'mem_show_filter',
-            $gL10n->get('SYS_FILTER_MEMBERS'),
+            $gL10n->get('SYS_MEMBERS'),
             $selectBoxValues,
             array(
                 'defaultValue' => $getMembersShowFiler,

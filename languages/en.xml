@@ -683,7 +683,6 @@
   <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is higher than the version of the Admidio scripts #VAR2#.\n\nPlease update your Admidio files on the server #VAR3# by using a later version of Admidio#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
-  <string name="SYS_FILTER_MEMBERS">members</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter to export</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
   <string name="SYS_FIRSTNAME">First name</string>
@@ -874,6 +873,7 @@
   <string name="SYS_MEMBER">Member</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Member assignment</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
+  <string name="SYS_MEMBERS">Members</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">One of the configurations specified here can be used to display the members administration. The columns of the selected list configuration are then displayed in the members administration.</string>
   <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>

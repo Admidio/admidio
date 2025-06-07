@@ -460,7 +460,7 @@ try {
             // filter all items
             $form->addSelectBox(
                 'mem_show_filter',
-                $gL10n->get('SYS_FILTER_MEMBERS'),
+                $gL10n->get('SYS_MEMBERS'),
                 $selectBoxValues,
                 array(
                     'defaultValue' => $getMembersShowFiler,
