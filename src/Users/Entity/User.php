@@ -1260,7 +1260,7 @@ class User extends Entity
             }
         }
 
-        // add result into cache
+        // add a result into cache
         $this->usersEditAllowed[$userId] = $returnValue;
 
         return $returnValue;
@@ -1275,7 +1275,7 @@ class User extends Entity
      */
     private function hasRightRole(array $rightsList, string $rightName, int $roleId): bool
     {
-        // if user has right to view all lists then he could also view this role
+        // if user has a right to view all lists, then he could also view this role
         if ($this->checkRolesRight($rightName)) {
             return true;
         }
@@ -1297,7 +1297,8 @@ class User extends Entity
 
     /**
      * Checks the necessary rights if this user could view former roles members. Therefore,
-     * the user must also have the right to view the role. So you must also check this right.
+     * the user must have global rights to view all users or edit roles, and the global preference must be set.
+     * Otherwise, the user must be a leader of the role and leaders are allowed to edit all users or to assign members.
      * @param int $roleId ID of the role that should be checked.
      * @return bool Return **true** if the user has the right to view former roles members
      * @throws Exception
@@ -1325,7 +1326,7 @@ class User extends Entity
 
     /**
      * Checks if the current user is allowed to view the profile of the user of the parameter.
-     * It will check if user has edit rights with method **hasRightEditProfile** or if the user is a member
+     * It will check if user has edit rights with method **hasRightEditProfile**, or if the user is a member
      * of a role where the current user has the right to view profiles.
      * @param User $user User object of the user that should be checked if the current user can view his profile.
      * @return bool Return **true** if the current user is allowed to view the profile of the user from **$user**.
