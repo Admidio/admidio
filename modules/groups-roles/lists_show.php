@@ -717,15 +717,6 @@ try {
 
             // add a column with the row number at the first column
             array_unshift($columnValues, $listRowNumber);
-        } else {
-            // add a column with former status
-            if (isset($member['mem_former'])) {
-                if ($member['mem_former']) {
-                    $columnValues = array('mem_former' => $gL10n->get('SYS_FORMER_MEMBER')) + $columnValues;
-                } else {
-                    $columnValues = array('mem_former' => $gL10n->get('SYS_MEMBER')) + $columnValues;
-                }
-            }
         }
 
         if ($isAdministratorUserstatus) {

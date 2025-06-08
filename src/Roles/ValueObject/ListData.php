@@ -99,8 +99,9 @@ class ListData
                 if (in_array($columnValueKey, array('mem_leader', 'usr_uuid'))) {
                     $outputData[$rowNumber][$columnValueKey] = $columnValue;
                 } elseif ($columnValueKey === 'mem_former') {
-                    if ($outputFormat === 'html' || $outputFormat === 'print') {
-                     $outputData[$rowNumber][$columnValueKey] = (bool)$columnValue;
+                    if ($outputFormat === 'html' || $outputFormat === 'print' || $outputFormat === 'pdf') {
+                        // For HTML, print, and pdf formats, we keep the boolean value as is
+                        $outputData[$rowNumber][$columnValueKey] = (bool)$columnValue;
                     } else {
                         // For all other formats, we convert the boolean value to a string
                         $outputData[$rowNumber][$columnValueKey] = (bool)$columnValue ? $gL10n->get('SYS_FORMER_MEMBER') : $gL10n->get('SYS_MEMBER');
