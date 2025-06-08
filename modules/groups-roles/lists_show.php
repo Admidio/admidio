@@ -682,7 +682,7 @@ try {
             if (isset($member['mem_former'])) {
                 // Add icon for member or no member of the organization
                 if ($member['mem_former']) {
-                    $icon = 'bi-person-fill-x text-danger';
+                    $icon = 'bi-person-fill-dash text-danger';
                     $iconText = $gL10n->get('SYS_FORMER_MEMBER_OF_ROLE_GROUP', array($roleName));
                 }
                 else {

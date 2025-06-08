@@ -333,16 +333,16 @@ try {
             $icon = 'bi-person-fill-check';
             $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($currentOrgName));
         } elseif ($formerContactsOfThisOrganization) {
-            $icon = 'bi-person-fill-x';
+            $icon = 'bi-person-fill-dash';
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($currentOrgName));
         } elseif ($contactsOfOtherOrganization) {
             $icon = 'bi-person-fill-check text-warning';
             $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($otherOrgName));
         } elseif ($formerContactsOfOtherOrganization) {
-            $icon = 'bi-person-fill-x text-warning';
+            $icon = 'bi-person-fill-dash text-warning';
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($otherOrgName));
         } else {
-            $icon = 'bi-person-fill-dash text-danger';
+            $icon = 'bi-person-fill-x text-danger';
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ANY_ORGANIZATION');
         }
 
