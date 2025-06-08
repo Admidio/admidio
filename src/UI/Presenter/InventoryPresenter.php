@@ -702,11 +702,6 @@ class InventoryPresenter extends PagePresenter
             $columnNumber++;
         }
 
-        if ($mode === 'html' && $gCurrentUser->isAdministratorInventory()) {
-            $columnAlign[] = 'end';
-            $headers[]     = '&nbsp;';
-        }
-
         $preparedData['headers']         = $headers;
         $preparedData['export_headers']  = $exportHeaders;
         $preparedData['column_align']    = $columnAlign;
@@ -717,6 +712,7 @@ class InventoryPresenter extends PagePresenter
         $rows = array();
         $strikethroughs = array();
         $listRowNumber = 1;
+        $actionsHeaderAdded = false;
 
         // Iterate over each item to fill the table rows
         foreach ($this->itemsData->getItems() as $item) {
@@ -752,7 +748,7 @@ class InventoryPresenter extends PagePresenter
 
                 // Process ITEMNAME column
                 if ($infNameIntern === 'ITEMNAME' && strlen($content) > 0) {
-                    if ($mode === 'html') {
+                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$item['ini_former'])) {
                         $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
                     } else {
                         $content = SecurityUtils::encodeHTML($content);
@@ -894,6 +890,13 @@ class InventoryPresenter extends PagePresenter
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                         );
                     }
+
+                    // add actions column to header
+                    if (!$actionsHeaderAdded && ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')))) {
+                        $actionsHeaderAdded = true;
+                        $preparedData['column_align'][] = 'end';
+                        $preparedData['headers'][] = '&nbsp;';
+                    }
                 }
             }
 
@@ -937,6 +940,15 @@ class InventoryPresenter extends PagePresenter
             $listRowNumber++;
         }
 
+        // check if actionHeader was set, if so, make shure every row has an actions column
+        if ($actionsHeaderAdded) {
+            foreach ($rows as &$row) {
+                if (!isset($row['actions'])) {
+                    $row['actions'] = array();
+                }
+            }
+        }
+        
         $preparedData['rows'] = $rows;
         $preparedData['strikethroughs'] = $strikethroughs;
 
