@@ -75,7 +75,7 @@ try {
         );
 
 
-        if ($gCurrentUser->isAdministrator()) {
+        if ($gCurrentUser->isAdministrator() && $gSettingsManager->getBool('contacts_show_all')) {
             $selectBoxValues = array(
                 '0' => array('0', $gL10n->get('SYS_ACTIVE_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
                 '1' => array('1', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
