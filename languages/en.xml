@@ -1017,6 +1017,7 @@
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
   <string name="SYS_ORGANIZATION">Organization</string>
+  <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
   <string name="SYS_OTHER_TABLES">Other tables (third-party modules; only visible to administrators)</string>
   <string name="SYS_OVERHANG">Overhang</string>
