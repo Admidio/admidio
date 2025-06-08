@@ -216,7 +216,6 @@ try {
     } elseif (($getMembersShowFilter === 1) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
-                'showAllMembersDatabase' => false,
                 'showFormerMembers' => true,
                 'showUserUUID' => true,
                 'useConditions' => false,
@@ -226,7 +225,6 @@ try {
     } elseif (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
-                'showAllMembersDatabase' => false,
                 'showAllMembersThisOrga' => true,
                 'showFormerMembers' => true,
                 'showUserUUID' => true,
@@ -237,9 +235,7 @@ try {
     } elseif (($getMembersShowFilter === 3) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
-                'showAllMembersDatabase' => ($gSettingsManager->getBool('contacts_show_all')) ? true : false,
-                'showAllMembersThisOrga' => ($gSettingsManager->getBool('contacts_show_all')) ? false : true,
-                'showFormerMembers' => ($gSettingsManager->getBool('contacts_show_all')) ? false : true,
+                'showAllMembersDatabase' => true,
                 'showUserUUID' => true,
                 'useConditions' => false,
                 'useOrderBy' => $useOrderBy

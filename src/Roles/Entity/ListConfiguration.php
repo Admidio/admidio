@@ -924,17 +924,7 @@ class ListConfiguration extends Entity
         }
 
         // Set SQL-Statement
-        if ($optionsAll['showAllMembersDatabase'] && $optionsAll['showFormerMembers']) {
-            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . ', ' . $sqlFormerSelect . '
-                      FROM ' . TBL_USERS . '
-                INNER JOIN ' . TBL_MEMBERS . ' mem
-                        ON mem_usr_id = usr_id
-                           ' . $sqlJoin . '
-                     WHERE usr_valid = true ' .
-                $sqlMemberStatus .
-                $sqlWhere .
-                $sqlOrderBys;
-        } elseif ($optionsAll['showAllMembersThisOrga'] && $optionsAll['showFormerMembers']) {
+        if ($optionsAll['showAllMembersThisOrga'] && $optionsAll['showFormerMembers']) {
             $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . ', ' . $sqlFormerSelect . '
                       FROM ' . TBL_MEMBERS . ' mem
                 INNER JOIN ' . TBL_ROLES . '
