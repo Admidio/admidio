@@ -346,9 +346,9 @@
   <string name="SYS_COLUMN_SELECTION">Spaltenauswahl</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Wählt die Spalten aus, die in der Liste angezeigt werden sollen.\n\n Inaktive Rollen sind mit (*) gekennzeichnet.</string>
   <string name="SYS_COLOR_PRIMARY">Primärfarbe</string>
-  <string name="SYS_COLOR_PRIMARY_DESC">Die Hauptfarbe, die für Admidio verwendet wird. Die Titelleiste verwendet diese Farbe, ebenso wie die Überschriften.</string>
+  <string name="SYS_COLOR_PRIMARY_DESC">Die verwendete Hauptfarbe für Admidio. Diese Farbe wird für die Titelleiste und die Überschriften verwendet.</string>
   <string name="SYS_COLOR_SECONDARY">Sekundärfarbe</string>
-  <string name="SYS_COLOR_SECONDARY_DESC">Die für Admidio verwendete Sekundärfarbe. Die Seitenleiste wird diese Farbe verwenden, ebenso wie die Einstellungsbereiche.</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">Die verwendete Sekundärfarbe für Admidio. Die Seitenleiste und die Einstellungsbereiche verwenden diese Farbe.</string>
   <string name="SYS_COMPACT">Kompakt</string>
   <string name="SYS_CONFIGURATIONS">Konfigurationen</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Hier können beliebig viele Konfigurationen für den Kategoriereport angelegt werden. In der Bildschirmanzeige wird über \"Konfiguration auswählen\" jeweils eine dieser Konfigurationen als Basis für die Anzeige verwendet.</string>
@@ -1505,7 +1505,7 @@
   <string name="SYS_SSO_CLIENT_DELETE">SSO Client löschen</string>
   <string name="SYS_SSO_CLIENT_ADD_SAML">Neuer SAML 2.0 Client</string>
   <string name="SYS_SSO_CLIENT_ADMIN">Single-Sign-On Client Administration (SAML 2.0, OIDC)</string>
-  <string name="SYS_SSO_CLIENT_ADMIN_DESC">Admidio kann als „id Provider“ für Single-Sign-On mit den Protokollen SAML 2.0 oder OIDC verwendet werden. Das bedeutet, dass andere Webanwendungen („Clients“) die Benutzerkonten von Admidio zur Authentifizierung und Autorisierung nutzen können. Jeder Client muss hier registriert werden, und der Client muss auch für SSO mit Admidio eingerichtet werden. Wenn sich ein Benutzer bei einer Client-Anwendung anmelden möchte, wird er nicht zum Anmeldebildschirm des Clients, sondern zu Admidio weitergeleitet. Wenn der Benutzer bereits bei Admidio angemeldet ist, wird der angemeldete Benutzer zum Client zurückgeleitet und erhält Zugang. Andernfalls kann sich der Benutzer bei Admidio anmelden und wird dann wieder zur Client-Anwendung zurückgeleitet.</string>
+  <string name="SYS_SSO_CLIENT_ADMIN_DESC">Admidio kann als „ID-Provider“ für Single-Sign-On mit den Protokollen SAML 2.0 oder OIDC verwendet werden. Das bedeutet, dass andere Webanwendungen („Clients“) die Benutzerkonten von Admidio zur Authentifizierung und Autorisierung nutzen können. Jeder Client muss hier registriert werden, und der Client muss auch für SSO mit Admidio eingerichtet werden. Wenn sich ein Benutzer bei einer Client-Anwendung anmelden möchte, wird er nicht zum Anmeldebildschirm des Clients, sondern zu Admidio weitergeleitet. Wenn der Benutzer bereits bei Admidio angemeldet ist, wird der angemeldete Benutzer zum Client zurückgeleitet und erhält Zugang. Andernfalls kann sich der Benutzer bei Admidio anmelden und wird dann wieder zur Client-Anwendung zurückgeleitet.</string>
   <string name="SYS_SSO_CLIENT_NAME">Client Name</string>
   <string name="SYS_SSO_CLIENT_NAME_DESC">Der von Menschen lesbare Name des Clients. Dies ist ein rein beschreibendes Attribut und wird nicht zur Identifizierung von Kunden verwendet.</string>
   <string name="SYS_SSO_CLIENT_ID">Client ID</string>
@@ -1541,7 +1541,7 @@
   <string name="SYS_SSO">Single-Sign-On (SAML 2.0, OpenId Connect)</string>
   <string name="SYS_SSO_SAML">Single-Sign-On mit SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML2.0 aktivieren</string>
-  <string name="SYS_SSO_SAML_ENABLED_DESC">Diese Einstellung macht Admidio zu einem SAML 2.0 Identity Provider (idP) für Single-Sign-On, der es anderen Webanwendungen ermöglicht, Benutzer:innen gegenüber der Admidio-Benutzerliste zu authentifizieren.</string>
+  <string name="SYS_SSO_SAML_ENABLED_DESC">Diese Einstellung macht Admidio zu einem SAML 2.0 Identity Provider (idP) für Single-Sign-On, der es anderen Webanwendungen ermöglicht, Benutzer gegenüber der Admidio-Benutzerliste zu authentifizieren.</string>
   <string name="SYS_SSO_SAML_ENTITY_ID">SAML-Entity-ID</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">Der eindeutige Bezeichner für SAML dieser Admidio-Instanz. Normalerweise ist dies die URL deiner Installation. Der Client muss mit genau der gleichen Entity-ID eingerichtet werden, sonst funktioniert die Anmeldung nicht.</string>
   <string name="SYS_SSO_STATIC_SETTINGS">IdP-Metadaten für die Client-Einrichtung</string>

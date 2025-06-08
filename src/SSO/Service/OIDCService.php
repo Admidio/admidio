@@ -196,14 +196,15 @@ class OIDCService extends SSOService {
      *   where the 'style' key is optional, but 'value' and 'id' are required.
      */
     public function getStaticSettings() : array {
+        global $gL10n;
         $discoveryURL = $this->getDiscoveryURL();
         $staticSettings = array(
-            'SYS_SSO_OIDC_DISCOVERY_URL' => ['value' => '<a href="' . $discoveryURL . '">' . $discoveryURL . '</a>', 'id' => 'discovery_URL'],
-            'SYS_SSO_OIDC_AUTH_ENDPOINT' => ['value' => $this->getAuthorizationEndpoint(), 'id' => 'auth_endpoint'],
-            'SYS_SSO_OIDC_TOKEN_ENDPOINT' => ['value' => $this->getTokenEndpoint(),'id' => 'token_endpoint'],
-            'SYS_SSO_OIDC_USERINFO_ENDPOINT' => ['value' => $this->getUserinfoEndpoint(),'id' => 'userinfo_endpoint'],
-            'SYS_SSO_OIDC_JWKS_ENDPOINT' => ['value' => $this->getJWKSEndpoint(),'id' => 'jwks_endpoint'],
-            'SYS_SSO_OIDC_LOGOUT_ENDPOINT' => ['value' => $this->getLogoutEndpoint(),'id' => 'logout_endpoint'],
+            $gL10n->get('SYS_SSO_OIDC_DISCOVERY_URL') => ['value' => '<a href="' . $discoveryURL . '">' . $discoveryURL . '</a>', 'id' => 'discovery_URL'],
+            $gL10n->get('SYS_SSO_OIDC_AUTH_ENDPOINT') => ['value' => $this->getAuthorizationEndpoint(), 'id' => 'auth_endpoint'],
+            $gL10n->get('SYS_SSO_OIDC_TOKEN_ENDPOINT') => ['value' => $this->getTokenEndpoint(),'id' => 'token_endpoint'],
+            $gL10n->get('SYS_SSO_OIDC_USERINFO_ENDPOINT') => ['value' => $this->getUserinfoEndpoint(),'id' => 'userinfo_endpoint'],
+            $gL10n->get('SYS_SSO_OIDC_JWKS_ENDPOINT') => ['value' => $this->getJWKSEndpoint(),'id' => 'jwks_endpoint'],
+            $gL10n->get('SYS_SSO_OIDC_LOGOUT_ENDPOINT') => ['value' => $this->getLogoutEndpoint(),'id' => 'logout_endpoint'],
         );
         return $staticSettings;
     }

@@ -2,4 +2,5 @@
 <resources>
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Alle hendelser</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Hendelser</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Arrangementer er ikke tilgjengelig for besøkende. Logg inn for å se arrangementene.</string>
 </resources>
