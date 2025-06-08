@@ -9,9 +9,10 @@
  *
  * Parameters:
  *
- * mem_show_filter - 0  : (Default) Show only active contacts for current or all organizations
- *                   1  : Show only inactive contacts for current or all organizations
- *                   2  : Show active and inactive contacts for current or all organizations
+ * mem_show_filter - 0  : (Default) Show only active contacts for current organization
+ *                   1  : Show only inactive contacts for current organization
+ *                   2  : Show active and inactive contacts for current organization
+ *                   3  : Show active and inactive contacts for all organizations (only Admin)
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
