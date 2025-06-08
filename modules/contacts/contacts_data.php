@@ -32,9 +32,10 @@
  *
  * Parameters:
  *
- * mem_show_filter  - 0  : (Default) Show only active contacts of the current organization in database
- *                    1  : Show only inactive contacts of the current or all organizations in database
- *                    2  : Show active and inactive contacts of the current or all organizations in database
+ * mem_show_filter - 0  : (Default) Show only active contacts for current organization
+ *                    1  : Show only inactive contacts for current organization
+ *                    2  : Show active and inactive contacts for current organization
+ *                    3  : Show active and inactive contacts for all organizations (only Admin)
  * draw             - Number to validate the right inquiry from DataTables.
  * start            - Paging first record indicator. This is the start point in the current data set
  *                    (0 index based - i.e. 0 is the first record).
