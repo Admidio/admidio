@@ -80,8 +80,7 @@ try {
                 '0' => array('0', $gL10n->get('SYS_ACTIVE_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
                 '1' => array('1', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
                 '2' => array('2', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
-                '3' => array('3', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS')),
-                '4' => array('4', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS'))
+                '3' => array('3', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS'))
             );
         } else {
             $selectBoxValues = array(

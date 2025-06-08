@@ -155,18 +155,18 @@ try {
         // show only active members of the current organization
         $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
         $formerContactsOfThisOrganizationSelect = ' 0 '; // no former members of the current organization should be shown
-    } elseif ($getMembersShowFilter === 1 || $getMembersShowFilter === 3) {
+    } elseif ($getMembersShowFilter === 1) {
         // show only former members of the current organization
         $contactsOfThisOrganizationSelect = ' 0 '; // no current members of the current organization should be shown
         $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
-    } elseif ($getMembersShowFilter === 2 || $getMembersShowFilter === 4) {
-        // show all members of all organizations
+    } elseif ($getMembersShowFilter === 2 || $getMembersShowFilter === 3) {
+        // show all members of current organization
         $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
         $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
     }
 
     // create a subselect to check if the user is also an active member of another organization
-    if ($gCurrentOrganization->countAllRecords() > 1  && $gCurrentUser->isAdministratorUsers()) {
+    if ($gCurrentOrganization->countAllRecords() > 1  && $gCurrentUser->isAdministrator() && $getMembersShowFilter === 3) {
         $contactsOfOtherOrganizationSelectPlaceholder = '
             FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
@@ -194,21 +194,11 @@ try {
                 AND cat_name_intern <> 'EVENTS'
                 AND cat_org_id   <> " . $gCurrentOrgId . ")";
 
-        if ($getMembersShowFilter === 0) {
-            // show only active members of another organization or all members of all organizations
-            $contactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderCurrentOtherOrg);
-            $formerContactsOfOtherOrganizationSelect = ' 0 '; // no former members of other organizations should be shown
-        } elseif ($getMembersShowFilter === 1 || $getMembersShowFilter === 3) {
-            // show only former members of another organization
-            $contactsOfOtherOrganizationSelect = ' 0 '; // no current members of other organizations should be shown
-            $formerContactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other_former' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderFormerOtherOrg);
-        } elseif ($getMembersShowFilter === 2 || $getMembersShowFilter === 4) {
-            // show all members of all organizations
-            $contactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderCurrentOtherOrg);
-            $formerContactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other_former' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderFormerOtherOrg);
-        }
+        // show all members of other organizations
+        $contactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderCurrentOtherOrg);
+        $formerContactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other_former' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderFormerOtherOrg);
     } else {
-        // if there is only one organization then no other members of other organizations should be shown
+        // if there is only one organization or user is no admin then no other members of other organizations should be shown
         $contactsOfOtherOrganizationSelect = ' 0 ';
         $formerContactsOfOtherOrganizationSelect = ' 0 ';
     }
@@ -245,16 +235,6 @@ try {
             )
         );
     } elseif (($getMembersShowFilter === 3) && $gCurrentUser->isAdministratorUsers()) {
-        $mainSql = $contactsListConfig->getSql(
-            array(
-                'showAllMembersDatabase' => ($gSettingsManager->getBool('contacts_show_all')) ? true : false,
-                'showFormerMembers' => true,
-                'showUserUUID' => true,
-                'useConditions' => false,
-                'useOrderBy' => $useOrderBy
-            )
-        );
-    } elseif (($getMembersShowFilter === 4) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersDatabase' => ($gSettingsManager->getBool('contacts_show_all')) ? true : false,
@@ -354,13 +334,13 @@ try {
 
         // Add icon for member or no member of the organization
         if ($contactsOfThisOrganization) {
-            $icon = 'bi-person-fill';
+            $icon = 'bi-person-fill-check';
             $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($currentOrgName));
         } elseif ($formerContactsOfThisOrganization) {
             $icon = 'bi-person-fill-x';
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($currentOrgName));
         } elseif ($contactsOfOtherOrganization) {
-            $icon = 'bi-person-fill text-warning';
+            $icon = 'bi-person-fill-check text-warning';
             $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($otherOrgName));
         } elseif ($formerContactsOfOtherOrganization) {
             $icon = 'bi-person-fill-x text-warning';
