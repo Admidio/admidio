@@ -155,11 +155,11 @@ try {
         // show only active members of the current organization
         $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
         $formerContactsOfThisOrganizationSelect = ' 0 '; // no former members of the current organization should be shown
-    } elseif ($getMembersShowFilter === 1) {
+    } elseif ($getMembersShowFilter === 1 || $getMembersShowFilter === 3) {
         // show only former members of the current organization
         $contactsOfThisOrganizationSelect = ' 0 '; // no current members of the current organization should be shown
         $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
-    } elseif ($getMembersShowFilter === 2) {
+    } elseif ($getMembersShowFilter === 2 || $getMembersShowFilter === 4) {
         // show all members of all organizations
         $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
         $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
@@ -198,11 +198,11 @@ try {
             // show only active members of another organization or all members of all organizations
             $contactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderCurrentOtherOrg);
             $formerContactsOfOtherOrganizationSelect = ' 0 '; // no former members of other organizations should be shown
-        } elseif ($getMembersShowFilter === 1) {
+        } elseif ($getMembersShowFilter === 1 || $getMembersShowFilter === 3) {
             // show only former members of another organization
             $contactsOfOtherOrganizationSelect = ' 0 '; // no current members of other organizations should be shown
             $formerContactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other_former' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderFormerOtherOrg);
-        } elseif ($getMembersShowFilter === 2) {
+        } elseif ($getMembersShowFilter === 2 || $getMembersShowFilter === 4) {
             // show all members of all organizations
             $contactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderCurrentOtherOrg);
             $formerContactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other_former' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderFormerOtherOrg);
@@ -226,7 +226,7 @@ try {
     } elseif (($getMembersShowFilter === 1) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
-                'showAllMembersDatabase' => $gSettingsManager->getBool('contacts_show_all') ? true : false,
+                'showAllMembersDatabase' => false,
                 'showFormerMembers' => true,
                 'showUserUUID' => true,
                 'useConditions' => false,
@@ -236,9 +236,30 @@ try {
     } elseif (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
-                'showAllMembersDatabase' => $gSettingsManager->getBool('contacts_show_all') ? true : false,
-                'showAllMembersThisOrga' => $gSettingsManager->getBool('contacts_show_all') ? false : true,
-                'showFormerMembers' => $gSettingsManager->getBool('contacts_show_all') ? false : true,
+                'showAllMembersDatabase' => false,
+                'showAllMembersThisOrga' => true,
+                'showFormerMembers' => true,
+                'showUserUUID' => true,
+                'useConditions' => false,
+                'useOrderBy' => $useOrderBy
+            )
+        );
+    } elseif (($getMembersShowFilter === 3) && $gCurrentUser->isAdministratorUsers()) {
+        $mainSql = $contactsListConfig->getSql(
+            array(
+                'showAllMembersDatabase' => ($gSettingsManager->getBool('contacts_show_all')) ? true : false,
+                'showFormerMembers' => true,
+                'showUserUUID' => true,
+                'useConditions' => false,
+                'useOrderBy' => $useOrderBy
+            )
+        );
+    } elseif (($getMembersShowFilter === 4) && $gCurrentUser->isAdministratorUsers()) {
+        $mainSql = $contactsListConfig->getSql(
+            array(
+                'showAllMembersDatabase' => ($gSettingsManager->getBool('contacts_show_all')) ? true : false,
+                'showAllMembersThisOrga' => ($gSettingsManager->getBool('contacts_show_all')) ? false : true,
+                'showFormerMembers' => ($gSettingsManager->getBool('contacts_show_all')) ? false : true,
                 'showUserUUID' => true,
                 'useConditions' => false,
                 'useOrderBy' => $useOrderBy

@@ -74,16 +74,27 @@ try {
             array('type' => 'navbar', 'setFocus' => false)
         );
 
-        $selectBoxValues = array(
-            '0' => $gL10n->get('SYS_ACTIVE_MEMBERS'),
-            '1' => $gL10n->get('SYS_FORMER_MEMBERS'),
-            '2' => $gL10n->get('SYS_ALL_MEMBERS')
-        );
+
+        if ($gCurrentUser->isAdministrator()) {
+            $selectBoxValues = array(
+                '0' => array('0', $gL10n->get('SYS_ACTIVE_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
+                '1' => array('1', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
+                '2' => array('2', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
+                '3' => array('3', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS')),
+                '4' => array('4', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS'))
+            );
+        } else {
+            $selectBoxValues = array(
+                '0' => $gL10n->get('SYS_ACTIVE_CONTACTS'),
+                '1' => $gL10n->get('SYS_FORMER_CONTACTS'),
+                '2' => $gL10n->get('SYS_ALL_CONTACTS')
+            );
+        }
 
         // filter all items
         $form->addSelectBox(
             'mem_show_filter',
-            $gL10n->get('SYS_MEMBERS'),
+            $gL10n->get('SYS_CONTACTS'),
             $selectBoxValues,
             array(
                 'defaultValue' => $getMembersShowFiler,
