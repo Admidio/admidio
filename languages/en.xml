@@ -708,6 +708,8 @@
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_CONTACTS">Former contacts</string>
+  <string name="SYS_FORMER_MEMBER">Former member</string>
+  <string name="SYS_FORMER_MEMBER_OF_GROUP">Former member of group #VAR1#</string>
   <string name="SYS_FORMER_MEMBERS">Former members</string>
   <string name="SYS_FORMER_PL">Former</string>
   <string name="SYS_FORMER_ROLE_MEMBERSHIP">Former role memberships</string>
@@ -879,6 +881,7 @@
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Member</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Member assignment</string>
+  <string name="SYS_MEMBER_OF_GROUP">Member of group #VAR1#</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
   <string name="SYS_MEMBERS">Members</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>

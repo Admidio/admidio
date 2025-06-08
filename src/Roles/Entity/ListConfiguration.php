@@ -240,7 +240,8 @@ class ListConfiguration extends Entity
                     $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
                 } else {                    $content = $htmlText;
                 }
-            }        } elseif ($column->getValue('lsc_special_field') === 'mem_duration') {
+            }
+        } elseif ($column->getValue('lsc_special_field') === 'mem_duration') {
             // Handle membership duration formatting
             if (!empty($content)) {
                 try {
@@ -859,23 +860,44 @@ class ListConfiguration extends Entity
         $sqlMemberStatus .= ' AND mem_end >= \'' . $dateStart . '\'';
 
         if ($optionsAll['showFormerMembers'] && count($optionsAll['showRolesMembers']) > 0) {
-            $sqlMemberStatus = 'AND mem_end < \'' . $dateEnd . '\'
-                AND NOT EXISTS (
+            $sqlMemberStatus = 'AND NOT EXISTS (
                    SELECT 1
                      FROM ' . TBL_MEMBERS . ' AS act
                     WHERE act.mem_rol_id = mem.mem_rol_id
                       AND act.mem_usr_id = mem.mem_usr_id
                       AND \'' . $dateEnd . '\' BETWEEN act.mem_begin AND act.mem_end
                 )';
+
+            // add case for former members to have a flag if the user is a former member
+            $sqlFormerSelect = 'CASE
+                    WHEN mem_end  < \'' . $dateEnd . '\'
+                    ' . $sqlMemberStatus . '
+                    THEN TRUE
+                    ELSE FALSE
+                END AS mem_former';
+
+            // add former member column to the WHERE statement
+            $sqlMemberStatus = 'AND mem_end < \'' . $dateEnd . '\' ' . $sqlMemberStatus;
         } elseif ($optionsAll['showFormerMembers']) {
             $dateEnd = ($optionsAll['endDate'] !== null) ? $optionsAll['endDate'] . ' 23:59:59' : DATE_NOW;
-            $sqlMemberStatus = 'AND mem_end < \'' . $dateEnd . '\'
-                AND NOT EXISTS (
+
+            $sqlMemberStatus = 'AND NOT EXISTS (
                    SELECT 1
                      FROM ' . TBL_MEMBERS . ' AS act
                     WHERE act.mem_usr_id = mem.mem_usr_id
                       AND \'' . $dateEnd . '\' BETWEEN act.mem_begin AND act.mem_end
                 )';
+
+            // add case for former members to have a flag if the user is a former member
+            $sqlFormerSelect = 'CASE
+                    WHEN mem_end  < \'' . $dateEnd . '\'
+                    ' . $sqlMemberStatus . '
+                    THEN TRUE
+                    ELSE FALSE
+                END AS mem_former';
+
+            // add former member column to the WHERE statement
+            $sqlMemberStatus = 'AND mem_end < \'' . $dateEnd . '\' ' . $sqlMemberStatus;
         }
 
         // check if mem_leaders should be shown
@@ -903,7 +925,7 @@ class ListConfiguration extends Entity
 
         // Set SQL-Statement
         if ($optionsAll['showAllMembersDatabase'] && $optionsAll['showFormerMembers']) {
-            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . ', ' . $sqlFormerSelect . '
                       FROM ' . TBL_USERS . '
                 INNER JOIN ' . TBL_MEMBERS . ' mem
                         ON mem_usr_id = usr_id
@@ -913,7 +935,7 @@ class ListConfiguration extends Entity
                 $sqlWhere .
                 $sqlOrderBys;
         } elseif ($optionsAll['showAllMembersThisOrga'] && $optionsAll['showFormerMembers']) {
-            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . '
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . ', ' . $sqlFormerSelect . '
                       FROM ' . TBL_MEMBERS . ' mem
                 INNER JOIN ' . TBL_ROLES . '
                         ON rol_id = mem_rol_id

@@ -254,7 +254,13 @@ try {
     if (in_array($getMode, array('xlsx', 'ods', 'csv'))) {
         // generate the export to xlsx, ods or csv file
 
-        $listData->setColumnHeadlines($list->getColumnNames());
+        if ($getMembersShowFiler === 2) {
+            $arrColumnNames = $list->getColumnNames();
+            $arrColumnNames[] = $gL10n->get('INS_MEMBERSHIP');
+             $listData->setColumnHeadlines($arrColumnNames);
+        } else {
+            $listData->setColumnHeadlines($list->getColumnNames());
+        }
         $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
         if ((string)$list->getValue('lst_name') !== '') {
             $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
@@ -599,6 +605,12 @@ try {
 
     // set the first column for the counter
     if ($getMode === 'html') {
+         // add column for former status
+        if ($getMembersShowFiler === 2) {
+            array_unshift($arrColumnNames, '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('INS_MEMBERSHIP') . '"></i>');
+            array_unshift($arrColumnAlign, 'center');
+        }
+
         // in html mode we group leaders. Therefore, we need a special hidden column.
         array_unshift($arrColumnNames, $gL10n->get('INS_GROUPS'));
         array_unshift($arrColumnAlign, 'left');
@@ -607,6 +619,10 @@ try {
             // add column for edit link
             $arrColumnNames[] = '&nbsp;';
         }
+    }
+    elseif ($getMembersShowFiler === 2) {
+        array_unshift($arrColumnNames, $gL10n->get('INS_MEMBERSHIP'));
+        array_unshift($arrColumnAlign, 'left');
     }
 
     // add column with sequential number
@@ -653,7 +669,8 @@ try {
             }
 
             if ($getMode === 'print' || $getMode === 'pdf') {
-                $table->addRowByArray(array($title), '', array('class' => 'admidio-group-heading'), $list->countColumns() + 1);
+                $colspan = ($getMembersShowFiler === 2) ? $list->countColumns() + 2 : $list->countColumns() + 1;
+                $table->addRowByArray(array($title), '', array('class' => 'admidio-group-heading'), $colspan);
             }
             $lastMemberIsLeader = $memberIsLeader;
         }
@@ -662,6 +679,20 @@ try {
         unset($columnValues['usr_uuid']);
 
         if ($getMode === 'html') {
+            if (isset($member['mem_former'])) {
+                // Add icon for member or no member of the organization
+                if ($member['mem_former']) {
+                    $icon = 'bi-person-fill-x text-danger';
+                    $iconText = $gL10n->get('SYS_FORMER_MEMBER_OF_GROUP', array($roleName));
+                }
+                else {
+                    $icon = 'bi-person-fill-check';
+                    $iconText = $gL10n->get('SYS_MEMBER_OF_GROUP', array($roleName));
+                }
+                unset($columnValues['mem_former']);
+                $columnValues = array('mem_former' => '<i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>') + $columnValues;
+            }
+
             // in html mode we add a column with leader/member information to
             // enable the grouping function of jquery datatables
             if ($memberIsLeader) {
@@ -675,8 +706,26 @@ try {
         } elseif (in_array($getMode, array('print', 'pdf'), true)) {
             unset($columnValues['mem_leader']);
 
+            // add a column with former status
+            if (isset($member['mem_former'])) {
+                if ($member['mem_former']) {
+                    $columnValues = array('mem_former' => $gL10n->get('SYS_FORMER_MEMBER')) + $columnValues;
+                } else {
+                    $columnValues = array('mem_former' => $gL10n->get('SYS_MEMBER')) + $columnValues;
+                }
+            }
+
             // add a column with the row number at the first column
             array_unshift($columnValues, $listRowNumber);
+        } else {
+            // add a column with former status
+            if (isset($member['mem_former'])) {
+                if ($member['mem_former']) {
+                    $columnValues = array('mem_former' => $gL10n->get('SYS_FORMER_MEMBER')) + $columnValues;
+                } else {
+                    $columnValues = array('mem_former' => $gL10n->get('SYS_MEMBER')) + $columnValues;
+                }
+            }
         }
 
         if ($isAdministratorUserstatus) {
