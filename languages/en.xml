@@ -709,7 +709,7 @@
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_CONTACTS">Former contacts</string>
   <string name="SYS_FORMER_MEMBER">Former member</string>
-  <string name="SYS_FORMER_MEMBER_OF_GROUP">Former member of group #VAR1#</string>
+  <string name="SYS_FORMER_MEMBER_OF_ROLE_GROUP">Former member of role/group #VAR1#</string>
   <string name="SYS_FORMER_MEMBERS">Former members</string>
   <string name="SYS_FORMER_PL">Former</string>
   <string name="SYS_FORMER_ROLE_MEMBERSHIP">Former role memberships</string>
@@ -735,6 +735,7 @@
   <string name="SYS_GEN_RANDOM_EXCEPTION">The program can not generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">The program expects a string with at least 2 different characters.</string>
   <string name="SYS_GREETING_CARD">Greeting card</string>
+  <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
@@ -881,8 +882,8 @@
   <string name="SYS_MEGAPIXEL">Megapixel</string>
   <string name="SYS_MEMBER">Member</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Member assignment</string>
-  <string name="SYS_MEMBER_OF_GROUP">Member of group #VAR1#</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
+  <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
   <string name="SYS_MEMBERS">Members</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">One of the configurations specified here can be used to display the members administration. The columns of the selected list configuration are then displayed in the members administration.</string>

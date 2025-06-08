@@ -256,7 +256,7 @@ try {
 
         if ($getMembersShowFiler === 2) {
             $arrColumnNames = $list->getColumnNames();
-            $arrColumnNames[] = $gL10n->get('INS_MEMBERSHIP');
+            $arrColumnNames[] = $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP');
              $listData->setColumnHeadlines($arrColumnNames);
         } else {
             $listData->setColumnHeadlines($list->getColumnNames());
@@ -607,7 +607,7 @@ try {
     if ($getMode === 'html') {
          // add column for former status
         if ($getMembersShowFiler === 2) {
-            array_unshift($arrColumnNames, '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('INS_MEMBERSHIP') . '"></i>');
+            array_unshift($arrColumnNames, '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP') . '"></i>');
             array_unshift($arrColumnAlign, 'center');
         }
 
@@ -621,7 +621,7 @@ try {
         }
     }
     elseif ($getMembersShowFiler === 2) {
-        array_unshift($arrColumnNames, $gL10n->get('INS_MEMBERSHIP'));
+        array_unshift($arrColumnNames, $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP'));
         array_unshift($arrColumnAlign, 'left');
     }
 
@@ -683,11 +683,11 @@ try {
                 // Add icon for member or no member of the organization
                 if ($member['mem_former']) {
                     $icon = 'bi-person-fill-x text-danger';
-                    $iconText = $gL10n->get('SYS_FORMER_MEMBER_OF_GROUP', array($roleName));
+                    $iconText = $gL10n->get('SYS_FORMER_MEMBER_OF_ROLE_GROUP', array($roleName));
                 }
                 else {
                     $icon = 'bi-person-fill-check';
-                    $iconText = $gL10n->get('SYS_MEMBER_OF_GROUP', array($roleName));
+                    $iconText = $gL10n->get('SYS_MEMBER_OF_ROLE_GROUP', array($roleName));
                 }
                 unset($columnValues['mem_former']);
                 $columnValues = array('mem_former' => '<i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>') + $columnValues;
