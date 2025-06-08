@@ -690,7 +690,8 @@ try {
                     $iconText = $gL10n->get('SYS_MEMBER_OF_ROLE_GROUP', array($roleName));
                 }
                 unset($columnValues['mem_former']);
-                $columnValues = array('mem_former' => '<i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>') + $columnValues;
+                $sortingValue = $member['mem_former'] ? 1 : 0;
+                $columnValues = array('mem_former' => array('value' => '<i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i>', 'order' => $sortingValue)) + $columnValues;
             }
 
             // in html mode we add a column with leader/member information to
