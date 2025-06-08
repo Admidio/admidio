@@ -112,18 +112,18 @@ class InventoryPresenter extends PagePresenter
             );
         }
 
-        // link to print overlay and exports
-        $this->addPageFunctionsMenuItem(
-            'menu_item_lists_print_view',
-            $gL10n->get('SYS_PRINT_PREVIEW'),
-            'javascript:void(0);',
-            'bi-printer-fill'
-        );
-
-        // dropdown menu for export options
-        $this->createExportDropdown(false);
-
         if ($gCurrentUser->isAdministratorInventory()) {
+            // link to print overlay and exports
+            $this->addPageFunctionsMenuItem(
+                'menu_item_lists_print_view',
+                $gL10n->get('SYS_PRINT_PREVIEW'),
+                'javascript:void(0);',
+                'bi-printer-fill'
+            );
+
+            // dropdown menu for export options
+            $this->createExportDropdown();
+
             // show link to import items
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_import_items',
@@ -702,7 +702,7 @@ class InventoryPresenter extends PagePresenter
             $columnNumber++;
         }
 
-        if ($mode === 'html') {
+        if ($mode === 'html' && $gCurrentUser->isAdministratorInventory()) {
             $columnAlign[] = 'end';
             $headers[]     = '&nbsp;';
         }
