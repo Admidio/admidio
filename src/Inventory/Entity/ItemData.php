@@ -62,7 +62,7 @@ class ItemData extends Entity
      * @param string $newval new value after the change (can be null)
      * @return true returns **true** if no error occurred
      */
-    protected function logUserfieldChange(?string $oldval = null, ?string $newval = null) : bool {
+    protected function logItemfieldChange(?string $oldval = null, ?string $newval = null) : bool {
         global $gDb, $gProfileFields;
 
         if ($oldval === $newval) {
@@ -167,7 +167,7 @@ class ItemData extends Entity
     public function logDeletion(): bool
     {
         $oldval = $this->columnsInfos['ind_value']['previousValue'];
-        return $this->logUserfieldChange($oldval, null);
+        return $this->logItemfieldChange($oldval, null);
     }
 
 
@@ -180,7 +180,7 @@ class ItemData extends Entity
     public function logModifications(array $logChanges): bool
     {
         if ($logChanges['ind_value']) {
-            return $this->logUserfieldChange($logChanges['ind_value']['oldValue'], $logChanges['ind_value']['newValue']);
+            return $this->logItemfieldChange($logChanges['ind_value']['oldValue'], $logChanges['ind_value']['newValue']);
         } else {
             // Nothing to log at all!
             return true;
