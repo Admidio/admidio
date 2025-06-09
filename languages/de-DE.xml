@@ -358,7 +358,6 @@
   <string name="SYS_COMMA_SEPARATED_FILE">Kommagetrennte Datei (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
-  <string name="SYS_COMMON_SETTINGS">Allgemeine Einstellungen</string>
   <string name="SYS_COMMUNICATION">Kommunikation</string>
   <string name="SYS_COMPLEMENT">Ergänzen</string>
   <string name="SYS_CONDITION">Bedingung</string>
@@ -1438,7 +1437,7 @@
   <string name="SYS_SSO_OAUTH_KEYS">OIDC (SSO) Schlüssel</string>
   <string name="SYS_SSO_X509_CERTIFICATE">x509 Client-Zertifikat</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">SAML-Nachrichten werden kryptografisch signiert, um Sicherheitsangriffe zu verhindern. Dieses Zertifikat wird vom Client zur Verfügung gestellt und muss genau so eingegeben/kopiert werden, wie vom Client angegeben. Andernfalls schlägt die SAML-Kommunikation fehl und eine SSO-Anmeldung ist nicht möglich.</string>
-  <string name="SYS_SSO">Single-Sign-On (SAML 2.0, OpenId Connect)</string>
+  <string name="SYS_SSO">Single-Sign-On</string>
   <string name="SYS_SSO_SAML">Single-Sign-On mit SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML2.0 aktivieren</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Diese Einstellung macht Admidio zu einem SAML 2.0 Identity Provider (idP) für Single-Sign-On, der es anderen Webanwendungen ermöglicht, Benutzer gegenüber der Admidio-Benutzerliste zu authentifizieren.</string>

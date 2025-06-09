@@ -73,16 +73,16 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n;
         $this->preferenceTabs = array(
-            // === 1) Common ===
+            // === 1) System ===
             array(
-                'key'    => 'common',
-                'label'  => $gL10n->get('SYS_COMMON'),
+                'key'    => 'system',
+                'label'  => $gL10n->get('SYS_SYSTEM'),
                 'panels' => array(
-                    array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON_SETTINGS'),        'icon'=>'bi-gear-fill',                     'subcards'=>false),
+                    array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false),
                     array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
                     array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
                     array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
-                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),     'icon'=>'bi-info-circle-fill',              'subcards'=>true),
+                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
                 ),
             ),
         
