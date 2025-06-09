@@ -532,6 +532,7 @@
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
   <string name="SYS_DQUOTE">Anführungszeichen (\")</string>
   <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
+  <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Dropdown-Listenfeld (Mehrfachauswahl)</string>
   <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
   <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Datenbank-Backup herunterladen</string>
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
