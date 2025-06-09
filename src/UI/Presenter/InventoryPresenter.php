@@ -101,7 +101,7 @@ class InventoryPresenter extends PagePresenter
 
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to view inventory history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items,inventory_item_data');
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_items,inventory_item_data,inventory_item_lend_data');
            
             // show link to create new item
             $this->addPageFunctionsMenuItem(
@@ -833,7 +833,7 @@ class InventoryPresenter extends PagePresenter
             // Append admin action column for HTML mode
             if ($mode === 'html') {
                 $historyButton = ChangelogService::displayHistoryButtonTable(
-                    'inventory_items,inventory_item_data',
+                    'inventory_items,inventory_item_data,inventory_item_lend_data',
                     $gCurrentUser->isAdministratorInventory(),
                     ['uuid' => $item['ini_uuid']]
                 );
@@ -850,6 +850,26 @@ class InventoryPresenter extends PagePresenter
                             'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                         );
+
+                        // Add lend action
+                        if (!$item['ini_former']) {
+                            // check if the item is in inventory
+                            if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
+                                $itemLended = false;
+                                $icon ='bi bi-box-arrow-right';
+                                $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_LEND');
+                            }
+                            else {
+                                $itemLended = true;
+                                $icon = 'bi bi-box-arrow-in-left';
+                                $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_UNLEND');
+                            }
+                            $rowValues['actions'][] = array(
+                                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_lend', 'item_uuid' => $item['ini_uuid'], 'item_lended' => $itemLended)),
+                                'icon' => $icon,
+                                'tooltip' =>$tooltip
+                            );
+                        }
 
                         // Add copy action
                         $rowValues['actions'][] = array(
@@ -1110,7 +1130,7 @@ class InventoryPresenter extends PagePresenter
 
             // Append admin action column
             $historyButton = ChangelogService::displayHistoryButtonTable(
-                'inventory_items,inventory_item_data',
+                'inventory_items,inventory_item_data,inventory_item_lend_data',
                 $gCurrentUser->isAdministratorInventory(),
                 ['uuid' => $item['ini_uuid']]
             );
@@ -1127,6 +1147,26 @@ class InventoryPresenter extends PagePresenter
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                     );
+
+                    // Add lend action
+                    if (!$item['ini_former']) {
+                        // check if the item is in inventory
+                        if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
+                            $itemLended = false;
+                            $icon ='bi bi-box-arrow-right';
+                            $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_LEND');
+                        }
+                        else {
+                            $itemLended = true;
+                            $icon = 'bi bi-box-arrow-in-left';
+                            $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_UNLEND');
+                        }
+                        $rowValues['actions'][] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_lend', 'item_uuid' => $item['ini_uuid'], 'item_lended' => $itemLended)),
+                            'icon' => $icon,
+                            'tooltip' =>$tooltip
+                        );
+                    }
 
                     // Add copy action
                     $rowValues['actions'][] = array(

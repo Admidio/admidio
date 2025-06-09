@@ -825,12 +825,15 @@
   <string name="SYS_INVENTORY_ITEM_DELETED">Gegenstand gelöscht</string>
   <string name="SYS_INVENTORY_ITEM_EDIT">Gegenstand ändern</string>
   <string name="SYS_INVENTORY_ITEM_EDITED">Gegenstand erfolgreich geändert</string>
+  <string name="SYS_INVENTORY_ITEM_LEND">Gegenstand ausleihen</string>
+  <string name="SYS_INVENTORY_ITEM_LEND_DATA">Ausleihdaten</string>
   <string name="SYS_INVENTORY_ITEM_MADE_FORMER">Gegenstand ausgesondert</string>
   <string name="SYS_INVENTORY_ITEM_MAKE_FORMER">Gegenstand aussondern</string>
   <string name="SYS_INVENTORY_ITEM_MAKE_FORMER_DESC">Sie können den #VAR1_BOLD#. Dies hat den Vorteil, dass die Daten erhalten bleiben und Sie später immer wieder sehen können, wer diesen Gegenstand ausgeliehen hat.</string>
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER">Aussondern rückgängig machen</string>
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM">Möchten Sie die Aussonderung des Gegenstandes wirklich rückgängig machen?</string>
   <string name="SYS_INVENTORY_ITEM_UNDONE_FORMER">Aussonderung des Gegenstandes rückgängig gemacht</string>
+  <string name="SYS_INVENTORY_ITEM_UNLEND">Gegenstand zurückgeben</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Anzahl der Gegenstände pro Seite</string>
   <string name="SYS_INVENTORY_ITEMFIELD">Eigenschaftsfeld</string>
   <string name="SYS_INVENTORY_ITEMFIELD_CREATE">Eigenschaftsfeld anlegen</string>

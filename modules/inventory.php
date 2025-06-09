@@ -38,7 +38,7 @@ try {
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'sequence', 'item_edit','item_edit_lend', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
     $getiniUUID = admFuncVariableIsValid($_GET, 'item_uuid', 'uuid');
@@ -50,7 +50,7 @@ try {
     $getFormer = admFuncVariableIsValid($_GET, 'item_former', 'bool', array('defaultValue' => false));
     $getRedirectToImport = admFuncVariableIsValid($_GET, 'redirect_to_import', 'bool', array('defaultValue' => false));
     $getItemUUIDs = admFuncVariableIsValid($_GET, 'uuids', 'array', array('defaultValue' => array()));
-    
+    $getLended = admFuncVariableIsValid($_GET, 'item_lended', 'bool', array('defaultValue' => false));
 
     // check if module is active
     if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
@@ -151,6 +151,21 @@ try {
             $item = new InventoryItemPresenter('adm_item_edit');
             $item->setHeadline($headline);
             $item->createEditForm($getiniUUID, $getCopy);
+            $item->show();
+            break;
+
+        case 'item_edit_lend':
+            // set headline of the script
+            if ($getLended) {
+                $headline = $gL10n->get('SYS_INVENTORY_ITEM_UNLEND');
+            }
+            else {
+                $headline = $gL10n->get('SYS_INVENTORY_ITEM_LEND');
+            }
+            $gNavigation->addUrl(CURRENT_URL, $headline);
+            $item = new InventoryItemPresenter('adm_item_edit_lend');
+            $item->setHeadline($headline);
+            $item->createEditLendForm($getiniUUID);
             $item->show();
             break;
 

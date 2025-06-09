@@ -66,8 +66,8 @@ class ItemService
         $this->itemRessource->undoItemFormer();
 
         // Send notification to all users
-         $this->itemRessource->sendNotification();
-        }
+        $this->itemRessource->sendNotification();
+    }
 
     /**
      * Delete the current profile field form into the database.

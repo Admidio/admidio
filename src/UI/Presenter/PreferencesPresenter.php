@@ -421,7 +421,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
                         'id' => 'content_modules',
-                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_items', 'inventory_item_data', 'links', 'others')
+                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_items', 'inventory_item_data', 'inventory_item_lend_data', 'links', 'others')
                     ),
                     array(
                         'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),

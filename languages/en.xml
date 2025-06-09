@@ -825,12 +825,15 @@
   <string name="SYS_INVENTORY_ITEM_DELETED">Item successfully deleted</string>
   <string name="SYS_INVENTORY_ITEM_EDIT">Change the item</string>
   <string name="SYS_INVENTORY_ITEM_EDITED">Item successfully changed</string>
+  <string name="SYS_INVENTORY_ITEM_LEND">Lend item</string>
+  <string name="SYS_INVENTORY_ITEM_LEND_DATA">Item lend data</string>
   <string name="SYS_INVENTORY_ITEM_MADE_FORMER">Item was made to former</string>
   <string name="SYS_INVENTORY_ITEM_MAKE_FORMER">Make item former</string>
   <string name="SYS_INVENTORY_ITEM_MAKE_FORMER_DESC">You can #VAR1_BOLD#. This has the advantage that the data is preserved and you can later always see who has borrowed this item.</string>
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER">Undo made to former</string>
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM">Do you really want to undo the disposal of the item?</string>
   <string name="SYS_INVENTORY_ITEM_UNDONE_FORMER">Undone item made to former</string>
+  <string name="SYS_INVENTORY_ITEM_UNLEND">Return item</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Number of items per page</string>
   <string name="SYS_INVENTORY_ITEMFIELD">Item field</string>
   <string name="SYS_INVENTORY_ITEMFIELD_CREATE">Create new item field</string>
@@ -872,7 +875,7 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items loaned to you:</string>
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON">Received back on</string>
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESC">The date the item was returned to the keeper</string>
-  <string name="SYS_INVENTORY_RECEIVED_ON">Lent on</string>
+  <string name="SYS_INVENTORY_RECEIVED_ON">Lend on</string>
   <string name="SYS_INVENTORY_RECEIVED_ON_DESC">The lending date of the item to the last recipient</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE">Delete selection</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">If you select #VAR1_BOLD#, the items along with their associated records will be irrevocably removed from the database, and it will not be possible to view the data of these items later.</string>

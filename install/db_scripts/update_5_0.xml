@@ -400,7 +400,21 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1240">ALTER TABLE %PREFIX%_inventory_item_data
         ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;</step>
-    <step id="1250">CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_items (
+    <step id="1250">CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_item_lend_data (
+            inl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            inl_inf_id                  integer unsigned    NOT NULL,
+            inl_ini_id                  integer unsigned    NOT NULL,
+            inl_value                   varchar(4000),
+            PRIMARY KEY (inl_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1260">CREATE UNIQUE INDEX %PREFIX%_idx_inl_inf_ini_id ON %PREFIX%_inventory_item_lend_data (inl_inf_id, inl_ini_id);</step>
+    <step id="1270">ALTER TABLE %PREFIX%_inventory_item_lend_data
+        ADD CONSTRAINT %PREFIX%_fk_inl_inf         FOREIGN KEY (inl_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_inl_ini         FOREIGN KEY (inl_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;</step>
+    <step id="1280">CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_items (
             ini_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
             ini_uuid                    varchar(36)         NOT NULL,
             ini_cat_id                  integer unsigned    NOT NULL,
@@ -415,22 +429,22 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci;</step>
-    <step id="1260">CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);</step>
-    <step id="1270">ALTER TABLE %PREFIX%_inventory_items
+    <step id="1290">CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);</step>
+    <step id="1300">ALTER TABLE %PREFIX%_inventory_items
         ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
-    <step id="1280">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory_admin boolean NOT NULL DEFAULT false</step>
-    <step id="1290">UPDATE %PREFIX%_roles SET rol_inventory_admin = true WHERE rol_administrator = true</step>
-    <step id="1300">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+    <step id="1310">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory_admin boolean NOT NULL DEFAULT false</step>
+    <step id="1320">UPDATE %PREFIX%_roles SET rol_inventory_admin = true WHERE rol_administrator = true</step>
+    <step id="1330">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES ('MODULE', 'SYS_INVENTORY', 'INVENTORY',  '5.0.0', 0)</step>
-    <step id="1310">UPDATE %PREFIX%_menu SET men_order = men_order + 1 WHERE men_men_id_parent = 1 AND men_order >= 8;</step>
-    <step id="1320">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+    <step id="1340">UPDATE %PREFIX%_menu SET men_order = men_order + 1 WHERE men_men_id_parent = 1 AND men_order >= 8;</step>
+    <step id="1350">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'INVENTORY'), 1, %UUID%, false, 8, true, 'inventory', '/modules/inventory.php', 'box-seam-fill', 'SYS_INVENTORY', 'SYS_INVENTORY_DESC')</step>
-    <step id="1330">UpdateStepsCode::updateStep50InventoryCategories</step>
+    <step id="1360">UpdateStepsCode::updateStep50InventoryCategories</step>
    <!-- disable module when updating an existing admidio instance -->
-    <step id="1340">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 WHERE prf_name = 'inventory_module_enabled'</step>
-    <step id="1350">UpdateStepsCode::updateStep50AddInventoryFields</step>
+    <step id="1370">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 WHERE prf_name = 'inventory_module_enabled'</step>
+    <step id="1380">UpdateStepsCode::updateStep50AddInventoryFields</step>
 
     <step>stop</step>
 </update>

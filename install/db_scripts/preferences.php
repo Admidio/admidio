@@ -84,6 +84,7 @@ $defaultOrgPreferences = array(
     'changelog_table_forum_posts' => '0',
     'changelog_table_inventory_fields' => '0',
     'changelog_table_inventory_items' => '0',
+    'changelog_table_inventory_item_lend_data' => '0',
     'changelog_table_saml_clients' => '0',
     'changelog_table_oidc_clients' => '0',
     'changelog_table_others' => '0',

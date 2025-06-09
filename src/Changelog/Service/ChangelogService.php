@@ -18,6 +18,7 @@ use Admidio\Forum\Entity\Post;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemData;
+use Admidio\Inventory\Entity\ItemLendData;
 
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -189,6 +190,7 @@ class ChangelogService {
             'inventory_fields' => 'SYS_INVENTORY_ITEMFIELDS',
             'inventory_items' => 'SYS_INVENTORY_ITEMS',
             'inventory_item_data' => 'SYS_INVENTORY_ITEM_DATA',
+            'inventory_item_lend_data' => 'SYS_INVENTORY_ITEM_LEND_DATA',
 
             'organizations' => 'SYS_ORGANIZATION',
             'menu' => 'SYS_MENU_ITEM',
@@ -322,6 +324,8 @@ class ChangelogService {
                 return new Item($gDb);
             case 'inventory_item_data':
                 return new ItemData($gDb);
+            case 'inventory_item_lend_data':
+                return new ItemLendData($gDb);
             default:
                 return null;
         }
@@ -525,6 +529,13 @@ class ChangelogService {
             'ind_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
             'ind_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
             'ind_value' =>                 'SYS_VALUE',  
+            'inl_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
+            'inl_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
+            'inl_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
+            'inl_value_url' =>             array('name' => 'SYS_VALUE', 'type' => 'URL'),
+            'inl_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
+            'inl_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
+            'inl_value' =>                 'SYS_VALUE',  
 
             'lnk_name' =>                  'SYS_LINK_NAME',
             'lnk_description' =>           'SYS_DESCRIPTION',
@@ -711,6 +722,8 @@ class ChangelogService {
                 case 'inventory_item_data' : // Fall through
                 case 'inventory_items' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $uuid)); break;
+                case 'inventory_item_lend_data' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_lend', 'item_uuid' => $uuid)); break;
                 case 'links' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
                 case 'lists' :

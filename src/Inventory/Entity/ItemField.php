@@ -69,9 +69,15 @@ class ItemField extends Entity
                    AND inf_sequence > ? -- $this->getValue(\'inf_sequence\')';
         $this->db->queryPrepared($sql, array($gCurrentOrgId, (int)$this->getValue('inf_sequence')));
 
+        // delete all data of this field in the item data table
         $infId = (int)$this->getValue('inf_id');
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . '
                  WHERE ind_inf_id = ? -- $usfId';
+        $this->db->queryPrepared($sql, array($infId));
+        
+        // delete all data of this field in the item lend data table
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
+                 WHERE inl_inf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($infId));
 
         $return = parent::delete();

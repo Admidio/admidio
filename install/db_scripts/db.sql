@@ -11,50 +11,51 @@
 /*==============================================================*/
 /* Table Cleanup                                                */
 /*==============================================================*/
-DROP TABLE IF EXISTS %PREFIX%_announcements        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_auto_login           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_category_report      CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_components           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_events               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_forum_topics         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_forum_posts          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_links                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_members              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_attachments CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_content     CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_recipients  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_photos               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_preferences          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_registrations        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_role_dependencies    CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles_rights         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles_rights_data    CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_list_columns         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_lists                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_log_changes          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_rooms                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_sessions             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_texts                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_relations       CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_relation_types  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_data            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_fields          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_categories           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_users                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_organizations        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_ids                  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_fields     CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_item_data  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_items      CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_saml_clients         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_sso_keys             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_announcements             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_auto_login                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_category_report           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_components                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_events                    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_files                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_folders                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_guestbook_comments        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_guestbook                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_topics              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_posts               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_links                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_members                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages                  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_attachments      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_content          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_recipients       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_photos                    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_preferences               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_registrations             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_role_dependencies         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles_rights              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles_rights_data         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_list_columns              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_lists                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_log_changes               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_rooms                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sessions                  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_texts                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_relations            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_relation_types       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_data                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_fields               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_categories                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_users                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_organizations             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_ids                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_menu                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_fields          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_data       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_lend_data  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_items           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_saml_clients              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sso_keys                  CASCADE;
 
 
 
@@ -1058,6 +1059,23 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
 
 /*==============================================================*/
+/* Table: adm_inventory_item_lend_data                          */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_item_lend_data
+(
+    inl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inl_inf_id                  integer unsigned    NOT NULL,
+    inl_ini_id                  integer unsigned    NOT NULL,
+    inl_value                   varchar(4000),
+    PRIMARY KEY (inl_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_inl_inf_ini_id ON %PREFIX%_inventory_item_lend_data (inl_inf_id, inl_ini_id);
+
+/*==============================================================*/
 /* Table: adm_inventory_items                                   */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_inventory_items
@@ -1318,6 +1336,10 @@ ALTER TABLE %PREFIX%_inventory_fields
 ALTER TABLE %PREFIX%_inventory_item_data
     ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_inventory_item_lend_data
+    ADD CONSTRAINT %PREFIX%_fk_inl_inf         FOREIGN KEY (inl_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_inl_ini         FOREIGN KEY (inl_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_inventory_items
     ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,

@@ -158,6 +158,7 @@ const TBL_USER_RELATION_TYPES = TABLE_PREFIX . '_user_relation_types';
 const TBL_INVENTORY_ITEM_DATA = TABLE_PREFIX . '_inventory_item_data';
 const TBL_INVENTORY_FIELDS = TABLE_PREFIX . '_inventory_fields';
 const TBL_INVENTORY_ITEMS = TABLE_PREFIX . '_inventory_items';
+const TBL_INVENTORY_ITEM_LEND_DATA = TABLE_PREFIX . '_inventory_item_lend_data';
 
 // #####################
 // ###  OTHER STUFF  ###

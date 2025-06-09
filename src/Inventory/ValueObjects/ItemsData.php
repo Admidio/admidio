@@ -13,6 +13,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Entity\ItemLendData;
 use Admidio\Categories\Entity\Category;
 
 // PHP namespaces
@@ -41,6 +42,7 @@ class ItemsData
     private bool $mItemImported = false;                   ///< flag if a item was imported
     private bool $showFormerItems = true;               ///< if true, than former items will be showed
     private int $organizationId = -1;                ///< ID of the organization for which the item field structure should be read
+    private array $lendFieldNames = array('LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');  ///< array with the internal field names of the lend fields
 
     /**
      * @var Database An object of the class Database for communication with the database
@@ -70,11 +72,14 @@ class ItemsData
      * @var array<int,ItemData> Array with all user data objects
      */
     protected array $mItemData = array();
-
-    protected array $mChangedItemData = array();  ///< Array with all changed item data objects for notification
-
-    protected array $mItems = array();  ///< Array with all item objects
-
+    /**
+     * @var array<int,ItemData> Array with all changed item data objects for notification
+     */
+    protected array $mChangedItemData = array();
+    /**
+     * @var array<int,Item> Array with all item objects
+     */
+    protected array $mItems = array();
     /**
      * @var int UserId of the current user of this object
      */
@@ -158,6 +163,7 @@ class ItemsData
 
     /**
      * Reads the item data of all item fields out of database table @b adm_inventory_manager_data
+     * and @b adm_inventory_manager_items_lend
      * and adds an object for each field data to the @b mItemData array.
      * If profile fields structure wasn't read, this will be done before.
      * 
@@ -194,7 +200,20 @@ class ItemsData
                 }
                 $this->mItemData[$row['ind_inf_id']]->setArray($row);
             }
-        } else {
+
+            // read all item lend data
+            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
+                    INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+                        ON inf_id = inl_inf_id
+                    WHERE inl_ini_id = ?;';
+            $itemLendStatement = $this->mDb->queryPrepared($sql, array($itemId));
+            
+            while ($row = $itemLendStatement->fetch()) {
+                if (!array_key_exists($row['inl_inf_id'], $this->mItemData)) {
+                    $this->mItemData[$row['inl_inf_id']] = new ItemLendData($this->mDb, $this, $row['inl_inf_id']);
+                }
+                $this->mItemData[$row['inl_inf_id']]->setArray($row);
+            }        } else {
             $this->mItemCreated = true;
         }
     }
@@ -320,7 +339,7 @@ class ItemsData
     {
         return $this->mItemData;
     }
-
+    
     /**
      * Returns the value of a column from the table adm_inventory_fields for a given internal field name
      * 
@@ -637,7 +656,12 @@ class ItemsData
                 }
             }
             elseif (array_key_exists($this->mItemFields[$fieldNameIntern]->getValue('inf_id'), $this->mItemData)) {
-                $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('ind_value', $format);
+                $prefix = 'ind';
+                if ($this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')] instanceof ItemLendData) {
+                    // if field is a lend field then use 'inl_' as prefix
+                    $prefix = 'inl';
+                }
+                $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue($prefix . '_value', $format);
 
                 if ($format === 'database') {
                     return $value;
@@ -759,11 +783,16 @@ class ItemsData
         global $gSettingsManager;
 
         $infId = $this->mItemFields[$fieldNameIntern]->getValue('inf_id');
+        $oldFieldValue = '';
+        // default prefix is 'ind_' for item data
+        // if field is a lend field then use 'inl_' as prefix
+        $prefix = 'ind';
+        if (in_array($fieldNameIntern, $this->lendFieldNames)) {
+            $prefix = 'inl';
+        }
 
-        if (!array_key_exists($infId, $this->mItemData)) {
-            $oldFieldValue = '';
-        } else {
-            $oldFieldValue = $this->mItemData[$infId]->getValue('ind_value');
+        if (array_key_exists($infId, $this->mItemData)) {
+            $oldFieldValue = $this->mItemData[$infId]->getValue($prefix .'_value');
         }
 
         // check if new value only contains spaces
@@ -806,13 +835,18 @@ class ItemsData
             return true;
         }
 
+        // if item data object for this field does not exist then create it
         if (!array_key_exists($infId, $this->mItemData)) {
-            $this->mItemData[$infId] = new ItemData($this->mDb, $this);
-            $this->mItemData[$infId]->setValue('ind_inf_id', $infId);
-            $this->mItemData[$infId]->setValue('ind_ini_id', $this->mItemId);
+            if (in_array($fieldNameIntern, $this->lendFieldNames)) {
+                $this->mItemData[$infId] = new ItemLendData($this->mDb, $this);
+            } else {
+                $this->mItemData[$infId] = new ItemData($this->mDb, $this);
+            }
+            $this->mItemData[$infId]->setValue($prefix . '_inf_id', $infId);
+            $this->mItemData[$infId]->setValue($prefix . '_ini_id', $this->mItemId);
         }
-
-        return $this->mItemData[$infId]->setValue('ind_value', $newValue);
+        
+        return $this->mItemData[$infId]->setValue($prefix . '_value', $newValue);
     }
 
     /**
@@ -866,9 +900,13 @@ class ItemsData
         $item = new Item($this->mDb, $this, $this->mItemId);
         $item->logDeletion();
 
+        // delete all item data
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
-
+        // delete all item lend data
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . ' WHERE inl_ini_id = ?;';
+        $this->mDb->queryPrepared($sql, array($this->mItemId));
+        // delete item
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
         $this->mDb->queryPrepared($sql, array($this->mItemId, $this->organizationId));
 
@@ -917,14 +955,15 @@ class ItemsData
         global $gCurrentUser;
         $this->mDb->startTransaction();
 
+        // safe item data
         foreach ($this->mItemData as $value) {
             if ($value->hasColumnsValueChanged()) {
                 $this->columnsValueChanged = true;
                 $this->mItemChanged = true;
             }
-
+            
             // dont safe CATEGORY field to items data
-            if ($value->getValue('ind_inf_id') === 2) {
+            if ($value instanceof ItemData && $value->getValue('ind_inf_id') === 2) {
                 $category = new Category($this->mDb);
                 $category->readDataByUuid($value->getValue('ind_value'));
                 $catID = $category->getValue('cat_id');
@@ -933,9 +972,17 @@ class ItemsData
                 $item->setValue('ini_cat_id', $catID);
                 $value->delete();
             }
-            else {
+            elseif ($value instanceof ItemData) {
                 // if value exists and new value is empty then delete entry
                 if ($value->getValue('ind_id') > 0 && $value->getValue('ind_value') === '') {
+                    $value->delete();
+                } else {
+                    $value->save();
+                }
+            }
+            elseif ($value instanceof ItemLendData) {
+                // if value exists and new value is empty then delete entry
+                if ($value->getValue('inl_id') > 0 && $value->getValue('inl_value') === '') {
                     $value->delete();
                 } else {
                     $value->save();

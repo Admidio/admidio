@@ -1,7 +1,3 @@
-{* {if strlen($infoAlert) > 0}
-    <div class="alert alert-info" role="alert"><i class="bi bi-info-circle-fill"></i>{$infoAlert}</div>
-{/if} *}
-
 <div class="table-responsive">
     <div id="adm_inventory_table_select_actions" class="mb-3">
         <button id="delete-selected" class="btn btn-primary" style="display: none;">
