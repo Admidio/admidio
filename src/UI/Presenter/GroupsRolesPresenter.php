@@ -219,7 +219,7 @@ class GroupsRolesPresenter extends PagePresenter
                     $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                 }
 
-                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'], 'show_former_members' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
+                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'], 'mem_show_filter' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
             }
 
             if ($row['num_leader'] > 0) {

@@ -8,7 +8,7 @@
   <string name="PLG_BIRTHDAY_NO_MEMBERS">Ingen medlemmer har fødselsdag i dag.</string>
   <string name="PLG_BIRTHDAY_ONE_MEMBER">I dag har et medlem fødselsdag.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# ble #VAR3# år gammel #VAR2# dager før, på #VAR4#</string>
-  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# hadde fødselsdag for #VAR2# dager siden</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# hadde fødselsdag for  #VAR2# dager siden</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# blir #VAR2# i dag</string>
   <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# har fødselsdag i dag</string>
   <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# blir #VAR3# i morgen, den #VAR4#</string>

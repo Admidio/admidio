@@ -204,6 +204,7 @@
   <string name="SYS_A_TO_Z">A to Z</string>
   <string name="SYS_ABORT">Cancel</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
+  <string name="SYS_ACTIVE_CONTACTS">Active contacts</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Active and former members</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Active and former</string>
   <string name="SYS_ACTIVE_MEMBERS">Active Members</string>
@@ -239,7 +240,9 @@
   <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be  inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors and members for this reason.</string>
   <string name="SYS_ALL">All</string>
+  <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Full time</string>
+  <string name="SYS_ALL_MEMBERS">All members</string>
   <string name="SYS_ALL_ORGANIZATIONS">All organizations</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, web link, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">All others</string>
@@ -357,7 +360,6 @@
   <string name="SYS_COMMA_SEPARATED_FILE">Comma-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
   <string name="SYS_COMMON">General</string>
-  <string name="SYS_COMMON_SETTINGS">General settings</string>
   <string name="SYS_COMMUNICATION">Communication</string>
   <string name="SYS_COMPLEMENT">Complement</string>
   <string name="SYS_CONDITION">Condition</string>
@@ -377,6 +379,8 @@
   <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">If the new contact cannot be assigned to an existing contact with a similar name, you can create a new contact and assign the appropriate roles to it.</string>
   <string name="SYS_CONTACT_SIMILAR_NAME">A contact with a similar name was found.</string>
   <string name="SYS_CONTACTS">Contacts</string>
+  <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>
+  <string name="SYS_CONTACTS_PER_PAGE">Number of contacts per page</string>
   <string name="SYS_CONTENT">Content</string>
   <string name="SYS_CONTENTS">Contents</string>
   <string name="SYS_CONTRIBUTION">Contribution</string>
@@ -427,8 +431,10 @@
   <string name="SYS_CURRENT_DATABASE_VERSION">Current database version</string>
   <string name="SYS_CURRENT_EVENTS_OF_ORGA">Current events of organizations #VAR1#</string>
   <string name="SYS_CURRENT_MEMBER">Current member</string>
+  <string name="SYS_CURRENT_ORGANIZATION">Current organization</string>
   <string name="SYS_CURRENT_PASSWORD">Current password</string>
   <string name="SYS_CURRENT_PROFILE_PICTURE">Current profile picture</string>
+  <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Current role memberships</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, web links ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
@@ -702,6 +708,9 @@
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
+  <string name="SYS_FORMER_CONTACTS">Former contacts</string>
+  <string name="SYS_FORMER_MEMBER">Former member</string>
+  <string name="SYS_FORMER_MEMBER_OF_ROLE_GROUP">Former member of role/group #VAR1#</string>
   <string name="SYS_FORMER_MEMBERS">Former members</string>
   <string name="SYS_FORMER_PL">Former</string>
   <string name="SYS_FORMER_ROLE_MEMBERSHIP">Former role memberships</string>
@@ -727,6 +736,7 @@
   <string name="SYS_GEN_RANDOM_EXCEPTION">The program can not generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">The program expects a string with at least 2 different characters.</string>
   <string name="SYS_GREETING_CARD">Greeting card</string>
+  <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
@@ -874,10 +884,10 @@
   <string name="SYS_MEMBER">Member</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Member assignment</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
+  <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBERS">Members</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Members between #VAR1# and #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">One of the configurations specified here can be used to display the members administration. The columns of the selected list configuration are then displayed in the members administration.</string>
-  <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>
-  <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Current role memberships</string>
   <string name="SYS_MEMBERS_PER_PAGE">Members displayed per page</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Number of members listed in the HTML view. More members can be listed by using the pagination function. This value won\'t affect print preview and export functionality (Default: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Found #VAR1# members with a similar name.</string>
@@ -970,6 +980,7 @@
   <string name="SYS_NONE">None</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
+  <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not member of any organization</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Not member of organization #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Please use a valid number as condition for field #VAR1_BOLD#.</string>
   <string name="SYS_NOT_REGISTERED">Not registered</string>
@@ -1007,6 +1018,7 @@
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
   <string name="SYS_ORGANIZATION">Organization</string>
+  <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
   <string name="SYS_OTHER_TABLES">Other tables (third-party modules; only visible to administrators)</string>
   <string name="SYS_OVERHANG">Overhang</string>
@@ -1287,7 +1299,7 @@
   <string name="SYS_SETTINGS">Preferences</string>
   <string name="SYS_SHOW_ALL">Show all</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional show all contacts</string>
-  <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, former contacts and contacts of other organizations can optionally be displayed in the member administration in addition to the active contacts of the current organization. Otherwise, only active contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
@@ -1427,7 +1439,7 @@
   <string name="SYS_SSO_OAUTH_KEYS">OIDC (SSO) keys</string>
   <string name="SYS_SSO_X509_CERTIFICATE">x509 Client Certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">SAML Messages are cryptographically signed to prevent security attacks. This certificate is provided by the client and must be entered / copied exactly as given by the client. Otherwise the SAML communication will fail and SSO login will not be possible.</string>
-  <string name="SYS_SSO">Single-Sign-On (SAML 2.0, OpenId Connect)</string>
+  <string name="SYS_SSO">Single-Sign-On</string>
   <string name="SYS_SSO_SAML">Single-Sign-On with SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED">Enable Single-Sign-On via SAML2.0</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">This setting turns Admidio into a SAML 2.0 identity provider (idP) for single-sign-on, which allows other web applications to authenticate users agains the Admidio user list.</string>
@@ -1599,7 +1611,6 @@
   <string name="SYS_USERNAME_DESCRIPTION">You can log in to the system with this name.\nThe name must be unique in the system. If your desired name is already taken, try combinations such as Andi78 or SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or E-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
-  <string name="SYS_CONTACTS_PER_PAGE">Number of contacts per page</string>
   <string name="SYS_USING_CURRENT_VERSION">You are using a current #VAR1#version of Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

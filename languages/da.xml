@@ -345,9 +345,9 @@
   <string name="SYS_COLUMN_SELECTION">Kolonne vælger</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Vælger de kolonner, der skal vises på listen.\n\n Inaktive roller er markeret med (*).</string>
   <string name="SYS_COLOR_PRIMARY">Primær farve</string>
-  <string name="SYS_COLOR_PRIMARY_DESC">Hovedfarven bruges til admidio. Titellinjen vil bruge denne farve såvel som overskrifter.</string>
+  <string name="SYS_COLOR_PRIMARY_DESC">Hovedfarven brugt til Admidio. Titellinjen vil bruge denne farve såvel som overskrifter.</string>
   <string name="SYS_COLOR_SECONDARY">Sekundær farve</string>
-  <string name="SYS_COLOR_SECONDARY_DESC">Den sekundære farve, der bruges til admidio. Sidebjælken bruger denne farve såvel som præferencesektionerne.</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">Den sekundære farve, der bruges til Admidio. Sidebjælken bruger denne farve såvel som præferencesektionerne.</string>
   <string name="SYS_COMPACT">Kompakt</string>
   <string name="SYS_CONFIGURATIONS">Konfigurationer</string>
   <string name="SYS_CONFIGURATIONS_HEADER">Et vilkårligt antal konfigurationer kan oprettes her for kategorirapporten. I skærmvisningen bruges en af disse konfigurationer som basis for visningen i hvert enkelt tilfælde via \"Vælg konfiguration\".</string>
@@ -355,6 +355,8 @@
   <string name="SYS_COMMA_SEPARATED_FILE">Kommasepareret fil (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Generel</string>
+  <string name="SYS_COMMON_SETTINGS">Generelle indstillinger</string>
+  <string name="SYS_COMMUNICATION">Kommunikation</string>
   <string name="SYS_COMPLEMENT">Supplere</string>
   <string name="SYS_CONDITION">Betingelse</string>
   <string name="SYS_CONFIGURATION">Liste indstilling</string>
@@ -374,6 +376,7 @@
   <string name="SYS_CONTACT_SIMILAR_NAME">En kontakt med et lignende navn blev fundet.</string>
   <string name="SYS_CONTACTS">Kontaktpersoner</string>
   <string name="SYS_CONTENT">Indhold</string>
+  <string name="SYS_CONTENTS">Indhold</string>
   <string name="SYS_CONTRIBUTION">Kontingent</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Kontingent periode</string>
   <string name="SYS_CONVERSATION_PARTNER">‎Samtalepartner‎</string>
@@ -1389,7 +1392,7 @@
   <string name="SYS_SSO_CLIENT_DELETE">Slet SSO-klient</string>
   <string name="SYS_SSO_CLIENT_ADD_SAML">Ny SAML 2.0-klient</string>
   <string name="SYS_SSO_CLIENT_ADMIN">Administration af klienter med enkeltlogon (SAML 2.0, OIDC)</string>
-  <string name="SYS_SSO_CLIENT_ADMIN_DESC">Admidio kan bruges som en \"id-udbyder\" til single-sign-on ved hjælp af SAML 2.0- eller OIDC-protokollerne. Det betyder, at andre webapplikationer (\"klienter\") kan bruge Admidios brugerkonti til autentificering og autorisation. Hver klient skal registreres her, og klienten skal også konfigureres til SSO med admidio. Når en bruger ønsker at logge ind på en klientapplikation, i stedet for klientens login-skærm, bliver de omdirigeret til Admidio. Hvis brugeren allerede er logget ind i Admidio, returneres den indloggede bruger til klienten og får adgang. Ellers kan brugeren logge ind på Admidio og bliver derefter omdirigeret tilbage til klientapplikationen.</string>
+  <string name="SYS_SSO_CLIENT_ADMIN_DESC">Admidio kan bruges som en \"ID-udbyder\" til single-sign-on ved hjælp af SAML 2.0- eller OIDC-protokollerne. Det betyder, at andre webapplikationer (\"klienter\") kan bruge Admidios brugerkonti til autentificering og autorisation. Hver klient skal registreres her, og klienten skal også konfigureres til SSO med Admidio. Når en bruger ønsker at logge ind på en klientapplikation, i stedet for klientens login-skærm, bliver de omdirigeret til Admidio. Hvis brugeren allerede er logget ind i Admidio, returneres den indloggede bruger til klienten og får adgang. Ellers kan brugeren logge ind på Admidio og bliver derefter omdirigeret tilbage til klientapplikationen.</string>
   <string name="SYS_SSO_CLIENT_NAME">Kundens navn</string>
   <string name="SYS_SSO_CLIENT_NAME_DESC">Kundens navn, der kan læses af mennesker. Dette er en rent beskrivende attribut og vil ikke blive brugt til at identificere klienter.</string>
   <string name="SYS_SSO_CLIENT_ID">Klient-id</string>
@@ -1414,7 +1417,7 @@
   <string name="SYS_SSO_AUTO_SETUP">Automatisk opsætning fra metadata</string>
   <string name="SYS_SSO_LOAD_METADATA">Indlæs klientmetadata</string>
   <string name="SYS_SSO_METADATA_URL">URL-adresse til metadata (valgfrit)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Nogle klienter tilbyder en metadatafil med alle nødvendige indstillinger. Den automatiske hentning af denne metadata-URL fungerer kun, hvis URL\'en er tilgængelig for admidio-serveren.</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Nogle klienter tilbyder en metadatafil med alle nødvendige indstillinger. Den automatiske hentning af denne metadata-URL fungerer kun, hvis URL\'en er tilgængelig for Admidio-serveren.</string>
   <string name="SYS_SSO_ROLES">Begræns adgangen til roller</string>
   <string name="SYS_SSO_ROLES_DESC">Det er kun de valgte roller, der har tilladelse til at logge ind på klienten via enkeltlogon. Hvis den er tom, kan alle gyldige Admidio-brugere logge ind.</string>
   <string name="SYS_SSO_NO_SAML_CLIENTS_FOUND">Ingen SAML-klienter (tjenesteudbydere) konfigureret!</string>
@@ -1425,7 +1428,7 @@
   <string name="SYS_SSO">Enkeltlogon (SAML 2.0, OpenId Connect)</string>
   <string name="SYS_SSO_SAML">Enkeltlogon med SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED">Aktiver enkeltlogon via SAML2.0</string>
-  <string name="SYS_SSO_SAML_ENABLED_DESC">Denne indstilling gør Admidio til en SAML 2.0-identitetsudbyder (idP) til enkeltlogon, som gør det muligt for andre webapplikationer at godkende brugere mod admidio-brugerlisten.</string>
+  <string name="SYS_SSO_SAML_ENABLED_DESC">Denne indstilling gør Admidio til en SAML 2.0-identitetsudbyder (idP) til enkeltlogon, som gør det muligt for andre webapplikationer at godkende brugere mod Admidio-brugerlisten.</string>
   <string name="SYS_SSO_SAML_ENTITY_ID">SAML-enheds-id</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">Det entydige id for SAML for denne Admidio-instans. Dette er typisk URL-adressen til din installation. Klienten skal konfigureres med nøjagtig det samme enheds-id, ellers fungerer login ikke.</string>
   <string name="SYS_SSO_STATIC_SETTINGS">IdP-metadata til klientopsætning</string>
@@ -1486,7 +1489,7 @@
   <string name="SYS_SSO_NAME_PROPERTIES">Navn og egenskaber for klient (tjenesteudbyder)</string>
   <string name="SYS_SSO_USERDATA_ACCESS">Brugerdata og adgangstilladelser</string>
   <string name="SYS_SSO_USERID_FIELD">Feltet Bruger-id</string>
-  <string name="SYS_SSO_USERID_FIELD_DESC">Vælg det admidio-felt, der entydigt skal identificere brugeren i klientsystemet (Tjenesteudbyder). Nogle systemer forventer et login-navn (streng), nogle systemer arbejder med numeriske ID\'er osv. Se venligst manualen til tjenesteudbyderappen.</string>
+  <string name="SYS_SSO_USERID_FIELD_DESC">Vælg det Admidio-felt, der entydigt skal identificere brugeren i klientsystemet (tjenesteudbyder). Nogle systemer forventer et login-navn (streng), nogle systemer arbejder med numeriske ID\'er osv. Se venligst manualen til tjenesteudbyderappen.</string>
   <string name="SYS_SSO_USERID_FIELDS">Felter til bruger-id</string>
   <string name="SYS_SSO_USERID_ID">Bruger-id (numerisk)</string>
   <string name="SYS_SSO_USERID_UUID">Bruger-UUID (tilfældig streng på 32 tegn)</string>
@@ -1494,7 +1497,7 @@
   <string name="SYS_ERROR_UUID_MISSING">UUID mangler</string>
   <string name="SYS_SSO_OIDC">Enkeltlogon med OpenId Connect (OIDC)</string>
   <string name="SYS_SSO_OIDC_ENABLED">Aktivér enkeltlogon via OpenId Connect (OIDC)</string>
-  <string name="SYS_SSO_OIDC_ENABLED_DESC">Denne indstilling gør Admidio til en OIDC-identitetsudbyder (idP) til enkeltlogon, som gør det muligt for andre webprogrammer at godkende brugere i forhold til admidio-brugerlisten.</string>
+  <string name="SYS_SSO_OIDC_ENABLED_DESC">Denne indstilling gør Admidio til en OIDC-identitetsudbyder (idP) til enkeltlogon, som gør det muligt for andre webapplikationer at godkende brugere i forhold til Admidio-brugerlisten.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_CODE_INVALID">Ugyldig status kode!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# karakterer</string>
@@ -1578,6 +1581,7 @@
   <string name="SYS_UPDATE_SUCCESSFUL">Opdatering udført sucessfuldt</string>
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">URL\'en i feltet #VAR1_BOLD# indeholder ulovlige karakterer.\n\nTilladte karakterer er bogstaver fra \'a\' til \'z\' og \'A\' til \'Z\', cifre fra 0-9 og specielle karakterer som .+-_:/#?= Undlad ÆØÅæøå</string>
+  <string name="SYS_USERS">Brugere</string>
   <string name="SYS_USER_COULD_BE_CREATED">Personen kunne oprettes.</string>
   <string name="SYS_USER_DELETE_DESC">Vil du virkelig slette #VAR1_BOLD#?\n\nBrugeren bliver slettet helt fra databasen, så adgang til vedkommendes informationer bliver helt slettet.</string>
   <string name="SYS_USER_ID_NOT_FOUND">Der kunne ikke findes nogen bruger med dette ID!</string>
