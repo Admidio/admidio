@@ -27,7 +27,7 @@
     --bs-link-color: var(--bs-primary);
     --bs-link-color-rgb: var(--bs-primary-rgb);
     --bs-link-hover-color: color-mix(in srgb, var(--bs-link-color) 80%, white);
-    --bs-link-hover-color-rgb: color-mix(in srgb, var(--bs-link-color-rgb) 80%, white);
+    --bs-link-hover-color-rgb: color-mix(in srgb, rgb(var(--bs-link-color-rgb)) 80%, white);
     --bs-focus-ring-color: #c4e9ef;
 }
 
@@ -777,4 +777,32 @@ tr.admidio-event-highlight {
 
 ul.changelog-tableselect-list {
     list-style-type: none;
+}
+
+/************************************/
+/* subinfo form controls (showing/hiding rows) */
+/************************************/
+
+.subinfo-row .subinfo-sub-row label, .col-form-sublabel {
+  padding-left: 2.5em;
+  font-weight: normal;
+}
+.subinfo-sub-row, .subinfo-row {
+  margin-bottom: 0pt !important;
+}
+.subinfo_head {
+  margin-bottom: 1.5rem;
+}
+.col-form-label.col-form-sublabel {
+    padding-top: 2pt;
+    padding-bottom: 2pt;
+}
+
+.subinfo-row .form-control-plaintext {
+  width: 75%;
+}
+.subinfo-sub-row .form-control-plaintext {
+  width: 75%;
+  padding-bottom: 0;
+  padding-top: 0;
 }

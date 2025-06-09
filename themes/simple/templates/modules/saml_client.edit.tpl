@@ -9,7 +9,7 @@
         <div class="card-body">
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_metadata_url']}
             {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_metadata_setup']}
-            {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_saml_sso_staticsettings']}
+            {include 'sys-template-parts/form.static-subinformation.tpl' data=$elements['sso_saml_sso_staticsettings']}
         </div>
     </div>
     <div class="card admidio-field-group">

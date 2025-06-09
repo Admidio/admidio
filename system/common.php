@@ -28,7 +28,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'common.php') {
 
 $rootPath = dirname(__DIR__);
 
-// if config file doesn't exists, than show installation dialog
+// if a config file doesn't exist, then show installation dialog
 if (!is_file($rootPath . '/adm_my_files/config.php')) {
     header('Location: install/index.php');
     exit();
@@ -54,10 +54,10 @@ try {
 // check for empty db and redirect to installation wizard
 try {
     if (empty($gDb->getTableColumns(TBL_SESSIONS))) {
-        // Postgres does not throw an error, but returns an empty array if the sesssions table does not yet exist.
+        // Postgres does not throw an error, but returns an empty array if the session table does not yet exist.
         header('Location: ' . ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
         exit();
-    };
+    }
 } catch (Throwable $t) {
     header('Location: ' . ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php');
     exit();
@@ -76,7 +76,7 @@ try {
 }
 
 if (array_key_exists('gCurrentSession', $_SESSION)) {
-    // read session object from PHP session
+    // read a session object from PHP session
     /**
      * @var Session $gCurrentSession The global session object that will store the other global objects and
      *                               validates the session against the stored session in the database
@@ -89,7 +89,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)) {
 if (array_key_exists('gCurrentSession', $_SESSION)
     && $_SESSION['gCurrentSession']->hasObject('gCurrentOrganization')
     && $_SESSION['gCurrentSession']->getValue('ses_reload') === false) {
-    // read system component
+    // read a system component
     /**
      * @var Component $gSystemComponent
      */
@@ -99,7 +99,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)
      * @var Language $gL10n
      */
     $gL10n =& $gCurrentSession->getObject('gL10n');
-    // read organization data from session object
+    // read organization data from a session object
     /**
      * @var Organization $gCurrentOrganization
      */
@@ -113,17 +113,17 @@ if (array_key_exists('gCurrentSession', $_SESSION)
     if (array_key_exists('gCurrentSession', $_SESSION)) {
         $gCurrentSession->initializeObjects();
     } else {
-        // create new session object and store it in PHP session
+        // create a new session object and store it in PHP session
         $gCurrentSession = new Session($gDb, COOKIE_PREFIX);
         $_SESSION['gCurrentSession'] = $gCurrentSession;
     }
 
-    // create system component
+    // create a system component
     $gSystemComponent = new Component($gDb);
     $gSystemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
     $gCurrentSession->addObject('gSystemComponent', $gSystemComponent);
 
-    // create object of the organization of config file with their preferences
+    // create an object of the organization of config file with their preferences
     if ($gCurrentSession->getOrganizationId() > 0) {
         $gCurrentOrganization = new Organization($gDb, $gCurrentSession->getOrganizationId());
     } else {
@@ -176,11 +176,11 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
      */
     $gProfileFields =& $gCurrentSession->getObject('gProfileFields');
     /**
-     * @var User $gCurrentUser The current user object of the registered user. For visitors there will be no data loaded.
+     * @var User $gCurrentUser The current user object of the registered user. For visitors, there will be no data loaded.
      */
     $gCurrentUser  =& $gCurrentSession->getObject('gCurrentUser');
     /**
-     * @var int $gCurrentOrgId The ID of the current registered user or 0 if its an visitor.
+     * @var int $gCurrentOrgId The ID of the current registered user or 0 if it's a visitor.
      */
     $gCurrentUserId = $gCurrentUser->getValue('usr_id');
     $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');
@@ -191,14 +191,14 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
         $gCurrentSession->setValue('ses_usr_id', '');
     }
 } else {
-    // create object with current user field structure und user object
+    // create an object with current user field structure und user object
     $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
     $gCurrentUser   = new User($gDb, $gProfileFields, $sesUsrId);
     $gCurrentUserId = $gCurrentUser->getValue('usr_id');
     $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');
 
-    // if session is created with auto login then update user login data
-    // if user object is created and session has usr_id then this is an auto login
+    // if a session is created with auto login then update user login data
+    // if a user object is created and session has usr_id then this is an auto login,
     // and we should update the login data and count logins
     if ($sesUsrId > 0) {
         $gCurrentUser->updateLoginData();
@@ -216,7 +216,7 @@ if ($gCurrentSession->hasObject('gMenu')) {
      */
     $gMenu =& $gCurrentSession->getObject('gMenu');
 } else {
-    // read menu from database
+    // read a menu from database
     $gMenu = new Menu();
     $gCurrentSession->addObject('gMenu', $gMenu);
 }
@@ -234,7 +234,7 @@ if ($sesUsrId > 0) {
 $gCurrentSession->setValue('ses_reload', 0);
 $gCurrentSession->save();
 
-// create necessary objects and parameters
+// create the necessary objects and parameters
 
 // set default theme if no theme or old theme was set
 if (!$gSettingsManager->has('theme') || $gSettingsManager->get('theme') == 'modern') {
@@ -245,15 +245,15 @@ define('THEME_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->get
 define('THEME_URL', ADMIDIO_URL  . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme'));
 
 
-if (!empty($gSettingsManager->getString('theme_fallback'))) {
+if ($gSettingsManager->has('theme_fallback') && !empty($gSettingsManager->getString('theme_fallback'))) {
     define('THEME_FALLBACK_PATH', ADMIDIO_PATH . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme_fallback'));
     define('THEME_FALLBACK_URL', ADMIDIO_URL  . FOLDER_THEMES . '/' . $gSettingsManager->getString('theme_fallback'));
 }
 
-// Create message object which can be called if a message should be shown
+// Create a message object which can be called if a message should be shown
 $gMessage = new Message();
 
-// Create object for navigation between the scripts and modules
+// Create an object for navigation between the scripts and modules
 // Every URL will be stored in a stack and can be called if user want's to navigate back
 if ($gCurrentSession->hasObject('gNavigation')) {
     /**
@@ -266,7 +266,7 @@ if ($gCurrentSession->hasObject('gNavigation')) {
 }
 
 try {
-    // check version of database against version of file system and show notice if not equal
+    // check a version of database against a version of file system and show notice if not equal
     $gSystemComponent->checkDatabaseVersion();
 } catch (Throwable $e) {
     $gSettingsManager->disableExceptions();
