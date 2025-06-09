@@ -32,29 +32,32 @@
  *
  * Parameters:
  *
- * members - true : (Default) Show only active contacts of the current organization
- *           false  : Show active and inactive contacts of all organizations in database
- * draw    - Number to validate the right inquiry from DataTables.
- * start   - Paging first record indicator. This is the start point in the current data set
- *           (0 index based - i.e. 0 is the first record).
- * length  - Number of records that the table can display in the current draw. It is expected that
- *           the number of records returned will be equal to this number, unless the server has
- *           fewer records to return. Note that this can be -1 to indicate that all records should
- *           be returned (although that negates any benefits of server-side processing!)
- * search[value] - Global search value.
+ * mem_show_filter - 0  : (Default) Show only active contacts for current organization
+ *                    1  : Show only inactive contacts for current organization
+ *                    2  : Show active and inactive contacts for current organization
+ *                    3  : Show active and inactive contacts for all organizations (only Admin)
+ * draw             - Number to validate the right inquiry from DataTables.
+ * start            - Paging first record indicator. This is the start point in the current data set
+ *                    (0 index based - i.e. 0 is the first record).
+ * length           - Number of records that the table can display in the current draw. It is expected that
+ *                    the number of records returned will be equal to this number, unless the server has
+ *                    fewer records to return. Note that this can be -1 to indicate that all records should
+ *                    be returned (although that negates any benefits of server-side processing!)
+ * search[value]    - Global search value.
  ***********************************************************************************************
  */
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Organizations\Entity\Organization;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require_once(__DIR__ . '/../../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMembers = admFuncVariableIsValid($_GET, 'members', 'bool', array('defaultValue' => true));
+    $getMembersShowFilter = admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0));
     $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
@@ -64,10 +67,8 @@ try {
 
     header('Content-Type: application/json');
 
-    // if only active members should be shown then set parameter
-    if (!$gSettingsManager->getBool('contacts_show_all')) {
-        $getMembers = true;
-    }
+    // show all members of all organizations
+    $getMembersAllOrgs = $gSettingsManager->getBool('contacts_show_all');
 
     if (isset($_SESSION['contacts_list_configuration'])) {
         $contactsListConfig = $_SESSION['contacts_list_configuration'];
@@ -122,7 +123,7 @@ try {
     }
 
     // create a subselect to check if the user is an active member of the current organization
-    $sqlSubSelect = '(SELECT COUNT(*) AS count_this
+    $contactsOfThisOrganizationSelectPlaceholder = '
                     FROM ' . TBL_MEMBERS . '
               INNER JOIN ' . TBL_ROLES . '
                       ON rol_id = mem_rol_id
@@ -130,40 +131,81 @@ try {
                       ON cat_id = rol_cat_id
                    WHERE mem_usr_id  = usr_id
                      AND mem_begin  <= \'' . DATE_NOW . '\'
-                     AND mem_end     > \'' . DATE_NOW . '\'
+                     %s    -- logic placeholder for mem_end
                      AND rol_valid = true
                      AND cat_name_intern <> \'EVENTS\'
                      AND (  cat_org_id = ' . $gCurrentOrgId . '
                          OR cat_org_id IS NULL ))';
 
-    if ($getMembers) {
-        $contactsOfThisOrganizationCondition = ' AND ' . $sqlSubSelect . ' > 0 ';
-        $contactsOfThisOrganizationSelect = ' 1 ';
-    } else {
-        $contactsOfThisOrganizationCondition = '';
-        $contactsOfThisOrganizationSelect = $sqlSubSelect;
+    $placeholderCurrentThisOrg = ' AND mem_end > \'' . DATE_NOW . '\'';
+    $placeholderFormerThisOrg = ' AND mem_end <= \'' . DATE_NOW . '\'
+            AND NOT EXISTS (
+                SELECT 1
+                FROM ' . TBL_MEMBERS . '
+            INNER JOIN ' . TBL_ROLES . '      ON rol_id    = mem_rol_id
+            INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id    = rol_cat_id
+                WHERE mem_usr_id   = usr_id
+                AND mem_begin   <= \'' . DATE_NOW . '\'
+                AND mem_end      > \'' . DATE_NOW . '\'
+                AND rol_valid    = true
+                AND cat_name_intern <> \'EVENTS\'
+                AND (  cat_org_id   = ' . $gCurrentOrgId . '
+                         OR cat_org_id IS NULL ))';
+
+    if ($getMembersShowFilter === 0) {
+        // show only active members of the current organization
+        $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
+        $formerContactsOfThisOrganizationSelect = ' 0 '; // no former members of the current organization should be shown
+    } elseif ($getMembersShowFilter === 1) {
+        // show only former members of the current organization
+        $contactsOfThisOrganizationSelect = ' 0 '; // no current members of the current organization should be shown
+        $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
+    } elseif ($getMembersShowFilter === 2 || $getMembersShowFilter === 3) {
+        // show all members of current organization
+        $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
+        $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
     }
 
     // create a subselect to check if the user is also an active member of another organization
-    $contactsOfOtherOrganizationSelect = ' 0 ';
-    if ($gCurrentOrganization->countAllRecords() > 1) {
-        $contactsOfOtherOrganizationSelect = '
-        (SELECT COUNT(*) AS count_other
-           FROM ' . TBL_MEMBERS . '
-     INNER JOIN ' . TBL_ROLES . '
-             ON rol_id = mem_rol_id
-     INNER JOIN ' . TBL_CATEGORIES . '
-             ON cat_id = rol_cat_id
-          WHERE mem_usr_id  = usr_id
-            AND mem_begin  <= \'' . DATE_NOW . '\'
-            AND mem_end     > \'' . DATE_NOW . '\'
-            AND rol_valid = true
-            AND cat_name_intern <> \'EVENTS\'
-            AND cat_org_id <> ' . $gCurrentOrgId . ')';
+    if ($gCurrentOrganization->countAllRecords() > 1  && $gCurrentUser->isAdministrator() && $getMembersShowFilter === 3) {
+        $contactsOfOtherOrganizationSelectPlaceholder = '
+            FROM ' . TBL_MEMBERS . '
+        INNER JOIN ' . TBL_ROLES . '
+                ON rol_id = mem_rol_id
+        INNER JOIN ' . TBL_CATEGORIES . '
+                ON cat_id = rol_cat_id
+            WHERE mem_usr_id  = usr_id
+                AND mem_begin  <= \'' . DATE_NOW . '\'
+                %s    -- logic placeholder for mem_end
+                AND rol_valid = true
+                AND cat_name_intern <> \'EVENTS\'
+                AND cat_org_id <> ' . $gCurrentOrgId . ')';
+
+        $placeholderCurrentOtherOrg = "AND mem_end > '" . DATE_NOW . "'";
+        $placeholderFormerOtherOrg = "AND mem_end <= '" . DATE_NOW . "'
+            AND NOT EXISTS (
+                SELECT 1
+                FROM " . TBL_MEMBERS . "
+            INNER JOIN " . TBL_ROLES . "      ON rol_id    = mem_rol_id
+            INNER JOIN " . TBL_CATEGORIES . " ON cat_id    = rol_cat_id
+                WHERE mem_usr_id   = usr_id
+                AND mem_begin   <= '" . DATE_NOW . "'
+                AND mem_end      > '" . DATE_NOW . "'
+                AND rol_valid    = true
+                AND cat_name_intern <> 'EVENTS'
+                AND cat_org_id   <> " . $gCurrentOrgId . ")";
+
+        // show all members of other organizations
+        $contactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderCurrentOtherOrg);
+        $formerContactsOfOtherOrganizationSelect = '(SELECT COUNT(*) AS count_other_former' . sprintf($contactsOfOtherOrganizationSelectPlaceholder, $placeholderFormerOtherOrg);
+    } else {
+        // if there is only one organization or user is no admin then no other members of other organizations should be shown
+        $contactsOfOtherOrganizationSelect = ' 0 ';
+        $formerContactsOfOtherOrganizationSelect = ' 0 ';
     }
 
-    // create sql to show all members (not accepted users should not be shown)
-    if ($getMembers && $gCurrentUser->isAdministratorUsers()) {
+    // create main sql statement
+    if (($getMembersShowFilter === 0) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersThisOrga' => true,
@@ -172,7 +214,26 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif ($gCurrentUser->isAdministratorUsers()) {
+    } elseif (($getMembersShowFilter === 1) && $gCurrentUser->isAdministratorUsers()) {
+        $mainSql = $contactsListConfig->getSql(
+            array(
+                'showFormerMembers' => true,
+                'showUserUUID' => true,
+                'useConditions' => false,
+                'useOrderBy' => $useOrderBy
+            )
+        );
+    } elseif (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+        $mainSql = $contactsListConfig->getSql(
+            array(
+                'showAllMembersThisOrga' => true,
+                'showFormerMembers' => true,
+                'showUserUUID' => true,
+                'useConditions' => false,
+                'useOrderBy' => $useOrderBy
+            )
+        );
+    } elseif (($getMembersShowFilter === 3) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersDatabase' => true,
@@ -192,7 +253,18 @@ try {
         );
     }
 
-    $mainSql = 'SELECT DISTINCT ' . $contactsOfThisOrganizationSelect . ' AS member_this_orga, ' . $contactsOfOtherOrganizationSelect . ' AS member_other_orga, usr_login_name as loginname,
+    $mainSql = 'SELECT DISTINCT ' . $contactsOfThisOrganizationSelect . ' AS member_this_orga, ' . $formerContactsOfThisOrganizationSelect . ' AS former_member_this_orga, ' . $contactsOfOtherOrganizationSelect . ' AS member_other_orga, ' . $formerContactsOfOtherOrganizationSelect . ' AS former_member_other_orga, 
+                (SELECT GROUP_CONCAT(DISTINCT cat_org.cat_org_id
+                        ORDER BY cat_org.cat_org_id
+                        SEPARATOR \',\')
+                    FROM ' . TBL_MEMBERS . ' AS mem_org
+                    INNER JOIN ' . TBL_ROLES . ' AS rol_org
+                        ON rol_org.rol_id = mem_org.mem_rol_id
+                    INNER JOIN ' . TBL_CATEGORIES . ' AS cat_org
+                        ON cat_org.cat_id = rol_org.rol_cat_id
+                    WHERE mem_org.mem_usr_id = usr_id
+                ) AS member_org_ids,
+                usr_login_name as loginname,
                 (SELECT email.usd_value FROM ' . TBL_USER_DATA . ' email
                   WHERE  email.usd_usr_id = usr_id
                     AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
@@ -220,7 +292,7 @@ try {
     $queryParamsMain = array_merge($queryParamsEmail, $queryParamsSearch);
     $mglStatement = $gDb->queryPrepared($sql, $queryParamsMain); // TODO add more params
 
-    $orgName = $gCurrentOrganization->getValue('org_longname');
+    $currentOrgName = $gCurrentOrganization->getValue('org_longname');
     $rowNumber = $getStart; // count for every row
 
     // get count of all members and store into json
@@ -232,22 +304,47 @@ try {
 
     while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
-        $ColumnNumberSql = 5;
+        $ColumnNumberSql = 8;
         $columnNumberJson = 2;
 
         $contactsOfThisOrganization = (bool)$row['member_this_orga'];
+        $formerContactsOfThisOrganization = (bool)$row['former_member_this_orga'];
         $contactsOfOtherOrganization = (bool)$row['member_other_orga'];
+        $formerContactsOfOtherOrganization = (bool)$row['former_member_other_orga'];
+
+        $otherOrgName = '';
+        if ($row['member_org_ids'] !== null) {
+            $usrOrgIds = explode(',', $row['member_org_ids']);
+            if (count($usrOrgIds) > 0) {
+                // remove current organization from the list of user organizations
+                $usrOrgIds = array_values(array_diff($usrOrgIds, array($gCurrentOrgId)));
+                // if user is member of more than one organization then show the name of the first organization
+                if (count($usrOrgIds) > 0) {
+                    $otherOrg = new Organization($gDb, $usrOrgIds[0]);
+                    $otherOrgName = $otherOrg->getValue('org_longname');
+                }
+            }
+        }
 
         // Create row and add first column
         $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => $rowNumber);
 
         // Add icon for member or no member of the organization
         if ($contactsOfThisOrganization) {
-            $icon = 'bi-person-fill';
-            $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($orgName));
+            $icon = 'bi-person-fill-check';
+            $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($currentOrgName));
+        } elseif ($formerContactsOfThisOrganization) {
+            $icon = 'bi-person-fill-dash';
+            $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($currentOrgName));
+        } elseif ($contactsOfOtherOrganization) {
+            $icon = 'bi-person-fill-check text-warning';
+            $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($otherOrgName));
+        } elseif ($formerContactsOfOtherOrganization) {
+            $icon = 'bi-person-fill-dash text-warning';
+            $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($otherOrgName));
         } else {
-            $icon = 'bi-person-fill-dash text-danger';
-            $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', array($orgName));
+            $icon = 'bi-person-fill-x text-danger';
+            $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ANY_ORGANIZATION');
         }
 
         $columnValues['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
