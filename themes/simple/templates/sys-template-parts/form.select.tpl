@@ -14,7 +14,7 @@
             {$itemvar@key}="{$itemvar}"
         {/foreach}>
         {assign "group" ""}
-        <option value="" hidden="hidden" disabled="disabled">{$data.label}</option>
+        <option value="placeholder" hidden="hidden" disabled="disabled">{$data.label}</option>
         {foreach $data.values as $optionvar}
             {if {array_key_exists key="group" array=$optionvar} && $optionvar["group"] neq $group}
                 {if $group neq ""}</optgroup>{/if}
