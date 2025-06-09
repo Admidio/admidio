@@ -771,6 +771,8 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
+        //array with the internal field names of the lend fields
+        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
 
         $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',
@@ -816,6 +818,13 @@ class PreferencesPresenter extends PagePresenter
         );
         
         $formInventory->addCheckbox(
+            'inventory_items_disable_lending',
+            $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_LENDING'),
+            (bool) $formValues['inventory_items_disable_lending'],
+            array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC')
+        );
+        
+        $formInventory->addCheckbox(
             'inventory_system_field_names_editable',
             $gL10n->get('SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT'),
             $formValues['inventory_system_field_names_editable'],
@@ -834,7 +843,11 @@ class PreferencesPresenter extends PagePresenter
             $items = new ItemsData($gDb, $gCurrentOrgId);
             $selectBoxEntries = array();
             foreach ($items->getItemFields() as $itemField) {
-                $selectBoxEntries[$itemField->getValue('inf_name_intern')] = $itemField->getValue('inf_name');
+                $infNameIntern = $itemField->getValue('inf_name_intern');
+                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
+                    continue; // skip lending fields if lending is disabled
+                }
+                $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
             }
                 
             $formInventory->addSelectBox(
@@ -889,10 +902,11 @@ class PreferencesPresenter extends PagePresenter
         // create array of possible fields for profile view
         $selectBoxEntries = array();
         foreach ($items->getItemFields() as $itemField) {
-            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME') {
+            $infNameIntern = $itemField->getValue('inf_name_intern');
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
                 continue;
             }
-            $selectBoxEntries[$itemField->getValue('inf_name_intern')] = $itemField->getValue('inf_name');
+            $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
         }
                
         $formInventory->addSelectBox(

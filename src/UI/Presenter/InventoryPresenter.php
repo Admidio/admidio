@@ -640,7 +640,7 @@ class InventoryPresenter extends PagePresenter
      */
     public function prepareData(string $mode = 'html') : array
     {
-        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession;
+        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
 
         // Initialize the result array
         $preparedData = array(
@@ -656,11 +656,17 @@ class InventoryPresenter extends PagePresenter
         $headers     =  ($this->getFilterItems === 2) ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>') : array();
         $exportHeaders = array();
         $columnNumber = 1;
+        //array with the internal field names of the lend fields
+        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
 
         // Build headers and column alignment for each item field
         foreach ($this->itemsData->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
             $columnHeader  = $this->itemsData->getProperty($infNameIntern, 'inf_name');
+
+            if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
+                continue; // skip lending fields if lending is disabled
+            }
 
             // For the first column, add specific header configurations for export modes
             if ($columnNumber === 1) {
@@ -724,6 +730,10 @@ class InventoryPresenter extends PagePresenter
 
             foreach ($this->itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
+
+                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
+                    continue; // skip lending fields if lending is disabled
+                }
 
                 // Apply filters for CATEGORY and KEEPER
                 if (
@@ -852,7 +862,7 @@ class InventoryPresenter extends PagePresenter
                         );
 
                         // Add lend action
-                        if (!$item['ini_former']) {
+                        if (!$item['ini_former'] && !$gSettingsManager->GetBool('inventory_items_disable_lending')) {
                             // check if the item is in inventory
                             if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
                                 $itemLended = false;
@@ -862,7 +872,7 @@ class InventoryPresenter extends PagePresenter
                             else {
                                 $itemLended = true;
                                 $icon = 'bi bi-box-arrow-in-left';
-                                $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_UNLEND');
+                                $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                             }
                             $rowValues['actions'][] = array(
                                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_lend', 'item_uuid' => $item['ini_uuid'], 'item_lended' => $itemLended)),
@@ -1006,6 +1016,8 @@ class InventoryPresenter extends PagePresenter
         $columnAlign[] = 'end'; // first column alignment
         $headers     = array();
         $columnNumber = 1;
+        //array with the internal field names of the lend fields
+        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
 
         // create array with all column heading values
         $profileItemFields = array('ITEMNAME');
@@ -1020,7 +1032,7 @@ class InventoryPresenter extends PagePresenter
         foreach ($itemsData->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
 
-            if (!in_array($infNameIntern, $profileItemFields, true)) {
+            if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
                 continue;
             }
 
@@ -1075,7 +1087,7 @@ class InventoryPresenter extends PagePresenter
             foreach ($itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
 
-                if (!in_array($infNameIntern, $profileItemFields, true)) {
+                if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
                     continue;
                 }
                 
@@ -1149,7 +1161,7 @@ class InventoryPresenter extends PagePresenter
                     );
 
                     // Add lend action
-                    if (!$item['ini_former']) {
+                    if (!$item['ini_former'] && !$gSettingsManager->GetBool('inventory_items_disable_lending')) {
                         // check if the item is in inventory
                         if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
                             $itemLended = false;
@@ -1159,7 +1171,7 @@ class InventoryPresenter extends PagePresenter
                         else {
                             $itemLended = true;
                             $icon = 'bi bi-box-arrow-in-left';
-                            $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_UNLEND');
+                            $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                         }
                         $rowValues['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_lend', 'item_uuid' => $item['ini_uuid'], 'item_lended' => $itemLended)),

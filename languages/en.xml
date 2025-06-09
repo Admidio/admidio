@@ -814,7 +814,6 @@
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Import items</string>
   <string name="SYS_INVENTORY_IMPORT_PROGRESS">The item #VAR1_BOLD# was imported #VAR2_BOLD#.</string>
   <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned to any item fields in InventoryManager:</string>
-  <string name="SYS_INVENTORY_ITEMS">Items</string>
   <string name="SYS_INVENTORY_ITEM_COPIED">Item successfully copied</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Copy the item</string>
   <string name="SYS_INVENTORY_ITEM_CREATE">Create a item</string>
@@ -833,7 +832,10 @@
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER">Undo made to former</string>
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM">Do you really want to undo the disposal of the item?</string>
   <string name="SYS_INVENTORY_ITEM_UNDONE_FORMER">Undone item made to former</string>
-  <string name="SYS_INVENTORY_ITEM_UNLEND">Return item</string>
+  <string name="SYS_INVENTORY_ITEM_RETURN">Return item</string>
+  <string name="SYS_INVENTORY_ITEMS">Items</string>
+  <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING">Disable borrowing functionality</string>
+  <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC">When this option is enabled, items can no longer be borrowed. Existing borrowing records will still be saved, but will no longer be displayed. (Default: no)</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Number of items per page</string>
   <string name="SYS_INVENTORY_ITEMFIELD">Item field</string>
   <string name="SYS_INVENTORY_ITEMFIELD_CREATE">Create new item field</string>
@@ -875,8 +877,8 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items loaned to you:</string>
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON">Received back on</string>
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESC">The date the item was returned to the keeper</string>
-  <string name="SYS_INVENTORY_RECEIVED_ON">Lend on</string>
-  <string name="SYS_INVENTORY_RECEIVED_ON_DESC">The lending date of the item to the last recipient</string>
+  <string name="SYS_INVENTORY_RECEIVED_ON">Borrowed on</string>
+  <string name="SYS_INVENTORY_RECEIVED_ON_DESC">The borrowing date of the item to the last recipient</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE">Delete selection</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">If you select #VAR1_BOLD#, the items along with their associated records will be irrevocably removed from the database, and it will not be possible to view the data of these items later.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">The selected items have been deleted.</string>

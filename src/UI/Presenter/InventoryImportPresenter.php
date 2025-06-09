@@ -201,7 +201,7 @@ class InventoryImportPresenter extends PagePresenter
 
     public function createAssignFieldsForm(): void
     {
-        global $gL10n, $gCurrentSession, $gDb, $gCurrentOrgId;
+        global $gL10n, $gCurrentSession, $gDb, $gCurrentOrgId, $gSettingsManager;
 
         if (isset($_SESSION['import_csv_request'])) {
             // due to incorrect input the user has returned to this form
@@ -267,9 +267,15 @@ class InventoryImportPresenter extends PagePresenter
         $arrayCsvColumns = array_filter($arrayCsvColumns, function ($value) {
             return !is_null($value);
         });
-        
+
+        //array with the internal field names of the lend fields
+        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
         $items = new ItemsData($gDb, $gCurrentOrgId);
         foreach ($items->getItemFields() as $itemField) {
+            if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($itemField->getValue('inf_name_intern'), $lendFieldNames)) {
+                continue; // skip lending fields if lending is disabled
+            }
+
             $fieldDefaultValue = -1;
             if (in_array($itemField->GetValue('inf_name'), $arrayCsvColumns)) {
                 $fieldDefaultValue = array_search($itemField->GetValue('inf_name'), $arrayCsvColumns);

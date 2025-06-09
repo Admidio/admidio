@@ -254,12 +254,16 @@ class ImportService
         
         // get all values of the item fields
         $importedItemData = array();
-        
+        //array with the internal field names of the lend fields
+        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+
         foreach ($assignedFieldColumn as $row => $values) {
             foreach ($items->getItemFields() as $fields){
                 $infId = $fields->getValue('inf_id');
                 $imfNameIntern = $fields->getValue('inf_name_intern');
-        
+                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($imfNameIntern, $lendFieldNames)) {
+                    continue; // skip lending fields if lending is disabled
+                }
                 if (isset($values[$infId]))
                 {
                     if ($fields->getValue('inf_type')=='CHECKBOX') {

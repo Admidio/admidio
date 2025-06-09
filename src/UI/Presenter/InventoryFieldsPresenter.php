@@ -184,7 +184,7 @@ class InventoryFieldsPresenter extends PagePresenter
      */
     public function createList()
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentUser;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentUser, $gSettingsManager;
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
@@ -226,8 +226,13 @@ class InventoryFieldsPresenter extends PagePresenter
         $templateItemFields = array();
         $itemFieldCategoryID = -1;
         $prevItemFieldCategoryID = -1;
+        //array with the internal field names of the lend fields
+        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
 
         foreach ($items->getItemFields() as $itemField) {
+            if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($itemField->getValue('inf_name_intern'), $lendFieldNames)) {
+                continue; // skip lending fields if lending is disabled
+            }
             $prevItemFieldCategoryID = $itemFieldCategoryID;
             $itemFieldCategoryID = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;
 

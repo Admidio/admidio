@@ -273,6 +273,7 @@ class ItemsData
             $sqlImfIds = substr($sqlImfIds, 0, -4) . ')';
         }
 
+        // first read all item data for the given user
         $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEM_DATA . '
                 INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                     ON inf_id = ind_inf_id
@@ -287,6 +288,34 @@ class ItemsData
 
         while ($row = $statement->fetch()) {
             $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
+        }
+
+        // now read the item lend data for each item
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
+                INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+                    ON inf_id = inl_inf_id
+                    ' . $sqlImfIds . '
+                INNER JOIN ' . TBL_INVENTORY_ITEMS . '
+                    ON ini_id = inl_ini_id
+                WHERE (ini_org_id IS NULL
+                    OR ini_org_id = ?)
+                AND inl_value = ?
+                ' . $sqlWhereCondition . ';';
+        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
+        // check if a item already exists in the items array
+        while ($row = $statement->fetch()) {
+            // check if item already exists in the items array
+            $itemExists = false;
+            foreach ($this->mItems as $item) {
+                if ($item['ini_id'] === $row['ini_id']) {
+                    $itemExists = true;
+                    break;
+                }
+            }
+            // if item doesn't exist, then add it to the items array
+            if (!$itemExists) {
+                $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
+            }
         }
     }
 

@@ -815,7 +815,6 @@
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Gegenstände importieren</string>
   <string name="SYS_INVENTORY_IMPORT_PROGRESS">Der Gegenstand #VAR1_BOLD# wurde #VAR2_BOLD# importiert.</string>
   <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">Folgenden Spalten der Importdatei sind keine Felder in der Inventarverwaltung zugeordnet:</string>
-  <string name="SYS_INVENTORY_ITEMS">Gegenstände</string>
   <string name="SYS_INVENTORY_ITEM_COPIED">Gegenstand erfolgreich kopiert</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Gegenstand kopieren</string>
   <string name="SYS_INVENTORY_ITEM_CREATE">Neuen Gegenstand anlegen</string>
@@ -834,7 +833,10 @@
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER">Aussondern rückgängig machen</string>
   <string name="SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM">Möchtest du die Aussonderung des Gegenstandes wirklich rückgängig machen?</string>
   <string name="SYS_INVENTORY_ITEM_UNDONE_FORMER">Aussonderung des Gegenstandes rückgängig gemacht</string>
-  <string name="SYS_INVENTORY_ITEM_UNLEND">Gegenstand zurückgeben</string>
+  <string name="SYS_INVENTORY_ITEM_RETURN">Gegenstand zurückgeben</string>
+  <string name="SYS_INVENTORY_ITEMS">Gegenstände</string>
+  <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING">Ausleih-Funktionalität deaktivieren</string>
+  <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC">Wenn diese Option aktiviert ist, können Gegenstände nicht mehr ausgeliehen werden. Vorhandene Ausleihdaten werden weiterhin gespeichert, allerdings nicht länger angezeigt. (Voreinstellung: nein)</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Anzahl der Gegenstände pro Seite</string>
   <string name="SYS_INVENTORY_ITEMFIELD">Eigenschaftsfeld</string>
   <string name="SYS_INVENTORY_ITEMFIELD_CREATE">Eigenschaftsfeld anlegen</string>

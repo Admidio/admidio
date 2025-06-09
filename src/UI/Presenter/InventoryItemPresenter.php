@@ -42,7 +42,7 @@ class InventoryItemPresenter extends PagePresenter
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
         //array with the internal field names of the lend fields not used in the edit form
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');  ///< array with the internal field names of the lend fields
+        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -294,6 +294,8 @@ class InventoryItemPresenter extends PagePresenter
         // Check if itemUUID is valid
         if (!Uuid::isValid($itemUUID)) {
             throw new Exception('The parameter "' . $itemUUID . '" is not a valid UUID!');
+        } elseif ($gSettingsManager->GetBool('inventory_items_disable_lending')) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // display History button

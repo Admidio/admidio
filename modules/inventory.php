@@ -157,7 +157,7 @@ try {
         case 'item_edit_lend':
             // set headline of the script
             if ($getLended) {
-                $headline = $gL10n->get('SYS_INVENTORY_ITEM_UNLEND');
+                $headline = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
             }
             else {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_LEND');

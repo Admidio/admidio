@@ -7,6 +7,7 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_items_per_page']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_field_history_days']}
     {include 'sys-template-parts/form.seperator.tpl' data=$elements['inventory_seperator_general_settings']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_items_disable_lending']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_system_field_names_editable']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_allow_keeper_edit']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_allowed_keeper_edit_fields']}
