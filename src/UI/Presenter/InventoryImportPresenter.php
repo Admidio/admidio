@@ -233,16 +233,16 @@ class InventoryImportPresenter extends PagePresenter
             $(".admidio-import-field").change(function() {
                 var available = [];
                 $("#adm_inventory_import_assign_fields_form .admidio-import-field").first().children("option").each(function() {
-                    if ($(this).val() != "") {
+                    if ($(this).val() != "" && !$(this).prop("hidden")) {
                         available.push($(this).text());
                     }
                 });
                 var used = [];
                 $("#adm_inventory_import_assign_fields_form .admidio-import-field").children("option:selected").each(function() {
-                    if ($(this).val() != "") {
+                    if ($(this).val() != "" && !$(this).prop("hidden")) {
                         used.push($(this).text());
                     }
-                });               
+                });
                 var outstr = "";
                 $(available).not(used).each(function(index, value) {
                     if (value === "Nr.") {
