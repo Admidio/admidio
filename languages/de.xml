@@ -203,6 +203,7 @@
   <string name="SYS_A_TO_Z">A bis Z</string>
   <string name="SYS_ABORT">Abbrechen</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
+  <string name="SYS_ACTIVE_CONTACTS">Aktive Kontakte</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktive und ehemalige Mitglieder</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktive und ehemalige</string>
   <string name="SYS_ACTIVE_MEMBERS">Aktive Mitglieder</string>
@@ -238,7 +239,9 @@
   <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesucher:innen der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Gästen und Mitgliedern aus diesem Grund nicht angezeigt.</string>
   <string name="SYS_ALL">Alle</string>
+  <string name="SYS_ALL_CONTACTS">Alle Kontakte</string>
   <string name="SYS_ALL_DAY">Ganztägig</string>
+  <string name="SYS_ALL_MEMBERS">Alle Mitglieder</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle Organisationen</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Veranstaltung, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">Alle anderen</string>
@@ -356,7 +359,6 @@
   <string name="SYS_COMMA_SEPARATED_FILE">Kommagetrennte Datei (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Allgemein</string>
-  <string name="SYS_COMMON_SETTINGS">Allgemeine Einstellungen</string>
   <string name="SYS_COMMUNICATION">Kommunikation</string>
   <string name="SYS_COMPLEMENT">Ergänzen</string>
   <string name="SYS_CONDITION">Bedingung</string>
@@ -378,6 +380,8 @@
   <string name="SYS_CONTACTS">Kontakte</string>
   <string name="SYS_CONTENT">Inhalt</string>
   <string name="SYS_CONTENTS">Inhalt</string>
+  <string name="SYS_CONTACTS_DESC">Hier können alle aktiven und ehemaligen Mitglieder angezeigt und organisiert werden. Neue Kontakte können importiert oder erstellt werden.</string>
+  <string name="SYS_CONTACTS_PER_PAGE">Anzahl der Kontakte pro Seite</string>
   <string name="SYS_CONTRIBUTION">Beitrag</string>
   <string name="SYS_CONTRIBUTION_PERIOD">Beitragszeitraum</string>
   <string name="SYS_CONVERSATION_PARTNER">Gesprächspartner</string>
@@ -426,8 +430,10 @@
   <string name="SYS_CURRENT_DATABASE_VERSION">Aktuelle Datenbankversion</string>
   <string name="SYS_CURRENT_EVENTS_OF_ORGA">Aktuelle Veranstaltungen der Organisation #VAR1#</string>
   <string name="SYS_CURRENT_MEMBER">Aktuelles Mitglied</string>
+  <string name="SYS_CURRENT_ORGANIZATION">Aktuelle Organisation</string>
   <string name="SYS_CURRENT_PASSWORD">Aktuelles Passwort</string>
   <string name="SYS_CURRENT_PROFILE_PICTURE">Aktuelles Profilfoto</string>
+  <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Aktuelle Rollenmitgliedschaften</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR2# eine E-Mail-Adresse ein.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Veranstaltungen, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
@@ -684,6 +690,7 @@
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
+  <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
   <string name="SYS_FIRSTNAME">Vorname</string>
@@ -702,6 +709,9 @@
   <string name="SYS_FONT">Schriftart</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ehemaliger</string>
+  <string name="SYS_FORMER_CONTACTS">Ehemalige Kontakte</string>
+  <string name="SYS_FORMER_MEMBER">Ehemaliges Mitglied</string>
+  <string name="SYS_FORMER_MEMBER_OF_ROLE_GROUP">Ehemaliges Mitglied der Rolle/Gruppe #VAR1#</string>
   <string name="SYS_FORMER_MEMBERS">Ehemalige Mitglieder</string>
   <string name="SYS_FORMER_PL">Ehemalige</string>
   <string name="SYS_FORMER_ROLE_MEMBERSHIP">Ehemalige Rollenmitgliedschaften</string>
@@ -727,6 +737,7 @@
   <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Das Programm erwartet eine Zeichenkette mit mindestens 2 unterschiedlichen Zeichen.</string>
   <string name="SYS_GREETING_CARD">Grußkarte</string>
+  <string name="SYS_GROUP_ROLE_MEMBERSHIP">Rollen-/Gruppenmitgliedschaft</string>
   <string name="SYS_GROUPS_ROLES">Gruppen &amp; Rollen</string>
   <string name="SYS_GROUPS_ROLES_DESC">Übersicht und Verwaltung aller Gruppen und Rollen der Organisation. Es können verschiedene Mitgliederlisten angezeigt, exportiert und eigene Listen erstellt werden.</string>
   <string name="SYS_HALF_YEARLY">Halbjährlich</string>
@@ -982,10 +993,10 @@
   <string name="SYS_MEMBER">Mitglied</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Mitgliederzuordnung</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Mitglied der Organisation #VAR1#</string>
+  <string name="SYS_MEMBER_OF_ROLE_GROUP">Mitglied der Rolle/Gruppe #VAR1#</string>
+  <string name="SYS_MEMBERS">Mitglieder</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Mitglieder zwischen #VAR1# und #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">Eine der hier vorgegebenen Konfigurationen kann für die Anzeige der Mitgliederverwaltung genutzt werden. Es werden anschließend in der Mitgliederverwaltung die Spalten der ausgewählten Listenkonfiguration angezeigt.</string>
-  <string name="SYS_CONTACTS_DESC">Hier können alle aktiven und ehemaligen Mitglieder angezeigt und organisiert werden. Neue Kontakte können importiert oder erstellt werden.</string>
-  <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Aktuelle Rollenmitgliedschaften</string>
   <string name="SYS_MEMBERS_PER_PAGE">Anzahl Teilnehmende pro Seite</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Voreinstellung: 25)</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Es wurden #VAR1# Mitglieder mit einem ähnlichen Namen gefunden.</string>
@@ -1078,6 +1089,7 @@
   <string name="SYS_NONE">Keiner</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nicht bei Registrierung</string>
   <string name="SYS_NOT_EMPTY">Nicht leer</string>
+  <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Kein Mitglied einer Organisation</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Nicht Mitglied der Organisation #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
   <string name="SYS_NOT_REGISTERED">nicht registriert</string>
@@ -1115,6 +1127,7 @@
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
+  <string name="SYS_ORGANIZATION_AFFILIATION">Organisationszugehörigkeit</string>
   <string name="SYS_ORGANIZATION_DESC">Name und Kontaktangaben der aktuellen Organisation mit der Möglichkeit, Unterorganisationen zu erstellen und anzuzeigen.</string>
   <string name="SYS_OTHER_TABLES">Andere Tabellen (Module von Drittanbietern; nur für Administratoren sichtbar)</string>
   <string name="SYS_OVERHANG">Überhang</string>
@@ -1398,7 +1411,7 @@
   <string name="SYS_SETTINGS">Einstellungen</string>
   <string name="SYS_SHOW_ALL">Alle anzeigen</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional alle Kontakte anzeigen</string>
-  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den aktiven Kontakten der aktuellen Organisation optional auch ehemalige Kontakte und Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den Kontakten der aktuellen Organisation optional auch Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive und inaktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
   <string name="SYS_SHOW_CALENDAR">Kalender anzeigen</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Für nicht angemeldete Benutzer:innen wird im E-Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss die Benutzerin oder der Benutzer vor dem E-Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Voreinstellung: ja)</string>
@@ -1538,7 +1551,7 @@
   <string name="SYS_SSO_OAUTH_KEYS">OIDC (SSO) Schlüssel</string>
   <string name="SYS_SSO_X509_CERTIFICATE">x509 Client-Zertifikat</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">SAML-Nachrichten werden kryptografisch signiert, um Sicherheitsangriffe zu verhindern. Dieses Zertifikat wird vom Client zur Verfügung gestellt und muss genau so eingegeben/kopiert werden, wie vom Client angegeben. Andernfalls schlägt die SAML-Kommunikation fehl und eine SSO-Anmeldung ist nicht möglich.</string>
-  <string name="SYS_SSO">Single-Sign-On (SAML 2.0, OpenId Connect)</string>
+  <string name="SYS_SSO">Single-Sign-On</string>
   <string name="SYS_SSO_SAML">Single-Sign-On mit SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML2.0 aktivieren</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Diese Einstellung macht Admidio zu einem SAML 2.0 Identity Provider (idP) für Single-Sign-On, der es anderen Webanwendungen ermöglicht, Benutzer gegenüber der Admidio-Benutzerliste zu authentifizieren.</string>
@@ -1710,7 +1723,6 @@
   <string name="SYS_USERNAME_DESCRIPTION">Mit diesem Namen kannst du dich anschließend im System anmelden.\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Anmeldename oder E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# am #VAR2# um #VAR3#</string>
-  <string name="SYS_CONTACTS_PER_PAGE">Anzahl der Kontakte pro Seite</string>
   <string name="SYS_USING_CURRENT_VERSION">Du benutzt eine aktuelle #VAR1#Version von Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

@@ -82,6 +82,8 @@ class ListData
      */
     protected function prepareOutputFormat(string $outputFormat): array
     {
+        global $gL10n;
+
         $outputData = array();
         $startRow = 0;
 
@@ -96,6 +98,14 @@ class ListData
             foreach($this->data[$rowNumber] as $columnValueKey => $columnValue) {
                 if (in_array($columnValueKey, array('mem_leader', 'usr_uuid'))) {
                     $outputData[$rowNumber][$columnValueKey] = $columnValue;
+                } elseif ($columnValueKey === 'mem_former') {
+                    if ($outputFormat === 'html' || $outputFormat === 'print' || $outputFormat === 'pdf') {
+                        // For HTML, print, and pdf formats, we keep the boolean value as is
+                        $outputData[$rowNumber][$columnValueKey] = (bool)$columnValue;
+                    } else {
+                        // For all other formats, we convert the boolean value to a string
+                        $outputData[$rowNumber][$columnValueKey] = (bool)$columnValue ? $gL10n->get('SYS_FORMER_MEMBER') : $gL10n->get('SYS_MEMBER');
+                    }
                 } else {
                     $outputData[$rowNumber][$columnValueKey] =
                         $this->listConfiguration->convertColumnContentForOutput(
