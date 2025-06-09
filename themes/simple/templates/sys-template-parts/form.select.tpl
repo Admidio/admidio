@@ -14,10 +14,7 @@
             {$itemvar@key}="{$itemvar}"
         {/foreach}>
         {assign "group" ""}
-        {if $data.values|@count eq 1}
-            {* add a hidden option to keep the select field at least as wide as its label  *}
-            <option value="" hidden="hidden" disabled="disabled">{$data.label}</option>
-        {/if}
+        <option value="" hidden="hidden" disabled="disabled">{$data.label}</option>
         {foreach $data.values as $optionvar}
             {if {array_key_exists key="group" array=$optionvar} && $optionvar["group"] neq $group}
                 {if $group neq ""}</optgroup>{/if}
