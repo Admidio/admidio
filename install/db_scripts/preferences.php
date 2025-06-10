@@ -84,6 +84,7 @@ $defaultOrgPreferences = array(
     'changelog_table_forum_posts' => '0',
     'changelog_table_inventory_fields' => '0',
     'changelog_table_inventory_items' => '0',
+    'changelog_table_inventory_item_data' => '0',
     'changelog_table_inventory_item_lend_data' => '0',
     'changelog_table_saml_clients' => '0',
     'changelog_table_oidc_clients' => '0',
@@ -156,7 +157,7 @@ $defaultOrgPreferences = array(
     'inventory_items_disable_lending'       => '0',
     'inventory_profile_view_enabled'        => '1',
     'inventory_profile_view'                => 'LAST_RECEIVER',
-    'inventory_export_filename'             => 'Inventory',
+    'inventory_export_filename'             => $GLOBALS['gL10n']->get('SYS_INVENTORY'),
     'inventory_add_date'                    => '0',
 
     // Events

@@ -1,3 +1,31 @@
+<script type="text/javascript">
+    /* Function to handle the visibility of fields based on the corresponding option */
+    $(function(){
+        /* Keeper edit */
+        if(!$("#inventory_allow_keeper_edit").is(":checked")) {
+            $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
+        }
+        $("#inventory_allow_keeper_edit").on("change", function() {
+            if(!$("#inventory_allow_keeper_edit").is(":checked")) {
+                $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
+            } else {
+                $("#inventory_allowed_keeper_edit_fields_group").slideDown("slow");
+            }
+        });
+        /* Profile view */
+        if(!$("#inventory_profile_view_enabled").is(":checked")) {
+            $("#inventory_profile_view_group").slideUp("slow");
+        }
+        $("#inventory_profile_view_enabled").on("change", function() {
+            if(!$("#inventory_profile_view_enabled").is(":checked")) {
+                $("#inventory_profile_view_group").slideUp("slow");
+            } else {
+                $("#inventory_profile_view_group").slideDown("slow");
+            }
+        });
+    });
+</script>
+
 <form {foreach $attributes as $attribute}
         {$attribute@key}="{$attribute}"
     {/foreach}>

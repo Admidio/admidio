@@ -55,7 +55,7 @@ class ExportService
         $filename = $gSettingsManager->getString('inventory_export_filename');
         if ($gSettingsManager->getBool('inventory_add_date')) {
             // add system date format to filename
-            $filename .= '_' . date($gSettingsManager->getString('system_date'));
+            $filename = date('Y-m-d') . '_' . $filename;
         }
 
         $inventoryPage = new InventoryPresenter('adm-inventory-print');
