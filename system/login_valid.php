@@ -19,7 +19,16 @@ try {
     if (!$gValidLogin) {
         if (!isset($_SESSION['login_forward_url'])) {
             // remember requested URL, so we could redirect to this URL again after login
-            $_SESSION['login_forward_url'] = CURRENT_URL;
+            $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+            // if it was no ajax request, we can store the current URL, otherwise we have to store the previous URL set as header from the ajax request
+            if ($isAjax) {
+                $previousUrl = $_SERVER['HTTP_X_AJAX_PREVIOUS_URL'] ?? null;
+                if ($previousUrl && filter_var($previousUrl, FILTER_VALIDATE_URL)) {
+                    $_SESSION['login_forward_url'] = $previousUrl;
+                }
+            } else {
+                $_SESSION['login_forward_url'] = CURRENT_URL;
+            }
         }
 
         // User not logged in -> Request login site
