@@ -534,6 +534,7 @@
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DQUOTE">Double quote (")</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
+  <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Drop-down list box (multi-select)</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>

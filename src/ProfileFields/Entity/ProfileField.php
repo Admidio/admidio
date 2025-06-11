@@ -195,7 +195,7 @@ class ProfileField extends Entity
 
                     break;
                 case 'usf_value_list':
-                    if ($this->dbColumns['usf_type'] === 'DROPDOWN' || $this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
+                    if ($this->dbColumns['usf_type'] === 'DROPDOWN' ||  $this->dbColumns['usf_type'] === 'DROPDOWN_MULTISELECT' || $this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
                         $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
 
                         // first replace windows new line with unix new line and then create an array

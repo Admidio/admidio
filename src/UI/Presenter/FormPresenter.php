@@ -1188,6 +1188,39 @@ class FormPresenter
                     language: "' . $gL10n->getLanguageLibs() . '"
                 });';
 
+            // if multiselect is enabled and it is not a required field then it is possible that the user has not selected any entry.
+            if ($optionsAll['multiselect'] && $optionsAll['property'] !== self::FIELD_REQUIRED) {
+                // add a javascript code to select an empty entry when no entry is selected
+                $javascriptCode .= '
+                    // if the user unselects all entries then we add an empty entry to the select box and select it.
+                    $("#' . $id . '").on("select2:unselect", function(e) {
+                        var $sel = $(this);
+                        var current = $sel.val(); // Array oder null
+                        if (current === null || current.length === 0) {
+                            if ($sel.find("option[value=\'\']").length === 0) {
+                                $sel.append(\'<option value="" selected></option>\');
+                                $sel.trigger("change.select2");
+                            } else {
+                                $sel.val("").trigger("change.select2");
+                            }
+                        }
+                    });
+                    
+                    // if the user selects an entry and the empty entry is selected then remove the empty entry
+                    $("#' . $id . '").on("select2:select", function(e) {
+                        var $sel = $(this);
+                        var current = $sel.val() || [];
+                        if (Array.isArray(current) && current.length > 1 && current.indexOf("") !== -1) {
+                            $sel.find(\'option[value=""]\').remove();
+                            var newVals = current.filter(function(v) {
+                                return v !== "";
+                            });
+                            $sel.val(newVals).trigger("change.select2");
+                        }
+                    });';
+
+            }
+
             if (is_array($optionsAll['defaultValue']) && count($optionsAll['defaultValue']) > 0) {
                 // add default values to multi select
                 $htmlDefaultValues = '"' . implode('", "', $optionsAll['defaultValue']) . '"';
