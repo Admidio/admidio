@@ -962,6 +962,7 @@
   <string name="SYS_NUMBER_COL_DESC">Vastav märkeruut peab olema aktiveeritud, kui soovid aruande lõpus kuvada rida liikmete arvuga.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Albumite arv lehel</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Leheküljel kuvatavate kirjete arv. Kui kirjeid on rohkem, kuvatakse lehtede vahel liikumiseks navigeerimiselemendid. (Vaikimisi: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Leheküljel kuvatavate kirjete arv. Kui kirjeid on rohkem, kuvatakse lehtede vahel liikumiseks navigeerimiselemendid. (Vaikimisi: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Saajate arv</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Sellel väljal olev number näitab e-kirjas olevate adressaatide maksimaalset arvu. Teenusepakkujad võivad seda arvu piirata. Kui e-kiri tuleks saata rohkematele adressaatidele kui siin määratud arv, genereeritakse mitu e-kirja. Perioodi jooksul saadetavate võimalike e-kirjade arvu võivad teenusepakkujad samuti piirata. (Vaikimisi: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF-i arvutustabel (*.ods)</string>

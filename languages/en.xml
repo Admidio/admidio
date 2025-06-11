@@ -1114,6 +1114,7 @@
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Number of albums per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is 0, all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is "All", all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Number of posts per page</string>
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Number of topics per page</string>
   <string name="SYS_NUMBER_RECIPIENTS">Number of recipients</string>

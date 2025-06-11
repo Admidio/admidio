@@ -591,12 +591,12 @@ class PreferencesPresenter extends PagePresenter
             $sqlData,
             array('defaultValue' => $formValues['contacts_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MEMBERS_CONFIGURATION_DESC')
         );
-        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
         $formContacts->addSelectBox(
             'contacts_per_page',
             $gL10n->get('SYS_CONTACTS_PER_PAGE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
+            array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(25)))
         );
         $formContacts->addInput(
             'contacts_field_history_days',
@@ -796,12 +796,12 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ACCESS_TO_MODULE_DESC')
         );
 
-        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
         $formInventory->addSelectBox(
             'inventory_items_per_page',
             $gL10n->get('SYS_INVENTORY_ITEMS_PER_PAGE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['inventory_items_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
+            array('defaultValue' => $formValues['inventory_items_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(25)))
         );
 
         $formInventory->addInput(
@@ -1159,12 +1159,12 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['events_view'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_DEFAULT_VIEW_DESC', array('SYS_DETAILED', 'SYS_COMPACT')))
         );
-        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
         $formEvents->addSelectBox(
             'events_per_page',
             $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+            array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(10)))
         );
         $formEvents->addCheckbox(
             'events_ical_export_enabled',

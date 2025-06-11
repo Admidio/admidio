@@ -567,19 +567,20 @@ class InventoryPresenter extends PagePresenter
 
                 $dataTables->disableColumnsSort(array(1, count($templateData['headers'])));
                 $dataTables->setColumnsNotHideResponsive(array(1, count($templateData['headers'])));
+                $dataTables->setRowsPerPage(-1); // show all items
             }
             else {
                 $this->addJavascript('
-                    // button remove style="display: none;"
+                    // button add style="display: none;"
                     $("#delete-selected").css("display", "none");
                 ', false);
 
                 $dataTables->disableColumnsSort(array(count($templateData['headers'])));
                 $dataTables->setColumnsNotHideResponsive(array(count($templateData['headers'])));
+                $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
             }
             $dataTables->createJavascript(count($templateData['rows']), count($templateData['headers']));
             $dataTables->setColumnAlignByArray($templateData['column_align']);
-            $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
         }
         else {
             $templateData = $this->prepareData('print');

@@ -1114,6 +1114,7 @@
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Anzahl Alben pro Seite</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert 0 ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert "Alle" ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Anzahl der Beiträge pro Seite</string>
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Anzahl der Themen pro Seite</string>
   <string name="SYS_NUMBER_RECIPIENTS">Anzahl der Empfänger:innen</string>
