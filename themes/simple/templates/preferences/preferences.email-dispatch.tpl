@@ -6,9 +6,9 @@
         }
         $("#mail_sending_mode").on("change", function() {
             if($("#mail_sending_mode").val() == 1) {
-                $(fieldsToHideOnSingleMode).hide();
+                $(fieldsToHideOnSingleMode).slideUp("slow");
             } else {
-                $(fieldsToHideOnSingleMode).show();
+                $(fieldsToHideOnSingleMode).slideDown("slow");
             }
         });
     });

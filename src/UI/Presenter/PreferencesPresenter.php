@@ -98,7 +98,19 @@ class PreferencesPresenter extends PagePresenter
                 ),
             ),
 
-            // === 2) Communication ===
+            // === 3) User Management ===
+            array(
+                'key'    => 'user_management',
+                'label'  => $gL10n->get('SYS_USERS'),
+                'panels' => array(
+                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
+                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
+                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
+                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
+                ),
+            ),
+
+            // === 4) Communication ===
             array(
                 'key'    => 'communication',
                 'label'  => $gL10n->get('SYS_COMMUNICATION'),
@@ -111,7 +123,7 @@ class PreferencesPresenter extends PagePresenter
                 ),
             ),
         
-            // === 3) Contents ===
+            // === 5) Contents ===
             array(
                 'key'    => 'content_management',
                 'label'  => $gL10n->get('SYS_CONTENTS'),
@@ -120,18 +132,6 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false),
                     array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
                     array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
-                ),
-            ),
-        
-            // === 4) User Management ===
-            array(
-                'key'    => 'user_management',
-                'label'  => $gL10n->get('SYS_USERS'),
-                'panels' => array(
-                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
-                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
-                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
-                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
                 ),
             ),
         );
@@ -334,9 +334,9 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
         $formCategoryReport->addCheckbox(
-            'category_report_enable_module',
+            'category_report_module_enabled',
             $gL10n->get('SYS_ENABLE_CATEGORY_REPORT'),
-            (bool) $formValues['category_report_enable_module'],
+            (bool) $formValues['category_report_module_enabled'],
             array('helpTextId' => array('SYS_ENABLE_CATEGORY_REPORT_DESC', array($gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'))))
         );
         // read all global lists
@@ -803,23 +803,6 @@ class PreferencesPresenter extends PagePresenter
             array('maxLength' => 50, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
         );
 
-        // Add js to show or hide mail options
-        $this->addJavascript('
-            $(function(){
-                var fieldsToHideOnSingleMode = "#mail_recipients_with_roles_group, #mail_into_to_group, #mail_number_recipients_group";
-                if($("#mail_sending_mode").val() == 1) {
-                    $(fieldsToHideOnSingleMode).hide();
-                }
-                $("#mail_sending_mode").on("change", function() {
-                    if($("#mail_sending_mode").val() == 1) {
-                        $(fieldsToHideOnSingleMode).hide();
-                    } else {
-                        $(fieldsToHideOnSingleMode).show();
-                    }
-                });
-            });
-        ');
-
         $selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
         $formEmailDispatch->addSelectBox(
             'mail_sending_mode',
@@ -1074,9 +1057,9 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
         $formGroupsRoles->addCheckbox(
-            'groups_roles_enable_module',
+            'groups_roles_module_enabled',
             $gL10n->get('SYS_ENABLE_GROUPS_ROLES'),
-            (bool) $formValues['groups_roles_enable_module'],
+            (bool) $formValues['groups_roles_module_enabled'],
             array('helpTextId' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
         );
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
@@ -1698,9 +1681,9 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
         $formRegistration->addCheckbox(
-            'registration_enable_module',
+            'registration_module_enabled',
             $gL10n->get('ORG_ENABLE_REGISTRATION_MODULE'),
-            (bool) $formValues['registration_enable_module'],
+            (bool) $formValues['registration_module_enabled'],
             array('helpTextId' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC')
         );
         $formRegistration->addCheckbox(
@@ -2437,6 +2420,51 @@ class PreferencesPresenter extends PagePresenter
                         directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
                     });
                 });
+               
+                // Module Settings visibility
+                // Universal handling for module enabled toggle within the current panel container
+                
+                // define additional ids that should also be considered for visibility toggling
+                var additionalIds = [\'#system_notifications_enabled\'];
+                // Look for any input whose id ends with "_module_enabled"
+                var selectors = ["[id$=\'_module_enabled\']"].concat(additionalIds);
+
+                var moduleEnabledField = panelContainer.find(selectors.join(", ")).filter(":visible");
+                if (moduleEnabledField.length > 0) {
+                    // Get all row elements inside the form, excluding the row containing the module enabled field
+                    var formElementGroups = panelContainer.find("form div.row")
+                        .not(moduleEnabledField.closest("div.row"));
+                    
+                    // Function to update visibility based on the fields type and state
+                    var updateVisibility = function(initialCall) {
+                        var isEnabled;
+                        if (moduleEnabledField.attr("type") === "checkbox") {
+                            isEnabled = moduleEnabledField.is(":checked");
+                        } else {
+                            isEnabled = moduleEnabledField.val() != 0;
+                        }
+                        
+                        if (initialCall === true) {
+                            if (isEnabled) {
+                                formElementGroups.show();
+                            } else {
+                                formElementGroups.hide();
+                            }
+                        } else {
+                            if (isEnabled) {
+                                formElementGroups.slideDown("slow");
+                            } else {
+                                formElementGroups.slideUp("slow");
+                            }
+                        }
+                    };
+                    
+                    // Set initial state without animation
+                    updateVisibility(true);
+                    
+                    // Update visibility on change
+                    moduleEnabledField.on("change", updateVisibility);
+                }
             }
         
             // === 3) Hooks für Desktop-Tabs ===
