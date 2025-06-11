@@ -655,7 +655,7 @@ class DocumentsPresenter extends PagePresenter
         $dataTables = new DataTables($this, 'adm_documents_files_table');
         $dataTables->disableColumnsSort(array(1, 6));
         $dataTables->setColumnsNotHideResponsive(array(6));
-        $dataTables->createJavascript(count($this->data), 6);
+        $dataTables->createJavascript(count($templateData), 6);
 
         $this->smarty->assign('infoAlert', $infoAlert);
         $this->smarty->assign('list', $templateData);
