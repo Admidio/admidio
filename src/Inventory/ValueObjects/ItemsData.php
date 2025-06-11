@@ -999,6 +999,7 @@ class ItemsData
 
                 $item = new Item($this->mDb, $this, $this->mItemId);
                 $item->setValue('ini_cat_id', $catID);
+                $item->save();
                 $value->delete();
             }
             elseif ($value instanceof ItemData) {
