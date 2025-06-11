@@ -1,3 +1,7 @@
+{if strlen($infoAlert) > 0}
+    <div class="alert alert-info" role="alert"><i class="bi bi-info-circle-fill"></i>{$infoAlert}</div>
+{/if}
+
 <form {foreach $attributes as $attribute}
         {$attribute@key}="{$attribute}"
     {/foreach}>
@@ -7,7 +11,11 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_DESIGNATION')}</div>
         <div class="card-body">
-            {include 'sys-template-parts/form.input.tpl' data=$elements['INF-ITEMNAME']}  {* Name *}
+            {if $multiEdit}
+                {include 'sys-template-parts/form.multiline.tpl' data=$elements['INF-ITEMNAME']}  {* Names *}
+            {else}
+                {include 'sys-template-parts/form.input.tpl' data=$elements['INF-ITEMNAME']}  {* Name *}
+            {/if}
         </div>
     </div>
     <div class="card admidio-field-group">

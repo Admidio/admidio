@@ -452,18 +452,21 @@ class InventoryPresenter extends PagePresenter
             // initialize and set the parameter for DataTables
             $dataTables = new DataTables($this, 'adm_inventory_table');
             if ($this->getFilterItems == 2) {
+                // add the checkbox for selecting items and action buttons
                 $this->addJavascript('
                     $(document).ready(function() {
                         // base URLs
-                        var explainUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg")) . '";
+                        var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
+                        var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg")) . '";
 
                         // cache jQuery objects
-                        var $table     = $("#adm_inventory_table");
-                        var tableApi   = new $.fn.dataTable.Api($table);
-                        var $button    = $("#delete-selected").css("display","block");
-                        var $headChk   = $table.find("thead input[type=checkbox]");
-                        var $rowChks   = function(){ return $table.find("tbody input[type=checkbox]"); };
-                        var $actions   = $("#adm_inventory_table_select_actions");
+                        var $table          = $("#adm_inventory_table");
+                        var tableApi        = new $.fn.dataTable.Api($table);
+                        var $editButton    = $("#edit-selected").css("display","block");
+                        var $deleteButon    = $("#delete-selected").css("display","block");
+                        var $headChk        = $table.find("thead input[type=checkbox]");
+                        var $rowChks        = function(){ return $table.find("tbody input[type=checkbox]"); };
+                        var $actions        = $("#adm_inventory_table_select_actions");
 
                         // master list of selected IDs
                         var selectedIds = [];
@@ -473,7 +476,8 @@ class InventoryPresenter extends PagePresenter
                         }
 
                         function refreshActions() {
-                            $button.prop("disabled", !anySelected());
+                            $editButton.prop("disabled", !anySelected());
+                            $deleteButon.prop("disabled", !anySelected());
                         }
 
                         function updateHeaderState() {
@@ -538,28 +542,45 @@ class InventoryPresenter extends PagePresenter
                         $actions
                             .off("click", "#delete-selected")
                             .on("click", "#delete-selected", function(){
-                            // build uuids[] querystring
-                            var qs = selectedIds
-                                .map(function(id){
-                                return "uuids[]=" + encodeURIComponent(id);
+                                // build uuids[] querystring
+                                var qs = selectedIds
+                                    .map(function(id){
+                                    return "item_uuids[]=" + encodeURIComponent(id);
+                                    })
+                                    .join("&");
+
+                                // full URL to your explain_msg endpoint
+                                var popupUrl = explainDeleteUrlBase + "&" + qs;
+
+                                // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
+                                $("<a>", {
+                                    href: "javascript:void(0);",
+                                    class: "admidio-icon-link openPopup",
+                                    "data-href": popupUrl
                                 })
-                                .join("&");
+                                .appendTo("body")
+                                .click()    // trigger the built-in openPopup handler
+                                .remove();
+                            });
+                            // bulk-edit button → fire Admidio’s openPopup against item_edit URL
+                        $actions
+                            .off("click", "#edit-selected")
+                            .on("click", "#edit-selected", function(){
+                                // build uuids[] querystring
+                                var qs = selectedIds
+                                    .map(function(id){
+                                        return "item_uuids[]=" + encodeURIComponent(id);
+                                    })
+                                    .join("&");
 
-                            // full URL to your explain_msg endpoint
-                            var popupUrl = explainUrlBase + "&" + qs;
+                                // full URL to the edit endpoint
+                                var editUrl = editUrlBase + "&" + qs;
 
-                            // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
-                            $("<a>", {
-                                href: "javascript:void(0);",
-                                class: "admidio-icon-link openPopup",
-                                "data-href": popupUrl
-                            })
-                            .appendTo("body")
-                            .click()    // trigger the built-in openPopup handler
-                            .remove();
+                                // open the editUrl directly in the current window
+                                window.location.href = editUrl;
                             });
 
-                        // initialize button state
+                        // initialize button states
                         refreshActions();
                     });'
                     , true

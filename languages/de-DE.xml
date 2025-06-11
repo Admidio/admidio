@@ -502,6 +502,7 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Profilbild löschen</string>
   <string name="SYS_DELETE_ROLE">Rolle löschen</string>
   <string name="SYS_DELETE_ROLE_DESC">Wollen Sie die Rolle #VAR1_BOLD# wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften endgültig entfernt.</string>
+  <string name="SYS_DELETE_SELECTION">Auswahl löschen</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Sie dürfen keine Systemkategorien löschen.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">Sie können die Systemrolle #VAR1_BOLD# nicht löschen.</string>
   <string name="SYS_DELETED">Gelöscht</string>
@@ -570,6 +571,7 @@
   <string name="SYS_EDIT_ROLE">Rolle bearbeiten</string>
   <string name="SYS_EDIT_ROOMS">Räume bearbeiten</string>
   <string name="SYS_EDIT_ROOMS_DESC">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</string>
+  <string name="SYS_EDIT_SELECTION">Auswahl bearbeiten</string>
   <string name="SYS_EDIT_TOPIC">Thema bearbeiten</string>
   <string name="SYS_EDIT_TOPICS">Themen bearbeiten</string>
   <string name="SYS_EDIT_USER">Benutzer:in bearbeiten</string>
@@ -836,6 +838,8 @@
   <string name="SYS_INVENTORY_ITEMS">Gegenstände</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING">Ausleih-Funktionalität deaktivieren</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC">Wenn diese Option aktiviert ist, können Gegenstände nicht mehr ausgeliehen werden. Vorhandene Ausleihdaten werden weiterhin gespeichert, allerdings nicht länger angezeigt. (Voreinstellung: nein)</string>
+  <string name="SYS_INVENTORY_ITEMS_EDIT">Gegenstände ändern</string>
+  <string name="SYS_INVENTORY_ITEMS_EDIT_DESC">Die Werte der Eigenschaftsfelder können hier geändert werden.\n\nDie dargestellten Werte werden für ALLE Gegenstände übernommen!</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Anzahl der Gegenstände pro Seite</string>
   <string name="SYS_INVENTORY_ITEMFIELD">Eigenschaftsfeld</string>
   <string name="SYS_INVENTORY_ITEMFIELD_CREATE">Eigenschaftsfeld anlegen</string>
@@ -879,9 +883,9 @@
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESC">Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde</string>
   <string name="SYS_INVENTORY_RECEIVED_ON">Verliehen am</string>
   <string name="SYS_INVENTORY_RECEIVED_ON_DESC">Das Verleihdatum des Gegenstandes an den letzten Empfänger</string>
-  <string name="SYS_INVENTORY_SELECTION_DELETE">Auswahl löschen</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">Wenn Sie #VAR1_BOLD# auswählen, werden die Gegenstände zusammen mit den dazugehörigen Datensätzen unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Gegenstände einzusehen.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">Die ausgewählten Gegenstände wurden gelöscht.</string>
+  <string name="SYS_INVENTORY_SELECTION_EDITED">Gegenstände erfolgreich geändert</string>
   <string name="SYS_INVENTORY_SELECTION_MADE_FORMER">Die ausgewählten Gegenstände wurden ausgesondert.</string>
   <string name="SYS_INVENTORY_SELECTION_MAKE_FORMER">Auswahl aussondern</string>
   <string name="SYS_INVENTORY_SELECTION_MAKE_FORMER_DESC">Sie können die ausgewählten Gegenstände auch aussondern, indem Sie #VAR1_BOLD# auswählen. Dies hat den Vorteil, dass die Daten erhalten bleiben und Sie später immer wieder sehen können, wer diesen Gegenstand ausgeliehen hat.</string>

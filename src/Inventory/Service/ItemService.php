@@ -84,10 +84,10 @@ class ItemService
 
     /**
      * Save data from the profile field form into the database.
-     * 
+     * @param bool $multiEdit If true, the form is used for multi-editing of items.
      * @throws Exception
      */
-    public function save(): void
+    public function save(bool $multiEdit = false): void
     {
         global $gCurrentSession, $gL10n, $gSettingsManager;
 
@@ -152,7 +152,7 @@ class ItemService
                             throw new Exception($gL10n->get('SYS_DATABASE_ERROR'), $gL10n->get('SYS_ERROR'));
                         }
                     }
-                } elseif ($itemField->getValue('inf_type') === 'CHECKBOX') {
+                } elseif ($itemField->getValue('inf_type') === 'CHECKBOX' && !$multiEdit) {
                     // Set value to '0' for unchecked checkboxes
                     $this->itemRessource->setValue($itemField->getValue('inf_name_intern'), '0');
                 }

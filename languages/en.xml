@@ -502,6 +502,7 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
+  <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
   <string name="SYS_DELETED">Deleted</string>
@@ -570,6 +571,7 @@
   <string name="SYS_EDIT_ROLE">Edit role</string>
   <string name="SYS_EDIT_ROOMS">Edit rooms</string>
   <string name="SYS_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
+  <string name="SYS_EDIT_SELECTION">Edit selection</string>
   <string name="SYS_EDIT_TOPIC">Edit topic</string>
   <string name="SYS_EDIT_TOPICS">Edit topics</string>
   <string name="SYS_EDIT_USER">Edit user</string>
@@ -836,6 +838,8 @@
   <string name="SYS_INVENTORY_ITEMS">Items</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING">Disable borrowing functionality</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC">When this option is enabled, items can no longer be borrowed. Existing borrowing records will still be saved, but will no longer be displayed. (Default: no)</string>
+  <string name="SYS_INVENTORY_ITEMS_EDIT">Change items</string>
+  <string name="SYS_INVENTORY_ITEMS_EDIT_DESC">The values of the item fields can be changed here.\n\nThe displayed values will be applied to ALL items!</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Number of items per page</string>
   <string name="SYS_INVENTORY_ITEMFIELD">Item field</string>
   <string name="SYS_INVENTORY_ITEMFIELD_CREATE">Create new item field</string>
@@ -879,9 +883,10 @@
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESC">The date the item was returned to the keeper</string>
   <string name="SYS_INVENTORY_RECEIVED_ON">Borrowed on</string>
   <string name="SYS_INVENTORY_RECEIVED_ON_DESC">The borrowing date of the item to the last recipient</string>
-  <string name="SYS_INVENTORY_SELECTION_DELETE">Delete selection</string>
+  <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">If you select #VAR1_BOLD#, the items along with their associated records will be irrevocably removed from the database, and it will not be possible to view the data of these items later.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">The selected items have been deleted.</string>
+  <string name="SYS_INVENTORY_SELECTION_EDITED">Items successfully changed</string>
   <string name="SYS_INVENTORY_SELECTION_MADE_FORMER">The selected items have been marked as former.</string>
   <string name="SYS_INVENTORY_SELECTION_MAKE_FORMER">Mark selection as former</string>
   <string name="SYS_INVENTORY_SELECTION_MAKE_FORMER_DESC">You can also mark the selected items as former by choosing #VAR1_BOLD#. This has the advantage that the data is preserved and you can always later see who borrowed the item.</string>
