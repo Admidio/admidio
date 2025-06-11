@@ -49,7 +49,7 @@ $defaultOrgPreferences = array(
     // Registration
     'registration_adopt_all_data' => '1',
     'registration_enable_captcha' => '1',
-    'registration_enable_module' => '1',
+    'registration_module_enabled' => '1',
     'registration_manual_approval' => '1',
     'registration_send_notification_email' => '1',
 
@@ -125,7 +125,7 @@ $defaultOrgPreferences = array(
     'announcements_per_page' => '10',
 
     // Category-Report
-    'category_report_enable_module' => '1',
+    'category_report_module_enabled' => '1',
     'category_report_default_configuration' => '',
 
     // Contacts
@@ -158,16 +158,16 @@ $defaultOrgPreferences = array(
 
     // Groups and roles
     'groups_roles_default_configuration' => '',
-    'groups_roles_enable_module' => '1',
+    'groups_roles_module_enabled' => '1',
     'groups_roles_export' => '1',
     'groups_roles_edit_lists' => '1',
     'groups_roles_members_per_page' => '25',
     'groups_roles_show_former_members' => '2',
 
     // Messages
-    'enable_mail_module' => '1',
-    'enable_pm_module' => '1',
-    'enable_mail_captcha' => '1',
+    'mail_module_enabled' => '1',
+    'pm_module_enabled' => '1',
+    'mail_captcha_enabled' => '1',
     'mail_delivery_confirmation' => '0',
     'mail_html_registered_users' => '1',
     'mail_max_receiver' => '10',
@@ -216,7 +216,7 @@ $defaultOrgPreferences = array(
 
 
     // Weblinks
-    'enable_weblinks_module' => '1',
+    'weblinks_module_enabled' => '1',
     'weblinks_per_page' => '0',
     'weblinks_redirect_seconds' => '10',
     'weblinks_target' => '_blank'

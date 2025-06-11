@@ -242,7 +242,8 @@ class Component extends Entity
                 break;
 
             case 'DOCUMENTS-FILES':
-                if ($gSettingsManager->getBool('documents_files_module_enabled')) {
+                if ($gSettingsManager->getInt('documents_files_module_enabled') === 1
+                || ($gSettingsManager->getInt('documents_files_module_enabled') === 2 && $gValidLogin)) {
                     try {
                         $documentsRootFolder = new Folder($gDb);
                         $documentsRootFolder->getFolderForDownload('');
@@ -261,21 +262,21 @@ class Component extends Entity
                 break;
 
             case 'LINKS':
-                if ($gSettingsManager->getInt('enable_weblinks_module') === 1
-                || ($gSettingsManager->getInt('enable_weblinks_module') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('weblinks_module_enabled') === 1
+                || ($gSettingsManager->getInt('weblinks_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
 
             case 'GROUPS-ROLES':
-                if ($gSettingsManager->getBool('groups_roles_enable_module') && $gValidLogin) {
+                if ($gSettingsManager->getBool('groups_roles_module_enabled') && $gValidLogin) {
                     return true;
                 }
                 break;
 
             case 'MESSAGES':
-                if ($gSettingsManager->getBool('enable_mail_module')
-                || ($gSettingsManager->getBool('enable_pm_module') && $gValidLogin)) {
+                if (($gSettingsManager->getInt('mail_module_enabled') === 1 || ($gSettingsManager->getInt('mail_module_enabled') === 2 && $gValidLogin))
+                || ($gSettingsManager->getBool('pm_module_enabled') && $gValidLogin)) {
                     return true;
                 }
                 break;
@@ -294,7 +295,7 @@ class Component extends Entity
                 break;
 
             case 'REGISTRATION':
-                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->isAdministratorRegistration()) {
+                if ($gSettingsManager->getBool('registration_module_enabled') && $gCurrentUser->isAdministratorRegistration()) {
                     return true;
                 }
                 break;

@@ -29,7 +29,7 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // check if the module is enabled and disallow access if it's disabled
-    if (!$gSettingsManager->getBool('category_report_enable_module')) {
+    if (!$gSettingsManager->getBool('category_report_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 

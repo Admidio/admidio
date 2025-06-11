@@ -387,7 +387,7 @@ try {
         if ($gCurrentUser->isAdministratorUsers()) {
             // add link to send email to user
             if (!empty($row['member_email'])) {
-                if (!$gSettingsManager->getBool('enable_mail_module')) {
+                if (!($gSettingsManager->getInt('mail_module_enabled') > 0)) {
                     $mailLink = 'mailto:' . $row['member_email'];
                 } else {
                     $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));

@@ -299,7 +299,7 @@ class HtmlPage
         $this->smarty->assign('currentUser', $gCurrentUser);
         $this->smarty->assign('validLogin', $gValidLogin);
         $this->smarty->assign('debug', $gDebug);
-        $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
+        $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_module_enabled'));
 
         // add imprint and data protection
         if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {

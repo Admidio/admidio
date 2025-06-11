@@ -103,7 +103,7 @@ class ModuleContacts extends PagePresenter
             $templateRow['data'] = $similarUser->getProfileFieldsData();
             $templateRow['profileUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL. FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $similarUser->getValue('usr_uuid')));
 
-            if ($gSettingsManager->getBool('enable_mail_module')) {
+            if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
                 $templateRow['emailUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/messages/messages_write.php', array('user_uuid' => $similarUser->getValue('usr_uuid')));
             } else {
                 $templateRow['emailUrl'] = 'mailto:'.$similarUser->getValue('EMAIL');

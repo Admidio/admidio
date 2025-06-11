@@ -98,7 +98,19 @@ class PreferencesPresenter extends PagePresenter
                 ),
             ),
 
-            // === 2) Communication ===
+            // === 3) User Management ===
+            array(
+                'key'    => 'user_management',
+                'label'  => $gL10n->get('SYS_USERS'),
+                'panels' => array(
+                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
+                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
+                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
+                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
+                ),
+            ),
+
+            // === 4) Communication ===
             array(
                 'key'    => 'communication',
                 'label'  => $gL10n->get('SYS_COMMUNICATION'),
@@ -111,7 +123,7 @@ class PreferencesPresenter extends PagePresenter
                 ),
             ),
         
-            // === 3) Contents ===
+            // === 5) Contents ===
             array(
                 'key'    => 'content_management',
                 'label'  => $gL10n->get('SYS_CONTENTS'),
@@ -120,18 +132,6 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false),
                     array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
                     array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
-                ),
-            ),
-        
-            // === 4) User Management ===
-            array(
-                'key'    => 'user_management',
-                'label'  => $gL10n->get('SYS_USERS'),
-                'panels' => array(
-                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
-                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
-                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
-                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
                 ),
             ),
         );
@@ -151,7 +151,7 @@ class PreferencesPresenter extends PagePresenter
         $formAnnouncements = new FormPresenter(
             'adm_preferences_form_announcements',
             'preferences/preferences.announcements.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Announcements')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'announcements')),
             null,
             array('class' => 'form-preferences')
         );
@@ -207,7 +207,7 @@ class PreferencesPresenter extends PagePresenter
         $formCaptcha = new FormPresenter(
             'adm_preferences_form_captcha',
             'preferences/preferences.captcha.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Captcha')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'captcha')),
             null,
             array('class' => 'form-preferences')
         );
@@ -329,14 +329,14 @@ class PreferencesPresenter extends PagePresenter
         $formCategoryReport = new FormPresenter(
             'adm_preferences_form_category_report',
             'preferences/preferences.category-report.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'CategoryReport')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'category_report')),
             null,
             array('class' => 'form-preferences')
         );
         $formCategoryReport->addCheckbox(
-            'category_report_enable_module',
+            'category_report_module_enabled',
             $gL10n->get('SYS_ENABLE_CATEGORY_REPORT'),
-            (bool) $formValues['category_report_enable_module'],
+            (bool) $formValues['category_report_module_enabled'],
             array('helpTextId' => array('SYS_ENABLE_CATEGORY_REPORT_DESC', array($gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'))))
         );
         // read all global lists
@@ -381,7 +381,7 @@ class PreferencesPresenter extends PagePresenter
         $formChangelog = new FormPresenter(
             'adm_preferences_form_changelog',
             'preferences/preferences.changelog.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Changelog')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'changelog')),
             null,
             array('class' => 'form-preferences')
         );
@@ -472,7 +472,7 @@ class PreferencesPresenter extends PagePresenter
         $formCommon = new FormPresenter(
             'adm_preferences_form_common',
             'preferences/preferences.common.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Common')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'common')),
             null,
             array('class' => 'form-preferences')
         );
@@ -565,7 +565,7 @@ class PreferencesPresenter extends PagePresenter
         $formContacts = new FormPresenter(
             'adm_preferences_form_contacts',
             'preferences/preferences.contacts.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Contacts')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'contacts')),
             null,
             array('class' => 'form-preferences')
         );
@@ -648,7 +648,7 @@ class PreferencesPresenter extends PagePresenter
 
         $formValues = $gSettingsManager->getAll();
 
-        $formCommon = new FormPresenter(
+        $formDesign = new FormPresenter(
             'adm_preferences_form_design',
             'preferences/preferences.design.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'design')),
@@ -661,58 +661,58 @@ class PreferencesPresenter extends PagePresenter
         if (count($themes) === 0) {
             throw new Exception('SYS_TEMPLATE_FOLDER_OPEN');
         }
-        $formCommon->addSelectBox(
+        $formDesign->addSelectBox(
             'theme',
             $gL10n->get('ORG_ADMIDIO_THEME'),
             $themes,
             array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
         );
-        $formCommon->addSelectBox(
+        $formDesign->addSelectBox(
             'theme_fallback',
             $gL10n->get('ORG_ADMIDIO_THEME_FALLBACK'),
             $themes,
             array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC')
         );
-        $formCommon->addInput(
+        $formDesign->addInput(
             'color_primary',
             $gL10n->get('SYS_COLOR_PRIMARY'),
             $formValues['color_primary']??'#349aaa',
             array('type' => 'color', 'helpTextId' => 'SYS_COLOR_PRIMARY_DESC')
         );
-        $formCommon->addInput(
+        $formDesign->addInput(
             'color_secondary',
             $gL10n->get('SYS_COLOR_SECONDARY'),
             $formValues['color_secondary']??'#263340',
             array('type' => 'color', 'helpTextId' => 'SYS_COLOR_SECONDARY_DESC')
         );
 
-        $formCommon->addInput(
+        $formDesign->addInput(
             'additional_styles_file',
             $gL10n->get('SYS_ADDITIONAL_CSS_FILE'),
             $formValues['additional_styles_file']??'',
             array('helpTextId' => 'SYS_ADDITIONAL_CSS_FILE_DESC')
         );
-        $formCommon->addInput(
+        $formDesign->addInput(
             'logo_file',
             $gL10n->get('SYS_LOGO_FILE'),
             $formValues['logo_file']??'',
             array('helpTextId' => 'SYS_LOGO_FILE_DESC')
         );
-        $formCommon->addInput(
+        $formDesign->addInput(
             'favicon_file',
             $gL10n->get('SYS_FAVICON_FILE'),
             $formValues['favicon_file']??'',
             array('helpTextId' => 'SYS_FAVICON_FILE_DESC')
         );
-        $formCommon->addSubmitButton(
+        $formDesign->addSubmitButton(
             'adm_button_save_design',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
         $smarty = $this->getSmartyTemplate();
-        $formCommon->addToSmarty($smarty);
-        $gCurrentSession->addFormObject($formCommon);
+        $formDesign->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formDesign);
         return $smarty->fetch('preferences/preferences.design.tpl');
     }
 
@@ -731,15 +731,20 @@ class PreferencesPresenter extends PagePresenter
         $formDocumentsFiles = new FormPresenter(
             'adm_preferences_form_documents_files',
             'preferences/preferences.documents-files.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'DocumentsFiles')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'documents_files')),
             null,
             array('class' => 'form-preferences')
         );
-        $formDocumentsFiles->addCheckbox(
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formDocumentsFiles->addSelectBox(
             'documents_files_module_enabled',
-            $gL10n->get('SYS_ENABLE_DOCUMENTS_FILES_MODULE'),
-            (bool) $formValues['documents_files_module_enabled'],
-            array('helpTextId' => 'SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC')
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['documents_files_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
         $formDocumentsFiles->addInput(
             'documents_files_max_upload_size',
@@ -774,7 +779,7 @@ class PreferencesPresenter extends PagePresenter
         $formEmailDispatch = new FormPresenter(
             'adm_preferences_form_email_dispatch',
             'preferences/preferences.email-dispatch.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'EmailDispatch')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'email_dispatch')),
             null,
             array('class' => 'form-preferences')
         );
@@ -797,23 +802,6 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_sendmail_name'],
             array('maxLength' => 50, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
         );
-
-        // Add js to show or hide mail options
-        $this->addJavascript('
-            $(function(){
-                var fieldsToHideOnSingleMode = "#mail_recipients_with_roles_group, #mail_into_to_group, #mail_number_recipients_group";
-                if($("#mail_sending_mode").val() == 1) {
-                    $(fieldsToHideOnSingleMode).hide();
-                }
-                $("#mail_sending_mode").on("change", function() {
-                    if($("#mail_sending_mode").val() == 1) {
-                        $(fieldsToHideOnSingleMode).hide();
-                    } else {
-                        $(fieldsToHideOnSingleMode).show();
-                    }
-                });
-            });
-        ');
 
         $selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
         $formEmailDispatch->addSelectBox(
@@ -933,7 +921,7 @@ class PreferencesPresenter extends PagePresenter
         $formEvents = new FormPresenter(
             'adm_preferences_form_events',
             'preferences/preferences.events.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Events')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'events')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1064,14 +1052,14 @@ class PreferencesPresenter extends PagePresenter
         $formGroupsRoles = new FormPresenter(
             'adm_preferences_form_groups_roles',
             'preferences/preferences.groups-roles.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'GroupsRoles')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'groups_roles')),
             null,
             array('class' => 'form-preferences')
         );
         $formGroupsRoles->addCheckbox(
-            'groups_roles_enable_module',
+            'groups_roles_module_enabled',
             $gL10n->get('SYS_ENABLE_GROUPS_ROLES'),
-            (bool) $formValues['groups_roles_enable_module'],
+            (bool) $formValues['groups_roles_module_enabled'],
             array('helpTextId' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
         );
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
@@ -1164,7 +1152,7 @@ class PreferencesPresenter extends PagePresenter
         $formForum = new FormPresenter(
             'adm_preferences_form_forum',
             'preferences/preferences.forum.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Forum')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'forum')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1228,7 +1216,7 @@ class PreferencesPresenter extends PagePresenter
         $formWeblinks = new FormPresenter(
             'adm_preferences_form_links',
             'preferences/preferences.links.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Links')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'links')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1238,10 +1226,10 @@ class PreferencesPresenter extends PagePresenter
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
         );
         $formWeblinks->addSelectBox(
-            'enable_weblinks_module',
+            'weblinks_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['enable_weblinks_module'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
+            array('defaultValue' => $formValues['weblinks_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
         $formWeblinks->addInput(
             'weblinks_per_page',
@@ -1297,26 +1285,31 @@ class PreferencesPresenter extends PagePresenter
         $formMessages = new FormPresenter(
             'adm_preferences_form_messages',
             'preferences/preferences.messages.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Messages')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'messages')),
             null,
             array('class' => 'form-preferences')
         );
-        $formMessages->addCheckbox(
-            'enable_mail_module',
-            $gL10n->get('SYS_ENABLE_EMAILS'),
-            (bool) $formValues['enable_mail_module'],
-            array('helpTextId' => 'SYS_ENABLE_EMAILS_DESC')
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
+        );
+        $formMessages->addSelectBox(
+            'mail_module_enabled',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'ORG_ACCESS_TO_MODULE_DESC')
         );
         $formMessages->addCheckbox(
-            'enable_pm_module',
+            'pm_module_enabled',
             $gL10n->get('SYS_ENABLE_PM_MODULE'),
-            (bool) $formValues['enable_pm_module'],
+            (bool) $formValues['pm_module_enabled'],
             array('helpTextId' => 'SYS_ENABLE_PM_MODULE_DESC')
         );
         $formMessages->addCheckbox(
-            'enable_mail_captcha',
+            'mail_captcha_enabled',
             $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool) $formValues['enable_mail_captcha'],
+            (bool) $formValues['mail_captcha_enabled'],
             array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
         );
 
@@ -1406,7 +1399,7 @@ class PreferencesPresenter extends PagePresenter
         $formPhotos = new FormPresenter(
             'adm_preferences_form_photos',
             'preferences/preferences.photos.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Photos')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'photos')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1536,7 +1529,7 @@ class PreferencesPresenter extends PagePresenter
         $formProfile = new FormPresenter(
             'adm_preferences_form_profile',
             'preferences/preferences.profile.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Profile')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'profile')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1616,7 +1609,7 @@ class PreferencesPresenter extends PagePresenter
         $formRegionalSettings = new FormPresenter(
             'adm_preferences_form_regional_settings',
             'preferences/preferences.regional-settings.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'RegionalSettings')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'regional_settings')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1683,14 +1676,14 @@ class PreferencesPresenter extends PagePresenter
         $formRegistration = new FormPresenter(
             'adm_preferences_form_registration',
             'preferences/preferences.registration.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Registration')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'registration')),
             null,
             array('class' => 'form-preferences')
         );
         $formRegistration->addCheckbox(
-            'registration_enable_module',
+            'registration_module_enabled',
             $gL10n->get('ORG_ENABLE_REGISTRATION_MODULE'),
-            (bool) $formValues['registration_enable_module'],
+            (bool) $formValues['registration_module_enabled'],
             array('helpTextId' => 'ORG_ENABLE_REGISTRATION_MODULE_DESC')
         );
         $formRegistration->addCheckbox(
@@ -1744,7 +1737,7 @@ class PreferencesPresenter extends PagePresenter
         $formSecurity = new FormPresenter(
             'adm_preferences_form_security',
             'preferences/preferences.security.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Security')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'security')),
             null,
             array('class' => 'form-preferences')
         );
@@ -1818,7 +1811,7 @@ class PreferencesPresenter extends PagePresenter
         $formSSO = new FormPresenter(
             'adm_preferences_form_sso',
             'preferences/preferences.sso.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Sso')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'sso')),
             null,
             array('class' => 'form-preferences')
         );
@@ -2233,7 +2226,7 @@ class PreferencesPresenter extends PagePresenter
         $formSystemNotifications = new FormPresenter(
             'adm_preferences_form_system_notifications',
             'preferences/preferences.system-notifications.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'SystemNotifications')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'system_notifications')),
             null,
             array('class' => 'form-preferences')
         );
@@ -2427,6 +2420,51 @@ class PreferencesPresenter extends PagePresenter
                         directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
                     });
                 });
+               
+                // Module Settings visibility
+                // Universal handling for module enabled toggle within the current panel container
+                
+                // define additional ids that should also be considered for visibility toggling
+                var additionalIds = [\'#system_notifications_enabled\'];
+                // Look for any input whose id ends with "_module_enabled"
+                var selectors = ["[id$=\'_module_enabled\']"].concat(additionalIds);
+
+                var moduleEnabledField = panelContainer.find(selectors.join(", ")).filter(":visible");
+                if (moduleEnabledField.length > 0) {
+                    // Get all row elements inside the form, excluding the row containing the module enabled field
+                    var formElementGroups = panelContainer.find("form div.row")
+                        .not(moduleEnabledField.closest("div.row"));
+                    
+                    // Function to update visibility based on the fields type and state
+                    var updateVisibility = function(initialCall) {
+                        var isEnabled;
+                        if (moduleEnabledField.attr("type") === "checkbox") {
+                            isEnabled = moduleEnabledField.is(":checked");
+                        } else {
+                            isEnabled = moduleEnabledField.val() != 0;
+                        }
+                        
+                        if (initialCall === true) {
+                            if (isEnabled) {
+                                formElementGroups.show();
+                            } else {
+                                formElementGroups.hide();
+                            }
+                        } else {
+                            if (isEnabled) {
+                                formElementGroups.slideDown("slow");
+                            } else {
+                                formElementGroups.slideUp("slow");
+                            }
+                        }
+                    };
+                    
+                    // Set initial state without animation
+                    updateVisibility(true);
+                    
+                    // Update visibility on change
+                    moduleEnabledField.on("change", updateVisibility);
+                }
             }
         
             // === 3) Hooks für Desktop-Tabs ===

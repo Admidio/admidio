@@ -65,8 +65,8 @@ try {
     }
 
     // check if the call of the page was allowed by settings
-    if ((!$gSettingsManager->getBool('enable_mail_module') && $getMsgType !== Message::MESSAGE_TYPE_PM)
-        || (!$gSettingsManager->getBool('enable_pm_module') && $getMsgType === Message::MESSAGE_TYPE_PM)) {
+    if ((!($gSettingsManager->getInt('mail_module_enabled') === 1 || ($gSettingsManager->getInt('mail_module_enabled') === 2 && $gValidLogin)) && $getMsgType !== Message::MESSAGE_TYPE_PM)
+        || (!$gSettingsManager->getBool('pm_module_enabled') && $getMsgType === Message::MESSAGE_TYPE_PM)) {
         // message if the sending of PM is not allowed
         throw new Exception('SYS_MODULE_DISABLED');
     }
@@ -581,7 +581,7 @@ try {
         }
 
         // if captchas are enabled then visitors of the website must resolve this
-        if (!$gValidLogin && $gSettingsManager->getBool('enable_mail_captcha')) {
+        if (!$gValidLogin && $gSettingsManager->getBool('mail_captcha_enabled')) {
             $form->addCaptcha('adm_captcha_code');
         }
 
