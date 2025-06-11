@@ -92,8 +92,6 @@
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
-  <string name="ORG_ACCESS_TO_PLUGIN">Zugriff auf Plugin #VAR1_ITALIC#</string>
-  <string name="ORG_ACCESS_TO_PLUGINS_DESC">Die \"#VAR1# Plugins\" können jeweils komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das jeweilige Plugin für Gäste ausgeblendet. (Voreinstellung: Aktiviert)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Zusätzliche Variablen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner themes angezeigt. (Voreinstellung: simple)</string>
