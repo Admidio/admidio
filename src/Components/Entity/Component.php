@@ -269,7 +269,7 @@ class Component extends Entity
                 break;
 
             case 'GROUPS-ROLES':
-                if ($gSettingsManager->getBool('groups_roles_enable_module') && $gValidLogin) {
+                if ($gSettingsManager->getBool('groups_roles_module_enabled') && $gValidLogin) {
                     return true;
                 }
                 break;
@@ -295,7 +295,7 @@ class Component extends Entity
                 break;
 
             case 'REGISTRATION':
-                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->isAdministratorRegistration()) {
+                if ($gSettingsManager->getBool('registration_module_enabled') && $gCurrentUser->isAdministratorRegistration()) {
                     return true;
                 }
                 break;

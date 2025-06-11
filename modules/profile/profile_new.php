@@ -57,7 +57,7 @@ try {
     // check if module may be called
     if (!$gValidLogin) {
         // Registration disabled, so also lock this mode
-        if (!$gSettingsManager->getBool('registration_enable_module')) {
+        if (!$gSettingsManager->getBool('registration_module_enabled')) {
             throw new Exception('SYS_MODULE_DISABLED');
         }
     } else {

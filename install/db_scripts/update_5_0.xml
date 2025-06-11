@@ -372,5 +372,17 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1270" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_weblinks_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'weblinks_module_enabled'</step>
     <step id="1280" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_weblinks_module' AND pr1.prf_name = 'weblinks_module_enabled'</step>
     <step id="1290">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_weblinks_module'</step>
+    <!-- rename registration_enable_module to registration_module_enabled -->
+    <step id="1300" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'registration_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_module_enabled'</step>
+    <step id="1310" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'registration_enable_module' AND pr1.prf_name = 'registration_module_enabled'</step>
+    <step id="1320">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_enable_module'</step>
+    <!-- rename category_report_enable_module to category_report_module_enabled -->
+    <step id="1330" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'category_report_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'category_report_module_enabled'</step>
+    <step id="1340" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'category_report_enable_module' AND pr1.prf_name = 'category_report_module_enabled'</step>
+    <step id="1350">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'category_report_enable_module'</step>
+    <!-- rename groups_roles_enable_module to groups_roles_module_enabled -->
+    <step id="1360" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'groups_roles_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'groups_roles_module_enabled'</step>
+    <step id="1370" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'groups_roles_enable_module' AND pr1.prf_name = 'groups_roles_module_enabled'</step>
+    <step id="1380">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'groups_roles_enable_module'</step>
     <step>stop</step>
 </update>

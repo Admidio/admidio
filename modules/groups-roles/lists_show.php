@@ -54,7 +54,7 @@ try {
     $getRelationTypeList = admFuncVariableIsValid($_GET, 'relation_type_list', 'string'); // could be int or int[], so string is necessary
 
     // check if the module is enabled and disallow access if it's disabled
-    if (!$gSettingsManager->getBool('groups_roles_enable_module')) {
+    if (!$gSettingsManager->getBool('groups_roles_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 

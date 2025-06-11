@@ -315,7 +315,7 @@ class PagePresenter
         $this->smarty->assign('currentUser', $gCurrentUser);
         $this->smarty->assign('validLogin', $gValidLogin);
         $this->smarty->assign('debug', $gDebug);
-        $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_enable_module'));
+        $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_module_enabled'));
         
         // Design variables
         $this->smarty->assign('additionalStylesFile',  $gSettingsManager->getString('additional_styles_file'));

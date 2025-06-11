@@ -32,7 +32,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // check if module is active
-    if (!$gSettingsManager->getBool('registration_enable_module')) {
+    if (!$gSettingsManager->getBool('registration_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
