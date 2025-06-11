@@ -224,13 +224,6 @@ class PreferencesService
         // first check the fields of the submitted form
         switch ($panel) {
             case 'design':
-                // check if the style form or the overview form was submitted
-                foreach ($formData as $key => $value) {
-                    if (str_starts_with($key, 'overview_')) {
-                        break 2; // break out of loop and case
-                    }
-                }
-
                 if (!StringUtils::strIsValidFolderName($formData['theme'])
                     || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme'] . '/index.html')) {
                     throw new Exception('ORG_INVALID_THEME');

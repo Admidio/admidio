@@ -46,15 +46,6 @@ $defaultOrgPreferences = array(
     'favicon_file' => '',
     'additional_styles_file' => '',
 
-    // Overview plugins
-    'overview_plugin_birthday_enabled' => '1',
-    'overview_plugin_calendar_enabled' => '1',
-    'overview_plugin_random_photo_enabled' => '1',
-    'overview_plugin_latest_documents_files_enabled' => '1',
-    'overview_plugin_announcement_list_enabled' => '1',
-    'overview_plugin_event_list_enabled' => '1',
-    'overview_plugin_who_is_online_enabled' => '1',
-
     // Registration
     'registration_adopt_all_data' => '1',
     'registration_enable_captcha' => '1',

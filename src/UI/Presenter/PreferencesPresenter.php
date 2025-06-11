@@ -79,7 +79,7 @@ class PreferencesPresenter extends PagePresenter
                 'label'  => $gL10n->get('SYS_SYSTEM'),
                 'panels' => array(
                     array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false),
-                    array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>true),
+                    array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
                     array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
                     array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
                     array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
@@ -647,83 +647,10 @@ class PreferencesPresenter extends PagePresenter
         global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
-        $smarty = $this->getSmartyTemplate();
 
-        // overview plugins design
-        $formOverviewDesign = new FormPresenter(
-            'adm_preferences_form_overview_design',
-            'preferences/preferences.design.overview.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'design')),
-            null,
-            array('class' => 'form-preferences')
-        );
-        $selectBoxEntries = array(
-            '0' => $gL10n->get('SYS_DISABLED'),
-            '1' => $gL10n->get('SYS_ENABLED'),
-            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
-        );
-
-        $formOverviewDesign->addDescription(
-            'overview_design_description',
-            $gL10n->get('ORG_ACCESS_TO_PLUGINS_DESC', array($gL10n->get('SYS_OVERVIEW'))),
-        );
-
-        $formOverviewDesign->addSelectBox(
-            'overview_plugin_birthday_enabled',
-            $gL10n->get('ORG_ACCESS_TO_PLUGIN', array($gL10n->get('PLG_BIRTHDAY_HEADLINE'))),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['overview_plugin_birthday_enabled'], 'showContextDependentFirstEntry' => false)
-        );
-        $formOverviewDesign->addSelectBox(
-            'overview_plugin_calendar_enabled',
-            $gL10n->get('ORG_ACCESS_TO_PLUGIN', array($gL10n->get('SYS_CALENDAR'))),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['overview_plugin_calendar_enabled'], 'showContextDependentFirstEntry' => false)
-        );
-        $formOverviewDesign->addSelectBox(
-            'overview_plugin_random_photo_enabled',
-            $gL10n->get('ORG_ACCESS_TO_PLUGIN', array($gL10n->get('SYS_PHOTOS'))),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['overview_plugin_random_photo_enabled'], 'showContextDependentFirstEntry' => false)
-        );
-        $formOverviewDesign->addSelectBox(
-            'overview_plugin_latest_documents_files_enabled',
-            $gL10n->get('ORG_ACCESS_TO_PLUGIN', array($gL10n->get('SYS_DOCUMENTS_FILES'))),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['overview_plugin_latest_documents_files_enabled'], 'showContextDependentFirstEntry' => false)
-        );
-        $formOverviewDesign->addSelectBox(
-            'overview_plugin_announcement_list_enabled',
-            $gL10n->get('ORG_ACCESS_TO_PLUGIN', array($gL10n->get('SYS_ANNOUNCEMENTS'))),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['overview_plugin_announcement_list_enabled'], 'showContextDependentFirstEntry' => false)
-        );
-        $formOverviewDesign->addSelectBox(
-            'overview_plugin_event_list_enabled',
-            $gL10n->get('ORG_ACCESS_TO_PLUGIN', array($gL10n->get('SYS_EVENTS'))),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['overview_plugin_event_list_enabled'], 'showContextDependentFirstEntry' => false)
-        );
-        $formOverviewDesign->addSelectBox(
-            'overview_plugin_who_is_online_enabled',
-            $gL10n->get('ORG_ACCESS_TO_PLUGIN', array($gL10n->get('PLG_ONLINE_HEADLINE'))),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['overview_plugin_who_is_online_enabled'], 'showContextDependentFirstEntry' => false)
-        );
-        $formOverviewDesign->addSubmitButton(
-            'adm_button_save_overview_design',
-            $gL10n->get('SYS_SAVE'),
-            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
-        );
-
-        $formOverviewDesign->addToSmarty($smarty);
-        $gCurrentSession->addFormObject($formOverviewDesign);
-        $renderedTemplate = $smarty->fetch('preferences/preferences.design.overview.tpl');
-
-        // general style
         $formDesign = new FormPresenter(
             'adm_preferences_form_design',
-            'preferences/preferences.design.style.tpl',
+            'preferences/preferences.design.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'design')),
             null,
             array('class' => 'form-preferences')
@@ -783,11 +710,10 @@ class PreferencesPresenter extends PagePresenter
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
         );
 
+        $smarty = $this->getSmartyTemplate();
         $formDesign->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formDesign);
-        $renderedTemplate .= $smarty->fetch('preferences/preferences.design.style.tpl');
-
-        return $renderedTemplate;
+        return $smarty->fetch('preferences/preferences.design.tpl');
     }
 
     /**
