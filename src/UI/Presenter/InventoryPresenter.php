@@ -278,14 +278,14 @@ class InventoryPresenter extends PagePresenter
         );
 
         $selectBoxValues = array(
-            '0' => $gL10n->get('SYS_INVENTORY_SHOW_CURRENT_ITEMS'),
-            '1' => $gL10n->get('SYS_INVENTORY_SHOW_ONLY_FORMER_ITEMS'),
-            '2' => $gL10n->get('SYS_INVENTORY_SHOW_ALL_ITEMS')
+            '0' => $gL10n->get('SYS_INVENTORY_FILTER_CURRENT_ITEMS'),
+            '1' => $gL10n->get('SYS_INVENTORY_FILTER_FORMER_ITEMS'),
+            '2' => $gL10n->get('SYS_ALL')
         );
         // filter all items
         $form->addSelectBox(
             'items_filter',
-            $gL10n->get('SYS_INVENTORY_SHOW_ITEMS_FILER'),
+            $gL10n->get('SYS_INVENTORY_ITEMS'),
             $selectBoxValues,
             array(
                 'property' => $showFilterForm,

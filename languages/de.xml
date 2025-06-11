@@ -810,6 +810,8 @@
   <string name="SYS_INVENTORY_FIELD_DESC">Hier kannst du ein Feld mit einer laufenden Nummer auswählen. Bei einer Auswahl wird die aktuelle Nummer ausgelesen und entsprechend der angegebenen Anzahl erhöht.\n\nHINWEIS:\nDas Modul kann nur erkennen, ob ein Datenfeld vom Typ "Zahl" ist. Ob in diesem Datenfeld eine laufende Nummer gespeichert ist, kann nicht erkannt werden.</string>
   <string name="SYS_INVENTORY_FILENAME">Dateiname</string>
   <string name="SYS_INVENTORY_FILENAME_DESC">Der Dateiname der Exportdatei (ohne Dateiendung). Der Dateiname wird automatisch mit der Endung des Exportformates versehen. (Voreinstellung: "Inventarverwaltung")</string>
+  <string name="SYS_INVENTORY_FILTER_CURRENT_ITEMS">Aktuelle</string>
+  <string name="SYS_INVENTORY_FILTER_FORMER_ITEMS">Ausgesonderte</string>
   <string name="SYS_INVENTORY_IN_INVENTORY">Im Inventar</string>
   <string name="SYS_INVENTORY_IN_INVENTORY_DESC">Gegenstand befindet sich im Inventar</string>
   <string name="SYS_INVENTORY_IMPORT_DESC">Hier kannst du Gegenstände aus einer vorherigen Exportdatei oder einer eigenen Datei importieren.</string>
@@ -893,10 +895,6 @@
   <string name="SYS_INVENTORY_SELECTION_UNDO_FORMER">Aussonderung rückgängig machen</string>
   <string name="SYS_INVENTORY_SELECTION_UNDO_FORMER_DESC">Du kannst die ausgewählten Gegenstände wieder in die Inventarverwaltung aufnehmen, indem du #VAR1_BOLD# auswählst.</string>
   <string name="SYS_INVENTORY_SELECTION_UNDONE_FORMER">Die Aussonderung der ausgewählten Gegenstände wurde rückgängig gemacht.</string>
-  <string name="SYS_INVENTORY_SHOW_ALL_ITEMS">Alle</string>
-  <string name="SYS_INVENTORY_SHOW_CURRENT_ITEMS">Aktuelle</string>
-  <string name="SYS_INVENTORY_SHOW_ONLY_FORMER_ITEMS">Ausgesonderte</string>
-  <string name="SYS_INVENTORY_SHOW_ITEMS_FILER">Gegenstandsfilter</string>
   <string name="SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT">Editierberechtigung für den Anzeigenamen von Systemfeldern</string>
   <string name="SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC">Wenn diese Option aktiviert ist, können die Anzeigenamen der Systemfelder geändert werden. (Voreinstellung: nein)</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER">Aktueller Benutzer als Standardauswahl</string>

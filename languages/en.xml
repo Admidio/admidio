@@ -809,6 +809,8 @@
   <string name="SYS_INVENTORY_FIELD_DESC">Here a field of a consecutive number can be selected. In a selection, the current number is read out and increased according to the specified number.\n\nNOTE: InventoryManager can only tell if a data field is of type "number". Whether a serial number is stored in this data field can not be recognized.</string>
   <string name="SYS_INVENTORY_FILENAME">Filename</string>
   <string name="SYS_INVENTORY_FILENAME_DESC">The file name of the export file (without file extension). The file name is automatically appended with the export format’s extension. (Default: "Inventory manager")</string>
+  <string name="SYS_INVENTORY_FILTER_CURRENT_ITEMS">Current</string>
+  <string name="SYS_INVENTORY_FILTER_FORMER_ITEMS">Former</string>
   <string name="SYS_INVENTORY_IN_INVENTORY">In inventory</string>
   <string name="SYS_INVENTORY_IN_INVENTORY_DESC">Item is in inventory</string>
   <string name="SYS_INVENTORY_IMPORT_DESC">Here you can import items from a previous export file or your own file.</string>
@@ -893,10 +895,6 @@
   <string name="SYS_INVENTORY_SELECTION_UNDO_FORMER">Undo made selection former</string>
   <string name="SYS_INVENTORY_SELECTION_UNDO_FORMER_DESC">You can reinstate the selected items back into the inventory manager by choosing #VAR1_BOLD#.</string>
   <string name="SYS_INVENTORY_SELECTION_UNDONE_FORMER">The marking as former of the selected items has been undone.</string>
-  <string name="SYS_INVENTORY_SHOW_ALL_ITEMS">All</string>
-  <string name="SYS_INVENTORY_SHOW_CURRENT_ITEMS">Current</string>
-  <string name="SYS_INVENTORY_SHOW_ONLY_FORMER_ITEMS">Former</string>
-  <string name="SYS_INVENTORY_SHOW_ITEMS_FILER">Filer items</string>
   <string name="SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT">Permission to edit the display name of system fields</string>
   <string name="SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC">If this option is enabled, the display names of the system item fields can be modified. (Default: no)</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER">Current user as default selection</string>
