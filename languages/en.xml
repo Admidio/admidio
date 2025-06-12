@@ -603,12 +603,8 @@
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">The category report creates a list of all roles and categories to which a member is assigned. The permission #VAR1_BOLD# is required for access to the category report. (Default: yes)</string>
   <string name="SYS_ENABLE_CHANGELOG">Enable changelog</string>
   <string name="SYS_ENABLE_CHANGELOG_DESC">The changelog logs all changes (including the old and new value) to the selected objects (corresponding to database tables) in the database. The changelog can only be viewed by administrators or users that have edit access to the corresponding module. Each user can also view his/her profile data changes. (Default: yes)</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Enable documents &amp; files</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Enable download</string>
   <string name="SYS_ENABLE_DOWNLOAD_DESC">Allows to download single photos or complete albums as zip file. A hyperlink will be displayed for each photo or album. If option #VAR1_BOLD# is active only original photos will be downloaded.</string>
-  <string name="SYS_ENABLE_EMAILS">Enable e-mails</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">E-mails within messages module can be enabled or disabled via this setting. If the server does not support e-mail, the option should be disabled. (Default: enabled)</string>
   <string name="SYS_ENABLE_EVENT_REGISTRATION">Do you want to enable event registration?\nIf event is deleted, all registered participants will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Enable greeting cards</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">The greeting cards can be enabled or disabled via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
