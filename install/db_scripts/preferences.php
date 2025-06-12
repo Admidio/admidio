@@ -45,6 +45,7 @@ $defaultOrgPreferences = array(
     'logo_file' => '',
     'favicon_file' => '',
     'additional_styles_file' => '',
+    'clamp_text_lines' => '5',
 
     // Registration
     'registration_adopt_all_data' => '1',

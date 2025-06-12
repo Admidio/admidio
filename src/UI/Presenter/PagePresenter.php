@@ -333,6 +333,8 @@ class PagePresenter
             $styles .= '    --bs-secondary: ' . $color_secondary . ";\n";
             $styles .= '    --bs-secondary-rgb: ' . hexdec(substr($color_secondary, 1, 2)) . ', ' . hexdec(substr($color_secondary, 3, 2)) . ', ' . hexdec(substr($color_secondary, 5, 2)) . ";\n";
         }
+        // set the clamp text lines
+        $styles .= '    --admidio-clamp-text-lines: ' . $gSettingsManager->getInt('clamp_text_lines') . ";\n";
         if (!empty($styles)) {
             $this->smarty->assign('additionalStyles', ":root {\n$styles};");
         }

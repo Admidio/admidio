@@ -704,6 +704,12 @@ class PreferencesPresenter extends PagePresenter
             $formValues['favicon_file']??'',
             array('helpTextId' => 'SYS_FAVICON_FILE_DESC')
         );
+        $formDesign->addInput(
+            'clamp_text_lines',
+            $gL10n->get('SYS_CLAMP_TEXT_LINES'),
+            $formValues['clamp_text_lines']??'',
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => 'SYS_CLAMP_TEXT_LINES_DESC')
+        );
         $formDesign->addSubmitButton(
             'adm_button_save_design',
             $gL10n->get('SYS_SAVE'),
