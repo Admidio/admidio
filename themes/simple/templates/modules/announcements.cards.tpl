@@ -21,7 +21,18 @@
             {/if}
         </div>
         <div class="card-body">
-            {$announcement.description}
+            <div class="row">
+                <div id="adm_announcement_caret_col_description_{$announcement.uuid}" class="col-auto clamp-caret">
+                    <a id="adm_announcement_caret_description_{$announcement.uuid}" class="admidio-open-close-caret" data-target="adm_announcement_description_{$announcement.uuid}">
+                        <i class="bi bi-caret-right-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_SHOW_MORE')}"></i>
+                    </a>
+                </div>
+                <div class="col">
+                    <div id="adm_announcement_description_{$announcement.uuid}" class="clamp-text">
+                        {$announcement.description}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-footer container">
             <div class="row">

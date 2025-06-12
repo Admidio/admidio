@@ -157,6 +157,32 @@ class AnnouncementsPresenter extends PagePresenter
             $this->smarty->assign('showCategories', false);
         }
 
+        $this->addJavascript('
+            $(".admidio-open-close-caret").click(function() {
+                var tooltips = [
+                    "' . $gL10n->get('SYS_SHOW_MORE') . '",
+                    "' . $gL10n->get('SYS_SHOW_LESS') . '"
+                ];
+                showHideMoreText($(this), tooltips);
+            });
+            $(function(){
+                $(".clamp-text").each(function(){
+                    var clampHeight = this.offsetHeight;
+                    var fullHeight  = this.scrollHeight;
+
+                    if (fullHeight < clampHeight + 1) {
+                        $(this).closest(".col").prev(".clamp-caret").addClass("d-none");
+                    } else {
+                        // find the caret for this text
+                        var caret = $(this).closest(".col").prev(".clamp-caret").find(".admidio-open-close-caret");
+                        var caretHeight = caret.outerHeight();
+                        caret.css("top", (clampHeight - caretHeight) + "px");
+                    }
+                });
+            });',
+            true
+        );
+
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
         $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $announcementsService->count(), $gSettingsManager->getInt('announcements_per_page'), $offset, true, 'offset'));
