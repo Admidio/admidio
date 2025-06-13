@@ -246,7 +246,7 @@ class CategoryReport
 
             if ((string)$this->arrConfiguration[$this->conf]['selection_cat'] !== '') {
                 foreach (explode(',', $this->arrConfiguration[$this->conf]['selection_cat']) as $cat) {
-                    if ($this->isMemberOfCategory($cat, $member)) {
+                    if ($this->isMemberOfCategory((int)$cat, $member)) {
                         $roleCategoryMarker = true;
                     }
                 }
