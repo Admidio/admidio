@@ -182,7 +182,7 @@ class AnnouncementsPresenter extends PagePresenter
             });',
             true
         );
-
+        $this->smarty->assign('enableClampLines', $gSettingsManager->getBool('announcements_clamp_text_lines_enabled'));
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
         $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $announcementsService->count(), $gSettingsManager->getInt('announcements_per_page'), $offset, true, 'offset'));

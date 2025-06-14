@@ -124,6 +124,7 @@ $defaultOrgPreferences = array(
     // Announcements
     'announcements_module_enabled' => '1',
     'announcements_per_page' => '10',
+    'announcements_clamp_text_lines_enabled' => '0',
 
     // Category-Report
     'category_report_module_enabled' => '1',
@@ -146,6 +147,7 @@ $defaultOrgPreferences = array(
     'events_may_take_part' => '0',
     'events_module_enabled' => '1',
     'events_per_page' => '10',
+    'events_clamp_text_lines_enabled' => '0',
     'events_rooms_enabled' => '0',
     'events_save_cancellations' => '1',
     'events_show_map_link' => '1',
