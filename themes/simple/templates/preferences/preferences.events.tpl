@@ -6,6 +6,7 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['events_module_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['events_view']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['events_per_page']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['events_clamp_text_lines_enabled']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['events_ical_export_enabled']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['events_show_map_link']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['events_list_configuration']}

@@ -27,6 +27,33 @@ function showHideBlock(element) {
 }
 
 /**
+ * The function can be used to show or hide a text block that is longer than the
+ * visible area. Therefore, a small caret is used that will change his orientation
+ * if the text block is hidden.
+ * @param {HTMLElement} element This is the element you must click to show or hide another text block.
+ *                              The element must have a data-target attribute which contains the id of the
+ *                              element to hide.
+ * @param {Array} tooltipTexts This is an array with two strings that will be used as tooltip texts.
+ *                             The first string will be used if the text block is hidden and the second
+ *                             string will be used if the text block is shown.
+ */
+function showHideMoreText(element, tooltipTexts) {
+    var $target  = $("#" + $(element).data("target"));
+    var $icon = $("#" + $(element).attr("id")).find(".bi");
+
+    $target.toggleClass("expanded");
+    if ($target.hasClass("expanded")) {
+        $icon.attr("class", "bi bi-caret-down-fill");
+        $icon.attr("aria-label", tooltipTexts[1]);
+        $icon.attr("data-bs-original-title", tooltipTexts[1]);
+    } else {
+        $icon.attr("class", "bi bi-caret-right-fill");
+        $icon.attr("aria-label", tooltipTexts[0]);
+        $icon.attr("data-bs-original-title", tooltipTexts[0]);
+    }
+}
+
+/**
  * This function can be used to call a specific url and hide an html element
  * in dependence from the returned data. If the data received is "done" then
  * the element will be hidden otherwise the data will be shown in an error block.
