@@ -932,6 +932,63 @@ class FormPresenter
         $this->elements[$id] = $optionsAll;
     }
 
+    public function addOptionEditor(string $id, string $label, array $values, array $options = array()): void
+    {
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'type' => 'option-editor',
+            'id' => $id,
+            'label' => $label,
+            'values' => $values
+        ), $options));
+        $attributes = array();
+
+        // set field properties
+        switch ($optionsAll['property']) {
+            case self::FIELD_DISABLED:
+                $attributes['disabled'] = 'disabled';
+                break;
+
+            case self::FIELD_READONLY:
+                $attributes['readonly'] = 'readonly';
+                break;
+
+            case self::FIELD_REQUIRED:
+                $attributes['required'] = 'required';
+                $this->flagRequiredFields = true;
+                break;
+
+            case self::FIELD_HIDDEN:
+                $attributes['hidden'] = 'hidden';
+                $attributes['class'] = ' invisible';
+                break;
+        }
+
+        $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
+        $this->addJavascriptCode('
+            $("tbody.admidio-sortable").sortable({
+                axis: "y",
+                handle: ".handle"
+            });
+            $(".admidio-field-move").click(function() {
+                var direction = $(this).data("direction");
+                var target = $(this).data("target");
+
+                if (direction === "UP") {
+                    $("#"+target).prev().before($("#"+target));
+                } else {
+                    $("#"+target).next().after($("#"+target));
+                }
+            });', true
+        );
+        $this->elements[$id] = $optionsAll;
+    }
+    
     /**
      * Add a new radio button with a label to the form. The radio button could have different status
      * which could be defined with an array.

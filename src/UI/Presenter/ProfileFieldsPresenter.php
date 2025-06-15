@@ -3,6 +3,7 @@ namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\ProfileFields\Entity\ProfileField;
+use Admidio\ProfileFields\Entity\SelectOptions;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -63,13 +64,13 @@ class ProfileFieldsPresenter extends PagePresenter
         $this->addJavascript('
             $("#usf_type").change(function() {
                 if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "DROPDOWN_MULTISELECT" || $("#usf_type").val() === "RADIO_BUTTON") {
-                    $("#usf_value_list").attr("required", "required");
-                    $("#usf_value_list_group").addClass("admidio-form-group-required");
-                    $("#usf_value_list_group").show("slow");
+                    $("#ufo_usf_options").attr("required", "required");
+                    $("#ufo_usf_options_group").addClass("admidio-form-group-required");
+                    $("#ufo_usf_options_group").show("slow");
                 } else {
-                    $("#usf_value_list").removeAttr("required");
-                    $("#usf_value_list_group").removeClass("admidio-form-group-required");
-                    $("#usf_value_list_group").hide();
+                    $("#ufo_usf_options").removeAttr("required");
+                    $("#ufo_usf_options_group").removeClass("admidio-form-group-required");
+                    $("#ufo_usf_options_group").hide();
                 }
             });
             $("#usf_type").trigger("change");', true
@@ -162,13 +163,16 @@ class ProfileFieldsPresenter extends PagePresenter
                 array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type'))
             );
         }
-        $form->addMultilineTextInput(
-            'usf_value_list',
+
+        $options = new SelectOptions($gDb, $userField->getValue('usf_id'));
+        $optionValueList = $options->getAllOptions();
+        $form->addOptionEditor(
+            'ufo_usf_options',
             $gL10n->get('SYS_VALUE_LIST'),
-            htmlentities($userField->getValue('usf_value_list', 'database'), ENT_QUOTES),
-            6,
+            $optionValueList,
             array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com">', '</a>')))
         );
+
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
         if (in_array($usfNameIntern, array('LAST_NAME', 'FIRST_NAME'))) {
             $form->addInput(
