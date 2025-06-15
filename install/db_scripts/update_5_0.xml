@@ -384,5 +384,20 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1360" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'groups_roles_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'groups_roles_module_enabled'</step>
     <step id="1370" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'groups_roles_enable_module' AND pr1.prf_name = 'groups_roles_module_enabled'</step>
     <step id="1380">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'groups_roles_enable_module'</step>
+    <step id="1410"> CREATE TABLE IF NOT EXISTS %PREFIX%_user_field_select_options (
+            ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+            ufo_usf_id      integer unsigned    NOT NULL,
+            ufo_value       varchar(255)        NOT NULL,
+            ufo_sequence    smallint            NOT NULL,
+            ufo_obsolete    boolean             NOT NULL DEFAULT false,
+            PRIMARY KEY (ufo_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1420">ALTER TABLE %PREFIX%_user_field_select_options
+            ADD CONSTRAINT %PREFIX%_fk_ufo_usf FOREIGN KEY (ufo_usf_id) REFERENCES %PREFIX%_user_fields (usf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
+    <step id="1430">UpdateStepsCode::updateStep50MoveFieldListValues</step>
+    <step id="1440">ALTER TABLE %PREFIX%_user_fields DROP usf_value_list</step>
     <step>stop</step>
 </update>

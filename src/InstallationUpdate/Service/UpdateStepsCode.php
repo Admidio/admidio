@@ -41,6 +41,33 @@ final class UpdateStepsCode
         self::$db = $database;
     }
 
+    public static function updateStep50MoveFieldListValues()
+    {
+        $sql = 'SELECT usf_id, usf_value_list FROM ' . TBL_USER_FIELDS . '
+                 WHERE usf_type = \'DROPDOWN\' 
+                 OR usf_type = \'RADIO_BUTTON\'';
+
+        $userFieldsStatement = self::$db->queryPrepared($sql);
+        while ($row = $userFieldsStatement->fetch()) {
+            $values = explode("\n", $row['usf_value_list']);
+            $values = array_map('trim', $values);
+
+            // remove empty values
+            $values = array_filter($values, function ($value) {
+                return !empty($value);
+            });
+
+            if (count($values) > 0) {
+                foreach ($values as $key => $value) {
+                    $sql = 'INSERT INTO ' . TBL_USER_FIELD_OPTIONS . ' (ufo_usf_id, ufo_value, ufo_sequence)
+                             VALUES (?, ?, ?) -- $row[\'usf_id\'], -- $value, -- $key';
+
+                    self::$db->queryPrepared($sql, array((int)$row['usf_id'], $value, $key + 1));
+                }
+            }
+        }
+    }
+
     /**
      * Create categories for the forum and each organization.
      * @throws Exception

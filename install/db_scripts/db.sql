@@ -11,47 +11,48 @@
 /*==============================================================*/
 /* Table Cleanup                                                */
 /*==============================================================*/
-DROP TABLE IF EXISTS %PREFIX%_announcements        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_auto_login           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_category_report      CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_components           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_events               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_forum_topics         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_forum_posts          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_links                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_members              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_attachments CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_content     CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_recipients  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_photos               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_preferences          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_registrations        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_role_dependencies    CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles_rights         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles_rights_data    CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_list_columns         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_lists                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_log_changes          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_rooms                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_sessions             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_texts                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_relations       CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_relation_types  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_data            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_fields          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_categories           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_users                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_organizations        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_ids                  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_saml_clients         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_sso_keys             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_announcements             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_auto_login                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_category_report           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_components                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_events                    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_files                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_folders                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_guestbook_comments        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_guestbook                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_topics              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_posts               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_links                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_members                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages                  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_attachments      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_content          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_recipients       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_photos                    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_preferences               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_registrations             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_role_dependencies         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles_rights              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles_rights_data         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_list_columns              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_lists                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_log_changes               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_rooms                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sessions                  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_texts                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_relations            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_relation_types       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_data                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_fields               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_field_select_options CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_categories                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_users                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_organizations             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_ids                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_menu                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_saml_clients              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sso_keys                  CASCADE;
 
 
 
@@ -1051,6 +1052,21 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
+/*==============================================================*/
+/* Table: adm_user_field_select_options                         */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_user_field_select_options
+(
+    ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ufo_usf_id      integer unsigned    NOT NULL,                   -- Connected user field id
+    ufo_value       varchar(255)        NOT NULL,                   -- option value
+    ufo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ufo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ufo_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Foreign Key Constraints                                      */
@@ -1237,3 +1253,6 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr2        FOREIGN KEY (ure_usr_id2)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_user_field_select_options
+    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
