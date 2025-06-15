@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\ProfileFields\Entity;
 
+use Admidio\ProfileFields\Entity\SelectOptions;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Image;
@@ -178,6 +179,10 @@ class ProfileField extends Entity
         } elseif ($columnName === 'usf_name_intern') {
             // internal name should be read with no conversion
             $value = parent::getValue($columnName, 'database');
+        } elseif ($columnName === 'ufo_usf_options') {
+            // if value is a list of options then return the options as array
+            $options = new SelectOptions($this->db, (int)$this->dbColumns['usf_id']);
+            $value = $options->getAllOptions();
         } else {
             $value = parent::getValue($columnName, $format);
         }
@@ -194,50 +199,47 @@ class ProfileField extends Entity
                     $value = Language::translateIfTranslationStrId($value);
 
                     break;
-                case 'usf_value_list':
+                case 'ufo_usf_options':
                     if ($this->dbColumns['usf_type'] === 'DROPDOWN' ||  $this->dbColumns['usf_type'] === 'DROPDOWN_MULTISELECT' || $this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
-                        $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
+                        $arrOptionValuesWithKeys = array(); // array with list values and keys that represents the internal value
+                        $arrOptions = $value;
 
-                        // first replace windows new line with unix new line and then create an array
-                        $valueFormatted = str_replace("\r\n", "\n", $value);
-                        $arrListValues = explode("\n", $valueFormatted);
-
-                        foreach ($arrListValues as $key => &$listValue) {
+                        foreach ($arrOptions as &$option) {
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
                                 // if value is bootstrap icon or icon separated from text
-                                if (Image::isBootstrapIcon($listValue) || str_contains($listValue, '|')) {
+                                if (Image::isBootstrapIcon($option['value']) || str_contains($option['value'], '|')) {
                                     // if there is bootstrap icon and text separated by | then explode them
-                                    if (str_contains($listValue, '|')) {
-                                        list($listValueImage, $listValueText) = explode('|', $listValue);
+                                    if (str_contains($option['value'], '|')) {
+                                        list($optionValueImage, $optionValueText) = explode('|', $option['value']);
                                     } else {
-                                        $listValueImage = $listValue;
-                                        $listValueText = $this->getValue('usf_name');
+                                        $optionValueImage = $option['value'];
+                                        $optionValueText = $this->getValue('usf_name');
                                     }
 
                                     // if text is a translation-id then translate it
-                                    $listValueText = Language::translateIfTranslationStrId($listValueText);
+                                    $optionValueText = Language::translateIfTranslationStrId($optionValueText);
 
                                     if ($format === 'html') {
-                                        $listValue = Image::getIconHtml($listValueImage, $listValueText) . ' ' . $listValueText;
+                                        $option['value'] = Image::getIconHtml($optionValueImage, $optionValueText) . ' ' . $optionValueText;
                                     } else {
                                         // if no image is wanted then return the text part or only the position of the entry
-                                        if (str_contains($listValue, '|')) {
-                                            $listValue = $listValueText;
+                                        if (str_contains($option['value'], '|')) {
+                                            $option['value'] = $optionValueText;
                                         } else {
-                                            $listValue = $key + 1;
+                                            $option['value'] = $option['id'];
                                         }
                                     }
                                 }
                             }
 
                             // if text is a translation-id then translate it
-                            $listValue = Language::translateIfTranslationStrId($listValue);
+                            $option['value'] = Language::translateIfTranslationStrId($option['value']);
 
                             // save values in new array that starts with key = 1
-                            $arrListValuesWithKeys[++$key] = $listValue;
+                            $arrOptionValuesWithKeys[$option['id']] = $option['value'];
                         }
-                        unset($listValue);
-                        $value = $arrListValuesWithKeys;
+                        unset($option);
+                        $value = $arrOptionValuesWithKeys;
                     }
 
                     break;
@@ -466,5 +468,58 @@ class ProfileField extends Entity
             return parent::setValue($columnName, $newValue, $checkValue);
         }
         return false;
+    }
+
+    /**
+     * Set the values of the options of a dropdown, radio button or multiselect field.
+     * The values are stored in the database and the sequence of the options is updated.
+     * @param array $newValues Array with new values for the options. The key is the option ID and the value is an array with the new values.
+     * @return bool Returns true if the values could be saved, otherwise false.
+     * @throws Exception
+     */
+    public function setOptionValues(array $newValues): bool
+    {
+        $ret = true;
+        
+        if ($this->getValue('usf_type') === 'DROPDOWN' || $this->getValue('usf_type') === 'DROPDOWN_MULTISELECT' || $this->getValue('usf_type') === 'RADIO_BUTTON') {
+            $options = new SelectOptions($this->db, $this->getValue('usf_id'));
+
+            // first save the new values of the options
+            foreach ($newValues as $id => $values) {
+                $options->readDataById($id);
+                if ($options->isNewRecord()) {
+                    // if the options value does not exist then create a new entry
+                    $options->setValue('ufo_usf_id', $this->getValue('usf_id'));
+                }
+                foreach ($values as $key => $value) {
+                    $options->setValue('ufo_' . $key, $value);
+                }
+                $ret = $options->save();
+            }
+
+            // now change the sequence of the options
+            $allOptions = $options->getAllOptions('database'); // load all options of the options
+
+            // determinalte current sequence based on allOpions sequence values
+            $currentSequence = array();
+            foreach ($allOptions as $option) {
+                $currentSequence[$option['ufo_id']] = $option['ufo_sequence'];
+            }
+            // determinate new sequence based on array position
+            $newSequence = array();
+            $sequence = 0;
+            foreach ($newValues as $id => $values) {
+                $newSequence[$id] = $sequence++;
+            }
+
+            // check if the sequence of the options has changed
+            if ($currentSequence !== $newSequence) {
+                // if the sequence has changed then update the sequence of the options
+                $options->readDataById(array_key_first($newSequence));
+                $options->setSequence($newSequence);
+            }
+
+        }
+        return $ret;
     }
 }
