@@ -205,6 +205,18 @@ class DataTables
             $.fn.dataTable.luxon(formatPhpToLuxon("' . $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time') . '"));
             ', true
             );
+        } else {
+            // tooltips doesn't show up properly if we use server side processing
+            // so we have to reactivate the tooltips after every table draw.
+            $this->htmlPage->addJavascript(
+                '
+                $("#' . $this->id . '").on("draw.dt", function () {
+                    document.querySelectorAll(\'[data-bs-toggle="tooltip"]\').forEach(
+                        el => new bootstrap.Tooltip(el)
+                    );
+                });
+                ', true
+            );
         }
         $this->htmlPage->addJavascript(
             '
