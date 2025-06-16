@@ -8,9 +8,9 @@
 
 {else}
     {assign var="translationStrings" value=[
-        'move_up'  => $l10n->get('SYS_MOVE_UP', array('SYS_OPTION_ENTRY')),
-        'move_down'=> $l10n->get('SYS_MOVE_DOWN', array('SYS_OPTION_ENTRY')),
-        'move_var' => $l10n->get('SYS_MOVE_VAR', array('SYS_OPTION_ENTRY')),
+        'move_up'  => $l10n->get('SYS_MOVE_UP', array('SYS_ENTRY')),
+        'move_down'=> $l10n->get('SYS_MOVE_DOWN', array('SYS_ENTRY')),
+        'move_var' => $l10n->get('SYS_MOVE_VAR', array('SYS_ENTRY')),
         'restore'  => $l10n->get('SYS_RESTORE_ENTRY'),
         'delete'   => $l10n->get('SYS_DELETE')
     ]}
