@@ -768,7 +768,7 @@ class ListConfiguration extends Entity
                             // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
                             $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
                             $arrCheckboxKeys = array(1, 0, 1, 0);
-                            $value = str_replace(array_map('StringUtils::strToLower', $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
+                            $value = str_replace(array_map(array(StringUtils::class, 'strToLower'), $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
                             break;
 
                         case 'DROPDOWN': // fallthrough
@@ -777,7 +777,7 @@ class ListConfiguration extends Entity
 
                             // replace all field values with their internal numbers
                             $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
-                            $value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
+                            $value = array_search(StringUtils::strToLower($value), array_map(array(StringUtils::class, 'strToLower'), $arrListValues), true);
                             break;
 
                         case 'NUMBER': // fallthrough
