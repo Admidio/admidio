@@ -226,7 +226,7 @@ try {
 
             // get available values for current field type and push to array
             if ($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'DROPDOWN_MULTISELECT' || $field->getValue('usf_type') === 'RADIO_BUTTON') {
-                foreach ($field->getValue('ufo_usf_options', 'text') as $key => $value) {
+                foreach ($field->getValue('ufo_usf_options', 'text', false) as $key => $value) {
                     $javascriptCode .= '
                     userFields[' . $i . ']["ufo_usf_options"]["' . $key . '"] = "' . $value . '";';
                 }
