@@ -43,8 +43,8 @@
                                 <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][value]" value="{$option.value|escape}" {if $option.obsolete}disabled="disabled"{/if}>
                             </td>
                             <td class="align-middle" style="display: none;">
-                                <div class="admidio-form-group form-check form-switch d-flex justify-content-center">
-                                    <input class="form-check-input focus-ring" type="checkbox" name="{$data.id}[{$option.id}][obsolete]" value="1" {if $option.obsolete}checked{/if}>
+                                <div class="admidio-form-group d-flex justify-content-center">
+                                    <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][obsolete]" value="{$option.obsolete}">
                                 </div>
                             </td>
                             <td id="adm_option_{$option.id}_move_actions" class="text-center align-middle">
@@ -103,7 +103,7 @@
                 <td><input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][value]"></td>
                 <td class="align-middle" style="display: none;">
                     <div class="admidio-form-group form-check form-switch d-flex justify-content-center">
-                        <input class="form-check-input focus-ring" type="checkbox" name="${dataId}[${optionId}][obsolete]" value="1">
+                        <input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][obsolete]" value="1">
                     </div>
                 </td>
                 <td id="adm_option_${optionId}_move_actions" class="text-center align-middle">
@@ -138,7 +138,7 @@
         function deleteEntry(entryId) {
             const row = document.getElementById('adm_option_' + entryId);
             if (row) {
-                row.querySelector('input[name$="[obsolete]"]').checked = true; // Mark as obsolete
+                row.querySelector('input[name$="[obsolete]"]').value = 1; // Mark as obsolete
                 // disable input fields
                 row.querySelector('input[name$="[value]"]').disabled = true;
                 const moveActions = row.querySelector('#adm_option_' + entryId + '_move_actions');
@@ -155,7 +155,7 @@
         function restoreEntry(entryId) {
             const row = document.getElementById('adm_option_' + entryId);
             if (row) {
-                row.querySelector('input[name$="[obsolete]"]').checked = false; // Unmark as obsolete
+                row.querySelector('input[name$="[obsolete]"]').value = 0; // Unmark as obsolete
                 // enable input fields
                 row.querySelector('input[name$="[value]"]').disabled = false;
                 const moveActions = row.querySelector('#adm_option_' + entryId + '_move_actions');
