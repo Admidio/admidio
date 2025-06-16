@@ -414,7 +414,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_USER_ROLE_SETTINGS'),
                         'id' => 'user_role_settings',
-                        'tables' => array('user_fields', 'user_relation_types', 'roles_rights', 'roles_rights_data')
+                        'tables' => array('user_fields', 'user_field_select_options', 'user_relation_types', 'roles_rights', 'roles_rights_data')
                     ),
                     array(
                         'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),

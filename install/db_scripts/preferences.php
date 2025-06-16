@@ -59,6 +59,7 @@ $defaultOrgPreferences = array(
     'changelog_table_users' => '1',
     'changelog_table_members' => '1',
     'changelog_table_user_fields' => '0',
+    'changelog_table_user_field_select_options' => '0',
     'changelog_table_announcements' => '0',
     'changelog_table_events' => '0',
     'changelog_table_rooms' => '0',

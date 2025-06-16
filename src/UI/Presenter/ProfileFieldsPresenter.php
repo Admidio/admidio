@@ -326,7 +326,7 @@ class ProfileFieldsPresenter extends PagePresenter
             'bi-hdd-stack-fill'
         );
 
-        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields');
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields,user_field_select_options');
 
         $sql = 'SELECT *
                   FROM ' . TBL_USER_FIELDS . '
