@@ -58,12 +58,22 @@ final class UpdateStepsCode
             });
 
             if (count($values) > 0) {
+                // insert the values into the user field options table
                 foreach ($values as $key => $value) {
                     $sql = 'INSERT INTO ' . TBL_USER_FIELD_OPTIONS . ' (ufo_usf_id, ufo_value, ufo_sequence)
                              VALUES (?, ?, ?) -- $row[\'usf_id\'], -- $value, -- $key';
 
                     self::$db->queryPrepared($sql, array((int)$row['usf_id'], $value, $key + 1));
                 }
+
+                // update the user field values to use the new option id
+                $sql = 'UPDATE ' . TBL_USER_DATA . '
+                        JOIN ' . TBL_USER_FIELD_OPTIONS . '
+                            ON ufo_usf_id = usd_usf_id
+                            AND usd_value = ufo_sequence
+                        SET usd_value = ufo_id
+                            WHERE usd_usf_id = ? -- $row[\'usf_id\']';
+                self::$db->queryPrepared($sql, array((int)$row['usf_id']));
             }
         }
     }
