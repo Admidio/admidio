@@ -886,7 +886,6 @@ CREATE TABLE %PREFIX%_user_fields
     usf_name_intern             varchar(110)        NOT NULL,
     usf_name                    varchar(100)        NOT NULL,
     usf_description             text,
-    usf_value_list              text,
     usf_default_value           varchar(100),
     usf_regex                   varchar(100),
     usf_icon                    varchar(100),
