@@ -64,19 +64,27 @@ class ProfileFieldsPresenter extends PagePresenter
         $this->addJavascript('
             $("#usf_type").change(function() {
                 if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "DROPDOWN_MULTISELECT" || $("#usf_type").val() === "RADIO_BUTTON") {
-                    $("#ufo_usf_options").attr("required", "required");
+                    $("#ufo_usf_options_table").attr("required", "required");
                     $("#ufo_usf_options_group").addClass("admidio-form-group-required");
                     $("#ufo_usf_options_group").show("slow");
+                    // find all option input fields in the table and set the required atribute
+                    $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
+                        $(this).attr("required", "required");
+                    });
                 } else {
-                    $("#ufo_usf_options").removeAttr("required");
+                    $("#ufo_usf_options_table").removeAttr("required");
                     $("#ufo_usf_options_group").removeClass("admidio-form-group-required");
                     $("#ufo_usf_options_group").hide();
-                }
+                    // find all options and remove the required atribute from the input field
+                    $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
+                        $(this).removeAttr("required");
+                    });
+                    }
             });
             $("#usf_type").trigger("change");', true
         );
 
-        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields', !empty($profileFieldUUID), array('uuid' => $profileFieldUUID));
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields,user_field_select_options', !empty($profileFieldUUID), array('uuid' => $profileFieldUUID));
 
         // show form
         $form = new FormPresenter(
@@ -166,6 +174,11 @@ class ProfileFieldsPresenter extends PagePresenter
 
         $options = new SelectOptions($gDb, $userField->getValue('usf_id'));
         $optionValueList = $options->getAllOptions();
+        if (empty($optionValueList)) {
+            $optionValueList = array(
+                0 => array('id' => 1, 'value' => '', 'sequence' => 0, 'obsolete' => false)
+            );
+        }
         $form->addOptionEditor(
             'ufo_usf_options',
             $gL10n->get('SYS_VALUE_LIST'),

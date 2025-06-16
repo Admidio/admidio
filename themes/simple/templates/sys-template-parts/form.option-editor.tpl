@@ -19,7 +19,7 @@
         {if $formType neq "navbar"} mb-3{/if}
         {if $data.property eq 1} admidio-form-group-required{/if}">
 
-        <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
+        <label for="{$data.id}_table" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
             {include file="sys-template-parts/parts/form.part.icon.tpl"}
             {$data.label}
         </label>
@@ -27,7 +27,7 @@
         <div{if $formType neq "vertical" and $formType neq "navbar"} class="col-sm-9"{/if}>
 
             {* --- Die Tabelle mit den editierbaren Optionen --- *}
-            <table id="adm_option_editor_{$data.id}" class="table table-hover" width="100%" style="width: 100%;">
+            <table id="{$data.id}_table" class="table table-hover" width="100%" style="width: 100%;">
                 <thead>
                     <tr>
                         <th>{$l10n->get('SYS_VALUE')}</th>
@@ -40,7 +40,7 @@
                     {foreach $data.values as $option}
                         <tr id="adm_option_{$option.id}" data-uuid="{$option.id}">
                             <td>
-                                <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][value]" value="{$option.value|escape}" {if $option.obsolete}disabled="disabled"{/if}>
+                                <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][value]" value="{$option.value|escape}" {if $option.obsolete}disabled="disabled"{/if} {foreach $data.attributes as $itemvar}{$itemvar@key}="{$itemvar}"{/foreach}>
                             </td>
                             <td class="align-middle" style="display: none;">
                                 <div class="admidio-form-group d-flex justify-content-center">
@@ -87,7 +87,7 @@
         {literal}
         <script>
         function addOptionRow(dataId, translationStrings) {
-            const table = document.getElementById('adm_option_editor_' + dataId).getElementsByTagName('tbody')[0];
+            const table = document.getElementById(dataId + '_table').getElementsByTagName('tbody')[0];
             const newRow = document.createElement('tr');
             const rows = table.querySelectorAll('tr[id^="adm_option_"]');
             let maxId = 0;
@@ -100,10 +100,10 @@
             });
             const optionId = maxId + 1;
             newRow.innerHTML = `
-                <td><input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][value]"></td>
+                <td><input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][value]" required="required"></td>
                 <td class="align-middle" style="display: none;">
                     <div class="admidio-form-group form-check form-switch d-flex justify-content-center">
-                        <input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][obsolete]" value="1">
+                        <input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][obsolete]" value="">
                     </div>
                 </td>
                 <td id="adm_option_${optionId}_move_actions" class="text-center align-middle">
@@ -138,6 +138,20 @@
         function deleteEntry(entryId) {
             const row = document.getElementById('adm_option_' + entryId);
             if (row) {
+                const table = row.parentNode;
+                const countOptions = table.querySelectorAll('tr[id^="adm_option_"]').length;
+                if (row.querySelector('input[name$="[value]"]').value.trim() === '' && row.querySelector('input[name$="[obsolete]"]').value.trim() === '') {
+                    // check if the row is the last one
+                    if (countOptions > 1) {
+                        row.remove(); // Remove the row if the value is empty
+                    }
+                    return;
+                } else if (row.querySelector('input[name$="[value]"]').value.trim() === '') {
+                    // If the value is empty, just remove the row
+                    if (countOptions <= 1) {
+                        return;
+                    }
+                }
                 row.querySelector('input[name$="[obsolete]"]').value = 1; // Mark as obsolete
                 // disable input fields
                 row.querySelector('input[name$="[value]"]').disabled = true;

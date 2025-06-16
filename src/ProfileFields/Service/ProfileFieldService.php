@@ -98,10 +98,15 @@ class ProfileFieldService
             } elseif (str_starts_with($key, 'ufo_')) {
                 // if the key starts with 'ufo_' then it is a user field option
                 // and we save it in the user field options table
-                $this->profileFieldRessource->setOptionValues($value);
+                $options = $value;
             }
         }
 
         $this->profileFieldRessource->save();
+
+        // safe the field options after the new field has been saved
+        if (isset($options) && is_array($options)) {
+            $this->profileFieldRessource->setOptionValues($options);
+        }
     }
 }

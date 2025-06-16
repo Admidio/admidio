@@ -32,7 +32,7 @@ class SelectOptions extends Entity
         $this->connectAdditionalTable(TBL_USER_FIELDS, 'usf_id', $usfId);
 
         parent::__construct($database, TBL_USER_FIELD_OPTIONS, 'ufo');
-        $this->readDataByFieldId();
+        $this->readDataByFieldId($this->usfId);
     }
 
     /**
@@ -41,8 +41,16 @@ class SelectOptions extends Entity
      * If no id is set than no data will be read.
      * @throws Exception
      */
-    private function readDataByFieldId()
+    public function readDataByFieldId($usfId = 0): void
     {
+        // if no id is set then use the id of the object
+        if ($usfId > 0) {
+            $this->usfId = $usfId;
+        }
+
+        // reset the internal array with the option values
+        $this->optionValues = array();
+
         // if id is set than read the data of the recordset
         if ($this->usfId > 0) {
             $sql = 'SELECT ufo_id, ufo_value, ufo_sequence, ufo_obsolete
@@ -57,30 +65,38 @@ class SelectOptions extends Entity
         }
     }
 
+    public function readDataById(int $id): bool
+    {
+        // check if the id is an option of the select field
+        if (isset($this->optionValues[$id])) {
+            return parent::readDataById($id);
+        } else {
+            return false;
+        }
+    }
     /**
      * Returns an array with all options of the select field.
      * If the parameter $format is set to 'database' then the values will be returned with their database column names.
      * If the parameter $format is not set or empty then the values will be returned with their value.
-     * @param string $format If set to 'database' then the values will be returned with their database column names.
+     * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the profile field will not be considered.
      * @return array Returns an array with all options of the select field.
      */
-    public function getAllOptions(string $format = ''): array
+    public function getAllOptions(bool $withObsoleteEnries = true): array
     {
         $values = array();
         if (!empty($this->optionValues)) {
-            if ($format === 'database') {
-                // if format is database than return the values with database column names
-                $values = $this->optionValues;
-            } else {
-                // if format is not database than return the values with their value
-                foreach ($this->optionValues as $value) {
-                    $values[$value['ufo_id']] = array(
-                        'id' => $value['ufo_id'],
-                        'value' => $value['ufo_value'],
-                        'sequence' => $value['ufo_sequence'],
-                        'obsolete' => $value['ufo_obsolete']
-                    );
+            // if format is not database than return the values with their value
+            foreach ($this->optionValues as $value) {
+                // if obsolete entries should not be returned then skip them
+                if (!$withObsoleteEnries && $value['ufo_obsolete']) {
+                    continue;
                 }
+                $values[$value['ufo_id']] = array(
+                    'id' => $value['ufo_id'],
+                    'value' => $value['ufo_value'],
+                    'sequence' => $value['ufo_sequence'],
+                    'obsolete' => $value['ufo_obsolete']
+                );
             }
         }
         return $values;
@@ -132,6 +148,7 @@ class SelectOptions extends Entity
         $this->db->startTransaction();
 
         if ($this->newRecord) {
+            $this->usfId = (int)$this->dbColumns['ufo_usf_id'];
             // Determine the highest sequence number of the option when inserting
             $sql = 'SELECT COUNT(*) AS count
                       FROM '.TBL_USER_FIELD_OPTIONS.'

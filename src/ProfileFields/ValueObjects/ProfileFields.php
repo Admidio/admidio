@@ -162,13 +162,14 @@ class ProfileFields
      *                           * **database** returns database value of **ufo_usf_options** without any transformations
      *                           * **text** extract only text from **ufo_usf_options**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
+     * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the profile field will not be considered.
      * @return mixed Returns for the profile field with the given uuid the value.
      * @throws Exception
      */
-    public function getProperty(string $fieldNameIntern, string $column, string $format = '')
+    public function getProperty(string $fieldNameIntern, string $column, string $format = '', bool $withObsoleteEnries = true)
     {
         if (array_key_exists($fieldNameIntern, $this->mProfileFields)) {
-            return $this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
+            return $this->mProfileFields[$fieldNameIntern]->getValue($column, $format, $withObsoleteEnries);
         }
 
         // if id-field not exists then return zero
@@ -284,7 +285,7 @@ class ProfileFields
                 case 'DROPDOWN': // fallthrough
                 case 'RADIO_BUTTON':
                     $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
-                    $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', 'database');
+                    $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', 'database', false);
 
                     foreach ($arrOptions as $values) {
                         // if value is bootstrap icon or icon separated from text
@@ -324,7 +325,7 @@ class ProfileFields
                     break;
                 case 'DROPDOWN_MULTISELECT':
                     $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
-                    $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', 'database');
+                    $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', 'database', false);
 
                     foreach ($arrOptions as $values) {
                         // if text is a translation-id then translate it
@@ -473,14 +474,14 @@ class ProfileFields
                     case 'RADIO_BUTTON':
                         // the value in db is only the position, now search for the text
                         if ($value > 0 && $format !== 'html') {
-                            $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', $format);
+                            $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', $format, false);
                             $value = $arrOptions[$value];
                         }
                         break;
                     case 'DROPDOWN_MULTISELECT':
                         // the value in db is a comma separated list of positions, now search for the text
                         if ($value !== '' && $format !== 'html') {
-                            $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', $format);
+                            $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', $format, false);
                             $valueArray = explode(',', $value);
                             foreach ($valueArray as &$val) {
                                 $val = trim($val);
