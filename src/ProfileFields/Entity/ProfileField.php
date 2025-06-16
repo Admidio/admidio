@@ -158,9 +158,9 @@ class ProfileField extends Entity
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For column **usf_value_list** the following format is accepted:
-     *                           * **database** returns database value of **usf_value_list** without any transformations
-     *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
+     * @param string $format For column **ufo_usf_options** the following format is accepted:
+     *                           * **database** returns database value of **ufo_usf_options** without any transformations
+     *                           * **text** extract only text from **ufo_usf_options**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.

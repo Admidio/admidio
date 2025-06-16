@@ -241,7 +241,7 @@ class UserImport extends User
                     case 'DROPDOWN': // fallthrough
                     case 'RADIO_BUTTON':
                         // save position of combobox
-                        $arrListValues = $this->mProfileFieldsData->getProperty($columnName, 'usf_value_list', 'text');
+                        $arrListValues = $this->mProfileFieldsData->getProperty($columnName, 'ufo_usf_options', 'text');
 
                         for ($position = 1; $position <= count($arrListValues); $position++) {
                             if (StringUtils::strToLower($newValue) === StringUtils::strToLower(trim($arrListValues[$position]))) {
@@ -255,7 +255,7 @@ class UserImport extends User
                         break;
                     case 'DROPDOWN_MULTISELECT':
                         // save position of combobox
-                        $arrListValues = $this->mProfileFieldsData->getProperty($columnName, 'usf_value_list', 'text');
+                        $arrListValues = $this->mProfileFieldsData->getProperty($columnName, 'ufo_usf_options', 'text');
                         $validValue = '';
 
                         // split the value by comma and check each value

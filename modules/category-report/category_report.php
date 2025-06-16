@@ -388,7 +388,7 @@ try {
                     || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN_MULTISELECT'
                     || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON')) {
                 // show selected text of optionfield or combobox
-                $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
+                $arrListValues = $gProfileFields->getPropertyById($usf_id, 'ufo_usf_options', 'text');
                 // if the content is an array, then we have to loop through the array
                 if (is_array($content)) {
                     $content = array_map(function ($value) use ($arrListValues) {

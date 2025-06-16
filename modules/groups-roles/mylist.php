@@ -221,18 +221,18 @@ try {
                 "usf_name": "' . addslashes($field->getValue('usf_name')) . '",
                 "usf_name_intern": "' . addslashes($field->getValue('usf_name_intern')) . '",
                 "usf_type": "' . $field->getValue('usf_type') . '",
-                "usf_value_list": {}
+                "ufo_usf_options": {}
             };';
 
             // get available values for current field type and push to array
             if ($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'DROPDOWN_MULTISELECT' || $field->getValue('usf_type') === 'RADIO_BUTTON') {
-                foreach ($field->getValue('usf_value_list', 'text') as $key => $value) {
+                foreach ($field->getValue('ufo_usf_options', 'text') as $key => $value) {
                     $javascriptCode .= '
-                    userFields[' . $i . ']["usf_value_list"]["' . $key . '"] = "' . $value . '";';
+                    userFields[' . $i . ']["ufo_usf_options"]["' . $key . '"] = "' . $value . '";';
                 }
             } else {
                 $javascriptCode .= '
-                userFields[' . $i . ']["usf_value_list"] = "";';
+                userFields[' . $i . ']["ufo_usf_options"] = "";';
             }
         }
     }
@@ -374,16 +374,16 @@ try {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";
 
-                    for (selectValue in arrUserFields[key]["usf_value_list"]) {
+                    for (selectValue in arrUserFields[key]["ufo_usf_options"]) {
                         selected = "";
 
                         if (arrDefaultFields[fieldNumberShow]) {
                             if (arrUserFields[key]["usf_name_intern"] === arrDefaultFields[fieldNumberShow]["usf_name_intern"]
-                            &&  arrUserFields[key]["usf_value_list"][selectValue] == arrDefaultFields[fieldNumberShow]["condition"]) {
+                            &&  arrUserFields[key]["ufo_usf_options"][selectValue] == arrDefaultFields[fieldNumberShow]["condition"]) {
                                 selected = " selected=\"selected\" ";
                             }
                         }
-                        html += "<option value=\"" + arrUserFields[key]["usf_value_list"][selectValue] + "\" " + selected + ">" + arrUserFields[key]["usf_value_list"][selectValue] + "</option>";
+                        html += "<option value=\"" + arrUserFields[key]["ufo_usf_options"][selectValue] + "\" " + selected + ">" + arrUserFields[key]["ufo_usf_options"][selectValue] + "</option>";
                         "</select>";
                     }
                 }

@@ -196,7 +196,7 @@ class ListConfiguration extends Entity
                 || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON')) {
             if (strlen($content) > 0) {
                 // show selected text of option field or combobox
-                $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
+                $arrListValues = $gProfileFields->getPropertyById($usfId, 'ufo_usf_options', 'text');
                 // if the contnent is a list of values then explode it
                 if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN_MULTISELECT') {
                     // explode the content by comma
@@ -584,7 +584,7 @@ class ListConfiguration extends Entity
                     case 'RADIO_BUTTON':
                         // create "case when" with all values of the profile field value list
                         $condition = ' CASE ';
-                        $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
+                        $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'ufo_usf_options', 'text');
 
                         foreach ($arrListValues as $key => $value) {
                             $condition .= ' WHEN ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ' = \'' . $key . '\' THEN \'' . $value . '\' ';
@@ -776,7 +776,7 @@ class ListConfiguration extends Entity
                             $type = 'int';
 
                             // replace all field values with their internal numbers
-                            $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
+                            $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'ufo_usf_options', 'text');
                             $value = array_search(StringUtils::strToLower($value), array_map(array(StringUtils::class, 'strToLower'), $arrListValues), true);
                             break;
 

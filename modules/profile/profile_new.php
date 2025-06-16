@@ -255,7 +255,7 @@ try {
                             $defaultValue = $user->getValue($usfNameIntern, 'database');
                         }
                     } else {
-                        $arrListValues = $gProfileFields->getProperty($usfNameIntern, 'usf_value_list');
+                        $arrListValues = $gProfileFields->getProperty($usfNameIntern, 'ufo_usf_options');
                         $defaultValue = $user->getValue($usfNameIntern, 'database');
                         // if the field is a dropdown multiselect then convert the values to an array
                         if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') {
@@ -288,7 +288,7 @@ try {
                     $form->addRadioButton(
                         $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
                         $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
-                        $gProfileFields->getProperty($usfNameIntern, 'usf_value_list', 'html'),
+                        $gProfileFields->getProperty($usfNameIntern, 'ufo_usf_options', 'html'),
                         array(
                             'property' => $fieldProperty,
                             'defaultValue' => (int)$user->getValue($usfNameIntern, 'database'),
