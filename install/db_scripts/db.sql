@@ -308,6 +308,7 @@ CREATE TABLE %PREFIX%_links
     lnk_description             text,
     lnk_url                     varchar(2000)       NOT NULL,
     lnk_counter                 integer             NOT NULL    DEFAULT 0,
+    lnk_sequence                smallint            NOT NULL,
     lnk_usr_id_create           integer unsigned,
     lnk_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     lnk_usr_id_change           integer unsigned,

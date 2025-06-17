@@ -18,6 +18,9 @@ use Admidio\Infrastructure\Utils\StringUtils;
  */
 class Weblink extends Entity
 {
+    public const MOVE_UP = 'UP';
+    public const MOVE_DOWN = 'DOWN';
+
     /**
      * Constructor that will create an object of a recordset of the table adm_links.
      * If the id is set than the specific weblink will be loaded.
@@ -216,5 +219,35 @@ class Weblink extends Entity
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+    
+    /**
+     * Weblink will change the sequence one step up or one step down.
+     * @param string $mode mode if the weblink move up or down, values are Weblink::MOVE_UP, Weblink::MOVE_DOWN
+     * @return bool Return true if the sequence of the weblink could be changed, otherwise false.
+     * @throws Exception
+     */
+    public function moveSequence(string $mode): bool
+    {
+        $lnkSequence = (int)$this->getValue('lnk_sequence');
+        $lnkCatId = (int)$this->getValue('lnk_cat_id');
+        $sql = 'UPDATE ' . TBL_LINKS . '
+                   SET lnk_sequence = ? -- $usfSequence
+                 WHERE lnk_cat_id   = ? -- $usfCatId
+                   AND lnk_sequence = ? -- $usfSequence -/+ 1';
+
+        // profile field will get one number lower and therefore move a position up in the list
+        if ($mode === self::MOVE_UP) {
+            $newSequence = $lnkSequence - 1;
+        } // profile field will get one number higher and therefore move a position down in the list
+        elseif ($mode === self::MOVE_DOWN) {
+            $newSequence = $lnkSequence + 1;
+        }
+
+        // update the existing entry with the sequence of the field that should get the new sequence
+        $this->db->queryPrepared($sql, array($lnkSequence, $lnkCatId, $newSequence));
+
+        $this->setValue('lnk_sequence', $newSequence);
+        return $this->save();
     }
 }

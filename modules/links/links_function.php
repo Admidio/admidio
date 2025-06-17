@@ -16,6 +16,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Weblinks\Entity\Weblink;
 
 try {
@@ -23,9 +24,12 @@ try {
     require(__DIR__ . '/../../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create', 'delete')));
-
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('create', 'delete', 'sequence')));
+    if ($getMode === 'sequence') {
+        $getLinkUuid = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
+    } else {
+        $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
+    }
     // check if the module is enabled for use
     if ($gSettingsManager->getInt('weblinks_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
@@ -57,9 +61,18 @@ try {
         foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'lnk_')) {
                 $link->setValue($key, $value);
+
+                if ($key === 'lnk_cat_id') {
+                    $sql = 'SELECT COUNT(*) AS count
+                          FROM ' . TBL_LINKS . '
+                         WHERE lnk_cat_id = ? -- $value';
+
+                    $pdoStatement = $gDb->queryPrepared($sql, array($link->getValue('lnk_cat_id')));
+
+                    $link->setValue('lnk_sequence', $pdoStatement->fetchColumn() + 1);
+                }
             }
         }
-
         if ($link->save()) {
             // Notification an email for new or changed entries to all members of the notification role
             $link->sendNotification();
@@ -72,8 +85,26 @@ try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-        // delete current announcements, right checks were done before
+        // close gap in sequence
+        $sql = 'UPDATE ' . TBL_LINKS . '
+                   SET lnk_sequence = lnk_sequence - 1
+                 WHERE lnk_cat_id   = ? -- $link->getValue(\'lnk_cat_id\')
+                   AND lnk_sequence > ? -- $link->getValue(\'lnk_sequence\')';
+        $gDb->queryPrepared($sql, array((int)$link->getValue('lnk_cat_id'), (int)$link->getValue('lnk_sequence')));
+
+        // delete current link, right checks were done before
         $link->delete();
+
+        echo json_encode(array('status' => 'success'));
+        exit();
+    } elseif ($getMode === 'sequence') {
+        $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+        // update sequence of links
+        $link->moveSequence($postDirection);
         echo json_encode(array('status' => 'success'));
         exit();
     }

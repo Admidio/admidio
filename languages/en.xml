@@ -1643,6 +1643,7 @@
   <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="SYS_WARNING">Warning</string>
+  <string name="SYS_WEBLINK">Web link</string>
   <string name="SYS_WEBLINKS">Web links</string>
   <string name="SYS_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>
   <string name="SYS_WEBMASTER">Webmaster</string>

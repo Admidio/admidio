@@ -79,6 +79,30 @@ final class UpdateStepsCode
     }
 
     /**
+     * This method will update the sequence of the links in the database.
+     * The sequence is used to sort the links within a category.
+     * The sequence starts with 1 for each category and is incremented by 1 for each link.
+     * @throws Exception
+     */
+    public static function updateStep50AddLinkSequence()
+    {
+        $sql = 'SELECT lnk_id, lnk_cat_id FROM ' . TBL_LINKS . ' ORDER BY lnk_cat_id, lnk_id';
+        $statement = self::$db->queryPrepared($sql);
+        $currentCatId = null;
+        $sequence = 1;
+
+        while ($row = $statement->fetch()) {
+            if ($currentCatId !== $row['lnk_cat_id']) {
+                $currentCatId = $row['lnk_cat_id'];
+                $sequence = 1;
+            }
+            $updateSql = 'UPDATE ' . TBL_LINKS . ' SET lnk_sequence = ? WHERE lnk_id = ?';
+            self::$db->queryPrepared($updateSql, [$sequence, $row['lnk_id']]);
+            $sequence++;
+        }
+    }
+
+    /**
      * Create categories for the forum and each organization.
      * @throws Exception
      */
