@@ -268,5 +268,6 @@ class SelectOptions extends Entity
         $logEntry->setValue('log_record_name', $fieldName);
         $logEntry->setValue('log_record_id', $id);
         $logEntry->setValue('log_record_uuid', $uuid);
+        $logEntry->setValue('log_related_name', $this->getValue('ufo_value'));
     }
 }
