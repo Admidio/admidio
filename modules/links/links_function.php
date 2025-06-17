@@ -87,7 +87,7 @@ try {
 
         // close gap in sequence
         $sql = 'UPDATE ' . TBL_LINKS . '
-                   SET lnk_sequence = usf_sequence - 1
+                   SET lnk_sequence = lnk_sequence - 1
                  WHERE lnk_cat_id   = ? -- $link->getValue(\'lnk_cat_id\')
                    AND lnk_sequence > ? -- $link->getValue(\'lnk_sequence\')';
         $gDb->queryPrepared($sql, array((int)$link->getValue('lnk_cat_id'), (int)$link->getValue('lnk_sequence')));
