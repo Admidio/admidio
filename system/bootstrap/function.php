@@ -613,8 +613,17 @@ function admRedirect(string $url, int $statusCode = 303)
         $redirectUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/redirect.php', array('url' => $url));
     }
 
-    header('Location: ' . $redirectUrl, true, $statusCode);
-    exit();
+    // Detect AJAX
+    $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    if ($isAjax) {
+        //sent a custom header X-ADMIDIO-REDIRECT to handle he redirect with JavaScript
+        $gLogger->info('REDIRECT: Redirecting via AJAX!', $loggerObject);
+        header('X-ADMIDIO-REDIRECT: ' . $redirectUrl, true, $statusCode);
+        exit();
+    } else {
+        header('Location: ' . $redirectUrl, true, $statusCode);
+        exit();
+    }
 }
 
 /**

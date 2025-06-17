@@ -384,3 +384,24 @@ function formSubmit(event) {
         }
     });
 }
+
+/**
+ * This function will set the X-AJAX-PREVIOUS-URL header for all AJAX requests.
+ * This is useful to know the previous URL when processing AJAX requests on the server side.
+ */
+$(document).ajaxSend(function(event, jqXHR, settings) {
+    jqXHR.setRequestHeader('X-AJAX-PREVIOUS-URL', window.location.href);
+});
+
+/**
+ * This function will reload the complete page if the X-ADMIDIO-REDIRECT header is set.
+ * This is useful for example if a user has been logged out and a AJAX call causes an redirect to show the login page.
+ * Then the complete page should be reloaded and not only the AJAX content.
+ */
+$(document).ajaxComplete(function(event, jqXHR) {
+    var redirect = jqXHR.getResponseHeader('X-ADMIDIO-REDIRECT');
+    if (redirect) {
+        // reload the complete page and not only the AJAX content
+        window.location.href = redirect;
+    }
+});
