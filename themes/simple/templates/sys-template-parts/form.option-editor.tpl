@@ -19,7 +19,7 @@
         {if $formType neq "navbar"} mb-3{/if}
         {if $data.property eq 1} admidio-form-group-required{/if}">
 
-        <label for="{$data.id}_table" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
+        <label class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
             {include file="sys-template-parts/parts/form.part.icon.tpl"}
             {$data.label}
         </label>
@@ -36,9 +36,9 @@
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
-                <tbody id="adm_profile_fields_{$data.id}" class="admidio-sortable">
+                <tbody class="admidio-sortable">
                     {foreach $data.values as $option}
-                        <tr id="adm_option_{$option.id}" data-uuid="{$option.id}">
+                        <tr id="{$data.id}_option_{$option.id}" data-uuid="{$option.id}">
                             <td>
                                 <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][value]" value="{$option.value|escape}" {if $option.obsolete}disabled="disabled"{/if} {foreach $data.attributes as $itemvar}{$itemvar@key}="{$itemvar}"{/foreach}>
                             </td>
@@ -47,22 +47,22 @@
                                     <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][obsolete]" value="{$option.obsolete}">
                                 </div>
                             </td>
-                            <td id="adm_option_{$option.id}_move_actions" class="text-center align-middle">
-                                <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-direction="UP" data-target="adm_option_{$option.id}" {if $option.obsolete} style="display: none;"{/if}>
+                            <td id="{$data.id}_option_{$option.id}_move_actions" class="text-center align-middle">
+                                <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-direction="UP" data-target="{$data.id}_option_{$option.id}">
                                     <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$translationStrings.move_up}"></i>
                                 </a>
-                                <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-direction="DOWN" data-target="adm_option_{$option.id}" {if $option.obsolete} style="display: none;"{/if}>
+                                <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-direction="DOWN" data-target="{$data.id}_option_{$option.id}">
                                     <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$translationStrings.move_down}"></i>
                                 </a>
-                                <a class="admidio-icon-link" {if $option.obsolete} style="display: none;"{/if}>
+                                <a class="admidio-icon-link">
                                     <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$translationStrings.move_var}"></i>
                                 </a>
                             </td>
-                            <td id="adm_option_{$option.id}_delete_actions" class="text-center align-middle">
-                                <a id="adm_option_{$option.id}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry('{$option.id}');" {if !$option.obsolete} style="display: none;"{/if}>
+                            <td id="{$data.id}_option_{$option.id}_delete_actions" class="text-center align-middle">
+                                <a id="{$data.id}_option_{$option.id}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry('{$data.id}', '{$option.id}');" {if !$option.obsolete} style="display: none;"{/if}>
                                     <i class="bi bi-arrow-counterclockwise text-success" data-bs-toggle="tooltip" title="{$translationStrings.restore}"></i>
                                 </a>
-                                <a id="adm_option_{$option.id}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry('{$option.id}');"{if $option.obsolete} style="display: none;"{/if}>
+                                <a id="{$data.id}_option_{$option.id}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry('{$data.id}', '{$option.id}');"{if $option.obsolete} style="display: none;"{/if}>
                                     <i class="bi bi-trash-fill text-danger" data-bs-toggle="tooltip" title="{$translationStrings.delete}"></i>
                                 </a>
                             </td>
@@ -71,7 +71,7 @@
                 </tbody>
             </table>
             {* --- Button zum Hinzufügen einer neuen Option --- *}
-            <button type="button" class="btn btn-sm btn-primary" onclick="addOptionRow('{$data.id}', {$translationStrings|json_encode|escape:'htmlall':'UTF-8'})">
+            <button type="button" class="btn btn-primary" onclick="addOptionRow('{$data.id}', {$translationStrings|json_encode|escape:'htmlall':'UTF-8'})">
                 <i class="bi bi-plus-circle"></i> {$l10n->get('SYS_ADD_ENTRY')}
             </button>
 
@@ -89,10 +89,10 @@
         function addOptionRow(dataId, translationStrings) {
             const table = document.getElementById(dataId + '_table').getElementsByTagName('tbody')[0];
             const newRow = document.createElement('tr');
-            const rows = table.querySelectorAll('tr[id^="adm_option_"]');
+            const rows = table.querySelectorAll('tr[id^="' + dataId + '_option_"]');
             let maxId = 0;
             rows.forEach(row => {
-                const currentId = row.id.replace('adm_option_', '');
+                const currentId = row.id.replace(dataId + '_option_', '');
                 const num = parseInt(currentId, 10);
                 if (!isNaN(num) && num > maxId) {
                     maxId = num;
@@ -106,40 +106,40 @@
                         <input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][obsolete]" value="">
                     </div>
                 </td>
-                <td id="adm_option_${optionId}_move_actions" class="text-center align-middle">
+                <td id="${dataId}_option_${optionId}_move_actions" class="text-center align-middle">
                     <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)"
-                        data-direction="UP" data-target="adm_option_${optionId}">
+                        data-direction="UP" data-target="${dataId}_option_${optionId}">
                         <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="${translationStrings.move_up}"></i>
                     </a>
                     <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)"
-                        data-direction="DOWN" data-target="adm_option_${optionId}">
+                        data-direction="DOWN" data-target="${dataId}_option_${optionId}">
                         <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="${translationStrings.move_down}"></i>
                     </a>
                     <a class="admidio-icon-link">
                         <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="${translationStrings.move_var}"></i>
                     </a>
                 </td>
-                <td id="adm_option_${optionId}_delete_actions" class="text-center align-middle">
-                    <a id="adm_option_${optionId}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry('${optionId}');" style="display: none;">
+                <td id="${dataId}_option_${optionId}_delete_actions" class="text-center align-middle">
+                    <a id="${dataId}_option_${optionId}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry('${dataId}', '${optionId}');" style="display: none;">
                         <i class="bi bi-arrow-counterclockwise text-success" data-bs-toggle="tooltip" title="${translationStrings.restore}"></i>
                     </a>
-                    <a id="adm_option_${optionId}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry('${optionId}');">
+                    <a id="${dataId}_option_${optionId}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry('${dataId}', '${optionId}');">
                         <i class="bi bi-trash-fill text-danger" data-bs-toggle="tooltip" title="${translationStrings.delete}"></i>
                     </a>
                 </td>
             `;
-            newRow.id = 'adm_option_' + optionId;
+            newRow.id = dataId + '_option_' + optionId;
             newRow.setAttribute('data-uuid', optionId);
             newRow.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
                 new bootstrap.Tooltip(el);
             });
             table.appendChild(newRow);
         }
-        function deleteEntry(entryId) {
-            const row = document.getElementById('adm_option_' + entryId);
+        function deleteEntry(dataId, entryId) {
+            const row = document.getElementById(dataId + '_option_' + entryId);
             if (row) {
                 const table = row.parentNode;
-                const countOptions = table.querySelectorAll('tr[id^="adm_option_"]').length;
+                const countOptions = table.querySelectorAll('tr[id^="' + dataId + '_option_"]').length;
                 if (row.querySelector('input[name$="[value]"]').value.trim() === '' && row.querySelector('input[name$="[obsolete]"]').value.trim() === '') {
                     // check if the row is the last one
                     if (countOptions > 1) {
@@ -152,34 +152,24 @@
                         return;
                     }
                 }
-                row.querySelector('input[name$="[obsolete]"]').value = 1; // Mark as obsolete
+                // Mark the entry as obsolete
+                row.querySelector('input[name$="[obsolete]"]').value = 1;
                 // disable input fields
                 row.querySelector('input[name$="[value]"]').disabled = true;
-                const moveActions = row.querySelector('#adm_option_' + entryId + '_move_actions');
-                if (moveActions) {
-                    moveActions.querySelectorAll('*').forEach(function(elem) {
-                        elem.style.display = 'none';
-                    });
-                }
-                // change displayed delete option
-                row.querySelector('#adm_option_' + entryId + '_delete').style.display = 'none'; // Hide delete icon
-                row.querySelector('#adm_option_' + entryId + '_restore').style.display = 'inline'; // Show restore icon
+                // change displayed delete/restore option
+                row.querySelector('#' + dataId + '_option_' + entryId + '_delete').style.display = 'none';
+                row.querySelector('#' + dataId + '_option_' + entryId + '_restore').style.display = 'inline';
             }
         }
-        function restoreEntry(entryId) {
-            const row = document.getElementById('adm_option_' + entryId);
+        function restoreEntry(dataId, entryId) {
+            const row = document.getElementById(dataId + '_option_' + entryId);
             if (row) {
                 row.querySelector('input[name$="[obsolete]"]').value = 0; // Unmark as obsolete
                 // enable input fields
                 row.querySelector('input[name$="[value]"]').disabled = false;
-                const moveActions = row.querySelector('#adm_option_' + entryId + '_move_actions');
-                if (moveActions) {
-                    moveActions.querySelectorAll('*').forEach(function(elem) {
-                        elem.style.display = 'inline';
-                    });
-                }                // change displayed delete option
-                row.querySelector('#adm_option_' + entryId + '_delete').style.display = 'inline'; // Show delete icon
-                row.querySelector('#adm_option_' + entryId + '_restore').style.display = 'none'; // Hide restore icon
+                // change displayed delete option
+                row.querySelector('#' + dataId + '_option_' + entryId + '_delete').style.display = 'inline'; // Show delete icon
+                row.querySelector('#' + dataId + '_option_' + entryId + '_restore').style.display = 'none'; // Hide restore icon
             }
         }
         </script>
