@@ -1651,6 +1651,7 @@
   <string name="SYS_WANT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <string name="SYS_WARNING">Warnung</string>
+  <string name="SYS_WEBLINK">Weblink</string>
   <string name="SYS_WEBLINKS">Weblinks</string>
   <string name="SYS_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
