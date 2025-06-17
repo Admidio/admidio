@@ -112,6 +112,10 @@ class ProfileField extends Entity
                  WHERE lsc_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
 
+        $sql = 'DELETE FROM ' . TBL_USER_FIELD_OPTIONS . '
+                 WHERE ufo_usf_id = ? -- $usfId';
+        $this->db->queryPrepared($sql, array($usfId));
+
         $return = parent::delete();
 
         if (is_object($gCurrentSession)) {
@@ -478,68 +482,8 @@ class ProfileField extends Entity
      * @return bool Returns true if the values could be saved, otherwise false.
      * @throws Exception
      */
-    public function setOptionValues(array $newValues): bool
+    public function setSelectOptions(array $newValues): bool
     {
-        $ret = true;
-        
-        if ($this->getValue('usf_type') === 'DROPDOWN' || $this->getValue('usf_type') === 'DROPDOWN_MULTISELECT' || $this->getValue('usf_type') === 'RADIO_BUTTON') {
-            $usfId = $this->getValue('usf_id');
-            $options = new SelectOptions($this->db, $usfId);
-            $newOption = false;
-            $arrValues = $newValues;
-            // first save the new values of the options
-            foreach ($newValues as $id => $values) {
-                if ($options->readDataById($id)) {                                       
-                    foreach ($values as $key => $value) {
-                        $options->setValue('ufo_' . $key, $value);
-                    }
-                    $ret = $options->save();
-                } else {
-                    $newOption = true;
-                    $option = new SelectOptions($this->db);
-
-                    // if the options value does not exist then create a new entry
-                    $option->setValue('ufo_usf_id', $usfId);
-
-                    foreach ($values as $key => $value) {
-                        $option->setValue('ufo_' . $key, $value);
-                    }
-                    $ret = $option->save();
-
-                    // update the ID of the new option in the array
-                    if ($id != $option->getValue('ufo_id')) {
-                        $arrValues[$option->getValue('ufo_id')] = $values;
-                        unset($arrValues[$id]); // remove old ID from array
-                    }
-                }
-            }
-
-            // if new Opions were added then the sequence of the options must be updated
-            if ($newOption) {
-                $options->readDataByFieldId($usfId);
-            }
-            // now change the sequence of the options
-            $allOptions = $options->getAllOptions(); // load all options of the options
-
-            // determinalte current sequence based on allOpions sequence values
-            $currentSequence = array();
-            foreach ($allOptions as $option) {
-                $currentSequence[$option['id']] = $option['sequence'] - 1; // -1 because sequence starts with 1 in database
-            }
-            // determinate new sequence based on array position
-            $newSequence = array();
-            $sequence = 0;
-            foreach ($arrValues as $id => $values) {
-                $newSequence[$id] = $sequence++;
-            }
-
-            // check if the sequence of the options has changed
-            if ($currentSequence !== $newSequence) {
-                // if the sequence has changed then update the sequence of the options
-                $options->readDataById(array_key_first($newSequence));
-                $options->setSequence($newSequence);
-            }
-        }
-        return $ret;
+        return (new SelectOptions($this->db, (int)$this->getValue('usf_id')))->setOptionValues($newValues);
     }
 }

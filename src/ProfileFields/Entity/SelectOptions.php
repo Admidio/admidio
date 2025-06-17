@@ -133,6 +133,83 @@ class SelectOptions extends Entity
         return $this->save();
     }
 
+    
+    /**
+     * Set the values of the options of a dropdown, radio button or multiselect field.
+     * The values are stored in the database and the sequence of the options is updated.
+     * @param array $newValues Array with new values for the options. The key is the option ID and the value is an array with the new values.
+     * @return bool Returns true if the values could be saved, otherwise false.
+     * @throws Exception
+     */
+    public function setOptionValues(array $newValues): bool
+    {
+        $ret = true;
+        $newOption = false;
+        $arrValues = $newValues;
+        // first save the new values of the options
+        foreach ($newValues as $id => $values) {
+            if ($this->readDataById($id)) {                                       
+                foreach ($values as $key => $value) {
+                    $this->setValue('ufo_' . $key, $value);
+                }
+                $ret = $this->save();
+            } else {
+                $newOption = true;
+                $option = new SelectOptions($this->db);
+
+                // if the options value does not exist then create a new entry
+                $option->setValue('ufo_usf_id', $this->usfId);
+
+                foreach ($values as $key => $value) {
+                    $option->setValue('ufo_' . $key, $value);
+                }
+                $ret = $option->save();
+
+                // update the ID of the new option in the array
+                if ($id != $option->getValue('ufo_id')) {
+                    $newId = $option->getValue('ufo_id');
+                    $newArr = [];
+                    foreach ($arrValues as $key => $value) {
+                        if ($key === $id) {
+                            $newArr[$newId] = $values;
+                        } else {
+                            $newArr[$key] = $value;
+                        }
+                    }
+                    $arrValues = $newArr;
+                }
+            }
+        }
+
+        // if new Opions were added then the sequence of the options must be updated
+        if ($newOption) {
+            $this->readDataByFieldId($this->usfId);
+        }
+        // now change the sequence of the options
+        $allOptions = $this->getAllOptions(); // load all options of the options
+
+        // determinalte current sequence based on allOpions sequence values
+        $currentSequence = array();
+        foreach ($allOptions as $option) {
+            $currentSequence[$option['id']] = $option['sequence'] - 1; // -1 because sequence starts with 1 in database
+        }
+        // determinate new sequence based on array position
+        $newSequence = array();
+        $sequence = 0;
+        foreach ($arrValues as $id => $values) {
+            $newSequence[$id] = $sequence++;
+        }
+
+        // check if the sequence of the options has changed
+        if ($currentSequence !== $newSequence) {
+            // if the sequence has changed then update the sequence of the options
+            $this->readDataById(array_key_first($newSequence));
+            $this->setSequence($newSequence);
+        }
+        
+        return $ret;
+    }
+
     /**
      * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update

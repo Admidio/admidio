@@ -106,7 +106,7 @@ class ProfileFieldService
 
         // safe the field options after the new field has been saved
         if (isset($options) && is_array($options)) {
-            $this->profileFieldRessource->setOptionValues($options);
+            $this->profileFieldRessource->setSelectOptions($options);
         }
     }
 }
