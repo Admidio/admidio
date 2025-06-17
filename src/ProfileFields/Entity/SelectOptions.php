@@ -4,6 +4,8 @@ namespace Admidio\ProfileFields\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Changelog\Entity\LogChanges;
+use Admidio\ProfileFields\Entity\ProfileField;
 
 /**
  * @brief Class manages access to database table adm_field_selection_options.
@@ -245,5 +247,26 @@ class SelectOptions extends Entity
         }
 
         return $returnValue;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record: Add the first forum post as a related object
+     * @param LogChanges $logEntry The log entry to adjust
+     * @return void
+     * @throws Exception
+     */
+    protected function adjustLogEntry(LogChanges $logEntry): void
+    {      
+        $profileField = new ProfileField($this->db);
+
+        $fieldId = $this->getValue('ufo_usf_id');
+        $id = $this->dbColumns[$this->keyColumnName];
+        $profileField->readDataById($fieldId);
+        $uuid = $profileField->getValue('usf_uuid', 'database');
+        $fieldName = $profileField->getValue('usf_name', 'database');
+
+        $logEntry->setValue('log_record_name', $fieldName);
+        $logEntry->setValue('log_record_id', $id);
+        $logEntry->setValue('log_record_uuid', $uuid);
     }
 }
