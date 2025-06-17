@@ -173,7 +173,7 @@ class ProfileFieldsPresenter extends PagePresenter
         }
 
         $options = new SelectOptions($gDb, $userField->getValue('usf_id'));
-        $optionValueList = $options->getAllOptions();
+        $optionValueList = $options->getAllOptions($gSettingsManager->getBool('profile_show_obsolete_select_field_options'));
         if (empty($optionValueList)) {
             $optionValueList = array(
                 0 => array('id' => 1, 'value' => '', 'sequence' => 0, 'obsolete' => false)

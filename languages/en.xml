@@ -1316,6 +1316,8 @@
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">If the address is stored in the profile, two links to Google Maps are displayed next to the address. The user\'s place of residence is linked and the route from his own place of residence to the place of residence of the user displayed is linked. When accessing the links, the following profile information will be transmitted to Google: street, postcode, city, and country. (Default: no)</string>
   <string name="SYS_SHOW_MAP">Show map</string>
   <string name="SYS_SHOW_MEMBER_LIST">Show member list</string>
+  <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Display obsolete selection options</string>
+  <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">This setting allows you to specify whether obsolete selection options should be displayed in the profile field configuration. If this setting is set, obsolete select options can be restored.\nThis option is available only for profile fields of the drop-down list and option field types. (Default: yes)</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="SYS_SHOW_PARTICIPANTS">Show participants</string>

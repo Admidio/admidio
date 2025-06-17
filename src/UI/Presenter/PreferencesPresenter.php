@@ -1542,6 +1542,12 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
         );
         $formProfile->addCheckbox(
+            'profile_show_obsolete_select_field_options',
+            $gL10n->get('SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS'),
+            (bool) $formValues['profile_show_obsolete_select_field_options'],
+            array('helpTextId' => 'SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC')
+        );
+        $formProfile->addCheckbox(
             'profile_show_map_link',
             $gL10n->get('SYS_SHOW_MAP_LINK'),
             (bool) $formValues['profile_show_map_link'],
