@@ -48,10 +48,10 @@
                                 </div>
                             </td>
                             <td id="{$data.id}_option_{$option.id}_move_actions" class="text-center align-middle">
-                                <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-direction="UP" data-target="{$data.id}_option_{$option.id}">
+                                <a class="admidio-icon-link admidio-field-move" href="javascript:void(0);" data-direction="UP" data-target="{$data.id}_option_{$option.id}">
                                     <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$translationStrings.move_up}"></i>
                                 </a>
-                                <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-direction="DOWN" data-target="{$data.id}_option_{$option.id}">
+                                <a class="admidio-icon-link admidio-field-move" href="javascript:void(0);" data-direction="DOWN" data-target="{$data.id}_option_{$option.id}">
                                     <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$translationStrings.move_down}"></i>
                                 </a>
                                 <a class="admidio-icon-link">
@@ -59,10 +59,10 @@
                                 </a>
                             </td>
                             <td id="{$data.id}_option_{$option.id}_delete_actions" class="text-center align-middle">
-                                <a id="{$data.id}_option_{$option.id}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry('{$data.id}', '{$option.id}');" {if !$option.obsolete} style="display: none;"{/if}>
+                                <a id="{$data.id}_option_{$option.id}_restore" class="admidio-icon-link" href="javascript:void(0);" onclick="restoreEntry('{$data.id}', '{$option.id}');" {if !$option.obsolete} style="display: none;"{/if}>
                                     <i class="bi bi-arrow-counterclockwise text-success" data-bs-toggle="tooltip" title="{$translationStrings.restore}"></i>
                                 </a>
-                                <a id="{$data.id}_option_{$option.id}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry('{$data.id}', '{$option.id}');"{if $option.obsolete} style="display: none;"{/if}>
+                                <a id="{$data.id}_option_{$option.id}_delete" class="admidio-icon-link" href="javascript:void(0);" onclick="deleteEntry('{$data.id}', '{$option.id}');"{if $option.obsolete} style="display: none;"{/if}>
                                     <i class="bi bi-trash-fill text-danger" data-bs-toggle="tooltip" title="{$translationStrings.delete}"></i>
                                 </a>
                             </td>
@@ -71,7 +71,7 @@
                 </tbody>
             </table>
             {* --- Button zum Hinzufügen einer neuen Option --- *}
-            <button type="button" class="btn btn-primary" onclick="addOptionRow('{$data.id}', {$translationStrings|json_encode|escape:'htmlall':'UTF-8'})">
+            <button type="button" class="btn btn-primary" onclick="addOptionRow('{$data.id}', {$translationStrings|json_encode|escape:'htmlall':'UTF-8'});">
                 <i class="bi bi-plus-circle"></i> {$l10n->get('SYS_ADD_ENTRY')}
             </button>
 
@@ -81,6 +81,7 @@
         </div>
     </div>
 
+    {literal}
     <script>
         function addOptionRow(dataId, translationStrings) {
             const table = document.getElementById(dataId + '_table').getElementsByTagName('tbody')[0];
@@ -169,4 +170,5 @@
             }
         }
     </script>
+    {/literal}
 {/if}
