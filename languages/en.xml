@@ -342,7 +342,7 @@
   <string name="SYS_CHOOSE_FILE">Select file</string>
   <string name="SYS_CITY">City</string>
   <string name="SYS_CLAMP_TEXT_LINES">Limit text lines</string>
-  <string name="SYS_CLAMP_TEXT_LINES_DESC">This setting allows you to specify the maximum number of lines to be displayed as an #VAR1#. If 0 is selected, the complete text will be displayed. (Default: 5)</string>
+  <string name="SYS_CLAMP_TEXT_LINES_DESC">This setting allows you to specify the maximum number of lines to be displayed as an #VAR1#. If 0 is selected, the complete text will be displayed. (Default: 0)</string>
   <string name="SYS_CLOCK">o\'clock</string>
   <string name="SYS_CLOSE">Close</string>
   <string name="SYS_CODING">Coding</string>

@@ -15,7 +15,7 @@
     --admidio-header-link-color-hover: #000000;
     --admidio-menu-bg-color-hover: #3d5266;
     --admidio-menu-font-color-hover: #ffffff;
-    --admidio-clamp-text-lines: 5;
+    --admidio-clamp-text-lines: 0;
     --bs-primary: #349aaa;
     --bs-primary-rgb: 52, 154, 170;
     --bs-secondary: #263340;

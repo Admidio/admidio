@@ -342,7 +342,7 @@
   <string name="SYS_CHOOSE_FILE">Datei auswählen</string>
   <string name="SYS_CITY">Ort</string>
   <string name="SYS_CLAMP_TEXT_LINES">Textzeilen begrenzen</string>
-  <string name="SYS_CLAMP_TEXT_LINES_DESC">Mit dieser Einstellung kann die Anzahl der Zeilen festgelegt werden, die maximal als #VAR1# angezeigt werden sollen. Wenn 0 ausgewählt ist, wird der komplette Text dargestellt. (Voreinstellung: 5)</string>
+  <string name="SYS_CLAMP_TEXT_LINES_DESC">Mit dieser Einstellung kann die Anzahl der Zeilen festgelegt werden, die maximal als #VAR1# angezeigt werden sollen. Wenn 0 ausgewählt ist, wird der komplette Text dargestellt. (Voreinstellung: 0)</string>
   <string name="SYS_CLOCK">Uhr</string>
   <string name="SYS_CLOSE">Schließen</string>
   <string name="SYS_CODING">Kodierung</string>
