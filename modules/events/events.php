@@ -110,27 +110,15 @@ try {
         }
 
         $page->addJavascript('
-            $(".admidio-open-close-caret").click(function() {
-                var tooltips = [
-                    "' . $gL10n->get('SYS_SHOW_MORE') . '",
-                    "' . $gL10n->get('SYS_SHOW_LESS') . '"
-                ];
-                showHideMoreText($(this), tooltips);
-            });
-            $(function(){
-                $(".clamp-text").each(function(){
-                    var clampHeight = this.offsetHeight;
-                    var fullHeight  = this.scrollHeight;
+            $(".clamp-text").each(function(){
+                var clampHeight = this.offsetHeight;
+                var fullHeight  = this.scrollHeight;
 
-                    if (fullHeight < clampHeight + 1) {
-                        $(this).closest(".col").prev(".clamp-caret").addClass("d-none");
-                    } else {
-                        // find the caret for this text
-                        var caret = $(this).closest(".col").prev(".clamp-caret").find(".admidio-open-close-caret");
-                        var caretHeight = caret.outerHeight();
-                        caret.css("top", (clampHeight - caretHeight) + "px");
-                    }
-                });
+                if (fullHeight < clampHeight + 1) {
+                    $(this).next(".clamp-button").hide();
+                } else {
+                    $(this).next(".clamp-button").show();
+                }
             });
 
             $("#sel_change_view").change(function() {
@@ -746,22 +734,18 @@ try {
 
                 if ($event->getValue('dat_description') !== '') {
                     // Show description only if it is not empty
-                    if ($gSettingsManager->getBool('events_clamp_text_lines_enabled')) {
+                    if ($gSettingsManager->getInt('events_clamp_text_lines') > 0) {
                         $page->addHtml('
-                            <div class="row">
-                                <div id="event_caret_col_description_' . $eventUUID . '" class="col-auto clamp-caret">
-                                    <a id="event_caret_description_' . $eventUUID . '" class="admidio-open-close-caret" data-target="event_description_' . $eventUUID . '">
-                                        <i class="bi bi-caret-right-fill" data-bs-toggle="tooltip" title="' .  $gL10n->get('SYS_SHOW_MORE') . '"></i>
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <div id="event_description_' . $eventUUID . '" class="clamp-text">' . 
-                                        $event->getValue('dat_description') .
-                                    '</div>
-                                </div>' . 
-                                $attentionDeadline .
+                            <div id="event_description_' . $eventUUID . '" class="clamp-text" style="--admidio-clamp-text-lines: ' . $gSettingsManager->getInt('events_clamp_text_lines') . ';">' . 
+                                $event->getValue('dat_description') .
                             '</div>
-                            </br>'
+                            <div class="clamp-button">
+                                <a id="event_caret_description_' . $eventUUID . '" onclick="showHideMoreText($(this), [\'' . $gL10n->get('SYS_SHOW_MORE') . '\', \'' . $gL10n->get('SYS_SHOW_LESS') . '\']);" role="button" class="admidio-more-less-button" data-target="event_description_' . $eventUUID . '">
+                                    ' . $gL10n->get('SYS_SHOW_MORE') . '
+                                </a>
+                            </div>' . 
+                            $attentionDeadline .
+                            '</br>'
                         );
                     } else {
                         $page->addHtml('
@@ -866,19 +850,15 @@ try {
                         $columnValues[] = implode(', ', $columnValue);
                         break;
                     case 'description':
-                        if ($gSettingsManager->getBool('events_clamp_text_lines_enabled')) {
+                        if ($gSettingsManager->getInt('events_clamp_text_lines') > 0) {
                             $descContent = '
-                                <div class="row">
-                                    <div id="event_caret_col_description_' . $eventUUID . '" class="col-auto clamp-caret">
-                                        <a id="event_caret_description_' . $eventUUID . '" class="admidio-open-close-caret" data-target="event_description_' . $eventUUID . '">
-                                            <i class="bi bi-caret-right-fill" data-bs-toggle="tooltip" title="' .  $gL10n->get('SYS_SHOW_MORE') . '"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <div id="event_description_' . $eventUUID . '" class="clamp-text">' . 
-                                            $event->getValue('dat_description') .
-                                        '</div>
-                                    </div>
+                                <div id="event_description_' . $eventUUID . '" class="clamp-text" style="--admidio-clamp-text-lines: ' . $gSettingsManager->getInt('events_clamp_text_lines') . ';">' . 
+                                    $event->getValue('dat_description') .
+                                '</div>
+                                <div class="clamp-button">
+                                    <a id=event_caret_description_' . $eventUUID . '"" onclick="showHideMoreText($(this), ["' . $gL10n->get('SYS_SHOW_MORE') . '", "' . $gL10n->get('SYS_SHOW_LESS') . '"]);" role="button" class="admidio-more-less-button" data-target="event_description_' . $eventUUID . '">
+                                        ' . $gL10n->get('SYS_SHOW_MORE') . '
+                                    </a>
                                 </div>';
                         } else {
                             $descContent = $event->getValue('dat_description');

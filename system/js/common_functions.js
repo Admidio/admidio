@@ -33,23 +33,18 @@ function showHideBlock(element) {
  * @param {HTMLElement} element This is the element you must click to show or hide another text block.
  *                              The element must have a data-target attribute which contains the id of the
  *                              element to hide.
- * @param {Array} tooltipTexts This is an array with two strings that will be used as tooltip texts.
- *                             The first string will be used if the text block is hidden and the second
- *                             string will be used if the text block is shown.
+ * @param {Array} butonTexts This is an array with two strings that will be used as button texts.
+ *                           The first string will be used if the text block is hidden and the second
+ *                           string will be used if the text block is shown.
  */
-function showHideMoreText(element, tooltipTexts) {
+function showHideMoreText(element, butonTexts) {
     var $target  = $("#" + $(element).data("target"));
-    var $icon = $("#" + $(element).attr("id")).find(".bi");
-
+    var $button = $("#" + $(element).attr("id"));
     $target.toggleClass("expanded");
     if ($target.hasClass("expanded")) {
-        $icon.attr("class", "bi bi-caret-down-fill");
-        $icon.attr("aria-label", tooltipTexts[1]);
-        $icon.attr("data-bs-original-title", tooltipTexts[1]);
+        $button.html(butonTexts[1]);
     } else {
-        $icon.attr("class", "bi bi-caret-right-fill");
-        $icon.attr("aria-label", tooltipTexts[0]);
-        $icon.attr("data-bs-original-title", tooltipTexts[0]);
+        $button.html(butonTexts[0]);
     }
 }
 

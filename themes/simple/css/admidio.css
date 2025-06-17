@@ -808,15 +808,6 @@ ul.changelog-tableselect-list {
 /***********************************/
 /* Clamp text */
 /***********************************/
-.clamp-caret {
-  position: relative;
-}
-.clamp-caret .admidio-open-close-caret {
-  position: absolute;
-  left: 0;
-  /* top: (set by JS) */
-  padding-left: var(--bs-card-spacer-y);
-}
 .clamp-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;

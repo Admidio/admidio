@@ -22,17 +22,13 @@
         </div>
         <div class="card-body">
         {if $enableClampLines}
-            <div class="row">
-                <div id="adm_announcement_caret_col_description_{$announcement.uuid}" class="col-auto clamp-caret">
-                    <a id="adm_announcement_caret_description_{$announcement.uuid}" class="admidio-open-close-caret" data-target="adm_announcement_description_{$announcement.uuid}">
-                        <i class="bi bi-caret-right-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_SHOW_MORE')}"></i>
-                    </a>
-                </div>
-                <div class="col">
-                    <div id="adm_announcement_description_{$announcement.uuid}" class="clamp-text">
-                        {$announcement.description}
-                    </div>
-                </div>
+            <div id="adm_announcement_description_{$announcement.uuid}" class="clamp-text" style="--admidio-clamp-text-lines: {$clampLines};">
+                {$announcement.description}
+            </div>
+            <div class="clamp-button">
+                <a id="adm_announcement_caret_description_{$announcement.uuid}" onclick="showHideMoreText($(this), ['{$l10n->get('SYS_SHOW_MORE')}', '{$l10n->get('SYS_SHOW_LESS')}']);" role="button" class="admidio-more-less-button" data-target="adm_announcement_description_{$announcement.uuid}">
+                    {$l10n->get('SYS_SHOW_MORE')}
+                </a>
             </div>
         {else}
             {$announcement.description}
