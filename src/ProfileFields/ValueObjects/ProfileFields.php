@@ -332,7 +332,7 @@ class ProfileFields
                         $values['value'] = Language::translateIfTranslationStrId($values['value']);
 
                         // save values in new array that starts with key = 1
-                        $arrListValuesWithKeys[$values['id']] = $values['value'];
+                        $arrOptionValuesWithKeys[$values['id']] = $values['value'];
                     }
 
                     if (count($arrOptionValuesWithKeys) > 0 && !empty($value)) {
