@@ -45,7 +45,6 @@ $defaultOrgPreferences = array(
     'logo_file' => '',
     'favicon_file' => '',
     'additional_styles_file' => '',
-    'clamp_text_lines' => '5',
 
     // Registration
     'registration_adopt_all_data' => '1',
@@ -124,7 +123,7 @@ $defaultOrgPreferences = array(
     // Announcements
     'announcements_module_enabled' => '1',
     'announcements_per_page' => '10',
-    'announcements_clamp_text_lines_enabled' => '0',
+    'announcements_clamp_text_lines' => '5',
 
     // Category-Report
     'category_report_module_enabled' => '1',
@@ -147,7 +146,7 @@ $defaultOrgPreferences = array(
     'events_may_take_part' => '0',
     'events_module_enabled' => '1',
     'events_per_page' => '10',
-    'events_clamp_text_lines_enabled' => '0',
+    'events_clamp_text_lines' => '5',
     'events_rooms_enabled' => '0',
     'events_save_cancellations' => '1',
     'events_show_map_link' => '1',

@@ -342,7 +342,7 @@
   <string name="SYS_CHOOSE_FILE">Select file</string>
   <string name="SYS_CITY">City</string>
   <string name="SYS_CLAMP_TEXT_LINES">Limit text lines</string>
-  <string name="SYS_CLAMP_TEXT_LINES_DESC">This setting allows you to specify the maximum number of lines to be displayed as an announcement or event description. If 0 is selected, the complete text will be displayed. (Default: 5)</string>
+  <string name="SYS_CLAMP_TEXT_LINES_DESC">This setting allows you to specify the maximum number of lines to be displayed as an #VAR1#. If 0 is selected, the complete text will be displayed. (Default: 5)</string>
   <string name="SYS_CLOCK">o\'clock</string>
   <string name="SYS_CLOSE">Close</string>
   <string name="SYS_CODING">Coding</string>
@@ -614,8 +614,6 @@
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Displays the groups and roles of the organization and allows free configuration of groups and roles. Own list can be configured and applied. This module is generally only available for logged in users. (Default: yes)</string>
   <string name="SYS_ENABLE_ICAL_EXPORT">Enable iCal export</string>
   <string name="SYS_ENABLE_ICAL_EXPORT_DESC">If iCal is enabled, individual events or all events within a given time period can be downloaded. Also, users will be able to subscribe to events by using their own calendar client software . (default: yes)</string>
-  <string name="SYS_ENABLE_LINE_CLAMP">Enable line limit</string>
-  <string name="SYS_ENABLE_LINE_CLAMP_DESC">If this function is enabled, long texts in the module overview will be limited to the number of lines specified in the setting #VAR1_ITALIC#. (Default: No)</string>
   <string name="SYS_ENABLE_NOTIFICATIONS">Enable system notifications</string>
   <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Here you can enable or disable the system notifications of Admidio. They can be sent, if for example a new user has registered. Registration confirmations will also be sent as system notifications. In general, this feature should not be disabled unless the server does not support e-mail delivery. The e-mail module is not affected by the deactivation. (Default: yes)</string>
   <string name="SYS_ENABLE_PM_MODULE">Enable private messages</string>

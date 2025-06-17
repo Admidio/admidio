@@ -172,12 +172,11 @@ class PreferencesPresenter extends PagePresenter
             $formValues['announcements_per_page'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
         );
-        $html = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'design')) . '">' . $gL10n->get('SYS_CLAMP_TEXT_LINES') . '</a>';
-         $formAnnouncements->addCheckbox(
-            'announcements_clamp_text_lines_enabled',
-            $gL10n->get('SYS_ENABLE_LINE_CLAMP'),
-            (bool) $formValues['announcements_clamp_text_lines_enabled'],
-            array('helpTextId' => array('SYS_ENABLE_LINE_CLAMP_DESC', array($html)))
+         $formAnnouncements->addInput(
+            'announcements_clamp_text_lines',
+            $gL10n->get('SYS_CLAMP_TEXT_LINES'),
+            $formValues['announcements_clamp_text_lines'],
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_ANNOUNCEMENT')))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ANN')) . '">
             <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
@@ -711,12 +710,6 @@ class PreferencesPresenter extends PagePresenter
             $formValues['favicon_file']??'',
             array('helpTextId' => 'SYS_FAVICON_FILE_DESC')
         );
-        $formDesign->addInput(
-            'clamp_text_lines',
-            $gL10n->get('SYS_CLAMP_TEXT_LINES'),
-            $formValues['clamp_text_lines']??'',
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => 'SYS_CLAMP_TEXT_LINES_DESC')
-        );
         $formDesign->addSubmitButton(
             'adm_button_save_design',
             $gL10n->get('SYS_SAVE'),
@@ -978,12 +971,11 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
         );
-        $html = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'design')) . '">' . $gL10n->get('SYS_CLAMP_TEXT_LINES') . '</a>';
-        $formEvents->addCheckbox(
-            'events_clamp_text_lines_enabled',
-            $gL10n->get('SYS_ENABLE_LINE_CLAMP'),
-            (bool) $formValues['events_clamp_text_lines_enabled'],
-            array('helpTextId' => array('SYS_ENABLE_LINE_CLAMP_DESC', array($html)))
+         $formEvents->addInput(
+            'events_clamp_text_lines',
+            $gL10n->get('SYS_CLAMP_TEXT_LINES', array($gL10n->get('SYS_DESCRIPTION'))),
+            $formValues['events_clamp_text_lines'],
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_DESCRIPTION')))
         );
         $formEvents->addCheckbox(
             'events_ical_export_enabled',

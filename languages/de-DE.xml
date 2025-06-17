@@ -342,7 +342,7 @@
   <string name="SYS_CHOOSE_FILE">Datei auswählen</string>
   <string name="SYS_CITY">Ort</string>
   <string name="SYS_CLAMP_TEXT_LINES">Textzeilen begrenzen</string>
-  <string name="SYS_CLAMP_TEXT_LINES_DESC">Mit dieser Einstellung kann die Anzahl der Zeilen festgelegt werden, die maximal als Ankündigung oder als Beschreibung einer Veranstaltung angezeigt werden sollen. Wenn 0 ausgewählt ist, wird der komplette Text dargestellt. (Voreinstellung: 5)</string>
+  <string name="SYS_CLAMP_TEXT_LINES_DESC">Mit dieser Einstellung kann die Anzahl der Zeilen festgelegt werden, die maximal als #VAR1# angezeigt werden sollen. Wenn 0 ausgewählt ist, wird der komplette Text dargestellt. (Voreinstellung: 5)</string>
   <string name="SYS_CLOCK">Uhr</string>
   <string name="SYS_CLOSE">Schließen</string>
   <string name="SYS_CODING">Kodierung</string>
@@ -618,8 +618,6 @@
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Zeigt die Gruppen und Rollen der Organisation an und ermöglicht die freie Konfiguration von Gruppen und Rollen. Eigene Liste können konfiguriert und angewendet werden. Dieses Modul ist generell nur für angemeldete Benutzerinnen und Benutzern verfügbar. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_ICAL_EXPORT">iCal-Export ermöglichen</string>
   <string name="SYS_ENABLE_ICAL_EXPORT_DESC">Ist diese Funktion aktiviert, lassen sich einzelne Veranstaltungen oder alle Veranstaltungen in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Veranstaltungen mit einer Kalendersoftware wird möglich. (Voreinstellung: ja)</string>
-  <string name="SYS_ENABLE_LINE_CLAMP">Textzeilenbegrenzung aktivieren</string>
-  <string name="SYS_ENABLE_LINE_CLAMP_DESC">Ist diese Funktion aktiviert, werden lange Texte in der Modulübersicht auf die in der Einstellung #VAR1_ITALIC# angegebene Anzahl an Zeilen begrenzt. (Voreinstellung: nein)</string>
   <string name="SYS_ENABLE_NOTIFICATIONS">Systembenachrichtigungen aktivieren</string>
   <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel ein:e neue:r Benutzer:in angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden. Es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_PM_MODULE">Private Nachrichten aktivieren</string>
