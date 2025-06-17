@@ -192,7 +192,7 @@ class ProfileField extends Entity
             $value = parent::getValue($columnName, $format);
         }
 
-        if (strlen((string) $value) === 0 || $value === null) {
+        if ((is_array($value) && empty($value)) || (!is_array($value) && (strlen((string)$value) === 0 || $value === null))) {
             return '';
         }
 
