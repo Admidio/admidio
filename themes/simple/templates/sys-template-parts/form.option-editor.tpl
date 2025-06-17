@@ -81,11 +81,7 @@
         </div>
     </div>
 
-    {* JS nur einmal ausgeben *}
-    {if !$smarty.get._option_editor_js_loaded}
-        {assign var="_option_editor_js_loaded" value=true scope="global"}
-        {literal}
-        <script>
+    <script>
         function addOptionRow(dataId, translationStrings) {
             const table = document.getElementById(dataId + '_table').getElementsByTagName('tbody')[0];
             const newRow = document.createElement('tr');
@@ -172,7 +168,5 @@
                 row.querySelector('#' + dataId + '_option_' + entryId + '_restore').style.display = 'none'; // Hide restore icon
             }
         }
-        </script>
-        {/literal}
-    {/if}
+    </script>
 {/if}
