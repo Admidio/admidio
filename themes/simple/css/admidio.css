@@ -83,6 +83,9 @@
     -moz-hyphens: auto;
     -ms-hyphens: auto;
     hyphens: auto;
+    word-break: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .admidio-max-content {
@@ -760,6 +763,7 @@ tr.admidio-event-highlight {
 }
 
 .admidio-preferences-group .list-group-item.group-heading {
+    width: 100%;
     border-bottom: none;
     border-top: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
     border-top-left-radius: var(--bs-list-group-border-radius);
