@@ -41,6 +41,43 @@ final class UpdateStepsCode
         self::$db = $database;
     }
 
+    public static function updateStep50MoveFieldListValues()
+    {
+        $sql = 'SELECT usf_id, usf_value_list FROM ' . TBL_USER_FIELDS . '
+                 WHERE usf_type = \'DROPDOWN\' 
+                 OR usf_type = \'RADIO_BUTTON\'';
+
+        $userFieldsStatement = self::$db->queryPrepared($sql);
+        while ($row = $userFieldsStatement->fetch()) {
+            $values = explode("\n", $row['usf_value_list']);
+            $values = array_map('trim', $values);
+
+            // remove empty values
+            $values = array_filter($values, function ($value) {
+                return !empty($value);
+            });
+
+            if (count($values) > 0) {
+                // insert the values into the user field options table
+                foreach ($values as $key => $value) {
+                    $sql = 'INSERT INTO ' . TBL_USER_FIELD_OPTIONS . ' (ufo_usf_id, ufo_value, ufo_sequence)
+                             VALUES (?, ?, ?) -- $row[\'usf_id\'], -- $value, -- $key';
+
+                    self::$db->queryPrepared($sql, array((int)$row['usf_id'], $value, $key + 1));
+                }
+
+                // update the user field values to use the new option id
+                $sql = 'UPDATE ' . TBL_USER_DATA . '
+                        JOIN ' . TBL_USER_FIELD_OPTIONS . '
+                            ON ufo_usf_id = usd_usf_id
+                            AND usd_value = ufo_sequence
+                        SET usd_value = ufo_id
+                            WHERE usd_usf_id = ? -- $row[\'usf_id\']';
+                self::$db->queryPrepared($sql, array((int)$row['usf_id']));
+            }
+        }
+    }
+
     /**
      * This method will update the sequence of the links in the database.
      * The sequence is used to sort the links within a category.

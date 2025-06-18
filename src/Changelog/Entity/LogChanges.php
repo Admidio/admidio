@@ -141,6 +141,9 @@ class LogChanges extends Entity
             case 'user_fields':
                 $this->connectAdditionalTable(TBL_USER_FIELDS, 'usf_id', 'log_record_id');
                 break;
+            case 'user_field_select_options':
+                $this->connectAdditionalTable(TBL_USER_FIELD_OPTIONS, 'ufo_id', 'log_record_id');
+                break;
             case 'user_relations':
                 $this->connectAdditionalTable(TBL_USER_RELATIONS, 'ure_id', 'log_record_id');
                 break;
