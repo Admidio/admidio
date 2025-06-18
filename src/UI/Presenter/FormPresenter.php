@@ -971,11 +971,124 @@ class FormPresenter
         }
 
         $this->addJavascriptCode('
+            function updateEntryMoves() {
+                $("tbody.admidio-sortable").each(function() {
+                    var $rows = $(this).find(\'tr[id*="_option_"]\').has(\'td[id*="_move_actions"]\').has(".admidio-entry-move");
+                    $rows.each(function(index) {
+                        var $upArrow   = $(this).find(\'.admidio-entry-move[data-direction="UP"]\');
+                        var $downArrow = $(this).find(\'.admidio-entry-move[data-direction="DOWN"]\');
+
+                        if (index === 0) {
+                            $upArrow.css("visibility", "hidden");
+                        } else {
+                            $upArrow.css("visibility", "visible");
+                        }
+
+                        if (index === $rows.length - 1) {
+                            $downArrow.css("visibility", "hidden");
+                        } else {
+                            $downArrow.css("visibility", "visible");
+                        }
+                    });
+                });
+            }
+            function addOptionRow(dataId, translationStrings) {
+                const table = document.getElementById(dataId + "_table").getElementsByTagName("tbody")[0];
+                const newRow = document.createElement("tr");
+                const rows = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\');
+                let maxId = 0;
+                rows.forEach(row => {
+                    const currentId = row.id.replace(dataId + "_option_", "");
+                    const num = parseInt(currentId, 10);
+                    if (!isNaN(num) && num > maxId) {
+                        maxId = num;
+                    }
+                });
+                const optionId = maxId + 1;
+                newRow.innerHTML = `
+                    <td><input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][value]" required="required"></td>
+                    <td class="align-middle" style="display: none;">
+                        <div class="admidio-form-group form-check form-switch d-flex justify-content-center">
+                            <input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][obsolete]" value="">
+                        </div>
+                    </td>
+                    <td id="${dataId}_option_${optionId}_move_actions" class="text-center align-middle">
+                        <a class="admidio-icon-link admidio-entry-move" href="javascript:void(0)"
+                            data-direction="UP" data-target="${dataId}_option_${optionId}">
+                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="${translationStrings.move_up}"></i>
+                        </a>
+                        <a class="admidio-icon-link admidio-entry-move" href="javascript:void(0)"
+                            data-direction="DOWN" data-target="${dataId}_option_${optionId}">
+                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="${translationStrings.move_down}"></i>
+                        </a>
+                        <a class="admidio-icon-link">
+                            <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="${translationStrings.move_var}"></i>
+                        </a>
+                    </td>
+                    <td id="${dataId}_option_${optionId}_delete_actions" class="text-center align-middle">
+                        <a id="${dataId}_option_${optionId}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry(\'${dataId}\', \'${optionId}\');" style="display: none;">
+                            <i class="bi bi-arrow-counterclockwise text-success" data-bs-toggle="tooltip" title="${translationStrings.restore}"></i>
+                        </a>
+                        <a id="${dataId}_option_${optionId}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry(\'${dataId}\', \'${optionId}\');">
+                            <i class="bi bi-trash-fill text-danger" data-bs-toggle="tooltip" title="${translationStrings.delete}"></i>
+                        </a>
+                    </td>
+                `;
+                newRow.id = dataId + "_option_" + optionId;
+                newRow.setAttribute("data-uuid", optionId);
+                newRow.querySelectorAll(\'[data-bs-toggle="tooltip"]\').forEach((el) => {
+                    new bootstrap.Tooltip(el);
+                });
+                table.insertBefore(newRow, table.querySelector("tr#table_row_button"));
+                updateEntryMoves();
+            }
+            function deleteEntry(dataId, entryId) {
+                const row = document.getElementById(dataId + "_option_" + entryId);
+                if (row) {
+                    const table = row.parentNode;
+                    const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                    if (row.querySelector(\'input[name$="[value]"]\').value.trim() === "" && row.querySelector(\'input[name$="[obsolete]"]\').value.trim() === "") {
+                        // check if the row is the last one
+                        if (countOptions > 1) {
+                            row.remove(); // Remove the row if the value is empty
+                        }
+                        return;
+                    } else if (row.querySelector(\'input[name$="[value]"]\').value.trim() === "") {
+                        // If the value is empty, just remove the row
+                        if (countOptions <= 1) {
+                            return;
+                        }
+                    }
+                    // Mark the entry as obsolete
+                    row.querySelector(\'input[name$="[obsolete]"]\').value = 1;
+                    // disable input fields
+                    row.querySelector(\'input[name$="[value]"]\').disabled = true;
+                    // change displayed delete/restore option
+                    row.querySelector("#" + dataId + "_option_" + entryId + "_delete").style.display = "none";
+                    row.querySelector("#" + dataId + "_option_" + entryId + "_restore").style.display = "inline";
+                }
+            }
+            function restoreEntry(dataId, entryId) {
+                const row = document.getElementById(dataId + "_option_" + entryId);
+                if (row) {
+                    row.querySelector(\'input[name$="[obsolete]"]\').value = 0; // Unmark as obsolete
+                    // enable input fields
+                    row.querySelector(\'input[name$="[value]"]\').disabled = false;
+                    // change displayed delete option
+                    row.querySelector("#" + dataId + "_option_" + entryId + "_delete").style.display = "inline"; // Show delete icon
+                    row.querySelector("#" + dataId + "_option_" + entryId + "_restore").style.display = "none"; // Hide restore icon
+                }
+            }');
+
+        $this->addJavascriptCode('
             $("tbody.admidio-sortable").sortable({
                 axis: "y",
-                handle: ".handle"
+                handle: ".handle",
+                stop: function(event, ui) {
+                    updateEntryMoves();
+                }
             });
-            $(".admidio-field-move").click(function() {
+            $(".admidio-entry-move").click(function() {
                 var direction = $(this).data("direction");
                 var target = $(this).data("target");
 
@@ -984,7 +1097,11 @@ class FormPresenter
                 } else {
                     $("#"+target).next().after($("#"+target));
                 }
-            });', true
+                updateEntryMoves();
+            });
+
+            updateEntryMoves();
+            ', true
         );
         $this->elements[$id] = $optionsAll;
     }
