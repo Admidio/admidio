@@ -68,12 +68,15 @@
                             </td>
                         </tr>
                     {/foreach}
+                        <tr id="table_row_button">
+                            <td colspan="4">
+                                <a class="icon-text-link" href="javascript:void(0);" onclick="javascript:addOptionRow('{$data.id}', {$translationStrings|json_encode|escape:'htmlall':'UTF-8'});">
+                                    <i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ENTRY')}
+                                </a>
+                            </td>
+                        </tr>
                 </tbody>
             </table>
-            {* --- Button zum Hinzufügen einer neuen Option --- *}
-            <button type="button" class="btn btn-primary" onclick="addOptionRow('{$data.id}', {$translationStrings|json_encode|escape:'htmlall':'UTF-8'});">
-                <i class="bi bi-plus-circle"></i> {$l10n->get('SYS_ADD_ENTRY')}
-            </button>
 
             {include file="sys-template-parts/parts/form.part.helptext.tpl"}
             {include file="sys-template-parts/parts/form.part.warning.tpl"}
@@ -130,7 +133,7 @@
             newRow.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
                 new bootstrap.Tooltip(el);
             });
-            table.appendChild(newRow);
+            table.insertBefore(newRow, table.querySelector('tr#table_row_button'));
         }
         function deleteEntry(dataId, entryId) {
             const row = document.getElementById(dataId + '_option_' + entryId);
