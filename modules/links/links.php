@@ -104,6 +104,27 @@ try {
         ChangelogService::displayHistoryButton($page, 'weblinks', 'links');
 
         $page->addJavascript('
+            function updateFieldMoves() {
+                $(\'.card-body\').each(function() {
+                    var $rows = $(this).find(\'div[id^="lnk_"]\');
+                    $rows.each(function(index) {
+                        var $upArrow   = $(this).find(\'.admidio-field-move[data-direction="UP"]\');
+                        var $downArrow = $(this).find(\'.admidio-field-move[data-direction="DOWN"]\');
+                        
+                        if (index === 0) {
+                            $upArrow.hide();
+                        } else {
+                            $upArrow.show();
+                        }
+                        
+                        if (index === $rows.length - 1) {
+                            $downArrow.hide();
+                        } else {
+                            $downArrow.show();
+                        }
+                    });
+                });
+            }
             $("#cat_uuid").change(function() {
                 $("#adm_navbar_filter_form").submit();
             });
@@ -113,7 +134,12 @@ try {
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });',
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                updateFieldMoves();
+            });
+            
+            updateFieldMoves();',
             true
         );
 
@@ -193,23 +219,18 @@ try {
                     <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_new.php', array('link_uuid' => $lnkUuid)) . '">
                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>'
                     );
-                    //  only show up arrow if this is not the first link in the category
-                    if ($i > 0) {
-                        $page->addHtml('
-                            <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
-                                data-direction="UP" data-target="lnk_' . $lnkUuid . '">
-                                <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_WEBLINK')) . '"></i></a>'
-                        );
-                    }
-                    // only show down arrow if this is not the last link in the category
-                    if ($i < $lnkCatCount - 1) {
-                        // show down arrow
-                        $page->addHtml('
-                            <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
-                                data-direction="DOWN" data-target="lnk_' . $lnkUuid . '">
-                                <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('SYS_WEBLINK')) . '"></i></a>'
-                        );
-                    }
+                    // show up arrow
+                    $page->addHtml('
+                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
+                            data-direction="UP" data-target="lnk_' . $lnkUuid . '">
+                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_WEBLINK')) . '"></i></a>'
+                    );
+                    // show down arrow
+                    $page->addHtml('
+                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
+                            data-direction="DOWN" data-target="lnk_' . $lnkUuid . '">
+                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('SYS_WEBLINK')) . '"></i></a>'
+                    );
                     $page->addHtml('
                         <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                             data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($weblink->getValue('lnk_name', 'database'))) . '"
