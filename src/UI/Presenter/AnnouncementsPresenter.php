@@ -157,6 +157,21 @@ class AnnouncementsPresenter extends PagePresenter
             $this->smarty->assign('showCategories', false);
         }
 
+        $this->addJavascript('
+            $(".clamp-text").each(function(){
+                var clampHeight = this.offsetHeight;
+                var fullHeight  = this.scrollHeight;
+
+                if (fullHeight < clampHeight + 1) {
+                    $(this).next(".clamp-button").hide();
+                } else {
+                    $(this).next(".clamp-button").show();
+                }
+            });',
+            true
+        );
+        $this->smarty->assign('clampLines', $gSettingsManager->getInt('announcements_clamp_text_lines'));
+        $this->smarty->assign('enableClampLines', ( $gSettingsManager->getInt('announcements_clamp_text_lines') > 0) ?? false);
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
         $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $announcementsService->count(), $gSettingsManager->getInt('announcements_per_page'), $offset, true, 'offset'));
