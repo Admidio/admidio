@@ -104,12 +104,14 @@ try {
         ChangelogService::displayHistoryButton($page, 'weblinks', 'links');
 
         $page->addJavascript('
-            function updateFieldMoves() {
+            function updateLinkMoves() {
                 $(\'.card-body\').each(function() {
-                    var $rows = $(this).find(\'div[id^="lnk_"]\');
+                    var $rows = $(this).find(\'div[id^="lnk_"]\').has(".admidio-link-move").filter(function() {
+                        return $(this).css("display") !== "none";
+                    });
                     $rows.each(function(index) {
-                        var $upArrow   = $(this).find(\'.admidio-field-move[data-direction="UP"]\');
-                        var $downArrow = $(this).find(\'.admidio-field-move[data-direction="DOWN"]\');
+                        var $upArrow   = $(this).find(\'.admidio-link-move[data-direction="UP"]\');
+                        var $downArrow = $(this).find(\'.admidio-link-move[data-direction="DOWN"]\');
                         
                         if (index === 0) {
                             $upArrow.hide();
@@ -128,7 +130,7 @@ try {
             $("#cat_uuid").change(function() {
                 $("#adm_navbar_filter_form").submit();
             });
-            $(".admidio-field-move").click(function() {
+            $(".admidio-link-move").click(function() {
                 moveTableRow(
                     $(this),
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php",
@@ -136,10 +138,12 @@ try {
                 );
             });
             $(document).ajaxComplete(function(event, xhr, settings) {
-                updateFieldMoves();
+                setTimeout(function() {
+                    updateLinkMoves();
+                }, 1000); //wait for moveTableRow to finish hiding the element
             });
             
-            updateFieldMoves();',
+            updateLinkMoves();',
             true
         );
 
@@ -221,13 +225,13 @@ try {
                     );
                     // show up arrow
                     $page->addHtml('
-                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
+                        <a class="admidio-icon-link admidio-link-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
                             data-direction="UP" data-target="lnk_' . $lnkUuid . '">
                             <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_WEBLINK')) . '"></i></a>'
                     );
                     // show down arrow
                     $page->addHtml('
-                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
+                        <a class="admidio-icon-link admidio-link-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
                             data-direction="DOWN" data-target="lnk_' . $lnkUuid . '">
                             <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('SYS_WEBLINK')) . '"></i></a>'
                     );

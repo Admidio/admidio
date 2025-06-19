@@ -18,7 +18,7 @@
                 </td>
             </tr>
         </tbody>
-        <tbody id="adm_menu_entries_{$menuNode.uuid}">
+        <tbody id="adm_menu_entries_{$menuNode.uuid}" class="admidio-sortable">
             {foreach $menuNode.entries as $menuEntry}
                 <tr id="adm_menu_entry_{$menuEntry.uuid}">
                     <td style="word-break: break-word;"><i class="bi bi-{$menuEntry.icon}"></i> {$menuEntry.name}</td>

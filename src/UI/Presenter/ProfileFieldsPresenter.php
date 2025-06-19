@@ -270,6 +270,35 @@ class ProfileFieldsPresenter extends PagePresenter
         $this->setHeadline($gL10n->get('ORG_PROFILE_FIELDS'));
 
         $this->addJavascript('
+            function updateFieldMoves() {
+                $(\'tbody.admidio-sortable\').each(function() {
+                    var $rows = $(this).find(\'tr[id^=adm_profile_field]\').has(\'.admidio-field-move\').filter(function() {
+                        return $(this).css("display") !== "none";
+                    });
+                    $rows.each(function(index) {
+                        var $upArrow   = $(this).find(\'.admidio-field-move[data-direction="UP"]\');
+                        var $downArrow = $(this).find(\'.admidio-field-move[data-direction="DOWN"]\');
+                        var $arrowMove = $(this).find(".handle");
+
+                        if (index === 0) {
+                            $upArrow.css(\'visibility\', \'hidden\');
+                        } else {
+                            $upArrow.css(\'visibility\', \'visible\');
+                        }
+
+                        if (index === $rows.length - 1) {
+                            $downArrow.css(\'visibility\', \'hidden\');
+                        } else {
+                            $downArrow.css(\'visibility\', \'visible\');
+                        }
+                        if (index === 0 && index === $rows.length - 1) {
+                            $arrowMove.css(\'visibility\', \'hidden\');
+                        } else {
+                            $arrowMove.css(\'visibility\', \'visible\');
+                        }
+                    });
+                });
+            }
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this));
             });
@@ -282,6 +311,7 @@ class ProfileFieldsPresenter extends PagePresenter
                     $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php?mode=sequence&uuid=" + uid + "&order=" + order,
                         {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
                     );
+                    updateFieldMoves();
                 }
             });
             $(".admidio-field-move").click(function() {
@@ -290,7 +320,15 @@ class ProfileFieldsPresenter extends PagePresenter
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });', true
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                setTimeout(function() {
+                    updateFieldMoves();
+                }, 1000); //wait for moveTableRow to finish hiding the element
+            });
+            
+            updateFieldMoves();
+            ', true
         );
 
         // define link to create new profile field
@@ -392,7 +430,7 @@ class ProfileFieldsPresenter extends PagePresenter
                 );
             } else {
                 $templateRowProfileField['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'row_' . $userField->getValue('usf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('mode' => 'delete', 'uuid' => $userField->getValue('usf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataHref' => 'callUrlHideElement(\'adm_profile_field_' . $userField->getValue('usf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('mode' => 'delete', 'uuid' => $userField->getValue('usf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($userField->getValue('usf_name', 'database'))),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')
