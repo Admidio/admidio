@@ -489,7 +489,7 @@ class DocumentsPresenter extends PagePresenter
                 $this->addPageFunctionsMenuItem(
                     'menu_item_documents_upload_files',
                     $gL10n->get('SYS_UPLOAD_FILES'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/system/file_upload.php', array('module' => 'documents_files', 'uuid' => $currentFolder->getValue('fol_uuid'))),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => 'documents_files', 'uuid' => $currentFolder->getValue('fol_uuid'))),
                     'bi-upload'
                 );
 
@@ -568,7 +568,7 @@ class DocumentsPresenter extends PagePresenter
                         );
                     }
                     $templateRow['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/modules/documents-files.php',
+                        'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array('mode' => 'folder_delete', 'folder_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['name'])),
                         'icon' => 'bi bi-trash',
@@ -605,7 +605,7 @@ class DocumentsPresenter extends PagePresenter
                         );
                     }
                     $templateRow['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/modules/documents-files.php',
+                        'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array('mode' => 'file_delete', 'file_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['name'])),
                         'icon' => 'bi bi-trash',
@@ -655,7 +655,7 @@ class DocumentsPresenter extends PagePresenter
         $dataTables = new DataTables($this, 'adm_documents_files_table');
         $dataTables->disableColumnsSort(array(1, 6));
         $dataTables->setColumnsNotHideResponsive(array(6));
-        $dataTables->createJavascript(count($this->data), 6);
+        $dataTables->createJavascript(count($templateData), 6);
 
         $this->smarty->assign('infoAlert', $infoAlert);
         $this->smarty->assign('list', $templateData);

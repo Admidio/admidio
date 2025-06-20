@@ -61,7 +61,7 @@ try {
         $g_root_path = getAdmidioUrl();
     }
 
-    require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
+    require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
     $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation', 'installation_successful');
 

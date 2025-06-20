@@ -16,7 +16,6 @@
     <div id="{$elements.changelog_tables.id}"{if $elements.changelog_tables.class neq ""} class="{$elements.changelog_tables.class}"{/if}>{$elements.changelog_tables.content}</div>
 {foreach $elements.changelog_tables.tables as $tablegroup}
         <div id="{$tablegroup.id}" class="col-sm-9 fw-bold">{$tablegroup.title}</div>
-        <div class="col-sm-9">
         <ul class="changelog-tableselect-list">
             {foreach $tablegroup.tables as $table}
             <li><input id="changelog_table_{$table}" name="changelog_table_{$table}" class="form-check-input focus-ring {$elements['changelog_table_'|cat:$table].class}" type="checkbox" value="1"
@@ -29,8 +28,7 @@
             </label>
             </li>
             {/foreach}
-            </ul>
-        </div>
+        </ul>
 {/foreach}
     {if $formType neq "vertical" and $formType neq "navbar"}</div>{/if}
 </div>

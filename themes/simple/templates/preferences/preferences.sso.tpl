@@ -1,4 +1,7 @@
 <script>
+    $(".admidio-open-close-caret").click(function() {
+        showHideBlock($(this));
+    });
     $(".copy-container").each(function () {
         let $element = $(this);
 
@@ -67,6 +70,26 @@
 
     // Trigger change event on page load to set initial value
     $('#sso_saml_signing_key').trigger('change');
+
+
+    // Show/hide saml and oidc controls depending on the saml/oidc enabled checkboxes
+    $('#sso_saml_enabled').on('change', function() {
+        if ($('#sso_saml_enabled').is(':checked')) {
+            $('.admidio-form-group:has(.if-saml-enabled)').show();
+        } else {
+            $('.admidio-form-group:has(.if-saml-enabled)').hide();
+        }
+    });
+    $('#sso_saml_enabled').trigger('change');
+    $('#sso_oidc_enabled').on('change', function() {
+        if ($('#sso_oidc_enabled').is(':checked')) {
+            $('.admidio-form-group:has(.if-oidc-enabled)').show();
+        } else {
+            $('.admidio-form-group:has(.if-oidc-enabled)').hide();
+        }
+    });
+    $('#sso_oidc_enabled').trigger('change');
+    
 </script>
 
 <form {foreach $attributes as $attribute}
@@ -76,6 +99,10 @@
 
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_keys']}
 
+{* ********************************************************************************** 
+ * SAML settings 
+ * **********************************************************************************}
+
     {$elements['sso_saml_settings'].content}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_saml_enabled']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['sso_saml_entity_id']}
@@ -84,8 +111,24 @@
 
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_saml_want_requests_signed']}
 
-    {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_saml_sso_staticsettings']}
+    {include 'sys-template-parts/form.static-subinformation.tpl' data=$elements['sso_saml_sso_staticsettings']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_saml_clients']}
+
+
+
+
+{* ********************************************************************************** 
+ * OIDC settings 
+ * **********************************************************************************}
+
+    {$elements['sso_oidc_settings'].content}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_oidc_enabled']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_issuer_url']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['sso_oidc_signing_key']}
+
+    {include 'sys-template-parts/form.static-subinformation.tpl' data=$elements['sso_oidc_sso_staticsettings']}
+    {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_oidc_clients']}
+    
 
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_sso']}
     <div class="form-alert" style="display: none;">&nbsp;</div>

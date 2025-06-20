@@ -13,7 +13,7 @@ service cron start
 
 
 # check for existing admidio directories in docker volumes
-for dir in "adm_plugins" "install" "libs" "src" "themes" "adm_my_files" "adm_program" ; do
+for dir in "adm_my_files" "adm_plugins" "install" "languages" "libs" "modules" "rss" "src" "system" "themes" ; do
     if [ ! -d "${dir}" -o "$(find "${dir}" -maxdepth 0 -type d -empty 2>/dev/null)" != "" ]; then
         echo "[INFO ] provisioning missing directory ${dir}"
         cp -a "provisioning/${dir}" .
@@ -118,14 +118,6 @@ if [ -f "${ADMIDIO_CONFIG}" ]; then
     if [ "${ADMIDIO_ORGANISATION}" != "" ]; then
         if [ "$(egrep '^\$g_organization' ${ADMIDIO_CONFIG})" != "" ]; then
             sed -i "s/^\$g_organization.*/\$g_organization = '${ADMIDIO_ORGANISATION}';/g" "${ADMIDIO_CONFIG}"
-        else
-            echo "" >> "${ADMIDIO_CONFIG}"
-            echo "# // Short description of the organization that is running Admidio" >> "${ADMIDIO_CONFIG}"
-            echo "# // This short description must correspond to your input in the installation wizard !!!" >> "${ADMIDIO_CONFIG}"
-            echo "# // Example: 'ADMIDIO'" >> "${ADMIDIO_CONFIG}"
-            echo "# // Maximum of 10 characters !!!" >> "${ADMIDIO_CONFIG}"
-            echo "\$g_organization = '${ADMIDIO_ORGANISATION}';" >> "${ADMIDIO_CONFIG}"
-            echo "" >> "${ADMIDIO_CONFIG}"
         fi
     fi
 
@@ -158,28 +150,51 @@ fi
 
 if [ "$(cat ${ADMIDIO_INSTALLED_VERSION} 2>/dev/null)" != "$(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null)" ]; then
     echo "[INFO ] update admidio installation to image version ($(cat ${ADMIDIO_IMAGE_VERSION} 2>/dev/null)) ..."
-    echo "[DEBUG] rsync -a --delete provisioning/adm_program/ adm_program/"
-    rsync -a --delete provisioning/adm_program/ adm_program/
-    echo "[DEBUG] rsync -a --delete provisioning/install/ install/"
-    rsync -a --delete provisioning/install/ install/
-    echo "[DEBUG] rsync -a --delete provisioning/libs/ libs/"
-    rsync -a --delete provisioning/libs/ libs/
-    echo "[DEBUG] rsync -a --delete provisioning/src/ src/"
-    rsync -a --delete provisioning/src/ src/
-    echo "[DEBUG] rsync -a provisioning/adm_plugins/ adm_plugins/"
-    rsync -a provisioning/adm_plugins/ adm_plugins/
-    echo "[DEBUG] rsync -a provisioning/themes/ themes/"
-    rsync -a provisioning/themes/ themes/
-    echo "[DEBUG] rsync -a --delete provisioning/themes/simple/ themes/simple/"
-    rsync -a --delete provisioning/themes/simple/ themes/simple/
+
     echo "[DEBUG] rsync -a --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/"
     rsync -a --exclude="/config.php" --exclude="/.admidio_installed" --exclude="/.admidio_installed_version" provisioning/adm_my_files/ adm_my_files/
+
+    echo "[DEBUG] rsync -a provisioning/adm_plugins/ adm_plugins/"
+    rsync -a provisioning/adm_plugins/ adm_plugins/
+
+    echo "[DEBUG] rsync -a --delete provisioning/install/ install/"
+    rsync -a --delete provisioning/install/ install/
+
+    echo "[DEBUG] rsync -a --delete provisioning/languages/ languages/"
+    rsync -a --delete provisioning/languages/ languages/
+
+    echo "[DEBUG] rsync -a --delete provisioning/libs/ libs/"
+    rsync -a --delete provisioning/libs/ libs/
+
+    echo "[DEBUG] rsync -a --delete provisioning/modules/ modules/"
+    rsync -a --delete provisioning/modules/ modules/
+
+    echo "[DEBUG] rsync -a --delete provisioning/rss/ rss/"
+    rsync -a --delete provisioning/rss/ rss/
+
+    echo "[DEBUG] rsync -a --delete provisioning/src/ src/"
+    rsync -a --delete provisioning/src/ src/
+
+    echo "[DEBUG] rsync -a --delete provisioning/system/ system/"
+    rsync -a --delete provisioning/system/ system/
+
+    echo "[DEBUG] rsync -a provisioning/themes/ themes/"
+    rsync -a provisioning/themes/ themes/
+
+    echo "[DEBUG] rsync -a --delete provisioning/themes/simple/ themes/simple/"
+    rsync -a --delete provisioning/themes/simple/ themes/simple/
+
     rm -f "${ADMIDIO_INSTALLED_VERSION}"
 fi
 
 # run apache with php enabled as user default
 echo "[INFO ] run apache config test (apachectl configtest)"
 apachectl configtest
+
+
+echo "####################################################################################################"
+echo "### congratulations! Admidio is now reachable at ${ADMIDIO_ROOT_PATH}"
+echo "####################################################################################################"
 
 echo "[INFO ] run apache with php enabled (apachectl -D FOREGROUND)"
 apachectl -D FOREGROUND

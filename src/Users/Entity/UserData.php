@@ -50,7 +50,7 @@ class UserData extends Entity
      * @param string $newval new value after the change (can be null)
      * @return true returns **true** if no error occurred
      */
-    protected function logUserfieldChange(string $oldval = null, string $newval = null) : bool {
+    protected function logUserfieldChange(?string $oldval = null, ?string $newval = null) : bool {
         if ($oldval === $newval) {
             // No change, nothing to log
             return true;

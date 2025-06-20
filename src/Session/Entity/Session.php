@@ -503,7 +503,7 @@ class Session extends Entity
         int    $expire = 0,
         string $path = '',
         string $domain = '',
-        bool   $secure = null,
+        ?bool   $secure = null,
         bool   $httpOnly = true
     ): bool
     {
@@ -554,7 +554,7 @@ class Session extends Entity
      *                             Set to "false" to allow access for JavaScript. (Possible XSS security leak)
      * @throws \RuntimeException
      */
-    public static function start(string $cookiePrefix, int $limit = 0, string $path = '', string $domain = '', bool $secure = null, bool $httpOnly = true)
+    public static function start(string $cookiePrefix, int $limit = 0, string $path = '', string $domain = '', ?bool $secure = null, bool $httpOnly = true)
     {
         global $gLogger, $gSetCookieForDomain;
 

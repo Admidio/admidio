@@ -2,7 +2,6 @@
 <resources>
   <string name="PLG_CALENDAR_CURRENT_MONTH">Aktuell måned</string>
   <string name="PLG_CALENDAR_MONTH">Januar,Februar,Mars,April,Mai,Juni,Juli,August,September,Oktober,November,Desember</string>
-  <string name="PLG_CALENDAR_MORE">(... videre)</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">M</string>
   <string name="PLG_CALENDAR_TUESDAY_SHORT">Ti</string>
   <string name="PLG_CALENDAR_WEDNESDAY_SHORT">O</string>

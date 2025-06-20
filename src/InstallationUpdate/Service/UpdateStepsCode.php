@@ -3,8 +3,8 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
-use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -39,6 +39,30 @@ final class UpdateStepsCode
     public static function setDatabase(Database $database)
     {
         self::$db = $database;
+    }
+
+    /**
+     * This method will update the sequence of the links in the database.
+     * The sequence is used to sort the links within a category.
+     * The sequence starts with 1 for each category and is incremented by 1 for each link.
+     * @throws Exception
+     */
+    public static function updateStep50AddLinkSequence()
+    {
+        $sql = 'SELECT lnk_id, lnk_cat_id FROM ' . TBL_LINKS . ' ORDER BY lnk_cat_id, lnk_id';
+        $statement = self::$db->queryPrepared($sql);
+        $currentCatId = null;
+        $sequence = 1;
+
+        while ($row = $statement->fetch()) {
+            if ($currentCatId !== $row['lnk_cat_id']) {
+                $currentCatId = $row['lnk_cat_id'];
+                $sequence = 1;
+            }
+            $updateSql = 'UPDATE ' . TBL_LINKS . ' SET lnk_sequence = ? WHERE lnk_id = ?';
+            self::$db->queryPrepared($updateSql, [$sequence, $row['lnk_id']]);
+            $sequence++;
+        }
     }
 
     /**
@@ -105,6 +129,15 @@ final class UpdateStepsCode
         }
 
         self::$db->initializeTableColumnProperties();
+    }
+
+    /**
+     * Repair the path of the folders
+     */
+    public static function updateStep43RepairDocumentsPath()
+    {
+        $maintenance = new Maintenance(self::$db);
+        $maintenance->repairDocumentsFilesPath();
     }
 
     /**
@@ -878,7 +911,7 @@ final class UpdateStepsCode
                 VALUES (NULL, NULL, 1, 1, 1, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
                      , (NULL, NULL, 1, 2, 1, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
                      , (NULL, NULL, 1, 3, 1, \'plugins\', NULL, \'\', \'SYS_PLUGINS\', \'\')
-                     , (NULL, 1, 0, 1, 1, \'overview\', \'/adm_program/overview.php\', \'home.png\', \'SYS_OVERVIEW\', \'\')
+                     , (NULL, 1, 0, 1, 1, \'overview\', \'' . FOLDER_MODULES . '/overview.php\', \'home.png\', \'SYS_OVERVIEW\', \'\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, 0, 3, 1, \'documents-files\', \'' . FOLDER_MODULES . '/documents-files/documents_files.php\', \'fa-file-download\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, 0, 7, 1, \'groups-roles\', \'' . FOLDER_MODULES . '/groups-roles/groups_roles.php\', \'fa-user-tie\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \'' . FOLDER_MODULES . '/announcements.php\', \'announcements.png\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')

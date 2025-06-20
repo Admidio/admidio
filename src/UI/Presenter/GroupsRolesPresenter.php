@@ -83,7 +83,7 @@ class GroupsRolesPresenter extends PagePresenter
             $templateRow['title'] = $role->getValue('rol_name');
 
             // send a mail to all role members
-            if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getBool('enable_mail_module')) {
+            if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getInt('mail_module_enabled') > 0) {
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $row['rol_uuid'])),
                     'icon' => 'bi bi-envelope',
@@ -114,14 +114,14 @@ class GroupsRolesPresenter extends PagePresenter
                 // set role active or inactive
                 if ($roleType === GroupsRolesPresenter::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($row['rol_name'])),
                         'icon' => 'bi bi-eye',
                         'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                     );
                 } elseif ($roleType === GroupsRolesPresenter::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($row['rol_name'])),
                         'icon' => 'bi bi-eye-slash',
                         'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
@@ -136,7 +136,7 @@ class GroupsRolesPresenter extends PagePresenter
                 );
                 if (!$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['rol_name'])),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
@@ -169,7 +169,7 @@ class GroupsRolesPresenter extends PagePresenter
 
                 if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
                     if ($role->getValue('rol_weekday') > 0) {
-                        $html .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' GroupsRolesPresenter.php';
+                        $html .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                     }
                     if (!empty($role->getValue('rol_start_time'))) {
                         $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
@@ -219,7 +219,7 @@ class GroupsRolesPresenter extends PagePresenter
                     $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                 }
 
-                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'], 'show_former_members' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
+                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'], 'mem_show_filter' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
             }
 
             if ($row['num_leader'] > 0) {
@@ -359,7 +359,7 @@ class GroupsRolesPresenter extends PagePresenter
             FormPresenter::SELECT_BOX_MODUS_EDIT,
             array('property' => ($eventRole ? FormPresenter::FIELD_READONLY : FormPresenter::FIELD_REQUIRED), 'defaultValue' => $role->getValue('cat_uuid'))
         );
-        if ($gSettingsManager->getBool('enable_mail_module')) {
+        if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
             $selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('SYS_ROLE_MEMBERS'), 2 => $gL10n->get('ORG_REGISTERED_USERS'), 3 => $gL10n->get('SYS_ALSO_VISITORS'));
             $form->addSelectBox(
                 'rol_mail_this_role',
@@ -440,7 +440,7 @@ class GroupsRolesPresenter extends PagePresenter
             );
             $form->addInput(
                 'rol_cost',
-                $gL10n->get('SYS_CONTRIBUTION') . ' GroupsRolesPresenter.php' . $gSettingsManager->getString('system_currency'),
+                $gL10n->get('SYS_CONTRIBUTION') . ' ' . $gSettingsManager->getString('system_currency'),
                 (string)$role->getValue('rol_cost'),
                 array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => '0.01')
             );
@@ -472,7 +472,7 @@ class GroupsRolesPresenter extends PagePresenter
                 (bool)$role->getValue('rol_approve_users'),
                 array('icon' => 'bi-card-checklist')
             );
-            if ($gSettingsManager->getBool('enable_mail_module')) {
+            if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_mail_to_all',
                     $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'),
@@ -516,7 +516,7 @@ class GroupsRolesPresenter extends PagePresenter
                     array('icon' => 'bi-image-fill')
                 );
             }
-            if ($gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($gSettingsManager->getInt('documents_files_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_documents_files',
                     $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
@@ -532,7 +532,7 @@ class GroupsRolesPresenter extends PagePresenter
                     array('helpTextId' => 'SYS_RIGHT_FORUM_DESC', 'icon' => 'bi-chat-dots-fill')
                 );
             }
-            if ($gSettingsManager->getInt('enable_weblinks_module') > 0) {
+            if ($gSettingsManager->getInt('weblinks_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_weblinks',
                     $gL10n->get('SYS_RIGHT_WEBLINKS'),
@@ -646,13 +646,13 @@ class GroupsRolesPresenter extends PagePresenter
             if ($role->getValue('rol_photo') == 1 && $gSettingsManager->getInt('photo_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-image-fill', 'title' => $gL10n->get('SYS_RIGHT_PHOTOS'));
             }
-            if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getBool('documents_files_module_enabled')) {
+            if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getInt('documents_files_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
             if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_FORUM'));
             }
-            if ($role->getValue('rol_weblinks') == 1 && $gSettingsManager->getInt('enable_weblinks_module') > 0) {
+            if ($role->getValue('rol_weblinks') == 1 && $gSettingsManager->getInt('weblinks_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-link-45deg', 'title' => $gL10n->get('SYS_RIGHT_WEBLINKS'));
             }
 
@@ -723,14 +723,14 @@ class GroupsRolesPresenter extends PagePresenter
             );
             if ($roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($row['rol_name'])),
                     'icon' => 'bi bi-eye',
                     'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                 );
             } elseif ($roleType === $this::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($row['rol_name'])),
                     'icon' => 'bi bi-eye-slash',
                     'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
@@ -738,7 +738,7 @@ class GroupsRolesPresenter extends PagePresenter
             }
             if (!$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . '/adm_program/modules/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['rol_name'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_ROLE')

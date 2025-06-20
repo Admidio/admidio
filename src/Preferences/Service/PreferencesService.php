@@ -223,14 +223,20 @@ class PreferencesService
 
         // first check the fields of the submitted form
         switch ($panel) {
-            case 'Common':
+            case 'design':
                 if (!StringUtils::strIsValidFolderName($formData['theme'])
                     || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme'] . '/index.html')) {
                     throw new Exception('ORG_INVALID_THEME');
                 }
+                if (!empty($formData['theme_fallback'])) {
+                    if (!StringUtils::strIsValidFolderName($formData['theme_fallback'])
+                        || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme_fallback'] . '/index.html')) {
+                        throw new Exception('ORG_INVALID_THEME_FALLBACK');
+                    }
+                }
                 break;
 
-            case 'Security':
+            case 'security':
                 if (!isset($formData['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login')) {
                     // if auto login was deactivated than delete all saved logins
                     $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
@@ -238,27 +244,35 @@ class PreferencesService
                 }
                 break;
 
-            case 'RegionalSettings':
+            case 'regional_settings':
                 if (!StringUtils::strIsValidFolderName($formData['system_language'])
                     || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $formData['system_language'] . '.xml')) {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
                 }
                 break;
 
-            case 'Messages':
+            case 'messages':
                 // get real filename of the template file
                 if ($formData['mail_template'] !== $gSettingsManager->getString('mail_template')) {
                     $formValues['mail_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $formData['mail_template']);
                 }
                 break;
 
-            case 'Photos':
+            case 'photos':
                 // get real filename of the template file
                 if ($formData['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
                     $formValues['photo_ecard_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $formData['photo_ecard_template']);
                 }
                 break;
 
+            case 'sso':
+                if (empty($formData['sso_oidc_issuer_url'])) {
+                    $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+                }
+                if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
+                    $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
+                }
+                break;
         }
 
         // then update the database with the new values
@@ -313,7 +327,7 @@ class PreferencesService
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname', 'database'))));
         $email->setTemplateText(
             $gL10n->get('SYS_EMAIL_FUNCTION_TEST_CONTENT', array($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'))),
-            $gCurrentUser->getValue('FIRSTNAME') . ' PreferencesService.php' . $gCurrentUser->getValue('LASTNAME'),
+            $gCurrentUser->getValue('FIRSTNAME') . ' ' . $gCurrentUser->getValue('LASTNAME'),
             $gCurrentUser->getValue('EMAIL'),
             $gCurrentUser->getValue('usr_uuid'),
             $gL10n->get('SYS_ADMINISTRATOR')

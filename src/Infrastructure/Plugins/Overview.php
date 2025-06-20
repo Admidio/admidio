@@ -67,12 +67,16 @@ class Overview
             $this->smarty = new Smarty();
 
             // initialize php template engine smarty
-            $this->smarty->setTemplateDir(THEME_PATH . '/templates/');
-            $this->smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/');
+            $this->smarty->addTemplateDir(THEME_PATH . '/templates/');
+            if (defined('THEME_FALLBACK_PATH')) {
+                $this->smarty->addTemplateDir(THEME_FALLBACK_PATH . '/templates/');
+            }
+            $this->smarty->prependTemplateDir(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/');
             $this->smarty->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $this->smarty->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
             $this->smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
             $this->smarty->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
+            $this->smarty->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
 
             $this->smarty->assign('name', $this->name);
             $this->smarty->assign('l10n', $gL10n);

@@ -307,6 +307,7 @@ CREATE TABLE %PREFIX%_links
     lnk_description             text,
     lnk_url                     varchar(2000)       NOT NULL,
     lnk_counter                 integer             NOT NULL    DEFAULT 0,
+    lnk_sequence                smallint            NOT NULL,
     lnk_usr_id_create           integer unsigned,
     lnk_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     lnk_usr_id_change           integer unsigned,
@@ -483,6 +484,89 @@ COLLATE = utf8_unicode_ci;
 
 
 /*==============================================================*/
+/* Tables: adm_oidc_clients, adm_oidc_access_tokens,          */
+/*         adm_oidc_refresh_tokens, adm_oidc_auth_codes,      */
+/*         adm_oidc_jwks                                       */
+/* Data storage for oidc (client settings and tokens)          */
+/*==============================================================*/
+
+CREATE TABLE %PREFIX%_oidc_clients (
+    ocl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ocl_uuid                    varchar(36)         NOT NULL,
+    ocl_client_id               varchar(64)         NOT NULL,
+    ocl_client_name             varchar(255)        NOT NULL,
+    ocl_enabled                 bool                DEFAULT true,
+    ocl_client_secret           varchar(255)        NOT NULL,
+    ocl_redirect_uri            text                NOT NULL,
+    ocl_grant_types             varchar(255)        NOT NULL,
+    ocl_scope                   varchar(255)        DEFAULT NULL,
+    ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
+    ocl_field_mapping           text                NULL,
+    ocl_role_mapping            text                NULL,
+    ocl_usr_id_create           integer unsigned,
+    ocl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    ocl_usr_id_change           integer unsigned,
+    ocl_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (ocl_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE TABLE %PREFIX%_oidc_access_tokens (
+    oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    oat_usr_id                  integer unsigned    NOT NULL,
+    oat_ocl_id                  integer unsigned    NOT NULL,
+    oat_token                   text,
+    oat_scope                   text,
+    oat_expires_at              timestamp           NOT NULL,
+    oat_revoked                 boolean             DEFAULT FALSE,
+    oat_usr_id_create           integer unsigned,
+    oat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (oat_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE TABLE %PREFIX%_oidc_refresh_tokens (
+    ort_id                      integer unsigned    AUTO_INCREMENT,
+    ort_ocl_id                  integer unsigned    NOT NULL,
+    ort_usr_id                  integer unsigned    NULL,
+    ort_token                   text,
+    ort_scope                   text,
+    ort_expires_at              timestamp           NOT NULL,
+    ort_revoked                 boolean             DEFAULT FALSE,
+    ort_usr_id_create           integer unsigned,
+    ort_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (ort_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE TABLE %PREFIX%_oidc_auth_codes (
+    oac_id                      integer unsigned    AUTO_INCREMENT,
+    oac_usr_id                  integer unsigned    NOT NULL,
+    oac_ocl_id                  integer unsigned    NOT NULL,
+    oac_token                   text,
+    oac_scope                   text,
+    oac_nonce                   varchar(2550)       NULL,
+    oac_expires_at              timestamp           NOT NULL,
+    oac_revoked                 boolean             DEFAULT FALSE,
+    oac_redirect_uri            text                NOT NULL,
+    oac_used                    boolean             DEFAULT FALSE,
+    oac_usr_id_create           integer unsigned,
+    oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (oac_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+
+/*==============================================================*/
 /* Tables: adm_saml_clients                                     */
 /* Data storage for saml  (client settings and tokens)          */
 /*==============================================================*/
@@ -493,6 +577,7 @@ CREATE TABLE %PREFIX%_saml_clients (
     smc_org_id                  integer unsigned    NOT NULL,
     smc_client_id               varchar(255)        NOT NULL UNIQUE,
     smc_client_name             varchar(255)        NOT NULL,
+    smc_enabled                 bool                DEFAULT true,
     smc_metadata_url            text                NULL,
     smc_acs_url                 text                NOT NULL,
     smc_slo_url                 text                NULL,
@@ -527,6 +612,7 @@ CREATE TABLE %PREFIX%_sso_keys (
     key_uuid                    varchar(36)         NOT NULL,
     key_org_id                  integer unsigned    NOT NULL,
     key_name                    text                NOT NULL,
+-- TODO: Add key_type ENUM ('RSA', 'EC') or key_algorithm varchar(16) for signing algorithm e.g. RS256, ES256, etc.    
     key_algorithm               varchar(50)         NOT NULL    DEFAULT 'RSA',
     key_private                 text                NOT NULL,
     key_public                  text                NOT NULL,
@@ -1053,6 +1139,25 @@ ALTER TABLE %PREFIX%_messages_recipients
     ADD CONSTRAINT %PREFIX%_fk_msr_msg_id      FOREIGN KEY (msr_msg_id)         REFERENCES %PREFIX%_messages (msg_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_msr_rol_id      FOREIGN KEY (msr_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_msr_usr_id      FOREIGN KEY (msr_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_oidc_clients
+    ADD CONSTRAINT %PREFIX%_fk_ocl_usr_create  FOREIGN KEY (ocl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ocl_usr_change  FOREIGN KEY (ocl_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_oidc_access_tokens
+    ADD CONSTRAINT %PREFIX%_fk_oat_usr_id      FOREIGN KEY (oat_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oat_ocl_id      FOREIGN KEY (oat_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oat_usr_create  FOREIGN KEY (oat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_oidc_refresh_tokens
+    ADD CONSTRAINT %PREFIX%_fk_ort_usr_id      FOREIGN KEY (ort_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_ort_ocl_id      FOREIGN KEY (ort_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_ort_usr_create  FOREIGN KEY (ort_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_oidc_auth_codes
+    ADD CONSTRAINT %PREFIX%_fk_oac_usr_id      FOREIGN KEY (oac_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oac_ocl_id      FOREIGN KEY (oac_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oac_usr_create  FOREIGN KEY (oac_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_organizations
     ADD CONSTRAINT %PREFIX%_fk_org_org_parent  FOREIGN KEY (org_org_id_parent)  REFERENCES %PREFIX%_organizations (org_id)       ON DELETE SET NULL ON UPDATE RESTRICT;

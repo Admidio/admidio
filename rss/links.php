@@ -19,7 +19,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Weblinks\Entity\Weblink;
 
-require_once(__DIR__ . '/../adm_program/system/common.php');
+require_once(__DIR__ . '/../system/common.php');
 
 try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
@@ -30,7 +30,7 @@ try {
     }
 
     // check if module is active or is public
-    if ((int)$gSettingsManager->get('enable_weblinks_module') !== 1) {
+    if ($gSettingsManager->getInt('weblinks_module_enabled') !== 1) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 

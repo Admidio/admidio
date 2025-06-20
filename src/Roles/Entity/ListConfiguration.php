@@ -192,11 +192,22 @@ class ListConfiguration extends Entity
             }
         } elseif (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true)
             && ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
+                || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN_MULTISELECT'
                 || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON')) {
             if (strlen($content) > 0) {
                 // show selected text of option field or combobox
                 $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
-                $content = $arrListValues[$content];
+                // if the contnent is a list of values then explode it
+                if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN_MULTISELECT') {
+                    // explode the content by comma
+                    $content = explode(',', $content);
+                    $content = array_map(function ($value) use ($arrListValues) {
+                        return isset($arrListValues[$value]) ? $arrListValues[$value] : '';
+                    }, $content);
+                    $content = implode(', ', $content);
+                } else {
+                    $content = $arrListValues[$content];
+                }
             }
         } elseif (in_array($column->getValue('lsc_special_field'), array('usr_timestamp_create', 'usr_timestamp_change', 'mem_timestamp_change'))) {
             if (strlen($content) > 0) {
@@ -238,9 +249,32 @@ class ListConfiguration extends Entity
             } else {
                 if ($format === 'html') {
                     $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
-                } else {
-                    $content = $htmlText;
+                } else {                    $content = $htmlText;
                 }
+            }
+        } elseif ($column->getValue('lsc_special_field') === 'mem_duration') {
+            // Handle membership duration formatting
+            if (!empty($content)) {
+                try {
+                    // Parse the concatenated mem_begin|mem_end format
+                    $parts = explode('|', $content);
+                    if (count($parts) === 2) {
+                        $memBegin = $parts[0];
+                        $memEnd = $parts[1] === 'ongoing' ? null : $parts[1];
+                        
+                        // Create a temporary membership object to use its calculateDuration method
+                        $membership = new Membership($gDb);
+                        $duration = $membership->calculateDuration($memBegin, $memEnd);
+                        $content = $duration['formatted'];
+                    } else {
+                        $content = '';
+                    }
+                } catch (Exception $e) {
+                    // If calculation fails, show empty content
+                    $content = '';
+                }
+            } else {
+                $content = '';
             }
         } elseif (in_array($column->getValue('lsc_special_field'), array('usr_usr_id_create', 'usr_usr_id_change', 'mem_usr_id_change')) && (int)$content) {
             // Get User Information and store information in array
@@ -395,6 +429,7 @@ class ListConfiguration extends Entity
             'usr_uuid' => 'left',
             'mem_begin' => 'left',
             'mem_end' => 'left',
+            'mem_duration' => 'left',
             'mem_leader' => 'left',
             'mem_approved' => 'left',
             'mem_usr_id_change' => 'left',
@@ -450,6 +485,7 @@ class ListConfiguration extends Entity
             'usr_uuid' => $gL10n->get('SYS_UNIQUE_ID'),
             'mem_begin' => $gL10n->get('SYS_START'),
             'mem_end' => $gL10n->get('SYS_END'),
+            'mem_duration' => $gL10n->get('SYS_MEMBERSHIP_DURATION'),
             'mem_leader' => $gL10n->get('SYS_LEADERS'),
             'mem_approved' => $gL10n->get('SYS_PARTICIPATION_STATUS'),
             'mem_usr_id_change' => $gL10n->get('SYS_CHANGED_BY'),
@@ -680,8 +716,14 @@ class ListConfiguration extends Entity
                 $sqlColumnName = $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
             } else {
                 // Special fields like usr_photo, mem_begin ...
-                $dbColumnName = $listColumn->getValue('lsc_special_field');
-                $sqlColumnName = $listColumn->getValue('lsc_special_field');
+                $specialField = $listColumn->getValue('lsc_special_field');                // Handle special case for membership duration calculation
+                if ($specialField === 'mem_duration') {
+                    // Display membership duration as formatted string mem_begin|mem_end
+                    $dbColumnName = 'CONCAT(mem_begin, \'|\', CASE WHEN mem_end >= \'' . DATE_NOW . '\' THEN \'ongoing\' ELSE mem_end END)';
+                } else {
+                    $dbColumnName = $specialField;
+                }
+                $sqlColumnName = $specialField;
             }
 
             if (in_array($sqlColumnName, $arrSqlColumnNames)) {
@@ -726,7 +768,7 @@ class ListConfiguration extends Entity
                             // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
                             $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
                             $arrCheckboxKeys = array(1, 0, 1, 0);
-                            $value = str_replace(array_map('StringUtils::strToLower', $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
+                            $value = str_replace(array_map(array(StringUtils::class, 'strToLower'), $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
                             break;
 
                         case 'DROPDOWN': // fallthrough
@@ -735,7 +777,7 @@ class ListConfiguration extends Entity
 
                             // replace all field values with their internal numbers
                             $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
-                            $value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
+                            $value = array_search(StringUtils::strToLower($value), array_map(array(StringUtils::class, 'strToLower'), $arrListValues), true);
                             break;
 
                         case 'NUMBER': // fallthrough
@@ -822,27 +864,51 @@ class ListConfiguration extends Entity
         }
 
         // Set state of membership
-        if ($optionsAll['showFormerMembers']) {
-            $sqlMemberStatus = 'AND mem_end < \'' . DATE_NOW . '\'
-                AND NOT EXISTS (
+        $dateStart = ($optionsAll['startDate'] !== null) ? $optionsAll['startDate'] . ' 00:00:00' : DATE_NOW;
+        $dateEnd = ($optionsAll['endDate'] !== null) ? $optionsAll['endDate'] . ' 23:59:59' : DATE_NOW;
+
+        $sqlMemberStatus = 'AND mem_begin <= \'' . $dateEnd . '\'';
+        $sqlMemberStatus .= ' AND mem_end >= \'' . $dateStart . '\'';
+
+        if ($optionsAll['showFormerMembers'] && count($optionsAll['showRolesMembers']) > 0) {
+            $sqlMemberStatus = 'AND NOT EXISTS (
                    SELECT 1
                      FROM ' . TBL_MEMBERS . ' AS act
                     WHERE act.mem_rol_id = mem.mem_rol_id
                       AND act.mem_usr_id = mem.mem_usr_id
-                      AND \'' . DATE_NOW . '\' BETWEEN act.mem_begin AND act.mem_end
+                      AND \'' . $dateEnd . '\' BETWEEN act.mem_begin AND act.mem_end
                 )';
-        } else {
-            if ($optionsAll['startDate'] === null) {
-                $sqlMemberStatus = 'AND mem_begin <= \'' . DATE_NOW . '\'';
-            } else {
-                $sqlMemberStatus = 'AND mem_begin <= \'' . $optionsAll['endDate'] . ' 23:59:59\'';
-            }
 
-            if ($optionsAll['endDate'] === null) {
-                $sqlMemberStatus .= ' AND mem_end >= \'' . DATE_NOW . '\'';
-            } else {
-                $sqlMemberStatus .= ' AND mem_end >= \'' . $optionsAll['startDate'] . ' 00:00:00\'';
-            }
+            // add case for former members to have a flag if the user is a former member
+            $sqlFormerSelect = 'CASE
+                    WHEN mem_end  < \'' . $dateEnd . '\'
+                    ' . $sqlMemberStatus . '
+                    THEN TRUE
+                    ELSE FALSE
+                END AS mem_former';
+
+            // add former member column to the WHERE statement
+            $sqlMemberStatus = 'AND mem_end < \'' . $dateEnd . '\' ' . $sqlMemberStatus;
+        } elseif ($optionsAll['showFormerMembers']) {
+            $dateEnd = ($optionsAll['endDate'] !== null) ? $optionsAll['endDate'] . ' 23:59:59' : DATE_NOW;
+
+            $sqlMemberStatus = 'AND NOT EXISTS (
+                   SELECT 1
+                     FROM ' . TBL_MEMBERS . ' AS act
+                    WHERE act.mem_usr_id = mem.mem_usr_id
+                      AND \'' . $dateEnd . '\' BETWEEN act.mem_begin AND act.mem_end
+                )';
+
+            // add case for former members to have a flag if the user is a former member
+            $sqlFormerSelect = 'CASE
+                    WHEN mem_end  < \'' . $dateEnd . '\'
+                    ' . $sqlMemberStatus . '
+                    THEN TRUE
+                    ELSE FALSE
+                END AS mem_former';
+
+            // add former member column to the WHERE statement
+            $sqlMemberStatus = 'AND mem_end < \'' . $dateEnd . '\' ' . $sqlMemberStatus;
         }
 
         // check if mem_leaders should be shown
@@ -869,7 +935,29 @@ class ListConfiguration extends Entity
         }
 
         // Set SQL-Statement
-        if ($optionsAll['showAllMembersDatabase']) {
+        if ($optionsAll['showAllMembersThisOrga'] && $optionsAll['showFormerMembers']) {
+            $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . ', ' . $sqlFormerSelect . '
+                      FROM ' . TBL_MEMBERS . ' mem
+                INNER JOIN ' . TBL_ROLES . '
+                        ON rol_id = mem_rol_id
+                INNER JOIN ' . TBL_CATEGORIES . '
+                        ON cat_id = rol_cat_id
+                           ' . $sqlUserJoin . '
+                           ' . $sqlJoin . '
+                     WHERE usr_valid = true
+                       AND rol_valid = true
+                       AND rol_uuid IN ' . $sqlRoleIds . '
+                           ' . $sqlRelationTypeWhere . '
+                       AND (((  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
+                           OR cat_org_id IS NULL )
+                           AND mem_begin <= \'' . $dateEnd . '\'
+                           AND mem_end >= \'' . $dateStart . '\')
+                        OR (  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
+                           OR cat_org_id IS NULL )
+                           ' . $sqlMemberStatus . ')' .
+                $sqlWhere .
+                $sqlOrderBys;     
+        } elseif ($optionsAll['showAllMembersDatabase']) {
             $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . '
                       FROM ' . TBL_USERS . '
                            ' . $sqlJoin . '
@@ -936,11 +1024,11 @@ class ListConfiguration extends Entity
 
             // only add columns to the array if the current user is allowed to view them
             if ($usfId === 0
+            // if only names should be shown, then check if it's a name field
                 || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->isAdministratorUsers())) {
-                // if only names should be shown, then check if it's a name field
                 if (!$this->showOnlyNames
                     || ($usfId > 0 && in_array($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), array('FIRST_NAME', 'LAST_NAME')))
-                    || ($usfId === 0 && in_array($lscRow['lsc_special_field'], array('mem_begin', 'mem_end', 'mem_leader', 'mem_usr_id_change', 'mem_timestamp_change', 'mem_approved', 'mem_comment', 'mem_count_guests')))) {
+                    || ($usfId === 0 && in_array($lscRow['lsc_special_field'], array('mem_begin', 'mem_end', 'mem_duration', 'mem_leader', 'mem_usr_id_change', 'mem_timestamp_change', 'mem_approved', 'mem_comment', 'mem_count_guests')))) {
                     // some user fields should only be viewed by users that could edit roles
                     if (!in_array($lscRow['lsc_special_field'], array('usr_login_name', 'usr_usr_id_create', 'usr_timestamp_create', 'usr_usr_id_change', 'usr_timestamp_change', 'usr_login_name', 'usr_uuid'))
                         || $gCurrentUser->isAdministratorUsers()) {
@@ -1085,6 +1173,7 @@ class ListConfiguration extends Entity
      * so their initial setting on creation should not be logged. Instead, they will be used
      * when displaying the log entry.
      *
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {

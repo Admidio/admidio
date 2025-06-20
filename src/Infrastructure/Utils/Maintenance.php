@@ -2,6 +2,7 @@
 namespace Admidio\Infrastructure\Utils;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 
@@ -27,13 +28,14 @@ class Maintenance
     }
 
     /**
-     * Reorganize the sequence of all categories. They will be ordered within each type. First all categories with no
+     * Reorganize the sequence of all categories. They will be ordered within each type. First, all categories with no
      * organization and then all categories with an organization will be sorted. The sequence number of categories
-     * of each organization will start after the sequence of categories without organization.
+     * from each organization will start after the sequence of categories without an organization.
      * The current sequence of the categories will be considered.
+     * @return void
      * @throws Exception
      */
-    public function reorganizeCategories()
+    public function reorganizeCategories(): void
     {
         $currentCategoryType = '';
         $currentOrganization = 0;
@@ -65,6 +67,34 @@ class Maintenance
                 $newSequenceBase++;
             }
             $newSequenceOrganization++;
+        }
+    }
+
+    /**
+     * Reset all path values of every folder in the database. The script will start at every root folder
+     * of every organization and will set the path of every folder to the path of the root folder.
+     * @return void
+     * @throws Exception
+     */
+    public function repairDocumentsFilesPath(): void
+    {
+        $sql = 'SELECT fol_id, fol_name, fol_path
+                  FROM ' . TBL_FOLDERS . '
+                 WHERE fol_fol_id_parent IS NULL ';
+        $rootFolderStatement = $this->database->queryPrepared($sql);
+
+        while ($rowRootFolder = $rootFolderStatement->fetch()) {
+            $rootFolder = new Folder($this->database, $rowRootFolder['fol_id']);
+
+            $sql = 'SELECT fol_id, fol_name, fol_path
+                  FROM ' . TBL_FOLDERS . '
+                 WHERE fol_fol_id_parent = ? -- $rowRootFolder[\'fol_id\']';
+            $folderStatement = $this->database->queryPrepared($sql, array($rowRootFolder['fol_id']));
+
+            while ($row = $folderStatement->fetch()) {
+                $folder = new Folder($this->database, $row['fol_id']);
+                $folder->rename($row['fol_name'], $rootFolder->getValue('fol_path') . '/' . $rowRootFolder['fol_name']);
+            }
         }
     }
 }

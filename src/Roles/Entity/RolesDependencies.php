@@ -60,7 +60,7 @@ class RolesDependencies extends Entity
      * (e.g. the users table stores and auto-increments the login count, which 
      * we do not want to log)
      * 
-     * @return true Returns the list of database columns to be ignored for logging.
+     * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {

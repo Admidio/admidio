@@ -3,7 +3,7 @@
 {/if}
 
 
-    <table id="documents-files-table" class="table table-hover" width="100%" style="width: 100%;">
+    <table id="adm_documents_files_table" class="table table-hover" width="100%" style="width: 100%;">
         <thead>
             <tr>
                 <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>

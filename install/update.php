@@ -38,6 +38,7 @@ try {
      * @param string $message Message that should be shown to the user.
      * @param bool $reloadPage If set to **true** than the user could reload the update page.
      * @return void
+     * @throws \Admidio\Infrastructure\Exception
      */
     function showErrorMessage(string $message, bool $reloadPage = false): void
     {
@@ -55,13 +56,13 @@ try {
             $message,
             ($reloadPage) ? $gL10n->get('SYS_RELOAD') : $gL10n->get('SYS_OVERVIEW'),
             ($reloadPage) ? 'bi-arrow-clockwise' : 'bi-house-door-fill',
-            ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . '/adm_program/overview.php'
+            ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . FOLDER_MODULES . '/overview.php'
         );
     }
 
     $rootPath = dirname(__DIR__);
 
-    // embed config file
+    // embed a config file
     $g_organization = '';
     $configPath = $rootPath . '/adm_my_files/config.php';
 
@@ -75,7 +76,7 @@ try {
         exit();
     }
 
-    require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
+    require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
     // Initialize and check the parameters
 
@@ -259,7 +260,7 @@ try {
                 $gL10n->get('SYS_DATABASE_IS_UP_TO_DATE') . '<br />' . $gL10n->get('SYS_DATABASE_DOESNOT_NEED_UPDATED'),
                 $gL10n->get('SYS_OVERVIEW'),
                 'bi-house-door-fill',
-                ADMIDIO_URL . '/adm_program/overview.php'
+                ADMIDIO_URL . FOLDER_MODULES . '/overview.php'
             );
             // => EXIT
         } // if source version smaller than database -> show error
@@ -276,7 +277,7 @@ try {
                 ),
                 $gL10n->get('SYS_OVERVIEW'),
                 'bi-house-door-fill',
-                ADMIDIO_URL . '/adm_program/overview.php'
+                ADMIDIO_URL . FOLDER_MODULES . '/overview.php'
             );
             // => EXIT
         }

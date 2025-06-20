@@ -19,9 +19,8 @@ $defaultOrgPreferences = array(
     'security_login_email_address_enabled' => '0',
     'default_country' => 'DEU',
     'logout_minutes' => '20',
-    'homepage_logout' => 'adm_program/overview.php',
-    'homepage_login' => 'adm_program/overview.php',
-    'theme' => 'simple',
+    'homepage_logout' => 'modules/overview.php',
+    'homepage_login' => 'modules/overview.php',
     'enable_password_recovery' => '1',
     'two_factor_authentication_enabled' => '0',
     'system_browser_update_check' => '0',
@@ -39,10 +38,19 @@ $defaultOrgPreferences = array(
     'system_url_data_protection' => '',
     'password_min_strength' => '1',
 
+    // Theme
+    'theme' => 'simple',
+    'theme_fallback' => 'simple',
+    'color_primary' => '#349aaa',
+    'color_secondary' => '#263340',
+    'logo_file' => '',
+    'favicon_file' => '',
+    'additional_styles_file' => '',
+
     // Registration
     'registration_adopt_all_data' => '1',
     'registration_enable_captcha' => '1',
-    'registration_enable_module' => '1',
+    'registration_module_enabled' => '1',
     'registration_manual_approval' => '1',
     'registration_send_notification_email' => '1',
 
@@ -76,6 +84,7 @@ $defaultOrgPreferences = array(
     'changelog_table_forum_topics' => '0',
     'changelog_table_forum_posts' => '0',
     'changelog_table_saml_clients' => '0',
+    'changelog_table_oidc_clients' => '0',
     'changelog_table_others' => '0',
 
     // E-mail dispatch
@@ -115,9 +124,10 @@ $defaultOrgPreferences = array(
     // Announcements
     'announcements_module_enabled' => '1',
     'announcements_per_page' => '10',
+    'announcements_clamp_text_lines' => '0',
 
     // Category-Report
-    'category_report_enable_module' => '1',
+    'category_report_module_enabled' => '1',
     'category_report_default_configuration' => '',
 
     // Contacts
@@ -137,6 +147,7 @@ $defaultOrgPreferences = array(
     'events_may_take_part' => '0',
     'events_module_enabled' => '1',
     'events_per_page' => '10',
+    'events_clamp_text_lines' => '0',
     'events_rooms_enabled' => '0',
     'events_save_cancellations' => '1',
     'events_show_map_link' => '1',
@@ -150,16 +161,16 @@ $defaultOrgPreferences = array(
 
     // Groups and roles
     'groups_roles_default_configuration' => '',
-    'groups_roles_enable_module' => '1',
+    'groups_roles_module_enabled' => '1',
     'groups_roles_export' => '1',
     'groups_roles_edit_lists' => '1',
     'groups_roles_members_per_page' => '25',
     'groups_roles_show_former_members' => '2',
 
     // Messages
-    'enable_mail_module' => '1',
-    'enable_pm_module' => '1',
-    'enable_mail_captcha' => '1',
+    'mail_module_enabled' => '1',
+    'pm_module_enabled' => '1',
+    'mail_captcha_enabled' => '1',
     'mail_delivery_confirmation' => '0',
     'mail_html_registered_users' => '1',
     'mail_max_receiver' => '10',
@@ -189,6 +200,7 @@ $defaultOrgPreferences = array(
 
     // Profile
     'profile_show_map_link' => '0',
+    'profile_show_empty_fields' => '1',
     'profile_show_roles' => '1',
     'profile_show_former_roles' => '1',
     'profile_show_extern_roles' => '1',
@@ -200,9 +212,14 @@ $defaultOrgPreferences = array(
     'sso_saml_want_requests_signed' => '1',
     'sso_saml_signing_key' => '0',
     'sso_saml_encryption_key' => '0',
+    'sso_oidc_enabled' => '0',
+    'sso_oidc_issuer_url' => ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php',
+    'sso_oidc_signing_key' => '0',
+    'sso_oidc_encryption_key' => '',
+
 
     // Weblinks
-    'enable_weblinks_module' => '1',
+    'weblinks_module_enabled' => '1',
     'weblinks_per_page' => '0',
     'weblinks_redirect_seconds' => '10',
     'weblinks_target' => '_blank'

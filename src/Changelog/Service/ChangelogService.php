@@ -31,6 +31,7 @@ use Admidio\Infrastructure\Entity\Text;
 use Admidio\Roles\Service\RolesService;
 use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\SAMLClient;
+use Admidio\SSO\Entity\OIDCClient;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -72,7 +73,7 @@ class ChangelogService {
     public static array $noLogTables = [
         'auto_login', 'components', 'id', 'log_changes',
         'messages', 'messages_attachments', 'messages_content', 'messages_recipients',
-        'registrations',
+        'oidc_access_tokens', 'oidc_refresh_tokens', 'oidc_auth_codes', 'registrations',
         'sessions'];
 
 
@@ -195,6 +196,7 @@ class ChangelogService {
             'preferences' => 'SYS_SETTINGS',
             'texts' => 'SYS_SETTINGS',
             'saml_clients' => 'SYS_SSO_CLIENTS_SAML',
+            'oidc_clients' => 'SYS_SSO_CLIENTS_OIDC',
             'sso_keys' => 'SYS_SSO_KEYS',
             'others' => 'SYS_ALL_OTHERS',
         );
@@ -302,6 +304,8 @@ class ChangelogService {
                 return new Topic($gDb);
             case 'saml_clients':
                 return new SAMLClient($gDb);
+            case 'oidc_clients':
+                return new OIDCClient($gDb);
             case 'sso_keys':
                 return new Key($gDb);
             default:
@@ -497,6 +501,7 @@ class ChangelogService {
             'lnk_url' =>                   array('name' => 'SYS_LINK_ADDRESS', 'type' => 'URL'),
             'lnk_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'lnk_counter' =>               'SYS_COUNTER',
+            'lnk_sequence' =>             'SYS_ORDER',
 
             'txt_text' =>                  array('name' => 'SYS_TEXT', 'type' => 'TEXT_BIG'),
             'txt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
@@ -580,15 +585,24 @@ class ChangelogService {
             'smc_slo_url' =>                'SYS_SSO_SLO_URL',
             'smc_x509_certificate' =>       'SYS_SSO_X509_CERTIFICATE',
             'smc_userid_field' =>           'SYS_SSO_USERID_FIELD',
-            'smc_field_mapping' =>          array('name' => 'SYS_SSO_SAML_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
-            'smc_role_mapping' =>           array('name' => 'SYS_SSO_SAML_ROLES', 'type' => 'SAML_roles_mapping'),
+            'smc_field_mapping' =>          array('name' => 'SYS_SSO_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
+            'smc_role_mapping' =>           array('name' => 'SYS_SSO_ROLESMAP', 'type' => 'SSO_roles_mapping'),
             'smc_validate_signatures' =>    array('name' => 'SYS_SSO_VALIDATE_SIGNATURES', 'type' => 'BOOL'),
             'smc_require_auth_signed' =>    array('name' => 'SYS_SSO_REQUIRE_AUTHN_SIGNED', 'type' => 'BOOL'),
             'smc_sign_assertions' =>        array('name' => 'SYS_SSO_SIGN_ASSERTIONS', 'type' => 'BOOL'),
             'smc_encrypt_assertions' =>     array('name' => 'SYS_SSO_ENCRYPT_ASSERTIONS', 'type' => 'BOOL'),
             'smc_assertion_lifetime' =>     'SYS_SSO_SAML_ASSERTION_LIFETIME',
             'smc_allowed_clock_skew' =>     'SYS_SSO_SAML_ALLOWED_CLOCK_SKEW',
-
+            
+            'ocl_client_id' =>              'SYS_SSO_CLIENT_ID',
+            'ocl_client_name' =>            'SYS_SSO_CLIENT_NAME',
+            'ocl_client_secret' =>          'SYS_SSO_CLIENT_SECRET',
+            'ocl_redirect_uri' =>           'SYS_SSO_REDIRECT_URI',
+            'ocl_userid_field' =>           'SYS_SSO_USERID_FIELD',
+            'ocl_field_mapping' =>          array('name' => 'SYS_SSO_ATTRIBUTES', 'type' => 'OIDC_field_mapping'),
+            'ocl_role_mapping' =>           array('name' => 'SYS_SSO_ROLESMAP', 'type' => 'SSO_roles_mapping'),
+            // 'ocl_grant_types' =>            'TODO',
+            // 'ocl_scope' =>                  'TODO',        
 
             'key_org_id' =>                 array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'key_name' =>                   'SYS_NAME',
@@ -709,6 +723,8 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/userrelations/relationtypes_new.php', array('urt_uuid' => $uuid)); break;
                 case 'saml_clients':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $uuid)); break;
+                case 'oidc_clients':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $uuid)); break;
                 case 'sso_keys':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/keys.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             }
@@ -742,7 +758,7 @@ class ChangelogService {
      */
     public static function formatValue($value, $type, $entries = []) {
         global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n;
-        if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping']) ) {
+        if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping', 'SSO_field_mapping', 'SSO_roles_mapping', 'OIDC_field_mapping', 'OIDC_roles_mapping']) ) {
             $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
         }
 
@@ -787,7 +803,7 @@ class ChangelogService {
                 case 'EMAIL':
                     // the value in db is only the position, now search for the text
                     if ($value !== '') {
-                        if (!$gSettingsManager->getBool('enable_mail_module')) {
+                        if (!$gSettingsManager->getInt('mail_module_enabled') > 0) {
                             $emailLink = 'mailto:' . $value;
                         } else {
                             $emailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $gCurrentUserUUID));
@@ -897,10 +913,13 @@ class ChangelogService {
                     }
                     break;
                 case 'SAML_field_mapping':
-                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_SAML_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ATTRIBUTES_ALLOTHER')]);
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_ATTRIBUTES_ALLOTHER')]);
                     break;
-                case 'SAML_roles_mapping':
-                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_SAML_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_SAML_ROLES_ALLOTHER')]);
+                case 'OIDC_field_mapping':
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_ATTRIBUTES_NOOTHER')]);
+                    break;
+                case 'SSO_roles_mapping':
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_ROLES_ALLOTHER')]);
                     break;
 
             }
@@ -926,10 +945,10 @@ class ChangelogService {
         // Header
         $table = '<table border="1"><tr style="background: darkgray"><th>' . $admidioField . '</th><th>' . $targetField . "</th></tr>\n";
         // Loop through all mappings:
-        foreach ($mapping as $samlVal => $admVal) {
-            if (array_key_exists($samlVal, $messages)) {
+        foreach ($mapping as $ssoVal => $admVal) {
+            if (array_key_exists($ssoVal, $messages)) {
                 if (!empty($admVal)) {
-                    $msg = $messages[$samlVal];
+                    $msg = $messages[$ssoVal];
                     $table .= '<tr><td colspan="2" style="border: solid 1pt gray; background: lightgray;">' . $msg . "</td></tr>\n";
                 }
             } else {
@@ -937,7 +956,7 @@ class ChangelogService {
                     $object->readDataById($admVal);
                     $admVal = $object->readableName();
                 }
-                $table .= '<tr><td>' . $admVal . '</td><td>' . $samlVal . "</td></tr>\n";
+                $table .= '<tr><td>' . $admVal . '</td><td>' . $ssoVal . "</td></tr>\n";
             }
         }
         $table .= '</table>';
@@ -1088,7 +1107,7 @@ class ChangelogService {
      * @return bool Returns true if the database table (or at least one, of multiple are given) is logged
      * @throws Exception
      */
-    public static function hasLogViewPermission(string|array $table, User $user = null) : bool {
+    public static function hasLogViewPermission(string|array $table, ?User $user = null) : bool {
         global $gSettingsManager, $gCurrentUser;
         if (empty($user)) {
             $user = $gCurrentUser;

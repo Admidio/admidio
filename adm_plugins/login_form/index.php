@@ -21,7 +21,7 @@ try {
     $rootPath = dirname(__DIR__, 2);
     $pluginFolder = basename(__DIR__);
 
-    require_once($rootPath . '/adm_program/system/common.php');
+    require_once($rootPath . '/system/common.php');
 
     // only include config file if it exists
     if (is_file(__DIR__ . '/config.php')) {
@@ -116,7 +116,7 @@ try {
                 // request to reset the password
                 $linkUrl = ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php';
                 $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
-            } elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
+            } elseif ($gSettingsManager->getInt('mail_module_enabled') === 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
                 // show link of message module to send mail to administrator role
                 $linkUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
             } else {
@@ -131,7 +131,7 @@ try {
         $form = new FormPresenter(
             'adm_plugin_login_form',
             'plugin.login-form.edit.tpl',
-            ADMIDIO_URL . '/adm_program/system/login.php?mode=check',
+            ADMIDIO_URL . FOLDER_SYSTEM . '/login.php?mode=check',
             null,
             array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
         );

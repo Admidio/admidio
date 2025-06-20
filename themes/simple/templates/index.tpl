@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="{$languageIsoCode}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- (c) The Admidio Team - https://www.admidio.org -->
 
-    <link rel="shortcut icon" type="image/x-icon" href="{$urlTheme}/images/favicon.ico" />
-    <link rel="apple-touch-icon" type="image/png" href="{$urlTheme}/images/apple-touch-icon.png" sizes="180x180" />
+    <link rel="shortcut icon" type="image/x-icon" href="{if ($faviconFile)}{$urlAdmidio}/{$faviconFile}{else}{get_themed_file filepath='/images/favicon.ico'}{/if}" />
+    <link rel="apple-touch-icon" type="image/png" href="{get_themed_file filepath='/images/apple-touch-icon.png'}" sizes="180x180" />
 
     <title>{$title}</title>
 
@@ -32,7 +32,14 @@
         {/foreach}
     {/if}
 
-    <link rel="stylesheet" type="text/css" href="{$urlTheme}/css/admidio.css" />
+    <link rel="stylesheet" type="text/css" href="{get_themed_file filepath='/css/admidio.css'}" />
+    {if ($additionalStylesFile)}
+    <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/{$additionalStylesFile}" />
+    {/if}
+    {if ($additionalStyles)}<style>
+        {$additionalStyles}
+    </style>
+    {/if}
 
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";
@@ -81,9 +88,10 @@
 
     {include 'system/messagebox.tpl'}
 
+
     <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">
-        <a class="navbar-brand d-none d-md-block" href="{$urlAdmidio}/adm_program/overview.php">
-            <img src="{$urlTheme}/images/admidio_logo.png" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
+        <a class="navbar-brand d-none d-md-block" href="{$urlAdmidio}/modules/overview.php">
+            <img src="{if ($logoFile)}{$urlAdmidio}/{$logoFile}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
         </a>
         <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
         <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>
@@ -91,20 +99,20 @@
         {if $validLogin}
             <span id="adm_dropdown_user_photo" class="dropdown ms-auto">
                 <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img id="adm_profile_photo" style="max-height: 40px; max-width: 40px;" class="rounded-circle" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+                    <img id="adm_profile_photo" style="max-height: 40px; max-width: 40px;" class="rounded-circle" src="{$urlAdmidio}/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-center">
                     <li class="nav-item mb-2">
-                        <img id="adm_profile_photo" style="max-height: 200px; max-width: 200px;" class="rounded-circle" src="{$urlAdmidio}/adm_program/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+                        <img id="adm_profile_photo" style="max-height: 200px; max-width: 200px;" class="rounded-circle" src="{$urlAdmidio}/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
                     </li>
                     <li class="nav-item mb-4">
                         {$currentUser->getValue('FIRST_NAME')} {$currentUser->getValue('LAST_NAME')}
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link link-primary" href="{$urlAdmidio}/adm_program/modules/profile/profile.php">{$l10n->get('SYS_MY_PROFILE')}</a>
+                        <a class="nav-link link-primary" href="{$urlAdmidio}/modules/profile/profile.php">{$l10n->get('SYS_MY_PROFILE')}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link link-primary" href="{$urlAdmidio}/adm_program/system/logout.php">{$l10n->get('SYS_LOGOUT')}</a>
+                        <a class="nav-link link-primary" href="{$urlAdmidio}/system/logout.php">{$l10n->get('SYS_LOGOUT')}</a>
                     </li>
                 </ul>
             </span>
@@ -112,11 +120,11 @@
             <div id="adm_navbar_nav" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{$urlAdmidio}/adm_program/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
+                        <a class="nav-link" href="{$urlAdmidio}/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
                     </li>
                     {if $registrationEnabled}
                         <li class="nav-item">
-                            <a class="nav-link" href="{$urlAdmidio}/adm_program/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
+                            <a class="nav-link" href="{$urlAdmidio}/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
                         </li>
                     {/if}
                 </ul>

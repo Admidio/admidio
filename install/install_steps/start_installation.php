@@ -118,6 +118,7 @@ $sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
              , (\'event_participation\', \'adm_events\')
              , (\'menu_view\',     \'adm_menu\')
              , (\'sso_saml_access\', \'adm_saml_clients\')
+             , (\'sso_oidc_access\', \'adm_oidc_clients\')
              ';
 $db->queryPrepared($sql);
 
@@ -154,7 +155,6 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'INSTAGRAM\',             \'SYS_INSTAGRAM\',   \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'instagram\', \'https://www.instagram.com/#user_content#\',    false, 2, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'LINKEDIN\',              \'SYS_LINKEDIN\',    \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'linkedin\',  \'https://www.linkedin.com/in/#user_content#\',  false, 3, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'MASTODON\',              \'SYS_MASTODON\',    \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'mastodon\',  \'https://mastodon.social/#user_content#\',      false, 4, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'SKYPE\',                 \'SYS_SKYPE\',       \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_DESC').'\',     \'skype\',     NULL,                                            false, 5, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'XING\',                  \'SYS_XING\',        \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', null,          \'https://www.xing.com/profile/#user_content#\', false, 7, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
 
@@ -256,7 +256,7 @@ $sql = 'INSERT INTO '.TBL_MENU.'
         VALUES (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 1, true, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
              , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 2, true, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
              , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 3, true, \'extensions\', NULL, \'\', \'SYS_EXTENSIONS\', \'\')
-             , (NULL, 1, \'' . Uuid::uuid4() . '\', false, 1, true, \'overview\', \'/adm_program/overview.php\', \'bi-house-door-fill\', \'SYS_OVERVIEW\', \'\')
+             , (NULL, 1, \'' . Uuid::uuid4() . '\', false, 1, true, \'overview\', \''.FOLDER_MODULES.'/overview.php\', \'bi-house-door-fill\', \'SYS_OVERVIEW\', \'\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 2, true, \'announcements\', \''.FOLDER_MODULES.'/announcements.php\', \'newspaper\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'EVENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 3, true, \'events\', \''.FOLDER_MODULES.'/events/events.php\', \'calendar-week-fill\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, \'' . Uuid::uuid4() . '\', false, 4, true, \'messages\', \''.FOLDER_MODULES.'/messages/messages.php\', \'envelope-fill\', \'SYS_MESSAGES\', \'SYS_MESSAGES_DESC\')

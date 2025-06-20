@@ -210,6 +210,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             smc_org_id                  integer unsigned    NOT NULL,
             smc_client_id               varchar(255)        NOT NULL UNIQUE,
             smc_client_name             varchar(255)        NOT NULL,
+            smc_enabled                 bool                DEFAULT true,
             smc_metadata_url            text                NULL,
             smc_acs_url                 text                NOT NULL,
             smc_slo_url                 text                NULL,
@@ -263,7 +264,128 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_key_org         FOREIGN KEY (key_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_key_usr_change  FOREIGN KEY (key_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_key_usr_create  FOREIGN KEY (key_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
-    <step id="1040">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/announcements.php' WHERE men_name_intern = 'announcements'</step>
-    <step id="1050">UPDATE %PREFIX%_preferences SET prf_value = '%UUID%' WHERE prf_name = 'system_tenant_id' AND prf_org_id = 1</step>
+    <step id="1040">UPDATE %PREFIX%_menu SET men_url = '/modules/announcements.php' WHERE men_name_intern = 'announcements'</step>
+    <step id="1050">UPDATE %PREFIX%_preferences SET prf_value = 'modules/overview.php' WHERE prf_name IN ('homepage_login', 'homepage_logout') AND prf_value = 'adm_program/overview.php'</step>
+    <step id="1060">UPDATE %PREFIX%_preferences SET prf_value = REPLACE(prf_value, 'adm_program/', '') WHERE prf_name IN ('homepage_login', 'homepage_logout') AND prf_value LIKE '%adm_program/%'</step>
+    <step id="1070">UPDATE %PREFIX%_menu SET men_url = '/modules/overview.php' WHERE men_url = '/adm_program/overview.php'</step>
+    <step id="1080">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_program', '') WHERE men_url LIKE '%/adm_program%'</step>
+    <step id="1090">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
+                   VALUES ('sso_oidc_access', '%PREFIX%_oidc_clients')</step>
+    <step id="1100">CREATE TABLE %PREFIX%_oidc_clients (
+            ocl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            ocl_uuid                    varchar(36)         NOT NULL,
+            ocl_client_id               varchar(64)         NOT NULL,
+            ocl_client_name             varchar(255)        NOT NULL,
+            ocl_enabled                 bool                DEFAULT true,
+            ocl_client_secret           varchar(255)        NOT NULL,
+            ocl_redirect_uri            text                NOT NULL,
+            ocl_grant_types             varchar(255)        NOT NULL,
+            ocl_scope                   varchar(255)        DEFAULT NULL,
+            ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
+            ocl_field_mapping           text                NULL,
+            ocl_role_mapping            text                NULL,
+            ocl_usr_id_create           integer unsigned,
+            ocl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            ocl_usr_id_change           integer unsigned,
+            ocl_timestamp_change        timestamp           NULL        DEFAULT NULL,
+            PRIMARY KEY (ocl_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1110">ALTER TABLE %PREFIX%_oidc_clients
+            ADD CONSTRAINT %PREFIX%_fk_ocl_usr_create  FOREIGN KEY (ocl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+            ADD CONSTRAINT %PREFIX%_fk_ocl_usr_change  FOREIGN KEY (ocl_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+    <step id="1120">CREATE TABLE %PREFIX%_oidc_access_tokens (
+            oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            oat_usr_id                  integer unsigned    NOT NULL,
+            oat_ocl_id                  integer unsigned    NOT NULL,
+            oat_token                   text,
+            oat_scope                   text,
+            oat_expires_at              timestamp           NOT NULL,
+            oat_revoked                 boolean             DEFAULT FALSE,
+            oat_usr_id_create           integer unsigned,
+            oat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (oat_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1130">ALTER TABLE %PREFIX%_oidc_access_tokens
+            ADD CONSTRAINT %PREFIX%_fk_oat_usr_id      FOREIGN KEY (oat_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_oat_ocl_id      FOREIGN KEY (oat_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_oat_usr_create  FOREIGN KEY (oat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+    <step id="1140">CREATE TABLE %PREFIX%_oidc_refresh_tokens (
+            ort_id                      integer unsigned    AUTO_INCREMENT,
+            ort_usr_id                  integer unsigned    NOT NULL,
+            ort_ocl_id                  integer unsigned    NOT NULL,
+            ort_token                   text,
+            ort_scope                   text,
+            ort_expires_at              timestamp           NOT NULL,
+            ort_revoked                 boolean             DEFAULT FALSE,
+            ort_usr_id_create           integer unsigned,
+            ort_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (ort_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1150">ALTER TABLE %PREFIX%_oidc_refresh_tokens
+            ADD CONSTRAINT %PREFIX%_fk_ort_usr_id      FOREIGN KEY (ort_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_ort_ocl_id      FOREIGN KEY (ort_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_ort_usr_create  FOREIGN KEY (ort_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+    <step id="1160">CREATE TABLE %PREFIX%_oidc_auth_codes (
+            oac_id                      integer unsigned    AUTO_INCREMENT,
+            oac_usr_id                  integer unsigned    NOT NULL,
+            oac_ocl_id                  integer unsigned    NOT NULL,
+            oac_token                   text,
+            oac_scope                   text,
+            oac_nonce                   varchar(2550)       NULL,
+            oac_expires_at              timestamp           NOT NULL,
+            oac_revoked                 boolean             DEFAULT FALSE,
+            oac_redirect_uri            text                NOT NULL,
+            oac_used                    boolean             DEFAULT FALSE,
+            oac_usr_id_create           integer unsigned,
+            oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (oac_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1170">ALTER TABLE %PREFIX%_oidc_auth_codes
+            ADD CONSTRAINT %PREFIX%_fk_oac_usr_id      FOREIGN KEY (oac_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_oac_ocl_id      FOREIGN KEY (oac_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+            ADD CONSTRAINT %PREFIX%_fk_oac_usr_create  FOREIGN KEY (oac_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
+    <!-- rename enable_mail_module to mail_module_enabled -->
+    <step id="1180" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_mail_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_module_enabled'</step>
+    <step id="1190" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_mail_module' AND pr1.prf_name = 'mail_module_enabled'</step>
+    <step id="1200">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_mail_module'</step>
+    <!-- rename enable_pm_module to pm_module_enabled -->
+    <step id="1210" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_pm_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'pm_module_enabled'</step>
+    <step id="1220" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_pm_module' AND pr1.prf_name = 'pm_module_enabled'</step>
+    <step id="1230">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_pm_module'</step>
+    <!-- rename enable_mail_captcha to mail_captcha_enabled -->
+    <step id="1240" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_mail_captcha' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_captcha_enabled'</step>
+    <step id="1250" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_mail_captcha' AND pr1.prf_name = 'mail_captcha_enabled'</step>
+    <step id="1260">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_mail_captcha'</step>
+    <!-- rename enable_weblinks_module to weblinks_module_enabled -->
+    <step id="1270" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_weblinks_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'weblinks_module_enabled'</step>
+    <step id="1280" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_weblinks_module' AND pr1.prf_name = 'weblinks_module_enabled'</step>
+    <step id="1290">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_weblinks_module'</step>
+    <!-- rename registration_enable_module to registration_module_enabled -->
+    <step id="1300" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'registration_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_module_enabled'</step>
+    <step id="1310" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'registration_enable_module' AND pr1.prf_name = 'registration_module_enabled'</step>
+    <step id="1320">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_enable_module'</step>
+    <!-- rename category_report_enable_module to category_report_module_enabled -->
+    <step id="1330" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'category_report_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'category_report_module_enabled'</step>
+    <step id="1340" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'category_report_enable_module' AND pr1.prf_name = 'category_report_module_enabled'</step>
+    <step id="1350">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'category_report_enable_module'</step>
+    <!-- rename groups_roles_enable_module to groups_roles_module_enabled -->
+    <step id="1360" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'groups_roles_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'groups_roles_module_enabled'</step>
+    <step id="1370" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'groups_roles_enable_module' AND pr1.prf_name = 'groups_roles_module_enabled'</step>
+    <step id="1380">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'groups_roles_enable_module'</step>
+    <step id="1390">ALTER TABLE %PREFIX%_links ADD COLUMN lnk_sequence smallint NOT NULL AFTER lnk_counter</step>
+    <step id="1400">UpdateStepsCode::updateStep50AddLinkSequence</step>
+    <step id="1410">UPDATE %PREFIX%_preferences SET prf_value = '%UUID%' WHERE prf_name = 'system_tenant_id' AND prf_org_id = 1</step>
     <step>stop</step>
 </update>
