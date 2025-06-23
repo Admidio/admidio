@@ -342,6 +342,8 @@
   <string name="SYS_CHECKBOX_AUTOSAVE">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</string>
   <string name="SYS_CHOOSE_FILE">Datei auswählen</string>
   <string name="SYS_CITY">Ort</string>
+  <string name="SYS_CLAMP_TEXT_LINES">Textzeilen begrenzen</string>
+  <string name="SYS_CLAMP_TEXT_LINES_DESC">Mit dieser Einstellung kann die Anzahl der Zeilen festgelegt werden, die maximal als #VAR1# angezeigt werden sollen. Wenn 0 ausgewählt ist, wird der komplette Text dargestellt. (Voreinstellung: 0)</string>
   <string name="SYS_CLOCK">Uhr</string>
   <string name="SYS_CLOSE">Schließen</string>
   <string name="SYS_CODING">Kodierung</string>
@@ -1314,12 +1316,14 @@
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">Benutzer:innen mit dem Recht #VAR1_BOLD#</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Ehemalige Rollenmitgliedschaften anzeigen</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen die Benutzerin oder der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Voreinstellung: ja)</string>
+  <string name="SYS_SHOW_LESS">Weniger anzeigen</string>
   <string name="SYS_SHOW_LIST">Liste anzeigen</string>
   <string name="SYS_SHOW_MAP_LINK">Kartenlink anzeigen</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Ist die Adresse im Profil hinterlegt, so werden neben der Adresse zwei Links zu Google-Maps angezeigt. Es wird der Wohnort der Benutzerin oder des Benutzers verlinkt und es wird die Route vom eigenen Wohnort zum Wohnort der angezeigten Benutzerin oder des angezeigten Benutzers verlinkt. Beim Aufruf der Links werden folgende Informationen der Profile an Google übertragen: Straße, Postleitzahl, Ort und Land. (Voreinstellung: nein)</string>
   <string name="SYS_SHOW_MAP">Auf Karte zeigen</string>
   <string name="SYS_SHOW_MEMBER_LIST">Mitgliederliste anzeigen</string>
+  <string name="SYS_SHOW_MORE">Mehr anzeigen</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Alte Auswahloptionen anzeigen</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">Mit dieser Einstellung kann festgelegt werden, ob alte Auswahloptionen in der Profilfeld-Konfiguration angezeigt werden sollen. Wenn die Einstellung aktiviert ist, können alte Auswahloptionen wiederhergestellt werden.\nDiese Option ist nur für Profilfelder der Typen Drop-Down-Listenfeld und Optionsfeld verfügbar. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
