@@ -43,7 +43,7 @@ class SelectOptions extends Entity
      * If no id is set than no data will be read.
      * @throws Exception
      */
-    public function readDataByFieldId($usfId = 0): void
+    public function readDataByFieldId(int $usfId = 0) : void
     {
         // if no id is set then use the id of the object
         if ($usfId > 0) {
@@ -67,7 +67,14 @@ class SelectOptions extends Entity
         }
     }
 
-    public function readDataById(int $id): bool
+    /**
+     * Reads the data of the select option with the given ID from the database.
+     * If the ID is not an option of the select field then false will be returned.
+     * @param int $id The ID of the option to read.
+     * @return bool Returns true if the data could be read, otherwise false.
+     * @throws Exception
+     */
+    public function readDataById(int $id) : bool
     {
         // check if the id is an option of the select field
         if (isset($this->optionValues[$id])) {
@@ -76,6 +83,7 @@ class SelectOptions extends Entity
             return false;
         }
     }
+
     /**
      * Returns an array with all options of the select field.
      * If the parameter $format is set to 'database' then the values will be returned with their database column names.
@@ -83,7 +91,7 @@ class SelectOptions extends Entity
      * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the profile field will not be considered.
      * @return array Returns an array with all options of the select field.
      */
-    public function getAllOptions(bool $withObsoleteEnries = true): array
+    public function getAllOptions(bool $withObsoleteEnries = true) : array
     {
         $values = array();
         if (!empty($this->optionValues)) {
@@ -105,12 +113,57 @@ class SelectOptions extends Entity
     }
 
     /**
+     * Checks if an option with the given ID is used in the database.
+     * This is used to check if an option can be deleted or not.
+     * @param int $ufoId The ID of the option to check.
+     * @return bool Returns true if the option is used in the database, otherwise false.
+     */
+    public function isOptionUsed(int $ufoId) : bool
+    {
+        if ($this->usfId > 0) {
+            $sql = 'SELECT COUNT(*) FROM ' . TBL_USER_DATA . '
+                WHERE usd_value = ?
+                  AND usd_usf_id = ? -- $usfId'; // only check for not obsolete entries
+        $stmt = $this->db->queryPrepared($sql, array($ufoId, $this->usfId));
+        return ((int)$stmt->fetchColumn() > 0);
+        } else {
+            // if no usfId is set then it is a new profile field and no options are used in the database
+            return false;
+        }
+    }
+    
+    /**
+     * Deletes an option from the select field.
+     * The option will be removed from the database and the internal array of options.
+     * @param int $ufoId The ID of the option to delete.
+     * @return bool Returns true if the option could be deleted, otherwise false.
+     * @throws Exception
+     */
+    public function deleteOption(int $ufoId) : bool
+    {
+        if ($this->usfId > 0) {
+            // delete the option from the database
+            $sql = 'DELETE FROM ' . TBL_USER_FIELD_OPTIONS . '
+                    WHERE ufo_id = ? -- option ID
+                    AND ufo_usf_id = ? -- $usfId';
+            $this->db->queryPrepared($sql, array($ufoId, $this->usfId));
+
+            // remove the option from the internal array
+            unset($this->optionValues[$ufoId]);
+            return true;
+        } else {
+            // if no usfId is set then it is a new profile field and no options
+            return false;
+        }
+    }
+
+    /**
      * Option will change the complete sequence.
      * @param array $sequence the new sequence of opions (option IDs)
      * @return bool Return true if the sequence of the options could be changed, otherwise false.
      * @throws Exception
      */
-    public function setSequence(array $sequence): bool
+    public function setSequence(array $sequence) : bool
     {
         $ufoID = $this->getValue('ufo_id');
 
@@ -135,7 +188,6 @@ class SelectOptions extends Entity
         return $this->save();
     }
 
-    
     /**
      * Set the values of the options of a dropdown, radio button or multiselect field.
      * The values are stored in the database and the sequence of the options is updated.
@@ -143,7 +195,7 @@ class SelectOptions extends Entity
      * @return bool Returns true if the values could be saved, otherwise false.
      * @throws Exception
      */
-    public function setOptionValues(array $newValues): bool
+    public function setOptionValues(array $newValues) : bool
     {
         $ret = true;
         $newOption = false;
@@ -222,7 +274,7 @@ class SelectOptions extends Entity
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws Exception
      */
-    public function save(bool $updateFingerPrint = true): bool
+    public function save(bool $updateFingerPrint = true) : bool
     {
         $this->db->startTransaction();
 
@@ -255,7 +307,7 @@ class SelectOptions extends Entity
      * @return void
      * @throws Exception
      */
-    protected function adjustLogEntry(LogChanges $logEntry): void
+    protected function adjustLogEntry(LogChanges $logEntry) : void
     {      
         $profileField = new ProfileField($this->db);
 

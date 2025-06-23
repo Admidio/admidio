@@ -264,6 +264,7 @@ class ProfileFieldsPresenter extends PagePresenter
             array('toolbar' => 'AdmidioComments'));
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
+        $this->assignSmartyVariable('fieldUUID', $profileFieldUUID);
         $this->assignSmartyVariable('fieldNameIntern', $usfNameIntern);
         $this->assignSmartyVariable('systemField', $userField->getValue('usf_system'));
         $this->assignSmartyVariable('userCreatedName', $userField->getNameOfCreatingUser());

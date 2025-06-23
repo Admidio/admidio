@@ -992,7 +992,7 @@ class FormPresenter
                     });
                 });
             }
-            function addOptionRow(dataId, translationStrings) {
+            function addOptionRow(dataId, deleteUrl, csrfToken, translationStrings) {
                 const table = document.getElementById(dataId + "_table").getElementsByTagName("tbody")[0];
                 const newRow = document.createElement("tr");
                 const rows = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\');
@@ -1029,7 +1029,7 @@ class FormPresenter
                         <a id="${dataId}_option_${optionId}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry(\'${dataId}\', \'${optionId}\');" style="display: none;">
                             <i class="bi bi-arrow-counterclockwise text-success" data-bs-toggle="tooltip" title="${translationStrings.restore}"></i>
                         </a>
-                        <a id="${dataId}_option_${optionId}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry(\'${dataId}\', \'${optionId}\');">
+                        <a id="${dataId}_option_${optionId}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry(\'${dataId}\', \'${optionId}\', \'${deleteUrl}\', \'${csrfToken}\');">
                             <i class="bi bi-trash-fill text-danger" data-bs-toggle="tooltip" title="${translationStrings.delete}"></i>
                         </a>
                     </td>
@@ -1042,31 +1042,46 @@ class FormPresenter
                 table.insertBefore(newRow, table.querySelector("tr#table_row_button"));
                 updateEntryMoves();
             }
-            function deleteEntry(dataId, entryId) {
-                const row = document.getElementById(dataId + "_option_" + entryId);
-                if (row) {
-                    const table = row.parentNode;
-                    const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
-                    if (row.querySelector(\'input[name$="[value]"]\').value.trim() === "" && row.querySelector(\'input[name$="[obsolete]"]\').value.trim() === "") {
-                        // check if the row is the last one
-                        if (countOptions > 1) {
-                            row.remove(); // Remove the row if the value is empty
-                        }
-                        return;
-                    } else if (row.querySelector(\'input[name$="[value]"]\').value.trim() === "") {
-                        // If the value is empty, just remove the row
-                        if (countOptions <= 1) {
-                            return;
+            function deleteEntry(dataId, entryId, url, csrfToken) {
+                $.post(url, {
+                    adm_csrf_token: csrfToken
+                    }, function(data) {
+                        const returnData = (typeof data === "object") ? data : JSON.parse(data);
+                        const returnStatus = returnData.status;
+
+                        const row = document.getElementById(`${dataId}_option_${entryId}`);
+                        // Handle responses
+                        if (returnStatus === "used") {
+                            if (!row) return;
+                            const table = row.parentNode;
+                            const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                            if (row.querySelector(\'input[name$="[value]"]\').value.trim() === "" && row.querySelector(\'input[name$="[obsolete]"]\').value.trim() === "") {
+                                // check if the row is the last one
+                                if (countOptions > 1) {
+                                    row.remove(); // Remove the row if the value is empty
+                                }
+                                return;
+                            } else if (row.querySelector(\'input[name$="[value]"]\').value.trim() === "") {
+                                // If the value is empty, just remove the row
+                                if (countOptions <= 1) {
+                                    return;
+                                }
+                            }
+                            // Mark the entry as obsolete
+                            row.querySelector(\'input[name$="[obsolete]"]\').value = 1;
+                            // disable input fields
+                            row.querySelector(\'input[name$="[value]"]\').disabled = true;
+                            // change displayed delete/restore option
+                            row.querySelector("#" + dataId + "_option_" + entryId + "_delete").style.display = "none";
+                            row.querySelector("#" + dataId + "_option_" + entryId + "_restore").style.display = "inline";
+                        } else if (returnStatus === "deleted") {
+                            // delete the row if the entry was deleted
+                            if (row) row.remove();
+                        } else {
+                            // unknown status, do nothing
                         }
                     }
-                    // Mark the entry as obsolete
-                    row.querySelector(\'input[name$="[obsolete]"]\').value = 1;
-                    // disable input fields
-                    row.querySelector(\'input[name$="[value]"]\').disabled = true;
-                    // change displayed delete/restore option
-                    row.querySelector("#" + dataId + "_option_" + entryId + "_delete").style.display = "none";
-                    row.querySelector("#" + dataId + "_option_" + entryId + "_restore").style.display = "inline";
-                }
+                );
             }
             function restoreEntry(dataId, entryId) {
                 const row = document.getElementById(dataId + "_option_" + entryId);
@@ -1078,7 +1093,8 @@ class FormPresenter
                     row.querySelector("#" + dataId + "_option_" + entryId + "_delete").style.display = "inline"; // Show delete icon
                     row.querySelector("#" + dataId + "_option_" + entryId + "_restore").style.display = "none"; // Hide restore icon
                 }
-            }');
+            }'
+        );
 
         $this->addJavascriptCode('
             $("tbody.admidio-sortable").sortable({
@@ -1088,7 +1104,7 @@ class FormPresenter
                     updateEntryMoves();
                 }
             });
-            $(".admidio-entry-move").click(function() {
+            $("tbody.admidio-sortable").on("click", ".admidio-entry-move", function() {
                 var direction = $(this).data("direction");
                 var target = $(this).data("target");
 
