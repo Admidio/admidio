@@ -122,9 +122,15 @@ class SelectOptions extends Entity
     {
         if ($this->usfId > 0) {
             $sql = 'SELECT COUNT(*) FROM ' . TBL_USER_DATA . '
-                WHERE usd_value = ?
-                  AND usd_usf_id = ? -- $usfId'; // only check for not obsolete entries
-        $stmt = $this->db->queryPrepared($sql, array($ufoId, $this->usfId));
+                WHERE usd_usf_id = ? -- $usfId
+                AND (
+                    usd_value = ? -- $ufoId
+                    OR POSITION(
+                        CONCAT(\',\', ?, \',\')  -- $ufoId
+                        IN CONCAT(\',\', usd_value, \',\')
+                    ) > 0
+                )';
+        $stmt = $this->db->queryPrepared($sql, array($this->usfId, $ufoId, $ufoId));
         return ((int)$stmt->fetchColumn() > 0);
         } else {
             // if no usfId is set then it is a new profile field and no options are used in the database

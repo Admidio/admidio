@@ -1050,23 +1050,16 @@ class FormPresenter
                         const returnStatus = returnData.status;
 
                         const row = document.getElementById(`${dataId}_option_${entryId}`);
+                        // If the row does not exist, do nothing
+                        if (!row) return;
+
+                        const table = row.parentNode;
+                        const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                        // If there is only one option left, do not delete it or mark it as obsolete
+                        if (countOptions <= 1) return;
+
                         // Handle responses
                         if (returnStatus === "used") {
-                            if (!row) return;
-                            const table = row.parentNode;
-                            const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
-                            if (row.querySelector(\'input[name$="[value]"]\').value.trim() === "" && row.querySelector(\'input[name$="[obsolete]"]\').value.trim() === "") {
-                                // check if the row is the last one
-                                if (countOptions > 1) {
-                                    row.remove(); // Remove the row if the value is empty
-                                }
-                                return;
-                            } else if (row.querySelector(\'input[name$="[value]"]\').value.trim() === "") {
-                                // If the value is empty, just remove the row
-                                if (countOptions <= 1) {
-                                    return;
-                                }
-                            }
                             // Mark the entry as obsolete
                             row.querySelector(\'input[name$="[obsolete]"]\').value = 1;
                             // disable input fields
@@ -1076,10 +1069,12 @@ class FormPresenter
                             row.querySelector("#" + dataId + "_option_" + entryId + "_restore").style.display = "inline";
                         } else if (returnStatus === "deleted") {
                             // delete the row if the entry was deleted
-                            if (row) row.remove();
+                            row.remove();
+                            updateEntryMoves();
                         } else {
                             // unknown status, do nothing
                         }
+
                     }
                 );
             }
