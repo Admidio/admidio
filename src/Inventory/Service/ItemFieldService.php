@@ -48,7 +48,7 @@ class ItemFieldService
         return $this->itemFieldRessource->delete();
     }
 
-   /**
+    /**
      * Profile field will change the sequence one step up or one step down.
      * @param string $mode mode if the item field move up or down, values are ProfileField::MOVE_UP, ProfileField::MOVE_DOWN
      * @return bool Return true if the sequence of the category could be changed, otherwise false.
@@ -77,6 +77,15 @@ class ItemFieldService
 
         $this->itemFieldRessource->setValue('inf_sequence', $newSequence);
         return $this->itemFieldRessource->save();
+    }
+
+    /**
+     * Get the ID of the item field.
+     * @return int The ID of the item field.
+     */
+    public function getFieldID(): int
+    {
+        return (int)$this->itemFieldRessource->getValue('inf_id');
     }
 
     /**
@@ -147,9 +156,19 @@ class ItemFieldService
         foreach ($formValues as $key => $value) {
             if (str_starts_with($key, 'inf_')) {
                 $this->itemFieldRessource->setValue($key, $value);
+            } elseif (str_starts_with($key, 'ifo_')) {
+                // if the key starts with 'ufo_' then it is a user field option
+                // and we save it in the user field options table
+                $options = $value;
             }
         }
 
-        return $this->itemFieldRessource->save();
+        $this->itemFieldRessource->save();
+
+        // safe the field options after the new field has been saved
+        if (isset($options) && is_array($options)) {
+            $this->itemFieldRessource->setSelectOptions($options);
+        }
+        return true;
     }
 }

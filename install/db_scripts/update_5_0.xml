@@ -366,7 +366,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             inf_name_intern             varchar(110)        NOT NULL,
             inf_name                    varchar(100)        NOT NULL,
             inf_description             text,
-            inf_value_list              text,
             inf_system                  boolean             NOT NULL    DEFAULT false,
             inf_required_input          smallint            NOT NULL    DEFAULT 0,
             inf_sequence                smallint            NOT NULL,
@@ -445,6 +444,18 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
    <!-- disable module when updating an existing admidio instance -->
     <step id="1370">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 WHERE prf_name = 'inventory_module_enabled'</step>
     <step id="1380">UpdateStepsCode::updateStep50AddInventoryFields</step>
-
+    <step id="1390"> CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_field_select_options (
+            ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+            ifo_inf_id      integer unsigned    NOT NULL,
+            ifo_value       varchar(255)        NOT NULL,
+            ifo_sequence    smallint            NOT NULL,
+            ifo_obsolete    boolean             NOT NULL DEFAULT false,
+            PRIMARY KEY (ifo_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci;</step>
+    <step id="1400">ALTER TABLE %PREFIX%_inventory_field_select_options
+            ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id) REFERENCES %PREFIX%_inventory_fields (inf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
     <step>stop</step>
 </update>

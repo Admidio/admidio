@@ -188,6 +188,7 @@ class ChangelogService {
             'files' => 'SYS_FILE',
 
             'inventory_fields' => 'SYS_INVENTORY_ITEMFIELDS',
+            'inventory_field_select_options' => 'SYS_INVENTORY_ITEMFIELD_SELECT_OPTIONS',
             'inventory_items' => 'SYS_INVENTORY_ITEMS',
             'inventory_item_data' => 'SYS_INVENTORY_ITEM_DATA',
             'inventory_item_lend_data' => 'SYS_INVENTORY_ITEM_LEND_DATA',
@@ -318,14 +319,13 @@ class ChangelogService {
                 return new OIDCClient($gDb);
             case 'sso_keys':
                 return new Key($gDb);
+            case 'inventory_field_select_options':
             case 'inventory_fields':
                 return new ItemField($gDb);
+            case 'inventory_item_data':
+            case 'inventory_item_lend_data':
             case 'inventory_items':
                 return new Item($gDb);
-            case 'inventory_item_data':
-                return new ItemData($gDb);
-            case 'inventory_item_lend_data':
-                return new ItemLendData($gDb);
             default:
                 return null;
         }
@@ -515,9 +515,8 @@ class ChangelogService {
             'fop_fot_id' =>                array('name' => 'SYS_FORUM_TOPIC', 'type' => 'TOPIC'),
 
             'inf_type' =>                  array('name' => 'SYS_TYPE', 'type' => 'CUSTOM_LIST', 'entries' => $userFieldText),
-            'inf_name' =>                  'SYS_INVENTORY_ITEMFIELDS',
+            'inf_name' =>                  'SYS_NAME',
             'inf_description' =>           'SYS_DESCRIPTION',
-            'inf_value_list' =>            'SYS_VALUE_LIST',
             'inf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
             'inf_sequence' =>              'SYS_ORDER',
             'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
@@ -536,6 +535,10 @@ class ChangelogService {
             'inl_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
             'inl_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
             'inl_value' =>                 'SYS_VALUE',  
+            'ifo_value' =>                 'SYS_VALUE',
+            'ifo_inf_id' =>                'SYS_INVENTORY_ITEMFIELD',
+            'ifo_sequence' =>              'SYS_ORDER',
+            'ifo_obsolete' =>             array('name' => 'SYS_DELETED', 'type' => 'BOOL'),
 
             'lnk_name' =>                  'SYS_LINK_NAME',
             'lnk_description' =>           'SYS_DESCRIPTION',
@@ -717,6 +720,7 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'topic', 'topic_uuid' => $uuid)); break;
                 case 'forum_posts' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'post_edit', 'post_uuid' => $uuid)); break;
+                case 'inventory_field_select_options': // Fall through
                 case 'inventory_fields' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'field_edit', 'uuid' => $uuid)); break;
                 case 'inventory_item_data' : // Fall through
@@ -947,18 +951,6 @@ class ChangelogService {
                     $obj = new POST($gDb, $value);
                     $htmlValue = self::createLink($obj->readableName(), 'forum_posts', $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
                     break;
-/*                 case 'ITEM':
-                    $obj = new Item($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'inventory_items', $obj->getValue('ini_id'), $obj->getValue('ini_id'));
-                    break;
-                 case 'ITEM_DATA':
-                    $obj = new ItemData($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'inventory_items', $obj->getValue('ind_id'), $obj->getValue('ind_id'));
-                    break;
-                case 'ITEMFIELD':
-                    $obj = new ItemField($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'inventory_fields', $obj->getValue('inf_id'), $obj->getValue('inf_id'));
-                    break; */
                 case 'CUSTOM_LIST':
                     $value = $entries[$value]??$value;
                     $htmlValue = '';

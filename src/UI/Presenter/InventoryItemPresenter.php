@@ -57,6 +57,9 @@ class InventoryItemPresenter extends PagePresenter
             }
         }
 
+        // display History button
+        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_item_data', $gCurrentUser->isAdministratorInventory(), ['uuid' => $itemUUID]);
+
         foreach ($items->getItemFields() as $itemField) {  
             $infNameIntern = $itemField->getValue('inf_name_intern');
             if ($infNameIntern === 'KEEPER') {
@@ -77,12 +80,12 @@ class InventoryItemPresenter extends PagePresenter
             $infNameIntern = $itemField->getValue('inf_name_intern');
             // Skip lend fields that are not used in the edit form
             if (in_array($itemField->getValue('inf_name_intern'), $lendFieldNames)) {
-                if ($itemUUID === '' && $infNameIntern === 'IN_INVENTORY') {
-                    // If the item is new, we need to add the checkbox for IN_INVENTORY defaulting to true
+                if ($infNameIntern === 'IN_INVENTORY') {
+                    // we need to add the checkbox for IN_INVENTORY defaulting to true
                     $form->addInput(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        true,
+                        ($itemUUID === '') ? true : (bool)$items->getValue($infNameIntern),
                         array('property' => FormPresenter::FIELD_HIDDEN)
                     );
                 }
@@ -124,7 +127,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'inf_value_list'),
+                        $items->getProperty($infNameIntern, 'ifo_inf_options'),
                         array(
                             'property' => $fieldProperty,
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),
@@ -138,7 +141,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addRadioButton(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'inf_value_list', 'html'),
+                        $items->getProperty($infNameIntern, 'ifo_inf_options', 'html'),
                         array(
                             'property' => $fieldProperty,
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),
@@ -385,7 +388,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'inf_value_list'),
+                        $items->getProperty($infNameIntern, 'ifo_inf_options'),
                         array(
                             'property' => $fieldProperty,
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),
@@ -399,7 +402,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addRadioButton(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'inf_value_list', 'html'),
+                        $items->getProperty($infNameIntern, 'ifo_inf_options', 'html'),
                         array(
                             'property' => $fieldProperty,
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),
@@ -549,6 +552,8 @@ class InventoryItemPresenter extends PagePresenter
     public function createEditLendForm(string $itemUUID)
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gL10n, $gCurrentOrgId, $gDb;
+        //array with the internal field names of the lend fields not used in the edit form
+        $lendFieldNames = array('ITEMNAME', 'IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -561,7 +566,7 @@ class InventoryItemPresenter extends PagePresenter
         }
 
         // display History button
-        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_items,inventory_item_lend_data', $gCurrentUser->isAdministratorInventory(), ['uuid' => $itemUUID]);
+        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_item_lend_data', $gCurrentUser->isAdministratorInventory(), ['uuid' => $itemUUID]);
 
         // Read item data
         $items->readItemData($itemUUID);
@@ -599,6 +604,11 @@ class InventoryItemPresenter extends PagePresenter
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
         
+            // Skip all fields not used in the lend form
+            if (!in_array($infNameIntern, $lendFieldNames)) {
+                continue;
+            }
+
             if ($items->getProperty($infNameIntern, 'inf_required_input') == 1) {
                 $fieldProperty = FormPresenter::FIELD_REQUIRED;
             }
@@ -756,7 +766,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'inf_value_list'),
+                        $items->getProperty($infNameIntern, 'ifo_inf_options'),
                         array(
                             'property' => $fieldProperty,
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),

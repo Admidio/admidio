@@ -6,6 +6,7 @@ namespace Admidio\UI\Presenter;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
@@ -37,7 +38,7 @@ class InventoryFieldsPresenter extends PagePresenter
      */
     public function createEditForm(string $itemFieldUUID = '', string $itemFieldName = '')
     {
-        global $gCurrentSession, $gSettingsManager, $gL10n, $gCurrentOrgId, $gDb;
+        global $gCurrentSession, $gCurrentUser, $gSettingsManager, $gL10n, $gCurrentOrgId, $gDb;
 
         // Create user-defined field object
         $itemField = new ItemField($gDb);
@@ -54,16 +55,27 @@ class InventoryFieldsPresenter extends PagePresenter
             }
         }
 
+        // show link to view inventory fields history
+        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options', $gCurrentUser->isAdministratorInventory(), ['uuid' => $itemFieldUUID]);
+
         $this->addJavascript('
             $("#inf_type").change(function() {
                 if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "RADIO_BUTTON") {
-                    $("#inf_value_list").attr("required", "required");
-                    $("#inf_value_list_group").addClass("admidio-form-group-required");
-                    $("#inf_value_list_group").show("slow");
+                    $("#ifo_inf_options_table").attr("required", "required");
+                    $("#ifo_inf_options_group").addClass("admidio-form-group-required");
+                    $("#ifo_inf_options_group").show("slow");
+                    // find all option input fields in the table and set the required atribute
+                    $("#ifo_inf_options_table").find("input[name$=\'[value]\']").each(function() {
+                        $(this).attr("required", "required");
+                    });
                 } else {
-                    $("#inf_value_list").removeAttr("required");
-                    $("#inf_value_list_group").removeClass("admidio-form-group-required");
-                    $("#inf_value_list_group").hide();
+                    $("#ifo_inf_options_table").removeAttr("required");
+                    $("#ifo_inf_options_group").removeClass("admidio-form-group-required");
+                    $("#ifo_inf_options_group").hide();
+                    // find all options and remove the required atribute from the input field
+                    $("#ifo_inf_options_table").find("input[name$=\'[value]\']").each(function() {
+                        $(this).removeAttr("required");
+                    });
                 }
             });
             $("#inf_type").trigger("change");', true
@@ -138,13 +150,20 @@ class InventoryFieldsPresenter extends PagePresenter
             );
         }
 
-        $form->addMultilineTextInput(
-            'inf_value_list',
+        $options = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+        $optionValueList = $options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options'));
+        if (empty($optionValueList)) {
+            $optionValueList = array(
+                0 => array('id' => 1, 'value' => '', 'sequence' => 0, 'obsolete' => false)
+            );
+        }
+        $form->addOptionEditor(
+            'ifo_inf_options',
             $gL10n->get('SYS_VALUE_LIST'),
-            htmlentities($itemField->getValue('inf_value_list', 'database'), ENT_QUOTES),
-            6,
-            array('helpTextId' => $gL10n->get('SYS_INVENTORY_VALUE_LIST_DESC', array('<a href="https://icons.getbootstrap.com/" target="_blank">', '</a>')))
+            $optionValueList,
+            array('helpTextId' => array('SYS_VALUE_LIST_DESC' /* SYS_INVENTORY_VALUE_LIST_DESC */, array('<a href="https://icons.bootstrap.com" target="_blank">', '</a>')), 'filename' => 'inventory')
         );
+
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES');
         $form->addSelectBox(
             'inf_required_input',
@@ -165,6 +184,7 @@ class InventoryFieldsPresenter extends PagePresenter
             array('icon' => 'bi-check-lg')
         );
 
+        $this->assignSmartyVariable('fieldUUID', $itemFieldUUID);
         $this->assignSmartyVariable('fieldNameIntern', $infNameIntern);
         $this->assignSmartyVariable('systemField', $itemField->getValue('inf_system'));
         $this->assignSmartyVariable('sequenceField', $itemField->getValue('inf_sequence'));
@@ -211,7 +231,7 @@ class InventoryFieldsPresenter extends PagePresenter
         );
 
         // show link to view inventory fields history
-        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields', $gCurrentUser->isAdministratorInventory());
+        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options', $gCurrentUser->isAdministratorInventory());
 
         // define link to create new item field
         $this->addPageFunctionsMenuItem(

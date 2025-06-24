@@ -421,7 +421,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
                         'id' => 'content_modules',
-                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_items', 'inventory_item_data', 'inventory_item_lend_data', 'links', 'others')
+                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_lend_data', 'links', 'others')
                     ),
                     array(
                         'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
@@ -815,6 +815,13 @@ class PreferencesPresenter extends PagePresenter
         $formInventory->addSeperator(
             'inventory_seperator_general_settings',
             $gL10n->get('SYS_COMMON')
+        );
+        
+        $formInventory->addCheckbox(
+            'inventory_show_obsolete_select_field_options',
+            $gL10n->get('SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS'),
+            (bool) $formValues['inventory_show_obsolete_select_field_options'],
+            array('helpTextId' => 'SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC')
         );
         
         $formInventory->addCheckbox(

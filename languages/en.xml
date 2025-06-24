@@ -849,6 +849,7 @@
   <string name="SYS_INVENTORY_ITEMFIELD_DELETE_DESC">Should the item field #VAR1_BOLD# and the associated item data be deleted?</string>
   <string name="SYS_INVENTORY_ITEMFIELD_DELETED">Item field successfully deleted</string>
   <string name="SYS_INVENTORY_ITEMFIELD_EDIT">Change the item field</string>
+  <string name="SYS_INVENTORY_ITEMFIELD_SELECT_OPTIONS">Item field select options</string>
   <string name="SYS_INVENTORY_ITEMFIELDS">Item fields</string>
   <string name="SYS_INVENTORY_ITEMFIELDS_EDIT">Maintain item fields</string>
   <string name="SYS_INVENTORY_ITEMNAME">Item name</string>

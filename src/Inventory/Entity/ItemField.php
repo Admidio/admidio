@@ -10,6 +10,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Inventory\Entity\SelectOptions;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -72,12 +73,17 @@ class ItemField extends Entity
         // delete all data of this field in the item data table
         $infId = (int)$this->getValue('inf_id');
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . '
-                 WHERE ind_inf_id = ? -- $usfId';
+                 WHERE ind_inf_id = ? -- $infId';
         $this->db->queryPrepared($sql, array($infId));
         
+        // delete all data of this field in the field select options table
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                 WHERE ifo_inf_id = ? -- $infId';
+        $this->db->queryPrepared($sql, array($infId));
+
         // delete all data of this field in the item lend data table
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
-                 WHERE inl_inf_id = ? -- $usfId';
+                 WHERE inl_inf_id = ? -- $infId';
         $this->db->queryPrepared($sql, array($infId));
 
         $return = parent::delete();
@@ -125,9 +131,10 @@ class ItemField extends Entity
      * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
      * @param string $format            Returns the field value in a special format @b text, @b html, @b database
      *                                  or datetime (detailed description in method description)
+     * @param bool $withObsoleteEnries  If set to **false** then the obsolete entries of the inventory field will not be considered.
      * @return mixed                    Returns the value for the column
      */
-    public function getValue($fieldNameIntern, $format = ''): mixed
+    public function getValue($fieldNameIntern, $format = '', bool $withObsoleteEnries = true): mixed
     {
         if ($fieldNameIntern === 'inf_description') {
             if (!isset($this->dbColumns['inf_description'])) {
@@ -140,11 +147,15 @@ class ItemField extends Entity
         } elseif ($fieldNameIntern === 'inf_name_intern') {
             // internal name should be read with no conversion
             $value = parent::getValue($fieldNameIntern, 'database');
+        } elseif ($fieldNameIntern === 'ifo_inf_options') {
+            // if value is a list of options then return the options as array
+            $options = new SelectOptions($this->db, (int)$this->dbColumns['inf_id']);
+            $value = $options->getAllOptions($withObsoleteEnries);
         } else {
             $value = parent::getValue($fieldNameIntern, $format);
         }
 
-        if (strlen((string) $value) === 0 || $value === null) {
+        if ((is_array($value) && empty($value)) || (!is_array($value) && (strlen((string)$value) === 0 || $value === null))) {
             return '';
         }
 
@@ -155,50 +166,47 @@ class ItemField extends Entity
                     $value = Language::translateIfTranslationStrId($value);
                     break;
 
-                case 'inf_value_list':
+                case 'ifo_inf_options':
                     if ($this->dbColumns['inf_type'] === 'DROPDOWN' || $this->dbColumns['inf_type'] === 'RADIO_BUTTON') {
-                        $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
+                        $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
+                        $arrOptions = $value;
 
-                        // first replace windows new line with unix new line and then create an array
-                        $valueFormatted = str_replace("\r\n", "\n", $value);
-                        $arrListValues = explode("\n", $valueFormatted);
-
-                        foreach ($arrListValues as $key => &$listValue) {
+                        foreach ($arrOptions as &$option) {
                             if ($this->dbColumns['inf_type'] === 'RADIO_BUTTON') {
                                 // if value is bootstrap icon or icon separated from text
-                                if (Image::isBootstrapIcon($listValue) || str_contains($listValue, '|')) {
+                                if (Image::isBootstrapIcon($option['value']) || str_contains($option['value'], '|')) {
                                     // if there is bootstrap icon and text separated by | then explode them
-                                    if (str_contains($listValue, '|')) {
-                                        list($listValueImage, $listValueText) = explode('|', $listValue);
+                                    if (str_contains($option['value'], '|')) {
+                                        list($optionValueImage, $optionValueText) = explode('|', $option['value']);
                                     } else {
-                                        $listValueImage = $listValue;
-                                        $listValueText = '';
+                                        $optionValueImage = $option['value'];
+                                        $optionValueText = '';
                                     }
 
                                     // if text is a translation-id then translate it
-                                    $listValueText = Language::translateIfTranslationStrId($listValueText);
+                                    $optionValueText = Language::translateIfTranslationStrId($optionValueText);
 
                                     if ($format === 'html') {
-                                        $listValue = Image::getIconHtml($listValueImage, $listValueText) . ' ' . $listValueText;
+                                        $option['value'] = Image::getIconHtml($optionValueImage, $optionValueText) . ' ' . $optionValueText;
                                     } else {
                                         // if no image is wanted then return the text part or only the position of the entry
-                                        if (str_contains($listValue, '|')) {
-                                            $listValue = $listValueText;
+                                        if (str_contains($option['value'], '|')) {
+                                            $option['value'] = $optionValueText;
                                         } else {
-                                            $listValue = $key + 1;
+                                            $option['value'] = $option['id'];
                                         }
                                     }
                                 }
                             }
 
                             // if text is a translation-id then translate it
-                            $listValue = Language::translateIfTranslationStrId($listValue);
+                            $option['value'] = Language::translateIfTranslationStrId($option['value']);
 
                             // save values in new array that starts with key = 1
-                            $arrListValuesWithKeys[++$key] = $listValue;
+                            $arrOptionValuesWithKeys[$option['id']] = $option['value'];
                         }
-                        unset($listValue);
-                        $value = $arrListValuesWithKeys;
+                        unset($option);
+                        $value = $arrOptionValuesWithKeys;
                     }
                     break;
                 default:
@@ -264,13 +272,13 @@ class ItemField extends Entity
 
         if ($newValue !== parent::getValue($columnName)) {
             if ($checkValue) {
-                if ($columnName === 'usf_description') {
+                if ($columnName === 'inf_description') {
                     // don't check value because it contains expected html tags
                     $checkValue = false;
                 }
 
                 // name, category and type couldn't be edited if it's a system field
-                if (in_array($columnName, array('usf_type'), true) && (int)$this->getValue('inf_system') === 1) {
+                if (in_array($columnName, array('inf_type'), true) && (int)$this->getValue('inf_system') === 1) {
                     throw new Exception('The item field ' . $this->getValue('inf_name_intern') . ' is a system field. You could
                         not change the type.');
                 }
@@ -279,6 +287,18 @@ class ItemField extends Entity
             return parent::setValue($columnName, $newValue, $checkValue);
         }
         return false;
+    }
+
+    /**
+     * Set the values of the options of a dropdown, radio button or multiselect field.
+     * The values are stored in the database and the sequence of the options is updated.
+     * @param array $newValues Array with new values for the options. The key is the option ID and the value is an array with the new values.
+     * @return bool Returns true if the values could be saved, otherwise false.
+     * @throws Exception
+     */
+    public function setSelectOptions(array $newValues): bool
+    {
+        return (new SelectOptions($this->db, (int)$this->getValue('inf_id')))->setOptionValues($newValues);
     }
 
     /**

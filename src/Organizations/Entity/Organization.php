@@ -225,14 +225,14 @@ class Organization extends Entity
 
         // insert inventory fields
         $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELDS . '
-                       (inf_uuid, inf_org_id, inf_type, inf_name_intern, inf_name, inf_description, inf_value_list, inf_system, inf_required_input, inf_sequence, inf_usr_id_create, inf_timestamp_create, inf_usr_id_change, inf_timestamp_change)
-                VALUES (?, ?, \'TEXT\', \'ITEMNAME\', \'SYS_INVENTORY_ITEMNAME\', \'SYS_INVENTORY_ITEMNAME_DESC\', NULL, 1, 1, 0, ?, ?, NULL, NULL),
-                       (?, ?, \'CATEGORY\', \'CATEGORY\', \'SYS_CATEGORY\', \'SYS_INVENTORY_CATEGORY_DESC\', NULL, 1, 1, 1, ?, ?, NULL, NULL),
-                       (?, ?, \'TEXT\', \'KEEPER\', \'SYS_INVENTORY_KEEPER\', \'SYS_INVENTORY_KEEPER_DESC\', NULL, 1, 0, 2, ?, ?, NULL, NULL),
-                       (?, ?, \'CHECKBOX\', \'IN_INVENTORY\', \'SYS_INVENTORY_IN_INVENTORY\', \'SYS_INVENTORY_IN_INVENTORY_DESC\', NULL, 1, 0, 3, ?, ?, NULL, NULL),
-                       (?, ?, \'TEXT\', \'LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER_DESC\', NULL, 1, 0, 4, ?, ?, NULL, NULL),
-                       (?, ?, \'DATE\', \'RECEIVED_ON\', \'SYS_INVENTORY_RECEIVED_ON\', \'SYS_INVENTORY_RECEIVED_ON_DESC\', NULL, 1, 0, 5, ?, ?, NULL, NULL),
-                       (?, ?, \'DATE\', \'RECEIVED_BACK_ON\', \'SYS_INVENTORY_RECEIVED_BACK_ON\', \'SYS_INVENTORY_RECEIVED_BACK_ON_DESC\', NULL, 1, 0, 6, ?, ?, NULL, NULL);
+                       (inf_uuid, inf_org_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_required_input, inf_sequence, inf_usr_id_create, inf_timestamp_create, inf_usr_id_change, inf_timestamp_change)
+                VALUES (?, ?, \'TEXT\', \'ITEMNAME\', \'SYS_INVENTORY_ITEMNAME\', \'SYS_INVENTORY_ITEMNAME_DESC\', 1, 1, 0, ?, ?, NULL, NULL),
+                       (?, ?, \'CATEGORY\', \'CATEGORY\', \'SYS_CATEGORY\', \'SYS_INVENTORY_CATEGORY_DESC\', 1, 1, 1, ?, ?, NULL, NULL),
+                       (?, ?, \'TEXT\', \'KEEPER\', \'SYS_INVENTORY_KEEPER\', \'SYS_INVENTORY_KEEPER_DESC\', 1, 0, 2, ?, ?, NULL, NULL),
+                       (?, ?, \'CHECKBOX\', \'IN_INVENTORY\', \'SYS_INVENTORY_IN_INVENTORY\', \'SYS_INVENTORY_IN_INVENTORY_DESC\', 1, 0, 3, ?, ?, NULL, NULL),
+                       (?, ?, \'TEXT\', \'LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER_DESC\', 1, 0, 4, ?, ?, NULL, NULL),
+                       (?, ?, \'DATE\', \'RECEIVED_ON\', \'SYS_INVENTORY_RECEIVED_ON\', \'SYS_INVENTORY_RECEIVED_ON_DESC\', 1, 0, 5, ?, ?, NULL, NULL),
+                       (?, ?, \'DATE\', \'RECEIVED_BACK_ON\', \'SYS_INVENTORY_RECEIVED_BACK_ON\', \'SYS_INVENTORY_RECEIVED_BACK_ON_DESC\', 1, 0, 6, ?, ?, NULL, NULL);
                 ';
         $queryParams = array(
             Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,

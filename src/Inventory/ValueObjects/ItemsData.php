@@ -375,20 +375,17 @@ class ItemsData
      * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
      * @param string $column            The column name of @b adm_inventory_fields for which you want the value
      * @param string $format            Optional the format (is necessary for timestamps)
+     * @param bool $withObsoleteEnries  If set to **false** then the obsolete entries of the item field will not be considered.
      * @return array|string             Returns the value for the column
      */
-    public function getProperty($fieldNameIntern, $column, $format = '')
+    public function getProperty($fieldNameIntern, $column, $format = '', bool $withObsoleteEnries = true)
     {
         if (!array_key_exists($fieldNameIntern, $this->mItemFields)) {
             // if id-field not exists then return zero
             return (strpos($column, '_id') > 0) ? 0 : '';
         }
 
-        $value = $this->mItemFields[$fieldNameIntern]->getValue($column, $format);
-
-        /*         if ($column === 'inf_value_list' && in_array($this->mItemFields[$fieldNameIntern]->getValue('inf_type'), ['DROPDOWN', 'RADIO_BUTTON'])) {
-            $value = $this->getListValue($fieldNameIntern, $value, $format);
-        } */
+        $value = $this->mItemFields[$fieldNameIntern]->getValue($column, $format, $withObsoleteEnries);
 
         return $value;
     }
@@ -445,68 +442,6 @@ class ItemsData
                 JOIN ' . TBL_USER_DATA . ' as last_name ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
                 JOIN ' . TBL_USER_DATA . ' as first_name ON first_name.usd_usr_id = usr_id AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
                 WHERE usr_valid = true AND EXISTS (SELECT 1 FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . ' WHERE mem_usr_id = usr_id AND mem_rol_id = rol_id AND mem_begin <= \'' . DATE_NOW . '\' AND mem_end > \'' . DATE_NOW . '\' AND rol_valid = true AND rol_cat_id = cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)) ORDER BY last_name.usd_value, first_name.usd_value;';
-        }
-
-
-    /**
-     * Returns the list values for a given field name intern (inf_name_intern)
-     * 
-     * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
-     * @param array $value             The value to be formatted
-     * @param string $format            Optional the format (is necessary for timestamps)
-     * @return array                    Returns an array with the list values for the given field name intern
-     */
-    protected function getListValue($fieldNameIntern, $value, $format) : array
-    {
-        $arrListValuesWithItems = array(); // array with list values and items that represents the internal value
-
-        // first replace windows new line with unix new line and then create an array
-        // $valueFormatted = str_replace("\r\n", "\n", $value);
-        //$arrListValues = explode("\n", $valueFormatted);
-
-        foreach ($value as $item => &$listValue) {
-            if ($this->mItemFields[$fieldNameIntern]->getValue('inf_type') === 'RADIO_BUTTON') {
-                // if value is imagefile or imageurl then show image
-                if (strpos(strtolower($listValue), '.png') > 0 || strpos(strtolower($listValue), '.jpg') > 0) {
-                    // if value is imagefile or imageurl then show image
-                    if (Image::isBootstrapIcon($listValue)
-                        || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false)) {
-                        // if there is imagefile and text separated by | then explode them
-                        if (StringUtils::strContains($listValue, '|')) {
-                            list($listValueImage, $listValueText) = explode('|', $listValue);
-                        }
-                        else {
-                            $listValueImage = $listValue;
-                            $listValueText = $this->getValue('usf_name');
-                        }
-
-                        // if text is a translation-id then translate it
-                        $listValueText = Language::translateIfTranslationStrId($listValueText);
-
-                        if ($format === 'text') {
-                            // if no image is wanted then return the text part or only the position of the entry
-                            if (StringUtils::strContains($listValue, '|')) {
-                                $listValue = $listValueText;
-                            }
-                            else {
-                                $listValue = $item + 1;
-                            }
-                        }
-                        else {
-                            $listValue = Image::getIconHtml($listValueImage, $listValueText);
-                        }
-                    }
-                }
-            }
-
-            // if text is a translation-id then translate it
-            $listValue = Language::translateIfTranslationStrId($listValue);
-
-            // save values in new array that starts with item = 1
-            $arrListValuesWithItems[++$item] = $listValue;
-        }
-        unset($listValue);
-        return $arrListValuesWithItems;
     }
 
     /**
@@ -519,7 +454,7 @@ class ItemsData
      */
     public function getHtmlValue($fieldNameIntern, $value): string
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gL10n;
 
         if (!array_key_exists($fieldNameIntern, $this->mItemFields)) {
             return (string)$value;
@@ -563,44 +498,40 @@ class ItemsData
 
                 case 'DROPDOWN':
                 case 'RADIO_BUTTON':
-                    $arrListValuesWithItems = array(); // array with list values and items that represents the internal value
+                    $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
+                    $arrOptions = $this->mItemFields[$fieldNameIntern]->getValue('ifo_inf_options', 'database', false);
 
-                    // first replace windows new line with unix new line and then create an array
-                    $valueFormatted = str_replace("\r\n", "\n", $this->mItemFields[$fieldNameIntern]->getValue('inf_value_list', 'database'));
-                    $arrListValues = explode("\n", $valueFormatted);
-
-                    foreach ($arrListValues as $index => $listValue) {
+                    foreach ($arrOptions as $option) {
                         // if value is imagefile or imageurl then show image
-                        if ($infType === 'RADIO_BUTTON' && (Image::isBootstrapIcon($listValue)
-                            || StringUtils::strContains($listValue, '.png', false) || StringUtils::strContains($listValue, '.jpg', false))) {
+                        if ($infType === 'RADIO_BUTTON' && (Image::isBootstrapIcon($option['value'])
+                            || StringUtils::strContains($option['value'], '.png', false) || StringUtils::strContains($option['value'], '.jpg', false))) {
                             // if there is imagefile and text separated by | then explode them
-                            if (StringUtils::strContains($listValue, '|')) {
-                                list($listValueImage, $listValueText) = explode('|', $listValue);
+                            if (StringUtils::strContains($option['value'], '|')) {
+                                list($optionValueImage, $optionValueText) = explode('|', $option['value']);
                             } else {
-                                $listValueImage = $listValue;
-                                $listValueText = '';//$this->getValue('inf_name');
+                                $optionValueImage = $option['value'];
+                                $optionValueText = '';
                             }
 
                             // if text is a translation-id then translate it
-                            $listValueText = Language::translateIfTranslationStrId($listValueText);
+                            $optionValueText = Language::translateIfTranslationStrId($optionValueText);
 
                             // get html snippet with image tag
-                            $listValue = Image::getIconHtml($listValueImage, $listValueText);
+                            $option['value'] = Image::getIconHtml($optionValueImage, $optionValueText);
                         }
 
                         // if text is a translation-id then translate it
-                        $listValue = Language::translateIfTranslationStrId($listValue);
+                        $option['value'] = Language::translateIfTranslationStrId($option['value']);
 
                         // save values in new array that starts with item = 1
-                        $arrListValuesWithItems[++$index] = $listValue;
+                        $arrOptionValuesWithKeys[$option['id']] = $option['value'];
                     }
 
-                    if (array_key_exists($value, $arrListValuesWithItems)) {
-                        $htmlValue = $arrListValuesWithItems[$value];
+                    if (array_key_exists($value, $arrOptionValuesWithKeys)) {
+                        $htmlValue = $arrOptionValuesWithKeys[$value];
                     } else {
                         // if value is not in list then delete the value
-                        $htmlValue = ''; //'list value '.$value .' not found';
-                        //$htmlValue = $gL10n->get('PLG_INVENTORY_ITEMFIELD', array($value));
+                        $htmlValue = '<i>' . $gL10n->get('SYS_DELETED_ENTRY') . '</i>';
 
                     }
                     break;
@@ -735,9 +666,8 @@ class ItemsData
                     case 'RADIO_BUTTON':
                         // the value in db is only the position, now search for the text
                         if ($value > 0 && $format !== 'html') {
-                            $valueList = $this->mItemFields[$fieldNameIntern]->getValue('inf_value_list', $format);
-                            $arrListValues = $this->getListValue($fieldNameIntern, $valueList, $format);
-                            $value = $arrListValues[$value];
+                            $arrOptions = $this->mItemFields[$fieldNameIntern]->getValue('ifo_inf_options', $format, false);
+                            $value = $arrOptions[$value];
                         }
                         break;
                 }
@@ -1104,7 +1034,7 @@ class ItemsData
                     foreach ($items as $data) {
                         foreach ($data as $key => $value) {
                             if ($value['oldValue'] != $value['newValue']) {
-                                $listValues = $this->getProperty($key, 'inf_value_list');
+                                $options = $this->getProperty($key, 'ifo_inf_options');
                                 if ($key === 'ITEMNAME') {
                                     $itemName = $value['newValue'];
                                 } elseif ($key === 'KEEPER') {
@@ -1146,11 +1076,11 @@ class ItemsData
                                         $value['oldValue'] == 1 ? $gL10n->get('SYS_YES') : ($value['oldValue'] == 0 ? $gL10n->get('SYS_NO') : $value['oldValue']),
                                         $value['newValue'] == 1 ? $gL10n->get('SYS_YES') : ($value['newValue'] == 0 ? $gL10n->get('SYS_NO') : $value['newValue'])
                                     );
-                                } elseif ($listValues !== '') {
+                                } elseif ($options !== '') {
                                     $changes[] = array(
                                         $key,
-                                        isset($listValues[$value['oldValue']]) ? $listValues[$value['oldValue']] : '',
-                                        isset($listValues[$value['newValue']]) ? $listValues[$value['newValue']] : ''
+                                        isset($options[$value['oldValue']]) ? $options[$value['oldValue']] : '',
+                                        isset($options[$value['newValue']]) ? $options[$value['newValue']] : ''
                                     );
                                 } else {
                                     $changes[] = array($key, $value['oldValue'], $value['newValue']);
