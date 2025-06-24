@@ -1,0 +1,40 @@
+name: Sort en.xml
+
+on:
+  push:
+    branches: 
+      - master
+    paths:
+      - languages/en.xml
+  workflow_dispatch:
+
+jobs:
+  sort-en-xml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install lxml
+        run: pip install lxml
+
+      - name: Run sort script
+        run: python .github/scripts/sort_en_xml.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+
+          if git diff --quiet; then
+            echo "No changes detected."
+          else
+            git add languages/en.xml
+            git commit -m "chore: sort en.xml alphabetically"
+            git push
+          fi
