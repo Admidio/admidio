@@ -495,10 +495,11 @@ class CategoriesPresenter extends PagePresenter
             $category->clear();
             $category->setArray($catRow);
 
-            if($categoryOrganizationID !== (int) $category->getValue('cat_org_id')
-            && count($templateCategories) > 0) {
-                $templateCategoryNodes[] = $templateCategories;
-                $templateCategories = array();
+            if($categoryOrganizationID !== (int) $category->getValue('cat_org_id')) {
+                if (count($templateCategories) > 0) {
+                    $templateCategoryNodes[] = $templateCategories;
+                    $templateCategories = array();
+                }
                 $categoryOrganizationID = $category->getValue('cat_org_id');
             }
 
