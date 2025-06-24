@@ -1270,7 +1270,7 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['groups_roles_enable_module'],
             array('helpTextId' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
         );
-        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
         $formGroupsRoles->addSelectBox(
             'groups_roles_members_per_page',
             $gL10n->get('SYS_MEMBERS_PER_PAGE'),
