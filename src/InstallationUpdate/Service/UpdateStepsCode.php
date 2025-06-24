@@ -87,21 +87,22 @@ final class UpdateStepsCode
     {
         global $gL10n;
 
+        // read id of system user from database
+        $sql = 'SELECT usr_id
+                  FROM ' . TBL_USERS . '
+                 WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
+        $systemUserStatement = self::$db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
+        $systemUserId = (int)$systemUserStatement->fetchColumn();
+
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = self::$db->queryPrepared($sql);
 
         while ($row = $organizationStatement->fetch()) {
-            // create organization depending on category for inventory
-            $category = new Category(self::$db);
-            $category->setValue('cat_org_id', (int)$row['org_id']);
-            $category->setValue('cat_type', 'IVT');
-            $category->setValue('cat_name_intern', 'COMMON');
-            $category->setValue('cat_name', $gL10n->get('SYS_COMMON'));
-            $category->setValue('cat_system', '1');
-            $category->setValue('cat_default', '1');
-            $category->setValue('cat_sequence', '0');
-            $category->save();
-   
+            $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
+                           (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                    VALUES (?, ?, \'IVT\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
+            self::$db->queryPrepared($sql, array((int)$row['org_id'], Uuid::uuid4(), $systemUserId, DATETIME_NOW));
+
             // set edit role rights to inventory categories for administrator role
             $sql = 'SELECT rol_id
                     FROM ' . TBL_ROLES . '
@@ -112,6 +113,9 @@ final class UpdateStepsCode
             $pdoStatement = self::$db->queryPrepared($sql, array($row['org_id'], $gL10n->get('SYS_ADMINISTRATOR')));
             if (($row = $pdoStatement->fetch()) !== false) {
                 // set edit role rights to inventory categories for role administrator
+                $category = new Category(self::$db);
+                $category->readDataByColumns(array('cat_org_id' => (int)$row['org_id'], 'cat_type' => 'IVT'));
+
                 $rightCategoryView = new RolesRights(self::$db, 'category_edit', $category->getValue('cat_id'));
                 $rightCategoryView->saveRoles(array($row['rol_id']));
             }
