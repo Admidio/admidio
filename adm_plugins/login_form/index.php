@@ -116,7 +116,7 @@ try {
                 // request to reset the password
                 $linkUrl = ADMIDIO_URL . FOLDER_SYSTEM . '/password_reset.php';
                 $linkText = $gL10n->get('SYS_PASSWORD_FORGOTTEN');
-            } elseif ($gSettingsManager->getBool('enable_mail_module') && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
+            } elseif ($gSettingsManager->getInt('mail_module_enabled') === 1 && $roleAdministrator->getValue('rol_mail_this_role') == 3) {
                 // show link of message module to send mail to administrator role
                 $linkUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $roleAdministrator->getValue('rol_uuid'), 'subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
             } else {

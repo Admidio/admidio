@@ -342,6 +342,8 @@
   <string name="SYS_CHECKBOX_AUTOSAVE">Checkbox status is saved automatically after marking.</string>
   <string name="SYS_CHOOSE_FILE">Select file</string>
   <string name="SYS_CITY">City</string>
+  <string name="SYS_CLAMP_TEXT_LINES">Limit text lines</string>
+  <string name="SYS_CLAMP_TEXT_LINES_DESC">This setting allows you to specify the maximum number of lines to be displayed as an #VAR1#. If 0 is selected, the complete text will be displayed. (Default: 0)</string>
   <string name="SYS_CLOCK">o\'clock</string>
   <string name="SYS_CLOSE">Close</string>
   <string name="SYS_CODING">Coding</string>
@@ -534,6 +536,7 @@
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DQUOTE">Double quote (")</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
+  <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Drop-down list box (multi-select)</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
@@ -606,12 +609,8 @@
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">The category report creates a list of all roles and categories to which a member is assigned. The permission #VAR1_BOLD# is required for access to the category report. (Default: yes)</string>
   <string name="SYS_ENABLE_CHANGELOG">Enable changelog</string>
   <string name="SYS_ENABLE_CHANGELOG_DESC">The changelog logs all changes (including the old and new value) to the selected objects (corresponding to database tables) in the database. The changelog can only be viewed by administrators or users that have edit access to the corresponding module. Each user can also view his/her profile data changes. (Default: yes)</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Enable documents &amp; files</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Documents &amp; files can be enabled or disabled via this setting. (Default: yes)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Enable download</string>
   <string name="SYS_ENABLE_DOWNLOAD_DESC">Allows to download single photos or complete albums as zip file. A hyperlink will be displayed for each photo or album. If option #VAR1_BOLD# is active only original photos will be downloaded.</string>
-  <string name="SYS_ENABLE_EMAILS">Enable e-mails</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">E-mails within messages module can be enabled or disabled via this setting. If the server does not support e-mail, the option should be disabled. (Default: enabled)</string>
   <string name="SYS_ENABLE_EVENT_REGISTRATION">Do you want to enable event registration?\nIf event is deleted, all registered participants will be removed, too.\nWould you like to block further registrations, please reduce number of allowed participants.</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Enable greeting cards</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">The greeting cards can be enabled or disabled via this setting. If the server does not support e-mail, the module should be disabled. This module is generally only available to registered users. (Default: yes)</string>
@@ -1432,12 +1431,14 @@
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">User with permission #VAR1_BOLD#</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Display former role memberships</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">A box will be shown with all roles of the user in the current organization. Membership start and end date will be displayed. (default: yes)</string>
+  <string name="SYS_SHOW_LESS">Show less</string>
   <string name="SYS_SHOW_LIST">Display list</string>
   <string name="SYS_SHOW_MAP_LINK">Display link to map</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">If location is set, Google Maps is used to display location and route from own location. (default: yes)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">If the address is stored in the profile, two links to Google Maps are displayed next to the address. The user\'s place of residence is linked and the route from his own place of residence to the place of residence of the user displayed is linked. When accessing the links, the following profile information will be transmitted to Google: street, postcode, city, and country. (Default: no)</string>
   <string name="SYS_SHOW_MAP">Show map</string>
   <string name="SYS_SHOW_MEMBER_LIST">Show member list</string>
+  <string name="SYS_SHOW_MORE">Show more</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="SYS_SHOW_PARTICIPANTS">Show participants</string>
@@ -1766,6 +1767,7 @@
   <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="SYS_WARNING">Warning</string>
+  <string name="SYS_WEBLINK">Web link</string>
   <string name="SYS_WEBLINKS">Web links</string>
   <string name="SYS_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>
   <string name="SYS_WEBMASTER">Webmaster</string>

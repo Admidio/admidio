@@ -545,6 +545,7 @@ class ChangelogService {
             'lnk_url' =>                   array('name' => 'SYS_LINK_ADDRESS', 'type' => 'URL'),
             'lnk_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'lnk_counter' =>               'SYS_COUNTER',
+            'lnk_sequence' =>             'SYS_ORDER',
 
             'txt_text' =>                  array('name' => 'SYS_TEXT', 'type' => 'TEXT_BIG'),
             'txt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
@@ -854,7 +855,7 @@ class ChangelogService {
                 case 'EMAIL':
                     // the value in db is only the position, now search for the text
                     if ($value !== '') {
-                        if (!$gSettingsManager->getBool('enable_mail_module')) {
+                        if (!$gSettingsManager->getInt('mail_module_enabled') > 0) {
                             $emailLink = 'mailto:' . $value;
                         } else {
                             $emailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $gCurrentUserUUID));

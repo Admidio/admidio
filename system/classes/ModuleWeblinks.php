@@ -125,7 +125,7 @@ class ModuleWeblinks extends Modules
                     ON cat_id = lnk_cat_id
                  WHERE cat_id IN ('.Database::getQmForValues($catIdParams).')
                        '.$sqlConditions['sql'].'
-              ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
+              ORDER BY cat_sequence, lnk_sequence, lnk_timestamp_create DESC';
 
         if ($limit > 0) {
             $sql .= ' LIMIT '.$limit;

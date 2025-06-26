@@ -202,6 +202,7 @@
   <string name="SYS_A_TO_Z">A til Z</string>
   <string name="SYS_ABORT">Afbryd</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
+  <string name="SYS_ACTIVE_CONTACTS">Aktive kontakter</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktive og tidligere medlemmer</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktive og tidligere</string>
   <string name="SYS_ACTIVE_MEMBERS">Aktive Medlemmer</string>
@@ -237,7 +238,9 @@
   <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Folderen kunne ikke findes. Blev folderen slettet med FTP eller skal den være utilgængelig, venligst slet folderen i Admidio.\nGæster uden billede administrations rettigheder kan ikke få vist det valgte album.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">Albummet er i øjeblikket låst og vil ikke blive vist til besøgende og medlemmer af denne grund.</string>
   <string name="SYS_ALL">Alle</string>
+  <string name="SYS_ALL_CONTACTS">Alle kontakter</string>
   <string name="SYS_ALL_DAY">Hele dagen</string>
+  <string name="SYS_ALL_MEMBERS">Alle medlemmer</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle organisationer</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Den valgte kategori er delt for alle organisationer.\nDet aktuelle objekt (begivenhed, meddelelse, profilfelt, weblink osv.) vil være synlig ikke kun i denne organisation, men også i alle følgende organisationer: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">Alle andre</string>
@@ -355,7 +358,6 @@
   <string name="SYS_COMMA_SEPARATED_FILE">Kommasepareret fil (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
   <string name="SYS_COMMON">Generel</string>
-  <string name="SYS_COMMON_SETTINGS">Generelle indstillinger</string>
   <string name="SYS_COMMUNICATION">Kommunikation</string>
   <string name="SYS_COMPLEMENT">Supplere</string>
   <string name="SYS_CONDITION">Betingelse</string>
@@ -375,6 +377,8 @@
   <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">Hvis den nye kontakt ikke kan tildeles til en eksisterende kontakt med et lignende navn, kan du oprette en ny kontakt og tildele den de relevante roller.</string>
   <string name="SYS_CONTACT_SIMILAR_NAME">En kontakt med et lignende navn blev fundet.</string>
   <string name="SYS_CONTACTS">Kontaktpersoner</string>
+  <string name="SYS_CONTACTS_DESC">Vis og organiser alle aktive og tidligere medlemmer her. Nye kontaktpersoner kan importeres eller oprettes.</string>
+  <string name="SYS_CONTACTS_PER_PAGE">Antal kontakter pr. side</string>
   <string name="SYS_CONTENT">Indhold</string>
   <string name="SYS_CONTENTS">Indhold</string>
   <string name="SYS_CONTRIBUTION">Kontingent</string>
@@ -425,8 +429,10 @@
   <string name="SYS_CURRENT_DATABASE_VERSION">Nuværende database version</string>
   <string name="SYS_CURRENT_EVENTS_OF_ORGA">Nuværende møder i organisation #VAR1#</string>
   <string name="SYS_CURRENT_MEMBER">Nuværende medlem</string>
+  <string name="SYS_CURRENT_ORGANIZATION">Nuværende organisation</string>
   <string name="SYS_CURRENT_PASSWORD">Nuværende kodeord</string>
   <string name="SYS_CURRENT_PROFILE_PICTURE">Nuværende profil billede</string>
+  <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Nuværende rollemedlemskaber</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du har ikke indtastet en gyldig e-mail adresse!\n\nIndtast en gyldig e-mail adresse i din #VAR1#profil#VAR2#.</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Hvis denne mulighed er aktiveret, vil dataene (begivenheder, meddelelser, weblinks ...) i denne kategori også blive vist på følgende organisationers websteder:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data er synlig for flere organisationer</string>
@@ -526,6 +532,7 @@
   <string name="SYS_DONT_SHOW">Vis ikke</string>
   <string name="SYS_DQUOTE">‎Dobbelt citat (\")‎</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down liste boks</string>
+  <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Rulleliste (flervalg)</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
   <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download sikkerhedskopiering af database</string>
   <string name="SYS_DOWNLOAD_FILE">Download fil</string>
@@ -596,12 +603,8 @@
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Kategorierapporten opretter en liste over alle roller og kategorier, som et medlem er tildelt. Tilladelsen #VAR1_BOLD# er påkrævet for at få adgang til kategorirapporten. (Standard: ja)</string>
   <string name="SYS_ENABLE_CHANGELOG">Aktiver ændringslog</string>
   <string name="SYS_ENABLE_CHANGELOG_DESC">Ændringsloggen logger alle ændringer (inklusive den gamle og nye værdi) til de valgte objekter (svarende til databasetabeller) i databasen. Ændringsloggen kan kun ses af administratorer eller brugere, der har redigeringsadgang til det tilsvarende modul. Hver bruger kan også se hans/hendes profildataændringer. (Standard: ja)</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktiver dokumenter &amp; filer</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Dokumenter &amp; filer kan aktiveres eller deaktiveres via denne indstilling. (Standard: ja)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Aktiver download</string>
   <string name="SYS_ENABLE_DOWNLOAD_DESC">Tillader at downloade enkeltfotos eller komplette album som zip-fil. Et hyperlink vises for hvert foto eller album. Hvis indstilling #VAR1_BOLD# er aktiv, downloades kun originale fotos.</string>
-  <string name="SYS_ENABLE_EMAILS">Aktiver e-mails</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">E-mails i beskedmodulet kan aktiveres eller deaktiveres via denne indstilling. Hvis serveren ikke understøtter e-mail, bør indstillingen være deaktiveret. (Standard: aktiveret)</string>
   <string name="SYS_ENABLE_EVENT_REGISTRATION">Vil du aktivere event registrering? \nHvis en event bliver slettet så fjernes også alle deltagere fra eventen.\nVil du blokere for yderligere deltagere, så skal du reducere antallet af tilladte deltagere.</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Aktiver lykønskningskort</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">Lykønskningskortene kan aktiveres eller deaktiveres via denne indstilling. Hvis serveren ikke understøtter e-mail, skal modulet være deaktiveret. Dette modul er generelt kun tilgængeligt for registrerede brugere. (Standard: ja)</string>
@@ -700,6 +703,9 @@
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Tidligere medlem</string>
+  <string name="SYS_FORMER_CONTACTS">Tidligere kontakter</string>
+  <string name="SYS_FORMER_MEMBER">Tidligere medlem</string>
+  <string name="SYS_FORMER_MEMBER_OF_ROLE_GROUP">Tidligere medlem af rolle-/gruppe#VAR1#</string>
   <string name="SYS_FORMER_MEMBERS">Tidligere medlemmer</string>
   <string name="SYS_FORMER_PL">Tidligere medlem</string>
   <string name="SYS_FORMER_ROLE_MEMBERSHIP">Tidligere rolle medlemskaber</string>
@@ -725,6 +731,7 @@
   <string name="SYS_GEN_RANDOM_EXCEPTION">Programmet kan ikke generere tilfældige numre.\nFejl Kode: #VAR1#\nFejl Besked: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Programmet forventer en streng med mindst to forskellige karakterer.</string>
   <string name="SYS_GREETING_CARD">Postkort</string>
+  <string name="SYS_GROUP_ROLE_MEMBERSHIP">Gruppe-/rollemedlemskab</string>
   <string name="SYS_GROUPS_ROLES">Grupper &amp; roller</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overblik og administration af alle grupper og roller i organisationen. Forskellige medlemslister kan vises, eksporteret og egne lister kan oprettes.</string>
   <string name="SYS_HALF_YEARLY">Halvårligt</string>
@@ -872,10 +879,10 @@
   <string name="SYS_MEMBER">Medlem</string>
   <string name="SYS_MEMBER_ASSIGNMENT">Medlemskabs tildeling</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Medlem af organisation #VAR1#</string>
+  <string name="SYS_MEMBER_OF_ROLE_GROUP">Medlem af rolle/gruppe #VAR1#</string>
+  <string name="SYS_MEMBERS">Medlemmer</string>
   <string name="SYS_MEMBERS_BETWEEN_PERIOD">Medlemmer imellem #VAR1# og #VAR2#</string>
   <string name="SYS_MEMBERS_CONFIGURATION_DESC">En af de her specificerede konfigurationer kan bruges til at vise medlemsadministrationen. Kolonnerne i den valgte listekonfiguration vises derefter i medlemsadministrationen.</string>
-  <string name="SYS_CONTACTS_DESC">Vis og organiser alle aktive og tidligere medlemmer her. Nye kontaktpersoner kan importeres eller oprettes.</string>
-  <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Nuværende rollemedlemskaber</string>
   <string name="SYS_MEMBERS_PER_PAGE">Medlemmer vist pr. side</string>
   <string name="SYS_MEMBERS_PER_PAGE_DESC">Antal medlemmer som vises i HTML visningen. Flere medlemmer kan vises ved at bruge side opdelings funktionen. Denne værdi vil ikke påvirke print visning eller eksport funktionalitet (Standard: 25).</string>
   <string name="SYS_MEMBERS_SIMILAR_NAME">Fandt #VAR1# medlemmer med et lignende navn.</string>
@@ -968,6 +975,7 @@
   <string name="SYS_NONE">Ingen</string>
   <string name="SYS_NOT_AT_REGISTRATION">Ikke ved registrering</string>
   <string name="SYS_NOT_EMPTY">Ikke tom</string>
+  <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Ikke medlem af nogen organisation</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Ikke medlem af organisationen #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Venligst anvend et validt nummer som grundlag for feltet #VAR1_BOLD#.</string>
   <string name="SYS_NOT_REGISTERED">ikke registreret</string>
@@ -1006,6 +1014,7 @@
   <string name="SYS_OPTIONAL">Valgbar</string>
   <string name="SYS_ORDER">Orden</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
+  <string name="SYS_ORGANIZATION_AFFILIATION">Organisationens tilhørsforhold</string>
   <string name="SYS_ORGANIZATION_DESC">Navn og kontaktoplysninger på den aktuelle organisation med mulighed for at oprette og vise underorganisationer.</string>
   <string name="SYS_OTHER_TABLES">Andre tabeller (tredjepartsmoduler, kun synlige for administratorer)</string>
   <string name="SYS_OVERHANG">Overbooking</string>
@@ -1286,7 +1295,7 @@
   <string name="SYS_SETTINGS">Indstillinger</string>
   <string name="SYS_SHOW_ALL">Vis alt</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Valgfri vis alle kontakter</string>
-  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Hvis denne indstilling er aktiveret, kan tidligere kontakter og kontakter fra andre organisationer valgfrit vises i medlemsadministrationen ud over de aktive kontakter i den aktuelle organisation. Ellers vises kun aktive kontakter i den aktuelle organisation. Dog søges der stadig i hele databasen for alle organisationer efter eksisterende kontakter, når der oprettes nye kontakter eller tildeler registreringer. (standard: ja)</string>
+  <string name="SYS_SHOW_ALL_CONTACTS_DESC">Hvis denne indstilling er angivet, kan kontakter fra andre organisationer valgfrit vises i medlemsadministrationen ud over kontakterne i den aktuelle organisation. Ellers vises kun aktive og inaktive kontakter i den aktuelle organisation. Men når du opretter nye kontakter eller tildeler registreringer, søges der stadig i hele databasen for alle organisationer efter eksisterende kontakter. (standard: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Hvis denne indstilling er sat, vil tidligere medlemmer såvel som medlemmer af andre organisationer blive vist sammen med de aktive  medlemmer af denne organisation. </string>
   <string name="SYS_SHOW_CALENDAR">Vis kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For udloggede brugere vises en alfanumerisk tekst, når captcha-modulet er aktiveret. Den medfølgende tekst skal indtastes i det rigtige felt. Dette skal forhindre misbrug af formularen fra spammere. (standard: ja)</string>
@@ -1426,7 +1435,7 @@
   <string name="SYS_SSO_OAUTH_KEYS">OIDC (SSO) nøgler</string>
   <string name="SYS_SSO_X509_CERTIFICATE">x509-klientcertifikat</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">SAML-meddelelser signeres kryptografisk for at forhindre sikkerhedsangreb. Dette certifikat leveres af klienten og skal indtastes/kopieres nøjagtigt som givet af klienten. Ellers vil SAML-kommunikationen mislykkes, og SSO-login vil ikke være muligt.</string>
-  <string name="SYS_SSO">Enkeltlogon (SAML 2.0, OpenId Connect)</string>
+  <string name="SYS_SSO">Enkelt-sign-On</string>
   <string name="SYS_SSO_SAML">Enkeltlogon med SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED">Aktiver enkeltlogon via SAML2.0</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Denne indstilling gør Admidio til en SAML 2.0-identitetsudbyder (idP) til enkeltlogon, som gør det muligt for andre webapplikationer at godkende brugere mod Admidio-brugerlisten.</string>
@@ -1598,7 +1607,6 @@
   <string name="SYS_USERNAME_DESCRIPTION">Du kan logge ind på systemet med dette navn.\nNavnet skal være unikt i systemet. Hvis dit ønskede navn allerede er taget, så prøv kombinationer som Andi78 eller SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# den #VAR3#</string>
-  <string name="SYS_CONTACTS_PER_PAGE">Antal kontakter pr. side</string>
   <string name="SYS_USING_CURRENT_VERSION">Du bruger den nyeste version af Admidio!</string>
   <string name="SYS_UTF8">UTF-8</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>

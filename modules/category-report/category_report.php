@@ -29,7 +29,7 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // check if the module is enabled and disallow access if it's disabled
-    if (!$gSettingsManager->getBool('category_report_enable_module')) {
+    if (!$gSettingsManager->getBool('category_report_module_enabled')) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
@@ -385,10 +385,19 @@ try {
                 && in_array($getMode, array('csv', 'pdf'), true)
                 && $content > 0
                 && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
+                    || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN_MULTISELECT'
                     || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON')) {
                 // show selected text of optionfield or combobox
                 $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
-                $content = $arrListValues[$content];
+                // if the content is an array, then we have to loop through the array
+                if (is_array($content)) {
+                    $content = array_map(function ($value) use ($arrListValues) {
+                        return isset($arrListValues[$value]) ? $arrListValues[$value] : '';
+                    }, $content);
+                    $content = implode(', ', $content);
+                } else {
+                    $content = $arrListValues[$content];
+                }
             }
 
             if ($usf_id === 0 && $content === true) {       // alle Spalten außer Profilfelder

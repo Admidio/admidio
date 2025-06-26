@@ -27,6 +27,28 @@ function showHideBlock(element) {
 }
 
 /**
+ * The function can be used to show or hide a text block that is longer than the
+ * visible area. Therefore, a small caret is used that will change his orientation
+ * if the text block is hidden.
+ * @param {HTMLElement} element This is the element you must click to show or hide another text block.
+ *                              The element must have a data-target attribute which contains the id of the
+ *                              element to hide.
+ * @param {Array} butonTexts This is an array with two strings that will be used as button texts.
+ *                           The first string will be used if the text block is hidden and the second
+ *                           string will be used if the text block is shown.
+ */
+function showHideMoreText(element, butonTexts) {
+    var $target  = $("#" + $(element).data("target"));
+    var $button = $("#" + $(element).attr("id"));
+    $target.toggleClass("expanded");
+    if ($target.hasClass("expanded")) {
+        $button.html(butonTexts[1]);
+    } else {
+        $button.html(butonTexts[0]);
+    }
+}
+
+/**
  * This function checks if a tbody element is empty (i.e., has no visible tr elements).
  * @param   {HTMLElement} tbodyElement  The tbody element to check.
  * @returns {boolean}                   True if the tbody element is empty, false otherwise.
@@ -498,3 +520,24 @@ function formSubmit(event) {
         }
     });
 }
+
+/**
+ * This function will set the X-AJAX-PREVIOUS-URL header for all AJAX requests.
+ * This is useful to know the previous URL when processing AJAX requests on the server side.
+ */
+$(document).ajaxSend(function(event, jqXHR, settings) {
+    jqXHR.setRequestHeader('X-AJAX-PREVIOUS-URL', window.location.href);
+});
+
+/**
+ * This function will reload the complete page if the X-ADMIDIO-REDIRECT header is set.
+ * This is useful for example if a user has been logged out and a AJAX call causes an redirect to show the login page.
+ * Then the complete page should be reloaded and not only the AJAX content.
+ */
+$(document).ajaxComplete(function(event, jqXHR) {
+    var redirect = jqXHR.getResponseHeader('X-ADMIDIO-REDIRECT');
+    if (redirect) {
+        // reload the complete page and not only the AJAX content
+        window.location.href = redirect;
+    }
+});

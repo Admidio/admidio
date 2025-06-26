@@ -342,6 +342,8 @@
   <string name="SYS_CHECKBOX_AUTOSAVE">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</string>
   <string name="SYS_CHOOSE_FILE">Datei auswählen</string>
   <string name="SYS_CITY">Ort</string>
+  <string name="SYS_CLAMP_TEXT_LINES">Textzeilen begrenzen</string>
+  <string name="SYS_CLAMP_TEXT_LINES_DESC">Mit dieser Einstellung kann die Anzahl der Zeilen festgelegt werden, die maximal als #VAR1# angezeigt werden sollen. Wenn 0 ausgewählt ist, wird der komplette Text dargestellt. (Voreinstellung: 0)</string>
   <string name="SYS_CLOCK">Uhr</string>
   <string name="SYS_CLOSE">Schließen</string>
   <string name="SYS_CODING">Kodierung</string>
@@ -534,6 +536,7 @@
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
   <string name="SYS_DQUOTE">Anführungszeichen (\")</string>
   <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
+  <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Dropdown-Listenfeld (Mehrfachauswahl)</string>
   <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
   <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Datenbank-Backup herunterladen</string>
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
@@ -1431,11 +1434,13 @@
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">Benutzer:innen mit dem Recht #VAR1_BOLD#</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Ehemalige Rollenmitgliedschaften anzeigen</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen die Benutzerin oder der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Voreinstellung: ja)</string>
+  <string name="SYS_SHOW_LESS">Weniger anzeigen</string>
   <string name="SYS_SHOW_LIST">Liste anzeigen</string>
   <string name="SYS_SHOW_MAP_LINK">Kartenlink anzeigen</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Ist die Adresse im Profil hinterlegt, so werden neben der Adresse zwei Links zu Google-Maps angezeigt. Es wird der Wohnort der Benutzerin oder des Benutzers verlinkt und es wird die Route vom eigenen Wohnort zum Wohnort der angezeigten Benutzerin bzw. des angezeigten Benutzers verlinkt. Beim Aufruf der Links werden folgende Informationen der Profile an Google übertragen: Straße, Postleitzahl, Ort und Land. (Voreinstellung: nein)</string>
   <string name="SYS_SHOW_MAP">Auf Karte zeigen</string>
+  <string name="SYS_SHOW_MORE">Mehr anzeigen</string>
   <string name="SYS_SHOW_MEMBER_LIST">Mitgliederliste anzeigen</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Falls mehrere Organisationen in der Datenbank gespeichert sind, kann der Anmeldebildschirm eine Auswahlbox mit allen verfügbaren Organisationen anzeigen. Der Benutzer bzw. die Benutzerin kann dann bei der Anmeldung eine andere Organisation auswählen (eine andere als die in der config.php definierte). Allerdings muss der Benutzer bzw. die Benutzerin ein registriertes Mitglied der ausgewählten Organisation sein.</string>
@@ -1765,6 +1770,7 @@
   <string name="SYS_WANT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
   <string name="SYS_WARNING">Warnung</string>
+  <string name="SYS_WEBLINK">Weblink</string>
   <string name="SYS_WEBLINKS">Weblinks</string>
   <string name="SYS_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
   <string name="SYS_WEBMASTER">Webmaster</string>

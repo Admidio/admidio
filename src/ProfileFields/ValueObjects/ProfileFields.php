@@ -268,7 +268,7 @@ class ProfileFields
                 case 'EMAIL':
                     // the value in db is only the position, now search for the text
                     if ($value !== '') {
-                        if (!$gSettingsManager->getBool('enable_mail_module')) {
+                        if (!$gSettingsManager->getInt('mail_module_enabled') > 0) {
                             $emailLink = 'mailto:' . $value;
                         } else {
                             // set value2 to user id because we need a second parameter in the link to mail module
@@ -320,6 +320,49 @@ class ProfileFields
                             $htmlValue = $arrListValuesWithKeys[$value];
                         } else {
                             $htmlValue = '<i>' . $gL10n->get('SYS_DELETED_ENTRY') . '</i>';
+                        }
+                    } else {
+                        $htmlValue = '';
+                    }
+                    break;
+                case 'DROPDOWN_MULTISELECT':
+                    $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
+
+                    // first replace windows new line with unix new line and then create an array
+                    $valueFormatted = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
+                    $arrListValues = explode("\n", $valueFormatted);
+
+                    foreach ($arrListValues as $index => $listValue) {
+                        // if text is a translation-id then translate it
+                        $listValue = Language::translateIfTranslationStrId($listValue);
+
+                        // save values in new array that starts with key = 1
+                        $arrListValuesWithKeys[++$index] = $listValue;
+                    }
+
+                    if (count($arrListValuesWithKeys) > 0 && !empty($value)) {
+                        // split value by comma and trim each value
+                        $valueArray = explode(',', $value);
+                        foreach ($valueArray as &$val) {
+                            $val = trim($val);
+                        }
+                        unset($val);
+
+                        // now create html output for each value
+                        $htmlValue = '';
+                        foreach ($valueArray as $val) {
+                            if (array_key_exists($val, $arrListValuesWithKeys)) {
+                                // if value is the index of the array then we can use it
+                                if ($htmlValue !== '') {
+                                    $htmlValue .= ', ';
+                                }
+                                $htmlValue .= $arrListValuesWithKeys[$val];                              
+                            } else {
+                                if ($htmlValue !== '') {
+                                    $htmlValue .= ', ';
+                                }
+                                $htmlValue .= '<i>' . $gL10n->get('SYS_DELETED_ENTRY') . '</i>';
+                            }
                         }
                     } else {
                         $htmlValue = '';
@@ -438,6 +481,23 @@ class ProfileFields
                         if ($value > 0 && $format !== 'html') {
                             $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', $format);
                             $value = $arrListValues[$value];
+                        }
+                        break;
+                    case 'DROPDOWN_MULTISELECT':
+                        // the value in db is a comma separated list of positions, now search for the text
+                        if ($value !== '' && $format !== 'html') {
+                            $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', $format);
+                            $valueArray = explode(',', $value);
+                            foreach ($valueArray as &$val) {
+                                $val = trim($val);
+                                if (array_key_exists($val, $arrListValues)) {
+                                    $val = $arrListValues[$val];
+                                } else {
+                                    $val = '<i>' . $GLOBALS['gL10n']->get('SYS_DELETED_ENTRY') . '</i>';
+                                }
+                            }
+                            unset($val);
+                            $value = implode(', ', $valueArray);
                         }
                         break;
                 }
@@ -702,6 +762,19 @@ class ProfileFields
                             throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                         } elseif (!array_key_exists($fieldValue, $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list'))) {
                             throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                        }
+                    }
+                    break;
+                case 'DROPDOWN_MULTISELECT':
+                    if ($fieldValue !== '') {
+                        // split value by comma and check each value
+                        $valueArray = explode(',', $fieldValue);
+                        foreach ($valueArray as $val) {
+                            if (!$this->noValueCheck && !is_numeric($val)) {
+                                throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                            } elseif (!array_key_exists($val, $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list'))) {
+                                throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
+                            }
                         }
                     }
                     break;

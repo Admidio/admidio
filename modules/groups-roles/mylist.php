@@ -39,7 +39,7 @@ try {
     $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'int');
 
     // check if the module is enabled and disallow access if it's disabled
-    if (!$gSettingsManager->getBool('groups_roles_enable_module')
+    if (!$gSettingsManager->getBool('groups_roles_module_enabled')
         || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
         || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator())) {
         throw new Exception('SYS_MODULE_DISABLED');
@@ -225,7 +225,7 @@ try {
             };';
 
             // get available values for current field type and push to array
-            if ($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'RADIO_BUTTON') {
+            if ($field->getValue('usf_type') === 'DROPDOWN' || $field->getValue('usf_type') === 'DROPDOWN_MULTISELECT' || $field->getValue('usf_type') === 'RADIO_BUTTON') {
                 foreach ($field->getValue('usf_value_list', 'text') as $key => $value) {
                     $javascriptCode .= '
                     userFields[' . $i . ']["usf_value_list"]["' . $key . '"] = "' . $value . '";';
@@ -369,6 +369,7 @@ try {
         for (key in arrUserFields) {
             if (arrUserFields[key]["usf_name"] === columnName) {
                 if (arrUserFields[key]["usf_type"] === "DROPDOWN"
+                ||  arrUserFields[key]["usf_type"] === "DROPDOWN_MULTISELECT"
                 ||  arrUserFields[key]["usf_type"] === "RADIO_BUTTON") {
                     html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>";

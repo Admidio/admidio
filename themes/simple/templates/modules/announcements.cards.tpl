@@ -21,7 +21,18 @@
             {/if}
         </div>
         <div class="card-body">
+        {if $enableClampLines}
+            <div id="adm_announcement_description_{$announcement.uuid}" class="clamp-text" style="--admidio-clamp-text-lines: {$clampLines};">
+                {$announcement.description}
+            </div>
+            <div class="clamp-button">
+                <a id="adm_announcement_caret_description_{$announcement.uuid}" onclick="showHideMoreText($(this), ['{$l10n->get('SYS_SHOW_MORE')}', '{$l10n->get('SYS_SHOW_LESS')}']);" role="button" class="admidio-more-less-button" data-target="adm_announcement_description_{$announcement.uuid}">
+                    {$l10n->get('SYS_SHOW_MORE')}
+                </a>
+            </div>
+        {else}
             {$announcement.description}
+        {/if}
         </div>
         <div class="card-footer container">
             <div class="row">

@@ -15,6 +15,7 @@
     --admidio-header-link-color-hover: #000000;
     --admidio-menu-bg-color-hover: #3d5266;
     --admidio-menu-font-color-hover: #ffffff;
+    --admidio-clamp-text-lines: 0;
     --bs-primary: #349aaa;
     --bs-primary-rgb: 52, 154, 170;
     --bs-secondary: #263340;
@@ -83,6 +84,9 @@
     -moz-hyphens: auto;
     -ms-hyphens: auto;
     hyphens: auto;
+    word-break: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .admidio-max-content {
@@ -400,8 +404,6 @@ label {
 }
 
 .admidio-tabs {
-/*     overflow: hidden;
-    overflow-x: auto; */
     flex-wrap: nowrap;     /* never wrap */
     width: 100%;
 }
@@ -414,7 +416,6 @@ label {
     flex-direction: column; 
     justify-content: center;
     text-align: center;
-    /* min-width: 120px; */
     max-width: 250px;
 }
 
@@ -775,6 +776,7 @@ tr.admidio-event-highlight {
 }
 
 .admidio-preferences-group .list-group-item.group-heading {
+    width: 100%;
     border-bottom: none;
     border-top: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
     border-top-left-radius: var(--bs-list-group-border-radius);
@@ -820,4 +822,21 @@ ul.changelog-tableselect-list {
   width: 75%;
   padding-bottom: 0;
   padding-top: 0;
+}
+
+/***********************************/
+/* Clamp text */
+/***********************************/
+.clamp-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--admidio-clamp-text-lines);
+  line-clamp: var(--admidio-clamp-text-lines);
+  overflow: hidden;
+}
+
+.clamp-text.expanded {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
 }

@@ -32,7 +32,7 @@ try {
     $getName = admFuncVariableIsValid($_GET, 'name', 'string');
 
     // check if the module is enabled and disallow access if it's disabled
-    if (!$gSettingsManager->getBool('groups_roles_enable_module')
+    if (!$gSettingsManager->getBool('groups_roles_module_enabled')
         || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
         || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && !$gCurrentUser->isAdministrator())) {
         throw new Exception('SYS_MODULE_DISABLED');

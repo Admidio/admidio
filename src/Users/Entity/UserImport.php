@@ -253,6 +253,32 @@ class UserImport extends User
                             }
                         }
                         break;
+                    case 'DROPDOWN_MULTISELECT':
+                        // save position of combobox
+                        $arrListValues = $this->mProfileFieldsData->getProperty($columnName, 'usf_value_list', 'text');
+                        $validValue = '';
+
+                        // split the value by comma and check each value
+                        $values = explode(',', $newValue);
+                        foreach ($values as $value) {
+                            $value = trim($value);
+                            for ($position = 1; $position <= count($arrListValues); $position++) {
+                                if (StringUtils::strToLower($value) === StringUtils::strToLower(trim($arrListValues[$position]))) {
+                                    // if col_value is text than save position if text is equal to text of position
+                                    if ($validValue !== '') {
+                                        $validValue .= ',';
+                                    }
+                                    $validValue .= $position;
+                                } elseif (is_numeric($value) && !is_numeric($arrListValues[$position]) && $value > 0 && $value < 1000) {
+                                    // if col_value is numeric than save position if col_value is equal to position
+                                    if ($validValue !== '') {
+                                        $validValue .= ',';
+                                    }
+                                    $validValue .= $value;
+                                }
+                            }
+                        }
+                        break;
                     case 'EMAIL':
                         if (StringUtils::strValidCharacters($newValue, 'email')) {
                             $validValue = substr($newValue, 0, 255);

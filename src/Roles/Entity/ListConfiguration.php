@@ -192,11 +192,22 @@ class ListConfiguration extends Entity
             }
         } elseif (in_array($format, array('csv', 'xlsx', 'ods', 'pdf'), true)
             && ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN'
+                || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN_MULTISELECT'
                 || $gProfileFields->getPropertyById($usfId, 'usf_type') === 'RADIO_BUTTON')) {
             if (strlen($content) > 0) {
                 // show selected text of option field or combobox
                 $arrListValues = $gProfileFields->getPropertyById($usfId, 'usf_value_list', 'text');
-                $content = $arrListValues[$content];
+                // if the contnent is a list of values then explode it
+                if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN_MULTISELECT') {
+                    // explode the content by comma
+                    $content = explode(',', $content);
+                    $content = array_map(function ($value) use ($arrListValues) {
+                        return isset($arrListValues[$value]) ? $arrListValues[$value] : '';
+                    }, $content);
+                    $content = implode(', ', $content);
+                } else {
+                    $content = $arrListValues[$content];
+                }
             }
         } elseif (in_array($column->getValue('lsc_special_field'), array('usr_timestamp_create', 'usr_timestamp_change', 'mem_timestamp_change'))) {
             if (strlen($content) > 0) {
@@ -757,7 +768,7 @@ class ListConfiguration extends Entity
                             // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
                             $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
                             $arrCheckboxKeys = array(1, 0, 1, 0);
-                            $value = str_replace(array_map('StringUtils::strToLower', $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
+                            $value = str_replace(array_map(array(StringUtils::class, 'strToLower'), $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
                             break;
 
                         case 'DROPDOWN': // fallthrough
@@ -766,7 +777,7 @@ class ListConfiguration extends Entity
 
                             // replace all field values with their internal numbers
                             $arrListValues = $gProfileFields->getPropertyById($lscUsfId, 'usf_value_list', 'text');
-                            $value = array_search(StringUtils::strToLower($value), array_map('StringUtils::strToLower', $arrListValues), true);
+                            $value = array_search(StringUtils::strToLower($value), array_map(array(StringUtils::class, 'strToLower'), $arrListValues), true);
                             break;
 
                         case 'NUMBER': // fallthrough

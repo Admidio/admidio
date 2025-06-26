@@ -23,7 +23,7 @@ try {
     }
 
     // check if the call of the page was allowed
-    if (!$gSettingsManager->getBool('enable_pm_module') && !$gSettingsManager->getBool('enable_mail_module')) {
+    if (!$gSettingsManager->getBool('pm_module_enabled') && !($gSettingsManager->getInt('mail_module_enabled') > 0)) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
@@ -62,7 +62,7 @@ try {
     $page->setContentFullWidth();
 
     // link to write new email
-    if ($gSettingsManager->getBool('enable_mail_module')) {
+    if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
         $page->addPageFunctionsMenuItem(
             'menu_item_messages_new_email',
             $gL10n->get('SYS_WRITE_EMAIL'),
@@ -71,7 +71,7 @@ try {
         );
     }
     // link to write new PM
-    if ($gSettingsManager->getBool('enable_pm_module')) {
+    if ($gSettingsManager->getBool('pm_module_enabled')) {
         $page->addPageFunctionsMenuItem(
             'menu_item_messages_new_pm',
             $gL10n->get('SYS_WRITE_PM'),

@@ -30,9 +30,9 @@ try {
     $getLinkUuid = admFuncVariableIsValid($_GET, 'link_uuid', 'uuid');
 
     // check if the module is enabled for use
-    if ((int)$gSettingsManager->get('enable_weblinks_module') === 0) {
+    if ($gSettingsManager->getInt('weblinks_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ((int)$gSettingsManager->get('enable_weblinks_module') === 2) {
+    } elseif ($gSettingsManager->getInt('weblinks_module_enabled') === 2) {
         // available only with valid login
         require(__DIR__ . '/../../system/login_valid.php');
     }
@@ -46,11 +46,11 @@ try {
         $headline .= ' - ' . $category->getValue('cat_name');
     }
 
-        // Create Link object
-        $weblinks = new ModuleWeblinks();
-        $weblinks->setParameter('lnk_uuid', $getLinkUuid);
-        $weblinks->setParameter('cat_id', $category->getValue('cat_id'));
-        $weblinksCount = $weblinks->getDataSetCount();
+    // Create Link object
+    $weblinks = new ModuleWeblinks();
+    $weblinks->setParameter('lnk_uuid', $getLinkUuid);
+    $weblinks->setParameter('cat_id', $category->getValue('cat_id'));
+    $weblinksCount = $weblinks->getDataSetCount();
 
     // number of weblinks per page
     if ($gSettingsManager->getInt('weblinks_per_page') > 0) {
@@ -103,11 +103,43 @@ try {
 
         ChangelogService::displayHistoryButton($page, 'weblinks', 'links');
 
-        $page->addJavascript(
-            '
-        $("#cat_uuid").change(function() {
-            $("#adm_navbar_filter_form").submit();
-        });',
+        $page->addJavascript('
+            function updateFieldMoves() {
+                $(\'.card-body\').each(function() {
+                    var $rows = $(this).find(\'div[id^="lnk_"]\');
+                    $rows.each(function(index) {
+                        var $upArrow   = $(this).find(\'.admidio-field-move[data-direction="UP"]\');
+                        var $downArrow = $(this).find(\'.admidio-field-move[data-direction="DOWN"]\');
+                        
+                        if (index === 0) {
+                            $upArrow.hide();
+                        } else {
+                            $upArrow.show();
+                        }
+                        
+                        if (index === $rows.length - 1) {
+                            $downArrow.hide();
+                        } else {
+                            $downArrow.show();
+                        }
+                    });
+                });
+            }
+            $("#cat_uuid").change(function() {
+                $("#adm_navbar_filter_form").submit();
+            });
+            $(".admidio-field-move").click(function() {
+                moveTableRow(
+                    $(this),
+                    "' . ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php",
+                    "' . $gCurrentSession->getCsrfToken() . '"
+                );
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                updateFieldMoves();
+            });
+            
+            updateFieldMoves();',
             true
         );
 
@@ -158,6 +190,10 @@ try {
                 $lnkCatId = (int)$weblink->getValue('lnk_cat_id');
                 $lnkName = $weblink->getValue('lnk_name');
                 $lnkDescription = $weblink->getValue('lnk_description');
+                // count the number of links in this category
+                $lnkCatCount = count(array_filter($weblinksDataSet['recordset'], function($record) use ($lnkCatId) {
+                    return (int)$record['lnk_cat_id'] === $lnkCatId;
+                }));
 
                 if ($lnkCatId !== $previousCatId) {
                     $i = 0;
@@ -181,11 +217,26 @@ try {
                 if ($weblink->isEditable()) {
                     $page->addHtml('
                     <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_new.php', array('link_uuid' => $lnkUuid)) . '">
-                        <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>
-                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($weblink->getValue('lnk_name', 'database'))) . '"
-                        data-href="callUrlHideElement(\'lnk_' . $lnkUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 'delete', 'link_uuid' => $lnkUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>');
+                        <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>'
+                    );
+                    // show up arrow
+                    $page->addHtml('
+                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
+                            data-direction="UP" data-target="lnk_' . $lnkUuid . '">
+                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_UP', array('SYS_WEBLINK')) . '"></i></a>'
+                    );
+                    // show down arrow
+                    $page->addHtml('
+                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="' . $lnkUuid . '"
+                            data-direction="DOWN" data-target="lnk_' . $lnkUuid . '">
+                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MOVE_DOWN', array('SYS_WEBLINK')) . '"></i></a>'
+                    );
+                    $page->addHtml('
+                        <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                            data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($weblink->getValue('lnk_name', 'database'))) . '"
+                            data-href="callUrlHideElement(\'lnk_' . $lnkUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 'delete', 'link_uuid' => $lnkUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                            <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>'
+                    );
                 }
 
                 // get available description
