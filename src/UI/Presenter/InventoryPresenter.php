@@ -455,99 +455,90 @@ class InventoryPresenter extends PagePresenter
                 // add the checkbox for selecting items and action buttons
                 $this->addJavascript('
                     $(document).ready(function() {
-                        // base URLs
-                        var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
-                        var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg")) . '";
+						var $table = $("#adm_inventory_table");
+						
+						$table.one("init.dt", function() {
+							var tableApi = $table.DataTable();
 
-                        // cache jQuery objects
-                        var $table          = $("#adm_inventory_table");
-                        var tableApi        = new $.fn.dataTable.Api($table);
-                        var $editButton    = $("#edit-selected").css("display","block");
-                        var $deleteButon    = $("#delete-selected").css("display","block");
-                        var $headChk        = $table.find("thead input[type=checkbox]");
-                        var $rowChks        = function(){ return $table.find("tbody input[type=checkbox]"); };
-                        var $actions        = $("#adm_inventory_table_select_actions");
+							// base URLs
+							var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
+							var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg")) . '";
 
-                        // master list of selected IDs
-                        var selectedIds = [];
+							// cache jQuery objects
+							var $editButton    = $("#edit-selected").css("display","block");
+							var $deleteButon    = $("#delete-selected").css("display","block");
+							var $headChk        = $table.find("thead input[type=checkbox]");
+							var $rowChks        = function(){ return $table.find("tbody input[type=checkbox]"); };
+							var $actions        = $("#adm_inventory_table_select_actions");
 
-                        function anySelected() {
-                            return selectedIds.length > 0;
-                        }
+                            // master list of selected IDs
+                            var selectedIds = [];
 
-                        function refreshActions() {
-                            $editButton.prop("disabled", !anySelected());
-                            $deleteButon.prop("disabled", !anySelected());
-                        }
-
-                        function updateHeaderState() {
-                            var total   = $rowChks().length;
-                            var checked = $rowChks().filter(":checked").length;
-                            if (checked === 0) {
-                                $headChk.prop({ checked: false, indeterminate: false });
-                            }
-                            else if (checked === total) {
-                                $headChk.prop({ checked: true,  indeterminate: false });
-                            }
-                            else {
-                                $headChk.prop({ checked: false, indeterminate: true });
-                            }
-                        }
-
-                        // header-checkbox → select/unselect *all* rows across all pages
-                        $headChk.on("change", function(){
-                            var checkAll = this.checked;
-                            selectedIds = [];
-
-                            if (checkAll) {
-                                // grab every row (even on other pages)
-                                tableApi.rows().every(function(){
-                                    selectedIds.push(this.node().id.replace(/^adm_inventory_item_/, ""));
-                                });
+                            function anySelected() {
+                                return selectedIds.length > 0;
                             }
 
-                            // toggel checked state of all row checkboxes
-                            $rowChks().prop("checked", checkAll);
-
-                            updateHeaderState();
-                            refreshActions();
-                        });
-
-                        // individual row-checkbox → toggle just that ID
-                        $table.on("change", "tbody input[type=checkbox]", function(){
-                            var id  = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
-                            var idx = selectedIds.indexOf(id);
-                            if (this.checked && idx === -1) {
-                                selectedIds.push(id);
-                            }
-                            else if (!this.checked && idx !== -1) {
-                                selectedIds.splice(idx,1);
+                            function refreshActions() {
+                                $editButton.prop("disabled", !anySelected());
+                                $deleteButon.prop("disabled", !anySelected());
                             }
 
-                            updateHeaderState();
-                            refreshActions();
-                        });
+                            function updateHeaderState() {
+                                var total   = $rowChks().length;
+                                var checked = $rowChks().filter(":checked").length;
+                                if (checked === 0) {
+                                    $headChk.prop({ checked: false, indeterminate: false });
+                                }
+                                else if (checked === total) {
+                                    $headChk.prop({ checked: true,  indeterminate: false });
+                                }
+                                else {
+                                    $headChk.prop({ checked: false, indeterminate: true });
+                                }
+                            }
 
-                        // on each draw (paging/filter/sort): re-check boxes from list
-                        tableApi.on("draw", function(){
-                            $rowChks().each(function(){
-                                var id = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
-                                $(this).prop("checked", selectedIds.indexOf(id) !== -1);
+                            // header-checkbox → select/unselect *all* rows
+                            $headChk.on("change", function(){
+                                var checkAll = this.checked;
+                                selectedIds = [];
+
+                                if (checkAll) {
+                                    // grab every row (even on other pages)
+                                    tableApi.rows().every(function(){
+                                        if ($(this.node()).is(":visible")){
+                                            selectedIds.push(this.node().id.replace(/^adm_inventory_item_/, ""));
+                                        }
+                                    });
+                                }
+
+                                // toggel checked state of all row checkboxes
+                                $rowChks().prop("checked", checkAll);
+
+                                updateHeaderState();
+                                refreshActions();
                             });
-                            updateHeaderState();
-                            refreshActions();
-                        });
 
-                        // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
-                        $actions
-                            .off("click", "#delete-selected")
-                            .on("click", "#delete-selected", function(){
+                            // individual row-checkbox → toggle just that ID
+                            $table.on("change", "tbody input[type=checkbox]", function(){
+                                var id  = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
+                                var idx = selectedIds.indexOf(id);
+                                if (this.checked && idx === -1) {
+                                    selectedIds.push(id);
+                                }
+                                else if (!this.checked && idx !== -1) {
+                                    selectedIds.splice(idx,1);
+                                }
+
+                                updateHeaderState();
+                                refreshActions();
+                            });
+
+                            // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
+                            $actions.off("click", "#delete-selected").on("click", "#delete-selected", function(){
                                 // build uuids[] querystring
-                                var qs = selectedIds
-                                    .map(function(id){
+                                var qs = selectedIds.map(function(id){
                                     return "item_uuids[]=" + encodeURIComponent(id);
-                                    })
-                                    .join("&");
+                                }).join("&");
 
                                 // full URL to your explain_msg endpoint
                                 var popupUrl = explainDeleteUrlBase + "&" + qs;
@@ -557,21 +548,28 @@ class InventoryPresenter extends PagePresenter
                                     href: "javascript:void(0);",
                                     class: "admidio-icon-link openPopup",
                                     "data-href": popupUrl
-                                })
-                                .appendTo("body")
+                                }).appendTo("body")
                                 .click()    // trigger the built-in openPopup handler
                                 .remove();
+                                
+                                // when the popup closes, unselect all items
+                                $(document).one("hidden.bs.modal", function() {
+                                    selectedIds = [];
+                                    $headChk.prop({ checked: false, indeterminate: false });
+                                    $rowChks().prop("checked", false);
+                                    
+                                    // initialize button states
+                                    updateHeaderState();
+                                    refreshActions();
+                                });
                             });
+                            
                             // bulk-edit button → fire Admidio’s openPopup against item_edit URL
-                        $actions
-                            .off("click", "#edit-selected")
-                            .on("click", "#edit-selected", function(){
+                            $actions.off("click", "#edit-selected").on("click", "#edit-selected", function(){
                                 // build uuids[] querystring
-                                var qs = selectedIds
-                                    .map(function(id){
-                                        return "item_uuids[]=" + encodeURIComponent(id);
-                                    })
-                                    .join("&");
+                                var qs = selectedIds.map(function(id){
+                                    return "item_uuids[]=" + encodeURIComponent(id);
+                                }).join("&");
 
                                 // full URL to the edit endpoint
                                 var editUrl = editUrlBase + "&" + qs;
@@ -580,8 +578,9 @@ class InventoryPresenter extends PagePresenter
                                 window.location.href = editUrl;
                             });
 
-                        // initialize button states
-                        refreshActions();
+                            // initialize button states
+                            refreshActions();
+                        });
                     });'
                     , true
                 );
@@ -630,6 +629,12 @@ class InventoryPresenter extends PagePresenter
         return false;
     }
 
+    /**
+     * Check if the current user is the keeper of an item.
+     * This method checks if the current user is listed as a keeper in the inventory item data.
+     *
+     * @return bool Returns true if the current user is a keeper, false otherwise.
+     */
     private function isCurrentUserKeeper(): bool
     {
         global $gCurrentUser, $gDb;

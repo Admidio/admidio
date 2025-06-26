@@ -52,6 +52,12 @@ try {
     $getFormer = admFuncVariableIsValid($_GET, 'item_former', 'bool', array('defaultValue' => false));
     $getRedirectToImport = admFuncVariableIsValid($_GET, 'redirect_to_import', 'bool', array('defaultValue' => false));
     $getItemUUIDs = admFuncVariableIsValid($_GET, 'item_uuids', 'array', array('defaultValue' => array()));
+    if (empty($getItemUUIDs)) {
+        $getItemUUIDs = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
+        $getItemUUIDs = array_map(function($uuid) {
+            return preg_replace('/adm_inventory_item_/', '', $uuid);
+        }, $getItemUUIDs);
+    }
     $getLended = admFuncVariableIsValid($_GET, 'item_lended', 'bool', array('defaultValue' => false));
 
     // check if module is active
@@ -240,9 +246,9 @@ try {
 
         case 'item_delete_explain_msg':
             if (count($getItemUUIDs) > 0) {
-                $undoFormerOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuids' => $getItemUUIDs)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
-                $formerOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former', 'item_uuids' => $getItemUUIDs)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
-                $deleteOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_uuids' => $getItemUUIDs)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+                $undoFormerOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+                $formerOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_make_former')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+                $deleteOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 $headerMsg = $gL10n->get('SYS_NOTE');
             }
             else {

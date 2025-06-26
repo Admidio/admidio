@@ -111,13 +111,13 @@ final class UpdateStepsCode
                     AND cat_type = \'ROL\'
                     WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\') ';
             $pdoStatement = self::$db->queryPrepared($sql, array($row['org_id'], $gL10n->get('SYS_ADMINISTRATOR')));
-            if (($row = $pdoStatement->fetch()) !== false) {
+            if (($row2 = $pdoStatement->fetch()) !== false) {
                 // set edit role rights to inventory categories for role administrator
                 $category = new Category(self::$db);
                 $category->readDataByColumns(array('cat_org_id' => (int)$row['org_id'], 'cat_type' => 'IVT'));
 
                 $rightCategoryView = new RolesRights(self::$db, 'category_edit', $category->getValue('cat_id'));
-                $rightCategoryView->saveRoles(array($row['rol_id']));
+                $rightCategoryView->saveRoles(array($row2['rol_id']));
             }
         }
     }
