@@ -412,7 +412,7 @@ class ChangelogService {
             'usf_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
             'usf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
             'ufo_value' =>                 'SYS_VALUE',
-            'ufo_usf_id' =>                array('name' => 'SYS_PROFILE_FIELD', 'type' => 'PROFILE_FIELD'),
+            'ufo_usf_id' =>                'SYS_PROFILE_FIELD',
             'ufo_sequence' =>              'SYS_ORDER',
             'ufo_obsolete' =>             array('name' => 'SYS_DELETED', 'type' => 'BOOL'),
 

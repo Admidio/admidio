@@ -31,7 +31,7 @@ try {
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit', 'save', 'delete', 'delete_option_entry', 'sequence')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit', 'save', 'delete', 'check_option_entry_status', 'delete_option_entry', 'sequence')));
     $getProfileFieldUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getOptionID = admFuncVariableIsValid($_GET, 'option_id', 'int', array('defaultValue' => 0));
 
@@ -80,7 +80,7 @@ try {
             echo json_encode(array('status' => 'success'));
             break;
 
-        case 'delete_option_entry':
+        case 'check_option_entry_status':
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
@@ -95,10 +95,27 @@ try {
                     // if the option is used in a profile field, then it cannot be deleted
                     $status = 'used';
                 } else {
-                    // delete the option entry
-                    $option->deleteOption($getOptionID);
-                    $status = 'deleted';
+                    // option entry can be deleted
+                    $status = 'unused';
                 }
+            }
+            echo json_encode(array('status' => $status));
+            break;
+
+        case 'delete_option_entry':
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $status = 'error';
+            // check if the option entry has any dependencies in the database
+            if ($getOptionID > 0) {
+                $profileFields = new ProfileField($gDb);
+                $profileFields->readDataByUuid($getProfileFieldUUID);
+
+                $option = new SelectOptions($gDb, $profileFields->getValue('usf_id'));
+                // delete the option entry
+                $option->deleteOption($getOptionID);
+                $status = 'success';
             }
             echo json_encode(array('status' => $status));
             break;

@@ -62,7 +62,7 @@
                                 <a id="{$data.id}_option_{$option.id}_restore" class="admidio-icon-link" href="javascript:void(0);" onclick="restoreEntry('{$data.id}', '{$option.id}');" {if !$option.obsolete} style="display: none;"{/if}>
                                     <i class="bi bi-arrow-counterclockwise text-success" data-bs-toggle="tooltip" title="{$translationStrings.restore}"></i>
                                 </a>
-                                <a id="{$data.id}_option_{$option.id}_delete" class="admidio-icon-link" href="javascript:void(0);" onclick="deleteEntry('{$data.id}', '{$option.id}', '{$urlAdmidio}/modules/profile-fields.php?mode=delete_option_entry&uuid={$fieldUUID}&option_id={$option.id}', '{$csrfToken}');"{if $option.obsolete} style="display: none;"{/if}>
+                                <a id="{$data.id}_option_{$option.id}_delete" class="admidio-icon-link" href="javascript:void(0);" onclick="deleteEntry('{$data.id}', '{$option.id}', '{$urlAdmidio}/modules/{$data.filename}.php?mode=check_option_entry_status&uuid={$fieldUUID}&option_id={$option.id}', '{$urlAdmidio}/modules/{$data.filename}.php?mode=delete_option_entry&uuid={$fieldUUID}&option_id={$option.id}', '{$l10n->get('SYS_DELETE_ENTRY', array('ENTRY_VAL'))}', '{$csrfToken}');" {if $option.obsolete} style="display: none;"{/if}>
                                     <i class="bi bi-trash-fill text-danger" data-bs-toggle="tooltip" title="{$translationStrings.delete}"></i>
                                 </a>
                             </td>
@@ -72,7 +72,7 @@
                 <tfoot>
                     <tr id="table_row_button">
                         <td colspan="4">
-                            <a class="icon-text-link" href="javascript:void(0);" onclick="javascript:addOptionRow('{$data.id}', '{$urlAdmidio}/modules/profile-fields.php?mode=delete_option_entry&uuid={$fieldUUID}&option_id={$option.id}', '{$csrfToken}', {$translationStrings|json_encode|escape:'htmlall':'UTF-8'});">
+                            <a class="icon-text-link" href="javascript:void(0);" onclick="javascript:addOptionRow('{$data.id}', '{$urlAdmidio}/modules/{$data.filename}.php?mode=check_option_entry_status&uuid={$fieldUUID}&option_id=', '{$urlAdmidio}/modules/{$data.filename}.php?mode=delete_option_entry&uuid={$fieldUUID}&option_id=', '{$csrfToken}', {$translationStrings|json_encode|escape:'htmlall':'UTF-8'});">
                                 <i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_ENTRY')}
                             </a>
                         </td>
