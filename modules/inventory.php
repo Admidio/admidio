@@ -39,7 +39,7 @@ try {
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'delete_option_entry', 'sequence', 'item_edit','item_edit_lend', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit','item_edit_lend', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_make_former', 'item_undo_former', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getOptionID = admFuncVariableIsValid($_GET, 'option_id', 'int', array('defaultValue' => 0));
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
@@ -122,7 +122,7 @@ try {
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEMFIELD_DELETED')));
             break;
 
-        case 'delete_option_entry':
+        case 'check_option_entry_status':
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
@@ -136,13 +136,30 @@ try {
                     // if the option is used in a profile field, then it cannot be deleted
                     $status = 'used';
                 } else {
-                    // delete the option entry
-                    $option->deleteOption($getOptionID);
-                    $status = 'deleted';
+                    // option entry can be deleted
+                    $status = 'unused';
                 }
             }
             echo json_encode(array('status' => $status));
             break;
+
+        case 'delete_option_entry':
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $status = 'error';
+            // check if the option entry has any dependencies in the database
+            if ($getOptionID > 0) {
+                $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
+
+                $option = new SelectOptions($gDb, $itemFieldsModule->getFieldID());
+                // delete the option entry
+                $option->deleteOption($getOptionID);
+                $status = 'success';
+            }
+            echo json_encode(array('status' => $status));
+            break;
+
         case 'sequence':
             // Update menu entry sequence
             $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
