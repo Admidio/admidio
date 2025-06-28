@@ -213,6 +213,7 @@
   <string name="SYS_ADD_ATTACHMENT">Attach attachment</string>
   <string name="SYS_ADD_COLUMN">Add column</string>
   <string name="SYS_ADD_COLUMNS_DESC">Assign any number of columns corresponding to profile fields in the table below. In addition, you can specify the default sorting and add conditions under which the respective members are to be filtered.</string>
+  <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Add event to calendar</string>
   <string name="SYS_ADD_ORGANIZATION">Add organization</string>
   <string name="SYS_ADD_RECIPIENTS">Add recipient</string>
@@ -628,6 +629,7 @@
   <string name="SYS_END" description="End of a date">End</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Would you like to end membership of user #VAR1# in #VAR2#?</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">The membership of user #VAR1_BOLD# at #VAR2_BOLD# was finished successfully!</string>
+  <string name="SYS_ENTRY">Entry</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is stored as default configuration for the module #VAR1# in this organization and cannot be deleted. Set another configuration to the default configuration in the module settings and try to delete this configuration afterwards.</string>
@@ -1114,6 +1116,7 @@
   <string name="SYS_PROFILE">Profile</string>
   <string name="SYS_PROFILE_DATA">Profile data</string>
   <string name="SYS_PROFILE_FIELD">Profile field</string>
+  <string name="SYS_PROFILE_FIELD_SELECT_OPTIONS">Profile field select options</string>
   <string name="SYS_PROFILE_FROM">Profile of #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profile information</string>
   <string name="SYS_PROFILE_PHOTO">Profile photo</string>
@@ -1170,6 +1173,7 @@
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>
+  <string name="SYS_RESTORE_ENTRY">Restore entry</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organize and assign registrations</string>
@@ -1323,6 +1327,8 @@
   <string name="SYS_SHOW_MAP">Show map</string>
   <string name="SYS_SHOW_MEMBER_LIST">Show member list</string>
   <string name="SYS_SHOW_MORE">Show more</string>
+  <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Display obsolete selection options</string>
+  <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">This setting allows you to specify whether obsolete selection options should be displayed in the profile field configuration. If this setting is set, obsolete select options can be restored.\nThis option is available only for profile fields of the drop-down list and option field types. (Default: yes)</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT">Display organisation selection</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">In case of several organizations stored in the database, the log-in screen is able to display a selection box with all available organizations. The user is then able at log in to select another organization (other than defined in the config.php). However, the user must be a registered member of the selected organization.</string>
   <string name="SYS_SHOW_PARTICIPANTS">Show participants</string>
@@ -1425,7 +1431,6 @@
   <string name="SYS_SSO_CLIENT_SECRET_RECREATE">Recreate</string>
   <string name="SYS_SSO_REDIRECT_URI">Redirect URI</string>
   <string name="SYS_SSO_REDIRECT_URI_DESC">The redirect URI, where the browser is redirected after successful login.</string>
-
   <string name="SYS_SSO_EDIT_SAML_CLIENT">Edit SAML Client (Service Provider)</string>
   <string name="SYS_SSO_EDIT_OIDC_CLIENT">Edit OIDC Client (Service Provider)</string>
   <string name="SYS_SSO_ADD_SAML_CLIENT">Add SAML Client (Service Provider)</string>
@@ -1494,7 +1499,6 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are logged in successful, but the user account does not have access permissions to the Service Provider (#VAR1#). Please either try logging in with a different account below, or return to the Service Provider.</string>
   <string name="SYS_SSO_LOGIN_RETURN">Return to #VAR1_BOLD# without logging in</string>
   <string name="SYS_LOGIN_TO">Sign in to #VAR1_BOLD#</string>
-
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">The unique identifier for OIDC of this Admidio instance. Typically this is the base URL of your Admidio installation. The client needs to be set up with the exact same entity ID, otherwise login will not work.</string>
   <string name="SYS_SSO_OIDC_STATIC_SETTINGS">IdP metadata for client setup</string>
@@ -1505,7 +1509,6 @@
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpoint</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Logout Endpoint</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
-
   <string name="SYS_SSO_NAME_PROPERTIES">Client (Service Provider) name and properties</string>
   <string name="SYS_SSO_USERDATA_ACCESS">User data and access permissions</string>
   <string name="SYS_SSO_USERID_FIELD">User ID field</string>
@@ -1627,7 +1630,7 @@
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
   <string name="SYS_VALUE">Value</string>
   <string name="SYS_VALUE_LIST">Value list</string>
-  <string name="SYS_VALUE_LIST_DESC">In this field, you can enter the entries for the drop-down list box or the option field. For each line, an entry of the drop-down list field or the option field can be entered here.\nThe profile is not stored as text later, but the selected position from the list. If you change the text in a line, all users already assigned will immediately see the new text in their profile. However, if you move an entry into another line, users may see a different entry.\nAn value of an option field can be displayed as icon instead of a text. The icon must be of the web font \"Bootstrap Icons\". Go to #VAR1#https://icons.getbootstrap.com#VAR2# and select an icon from the collection. A tooltip for the icon (e.g. gender-female|This is a female icon) can optionally be set via a vertical divider.</string>
+  <string name="SYS_VALUE_LIST_DESC">In this table, you can enter the entries for the drop-down list box or the option field. For each line, an entry of the drop-down list field or the option field can be entered here.\nThe profile is not stored as text later, but the selected position from the list. If you change the text in a line, all users already assigned will immediately see the new text in their profile.\nAn value of an option field can be displayed as icon instead of a text. The icon must be of the web font \"Bootstrap Icons\". Go to #VAR1#https://icons.getbootstrap.com#VAR2# and select an icon from the collection. A tooltip for the icon (e.g. gender-female|This is a female icon) can optionally be set via a vertical divider.</string>
   <string name="SYS_VARIOUS_ROLES">Various roles</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
   <string name="SYS_VENUE">Venue</string>

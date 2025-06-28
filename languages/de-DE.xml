@@ -213,6 +213,7 @@
   <string name="SYS_ADD_ATTACHMENT">Anhang hinzufügen</string>
   <string name="SYS_ADD_COLUMN">Spalte hinzufügen</string>
   <string name="SYS_ADD_COLUMNS_DESC">Ordnen Sie in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich können Sie die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
+  <string name="SYS_ADD_ENTRY">Eintrag hinzufügen</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Veranstaltung in den Kalender übernehmen</string>
   <string name="SYS_ADD_ORGANIZATION">Organisation hinzufügen</string>
   <string name="SYS_ADD_RECIPIENTS">Empfänger:innen hinzufügen</string>
@@ -630,6 +631,7 @@
   <string name="SYS_END" description="End of a date">Ende</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Wollen Sie die Mitgliedschaft von #VAR1# bei #VAR2# beenden?</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">Die Mitgliedschaft von #VAR1_BOLD# bei #VAR2_BOLD# wurde erfolgreich beendet! </string>
+  <string name="SYS_ENTRY">Eintrag</string>
   <string name="SYS_ERROR">Fehler</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Die Liste #VAR1_BOLD# ist als Standardkonfiguration für das Modul #VAR1# in dieser Organisation hinterlegt und kann nicht gelöscht werden. Wählen Sie in den Moduleinstellungen eine andere Konfiguration zur Standardkonfiguration und versuchen Sie danach diese Konfiguration zu löschen.</string>
@@ -1114,6 +1116,7 @@
   <string name="SYS_PROFILE">Profil</string>
   <string name="SYS_PROFILE_DATA">Profildaten</string>
   <string name="SYS_PROFILE_FIELD">Profilfeld</string>
+  <string name="SYS_PROFILE_FIELD_SELECT_OPTIONS">Profilfeld Auswahloptionen</string>
   <string name="SYS_PROFILE_FROM">Profil von #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformationen</string>
   <string name="SYS_PROFILE_PHOTO">Profilfoto</string>
@@ -1168,6 +1171,7 @@
   <string name="SYS_REQUIRED_INPUT">Erforderliche Eingabe</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Sie sind bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Das Bild konnte nicht verarbeitet werden, weil die Auflösung größer als #VAR1# Megapixel ist.</string>
+  <string name="SYS_RESTORE_ENTRY">Eintrag wiederherstellen</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen und alle Mitgliederprofile einsehen</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Ankündigungen verwalten</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Registrierungen verwalten und zuordnen</string>
@@ -1320,6 +1324,8 @@
   <string name="SYS_SHOW_MAP">Auf Karte zeigen</string>
   <string name="SYS_SHOW_MEMBER_LIST">Mitgliederliste anzeigen</string>
   <string name="SYS_SHOW_MORE">Mehr anzeigen</string>
+  <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Alte Auswahloptionen anzeigen</string>
+  <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">Mit dieser Einstellung kann festgelegt werden, ob alte Auswahloptionen in der Profilfeld-Konfiguration angezeigt werden sollen. Wenn die Einstellung aktiviert ist, können alte Auswahloptionen wiederhergestellt werden.\nDiese Option ist nur für Profilfelder der Typen Drop-Down-Listenfeld und Optionsfeld verfügbar. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT">Organisationsauswahl anzeigen</string>
   <string name="SYS_SHOW_ORGANIZATION_SELECT_DESC">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Die Benutzerin oder der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss die Benutzerin oder der Benutzer auch an der dieser Organisation registriert sein.</string>
   <string name="SYS_SHOW_PARTICIPANTS">Teilnehmende anzeigen</string>
@@ -1422,7 +1428,6 @@
   <string name="SYS_SSO_CLIENT_SECRET_RECREATE">Neu erstellen</string>
   <string name="SYS_SSO_REDIRECT_URI">URI umleiten</string>
   <string name="SYS_SSO_REDIRECT_URI_DESC">Der Redirect-URI, an den der Browser nach erfolgreicher Anmeldung weitergeleitet wird.</string>
-
   <string name="SYS_SSO_EDIT_SAML_CLIENT">SAML Client (Service Provider) bearbeiten</string>
   <string name="SYS_SSO_EDIT_OIDC_CLIENT">OIDC Client (Service Provider) bearbeiten</string>
   <string name="SYS_SSO_ADD_SAML_CLIENT">SAML Client (Service Provider) anlegen</string>
@@ -1491,7 +1496,6 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Sie sind erfolgreich eingeloggt, aber das Benutzerkonto hat keine Zugriffsrechte auf den Service Provider (#VAR1#). Bitte versuchen Sie entweder, sich mit einem anderen Konto anzumelden, oder kehren Sie zum Service Provider zurück.</string>
   <string name="SYS_SSO_LOGIN_RETURN">Zurück zu #VAR1_BOLD# ohne sich anzumelden</string>
   <string name="SYS_LOGIN_TO">Anmelden bei #VAR1_BOLD#</string>
-
   <string name="SYS_SSO_OIDC_ISSUER_URL">Aussteller</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Der eindeutige Bezeichner für OIDC dieser Admidio-Instanz. Normalerweise ist dies die Basis-URL Ihrer Admidio-Installation. Der Client muss mit genau der gleichen Entity-ID eingerichtet werden, sonst funktioniert die Anmeldung nicht.</string>
   <string name="SYS_SSO_OIDC_STATIC_SETTINGS">IdP-Metadaten für die Client-Einrichtung</string>
@@ -1502,7 +1506,6 @@
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpunkt</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Abmelde-Endpunkt</string>
   <string name="SYS_SSO_INVALID_CLIENT">Ungültiger Client</string>
-
   <string name="SYS_SSO_NAME_PROPERTIES">Name und Eigenschaften des Clients (Dienstanbieters)</string>
   <string name="SYS_SSO_USERDATA_ACCESS">Benutzerdaten und Zugangsberechtigungen</string>
   <string name="SYS_SSO_USERID_FIELD">Benutzer-ID-Feld</string>
@@ -1624,7 +1627,7 @@
   <string name="SYS_VALID_TO" description="Date valid to">Gültig bis</string>
   <string name="SYS_VALUE">Wert</string>
   <string name="SYS_VALUE_LIST">Werteliste</string>
-  <string name="SYS_VALUE_LIST_DESC">In diesem Feld können Sie die Einträge für das Drop-Down-Listenfeld oder das Optionsfeld eingeben. Für jede Zeile kann hier ein Eintrag des Drop-Down-Listenfeldes oder des Optionsfeldes eingetragen werden.\nDas Profil wird später nicht als Text gespeichert, sondern die ausgewählte Position aus der Liste. Wenn Sie den Text in einer Zeile ändern, sehen alle bereits zugeordneten Benutzer:innen den neuen Text sofort in ihrem Profil. Wenn Sie jedoch einen Eintrag in eine andere Zeile verschieben, sehen die Benutzer:innen möglicherweise einen anderen Eintrag.\nEin Wert eines Optionsfeldes kann als Symbol anstelle eines Textes angezeigt werden. Das Symbol muss in der Web-Schriftart „Bootstrap Icons“ dargestellt werden. Gehen Sie zu #VAR1#https://icons.getbootstrap.com#VAR2# und wählen Sie ein Icon aus der Sammlung. Ein Tooltip für das Icon (z.B. gender-female|Dies ist ein weibliches Icon) kann optional über eine vertikale Trennlinie gesetzt werden.</string>
+  <string name="SYS_VALUE_LIST_DESC">In dieser Tabelle können Sie die Einträge für das Drop-Down-Listenfeld oder das Optionsfeld eingeben. Für jede Zeile kann hier ein Eintrag des Drop-Down-Listenfeldes oder des Optionsfeldes eingetragen werden.\nDas Profil wird später nicht als Text gespeichert, sondern die ausgewählte Position aus der Liste. Wenn Sie den Text in einer Zeile ändern, sehen alle bereits zugeordneten Benutzer:innen den neuen Text sofort in ihrem Profil.\nEin Wert eines Optionsfeldes kann als Symbol anstelle eines Textes angezeigt werden. Das Symbol muss in der Web-Schriftart „Bootstrap Icons“ dargestellt werden. Gehen Sie zu #VAR1#https://icons.getbootstrap.com#VAR2# und wählen Sie ein Icon aus der Sammlung. Ein Tooltip für das Icon (z.B. gender-female|Dies ist ein weibliches Icon) kann optional über eine vertikale Trennlinie gesetzt werden.</string>
   <string name="SYS_VARIOUS_ROLES">Verschiedene Rollen</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
   <string name="SYS_VENUE">Veranstaltungsort</string>
