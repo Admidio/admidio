@@ -304,8 +304,12 @@ try {
 
     while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
+        if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+            $columnNumberJson = 3;
+        } else {
+            $columnNumberJson = 2;
+        }
         $ColumnNumberSql = 8;
-        $columnNumberJson = 2;
 
         $contactsOfThisOrganization = (bool)$row['member_this_orga'];
         $formerContactsOfThisOrganization = (bool)$row['former_member_this_orga'];
@@ -327,7 +331,11 @@ try {
         }
 
         // Create row and add first column
-        $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => $rowNumber);
+        if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+            $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => '<input type="checkbox"/>', '1' => $rowNumber);
+        } else {
+            $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => $rowNumber);
+        }
 
         // Add icon for member or no member of the organization
         if ($contactsOfThisOrganization) {
@@ -347,8 +355,13 @@ try {
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ANY_ORGANIZATION');
         }
 
-        $columnValues['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
-        <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
+        if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+            $columnValues['2'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
+            <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
+        } else {
+            $columnValues['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
+            <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
+        }
 
         // add all columns of the list configuration to the json array
         // start columnNumber with 4 because the first 2 columns are not of the list configuration

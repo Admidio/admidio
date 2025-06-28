@@ -503,6 +503,7 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
   <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
+  <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
   <string name="SYS_DELETED">Deleted</string>
@@ -571,6 +572,7 @@
   <string name="SYS_EDIT_ROLE">Edit role</string>
   <string name="SYS_EDIT_ROOMS">Edit rooms</string>
   <string name="SYS_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
+  <string name="SYS_EDIT_SELECTION">Edit selection</string>
   <string name="SYS_EDIT_TOPIC">Edit topic</string>
   <string name="SYS_EDIT_TOPICS">Edit topics</string>
   <string name="SYS_EDIT_USER">Edit user</string>
@@ -705,6 +707,7 @@
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
+  <string name="SYS_FORMER_SELECTION">Make selection former</string>
   <string name="SYS_FORMER_CONTACTS">Former contacts</string>
   <string name="SYS_FORMER_MEMBER">Former member</string>
   <string name="SYS_FORMER_MEMBER_OF_ROLE_GROUP">Former member of role/group #VAR1#</string>
@@ -852,6 +855,7 @@
   <string name="SYS_MAINTAIN_CATEGORIES_DESC">Here you can create and edit categories.</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">You can define relationship types (parent - child). For each defined relationship, the type (asymmetric, symmetric or unidirectional) is defined and the profile editing rights are defined within the relationship.</string>
   <string name="SYS_MAKE_FORMER">You can make this contact to a former contact. This does not delete the data, but only terminates all role memberships. This has the advantage that you can always see later which data and roles you had assigned to this contact.</string>
+  <string name="SYS_MAKE_FORMER_SELECTION">You can make the selected contacts to former contacts. This does not delete the data, but only terminates all role memberships. This has the advantage that you can always see later which data and roles you had assigned to these contacts.</string>
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">New profile fields and their properties can be defined as well as changes to existing profile fields. The fields can be assigned to categories and provided with rights, which roles can see or edit which profile fields.</string>
@@ -1156,6 +1160,8 @@
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_CONTACT">Remove contact</string>
   <string name="SYS_REMOVE_CONTACT_DESC">By choosing #VAR1_BOLD#, all data of this contact will be deleted and could not be viewed or restored anymore.</string>
+  <string name="SYS_REMOVE_CONTACT_SELECTION">Remove contact selection</string>
+  <string name="SYS_REMOVE_CONTACT_SELECTION_DESC">By choosing #VAR1_BOLD#, all selected contacts will be deleted and could not be viewed or restored anymore.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
@@ -1255,6 +1261,7 @@
   <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY">Security</string>
   <string name="SYS_SECURITY_ERROR">Security error</string>
+  <string name="SYS_SELECT_ALL">Select all</string>
   <string name="SYS_SELECT_CONFIGURATION">Select configuration</string>
   <string name="SYS_SELECT_FILES">Select files</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
