@@ -10,7 +10,7 @@
         </tr>
     </thead>
     {foreach $list as $categoryNode}
-        <tbody>
+        <tbody class="admidio-sortable">
             {foreach $categoryNode as $category}
                 <tr id="adm_category_{$category.uuid}">
                     <td style="word-break: break-word;"><a href="{$category.urlEdit}">{$category.name}</a></td>
