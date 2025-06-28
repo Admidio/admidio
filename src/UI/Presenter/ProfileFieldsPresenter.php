@@ -270,35 +270,6 @@ class ProfileFieldsPresenter extends PagePresenter
         $this->setHeadline($gL10n->get('ORG_PROFILE_FIELDS'));
 
         $this->addJavascript('
-            function updateFieldMoves() {
-                $(\'tbody.admidio-sortable\').each(function() {
-                    var $rows = $(this).find(\'tr[id^=adm_profile_field]\').has(\'.admidio-field-move\').filter(function() {
-                        return $(this).css("display") !== "none";
-                    });
-                    $rows.each(function(index) {
-                        var $upArrow   = $(this).find(\'.admidio-field-move[data-direction="UP"]\');
-                        var $downArrow = $(this).find(\'.admidio-field-move[data-direction="DOWN"]\');
-                        var $arrowMove = $(this).find(".handle");
-
-                        if (index === 0) {
-                            $upArrow.css(\'visibility\', \'hidden\');
-                        } else {
-                            $upArrow.css(\'visibility\', \'visible\');
-                        }
-
-                        if (index === $rows.length - 1) {
-                            $downArrow.css(\'visibility\', \'hidden\');
-                        } else {
-                            $downArrow.css(\'visibility\', \'visible\');
-                        }
-                        if (index === 0 && index === $rows.length - 1) {
-                            $arrowMove.css(\'visibility\', \'hidden\');
-                        } else {
-                            $arrowMove.css(\'visibility\', \'visible\');
-                        }
-                    });
-                });
-            }
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this));
             });
@@ -311,7 +282,7 @@ class ProfileFieldsPresenter extends PagePresenter
                     $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php?mode=sequence&uuid=" + uid + "&order=" + order,
                         {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
                     );
-                    updateFieldMoves();
+                    updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
                 }
             });
             $(".admidio-field-move").click(function() {
@@ -322,12 +293,17 @@ class ProfileFieldsPresenter extends PagePresenter
                 );
             });
             $(document).ajaxComplete(function(event, xhr, settings) {
-                setTimeout(function() {
-                    updateFieldMoves();
-                }, 1000); //wait for moveTableRow to finish hiding the element
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
+                }
             });
             
-            updateFieldMoves();
+            updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
             ', true
         );
 

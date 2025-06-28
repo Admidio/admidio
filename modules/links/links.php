@@ -104,29 +104,6 @@ try {
         ChangelogService::displayHistoryButton($page, 'weblinks', 'links');
 
         $page->addJavascript('
-            function updateLinkMoves() {
-                $(\'.card-body\').each(function() {
-                    var $rows = $(this).find(\'div[id^="lnk_"]\').has(".admidio-link-move").filter(function() {
-                        return $(this).css("display") !== "none";
-                    });
-                    $rows.each(function(index) {
-                        var $upArrow   = $(this).find(\'.admidio-link-move[data-direction="UP"]\');
-                        var $downArrow = $(this).find(\'.admidio-link-move[data-direction="DOWN"]\');
-                        
-                        if (index === 0) {
-                            $upArrow.hide();
-                        } else {
-                            $upArrow.show();
-                        }
-                        
-                        if (index === $rows.length - 1) {
-                            $downArrow.hide();
-                        } else {
-                            $downArrow.show();
-                        }
-                    });
-                });
-            }
             $("#cat_uuid").change(function() {
                 $("#adm_navbar_filter_form").submit();
             });
@@ -138,13 +115,18 @@ try {
                 );
             });
             $(document).ajaxComplete(function(event, xhr, settings) {
-                setTimeout(function() {
-                    updateLinkMoves();
-                }, 1000); //wait for moveTableRow to finish hiding the element
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions(".card-body", "lnk_", "admidio-link-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions(".card-body", "lnk_", "admidio-link-move");
+                }
             });
             
-            updateLinkMoves();',
-            true
+            updateMoveActions(".card-body", "lnk_", "admidio-link-move");
+            ', true
         );
 
         // create filter menu with elements for category

@@ -222,29 +222,6 @@ class MenuPresenter extends PagePresenter
         $this->setHeadline($gL10n->get('SYS_MENU'));
 
         $this->addJavascript('
-            function updateMenuMoves() {
-                $(\'tbody.admidio-sortable\').each(function() {
-                    var $rows = $(this).find(\'tr[id^=adm_menu_entry]\').has(\'.admidio-menu-move\').filter(function() {
-                        return $(this).css("display") !== "none";
-                    });
-                    $rows.each(function(index) {
-                        var $upArrow   = $(this).find(\'.admidio-menu-move[data-direction="UP"]\');
-                        var $downArrow = $(this).find(\'.admidio-menu-move[data-direction="DOWN"]\');
-
-                        if (index === 0) {
-                            $upArrow.css(\'visibility\', \'hidden\');
-                        } else {
-                            $upArrow.css(\'visibility\', \'visible\');
-                        }
-
-                        if (index === $rows.length - 1) {
-                            $downArrow.css(\'visibility\', \'hidden\');
-                        } else {
-                            $downArrow.css(\'visibility\', \'visible\');
-                        }
-                    });
-                });
-            }
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this));
             });
@@ -256,12 +233,17 @@ class MenuPresenter extends PagePresenter
                 );
             });
             $(document).ajaxComplete(function(event, xhr, settings) {
-                setTimeout(function() {
-                    updateMenuMoves();
-                }, 1000); //wait for moveTableRow to finish hiding the element
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
+                }
             });
             
-            updateMenuMoves();
+            updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
             ', true
         );
 
