@@ -1081,32 +1081,19 @@ class FormPresenter
                         deleteMsg = deleteMsg.replace("ENTRY_VAL", row.querySelector(\'input[name$="[value]"]\').value);
                         // Show confirmation dialog before deleting
                         messageBox(deleteMsg, undefined, undefined, "yes-no",
-                            `/* $.post(\'${deleteUrl}\', {
-                                adm_csrf_token: \'${csrfToken}\'
-                                }, function(data) {
-                                    const returnDataDelete = (typeof data === "object") ? data : JSON.parse(data);
-                                    const returnStatusDelete = returnDataDelete.status;
-                                    // Handle response
-                                    if (returnStatusDelete === "success") {
+                            `Promise.resolve(callUrlHideElement(\'${dataId}\' + "_option_" + \'${entryId}\', \'${deleteUrl}\', \'${csrfToken}\'))
+                                .then(function() {
+                                    setTimeout(function() {
                                         // delete the row if the entry was deleted
                                         const row = document.getElementById(\'${dataId}\' + "_option_" + \'${entryId}\');
-                                        row.remove();
-                                        updateMoveActions("tbody.admidio-sortable", "' . $id . '_option", "admidio-entry-move");
-                                    } else {
-                                        // unknown status, do nothing (error)
-                                    }
-                                    $("#adm_modal_messagebox").modal("hide");
-                                }
-                            ); */
-                            callUrlHideElement(\'${dataId}\' + "_option_" + \'${entryId}\', \'${deleteUrl}\', \'${csrfToken}\');
-                            $(document).ajaxComplete(function(event, xhr, settings) {
-                                setTimeout(function() {
-                                    // delete the row if the entry was deleted
-                                    const row = document.getElementById(\'${dataId}\' + "_option_" + \'${entryId}\');
-                                    row.remove();
-                                    updateMoveActions("tbody.admidio-sortable", "' . $id . '_option", "admidio-entry-move");
-                                }, 1000); //wait for moveTableRow to finish hiding the element
-                            });`
+                                        if (row) {
+                                            // remove the row from the table
+                                            row.remove();
+                                            updateMoveActions("tbody.admidio-sortable", "' . $id . '_option", "admidio-entry-move");
+                                        }
+                                    }, 1000); //wait for moveTableRow to finish hiding the element
+                                });
+                            `
                         );
                     }
                 });
