@@ -401,7 +401,8 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1420">ALTER TABLE %PREFIX%_user_field_select_options
             ADD CONSTRAINT %PREFIX%_fk_ufo_usf FOREIGN KEY (ufo_usf_id) REFERENCES %PREFIX%_user_fields (usf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
     <step id="1430">UpdateStepsCode::updateStep50MoveFieldListValues</step>
-    <step id="1440">ALTER TABLE %PREFIX%_user_fields DROP usf_value_list</step>    <!-- Add Update steps for module inventory -->
+    <step id="1440">ALTER TABLE %PREFIX%_user_fields DROP usf_value_list</step>
+    <!-- Add Update steps for module inventory -->
     <step id="1450">CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_fields (
             inf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
             inf_uuid                    varchar(36)         NOT NULL,

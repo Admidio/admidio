@@ -153,9 +153,6 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                 var tbodyElement2 = tbodyElement.previousElementSibling;
                 $(tbodyElement2).fadeOut("slow");
             }
-            else {
-                console.log("tbody is not empty");
-            }
         } else {
             // entry could not be deleted, then show content of data or a common error message
             if (returnMessage.length === 0) {
