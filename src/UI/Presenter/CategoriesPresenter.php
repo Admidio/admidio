@@ -477,7 +477,20 @@ class CategoriesPresenter extends PagePresenter
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/categories.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });', true
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_category", "admidio-category-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_category", "admidio-category-move");
+                }
+            });
+            
+            updateMoveActions("tbody.admidio-sortable", "adm_category", "admidio-category-move");
+            ', true
         );
 
         // define link to create new category

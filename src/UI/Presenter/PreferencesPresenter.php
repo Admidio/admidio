@@ -422,7 +422,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_USER_ROLE_SETTINGS'),
                         'id' => 'user_role_settings',
-                        'tables' => array('user_fields', 'user_relation_types', 'roles_rights', 'roles_rights_data')
+                        'tables' => array('user_fields', 'user_field_select_options', 'user_relation_types', 'roles_rights', 'roles_rights_data')
                     ),
                     array(
                         'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
@@ -1748,6 +1748,12 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_EDIT_PROFILE_FIELDS'),
             $html,
             array('helpTextId' => 'SYS_MANAGE_PROFILE_FIELDS_DESC', 'alertWarning' => $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST'))
+        );
+        $formProfile->addCheckbox(
+            'profile_show_obsolete_select_field_options',
+            $gL10n->get('SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS'),
+            (bool) $formValues['profile_show_obsolete_select_field_options'],
+            array('helpTextId' => 'SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC')
         );
         $formProfile->addCheckbox(
             'profile_show_map_link',

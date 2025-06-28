@@ -53,6 +53,7 @@ DROP TABLE IF EXISTS %PREFIX%_user_relation_types               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_log                          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_data                         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_fields                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_field_select_options         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_categories                        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_users                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_organizations                     CASCADE;

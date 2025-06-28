@@ -967,7 +967,212 @@ class FormPresenter
 
         $this->elements[$id] = $optionsAll;
     }
+    
+    /**
+     * Add a new option editor field to the form.
+     * This field allows the user to add multiple options with a value and an obsolete flag.
+     * The user can add, delete and move options.
+     * @param string $id ID of the option editor. This will also be the name of the option editor.
+     * @param string $label The label of the option editor.
+     * @param array $values An array with the values for the options. Each value should be an array with 'id', 'value' and 'obsolete' keys.
+     * @param string $filename (optional) The filename for performing delete actions on the options.
+     * @param array $options (optional) An array with the following possible entries:
+     *                        - **property** : With this param you can set the following properties:
+     *                          + **self::FIELD_DEFAULT**  : The field can accept an input.
+     *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
+     *                          + **self::FIELD_DISABLED** : The field will be disabled and could not accept an input.
+     *                          + **self::FIELD_HIDDEN**   : The field will not be shown. Useful to transport additional information.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                         e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                         If you need an additional parameter for the text you can add an array. The first entry
+     *                         must be the unique text id and the second entry will be a parameter of the text id.
+     *                       - **icon** : An icon can be set. This will be placed in front of the label.
+     *                       - **class** : An additional css classname. The class **admSelectbox**
+     *                         is set as default and need not set with this parameter.
+     * * @throws Exception
+     */
+    public function addOptionEditor(string $id, string $label, array $values, array $options = array()): void
+    {
+        global $gL10n;
 
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'type' => 'option-editor',
+            'id' => $id,
+            'label' => $label,
+            'values' => $values,
+            'filename' => 'profile-fields'
+        ), $options));
+        $attributes = array();
+
+        // set field properties
+        switch ($optionsAll['property']) {
+            case self::FIELD_DISABLED:
+                $attributes['disabled'] = 'disabled';
+                break;
+
+            case self::FIELD_READONLY:
+                $attributes['readonly'] = 'readonly';
+                break;
+
+            case self::FIELD_REQUIRED:
+                $attributes['required'] = 'required';
+                $this->flagRequiredFields = true;
+                break;
+
+            case self::FIELD_HIDDEN:
+                $attributes['hidden'] = 'hidden';
+                $attributes['class'] = ' invisible';
+                break;
+        }
+
+        $optionsAll["attributes"] = $attributes;
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
+        $this->addJavascriptCode('
+            function addOptionRow(dataId, checkUrl, deleteUrl, csrfToken, translationStrings) {
+                const table = document.getElementById(dataId + "_table").getElementsByTagName("tbody")[0];
+                const newRow = document.createElement("tr");
+                const rows = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\');
+                let maxId = 0;
+                rows.forEach(row => {
+                    const currentId = row.id.replace(dataId + "_option_", "");
+                    const num = parseInt(currentId, 10);
+                    if (!isNaN(num) && num > maxId) {
+                        maxId = num;
+                    }
+                });
+                const optionId = maxId + 1;
+                var deleteMsg = \'' . $gL10n->get('SYS_DELETE_ENTRY', array('ENTRY_VAL')) . '\';
+                newRow.innerHTML = `
+                    <td><input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][value]" required="required"></td>
+                    <td class="align-middle" style="display: none;">
+                        <div class="admidio-form-group form-check form-switch d-flex justify-content-center">
+                            <input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][obsolete]" value="">
+                        </div>
+                    </td>
+                    <td id="${dataId}_option_${optionId}_move_actions" class="text-center align-middle">
+                        <a class="admidio-icon-link admidio-entry-move" href="javascript:void(0)"
+                            data-direction="UP" data-target="${dataId}_option_${optionId}">
+                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="${translationStrings.move_up}"></i>
+                        </a>
+                        <a class="admidio-icon-link admidio-entry-move" href="javascript:void(0)"
+                            data-direction="DOWN" data-target="${dataId}_option_${optionId}">
+                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="${translationStrings.move_down}"></i>
+                        </a>
+                        <a class="admidio-icon-link">
+                            <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="${translationStrings.move_var}"></i>
+                        </a>
+                    </td>
+                    <td id="${dataId}_option_${optionId}_delete_actions" class="text-center align-middle">
+                        <a id="${dataId}_option_${optionId}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry(\'${dataId}\', \'${optionId}\');" style="display: none;">
+                            <i class="bi bi-arrow-counterclockwise text-success" data-bs-toggle="tooltip" title="${translationStrings.restore}"></i>
+                        </a>
+                        <a id="${dataId}_option_${optionId}_delete" class="admidio-icon-link" href="javascript:void(0)" onclick="deleteEntry(\'${dataId}\', \'${optionId}\', \'${checkUrl}${optionId}\', \'${deleteUrl}${optionId}\', \'${deleteMsg}\', \'${csrfToken}\');">
+                            <i class="bi bi-trash-fill text-danger" data-bs-toggle="tooltip" title="${translationStrings.delete}"></i>
+                        </a>
+                    </td>
+                `;
+                newRow.id = dataId + "_option_" + optionId;
+                newRow.setAttribute("data-uuid", optionId);
+                newRow.querySelectorAll(\'[data-bs-toggle="tooltip"]\').forEach((el) => {
+                    new bootstrap.Tooltip(el);
+                });
+                table.insertBefore(newRow, table.querySelector("tr#table_row_button"));
+                updateMoveActions("tbody.admidio-sortable", "' . $id . '_option", "admidio-entry-move");
+            }
+            function deleteEntry(dataId, entryId, checkUrl, deleteUrl, deleteMsg, csrfToken) {
+                // Check if the entry is used in another place
+                $.post(checkUrl, {
+                    adm_csrf_token: csrfToken
+                }, function(data) {
+                    const returnDataCheck = (typeof data === "object") ? data : JSON.parse(data);
+                    const returnStatusCheck = returnDataCheck.status;
+
+                    const row = document.getElementById(dataId + \'_option_\' + entryId);
+                    // If the row does not exist, do nothing
+                    if (!row) return;
+
+                    const table = row.parentNode;
+                    const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                    // If there is only one option left, do not delete it or mark it as obsolete
+                    if (countOptions <= 1) return;
+
+                    // If the entry is used, do not delete it but mark it as obsolete
+                    if (returnStatusCheck === "used") {
+                        // Mark the entry as obsolete
+                        row.querySelector(\'input[name$="[obsolete]"]\').value = 1;
+                        // disable input fields
+                        row.querySelector(\'input[name$="[value]"]\').disabled = true;
+                        // change displayed delete/restore option
+                        row.querySelector("#" + dataId + "_option_" + entryId + "_delete").style.display = "none";
+                        row.querySelector("#" + dataId + "_option_" + entryId + "_restore").style.display = "inline";
+                        return;
+                    } else if (returnStatusCheck === "unused") {
+                        // If the entry is not used, proceed with deletion
+                        // replace ENTRY_VAL with the actual value
+                        deleteMsg = deleteMsg.replace("ENTRY_VAL", row.querySelector(\'input[name$="[value]"]\').value);
+                        // Show confirmation dialog before deleting
+                        messageBox(deleteMsg, undefined, undefined, "yes-no",
+                            `Promise.resolve(callUrlHideElement(\'${dataId}\' + "_option_" + \'${entryId}\', \'${deleteUrl}\', \'${csrfToken}\'))
+                                .then(function() {
+                                    setTimeout(function() {
+                                        // delete the row if the entry was deleted
+                                        const row = document.getElementById(\'${dataId}\' + "_option_" + \'${entryId}\');
+                                        if (row) {
+                                            // remove the row from the table
+                                            row.remove();
+                                            updateMoveActions("tbody.admidio-sortable", "' . $id . '_option", "admidio-entry-move");
+                                        }
+                                    }, 1000); //wait for moveTableRow to finish hiding the element
+                                });
+                            `
+                        );
+                    }
+                });
+            }
+            function restoreEntry(dataId, entryId) {
+                const row = document.getElementById(dataId + "_option_" + entryId);
+                if (row) {
+                    row.querySelector(\'input[name$="[obsolete]"]\').value = 0; // Unmark as obsolete
+                    // enable input fields
+                    row.querySelector(\'input[name$="[value]"]\').disabled = false;
+                    // change displayed delete option
+                    row.querySelector("#" + dataId + "_option_" + entryId + "_delete").style.display = "inline"; // Show delete icon
+                    row.querySelector("#" + dataId + "_option_" + entryId + "_restore").style.display = "none"; // Hide restore icon
+                }
+            }'
+        );
+
+        $this->addJavascriptCode('
+            $("tbody.admidio-sortable").sortable({
+                axis: "y",
+                handle: ".handle",
+                stop: function(event, ui) {
+                    updateMoveActions("tbody.admidio-sortable", "' . $id . '_option", "admidio-entry-move");
+                }
+            });
+            $("tbody.admidio-sortable").on("click", ".admidio-entry-move", function() {
+                var direction = $(this).data("direction");
+                var target = $(this).data("target");
+
+                if (direction === "UP") {
+                    $("#"+target).prev().before($("#"+target));
+                } else {
+                    $("#"+target).next().after($("#"+target));
+                }
+                updateMoveActions("tbody.admidio-sortable", "' . $id . '_option", "admidio-entry-move");
+            });
+
+            updateMoveActions("tbody.admidio-sortable", "' . $id . '_option", "admidio-entry-move");
+            ', true
+        );
+        $this->elements[$id] = $optionsAll;
+    }
+    
     /**
      * Add a new radio button with a label to the form. The radio button could have different status
      * which could be defined with an array.

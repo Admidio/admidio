@@ -59,6 +59,7 @@ $defaultOrgPreferences = array(
     'changelog_table_users' => '1',
     'changelog_table_members' => '1',
     'changelog_table_user_fields' => '0',
+    'changelog_table_user_field_select_options' => '0',
     'changelog_table_announcements' => '0',
     'changelog_table_events' => '0',
     'changelog_table_rooms' => '0',
@@ -221,6 +222,7 @@ $defaultOrgPreferences = array(
     'photo_thumbs_scale' => '500',
 
     // Profile
+    'profile_show_obsolete_select_field_options' => '1',
     'profile_show_map_link' => '0',
     'profile_show_empty_fields' => '1',
     'profile_show_roles' => '1',

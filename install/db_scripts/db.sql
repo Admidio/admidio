@@ -45,6 +45,7 @@ DROP TABLE IF EXISTS %PREFIX%_user_relations                    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relation_types               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_data                         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_fields                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_field_select_options         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_categories                        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_users                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_organizations                     CASCADE;
@@ -892,7 +893,6 @@ CREATE TABLE %PREFIX%_user_fields
     usf_name_intern             varchar(110)        NOT NULL,
     usf_name                    varchar(100)        NOT NULL,
     usf_description             text,
-    usf_value_list              text,
     usf_default_value           varchar(100),
     usf_regex                   varchar(100),
     usf_icon                    varchar(100),
@@ -1142,6 +1142,21 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
+/*==============================================================*/
+/* Table: adm_user_field_select_options                         */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_user_field_select_options
+(
+    ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ufo_usf_id      integer unsigned    NOT NULL,                   -- Connected user field id
+    ufo_value       varchar(255)        NOT NULL,                   -- option value
+    ufo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ufo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ufo_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Foreign Key Constraints                                      */
@@ -1328,6 +1343,9 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr2        FOREIGN KEY (ure_usr_id2)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_user_field_select_options
+    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
 
 ALTER TABLE %PREFIX%_inventory_fields
     ADD CONSTRAINT %PREFIX%_fk_inf_org         FOREIGN KEY (inf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,

@@ -3,6 +3,7 @@ namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\ProfileFields\Entity\ProfileField;
+use Admidio\ProfileFields\Entity\SelectOptions;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -63,19 +64,27 @@ class ProfileFieldsPresenter extends PagePresenter
         $this->addJavascript('
             $("#usf_type").change(function() {
                 if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "DROPDOWN_MULTISELECT" || $("#usf_type").val() === "RADIO_BUTTON") {
-                    $("#usf_value_list").attr("required", "required");
-                    $("#usf_value_list_group").addClass("admidio-form-group-required");
-                    $("#usf_value_list_group").show("slow");
+                    $("#ufo_usf_options_table").attr("required", "required");
+                    $("#ufo_usf_options_group").addClass("admidio-form-group-required");
+                    $("#ufo_usf_options_group").show("slow");
+                    // find all option input fields in the table and set the required atribute
+                    $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
+                        $(this).attr("required", "required");
+                    });
                 } else {
-                    $("#usf_value_list").removeAttr("required");
-                    $("#usf_value_list_group").removeClass("admidio-form-group-required");
-                    $("#usf_value_list_group").hide();
-                }
+                    $("#ufo_usf_options_table").removeAttr("required");
+                    $("#ufo_usf_options_group").removeClass("admidio-form-group-required");
+                    $("#ufo_usf_options_group").hide();
+                    // find all options and remove the required atribute from the input field
+                    $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
+                        $(this).removeAttr("required");
+                    });
+                    }
             });
             $("#usf_type").trigger("change");', true
         );
 
-        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields', !empty($profileFieldUUID), array('uuid' => $profileFieldUUID));
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields,user_field_select_options', !empty($profileFieldUUID), array('uuid' => $profileFieldUUID));
 
         // show form
         $form = new FormPresenter(
@@ -162,13 +171,21 @@ class ProfileFieldsPresenter extends PagePresenter
                 array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $userField->getValue('usf_type'))
             );
         }
-        $form->addMultilineTextInput(
-            'usf_value_list',
+
+        $options = new SelectOptions($gDb, $userField->getValue('usf_id'));
+        $optionValueList = $options->getAllOptions($gSettingsManager->getBool('profile_show_obsolete_select_field_options'));
+        if (empty($optionValueList)) {
+            $optionValueList = array(
+                0 => array('id' => 1, 'value' => '', 'sequence' => 0, 'obsolete' => false)
+            );
+        }
+        $form->addOptionEditor(
+            'ufo_usf_options',
             $gL10n->get('SYS_VALUE_LIST'),
-            htmlentities($userField->getValue('usf_value_list', 'database'), ENT_QUOTES),
-            6,
+            $optionValueList,
             array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com">', '</a>')))
         );
+
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
         if (in_array($usfNameIntern, array('LAST_NAME', 'FIRST_NAME'))) {
             $form->addInput(
@@ -247,6 +264,7 @@ class ProfileFieldsPresenter extends PagePresenter
             array('toolbar' => 'AdmidioComments'));
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
+        $this->assignSmartyVariable('fieldUUID', $profileFieldUUID);
         $this->assignSmartyVariable('fieldNameIntern', $usfNameIntern);
         $this->assignSmartyVariable('systemField', $userField->getValue('usf_system'));
         $this->assignSmartyVariable('userCreatedName', $userField->getNameOfCreatingUser());
@@ -282,6 +300,7 @@ class ProfileFieldsPresenter extends PagePresenter
                     $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php?mode=sequence&uuid=" + uid + "&order=" + order,
                         {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
                     );
+                    updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
                 }
             });
             $(".admidio-field-move").click(function() {
@@ -290,7 +309,20 @@ class ProfileFieldsPresenter extends PagePresenter
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });', true
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
+                }
+            });
+            
+            updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
+            ', true
         );
 
         // define link to create new profile field
@@ -309,7 +341,7 @@ class ProfileFieldsPresenter extends PagePresenter
             'bi-hdd-stack-fill'
         );
 
-        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields');
+        ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields,user_field_select_options');
 
         $sql = 'SELECT *
                   FROM ' . TBL_USER_FIELDS . '
@@ -392,7 +424,7 @@ class ProfileFieldsPresenter extends PagePresenter
                 );
             } else {
                 $templateRowProfileField['actions'][] = array(
-                    'dataHref' => 'callUrlHideElement(\'row_' . $userField->getValue('usf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('mode' => 'delete', 'uuid' => $userField->getValue('usf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataHref' => 'callUrlHideElement(\'adm_profile_field_' . $userField->getValue('usf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('mode' => 'delete', 'uuid' => $userField->getValue('usf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($userField->getValue('usf_name', 'database'))),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')

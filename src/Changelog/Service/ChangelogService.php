@@ -168,6 +168,7 @@ class ChangelogService {
             'users' =>  'SYS_PROFILE_FIELD',
             'members' => 'SYS_ROLE_MEMBERSHIPS',
             'user_fields' => 'ORG_PROFILE_FIELDS',
+            'user_field_select_options' => 'SYS_PROFILE_FIELD_SELECT_OPTIONS',
             'announcements' => 'SYS_ANNOUNCEMENTS',
             'events' => 'SYS_EVENTS',
             'rooms' => 'SYS_ROOM',
@@ -305,6 +306,7 @@ class ChangelogService {
                 return new Room($gDb);
             case 'texts':
                 return new Text($gDb);
+            case 'user_field_select_options':
             case 'user_fields':
                 return new ProfileField($gDb);
             case 'user_relations':
@@ -416,7 +418,6 @@ class ChangelogService {
             'usf_name_intern' =>           'SYS_INTERNAL_NAME',
             'usf_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'usf_type' =>                  array('name' => 'SYS_TYPE', 'type' => 'CUSTOM_LIST', 'entries' => $userFieldText),
-            'usf_value_list' =>            'SYS_VALUE_LIST',
             'usf_description' =>           'SYS_DESCRIPTION',
             'usf_description_inline' =>    array('name' => 'SYS_DESCRIPTION_INLINE_DESC', 'type' => 'BOOL'),
             'usf_default_value' =>         'SYS_DEFAULT_VALUE',
@@ -428,6 +429,10 @@ class ChangelogService {
             'usf_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
             'usf_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
             'usf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
+            'ufo_value' =>                 'SYS_VALUE',
+            'ufo_usf_id' =>                'SYS_PROFILE_FIELD',
+            'ufo_sequence' =>              'SYS_ORDER',
+            'ufo_obsolete' =>             array('name' => 'SYS_DELETED', 'type' => 'BOOL'),
 
             'prf_value' =>                 'SYS_VALUE',
             'prf_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
@@ -766,6 +771,7 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
                 // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
                 //     $url = SecurityUtils::encodeUrl(); break;
+                case 'user_field_select_options':
                 case 'user_fields':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
                 case 'user_relations': // For user relations, we don't link to the modification of the individual relation, but to the user1
