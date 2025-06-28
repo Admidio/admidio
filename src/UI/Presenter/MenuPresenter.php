@@ -231,7 +231,20 @@ class MenuPresenter extends PagePresenter
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/menu.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });', true
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
+                }
+            });
+            
+            updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
+            ', true
         );
 
         // define link to create new menu

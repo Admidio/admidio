@@ -200,6 +200,12 @@ function formatPhpToLuxon(format) {
     });
 }
 
+/** * This function will redirect the browser to a specific URL with POST data.
+ * It creates a form dynamically, appends it to the body, fills it with the data,
+ * and submits it to the specified URL.
+ * @param {string} url The URL to which the form will be submitted.
+ * @param {Object} data An object containing key-value pairs to be sent as POST data.
+ */
 function redirectPost(url, data) {
     var form = document.createElement("form");
     document.body.appendChild(form);
@@ -215,6 +221,53 @@ function redirectPost(url, data) {
         }
     }
     form.submit();
+}
+
+/**
+ * This function updates the visibility of move actions (up, down and move arrows) for table rows.
+ * @param {string} $scope the jQuery scope to search for rows (e.g., "tbody.admidio-sortable").
+ * @param {string} rowIdPrefix The prefix of the row IDs to target.
+ * @param {string} moveActionClass The class of the move action elements (e.g., "admidio-field-move").
+ */
+function updateMoveActions($scope, rowIdPrefix, moveActionClass) {
+    $($scope).each(function() {
+        // If the scope is ".card-body", we search for divs with IDs starting with rowIdPrefix.
+        // Otherwise, we search for table rows with IDs starting with rowIdPrefix.
+        if ($scope === ".card-body") {
+            var $rows = $(this).find("div[id^=" + rowIdPrefix + "]").has("." + moveActionClass).filter(function() {
+                return $(this).css("display") !== "none";
+            });
+        } else {
+            var $rows = $(this).find("tr[id^=" + rowIdPrefix + "]").has("." + moveActionClass).filter(function() {
+                return $(this).css("display") !== "none";
+            });
+        }
+        $rows.each(function(index) {
+            var $upArrow   = $(this).find("." + moveActionClass + "[data-direction='UP']");
+            var $downArrow = $(this).find("." + moveActionClass + "[data-direction='DOWN']");
+            var $arrowMove = $(this).find(".handle").closest("a");
+
+            if (index === 0) {
+                $upArrow.css("visibility", "hidden");
+            } else {
+                $upArrow.css("visibility", "visible");
+            }
+
+            if (index === $rows.length - 1) {
+                $downArrow.css("visibility", "hidden");
+            } else {
+                $downArrow.css("visibility", "visible");
+            }
+
+            if ($arrowMove) {
+                if (index === 0 && index === $rows.length - 1) {
+                    $arrowMove.css("visibility", "hidden");
+                } else {
+                    $arrowMove.css("visibility", "visible");
+                }
+            }
+        });
+    });
 }
 
 /**
