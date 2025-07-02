@@ -480,7 +480,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
     <step id="1580">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory_admin boolean NOT NULL DEFAULT false</step>
     <step id="1590">UPDATE %PREFIX%_roles SET rol_inventory_admin = true WHERE rol_administrator = true</step>
-    <step id="1500">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+    <step id="1600">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES ('MODULE', 'SYS_INVENTORY', 'INVENTORY',  '5.0.0', 0)</step>
     <step id="1610">UPDATE %PREFIX%_menu SET men_order = men_order + 1 WHERE men_men_id_parent = 1 AND men_order >= 8;</step>
     <step id="1620">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
