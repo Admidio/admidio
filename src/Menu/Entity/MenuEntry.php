@@ -99,7 +99,7 @@ class MenuEntry extends Entity
         $value = parent::getValue($columnName, $format);
 
         // if text is a translation-id then translate it
-        if ($format !== 'database' && Language::isTranslationStringId($value)) {
+        if ($columnName === 'men_name' && $format !== 'database' && Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
 
