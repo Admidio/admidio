@@ -55,6 +55,10 @@
                         </div>
                     </div>
                 {/foreach}
+                <!-- Inventory Cards -->
+                {if $showInventoryOnProfile}
+                    {include file="modules/profile.view.inventory.tpl" viewType="tab"}
+                {/if}
             </div>
             <!-- Permissions Tab -->
             {if $showCurrentRoles}
@@ -142,25 +146,29 @@
             <div id="adm_profile_basic_informations_accordion" class="accordion-collapse collapse show" aria-labelledby="adm_profile_basic_informations_accordion_heading" data-bs-parent="#adm_profile_accordion">
                 <div class="accordion-body">
                     <div class="card admidio-accordion-field-group">
-                    <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
-                        {if isset($urlEditProfile)}
-                            <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlEditProfile}">
-                                <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_PROFILE')}</a>
-                        {/if}
-                    </div>
-                    <div class="card-body">
-                        {include file="modules/profile.view.basic-informations.tpl"}
-                    </div>
-                </div>
-                <!-- Dynamic Cards for additional Profile Data categories -->
-                {foreach $profileData as $categoryName => $category}
-                    <div class="card admidio-accordion-field-group">
-                        <div class="card-header">{$categoryName}</div>
+                        <div class="card-header"> {$l10n->get('SYS_PROFILE_DATA')}
+                            {if isset($urlEditProfile)}
+                                <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlEditProfile}">
+                                    <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_PROFILE')}</a>
+                            {/if}
+                        </div>
                         <div class="card-body">
-                            {include file="modules/profile.view.categories.tpl"}
+                            {include file="modules/profile.view.basic-informations.tpl"}
                         </div>
                     </div>
-                {/foreach}
+                    <!-- Dynamic Cards for additional Profile Data categories -->
+                    {foreach $profileData as $categoryName => $category}
+                        <div class="card admidio-accordion-field-group">
+                            <div class="card-header">{$categoryName}</div>
+                            <div class="card-body">
+                                {include file="modules/profile.view.categories.tpl"}
+                            </div>
+                        </div>
+                    {/foreach}
+                    <!-- Inventory Cards -->
+                    {if $showInventoryOnProfile}
+                        {include file="modules/profile.view.inventory.tpl" viewType="accordion"}
+                    {/if}
                 </div>
             </div>
         </div>

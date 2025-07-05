@@ -55,6 +55,40 @@ class Smarty
     }
 
     /**
+     * Function for the Smarty template engine that could be used within the templates to check if a string
+     * is inside another string.
+     * @param array                    $params   Array with all the variables that are set within the template file.
+     * @param Template $template The Smarty template object that could be used within the function.
+     * @return bool Returns **true** if the string is found, otherwise **false**
+     *
+     * **Code example**
+     * ```
+     * // example of this function within a template file
+     * {if {string_contains haystack=$myText needle='searchString'}}
+     *    ...
+     * {else}
+     *    ...
+     * {/if}
+     * ```
+     */
+    public static function stringContains(array $params, Template $template): bool
+    {
+        if (empty($params['haystack'])) {
+            throw new \UnexpectedValueException('Smarty function string_contains: missing "haystack" parameter');
+        }
+
+        if (empty($params['needle'])) {
+            throw new \UnexpectedValueException('Smarty function string_contains: missing "needle" parameter');
+        }
+
+        if (strpos($params['haystack'], $params['needle']) !== false) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * Function for the Smarty template engine that could be used within the templates to check if the given string
      * is a valid Admidio translation string.
      * @param array                    $params   Array with all the variables that are set within the template file.

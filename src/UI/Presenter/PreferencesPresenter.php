@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
+use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
 use RuntimeException;
@@ -130,6 +131,7 @@ class PreferencesPresenter extends PagePresenter
                 'panels' => array(
                     array('id'=>'events',               'title'=>$gL10n->get('SYS_EVENTS'),                 'icon'=>'bi-calendar-week-fill',            'subcards'=>false),
                     array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false),
+                    array('id'=>'inventory',            'title'=>$gL10n->get('SYS_INVENTORY'),              'icon'=>'bi-box-seam-fill',                 'subcards'=>false),
                     array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
                     array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
                 ),
@@ -425,7 +427,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
                         'id' => 'content_modules',
-                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'links', 'others')
+                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_lend_data', 'links', 'others')
                     ),
                     array(
                         'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
@@ -595,12 +597,12 @@ class PreferencesPresenter extends PagePresenter
             $sqlData,
             array('defaultValue' => $formValues['contacts_list_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MEMBERS_CONFIGURATION_DESC')
         );
-        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
         $formContacts->addSelectBox(
             'contacts_per_page',
             $gL10n->get('SYS_CONTACTS_PER_PAGE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(25)))
+            array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(25)))
         );
         $formContacts->addInput(
             'contacts_field_history_days',
@@ -768,6 +770,200 @@ class PreferencesPresenter extends PagePresenter
         $formDocumentsFiles->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formDocumentsFiles);
         return $smarty->fetch('preferences/preferences.documents-files.tpl');
+    }
+
+    /**
+     * Generates the html of the form from the inventory preferences and will return the complete html.
+     * @return string Returns the complete html of the form from the inventory preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createInventoryForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
+        $formValues = $gSettingsManager->getAll();
+        //array with the internal field names of the lend fields
+        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+
+        $formInventory = new FormPresenter(
+            'adm_preferences_form_inventory',
+            'preferences/preferences.inventory.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Inventory')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        // standard module settings
+        $selectBoxEntries = array(
+            '0' => $gL10n->get('SYS_DISABLED'),
+            '1' => $gL10n->get('SYS_ENABLED'),
+            '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
+            '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR')
+        );
+        $formInventory->addSelectBox(
+            'inventory_module_enabled',
+            $gL10n->get('ORG_ACCESS_TO_MODULE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ACCESS_TO_MODULE_DESC')
+        );
+
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
+        $formInventory->addSelectBox(
+            'inventory_items_per_page',
+            $gL10n->get('SYS_INVENTORY_ITEMS_PER_PAGE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_items_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(25)))
+        );
+
+        $formInventory->addInput(
+            'inventory_field_history_days',
+            $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
+            $formValues['inventory_field_history_days'],
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
+        );
+
+        // general settings
+        $formInventory->addSeperator(
+            'inventory_seperator_general_settings',
+            $gL10n->get('SYS_COMMON')
+        );
+        
+        $formInventory->addCheckbox(
+            'inventory_show_obsolete_select_field_options',
+            $gL10n->get('SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS'),
+            (bool) $formValues['inventory_show_obsolete_select_field_options'],
+            array('helpTextId' => 'SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC')
+        );
+        
+        $formInventory->addCheckbox(
+            'inventory_items_disable_lending',
+            $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_LENDING'),
+            (bool) $formValues['inventory_items_disable_lending'],
+            array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC')
+        );
+        
+        $formInventory->addCheckbox(
+            'inventory_system_field_names_editable',
+            $gL10n->get('SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT'),
+            $formValues['inventory_system_field_names_editable'],
+            array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
+        );
+
+        if ($formValues['inventory_module_enabled'] !== 3  || ($formValues['inventory_module_enabled'] === 3 && $gCurrentUser->isAdministratorInventory())) {
+            $formInventory->addCheckbox(
+                'inventory_allow_keeper_edit',
+                $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
+                $formValues['inventory_allow_keeper_edit'],
+                array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
+            );
+            
+            // create array of possible fields for keeper edit
+            $items = new ItemsData($gDb, $gCurrentOrgId);
+            $selectBoxEntries = array();
+            foreach ($items->getItemFields() as $itemField) {
+                $infNameIntern = $itemField->getValue('inf_name_intern');
+                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
+                    continue; // skip lending fields if lending is disabled
+                }
+                $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
+            }
+                
+            $formInventory->addSelectBox(
+                'inventory_allowed_keeper_edit_fields',
+                $gL10n->get('SYS_INVENTORY_ACCESS_EDIT_FIELDS'),
+                $selectBoxEntries,
+                array('defaultValue' => explode(',', $formValues['inventory_allowed_keeper_edit_fields']), 'helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
+            );
+        }
+
+        $formInventory->addCheckbox(
+            'inventory_current_user_default_keeper',
+            $gL10n->get('SYS_INVENTORY_USE_CURRENT_USER'),
+            (bool)$formValues['inventory_current_user_default_keeper'],
+            array('helpTextId' => 'SYS_INVENTORY_USE_CURRENT_USER_DESC')
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_allow_negative_numbers',
+            $gL10n->get('SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS'),
+            (bool)$formValues['inventory_allow_negative_numbers'],
+            array('helpTextId' => 'SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC')
+        );
+
+        $formInventory->addInput(
+            'inventory_decimal_places',
+            $gL10n->get('SYS_INVENTORY_DECIMAL_PLACES'),
+            $formValues['inventory_decimal_places'],
+            array('type' => 'number','minNumber' => 0, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC')
+        );
+
+        $selectBoxEntries = array('date' => $gL10n->get('SYS_DATE'), 'datetime' => $gL10n->get('SYS_DATE') .' & ' .$gL10n->get('SYS_TIME'));
+        $formInventory->addSelectBox(
+            'inventory_field_date_time_format',
+            $gL10n->get('SYS_INVENTORY_DATETIME_FORMAT'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_field_date_time_format'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_DATETIME_FORMAT_DESC')
+        );
+
+        // profile view settings
+        $formInventory->addSeperator(
+            'inventory_seperator_profile_view_settings',
+            $gL10n->get('SYS_INVENTORY_PROFILE_VIEW')
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_profile_view_enabled',
+            $gL10n->get('SYS_INVENTORY_PROFILE_VIEW_ENABLED'),
+            (bool)$formValues['inventory_profile_view_enabled'],
+            array('helpTextId' => 'SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC')
+        );
+        // create array of possible fields for profile view
+        $selectBoxEntries = array();
+        foreach ($items->getItemFields() as $itemField) {
+            $infNameIntern = $itemField->getValue('inf_name_intern');
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
+                continue;
+            }
+            $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
+        }
+               
+        $formInventory->addSelectBox(
+            'inventory_profile_view',
+            $gL10n->get('SYS_INVENTORY_PROFILE_VIEW_FIELDS'),
+            $selectBoxEntries,
+            array('defaultValue' => explode(',', $formValues['inventory_profile_view']), 'helpTextId' => 'SYS_INVENTORY_PROFILE_VIEW_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
+        );
+        
+        // export settings
+        $formInventory->addSeperator(
+            'inventory_seperator_export_settings',
+            $gL10n->get('SYS_INVENTORY_EXPORT')
+        );
+        
+        $formInventory->addInput(
+            'inventory_export_filename',
+            $gL10n->get('SYS_INVENTORY_FILENAME'),
+            $formValues['inventory_export_filename'],
+            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_FILENAME_DESC')
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_add_date',
+            $gL10n->get('SYS_INVENTORY_ADD_DATE'),
+            (bool)$formValues['inventory_add_date'],
+            array('helpTextId' => 'SYS_INVENTORY_ADD_DATE_DESC')
+        );
+        
+        $formInventory->addSubmitButton(
+            'adm_button_save_inventory',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $formInventory->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formInventory);
+        return $smarty->fetch('preferences/preferences.inventory.tpl');
     }
 
     /**
@@ -964,12 +1160,12 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['events_view'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_DEFAULT_VIEW_DESC', array('SYS_DETAILED', 'SYS_COMPACT')))
         );
-        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
         $formEvents->addSelectBox(
             'events_per_page',
             $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+            array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(10)))
         );
          $formEvents->addInput(
             'events_clamp_text_lines',
@@ -1074,7 +1270,7 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['groups_roles_module_enabled'],
             array('helpTextId' => 'SYS_ENABLE_GROUPS_ROLES_DESC')
         );
-        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
         $formGroupsRoles->addSelectBox(
             'groups_roles_members_per_page',
             $gL10n->get('SYS_MEMBERS_PER_PAGE'),

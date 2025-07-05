@@ -142,6 +142,12 @@ class Component extends Entity
                     }
                     break;
 
+                case 'INVENTORY':
+                    if ($gCurrentUser->isAdministratorInventory()) {
+                        return true;
+                    }
+                    break;
+    
                 case 'FORUM':
                     if ($gCurrentUser->isAdministratorForum()) {
                         return true;
@@ -254,6 +260,14 @@ class Component extends Entity
                 }
                 break;
 
+            case 'INVENTORY':
+                if ($gSettingsManager->getInt('inventory_module_enabled') === 1
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 2 && $gValidLogin)
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    return true;
+                }
+                break;
+    
             case 'FORUM':
                 if ($gSettingsManager->getInt('forum_module_enabled') === 1
                 || ($gSettingsManager->getInt('forum_module_enabled') === 2 && $gValidLogin)) {

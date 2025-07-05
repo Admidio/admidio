@@ -171,8 +171,8 @@ final class StringUtils
                 $validRegex = '=^[^/?*;:~<>|\"\\\\]+$=';
                 break;
             case 'url':
-                $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?(), \/%=#:~.@+-]+$/i';
-                $validRegexValidUrl = '/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i';
+                $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?(), \/%=#:~.@+\-\[\]]+$/i';
+                $validRegexValidUrl = '/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.\[\];]*[-a-z0-9+&@#\/%=~_|\[\]]/i';
                 break;
             case 'phone':
                 $validRegex = '/^[\d() \/+-]+$/i';

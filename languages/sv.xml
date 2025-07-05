@@ -991,6 +991,7 @@
   <string name="SYS_NUMBER_COL_DESC">Respektive kryssruta behöver aktiveras för att visa antal medlemmar i slutet av rapporten.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antal album per sida</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster som visas på en sida. Om det finns fler poster visas navigeringsfunktioner för att växla mellan sidor. (Standard: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Antal poster som visas på en sida. Om det finns fler poster visas navigeringsfunktioner för att växla mellan sidor. (Standard: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Antal mottagare</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Siffran i det här fältet anger det maximala antalet mottagare i ett e-postmeddelande. Detta antal kan begränsas av leverantörer. Om ett e-postmeddelande ska skickas till fler mottagare än det antal som anges här, kommer flera e-postmeddelanden att genereras. Antalet möjliga e-postmeddelanden som ska skickas inom en period kan också begränsas av leverantörer. (Standard: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF -kalkylblad (*.ods)</string>

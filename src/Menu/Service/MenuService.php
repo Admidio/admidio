@@ -137,7 +137,7 @@ class MenuService
      * @return string[] Returns an array with all parent menu entries
      * @throws Exception
      */
-    static function subMenu(int $level, int $menuID, int $parentID = null, array $menuList = array()): array
+    static function subMenu(int $level, int $menuID, int|null $parentID = null, array $menuList = array()): array
     {
         global $gDb;
 

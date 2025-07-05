@@ -996,6 +996,7 @@
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antall album per side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Antall oppføringer pr side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antall oppføringer som vises på en side. Hvis det er flere oppføringer, legges en paginering til siden. Hvis verdien er 0, listes alle oppføringer på en side opp, og pagineringen deaktiveres. (Standardinnstilling: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Antall oppføringer som vises på en side. Hvis det er flere oppføringer, legges en paginering til siden. Hvis verdien er "Alle", listes alle oppføringer på en side opp, og pagineringen deaktiveres. (Standardinnstilling: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Antall innlegg per side</string>
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Antall emner per side</string>
   <string name="SYS_NUMBER_RECIPIENTS">Antall mottakere</string>

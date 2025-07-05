@@ -55,6 +55,9 @@
                 {if {array_key_exists array=$elements key='rol_documents_files'}}
                     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['rol_documents_files']}
                 {/if}
+                {if {array_key_exists array=$elements key='rol_inventory_admin'}}
+                    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['rol_inventory_admin']}
+                {/if}
                 {if {array_key_exists array=$elements key='rol_forum_admin'}}
                     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['rol_forum_admin']}
                 {/if}

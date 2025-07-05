@@ -486,6 +486,10 @@ class Category extends Entity
                 $this->elementTable = TBL_USER_FIELDS;
                 $this->elementColumn = 'usf_cat_id';
                 break;
+            case 'IVT':
+                $this->elementTable = TBL_INVENTORY_ITEMS;
+                $this->elementColumn = 'ini_cat_id';
+                break;
         }
     }
 

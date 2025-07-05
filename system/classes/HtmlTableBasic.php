@@ -173,11 +173,11 @@ class HtmlTableBasic extends HtmlElement
      * You can define an attribute for each column. If you need further attributes for the column first do the settings with addAttribute();
      * If all settings are done for the column use the addData(); to define your column content.
      * @param string|array         $data          Content for the column as string, or array
-     * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
+     * @param array<string,string>|null $arrAttributes Further attributes as array with key/value pairs
      * @param string $columnType    Column element 'td' or 'th' (Default: 'td')
      * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
-    public function addColumn($data = '', array $arrAttributes = null, string $columnType = 'td')
+    public function addColumn($data = '', array|null $arrAttributes = null, string $columnType = 'td')
     {
         $this->addElement($columnType);
 
@@ -222,11 +222,11 @@ class HtmlTableBasic extends HtmlElement
      * The element and attributes are stored in buffer first and will be parsed and written in the output string if the content is defined.
      * After all settings are done use addColumn(); to define your columns with content.
      * @param string|array         $data          Content for the table row as string, or array
-     * @param array<string,string> $arrAttributes Further attributes as array with key/value pairs
+     * @param array<string,string>|null $arrAttributes Further attributes as array with key/value pairs
      * @param string $columnType    Column element 'td' or 'th' (Default: 'td')
      * @deprecated 5.0.0:5.1.0 Class "HtmlTableBasic" is deprecated, use native Smarty template integration instead.
      */
-    public function addRow($data = '', array $arrAttributes = null, string $columnType = 'td')
+    public function addRow($data = '', array|null $arrAttributes = null, string $columnType = 'td')
     {
         // Clear column counter
         $this->columnCount = 0;
