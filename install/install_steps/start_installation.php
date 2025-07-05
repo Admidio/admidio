@@ -141,9 +141,9 @@ $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, false, false, 0, false, 8,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, false, false, 0, false, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', NULL, false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
 
 // add gender options to database
