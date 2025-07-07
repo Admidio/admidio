@@ -363,6 +363,15 @@ label {
     min-height: 300px;
 }
 
+@media (min-width: 768px) {
+    .admidio-form-membership-period .admidio-form-group {
+            word-wrap: normal !important;
+            word-break: normal !important;
+            padding: 0 !important;
+            margin: 0 !important;
+    }
+}
+
 /***********************************/
 /* Cards */
 /***********************************/

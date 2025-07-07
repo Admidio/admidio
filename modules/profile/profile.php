@@ -184,7 +184,21 @@ try {
     ');
     $page->addJavascript('
         $(document).on("click", ".admidio-create-edit-info", function() {
-            $("#" + $(this).attr("id") + "_Content").toggle("fast");
+            /* Tabs */
+            editInfoElement = $(
+                "#adm_profile_role_memberships_current_accordion_content, " +
+                "#adm_profile_role_memberships_former_accordion_content, " +
+                "#adm_profile_role_memberships_future_accordion_content"
+            ).find("#" + $(this).attr("id") + "_Content").first();
+            editInfoElement.toggle("fast");
+
+            /* Accordions */
+            editInfoElement = $(
+                "#adm_profile_role_memberships_current_pane_content, " +
+                "#adm_profile_role_memberships_former_pane_content, " +
+                "#adm_profile_role_memberships_future_pane_content"
+            ).find("#" + $(this).attr("id") + "_Content").first();
+            editInfoElement.toggle("fast");
         });
 
         profileJS.reloadRoleMemberships();

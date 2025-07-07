@@ -591,3 +591,14 @@ $(document).ajaxComplete(function(event, jqXHR) {
         window.location.href = redirect;
     }
 });
+
+/**
+ * This function will override the dataType for AJAX requests to the datatables language files.
+ * It ensures that the response is treated as JSON and sets the correct MIME type.
+ */
+$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+    if (options.url.indexOf('/datatables/language/') !== -1) {
+        options.dataType = 'json';
+        jqXHR.overrideMimeType('application/json');
+    }
+});
