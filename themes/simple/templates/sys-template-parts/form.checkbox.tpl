@@ -1,6 +1,15 @@
 {if $formType neq "vertical" and $formType neq "navbar"}
-    <div class="row mb-3">
-        <div class="col-sm-9 offset-sm-3">
+        {* add a toggle checkbox if editing a selection *}
+        {if $data.toggleable}
+            <div class="admidio-form-group row mb-3">
+                <div class="admidio-form-group form-check form-switch col-sm-3">
+                    <input class="form-check-input focus-ring" type="checkbox" id="toggle_{$data.id}" name="toggle_{$data.id}" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FORM_USE_FOR_EDIT')}" value="1" tabindex="-1" autofocus="false">
+                </div>
+                <div class="col-sm-9">
+        {else}
+            <div class="row mb-3">
+                <div class="col-sm-9 offset-sm-3">
+        {/if}
 {/if}
 <div id="{$data.id}_group" class="admidio-form-group form-check form-switch
     {if $formType eq "vertical"} mb-3{/if}
