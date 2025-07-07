@@ -23,7 +23,6 @@
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Users\Entity\User;
 
@@ -33,9 +32,9 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('delete_explain_msg', 'remove', 'delete', 'send_login')));
-    $getUserUuids = admFuncVariableIsValid($_GET, 'user_uuids', 'array', array('requireValue' => false, 'defaultValue' => array()));
+    $getUserUuids = admFuncVariableIsValid($_GET, 'user_uuids', 'array', array('defaultValue' => array()));
     if (empty($getUserUuids)) {
-        $getUserUuids = admFuncVariableIsValid($_POST, 'uuids', 'array', array('requireValue' => false, 'defaultValue' => array()));
+        $getUserUuids = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
         $getUserUuids = array_map(function($uuid) {
             return preg_replace('/row_members_/', '', $uuid);
         }, $getUserUuids);
@@ -94,21 +93,15 @@ try {
         exit();
     }
 
-    if ($getMode === 'delete') {
-        $statusMsg = $gL10n->get('SYS_DELETE_DATA');
-    } elseif ($getMode === 'remove') {
-        $statusMsg = $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')));
-    } else {
-        $statusMsg = '';
-    }
-
     $statusData = array();
     $error = false;
     foreach ($getUserUuids as $userUuid) {
         // Create user-object
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($userUuid);
-        
+
+        $statusMsg = '';
+
         if ($getMode === 'delete') {
             // Check if user is also in other organizations
             $sql = 'SELECT COUNT(*) AS count
@@ -157,7 +150,8 @@ try {
                 $role->stopMembership($row['mem_usr_id']);
             }
 
-                $statusData[$userUuid] = 'success';
+            $statusMsg = $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')));
+            $statusData[$userUuid] = 'success';
         } elseif ($getMode === 'delete') {
             // User must not be in any other organization
             // User could not delete himself
@@ -170,6 +164,7 @@ try {
             // Delete user from database
             $user->delete();
             
+            $statusMsg = $gL10n->get('SYS_DELETE_DATA');
             $statusData[$userUuid] = 'success';
         } elseif ($getMode === 'send_login') {
             // If User must be member of this organization than send a new password
