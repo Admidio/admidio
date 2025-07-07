@@ -78,6 +78,9 @@ try {
     $useOrderBy = false;
     $orderCondition = '';
     $orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
+    if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+        array_unshift($orderColumns, 'checkbox');
+    }
 
     if (array_key_exists('order', $_GET)) {
         foreach ($_GET['order'] as $order) {

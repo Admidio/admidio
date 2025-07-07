@@ -152,7 +152,7 @@ try {
     $columnAlignment[] = 'right';
     $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('mem_show_filter' => $getMembersShowFilter)));
     $contactsTable->setColumnAlignByArray($columnAlignment);
-    $contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+    $contactsTable->disableDatatablesColumnsSort(array(1, 2, count($columnHeading)));// disable sort in last column
     $contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
     $contactsTable->addRowHeadingByArray($columnHeading);
     $contactsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
@@ -167,7 +167,7 @@ try {
                     var tableApi = $table.DataTable();
 
                     // base URLs
-                    var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "edit")) . '";
+                    var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('mode' => 'html_selection')) . '";
                     var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg')) . '";
 
                     // cache jQuery objects
