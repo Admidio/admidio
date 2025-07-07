@@ -63,10 +63,52 @@ function ProfileJS(gRootPath) {
     };
 
     this.toggleDetailsOn = function (memberUuid) {
-        $("#adm_membership_period_" + memberUuid).css({"visibility": "visible", "display": "block"});
+        /* Tabs */
+        // find the element in different containers (current, former, future)
+        membershipPeriodElement = $(
+            "#adm_profile_role_memberships_current_pane_content, " +
+            "#adm_profile_role_memberships_former_pane_content, " +
+            "#adm_profile_role_memberships_future_pane_content"
+        ).find("#adm_membership_period_" + memberUuid).first();
+        membershipPeriodElement.css({"visibility": "visible", "display": "block"});
+        // find the parent element with href toggleDetailsOn('memberUuid') and change it to toggleDetailsOff('memberUuid')
+        toggleElement = membershipPeriodElement.parent().find("a[href=\"javascript:profileJS.toggleDetailsOn('" + memberUuid + "')\"]");
+        toggleElement.attr("href", "javascript:profileJS.toggleDetailsOff('" + memberUuid + "')");
+
+        /* Accordions */
+        membershipPeriodElement = $(
+            "#adm_profile_role_memberships_current_accordion_content, " +
+            "#adm_profile_role_memberships_former_accordion_content, " +
+            "#adm_profile_role_memberships_future_accordion_content"
+        ).find("#adm_membership_period_" + memberUuid).first();
+        membershipPeriodElement.css({"visibility": "visible", "display": "block"});
+        // find the parent element with href toggleDetailsOn('memberUuid') and change it to toggleDetailsOff('memberUuid')
+        toggleElement = membershipPeriodElement.parent().find("a[href=\"javascript:profileJS.toggleDetailsOn('" + memberUuid + "')\"]");
+        toggleElement.attr("href", "javascript:profileJS.toggleDetailsOff('" + memberUuid + "')");
     };
 
     this.toggleDetailsOff = function (memberUuid) {
-        $("#adm_membership_period_" + memberUuid).css({"visibility": "hidden", "display": "none"});
+        /* Tabs */
+        // find the element in different containers (current, former, future)
+        membershipPeriodElement = $(
+            "#adm_profile_role_memberships_current_pane_content, " +
+            "#adm_profile_role_memberships_former_pane_content, " +
+            "#adm_profile_role_memberships_future_pane_content"
+        ).find("#adm_membership_period_" + memberUuid).first();
+        membershipPeriodElement.css({"visibility": "hidden", "display": "none"});
+        // find the parent element with href toggleDetailsOff('memberUuid') and change it to toggleDetailsOn('memberUuid')
+        toggleElement = membershipPeriodElement.parent().find("a[href=\"javascript:profileJS.toggleDetailsOff('" + memberUuid + "')\"]");
+        toggleElement.attr("href", "javascript:profileJS.toggleDetailsOn('" + memberUuid + "')");
+
+        /* Accordions */
+        membershipPeriodElement = $(
+            "#adm_profile_role_memberships_current_accordion_content, " +
+            "#adm_profile_role_memberships_former_accordion_content, " +
+            "#adm_profile_role_memberships_future_accordion_content"
+        ).find("#adm_membership_period_" + memberUuid).first();
+        membershipPeriodElement.css({"visibility": "hidden", "display": "none"});
+        // find the parent element with href toggleDetailsOff('memberUuid') and change it to toggleDetailsOn('memberUuid')
+        toggleElement = membershipPeriodElement.parent().find("a[href=\"javascript:profileJS.toggleDetailsOff('" + memberUuid + "')\"]");
+        toggleElement.attr("href", "javascript:profileJS.toggleDetailsOn('" + memberUuid + "')");
     };
 }
