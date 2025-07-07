@@ -1,4 +1,6 @@
-<div class="alert alert-info" role="alert"><i class="bi bi-info-circle-fill"></i>{$l10n->get('SYS_EDIT_PROFILES_DESC')}</div>
+{if strlen($infoAlert) > 0}
+    <div class="alert alert-info" role="alert"><i class="bi bi-info-circle-fill"></i>{$infoAlert}</div>
+{/if}
 
 <form {foreach $attributes as $attribute}
         {$attribute@key}="{$attribute}"

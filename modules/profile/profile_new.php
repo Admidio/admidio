@@ -587,8 +587,6 @@ try {
             }
 
             $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
-            $form->addToHtmlPage();
-            $gCurrentSession->addFormObject($form);
 
             // add javascript to toggle profile fields editability
             $page->addJavascript('
@@ -619,6 +617,14 @@ try {
                     });
                 });'
             );
+
+            // add a information that this is a multi-edit form
+            $infoAlert = $gL10n->get('SYS_EDIT_PROFILES_DESC');
+
+            $page->assignSmartyVariable('infoAlert', $infoAlert);
+
+            $form->addToHtmlPage();
+            $gCurrentSession->addFormObject($form);
 
             $page->show();
             break;
