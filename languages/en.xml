@@ -570,6 +570,8 @@
   <string name="SYS_EDIT_PROFILE_FIELDS">Edit profile fields</string>
   <string name="SYS_EDIT_PROFILE_FIELDS_PREF">Edit profile fields in the profile</string>
   <string name="SYS_EDIT_PROFILE_PIC_FROM">Edit profile picture of #VAR1# #VAR2#</string>
+  <string name="SYS_EDIT_PROFILES">Edit profiles</string>
+  <string name="SYS_EDIT_PROFILES_DESC">The values of the profile fields can be edited here.\n\nThe displayed values of the selected fields will be applied to ALL profiles in the selection!</string>
   <string name="SYS_EDIT_ROLE">Edit role</string>
   <string name="SYS_EDIT_ROOMS">Edit rooms</string>
   <string name="SYS_EDIT_ROOMS_DESC">Here you can create and edit rooms for events.</string>
@@ -707,6 +709,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
+  <string name="SYS_FORM_USE_FOR_EDIT">If this checkbox is activated, the corresponding field value will be used for editing the selection.</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_SELECTION">Make selection former</string>
@@ -1272,6 +1275,7 @@
   <string name="SYS_SELECT_MEMBERS">Select members</string>
   <string name="SYS_SELECT_PHOTO">Select photo</string>
   <string name="SYS_SELECT_PHOTOS">Select photos</string>
+  <string name="SYS_SELECTION">Selection</string>
   <string name="SYS_SEMICOLON">Semicolon (;)</string>
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_COPY">Send copy of e-mail to my address</string>
