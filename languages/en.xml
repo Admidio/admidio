@@ -887,7 +887,6 @@
   <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESC">The date the item was returned to the keeper</string>
   <string name="SYS_INVENTORY_RECEIVED_ON">Borrowed on</string>
   <string name="SYS_INVENTORY_RECEIVED_ON_DESC">The borrowing date of the item to the last recipient</string>
-  <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">If you select #VAR1_BOLD#, the items along with their associated records will be irrevocably removed from the database, and it will not be possible to view the data of these items later.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">The selected items have been deleted.</string>
   <string name="SYS_INVENTORY_SELECTION_EDITED">Items successfully changed</string>
