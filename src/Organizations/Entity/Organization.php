@@ -660,6 +660,49 @@ class Organization extends Entity
                      ';
         $this->db->queryPrepared($sql, array($this->getValue('org_id')));
 
+        // delete all inventory item data
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . '
+                    WHERE ind_ini_id IN (
+                        SELECT ivt.ini_id
+                            FROM (SELECT ini_id
+                                    FROM ' . TBL_INVENTORY_ITEMS . '
+                                    WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                                    ) ivt
+                        )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all inventory item lend data
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
+                 WHERE inl_ini_id IN (
+                       SELECT ini.ini_id
+                         FROM (SELECT ini_id
+                                 FROM ' . TBL_INVENTORY_ITEMS . '
+                                WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) ini
+                       )';
+
+        // delete all inventory items
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . '
+                 WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all inventory field options
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                 WHERE ifo_inf_id IN (
+                       SELECT inf.inf_id
+                         FROM (SELECT inf_id
+                                 FROM ' . TBL_INVENTORY_FIELDS . '
+                                WHERE inf_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) inf
+                       )';
+
+        // delete all inventory fields
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_FIELDS . '
+                 WHERE inf_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
         // now delete the organization
         parent::delete();
 
