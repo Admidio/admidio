@@ -41,6 +41,17 @@ class DataTables
      */
     protected int $rowsPerPage = 25;
     /**
+     * @var array<int,string> Array with the number of rows that should be displayed on one page as key and the
+     *                        text that should be shown in the menu as value.
+     *                        E.g. array(10 => '10', 25 => '25', 50 => '50', 100 => '100').
+     */
+    protected array $rowsPerPageMenuEntries = array(
+        10 => '10',
+        25 => '25',
+        50 => '50',
+        100 => '100'
+    );
+    /**
      * @var array<int,string> Array with the column number as key and the 'asc' or 'desc' as value.
      */
     protected array $columnsOrder = array();
@@ -116,6 +127,12 @@ class DataTables
         if ($rowCount > 10 || $this->serverSideProcessing) {
             // set default page length of the table
             $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
+            // set page length menu entries
+            // check if there is a entry with the value of -1, if not then add it
+            if (!array_key_exists(-1, $this->rowsPerPageMenuEntries)) {
+                $this->rowsPerPageMenuEntries[-1] = $gL10n->get('SYS_ALL');
+            }
+            $this->datatablesInitParameters[] = '"lengthMenu": [' . json_encode(array_keys($this->rowsPerPageMenuEntries)) . ', ' . json_encode(array_values($this->rowsPerPageMenuEntries)) . ']';
         } else {
             // disable page length menu
             $this->datatablesInitParameters[] = '"paging": false';
@@ -349,6 +366,17 @@ class DataTables
                 $this->columnsOrder[] = '[' . ($column - 1) . ', "asc"]';
             }
         }
+    }
+
+    /**
+     * Set the menu entries that should be shown in the page length menu of the DataTables.
+     * @param array<int,string> $menuEntries An array with the number of rows that should be displayed on one page as key
+     *                                       and the text that should be shown in the menu as value.
+     *                                       E.g. array(10 => '10', 25 => '25', 50 => '50', 100 => '100').
+     */
+    public function setRowsPerPageMenuEntries(array $menuEntries)
+    {
+        $this->rowsPerPageMenuEntries = $menuEntries;
     }
 
     /**

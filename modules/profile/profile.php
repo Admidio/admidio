@@ -21,6 +21,9 @@ use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\UI\Presenter\InventoryPresenter;
+use Admidio\UI\Component\DataTables;
+use Admidio\Inventory\ValueObjects\ItemsData;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -392,6 +395,92 @@ try {
         }
     }
 
+    if ($gSettingsManager->getInt('inventory_module_enabled') > 0 && $gSettingsManager->getBool('inventory_profile_view_enabled')) {
+        // ******************************************************************************
+        // Block with inventory items (optimized)
+        // ******************************************************************************
+        $itemsKeeper = new ItemsData($gDb, $gCurrentOrgId);
+        $itemsReceiver = new ItemsData($gDb, $gCurrentOrgId);
+        
+        // Read items by user
+        $itemsKeeper->readItemsByUser($user->getValue('usr_id'), array('KEEPER'));
+        $itemsReceiver->readItemsByUser($user->getValue('usr_id'), array('LAST_RECEIVER'));
+        
+        // Determine creation mode based on available items
+        $creationMode = 'none';
+        if (!empty($itemsKeeper->getItems()) && (empty($itemsReceiver->getItems()) || $gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+            $creationMode = 'keeper';
+        } elseif (empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+            $creationMode = 'receiver';
+        } elseif (!empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+            $creationMode = 'both';
+        }
+        
+        // Helper function to set up DataTables
+        function setupDataTable($page, $tableId, $templateData) 
+        {
+            // create DataTable objects for tabs and accordions
+            foreach (['_tab','_accordion'] as $suffix) {
+                $dt = new DataTables($page, $tableId . $suffix);
+                $headerCount = count($templateData['headers']);
+                $dt->disableColumnsSort(array($headerCount));
+                $dt->setColumnsNotHideResponsive(array($headerCount));
+                $dt->createJavascript(count($templateData['rows']), $headerCount);
+                $dt->setColumnAlignByArray($templateData['column_align']);
+                $dt->setRowsPerPage(10);
+            }
+        }
+        
+        $inventoryPage = new InventoryPresenter();
+        switch($creationMode) {
+            case 'keeper':
+                $templateData = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
+                setupDataTable($page, 'adm_inventory_table_keeper', $templateData);
+            
+                $page->assignSmartyVariable('keeperList', $templateData);
+                $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+                }
+                break;
+        
+            case 'receiver':
+                $templateData = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
+                setupDataTable($page, 'adm_inventory_table_receiver', $templateData);
+            
+                $page->assignSmartyVariable('receiverList', $templateData);
+                $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                }
+                break;
+        
+            case 'both':
+                $templateDataKeeper = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
+                $templateDataReceiver = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
+            
+                setupDataTable($page, 'adm_inventory_table_keeper', $templateDataKeeper);
+                setupDataTable($page, 'adm_inventory_table_receiver', $templateDataReceiver);
+            
+                $page->assignSmartyVariable('keeperList', $templateDataKeeper);
+                $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                }  
+            
+                $page->assignSmartyVariable('receiverList', $templateDataReceiver);
+                $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                }
+                break;
+        
+            default:
+                break;
+        }
+        $page->assignSmartyVariable('showInventoryOnProfile', $gSettingsManager->getBool('inventory_profile_view_enabled'));
+    }
+
     if ($gSettingsManager->getBool('profile_show_roles')) {
         // *******************************************************************************
         // Authorizations block
@@ -405,6 +494,7 @@ try {
             'rol_assign_roles',
             'rol_events',
             'rol_documents_files',
+            'rol_inventory_admin',
             'rol_edit_user',
             'rol_forum_admin',
             'rol_mail_to_all',
@@ -509,6 +599,13 @@ try {
                     'roles' => $rightsOrigin['rol_documents_files'],
                     'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
                     'icon' => 'bi-file-earmark-arrow-down-fill'
+                );
+            }
+            if ($user->checkRolesRight('rol_inventory_admin') && (int) $gSettingsManager->getInt('inventory_module_enabled') > 0) {
+                $userRightsArray[] = array(
+                    'roles' => $rightsOrigin['rol_inventory_admin'],
+                    'right' => $gL10n->get('SYS_RIGHT_INVENTORY'),
+                    'icon' => 'bi-box-seam-fill'
                 );
             }
             if ($user->checkRolesRight('rol_forum_admin') && $gSettingsManager->getInt('forum_module_enabled') > 0) {
