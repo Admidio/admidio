@@ -83,6 +83,11 @@ $defaultOrgPreferences = array(
     'changelog_table_texts' => '0',
     'changelog_table_forum_topics' => '0',
     'changelog_table_forum_posts' => '0',
+    'changelog_table_inventory_fields' => '0',
+    'changelog_table_inventory_field_select_options' => '0',
+    'changelog_table_inventory_items' => '0',
+    'changelog_table_inventory_item_data' => '0',
+    'changelog_table_inventory_item_lend_data' => '0',
     'changelog_table_saml_clients' => '0',
     'changelog_table_oidc_clients' => '0',
     'changelog_table_others' => '0',
@@ -140,6 +145,24 @@ $defaultOrgPreferences = array(
     // Documents and files
     'documents_files_module_enabled' => '1',
     'documents_files_max_upload_size' => '3',
+
+    // Inventory
+    'inventory_module_enabled' => '2',
+    'inventory_items_per_page' => '25',
+    'inventory_field_history_days' => '365',
+    'inventory_show_obsolete_select_field_options' => '1',
+    'inventory_system_field_names_editable' => '0',
+    'inventory_allow_keeper_edit' => '0',
+    'inventory_allowed_keeper_edit_fields' => 'IN_INVENTORY,LAST_RECEIVER,RECEIVED_ON,RECEIVED_BACK_ON',
+    'inventory_current_user_default_keeper' => '0',
+    'inventory_allow_negative_numbers' => '1',
+    'inventory_decimal_places' => '1',
+    'inventory_field_date_time_format' => 'date',
+    'inventory_items_disable_lending' => '0',
+    'inventory_profile_view_enabled' => '1',
+    'inventory_profile_view' => 'LAST_RECEIVER',
+    'inventory_export_filename' => $GLOBALS['gL10n']->get('SYS_INVENTORY'),
+    'inventory_add_date' => '0',
 
     // Events
     'events_list_configuration' => '',

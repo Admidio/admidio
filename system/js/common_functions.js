@@ -49,6 +49,32 @@ function showHideMoreText(element, butonTexts) {
 }
 
 /**
+ * This function checks if a tbody element is empty (i.e., has no visible tr elements).
+ * @param   {HTMLElement} tbodyElement  The tbody element to check.
+ * @returns {boolean}                   True if the tbody element is empty, false otherwise.
+ */
+function isTbodyEmpty(tbodyElement) {
+    rows = tbodyElement.querySelectorAll("tr");
+    count = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+        if (rows[i].style.display === "none") {
+            continue;
+        }
+        else {
+            count++;
+        }
+    }
+
+    if (count === 1) {
+        return true;   // the tbody element only holds the last visible element
+    }
+    else {
+        return false;
+    }
+}
+
+/**
  * This function can be used to call a specific url and hide an html element
  * in dependence from the returned data. If the data received is "done" then
  * the element will be hidden otherwise the data will be shown in an error block.
@@ -120,12 +146,97 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                     $(entryDeleted).fadeOut("slow");
                 }
             }
+
+            var tbodyElement = entryDeleted.closest("tbody");
+            if (isTbodyEmpty(tbodyElement)) {
+                $(tbodyElement).fadeOut("slow");
+                var tbodyElement2 = tbodyElement.previousElementSibling;
+                $(tbodyElement2).fadeOut("slow");
+            }
         } else {
             // entry could not be deleted, then show content of data or a common error message
             if (returnMessage.length === 0) {
                 returnMessage = "Error: Undefined error occurred!";
             }
             messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage + "</div>");
+        }
+    });
+}
+
+/**
+ * This function can be used to call a specific url and hide multiple html elements
+ * in dependence from the returned data. If the data received is "done" then
+ * the elements will be hidden otherwise the data will be shown in an error block.
+ * @param {string}   elementPrefix This is the prefix of the html elements ids that should be hidden.
+ * @param {array}   elementId  This is the array of ids of the html elements that should be hidden.
+ * @param {string}   url        This is the url that will be called.
+ * @param {string}   csrfToken  If this is set than it will be added to the post request.
+ */
+function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
+    // 1) normalize to an array
+    var rawIds = Array.isArray(elementIds)
+        ? elementIds.slice()         // clone the array if it already is one
+        : [ elementIds ];            // wrap single value into array
+
+    // 2) prefix each entry
+    var ids = rawIds.map(function(id){
+        return elementPrefix + id;
+    });
+    // helper: fade out one row (and optional callback) by id
+    function _fadeOutById(id) {
+        var entry = document.getElementById(id) || document.getElementById("row_" + id);
+        if (!entry) {
+            return;
+        }
+
+        // do the fade
+        $(entry).fadeOut("slow");
+
+        // then check if its <tbody> is now empty
+        var tb = entry.closest("tbody");
+        if (tb && tb.children.length === 0) {
+            $(tb).fadeOut("slow");
+            $(tb.previousElementSibling).fadeOut("slow");
+        }
+    }
+
+    // send AJAX
+    $.post(url, {
+        "adm_csrf_token": csrfToken,
+        "uuids[]": ids   // PHP will see $_POST['uuids'] as an array
+    }, function(responseData) {
+        var status = "error", msg = "";
+        try {
+            var d = typeof responseData === "object" ? responseData : JSON.parse(responseData);
+            status = d.status || status;
+            msg    = d.message || "";
+        } catch (e) {
+            if (responseData === "done") {
+                status = "success";
+            }
+            else {
+                msg = responseData;
+            }
+        }
+
+        var $modalMsg = $("#adm_status_message");
+        if (status === "success") {
+            if (msg) {
+                $modalMsg.html('<div class="alert alert-success"><i class="bi bi-check-lg"></i> '+msg+'</div>');
+                setTimeout(function(){
+                    $("#adm_modal, #adm_modal_messagebox").modal("hide");
+                    // fade out each
+                    ids.forEach(_fadeOutById);
+                }, 1500);
+            } else {
+                $("#adm_modal, #adm_modal_messagebox").modal("hide");
+                ids.forEach(_fadeOutById);
+            }
+        } else {
+            if (!msg) {
+                msg = "Error: Undefined error occurred!";
+            }
+            $modalMsg.html('<div class="alert alert-danger"><i class="bi bi-exclamation-circle-fill"></i> '+msg+'</div>');
         }
     });
 }
@@ -478,5 +589,16 @@ $(document).ajaxComplete(function(event, jqXHR) {
     if (redirect) {
         // reload the complete page and not only the AJAX content
         window.location.href = redirect;
+    }
+});
+
+/**
+ * This function will override the dataType for AJAX requests to the datatables language files.
+ * It ensures that the response is treated as JSON and sets the correct MIME type.
+ */
+$.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+    if (options.url.indexOf('/datatables/language/') !== -1) {
+        options.dataType = 'json';
+        jqXHR.overrideMimeType('application/json');
     }
 });

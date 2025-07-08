@@ -75,7 +75,7 @@ class HtmlTable extends HtmlTableBasic
     /**
      * Constructor creates the table element
      * @param string $id ID of the table
-     * @param HtmlPage|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code
+     * @param HtmlPage|PagePresenter|null $htmlPage (optional) A HtmlPage object that will be used to add javascript code
      *                         or files to the html output page.
      * @param bool $hoverRows (optional) If set to **true** then the active selected row will be marked with special css code
      * @param bool $datatables (optional) If set to **true** then the jQuery plugin Datatables will be used to create the table.
@@ -85,7 +85,7 @@ class HtmlTable extends HtmlTableBasic
      * @throws Exception
      * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
-    public function __construct(string $id, HtmlPage|PagePresenter $htmlPage = null, $hoverRows = true, bool $datatables = false, string $class = '')
+    public function __construct(string $id, HtmlPage|PagePresenter|null $htmlPage = null, $hoverRows = true, bool $datatables = false, string $class = '')
     {
         global $gL10n;
 
@@ -124,13 +124,13 @@ class HtmlTable extends HtmlTableBasic
      *                                              array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
      *                                              With this you can specify special values for sorting and searching.
      * @param string $id           (optional) Set an unique id for the column.
-     * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
+     * @param array<string,string>|null $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of column where the colspan should start.
      *                                              The first column of a table will be 1.
      * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
-    private function addRowTypeByArray(string $type, array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
+    private function addRowTypeByArray(string $type, array $arrColumnValues, string $id = '', array|null $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
         // set an id to the column
         if ($id !== '') {
@@ -152,12 +152,12 @@ class HtmlTable extends HtmlTableBasic
      * Each value of the array represents the heading text for each column.
      * @param array<int,string>    $arrColumnValues Array with the values for each column.
      * @param string $id              (optional) Set an unique id for the column.
-     * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
+     * @param array<string,string>|null $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
      * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
-    public function addRowFooterByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
+    public function addRowFooterByArray(array $arrColumnValues, string $id = '', array|null $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
         $this->addTableFooter();
         $this->addRowTypeByArray('td', $arrColumnValues, $id, $arrAttributes, $colspan, $colspanOffset);
@@ -168,12 +168,12 @@ class HtmlTable extends HtmlTableBasic
      * Each value of the array represents the heading text for each column.
      * @param array<int,string>    $arrColumnValues Array with the values for each column.
      * @param string $id           (optional) Set an unique id for the column.
-     * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
+     * @param array<string,string>|null $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start. The first column of a table will be 1.
      * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
-    public function addRowHeadingByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
+    public function addRowHeadingByArray(array $arrColumnValues, string $id = '', array|null $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
         $this->addTableHeader();
         $this->addRowTypeByArray('th', $arrColumnValues, $id, $arrAttributes, $colspan, $colspanOffset);
@@ -186,13 +186,13 @@ class HtmlTable extends HtmlTableBasic
      *                                              array('value' => $yourValue, 'order' => $sortingValue, 'search' => $searchingValue)
      *                                              With this you can specify special values for sorting and searching.
      * @param string $id           (optional) Set an unique id for the column.
-     * @param array<string,string> $arrAttributes   (optional) Further attributes as array with key/value pairs
+     * @param array<string,string>|null $arrAttributes   (optional) Further attributes as array with key/value pairs
      * @param int $colspan         (optional) Number of columns that should be joined together.
      * @param int $colspanOffset   (optional) Number of the column where the colspan should start.
      *                                              The first column of a table will be 1.
      * @deprecated 5.0.0:5.1.0 Class "HtmlTable" is deprecated, use native Smarty template integration instead.
      */
-    public function addRowByArray(array $arrColumnValues, string $id = '', array $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
+    public function addRowByArray(array $arrColumnValues, string $id = '', array|null $arrAttributes = null, int $colspan = 1, int $colspanOffset = 1)
     {
         // if body area wasn't defined until now then do it
         if (!$this->tbody) {
