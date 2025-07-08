@@ -152,7 +152,11 @@ try {
     $columnAlignment[] = 'right';
     $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('mem_show_filter' => $getMembersShowFilter)));
     $contactsTable->setColumnAlignByArray($columnAlignment);
-    $contactsTable->disableDatatablesColumnsSort(array(1, 2, count($columnHeading)));// disable sort in last column
+    if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+        $contactsTable->disableDatatablesColumnsSort(array(1, 2, count($columnHeading)));// disable sort in last column
+    } else {
+        $contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+    }
     $contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
     $contactsTable->addRowHeadingByArray($columnHeading);
     $contactsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
