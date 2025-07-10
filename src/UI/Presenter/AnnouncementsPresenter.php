@@ -230,7 +230,7 @@ class AnnouncementsPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_announcements_edit_form',
             'modules/announcements.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'edit', 'announcement_uuid' => $announcementUUID)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'save', 'announcement_uuid' => $announcementUUID)),
             $this
         );
         $form->addInput(
