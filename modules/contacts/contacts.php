@@ -197,7 +197,7 @@ try {
 
                     function updateHeaderState() {
                         var total = rowChks().length;
-                        var checked = rowChks().filter(":checked").length;
+                        var checked = selectedIds.length;
                         if (checked === 0) {
                             headChk.prop({ checked: false, indeterminate: false });
                         } else if (checked === total) {
@@ -210,38 +210,46 @@ try {
                     // header-checkbox → select/unselect *all* rows
                     headChk.on("change", function() {
                         var checkAll = this.checked;
-                        selectedIds = [];
 
                         if (checkAll) {
-                            // update the initial page length
-                            initialPageLength = tableApi.page.len();
-                            // show all rows
-                            tableApi.page.len(-1).draw();;
+                            // register a one-time draw event to collect all IDs
                             tableApi.one("draw.dt", function() {
+                                // clear the selectedIds array
+                                selectedIds = [];
+
                                 // grab every row
                                 tableApi.rows().every(function() {
                                     if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
                                         selectedIds.push(this.node().id.replace(/^row_members_/, ""));
+                                        $(this.node()).find("input[type=checkbox]").prop("checked", true);
                                     }
                                 });
-                            });
-                        } else {
-                            // reset the page length to the initial value
-                            tableApi.page.len(initialPageLength).draw();
-                        }
 
-                        tableApi.one("draw.dt", function() {
-                            // toggle checked state of all selected rows checkboxes
-                             selectedIds.forEach(function(id) {
+                                updateHeaderState();
+                                refreshActions();
+                            });
+
+                            // update the initial page length and set it to -1 (all rows)
+                            initialPageLength = tableApi.page.len();
+                            tableApi.page.len(-1).draw();
+                        } else {
+                            // set the checked state of all selected rows to false
+                            selectedIds.forEach(function(id) {
                                 var row = table.find("#row_members_" + id);
                                 if (row.length > 0) {
-                                    row.find("input[type=checkbox]").prop("checked", checkAll);
+                                    row.find("input[type=checkbox]").prop("checked", false);
                                 }
                             });
 
+                            // clear the selectedIds array
+                            selectedIds = [];
+
                             updateHeaderState();
                             refreshActions();
-                        });
+                            
+                            // reset the page length to the initial value
+                            tableApi.page.len(initialPageLength).draw();
+                        }
                     });
 
                     // individual row-checkbox → toggle just that ID
