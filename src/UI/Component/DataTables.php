@@ -228,9 +228,13 @@ class DataTables
             $this->htmlPage->addJavascript(
                 '
                 $("#' . $this->id . '").on("draw.dt", function () {
-                    document.querySelectorAll(\'[data-bs-toggle="tooltip"]\').forEach(
-                        el => new bootstrap.Tooltip(el)
-                    );
+                    document.querySelectorAll(\'[data-bs-toggle="tooltip"]\').forEach(el => {
+                        let tooltipInstance = bootstrap.Tooltip.getInstance(el);
+                        if (tooltipInstance) {
+                            tooltipInstance.dispose();
+                        }
+                        new bootstrap.Tooltip(el);
+                    });
                 });
                 ', true
             );
