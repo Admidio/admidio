@@ -61,7 +61,7 @@ try {
             $preferences = new PreferencesService();
             $preferences->save($getPanel, $_POST);
 
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA'), 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => strtolower($getPanel)))));
             break;
 
         // Returns the html of the requested form
