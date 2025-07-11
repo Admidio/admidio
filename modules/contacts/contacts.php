@@ -126,7 +126,7 @@ try {
     $contactsTable = new HtmlTable('adm_contacts_table', $page, true, true, 'table table-condensed');// create array with all column heading values
     $columnHeading = $contactsListConfig->getColumnNames();
 
-    if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
         array_unshift(
             $columnHeading,
             '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>',
@@ -143,7 +143,7 @@ try {
 
     $columnHeading[] = '&nbsp;';
     $columnAlignment = $contactsListConfig->getColumnAlignments();
-    if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
         array_unshift($columnAlignment, 'center', 'left', 'left');
     } else {
         array_unshift($columnAlignment, 'left', 'left');
@@ -152,7 +152,7 @@ try {
     $columnAlignment[] = 'right';
     $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('mem_show_filter' => $getMembersShowFilter)));
     $contactsTable->setColumnAlignByArray($columnAlignment);
-    if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
         $contactsTable->disableDatatablesColumnsSort(array(1, 2, count($columnHeading)));// disable sort in last column
     } else {
         $contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
@@ -160,26 +160,28 @@ try {
     $contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
     $contactsTable->addRowHeadingByArray($columnHeading);
     $contactsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
+    $contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
 
-    if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
         // add the checkbox for selecting items and action buttons
         $page->addJavascript('
             $(document).ready(function() {
-                var $table = $("#adm_contacts_table");
+                var table = $("#adm_contacts_table");
 
-                $table.one("init.dt", function() {
-                    var tableApi = $table.DataTable();
+                table.one("init.dt", function() {
+                    var tableApi = table.DataTable();
+                    var initialPageLength = tableApi.page.len();
 
                     // base URLs
                     var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('mode' => 'html_selection')) . '";
-                    var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg')) . '";
+                    var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg', 'show_former_button' => ($getMembersShowFilter !== 1))) . '";
 
                     // cache jQuery objects
-                    var $editButton = $("#edit-selected").css("display", "block");
-                    var $deleteButon = $("#delete-selected").css("display", "block");
-                    var $headChk = $table.find("thead input[type=checkbox]");
-                    var $rowChks = function() { return $table.find("tbody input[type=checkbox]"); };
-                    var $actions = $("#adm_contacts_table_select_actions");
+                    var editButton = $("#edit-selected");
+                    var deleteButon = $("#delete-selected");
+                    var headChk = table.find("thead input[type=checkbox]");
+                    var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
+                    var actions = $("#adm_contacts_table_select_actions");
 
                     // master list of selected IDs
                     var selectedIds = [];
@@ -189,45 +191,61 @@ try {
                     }
 
                     function refreshActions() {
-                        $editButton.prop("disabled", !anySelected());
-                        $deleteButon.prop("disabled", !anySelected());
+                        editButton.prop("disabled", !anySelected());
+                        deleteButon.prop("disabled", !anySelected());
                     }
 
                     function updateHeaderState() {
-                        var total = $rowChks().length;
-                        var checked = $rowChks().filter(":checked").length;
+                        var total = rowChks().length;
+                        var checked = rowChks().filter(":checked").length;
                         if (checked === 0) {
-                            $headChk.prop({ checked: false, indeterminate: false });
+                            headChk.prop({ checked: false, indeterminate: false });
                         } else if (checked === total) {
-                            $headChk.prop({ checked: true, indeterminate: false });
+                            headChk.prop({ checked: true, indeterminate: false });
                         } else {
-                            $headChk.prop({ checked: false, indeterminate: true });
+                            headChk.prop({ checked: false, indeterminate: true });
                         }
                     }
 
                     // header-checkbox → select/unselect *all* rows
-                    $headChk.on("change", function() {
+                    headChk.on("change", function() {
                         var checkAll = this.checked;
                         selectedIds = [];
 
                         if (checkAll) {
-                            // grab every row (even on other pages)
-                            tableApi.rows().every(function() {
-                                if ($(this.node()).is(":visible")){
-                                    selectedIds.push(this.node().id.replace(/^row_members_/, ""));
-                                }
+                            // update the initial page length
+                            initialPageLength = tableApi.page.len();
+                            // show all rows
+                            tableApi.page.len(-1).draw();;
+                            tableApi.one("draw.dt", function() {
+                                // grab every row
+                                tableApi.rows().every(function() {
+                                    if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
+                                        selectedIds.push(this.node().id.replace(/^row_members_/, ""));
+                                    }
+                                });
                             });
+                        } else {
+                            // reset the page length to the initial value
+                            tableApi.page.len(initialPageLength).draw();
                         }
 
-                        // toggle checked state of all row checkboxes
-                        $rowChks().prop("checked", checkAll);
+                        tableApi.one("draw.dt", function() {
+                            // toggle checked state of all selected rows checkboxes
+                             selectedIds.forEach(function(id) {
+                                var row = table.find("#row_members_" + id);
+                                if (row.length > 0) {
+                                    row.find("input[type=checkbox]").prop("checked", checkAll);
+                                }
+                            });
 
-                        updateHeaderState();
-                        refreshActions();
+                            updateHeaderState();
+                            refreshActions();
+                        });
                     });
 
                     // individual row-checkbox → toggle just that ID
-                    $table.on("change", "tbody input[type=checkbox]", function() {
+                    table.on("change", "tbody input[type=checkbox]", function() {
                         var id = this.closest("tr").id.replace(/^row_members_/, "");
                         var idx = selectedIds.indexOf(id);
                         if (this.checked && idx === -1) {
@@ -240,8 +258,22 @@ try {
                         refreshActions();
                     });
 
+                    // when the order changes, recheck selected ids
+                    tableApi.on("draw.dt", function() {
+                        //recheck selected ids
+                        selectedIds.forEach(function(id) {
+                            var row = table.find("#row_members_" + id);
+                            if (row.length > 0) {
+                                row.find("input[type=checkbox]").prop("checked", true);
+                            }
+                        });
+
+                        updateHeaderState();
+                        refreshActions();
+                    });
+
                     // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
-                    $actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
+                    actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
                         // build uuids[] querystring
                         var qs = selectedIds.map(function(id) {
                             return "user_uuids[]=" + encodeURIComponent(id);
@@ -262,17 +294,20 @@ try {
                         // when the popup closes, unselect all items
                         $(document).one("hidden.bs.modal", function() {
                             selectedIds = [];
-                            $headChk.prop({ checked: false, indeterminate: false });
-                            $rowChks().prop("checked", false);
+                            headChk.prop({ checked: false, indeterminate: false });
+                            rowChks().prop("checked", false);
                             
                             // initialize button states
                             updateHeaderState();
                             refreshActions();
+
+                            // redraw the table to reset the page length
+                            tableApi.page.len(initialPageLength).draw();
                         });
                     });
 
                     // bulk-edit button → fire Admidio’s openPopup against item_edit URL
-                    $actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
+                    actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
                         // build uuids[] querystring
                         var qs = selectedIds.map(function(id) {
                             return "user_uuids[]=" + encodeURIComponent(id);
@@ -296,32 +331,25 @@ try {
             , true
         );
 
-        $contactsTable->setDatatablesRowsPerPage(-1); // show all rows in the table
-
         $page->addHtml('
-            <div class="table-responsive">
-                <div id="adm_contacts_table_select_actions" class="mb-3">
-                    <ul class="nav admidio-menu-function-node">
-                        <li class="nav-item">
-                            <button id="edit-selected" class="btn nav-link btn-primary" style="display: none;">
-                                <i class="bi bi-pencil-square me-1"></i>' . $gL10n->get('SYS_EDIT_SELECTION') . '
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button id="delete-selected" class="btn nav-link btn-primary" style="display: none;">
-                                <i class="bi bi-trash me-1"></i>' . $gL10n->get('SYS_DELETE_SELECTION') . '
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+            <div id="adm_contacts_table_select_actions" class="mb-3">
+                <ul class="nav admidio-menu-function-node">
+                    <li class="nav-item">
+                        <button id="edit-selected" class="btn nav-link btn-primary" disabled="disabled">
+                            <i class="bi bi-pencil-square me-1"></i>' . $gL10n->get('SYS_EDIT_SELECTION') . '
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="delete-selected" class="btn nav-link btn-primary" disabled="disabled">
+                            <i class="bi bi-trash me-1"></i>' . $gL10n->get('SYS_DELETE_SELECTION') . '
+                        </button>
+                    </li>
+                </ul>
+            </div>
         ');
-        $page->addHtml($contactsTable->show());// show html of complete page
-        $page->addHtml('</div>');// close table responsive div
-    } else {
-        $contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
-        $page->addHtml($contactsTable->show());// show html of complete page
     }
 
+    $page->addHtml($contactsTable->show());// show html of complete page
     $page->show();
 } catch (Exception $e) {
     $gMessage->show($e->getMessage());

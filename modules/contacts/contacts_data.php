@@ -78,7 +78,7 @@ try {
     $useOrderBy = false;
     $orderCondition = '';
     $orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
-    if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
         array_unshift($orderColumns, 'checkbox');
     }
 
@@ -307,7 +307,7 @@ try {
 
     while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
-        if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
             $columnNumberJson = 3;
         } else {
             $columnNumberJson = 2;
@@ -334,7 +334,7 @@ try {
         }
 
         // Create row and add first column
-        if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
             $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => '<input type="checkbox"/>', '1' => $rowNumber);
         } else {
             $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => $rowNumber);
@@ -358,7 +358,7 @@ try {
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ANY_ORGANIZATION');
         }
 
-        if (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
             $columnValues['2'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
             <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
         } else {
