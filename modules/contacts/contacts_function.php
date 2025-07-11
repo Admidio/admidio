@@ -32,6 +32,7 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('delete_explain_msg', 'remove', 'delete', 'send_login')));
+    $showFormerButton = admFuncVariableIsValid($_GET, 'show_former_button', 'bool', array('defaultValue' => true));
     $getUserUuids = admFuncVariableIsValid($_GET, 'user_uuids', 'array', array('defaultValue' => array()));
     if (empty($getUserUuids)) {
         $getUserUuids = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
@@ -79,14 +80,18 @@ try {
                 <h3 class="modal-title">' . $headerMsg . '</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <p><i class="bi bi-person-fill-dash"></i>&nbsp;' . $formerMsg . '</p>
-                <p><i class="bi bi-trash"></i>&nbsp;' . $removeMsg . '</p>
+            <div class="modal-body">';
+        if ($showFormerButton) {
+            echo '<p><i class="bi bi-person-fill-dash"></i>&nbsp;' . $formerMsg . '</p>';
+        }
+        echo '<p><i class="bi bi-trash"></i>&nbsp;' . $removeMsg . '</p>
             </div>
-            <div class="modal-footer">
-                <button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="' . $formerOnClick . '">
-                    <i class="bi bi-person-fill-dash"></i>' . $formerButtonText . '</button>
-                <button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
+            <div class="modal-footer">';
+        if ($showFormerButton) {
+            echo '<button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="' . $formerOnClick . '">
+                    <i class="bi bi-person-fill-dash"></i>' . $formerButtonText . '</button>';
+        }
+        echo '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
                     <i class="bi bi-trash"></i>' . $deleteButtonText . '</button>
                 <div id="adm_status_message" class="mt-4 w-100"></div>
             </div>';
@@ -150,7 +155,7 @@ try {
                 $role->stopMembership($row['mem_usr_id']);
             }
 
-            $statusMsg = $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')));
+            $statusMsg = (count($getUserUuids) === 1) ? $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))) : $gL10n->get('SYS_END_MEMBERSHIP_OF_USERS_OK', array($gCurrentOrganization->getValue('org_longname')));
             $statusData[$userUuid] = 'success';
         } elseif ($getMode === 'delete') {
             // User must not be in any other organization

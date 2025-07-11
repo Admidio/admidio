@@ -633,6 +633,7 @@
   <string name="SYS_END" description="End of a date">End</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Would you like to end membership of user #VAR1# in #VAR2#?</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">The membership of user #VAR1_BOLD# at #VAR2_BOLD# was finished successfully!</string>
+  <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">The memberships of the selected users at #VAR1_BOLD# were finished successfully!</string>
   <string name="SYS_ENTRY">Entry</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
