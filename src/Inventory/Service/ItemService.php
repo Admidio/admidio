@@ -45,13 +45,13 @@ class ItemService
     }
 
     /**
-     * Marks the item as former.
+     * Marks the item as retired.
      *
      * @throws Exception
      */
-    public function makeItemFormer(): void
+    public function retireItem(): void
     {
-        $this->itemRessource->makeItemFormer();
+        $this->itemRessource->retireItem();
 
         // Send notification to all users
         $this->itemRessource->sendNotification();
@@ -61,9 +61,9 @@ class ItemService
      * Reverts the item to its previous state.
      * @throws Exception
      */
-    public function undoItemFormer(): void
+    public function reinstateItem(): void
     {
-        $this->itemRessource->undoItemFormer();
+        $this->itemRessource->reinstateItem();
 
         // Send notification to all users
         $this->itemRessource->sendNotification();

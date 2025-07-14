@@ -1085,7 +1085,7 @@ CREATE TABLE %PREFIX%_inventory_items
     ini_uuid                    varchar(36)         NOT NULL,
     ini_cat_id                  integer unsigned    NOT NULL,
     ini_org_id                  integer unsigned    NOT NULL,
-    ini_former                  boolean             NOT NULL    DEFAULT false,
+    ini_retired                 boolean             NOT NULL    DEFAULT false,
     ini_usr_id_create           integer unsigned,
     ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ini_usr_id_change           integer unsigned,

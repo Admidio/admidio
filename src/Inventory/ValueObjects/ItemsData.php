@@ -34,14 +34,14 @@ use DateTime;
  */
 class ItemsData
 {
-    private bool $mItemCreated = false;                   ///< flag if a new item was created
-    private bool $mItemChanged = false;                   ///< flag if a new item was changed
-    private bool $mItemDeleted = false;                   ///< flag if a item was deleted
-    private bool $mItemMadeFormer = false;                ///< flag if a item was made to former item
-    private bool $mItemUndoMadeFormer = false;             ///< flag if a item was made to normal again
-    private bool $mItemImported = false;                   ///< flag if a item was imported
-    private bool $showFormerItems = true;               ///< if true, than former items will be showed
-    private int $organizationId = -1;                ///< ID of the organization for which the item field structure should be read
+    private bool $mItemCreated = false;         ///< flag if a new item was created
+    private bool $mItemChanged = false;         ///< flag if a new item was changed
+    private bool $mItemDeleted = false;         ///< flag if a item was deleted
+    private bool $mItemRetired = false;         ///< flag if a item was retired
+    private bool $mItemReinstated = false;      ///< flag if a item was made to normal again
+    private bool $mItemImported = false;        ///< flag if a item was imported
+    private bool $showRetiredItems = true;      ///< if true, than retired items will be showed
+    private int $organizationId = -1;           ///< ID of the organization for which the item field structure should be read
     private array $lendFieldNames = array('LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');  ///< array with the internal field names of the lend fields
 
     /**
@@ -230,11 +230,11 @@ class ItemsData
         $this->mItems = array();
 
         $sqlWhereCondition = '';
-        if (!$this->showFormerItems) {
-            $sqlWhereCondition .= 'AND ini_former = 0';
+        if (!$this->showRetiredItems) {
+            $sqlWhereCondition .= 'AND ini_retired = 0';
         }
 
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEMS . '
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_retired FROM ' . TBL_INVENTORY_ITEMS . '
                 INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
                     ON ind_ini_id = ini_id
                 WHERE ini_org_id IS NULL
@@ -243,7 +243,7 @@ class ItemsData
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
         while ($row = $statement->fetch()) {
-            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
+            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_retired' => $row['ini_retired']);
         }
     }
 
@@ -261,8 +261,8 @@ class ItemsData
         $this->mItems = array();
 
         $sqlWhereCondition = '';
-        if (!$this->showFormerItems) {
-            $sqlWhereCondition .= 'AND ini_former = 0';
+        if (!$this->showRetiredItems) {
+            $sqlWhereCondition .= 'AND ini_retired = 0';
         }
 
         $sqlImfIds = 'AND (';
@@ -274,7 +274,7 @@ class ItemsData
         }
 
         // first read all item data for the given user
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEM_DATA . '
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_retired FROM ' . TBL_INVENTORY_ITEM_DATA . '
                 INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                     ON inf_id = ind_inf_id
                     ' . $sqlImfIds . '
@@ -287,11 +287,11 @@ class ItemsData
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
 
         while ($row = $statement->fetch()) {
-            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
+            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_retired' => $row['ini_retired']);
         }
 
         // now read the item lend data for each item
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_retired FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
                 INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                     ON inf_id = inl_inf_id
                     ' . $sqlImfIds . '
@@ -314,7 +314,7 @@ class ItemsData
             }
             // if item doesn't exist, then add it to the items array
             if (!$itemExists) {
-                $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
+                $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_retired' => $row['ini_retired']);
             }
         }
     }
@@ -693,18 +693,18 @@ class ItemsData
     }
 
     /**
-     * This method reads or stores the variable for showing former items.
+     * This method reads or stores the variable for showing retired items.
      * The values will be stored in database without any inspections!
      * 
-     * @param bool|null $newValue       If set, then the new value will be stored in @b showFormerItems.
-     * @return bool                     Returns the current value of @b showFormerItems
+     * @param bool|null $newValue       If set, then the new value will be stored in @b showRetiredItems.
+     * @return bool                     Returns the current value of @b showRetiredItems
      */
-    public function showFormerItems($newValue = null): bool
+    public function showRetiredItems($newValue = null): bool
     {
         if ($newValue !== null) {
-            $this->showFormerItems = $newValue;
+            $this->showRetiredItems = $newValue;
         }
-        return $this->showFormerItems;
+        return $this->showRetiredItems;
     }
 
     /**
@@ -835,7 +835,7 @@ class ItemsData
 
             $newItem = new Item($this->mDb, $this, 0);
             $newItem->setValue('ini_org_id', $this->organizationId);
-            $newItem->setValue('ini_former', 0);
+            $newItem->setValue('ini_retired', 0);
             $newItem->setValue('ini_cat_id', $category->getValue('cat_id'));
             $newItem->save();
 
@@ -873,35 +873,35 @@ class ItemsData
     }
 
     /**
-     * Marks an item as former
+     * Marks an item as retired
      * 
-     * @param int $itemId 		    The ID of the item to be marked as former.
+     * @param int $itemId 		    The ID of the item to be retired.
      * @return void
      */
-    public function makeItemFormer(): void
+    public function retireItem(): void
     {
         $item = new Item($this->mDb, $this, $this->mItemId);
-        $item->setValue('ini_former', 1);
+        $item->setValue('ini_retired', 1);
         $item->save();
 
-        $this->mItemMadeFormer = true;
-        $this->mItemUndoMadeFormer = false;
+        $this->mItemRetired = true;
+        $this->mItemReinstated = false;
     }
 
     /**
-     * Marks an item as no longer former
+     * Marks an item as reinstated which means it is no longer retired.
      * 
-     * @param int $itemId               The ID of the item to be marked as no longer former.
+     * @param int $itemId               The ID of the item to be marked as reinstated.
      * @return void
      */
-    public function undoItemFormer(): void
+    public function reinstateItem(): void
     {
         $item = new Item($this->mDb, $this, $this->mItemId);
-        $item->setValue('ini_former', 0);
+        $item->setValue('ini_retired', 0);
         $item->save();
 
-        $this->mItemMadeFormer = false;
-        $this->mItemUndoMadeFormer = true;
+        $this->mItemRetired = false;
+        $this->mItemReinstated = true;
     }
 
     /**
@@ -964,7 +964,7 @@ class ItemsData
     }
 
     /**
-     * Send a notification email that a new item was created, changed, deleted, or marked as former
+     * Send a notification email that a new item was created, changed, deleted, retired, reinstated or imported.
      * to all members of the notification role. This role is configured within the global preference
      * **system_notifications_role**. The email contains the item name, the name of the current user,
      * the timestamp, and the details of the changes.
@@ -994,12 +994,12 @@ class ItemsData
             } elseif ($this->mItemDeleted) {
                 $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_DELETED';
                 $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_DELETED';
-            } elseif ($this->mItemMadeFormer) {
-                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_MADE_FORMER';
-                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_MADE_FORMER';
-            } elseif ($this->mItemUndoMadeFormer) {
-                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_UNDO_FORMER';
-                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_UNDO_FORMER';
+            } elseif ($this->mItemRetired) {
+                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_RETIRED';
+                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_RETIRED';
+            } elseif ($this->mItemReinstated) {
+                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_REINSTATED';
+                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_REINSTATED';
             } elseif ($this->mItemChanged) {
                 $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_CHANGED';
                 $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CHANGED';
@@ -1009,7 +1009,7 @@ class ItemsData
 
             // if items were imported then sent a message with all itemnames, the user and the date
             // if item was created or changed then sent a message with all changed fields in a table
-            // if item was deleted or made former then sent a message with the item name, the user and the date
+            // if item was deleted, retired or reinstated then sent a message with the item name, the user and the date
             if ($this->mItemImported || $this->mItemCreated || $this->mItemChanged) {
                 $format_hdr = "<tr><th> %s </th><th> %s </th><th> %s </th></tr>\n";
                 $format_row = "<tr><th> %s </th><td> %s </td><td> %s </td></tr>\n";
