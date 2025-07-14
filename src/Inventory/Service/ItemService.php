@@ -95,7 +95,7 @@ class ItemService
         if (!$this->postImported)
         {
             $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-            $formValues = $itemFieldsEditForm->validate($_POST);
+            $formValues = $itemFieldsEditForm->validate($_POST, $multiEdit);
         }
         else
         {

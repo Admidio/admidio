@@ -368,12 +368,13 @@ class ChangeNotification
         $query = $gDb->queryPrepared($sql, array($userID));
 
         while ($row = $query->fetch()) {
-            $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], '', "DELETE", $user);
+            $membership = new Membership($gDb, $row['mem_id']);
+            $this->logRoleChange($membership, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], '', "DELETE", $user);
             if ($row['mem_end']) {
-                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], '', "DELETE", $user);
+                $this->logRoleChange($membership, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], '', "DELETE", $user);
             }
             if ($row['mem_leader']) {
-                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], '', "DELETE", $user);
+                $this->logRoleChange($membership, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], '', "DELETE", $user);
             }
         }
     }
