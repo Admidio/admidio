@@ -8,6 +8,8 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Email;
+use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Language;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -21,6 +23,64 @@ use Admidio\Infrastructure\Email;
  */
 class PreferencesService
 {
+    /**
+     * Registered presenter callbacks by component ID.
+     * @var array<int, callable[]>
+     */
+    private static array $pluginPresenters = array();
+
+    /**
+     * Register a preferences presenter for a plugin.
+     *
+     * @param int $componentId   The component ID of the plugin.
+     * @param callable $presenterCallback  A callable that renders the plugin's preferences panel.
+     */
+    public static function addPluginPreferencesPresenter(int $componentId, callable $presenterCallback): void
+    {
+        if (!isset(self::$pluginPresenters[$componentId])) {
+            self::$pluginPresenters[$componentId] = array();
+        }
+        self::$pluginPresenters[$componentId][] = $presenterCallback;
+    }
+
+    /**
+     * Get all registered presenter callbacks, grouped by component ID.
+     *
+     * @return array<int, callable[]>
+     */
+    public static function getPluginPresenters(): array
+    {
+        return self::$pluginPresenters;
+    }
+
+    /**
+     * Build the panel definitions for the "Plugins" tab.
+     *
+     * This method gathers metadata from each plugin and prepares
+     * the structure used by the PreferencesPresenter to render the accordion.
+     *
+     * @return array<int, array{id:string, title:string, icon?:string, subcards?:bool}>
+     */
+    public static function getPluginPanels(): array
+    {
+        $panels = array();
+
+        foreach (self::$pluginPresenters as $comId => $callbacks) {
+            // Retrieve plugin metadata by component ID (you may need to implement this lookup)
+            $pluginManager = new PluginManager();
+            $metadata = $pluginManager->getMetadataByComponentId($comId);
+
+            $panels[] = array(
+                'id'       => str_replace(' ', '_',strtolower(Language::translateIfTranslationStrId($metadata['name']))),
+                'title'    => Language::translateIfTranslationStrId($metadata['name']),
+                'icon'     => $metadata['icon'] ?? 'bi-puzzle',
+                'subcards' => $metadata['hasSubcards'] ?? false,
+            );
+        }
+
+        return $panels;
+    }
+
     /**
      * Function to check an update
      * @param string $currentVersion
