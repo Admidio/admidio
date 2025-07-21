@@ -216,7 +216,7 @@ abstract class PluginAbstract implements PluginInterface
      * @throws Exception
      * @return array
      */
-    public static function getStaticFiles($type = null) : array
+    public static function getStaticFiles(?string $type = null) : array
     {
         if ($type !== null && !is_string($type))
         {
@@ -287,6 +287,10 @@ abstract class PluginAbstract implements PluginInterface
         return $config;
     }
 
+    /**
+     * Get the plugin configuration
+     * @return array Returns the plugin configuration
+     */
     public static function getPluginConfig() : array
     {
         $config = self::$defaultConfig;
@@ -315,6 +319,15 @@ abstract class PluginAbstract implements PluginInterface
 
     /**
      * @throws Exception
+     * @return string
+     */
+    public static function getComponentName() : string
+    {
+        return basename(self::$pluginPath);
+    }
+    
+    /**
+     * @throws Exception
      * @return bool
      */
     public static function isInstalled() : bool
@@ -335,6 +348,22 @@ abstract class PluginAbstract implements PluginInterface
     public static function isActivated() : bool
     {
         return self::isInstalled() && (self::getComponentId() > 0);
+    }
+
+    /**
+     * @throws Exception
+     * @return bool
+     */
+    public static function isOverviewPlugin() : bool
+    {
+/*         global $gDb;
+        // check if the plugin exists in components database table
+        $sql = 'SELECT COUNT(*) AS count FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND com_type = ?';
+        $statement = $gDb->queryPrepared($sql, array(self::getName(), 'OVERVIEW_PLUGIN'));
+        $columns = (int)$statement->fetchColumn();
+
+        return $columns > 0; */
+        return true;
     }
 
     /**

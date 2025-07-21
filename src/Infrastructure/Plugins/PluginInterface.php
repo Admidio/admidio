@@ -2,6 +2,7 @@
 
 namespace Admidio\Infrastructure\Plugins;
 
+use Admidio\UI\Presenter\PagePresenter;
 use InvalidArgumentException;
 use Exception;
 /**
@@ -12,32 +13,32 @@ interface PluginInterface
     /**
      * @return PluginInterface
      */
-    public static function getInstance();
+    public static function getInstance() : PluginInterface;
 
     /**
      * @return string
      */
-    public static function getName();
+    public static function getName() : string;
 
     /**
      * @return string
      */
-    public static function getVersion();
+    public static function getVersion() : string;
 
     /**
      * @return array
      */
-    public static function getMetadata();
+    public static function getMetadata() : array;
 
     /**
      * @return array
      */
-    public static function getDependencies();
+    public static function getDependencies() : array;
 
     /**
      * @return array
      */
-    public static function getSupportedLanguages();
+    public static function getSupportedLanguages() : array;
 
     /**
      * @param string $type
@@ -45,7 +46,7 @@ interface PluginInterface
      * @throws Exception
      * @return array
      */
-    public static function getStaticFiles($type = null);
+    public static function getStaticFiles(?string $type = null) : array;
 
     /**
      * @throws InvalidArgumentException
@@ -62,15 +63,26 @@ interface PluginInterface
 
     /**
      * @throws Exception
+     * @return string
+     */
+    public static function getComponentName() : string;
+    /**
+     * @throws Exception
      * @return bool
      */
-    public static function isInstalled();
+    public static function isInstalled() : bool;
 
     /**
      * @throws Exception
      * @return bool
      */
-    public static function isActivated();
+    public static function isActivated() : bool;
+
+    /**
+     * @throws Exception
+     * @return bool
+     */
+    public static function isOverviewPlugin() : bool;
 
     /**
      * @throws Exception
@@ -82,13 +94,13 @@ interface PluginInterface
      * @throws Exception
      * @return bool
      */
-    public static function doClassAutoload();
+    public static function doClassAutoload() : bool;
 
     /**
      * @throws Exception
      * @return bool
      */
-    public static function doInstall();
+    public static function doInstall() : bool;
 
     /**
      * @param array $options
@@ -96,13 +108,13 @@ interface PluginInterface
      * @throws Exception
      * @return bool
      */
-    public static function doUninstall(array $options = array());
+    public static function doUninstall(array $options = array()) : bool;
 
     /**
      * @throws Exception
      * @return bool
      */
-    public static function doUpdate();
+    public static function doUpdate() : bool;
 
     /**
      * @param array $config
@@ -110,5 +122,5 @@ interface PluginInterface
      * @throws Exception
      * @return bool
      */
-    public static function doRender(array $config = array());
+    public static function doRender(PagePresenter $page, array $config = array()) : bool;
 }

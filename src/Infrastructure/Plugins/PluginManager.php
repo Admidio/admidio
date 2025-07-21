@@ -49,7 +49,7 @@ class PluginManager
         return $plugins;
     }
 
-    public function getPluginById(int $pluginId): ?PluginAbstract
+    public function getPluginById(int $pluginId) : ?PluginAbstract
     {
         $plugins = $this->getAvailablePlugins();
         foreach ($plugins as $plugin) {
@@ -60,7 +60,7 @@ class PluginManager
         return null;
     }
 
-    public function getPluginByName(string $pluginName): ?PluginAbstract
+    public function getPluginByName(string $pluginName) : ?PluginAbstract
     {
         $plugins = $this->getAvailablePlugins();
         if (isset($plugins[$pluginName]) && $plugins[$pluginName]['interface'] instanceof PluginAbstract) {
@@ -69,7 +69,7 @@ class PluginManager
         return null;
     }
 
-    public function getMetadataByComponentId(int $componentId): ?array
+    public function getMetadataByComponentId(int $componentId) : ?array
     {
         $plugin = $this->getPluginById($componentId);
         return $plugin ? $plugin->getMetadata() : null;
@@ -88,13 +88,12 @@ class PluginManager
             $this->pluginMainFile = $pluginFile;
             }
         }
-        return;
     }
 
     /**
      * Parse a PHP file and return the first class name found.
      */
-    private function getClassNameFromFile(string $file): ?string
+    private function getClassNameFromFile(string $file) : ?string
     {
         $src = file_get_contents($file);
         $tokens = token_get_all($src);
@@ -138,10 +137,41 @@ class PluginManager
     }
 
     /**
-     *
+     * Get all plugins that are used on the overview page.
+     * @return array
      */
-    public function getActivePlugins()
+    public function getOverviewPlugins() : array
     {
+        $availablePlugins = $this->getAvailablePlugins();
+        $overviewPlugins = array();
+        foreach ($availablePlugins as $plugin) {
+            if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->isInstalled() && $plugin['interface']->isOverviewPlugin()) {
+                $overviewPlugins[] = array(
+                    'id' => $plugin['interface']->getComponentId(),
+                    'name' => $plugin['interface']->getComponentName(),
+                    'file' => basename($plugin['relativePath']),
+                    'interface' => $plugin['interface']
+                );
+            }
+        }
+        return $overviewPlugins;
+    }
 
+    /**
+     * Get all active plugins.
+     * @return array
+     */
+    public function getActivePlugins() : array
+    {
+        $availablePlugins = $this->getAvailablePlugins();
+        $activePlugins = array();
+        // TODO: Check if the plugin is activated
+        // For now, we assume all installed plugins are active.
+        foreach ($availablePlugins as $plugin) {
+            if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->isInstalled()) {
+                $activePlugins[] = $plugin['interface'];
+            }
+        }
+        return $activePlugins;
     }
 }
