@@ -38,7 +38,7 @@
     <div class="admidio-overview-plugin col-sm-6 col-lg-4 col-xl-3" id="admidio-plugin-announcement-list">
         <div class="card admidio-card">
             <div class="card-body">
-                {load_admidio_plugin plugin="announcement-list" file="index.php"}
+                {load_admidio_plugin plugin="AnnouncementList" file="index.php"}
             </div>
         </div>
     </div>

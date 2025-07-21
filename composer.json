@@ -50,7 +50,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Admidio\\": "src/"
+            "Admidio\\": "src/",
+            "Plugins\\": "adm_plugins/"
         },
         "classmap": [
           "system/classes/",
@@ -67,7 +68,7 @@
             "!adm_my_files/ecard_templates",
             "!adm_my_files/mail_templates",
             "adm_plugins/*",
-            "!adm_plugins/announcement-list",
+            "!adm_plugins/AnnouncementList",
             "!adm_plugins/birthday",
             "!adm_plugins/calendar",
             "!adm_plugins/event-list",
