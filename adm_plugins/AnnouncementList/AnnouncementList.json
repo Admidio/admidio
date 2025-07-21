@@ -42,7 +42,7 @@
             "name": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES",
             "description": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC",
             "type": "array",
-            "value" : []
+            "value" : ["All"]
         }
     }
 }

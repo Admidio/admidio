@@ -80,7 +80,6 @@ class AnnouncementListPreferencesPresenter
         $sql = 'SELECT cat.cat_id, cat.cat_name
                 FROM ' . TBL_ANNOUNCEMENTS . ' AS ann
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
-                    ON cat_id = ann_cat_id
                     WHERE cat_id IN (' . $gDb->getQmForValues($catIdParams) . ')
             ORDER BY ann_timestamp_create DESC';
         $sqlData = array(

@@ -26,6 +26,45 @@ use Throwable;
  */
 class AnnouncementList extends PluginAbstract
 {
+    /** 
+     * Get the plugin configuration
+     * @return array Returns the plugin configuration
+     */
+    public static function getPluginConfig() : array
+    {
+        global $gCurrentUser;
+
+        // get the plugin config from the parent class
+        $config = parent::getPluginConfig();
+
+        // if the key equals 'announcement_list_displayed_categories' and the value is still the default value, retrieve the categories from the database
+        if (array_key_exists('announcement_list_displayed_categories', $config) && $config['announcement_list_displayed_categories']['value'] === self::$defaultConfig['announcement_list_displayed_categories']['value']) {
+            $config['announcement_list_displayed_categories']['value'] = $gCurrentUser->getAllVisibleCategories('ANN');
+        }
+        return $config;
+
+    }
+    
+    /**
+     * Get the plugin configuration values
+     * @return array Returns the plugin configuration values
+     */
+    public static function getPluginConfigValues() : array
+    {
+        global $gCurrentUser;
+
+        // get the plugin config values from the parent class
+        $config = parent::getPluginConfigValues();
+
+        // if the key equals 'announcement_list_displayed_categories' and the value is still the default value, retrieve the categories from the database
+        if (array_key_exists('announcement_list_displayed_categories', $config) && $config['announcement_list_displayed_categories'] === self::$defaultConfig['announcement_list_displayed_categories']['value']) {
+            $config['announcement_list_displayed_categories'] = $gCurrentUser->getAllVisibleCategories('ANN');
+        }
+
+        return $config;
+
+    }
+
     private static function getAnnouncementsData() : array
     {
         global $gSettingsManager, $gCurrentUser, $gDb, $gL10n;
@@ -115,7 +154,7 @@ class AnnouncementList extends PluginAbstract
      * @throws Exception
      * @return bool
      */
-    public static function doRender(array $config = array())
+    public static function doRender($page = null, array $config = array()) : bool
     {
         global $gSettingsManager, $gL10n;
 
