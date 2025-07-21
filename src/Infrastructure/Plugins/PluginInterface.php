@@ -13,7 +13,7 @@ interface PluginInterface
     /**
      * @return PluginInterface
      */
-    public static function getInstance() : PluginInterface;
+    public static function getInstance() ;
 
     /**
      * @return string
@@ -122,5 +122,5 @@ interface PluginInterface
      * @throws Exception
      * @return bool
      */
-    public static function doRender(PagePresenter $page, array $config = array()) : bool;
+    public static function doRender(?PagePresenter $page = null, array $config = array()) : bool;
 }

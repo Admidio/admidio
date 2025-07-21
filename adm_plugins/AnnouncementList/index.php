@@ -17,7 +17,7 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
 
     $pluginAnnouncementList = AnnouncementList::getInstance();
-    $pluginAnnouncementList->doRender($page);
+    $pluginAnnouncementList->doRender(isset($page) ? $page : null);
 
 } catch (Throwable $e) {
     echo $e->getMessage();

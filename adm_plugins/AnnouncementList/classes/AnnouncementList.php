@@ -156,7 +156,7 @@ class AnnouncementList extends PluginAbstract
      */
     public static function doRender($page = null, array $config = array()) : bool
     {
-        global $gSettingsManager, $gL10n;
+        global $gSettingsManager, $gL10n, $gValidLogin;
 
         if (!is_array($config))
         {
@@ -173,8 +173,8 @@ class AnnouncementList extends PluginAbstract
             $announcementListPlugin = new Overview($pluginFolder);
 
             if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
-                if ($gSettingsManager->getInt('announcements_module_enabled') === 1
-                    || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) {
+                if (($gSettingsManager->getInt('announcements_module_enabled') === 1 || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) &&
+                    ($gSettingsManager->getInt('announcement_list_plugin_enabled') === 1 || ($gSettingsManager->getInt('announcement_list_plugin_enabled') === 2 && $gValidLogin))) {
                     $announcementArray = self::getAnnouncementsData();
                     if (!empty($announcementArray)) {
                         $announcementListPlugin->assignTemplateVariable('announcements', $announcementArray);

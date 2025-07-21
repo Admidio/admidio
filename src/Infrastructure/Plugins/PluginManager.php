@@ -146,6 +146,17 @@ class PluginManager
         $overviewPlugins = array();
         foreach ($availablePlugins as $plugin) {
             if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->isInstalled() && $plugin['interface']->isOverviewPlugin()) {
+                $configValues = $plugin['interface']->getPluginConfigValues();
+                $enabled = false;
+                foreach ($configValues as $key => $value) {
+                    if (preg_match('/_enabled$/', $key) && $value > 0) {
+                        $enabled = true;
+                        break;
+                    }
+                }
+                if (!$enabled) {
+                    continue;
+                }
                 $overviewPlugins[] = array(
                     'id' => $plugin['interface']->getComponentId(),
                     'name' => $plugin['interface']->getComponentName(),
@@ -168,7 +179,7 @@ class PluginManager
         // TODO: Check if the plugin is activated
         // For now, we assume all installed plugins are active.
         foreach ($availablePlugins as $plugin) {
-            if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->isInstalled()) {
+            if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->isActivated()) {
                 $activePlugins[] = $plugin['interface'];
             }
         }
