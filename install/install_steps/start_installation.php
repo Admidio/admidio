@@ -89,7 +89,8 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.'
              , (\'MODULE\', \'SYS_SETTINGS\',        \'PREFERENCES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_PROFILE\',         \'PROFILE\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_REGISTRATION\',    \'REGISTRATION\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-             , (\'MODULE\', \'SYS_ROOM_MANAGEMENT\', \'ROOMS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
+             , (\'MODULE\', \'SYS_ROOM_MANAGEMENT\', \'ROOMS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_PLUGIN_MANAGER\',  \'PLUGINS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
 $db->query($sql); // TODO add more params
 
 // create organization independent categories
@@ -279,7 +280,8 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences.php\', \'gear-fill\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration.php\', \'card-checklist\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu.php\', \'menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ORGANIZATIONS\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'organization\', \''.FOLDER_MODULES.'/organizations.php\', \'diagram-3-fill\', \'SYS_ORGANIZATION\', \'SYS_ORGANIZATION_DESC\')';
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ORGANIZATIONS\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'organization\', \''.FOLDER_MODULES.'/organizations.php\', \'diagram-3-fill\', \'SYS_ORGANIZATION\', \'SYS_ORGANIZATION_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PLUGINS\'), 2, \'' . Uuid::uuid4() . '\', false, 5, true, \'plugins\', \''.FOLDER_MODULES.'/plugins.php\', \'puzzle\', \'SYS_PLUGIN_MANAGER\', \SYS_PLUGIN_MANAGER_DESC\')';
 $db->query($sql);
 
 // delete session data

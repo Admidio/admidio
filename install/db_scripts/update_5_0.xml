@@ -502,5 +502,11 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         COLLATE = utf8_unicode_ci;</step>
     <step id="1670">ALTER TABLE %PREFIX%_inventory_field_select_options
             ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id) REFERENCES %PREFIX%_inventory_fields (inf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
+    <step id="1680">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+        VALUES ('MODULE', 'SYS_PLUGIN_MANAGER', 'PLUGINS',  '5.0.0', 0)</step>
+    <step id="1690"> ALTER TABLE %PREFIX%_components
+        ADD com_status VARCHAR(36) NOT NULL AFTER com_update_completed;</step>
+    <step id="1700">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'PLUGINS'), 2, %UUID%, false, 5, true, 'plugins', '/modules/plugins.php', 'puzzle', 'SYS_PLUGIN_MANAGER', 'SYS_PLUGIN_MANAGER_DESC')</step>
     <step>stop</step>
 </update>

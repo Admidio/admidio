@@ -318,6 +318,7 @@ class Component extends Entity
             case 'MENU': // fallthrough
             case 'ORGANIZATIONS': // fallthrough
             case 'PREFERENCES': // fallthrough
+            case 'PLUGINS': // fallthrough
             case 'ROOMS':
                 if ($gCurrentUser->isAdministrator()) {
                     return true;
