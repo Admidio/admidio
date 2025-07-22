@@ -42,7 +42,6 @@ class AnnouncementList extends PluginAbstract
             $config['announcement_list_displayed_categories']['value'] = $gCurrentUser->getAllVisibleCategories('ANN');
         }
         return $config;
-
     }
     
     /**
@@ -62,7 +61,6 @@ class AnnouncementList extends PluginAbstract
         }
 
         return $config;
-
     }
 
     private static function getAnnouncementsData() : array
