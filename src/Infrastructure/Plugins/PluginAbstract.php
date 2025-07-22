@@ -28,9 +28,7 @@ abstract class PluginAbstract implements PluginInterface
      */
     protected function __construct()
     {
-        // set the plugin path to the folder of this class
-        $reflection = new \ReflectionClass($this);
-        self::$pluginPath = dirname($reflection->getFileName(), 2);
+
     }
 
     /**
@@ -136,21 +134,27 @@ abstract class PluginAbstract implements PluginInterface
         {
             self::$instances[$class] = new $class();
             self::$instances[$class]->doClassAutoload();
-            self::$instances[$class]->readPluginMetadata();
+        }
 
-            // check if the plugin is installed
-            if (self::$instances[$class]->isInstalled()) {
-                global $gDb;
-                // get the component id of the plugin
-                $sql = 'SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
-                $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
-                self::$pluginComId = (int)$statement->fetchColumn();
+        // set the plugin path to the folder of this class
+        $reflection = new \ReflectionClass(self::$instances[$class]);
+        self::$pluginPath = dirname($reflection->getFileName(), 2);
 
-                // get the installed version of the plugin
-                $sql = 'SELECT com_version FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
-                $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
-                self::$version = (string)$statement->fetchColumn();
-            }
+        // read the plugin metadata
+        self::$instances[$class]->readPluginMetadata();
+
+        // check if the plugin is installed
+        if (self::$instances[$class]->isInstalled()) {
+            global $gDb;
+            // get the component id of the plugin
+            $sql = 'SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
+            $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
+            self::$pluginComId = (int)$statement->fetchColumn();
+
+            // get the installed version of the plugin
+            $sql = 'SELECT com_version FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
+            $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
+            self::$version = (string)$statement->fetchColumn();
         }
 
         return self::$instances[$class];

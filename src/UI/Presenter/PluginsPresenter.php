@@ -100,7 +100,7 @@ class PluginsPresenter extends PagePresenter
         $templateRowPluginParent[] = array('id' => 'plugins', 'name' => $gL10n->get('SYS_EXTENSIONS'), 'entries' => array());
         foreach($plugins as $pluginName => $values) {
             $templateRow = array();
-            $interface = $values['interface'] instanceof PluginAbstract ? $values['interface'] : null;
+            $interface = $values['interface'] instanceof PluginAbstract ? $values['interface']::getInstance() : null;
 
             if ($interface != null) {
                 $templateRow['id'] = ($interface->getComponentId() !== 0) ? $interface->getComponentId() : $pluginName;

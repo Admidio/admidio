@@ -53,6 +53,7 @@ class PluginManager
     {
         $plugins = $this->getAvailablePlugins();
         foreach ($plugins as $plugin) {
+            $plugin['interface'] = $plugin['interface'] !== null ? $plugin['interface']::getInstance() : null;
             if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->getComponentId() === $pluginId) {
                 return $plugin['interface'];
             }
@@ -63,8 +64,11 @@ class PluginManager
     public function getPluginByName(string $pluginName) : ?PluginAbstract
     {
         $plugins = $this->getAvailablePlugins();
-        if (isset($plugins[$pluginName]) && $plugins[$pluginName]['interface'] instanceof PluginAbstract) {
-            return $plugins[$pluginName]['interface'];
+        if (isset($plugins[$pluginName])) {
+            $plugin = $plugins[$pluginName]['interface'] !== null ? $plugins[$pluginName]['interface']::getInstance() : null;
+            if ($plugin instanceof PluginAbstract) {
+                return $plugin;
+            }
         }
         return null;
     }
@@ -129,6 +133,7 @@ class PluginManager
         $availablePlugins = $this->getAvailablePlugins();
         $installedPlugins = array();
         foreach ($availablePlugins as $plugin) {
+            $plugin['interface'] = $plugin['interface'] !== null ? $plugin['interface']::getInstance() : null;
             if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->isInstalled()) {
                 $installedPlugins[] = $plugin['interface'];
             }
@@ -145,6 +150,7 @@ class PluginManager
         $availablePlugins = $this->getAvailablePlugins();
         $overviewPlugins = array();
         foreach ($availablePlugins as $plugin) {
+            $plugin['interface'] = $plugin['interface'] !== null ? $plugin['interface']::getInstance() : null;
             if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->isInstalled() && $plugin['interface']->isOverviewPlugin()) {
                 $configValues = $plugin['interface']->getPluginConfigValues();
                 $enabled = false;
@@ -179,6 +185,7 @@ class PluginManager
         // TODO: Check if the plugin is activated
         // For now, we assume all installed plugins are active.
         foreach ($availablePlugins as $plugin) {
+            $plugin['interface'] = $plugin['interface'] !== null ? $plugin['interface']::getInstance() : null;
             if ($plugin['interface'] instanceof PluginAbstract && $plugin['interface']->isActivated()) {
                 $activePlugins[] = $plugin['interface'];
             }

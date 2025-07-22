@@ -51,7 +51,7 @@ try {
                 $pluginManager = new PluginManager();
                 $plugin = $pluginManager->getPluginByName($getPluginName);
                 if ($plugin) {
-                    $interface = $plugin instanceof PluginAbstract ? $plugin : null;
+                    $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
 
                     if ($interface != null) {
                         $interface->doInstall();
@@ -70,7 +70,7 @@ try {
                 $pluginManager = new PluginManager();
                 $plugin = $pluginManager->getPluginByName($getPluginName);
                 if ($plugin) {
-                    $interface = $plugin instanceof PluginAbstract ? $plugin : null;
+                    $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
 
                     if ($interface != null) {
                         $interface->doUninstall();
@@ -89,7 +89,7 @@ try {
                 $pluginManager = new PluginManager();
                 $plugin = $pluginManager->getPluginByName($getPluginName);
                 if ($plugin) {
-                    $interface = $plugin instanceof PluginAbstract ? $plugin : null;
+                    $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
 
                     if ($interface != null) {
                         $interface->doUpdate();

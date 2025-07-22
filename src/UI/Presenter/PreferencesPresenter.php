@@ -107,6 +107,7 @@ class PreferencesPresenter extends PagePresenter
         global $gL10n;
         $pluginManager = new PluginManager();
         foreach ($pluginManager->getInstalledPlugins() as $pluginClass) {
+            $pluginClass::getInstance();
             $pluginClass::initPreferencePanelCallback();
         }
 
