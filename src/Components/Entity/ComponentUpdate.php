@@ -84,7 +84,7 @@ class ComponentUpdate extends Component
             $gLogger->warning($message, array('filePath' => $updateFile));
 
             throw new UnexpectedValueException($message);
-        } elseif ($this->getValue('com_type') === 'PLUGIN') {
+        } elseif ($this->getValue('com_type') === 'PLUGIN' || $this->getValue('com_type') === 'ADM_PLUGIN') {
             $updateFile = ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->getValue('com_name_intern') . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
             if (is_file($updateFile)) {

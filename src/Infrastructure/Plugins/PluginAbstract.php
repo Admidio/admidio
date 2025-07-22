@@ -142,13 +142,13 @@ abstract class PluginAbstract implements PluginInterface
             if (self::$instances[$class]->isInstalled()) {
                 global $gDb;
                 // get the component id of the plugin
-                $sql = 'SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND com_type = ?';
-                $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN'));
+                $sql = 'SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
+                $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
                 self::$pluginComId = (int)$statement->fetchColumn();
 
                 // get the installed version of the plugin
-                $sql = 'SELECT com_version FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND com_type = ?';
-                $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN'));
+                $sql = 'SELECT com_version FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
+                $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
                 self::$version = (string)$statement->fetchColumn();
             }
         }
@@ -334,8 +334,8 @@ abstract class PluginAbstract implements PluginInterface
     {
         global $gDb;
         // check if the plugin exists in components database table
-        $sql = 'SELECT COUNT(*) AS count FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND com_type = ?';
-        $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN'));
+        $sql = 'SELECT COUNT(*) AS count FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
+        $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
         $columns = (int)$statement->fetchColumn();
 
         return $columns > 0;
@@ -356,14 +356,13 @@ abstract class PluginAbstract implements PluginInterface
      */
     public static function isOverviewPlugin() : bool
     {
-/*         global $gDb;
-        // check if the plugin exists in components database table
+        global $gDb;
+        // check if the plugin exists in components database table and is of type 'ADM_PLUGIN'
         $sql = 'SELECT COUNT(*) AS count FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND com_type = ?';
-        $statement = $gDb->queryPrepared($sql, array(self::getName(), 'OVERVIEW_PLUGIN'));
+        $statement = $gDb->queryPrepared($sql, array(self::getName(), 'ADM_PLUGIN'));
         $columns = (int)$statement->fetchColumn();
 
-        return $columns > 0; */
-        return true;
+        return $columns > 0;
     }
 
     /**
@@ -374,8 +373,8 @@ abstract class PluginAbstract implements PluginInterface
     {
         global $gDb;
         // check if the plugin exists in components database table
-        $sql = 'SELECT com_version FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND com_type = ?';
-        $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN'));
+        $sql = 'SELECT com_version FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
+        $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
         $currentVersion = $statement->fetchColumn();
 
         return version_compare($currentVersion, self::getVersion(), '<');
@@ -496,7 +495,7 @@ abstract class PluginAbstract implements PluginInterface
 
         // update the plugin 
         $componentUpdateHandle = new ComponentUpdate($gDb);
-        $componentUpdateHandle->readDataByColumns(array('com_type' => 'PLUGIN', 'com_name' => self::getName(), 'com_name_intern' => basename(self::$pluginPath)));
+        $componentUpdateHandle->readDataByColumns(array('com_name' => self::getName(), 'com_name_intern' => basename(self::$pluginPath)));
         $componentUpdateHandle->updatePlugin(self::$metadata['version']);
 
         // set the installed version of the plugin

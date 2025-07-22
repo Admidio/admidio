@@ -42,6 +42,13 @@ class PluginsPresenter extends PagePresenter
         
         $this->prepareData();
 
+        $this->addJavascript('
+            $(".admidio-open-close-caret").click(function() {
+                showHideBlock($(this));
+            });
+            ', true
+        );
+
         $this->smarty->assign('list', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
         try {
@@ -89,7 +96,8 @@ class PluginsPresenter extends PagePresenter
         global $gL10n;
         $pluginManager = new PluginManager();
         $plugins = $pluginManager->getAvailablePlugins();
-
+        $templateRowPluginParent[] = array('id' => 'overview_plugins', 'name' => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'), 'entries' => array());
+        $templateRowPluginParent[] = array('id' => 'plugins', 'name' => $gL10n->get('SYS_EXTENSIONS'), 'entries' => array());
         foreach($plugins as $pluginName => $values) {
             $templateRow = array();
             $interface = $values['interface'] instanceof PluginAbstract ? $values['interface'] : null;
@@ -119,12 +127,14 @@ class PluginsPresenter extends PagePresenter
                             'tooltip' => $gL10n->get('SYS_PLUGIN_UPDATE')
                         );
                     }
-                    // add uninstall action
-                    $templateRow['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'uninstall', 'name' => $pluginName)),
-                        'icon' => 'bi bi-trash',
-                        'tooltip' => $gL10n->get('SYS_PLUGIN_UNINSTALL')
-                    );
+                    if (!$interface->isOverviewPlugin()) {
+                        // add uninstall action
+                        $templateRow['actions'][] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'uninstall', 'name' => $pluginName)),
+                            'icon' => 'bi bi-trash',
+                            'tooltip' => $gL10n->get('SYS_PLUGIN_UNINSTALL')
+                        );
+                    }
                 } else {
                     // add install action
                     $templateRow['actions'][] = array(
@@ -143,7 +153,15 @@ class PluginsPresenter extends PagePresenter
                 $templateRow['version'] = '';
                 $templateRow['installedVersion'] = '';
             }
-            $this->templateData[] = $templateRow;
+
+            if ($interface !== null && $interface->isOverviewPlugin()) {
+                // add the plugin to the overview plugins
+                $templateRowPluginParent[0]['entries'][] = $templateRow;
+            } else {
+                // add the plugin to the normal plugins
+                $templateRowPluginParent[1]['entries'][] = $templateRow;
+            }
         }
+        $this->templateData = $templateRowPluginParent;
     }
 }

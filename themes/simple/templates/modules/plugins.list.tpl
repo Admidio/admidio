@@ -10,19 +10,32 @@
                 <th>&nbsp;</th>
             </tr>
         </thead>
-        <tbody id="adm_plugin_entries" class="admidio-sortable">
-            {foreach $list as $pluginEntry}
-                <tr id="adm_plugin_entry_{$pluginEntry.id}">
-                    <td>{if isset($pluginEntry.icon)}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}</td>
-                    <td>{$pluginEntry.description}</td>
-                    <td>{$pluginEntry.author}</td>
-                    <td>{$pluginEntry.version}</td>
-                    <td>{$pluginEntry.installedVersion}</td>
-                    <td class="text-end">
-                        {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
+        {foreach $list as $pluginNode}
+            <tbody>
+                <tr class="admidio-group-heading">
+                    <td id="adm_plugin_group_{$pluginNode.id}" colspan="6">
+                        <a id="adm_plugin_caret_{$pluginNode.id}" class="admidio-icon-link admidio-open-close-caret" data-target="adm_plugin_entries_{$pluginNode.id}">
+                            <i class="bi bi-caret-down-fill"></i>
+                        </a> {$pluginNode.name}
                     </td>
                 </tr>
-            {/foreach}
-        </tbody>
+            </tbody>
+            {if isset($pluginNode.entries)}
+            <tbody id="adm_plugin_entries_{$pluginNode.id}" class="admidio-sortable">
+                {foreach $pluginNode.entries as $pluginEntry}
+                    <tr id="adm_plugin_entry_{$pluginEntry.id}">
+                        <td>{if isset($pluginEntry.icon)}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}</td>
+                        <td>{$pluginEntry.description}</td>
+                        <td>{$pluginEntry.author}</td>
+                        <td>{$pluginEntry.version}</td>
+                        <td>{$pluginEntry.installedVersion}</td>
+                        <td class="text-end">
+                            {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
+                        </td>
+                    </tr>
+                {/foreach}
+            </tbody>
+            {/if}
+        {/foreach}
     </table>
 </div>
