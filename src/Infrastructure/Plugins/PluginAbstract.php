@@ -331,6 +331,20 @@ abstract class PluginAbstract implements PluginInterface
     }
     
     /**
+     * Get the sequence of the plugin in the components table.
+     * @throws Exception
+     * @return int Returns the sequence of the plugin.
+     */
+    public static function getPluginSequence() : int
+    {
+        global $gDb;
+        // get the plugin sequence from the database
+        $sql = 'SELECT com_plg_sequence FROM ' . TBL_COMPONENTS . ' WHERE com_id = ?';
+        $statement = $gDb->queryPrepared($sql, array(self::getComponentId()));
+        return (int)$statement->fetchColumn();
+    }
+
+    /**
      * @throws Exception
      * @return bool
      */

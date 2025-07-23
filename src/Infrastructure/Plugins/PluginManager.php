@@ -163,12 +163,25 @@ class PluginManager
                 if (!$enabled) {
                     continue;
                 }
-                $overviewPlugins[] = array(
+
+                $templateRow = array(
                     'id' => $plugin['interface']->getComponentId(),
                     'name' => $plugin['interface']->getComponentName(),
                     'file' => basename($plugin['relativePath']),
                     'interface' => $plugin['interface']
                 );
+
+                // Get the sequence of the plugin
+                $sequence = $plugin['interface']->getPluginSequence();
+                $desiredSequence = $sequence;
+                if (isset($overviewPlugins[$desiredSequence])) {
+                    $desiredSequence++;
+                    while (isset($overviewPlugins[$desiredSequence])) {
+                        $desiredSequence++;
+                    }
+                }
+                $overviewPlugins[$desiredSequence] = $templateRow;
+                ksort($overviewPlugins);
             }
         }
         return $overviewPlugins;

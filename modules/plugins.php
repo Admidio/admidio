@@ -18,7 +18,10 @@
  * direction : Direction to change the sequence of the menu entry
  ***********************************************************************************************
  */
+
+use Admidio\Components\Service\ComponentService;
 use Admidio\Infrastructure\Exception;
+use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
 use Admidio\Infrastructure\Plugins\PluginManager;
@@ -28,8 +31,9 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'install', 'uninstall', 'update')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'install', 'uninstall', 'update', 'sequence')));
     $getPluginName = admFuncVariableIsValid($_GET, 'name', 'string', array('defaultValue' => ''));
+    $getPluginId = admFuncVariableIsValid($_GET, 'uuid', 'int');
 
     // check rights to use this module
     if (!$gCurrentUser->isAdministrator()) {
@@ -100,6 +104,25 @@ try {
             } else {
                 throw new Exception('SYS_PLUGIN_NAME_MISSING');
             }
+            break;
+        case 'sequence':
+            // Update menu entry sequence
+            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
+            $getOrder      = admFuncVariableIsValid($_GET, 'order', 'array');
+
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $componentService = new ComponentService($gDb, $getPluginId);
+
+            if (!empty($getOrder)) {
+                // set new order (drag and drop)
+                $ret = $componentService->setSequence(explode(',', $getOrder));
+            } else {
+                $ret = $componentService->moveSequence($postDirection);
+            }
+
+            echo json_encode(array('status' =>  ($ret ? 'success' : 'error')));
             break;
 
         default:

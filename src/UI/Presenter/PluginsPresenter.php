@@ -35,17 +35,49 @@ class PluginsPresenter extends PagePresenter
      */
     public function createList(): void
     {
-        global $gL10n;
+        global $gL10n, $gCurrentSession;
 
         $this->setHtmlID('adm_plugins');
         $this->setHeadline($gL10n->get('SYS_PLUGIN_MANAGER'));
-        
+        $this->setContentFullWidth();
+
         $this->prepareData();
 
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this));
             });
+            $("tbody.admidio-sortable").sortable({
+                axis: "y",
+                handle: ".handle",
+                stop: function(event, ui) {
+                    const order = $(this).sortable("toArray", {attribute: "data-uuid"});
+                    const uid = ui.item.attr("data-uuid");
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/plugins.php?mode=sequence&uuid=" + uid + "&order=" + order,
+                        {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
+                    );
+                    updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
+                }
+            });
+            $(".admidio-plugin-move").click(function() {
+                moveTableRow(
+                    $(this),
+                    "' . ADMIDIO_URL . FOLDER_MODULES . '/plugins.php",
+                    "' . $gCurrentSession->getCsrfToken() . '"
+                );
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
+                }
+            });
+
+            updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
             ', true
         );
 
@@ -96,8 +128,9 @@ class PluginsPresenter extends PagePresenter
         global $gL10n;
         $pluginManager = new PluginManager();
         $plugins = $pluginManager->getAvailablePlugins();
-        $templateRowPluginParent[] = array('id' => 'overview_plugins', 'name' => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'), 'entries' => array());
-        $templateRowPluginParent[] = array('id' => 'plugins', 'name' => $gL10n->get('SYS_EXTENSIONS'), 'entries' => array());
+        $templateRowPluginParent['overview'] = array('id' => 'overview_plugins', 'name' => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'), 'entries' => array());
+        $templateRowPluginParent['plugins'] = array('id' => 'plugins', 'name' => $gL10n->get('SYS_EXTENSIONS'), 'entries' => array());
+        $templateRowPluginParent['available'] = array('id' => 'plugins_available', 'name' => $gL10n->get('SYS_EXTENSIONS_AVAILABLE'), 'entries' => array());
         foreach($plugins as $pluginName => $values) {
             $templateRow = array();
             $interface = $values['interface'] instanceof PluginAbstract ? $values['interface']::getInstance() : null;
@@ -156,12 +189,33 @@ class PluginsPresenter extends PagePresenter
 
             if ($interface !== null && $interface->isOverviewPlugin()) {
                 // add the plugin to the overview plugins
-                $templateRowPluginParent[0]['entries'][] = $templateRow;
-            } else {
+                // for overview plugins here is a sequence number that is used to sort the plugins on the overview page
+                $sequence = $interface->getPluginSequence();
+                $desiredSequence = $sequence;
+                if (isset($templateRowPluginParent['overview']['entries'][$desiredSequence])) {
+                    $desiredSequence++;
+                    while (isset($templateRowPluginParent['overview']['entries'][$desiredSequence])) {
+                        $desiredSequence++;
+                    }
+                }
+                $templateRowPluginParent['overview']['entries'][$desiredSequence] = $templateRow;
+                ksort($templateRowPluginParent['overview']['entries']);
+            } elseif ($interface !== null && $interface->isInstalled()) {
                 // add the plugin to the normal plugins
-                $templateRowPluginParent[1]['entries'][] = $templateRow;
+                $templateRowPluginParent['plugins']['entries'][] = $templateRow;
+            } else {
+                // add the plugin to the available plugins
+                $templateRowPluginParent['available']['entries'][] = $templateRow;
             }
         }
+        
+        // remove empty categories
+        foreach ($templateRowPluginParent as $key => $value) {
+            if (empty($value['entries'])) {
+                unset($templateRowPluginParent[$key]);
+            }
+        }
+
         $this->templateData = $templateRowPluginParent;
     }
 }

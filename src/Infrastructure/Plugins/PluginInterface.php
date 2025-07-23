@@ -66,6 +66,13 @@ interface PluginInterface
      * @return string
      */
     public static function getComponentName() : string;
+
+    /**
+     * @throws Exception
+     * @return int
+     */
+    public static function getPluginSequence() : int;
+
     /**
      * @throws Exception
      * @return bool
