@@ -1345,7 +1345,7 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_user_field_select_options
-    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_inventory_fields
     ADD CONSTRAINT %PREFIX%_fk_inf_org         FOREIGN KEY (inf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
