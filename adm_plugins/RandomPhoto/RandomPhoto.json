@@ -1,0 +1,54 @@
+{
+    "name": "PLG_RANDOM_PHOTO_PLUGIN_NAME",
+    "description": "PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-image-fill",
+    "mainFile": "index.php",
+    "dependencies": [],
+    "defaultConfig": {
+        "random_photo_plugin_enabled": {
+            "name": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC",
+            "type": "integer",
+            "value" : 1
+        },
+        "random_photo_plugin_max_char_per_word": {
+            "name": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC",
+            "type": "integer",
+            "value" : 0
+        },
+        "random_photo_plugin_max_width": {
+            "name": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC",
+            "type": "integer",
+            "value" : 0
+        },
+        "random_photo_plugin_max_height": {
+            "name": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC",
+            "type": "integer",
+            "value" : 0
+        },
+        "random_photo_plugin_albums": {
+            "name": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC",
+            "type": "integer",
+            "value" : 0
+        },
+        "random_photo_plugin_album_photo_number": {
+            "name": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC",
+            "type": "integer",
+            "value" : 0
+        },
+        "random_photo_plugin_show_album_link": {
+            "name": "PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC",
+            "type": "boolean",
+            "value" : true
+        }
+    }
+}
