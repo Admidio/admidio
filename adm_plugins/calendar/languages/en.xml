@@ -10,4 +10,25 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">Sa</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Su</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Several days</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">This plugin displays a calendar with all events of the current month.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Calendar</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Show events</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">If this setting is enabled, events will be displayed in the calendar. (default: true)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Show birthdays</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">If this setting is enabled, the birthdays of members will be displayed in the calendar. (default: true)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Show birthdays for visitors</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">If this setting is enabled, the birthdays of members will be displayed for visitors. (default: false)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Show birthday icon</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">If this setting is enabled, a birthday icon will be displayed in the calendar. (default: true)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Display style for birthday person name</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">This setting allows you to choose how the names of birthday persons are displayed. (default: First name)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Considered categories</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">This setting allows you to choose which categories should be considered for events in the calendar. (default: all categories)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Display calendar names</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">If this setting is enabled, the names of the calendars will be displayed for each event. (default: false)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Allowed roles for content</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Here you can select the roles that are allowed to see the content of this plugin. If a user is not part of any selected role only the number of events and birthdays are shown. (default: all roles)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Allowed roles for birhdays</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Here you can select the roles which users must have whose birthdays should be shown. (default: all roles)</string>
 </resources>

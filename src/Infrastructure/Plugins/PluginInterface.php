@@ -124,6 +124,12 @@ interface PluginInterface
     public static function doUpdate() : bool;
 
     /**
+     * @throws Exception
+     * @return void
+     */
+    public static function initParams(array $params = array()) : bool;
+
+    /**
      * @param PagePresenter $page
      * @throws InvalidArgumentException
      * @throws Exception

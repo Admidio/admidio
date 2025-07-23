@@ -524,4 +524,14 @@ abstract class PluginAbstract implements PluginInterface
         // e.g.: $componentUpdateHandle->doUpdateSteps();
         return true;
     }
+
+    public static function initParams(array $params = array()) : bool
+    {
+        if (!is_array($params))
+        {
+            throw new InvalidArgumentException('Params must be an "array".');
+        }
+
+        return true;
+    }
 }

@@ -14,7 +14,7 @@
         {foreach $list as $pluginNode}
             <tbody>
                 <tr class="admidio-group-heading">
-                    <td id="adm_plugin_group_{$pluginNode.id}" colspan="6">
+                    <td id="adm_plugin_group_{$pluginNode.id}" colspan="7">
                         <a id="adm_plugin_caret_{$pluginNode.id}" class="admidio-icon-link admidio-open-close-caret" data-target="adm_plugin_entries_{$pluginNode.id}">
                             <i class="bi bi-caret-down-fill"></i>
                         </a> {$pluginNode.name}

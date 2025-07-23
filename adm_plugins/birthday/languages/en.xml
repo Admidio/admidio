@@ -23,7 +23,7 @@
   <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">Show names for visitors</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">If this setting is enabled visitors will see all names (not the age) of birthday persons today, in the future and in the past. Otherwise visitors will only see the number of persons who have birthday today, nothing more. (default: false)</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">Display style for birthday person name</string>
-  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">This setting allows you to choose how the names of birthday persons are displayed. (default: First name Last name)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">This setting allows you to choose how the names of birthday persons are displayed. (default: First name Surname)</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">Show age</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">If this setting is enabled logged in users will see the ages of birthday persons. (default: false)</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">Show name with salutation</string>

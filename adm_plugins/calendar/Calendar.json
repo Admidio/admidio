@@ -1,0 +1,72 @@
+{
+    "name": "PLG_CALENDAR_PLUGIN_NAME",
+    "description": "PLG_CALENDAR_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-calendar-week-fill",
+    "mainFile": "index.php",
+    "dependencies": [],
+    "defaultConfig": {
+        "calendar_plugin_enabled": {
+            "name": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC",
+            "type": "integer",
+            "value" : 1
+        },
+        "calendar_show_events": {
+            "name": "PLG_CALENDAR_PREFERENCES_SHOW_EVENTS",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC",
+            "type": "boolean",
+            "value" : true
+        },
+        "calendar_show_birthdays": {
+            "name": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC",
+            "type": "boolean",
+            "value" : true
+        },
+        "calendar_show_birthdays_to_guests": {
+            "name": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC",
+            "type": "boolean",
+            "value" : false
+        },
+        "calendar_show_birthday_icon": {
+            "name": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC",
+            "type": "boolean",
+            "value" : true
+        },
+        "calendar_show_birthday_names": {
+            "name": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC",
+            "type": "integer",
+            "value" : 1
+        },
+        "calendar_show_categories": {
+            "name": "PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC",
+            "type": "array",
+            "value" : ["All"]
+        },
+        "calendar_show_categories_names": {
+            "name": "PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC",
+            "type": "boolean",
+            "value" : false
+        },
+        "calendar_roles_view_plugin": {
+            "name": "PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN",
+            "description": "PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC",
+            "type": "array",
+            "value" : ["All"]
+        },
+        "calendar_roles_sql": {
+            "name": "PLG_CALENDAR_PREFERENCES_ROLES_SQL",
+            "description": "PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC",
+            "type": "array",
+            "value" : ["All"]
+        }
+    }
+}
