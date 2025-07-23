@@ -129,6 +129,16 @@ abstract class PluginAbstract implements PluginInterface
      */
     public static function getInstance() : PluginAbstract
     {
+        // reset global variables
+        self::$pluginComId = 0;
+        self::$pluginPath = '';
+        self::$name = '';
+        self::$version = '0.0.0';
+        self::$dependencies = array();
+        self::$metadata = array();
+        self::$defaultConfig = array();
+
+        // get the class name of the called class
         $class = get_called_class();
         if (!array_key_exists($class, self::$instances))
         {

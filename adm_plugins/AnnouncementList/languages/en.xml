@@ -11,7 +11,7 @@
   <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Characters before line break</string>
   <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximum number of characters in a word before a line break should be performed. (0: deactivates line break, default: 0)</string>
   <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Displayed categories</string>
-  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">If you only want to show announcements of a special category you can select the categories here. (default: All)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">If you only want to show announcements of a special category you can select the categories here. (default: all categories)</string>
   <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Show full description</string>
   <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">If this setting is enabled the full content of the description will be shown. Otherwise only a text preview will be displayed. (default: false)</string>
   <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Preview text</string>
