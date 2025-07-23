@@ -2694,8 +2694,8 @@ class PreferencesPresenter extends PagePresenter
                 
                 // define additional ids that should also be considered for visibility toggling
                 var additionalIds = [\'#system_notifications_enabled\'];
-                // Look for any input whose id ends with "_module_enabled"
-                var selectors = ["[id$=\'_module_enabled\']"].concat(additionalIds);
+                // Look for any input whose id ends with "_module_enabled" or "_plugin_enabled"
+                var selectors = ["[id$=\'_module_enabled\']", "[id$=\'_plugin_enabled\']"].concat(additionalIds);
 
                 var moduleEnabledField = panelContainer.find(selectors.join(", ")).filter(":visible");
                 if (moduleEnabledField.length > 0) {
