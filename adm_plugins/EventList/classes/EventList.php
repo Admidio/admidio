@@ -183,11 +183,14 @@ class EventList extends PluginAbstract
                 } else {
                     $eventListPlugin->assignTemplateVariable('message',$gL10n->get('PLG_EVENT_LIST_NO_ENTRIES_VISITORS'));
                 }
-                if (isset($page)) {
-                    echo $eventListPlugin->html('plugin.event-list.tpl');
-                } else {
-                    $eventListPlugin->showHtmlPage('plugin.event-list.tpl');
-                }
+            } else {
+                $eventListPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
+            }
+            
+            if (isset($page)) {
+                echo $eventListPlugin->html('plugin.event-list.tpl');
+            } else {
+                $eventListPlugin->showHtmlPage('plugin.event-list.tpl');
             }
         } catch (Throwable $e) {
             echo $e->getMessage();

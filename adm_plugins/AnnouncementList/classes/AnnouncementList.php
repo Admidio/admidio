@@ -182,11 +182,14 @@ class AnnouncementList extends PluginAbstract
                 } else {
                     $announcementListPlugin->assignTemplateVariable('message',$gL10n->get('PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS'));
                 }
-                if (isset($page)) {
-                    echo $announcementListPlugin->html('plugin.announcement-list.tpl');
-                } else {
-                    $announcementListPlugin->showHtmlPage('plugin.announcement-list.tpl');
-                }
+            } else {
+                $announcementListPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
+            }
+
+            if (isset($page)) {
+                echo $announcementListPlugin->html('plugin.announcement-list.tpl');
+            } else {
+                $announcementListPlugin->showHtmlPage('plugin.announcement-list.tpl');
             }
         } catch (Throwable $e) {
             echo $e->getMessage();

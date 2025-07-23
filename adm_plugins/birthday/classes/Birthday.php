@@ -389,28 +389,33 @@ class Birthday extends PluginAbstract
                 throw new InvalidArgumentException($gL10n->get('SYS_PLUGIN_NOT_INSTALLED'));
             }
 
-            if ($gSettingsManager->getInt('birthday_plugin_enabled') === 1 || ($gSettingsManager->getInt('birthday_plugin_enabled') === 2 && $gValidLogin)) {
-                $birthdaysArray = self::getBirthdaysData();
+            if ($gSettingsManager->getInt('events_module_enabled') > 0) {
+                if ($gSettingsManager->getInt('birthday_plugin_enabled') === 1 || ($gSettingsManager->getInt('birthday_plugin_enabled') === 2 && $gValidLogin)) {
+                    $birthdaysArray = self::getBirthdaysData();
 
-                if (!empty($birthdaysArray)) {
-                    if (self::$birthdayShowNames) {
-                        $birthdayPlugin->assignTemplateVariable('birthdays', $birthdaysArray);
-                    } else {
-                        if (count($birthdaysArray) === 1) {
-                            $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_ONE_MEMBER'));
+                    if (!empty($birthdaysArray)) {
+                        if (self::$birthdayShowNames) {
+                            $birthdayPlugin->assignTemplateVariable('birthdays', $birthdaysArray);
                         } else {
-                            $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_MORE_MEMBERS', array(count($birthdaysArray))));
+                            if (count($birthdaysArray) === 1) {
+                                $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_ONE_MEMBER'));
+                            } else {
+                                $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_MORE_MEMBERS', array(count($birthdaysArray))));
+                            }
+                        }
+                    } else {                   
+                        // If the configuration is set accordingly, a message is output if no member has a birthday today
+                        if ($gSettingsManager->getBool('birthday_show_notice_none')) {
+                            $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_MEMBERS'));
                         }
                     }
-                } else {                   
-                    // If the configuration is set accordingly, a message is output if no member has a birthday today
-                    if ($gSettingsManager->getBool('birthday_show_notice_none')) {
-                        $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_MEMBERS'));
-                    }
+                } else {
+                    $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_ENTRIES_VISITORS'));
                 }
             } else {
-                $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_ENTRIES_VISITORS'));
+                $birthdayPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
             }
+
             if (isset($page)) {
                 echo $birthdayPlugin->html('plugin.birthday.tpl');
             } else {

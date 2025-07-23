@@ -10,7 +10,7 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">Sa</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Su</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Several days</string>
-  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">This plugin displays a calendar with all events of the current month.</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">This plugin displays a calendar with all events of the current month on the Overview page.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Calendar</string>
   <!-- Plugin preferences -->
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Show events</string>

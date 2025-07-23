@@ -552,22 +552,25 @@ class Calendar extends PluginAbstract
             if (!self::isInstalled()) {
                 throw new InvalidArgumentException($gL10n->get('SYS_PLUGIN_NOT_INSTALLED'));
             }
+            if ($gSettingsManager->getInt('events_module_enabled') > 0 && $gSettingsManager->getInt('announcements_module_enabled') > 0) {
+                if ($gSettingsManager->getInt('calendar_plugin_enabled') === 1 || ($gSettingsManager->getInt('calendar_plugin_enabled') === 2 && $gValidLogin)) {
 
-            if ($gSettingsManager->getInt('calendar_plugin_enabled') === 1 || ($gSettingsManager->getInt('calendar_plugin_enabled') === 2 && $gValidLogin)) {
+                    $tableContent = self::getCalendarsData();
 
-                $tableContent = self::getCalendarsData();
+                    header('Content-Type: text/html; charset=utf-8');
 
-                header('Content-Type: text/html; charset=utf-8');
-
-                $calendarPlugin->assignTemplateVariable('pluginFolder', $pluginFolder);
-                $calendarPlugin->assignTemplateVariable('monthYearHeadline', self::$months[(int) self::$currentMonth - 1] . ' ' . self::$currentYear);
-                $calendarPlugin->assignTemplateVariable('monthYear', self::$currentMonth . self::$currentYear);
-                $calendarPlugin->assignTemplateVariable('currentMonthYear', date('mY'));
-                $calendarPlugin->assignTemplateVariable('dateIdLastMonth', date('mY', mktime(0, 0, 0, self::$currentMonth - 1, 1, self::$currentYear)));
-                $calendarPlugin->assignTemplateVariable('dateIdNextMonth', date('mY', mktime(0, 0, 0, self::$currentMonth + 1, 1, self::$currentYear)));
-                $calendarPlugin->assignTemplateVariable('tableContent', $tableContent);
+                    $calendarPlugin->assignTemplateVariable('pluginFolder', $pluginFolder);
+                    $calendarPlugin->assignTemplateVariable('monthYearHeadline', self::$months[(int) self::$currentMonth - 1] . ' ' . self::$currentYear);
+                    $calendarPlugin->assignTemplateVariable('monthYear', self::$currentMonth . self::$currentYear);
+                    $calendarPlugin->assignTemplateVariable('currentMonthYear', date('mY'));
+                    $calendarPlugin->assignTemplateVariable('dateIdLastMonth', date('mY', mktime(0, 0, 0, self::$currentMonth - 1, 1, self::$currentYear)));
+                    $calendarPlugin->assignTemplateVariable('dateIdNextMonth', date('mY', mktime(0, 0, 0, self::$currentMonth + 1, 1, self::$currentYear)));
+                    $calendarPlugin->assignTemplateVariable('tableContent', $tableContent);
+                } else {
+                    $calendarPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_ENTRIES_VISITORS'));
+                }
             } else {
-                $calendarPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_ENTRIES_VISITORS'));
+                $calendarPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
             }
 
             if (isset($page)) {
