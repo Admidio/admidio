@@ -152,14 +152,9 @@ class AnnouncementList extends PluginAbstract
      * @throws Exception
      * @return bool
      */
-    public static function doRender($page = null, array $config = array()) : bool
+    public static function doRender($page = null) : bool
     {
         global $gSettingsManager, $gL10n, $gValidLogin;
-
-        if (!is_array($config))
-        {
-            throw new InvalidArgumentException('Config must be an "array".');
-        }
 
         // show the announcement list
         try {

@@ -74,6 +74,7 @@ class Birthday extends PluginAbstract
     public static function getAvailableRoles($roleType = 1, bool $onlyIds = false): array {
         global $gDb;
 
+        $allRolesSet = array();
         $rolesService = new RolesService($gDb);
         $data = $rolesService->findAll($roleType);
 
@@ -370,14 +371,9 @@ class Birthday extends PluginAbstract
      * @throws Exception
      * @return bool
      */
-    public static function doRender($page = null, array $config = array()) : bool
+    public static function doRender($page = null) : bool
     {
         global $gSettingsManager, $gL10n, $gValidLogin;
-
-        if (!is_array($config))
-        {
-            throw new InvalidArgumentException('Config must be an "array".');
-        }
 
         // show the announcement list
         try {
@@ -401,9 +397,9 @@ class Birthday extends PluginAbstract
                             $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_MORE_MEMBERS', array(count($birthdaysArray))));
                         }
                     }
-                } else {
+                } else {                   
                     // If the configuration is set accordingly, a message is output if no member has a birthday today
-                    if ($config['birthday_show_notice_none']) {
+                    if ($gSettingsManager->getBool('birthday_show_notice_none')) {
                         $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_MEMBERS'));
                     }
                 }

@@ -117,10 +117,10 @@ interface PluginInterface
     public static function doUpdate() : bool;
 
     /**
-     * @param array $config
+     * @param PagePresenter $page
      * @throws InvalidArgumentException
      * @throws Exception
      * @return bool
      */
-    public static function doRender(?PagePresenter $page = null, array $config = array()) : bool;
+    public static function doRender(?PagePresenter $page = null) : bool;
 }
