@@ -115,8 +115,8 @@ class Birthday extends PluginAbstract
         }
 
         // Check if the role condition has been set
-        if (isset($config['birthday_rolle_sql']) && is_array($config['birthday_rolle_sql']) && count($config['birthday_rolle_sql']) > 0) {
-            $sqlRol = 'IN (' . implode(',', $config['birthday_rolle_sql']) . ')';
+        if (isset($config['birthday_roles_sql']) && is_array($config['birthday_roles_sql']) && count($config['birthday_roles_sql']) > 0) {
+            $sqlRol = 'IN (' . implode(',', $config['birthday_roles_sql']) . ')';
         } else {
             $sqlRol = 'IS NOT NULL';
         }
@@ -366,7 +366,7 @@ class Birthday extends PluginAbstract
     }
 
     /**
-     * @param array $config
+     * @param PagePresenter $page
      * @throws InvalidArgumentException
      * @throws Exception
      * @return bool
@@ -383,6 +383,11 @@ class Birthday extends PluginAbstract
             require_once($rootPath . '/system/common.php');
 
             $birthdayPlugin = new Overview($pluginFolder);
+
+            // check if the plugin is installed
+            if (!self::isInstalled()) {
+                throw new InvalidArgumentException($gL10n->get('SYS_PLUGIN_NOT_INSTALLED'));
+            }
 
             if ($gSettingsManager->getInt('birthday_plugin_enabled') === 1 || ($gSettingsManager->getInt('birthday_plugin_enabled') === 2 && $gValidLogin)) {
                 $birthdaysArray = self::getBirthdaysData();

@@ -147,7 +147,7 @@ class AnnouncementList extends PluginAbstract
     }
 
     /**
-     * @param array $config
+     * @param PagePresenter $page
      * @throws InvalidArgumentException
      * @throws Exception
      * @return bool
@@ -164,6 +164,11 @@ class AnnouncementList extends PluginAbstract
             require_once($rootPath . '/system/common.php');
 
             $announcementListPlugin = new Overview($pluginFolder);
+
+            // check if the plugin is installed
+            if (!self::isInstalled()) {
+                throw new InvalidArgumentException($gL10n->get('SYS_PLUGIN_NOT_INSTALLED'));
+            }
 
             if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
                 if (($gSettingsManager->getInt('announcements_module_enabled') === 1 || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) &&
