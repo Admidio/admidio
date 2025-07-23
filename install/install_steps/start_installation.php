@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
@@ -281,8 +282,20 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration.php\', \'card-checklist\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu.php\', \'menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ORGANIZATIONS\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'organization\', \''.FOLDER_MODULES.'/organizations.php\', \'diagram-3-fill\', \'SYS_ORGANIZATION\', \'SYS_ORGANIZATION_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PLUGINS\'), 2, \'' . Uuid::uuid4() . '\', false, 5, true, \'plugins\', \''.FOLDER_MODULES.'/plugins.php\', \'puzzle\', \'SYS_PLUGIN_MANAGER\', \SYS_PLUGIN_MANAGER_DESC\')';
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PLUGINS\'), 2, \'' . Uuid::uuid4() . '\', false, 5, true, \'plugins\', \''.FOLDER_MODULES.'/plugins.php\', \'puzzle\', \'SYS_PLUGIN_MANAGER\', \'SYS_PLUGIN_MANAGER_DESC\')';
 $db->query($sql);
+
+// install all overview plugins
+$pluginManager = new PluginManager();
+$plugins = $pluginManager->getAvailablePlugins();
+$arrayOverviewPlugins = array('AnnouncementList', 'Birthday', 'Calendar', 'EventList', 'LatestDocumentsFiles', 'LoginForm', 'RandomPhoto', 'WhoIsOnline');
+
+foreach ($plugins as $pluginName => $plugin) {
+    if (in_array($pluginName, $arrayOverviewPlugins)) {
+        // Install the overview plugin
+        $plugin['interface']::getInstance()->doInstall();
+    }
+}
 
 // delete session data
 session_unset();

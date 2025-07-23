@@ -159,6 +159,7 @@ CREATE TABLE %PREFIX%_components
     com_beta                    smallint            NOT NULL    DEFAULT 0,
     com_update_step             integer             NOT NULL    DEFAULT 0,
     com_update_completed        boolean             NOT NULL    DEFAULT true,
+    com_plg_sequence            smallint            NOT NULL    DEFAULT 0,
     com_timestamp_installed     timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (com_id)
 )
