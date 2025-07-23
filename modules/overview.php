@@ -10,6 +10,7 @@
  */
 
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Infrastructure\Plugins\PluginManager;
 
 try {
     // if the config file doesn't exist, then show the installation dialog
@@ -28,6 +29,20 @@ try {
     // create html page object and load template file
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-overview', $headline);
     $page->setContentFullWidth();
+
+    // get all overview plugins and add them to the template
+    $pluginManager = new PluginManager();
+    $plugins = $pluginManager->getOverviewPlugins();
+
+    $overviewPlugins = array();
+    foreach ($plugins as $plugin) {
+        $overviewPlugins[] =  array(
+            'id' => $plugin['id'],
+            'name' => $plugin['name'],
+            'file' => basename($plugin['file'])
+        );
+    }
+    $page->assignSmartyVariable('overviewPlugins', $overviewPlugins);
     $page->addTemplateFile('system/overview.tpl');
 
     $page->show();
