@@ -147,6 +147,8 @@ class PluginManager
      */
     public function getOverviewPlugins() : array
     {
+        global $gValidLogin;
+        
         $availablePlugins = $this->getAvailablePlugins();
         $overviewPlugins = array();
         foreach ($availablePlugins as $plugin) {
@@ -155,7 +157,7 @@ class PluginManager
                 $configValues = $plugin['interface']->getPluginConfigValues();
                 $enabled = false;
                 foreach ($configValues as $key => $value) {
-                    if (preg_match('/_enabled$/', $key) && $value > 0) {
+                    if (preg_match('/_enabled$/', $key) && $value === 1 || ($value === 2 && $gValidLogin)) {
                         $enabled = true;
                         break;
                     }

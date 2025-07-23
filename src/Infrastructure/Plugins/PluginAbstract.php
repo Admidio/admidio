@@ -286,7 +286,14 @@ abstract class PluginAbstract implements PluginInterface
                         break;
                     case 'array':
                         $valueString = $gSettingsManager->get($key);
-                        $config[$key] = $valueString === "" ? array() : explode(',', $valueString);
+                        if ($gSettingsManager->has($key . '_keys')) {
+                            // if the keys are stored separately, use them to create the array
+                            $keyString = $gSettingsManager->get($key . '_keys');
+                            $config[$key] = $valueString === "" ? array() : array_combine(explode(',', $keyString), explode(',', $valueString));
+                        } else {
+                            // if no keys are stored, use the value string as the value
+                            $config[$key] = $valueString === "" ? array() : explode(',', $valueString);
+                        }
                         break;
                     case 'string':
                     default:
@@ -440,7 +447,15 @@ abstract class PluginAbstract implements PluginInterface
         }
 
         // insert default plugin config values into the database
-        $gSettingsManager->setMulti(self::getPluginConfigValues());
+        $configValues = self::getPluginConfigValues();
+        foreach ($configValues as $key => $value) {
+            if (is_array($value)) {
+                $gSettingsManager->set($key, implode(',', $value));
+                $gSettingsManager->set($key . '_keys', implode(',', array_keys($value)));
+            } else {
+                $gSettingsManager->set($key, $value);
+            }
+        }
 
         // install the plugin
         $componentUpdateHandle = new ComponentUpdate($gDb);
