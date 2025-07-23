@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Who is online?</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">There is no data available for visitors. Log in to see who is online.</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">No visitors are on the website.</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# Visitors</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# member</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# members</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online are #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online is #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">This plugin displays visitors and registered members on the Overview page.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Who is Online</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_TIME_STILL_ACTIVE">Time still active</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_TIME_STILL_ACTIVE_DESC">The time (in minutes) a user is considered still online after their last action. (default: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Show visitors</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">If this setting is enabled the number of visitors will be displayed. Otherwise only logged-in users will be shown. (default: true)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Show members to visitors</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Here you can select how members are displayed to visitors. (default: number of logged in members)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Don\'t show logged in members</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Show logged in members</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Number of logged in members</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Show self</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">If this setting is enabled the own status (logged in as well as logged out) will be displayed. (default: true)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Show users side by side</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">If this setting is enabled the users will be displayed side by side. Otherwise they will be displayed one below the other. (default: false)</string>
+</resources>
