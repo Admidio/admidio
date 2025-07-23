@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\InstallationUpdate\Service;
 
+use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -40,6 +41,20 @@ final class UpdateStepsCode
     public static function setDatabase(Database $database)
     {
         self::$db = $database;
+    }
+
+    public static function updateStep50InstallOverviewPlugins()
+    {
+        $pluginManager = new PluginManager();
+        $plugins = $pluginManager->getAvailablePlugins();
+        $arrayOverviewPlugins = array(/* 'AnnouncementList', 'Birthday', 'Calendar', 'EventList', 'LatestDocumentsFiles', */ 'LoginForm'/* , 'RandomPhoto', 'WhoIsOnline' */);
+
+        foreach ($plugins as $pluginName => $plugin) {
+            if (in_array($pluginName, $arrayOverviewPlugins)) {
+                // Install the overview plugin
+                $plugin['interface']::getInstance()->doInstall();
+            }
+        }
     }
 
     public static function updateStep50MoveFieldListValues()

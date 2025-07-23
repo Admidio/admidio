@@ -507,5 +507,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1690">ALTER TABLE %PREFIX%_components ADD COLUMN com_plg_sequence smallint NOT NULL DEFAULT 0 AFTER com_update_completed;</step>
     <step id="1700">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'PLUGINS'), 2, %UUID%, false, 5, true, 'plugins', '/modules/plugins.php', 'puzzle', 'SYS_PLUGIN_MANAGER', 'SYS_PLUGIN_MANAGER_DESC')</step>
+    <step id="1710">UpdateStepsCode::updateStep50InstallOverviewPlugins</step>
     <step>stop</step>
 </update>
