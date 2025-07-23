@@ -151,7 +151,7 @@ $db->query($sql); // TODO add more params
 
 // add gender options to database
 $sql = 'INSERT INTO '.TBL_USER_FIELD_OPTIONS.'
-               (uso_usf_id, uso_value, uso_sequence)
+               (ufo_usf_id, ufo_value, ufo_sequence)
         VALUES ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-male|SYS_MALE\', 1)
              , ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-female|SYS_FEMALE\', 2)
              , ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-trans|SYS_DIVERSE\', 3)';
