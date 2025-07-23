@@ -1,5 +1,5 @@
 <div id="plugin-{$name}" class="admidio-plugin-content">
-    <h3>{$l10n->get('PLG_LATEST_FILES_HEADLINE')}</h3>
+    <h3>{$l10n->get('PLG_LATEST_DOCUMENTS_FILES_HEADLINE')}</h3>
 
     {if count($documentsFiles) > 0}
         <ul class="list-group list-group-flush">
@@ -10,7 +10,7 @@
                 </li>
             {/foreach}
             <li class="list-group-item">
-                <a href="{$urlAdmidio}/modules/documents-files.php">{$l10n->get('PLG_LATEST_FILES_MORE_DOWNLOADS')}</a>
+                <a href="{$urlAdmidio}/modules/documents-files.php">{$l10n->get('PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS')}</a>
             </li>
         </ul>
     {else}

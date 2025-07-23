@@ -1,0 +1,36 @@
+{
+    "name": "PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME",
+    "description": "PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-file-earmark-arrow-down-fill",
+    "mainFile": "index.php",
+    "dependencies": [],
+    "defaultConfig": {
+        "latest_documents_files_plugin_enabled": {
+            "name": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC",
+            "type": "integer",
+            "value" : 1
+        },
+        "latest_documents_files_files_count": {
+            "name": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT",
+            "description": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC",
+            "type": "integer",
+            "value" : 5
+        },
+        "latest_documents_files_show_upload_timestamp": {
+            "name": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP",
+            "description": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC",
+            "type": "boolean",
+            "value" : true
+        },
+        "latest_documents_files_max_chars_filename": {
+            "name": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME",
+            "description": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC",
+            "type": "integer",
+            "value" : 0
+        }
+    }
+}

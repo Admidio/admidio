@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_HEADLINE">Documentos e Ficheiros</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Mais documentos e ficheiros</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Não existem documentos ou ficheiros disponíveis</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Enviado por #VAR1# em #VAR2#</string>
+</resources>
