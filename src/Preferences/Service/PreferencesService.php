@@ -71,7 +71,7 @@ class PreferencesService
             $metadata = $pluginManager->getMetadataByComponentId($comId);
 
             $panels[] = array(
-                'id'       => str_replace(' ', '_',strtolower(Language::translateIfTranslationStrId($metadata['name']))),
+                'id'       => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($metadata['name'])))),
                 'title'    => Language::translateIfTranslationStrId($metadata['name']),
                 'icon'     => $metadata['icon'] ?? 'bi-puzzle',
                 'subcards' => $metadata['hasSubcards'] ?? false,

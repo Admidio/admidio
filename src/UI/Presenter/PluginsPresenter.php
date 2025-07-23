@@ -148,7 +148,7 @@ class PluginsPresenter extends PagePresenter
                 if ($interface->isInstalled()) {
                     // add showPreferences action
                     $templateRow['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => str_replace(' ', '_',strtolower(Language::translateIfTranslationStrId($interface->getName()))))),
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($interface->getName())))))),
                         'icon' => 'bi bi-gear',
                         'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
                     );
