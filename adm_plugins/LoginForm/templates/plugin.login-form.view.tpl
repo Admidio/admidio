@@ -13,7 +13,7 @@
     </div>
     <div class="admidio-form-group mb-3">
         <div>
-            {$l10n->get('PLG_LOGIN_ACTIVE_SINCE')}
+            {$l10n->get('PLG_LOGIN_FORM_ACTIVE_SINCE')}
         </div>
         <div>
             <strong>{$loginActiveSince}</strong>
@@ -21,7 +21,7 @@
     </div>
     <div class="admidio-form-group mb-3">
         <div>
-            {$l10n->get('PLG_LOGIN_LAST_LOGIN')}
+            {$l10n->get('PLG_LOGIN_FORM_LAST_LOGIN')}
         </div>
         <div>
             <strong>{$lastLogin}</strong>
@@ -29,7 +29,7 @@
     </div>
     <div class="admidio-form-group mb-3">
         <div>
-            {$l10n->get('PLG_LOGIN_NUMBER_OF_LOGINS')}
+            {$l10n->get('PLG_LOGIN_FORM_NUMBER_OF_LOGINS')}
         </div>
         <div>
             <strong>{$numberOfLogins}</strong>

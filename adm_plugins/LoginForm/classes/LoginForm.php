@@ -1,8 +1,17 @@
 <?php
+
+namespace Plugins\LoginForm\classes;
+
 use Admidio\Infrastructure\Plugins\Overview;
+use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
-use Admidio\UI\Presenter\FormPresenter;
+use Admidio\Infrastructure\Language;
+
+use InvalidArgumentException;
+use Exception;
+use Throwable;
 
 /**
  ***********************************************************************************************
@@ -17,85 +26,59 @@ use Admidio\UI\Presenter\FormPresenter;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-try {
-    $rootPath = dirname(__DIR__, 2);
-    $pluginFolder = basename(__DIR__);
+class LoginForm extends PluginAbstract
+{
+    private static array $pluginConfig = array();
 
-    require_once($rootPath . '/system/common.php');
+    private static function getLoginData() : array
+    {
+        global $gCurrentUser;
 
-    // only include config file if it exists
-    if (is_file(__DIR__ . '/config.php')) {
-        require_once(__DIR__ . '/config.php');
-    }
-
-    $loginFormPlugin = new Overview($pluginFolder);
-
-    // set default values if there has been no value stored in the config.php
-    if (!isset($plg_show_register_link) || !is_numeric($plg_show_register_link)) {
-        $plg_show_register_link = 0;
-    }
-
-    if (!isset($plg_show_email_link) || !is_numeric($plg_show_email_link)) {
-        $plg_show_email_link = 1;
-    }
-
-    if (!isset($plg_show_logout_link) || !is_numeric($plg_show_logout_link)) {
-        $plg_show_logout_link = 0;
-    }
-
-    if (!isset($plg_rank)) {
-        $plg_rank = array();
-    }
-
-    if ($gValidLogin) {
+        $loginData = array();
         // show the rank of the user if this is configured in the config.php
-        $htmlUserRank = '';
+        $loginData['htmlUserRank'] = '';
 
-        if (count($plg_rank) > 0) {
+        if (self::$pluginConfig['login_form_plugin_enable_ranks']) {
             $currentUserRankTitle = '';
-            $rankTitle = reset($plg_rank);
+            $rankTitle = reset(self::$pluginConfig['login_form_plugin_ranks']);
 
             while ($rankTitle !== false) {
-                $rankAssessment = key($plg_rank);
+                $rankAssessment = key(self::$pluginConfig['login_form_plugin_ranks']);
                 if ($rankAssessment < $gCurrentUser->getValue('usr_number_login')) {
                     $currentUserRankTitle = $rankTitle;
                 }
-                $rankTitle = next($plg_rank);
+                $rankTitle = next(self::$pluginConfig['login_form_plugin_ranks']);
             }
 
             if ($currentUserRankTitle !== '') {
-                $htmlUserRank = ' (' . $currentUserRankTitle . ')';
+                $loginData['htmlUserRank'] = ' (' . Language::translateIfTranslationStrId($currentUserRankTitle) . ')';
             }
         }
 
         if ($gCurrentUser->getValue('usr_last_login') === '') {
-            $lastLogin = '---';
+            $loginData['lastLogin'] = '---';
         } else {
-            $lastLogin = $gCurrentUser->getValue('usr_last_login');
+            $loginData['lastLogin'] = $gCurrentUser->getValue('usr_last_login');
         }
 
-        $loginFormPlugin->assignTemplateVariable('userUUID', $gCurrentUser->getValue('usr_uuid'));
-        $loginFormPlugin->assignTemplateVariable('userName', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
-        $loginFormPlugin->assignTemplateVariable('loginActiveSince', $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')));
-        $loginFormPlugin->assignTemplateVariable('lastLogin', $lastLogin);
-        $loginFormPlugin->assignTemplateVariable('numberOfLogins', $gCurrentUser->getValue('usr_number_login') . $htmlUserRank);
-        $loginFormPlugin->assignTemplateVariable('showLogoutLink', $plg_show_logout_link);
+        return $loginData;
+    }
 
-        if (isset($page)) {
-            echo $loginFormPlugin->html('plugin.login-form.view.tpl');
-        } else {
-            $loginFormPlugin->showHtmlPage('plugin.login-form.view.tpl');
-        }
-    } else {
-        // create and show the login form
-
+    /**
+     * @brief Creates the login form
+     * @return FormPresenter Returns the login form presenter
+     */
+    private static function createLoginForm() : FormPresenter
+    {
+        global $gL10n, $gDb, $gCurrentOrgId, $gSettingsManager, $gCurrentOrganization;
+        
         // preselected organization should be set by query parameter
         $getOrganizationShortName = admFuncVariableIsValid($_GET, 'organization_short_name', 'string');
         if ($getOrganizationShortName === '') {
             $getOrganizationShortName = $gCurrentOrganization->getValue('org_shortname');
         }
 
-        if ($plg_show_email_link) {
+        if (self::$pluginConfig['login_form_plugin_show_email_link']) {
             // read id of administrator role
             $sql = 'SELECT MIN(rol_id) as rol_id
                   FROM ' . TBL_ROLES . '
@@ -123,7 +106,7 @@ try {
                 // show link to send mail with local mail-client to administrator
                 $linkUrl = SecurityUtils::encodeUrl('mailto:' . $gCurrentOrganization->getValue('org_email_administrator'), array('subject' => $gL10n->get('SYS_LOGIN_PROBLEMS')));
             }
-            $forgotPasswordLink = '<a href="' . $linkUrl . '">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN') . '</a>';
+            $forgotPasswordLink = '<a href="' . $linkUrl . '">' . $linkText . '</a>';
         } else {
             $forgotPasswordLink = '';
         }
@@ -180,13 +163,62 @@ try {
         }
         $form->addSubmitButton('plg_btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right'));
 
-        $smarty = $loginFormPlugin->createSmartyObject();
-        $smarty->assign('settings', $gSettingsManager);
-        $smarty->assign('showRegisterLink', $plg_show_register_link);
-        $form->addToSmarty($smarty);
-        $gCurrentSession->addFormObject($form);
-        echo $smarty->fetch('plugin.login-form.edit.tpl');
+        return $form;
     }
-} catch (Throwable $e) {
-    echo $e->getMessage();
+
+    /**
+     * @param PagePresenter $page
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @return bool
+     */
+    public static function doRender($page = null) : bool
+    {
+        global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gValidLogin, $gL10n;
+
+        // show the latest documents & files list
+        try {
+            $rootPath = dirname(__DIR__, 3);
+            $pluginFolder = basename(self::$pluginPath);
+
+            require_once($rootPath . '/system/common.php');
+
+            $loginFormPlugin = new Overview($pluginFolder);
+            self::$pluginConfig = self::getPluginConfigValues();
+
+            // check if the plugin is enabled
+            if (self::$pluginConfig['login_form_plugin_enabled'] === 1 || ($gValidLogin && self::$pluginConfig['login_form_plugin_enabled'] === 2 && $gValidLogin)) {
+                if ($gValidLogin) {
+                    $loginData = self::getLoginData();
+                    $loginFormPlugin->assignTemplateVariable('userUUID', $gCurrentUser->getValue('usr_uuid'));
+                    $loginFormPlugin->assignTemplateVariable('userName', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
+                    $loginFormPlugin->assignTemplateVariable('loginActiveSince', $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')));
+                    $loginFormPlugin->assignTemplateVariable('lastLogin', $loginData['lastLogin']);
+                    $loginFormPlugin->assignTemplateVariable('numberOfLogins', $gCurrentUser->getValue('usr_number_login') . $loginData['htmlUserRank']);
+                    $loginFormPlugin->assignTemplateVariable('showLogoutLink', self::$pluginConfig['login_form_plugin_show_logout_link']);
+
+                    if (isset($page)) {
+                        echo $loginFormPlugin->html('plugin.login-form.view.tpl');
+                    } else {
+                        $loginFormPlugin->showHtmlPage('plugin.login-form.view.tpl');
+                    }
+                } else {
+                    $form = self::createLoginForm();
+                    $smarty = $loginFormPlugin->createSmartyObject();
+                    $smarty->assign('settings', $gSettingsManager);
+                    $smarty->assign('showRegisterLink', self::$pluginConfig['login_form_plugin_show_register_link']);
+                    $form->addToSmarty($smarty);
+                    $gCurrentSession->addFormObject($form);
+                    echo $smarty->fetch('plugin.login-form.edit.tpl');
+                }
+            } else {
+                throw new InvalidArgumentException($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+            }
+                
+        } catch (Throwable $e) {
+            echo $e->getMessage();
+        }
+
+        return true;
+    }
 }
