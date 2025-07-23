@@ -11,15 +11,15 @@
 
 # Only allow commit of official plugins
 /adm_plugins/*
-!/adm_plugins/birthday/
-!/adm_plugins/calendar/
-!/adm_plugins/login_form/
-!/adm_plugins/random_photo/
+!/adm_plugins/Birthday/
+!/adm_plugins/Calendar/
+!/adm_plugins/LoginForm/
+!/adm_plugins/RandomPhoto/
 !/adm_plugins/AnnouncementList/
-!/adm_plugins/event-list/
-!/adm_plugins/latest-documents-files/
-!/adm_plugins/who-is-online/
-!/adm_plugins/category_report/
+!/adm_plugins/EventList/
+!/adm_plugins/LatestDocumentsFiles/
+!/adm_plugins/WhoIsOnline/
+!/adm_plugins/CategoryReport/
 
 # Only allow commit of official themes
 /themes/*
