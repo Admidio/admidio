@@ -175,7 +175,23 @@ class PreferencesPresenter extends PagePresenter
                 )
             ),
 
-            // === 6) Extensions ===
+            // === 6) Overview Extensions ===
+            array(
+                'key'    => 'overview_extensions',
+                'label'  => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'),
+                // load in all plugin panels that are registered in the PreferencesService
+                'panels' => array_map(
+                    fn(array $entry) => [
+                        'id'       => $entry['id'],
+                        'title'    => $entry['title'],
+                        'icon'     => $entry['icon']    ?? 'bi-puzzle',
+                        'subcards' => $entry['subcards'] ?? false,
+                    ],
+                    \Admidio\Preferences\Service\PreferencesService::getOverviewPluginPanels()
+                )
+            ),
+
+            // === 7) Extensions ===
             array(
                 'key'    => 'extensions',
                 'label'  => $gL10n->get('SYS_EXTENSIONS'),

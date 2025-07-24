@@ -4,9 +4,12 @@ namespace Admidio\Infrastructure\Plugins;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Menu\Entity\MenuEntry;
+use Admidio\Menu\ValueObject\MenuNode;
 
 use InvalidArgumentException;
 use Exception;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class PluginAbstract
@@ -58,11 +61,13 @@ abstract class PluginAbstract implements PluginInterface
             if (!method_exists($preferencesClass, $functionName)) {
                 throw new Exception('The preferences class ' . $preferencesClass . ' does not have a method ' . $functionName . '().');
             }
-            // register the preferences presenter for this plugin
-            PreferencesService::addPluginPreferencesPresenter(
-                self::getComponentId(),
-                [ $preferencesClass, $functionName ]
-            );
+            if (self::isOverviewPlugin()) {
+                // register the overview preferences presenter for this plugin
+                PreferencesService::addOverviewPluginPreferencesPresenter(self::getComponentId(), [ $preferencesClass, $functionName ]);
+            } else {
+                // register the preferences presenter for this plugin
+                PreferencesService::addPluginPreferencesPresenter(self::getComponentId(), [ $preferencesClass, $functionName ]);
+            }
         }
     }
 
@@ -548,6 +553,16 @@ abstract class PluginAbstract implements PluginInterface
         // perform additional installation tasks
         // TODO: implement function to perform updateSteps for the plugin
         // e.g.: $componentUpdateHandle->doUpdateSteps();
+
+        // check if plugin has a menu entry generated with SQL if so add a vaild UUID
+        $pluginMenuEntry = new MenuEntry($gDb);
+        if ($pluginMenuEntry->readDataByColumns(array('men_name_intern' => basename(self::$pluginPath)))) {
+            $menuNode = new MenuNode('extensions', 'SYS_EXTENSIONS');
+            $menuNode->loadFromDatabase(3); // extensions node has the id  of 3 by default
+            $pluginMenuEntry->setValue('men_order', ($menuNode->count())); // set the order to the element. count includes the new entry
+            $pluginMenuEntry->setValue('men_uuid', (string)Uuid::uuid4());
+            $pluginMenuEntry->save();
+        }
 
         return true;
     }

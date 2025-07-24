@@ -28,6 +28,11 @@ class PreferencesService
      * @var array<int, callable[]>
      */
     private static array $pluginPresenters = array();
+    /**
+     * Registered presenter callbacks by component ID.
+     * @var array<int, callable[]>
+     */
+    private static array $overviewPluginPresenters = array();
 
     /**
      * Register a preferences presenter for a plugin.
@@ -50,7 +55,7 @@ class PreferencesService
      */
     public static function getPluginPresenters(): array
     {
-        return self::$pluginPresenters;
+        return array_merge(self::$overviewPluginPresenters, self::$pluginPresenters);
     }
 
     /**
@@ -66,6 +71,48 @@ class PreferencesService
         $panels = array();
 
         foreach (self::$pluginPresenters as $comId => $callbacks) {
+            // Retrieve plugin metadata by component ID (you may need to implement this lookup)
+            $pluginManager = new PluginManager();
+            $metadata = $pluginManager->getMetadataByComponentId($comId);
+
+            $panels[] = array(
+                'id'       => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($metadata['name'])))),
+                'title'    => Language::translateIfTranslationStrId($metadata['name']),
+                'icon'     => $metadata['icon'] ?? 'bi-puzzle',
+                'subcards' => $metadata['hasSubcards'] ?? false,
+            );
+        }
+
+        return $panels;
+    }
+
+    /**
+     * Register a preferences presenter for a plugin.
+     *
+     * @param int $componentId   The component ID of the plugin.
+     * @param callable $presenterCallback  A callable that renders the plugin's preferences panel.
+     */
+    public static function addOverviewPluginPreferencesPresenter(int $componentId, callable $presenterCallback): void
+    {
+        if (!isset(self::$overviewPluginPresenters[$componentId])) {
+            self::$overviewPluginPresenters[$componentId] = array();
+        }
+        self::$overviewPluginPresenters[$componentId][] = $presenterCallback;
+    }
+
+    /**
+     * Build the panel definitions for the "Plugins" tab.
+     *
+     * This method gathers metadata from each plugin and prepares
+     * the structure used by the PreferencesPresenter to render the accordion.
+     *
+     * @return array<int, array{id:string, title:string, icon?:string, subcards?:bool}>
+     */
+    public static function getOverviewPluginPanels(): array
+    {
+        $panels = array();
+
+        foreach (self::$overviewPluginPresenters as $comId => $callbacks) {
             // Retrieve plugin metadata by component ID (you may need to implement this lookup)
             $pluginManager = new PluginManager();
             $metadata = $pluginManager->getMetadataByComponentId($comId);
