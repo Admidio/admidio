@@ -2,10 +2,10 @@
 
 namespace Plugins\Birthday\classes;
 
-use Admidio\Roles\Service\RolesService;
 use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Service\RolesService;
 
 use InvalidArgumentException;
 use Exception;

@@ -6,7 +6,13 @@
     "url": "https://www.admidio.org",
     "icon": "bi-file-earmark-arrow-down-fill",
     "mainFile": "index.php",
-    "dependencies": [],
+    "dependencies": [
+        "Admidio\\Documents\\Entity\\File",
+        "Admidio\\Documents\\Entity\\Folder",
+        "Admidio\\Infrastructure\\Plugins\\Overview",
+        "Admidio\\Infrastructure\\Plugins\\PluginAbstract",
+        "Admidio\\Users\\Entity\\User"
+    ],
     "defaultConfig": {
         "latest_documents_files_plugin_enabled": {
             "name": "ORG_ACCESS_TO_PLUGIN",

@@ -2,12 +2,12 @@
 
 namespace Plugins\LoginForm\classes;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Overview;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
-use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
-use Admidio\Infrastructure\Language;
+use Admidio\UI\Presenter\FormPresenter;
 
 use InvalidArgumentException;
 use Exception;

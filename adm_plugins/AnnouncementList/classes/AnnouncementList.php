@@ -5,8 +5,8 @@ namespace Plugins\AnnouncementList\classes;
 use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 use InvalidArgumentException;
 use Exception;

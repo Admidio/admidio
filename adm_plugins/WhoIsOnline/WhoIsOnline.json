@@ -6,7 +6,11 @@
     "url": "https://www.admidio.org",
     "icon": "bi-building-fill-check",
     "mainFile": "index.php",
-    "dependencies": [],
+    "dependencies": [
+        "Admidio\\Infrastructure\\Plugins\\Overview",
+        "Admidio\\Infrastructure\\Plugins\\PluginAbstract",
+        "Admidio\\Infrastructure\\Utils\\SecurityUtils"
+    ],
     "defaultConfig": {
         "who_is_online_plugin_enabled": {
             "name": "ORG_ACCESS_TO_PLUGIN",

@@ -5,8 +5,8 @@ namespace Plugins\LatestDocumentsFiles\classes;
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Users\Entity\User;
 
 use InvalidArgumentException;
 use Exception;

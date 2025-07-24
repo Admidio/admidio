@@ -6,7 +6,13 @@
     "url": "https://www.admidio.org",
     "icon": "bi-newspaper",
     "mainFile": "index.php",
-    "dependencies": [],
+    "dependencies": [
+        "Admidio\\Announcements\\Entity\\Announcement",
+        "Admidio\\Infrastructure\\Database",
+        "Admidio\\Infrastructure\\Plugins\\Overview",
+        "Admidio\\Infrastructure\\Utils\\SecurityUtils",
+        "Admidio\\Infrastructure\\Plugins\\PluginAbstract"
+    ],
     "defaultConfig": {
         "announcement_list_plugin_enabled": {
             "name": "ORG_ACCESS_TO_PLUGIN",

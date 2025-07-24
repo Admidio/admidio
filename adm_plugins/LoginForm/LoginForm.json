@@ -6,7 +6,14 @@
     "url": "https://www.admidio.org",
     "icon": "bi-box-arrow-in-right",
     "mainFile": "index.php",
-    "dependencies": [],
+    "dependencies": [
+        "Admidio\\Infrastructure\\Language",
+        "Admidio\\Infrastructure\\Plugins\\Overview",
+        "Admidio\\Infrastructure\\Plugins\\PluginAbstract",
+        "Admidio\\Infrastructure\\Utils\\SecurityUtils",
+        "Admidio\\Roles\\Entity\\Role",
+        "Admidio\\UI\\Presenter\\FormPresenter"
+    ],
     "defaultConfig": {
         "login_form_plugin_enabled": {
             "name": "ORG_ACCESS_TO_PLUGIN",

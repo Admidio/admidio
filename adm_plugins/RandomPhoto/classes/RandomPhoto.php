@@ -2,9 +2,9 @@
 
 namespace Plugins\RandomPhoto\classes;
 
-use Admidio\Photos\Entity\Album;
 use Admidio\Infrastructure\Plugins\Overview;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Photos\Entity\Album;
 
 use InvalidArgumentException;
 use Exception;
