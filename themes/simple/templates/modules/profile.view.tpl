@@ -133,7 +133,7 @@
     </div>
 </div>
 
-<div class="d-block d-md-none">
+<div class="d-block d-md-none admidio-margin-bottom">
     <!-- Accordion Navigation -->
     <div class="accordion" id="adm_profile_accordion">
         <!-- Basic Data Accordion -->
