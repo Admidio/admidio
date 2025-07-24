@@ -71,13 +71,16 @@ class PluginsPresenter extends PagePresenter
                     // wait for callUrlHideElement to finish hiding the element
                     setTimeout(function() {
                         updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
+                        updateMoveActions(".accordion", "adm_plugin_card_entry", "admidio-plugin-move");
                     }, 1000);
                 } else {
                     updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
+                    updateMoveActions(".accordion", "adm_plugin_card_entry", "admidio-plugin-move");
                 }
             });
 
             updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
+            updateMoveActions(".accordion", "adm_plugin_card_entry", "admidio-plugin-move");
             ', true
         );
 
@@ -140,6 +143,7 @@ class PluginsPresenter extends PagePresenter
                 $templateRow['name'] = Language::translateIfTranslationStrId($interface->getName());
                 $templateRow['description'] = Language::translateIfTranslationStrId($interface->getMetadata()['description'] ?? '');
                 $templateRow['icon'] = $interface->getMetadata()['icon'] ?? '';
+                $templateRow['url'] = $interface->getMetadata()['url'] ? '<a href="' . $interface->getMetadata()['url'] . '" target="_blank" data-bs-toggle="tooltip" title="' . $interface->getMetadata()['url'] . '" style="display:inline-flex;"><i class="bi bi-link-45deg"></i>' . parse_url($interface->getMetadata()['url'])['host'] . '</a>' : '';
                 $templateRow['author'] = $interface->getMetadata()['author'] ?? '';
                 $templateRow['version'] = $interface->getMetadata()['version'] ?? '';
                 $templateRow['installedVersion'] = $interface->getVersion() !== '0.0.0' ? $interface->getVersion() : '';
@@ -182,6 +186,7 @@ class PluginsPresenter extends PagePresenter
                 $templateRow['name'] = $pluginName;
                 $templateRow['description'] = $gL10n->get('SYS_PLUGIN_NO_INTERFACE');
                 $templateRow['icon'] = '';
+                $templateRow['url'] = '';
                 $templateRow['author'] = '';
                 $templateRow['version'] = '';
                 $templateRow['installedVersion'] = '';
