@@ -58,6 +58,10 @@ try {
                     $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
 
                     if ($interface != null) {
+                        if (!$interface->checkDependencies()) {
+                            throw new RuntimeException('Missing dependencies for ' . $getPluginName . ' plugin');
+                        }
+
                         $interface->doInstall();
                     }
                 }

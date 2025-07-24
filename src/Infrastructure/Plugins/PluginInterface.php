@@ -77,6 +77,12 @@ interface PluginInterface
      * @throws Exception
      * @return bool
      */
+    public static function checkDependencies() : bool;
+
+    /**
+     * @throws Exception
+     * @return bool
+     */
     public static function isInstalled() : bool;
 
     /**

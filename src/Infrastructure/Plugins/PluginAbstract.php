@@ -362,6 +362,83 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
+     * Check if the plugin has all dependencies installed.
+     * @throws Exception
+     * @return bool Returns true if all dependencies are installed, false otherwise.
+     */
+    public static function checkDependencies() : bool
+    {
+        // check if the plugin has dependencies
+        if (empty(self::$dependencies)) {
+            return true;
+        }
+
+        // ensure Composer’s PSR‑4 autoloader is registered
+        if (!self::doClassAutoload()) {
+            throw new \RuntimeException('Could not load Composer autoloader at ' . ADMIDIO_PATH . '/vendor/autoload.php');
+        }
+        $missing = array();
+
+        // loop over all dependencies and check if they are available
+        foreach (self::$dependencies as $dependency) {
+            // dependencies should be a class name of the admidio core or the final namespace of the class
+
+            // check if the dependency is a fully qualified class name or only a short name
+            if (class_exists($dependency, true)) {
+                // if the class exists, continue to the next dependency
+                continue;
+            }
+
+            // if the class does not exist, try to find it in the Admidio namespace
+            if (self::findAdmidioClass($dependency) === null) {
+                $missing[] = $dependency;
+            }
+        }
+
+        if (!empty($missing)) {
+            // not all dependencies are met
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Scan src/ under the Admidio\ namespace for a class named $shortName.
+     * Returns the fully qualified class name if found, or null otherwise.
+     *
+     * @param string $shortName
+     * @return string|null
+     */
+    private static function findAdmidioClass(string $shortName): ?string
+    {
+        // define the path to the src directory
+        $srcDir = ADMIDIO_PATH . '/src';
+        $prefix = 'Admidio\\';
+
+        $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($srcDir));
+
+        // iterate through the directory structure to find the class file
+        foreach ($it as $file) {
+            if (! $file->isFile() || $file->getFilename() !== $shortName . '.php') {
+                continue;
+            }
+
+            // if the file is found, construct the full class name
+            $relPath = substr($file->getPathname(), strlen($srcDir) + 1, -4);
+            $subNamespaces = str_replace(DIRECTORY_SEPARATOR, '\\', $relPath);
+            $fullName = $prefix . ($subNamespaces !== '' ? $subNamespaces : $shortName);
+
+
+            if (class_exists($fullName, true)) {
+                return $fullName;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @throws Exception
      * @return bool
      */
