@@ -48,7 +48,7 @@
 </div>
 
 <!-- for small screens: Accordions -->
-<div class="d-block d-md-none">
+<div class="d-block d-md-none admidio-margin-bottom">
     <div class="accordion" id="adm_preferences_accordion">
         {foreach $preferenceTabs as $tab name=outer}
             <!-- heading for each accordion group -->
