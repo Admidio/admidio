@@ -34,6 +34,7 @@ class Calendar extends PluginAbstract
     private static string $currentYear = '';
     private static int $today = 0;
     private static int $lastDayCurrentMonth = 0;
+    private static bool $getDatId = false;
 
     private static array $pluginConfig = array();
 
@@ -505,8 +506,12 @@ class Calendar extends PluginAbstract
             throw new InvalidArgumentException('Config must be an "array".');
         }
 
+        // reset get date id flag before init
+        self::$getDatId = false;
+        
         // init parameters
         if (isset($params['date_id']) && $params['date_id'] !== '') {
+            self::$getDatId = true;
             // Read Date ID or generate current month and year
             self::$currentMonth = substr($params['date_id'], 0, 2);
             self::$currentYear = substr($params['date_id'], 2, 4);
@@ -573,7 +578,7 @@ class Calendar extends PluginAbstract
                 $calendarPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
             }
 
-            if (isset($page)) {
+            if (isset($page) || self::$getDatId) {
                 echo $calendarPlugin->html('plugin.calendar.tpl');
             } else {
                 $calendarPlugin->showHtmlPage('plugin.calendar.tpl');

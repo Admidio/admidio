@@ -29,10 +29,10 @@
         </div>
     {/if}
 
-    <script type="text/javascript"><!--
+    <script type="text/javascript">
         $("#calendarResetLink").click(function() {
             $.get({
-                url: '{$urlAdmidio}/adm_plugins/{$pluginFolder}/calendar.php',
+                url: '{$urlAdmidio}/adm_plugins/{$pluginFolder}/index.php',
                 cache: false,
                 data: 'date_id={$currentMonthYear}',
                 success: function(html) {
@@ -43,7 +43,7 @@
         });
         $("#previousMonth").click(function() {
             $.get({
-                url: '{$urlAdmidio}/adm_plugins/{$pluginFolder}/calendar.php',
+                url: '{$urlAdmidio}/adm_plugins/{$pluginFolder}/index.php',
                 cache: false,
                 data: 'date_id={$dateIdLastMonth}',
                 success: function (html) {
@@ -54,7 +54,7 @@
         });
         $("#nextMonth").click(function() {
             $.get({
-                url: '{$urlAdmidio}/adm_plugins/{$pluginFolder}/calendar.php',
+                url: '{$urlAdmidio}/adm_plugins/{$pluginFolder}/index.php',
                 cache: false,
                 data: 'date_id={$dateIdNextMonth}',
                 success: function (html) {
@@ -67,5 +67,5 @@
         $(document).ready(function() {
             $(".admidio-calendar-link").popover();
         });
-    --></script>
+    </script>
 </div>
