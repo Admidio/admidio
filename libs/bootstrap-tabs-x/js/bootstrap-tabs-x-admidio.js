@@ -84,6 +84,9 @@
         setTitle: function ($el) {
             var self = this, txt = $.trim($el.text()), isVertical = self.isVertical,
                 maxLen = $h.isEmpty($el.data('maxTitleLength')) ? self.maxTitleLength : $el.data('maxTitleLength');
+                if (maxLen === -1) {
+                    return;
+                }
             if (isVertical && txt.length > maxLen - 2 && $h.isEmpty($el.attr('title'))) {
                 $el.attr('title', txt);
             }

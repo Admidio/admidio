@@ -1,7 +1,7 @@
 <!-- Responsive Tabs and Accordions -->
 <div class="d-none d-md-block">
     <!-- Tab Navigation -->
-    <div class="tabs-x tabs-above tab-bordered">
+    <div class="tabs-x tabs-above tab-bordered" data-max-title-length="-1">
         <ul class="nav nav-tabs admidio-tabs" id="adm_profile_tabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="adm_profile_basic_informations_tab" data-bs-toggle="tab" data-bs-target="#adm_profile_basic_informations_pane" type="button" role="tab" aria-controls="adm_profile_basic_data" aria-selected="true">

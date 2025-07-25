@@ -1,6 +1,6 @@
 <!-- for big screens: Tabs -->
 <div class="d-none d-md-block">
-    <div class="tabs-x tabs-left tab-bordered">
+    <div class="tabs-x tabs-left tab-bordered" data-max-title-length="-1">
         <!-- variable set the first tab active -->
         {assign var="globalFirst" value=true}
         <ul id="adm_preferences_tabs" class="nav nav-tabs flex-column list-group admidio-preferences-group" role="tablist">
