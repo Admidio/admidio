@@ -2,12 +2,12 @@
     <div id="adm_inventory_table_select_actions" class="mb-3">
         <ul class="nav admidio-menu-function-node">
             <li class="nav-item">
-                <button id="edit-selected" class="btn nav-link btn-primary" style="display: none;">
+                <button id="edit-selected" class="btn nav-link btn-primary" disabled="disabled">
                     <i class="bi bi-pencil-square me-1"></i>{$l10n->get('SYS_EDIT_SELECTION')}
                 </button>
             </li>
             <li class="nav-item">
-                <button id="delete-selected" class="btn nav-link btn-primary" style="display: none;">
+                <button id="delete-selected" class="btn nav-link btn-primary" disabled="disabled">
                     <i class="bi bi-trash me-1"></i>{$l10n->get('SYS_DELETE_SELECTION')}
                 </button>
             </li>
