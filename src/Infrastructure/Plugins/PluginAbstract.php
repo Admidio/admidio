@@ -64,7 +64,7 @@ abstract class PluginAbstract implements PluginInterface
         $pluginMenuEntry->setValue('men_name', self::$name);
         $pluginMenuEntry->setValue('men_com_id', self::$pluginComId);
         $pluginMenuEntry->setValue('men_description', self::$metadata['description']);
-        $pluginMenuEntry->setValue('men_url', FOLDER_PLUGINS . '/' . $className . '/' . $className . '.php');
+        $pluginMenuEntry->setValue('men_url', FOLDER_PLUGINS . '/' . $className . '/' . (self::$metadata['mainFile'] ?? $className . '.php'));
         $pluginMenuEntry->setValue('men_icon', self::$metadata['icon']);
         $pluginMenuEntry->save();
 
@@ -625,7 +625,9 @@ abstract class PluginAbstract implements PluginInterface
         self::$version = self::$metadata['version'];
 
         // add the plugin menu entry to the database
-        self::addMenuEntry();
+        if (!self::isOverviewPlugin()) {
+            self::addMenuEntry();
+        }
 
         // perform additional installation tasks
         // TODO: implement function to perform updateSteps for the plugin
