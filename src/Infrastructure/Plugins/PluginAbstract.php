@@ -5,11 +5,9 @@ use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Menu\Entity\MenuEntry;
-use Admidio\Menu\ValueObject\MenuNode;
 
 use InvalidArgumentException;
 use Exception;
-use Ramsey\Uuid\Uuid;
 
 /**
  * Class PluginAbstract
@@ -50,6 +48,57 @@ abstract class PluginAbstract implements PluginInterface
 
     }
 
+    /**
+     * Add the plugin menu entry to the database.
+     * This method is called during the installation of the plugin.
+     * @throws Exception
+     */
+    private static function addMenuEntry() : void
+    {
+        global $gDb;
+
+        $className = basename(self::$pluginPath);
+
+        $pluginMenuEntry = new MenuEntry($gDb);
+        $pluginMenuEntry->setValue('men_men_id_parent', 3); // extensions node has the id  of 3 by default
+        $pluginMenuEntry->setValue('men_name', self::$name);
+        $pluginMenuEntry->setValue('men_com_id', self::$pluginComId);
+        $pluginMenuEntry->setValue('men_description', self::$metadata['description']);
+        $pluginMenuEntry->setValue('men_url', FOLDER_PLUGINS . '/' . $className . '/' . $className . '.php');
+        $pluginMenuEntry->setValue('men_icon', self::$metadata['icon']);
+        $pluginMenuEntry->save();
+
+        // rename the menu entry internal name to the class name
+        $pluginMenuEntry->readDataById($pluginMenuEntry->getValue('men_id'));
+        $pluginMenuEntry->setValue('men_name_intern', $className);
+        $pluginMenuEntry->save();
+    }
+
+    /**
+     * Remove the plugin menu entry from the database.
+     * This method is called during the uninstallation of the plugin.
+     * @throws Exception
+     */
+    private static function removeMenuEntry() : bool
+    {
+        global $gDb;
+
+        $className = basename(self::$pluginPath);
+
+        // delete the plugin menu entry
+        $pluginMenuEntry = new MenuEntry($gDb);
+        if ($pluginMenuEntry->readDataByColumns(array('men_name_intern' => $className))) {
+            $pluginMenuEntry->delete();
+        }
+
+        return true;
+    }
+
+    /**
+     * Initialize the preferences panel for this plugin.
+     * This method will be called automatically when the plugin is activated.
+     * It will register the preferences panel for this plugin in the PreferencesService.
+     */
     public static function initPreferencePanelCallback(): void
     {
         // find a preference panel for this plugin
@@ -471,6 +520,31 @@ abstract class PluginAbstract implements PluginInterface
      * @throws Exception
      * @return bool
      */
+    public static function isVisible() : bool
+    {
+        global $gValidLogin, $gCurrentUser;
+
+        // check if the plugin is activated
+        if (!self::isActivated()) {
+            return false;
+        }
+
+        // check if the plugin has setting ending with '_enabled'
+        $pluginConfig = self::getPluginConfig();
+        foreach ($pluginConfig as $key => $value) {
+            if (str_ends_with($key, '_enabled') && isset($value['value'])) {
+                if (($value['value'] === 1 || ($value['value'] === 2 && $gValidLogin))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @throws Exception
+     * @return bool
+     */
     public static function isOverviewPlugin() : bool
     {
         global $gDb;
@@ -550,19 +624,12 @@ abstract class PluginAbstract implements PluginInterface
         // set the installed version of the plugin
         self::$version = self::$metadata['version'];
 
+        // add the plugin menu entry to the database
+        self::addMenuEntry();
+
         // perform additional installation tasks
         // TODO: implement function to perform updateSteps for the plugin
         // e.g.: $componentUpdateHandle->doUpdateSteps();
-
-        // check if plugin has a menu entry generated with SQL if so add a vaild UUID
-        $pluginMenuEntry = new MenuEntry($gDb);
-        if ($pluginMenuEntry->readDataByColumns(array('men_name_intern' => basename(self::$pluginPath)))) {
-            $menuNode = new MenuNode('extensions', 'SYS_EXTENSIONS');
-            $menuNode->loadFromDatabase(3); // extensions node has the id  of 3 by default
-            $pluginMenuEntry->setValue('men_order', ($menuNode->count())); // set the order to the element. count includes the new entry
-            $pluginMenuEntry->setValue('men_uuid', (string)Uuid::uuid4());
-            $pluginMenuEntry->save();
-        }
 
         return true;
     }
@@ -597,6 +664,9 @@ abstract class PluginAbstract implements PluginInterface
         // update $gSettingsManager to remove the plugin config values
         $gSettingsManager->resetAll();
 
+        // remove the plugin menu entry
+        self::removeMenuEntry();
+        
         // delete the plugin from the components table
         $plugin = new Component($gDb, self::$pluginComId);
         $plugin->delete();
