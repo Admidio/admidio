@@ -79,7 +79,7 @@ const FOLDER_LIBS = '/libs'; // PHP libs
 const FOLDER_LANGUAGES = '/languages';
 const FOLDER_THEMES = '/themes';
 const FOLDER_MODULES = '/modules';
-const FOLDER_PLUGINS = '/adm_plugins';
+const FOLDER_PLUGINS = '/plugins';
 
 // ####################
 // ###  DATE-STUFF  ###

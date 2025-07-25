@@ -10,16 +10,16 @@
 !/adm_my_files/index.html
 
 # Only allow commit of official plugins
-/adm_plugins/*
-!/adm_plugins/Birthday/
-!/adm_plugins/Calendar/
-!/adm_plugins/LoginForm/
-!/adm_plugins/RandomPhoto/
-!/adm_plugins/AnnouncementList/
-!/adm_plugins/EventList/
-!/adm_plugins/LatestDocumentsFiles/
-!/adm_plugins/WhoIsOnline/
-!/adm_plugins/CategoryReport/
+/plugins/*
+!/plugins/Birthday/
+!/plugins/Calendar/
+!/plugins/LoginForm/
+!/plugins/RandomPhoto/
+!/plugins/AnnouncementList/
+!/plugins/EventList/
+!/plugins/LatestDocumentsFiles/
+!/plugins/WhoIsOnline/
+!/plugins/CategoryReport/
 
 # Only allow commit of official themes
 /themes/*

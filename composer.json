@@ -51,7 +51,7 @@
     "autoload": {
         "psr-4": {
             "Admidio\\": "src/",
-            "Plugins\\": "adm_plugins/"
+            "Plugins\\": "plugins/"
         },
         "classmap": [
           "system/classes/",
@@ -67,15 +67,15 @@
             "!adm_my_files/config_example.php",
             "!adm_my_files/ecard_templates",
             "!adm_my_files/mail_templates",
-            "adm_plugins/*",
-            "!adm_plugins/AnnouncementList",
-            "!adm_plugins/Birthday",
-            "!adm_plugins/Calendar",
-            "!adm_plugins/EventList",
-            "!adm_plugins/LatestDocumentsFiles",
-            "!adm_plugins/LoginForm",
-            "!adm_plugins/RandomPhoto",
-            "!adm_plugins/WhoIsOnline",
+            "plugins/*",
+            "!plugins/AnnouncementList",
+            "!plugins/Birthday",
+            "!plugins/Calendar",
+            "!plugins/EventList",
+            "!plugins/LatestDocumentsFiles",
+            "!plugins/LoginForm",
+            "!plugins/RandomPhoto",
+            "!plugins/WhoIsOnline",
             "demo_data",
             "!vendor/*",
             "vendor/maennchen/zipstream-php/test",

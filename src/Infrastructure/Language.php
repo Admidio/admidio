@@ -123,7 +123,7 @@ class Language
     }
 
     /**
-     * Read language folder of each plugin in adm_plugins and add this folder to the language folder
+     * Read language folder of each plugin in plugins and add this folder to the language folder
      * array of this class.
      */
     public function addPluginLanguageFolderPaths()
