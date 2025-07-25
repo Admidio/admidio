@@ -392,5 +392,12 @@ class ComponentUpdate extends Component
             // reset subversion because we want to start update for next main version with subversion 0
             $initialMinorVersion = 0;
         }
+
+        // save current version of plugin
+        $sql = 'UPDATE '.TBL_COMPONENTS.'
+                           SET com_version = ? -- $targetVersion
+                         WHERE com_id = ? -- :com_id';
+        $this->db->queryPrepared($sql, array($targetVersion, $this->getValue('com_id')));
+
     }
 }
