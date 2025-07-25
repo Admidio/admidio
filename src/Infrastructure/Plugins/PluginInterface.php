@@ -95,6 +95,12 @@ interface PluginInterface
      * @throws Exception
      * @return bool
      */
+    public static function isVisible() : bool;
+
+    /**
+     * @throws Exception
+     * @return bool
+     */
     public static function isOverviewPlugin() : bool;
 
     /**

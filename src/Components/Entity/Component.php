@@ -5,6 +5,8 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Infrastructure\Plugins\PluginManager;
 
 /**
  * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
@@ -323,6 +325,15 @@ class Component extends Entity
             case 'ROOMS':
                 if ($gCurrentUser->isAdministrator()) {
                     return true;
+                }
+                break;
+
+            default:
+                // check if the component is a plugin and it is visible
+                $pluginManager = new PluginManager();
+                $plugin = $pluginManager->getPluginByName($componentName);
+                if ($plugin) {
+                    return ($plugin instanceof PluginAbstract) ? $plugin::getInstance()->isVisible() : false;
                 }
                 break;
         }
