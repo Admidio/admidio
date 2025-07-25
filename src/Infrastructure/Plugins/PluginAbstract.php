@@ -562,13 +562,7 @@ abstract class PluginAbstract implements PluginInterface
      */
     public static function isUpdateAvailable() : bool
     {
-        global $gDb;
-        // check if the plugin exists in components database table
-        $sql = 'SELECT com_version FROM ' . TBL_COMPONENTS . ' WHERE com_name = ? AND (com_type = ? OR com_type = ?)';
-        $statement = $gDb->queryPrepared($sql, array(self::getName(), 'PLUGIN', 'ADM_PLUGIN'));
-        $currentVersion = $statement->fetchColumn();
-
-        return version_compare($currentVersion, self::getVersion(), '<');
+        return version_compare(self::$version, self::$metadata['version'], '<');
     }
 
     /**

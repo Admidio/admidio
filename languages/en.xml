@@ -1212,6 +1212,7 @@
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLEASE_WAIT">Please wait</string>
+  <string name="SYS_PLUGIN_DISABLED">This plugin is disabled.</string>
   <string name="SYS_PLUGIN_INSTALL">Install plugin</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Here you can manage the plugins of Admidio. Plugins are additional modules that can be installed to extend the functionality of Admidio. You can install, update or remove plugins.</string>
@@ -1727,7 +1728,9 @@
   <string name="SYS_UNLOCK_ALBUM">Unlock album</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNMANAGED_FILES">Unmanaged files</string>
+  <string name="SYS_UP_TO_DATE">Up to date</string>
   <string name="SYS_UPDATE">Update</string>
+  <string name="SYS_UPDATE_AVAILABLE">Update available</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>

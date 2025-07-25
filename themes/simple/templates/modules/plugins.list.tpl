@@ -34,12 +34,12 @@
                                 <div class="btn-group" role="group">
                                     <a class="admidio-icon-link admidio-plugin-move" href="javascript:void(0)" data-uuid="{$pluginEntry.id}"
                                     data-direction="UP" data-target="adm_plugin_entry_{$pluginEntry.id}">
-                                        <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', array('SYS_PLUGIN'))}"></i></a>
+                                        <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', array('SYS_EXTENSION'))}"></i></a>
                                     <a class="admidio-icon-link admidio-plugin-move" href="javascript:void(0)" data-uuid="{$pluginEntry.id}"
                                     data-direction="DOWN" data-target="adm_plugin_entry_{$pluginEntry.id}">
-                                        <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', array('SYS_PLUGIN'))}"></i></a>
+                                        <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', array('SYS_EXTENSION'))}"></i></a>
                                     <a class="admidio-icon-link">
-                                        <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_VAR', array('SYS_PLUGIN'))}"></i></a>
+                                        <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_VAR', array('SYS_EXTENSION'))}"></i></a>
                                 </div>
                             {/if}
                             </td>
@@ -47,7 +47,13 @@
                             <td>{$pluginEntry.author}</td>
                             <td>{$pluginEntry.url}</td>
                             <td>{$pluginEntry.version}</td>
-                            <td>{$pluginEntry.installedVersion}</td>
+                            <td data-bs-toggle="tooltip"
+                                {if $pluginEntry.installedVersion < $pluginEntry.version}
+                                    style="color: var(--bs-warning);" title="{$l10n->get('SYS_UPDATE_AVAILABLE', array('SYS_EXTENSION'))}"
+                                {else}
+                                    style="color: var(--bs-success);" title="{$l10n->get('SYS_UP_TO_DATE', array('SYS_EXTENSION'))}"
+                                {/if}
+                                >{$pluginEntry.installedVersion}</td>
                             <td class="text-end">
                                 {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
                             </td>
@@ -122,8 +128,12 @@
                                 <p>{$pluginEntry.version}</p>
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_installed_version">
-                                <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong>
-                                <p>{$pluginEntry.installedVersion}</p>
+                                <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong> 
+                                {if $pluginEntry.installedVersion < $pluginEntry.version}
+                                    <p><span style="color: var(--bs-warning);" >{$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</span></p>
+                                {else}
+                                    <p><span style="color: var(--bs-success);" >{$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</span></p>
+                                {/if}
                             </div>
                         </div>
                     </div>
