@@ -112,6 +112,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
         if ($gCurrentUser->hasRightViewRole($row['mem_rol_id'])
         || $GLOBALS['gCurrentUserId'] === (int) $user->getValue('usr_id')) {
             $futureMembership = false;
+            $formerMembership = false;
             $showRoleEndDate  = false;
             $deleteMode = 'pro_role';
 
@@ -127,6 +128,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
 
             // check if membership ends in the past
             if (strcmp($member->getValue('mem_end', 'Y-m-d'), DATE_NOW) < 0) {
+                $formerMembership = true;
                 $deleteMode = 'pro_former';
             }
 
@@ -178,8 +180,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 }
 
                 // You are not allowed to delete your own administrator membership, other roles could be deleted
-                if (($role->getValue('rol_administrator') == 1 && $GLOBALS['gCurrentUserId'] !== (int) $user->getValue('usr_id'))
-                                || ($role->getValue('rol_administrator') == 0)) {
+                if ((!$formerMembership || $gCurrentUser->isAdministrator())
+                    && ( ($role->getValue('rol_administrator') == 1 && $GLOBALS['gCurrentUserId'] !== (int) $user->getValue('usr_id'))
+                        || ($role->getValue('rol_administrator') == 0))) {
                     $roleMemHTML .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
                                         data-href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.'/adm_program/system/popup_message.php', array('type' => $deleteMode, 'element_id' => 'role_'.(int) $role->getValue('rol_id'), 'database_id' => $memberUuid, 'name' => $role->getValue('rol_name'))).'"><i
                                         class="fas fa-trash-alt" data-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
