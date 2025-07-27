@@ -196,19 +196,23 @@ class InventoryPresenter extends PagePresenter
                 form.submit();
             });
 
-            // fill the DataTable filter string with the current search value
-            var table = $("#adm_inventory_table").DataTable();            
-            var initFilter = "' . $initialFilter . '";
-            if (initFilter !== "") {
-                table.search(initFilter).draw();
-            }
-        
-            // set the filter string in the form when the DataTable is searched
-            table.on("search.dt", function(){
-            var textFilter = table.search() || "";
-            $("#adm_navbar_filter_form")
-                .find("input[name=\'items_filter_string\']")
-                .val(textFilter);
+            var table = $("#adm_inventory_table");
+
+            table.one("init.dt", function() {
+                // fill the DataTable filter string with the current search value
+                var tableApi = table.DataTable();
+                var initFilter = "' . $initialFilter . '";
+                if (initFilter !== "") {
+                    tableApi.search(initFilter).draw();
+                }
+            
+                // set the filter string in the form when the DataTable is searched
+                table.on("search.dt", function(){
+                var textFilter = tableApi.search() || "";
+                $("#adm_navbar_filter_form")
+                    .find("input[name=\'items_filter_string\']")
+                    .val(textFilter);
+                });
             });
         
             // create the print view link with the current filter values
