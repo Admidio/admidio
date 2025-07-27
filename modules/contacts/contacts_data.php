@@ -335,8 +335,10 @@ try {
 
         // Create row and add first column
         if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+            $columnNumberValues = '2';
             $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => '<input type="checkbox"/>', '1' => $rowNumber);
         } else {
+            $columnNumberValues = '1';
             $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => $rowNumber);
         }
 
@@ -358,14 +360,10 @@ try {
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ANY_ORGANIZATION');
         }
 
-        if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
-            $columnValues['2'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
-            <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
-        } else {
-            $columnValues['1'] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
-            <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
-        }
-
+        // add icon link to user profile
+        $columnValues[$columnNumberValues] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
+        <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
+        
         // add all columns of the list configuration to the json array
         // start columnNumber with 4 because the first 2 columns are not of the list configuration
         for ($columnNumber = 1; $columnNumber <= $contactsListConfig->countColumns(); $columnNumber++) {
