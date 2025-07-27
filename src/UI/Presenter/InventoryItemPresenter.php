@@ -208,15 +208,15 @@ class InventoryItemPresenter extends PagePresenter
                         );
 
                         $this->addJavascript('
-                            $(document).ready(function() {
-                                // Select2 für KEEPER initialisieren
-                                $("#INF-' . $pimKeeper .'").select2({
-                                    theme: "bootstrap-5",
-                                    allowClear: true,
-                                    placeholder: "",
-                                    language: "' . $gL10n->getLanguageLibs() . '",
-                                });
-                            });', true);
+                            // Select2 für KEEPER initialisieren
+                            $("#INF-' . $pimKeeper .'").select2({
+                                theme: "bootstrap-5",
+                                allowClear: true,
+                                placeholder: "",
+                                language: "' . $gL10n->getLanguageLibs() . '",
+                            });',
+                            true
+                        );
                     }
                     else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
@@ -475,15 +475,15 @@ class InventoryItemPresenter extends PagePresenter
                         );
 
                         $this->addJavascript('
-                            $(document).ready(function() {
-                                // Select2 für KEEPER initialisieren
-                                $("#INF-' . $pimKeeper .'").select2({
-                                    theme: "bootstrap-5",
-                                    allowClear: true,
-                                    placeholder: "",
-                                    language: "' . $gL10n->getLanguageLibs() . '",
-                                });
-                            });', true);
+                            // Select2 für KEEPER initialisieren
+                            $("#INF-' . $pimKeeper .'").select2({
+                                theme: "bootstrap-5",
+                                allowClear: true,
+                                placeholder: "",
+                                language: "' . $gL10n->getLanguageLibs() . '",
+                            });',
+                            true
+                        );
                     }
                     else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
@@ -835,39 +835,39 @@ class InventoryItemPresenter extends PagePresenter
                         );
             
                         $this->addJavascript('
-                            $(document).ready(function() {
-                                var selectIdLastReceiver = "#INF-' . $pimLastReceiver . '";
-            
-                                var defaultValue = "' . htmlspecialchars($items->getValue($infNameIntern)) . '";
-                                var defaultText = "' . htmlspecialchars($items->getValue($infNameIntern)) . '"; // Der Text für den Default-Wert
-            
-                                function isSelect2Empty(selectId) {
-                                    // Hole den aktuellen Wert des Select2-Feldes
-                                    var renderedElement = $("#select2-INF-' . $pimLastReceiver .'-container");
-                                    if (renderedElement.length) {
-                                        window.checkPimInInventory();
-                                    }
+                            var selectIdLastReceiver = "#INF-' . $pimLastReceiver . '";
+        
+                            var defaultValue = "' . htmlspecialchars($items->getValue($infNameIntern)) . '";
+                            var defaultText = "' . htmlspecialchars($items->getValue($infNameIntern)) . '"; // Der Text für den Default-Wert
+        
+                            function isSelect2Empty(selectId) {
+                                // Hole den aktuellen Wert des Select2-Feldes
+                                var renderedElement = $("#select2-INF-' . $pimLastReceiver .'-container");
+                                if (renderedElement.length) {
+                                    window.checkPimInInventory();
                                 }
-                                // Prüfe, ob der Default-Wert in den Optionen enthalten ist
-                                if ($(selectIdLastReceiver + " option[value=\'" + defaultValue + "\']").length === 0) {
-                                    // Füge den Default-Wert als neuen Tag hinzu
-                                    var newOption = new Option(defaultText, defaultValue, true, true);
-                                    $(selectIdLastReceiver).append(newOption).trigger("change");
-                                }
-            
-                                $("#INF-' . $pimLastReceiver .'").select2({
-                                    theme: "bootstrap-5",
-                                    allowClear: true,
-                                    placeholder: "",
-                                    language: "' . $gL10n->getLanguageLibs() . '",
-                                    tags: true
-                                });
-            
-                                // Überwache Änderungen im Select2-Feld
-                                $(selectIdLastReceiver).on("change.select2", function() {
-                                    isSelect2Empty(selectIdLastReceiver);
-                                });
-                            });', true);
+                            }
+                            // Prüfe, ob der Default-Wert in den Optionen enthalten ist
+                            if ($(selectIdLastReceiver + " option[value=\'" + defaultValue + "\']").length === 0) {
+                                // Füge den Default-Wert als neuen Tag hinzu
+                                var newOption = new Option(defaultText, defaultValue, true, true);
+                                $(selectIdLastReceiver).append(newOption).trigger("change");
+                            }
+        
+                            $("#INF-' . $pimLastReceiver .'").select2({
+                                theme: "bootstrap-5",
+                                allowClear: true,
+                                placeholder: "",
+                                language: "' . $gL10n->getLanguageLibs() . '",
+                                tags: true
+                            });
+        
+                            // Überwache Änderungen im Select2-Feld
+                            $(selectIdLastReceiver).on("change.select2", function() {
+                                isSelect2Empty(selectIdLastReceiver);
+                            });',
+                            true
+                        );
                     }
                     else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {

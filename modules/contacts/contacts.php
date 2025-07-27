@@ -165,178 +165,176 @@ try {
     if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
         // add the checkbox for selecting items and action buttons
         $page->addJavascript('
-            $(document).ready(function() {
-                var table = $("#adm_contacts_table");
+            var table = $("#adm_contacts_table");
 
-                table.one("init.dt", function() {
-                    var tableApi = table.DataTable();
-                    var initialPageLength = tableApi.page.len();
+            table.one("init.dt", function() {
+                var tableApi = table.DataTable();
+                var initialPageLength = tableApi.page.len();
 
-                    // base URLs
-                    var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('mode' => 'html_selection')) . '";
-                    var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg', 'show_former_button' => ($getMembersShowFilter !== 1))) . '";
+                // base URLs
+                var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('mode' => 'html_selection')) . '";
+                var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg', 'show_former_button' => ($getMembersShowFilter !== 1))) . '";
 
-                    // cache jQuery objects
-                    var editButton = $("#edit-selected");
-                    var deleteButon = $("#delete-selected");
-                    var headChk = table.find("thead input[type=checkbox]");
-                    var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
-                    var actions = $("#adm_contacts_table_select_actions");
+                // cache jQuery objects
+                var editButton = $("#edit-selected");
+                var deleteButon = $("#delete-selected");
+                var headChk = table.find("thead input[type=checkbox]");
+                var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
+                var actions = $("#adm_contacts_table_select_actions");
 
-                    // master list of selected IDs
-                    var selectedIds = [];
+                // master list of selected IDs
+                var selectedIds = [];
 
-                    function anySelected() {
-                        return selectedIds.length > 0;
+                function anySelected() {
+                    return selectedIds.length > 0;
+                }
+
+                function refreshActions() {
+                    editButton.prop("disabled", !anySelected());
+                    deleteButon.prop("disabled", !anySelected());
+                }
+
+                function updateHeaderState() {
+                    var total = rowChks().length;
+                    var checked = selectedIds.length;
+                    if (checked === 0) {
+                        headChk.prop({ checked: false, indeterminate: false });
+                    } else if (checked === total) {
+                        headChk.prop({ checked: true, indeterminate: false });
+                    } else {
+                        headChk.prop({ checked: false, indeterminate: true });
                     }
+                }
 
-                    function refreshActions() {
-                        editButton.prop("disabled", !anySelected());
-                        deleteButon.prop("disabled", !anySelected());
-                    }
+                // header-checkbox → select/unselect *all* rows
+                headChk.on("change", function() {
+                    var checkAll = this.checked;
 
-                    function updateHeaderState() {
-                        var total = rowChks().length;
-                        var checked = selectedIds.length;
-                        if (checked === 0) {
-                            headChk.prop({ checked: false, indeterminate: false });
-                        } else if (checked === total) {
-                            headChk.prop({ checked: true, indeterminate: false });
-                        } else {
-                            headChk.prop({ checked: false, indeterminate: true });
-                        }
-                    }
-
-                    // header-checkbox → select/unselect *all* rows
-                    headChk.on("change", function() {
-                        var checkAll = this.checked;
-
-                        if (checkAll) {
-                            // register a one-time draw event to collect all IDs
-                            tableApi.one("draw.dt", function() {
-                                // clear the selectedIds array
-                                selectedIds = [];
-
-                                // grab every row
-                                tableApi.rows().every(function() {
-                                    if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
-                                        selectedIds.push(this.node().id.replace(/^row_members_/, ""));
-                                        $(this.node()).find("input[type=checkbox]").prop("checked", true);
-                                    }
-                                });
-
-                                updateHeaderState();
-                                refreshActions();
-                            });
-
-                            // update the initial page length and set it to -1 (all rows)
-                            initialPageLength = tableApi.page.len();
-                            tableApi.page.len(-1).draw();
-                        } else {
-                            // set the checked state of all selected rows to false
-                            selectedIds.forEach(function(id) {
-                                var row = table.find("#row_members_" + id);
-                                if (row.length > 0) {
-                                    row.find("input[type=checkbox]").prop("checked", false);
-                                }
-                            });
-
+                    if (checkAll) {
+                        // register a one-time draw event to collect all IDs
+                        tableApi.one("draw.dt", function() {
                             // clear the selectedIds array
                             selectedIds = [];
 
+                            // grab every row
+                            tableApi.rows().every(function() {
+                                if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
+                                    selectedIds.push(this.node().id.replace(/^row_members_/, ""));
+                                    $(this.node()).find("input[type=checkbox]").prop("checked", true);
+                                }
+                            });
+
                             updateHeaderState();
                             refreshActions();
-                            
-                            // reset the page length to the initial value
-                            tableApi.page.len(initialPageLength).draw();
-                        }
-                    });
+                        });
 
-                    // individual row-checkbox → toggle just that ID
-                    table.on("change", "tbody input[type=checkbox]", function() {
-                        var id = this.closest("tr").id.replace(/^row_members_/, "");
-                        var idx = selectedIds.indexOf(id);
-                        if (this.checked && idx === -1) {
-                            selectedIds.push(id);
-                        } else if (!this.checked && idx !== -1) {
-                            selectedIds.splice(idx, 1);
-                        }
-
-                        updateHeaderState();
-                        refreshActions();
-                    });
-
-                    // when the order changes, recheck selected ids
-                    tableApi.on("draw.dt", function() {
-                        //recheck selected ids
+                        // update the initial page length and set it to -1 (all rows)
+                        initialPageLength = tableApi.page.len();
+                        tableApi.page.len(-1).draw();
+                    } else {
+                        // set the checked state of all selected rows to false
                         selectedIds.forEach(function(id) {
                             var row = table.find("#row_members_" + id);
                             if (row.length > 0) {
-                                row.find("input[type=checkbox]").prop("checked", true);
+                                row.find("input[type=checkbox]").prop("checked", false);
                             }
                         });
 
+                        // clear the selectedIds array
+                        selectedIds = [];
+
                         updateHeaderState();
                         refreshActions();
+                        
+                        // reset the page length to the initial value
+                        tableApi.page.len(initialPageLength).draw();
+                    }
+                });
+
+                // individual row-checkbox → toggle just that ID
+                table.on("change", "tbody input[type=checkbox]", function() {
+                    var id = this.closest("tr").id.replace(/^row_members_/, "");
+                    var idx = selectedIds.indexOf(id);
+                    if (this.checked && idx === -1) {
+                        selectedIds.push(id);
+                    } else if (!this.checked && idx !== -1) {
+                        selectedIds.splice(idx, 1);
+                    }
+
+                    updateHeaderState();
+                    refreshActions();
+                });
+
+                // when the order changes, recheck selected ids
+                tableApi.on("draw.dt", function() {
+                    //recheck selected ids
+                    selectedIds.forEach(function(id) {
+                        var row = table.find("#row_members_" + id);
+                        if (row.length > 0) {
+                            row.find("input[type=checkbox]").prop("checked", true);
+                        }
                     });
 
-                    // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
-                    actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
-                        // build uuids[] querystring
-                        var qs = selectedIds.map(function(id) {
-                            return "user_uuids[]=" + encodeURIComponent(id);
-                        }).join("&");
+                    updateHeaderState();
+                    refreshActions();
+                });
 
-                        // full URL to your explain_msg endpoint
-                        var popupUrl = explainDeleteUrlBase + "&" + qs;
+                // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
+                actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
+                    // build uuids[] querystring
+                    var qs = selectedIds.map(function(id) {
+                        return "user_uuids[]=" + encodeURIComponent(id);
+                    }).join("&");
 
-                        // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
-                        $("<a>", {
-                            href: "javascript:void(0);",
-                            class: "admidio-icon-link openPopup",
-                            "data-href": popupUrl
-                        }).appendTo("body")
-                          .click()    // trigger the built-in openPopup handler
-                          .remove();
+                    // full URL to your explain_msg endpoint
+                    var popupUrl = explainDeleteUrlBase + "&" + qs;
 
-                        // when the popup closes, unselect all items
-                        $(document).one("hidden.bs.modal", function() {
-                            selectedIds = [];
-                            headChk.prop({ checked: false, indeterminate: false });
-                            rowChks().prop("checked", false);
-                            
-                            // initialize button states
-                            updateHeaderState();
-                            refreshActions();
+                    // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
+                    $("<a>", {
+                        href: "javascript:void(0);",
+                        class: "admidio-icon-link openPopup",
+                        "data-href": popupUrl
+                    }).appendTo("body")
+                        .click()    // trigger the built-in openPopup handler
+                        .remove();
 
-                            // redraw the table to reset the page length
-                            tableApi.page.len(initialPageLength).draw();
-                        });
-                    });
-
-                    // bulk-edit button → fire Admidio’s openPopup against item_edit URL
-                    actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
-                        // build uuids[] querystring
-                        var qs = selectedIds.map(function(id) {
-                            return "user_uuids[]=" + encodeURIComponent(id);
-                        }).join("&");
-
-                        // full URL to the edit endpoint
-                        var editUrl = editUrlBase + "&" + qs;
-
-                        // open the editUrl directly in the current window
-                        window.location.href = editUrl;
+                    // when the popup closes, unselect all items
+                    $(document).one("hidden.bs.modal", function() {
+                        selectedIds = [];
+                        headChk.prop({ checked: false, indeterminate: false });
+                        rowChks().prop("checked", false);
                         
                         // initialize button states
                         updateHeaderState();
                         refreshActions();
-                    });
 
+                        // redraw the table to reset the page length
+                        tableApi.page.len(initialPageLength).draw();
+                    });
+                });
+
+                // bulk-edit button → fire Admidio’s openPopup against item_edit URL
+                actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
+                    // build uuids[] querystring
+                    var qs = selectedIds.map(function(id) {
+                        return "user_uuids[]=" + encodeURIComponent(id);
+                    }).join("&");
+
+                    // full URL to the edit endpoint
+                    var editUrl = editUrlBase + "&" + qs;
+
+                    // open the editUrl directly in the current window
+                    window.location.href = editUrl;
+                    
                     // initialize button states
+                    updateHeaderState();
                     refreshActions();
                 });
-            });'
-            , true
+
+                // initialize button states
+                refreshActions();
+            });',
+            true
         );
 
         $page->addHtml('
