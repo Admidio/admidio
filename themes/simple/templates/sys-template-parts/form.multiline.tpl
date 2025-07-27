@@ -9,10 +9,7 @@
         {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
         {if $formType neq "navbar"} mb-3{/if}
         {if $data.property eq 1} admidio-form-group-required{/if}">
-        <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
-            {include file="sys-template-parts/parts/form.part.icon.tpl"}
-            {$data.label}
-        </label>
+        {include file="sys-template-parts/parts/form.part.fieldtoggle.tpl"}
         <div{if $formType neq "vertical" and $formType neq "navbar"} class="col-sm-9"{/if}>
             <textarea id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}"
                 {foreach $data.attributes as $itemvar}

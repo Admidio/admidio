@@ -209,6 +209,7 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
         try {
             var d = typeof responseData === "object" ? responseData : JSON.parse(responseData);
             status = d.status || status;
+            statusData = d.statusData || [];
             msg    = d.message || "";
         } catch (e) {
             if (responseData === "done") {
@@ -231,6 +232,28 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
             } else {
                 $("#adm_modal, #adm_modal_messagebox").modal("hide");
                 ids.forEach(_fadeOutById);
+            }
+        } else if(status === "warning") {
+            if (msg) {
+                $modalMsg.html('<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i> '+msg+'</div>');
+                setTimeout(function(){
+                    $("#adm_modal, #adm_modal_messagebox").modal("hide");
+                    // fade out each
+                    ids.forEach(function(id){
+                        var pureId = id.startsWith(elementPrefix) ? id.substring(elementPrefix.length) : id;
+                        if (statusData[pureId] === "success") {
+                            _fadeOutById(id);
+                        }
+                    });
+                }, 1500);
+            } else {
+                $("#adm_modal, #adm_modal_messagebox").modal("hide");
+                ids.forEach(function(id){
+                    var pureId = id.startsWith(elementPrefix) ? id.substring(elementPrefix.length) : id;
+                    if (statusData[pureId] === "success") {
+                        _fadeOutById(id);
+                    }
+                });
             }
         } else {
             if (!msg) {
