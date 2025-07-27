@@ -241,7 +241,7 @@ class ForumTopicPresenter extends PagePresenter
                     );
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'adm_post_' . $forumPost['fop_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_delete', 'post_uuid' => $forumPost['fop_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array('SYS_POST')),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array('SYS_POST')),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE')
                     );

@@ -27,7 +27,7 @@ try {
     require_once(__DIR__ . '/../../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMembersShowFiler = admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0));
+    $getMembersShowFilter = admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0));
 
     // set headline of the script
     $headline = $gL10n->get('SYS_CONTACTS');// Navigation of the module starts here
@@ -97,7 +97,7 @@ try {
             $gL10n->get('SYS_CONTACTS'),
             $selectBoxValues,
             array(
-                'defaultValue' => $getMembersShowFiler,
+                'defaultValue' => $getMembersShowFilter,
                 'showContextDependentFirstEntry' => false
             )
         );
@@ -123,25 +123,237 @@ try {
         );
     }
     $orgName = $gCurrentOrganization->getValue('org_longname');// Create table object
-    $contactsTable = new HtmlTable('tbl_contacts', $page, true, true, 'table table-condensed');// create array with all column heading values
+    $contactsTable = new HtmlTable('adm_contacts_table', $page, true, true, 'table table-condensed');// create array with all column heading values
     $columnHeading = $contactsListConfig->getColumnNames();
 
-    array_unshift(
-        $columnHeading,
-        $gL10n->get('SYS_ABR_NO'),
-        '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ORGANIZATION_AFFILIATION') . '"></i>'
-    );
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        array_unshift(
+            $columnHeading,
+            '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>',
+            $gL10n->get('SYS_ABR_NO'),
+            '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ORGANIZATION_AFFILIATION') . '"></i>'
+        );
+    } else {    
+        array_unshift(
+            $columnHeading,
+            $gL10n->get('SYS_ABR_NO'),
+            '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ORGANIZATION_AFFILIATION') . '"></i>'
+        );
+    }
+
     $columnHeading[] = '&nbsp;';
     $columnAlignment = $contactsListConfig->getColumnAlignments();
-    array_unshift($columnAlignment, 'left', 'left');
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        array_unshift($columnAlignment, 'center', 'left', 'left');
+    } else {
+        array_unshift($columnAlignment, 'left', 'left');
+    }
+    
     $columnAlignment[] = 'right';
-    $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('mem_show_filter' => $getMembersShowFiler)));
+    $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('mem_show_filter' => $getMembersShowFilter)));
     $contactsTable->setColumnAlignByArray($columnAlignment);
-    $contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        $contactsTable->disableDatatablesColumnsSort(array(1, 2, count($columnHeading)));// disable sort in last column
+    } else {
+        $contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+    }
     $contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
     $contactsTable->addRowHeadingByArray($columnHeading);
-    $contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
     $contactsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
+    $contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
+
+    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        // add the checkbox for selecting items and action buttons
+        $page->addJavascript('
+            var table = $("#adm_contacts_table");
+
+            table.one("init.dt", function() {
+                var tableApi = table.DataTable();
+                var initialPageLength = tableApi.page.len();
+
+                // base URLs
+                var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('mode' => 'html_selection')) . '";
+                var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg', 'show_former_button' => ($getMembersShowFilter !== 1))) . '";
+
+                // cache jQuery objects
+                var editButton = $("#edit-selected");
+                var deleteButon = $("#delete-selected");
+                var headChk = table.find("thead input[type=checkbox]");
+                var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
+                var actions = $("#adm_contacts_table_select_actions");
+
+                // master list of selected IDs
+                var selectedIds = [];
+
+                function anySelected() {
+                    return selectedIds.length > 0;
+                }
+
+                function refreshActions() {
+                    editButton.prop("disabled", !anySelected());
+                    deleteButon.prop("disabled", !anySelected());
+                }
+
+                function updateHeaderState() {
+                    var total = rowChks().length;
+                    var checked = selectedIds.length;
+                    if (checked === 0) {
+                        headChk.prop({ checked: false, indeterminate: false });
+                    } else if (checked === total) {
+                        headChk.prop({ checked: true, indeterminate: false });
+                    } else {
+                        headChk.prop({ checked: false, indeterminate: true });
+                    }
+                }
+
+                // header-checkbox → select/unselect *all* rows
+                headChk.on("change", function() {
+                    var checkAll = this.checked;
+
+                    if (checkAll) {
+                        // register a one-time draw event to collect all IDs
+                        tableApi.one("draw.dt", function() {
+                            // clear the selectedIds array
+                            selectedIds = [];
+
+                            // grab every row
+                            tableApi.rows().every(function() {
+                                if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
+                                    selectedIds.push(this.node().id.replace(/^row_members_/, ""));
+                                    $(this.node()).find("input[type=checkbox]").prop("checked", true);
+                                }
+                            });
+
+                            updateHeaderState();
+                            refreshActions();
+                        });
+
+                        // update the initial page length and set it to -1 (all rows)
+                        initialPageLength = tableApi.page.len();
+                        tableApi.page.len(-1).draw();
+                    } else {
+                        // set the checked state of all selected rows to false
+                        selectedIds.forEach(function(id) {
+                            var row = table.find("#row_members_" + id);
+                            if (row.length > 0) {
+                                row.find("input[type=checkbox]").prop("checked", false);
+                            }
+                        });
+
+                        // clear the selectedIds array
+                        selectedIds = [];
+
+                        updateHeaderState();
+                        refreshActions();
+                        
+                        // reset the page length to the initial value
+                        tableApi.page.len(initialPageLength).draw();
+                    }
+                });
+
+                // individual row-checkbox → toggle just that ID
+                table.on("change", "tbody input[type=checkbox]", function() {
+                    var id = this.closest("tr").id.replace(/^row_members_/, "");
+                    var idx = selectedIds.indexOf(id);
+                    if (this.checked && idx === -1) {
+                        selectedIds.push(id);
+                    } else if (!this.checked && idx !== -1) {
+                        selectedIds.splice(idx, 1);
+                    }
+
+                    updateHeaderState();
+                    refreshActions();
+                });
+
+                // when the order changes, recheck selected ids
+                tableApi.on("draw.dt", function() {
+                    //recheck selected ids
+                    selectedIds.forEach(function(id) {
+                        var row = table.find("#row_members_" + id);
+                        if (row.length > 0) {
+                            row.find("input[type=checkbox]").prop("checked", true);
+                        }
+                    });
+
+                    updateHeaderState();
+                    refreshActions();
+                });
+
+                // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
+                actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
+                    // build uuids[] querystring
+                    var qs = selectedIds.map(function(id) {
+                        return "user_uuids[]=" + encodeURIComponent(id);
+                    }).join("&");
+
+                    // full URL to your explain_msg endpoint
+                    var popupUrl = explainDeleteUrlBase + "&" + qs;
+
+                    // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
+                    $("<a>", {
+                        href: "javascript:void(0);",
+                        class: "admidio-icon-link openPopup",
+                        "data-href": popupUrl
+                    }).appendTo("body")
+                        .click()    // trigger the built-in openPopup handler
+                        .remove();
+
+                    // when the popup closes, unselect all items
+                    $(document).one("hidden.bs.modal", function() {
+                        selectedIds = [];
+                        headChk.prop({ checked: false, indeterminate: false });
+                        rowChks().prop("checked", false);
+                        
+                        // initialize button states
+                        updateHeaderState();
+                        refreshActions();
+
+                        // redraw the table to reset the page length
+                        tableApi.page.len(initialPageLength).draw();
+                    });
+                });
+
+                // bulk-edit button → fire Admidio’s openPopup against item_edit URL
+                actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
+                    // build uuids[] querystring
+                    var qs = selectedIds.map(function(id) {
+                        return "user_uuids[]=" + encodeURIComponent(id);
+                    }).join("&");
+
+                    // full URL to the edit endpoint
+                    var editUrl = editUrlBase + "&" + qs;
+
+                    // open the editUrl directly in the current window
+                    window.location.href = editUrl;
+                    
+                    // initialize button states
+                    updateHeaderState();
+                    refreshActions();
+                });
+
+                // initialize button states
+                refreshActions();
+            });',
+            true
+        );
+
+        $page->addHtml('
+            <div id="adm_contacts_table_select_actions" class="mb-3">
+                <ul class="nav admidio-menu-function-node">
+                    <li class="nav-item">
+                        <button id="edit-selected" class="btn nav-link btn-primary" disabled="disabled">
+                            <i class="bi bi-pencil-square me-1"></i>' . $gL10n->get('SYS_EDIT_SELECTION') . '
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="delete-selected" class="btn nav-link btn-primary" disabled="disabled">
+                            <i class="bi bi-trash me-1"></i>' . $gL10n->get('SYS_DELETE_SELECTION') . '
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        ');
+    }
 
     $page->addHtml($contactsTable->show());// show html of complete page
     $page->show();

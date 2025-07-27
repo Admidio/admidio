@@ -267,7 +267,7 @@
   <string name="SYS_DELETE">Cancella</string>
   <string name="SYS_DELETE_ALBUM">Cancella album</string>
   <string name="SYS_DELETE_DATA">I dati sono stati cancellati.</string>
-  <string name="SYS_DELETE_ENTRY">Vuoi eliminare la voce #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Vuoi eliminare la voce #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Non c\'è nessun\'altra categoria in quest\'area. Per questa ragione la categoria non può essere cancellata.</string>
   <string name="SYS_DELETE_PROFILE_PICTURE">Cancella immagine del profilo</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Non puoi cancellare le categorie di sistema.</string>

@@ -10,6 +10,7 @@
  */
 
 use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -76,6 +77,7 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.'
              , (\'MODULE\', \'SYS_CATEGORY_REPORT\', \'CATEGORY-REPORT\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_EVENTS\',          \'EVENTS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_DOCUMENTS_FILES\', \'DOCUMENTS-FILES\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_INVENTORY\',        \'INVENTORY\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_FORUM\',           \'FORUM\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_WEBLINKS\',        \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_GROUPS_ROLES\',    \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -130,23 +132,29 @@ $db->queryPrepared($sql);
 
 // create profile fields of category basic data
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
-               (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_required_input, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-        VALUES ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, NULL, true, true, 1, true, 1,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, NULL, true, true, 1, true, 2,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, NULL, false, false, 0, false, 3,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'POSTCODE\',   \'SYS_POSTCODE\',  NULL, NULL, false, false, 0, false, 4,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'CITY\',       \'SYS_CITY\',      NULL, NULL, false, false, 0, false, 5,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, NULL, false, false, 0, false, 6,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, NULL, false, false, 0, false, 7,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, NULL, false, false, 0, false, 8,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, \'gender-male|SYS_MALE
-gender-female|SYS_FEMALE
-gender-trans|SYS_DIVERSE\', false, false, 0, false, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', NULL, false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
+               (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_disabled, usf_required_input, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+        VALUES ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, true, true, 1, true, 1,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, true, true, 1, true, 2,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, false, false, 0, false, 3,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'POSTCODE\',   \'SYS_POSTCODE\',  NULL, false, false, 0, false, 4,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'CITY\',       \'SYS_CITY\',      NULL, false, false, 0, false, 5,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, false, false, 0, false, 6,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, false, false, 0, false, 7,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, false, false, 0, false, 8,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, false, false, 0, false, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
+
+// add gender options to database
+$sql = 'INSERT INTO '.TBL_USER_FIELD_OPTIONS.'
+               (ufo_usf_id, ufo_value, ufo_sequence)
+        VALUES ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-male|SYS_MALE\', 1)
+             , ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-female|SYS_FEMALE\', 2)
+             , ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-trans|SYS_DIVERSE\', 3)';
+$db->query($sql);
 
 // create profile fields of category social networks
 $sql = 'INSERT INTO '.TBL_USER_FIELDS.'
@@ -263,10 +271,11 @@ $sql = 'INSERT INTO '.TBL_MENU.'
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, \'' . Uuid::uuid4() . '\', false, 5, true, \'groups-roles\', \''.FOLDER_MODULES.'/groups-roles/groups_roles.php\', \'people-fill\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CONTACTS\'), 1, \'' . Uuid::uuid4() . '\', false, 6, true, \'contacts\', \''.FOLDER_MODULES.'/contacts/contacts.php\', \'person-vcard-fill\', \'SYS_CONTACTS\', \'SYS_CONTACTS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, \'' . Uuid::uuid4() . '\', false, 7, true, \'documents-files\', \''.FOLDER_MODULES.'/documents-files.php\', \'file-earmark-arrow-down-fill\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, \'' . Uuid::uuid4() . '\', false, 8, true, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'image-fill\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CATEGORY-REPORT\'), 1, \'' . Uuid::uuid4() . '\', false, 9, true, \'category-report\', \''.FOLDER_MODULES.'/category-report/category_report.php\', \'list-stars\', \'SYS_CATEGORY_REPORT\', \'SYS_CATEGORY_REPORT_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, \'' . Uuid::uuid4() . '\', false, 10, true, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'link-45deg\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
-             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'FORUM\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'forum\', \''.FOLDER_MODULES.'/forum.php\', \'chat-dots-fill\', \'SYS_FORUM\', \'SYS_FORUM_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'INVENTORY\'), 1, \'' . Uuid::uuid4() . '\', false, 8, true, \'inventory\', \''.FOLDER_MODULES.'/inventory.php\', \'box-seam-fill\', \'SYS_INVENTORY\', \'SYS_INVENTORY_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, \'' . Uuid::uuid4() . '\', false, 9, true, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'image-fill\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CATEGORY-REPORT\'), 1, \'' . Uuid::uuid4() . '\', false, 10, true, \'category-report\', \''.FOLDER_MODULES.'/category-report/category_report.php\', \'list-stars\', \'SYS_CATEGORY_REPORT\', \'SYS_CATEGORY_REPORT_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'link-45deg\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'FORUM\'), 1, \'' . Uuid::uuid4() . '\', false, 12, true, \'forum\', \''.FOLDER_MODULES.'/forum.php\', \'chat-dots-fill\', \'SYS_FORUM\', \'SYS_FORUM_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences.php\', \'gear-fill\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration.php\', \'card-checklist\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
              , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu.php\', \'menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')

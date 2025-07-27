@@ -12,10 +12,7 @@
         {if $data.type == "datetime"} row{/if}">
 
         {if $formType neq "navbar"}
-            <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
-                {include file="sys-template-parts/parts/form.part.icon.tpl"}
-                {$data.label}
-            </label>
+            {include file="sys-template-parts/parts/form.part.fieldtoggle.tpl"}
         {/if}
 
         {if $formType neq "vertical" and $formType neq "navbar"}<div class="col-sm-9">{/if}

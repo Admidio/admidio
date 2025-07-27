@@ -231,7 +231,20 @@ class MenuPresenter extends PagePresenter
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/menu.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });', true
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
+                }
+            });
+
+            updateMoveActions("tbody.admidio-sortable", "adm_menu_entry", "admidio-menu-move");
+            ', true
         );
 
         // define link to create new menu
@@ -278,7 +291,7 @@ class MenuPresenter extends PagePresenter
                 if (!$menuEntry['men_standard']) {
                     $templateRowMenu['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'adm_menu_entry_' . $menuEntry['men_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('mode' => 'delete', 'uuid' => $menuEntry['men_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($templateRowMenu['name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($templateRowMenu['name'])),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE')
                     );

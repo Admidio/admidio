@@ -462,7 +462,7 @@
   <string name="SYS_DELETE_ALBUM">Remover álbum</string>
   <string name="SYS_DELETE_CONFIGURATION">Remover configuração</string>
   <string name="SYS_DELETE_DATA">Os dados foram excluídos</string>
-  <string name="SYS_DELETE_ENTRY">Apagar a nota #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Apagar a nota #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Não há outra categoria nesta área. Por alguma razão, a categoria não pode ser removida.</string>
   <string name="SYS_DELETE_MESSAGE">Remover mensagem #VAR1_BOLD# ?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Não é possível remover o cargo #VAR1_BOLD#. Pelo menos um cargo requer a configuração #VAR2_BOLD#.</string>

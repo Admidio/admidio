@@ -522,7 +522,7 @@
   <string name="SYS_DELETE_FILE">Supprimer le fichier</string>
   <string name="SYS_DELETE_FOLDER">Supprimer le dossier</string>
   <string name="SYS_DELETE_DATA">Les données ont été supprimées.</string>
-  <string name="SYS_DELETE_ENTRY">Voulez-vous supprimer la saisie #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Voulez-vous supprimer la saisie #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Il n\'y a pas d\'autre catégorie pour ce domaine. Pour cette raison, la catégorie ne peut pas être supprimée.</string>
   <string name="SYS_DELETE_MESSAGE">Est-ce que le message #VAR1_BOLD# doit maintenant être supprimé?.</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Vous ne pouvez pas supprimer le rôle #VAR1_BOLD#. Au moins un rôle doit avoir le paramètre #VAR2_BOLD#.</string>
@@ -991,6 +991,7 @@
   <string name="SYS_NUMBER_COL_DESC">La case à cocher correspondante doit être activée si vous voulez afficher à la fin du rapport une ligne avec le nombre d\'adhésions.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Nombre d\'albums par page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Nombre d\'entrées affichées sur une page. S\'il y a plus d\'entrées, des éléments de navigation sont affichés pour faire défiler les pages. (Par défaut : #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Nombre d\'entrées affichées sur une page. S\'il y a plus d\'entrées, des éléments de navigation sont affichés pour faire défiler les pages. Si la valeur est "Tous", toutes les entrées seront listées sur une seule page et la pagination sera désactivée. (Par défaut : #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Nombre de destinataires</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Le nombre figurant dans ce champ indique le nombre maximal de destinataires d\'un courriel. Ce nombre peut être limité par les fournisseurs. Si un e-mail doit être envoyé à plus de destinataires que le nombre défini ici, plusieurs e-mails seront générés. Le nombre d\'e-mails possibles à envoyer au cours d\'une période peut également être limité par les fournisseurs. (Par défaut : 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Feuille de calcul (*.ods)</string>

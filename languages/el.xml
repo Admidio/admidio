@@ -504,7 +504,7 @@
   <string name="SYS_DELETE_FILE">Διαγραφή αρχείου</string>
   <string name="SYS_DELETE_FOLDER">Διαγραφή φακέλου</string>
   <string name="SYS_DELETE_DATA">Τα δεδομένα διαγράφηκαν.</string>
-  <string name="SYS_DELETE_ENTRY">Θέλετε να διαγράψετε την εγγραφή #VAR1_BOLD#;</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Θέλετε να διαγράψετε την εγγραφή #VAR1_BOLD#;</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Δεν υπάρχει άλλη κατηγορία σε αυτόν τον τομέα. Για το λόγο αυτό, η κατηγορία δεν μπορεί να διαγραφεί.</string>
   <string name="SYS_DELETE_MESSAGE">Πρέπει το μήνυμα #VAR1_BOLD# να καταργηθεί τώρα;</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Δεν μπορείτε να διαγράψετε το ρόλο #VAR1_BOLD#. Τουλάχιστον ένας ρόλος απαιτεί τη ρύθμιση #VAR2_BOLD#.</string>

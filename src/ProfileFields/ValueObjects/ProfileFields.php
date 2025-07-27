@@ -158,17 +158,18 @@ class ProfileFields
      * Optional a format could be set.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of table **adm_user_fields**
      * @param string $column The column name of **adm_user_field** for which you want the value
-     * @param string $format For column **usf_value_list** the following format is accepted:
-     *                           * **database** returns database value of **usf_value_list** without any transformations
-     *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
+     * @param string $format For column **ufo_usf_options** the following format is accepted:
+     *                           * **database** returns database value of **ufo_usf_options** without any transformations
+     *                           * **text** extract only text from **ufo_usf_options**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
+     * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the profile field will not be considered.
      * @return mixed Returns for the profile field with the given uuid the value.
      * @throws Exception
      */
-    public function getProperty(string $fieldNameIntern, string $column, string $format = '')
+    public function getProperty(string $fieldNameIntern, string $column, string $format = '', bool $withObsoleteEnries = true)
     {
         if (array_key_exists($fieldNameIntern, $this->mProfileFields)) {
-            return $this->mProfileFields[$fieldNameIntern]->getValue($column, $format);
+            return $this->mProfileFields[$fieldNameIntern]->getValue($column, $format, $withObsoleteEnries);
         }
 
         // if id-field not exists then return zero
@@ -183,9 +184,9 @@ class ProfileFields
      * Optional a format could be set.
      * @param int $fieldId Expects the **usf_id** of table **adm_user_fields**
      * @param string $column The column name of **adm_user_field** for which you want the value
-     * @param string $format For column **usf_value_list** the following format is accepted:
-     *                           * **database** returns database value of **usf_value_list** without any transformations
-     *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
+     * @param string $format For column **ufo_usf_options** the following format is accepted:
+     *                           * **database** returns database value of **ufo_usf_options** without any transformations
+     *                           * **text** extract only text from **ufo_usf_options**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return string|array Returns for the profile field with the given uuid the value.
      * @throws Exception
@@ -206,9 +207,9 @@ class ProfileFields
      * Optional a format could be set.
      * @param string $fieldUuid Expects the **usf_id** of table **adm_user_fields**
      * @param string $column The column name of **adm_user_field** for which you want the value
-     * @param string $format For column **usf_value_list** the following format is accepted:
-     *                           * **database** returns database value of **usf_value_list** without any transformations
-     *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
+     * @param string $format For column **ufo_usf_options** the following format is accepted:
+     *                           * **database** returns database value of **ufo_usf_options** without any transformations
+     *                           * **text** extract only text from **ufo_usf_options**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
      * @return string Returns for the profile field with the given uuid the value.
      * @throws Exception
@@ -283,41 +284,38 @@ class ProfileFields
                     break;
                 case 'DROPDOWN': // fallthrough
                 case 'RADIO_BUTTON':
-                    $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
+                    $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
+                    $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', 'database', false);
 
-                    // first replace windows new line with unix new line and then create an array
-                    $valueFormatted = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
-                    $arrListValues = explode("\n", $valueFormatted);
-
-                    foreach ($arrListValues as $index => $listValue) {
+                    foreach ($arrOptions as $values) {
                         // if value is bootstrap icon or icon separated from text
                         if ($usfType === 'RADIO_BUTTON'
-                            && (Image::isBootstrapIcon($listValue) || str_contains($listValue, '|'))) {
+                            && (Image::isBootstrapIcon($values['value']) || str_contains($values['value'], '|'))) {
                             // if there is imagefile and text separated by | then explode them
-                            if (str_contains($listValue, '|')) {
-                                list($listValueImage, $listValueText) = explode('|', $listValue);
+                            if (str_contains($values['value'], '|')) {
+                                list($optionValueImage, $optionValueText) = explode('|', $values['value']);
                             } else {
-                                $listValueImage = $listValue;
-                                $listValueText = $this->getValue('usf_name');
+                                $optionValueImage = $values['value'];
+                                $optionValueText = $this->getValue('usf_name');
                             }
 
                             // if text is a translation-id then translate it
-                            $listValueText = Language::translateIfTranslationStrId($listValueText);
+                            $optionValueText = Language::translateIfTranslationStrId($optionValueText);
 
                             // get html snippet with image tag
-                            $listValue = Image::getIconHtml($listValueImage, $listValueText);
+                            $values['value'] = Image::getIconHtml($optionValueImage, $optionValueText);
                         }
 
                         // if text is a translation-id then translate it
-                        $listValue = Language::translateIfTranslationStrId($listValue);
+                        $values['value'] = Language::translateIfTranslationStrId($values['value']);
 
-                        // save values in new array that starts with key = 1
-                        $arrListValuesWithKeys[++$index] = $listValue;
+                        // save values in new array that represents he internal ids
+                        $arrOptionValuesWithKeys[$values['id']] = $values['value'];
                     }
 
-                    if (count($arrListValuesWithKeys) > 0 && !empty($value)) {
-                        if (array_key_exists($value, $arrListValuesWithKeys)) {
-                            $htmlValue = $arrListValuesWithKeys[$value];
+                    if (count($arrOptionValuesWithKeys) > 0 && !empty($value)) {
+                        if (array_key_exists($value, $arrOptionValuesWithKeys)) {
+                            $htmlValue = $arrOptionValuesWithKeys[$value];
                         } else {
                             $htmlValue = '<i>' . $gL10n->get('SYS_DELETED_ENTRY') . '</i>';
                         }
@@ -326,21 +324,18 @@ class ProfileFields
                     }
                     break;
                 case 'DROPDOWN_MULTISELECT':
-                    $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
+                    $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
+                    $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', 'database', false);
 
-                    // first replace windows new line with unix new line and then create an array
-                    $valueFormatted = str_replace("\r\n", "\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
-                    $arrListValues = explode("\n", $valueFormatted);
-
-                    foreach ($arrListValues as $index => $listValue) {
+                    foreach ($arrOptions as $values) {
                         // if text is a translation-id then translate it
-                        $listValue = Language::translateIfTranslationStrId($listValue);
+                        $values['value'] = Language::translateIfTranslationStrId($values['value']);
 
                         // save values in new array that starts with key = 1
-                        $arrListValuesWithKeys[++$index] = $listValue;
+                        $arrOptionValuesWithKeys[$values['id']] = $values['value'];
                     }
 
-                    if (count($arrListValuesWithKeys) > 0 && !empty($value)) {
+                    if (count($arrOptionValuesWithKeys) > 0 && !empty($value)) {
                         // split value by comma and trim each value
                         $valueArray = explode(',', $value);
                         foreach ($valueArray as &$val) {
@@ -351,12 +346,12 @@ class ProfileFields
                         // now create html output for each value
                         $htmlValue = '';
                         foreach ($valueArray as $val) {
-                            if (array_key_exists($val, $arrListValuesWithKeys)) {
+                            if (array_key_exists($val, $arrOptionValuesWithKeys)) {
                                 // if value is the index of the array then we can use it
                                 if ($htmlValue !== '') {
                                     $htmlValue .= ', ';
                                 }
-                                $htmlValue .= $arrListValuesWithKeys[$val];                              
+                                $htmlValue .= $arrOptionValuesWithKeys[$val];                              
                             } else {
                                 if ($htmlValue !== '') {
                                     $htmlValue .= ', ';
@@ -479,19 +474,19 @@ class ProfileFields
                     case 'RADIO_BUTTON':
                         // the value in db is only the position, now search for the text
                         if ($value > 0 && $format !== 'html') {
-                            $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', $format);
-                            $value = $arrListValues[$value];
+                            $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', $format, false);
+                            $value = $arrOptions[$value];
                         }
                         break;
                     case 'DROPDOWN_MULTISELECT':
                         // the value in db is a comma separated list of positions, now search for the text
                         if ($value !== '' && $format !== 'html') {
-                            $arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', $format);
+                            $arrOptions = $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options', $format, false);
                             $valueArray = explode(',', $value);
                             foreach ($valueArray as &$val) {
                                 $val = trim($val);
-                                if (array_key_exists($val, $arrListValues)) {
-                                    $val = $arrListValues[$val];
+                                if (array_key_exists($val, $arrOptions)) {
+                                    $val = $arrOptions[$val];
                                 } else {
                                     $val = '<i>' . $GLOBALS['gL10n']->get('SYS_DELETED_ENTRY') . '</i>';
                                 }
@@ -760,7 +755,7 @@ class ProfileFields
                     if ($fieldValue !== 0) { // 0 is the empty value for radio button
                         if (!$this->noValueCheck && !is_numeric($fieldValue)) {
                             throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
-                        } elseif (!array_key_exists($fieldValue, $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list'))) {
+                        } elseif (!array_key_exists($fieldValue, $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options'))) {
                             throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                         }
                     }
@@ -772,7 +767,7 @@ class ProfileFields
                         foreach ($valueArray as $val) {
                             if (!$this->noValueCheck && !is_numeric($val)) {
                                 throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
-                            } elseif (!array_key_exists($val, $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list'))) {
+                            } elseif (!array_key_exists($val, $this->mProfileFields[$fieldNameIntern]->getValue('ufo_usf_options'))) {
                                 throw new Exception('SYS_FIELD_INVALID_INPUT', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name')));
                             }
                         }

@@ -493,7 +493,7 @@
   <string name="SYS_DELETE_FILE">Slet fil</string>
   <string name="SYS_DELETE_FOLDER">Slet folder</string>
   <string name="SYS_DELETE_DATA">Data er blevet slettet.</string>
-  <string name="SYS_DELETE_ENTRY">Vil du slette #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Vil du slette #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Der er ikke nogen anden kategori i dette område. Derfor kan denne kategori ikke slettes.</string>
   <string name="SYS_DELETE_MESSAGE">Skal besked #VAR1_BOLD# fjernes nu?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Du kan ikke slette rollen #VAR1_BOLD#. Mindst én rolle kræver #VAR2_BOLD# indstillingen.</string>
@@ -996,6 +996,7 @@
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antal albums pr. side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster, der vises på en side. Hvis der er flere poster, tilføjes en paginering på siden. Hvis værdien er 0, vises alle poster på en side, og pagineringen deaktiveres. (Standardindstilling: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Antal poster, der vises på en side. Hvis der er flere poster, tilføjes en paginering på siden. Hvis værdien er "Alle", vises alle poster på en side, og pagineringen deaktiveres. (Standardindstilling: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Antal indlæg pr. side</string>
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Antal emner pr. side</string>
   <string name="SYS_NUMBER_RECIPIENTS">Antal modtagere</string>

@@ -520,7 +520,7 @@
   <string name="SYS_DELETE_FILE">Видалити файл</string>
   <string name="SYS_DELETE_FOLDER">Видалити папку</string>
   <string name="SYS_DELETE_DATA">Дані були видалені.</string>
-  <string name="SYS_DELETE_ENTRY">Ви хочете видалити запис #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Ви хочете видалити запис #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">У цій галузі немає інших категорій. З цієї причини категорію не можна видалити.</string>
   <string name="SYS_DELETE_MESSAGE">Чи слід видалити повідомлення #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Ви не можете видалити роль #VAR1_BOLD#. Хоча б для однієї ролі потрібне налаштування #VAR2_BOLD#.</string>
@@ -987,6 +987,7 @@
   <string name="SYS_NUMBER_COL_DESC">Відповідний прапорець необхідно активувати, якщо ви хочете вивести в кінці звіту рядок з кількістю учасників.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Кількість альбомів на сторінці</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Кількість записів, що відображаються на сторінці. Якщо більше записів, відображаються елементи навігації для прокручування між сторінками. (За замовчуванням: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Кількість записів, що відображаються на сторінці. Якщо більше записів, відображаються елементи навігації для прокручування між сторінками. (За замовчуванням: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Кількість одержувачів</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Кількість у цьому полі вказує на максимальну кількість одержувачів в електронному листі. Ця кількість може бути обмежена провайдерами. Якщо лист має бути надіслано більшій кількості одержувачів, ніж задано тут, буде згенеровано кілька листів. Кількість можливих листів, що надсилаються протягом періоду, також може бути обмежена провайдерами. (За замовчуванням: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>

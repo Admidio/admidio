@@ -187,6 +187,10 @@ a {
     border-color: var(--bs-link-color);
 }
 
+.dropdown-toggle {
+    white-space: normal;
+}
+
 .btn-primary:hover {
     background-color: var(--bs-link-hover-color);
     border-color: var(--bs-link-hover-color);
@@ -221,7 +225,9 @@ a {
     margin-bottom: 1rem;
 }
 
-.admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group){
+.admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group),
+.admidio-tabbed-field-group .table-responsive, .admidio-accordion-field-group .table-responsive,
+.admidio-tabbed-field-group .table-responsive .dt-container, .admidio-accordion-field-group .table-responsive .dt-container {
     margin-bottom: 0;
 }
 
@@ -334,6 +340,15 @@ label {
     font-weight: bold;
 }
 
+.form-separator-line {
+    border-top: 2px solid;
+    margin-bottom: 0;
+}
+
+.form-separator-line + label {
+    font-size: 1.25em;
+}
+
 @media (min-width: 768px) {
     .form-control-small {
         width: 50%;
@@ -346,6 +361,15 @@ label {
 
 .ck-editor__editable_inline {
     min-height: 300px;
+}
+
+@media (min-width: 768px) {
+    .admidio-form-membership-period .admidio-form-group {
+            word-wrap: normal !important;
+            word-break: normal !important;
+            padding: 0 !important;
+            margin: 0 !important;
+    }
 }
 
 /***********************************/

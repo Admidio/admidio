@@ -323,7 +323,7 @@ try {
     }
     // If none of the related-to values is set, hide the related_to column
     $showRelatedColumn = true;
-    $noShowRelatedTables = ['user_fields', 'users', 'user_data'];
+    $noShowRelatedTables = ['user_fields', 'user_field_select_options', 'users', 'user_data'];
 
 
     $fieldStrings = ChangelogService::getFieldTranslations();

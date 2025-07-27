@@ -506,7 +506,7 @@
   <string name="SYS_DELETE_FILE">Изтриване на файла</string>
   <string name="SYS_DELETE_FOLDER">Изтриване на ппката</string>
   <string name="SYS_DELETE_DATA">Данните бяха изтрити.</string>
-  <string name="SYS_DELETE_ENTRY">Искате ли да изтриете записка #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Искате ли да изтриете записка #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Няма друга категория в тази област. Поради тази причина категорията не може да бъде изтрита.</string>
   <string name="SYS_DELETE_MESSAGE">Should message #VAR1_BOLD# be removed now?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">You can not delete role #VAR1_BOLD#. At least one role requires the #VAR2_BOLD# setting.</string>

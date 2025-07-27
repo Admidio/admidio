@@ -5,6 +5,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\Maintenance;
+use Admidio\Inventory\Entity\ItemField;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -39,6 +40,123 @@ final class UpdateStepsCode
     public static function setDatabase(Database $database)
     {
         self::$db = $database;
+    }
+
+    public static function updateStep50MoveFieldListValues()
+    {
+        $sql = 'SELECT usf_id, usf_value_list FROM ' . TBL_USER_FIELDS . '
+                 WHERE usf_type = \'DROPDOWN\' 
+                 OR usf_type = \'RADIO_BUTTON\'';
+
+        $userFieldsStatement = self::$db->queryPrepared($sql);
+        while ($row = $userFieldsStatement->fetch()) {
+            $values = explode("\n", $row['usf_value_list']);
+            $values = array_map('trim', $values);
+
+            // remove empty values
+            $values = array_filter($values, function ($value) {
+                return !empty($value);
+            });
+
+            if (count($values) > 0) {
+                // insert the values into the user field options table
+                foreach ($values as $key => $value) {
+                    $sql = 'INSERT INTO ' . TBL_USER_FIELD_OPTIONS . ' (ufo_usf_id, ufo_value, ufo_sequence)
+                             VALUES (?, ?, ?) -- $row[\'usf_id\'], -- $value, -- $key';
+
+                    self::$db->queryPrepared($sql, array((int)$row['usf_id'], $value, $key + 1));
+                }
+
+                // update the user field values to use the new option id
+                $sql = 'UPDATE ' . TBL_USER_DATA . '
+                        JOIN ' . TBL_USER_FIELD_OPTIONS . '
+                            ON ufo_usf_id = usd_usf_id
+                            AND usd_value = ufo_sequence
+                        SET usd_value = ufo_id
+                            WHERE usd_usf_id = ? -- $row[\'usf_id\']';
+                self::$db->queryPrepared($sql, array((int)$row['usf_id']));
+            }
+        }
+    }
+
+    /**
+     * Add default fields for the inventory module.
+     * @throws Exception
+     */
+    public static function updateStep50AddInventoryFields()
+    {
+        $arrItemFields = array(
+            array('inf_type' => 'TEXT', 'inf_name_intern' => 'ITEMNAME', 'inf_name' => 'SYS_INVENTORY_ITEMNAME', 'inf_description' => 'SYS_INVENTORY_ITEMNAME_DESC', 'inf_required_input' => 1, 'inf_sequence' => 0),
+            array('inf_type' => 'CATEGORY', 'inf_name_intern' => 'CATEGORY', 'inf_name' => 'SYS_CATEGORY', 'inf_description' => 'SYS_INVENTORY_CATEGORY_DESC', 'inf_required_input' => 1, 'inf_sequence' => 1),
+            array('inf_type' => 'TEXT', 'inf_name_intern' => 'KEEPER', 'inf_name' => 'SYS_INVENTORY_KEEPER', 'inf_description' => 'SYS_INVENTORY_KEEPER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 2),
+            array('inf_type' => 'CHECKBOX', 'inf_name_intern' => 'IN_INVENTORY', 'inf_name' => 'SYS_INVENTORY_IN_INVENTORY', 'inf_description' => 'SYS_INVENTORY_IN_INVENTORY_DESC', 'inf_required_input' => 0, 'inf_sequence' => 3),
+            array('inf_type' => 'TEXT', 'inf_name_intern' => 'LAST_RECEIVER', 'inf_name' => 'SYS_INVENTORY_LAST_RECEIVER', 'inf_description' => 'SYS_INVENTORY_LAST_RECEIVER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 4),
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 5),
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_BACK_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_BACK_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_BACK_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 6)
+        );
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+        // create item fields for each organization
+        while ($row = $organizationStatement->fetch()) {
+            foreach ($arrItemFields as $itemFieldData) {
+                $itemField = new ItemField(self::$db);
+                $itemField->saveChangesWithoutRights();
+                $itemField->setValue('inf_org_id', (int)$row['org_id']);
+                $itemField->setValue('inf_type', $itemFieldData['inf_type']);
+                $itemField->setValue('inf_name_intern', $itemFieldData['inf_name_intern']);
+                $itemField->setValue('inf_name', $itemFieldData['inf_name']);
+                $itemField->setValue('inf_description', $itemFieldData['inf_description']);
+                $itemField->setValue('inf_system', 1);
+                $itemField->setValue('inf_required_input', (int)$itemFieldData['inf_required_input']);
+                $itemField->setValue('inf_sequence', (int)$itemFieldData['inf_sequence']);
+                $itemField->save();
+            }
+        }
+
+    }
+    
+    /**
+     * Create categories for the inventory for each organization.
+     * @throws Exception
+     */
+    public static function updateStep50InventoryCategories()
+    {
+        global $gL10n;
+
+        // read id of system user from database
+        $sql = 'SELECT usr_id
+                  FROM ' . TBL_USERS . '
+                 WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
+        $systemUserStatement = self::$db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
+        $systemUserId = (int)$systemUserStatement->fetchColumn();
+
+        $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $organizationStatement->fetch()) {
+            $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
+                           (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                    VALUES (?, ?, \'IVT\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
+            self::$db->queryPrepared($sql, array((int)$row['org_id'], Uuid::uuid4(), $systemUserId, DATETIME_NOW));
+
+            // set edit role rights to inventory categories for administrator role
+            $sql = 'SELECT rol_id
+                    FROM ' . TBL_ROLES . '
+                    INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                    AND cat_org_id = ? -- $row[\'org_id\']
+                    AND cat_type = \'ROL\'
+                    WHERE rol_name = ? -- $gL10n->get(\'SYS_ADMINISTRATOR\') ';
+            $pdoStatement = self::$db->queryPrepared($sql, array($row['org_id'], $gL10n->get('SYS_ADMINISTRATOR')));
+            if (($row2 = $pdoStatement->fetch()) !== false) {
+                // set edit role rights to inventory categories for role administrator
+                $category = new Category(self::$db);
+                $category->readDataByColumns(array('cat_org_id' => (int)$row['org_id'], 'cat_type' => 'IVT'));
+
+                $rightCategoryView = new RolesRights(self::$db, 'category_edit', $category->getValue('cat_id'));
+                $rightCategoryView->saveRoles(array($row2['rol_id']));
+            }
+        }
     }
 
     /**

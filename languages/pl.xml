@@ -512,7 +512,7 @@
   <string name="SYS_DELETE_FILE">Usuń plik</string>
   <string name="SYS_DELETE_FOLDER">Usuń folder</string>
   <string name="SYS_DELETE_DATA">Dane usunięte.</string>
-  <string name="SYS_DELETE_ENTRY">Czy chcesz usunąć wpis #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Czy chcesz usunąć wpis #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Brak innych kategorii. Nie można usunąć jedynej kategorii.</string>
   <string name="SYS_DELETE_MESSAGE">Czy chcesz usunąć wiadomość #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Nie możesz usunąć roli #VAR1_BOLD#. Co najmniej jedna rola wymaga ustawienia #VAR2_BOLD#.</string>
@@ -947,6 +947,7 @@
   <string name="SYS_NUMBER_COL_DESC">Odpowiednie pole wyboru musi być zaznaczone, jeśli chcesz wyświetlić na końcu raportu linię z liczbą członkostw.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Ilość albumów na stronie</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Liczba wpisów wyświetlanych na stronie. Jeśli wpisów jest więcej, wyświetlane są elementy nawigacyjne umożliwiające przewijanie stron. (Domyślnie: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Liczba wpisów wyświetlanych na stronie. Jeśli wpisów jest więcej, wyświetlane są elementy nawigacyjne umożliwiające przewijanie stron. (Domyślnie: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Ilość odbiorców</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Liczba w tym polu wyraża maksymalną liczbę odbiorców w mailu. Ta liczba może być ograniczona przez usługodawcę. Jeśli e-mail powinien być wysłany do liczby odbiorców większej od określonej tu wartości, wygenerowane zostaną dodatkowe maile. Ilość e-maili możliwych do wysłania w danym okresie również może ograniczać usługodawca. (Domyślnie: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">Arkusz kalkulacyjny ODF (*.ods)</string>

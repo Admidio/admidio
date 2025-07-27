@@ -176,7 +176,8 @@ class Organization extends Entity
                      , (?, ?, \'FOT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'EVT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'EVT\', \'TRAINING\',  \'INS_TRAINING\',  false, false, 2, ?, ?)
-                     , (?, ?, \'EVT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)';
+                     , (?, ?, \'EVT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)
+                     , (?, ?, \'IVT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)';
         $queryParams = array(
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
@@ -189,7 +190,8 @@ class Organization extends Entity
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
-            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
         );
         $this->db->queryPrepared($sql, $queryParams);
 
@@ -221,6 +223,28 @@ class Organization extends Entity
         $queryParams = array($orgId, Uuid::uuid4(), Folder::getRootFolderName('documents', $this->getValue('org_shortname')), FOLDER_DATA, $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
 
+        // insert inventory fields
+        $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELDS . '
+                       (inf_uuid, inf_org_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_required_input, inf_sequence, inf_usr_id_create, inf_timestamp_create, inf_usr_id_change, inf_timestamp_change)
+                VALUES (?, ?, \'TEXT\', \'ITEMNAME\', \'SYS_INVENTORY_ITEMNAME\', \'SYS_INVENTORY_ITEMNAME_DESC\', 1, 1, 0, ?, ?, NULL, NULL),
+                       (?, ?, \'CATEGORY\', \'CATEGORY\', \'SYS_CATEGORY\', \'SYS_INVENTORY_CATEGORY_DESC\', 1, 1, 1, ?, ?, NULL, NULL),
+                       (?, ?, \'TEXT\', \'KEEPER\', \'SYS_INVENTORY_KEEPER\', \'SYS_INVENTORY_KEEPER_DESC\', 1, 0, 2, ?, ?, NULL, NULL),
+                       (?, ?, \'CHECKBOX\', \'IN_INVENTORY\', \'SYS_INVENTORY_IN_INVENTORY\', \'SYS_INVENTORY_IN_INVENTORY_DESC\', 1, 0, 3, ?, ?, NULL, NULL),
+                       (?, ?, \'TEXT\', \'LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER_DESC\', 1, 0, 4, ?, ?, NULL, NULL),
+                       (?, ?, \'DATE\', \'RECEIVED_ON\', \'SYS_INVENTORY_RECEIVED_ON\', \'SYS_INVENTORY_RECEIVED_ON_DESC\', 1, 0, 5, ?, ?, NULL, NULL),
+                       (?, ?, \'DATE\', \'RECEIVED_BACK_ON\', \'SYS_INVENTORY_RECEIVED_BACK_ON\', \'SYS_INVENTORY_RECEIVED_BACK_ON_DESC\', 1, 0, 6, ?, ?, NULL, NULL);
+                ';
+        $queryParams = array(
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW
+        );
+        $this->db->queryPrepared($sql, $queryParams);
+
         // now create default roles
 
         // Create role administrator
@@ -237,6 +261,7 @@ class Organization extends Entity
         $roleAdministrator->setValue('rol_forum_admin', 1);
         $roleAdministrator->setValue('rol_photo', 1);
         $roleAdministrator->setValue('rol_weblinks', 1);
+        $roleAdministrator->setValue('rol_inventory_admin', 1);
         $roleAdministrator->setValue('rol_edit_user', 1);
         $roleAdministrator->setValue('rol_mail_to_all', 1);
         $roleAdministrator->setValue('rol_mail_this_role', 3);
@@ -632,6 +657,49 @@ class Organization extends Entity
         // delete all categories
         $sql = 'DELETE FROM ' . TBL_CATEGORIES . '
                  WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all inventory item data
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . '
+                    WHERE ind_ini_id IN (
+                        SELECT ivt.ini_id
+                            FROM (SELECT ini_id
+                                    FROM ' . TBL_INVENTORY_ITEMS . '
+                                    WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                                    ) ivt
+                        )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all inventory item lend data
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
+                 WHERE inl_ini_id IN (
+                       SELECT ini.ini_id
+                         FROM (SELECT ini_id
+                                 FROM ' . TBL_INVENTORY_ITEMS . '
+                                WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) ini
+                       )';
+
+        // delete all inventory items
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . '
+                 WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all inventory field options
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                 WHERE ifo_inf_id IN (
+                       SELECT inf.inf_id
+                         FROM (SELECT inf_id
+                                 FROM ' . TBL_INVENTORY_FIELDS . '
+                                WHERE inf_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) inf
+                       )';
+
+        // delete all inventory fields
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_FIELDS . '
+                 WHERE inf_org_id = ? -- $this->getValue(\'org_id\')
                      ';
         $this->db->queryPrepared($sql, array($this->getValue('org_id')));
 

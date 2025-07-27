@@ -491,7 +491,7 @@
   <string name="SYS_DELETE_FILE">ลบ ไฟล์</string>
   <string name="SYS_DELETE_FOLDER">ลบ โฟลเดอร์</string>
   <string name="SYS_DELETE_DATA">ลบข้อมูลแล้ว</string>
-  <string name="SYS_DELETE_ENTRY">คุณต้องการลบรายการ #VAR1_BOLD# หรือไม่</string>
+  <string name="SYS_WANT_DELETE_ENTRY">คุณต้องการลบรายการ #VAR1_BOLD# หรือไม่</string>
   <string name="SYS_DELETE_LAST_CATEGORY">ไม่มีหมวดหมู่อื่นในพื้นที่นี้ ด้วยเหตุนี้ จึงไม่สามารถ ลบ หมวดหมู่ ได้</string>
   <string name="SYS_DELETE_MESSAGE">ควรลบข้อความ #VAR1_BOLD# ทันทีหรือไม่</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">คุณ ไม่สามารถ ลบบทบาท #VAR1_BOLD# ได้ อย่างน้อยหนึ่งบทบาทต้องมีการตั้งค่า #VAR2_BOLD#</string>
@@ -899,6 +899,7 @@
   <string name="SYS_NUMBER_COL_DESC">ต้อง เปิดใช้งาน ช่องทำเครื่องหมายที่เกี่ยวข้อง หากคุณต้องการแสดงบรรทัดพร้อมจำนวนสมาชิกที่ส่วนท้ายของรายงาน</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">จำนวนอัลบั้มต่อหน้า</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">จำนวนรายการที่แสดงบนเพจ หากมีรายการมากกว่านี้ องค์ประกอบการนำทางจะแสดงขึ้นเพื่อเลื่อนระหว่างหน้าต่างๆ (ค่าเริ่มต้น: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">จำนวนรายการที่แสดงบนเพจ หากมีรายการมากกว่านี้ องค์ประกอบการนำทางจะแสดงขึ้นเพื่อเลื่อนระหว่างหน้าต่างๆ (ค่าเริ่มต้น: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">จำนวนผู้รับ</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">หมายเลขในช่องนี้ระบุจำนวนผู้รับสูงสุดในอีเมล หมายเลขนี้สามารถจำกัดได้โดยผู้ให้บริการ หากควรส่งอีเมลไปยังผู้รับมากกว่าจำนวนที่ตั้งไว้ที่นี่ อีเมลหลายฉบับจะถูกสร้างขึ้น จำนวนอีเมลที่เป็นไปได้ที่จะส่งภายในระยะเวลาหนึ่งอาจถูกจำกัดโดยผู้ให้บริการ (ค่าเริ่มต้น: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">สเปรดชีต ODF (* .ods )</string>

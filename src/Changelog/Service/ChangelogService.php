@@ -15,6 +15,10 @@ use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Entity\Post;
+use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\Entity\ItemData;
+use Admidio\Inventory\Entity\ItemLendData;
 
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -164,6 +168,7 @@ class ChangelogService {
             'users' =>  'SYS_PROFILE_FIELD',
             'members' => 'SYS_ROLE_MEMBERSHIPS',
             'user_fields' => 'ORG_PROFILE_FIELDS',
+            'user_field_select_options' => 'SYS_PROFILE_FIELD_SELECT_OPTIONS',
             'announcements' => 'SYS_ANNOUNCEMENTS',
             'events' => 'SYS_EVENTS',
             'rooms' => 'SYS_ROOM',
@@ -182,6 +187,13 @@ class ChangelogService {
 
             'folders' => 'SYS_FOLDER',
             'files' => 'SYS_FILE',
+
+            'inventory_fields' => 'SYS_INVENTORY_ITEMFIELDS',
+            'inventory_field_select_options' => 'SYS_INVENTORY_ITEMFIELD_SELECT_OPTIONS',
+            'inventory_items' => 'SYS_INVENTORY_ITEMS',
+            'inventory_item_data' => 'SYS_INVENTORY_ITEM_DATA',
+            'inventory_item_lend_data' => 'SYS_INVENTORY_ITEM_LEND_DATA',
+
             'organizations' => 'SYS_ORGANIZATION',
             'menu' => 'SYS_MENU_ITEM',
 
@@ -294,6 +306,7 @@ class ChangelogService {
                 return new Room($gDb);
             case 'texts':
                 return new Text($gDb);
+            case 'user_field_select_options':
             case 'user_fields':
                 return new ProfileField($gDb);
             case 'user_relations':
@@ -308,6 +321,13 @@ class ChangelogService {
                 return new OIDCClient($gDb);
             case 'sso_keys':
                 return new Key($gDb);
+            case 'inventory_field_select_options':
+            case 'inventory_fields':
+                return new ItemField($gDb);
+            case 'inventory_item_data':
+            case 'inventory_item_lend_data':
+            case 'inventory_items':
+                return new Item($gDb);
             default:
                 return null;
         }
@@ -398,7 +418,6 @@ class ChangelogService {
             'usf_name_intern' =>           'SYS_INTERNAL_NAME',
             'usf_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'usf_type' =>                  array('name' => 'SYS_TYPE', 'type' => 'CUSTOM_LIST', 'entries' => $userFieldText),
-            'usf_value_list' =>            'SYS_VALUE_LIST',
             'usf_description' =>           'SYS_DESCRIPTION',
             'usf_description_inline' =>    array('name' => 'SYS_DESCRIPTION_INLINE_DESC', 'type' => 'BOOL'),
             'usf_default_value' =>         'SYS_DEFAULT_VALUE',
@@ -410,6 +429,10 @@ class ChangelogService {
             'usf_icon' =>                  array('name' => 'SYS_ICON', 'type' => 'ICON'),
             'usf_url' =>                   array('name' => 'SYS_URL', 'type' => 'URL'),
             'usf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
+            'ufo_value' =>                 'SYS_VALUE',
+            'ufo_usf_id' =>                'SYS_PROFILE_FIELD',
+            'ufo_sequence' =>              'SYS_ORDER',
+            'ufo_obsolete' =>             array('name' => 'SYS_DELETED', 'type' => 'BOOL'),
 
             'prf_value' =>                 'SYS_VALUE',
             'prf_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
@@ -495,6 +518,32 @@ class ChangelogService {
             'fot_title' =>                 'SYS_TITLE',
             'fop_text' =>                  'SYS_TEXT',
             'fop_fot_id' =>                array('name' => 'SYS_FORUM_TOPIC', 'type' => 'TOPIC'),
+
+            'inf_type' =>                  array('name' => 'SYS_TYPE', 'type' => 'CUSTOM_LIST', 'entries' => $userFieldText),
+            'inf_name' =>                  'SYS_NAME',
+            'inf_description' =>           'SYS_DESCRIPTION',
+            'inf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
+            'inf_sequence' =>              'SYS_ORDER',
+            'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
+            'ini_former' =>                array('name' => 'SYS_INVENTORY_ITEM_MADE_FORMER', 'type' => 'BOOL'),
+            'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
+            'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
+            'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
+            'ind_value_url' =>             array('name' => 'SYS_VALUE', 'type' => 'URL'),
+            'ind_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
+            'ind_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
+            'ind_value' =>                 'SYS_VALUE',  
+            'inl_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
+            'inl_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
+            'inl_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
+            'inl_value_url' =>             array('name' => 'SYS_VALUE', 'type' => 'URL'),
+            'inl_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
+            'inl_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
+            'inl_value' =>                 'SYS_VALUE',  
+            'ifo_value' =>                 'SYS_VALUE',
+            'ifo_inf_id' =>                'SYS_INVENTORY_ITEMFIELD',
+            'ifo_sequence' =>              'SYS_ORDER',
+            'ifo_obsolete' =>             array('name' => 'SYS_DELETED', 'type' => 'BOOL'),
 
             'lnk_name' =>                  'SYS_LINK_NAME',
             'lnk_description' =>           'SYS_DESCRIPTION',
@@ -677,6 +726,14 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'topic', 'topic_uuid' => $uuid)); break;
                 case 'forum_posts' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/forum.php', array('mode' => 'post_edit', 'post_uuid' => $uuid)); break;
+                case 'inventory_field_select_options': // Fall through
+                case 'inventory_fields' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'field_edit', 'uuid' => $uuid)); break;
+                case 'inventory_item_data' : // Fall through
+                case 'inventory_items' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $uuid)); break;
+                case 'inventory_item_lend_data' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_lend', 'item_uuid' => $uuid)); break;
                 case 'links' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
                 case 'lists' :
@@ -714,6 +771,7 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
                 // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
                 //     $url = SecurityUtils::encodeUrl(); break;
+                case 'user_field_select_options':
                 case 'user_fields':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile-fields.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
                 case 'user_relations': // For user relations, we don't link to the modification of the individual relation, but to the user1
@@ -757,7 +815,7 @@ class ChangelogService {
      * @throws Exception
      */
     public static function formatValue($value, $type, $entries = []) {
-        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n;
+        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n, $gCurrentOrganization;
         if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping', 'SSO_field_mapping', 'SSO_roles_mapping', 'OIDC_field_mapping', 'OIDC_roles_mapping']) ) {
             $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
         }
@@ -858,8 +916,13 @@ class ChangelogService {
                     $htmlValue = self::createLink($obj->readableName(), 'categories', $obj->getValue('cat_id'), $obj->getValue('cat_uuid'));
                     break;
                 case 'USER':
-                    $obj = new User($gDb, $gProfileFields, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
+                    if ($value > 0) {
+                        $obj = new User($gDb, $gProfileFields, $value);
+                        $htmlValue = self::createLink($obj->readableName(), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
+                    } else {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname'). '"';
+                        $htmlValue = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION',array($orgName)))) . '</i>';
+                    }
                     break;
                 case 'ROOM':
                     $obj = new Room($gDb, $value);
@@ -1003,6 +1066,10 @@ class ChangelogService {
                 return 'forum_topics';
             case 'forum_topics':
                 return 'forum_posts';
+            case 'inventory_fields':
+                return 'inventory_items';
+            case 'inventory_items':
+                return 'inventory_fields';
             case 'list_columns':
                 // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
                 if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {
@@ -1182,7 +1249,63 @@ class ChangelogService {
         );
     }
 
+    /**
+     * Returns a string containing an icon-link "Change History" button to implement in a DataTable if changelog functionality
+     * is enabled at all, the table has logging enabled and the current user is allowed to view
+     * those objects. If these conditions are not satisfied, this function returns an empty string.
+     *
+     * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple())
+     * @param bool $condition Additional condition to display/hide
+     * @param array $params
+     * @return array
+     * @throws Exception
+     */
+    public static function displayHistoryButtonTable(string|array $table, bool $condition = true, array $params = array()) : array {
+        global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
 
+        // Changelog disabled globally
+        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+            return array();
+        }
+        // Changelog only enabled for admins
+        if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
+            return array();
+        }
+
+        // Required tables is/are not logged at all, or condition for history button not met
+        if (!self::isTableLogged($table) || !$condition)
+            return array();
+
+
+        if (!is_array($table))
+            $table = explode(',', $table);
+
+        $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
+        // Admin always has acces. Other users can have permissions per table.
+        $hasAccess = $gCurrentUser->isAdministrator() ||
+            (!empty($table) && empty(array_diff($table, $tablesPermitted)));
+
+        // No explicit table permissions. But user data can be accessed on a per-user permission level.
+        $isUserLog = (!empty($table) && empty(array_diff($table, ['users', 'user_data', 'user_relations', 'members'])));
+        if (!$hasAccess && $isUserLog && !empty($params['uuid'])) {
+            $user = new User($gDb, $gProfileFields);
+            $user->readDataByUuid($params['uuid']);
+            // If a user UUID is given, we need access to that particular user
+            if ($gCurrentUser->hasRightEditProfile($user)) {
+                $hasAccess = true;
+            }
+        }
+
+        if (!$hasAccess)
+            return array();
+
+        // If the user has access to the changelog, create the link to the changelog page
+        return array(
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)),
+            'icon' => 'bi bi-clock-history',
+            'tooltip' => $gL10n->get('SYS_CHANGE_HISTORY'),
+        );
+    }
 }
 
 

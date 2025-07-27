@@ -522,7 +522,7 @@
   <string name="SYS_DELETE_FILE">Radera fil</string>
   <string name="SYS_DELETE_FOLDER">Ta bort mapp</string>
   <string name="SYS_DELETE_DATA">Din data har blivit raderad</string>
-  <string name="SYS_DELETE_ENTRY">Vill du ta bort inlägg #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Vill du ta bort inlägg #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Det finns ingen annan kategori inom detta område. Av denna anledning kan kategorin inte tas bort.</string>
   <string name="SYS_DELETE_MESSAGE">Bör meddelandet #VAR1_BOLD# tas bort nu?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Du kan inte ta bort roll #VAR1_BOLD#. Minst en roll kräver inställningen #VAR2_BOLD#.</string>
@@ -991,6 +991,7 @@
   <string name="SYS_NUMBER_COL_DESC">Respektive kryssruta behöver aktiveras för att visa antal medlemmar i slutet av rapporten.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antal album per sida</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster som visas på en sida. Om det finns fler poster visas navigeringsfunktioner för att växla mellan sidor. (Standard: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Antal poster som visas på en sida. Om det finns fler poster visas navigeringsfunktioner för att växla mellan sidor. (Standard: #VAR1#)</string>
   <string name="SYS_NUMBER_RECIPIENTS">Antal mottagare</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Siffran i det här fältet anger det maximala antalet mottagare i ett e-postmeddelande. Detta antal kan begränsas av leverantörer. Om ett e-postmeddelande ska skickas till fler mottagare än det antal som anges här, kommer flera e-postmeddelanden att genereras. Antalet möjliga e-postmeddelanden som ska skickas inom en period kan också begränsas av leverantörer. (Standard: 50)</string>
   <string name="SYS_ODF_SPREADSHEET">ODF -kalkylblad (*.ods)</string>

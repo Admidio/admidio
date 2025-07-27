@@ -137,7 +137,7 @@ class GroupsRolesPresenter extends PagePresenter
                 if (!$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['rol_name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['rol_name'])),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                     );
@@ -524,6 +524,14 @@ class GroupsRolesPresenter extends PagePresenter
                     array('helpTextId' => 'SYS_RIGHT_DOCUMENTS_FILES_DESC', 'icon' => 'bi-file-earmark-arrow-down-fill')
                 );
             }
+            if ($gSettingsManager->get('inventory_module_enabled') > 0) {
+                $form->addCheckbox(
+                    'rol_inventory_admin',
+                    $gL10n->get('SYS_RIGHT_INVENTORY'),
+                    (bool)$role->getValue('rol_inventory_admin'),
+                    array('helpTextId' => 'SYS_RIGHT_INVENTORY_DESC', 'icon' => 'bi-box-seam-fill')
+                );
+            }
             if ($gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $form->addCheckbox(
                     'rol_forum_admin',
@@ -649,6 +657,9 @@ class GroupsRolesPresenter extends PagePresenter
             if ($role->getValue('rol_documents_files') == 1 && $gSettingsManager->getInt('documents_files_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'));
             }
+            if ($role->getValue('rol_inventory_admin') == 1 && $gSettingsManager->getInt('inventory_module_enabled') > 0) {
+                $templateRow['roleRights'][] = array('icon' => 'bi bi-box-seam-fill', 'title' => $gL10n->get('SYS_RIGHT_INVENTORY'));
+            }
             if ($role->getValue('rol_forum_admin') == 1 && $gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $templateRow['roleRights'][] = array('icon' => 'bi bi-file-earmark-arrow-down-fill', 'title' => $gL10n->get('SYS_RIGHT_FORUM'));
             }
@@ -739,7 +750,7 @@ class GroupsRolesPresenter extends PagePresenter
             if (!$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['rol_name'])),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['rol_name'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                 );

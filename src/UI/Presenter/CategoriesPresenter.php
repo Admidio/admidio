@@ -127,6 +127,14 @@ class CategoriesPresenter extends PagePresenter
                 $rolesRightsName = 'SYS_RIGHT_EDIT_USER';
                 break;
 
+            case 'IVT':
+                $component = 'INVENTORY';
+                $headline = $gL10n->get('SYS_INVENTORY') . ' - ' . $headlineSuffix;
+                $rolesRightEditName = $gL10n->get('SYS_EDIT_INVENTORY');
+                $rolesRightsColumn = 'rol_inventory_admin';
+                $rolesRightsName = 'SYS_RIGHT_INVENTORY';
+                break;
+
             default:
                 $headline = $headlineSuffix;
         }
@@ -397,7 +405,7 @@ class CategoriesPresenter extends PagePresenter
                 $navigationHeadline = $gL10n->get('SYS_CALENDARS');
                 $editableHeadline = $gL10n->get('SYS_EDIT_EVENTS');
                 $addButtonText = $gL10n->get('SYS_CREATE_CALENDAR');
-                $deleteMessage = 'SYS_DELETE_ENTRY';
+                $deleteMessage = 'SYS_WANT_DELETE_ENTRY';
                 break;
 
             case 'FOT':
@@ -426,6 +434,13 @@ class CategoriesPresenter extends PagePresenter
                 $rolesRightsColumn = 'rol_edit_user';
                 $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
                 $editableHeadline = $gL10n->get('SYS_EDIT_PROFILE_FIELDS_PREF');
+                break;
+
+            case 'IVT':
+                $component = 'INVENTORY';
+                $rolesRightsColumn = 'rol_inventory_admin';
+                $headline = $gL10n->get('SYS_INVENTORY') . ' - ' . $gL10n->get('SYS_CATEGORIES');
+                $editableHeadline = $gL10n->get('SYS_EDIT_INVENTORY');
                 break;
 
             default:
@@ -462,7 +477,20 @@ class CategoriesPresenter extends PagePresenter
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/categories.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });', true
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_category", "admidio-category-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_category", "admidio-category-move");
+                }
+            });
+
+            updateMoveActions("tbody.admidio-sortable", "adm_category", "admidio-category-move");
+            ', true
         );
 
         // define link to create new category
@@ -495,10 +523,11 @@ class CategoriesPresenter extends PagePresenter
             $category->clear();
             $category->setArray($catRow);
 
-            if($categoryOrganizationID !== (int) $category->getValue('cat_org_id')
-            && count($templateCategories) > 0) {
-                $templateCategoryNodes[] = $templateCategories;
-                $templateCategories = array();
+            if($categoryOrganizationID !== (int) $category->getValue('cat_org_id')) {
+                if (count($templateCategories) > 0) {
+                    $templateCategoryNodes[] = $templateCategories;
+                    $templateCategories = array();
+                }
                 $categoryOrganizationID = $category->getValue('cat_org_id');
             }
 
