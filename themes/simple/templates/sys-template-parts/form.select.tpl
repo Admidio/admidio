@@ -3,21 +3,7 @@
     {if $formType eq "navbar"} form-floating{else} mb-3{/if}
     {if $data.property eq 1} admidio-form-group-required{/if}">
     {if $formType neq "navbar"}
-        {* add a toggle checkbox if editing a selection *}
-        {if $data.toggleable}
-            <div class="admidio-form-group form-check form-switch col-sm-3">
-                <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-form-label{else}form-label{/if}">
-                    {include file="sys-template-parts/parts/form.part.icon.tpl"}
-                    {$data.label}
-                    <input class="form-check-input focus-ring" type="checkbox" id="toggle_{$data.id}" name="toggle_{$data.id}" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FORM_USE_FOR_EDIT')}" value="1"tabindex="-1" autofocus="false">
-                </label>
-            </div>
-        {else}
-            <label for="{$data.id}" class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-3 col-form-label{else}form-label{/if}">
-                {include file="sys-template-parts/parts/form.part.icon.tpl"}
-                {$data.label}
-            </label>
-        {/if}
+            {include file="sys-template-parts/parts/form.part.fieldtoggle.tpl"}
     {/if}
     {if $formType neq "vertical" and $formType neq "navbar"}<div class="col-sm-9">{/if}
     <select id="{$data.id}" class="form-select focus-ring {$data.class}"
