@@ -124,7 +124,7 @@ try {
                     updateMoveActions(".card-body", "lnk_", "admidio-link-move");
                 }
             });
-            
+
             updateMoveActions(".card-body", "lnk_", "admidio-link-move");
             ', true
         );
@@ -219,7 +219,7 @@ try {
                     );
                     $page->addHtml('
                         <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                            data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($weblink->getValue('lnk_name', 'database'))) . '"
+                            data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($weblink->getValue('lnk_name', 'database'))) . '"
                             data-href="callUrlHideElement(\'lnk_' . $lnkUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links/links_function.php', array('mode' => 'delete', 'link_uuid' => $lnkUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>'
                     );

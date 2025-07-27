@@ -497,7 +497,8 @@
   <string name="SYS_DELETE_FILE">Delete file</string>
   <string name="SYS_DELETE_FOLDER">Delete folder</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
-  <string name="SYS_DELETE_ENTRY">Would you like to delete entry #VAR1_BOLD#?</string>
+  <string name="SYS_DELETE_ENTRY">Delete entry</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Do you want to delete the entry #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">There is no other category in this area. For this reason, the category can not be deleted.</string>
   <string name="SYS_DELETE_MESSAGE">Should message #VAR1_BOLD# be removed now?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">You can not delete role #VAR1_BOLD#. At least one role requires the #VAR2_BOLD# setting.</string>

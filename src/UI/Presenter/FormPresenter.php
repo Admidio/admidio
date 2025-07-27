@@ -967,7 +967,7 @@ class FormPresenter
 
         $this->elements[$id] = $optionsAll;
     }
-    
+
     /**
      * Add a new option editor field to the form.
      * This field allows the user to add multiple options with a value and an obsolete flag.
@@ -1046,7 +1046,7 @@ class FormPresenter
                     }
                 });
                 const optionId = maxId + 1;
-                var deleteMsg = \'' . $gL10n->get('SYS_DELETE_ENTRY', array('ENTRY_VAL')) . '\';
+                var deleteMsg = \'' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array('ENTRY_VAL')) . '\';
                 newRow.innerHTML = `
                     <td><input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][value]" required="required"></td>
                     <td class="align-middle" style="display: none;">
@@ -1172,7 +1172,7 @@ class FormPresenter
         );
         $this->elements[$id] = $optionsAll;
     }
-    
+
     /**
      * Add a new radio button with a label to the form. The radio button could have different status
      * which could be defined with an array.
@@ -1428,7 +1428,7 @@ class FormPresenter
                             }
                         }
                     });
-                    
+
                     // if the user selects an entry and the empty entry is selected then remove the empty entry
                     $("#' . $id . '").on("select2:select", function(e) {
                         var $sel = $(this);

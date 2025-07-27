@@ -522,7 +522,7 @@
   <string name="SYS_DELETE_FILE">Radera fil</string>
   <string name="SYS_DELETE_FOLDER">Ta bort mapp</string>
   <string name="SYS_DELETE_DATA">Din data har blivit raderad</string>
-  <string name="SYS_DELETE_ENTRY">Vill du ta bort inlägg #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Vill du ta bort inlägg #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Det finns ingen annan kategori inom detta område. Av denna anledning kan kategorin inte tas bort.</string>
   <string name="SYS_DELETE_MESSAGE">Bör meddelandet #VAR1_BOLD# tas bort nu?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Du kan inte ta bort roll #VAR1_BOLD#. Minst en roll kräver inställningen #VAR2_BOLD#.</string>

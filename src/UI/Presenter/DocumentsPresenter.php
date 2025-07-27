@@ -570,7 +570,7 @@ class DocumentsPresenter extends PagePresenter
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array('mode' => 'folder_delete', 'folder_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['name'])),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_FOLDER')
                     );
@@ -607,7 +607,7 @@ class DocumentsPresenter extends PagePresenter
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array('mode' => 'file_delete', 'file_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['name'])),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_FILE')
                     );

@@ -320,7 +320,7 @@ class ProfileFieldsPresenter extends PagePresenter
                     updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
                 }
             });
-            
+
             updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
             ', true
         );
@@ -425,7 +425,7 @@ class ProfileFieldsPresenter extends PagePresenter
             } else {
                 $templateRowProfileField['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_profile_field_' . $userField->getValue('usf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('mode' => 'delete', 'uuid' => $userField->getValue('usf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($userField->getValue('usf_name', 'database'))),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($userField->getValue('usf_name', 'database'))),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')
                 );

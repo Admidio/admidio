@@ -513,7 +513,7 @@
   <string name="SYS_DELETE_FILE">Kustuta fail</string>
   <string name="SYS_DELETE_FOLDER">Kustuta kaust</string>
   <string name="SYS_DELETE_DATA">Andmed on kustutatud.</string>
-  <string name="SYS_DELETE_ENTRY">Kas soovite kirje #VAR1_BOLD# kustutada?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Kas soovite kirje #VAR1_BOLD# kustutada?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Selles piirkonnas pole ühtegi teist kategooriat. Sel põhjusel ei saa kategooriat kustutada.</string>
   <string name="SYS_DELETE_MESSAGE">Kas sõnum #VAR1_BOLD# tuleks kohe eemaldada?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Te ei saa rolli #VAR1_BOLD# kustutada. Vähemalt üks roll nõuab seadet #VAR2_BOLD#.</string>

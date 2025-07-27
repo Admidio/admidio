@@ -522,7 +522,7 @@
   <string name="SYS_DELETE_FILE">Supprimer le fichier</string>
   <string name="SYS_DELETE_FOLDER">Supprimer le dossier</string>
   <string name="SYS_DELETE_DATA">Les données ont été supprimées.</string>
-  <string name="SYS_DELETE_ENTRY">Voulez-vous supprimer la saisie #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Voulez-vous supprimer la saisie #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Il n\'y a pas d\'autre catégorie pour ce domaine. Pour cette raison, la catégorie ne peut pas être supprimée.</string>
   <string name="SYS_DELETE_MESSAGE">Est-ce que le message #VAR1_BOLD# doit maintenant être supprimé?.</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Vous ne pouvez pas supprimer le rôle #VAR1_BOLD#. Au moins un rôle doit avoir le paramètre #VAR2_BOLD#.</string>

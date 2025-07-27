@@ -133,7 +133,7 @@ class SSOKeyPresenter extends PagePresenter
             $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_KEY'))));
         }
         $this->setHtmlID('admidio-saml-client-edit');
-        
+
         ChangelogService::displayHistoryButton($this, 'sso-key', 'sso_keys', !empty($this->keyUUID), array('uuid' => $this->keyUUID));
 
         // show form
@@ -150,7 +150,7 @@ class SSOKeyPresenter extends PagePresenter
             $key->getValue('key_name'),
             array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_KEY_NAME_DESC'))
         );
-        
+
         $algos = ["RSA" => "RSA (default 2048)", "RSA-2048" => "RSA-2048", "RSA-3072" => "RSA-3072", "RSA-4096" => "RSA-4096"/*, "RSA-8192" => "RSA-8192", "ECDSA" => "ECDSA", "ECDSA-256" => "ECDSA-256", "ECDSA-384" => "ECDSA-384", "ECDSA-521" => "ECDSA-521"*/];
         $form->addSelectBox(
             'key_algorithm',
@@ -273,10 +273,10 @@ class SSOKeyPresenter extends PagePresenter
             array('type' => 'date', 'class' => 'certdata', 'property' => $certProp)
         );
 
-       
+
         $form->addSubmitButton(
-            'adm_button_save', 
-            $gL10n->get('SYS_SAVE'), 
+            'adm_button_save',
+            $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3'));
 
         $this->smarty->assign('nameUserCreated', $key->getNameOfCreatingUser());
@@ -355,7 +355,7 @@ class SSOKeyPresenter extends PagePresenter
 
 
         $table = new \HtmlTable('adm_sso_keys_table', $this, true, false);
-    
+
         $table->addRowHeadingByArray(array(
             $gL10n->get('SYS_NAME'),
             $gL10n->get('SYS_SSO_KEY_ALGORITHM'),
@@ -363,14 +363,14 @@ class SSOKeyPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_KEY_ACTIVE'),
             ''
         ));
-    
+
         $table->setMessageIfNoRowsFound('SYS_SSO_NO_KEYS_FOUND');
-    
+
         // $table->disableDatatablesColumnsSort(array(3, 6));
         $table->setDatatablesColumnsNotHideResponsive(array(6));
         // special settings for the table
-    
-    
+
+
         $keyService = new KeyService($gDb);
         foreach ($keyService->getKeysData() as $keyData) {
             $templateKey = array();
@@ -386,7 +386,7 @@ class SSOKeyPresenter extends PagePresenter
                 array('mode' => 'edit',        'icon' => 'bi-pencil-square',  'title' => $gL10n->get('SYS_SSO_KEY_EDIT')),
                 array('mode' => 'certificate', 'icon' => 'bi-shield-lock',    'title' => $gL10n->get('SYS_SSO_KEY_CERTIFICATE')),
                 array('mode' => 'export_password',      'icon' => 'bi-box-arrow-down', 'title' => $gL10n->get('SYS_SSO_KEY_EXPORT'), 'popup' => true),
-                array('mode' => 'delete',      'icon' => 'bi-trash',          'title' => $gL10n->get('SYS_SSO_KEY_DELETE'), 'message' => $gL10n->get('SYS_DELETE_ENTRY', array($keyData['key_name'])), 'buttons' => 'yes-no')
+                array('mode' => 'delete',      'icon' => 'bi-trash',          'title' => $gL10n->get('SYS_SSO_KEY_DELETE'), 'message' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($keyData['key_name'])), 'buttons' => 'yes-no')
             );
 
             $actions = array_map(function($action) use ($keyData) {
@@ -421,7 +421,7 @@ class SSOKeyPresenter extends PagePresenter
 
             $table->addRowByArray($templateKey, 'adm_sso_key_' . $keyData['key_uuid'], array('nobr' => 'true'));
         }
-    
+
         // add table to the form
         $this->addHtml(html: $table->show());
     }
