@@ -10,7 +10,6 @@ root = ET.parse('languages/en.xml').getroot()
 keys = [e.attrib['name'] for e in root.findall('.//string')
         if re.fullmatch(r'[A-Z0-9_]+', e.attrib['name'])]
 
-unused = []
 for dp, _, fs in os.walk('.'):
     if any(part in excl for part in dp.split(os.sep)):
         continue
