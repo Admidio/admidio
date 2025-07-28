@@ -20,9 +20,9 @@ for dp, _, fs in os.walk('.'):
         if f.endswith(('.php', '.js', '.html', '.tpl')):
             file_path = os.path.join(dp, f)
             file_content = open(file_path, 'r', errors='ignore').read()
-            for k in keys:
-                if k in file_content:
-                    used_keys.add(k)
+            pattern = re.compile(r'\b(' + '|'.join(map(re.escape, keys)) + r')\b')
+            found_keys = pattern.findall(file_content)
+            used_keys.update(found_keys)
 
 unused = [k for k in keys if k not in used_keys]
 if unused:
