@@ -19,7 +19,8 @@ for dp, _, fs in os.walk('.'):
     for f in fs:
         if f.endswith(('.php', '.js', '.html', '.tpl')):
             file_path = os.path.join(dp, f)
-            file_content = open(file_path, 'r', errors='ignore').read()
+            with open(file_path, 'r', errors='ignore') as f:
+                file_content = f.read()
             pattern = re.compile(r'\b(' + '|'.join(map(re.escape, keys)) + r')\b')
             found_keys = pattern.findall(file_content)
             used_keys.update(found_keys)
