@@ -11,6 +11,7 @@ excl = {d.strip() for d in args.exclude.split(',') if d.strip()}
 root = ET.parse('languages/en.xml').getroot()
 keys = [e.attrib['name'] for e in root.findall('.//string')
         if re.fullmatch(r'[A-Z0-9_]+', e.attrib['name'])]
+pattern = re.compile(r'\b(' + '|'.join(map(re.escape, keys)) + r')\b')
 used_keys = set()
 
 for dp, _, fs in os.walk('.'):
@@ -21,7 +22,6 @@ for dp, _, fs in os.walk('.'):
             file_path = os.path.join(dp, f)
             with open(file_path, 'r', errors='ignore') as f:
                 file_content = f.read()
-            pattern = re.compile(r'\b(' + '|'.join(map(re.escape, keys)) + r')\b')
             found_keys = pattern.findall(file_content)
             used_keys.update(found_keys)
 
