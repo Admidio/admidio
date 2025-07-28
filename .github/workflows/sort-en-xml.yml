@@ -42,6 +42,8 @@ jobs:
             echo "No changes detected."
           else
             NEW_BRANCH=sort-language-file-$(date +'%Y%m%d')
+            echo "NEW_BRANCH=$NEW_BRANCH" >> $GITHUB_ENV
+
             git checkout -b $NEW_BRANCH
             git add languages/en.xml
             git commit -m "chore: sort en.xml alphabetically"
@@ -52,6 +54,21 @@ jobs:
               --body "Created with GitHub Actions" \
               --label "translation" \
               --assignee ${{ github.actor }} \
-              --reviewer Fasse \
               --base master
+          fi
+
+      - name: Add Reviewer
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$NEW_BRANCH" ]; then
+            PR_NUMBER=$(gh pr list --head $NEW_BRANCH --json number --jq '.[0].number')
+            curl -s -X POST \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER/requested_reviewers \
+              -d '{"reviewers":["Fasse"]}'
+          else
+            echo "No new branch created, skipping reviewer assignment."
           fi
