@@ -125,7 +125,6 @@
   <string name="ORG_CAPTCHA_TYPE_WORDS">Words (english)</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Here you can define the Captcha type. The Captcha will be displayed as image. It can consist of random characters, a small math problem or two words. Further options allow to define the Captcha in detail. (default: random characters)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Captcha width in pixel. Captcha height will be calculated by proportion in regard to the width. In addition it will define the character size. (default: 215)</string>
-  <string name="ORG_CREATE_ITEM_FIELD">Create item field</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Create profile field</string>
   <string name="ORG_CURRENCY">Currency</string>
   <string name="ORG_CURRENCY_DESC">Select currency. Currency type will appear after all displayed amounts.</string>
@@ -179,11 +178,9 @@
   <string name="ORG_REGISTERED_USERS">Logged in user</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Search for similar names</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">At registration and assigning registrations Admidio is searching for similar surnames and first names in order to avoid double entries. Deactivation results search for identical names only. (default: yes)</string>
-  <string name="ORG_SECONDS">seconds</string>
   <string name="ORG_SEND_NEW_PASSWORD">Send new password</string>
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">In some places the creator and the user with the last change to a record is displayed together with a timestamp. This setting can be used to determine whether this information is displayed at all and whether the user should be displayed with the user name or with their first and last name.</string>
-  <string name="ORG_THEME_FOLDER_OPEN">Themes folder could not be opened/read.</string>
   <string name="ORG_TIME_FORMAT">Time format</string>
   <string name="ORG_TIME_FORMAT_DESC">Format complies with PHP function #VAR1#. (default: H:i)</string>
   <string name="ORG_TIMEZONE">Time zone</string>
@@ -201,7 +198,6 @@
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_A_TO_Z">A to Z</string>
-  <string name="SYS_ABORT">Cancel</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
   <string name="SYS_ACTIVE_CONTACTS">Active contacts</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Active and former members</string>
@@ -217,7 +213,6 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Add event to calendar</string>
   <string name="SYS_ADD_ORGANIZATION">Add organization</string>
-  <string name="SYS_ADD_RECIPIENTS">Add recipient</string>
   <string name="SYS_ADD_TO_DATABASE">Add to database</string>
   <string name="SYS_ADDRESS">Address</string>
   <string name="SYS_ADDITIONAL_COLUMNS">Additional columns</string>
@@ -232,7 +227,6 @@
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administrators</string>
   <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the Documents and Files module and therefore have access to all folders and files. They can upload and download files and assign access rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
-  <string name="SYS_AJAX_REQUEST_ERROR">Ajax request error.\nError Details: #VAR1#</string>
   <string name="SYS_ALBUM">Album</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Album contains no photos.</string>
   <string name="SYS_ALBUM_CREATED_TITLE">A new photo album was created at #VAR1#</string>
@@ -292,7 +286,6 @@
   <string name="SYS_BACK">Back</string>
   <string name="SYS_BACK_TO_ALBUM">Back to album</string>
   <string name="SYS_BACK_TO_FOLDER">Back to folder</string>
-  <string name="SYS_BACK_TO_MODULE_OVERVIEW">Back to module overview</string>
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_CALENDAR">Calendar</string>
@@ -304,9 +297,7 @@
   <string name="SYS_CANT_DELETE_ROLE">You can not delete the role #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Capacity</string>
   <string name="SYS_CAPTCHA">Captcha</string>
-  <string name="SYS_CAPTCHA_CALC">Result of the calculation</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">The result of the calculation is not correct.</string>
-  <string name="SYS_CAPTCHA_CALC_DESCRIPTION">The calculation is part of a captcha. A captcha is used for spam prevention. The calculation is used to detect if a user or a script (or spambot) filled in the form.\nPlease fill in the result of the calculation in the form.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">The authentication code was invalid.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Authentication code</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</string>
@@ -325,7 +316,6 @@
   <string name="SYS_CATEGORY_REPORT">Category report</string>
   <string name="SYS_CATEGORY_REPORT_DESC">Generates a listing of a member's role and category memberships.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
-  <string name="SYS_CATEGORY_VAR">#VAR1#-category</string>
   <string name="SYS_CHANGE_DATE">Change date</string>
   <string name="SYS_CHANGE_HISTORY">Change history</string>
   <string name="SYS_CHANGE_HISTORY_OF">Change history of #VAR1#</string>
@@ -346,7 +336,6 @@
   <string name="SYS_CLAMP_TEXT_LINES">Limit text lines</string>
   <string name="SYS_CLAMP_TEXT_LINES_DESC">This setting allows you to specify the maximum number of lines to be displayed as an #VAR1#. If 0 is selected, the complete text will be displayed. (Default: 0)</string>
   <string name="SYS_CLOCK">o\'clock</string>
-  <string name="SYS_CLOSE">Close</string>
   <string name="SYS_CODING">Coding</string>
   <string name="SYS_COLUMN">Column</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
@@ -505,7 +494,6 @@
   <string name="SYS_DELETE_ORGANIZATION">Do you really want to delete the organization #VAR1_BOLD#?\n\nAll data (announcements, documents, events, memberships, photos, roles and web links) of this organization will be irretrievably deleted.</string>
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
-  <string name="SYS_DELETE_ROLE_DESC">Are you sure you want to delete the role #VAR1_BOLD#?\n\nAll memberships will also be removed permanently.</string>
   <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
@@ -637,7 +625,6 @@
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">The memberships of the selected users at #VAR1_BOLD# were finished successfully!</string>
   <string name="SYS_ENTRY">Entry</string>
   <string name="SYS_ERROR">Error</string>
-  <string name="SYS_ERROR_DATABASE_ACCESS">Error occurred during database access:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is stored as default configuration for the module #VAR1# in this organization and cannot be deleted. Set another configuration to the default configuration in the module settings and try to delete this configuration afterwards.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - PAGE NOT FOUND!</string>
   <string name="SYS_EVENT">Event</string>
@@ -653,7 +640,6 @@
   <string name="SYS_EVENTS">Events</string>
   <string name="SYS_EVENTS_DESC">Events can be created and viewed. Members can register for special events if they wish.</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Events - Confirmation of attendance</string>
-  <string name="SYS_EXAMPLE">Example</string>
   <string name="SYS_EXAMPLES">Examples</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
@@ -665,10 +651,8 @@
   <string name="SYS_EXPORT_VCARD_FROM_VAR">Export vCard of #VAR1#</string>
   <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_FADE_IN">Fade in</string>
   <string name="SYS_FAVICON_FILE">Favicon File</string>
   <string name="SYS_FAVICON_FILE_DESC">The path to the favicon file for your installation. The path should be relative to your installation's root directory. If left empty, the default favicon of the theme will be used. (default: empty)</string>
-  <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Female</string>
   <string name="SYS_FIELD">Field</string>
   <string name="SYS_FIELD_EMPTY">Field #VAR1_BOLD# is empty.</string>
@@ -677,7 +661,6 @@
   <string name="SYS_FIELD_INVALID_INPUT">The Field #VAR1_BOLD# contains an invalid input.</string>
   <string name="SYS_FIELD_INVALID_REGEX">The entered value in the field #VAR1_BOLD# contains characters which do not match the corresponding regular expression of the field. Please check the field description which characters are allowed.</string>
   <string name="SYS_FIELD_NUMERIC">The field #VAR1_BOLD# may only contain numbers.\nPlease correct your input.</string>
-  <string name="SYS_FIELDS_EMPTY">Some fields are empty.</string>
   <string name="SYS_FILE">File</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
   <string name="SYS_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
@@ -703,7 +686,6 @@
   <string name="SYS_FIRSTNAME_LASTNAME">First name and lastname</string>
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
-  <string name="SYS_FOLDER_NO_FILES">Folder contains no files.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">You are not allowed to display selected folder.</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask an #VAR2#administrator#VAR3# for help to check write permissions of the parent folder.</string>
@@ -725,7 +707,6 @@
   <string name="SYS_FORMER_ROLE_MEMBERSHIP">Former role memberships</string>
   <string name="SYS_FORUM">Forum</string>
   <string name="SYS_FORUM_DESC">A simple forum for discussions within an organization. Various topics can be published and discussed.</string>
-  <string name="SYS_FORUM_MODULE_ENABLED_DESC">The forum can be activated via this setting. All registered members then have the opportunity to post or comment on topics in the forum.</string>
   <string name="SYS_FORUM_POST">Forum post</string>
   <string name="SYS_FORUM_POST_CHANGED_TITLE">A forum post was changed at #VAR1#</string>
   <string name="SYS_FORUM_POST_CREATED_TITLE">New forum post was created at #VAR1#</string>
@@ -743,7 +724,6 @@
   <string name="SYS_GENDER">Gender</string>
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">The program can not generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
-  <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">The program expects a string with at least 2 different characters.</string>
   <string name="SYS_GREETING_CARD">Greeting card</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
@@ -755,8 +735,6 @@
   <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
   <string name="SYS_HEADER_USER_ROLE_SETTINGS">Settings for users and groups/roles</string>
   <string name="SYS_HEADLINE">Headline</string>
-  <string name="SYS_HELP">Help</string>
-  <string name="SYS_HIDE">Hide</string>
   <string name="SYS_HIDDEN">Hidden</string>
   <string name="SYS_HIGHLIGHT_EVENT">Highlight event</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
@@ -767,7 +745,6 @@
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_ICON_FONT_DESC">Here you can add an icon of the web font \"Bootstrap Icons\". Go to #VAR1#https://icons.getbootstrap.com#VAR2# and select an icon from the collection. Just insert the name of the icon in this text box.</string>
-  <string name="SYS_ICQ">ICQ</string>
   <string name="SYS_IDENTIFY_USERS">Existing contacts are recognized by first name and last name.</string>
   <string name="SYS_IMPORTANT">Important</string>
   <string name="SYS_IMPORT">Import</string>
@@ -823,7 +800,6 @@
   <string name="SYS_INVENTORY_IMPORT_DESC">Here you can import items from a previous export file or your own file.</string>
   <string name="SYS_INVENTORY_IMPORT_ASSIGN_FIELDS_DESC">In the left column of the following table all item fields are displayed. In the right column the columns from the file to be imported are displayed in a selection list. You should now assign all columns from the file you want to import to a item field.</string>
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Import items</string>
-  <string name="SYS_INVENTORY_IMPORT_PROGRESS">The item #VAR1_BOLD# was imported #VAR2_BOLD#.</string>
   <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned to any item fields in InventoryManager:</string>
   <string name="SYS_INVENTORY_ITEM_COPIED">Item successfully copied</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Copy the item</string>
@@ -908,10 +884,8 @@
   <string name="SYS_INVENTORY_USE_CURRENT_USER_DESC">If this option is enabled, the current user is used as the default selection for the keeper when creating a new item. (Default: no)</string>
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
   <string name="SYS_INVENTORY_VALUE_LIST_DESC">In this field you can enter the items for the dropdown list or options field. Each line can record one entry for the dropdown list or options field.\n\nFor the item, the text is not stored later; instead, the selected position from the list is saved. Therefore, if you change the text on one line, all items already assigned will immediately receive the new text. However, if you move an entry to a different line, a different entry may be displayed for the item.\n\nFor an options field, an icon can be displayed instead of text. You can specify the name of an icon from the theme folder (e.g.: ok.png), the URL of an external image (e.g.: https://www.example.com/example.jpg), or an icon from the web font “Bootstrap Icons” (#VAR1#https://icons.getbootstrap.com#VAR2#). Optionally, a tooltip for the icon can be set via a vertical bar (e.g.: female.png|female).</string>
-  <string name="SYS_IO_ERROR">I/O error</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
-  <string name="SYS_ITEMNAME">Item name</string>
   <string name="SYS_KEEP_ORIGINAL">Save original files additionally</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
@@ -940,13 +914,11 @@
   <string name="SYS_LINK_CREATED_TITLE">A new web link was created at #VAR1#</string>
   <string name="SYS_LINK_TARGET">Link target</string>
   <string name="SYS_LINK_TARGET_DESC">Choose if selected website should be displayed in the window of Admidio or in a new window.</string>
-  <string name="SYS_LINK_TO">Link to #VAR1#</string>
   <string name="SYS_LINKEDIN">LinkedIn</string>
   <string name="SYS_LIST">List</string>
   <string name="SYS_LIST_COLUMNS">List columns</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Please define where to store profile picture (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. (default: database)</string>
-  <string name="SYS_LOCK">Lock</string>
   <string name="SYS_LOCK_ALBUM">Lock album</string>
   <string name="SYS_LOCK_ALBUM_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
   <string name="SYS_LOCKED">Locked</string>
@@ -970,7 +942,6 @@
   <string name="SYS_LOGO_FILE_DESC">The path to the logo file that is displayed in the top left corner. The path should be relative to your installation's root directory. If left empty, the default logo of the theme will be used. (default: empty)</string>
   <string name="SYS_LOGOUT">Sign out</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Signing out was successful.</string>
-  <string name="SYS_LOSTPW_AREADY_LOGGED_ID">You already signed in. Therefore you must already have the correct password!</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">The new password has been sent to the e-mail address #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">The new password has been sent to the user #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
@@ -1078,8 +1049,6 @@
   <string name="SYS_NO">No</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
-  <string name="SYS_NO_CHANGES_LOGGED">There are no changes logged.</string>
-  <string name="SYS_NO_CHANGES_LOGGED_PROFIL">No changes are logged for #VAR1_BOLD# .</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
   <string name="SYS_NO_DEFAULT_ROLE">You can not remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
   <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">The role management contains no default role for new users. Please contact an administrator who can edit this setting.</string>
@@ -1145,10 +1114,8 @@
   <string name="SYS_ORGANIZATION">Organization</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
-  <string name="SYS_OTHER_TABLES">Other tables (third-party modules; only visible to administrators)</string>
   <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overview</string>
-  <string name="SYS_PAGE">Page</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
   <string name="SYS_PAGE_NEXT">Next</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
@@ -1176,7 +1143,6 @@
   <string name="SYS_PASSWORD_OLD_WRONG">Old password is incorrect.</string>
   <string name="SYS_PASSWORD_RESET_INVALID">You have requested an invalid password reset link. If you haven't reset your password yet, please request a new link using the #VAR1# function.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
-  <string name="SYS_PASSWORD_UNKNOWN">Login failed due to incorrect password.\n\nPlease check your password and try again.</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">The password entered does not match the repeat.</string>
   <string name="SYS_PATH">Path</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
@@ -1211,7 +1177,6 @@
   <string name="SYS_PHP_VERSION_EOL">PHP version is no longer officially supported by PHP (End of Life). (#VAR1#)</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
-  <string name="SYS_PLEASE_WAIT">Please wait</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
@@ -1222,7 +1187,6 @@
   <string name="SYS_PRESET_CONFIGURATION">Default configuration</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Administrators are able to define default configurations for all users. Configure columns and conditions and save them by naming the configuration set.</string>
   <string name="SYS_PREVIEW">Preview</string>
-  <string name="SYS_PREVIOUS">Previous</string>
   <string name="SYS_PREVIOUS_EVENTS">Previous #VAR1#</string>
   <string name="SYS_PREVIOUS_NAME">Previous name</string>
   <string name="SYS_PREVIOUS_PHOTO">Previous picture</string>
@@ -1249,7 +1213,6 @@
   <string name="SYS_QUOTE">Single quote (')</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
-  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Latest announcements from organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail recipient</string>
   <string name="SYS_REDIRECT">Redirect</string>
@@ -1352,8 +1315,6 @@
   <string name="SYS_ROW">Row</string>
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
-  <string name="SYS_SAFE_MODE">Safe Mode</string>
-  <string name="SYS_SAFE_MODE_PROBLEM">Might cause problems with file uploads</string>
   <string name="SYS_SAME_WINDOW">Same window</string>
   <string name="SYS_SATURDAY">Saturday</string>
   <string name="SYS_SAVE">Save</string>
@@ -1364,7 +1325,6 @@
   <string name="SYS_SAVE_CHANGES">Save changes</string>
   <string name="SYS_SAVE_CONFIGURATION">Save configuration</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
-  <string name="SYS_SEARCH">Search</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_AGE_DESC">Searching for all users older than 18 years</string>
   <string name="SYS_SEARCH_DATE_EXAMPLE">01.03.1986</string>
@@ -1388,7 +1348,6 @@
   <string name="SYS_SEATING">Seating</string>
   <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY">Security</string>
-  <string name="SYS_SECURITY_ERROR">Security error</string>
   <string name="SYS_SELECT_ALL">Select all</string>
   <string name="SYS_SELECT_CONFIGURATION">Select configuration</string>
   <string name="SYS_SELECT_FILES">Select files</string>
@@ -1413,7 +1372,6 @@
   <string name="SYS_SEND_METHOD">Send via</string>
   <string name="SYS_SEND_METHOD_DESC">PHP\'s mail() method might be restricted by some providers and can be a reason for spam suspicion. Hence it is recommended to send mails by using an existing mail address and SMTP server. You can configure the SMTP settings below (default: PHP mail()).</string>
   <string name="SYS_SEND_NEW_LOGIN">Do you want to send #VAR1_BOLD# an email with the current username and a new password?</string>
-  <string name="SYS_SEND_NEW_PW">Send new password</string>
   <string name="SYS_SEND_PHOTO_AS_ECARD">Send photo as greeting card</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Send private message</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Your PM will be sent to the selected recipient.</string>
@@ -1426,7 +1384,6 @@
   <string name="SYS_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty (default: empty).</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">The sender was not logged in. The sender information may therefore be incorrect.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Separator for CSV-file</string>
-  <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
@@ -1434,13 +1391,11 @@
   <string name="SYS_SHOW_ALL_CONTACTS">Optional show all contacts</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
-  <string name="SYS_SHOW_CALENDAR">Display calendar</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_DESC">This setting can be used to determine who can view former roles. However, the user must also have the right to see the role itself. Leaders of a role may also view former members of their role, if they have permission to be set here. (Default: #VAR1#)</string>
-  <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Only show former members</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">User with permission #VAR1_BOLD#</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Display former role memberships</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">A box will be shown with all roles of the user in the current organization. Membership start and end date will be displayed. (default: yes)</string>
@@ -1472,7 +1427,6 @@
   <string name="SYS_SINCE">since #VAR1#</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SIZE">Size</string>
-  <string name="SYS_SKYPE">Skype</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP authentication</string>
   <string name="SYS_SMTP_AUTH_DESC">If the SMTP server requires authentication, the username and password fields are also required. (Default: Yes)</string>
@@ -1501,38 +1455,27 @@
   <string name="SYS_SSO_KEY_ADMIN">SSO Cryptographic Keys Administration</string>
   <string name="SYS_SSO_KEY_ADD">New Key</string>
   <string name="SYS_SSO_KEY_EDIT">Edit Key</string>
-  <string name="SYS_SSO_KEY_REGENERATE">Re-Generate Key</string>
   <string name="SYS_SSO_KEY_DELETE">Delete Key</string>
   <string name="SYS_SSO_KEY_NAME_DESC">The human-readable description of the key, only used for visual distinction.</string>
   <string name="SYS_SSO_KEY_ALGORITHM">Cryptographic Algorithm</string>
   <string name="SYS_SSO_KEY_ALGORITHM_DESC">The underlying cryptographic algorithm of the key. </string>
   <string name="SYS_SSO_KEY_PUBLIC">Public key</string>
-  <string name="SYS_SSO_KEY_PUBLIC_DESC">The public key can be shared with SSO clients to allow signing and/or encrypting messages. The public and the private keys form a pair and must always be used together.</string>
   <string name="SYS_SSO_KEY_PRIVATE">Private key</string>
-  <string name="SYS_SSO_KEY_PRIVATE_DESC">The private key is used to sign or encrypt messages. It MUST NOT be shared with anyone! The public and the private keys form a pair and must always be used together.</string>
   <string name="SYS_SSO_KEY_PRIVATE_NOT_SHOWN">For security reasons, the private key is hidden. However, you can export the key to a file.</string>
   <string name="SYS_SSO_KEY_CERTIFICATE">x509 certificate</string>
-  <string name="SYS_SSO_KEY_CERTIFICATE_DESC">The certificate is the signed public key with additional information and shall be shared with clients to sign or encrypt messages.</string>
   <string name="SYS_SSO_KEY_EXPIRES">Expiration date</string>
-  <string name="SYS_SSO_KEY_EXPIRES_DESC">The date when the generated key will expire and must be renewed (if set at all)</string>
   <string name="SYS_SSO_KEY_ACTIVE">Key Active</string>
   <string name="SYS_SSO_KEY_ACTIVE_DESC">Whether the key is currently active and can be used for signing or encryption.</string>
   <string name="SYS_SSO_KEY_IN_USE">This key is currently in use as the configured signing or encryption key.</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys for signing or encrypting SAML or OIDC messages configured!</string>
-  <string name="SYS_SSO_KEY_CERTIFICATE_DOWNLOAD">Download x509 certificate of the key</string>
   <string name="SYS_SSO_KEY_EXPORT">Export private key</string>
   <string name="SYS_SSO_KEY_SETTING">Cryptographic Key Settings</string>
-  <string name="SYS_SSO_NEW_CERTIFICATE">Create new certificate</string>
-  <string name="SYS_SSO_CERTIFICATE_EDIT">Edit certificate data</string>
-  <string name="SYS_SSO_CERTIFICATE_EDIT_TOOLTIP">After changing certificate data, the certificate needs to be re-created!</string>
   <string name="SYS_SSO_CERTIFICATE_SETTINGS">Certificate Settings</string>
   <string name="SYS_SSO_CERTIFICATE_FAILURE">Generating a certificate failed: #VAR1#</string>
   <string name="SYS_SSO_KEY_EXPORT_FAILURE">Exporting a key failed: #VAR1#</string>
-  <string name="SYS_SSO_KEY_FAILURE">Creating a cryptographic key failed: #VAR1#</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">The exported private key and certificate can and shall be encrypted with a password for security reasons. This password is required to open or import the downloaded file. Without this password, the key is not recoverable from the file. Using an empty password is possible, but strongly discouraged!</string>
   <string name="SYS_SSO_CERT_STATE">State or province</string>
-  <string name="SYS_SSO_CERT_ORGUNIT">Organizational unit</string>
   <string name="SYS_SSO_CERT_COMMON_NAME">Common name</string>
   <string name="SYS_SSO_CERT_ORGANIZATION_UNIT">Organization unit</string>
   <string name="SYS_SSO_CLIENTS_SAML">SAML 2.0 clients</string>
@@ -1558,8 +1501,6 @@
   <string name="SYS_SSO_REDIRECT_URI_DESC">The redirect URI, where the browser is redirected after successful login.</string>
   <string name="SYS_SSO_EDIT_SAML_CLIENT">Edit SAML Client (Service Provider)</string>
   <string name="SYS_SSO_EDIT_OIDC_CLIENT">Edit OIDC Client (Service Provider)</string>
-  <string name="SYS_SSO_ADD_SAML_CLIENT">Add SAML Client (Service Provider)</string>
-  <string name="SYS_SSO_ADD_OIDC_CLIENT">Add OIDC Client (Service Provider)</string>
   <string name="SYS_SSO_ACS_URL">ACS URL</string>
   <string name="SYS_SSO_ACS_URL_DESC">The Assertion Consumer Servicer (ACS) URL is the client's main entry point. After successful login at Admidio, the user will be redirected to that URL and logged in at the client.</string>
   <string name="SYS_SSO_SLO_URL">Single Log-Out URL (optional)</string>
@@ -1572,7 +1513,6 @@
   <string name="SYS_SSO_ROLES_DESC">Only the selected roles are permitted to log in to the client through Single-sign-on. If empty, all valid Admidio users can log in.</string>
   <string name="SYS_SSO_NO_SAML_CLIENTS_FOUND">No SAML clients (Service Providers) configured!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients (Service Providers) configured!</string>
-  <string name="SYS_SSO_OAUTH_KEYS">OIDC (SSO) keys</string>
   <string name="SYS_SSO_X509_CERTIFICATE">x509 Client Certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">SAML Messages are cryptographically signed to prevent security attacks. This certificate is provided by the client and must be entered / copied exactly as given by the client. Otherwise the SAML communication will fail and SSO login will not be possible.</string>
   <string name="SYS_SSO">Single-Sign-On</string>
@@ -1585,7 +1525,6 @@
   <string name="SYS_SSO_SAML_SSO_ENDPOINT">SSO Endpoint</string>
   <string name="SYS_SSO_SAML_SLO_ENDPOINT">SLO Endpoint</string>
   <string name="SYS_SSO_SAML_METADATA_URL">Metadata URL</string>
-  <string name="SYS_SSO_SAML_SUPPORTED_PROTOCOLS">Supported Protocols</string>
   <string name="SYS_SSO_SIGNING_KEY">Key for signatures</string>
   <string name="SYS_SSO_ENCRYPTION_KEY">Key for encryption</string>
   <string name="SYS_SSO_ROLESMAP">Included groups/roles</string>
@@ -1603,7 +1542,6 @@
   <string name="SYS_SSO_OIDC_ROLE">OIDC role name</string>
   <string name="SYS_SSO_ROLES_ALLOTHER">Include all remaining roles with Admidio's role name unchanged</string>
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Want signatures on all requests received</string>
-  <string name="SYS_SSO_SAML_REQUIRE_REQUESTS_SIGNED">Require signatures on all requests received</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME">Lifetime of SAML assertions sent to the client</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">Upon successful authentification, an "assertion" is sent to the client. This configuration determines how long (in seconds) this assertion should be considered valid by the client.</string>
   <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW">Allowed clock skew</string>
@@ -1615,18 +1553,15 @@
   <string name="SYS_SSO_SAML_SIGNATURE_KEY_MISSING">SAML message needs signature validation, but client (SP) has no certificate configured.</string>
   <string name="SYS_SSO_SAML_SIGNATURE_FAILED">SAML message failed signature validation.</string>
   <string name="SYS_SSO_SAML_ENCRYPTION_KEY_MISSING">SAML message needs encryption, but client (SP) has no certificate configured.</string>
-  <string name="SYS_SSO_SAML_ENCRYPTION_FAILED">Encrypting SAML message failed...</string>
   <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Signature and Encryption</string>
   <string name="SYS_SSO_REQUIRE_AUTHN_SIGNED">Require all requests received to be signed by the client (SP)</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">Sign assertions sent to the client (SP)</string>
   <string name="SYS_SSO_ENCRYPT_ASSERTIONS">Encrypt assertions sent to the client (SP)</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate signatures on all requests received</string>
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are logged in successful, but the user account does not have access permissions to the Service Provider (#VAR1#). Please either try logging in with a different account below, or return to the Service Provider.</string>
-  <string name="SYS_SSO_LOGIN_RETURN">Return to #VAR1_BOLD# without logging in</string>
   <string name="SYS_LOGIN_TO">Sign in to #VAR1_BOLD#</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">The unique identifier for OIDC of this Admidio instance. Typically this is the base URL of your Admidio installation. The client needs to be set up with the exact same entity ID, otherwise login will not work.</string>
-  <string name="SYS_SSO_OIDC_STATIC_SETTINGS">IdP metadata for client setup</string>
   <string name="SYS_SSO_OIDC_DISCOVERY_URL">Discovery URL</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentication Endpoint</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token Endpoint</string>
@@ -1649,13 +1584,11 @@
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# characters</string>
-  <string name="SYS_STOP">Stop</string>
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUBJECT">Subject</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS">Sub-organizations</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Sub-organizations can share profile data of contacts. In some modules (announcements, events) it is possible to display entries from the main organization in the sub-organizations. The administration of a sub-organization is completely independent and can be provided with its own rights concept. You can find more information in the #VAR1#Admidio Wiki#VAR2#.</string>
   <string name="SYS_SUNDAY">Sunday</string>
-  <string name="SYS_SUPPORT_ADMIDIO">Support Admidio</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Switch to calendar management</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
   <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Switch to profile field configuration</string>
@@ -1709,21 +1642,16 @@
   <string name="SYS_TITLE">Title</string>
   <string name="SYS_TO" description="E-Mail">To</string>
   <string name="SYS_TOPIC">Topic</string>
-  <string name="SYS_TOPICS">Topics</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
-  <string name="SYS_UNLIMITED">Unlimited</string>
   <string name="SYS_UNKNOWN">Unknown</string>
-  <string name="SYS_UNLOCK">Unlock</string>
   <string name="SYS_UNLOCK_ALBUM">Unlock album</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNMANAGED_FILES">Unmanaged files</string>
-  <string name="SYS_UPDATE">Update</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
-  <string name="SYS_UPLOAD_NAME_ERROR">The file name can not be named \"Submit\".</string>
   <string name="SYS_UPLOAD_PHOTOS">Upload photos</string>
   <string name="SYS_UPLOAD_PROFILE_PICTURE">Upload profile picture</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
@@ -1774,7 +1702,6 @@
   <string name="SYS_VISIBILITY">Visibility</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# visible only to logged in users</string>
   <string name="SYS_VISITORS">Guests</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
@@ -1786,11 +1713,9 @@
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Wednesday</string>
   <string name="SYS_WEEKDAY">Weekday</string>
-  <string name="SYS_WHAT_TO_DO">What to do?</string>
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Worksheet (index or name)</string>
   <string name="SYS_WRITE_EMAIL">Write e-mail</string>
-  <string name="SYS_WRITE_ENTRY">Write entry</string>
   <string name="SYS_WRITE_PM">Write private message</string>
   <string name="SYS_XING">Xing</string>
   <string name="SYS_YEAR">Year</string>
