@@ -41,7 +41,7 @@ jobs:
           if git diff --quiet; then
             echo "No changes detected."
           else
-            NEW_BRANCH=sort-language-file-$(date +'%Y%m%d%H%M%S')
+            NEW_BRANCH=sort-language-file-$(date +'%Y%m%d')
             git checkout -b $NEW_BRANCH
             git add languages/en.xml
             git commit -m "chore: sort en.xml alphabetically"
