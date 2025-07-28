@@ -42,11 +42,12 @@ interface PluginInterface
 
     /**
      * @param string $type
+     * @param string $path
      * @throws InvalidArgumentException
      * @throws Exception
      * @return array
      */
-    public static function getStaticFiles(?string $type = null) : array;
+    public static function getStaticFiles(?string $type = null, string $path = '') : array;
 
     /**
      * @throws InvalidArgumentException

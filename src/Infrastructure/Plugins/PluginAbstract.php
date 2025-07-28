@@ -5,10 +5,11 @@ use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Menu\Entity\MenuEntry;
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Database;
 
 use InvalidArgumentException;
-use Exception;
-
+use RuntimeException;
 /**
  * Class PluginAbstract
  */
@@ -280,26 +281,31 @@ abstract class PluginAbstract implements PluginInterface
 
     /**
      * @param string $type
+     * @param string $path
      * @throws InvalidArgumentException
      * @throws Exception
      * @return array
      */
-    public static function getStaticFiles(?string $type = null) : array
+    public static function getStaticFiles(?string $type = null, string $path = '' /* self::$pluginPath */) : array
     {
+        if ($path === '') {
+            $path = self::$pluginPath;
+        }
+
         if ($type !== null && !is_string($type))
         {
             throw new InvalidArgumentException('Type must be "null" or a "string".');
         }
 
-        if (!is_dir(self::$pluginPath))
+        if (!is_dir($path))
         {
-            throw new Exception('Plugin path does not exist: ' . self::$pluginPath);
+            throw new Exception('Plugin path does not exist: ' . $path);
         }
 
         $files = array();
-        foreach (scandir(self::$pluginPath) as $entry)
+        foreach (scandir($path) as $entry)
         {
-            $entryPath = self::$pluginPath . DIRECTORY_SEPARATOR . $entry;
+            $entryPath = $path . DIRECTORY_SEPARATOR . $entry;
             if (is_file($entryPath))
             {
                 $entryInfo = pathinfo($entryPath);
@@ -319,7 +325,7 @@ abstract class PluginAbstract implements PluginInterface
         }
         else
         {
-            return $files[$type];
+            return (array_key_exists($type, $files)) ? $files[$type] : array();
         }
     }
 
@@ -607,6 +613,41 @@ abstract class PluginAbstract implements PluginInterface
             }
         }
 
+        // check if the plugin has a .sql file to create the database tables
+        $sqlFiles = self::getStaticFiles('sql', self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts');
+        if (isset($sqlFiles) && count($sqlFiles) > 0) {
+            $sqlFile = null;
+            if (count($sqlFiles) === 1) {
+            // if there is only one sql file, take it
+                $sqlFile = $sqlFiles[0];
+            } else {
+                // if there are multiple sql files, we need to find the install file
+                // the install file needs to be named *install.sql
+                foreach ($sqlFiles as $file) {
+                    if (str_contains($file, 'install')) {
+                        $sqlFile = $file;
+                        break;
+                    }
+                }
+            }
+            if ($sqlFile !== null) {
+                // read data from sql install script and execute all statements to the current database
+                if (!is_file($sqlFile)) {
+                    throw new Exception('INS_DATABASE_FILE_NOT_FOUND', array(basename($sqlFile), dirname($sqlFile)));
+                }
+
+                try {
+                    $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFile);
+                } catch (RuntimeException $exception) {
+                    throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
+                }
+
+                foreach ($sqlStatements as $sqlStatement) {
+                    $gDb->queryPrepared($sqlStatement);
+                }
+            }
+        }
+
         // install the plugin
         $componentUpdateHandle = new ComponentUpdate($gDb);
         $componentUpdateHandle->readDataByColumns(array('com_type' => 'PLUGIN', 'com_name' => self::getName(), 'com_name_intern' => basename(self::$pluginPath)));
@@ -649,6 +690,39 @@ abstract class PluginAbstract implements PluginInterface
         }
 
         global $gDb, $gSettingsManager;
+
+        // check if the plugin has a .sql file to delete the database tables
+        $sqlFiles = self::getStaticFiles('sql', self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts');
+        if (isset($sqlFiles) && count($sqlFiles) > 0) {
+            $sqlFile = null;
+            // if there is only a db.sql file, no uninstall script is needed
+            if (count($sqlFiles) > 1) {
+                // if there are multiple sql files, we need to find the uninstall file
+                // the file needs to be named *uninstall.sql
+                foreach ($sqlFiles as $file) {
+                    if (str_contains($file, 'uninstall')) {
+                        $sqlFile = $file;
+                        break;
+                    }
+                }
+            }
+            if ($sqlFile !== null) {
+                // read data from sql install script and execute all statements to the current database
+                if (!is_file($sqlFile)) {
+                    throw new Exception('INS_DATABASE_FILE_NOT_FOUND', array(basename($sqlFile), dirname($sqlFile)));
+                }
+
+                try {
+                    $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFile);
+                } catch (RuntimeException $exception) {
+                    throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
+                }
+
+                foreach ($sqlStatements as $sqlStatement) {
+                    $gDb->queryPrepared($sqlStatement);
+                }
+            }
+        }
 
         // delete the plugin config values from the database
         foreach (self::getPluginConfigValues() as $key => $value) {
