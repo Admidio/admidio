@@ -31,7 +31,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Run unused‑string checker
+      - name: Run unused-string checker
         id: check
         run: |
           python .github/scripts/check_unused_strings.py --exclude .github,dockerscripts,hooks,libs > unused_keys.txt
