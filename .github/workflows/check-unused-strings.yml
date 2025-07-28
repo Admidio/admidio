@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' && failure() }}
         continue-on-error: true
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_NUMBER=$(jq --raw-output .number "$GITHUB_EVENT_PATH")
           BODY=$(echo -e "**WARNING: Unused translation keys detected**\n\n\`\`\`\n$(cat unused_keys.txt)\n\`\`\`\nPlease consider removing or using these keys." | jq -Rs .)
