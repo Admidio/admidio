@@ -200,4 +200,32 @@ class Smarty
         return THEME_URL . $filepath;
     }
     
+    /**
+     * Function for the Smarty template engine to compare two version strings.
+     * @param array $params   Array with all the variables that are set within the template file.
+     * @param Template $template The Smarty template object that could be used within the function.
+     * @return bool Returns **true** if the first version is greater than or equal to the second version, otherwise **false**.
+     *
+     * **Code example**
+     * ```
+     * // example of this function within a template file
+     * {if {version_compare firstVersion='1.0.0' secondVersion='1.0.1'}}
+     *    ...
+     * {else}
+     *    ...
+     * {/if}
+     * ```
+     */
+    public static function versionCompare(array $params, Template $template): bool
+    {
+        if (empty($params['firstVersion']) || empty($params['secondVersion'])) {
+            throw new \UnexpectedValueException('Smarty function version_compare: missing "firstVersion" or "secondVersion" parameter');
+        }
+
+        if (empty($params['operator'])) {
+            $params['operator'] = '==';
+        }
+
+        return version_compare($params['firstVersion'], $params['secondVersion'], $params['operator']);
+    }
 }

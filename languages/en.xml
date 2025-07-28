@@ -1103,6 +1103,7 @@
   <string name="SYS_NONE">None</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
+  <string name="SYS_NOT_INSTALLED">Not installed</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not member of any organization</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Not member of organization #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Please use a valid number as condition for field #VAR1_BOLD#.</string>

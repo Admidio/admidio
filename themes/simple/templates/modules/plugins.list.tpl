@@ -48,12 +48,14 @@
                             <td>{$pluginEntry.url}</td>
                             <td>{$pluginEntry.version}</td>
                             <td data-bs-toggle="tooltip"
-                                {if $pluginEntry.installedVersion < $pluginEntry.version}
-                                    style="color: var(--bs-warning);" title="{$l10n->get('SYS_UPDATE_AVAILABLE', array('SYS_EXTENSION'))}"
+                                {if $pluginEntry.installedVersion === ''}
+                                    style="color: var(--bs-danger);"
+                                {else if {version_compare firstVersion=$pluginEntry.installedVersion secondVersion=$pluginEntry.version operator='<'} }
+                                    style="color: var(--bs-warning);" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
                                 {else}
-                                    style="color: var(--bs-success);" title="{$l10n->get('SYS_UP_TO_DATE', array('SYS_EXTENSION'))}"
+                                    style="color: var(--bs-success);" title="{$l10n->get('SYS_UP_TO_DATE')}"
                                 {/if}
-                                >{$pluginEntry.installedVersion}</td>
+                                >{if $pluginEntry.installedVersion === ''}{$l10n->get('SYS_NOT_INSTALLED')}{else}{$pluginEntry.installedVersion}{/if}</td>
                             <td class="text-end">
                                 {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
                             </td>
@@ -129,10 +131,12 @@
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_installed_version">
                                 <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong> 
-                                {if $pluginEntry.installedVersion < $pluginEntry.version}
-                                    <p><span style="color: var(--bs-warning);" >{$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</span></p>
+                                {if $pluginEntry.installedVersion === ''}
+                                    <p><span style="color: var(--bs-danger);">{$l10n->get('SYS_NOT_INSTALLED')}</span></p>
+                                {else if {version_compare firstVersion=$pluginEntry.installedVersion secondVersion=$pluginEntry.version operator='<'} }
+                                    <p><span style="color: var(--bs-warning);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</span></p>
                                 {else}
-                                    <p><span style="color: var(--bs-success);" >{$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</span></p>
+                                    <p><span style="color: var(--bs-success);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</span></p>
                                 {/if}
                             </div>
                         </div>
