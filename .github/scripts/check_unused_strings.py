@@ -2,7 +2,7 @@ import os, re, xml.etree.ElementTree as ET
 import argparse
 
 p = argparse.ArgumentParser()
-p.add_argument('--exclude', default='', help='Comma‑separated dirs to skip')
+p.add_argument('--exclude', default='', help='Comma-separated dirs to skip')
 args = p.parse_args()
 excl = {d.strip() for d in args.exclude.split(',') if d.strip()}
 
