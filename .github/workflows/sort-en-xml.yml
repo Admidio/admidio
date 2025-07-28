@@ -47,7 +47,7 @@ jobs:
             git commit -m "chore: sort en.xml alphabetically"
 
             # Authenticate GitHub CLI
-            echo "$GITHUB_TOKEN" | gh auth login --with-token
+            gh auth login --with-token < <(echo "$GITHUB_TOKEN")
 
             git push --set-upstream origin $NEW_BRANCH
 
