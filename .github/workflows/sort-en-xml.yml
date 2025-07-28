@@ -45,10 +45,6 @@ jobs:
             git checkout -b $NEW_BRANCH
             git add languages/en.xml
             git commit -m "chore: sort en.xml alphabetically"
-
-            # Authenticate GitHub CLI
-            echo "$GITHUB_TOKEN" | gh auth login --with-token
-
             git push --set-upstream origin $NEW_BRANCH
 
             gh pr create \
