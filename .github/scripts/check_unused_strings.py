@@ -18,11 +18,12 @@ for dp, _, fs in os.walk('.'):
         if f.endswith(('.php', '.js', '.html', '.tpl')):
             file_path = os.path.join(dp, f)
             file_content = open(file_path, 'r', errors='ignore').read()
+            used_keys = set()
             for k in keys:
                 if k in file_content:
-                    keys.remove(k)
+                    used_keys.add(k)
 
-unused = keys
+unused = [k for k in keys if k not in used_keys]
 if unused:
     for k in unused:
         print(f"UNUSED: {k}")
