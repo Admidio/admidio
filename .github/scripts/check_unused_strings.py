@@ -9,6 +9,7 @@ excl = {d.strip() for d in args.exclude.split(',') if d.strip()}
 root = ET.parse('languages/en.xml').getroot()
 keys = [e.attrib['name'] for e in root.findall('.//string')
         if re.fullmatch(r'[A-Z0-9_]+', e.attrib['name'])]
+used_keys = set()
 
 for dp, _, fs in os.walk('.'):
     if any(part in excl for part in dp.split(os.sep)):
@@ -17,7 +18,6 @@ for dp, _, fs in os.walk('.'):
         if f.endswith(('.php', '.js', '.html', '.tpl')):
             file_path = os.path.join(dp, f)
             file_content = open(file_path, 'r', errors='ignore').read()
-            used_keys = set()
             for k in keys:
                 if k in file_content:
                     used_keys.add(k)
