@@ -1,4 +1,6 @@
-import os, re, xml.etree.ElementTree as ET
+import os
+import re
+import xml.etree.ElementTree as ET
 import argparse
 
 p = argparse.ArgumentParser()
