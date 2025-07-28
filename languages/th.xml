@@ -491,7 +491,7 @@
   <string name="SYS_DELETE_FILE">ลบ ไฟล์</string>
   <string name="SYS_DELETE_FOLDER">ลบ โฟลเดอร์</string>
   <string name="SYS_DELETE_DATA">ลบข้อมูลแล้ว</string>
-  <string name="SYS_DELETE_ENTRY">คุณต้องการลบรายการ #VAR1_BOLD# หรือไม่</string>
+  <string name="SYS_WANT_DELETE_ENTRY">คุณต้องการลบรายการ #VAR1_BOLD# หรือไม่</string>
   <string name="SYS_DELETE_LAST_CATEGORY">ไม่มีหมวดหมู่อื่นในพื้นที่นี้ ด้วยเหตุนี้ จึงไม่สามารถ ลบ หมวดหมู่ ได้</string>
   <string name="SYS_DELETE_MESSAGE">ควรลบข้อความ #VAR1_BOLD# ทันทีหรือไม่</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">คุณ ไม่สามารถ ลบบทบาท #VAR1_BOLD# ได้ อย่างน้อยหนึ่งบทบาทต้องมีการตั้งค่า #VAR2_BOLD#</string>

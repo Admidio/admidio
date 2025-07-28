@@ -511,7 +511,7 @@
   <string name="SYS_DELETE_FILE">Verwijder bestand</string>
   <string name="SYS_DELETE_FOLDER">Verwijder map</string>
   <string name="SYS_DELETE_DATA">Gegevens zijn verwijderd.</string>
-  <string name="SYS_DELETE_ENTRY">Wilt u #VAR1_BOLD# verwijderen?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Wilt u #VAR1_BOLD# verwijderen?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Er is geen andere categorie voor dit gebied. Om deze reden kan de categorie niet worden verwijderd.</string>
   <string name="SYS_DELETE_MESSAGE">Bericht #VAR1_BOLD# nu verwijderen?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">U kunt de rol #VAR1_BOLD# niet verwijderen. Ten minste één rol dient de instelling #VAR2_BOLD# te bezitten.</string>

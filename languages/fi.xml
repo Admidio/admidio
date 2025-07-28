@@ -505,7 +505,7 @@
   <string name="SYS_DELETE_FILE">Poista tiedosto</string>
   <string name="SYS_DELETE_FOLDER">Poista kansio</string>
   <string name="SYS_DELETE_DATA">Tiedot on poistettu.</string>
-  <string name="SYS_DELETE_ENTRY">Haluatko poistaa merkinnän #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Haluatko poistaa merkinnän #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Tällä alueella ei ole muuta luokkaa. Tästä syystä luokkaa ei voi poistaa.</string>
   <string name="SYS_DELETE_MESSAGE">Pitäisikö viesti #VAR1_BOLD# poistaa nyt?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Et voi poistaa roolia #VAR1_BOLD#. Vähintään yksi rooli vaatii #VAR2_BOLD# -asetuksen.</string>

@@ -405,7 +405,7 @@ class CategoriesPresenter extends PagePresenter
                 $navigationHeadline = $gL10n->get('SYS_CALENDARS');
                 $editableHeadline = $gL10n->get('SYS_EDIT_EVENTS');
                 $addButtonText = $gL10n->get('SYS_CREATE_CALENDAR');
-                $deleteMessage = 'SYS_DELETE_ENTRY';
+                $deleteMessage = 'SYS_WANT_DELETE_ENTRY';
                 break;
 
             case 'FOT':
@@ -435,14 +435,14 @@ class CategoriesPresenter extends PagePresenter
                 $headline = $gL10n->get('ORG_PROFILE_FIELDS') . ' - ' . $gL10n->get('SYS_CATEGORIES');
                 $editableHeadline = $gL10n->get('SYS_EDIT_PROFILE_FIELDS_PREF');
                 break;
-                
+
             case 'IVT':
                 $component = 'INVENTORY';
                 $rolesRightsColumn = 'rol_inventory_admin';
                 $headline = $gL10n->get('SYS_INVENTORY') . ' - ' . $gL10n->get('SYS_CATEGORIES');
                 $editableHeadline = $gL10n->get('SYS_EDIT_INVENTORY');
                 break;
-                
+
             default:
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
@@ -488,7 +488,7 @@ class CategoriesPresenter extends PagePresenter
                     updateMoveActions("tbody.admidio-sortable", "adm_category", "admidio-category-move");
                 }
             });
-            
+
             updateMoveActions("tbody.admidio-sortable", "adm_category", "admidio-category-move");
             ', true
         );

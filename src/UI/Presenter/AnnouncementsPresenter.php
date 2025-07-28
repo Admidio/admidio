@@ -358,7 +358,7 @@ class AnnouncementsPresenter extends PagePresenter
                             ADMIDIO_URL . FOLDER_MODULES . '/announcements.php',
                             array('mode' => 'delete', 'announcement_uuid' => $announcementData['ann_uuid'])
                         ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($announcementData['ann_headline'])),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($announcementData['ann_headline'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')
                 );

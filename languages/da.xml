@@ -493,7 +493,7 @@
   <string name="SYS_DELETE_FILE">Slet fil</string>
   <string name="SYS_DELETE_FOLDER">Slet folder</string>
   <string name="SYS_DELETE_DATA">Data er blevet slettet.</string>
-  <string name="SYS_DELETE_ENTRY">Vil du slette #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Vil du slette #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Der er ikke nogen anden kategori i dette område. Derfor kan denne kategori ikke slettes.</string>
   <string name="SYS_DELETE_MESSAGE">Skal besked #VAR1_BOLD# fjernes nu?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Du kan ikke slette rollen #VAR1_BOLD#. Mindst én rolle kræver #VAR2_BOLD# indstillingen.</string>

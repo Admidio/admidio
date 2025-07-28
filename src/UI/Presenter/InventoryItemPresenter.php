@@ -208,15 +208,15 @@ class InventoryItemPresenter extends PagePresenter
                         );
 
                         $this->addJavascript('
-                            $(document).ready(function() {
-                                // Select2 für KEEPER initialisieren
-                                $("#INF-' . $pimKeeper .'").select2({
-                                    theme: "bootstrap-5",
-                                    allowClear: true,
-                                    placeholder: "",
-                                    language: "' . $gL10n->getLanguageLibs() . '",
-                                });
-                            });', true);
+                            // Select2 für KEEPER initialisieren
+                            $("#INF-' . $pimKeeper .'").select2({
+                                theme: "bootstrap-5",
+                                allowClear: true,
+                                placeholder: "",
+                                language: "' . $gL10n->getLanguageLibs() . '",
+                            });',
+                            true
+                        );
                     }
                     else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
@@ -379,7 +379,8 @@ class InventoryItemPresenter extends PagePresenter
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
-                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
+                            'toggleable' => true
                         )
                     );
                     break;
@@ -393,7 +394,8 @@ class InventoryItemPresenter extends PagePresenter
                             'property' => $fieldProperty,
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),
                             'helpTextId' => $helpId,
-                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
+                            'toggleable' => true
                         )
                     );
                     break;
@@ -408,7 +410,8 @@ class InventoryItemPresenter extends PagePresenter
                             'defaultValue' => $items->getValue($infNameIntern, 'database'),
                             'showNoValueButton' => $items->getProperty($infNameIntern, 'inf_required_input') == 0,
                             'helpTextId' => $helpId,
-                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
+                            'toggleable' => true
                         )
                     );
                     break;
@@ -423,7 +426,8 @@ class InventoryItemPresenter extends PagePresenter
                             'maxLength' => 4000,
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
-                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
+                            'toggleable' => true
                         )
                     );
                     break;
@@ -439,6 +443,7 @@ class InventoryItemPresenter extends PagePresenter
                             array(
                                 'property' => FormPresenter::FIELD_REQUIRED,
                                 'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                'toggleable' => true
                             )
                         );
                     }
@@ -464,20 +469,21 @@ class InventoryItemPresenter extends PagePresenter
                                 'helpTextId' => $helpId,
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
                                 'defaultValue' => ($gSettingsManager->getBool('inventory_current_user_default_keeper')) ? $user->getValue('usr_id') : $items->getValue($infNameIntern),
-                                'multiselect' => false
+                                'multiselect' => false,
+                                'toggleable' => true
                             )
                         );
 
                         $this->addJavascript('
-                            $(document).ready(function() {
-                                // Select2 für KEEPER initialisieren
-                                $("#INF-' . $pimKeeper .'").select2({
-                                    theme: "bootstrap-5",
-                                    allowClear: true,
-                                    placeholder: "",
-                                    language: "' . $gL10n->getLanguageLibs() . '",
-                                });
-                            });', true);
+                            // Select2 für KEEPER initialisieren
+                            $("#INF-' . $pimKeeper .'").select2({
+                                theme: "bootstrap-5",
+                                allowClear: true,
+                                placeholder: "",
+                                language: "' . $gL10n->getLanguageLibs() . '",
+                            });',
+                            true
+                        );
                     }
                     else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
@@ -505,7 +511,8 @@ class InventoryItemPresenter extends PagePresenter
                                 'step' => isset($step) ? $step : null,
                                 'property' => $fieldProperty,
                                 'helpTextId' => $helpId,
-                                'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                                'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
+                                'toggleable' => true
                             )
                         );
                     }
@@ -517,6 +524,36 @@ class InventoryItemPresenter extends PagePresenter
             'adm_button_save',
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg')
+        );
+
+        // add javascript to toggle item fields editability
+        $this->addJavascript('
+            function toggleItemFields(fieldIdPrefix) {
+                var toggleCheckbox = document.getElementById("toggle_" + fieldIdPrefix);
+                // Select all elements that have an id equal to fieldIdPrefix or starting with fieldIdPrefix_
+                var fieldElements = document.querySelectorAll(\'[id^="\' + fieldIdPrefix + \'"]\');
+                if (toggleCheckbox) {
+                    fieldElements.forEach(function(fieldElement) {
+                        if (fieldElement.id === fieldIdPrefix || fieldElement.id.indexOf(fieldIdPrefix + "_") === 0) {
+                            fieldElement.disabled = !toggleCheckbox.checked;
+                        }
+                    });
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                // Find all toggle checkboxes and attach the change event
+                var toggleCheckboxes = document.querySelectorAll(\'[id^="toggle_"]\');
+                toggleCheckboxes.forEach(function(toggle) {
+                    var fieldIdPrefix = toggle.id.replace("toggle_", "");
+                    // Set the initial state
+                    toggleItemFields(fieldIdPrefix);
+                    // Update field state on toggle change
+                    toggle.addEventListener("change", function() {
+                        toggleItemFields(fieldIdPrefix);
+                    });
+                });
+            });'
         );
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
@@ -798,39 +835,39 @@ class InventoryItemPresenter extends PagePresenter
                         );
             
                         $this->addJavascript('
-                            $(document).ready(function() {
-                                var selectIdLastReceiver = "#INF-' . $pimLastReceiver . '";
-            
-                                var defaultValue = "' . htmlspecialchars($items->getValue($infNameIntern)) . '";
-                                var defaultText = "' . htmlspecialchars($items->getValue($infNameIntern)) . '"; // Der Text für den Default-Wert
-            
-                                function isSelect2Empty(selectId) {
-                                    // Hole den aktuellen Wert des Select2-Feldes
-                                    var renderedElement = $("#select2-INF-' . $pimLastReceiver .'-container");
-                                    if (renderedElement.length) {
-                                        window.checkPimInInventory();
-                                    }
+                            var selectIdLastReceiver = "#INF-' . $pimLastReceiver . '";
+        
+                            var defaultValue = "' . htmlspecialchars($items->getValue($infNameIntern)) . '";
+                            var defaultText = "' . htmlspecialchars($items->getValue($infNameIntern)) . '"; // Der Text für den Default-Wert
+        
+                            function isSelect2Empty(selectId) {
+                                // Hole den aktuellen Wert des Select2-Feldes
+                                var renderedElement = $("#select2-INF-' . $pimLastReceiver .'-container");
+                                if (renderedElement.length) {
+                                    window.checkPimInInventory();
                                 }
-                                // Prüfe, ob der Default-Wert in den Optionen enthalten ist
-                                if ($(selectIdLastReceiver + " option[value=\'" + defaultValue + "\']").length === 0) {
-                                    // Füge den Default-Wert als neuen Tag hinzu
-                                    var newOption = new Option(defaultText, defaultValue, true, true);
-                                    $(selectIdLastReceiver).append(newOption).trigger("change");
-                                }
-            
-                                $("#INF-' . $pimLastReceiver .'").select2({
-                                    theme: "bootstrap-5",
-                                    allowClear: true,
-                                    placeholder: "",
-                                    language: "' . $gL10n->getLanguageLibs() . '",
-                                    tags: true
-                                });
-            
-                                // Überwache Änderungen im Select2-Feld
-                                $(selectIdLastReceiver).on("change.select2", function() {
-                                    isSelect2Empty(selectIdLastReceiver);
-                                });
-                            });', true);
+                            }
+                            // Prüfe, ob der Default-Wert in den Optionen enthalten ist
+                            if ($(selectIdLastReceiver + " option[value=\'" + defaultValue + "\']").length === 0) {
+                                // Füge den Default-Wert als neuen Tag hinzu
+                                var newOption = new Option(defaultText, defaultValue, true, true);
+                                $(selectIdLastReceiver).append(newOption).trigger("change");
+                            }
+        
+                            $("#INF-' . $pimLastReceiver .'").select2({
+                                theme: "bootstrap-5",
+                                allowClear: true,
+                                placeholder: "",
+                                language: "' . $gL10n->getLanguageLibs() . '",
+                                tags: true
+                            });
+        
+                            // Überwache Änderungen im Select2-Feld
+                            $(selectIdLastReceiver).on("change.select2", function() {
+                                isSelect2Empty(selectIdLastReceiver);
+                            });',
+                            true
+                        );
                     }
                     else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {

@@ -298,7 +298,7 @@ class ForumPresenter extends PagePresenter
                             ADMIDIO_URL . FOLDER_MODULES . '/forum.php',
                             array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])
                         ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($forumTopic['fot_title'])),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($forumTopic['fot_title'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')
                 );

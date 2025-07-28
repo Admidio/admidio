@@ -497,7 +497,7 @@
   <string name="SYS_DELETE_FILE">Datei löschen</string>
   <string name="SYS_DELETE_FOLDER">Ordner löschen</string>
   <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>
-  <string name="SYS_DELETE_ENTRY">Willst du den Eintrag #VAR1_BOLD# löschen?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Willst du den Eintrag #VAR1_BOLD# löschen?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</string>
   <string name="SYS_DELETE_MESSAGE">Soll Nachricht #VAR1_BOLD# nun entfernt werden.</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Du kannst die Rolle #VAR1_BOLD# nicht löschen. Es muss mindestens eine Rolle die Einstellung #VAR2_BOLD# besitzen.</string>

@@ -245,10 +245,10 @@ class InventoryImportPresenter extends PagePresenter
                 });
                 var outstr = "";
                 $(available).not(used).each(function(index, value) {
-                    if (value === "Nr.") {
-                    outstr += "<tr><td>" + value + "</td><td></td></tr>";
+                    if (value === "'. $gL10n->get('SYS_ABR_NO') .'") {
+                        outstr += "<tr><td>" + value + "</td><td></td></tr>";
                     } else {
-                    outstr += "<tr><td>" + value + "</td><td><a href=\"' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=field_edit&field_name=" + encodeURIComponent(value) + "&redirect_to_import=true\" class=\"btn btn-primary btn-sm\">' . $gL10n->get('SYS_INVENTORY_ITEMFIELD_CREATE') . '</a></td></tr>";
+                        outstr += "<tr><td>" + value + "</td><td><a href=\"' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=field_edit&field_name=" + encodeURIComponent(value) + "&redirect_to_import=true\" class=\"btn btn-primary btn-sm\">' . $gL10n->get('SYS_INVENTORY_ITEMFIELD_CREATE') . '</a></td></tr>";
                     }
                 });
                 if (outstr == "") {

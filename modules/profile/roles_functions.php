@@ -123,6 +123,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
         if ($gCurrentUser->hasRightViewRole($row['mem_rol_id'])
         || $GLOBALS['gCurrentUserId'] === (int) $user->getValue('usr_id')) {
             $futureMembership = false;
+            $formerMembership = false;
             $showRoleEndDate  = false;
             $deleteMode = 'stop_membership';
             $deleteMessage = 'SYS_MEMBERSHIP_DELETE';
@@ -140,6 +141,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
 
             // check if membership ends in the past
             if (strcmp($member->getValue('mem_end', 'Y-m-d'), DATE_NOW) < 0) {
+                $formerMembership = true;
                 $deleteMode = 'remove_former_membership';
                 $deleteMessage = 'SYS_LINK_MEMBERSHIP_DELETE';
                 $callbackFunction = 'callbackFormerRoles';
@@ -167,11 +169,11 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             }
             if ($member->getValue('mem_leader') == 1) {
                 $membership['leader'] = $gL10n->get('SYS_LEADER');
-            }            
+            }
             // Calculate membership duration
             $membershipDuration = $member->calculateDuration();
             $membership['duration'] = $membershipDuration['formatted'];
-            
+
             if ($showRoleEndDate) {
                 $membership['period'] = $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));
             } elseif ($futureMembership) {
@@ -191,13 +193,21 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 $membership['linkMembershipEdit'] = $linkMembershipEdit;
 
                 // You are not allowed to delete your own administrator membership, other roles could be deleted
-                if (($role->getValue('rol_administrator') == 1 && $GLOBALS['gCurrentUserId'] !== (int) $user->getValue('usr_id'))
-                                || ($role->getValue('rol_administrator') == 0)) {
+                if ((!$formerMembership || $gCurrentUser->isAdministrator())
+                    && ( ($role->getValue('rol_administrator') == 1 && $GLOBALS['gCurrentUserId'] !== (int) $user->getValue('usr_id'))
+                       || ($role->getValue('rol_administrator') == 0))) {
+                    if ($formerMembership) {
+                        $icon = 'bi bi-trash';
+                        $description = $gL10n->get('SYS_DELETE_ENTRY');
+                    } else {
+                        $icon = 'bi bi-box-arrow-right';
+                        $description = $gL10n->get('SYS_CANCEL_MEMBERSHIP');
+                    }
                     $linkMembershipDelete = '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                         data-message="' . $gL10n->get($deleteMessage, array($role->getValue('rol_name', 'database'))) . '"
                         data-href="callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
-                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CANCEL_MEMBERSHIP').'"></i></a>';
+                        <i class="' . $icon . '" data-bs-toggle="tooltip" title="'.$description.'"></i></a>';
                 } else {
                     $linkMembershipDelete = '<a style="padding: 3px;"><i class="bi bi-trash invisible"></i></a>';
                 }

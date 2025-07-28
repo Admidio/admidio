@@ -11,7 +11,7 @@
             <span class="float-end text-end">
                 {if $isAdministratorUsers}
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                    data-message="{$l10n->get('SYS_DELETE_ENTRY', array({$userRelation.relationName}))}" data-href="{$userRelation.urlRelationDelete}"><i
+                    data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array({$userRelation.relationName}))}" data-href="{$userRelation.urlRelationDelete}"><i
                         class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_CANCEL_RELATIONSHIP')}"></i></a>
                 {/if}
                 {if $showRelationsCreateEdit}
