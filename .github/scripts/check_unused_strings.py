@@ -11,19 +11,18 @@ keys = [e.attrib['name'] for e in root.findall('.//string')
         if re.fullmatch(r'[A-Z0-9_]+', e.attrib['name'])]
 
 unused = []
-for k in keys:
-    used = False
-    for dp, _, fs in os.walk('.'):
-        if any(part in excl for part in dp.split(os.sep)):
-            continue
-        for f in fs:
-            if f.endswith(('.php','.js','.html','.tpl')):
-                if k in open(os.path.join(dp, f), 'r', errors='ignore').read():
-                    used = True; break
-        if used: break
-    if not used:
-        unused.append(k)
+for dp, _, fs in os.walk('.'):
+    if any(part in excl for part in dp.split(os.sep)):
+        continue
+    for f in fs:
+        if f.endswith(('.php', '.js', '.html', '.tpl')):
+            file_path = os.path.join(dp, f)
+            file_content = open(file_path, 'r', errors='ignore').read()
+            for k in keys:
+                if k in file_content:
+                    keys.remove(k)
 
+unused = keys
 if unused:
     for k in unused:
         print(f"UNUSED: {k}")
