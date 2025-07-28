@@ -28,10 +28,7 @@ jobs:
       - name: Install lxml
         run: pip install lxml
 
-      - name: Install GitHub CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gh
+# Removed redundant GitHub CLI installation step.
 
       - name: Run sort script
         run: python .github/scripts/sort_en_xml.py
