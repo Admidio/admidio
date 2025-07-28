@@ -51,6 +51,7 @@ jobs:
               --title "chore: sort en.xml alphabetically" \
               --body "Created with GitHub Actions" \
               --label "translation" \
+              --assignee ${{ github.actor }} \
               --reviewer Fasse \
               --base master
           fi
