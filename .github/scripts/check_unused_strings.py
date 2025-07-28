@@ -29,4 +29,3 @@ unused = [k for k in keys if k not in used_keys]
 if unused:
     for k in unused:
         print(f"UNUSED: {k}")
-    exit(1)  # triggers warning via continue-on-error

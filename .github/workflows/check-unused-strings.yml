@@ -17,6 +17,9 @@ permissions:
   contents: read
   pull-requests: write
 
+env:
+  unused_found: false
+
 jobs:
   unused-strings:
     if: ${{ github.repository_owner == 'Admidio' }}
@@ -35,17 +38,19 @@ jobs:
         id: check
         run: |
           python .github/scripts/check_unused_strings.py --exclude .github,dockerscripts,hooks,libs > unused_keys.txt
-
+          if [ -s unused_keys.txt ]; then
+            echo "unused_found=true" >> $GITHUB_ENV
+          else
+            echo "unused_found=false" >> $GITHUB_ENV
+          fi
       - name: Annotate warning if unused
-        if: failure()
-        continue-on-error: true
+        if: env.unused_found
         run: |
-          echo "::warning file=en.xml::Detected unused translation keys. Please review."
-          cat unused_keys.txt
+          CONTENT=$(cat unused_keys.txt | sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g')
+          echo "::warning file=languages/en.xml::Detected unused translation keys:%0A$CONTENT"
 
       - name: Post PR review with unused keys on pull request
-        if: ${{ github.event_name == 'pull_request' && failure() }}
-        continue-on-error: true
+        if: ${{ github.event_name == 'pull_request' && env.unused_found }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -58,8 +63,7 @@ jobs:
             -d "{\"body\": $BODY, \"event\": \"REQUEST_CHANGES\"}"
 
       - name: Echo unused keys on push
-        if: ${{ github.event_name == 'push' && failure() }}
-        continue-on-error: true
+        if: ${{ github.event_name == 'push' && env.unused_found }}
         run: |
           echo "WARNING: Unused translation keys detected:"
           cat unused_keys.txt
