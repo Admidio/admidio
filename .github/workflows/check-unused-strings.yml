@@ -41,6 +41,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "::warning file=en.xml::Detected unused translation keys. Please review."
+          cat unused_keys.txt
 
       - name: Post PR review with unused keys on pull request
         if: ${{ github.event_name == 'pull_request' && failure() }}
