@@ -46,8 +46,9 @@ jobs:
       - name: Annotate warning if unused
         if: env.unused_found
         run: |
-          CONTENT=$(cat unused_keys.txt | sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g')
-          echo "::warning file=languages/en.xml::Detected unused translation keys:%0A$CONTENT"
+          while IFS= read -r key; do
+            echo "::warning file=languages/en.xml::Unused translation key: $key"
+          done < unused_keys.txt
 
       - name: Post PR review with unused keys on pull request
         if: ${{ github.event_name == 'pull_request' && env.unused_found }}
