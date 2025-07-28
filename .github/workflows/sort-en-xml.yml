@@ -28,8 +28,6 @@ jobs:
       - name: Install lxml
         run: pip install lxml
 
-# Removed redundant GitHub CLI installation step.
-
       - name: Run sort script
         run: python .github/scripts/sort_en_xml.py
 
