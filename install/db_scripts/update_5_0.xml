@@ -509,5 +509,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'PLUGINS'), 2, %UUID%, false, 5, true, 'plugins', '/modules/plugins.php', 'puzzle', 'SYS_PLUGIN_MANAGER', 'SYS_PLUGIN_MANAGER_DESC')</step>
     <step id="1710">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_plugins', 'plugins') WHERE men_url LIKE '%/adm_plugins%'</step>
     <step id="1720">UpdateStepsCode::updateStep50InstallOverviewPlugins</step>
+    <step id="1730">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(100) NOT NULL</step>
     <step>stop</step>
 </update>
