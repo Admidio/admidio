@@ -456,7 +456,7 @@ try {
     $calendarPlugin->assignTemplateVariable('dateIdNextMonth', date('mY', mktime(0, 0, 0, $currentMonth + 1, 1, $currentYear)));
     $calendarPlugin->assignTemplateVariable('tableContent', $tableContent);
 
-    if (isset($page)) {
+    if (isset($page) || $getDateId !== '') {
         echo $calendarPlugin->html('plugin.calendar.tpl');
     } else {
         $calendarPlugin->showHtmlPage('plugin.calendar.tpl');

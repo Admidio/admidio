@@ -378,7 +378,7 @@ try {
                     <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID)) . '">
                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
                     $outputButtonDelete = '
-                    <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
+                    <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
                         data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
                 }
@@ -717,7 +717,7 @@ try {
                                             <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID)) . '">
                                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                                             </li>
-                                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
+                                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
                                                 data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                                             </li>');
@@ -736,14 +736,14 @@ try {
                     // Show description only if it is not empty
                     if ($gSettingsManager->getInt('events_clamp_text_lines') > 0) {
                         $page->addHtml('
-                            <div id="event_description_' . $eventUUID . '" class="clamp-text" style="--admidio-clamp-text-lines: ' . $gSettingsManager->getInt('events_clamp_text_lines') . ';">' . 
+                            <div id="event_description_' . $eventUUID . '" class="clamp-text" style="--admidio-clamp-text-lines: ' . $gSettingsManager->getInt('events_clamp_text_lines') . ';">' .
                                 $event->getValue('dat_description') .
                             '</div>
                             <div class="clamp-button">
                                 <a id="event_caret_description_' . $eventUUID . '" onclick="showHideMoreText($(this), [\'' . $gL10n->get('SYS_SHOW_MORE') . '\', \'' . $gL10n->get('SYS_SHOW_LESS') . '\']);" role="button" class="admidio-more-less-button" data-target="event_description_' . $eventUUID . '">
                                     ' . $gL10n->get('SYS_SHOW_MORE') . '
                                 </a>
-                            </div>' . 
+                            </div>' .
                             $attentionDeadline .
                             '</br>'
                         );
@@ -753,7 +753,7 @@ try {
                         );
                     }
                 }
-                            
+
                 if ($outputButtonParticipation !== '' || $outputButtonParticipants !== ''
                     || $outputButtonParticipantsEmail !== '' || $outputButtonParticipantsAssign !== '') {
                     $page->addHtml('<div class="btn-group">' . $outputButtonParticipation . $outputButtonParticipants . $outputButtonParticipantsEmail . $outputButtonParticipantsAssign . '</div>');
@@ -852,7 +852,7 @@ try {
                     case 'description':
                         if ($gSettingsManager->getInt('events_clamp_text_lines') > 0) {
                             $descContent = '
-                                <div id="event_description_' . $eventUUID . '" class="clamp-text" style="--admidio-clamp-text-lines: ' . $gSettingsManager->getInt('events_clamp_text_lines') . ';">' . 
+                                <div id="event_description_' . $eventUUID . '" class="clamp-text" style="--admidio-clamp-text-lines: ' . $gSettingsManager->getInt('events_clamp_text_lines') . ';">' .
                                     $event->getValue('dat_description') .
                                 '</div>
                                 <div class="clamp-button">

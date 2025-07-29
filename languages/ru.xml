@@ -520,7 +520,7 @@
   <string name="SYS_DELETE_FILE">Удалить файл</string>
   <string name="SYS_DELETE_FOLDER">Удалить папку</string>
   <string name="SYS_DELETE_DATA">Данные были удалены.</string>
-  <string name="SYS_DELETE_ENTRY">Вы хотите удалить запись #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Вы хотите удалить запись #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">В этой области нет других категорий. По этой причине категория не может быть удалена.</string>
   <string name="SYS_DELETE_MESSAGE">Следует ли удалить сообщение #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Вы не можете удалить роль #VAR1_BOLD#. Хотя бы для одной роли требуется настройка #VAR2_BOLD#.</string>

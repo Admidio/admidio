@@ -229,7 +229,7 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
             $pageNavClassNext = 'disabled';
         }
 
-        $pageNavigationPrevText = getListElementString($gL10n->get('SYS_BACK'), $pageNavClassPrev, $baseUrl, $queryParamName, ($onPage - 2) * $itemsPerPage);
+        $pageNavigationPrevText = getListElementString($gL10n->get('SYS_PAGE_PREVIOUS'), $pageNavClassPrev, $baseUrl, $queryParamName, ($onPage - 2) * $itemsPerPage);
         $pageNavigationNextText = getListElementString($gL10n->get('SYS_PAGE_NEXT'), $pageNavClassNext, $baseUrl, $queryParamName, $onPage * $itemsPerPage);
 
         $pageNavigationString = $pageNavigationPrevText . $pageNavigationString . $pageNavigationNextText;

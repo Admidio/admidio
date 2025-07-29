@@ -512,7 +512,7 @@
   <string name="SYS_DELETE_FILE">Usuń plik</string>
   <string name="SYS_DELETE_FOLDER">Usuń folder</string>
   <string name="SYS_DELETE_DATA">Dane usunięte.</string>
-  <string name="SYS_DELETE_ENTRY">Czy chcesz usunąć wpis #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_DELETE_ENTRY">Czy chcesz usunąć wpis #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Brak innych kategorii. Nie można usunąć jedynej kategorii.</string>
   <string name="SYS_DELETE_MESSAGE">Czy chcesz usunąć wiadomość #VAR1_BOLD#?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Nie możesz usunąć roli #VAR1_BOLD#. Co najmniej jedna rola wymaga ustawienia #VAR2_BOLD#.</string>

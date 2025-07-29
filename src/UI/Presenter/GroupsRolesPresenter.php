@@ -137,7 +137,7 @@ class GroupsRolesPresenter extends PagePresenter
                 if (!$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['rol_name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['rol_name'])),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                     );
@@ -750,7 +750,7 @@ class GroupsRolesPresenter extends PagePresenter
             if (!$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DELETE_ENTRY', array($row['rol_name'])),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['rol_name'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                 );

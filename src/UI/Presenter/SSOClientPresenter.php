@@ -46,7 +46,7 @@ class SSOClientPresenter extends PagePresenter
 
         $jsInit = '';
         $js = '$("#' . $type . '_tbody").sortable();';
-        
+
         $jsInit .= '
             function createArray_' . $type . '() {
                 var entries = new Array(); ';
@@ -68,7 +68,7 @@ class SSOClientPresenter extends PagePresenter
         $jsInit .= '
             var arr_' . $type . ' = createArray_' . $type . '();
             var fieldNumberIntern_' . $type . '  = 0;
-        
+
             // Function adds a new row for assigning columns to the list
             function addColumn_' . $type . '(ssoField = "", admidioField = "")
             {
@@ -88,7 +88,7 @@ class SSOClientPresenter extends PagePresenter
                         htmlAdmidioValues += "<optgroup label=\"" +  arr_' . $type . '[counter]["cat_name"] + "\">";
                         category =  arr_' . $type . '[counter]["cat_name"];
                     }
-        
+
                     var selected = "";
                     if( arr_' . $type . '[counter]["id"] == admidioField){
                         selected = " selected=\"selected\" ";
@@ -100,7 +100,7 @@ class SSOClientPresenter extends PagePresenter
                 }
                 htmlAdmidioValues += "</select>";
                 newCellAdmidio.innerHTML = htmlAdmidioValues;
-        
+
                 // New column for selecting the mapped name
                 var newCellSAML = newTableRow.insertCell(-1);
                 htmlMappedName = "<input type=\"text\" class=\"form-control sso-field-input\" id=\"' . $type . '_sso" + fieldNumberIntern_' . $type . ' + "\" name=\"' . $type . '_sso[]\" value=\"" + ssoField + "\" size=\"30\" maxlength=\"250\">";
@@ -110,12 +110,12 @@ class SSOClientPresenter extends PagePresenter
                 newCellButtons.style.paddingLeft = "0";
                 newCellButtons.style.paddingRight = "0";
                 htmlMoveButtons = /*"<a class=\"admidio-icon-link admidio-move-row-up\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
-                        "        <i class=\"bi bi-arrow-up-circle-fill\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_UP') . '\"></i></a>" + 
-                        "    <a class=\"admidio-icon-link admidio-move-row-down\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+                        "        <i class=\"bi bi-arrow-up-circle-fill\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_UP') . '\"></i></a>" +
+                        "    <a class=\"admidio-icon-link admidio-move-row-down\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
                         "        <i class=\"bi bi-arrow-down-circle-fill\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_DOWN') . '\"></i></a>" + */
-                        "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+                        "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
                         "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
-                        "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+                        "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
                         "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
                 newCellButtons.innerHTML = htmlMoveButtons;
 
@@ -124,7 +124,7 @@ class SSOClientPresenter extends PagePresenter
             }
             ';
 
-        // Add a row for each configured field / role 
+        // Add a row for each configured field / role
         $js .= '';
         foreach ($config as $ssoField => $admidioField) {
             $js .= '
@@ -152,13 +152,13 @@ class SSOClientPresenter extends PagePresenter
         while ($rowViewRoles = $allRolesStatement->fetch()) {
             // Each role is now added to this array
             $allRolesSet[] = array(
-                $rowViewRoles['rol_id'], // ID 
+                $rowViewRoles['rol_id'], // ID
                 $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
                 $rowViewRoles['cat_name'] // Group
             );
             // Leader has the role ID with negative sign!
             $allRolesSet[] = array(
-                -$rowViewRoles['rol_id'], // ID 
+                -$rowViewRoles['rol_id'], // ID
                 $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ') - ' . $gL10n->get('SYS_LEADER'), // Value
                 $rowViewRoles['cat_name'] // Group
             );
@@ -182,7 +182,7 @@ class SSOClientPresenter extends PagePresenter
             $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_CLIENT_SAML'))));
         }
         $this->setHtmlID('admidio-saml-client-edit');
-        
+
         $roleAccessSet = array();
         if ($this->objectUUID !== '') {
             $client->readDataByUUID($this->objectUUID);
@@ -288,7 +288,7 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('smc_assertion_lifetime') ?? '600',
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SSO_SAML_ASSERTION_LIFETIME_DESC')
         );
-        
+
         $form->addInput(
             'smc_allowed_clock_skew',
             $gL10n->get('SYS_SSO_SAML_ALLOWED_CLOCK_SKEW'),
@@ -345,7 +345,7 @@ class SSOClientPresenter extends PagePresenter
             array('helpTextId' => '')
         );
 
-        
+
         $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
@@ -399,11 +399,11 @@ class SSOClientPresenter extends PagePresenter
                 'helpTextId' => 'SYS_SSO_ROLES_DESC'
             )
         );
-    
-        
+
+
         $form->addSubmitButton(
-            'adm_button_save', 
-            $gL10n->get('SYS_SAVE'), 
+            'adm_button_save',
+            $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3'));
 
 
@@ -416,7 +416,7 @@ class SSOClientPresenter extends PagePresenter
         const metadataUrl = $("#smc_metadata_url").val().trim();
         if (!metadataUrl) { alert("Please enter a metadata URL."); return;}
 
-        // First try to load the metadata directly from the client. If we run into CORS error (loading from a different server 
+        // First try to load the metadata directly from the client. If we run into CORS error (loading from a different server
         // than the one hosting Admidio is often not permitted), we use the admidio server\'s CORS proxy script.
         $.get(metadataUrl)
             .done(function (metadataXml) {
@@ -460,7 +460,7 @@ class SSOClientPresenter extends PagePresenter
 
         const sloElement = xmlDoc.querySelector("SingleLogoutService");
         const sloUrl = sloElement ? sloElement.getAttribute("Location") : "";
-        
+
         // Extract X.509 Certificate
         const x509Element = xmlDoc.querySelector("KeyDescriptor[use=\'signing\'] X509Certificate");
         const x509Cert = x509Element ? x509Element.textContent.trim() : "";
@@ -479,7 +479,7 @@ class SSOClientPresenter extends PagePresenter
             document.getElementById("smc_require_auth_signed").checked = authnRequestsSigned;
             document.getElementById("smc_sign_assertions").checked = wantAssertionsSigned;
         }
-        
+
         // Populate input fields
         if (entityId !="") {
             $("#smc_client_id").val(entityId);
@@ -527,7 +527,7 @@ class SSOClientPresenter extends PagePresenter
             $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_CLIENT_OIDC'))));
         }
         $this->setHtmlID('admidio-oidc-client-edit');
-        
+
         $allRolesSet = $this->getAvailableRoles();
         if ($this->objectUUID !== '') {
             $client->readDataByUUID($this->objectUUID);
@@ -572,22 +572,22 @@ class SSOClientPresenter extends PagePresenter
 
         // TODO: Hide client secret from user -> Only allow changing, but not copying!
         $noClientSecretYet = ($client->isNewRecord() || empty($client->getValue('ocl_client_secret')));
-        $cancelRecreateButton = '<button id="cancel_recreate_client_secret" name="cancel_recreate_client_secret" type="button" class="btn focus-ring btn-secondary" style="padding: 0px 4px; flex-shrink: 0;">' . 
-                '<i class="bi bi-x-circle" data-bs-toggle="tooltip" title=""></i>' . 
-                $gL10n->get('SYS_CANCEL') . 
+        $cancelRecreateButton = '<button id="cancel_recreate_client_secret" name="cancel_recreate_client_secret" type="button" class="btn focus-ring btn-secondary" style="padding: 0px 4px; flex-shrink: 0;">' .
+                '<i class="bi bi-x-circle" data-bs-toggle="tooltip" title=""></i>' .
+                $gL10n->get('SYS_CANCEL') .
             '</button>';
-        $clientSecretContent = '<div style="display: flex; align-items: center; gap: 8px;" id="client_secret_not_shown">' . 
-                '<span style="flex: 1" id="client_passwd_label"><em>' . 
-                    $gL10n->get('SYS_SSO_CLIENT_SECRET_HIDDE') . 
-                    '</em></span>' . 
-                '<button id="recreate_client_secret" name="recreate_client_secret" type="button" class="btn focus-ring btn-secondary" style="padding: 0px 4px; flex-shrink: 0;">' . 
-                    '<i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title=""></i>' . 
-                    $gL10n->get('SYS_SSO_CLIENT_SECRET_RECREATE') . 
-                '</button>' . 
-            '</div>' . 
-            '<div style="display:flex; align-itens: center; gap: 8px;" id="client_secret_shown">' . 
+        $clientSecretContent = '<div style="display: flex; align-items: center; gap: 8px;" id="client_secret_not_shown">' .
+                '<span style="flex: 1" id="client_passwd_label"><em>' .
+                    $gL10n->get('SYS_SSO_CLIENT_SECRET_HIDDE') .
+                    '</em></span>' .
+                '<button id="recreate_client_secret" name="recreate_client_secret" type="button" class="btn focus-ring btn-secondary" style="padding: 0px 4px; flex-shrink: 0;">' .
+                    '<i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title=""></i>' .
+                    $gL10n->get('SYS_SSO_CLIENT_SECRET_RECREATE') .
+                '</button>' .
+            '</div>' .
+            '<div style="display:flex; align-itens: center; gap: 8px;" id="client_secret_shown">' .
             '<input id="new_ocl_client_secret" name="new_ocl_client_secret" class="form-control focus-ring hidden copy-container" type="text" value="" maxlength="250" style="flex: 1" >' .
-                ($noClientSecretYet ? '' : $cancelRecreateButton) . 
+                ($noClientSecretYet ? '' : $cancelRecreateButton) .
             '</div>';
         $this->addJavascript('
             function generateClientSecret(length = 32) {
@@ -633,8 +633,8 @@ class SSOClientPresenter extends PagePresenter
 
 
 
-        // TAB: 
-    
+        // TAB:
+
         $useridFields = [
             ['usr_id', $gL10n->get('SYS_SSO_USERID_ID') . ' - usr_id', $gL10n->get('SYS_SSO_USERID_FIELDS')],
             ['usr_uuid',  $gL10n->get('SYS_SSO_USERID_UUID') . ' - usr_uuid', $gL10n->get('SYS_SSO_USERID_FIELDS')],
@@ -698,7 +698,7 @@ class SSOClientPresenter extends PagePresenter
             array('helpTextId' => '')
         );
 
-        
+
         $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
@@ -752,11 +752,11 @@ class SSOClientPresenter extends PagePresenter
                 'helpTextId' => 'SYS_SSO_ROLES_DESC'
             )
         );
-    
-        
+
+
         $form->addSubmitButton(
-            'adm_button_save', 
-            $gL10n->get('SYS_SAVE'), 
+            'adm_button_save',
+            $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3'));
 
 
@@ -770,7 +770,7 @@ class SSOClientPresenter extends PagePresenter
     }
 
 
-    /** 
+    /**
      * Display a toggle to enable/disable a client (via a json call).
      * @param  $name
      */
@@ -781,15 +781,15 @@ class SSOClientPresenter extends PagePresenter
 
         $clientToggleURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'enable', 'uuid' => $uuid, 'enabled' => !$enabled));
         $actions = '
-        <a href="#" 
-           class="admidio-icon-link toggle-client-status" 
-           data-uuid="' . $uuid . '" 
-           data-enabled="' . ($enabled ? '1' : '0') . '" 
+        <a href="#"
+           class="admidio-icon-link toggle-client-status"
+           data-uuid="' . $uuid . '"
+           data-enabled="' . ($enabled ? '1' : '0') . '"
            title="' . $gL10n->get($enabled ? 'SYS_DISABLE' : 'SYS_ENABLE') . '">
            <i class="bi bi-toggle-' . ($enabled ? 'on' : 'off') . ' fs-2"></i>
         </a>';
         return $actions;
-    } 
+    }
 
     /**
      * Create the list of SAML and OIDC clients to show to the user.
@@ -832,13 +832,13 @@ class SSOClientPresenter extends PagePresenter
 
         $this->addHtml('<p>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN_DESC') . '</p>');
 
-        /* ****************************************************/  
+        /* ****************************************************/
         // SAML 2.0 clients
-        /* ****************************************************/  
+        /* ****************************************************/
         $this->addHtml('<h3 class="admidio-content-subheader">' . $gL10n->get('SYS_SSO_CLIENTS_SAML') . '</h3>');
-    
+
         $table = new \HtmlTable('adm_saml_clients_table', $this, true, false);
-    
+
         $table->addRowHeadingByArray(array(
             $gL10n->get('SYS_ENABLED'),
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
@@ -847,14 +847,14 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_ROLES'),
             ''
         ));
-    
+
         $table->setMessageIfNoRowsFound('SYS_SSO_NO_SAML_CLIENTS_FOUND');
-    
+
         $table->disableDatatablesColumnsSort(array(3, 6));
         $table->setDatatablesColumnsNotHideResponsive(array(6));
         // special settings for the table
-    
-    
+
+
         $SAMLService = new SAMLService($gDb, $gCurrentUser);
         $templateClientNodes = array();
         foreach ($SAMLService->getUUIDs() as $clientUUID) {
@@ -873,10 +873,10 @@ class SSOClientPresenter extends PagePresenter
             // add link to edit SAML client
             $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
                     '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT') . '"></i></a>';
-            
+
             // add link to delete SAML client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                    data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($client->readableName())) . '"
+                    data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($client->readableName())) . '"
                     data-href="callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
                 </a>';
@@ -884,20 +884,20 @@ class SSOClientPresenter extends PagePresenter
 
             $table->addRowByArray($templateClient, 'adm_saml_client_' . $clientUUID, array('nobr' => 'true'));
         }
-    
+
         // add table to the form
         $this->addHtml(html: $table->show());
 
-        
 
 
-        /* ****************************************************/  
+
+        /* ****************************************************/
         // OIDC clients
         /* ****************************************************/
         $this->addHtml('<h3 class="admidio-content-subheader">' . $gL10n->get('SYS_SSO_CLIENTS_OIDC') . '</h3>');
-    
+
         $table = new \HtmlTable('adm_oidc_clients_table', $this, true, false);
-    
+
         $table->addRowHeadingByArray(array(
             $gL10n->get('SYS_ENABLED'),
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
@@ -906,14 +906,14 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_ROLES'),
             ''
         ));
-    
+
         $table->setMessageIfNoRowsFound('SYS_SSO_NO_OIDC_CLIENTS_FOUND');
-    
+
         $table->disableDatatablesColumnsSort(array(3, 6));
         $table->setDatatablesColumnsNotHideResponsive(array(6));
         // special settings for the table
-    
-    
+
+
         $OIDCService = new OIDCService($gDb, $gCurrentUser);
         $templateClientNodes = array();
         foreach ($OIDCService->getUUIDs() as $clientUUID) {
@@ -932,10 +932,10 @@ class SSOClientPresenter extends PagePresenter
             // add link to edit SAML client
             $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
                     '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT') . '"></i></a>';
-            
+
             // add link to delete SAML client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                    data-message="' . $gL10n->get('SYS_DELETE_ENTRY', array($client->readableName())) . '"
+                    data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($client->readableName())) . '"
                     data-href="callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
                 </a>';
@@ -948,28 +948,28 @@ class SSOClientPresenter extends PagePresenter
         $this->addJavascript("
             $('.toggle-client-status').on('click', function (e) {
               e.preventDefault();
-          
+
               var \$link = $(this);
               var \$icon = \$link.find('i');
               var currentlyEnabled = \$link.data('enabled') === 1 || \$link.data('enabled') === '1';
               var newEnabled = currentlyEnabled ? 0 : 1;
-          
+
               $.get('clients.php?mode=enable', {
                 uuid: \$link.data('uuid'),
                 enabled: newEnabled
               })
               .done(function (response) {
                 var data = typeof response === 'string' ? JSON.parse(response) : response;
-          
+
                 if (data.success) {
                   // Toggle icon class
                   \$icon.removeClass('bi-toggle-' + (currentlyEnabled ? 'on' : 'off'))
                        .addClass('bi-toggle-' + (currentlyEnabled ? 'off' : 'on'));
-          
+
                   // Update tooltip title (you might want to localize this)
                   \$link.attr('title', currentlyEnabled ? 'Enable' : 'Disable');
                   \$link.tooltip('dispose').tooltip(); // Refresh tooltip if Bootstrap tooltip is used
-          
+
                   // Update data-enabled attribute
                   \$link.data('enabled', newEnabled);
                 } else {
@@ -981,7 +981,7 @@ class SSOClientPresenter extends PagePresenter
               });
             });
           ", true);
-          
+
         // add table to the form
         $this->addHtml(html: $table->show());
 

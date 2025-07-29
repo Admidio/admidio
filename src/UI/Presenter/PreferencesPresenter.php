@@ -37,11 +37,11 @@ class PreferencesPresenter extends PagePresenter
      * @var array Array with all possible entries for the preferences.
      *            Each entry consists of an array that has the following structure:
      *            array ('key' => 'xzy', 'label' => 'xyz', 'panels' => array('id' => 'xyz', 'title' => 'xyz', 'icon' => 'xyz'))
-     * 
+     *
      *            There are thwo different visualizations of the preferences:
      *              1) a nested tab structure (main tabs created by 'key' and 'label' and sub tabs created by 'panels')
      *              2) a accordion structure when the @media query (max-width: 768px) is active ('key' and 'label' are used for card header
-     *                 and 'panels' for accordions inside the card) 
+     *                 and 'panels' for accordions inside the card)
      */
     protected array $preferenceTabs = array();
     /**
@@ -86,7 +86,7 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
                 ),
             ),
-        
+
             // === 2) Login and Security ===
             array(
                 'key'    => 'login_security',
@@ -123,7 +123,7 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                  'icon'=>'bi-chat-dots-fill',                'subcards'=>false),
                 ),
             ),
-        
+
             // === 5) Contents ===
             array(
                 'key'    => 'content_management',
@@ -827,21 +827,21 @@ class PreferencesPresenter extends PagePresenter
             'inventory_seperator_general_settings',
             $gL10n->get('SYS_COMMON')
         );
-        
+
         $formInventory->addCheckbox(
             'inventory_show_obsolete_select_field_options',
             $gL10n->get('SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS'),
             (bool) $formValues['inventory_show_obsolete_select_field_options'],
             array('helpTextId' => 'SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC')
         );
-        
+
         $formInventory->addCheckbox(
             'inventory_items_disable_lending',
             $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_LENDING'),
             (bool) $formValues['inventory_items_disable_lending'],
             array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC')
         );
-        
+
         $formInventory->addCheckbox(
             'inventory_system_field_names_editable',
             $gL10n->get('SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT'),
@@ -856,7 +856,7 @@ class PreferencesPresenter extends PagePresenter
                 $formValues['inventory_allow_keeper_edit'],
                 array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
             );
-            
+
             // create array of possible fields for keeper edit
             $items = new ItemsData($gDb, $gCurrentOrgId);
             $selectBoxEntries = array();
@@ -867,7 +867,7 @@ class PreferencesPresenter extends PagePresenter
                 }
                 $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
             }
-                
+
             $formInventory->addSelectBox(
                 'inventory_allowed_keeper_edit_fields',
                 $gL10n->get('SYS_INVENTORY_ACCESS_EDIT_FIELDS'),
@@ -926,20 +926,20 @@ class PreferencesPresenter extends PagePresenter
             }
             $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
         }
-               
+
         $formInventory->addSelectBox(
             'inventory_profile_view',
             $gL10n->get('SYS_INVENTORY_PROFILE_VIEW_FIELDS'),
             $selectBoxEntries,
             array('defaultValue' => explode(',', $formValues['inventory_profile_view']), 'helpTextId' => 'SYS_INVENTORY_PROFILE_VIEW_DESC', 'multiselect' => true, 'maximumSelectionNumber' => count($selectBoxEntries))
         );
-        
+
         // export settings
         $formInventory->addSeperator(
             'inventory_seperator_export_settings',
             $gL10n->get('SYS_INVENTORY_EXPORT')
         );
-        
+
         $formInventory->addInput(
             'inventory_export_filename',
             $gL10n->get('SYS_INVENTORY_FILENAME'),
@@ -953,7 +953,7 @@ class PreferencesPresenter extends PagePresenter
             (bool)$formValues['inventory_add_date'],
             array('helpTextId' => 'SYS_INVENTORY_ADD_DATE_DESC')
         );
-        
+
         $formInventory->addSubmitButton(
             'adm_button_save_inventory',
             $gL10n->get('SYS_SAVE'),
@@ -1293,7 +1293,7 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['groups_roles_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_CONFIGURATION_LISTS_DESC')
         );
         $selectBoxEntries = array(
-            '0' => $gL10n->get('SYS_NOBODY'),
+            '0' => $gL10n->get('SYS_ADMINISTRATORS'),
             '1' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_ASSIGN_ROLES')))),
             '2' => preg_replace('/<\/?strong>/', '"', $gL10n->get('SYS_SHOW_FORMER_MEMBERS_RIGHT', array($gL10n->get('SYS_RIGHT_EDIT_USER'))))
         );
@@ -2167,12 +2167,12 @@ class PreferencesPresenter extends PagePresenter
                 $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
             }
         }
-        
+
         $formSSO->addSelectBox(
             'sso_oidc_signing_key',
             $gL10n->get('SYS_SSO_SIGNING_KEY'),
             $keys,
-            array('defaultValue' => $formValues['sso_oidc_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'), 
+            array('defaultValue' => $formValues['sso_oidc_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
                 'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
         );
 
@@ -2185,8 +2185,8 @@ class PreferencesPresenter extends PagePresenter
 
         // Link to OIDC Client administration
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
-        $html = '<a class="btn btn-secondary admidio-messagebox if-oidc-enabled" href="javascript:void(0);" data-buttons="yes-no" 
-            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' . 
+        $html = '<a class="btn btn-secondary admidio-messagebox if-oidc-enabled" href="javascript:void(0);" data-buttons="yes-no"
+            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
             $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
             data-href="window.location.href=\'' . $url . '\'">
             <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';
@@ -2557,14 +2557,14 @@ class PreferencesPresenter extends PagePresenter
                     $("#adm_preferences_accordion .accordion-button").addClass("collapsed");
                     $("#adm_preferences_accordion .accordion-item").removeClass("show");
                     $("#adm_preferences_accordion .accordion-collapse").removeClass("show");
-                    
+
                     // --- Activate the selected Tab and its content
                     $("#adm_tab_' . $this->preferencesPanelToShow . '").addClass("active");
                     $("#adm_tab_' . $this->preferencesPanelToShow . '_content").addClass("active show");
-                    
+
                     // --- For Mobile Accordion: open the desired accordion panel
                     $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show");
-                                        
+
                     // --- Desktop vs. Mobile via jQuery visibility
                     if ($(".d-none.d-md-block").is(":visible")) {
                         // Desktop mode
@@ -2600,11 +2600,11 @@ class PreferencesPresenter extends PagePresenter
                     panelContainer.html("<div class=\"text-danger\">Fehler beim Laden</div>");
                 });
             }
-        
+
             // === 2) Innerhalb eines Panels die Klick-Handler anmelden ===
             function initializePanelInteractions(panelId) {
                 var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
-            
+
                 // Captcha-Refresh
                 panelContainer.off("click", "#adm_captcha_refresh").on("click", "#adm_captcha_refresh", function(event) {
                     event.preventDefault();
@@ -2613,7 +2613,7 @@ class PreferencesPresenter extends PagePresenter
                         captchaImg.attr("src", "' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" + "?" + Math.random());
                     }
                 });
-            
+
                 // Update-Check
                 panelContainer.off("click", "#adm_link_check_update").on("click", "#adm_link_check_update", function(event) {
                     event.preventDefault();
@@ -2623,7 +2623,7 @@ class PreferencesPresenter extends PagePresenter
                         versionInfoContainer.html(htmlVersion);
                     });
                 });
-            
+
                 // Verzeichnis-Schutz prüfen
                 panelContainer.off("click", "#link_directory_protection").on("click", "#link_directory_protection", function(event) {
                     event.preventDefault();
@@ -2634,10 +2634,10 @@ class PreferencesPresenter extends PagePresenter
                         directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
                     });
                 });
-               
+
                 // Module Settings visibility
                 // Universal handling for module enabled toggle within the current panel container
-                
+
                 // define additional ids that should also be considered for visibility toggling
                 var additionalIds = [\'#system_notifications_enabled\'];
                 // Look for any input whose id ends with "_module_enabled"
@@ -2648,7 +2648,7 @@ class PreferencesPresenter extends PagePresenter
                     // Get all row elements inside the form, excluding the row containing the module enabled field
                     var formElementGroups = panelContainer.find("form div.row")
                         .not(moduleEnabledField.closest("div.row"));
-                    
+
                     // Function to update visibility based on the fields type and state
                     var updateVisibility = function(initialCall) {
                         var isEnabled;
@@ -2657,7 +2657,7 @@ class PreferencesPresenter extends PagePresenter
                         } else {
                             isEnabled = moduleEnabledField.val() != 0;
                         }
-                        
+
                         if (initialCall === true) {
                             if (isEnabled) {
                                 formElementGroups.show();
@@ -2672,15 +2672,15 @@ class PreferencesPresenter extends PagePresenter
                             }
                         }
                     };
-                    
+
                     // Set initial state without animation
                     updateVisibility(true);
-                    
+
                     // Update visibility on change
                     moduleEnabledField.on("change", updateVisibility);
                 }
             }
-        
+
             // === 3) Hooks für Desktop-Tabs ===
             $(document).on("shown.bs.tab", "ul#adm_preferences_tabs button.nav-link", function(e) {
                 var target = e.target.getAttribute("data-bs-target");
@@ -2701,7 +2701,7 @@ class PreferencesPresenter extends PagePresenter
                     loadPreferencesPanel(match[1]);
                 }
             });
-        
+
             // === 4) Hooks für Mobile-Accordion ===
             $(document).on("shown.bs.collapse", "#adm_preferences_accordion .accordion-collapse", function() {
                 var panelId = this.id.replace(/^collapse_/, "");
@@ -2712,11 +2712,11 @@ class PreferencesPresenter extends PagePresenter
                 var panelId = this.id.replace(/^collapse_/, "");
                 loadPreferencesPanel(panelId);
             });
-        
+
             // === 5) Formular-Submit per AJAX ===
             $(document).on("submit", "form[id^=\"adm_preferences_form_\"]", formSubmit);
       ', true);
-      
+
 
         ChangelogService::displayHistoryButton($this, 'preferences', 'preferences,texts');
 

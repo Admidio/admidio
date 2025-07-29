@@ -157,76 +157,78 @@ class InventoryPresenter extends PagePresenter
         $printBaseUrl  = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'print_preview'));
         
         $this->addJavascript('
-            $(document).ready(function(){
-                // only submit non-empty filter values
-                $("#items_filter_category, #items_filter_keeper, #items_filter").on("change", function(){
-                    var form = $("#adm_navbar_filter_form");
+            // only submit non-empty filter values
+            $("#items_filter_category, #items_filter_keeper, #items_filter").on("change", function(){
+                var form = $("#adm_navbar_filter_form");
 
-                    // Text-Filter
-                    var textFilterInput = $("#items_filter_string");
-                    if (textFilterInput.val() === "") {
-                        textFilterInput.removeAttr("name");
-                    } else {
-                        textFilterInput.attr("name", "items_filter_string");
-                    }
+                // Text-Filter
+                var textFilterInput = $("#items_filter_string");
+                if (textFilterInput.val() === "") {
+                    textFilterInput.removeAttr("name");
+                } else {
+                    textFilterInput.attr("name", "items_filter_string");
+                }
 
-                    // Category
-                    var categorySelect = $("#items_filter_category");
-                    if (categorySelect.val() === "") {
-                        categorySelect.removeAttr("name");
-                    } else {
-                        categorySelect.attr("name", "items_filter_category");
-                    }
+                // Category
+                var categorySelect = $("#items_filter_category");
+                if (categorySelect.val() === "") {
+                    categorySelect.removeAttr("name");
+                } else {
+                    categorySelect.attr("name", "items_filter_category");
+                }
 
-                    // Keeper
-                    var keeperSelect = $("#items_filter_keeper");
-                    if (keeperSelect.val() === "") {
-                        keeperSelect.removeAttr("name");
-                    } else {
-                        keeperSelect.attr("name", "items_filter_keeper");
-                    }
+                // Keeper
+                var keeperSelect = $("#items_filter_keeper");
+                if (keeperSelect.val() === "") {
+                    keeperSelect.removeAttr("name");
+                } else {
+                    keeperSelect.attr("name", "items_filter_keeper");
+                }
 
-                    // items filter
-                    var itemsSelect = $("#items_filter");
-                    if (itemsSelect.val() === "") {
-                        itemsSelect.removeAttr("name");
-                    } else {
-                        itemsSelect.attr("name", "items_filter");
-                    }
+                // items filter
+                var itemsSelect = $("#items_filter");
+                if (itemsSelect.val() === "") {
+                    itemsSelect.removeAttr("name");
+                } else {
+                    itemsSelect.attr("name", "items_filter");
+                }
 
-                    form.submit();
-                });
+                form.submit();
+            });
 
+            var table = $("#adm_inventory_table");
+
+            table.one("init.dt", function() {
                 // fill the DataTable filter string with the current search value
-                var table = $("#adm_inventory_table").DataTable();            
+                var tableApi = table.DataTable();
                 var initFilter = "' . $initialFilter . '";
                 if (initFilter !== "") {
-                    table.search(initFilter).draw();
+                    tableApi.search(initFilter).draw();
                 }
             
                 // set the filter string in the form when the DataTable is searched
                 table.on("search.dt", function(){
-                var textFilter = table.search() || "";
+                var textFilter = tableApi.search() || "";
                 $("#adm_navbar_filter_form")
                     .find("input[name=\'items_filter_string\']")
                     .val(textFilter);
                 });
+            });
+        
+            // create the print view link with the current filter values
+            $("#menu_item_lists_print_view").off("click").on("click", function(e){
+                e.preventDefault();
+                var textFilter     = $("#items_filter_string").val() || "";
+                var category     = $("#items_filter_category").val()   || "";
+                var keeper  = $("#items_filter_keeper").val()     || "";
+                var filterItems = $("#items_filter").val()     || "";
+                var url = "' . $printBaseUrl . '"
+                        + "&items_filter_string="   + encodeURIComponent(textFilter)
+                        + "&items_filter_category=" + encodeURIComponent(category)
+                        + "&items_filter_keeper="   + encodeURIComponent(keeper)
+                        + "&items_filter="        + encodeURIComponent(filterItems);
             
-                // create the print view link with the current filter values
-                $("#menu_item_lists_print_view").off("click").on("click", function(e){
-                    e.preventDefault();
-                    var textFilter     = $("#items_filter_string").val() || "";
-                    var category     = $("#items_filter_category").val()   || "";
-                    var keeper  = $("#items_filter_keeper").val()     || "";
-                    var filterItems = $("#items_filter").val()     || "";
-                    var url = "' . $printBaseUrl . '"
-                            + "&items_filter_string="   + encodeURIComponent(textFilter)
-                            + "&items_filter_category=" + encodeURIComponent(category)
-                            + "&items_filter_keeper="   + encodeURIComponent(keeper)
-                            + "&items_filter="        + encodeURIComponent(filterItems);
-                
-                    window.open(url, "_blank");
-                });
+                window.open(url, "_blank");
             });',
             true
         );
@@ -401,33 +403,31 @@ class InventoryPresenter extends PagePresenter
 
         // add javascript for the export dropdown menu to change the URL of the export link
         $this->addJavascript('
-            $(document).ready(function(){
-                var buttons = {
-                    xlsx:    "print_xlsx",
-                    ods:     "print_ods",
-                    csv_ms:  "print_csv-ms",
-                    csv:     "print_csv-oo",
-                    pdf:     "print_pdf",
-                    pdfl:    "print_pdfl"
-                };
+            var buttons = {
+                xlsx:    "print_xlsx",
+                ods:     "print_ods",
+                csv_ms:  "print_csv-ms",
+                csv:     "print_csv-oo",
+                pdf:     "print_pdf",
+                pdfl:    "print_pdfl"
+            };
 
-                $.each(buttons, function(suffix, modeValue){
-                    var selector = "#menu_item_lists_" + suffix;
-                    $(selector).on("click", function(e){
-                        var textFilter = $("#items_filter_string").val()            || "";
-                        var category   = $("#items_filter_category").val()         || "";
-                        var keeper     = $("#items_filter_keeper").val()           || "";
-                        var filterItems = $("#items_filter").val()     || "";
-                        var base = this.href.split("?")[0];
-                        var qs = [
-                        "items_filter_string="   + encodeURIComponent(textFilter),
-                        "items_filter_category=" + encodeURIComponent(category),
-                        "items_filter_keeper="   + encodeURIComponent(keeper),
-                        "items_filter="          + encodeURIComponent(filterItems),
-                        "mode="                  + modeValue
-                        ].join("&");
-                        this.href = base + "?" + qs;
-                    });
+            $.each(buttons, function(suffix, modeValue){
+                var selector = "#menu_item_lists_" + suffix;
+                $(selector).on("click", function(e){
+                    var textFilter = $("#items_filter_string").val()            || "";
+                    var category   = $("#items_filter_category").val()         || "";
+                    var keeper     = $("#items_filter_keeper").val()           || "";
+                    var filterItems = $("#items_filter").val()     || "";
+                    var base = this.href.split("?")[0];
+                    var qs = [
+                    "items_filter_string="   + encodeURIComponent(textFilter),
+                    "items_filter_category=" + encodeURIComponent(category),
+                    "items_filter_keeper="   + encodeURIComponent(keeper),
+                    "items_filter="          + encodeURIComponent(filterItems),
+                    "mode="                  + modeValue
+                    ].join("&");
+                    this.href = base + "?" + qs;
                 });
             });',
             true
@@ -451,154 +451,183 @@ class InventoryPresenter extends PagePresenter
 
             // initialize and set the parameter for DataTables
             $dataTables = new DataTables($this, 'adm_inventory_table');
-            if ($this->getFilterItems == 2) {
                 // add the checkbox for selecting items and action buttons
                 $this->addJavascript('
-                    $(document).ready(function() {
-						var $table = $("#adm_inventory_table");
-						
-						$table.one("init.dt", function() {
-							var tableApi = $table.DataTable();
+                    var table = $("#adm_inventory_table");
 
-							// base URLs
-							var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
-							var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg")) . '";
+                    table.one("init.dt", function() {
+                        var tableApi = table.DataTable();
+                        var initialPageLength = tableApi.page.len();
 
-							// cache jQuery objects
-							var $editButton    = $("#edit-selected").css("display","block");
-							var $deleteButon    = $("#delete-selected").css("display","block");
-							var $headChk        = $table.find("thead input[type=checkbox]");
-							var $rowChks        = function(){ return $table.find("tbody input[type=checkbox]"); };
-							var $actions        = $("#adm_inventory_table_select_actions");
+                        // base URLs
+                        var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
+                        var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg")) . '";
 
-                            // master list of selected IDs
-                            var selectedIds = [];
+                        // cache jQuery objects
+                        var editButton = $("#edit-selected");
+                        var deleteButon = $("#delete-selected");
+                        var headChk = table.find("thead input[type=checkbox]");
+                        var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
+                        var actions = $("#adm_inventory_table_select_actions");
 
-                            function anySelected() {
-                                return selectedIds.length > 0;
+                        // master list of selected IDs
+                        var selectedIds = [];
+
+                        function anySelected() {
+                            return selectedIds.length > 0;
+                        }
+
+                        function refreshActions() {
+                            editButton.prop("disabled", !anySelected());
+                            deleteButon.prop("disabled", !anySelected());
+                        }
+
+                        function updateHeaderState() {
+                            var total = rowChks().length;
+                            var checked = selectedIds.length;
+                            if (checked === 0) {
+                                headChk.prop({ checked: false, indeterminate: false });
+                            } else if (checked === total) {
+                                headChk.prop({ checked: true, indeterminate: false });
+                            } else {
+                                headChk.prop({ checked: false, indeterminate: true });
                             }
+                        }
 
-                            function refreshActions() {
-                                $editButton.prop("disabled", !anySelected());
-                                $deleteButon.prop("disabled", !anySelected());
-                            }
+                        // header-checkbox → select/unselect *all* rows
+                        headChk.on("change", function() {
+                            var checkAll = this.checked;
 
-                            function updateHeaderState() {
-                                var total   = $rowChks().length;
-                                var checked = $rowChks().filter(":checked").length;
-                                if (checked === 0) {
-                                    $headChk.prop({ checked: false, indeterminate: false });
-                                }
-                                else if (checked === total) {
-                                    $headChk.prop({ checked: true,  indeterminate: false });
-                                }
-                                else {
-                                    $headChk.prop({ checked: false, indeterminate: true });
-                                }
-                            }
+                            if (checkAll) {
+                                // register a one-time draw event to collect all IDs
+                                tableApi.one("draw.dt", function() {
+                                    // clear the selectedIds array
+                                    selectedIds = [];
 
-                            // header-checkbox → select/unselect *all* rows
-                            $headChk.on("change", function(){
-                                var checkAll = this.checked;
-                                selectedIds = [];
-
-                                if (checkAll) {
-                                    // grab every row (even on other pages)
-                                    tableApi.rows().every(function(){
-                                        if ($(this.node()).is(":visible")){
+                                    // grab every row
+                                    tableApi.rows().every(function() {
+                                        if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
                                             selectedIds.push(this.node().id.replace(/^adm_inventory_item_/, ""));
+                                            $(this.node()).find("input[type=checkbox]").prop("checked", true);
                                         }
                                     });
-                                }
 
-                                // toggel checked state of all row checkboxes
-                                $rowChks().prop("checked", checkAll);
-
-                                updateHeaderState();
-                                refreshActions();
-                            });
-
-                            // individual row-checkbox → toggle just that ID
-                            $table.on("change", "tbody input[type=checkbox]", function(){
-                                var id  = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
-                                var idx = selectedIds.indexOf(id);
-                                if (this.checked && idx === -1) {
-                                    selectedIds.push(id);
-                                }
-                                else if (!this.checked && idx !== -1) {
-                                    selectedIds.splice(idx,1);
-                                }
-
-                                updateHeaderState();
-                                refreshActions();
-                            });
-
-                            // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
-                            $actions.off("click", "#delete-selected").on("click", "#delete-selected", function(){
-                                // build uuids[] querystring
-                                var qs = selectedIds.map(function(id){
-                                    return "item_uuids[]=" + encodeURIComponent(id);
-                                }).join("&");
-
-                                // full URL to your explain_msg endpoint
-                                var popupUrl = explainDeleteUrlBase + "&" + qs;
-
-                                // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
-                                $("<a>", {
-                                    href: "javascript:void(0);",
-                                    class: "admidio-icon-link openPopup",
-                                    "data-href": popupUrl
-                                }).appendTo("body")
-                                .click()    // trigger the built-in openPopup handler
-                                .remove();
-                                
-                                // when the popup closes, unselect all items
-                                $(document).one("hidden.bs.modal", function() {
-                                    selectedIds = [];
-                                    $headChk.prop({ checked: false, indeterminate: false });
-                                    $rowChks().prop("checked", false);
-                                    
-                                    // initialize button states
                                     updateHeaderState();
                                     refreshActions();
                                 });
-                            });
-                            
-                            // bulk-edit button → fire Admidio’s openPopup against item_edit URL
-                            $actions.off("click", "#edit-selected").on("click", "#edit-selected", function(){
-                                // build uuids[] querystring
-                                var qs = selectedIds.map(function(id){
-                                    return "item_uuids[]=" + encodeURIComponent(id);
-                                }).join("&");
 
-                                // full URL to the edit endpoint
-                                var editUrl = editUrlBase + "&" + qs;
+                                // update the initial page length and set it to -1 (all rows)
+                                initialPageLength = tableApi.page.len();
+                                tableApi.page.len(-1).draw();
+                            } else {
+                                // set the checked state of all selected rows to false
+                                selectedIds.forEach(function(id) {
+                                    var row = table.find("#adm_inventory_item_" + id);
+                                    if (row.length > 0) {
+                                        row.find("input[type=checkbox]").prop("checked", false);
+                                    }
+                                });
 
-                                // open the editUrl directly in the current window
-                                window.location.href = editUrl;
-                            });
+                                // clear the selectedIds array
+                                selectedIds = [];
 
-                            // initialize button states
+                                updateHeaderState();
+                                refreshActions();
+                                
+                                // reset the page length to the initial value
+                                tableApi.page.len(initialPageLength).draw();
+                            }
+                        });
+
+                        // individual row-checkbox → toggle just that ID
+                        table.on("change", "tbody input[type=checkbox]", function() {
+                            var id = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
+                            var idx = selectedIds.indexOf(id);
+                            if (this.checked && idx === -1) {
+                                selectedIds.push(id);
+                            } else if (!this.checked && idx !== -1) {
+                                selectedIds.splice(idx, 1);
+                            }
+
+                            updateHeaderState();
                             refreshActions();
                         });
-                    });'
-                    , true
+
+                        // when the order changes, recheck selected ids
+                        tableApi.on("draw.dt", function() {
+                            //recheck selected ids
+                            selectedIds.forEach(function(id) {
+                                var row = table.find("#adm_inventory_item_" + id);
+                                if (row.length > 0) {
+                                    row.find("input[type=checkbox]").prop("checked", true);
+                                }
+                            });
+
+                            updateHeaderState();
+                            refreshActions();
+                        });
+
+                        // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
+                        actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
+                            // build uuids[] querystring
+                            var qs = selectedIds.map(function(id) {
+                                return "item_uuids[]=" + encodeURIComponent(id);
+                            }).join("&");
+
+                            // full URL to your explain_msg endpoint
+                            var popupUrl = explainDeleteUrlBase + "&" + qs;
+
+                            // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
+                            $("<a>", {
+                                href: "javascript:void(0);",
+                                class: "admidio-icon-link openPopup",
+                                "data-href": popupUrl
+                            }).appendTo("body")
+                            .click()    // trigger the built-in openPopup handler
+                            .remove();
+
+                            // when the popup closes, unselect all items
+                            $(document).one("hidden.bs.modal", function() {
+                                selectedIds = [];
+                                headChk.prop({ checked: false, indeterminate: false });
+                                rowChks().prop("checked", false);
+                                
+                                // initialize button states
+                                updateHeaderState();
+                                refreshActions();
+
+                                // redraw the table to reset the page length
+                                tableApi.page.len(initialPageLength).draw();
+                            });
+                        });
+
+                        // bulk-edit button → fire Admidio’s openPopup against item_edit URL
+                        actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
+                            // build uuids[] querystring
+                            var qs = selectedIds.map(function(id) {
+                                return "item_uuids[]=" + encodeURIComponent(id);
+                            }).join("&");
+
+                            // full URL to the edit endpoint
+                            var editUrl = editUrlBase + "&" + qs;
+
+                            // open the editUrl directly in the current window
+                            window.location.href = editUrl;
+                            
+                            // initialize button states
+                            updateHeaderState();
+                            refreshActions();
+                        });
+
+                        // initialize button states
+                        refreshActions();
+                    });',
+                    true
                 );
 
-                $dataTables->disableColumnsSort(array(1, count($templateData['headers'])));
-                $dataTables->setColumnsNotHideResponsive(array(1, count($templateData['headers'])));
-                $dataTables->setRowsPerPage(-1); // show all items
-            }
-            else {
-                $this->addJavascript('
-                    // button add style="display: none;"
-                    $("#delete-selected").css("display", "none");
-                ', false);
-
-                $dataTables->disableColumnsSort(array(count($templateData['headers'])));
-                $dataTables->setColumnsNotHideResponsive(array(count($templateData['headers'])));
-                $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
-            }
+            $dataTables->disableColumnsSort(array(1, count($templateData['headers'])));
+            $dataTables->setColumnsNotHideResponsive(array(1, count($templateData['headers'])));
+            $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
             $dataTables->createJavascript(count($templateData['rows']), count($templateData['headers']));
             $dataTables->setColumnAlignByArray($templateData['column_align']);
         }
@@ -679,8 +708,8 @@ class InventoryPresenter extends PagePresenter
         );
 
         // Set default alignment and headers for the first column (abbreviation)
-        $columnAlign[] = ($this->getFilterItems === 2) ? 'center' : 'end';
-        $headers     =  ($this->getFilterItems === 2) ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>') : array();
+        $columnAlign[] = 'center';
+        $headers =  array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>');
         $exportHeaders = array();
         $columnNumber = 1;
         //array with the internal field names of the lend fields
@@ -697,9 +726,7 @@ class InventoryPresenter extends PagePresenter
 
             // For the first column, add specific header configurations for export modes
             if ($columnNumber === 1) {
-                if ($this->getFilterItems === 2) {
-                    $columnAlign[] = 'end';
-                }
+                $columnAlign[] = 'end';
                 
                 if (in_array($mode, ['csv', 'ods', 'xlsx'])) {
                     $exportHeaders[$gL10n->get('SYS_ABR_NO')] = 'string';
@@ -774,9 +801,7 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 if ($columnNumber === 1) {
-                    if ($this->getFilterItems === 2) {
-                        $rowValues['data'][] = '<input type="checkbox"/>';
-                    }
+                    $rowValues['data'][] = '<input type="checkbox"/>';
                     $rowValues['data'][] = $listRowNumber;
                 }
 

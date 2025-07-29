@@ -382,7 +382,8 @@ class FormPresenter
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type' => 'checkbox',
             'id' => $id,
-            'label' => $label
+            'label' => $label,
+            'toggleable' => false
         ), $options));
         $attributes = array();
 
@@ -702,7 +703,8 @@ class FormPresenter
             'maxNumber' => null,
             'step' => null,
             'passwordStrength' => false,
-            'passwordUserData' => array()
+            'passwordUserData' => array(),
+            'toggleable' => false
         ), $options));
 
         $attributes['placeholder'] = $optionsAll['placeholder'];
@@ -913,7 +915,8 @@ class FormPresenter
             'id' => $id,
             'label' => $label,
             'maxLength' => 0,
-            'value' => $value
+            'value' => $value,
+            'toggleable' => false
         ), $options));
         $attributes = array();
 
@@ -967,7 +970,7 @@ class FormPresenter
 
         $this->elements[$id] = $optionsAll;
     }
-    
+
     /**
      * Add a new option editor field to the form.
      * This field allows the user to add multiple options with a value and an obsolete flag.
@@ -1046,7 +1049,7 @@ class FormPresenter
                     }
                 });
                 const optionId = maxId + 1;
-                var deleteMsg = \'' . $gL10n->get('SYS_DELETE_ENTRY', array('ENTRY_VAL')) . '\';
+                var deleteMsg = \'' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array('ENTRY_VAL')) . '\';
                 newRow.innerHTML = `
                     <td><input class="form-control focus-ring" type="text" name="${dataId}[${optionId}][value]" required="required"></td>
                     <td class="align-middle" style="display: none;">
@@ -1172,7 +1175,7 @@ class FormPresenter
         );
         $this->elements[$id] = $optionsAll;
     }
-    
+
     /**
      * Add a new radio button with a label to the form. The radio button could have different status
      * which could be defined with an array.
@@ -1207,7 +1210,8 @@ class FormPresenter
             'label' => $label,
             'defaultValue' => '',
             'showNoValueButton' => false,
-            'values' => $values
+            'values' => $values,
+            'toggleable' => false
         ), $options));
         $attributes = array();
 
@@ -1294,7 +1298,8 @@ class FormPresenter
             'search' => false,
             'placeholder' => '',
             'maximumSelectionNumber' => 0,
-            'valueAttributes' => ''
+            'valueAttributes' => '',
+            'toggleable' => false
         ), $options));
         $attributes = array('name' => $id);
 
@@ -1428,7 +1433,7 @@ class FormPresenter
                             }
                         }
                     });
-                    
+
                     // if the user selects an entry and the empty entry is selected then remove the empty entry
                     $("#' . $id . '").on("select2:select", function(e) {
                         var $sel = $(this);
@@ -1996,9 +2001,10 @@ class FormPresenter
      * @return array Returns an array with all valid fields and their values of this form
      * @throws Exception
      */
-    public function validate(array $fieldValues): array
+    public function validate(array $fieldValues, bool $editSelection = false): array
     {
         $validFieldValues = array();
+        $selectedFields = array();
 
         if (isset($fieldValues['adm_csrf_token'])) {
             // check the CSRF token of the form against the session token
@@ -2011,6 +2017,14 @@ class FormPresenter
         }
 
         foreach ($fieldValues as $key => $value) {
+            // remove all fieldValues that have the prefix toggle_ (used for toggling field usage when editing a selection of fields)
+            if ($editSelection && strpos($key, 'toggle_') === 0) {
+                // add the field to the selected fields array
+                $selectedFields[] = substr($key, 7);
+                unset($fieldValues[$key]);
+                continue;
+            }
+
             // security check if the form payload includes unexpected fields
             if (!array_key_exists($key, $this->elements)) {
                 throw new Exception('Invalid payload of the form!');
@@ -2018,6 +2032,11 @@ class FormPresenter
         }
 
         foreach ($this->elements as $element) {
+            if(!(($editSelection && in_array($element['id'], $selectedFields)) || !$editSelection)) {
+                // if the field is not selected in edit selection mode or edit selection is not active, continue with validation
+                continue;
+            }
+
             // check if element is required and given value in array $fieldValues is empty
             if (isset($element['property']) && $element['property'] === $this::FIELD_REQUIRED) {
                 if (isset($fieldValues[$element['id']])) {
@@ -2031,6 +2050,7 @@ class FormPresenter
                         throw new Exception('SYS_FIELD_EMPTY', array($element['label']));
                     }
                 } else {
+                    // if field is required and no value is set then throw an exception
                     throw new Exception('SYS_FIELD_EMPTY', array($element['label']));
                 }
             } elseif (isset($element['property']) && $element['property'] === $this::FIELD_DISABLED) {
