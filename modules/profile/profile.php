@@ -299,7 +299,7 @@ try {
                             $value = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0)" data-buttons="yes-no"
                                 data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '"
                                 data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">' .
-                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('ORG_SEND_NEW_PASSWORD') . '</a>';
+                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('ORG_SEND_LOGIN_DATA') . '</a>';
                         } else {
                             // if user has no email or send email is disabled then administrator could set a new password       
                             $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .

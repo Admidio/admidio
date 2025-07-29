@@ -2495,11 +2495,11 @@ class PreferencesPresenter extends PagePresenter
         $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_REFUSED', 'txt_org_id' => $gCurrentOrgId));
         $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrgId));
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_LOGIN_DATA', 'txt_org_id' => $gCurrentOrgId));
         $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
         $formSystemNotifications->addMultilineTextInput(
-            'SYSMAIL_NEW_PASSWORD',
-            $gL10n->get('ORG_SEND_NEW_PASSWORD'),
+            'SYSMAIL_LOGIN_DATA',
+            $gL10n->get('ORG_SEND_LOGIN_DATA'),
             $text->getValue('txt_text'),
             7,
             array('helpTextId' => $htmlDesc)
