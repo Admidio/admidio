@@ -651,7 +651,10 @@ abstract class PluginAbstract implements PluginInterface
         // install the plugin
         $componentUpdateHandle = new ComponentUpdate($gDb);
         $componentUpdateHandle->readDataByColumns(array('com_type' => 'PLUGIN', 'com_name' => self::getName(), 'com_name_intern' => basename(self::$pluginPath)));
-        $componentUpdateHandle->updatePlugin(self::$metadata['version']);
+        // define the update class name for the plugin
+        // if the class does not exist, it will be ignored when performing updatePlugin()
+        $updateStepCodeNamespace = 'Plugins\\' . basename(self::$pluginPath) . '\\classes\\Service\\';
+        $componentUpdateHandle->updatePlugin(self::$metadata['version'], $updateStepCodeNamespace);
 
         // set the new component id of the plugin
         self::$pluginComId = $componentUpdateHandle->getValue('com_id');
@@ -766,12 +769,24 @@ abstract class PluginAbstract implements PluginInterface
         }
 
         // add new plugin config values to the database
-        $gSettingsManager->setMulti(self::getPluginConfigValues(), false);
+        // insert default plugin config values into the database
+        $configValues = self::getPluginConfigValues();
+        foreach ($configValues as $key => $value) {
+            if (is_array($value)) {
+                $gSettingsManager->set($key, implode(',', $value), false);
+                $gSettingsManager->set($key . '_keys', implode(',', array_keys($value)), false);
+            } else {
+                $gSettingsManager->set($key, $value, false);
+            }
+        }
 
         // update the plugin 
         $componentUpdateHandle = new ComponentUpdate($gDb);
         $componentUpdateHandle->readDataByColumns(array('com_name' => self::getName(), 'com_name_intern' => basename(self::$pluginPath)));
-        $componentUpdateHandle->updatePlugin(self::$metadata['version']);
+        // define the update class namespace for the plugin
+        // if the update class does not exist, it will be ignored when performing updatePlugin()
+        $updateStepCodeNamespace = 'Plugins\\' . basename(self::$pluginPath) . '\\classes\\Service\\';
+        $componentUpdateHandle->updatePlugin(self::$metadata['version'], $updateStepCodeNamespace);
 
         // set the installed version of the plugin
         self::$version = self::$metadata['version'];

@@ -33,7 +33,7 @@ use UnexpectedValueException;
 class ComponentUpdate extends Component
 {
     public const UPDATE_STEP_STOP = 'stop';
-
+    private static $database = null;
     /**
      * Constructor that will create an object for component updating.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -42,8 +42,8 @@ class ComponentUpdate extends Component
     public function __construct(Database $database)
     {
         parent::__construct($database);
-
-        UpdateStepsCode::setDatabase($database);
+        
+        self::$database = $database;
     }
 
     /**
@@ -142,12 +142,22 @@ class ComponentUpdate extends Component
      * Get method name and execute this method
      * @param string $updateStepContent
      */
-    private static function executeUpdateMethod(string $updateStepContent)
+    private static function executeUpdateMethod(string $updateStepContent, string $namespace)
     {
         // get the method name (remove "UpdateStepsCode::")
+        $className = substr($updateStepContent, 0, strpos($updateStepContent, '::'));
         $methodName = substr($updateStepContent, strrpos($updateStepContent, '::') + 2);
+
+        // add namespace to class name
+        $className = $namespace . $className;
+
+        // check if the class exists and the method is defined in this class
+        if (!class_exists($className) || !method_exists($className, $methodName)) {
+            throw new Exception('Update class ' . $className . ' not found!');
+        }
         // now call the method
-        UpdateStepsCode::{$methodName}();
+        $className::setDatabase(self::$database);
+        $className::{$methodName}();
     }
 
     /**
@@ -175,7 +185,7 @@ class ComponentUpdate extends Component
      * @param string $version A version string of the version corresponding to the $xmlNode
      * @throws Exception
      */
-    private function executeStep(SimpleXMLElement $xmlNode, string $version = '')
+    private function executeStep(SimpleXMLElement $xmlNode, string $version = '', $namespace = 'Admidio\\InstallationUpdate\\Service\\')
     {
         global $gLogger;
 
@@ -195,7 +205,7 @@ class ComponentUpdate extends Component
             // then call this function and don't execute a SQL statement
             if (str_starts_with($updateStepContent, 'UpdateStepsCode::')) {
                 try {
-                    self::executeUpdateMethod($updateStepContent);
+                    self::executeUpdateMethod($updateStepContent, $namespace);
                 } catch (Throwable $e) {
                     throw new Exception('
                         <div style="font-family: monospace;">
@@ -324,7 +334,7 @@ class ComponentUpdate extends Component
      * @param string $targetVersion The target version to update.
      * @throws Exception
      */
-    public function updatePlugin(string $targetVersion)
+    public function updatePlugin(string $targetVersion, string $namespace)
     {
         global $gLogger;
 
@@ -375,7 +385,10 @@ class ComponentUpdate extends Component
                             break;
                         }
                         if ((int)$updateStep['id'] > (int)$this->getValue('com_update_step')) {
-                            $this->executeStep($updateStep, $mainVersion . '.' . $minorVersion . '.0');
+                            if ($namespace === '') {
+                                $namespace = 'Admidio\\InstallationUpdate\\Service\\';
+                            }
+                            $this->executeStep($updateStep, $mainVersion . '.' . $minorVersion . '.0', $namespace);
                         } else {
                             $gLogger->info('UPDATE: Skip update step Nr: ' . (int)$updateStep['id']);
                         }
