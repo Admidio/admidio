@@ -98,7 +98,7 @@ class Text extends Entity
             'SYSMAIL_REGISTRATION_NEW' => 'SYS_NOTIFICATION_NEW_REGISTRATION',
             'SYSMAIL_REGISTRATION_APPROVED' => 'SYS_NOTIFICATION_REGISTRATION_APPROVAL',
             'SYSMAIL_REGISTRATION_REFUSED' => 'ORG_REFUSE_REGISTRATION',
-            'SYSMAIL_LOGIN_DATA' => 'ORG_SEND_LOGIN_DATA',
+            'SYSMAIL_LOGIN_INFORMATION' => 'SYS_SEND_LOGIN_INFORMATION',
             'SYSMAIL_PASSWORD_RESET' => 'SYS_PASSWORD_FORGOTTEN',
         );
 //        $textLabel = Language::translateIfTranslationStrId($textLabels[$row['name']]);

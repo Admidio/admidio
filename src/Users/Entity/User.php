@@ -1946,7 +1946,7 @@ class User extends Entity
             $sysMail = new SystemMail($this->db);
             $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
             $sysMail->setVariable(1, $password);
-            $sysMail->sendSystemMail('SYSMAIL_LOGIN_DATA', $this);
+            $sysMail->sendSystemMail('SYSMAIL_LOGIN_INFORMATION', $this);
         } else {
             throw new Exception('SYS_NO_RIGHTS');
         }
