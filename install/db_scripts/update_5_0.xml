@@ -501,6 +501,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci;</step>
     <step id="1670">ALTER TABLE %PREFIX%_inventory_field_select_options
-            ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id) REFERENCES %PREFIX%_inventory_fields (inf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
+        ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id) REFERENCES %PREFIX%_inventory_fields (inf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
+    <step id="1680">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_LOGIN_INFORMATION' WHERE txt_name = 'SYSMAIL_NEW_PASSWORD'</step>
     <step>stop</step>
 </update>
