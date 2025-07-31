@@ -2706,6 +2706,16 @@ class PreferencesPresenter extends PagePresenter
             $(document).on("shown.bs.collapse", "#adm_preferences_accordion .accordion-collapse", function() {
                 var panelId = this.id.replace(/^collapse_/, "");
                 loadPreferencesPanel(panelId);
+
+                // scroll to the top of the accordion panel header
+                var checkLoaded = setInterval(function(){
+                    if ($("#collapse_" + panelId).find(".spinner-border").length === 0) {
+                        clearInterval(checkLoaded);
+                        $("html, body").animate({
+                            scrollTop: $("#heading_" + panelId).offset().top
+                        }, 500);
+                    }
+                }, 100);
             });
             // initial: geöffnetes Accordion-Panel laden
             $("#adm_preferences_accordion .accordion-collapse.show").each(function() {
