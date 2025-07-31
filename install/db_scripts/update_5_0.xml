@@ -391,6 +391,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
             ufo_usf_id      integer unsigned    NOT NULL,
             ufo_value       varchar(255)        NOT NULL,
+            ufo_system      boolean             NOT NULL DEFAULT false,
             ufo_sequence    smallint            NOT NULL,
             ufo_obsolete    boolean             NOT NULL DEFAULT false,
             PRIMARY KEY (ufo_id)

@@ -55,7 +55,7 @@ class SelectOptions extends Entity
 
         // if id is set than read the data of the recordset
         if ($this->usfId > 0) {
-            $sql = 'SELECT ufo_id, ufo_value, ifo_system, ufo_sequence, ufo_obsolete
+            $sql = 'SELECT ufo_id, ufo_value, ufo_system, ufo_sequence, ufo_obsolete
                     FROM ' . TBL_USER_FIELD_OPTIONS . '
                     WHERE ufo_usf_id = ? -- $usfId
                     ORDER BY ufo_sequence';
@@ -104,7 +104,7 @@ class SelectOptions extends Entity
                 $values[$value['ufo_id']] = array(
                     'id' => $value['ufo_id'],
                     'value' => $value['ufo_value'],
-                    'system' => $value['ifo_system'],
+                    'system' => $value['ufo_system'],
                     'sequence' => $value['ufo_sequence'],
                     'obsolete' => $value['ufo_obsolete']
                 );
