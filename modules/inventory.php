@@ -39,7 +39,7 @@ try {
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit','item_edit_lend', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit','item_edit_borrow', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getOptionID = admFuncVariableIsValid($_GET, 'option_id', 'int', array('defaultValue' => 0));
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
@@ -58,7 +58,7 @@ try {
             return preg_replace('/adm_inventory_item_/', '', $uuid);
         }, $getItemUUIDs);
     }
-    $getLended = admFuncVariableIsValid($_GET, 'item_lended', 'bool', array('defaultValue' => false));
+    $getBorrowed = admFuncVariableIsValid($_GET, 'item_borrowed', 'bool', array('defaultValue' => false));
 
     // check if module is active
     if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
@@ -216,18 +216,18 @@ try {
             $item->show();
             break;
 
-        case 'item_edit_lend':
+        case 'item_edit_borrow':
             // set headline of the script
-            if ($getLended) {
+            if ($getBorrowed) {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
             }
             else {
-                $headline = $gL10n->get('SYS_INVENTORY_ITEM_LEND');
+                $headline = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
             }
             $gNavigation->addUrl(CURRENT_URL, $headline);
-            $item = new InventoryItemPresenter('adm_item_edit_lend');
+            $item = new InventoryItemPresenter('adm_item_edit_borrow');
             $item->setHeadline($headline);
-            $item->createEditLendForm($getiniUUID);
+            $item->createEditBorrowForm($getiniUUID);
             $item->show();
             break;
 

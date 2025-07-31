@@ -408,11 +408,11 @@ try {
         
         // Determine creation mode based on available items
         $creationMode = 'none';
-        if (!empty($itemsKeeper->getItems()) && (empty($itemsReceiver->getItems()) || $gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        if (!empty($itemsKeeper->getItems()) && (empty($itemsReceiver->getItems()) || $gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'keeper';
-        } elseif (empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        } elseif (empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'receiver';
-        } elseif (!empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        } elseif (!empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'both';
         }
         

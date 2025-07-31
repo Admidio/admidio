@@ -91,8 +91,8 @@ final class UpdateStepsCode
             array('inf_type' => 'TEXT', 'inf_name_intern' => 'KEEPER', 'inf_name' => 'SYS_INVENTORY_KEEPER', 'inf_description' => 'SYS_INVENTORY_KEEPER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 2),
             array('inf_type' => 'CHECKBOX', 'inf_name_intern' => 'IN_INVENTORY', 'inf_name' => 'SYS_INVENTORY_IN_INVENTORY', 'inf_description' => 'SYS_INVENTORY_IN_INVENTORY_DESC', 'inf_required_input' => 0, 'inf_sequence' => 3),
             array('inf_type' => 'TEXT', 'inf_name_intern' => 'LAST_RECEIVER', 'inf_name' => 'SYS_INVENTORY_LAST_RECEIVER', 'inf_description' => 'SYS_INVENTORY_LAST_RECEIVER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 4),
-            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 5),
-            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_BACK_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_BACK_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_BACK_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 6)
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'BORROW_DATE', 'inf_name' => 'SYS_INVENTORY_BORROW_DATE', 'inf_description' => 'SYS_INVENTORY_BORROW_DATE_DESC', 'inf_required_input' => 0, 'inf_sequence' => 5),
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'RETURN_DATE', 'inf_name' => 'SYS_INVENTORY_RETURN_DATE', 'inf_description' => 'SYS_INVENTORY_RETURN_DATE_DESC', 'inf_required_input' => 0, 'inf_sequence' => 6)
         );
 
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;

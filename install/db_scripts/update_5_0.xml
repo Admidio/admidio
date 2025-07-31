@@ -444,20 +444,20 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1510">ALTER TABLE %PREFIX%_inventory_item_data
         ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;</step>
-    <step id="1520">CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_item_lend_data (
-            inl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-            inl_inf_id                  integer unsigned    NOT NULL,
-            inl_ini_id                  integer unsigned    NOT NULL,
-            inl_value                   varchar(4000),
-            PRIMARY KEY (inl_id)
+    <step id="1520">CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_item_borrow_data (
+            inb_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            inb_ini_id                  integer unsigned    NOT NULL,
+            inb_last_receiver           varchar(255)        NULL        DEFAULT NULL,
+            inb_borrow_date             varchar(255)        NULL        DEFAULT NULL,
+            inb_return_date             varchar(255)        NULL        DEFAULT NULL,
+            PRIMARY KEY (inb_id)
         )
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci;</step>
-    <step id="1530">CREATE UNIQUE INDEX %PREFIX%_idx_inl_inf_ini_id ON %PREFIX%_inventory_item_lend_data (inl_inf_id, inl_ini_id);</step>
-    <step id="1540">ALTER TABLE %PREFIX%_inventory_item_lend_data
-        ADD CONSTRAINT %PREFIX%_fk_inl_inf         FOREIGN KEY (inl_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
-        ADD CONSTRAINT %PREFIX%_fk_inl_ini         FOREIGN KEY (inl_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;</step>
+    <step id="1530">CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);</step>
+    <step id="1540">ALTER TABLE %PREFIX%_inventory_item_borrow_data
+        ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;</step>
     <step id="1550">CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_items (
             ini_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
             ini_uuid                    varchar(36)         NOT NULL,
@@ -488,8 +488,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1630">UpdateStepsCode::updateStep50InventoryCategories</step>
    <!-- disable module when updating an existing admidio instance -->
     <step id="1640">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 WHERE prf_name = 'inventory_module_enabled'</step>
-    <step id="1650">UpdateStepsCode::updateStep50AddInventoryFields</step>
-    <step id="1660"> CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_field_select_options (
+    <step id="1650"> CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_field_select_options (
             ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
             ifo_inf_id      integer unsigned    NOT NULL,
             ifo_value       varchar(255)        NOT NULL,
@@ -500,7 +499,8 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci;</step>
-    <step id="1670">ALTER TABLE %PREFIX%_inventory_field_select_options
+    <step id="1660">ALTER TABLE %PREFIX%_inventory_field_select_options
             ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id) REFERENCES %PREFIX%_inventory_fields (inf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
+    <step id="1670">UpdateStepsCode::updateStep50AddInventoryFields</step>
     <step>stop</step>
 </update>

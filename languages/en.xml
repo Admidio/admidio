@@ -783,6 +783,8 @@
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
+  <string name="SYS_INVENTORY_BORROW_DATE">Borrowing date</string>
+  <string name="SYS_INVENTORY_BORROW_DATE_DESC">The borrowing date of the item to the last recipient</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">The category of an item</string>
   <string name="SYS_INVENTORY_COPY_PREFERENCES">Settings for copying a item:</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
@@ -813,8 +815,8 @@
   <string name="SYS_INVENTORY_ITEM_DELETED">Item successfully deleted</string>
   <string name="SYS_INVENTORY_ITEM_EDIT">Change the item</string>
   <string name="SYS_INVENTORY_ITEM_EDITED">Item successfully changed</string>
-  <string name="SYS_INVENTORY_ITEM_LEND">Lend the item</string>
-  <string name="SYS_INVENTORY_ITEM_LEND_DATA">Item lend data</string>
+  <string name="SYS_INVENTORY_ITEM_BORROW">Borrow the item</string>
+  <string name="SYS_INVENTORY_ITEM_BORROW_DATA">Item borrowing data</string>
   <string name="SYS_INVENTORY_ITEM_REINSTATE">Reinstate the item</string>
   <string name="SYS_INVENTORY_ITEM_REINSTATE_CONFIRM">Do you really want to reinstate the item?</string>
   <string name="SYS_INVENTORY_ITEM_REINSTATED">Item successfully reinstated</string>
@@ -824,8 +826,8 @@
   <string name="SYS_INVENTORY_ITEM_RETIRED_CHANGELOG">Item retired?</string>
   <string name="SYS_INVENTORY_ITEM_RETURN">Return the item</string>
   <string name="SYS_INVENTORY_ITEMS">Items</string>
-  <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING">Disable borrowing functionality</string>
-  <string name="SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC">When this option is enabled, items can no longer be borrowed. Existing borrowing records will still be saved, but will no longer be displayed. (Default: no)</string>
+  <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING">Disable borrowing functionality</string>
+  <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING_DESC">When this option is enabled, items can no longer be borrowed. Existing borrowing records will still be saved, but will no longer be displayed. (Default: no)</string>
   <string name="SYS_INVENTORY_ITEMS_EDIT">Change items</string>
   <string name="SYS_INVENTORY_ITEMS_EDIT_DESC">The values of the item fields can be changed here.\n\nThe displayed values will be applied to ALL items!</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Number of items per page</string>
@@ -868,10 +870,8 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW_FIELDS">Property fields to display in the profile view</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC">The table shows the items managed by you:</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items loaned to you:</string>
-  <string name="SYS_INVENTORY_RECEIVED_BACK_ON">Received back on</string>
-  <string name="SYS_INVENTORY_RECEIVED_BACK_ON_DESC">The date the item was returned to the keeper</string>
-  <string name="SYS_INVENTORY_RECEIVED_ON">Borrowed on</string>
-  <string name="SYS_INVENTORY_RECEIVED_ON_DESC">The borrowing date of the item to the last recipient</string>
+  <string name="SYS_INVENTORY_RETURN_DATE">Return date</string>
+  <string name="SYS_INVENTORY_RETURN_DATE_DESC">The date the item was returned to the keeper</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE">Delete selected items</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">If you select #VAR1_BOLD#, the items along with their associated records will be irrevocably removed from the database, and it will not be possible to view the data of these items later.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">The selected items have been deleted.</string>

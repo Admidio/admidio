@@ -246,12 +246,12 @@ class InventoryFieldsPresenter extends PagePresenter
         $templateItemFields = array();
         $itemFieldCategoryID = -1;
         $prevItemFieldCategoryID = -1;
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrowing fields
+        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
 
         foreach ($items->getItemFields() as $itemField) {
-            if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($itemField->getValue('inf_name_intern'), $lendFieldNames)) {
-                continue; // skip lending fields if lending is disabled
+            if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {
+                continue; // skip borrowing fields if borrowing is disabled
             }
             $prevItemFieldCategoryID = $itemFieldCategoryID;
             $itemFieldCategoryID = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;

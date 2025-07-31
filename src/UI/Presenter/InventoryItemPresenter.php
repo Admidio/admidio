@@ -12,6 +12,7 @@ use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
+use DateTime;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -41,8 +42,8 @@ class InventoryItemPresenter extends PagePresenter
     public function createEditForm(string $itemUUID = '', bool $getCopy = false)
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
-        //array with the internal field names of the lend fields not used in the edit form
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrow fields not used in the edit form
+        $borrowFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -78,8 +79,8 @@ class InventoryItemPresenter extends PagePresenter
         foreach ($items->getItemFields() as $itemField) {  
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            // Skip lend fields that are not used in the edit form
-            if (in_array($itemField->getValue('inf_name_intern'), $lendFieldNames)) {
+            // Skip borrow fields that are not used in the edit form
+            if (in_array($itemField->getValue('inf_name_intern'), $borrowFieldNames)) {
                 if ($infNameIntern === 'IN_INVENTORY') {
                     // we need to add the checkbox for IN_INVENTORY defaulting to true
                     $form->addInput(
@@ -290,10 +291,10 @@ class InventoryItemPresenter extends PagePresenter
     public function createEditItemsForm(array $itemUUIDs = array())
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
-        // array with the internal field names of the lend fields not used in the edit form
+        // array with the internal field names of the borrow fields not used in the edit form
         // we also exclude IITEMNAME from the edit form, because it is only used for displaying item values based on the first entry
         // and it is not wanted to change the item name for multiple items at once
-        $lendFieldNames = array('ITEMNAME', 'IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        $borrowFieldNames = array('ITEMNAME', 'IN_INVENTORY', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -329,8 +330,8 @@ class InventoryItemPresenter extends PagePresenter
         foreach ($items->getItemFields() as $itemField) {  
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            // Skip lend fields that are not used in the edit form
-            if (in_array($itemField->getValue('inf_name_intern'), $lendFieldNames)) {
+            // Skip borrow fields that are not used in the edit form
+            if (in_array($itemField->getValue('inf_name_intern'), $borrowFieldNames)) {
                 if ($infNameIntern === 'ITEMNAME') {
                     // If the item is new, we need to add the input for ITEMNAME
                     $itemNames = '';
@@ -586,11 +587,11 @@ class InventoryItemPresenter extends PagePresenter
      * @param string $itemFieldID ID of the item field that should be edited.
      * @throws Exception
      */
-    public function createEditLendForm(string $itemUUID)
+    public function createEditBorrowForm(string $itemUUID)
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gL10n, $gCurrentOrgId, $gDb;
-        //array with the internal field names of the lend fields not used in the edit form
-        $lendFieldNames = array('ITEMNAME', 'IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrow fields not used in the edit form
+        $borrowFieldNames = array('ITEMNAME', 'IN_INVENTORY', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -598,12 +599,12 @@ class InventoryItemPresenter extends PagePresenter
         // Check if itemUUID is valid
         if (!Uuid::isValid($itemUUID)) {
             throw new Exception('The parameter "' . $itemUUID . '" is not a valid UUID!');
-        } elseif ($gSettingsManager->GetBool('inventory_items_disable_lending')) {
+        } elseif ($gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         // display History button
-        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_item_lend_data', $gCurrentUser->isAdministratorInventory(), ['uuid' => $itemUUID]);
+        ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_item_borrow_data', $gCurrentUser->isAdministratorInventory(), ['uuid' => $itemUUID]);
 
         // Read item data
         $items->readItemData($itemUUID);
@@ -613,26 +614,10 @@ class InventoryItemPresenter extends PagePresenter
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        foreach ($items->getItemFields() as $itemField) {  
-            $infNameIntern = $itemField->getValue('inf_name_intern');
-            if($infNameIntern === 'IN_INVENTORY') {
-                $pimInInventory = $infNameIntern;
-            }
-            elseif($infNameIntern === 'LAST_RECEIVER') {
-                $pimLastReceiver = $infNameIntern;
-            }
-            elseif ($infNameIntern === 'RECEIVED_ON') {
-                $pimReceivedOn = $infNameIntern;
-            }
-            elseif ($infNameIntern === 'RECEIVED_BACK_ON') {
-                $pimReceivedBackOn = $infNameIntern;
-            }
-        }
-
         // show form
         $form = new FormPresenter(
-            'adm_item_edit_lend_form',
-            'modules/inventory.item.edit.lend.tpl',
+            'adm_item_edit_borrow_form',
+            'modules/inventory.item.edit.borrow.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_uuid' => $itemUUID, 'mode' => 'item_save')),
             $this
         );
@@ -641,8 +626,21 @@ class InventoryItemPresenter extends PagePresenter
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
         
-            // Skip all fields not used in the lend form
-            if (!in_array($infNameIntern, $lendFieldNames)) {
+            if($infNameIntern === 'IN_INVENTORY') {
+                $ivtInInventory = $infNameIntern;
+            }
+            elseif($infNameIntern === 'LAST_RECEIVER') {
+                $ivtLastReceiver = $infNameIntern;
+            }
+            elseif ($infNameIntern === 'BORROW_DATE') {
+                $ivtReceivedOn = $infNameIntern;
+            }
+            elseif ($infNameIntern === 'RETURN_DATE') {
+                $ivtReceivedBackOn = $infNameIntern;
+            }
+
+            // Skip all fields not used in the borrow form
+            if (!in_array($infNameIntern, $borrowFieldNames)) {
                 continue;
             }
 
@@ -658,30 +656,30 @@ class InventoryItemPresenter extends PagePresenter
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
             }
             
-            if (isset($pimInInventory, $pimLastReceiver, $pimReceivedOn, $pimReceivedBackOn) && $infNameIntern === 'IN_INVENTORY') {
-                // Add JavaScript to check the LAST_RECEIVER field and set the required attribute for pimReceivedOnId and pimReceivedBackOnId
+            if (isset($ivtInInventory, $ivtLastReceiver, $ivtReceivedOn, $ivtReceivedBackOn)) {
+                // Add JavaScript to check the LAST_RECEIVER field and set the required attribute for ivtReceivedOnId and ivtReceivedBackOnId
                 $this->addJavascript('
                     document.addEventListener("DOMContentLoaded", function() {
-                        if (document.querySelector("[id=\'INF-' . $pimReceivedOn . '_time\']")) {
+                        if (document.querySelector("[id=\'INF-' . $ivtReceivedOn . '_time\']")) {
                             var pDateTime = "true";
                         } else {
                             var pDateTime = "false";
                         }
         
-                        var pimInInventoryField = document.querySelector("[id=\'INF-' . $pimInInventory . '\']");
-                        var pimInInventoryGroup = document.getElementById("INF-' . $pimInInventory . '_group");
-                        var pimLastReceiverField = document.querySelector("[id=\'INF-' . $pimLastReceiver . '\']");
-                        var pimLastReceiverGroup = document.getElementById("INF-' . $pimLastReceiver . '_group");
-                        var pimReceivedOnField = document.querySelector("[id=\'INF-' . $pimReceivedOn . '\']");
+                        var ivtInInventoryField = document.querySelector("[id=\'INF-' . $ivtInInventory . '\']");
+                        var ivtInInventoryGroup = document.getElementById("INF-' . $ivtInInventory . '_group");
+                        var ivtLastReceiverField = document.querySelector("[id=\'INF-' . $ivtLastReceiver . '\']");
+                        var ivtLastReceiverGroup = document.getElementById("INF-' . $ivtLastReceiver . '_group");
+                        var ivtReceivedOnField = document.querySelector("[id=\'INF-' . $ivtReceivedOn . '\']");
         
                         if (pDateTime === "true") {
-                            var pimReceivedOnFieldTime = document.querySelector("[id=\'INF-' . $pimReceivedOn . '_time\']");
-                            var pimReceivedBackOnFieldTime = document.querySelector("[id=\'INF-' . $pimReceivedBackOn . '_time\']");
+                            var ivtReceivedOnFieldTime = document.querySelector("[id=\'INF-' . $ivtReceivedOn . '_time\']");
+                            var ivtReceivedBackOnFieldTime = document.querySelector("[id=\'INF-' . $ivtReceivedBackOn . '_time\']");
                         }
         
-                        var pimReceivedOnGroup = document.getElementById("INF-' . $pimReceivedOn . '_group");
-                        var pimReceivedBackOnField = document.querySelector("[id=\'INF-' . $pimReceivedBackOn . '\']");
-                        var pimReceivedBackOnGroup = document.getElementById("INF-' . $pimReceivedBackOn . '_group");
+                        var ivtReceivedOnGroup = document.getElementById("INF-' . $ivtReceivedOn . '_group");
+                        var ivtReceivedBackOnField = document.querySelector("[id=\'INF-' . $ivtReceivedBackOn . '\']");
+                        var ivtReceivedBackOnGroup = document.getElementById("INF-' . $ivtReceivedBackOn . '_group");
         
                         function setRequired(field, group, required) {
                             if (required) {
@@ -693,90 +691,90 @@ class InventoryItemPresenter extends PagePresenter
                             }
                         }
         
-                        window.checkPimInInventory = function() {
-                            var isInInventoryChecked = pimInInventoryField.checked;
-                            var lastReceiverValue = pimLastReceiverField.value;
-                            var receivedBackOnValue = pimReceivedBackOnField.value;
+                        window.checkivtInInventory = function() {
+                            var isInInventoryChecked = ivtInInventoryField.checked;
+                            var lastReceiverValue = ivtLastReceiverField.value;
+                            var receivedBackOnValue = ivtReceivedBackOnField.value;
         
-                            setRequired(pimReceivedOnField, pimReceivedOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
-                            setRequired(pimReceivedBackOnField, pimReceivedBackOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
+                            setRequired(ivtReceivedOnField, ivtReceivedOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
+                            setRequired(ivtReceivedBackOnField, ivtReceivedBackOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
                             if (pDateTime === "true") {
-                                setRequired(pimReceivedOnFieldTime, pimReceivedOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
-                                setRequired(pimReceivedBackOnFieldTime, pimReceivedBackOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
+                                setRequired(ivtReceivedOnFieldTime, ivtReceivedOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
+                                setRequired(ivtReceivedBackOnFieldTime, ivtReceivedBackOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
                             }
         
-                            setRequired(pimLastReceiverField, pimLastReceiverGroup, !isInInventoryChecked);
-                            setRequired(pimReceivedOnField, pimReceivedOnGroup, !isInInventoryChecked);
+                            setRequired(ivtLastReceiverField, ivtLastReceiverGroup, !isInInventoryChecked);
+                            setRequired(ivtReceivedOnField, ivtReceivedOnGroup, !isInInventoryChecked);
                             if (pDateTime === "true") {
-                                setRequired(pimReceivedOnFieldTime, pimReceivedOnGroup, !isInInventoryChecked);
+                                setRequired(ivtReceivedOnFieldTime, ivtReceivedOnGroup, !isInInventoryChecked);
                             }
         
                             if (!isInInventoryChecked && (lastReceiverValue === "undefined" || !lastReceiverValue)) {
-                                pimReceivedOnField.value = "";
+                                ivtReceivedOnField.value = "";
                                 if (pDateTime === "true") {
-                                    pimReceivedOnFieldTime.value = "";
+                                    ivtReceivedOnFieldTime.value = "";
                                 }
                             }
         
                             if (receivedBackOnValue !== "") {
-                                setRequired(pimLastReceiverField, pimLastReceiverGroup, true);
-                                setRequired(pimReceivedOnField, pimReceivedOnGroup, true);
+                                setRequired(ivtLastReceiverField, ivtLastReceiverGroup, true);
+                                setRequired(ivtReceivedOnField, ivtReceivedOnGroup, true);
                                 if (pDateTime === "true") {
-                                    setRequired(pimReceivedOnFieldTime, pimReceivedOnGroup, true);
-                                    setRequired(pimReceivedBackOnFieldTime, pimReceivedBackOnGroup, true);
+                                    setRequired(ivtReceivedOnFieldTime, ivtReceivedOnGroup, true);
+                                    setRequired(ivtReceivedBackOnFieldTime, ivtReceivedBackOnGroup, true);
                                 }
                             }
         
-                            var previousPimInInventoryState = isInInventoryChecked;
+                            var previousivtInInventoryState = isInInventoryChecked;
         
-                            pimInInventoryField.addEventListener("change", function() {
-                                if (!pimInInventoryField.checked && previousPimInInventoryState) {
-                                    pimReceivedBackOnField.value = "";
+                            ivtInInventoryField.addEventListener("change", function() {
+                                if (!ivtInInventoryField.checked && previousivtInInventoryState) {
+                                    ivtReceivedBackOnField.value = "";
                                     if (pDateTime === "true") {
-                                        pimReceivedBackOnFieldTime.value = "";
+                                        ivtReceivedBackOnFieldTime.value = "";
                                     }
                                 }
-                                previousPimInInventoryState = pimInInventoryField.checked;
-                                window.checkPimInInventory();
+                                previousivtInInventoryState = ivtInInventoryField.checked;
+                                window.checkivtInInventory();
                             });
         
-                            pimLastReceiverField.addEventListener("change", window.checkPimInInventory);
-                            pimReceivedBackOnField.addEventListener("input", window.checkPimInInventory);
-                            pimReceivedOnField.addEventListener("input", validateReceivedOnAndBackOn);
+                            ivtLastReceiverField.addEventListener("change", window.checkivtInInventory);
+                            ivtReceivedBackOnField.addEventListener("input", window.checkivtInInventory);
+                            ivtReceivedOnField.addEventListener("input", validateReceivedOnAndBackOn);
                             if (pDateTime === "true") {
-                                pimReceivedOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
-                                pimReceivedBackOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
+                                ivtReceivedOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
+                                ivtReceivedBackOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
                             }
                         }
         
                         function validateReceivedOnAndBackOn() {
                             if (pDateTime === "true") {
-                                var receivedOnDate = new Date(pimReceivedOnField.value + " " + pimReceivedOnFieldTime.value);
-                                var receivedBackOnDate = new Date(pimReceivedBackOnField.value + " " + pimReceivedBackOnFieldTime.value);
+                                var receivedOnDate = new Date(ivtReceivedOnField.value + " " + ivtReceivedOnFieldTime.value);
+                                var receivedBackOnDate = new Date(ivtReceivedBackOnField.value + " " + ivtReceivedBackOnFieldTime.value);
                             } else {
-                                var receivedOnDate = new Date(pimReceivedOnField.value);
-                                var receivedBackOnDate = new Date(pimReceivedBackOnField.value);
+                                var receivedOnDate = new Date(ivtReceivedOnField.value);
+                                var receivedBackOnDate = new Date(ivtReceivedBackOnField.value);
                             }
         
                             if (receivedOnDate > receivedBackOnDate) {
-                                pimReceivedOnField.setCustomValidity("ReceivedOn date cannot be after ReceivedBack date.");
+                                ivtReceivedOnField.setCustomValidity("ReceivedOn date cannot be after ReceivedBack date.");
                             } else {
-                                pimReceivedOnField.setCustomValidity("");
+                                ivtReceivedOnField.setCustomValidity("");
                             }
                         }
         
-                        pimInInventoryField.addEventListener("change", window.checkPimInInventory);
-                        pimLastReceiverField.addEventListener("change", window.checkPimInInventory);
+                        ivtInInventoryField.addEventListener("change", window.checkivtInInventory);
+                        ivtLastReceiverField.addEventListener("change", window.checkivtInInventory);
         
-                        pimReceivedOnField.addEventListener("input", validateReceivedOnAndBackOn);
-                        pimReceivedBackOnField.addEventListener("input", window.checkPimInInventory);
+                        ivtReceivedOnField.addEventListener("input", validateReceivedOnAndBackOn);
+                        ivtReceivedBackOnField.addEventListener("input", window.checkivtInInventory);
                         
                         if (pDateTime === "true") {
-                            pimReceivedOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
-                            pimReceivedBackOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
+                            ivtReceivedOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
+                            ivtReceivedBackOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
                         }
-                        pimReceivedBackOnField.addEventListener("input", validateReceivedOnAndBackOn);
-                        window.checkPimInInventory();
+                        ivtReceivedBackOnField.addEventListener("input", validateReceivedOnAndBackOn);
+                        window.checkivtInInventory();
                     });
                 ');
             }
@@ -835,16 +833,16 @@ class InventoryItemPresenter extends PagePresenter
                         );
             
                         $this->addJavascript('
-                            var selectIdLastReceiver = "#INF-' . $pimLastReceiver . '";
+                            var selectIdLastReceiver = "#INF-' . $ivtLastReceiver . '";
         
                             var defaultValue = "' . htmlspecialchars($items->getValue($infNameIntern)) . '";
                             var defaultText = "' . htmlspecialchars($items->getValue($infNameIntern)) . '"; // Der Text für den Default-Wert
         
                             function isSelect2Empty(selectId) {
                                 // Hole den aktuellen Wert des Select2-Feldes
-                                var renderedElement = $("#select2-INF-' . $pimLastReceiver .'-container");
+                                var renderedElement = $("#select2-INF-' . $ivtLastReceiver .'-container");
                                 if (renderedElement.length) {
-                                    window.checkPimInInventory();
+                                    window.checkivtInInventory();
                                 }
                             }
                             // Prüfe, ob der Default-Wert in den Optionen enthalten ist
@@ -854,7 +852,7 @@ class InventoryItemPresenter extends PagePresenter
                                 $(selectIdLastReceiver).append(newOption).trigger("change");
                             }
         
-                            $("#INF-' . $pimLastReceiver .'").select2({
+                            $("#INF-' . $ivtLastReceiver .'").select2({
                                 theme: "bootstrap-5",
                                 allowClear: true,
                                 placeholder: "",
@@ -873,6 +871,13 @@ class InventoryItemPresenter extends PagePresenter
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
                             $fieldType = $gSettingsManager->getString('inventory_field_date_time_format');
                             $maxlength = null;
+                            $date = new DateTime('now');
+                            if ($fieldType === 'datetime') {
+                                $defaultDate = $date->format('Y-m-d H:i');
+                            } else {
+                                $defaultDate = $date->format('Y-m-d');
+                            }
+
                         }
                         elseif ($infNameIntern === 'ITEMNAME') {
                             $fieldProperty = FormPresenter::FIELD_DISABLED;
@@ -884,7 +889,7 @@ class InventoryItemPresenter extends PagePresenter
                         $form->addInput(
                             'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
-                            $items->getValue($infNameIntern),
+                            ($items->getValue($infNameIntern) === '' && $infNameIntern === 'BORROW_DATE') ? $defaultDate : $items->getValue($infNameIntern),
                             array(
                                 'type' => $fieldType,
                                 'maxLength' => isset($maxlength) ? $maxlength : null,

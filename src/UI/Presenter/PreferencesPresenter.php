@@ -427,7 +427,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
                         'id' => 'content_modules',
-                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_lend_data', 'links', 'others')
+                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'links', 'others')
                     ),
                     array(
                         'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
@@ -782,8 +782,8 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrowing fields
+        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
 
         $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',
@@ -836,10 +836,10 @@ class PreferencesPresenter extends PagePresenter
         );
 
         $formInventory->addCheckbox(
-            'inventory_items_disable_lending',
-            $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_LENDING'),
-            (bool) $formValues['inventory_items_disable_lending'],
-            array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC')
+            'inventory_items_disable_borrowing',
+            $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_BORROWING'),
+            (bool) $formValues['inventory_items_disable_borrowing'],
+            array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_BORROWING_DESC')
         );
 
         $formInventory->addCheckbox(
@@ -862,8 +862,8 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries = array();
             foreach ($items->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
-                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
-                    continue; // skip lending fields if lending is disabled
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                    continue; // skip borrowing fields if borrowing is disabled
                 }
                 $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
             }
@@ -921,7 +921,7 @@ class PreferencesPresenter extends PagePresenter
         $selectBoxEntries = array();
         foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames))) {
                 continue;
             }
             $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');

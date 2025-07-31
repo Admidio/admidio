@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS %PREFIX%_menu                              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_item_lend_data          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
@@ -1060,21 +1060,22 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
 
 /*==============================================================*/
-/* Table: adm_inventory_item_lend_data                          */
+/* Table: adm_inventory_item_borrow_data                          */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_item_lend_data
+CREATE TABLE %PREFIX%_inventory_item_borrow_data
 (
-    inl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    inl_inf_id                  integer unsigned    NOT NULL,
-    inl_ini_id                  integer unsigned    NOT NULL,
-    inl_value                   varchar(4000),
-    PRIMARY KEY (inl_id)
+    inb_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inb_ini_id                  integer unsigned    NOT NULL,
+    inb_last_receiver           varchar(255)        NULL        DEFAULT NULL,
+    inb_borrow_date             varchar(100)        NULL        DEFAULT NULL,
+    inb_return_date             varchar(100)        NULL        DEFAULT NULL,
+    PRIMARY KEY (inb_id)
 )
 ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_inl_inf_ini_id ON %PREFIX%_inventory_item_lend_data (inl_inf_id, inl_ini_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);
 
 /*==============================================================*/
 /* Table: adm_inventory_items                                   */
@@ -1356,10 +1357,8 @@ ALTER TABLE %PREFIX%_inventory_item_data
     ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_inventory_item_lend_data
-    ADD CONSTRAINT %PREFIX%_fk_inl_inf         FOREIGN KEY (inl_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_inl_ini         FOREIGN KEY (inl_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
-
+ALTER TABLE %PREFIX%_inventory_item_borrow_data
+    ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE %PREFIX%_inventory_items
     ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,

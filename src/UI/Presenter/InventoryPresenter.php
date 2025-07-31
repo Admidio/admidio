@@ -101,7 +101,7 @@ class InventoryPresenter extends PagePresenter
 
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to view inventory history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_lend_data');
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data');
            
             // show link to create new item
             $this->addPageFunctionsMenuItem(
@@ -712,16 +712,16 @@ class InventoryPresenter extends PagePresenter
         $headers =  array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>');
         $exportHeaders = array();
         $columnNumber = 1;
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrowing fields
+        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
 
         // Build headers and column alignment for each item field
         foreach ($this->itemsData->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
             $columnHeader  = $this->itemsData->getProperty($infNameIntern, 'inf_name');
 
-            if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
-                continue; // skip lending fields if lending is disabled
+            if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                continue; // skip borrowing fields if borrowing is disabled
             }
 
             // For the first column, add specific header configurations for export modes
@@ -785,8 +785,8 @@ class InventoryPresenter extends PagePresenter
             foreach ($this->itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
 
-                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
-                    continue; // skip lending fields if lending is disabled
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                    continue; // skip borrowing fields if borrowing is disabled
                 }
 
                 // Apply filters for CATEGORY and KEEPER
@@ -895,7 +895,7 @@ class InventoryPresenter extends PagePresenter
             // Append admin action column for HTML mode
             if ($mode === 'html') {
                 $historyButton = ChangelogService::displayHistoryButtonTable(
-                    'inventory_items,inventory_item_data,inventory_item_lend_data',
+                    'inventory_items,inventory_item_data,inventory_item_borrow_data',
                     $gCurrentUser->isAdministratorInventory(),
                     ['uuid' => $item['ini_uuid']]
                 );
@@ -913,21 +913,21 @@ class InventoryPresenter extends PagePresenter
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                         );
 
-                        // Add lend action
-                        if (!$item['ini_retired'] && !$gSettingsManager->GetBool('inventory_items_disable_lending')) {
+                        // Add borrow action
+                        if (!$item['ini_retired'] && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                             // check if the item is in inventory
                             if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
-                                $itemLended = false;
+                                $item_borrowed = false;
                                 $icon ='bi bi-box-arrow-right';
-                                $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_LEND');
+                                $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
                             }
                             else {
-                                $itemLended = true;
+                                $item_borrowed = true;
                                 $icon = 'bi bi-box-arrow-in-left';
                                 $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                             }
                             $rowValues['actions'][] = array(
-                                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_lend', 'item_uuid' => $item['ini_uuid'], 'item_lended' => $itemLended)),
+                                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_borrow', 'item_uuid' => $item['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                                 'icon' => $icon,
                                 'tooltip' =>$tooltip
                             );
@@ -1068,8 +1068,8 @@ class InventoryPresenter extends PagePresenter
         $columnAlign[] = 'end'; // first column alignment
         $headers     = array();
         $columnNumber = 1;
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrow fields
+        $borrowFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // create array with all column heading values
         $profileItemFields = array('ITEMNAME');
@@ -1084,7 +1084,7 @@ class InventoryPresenter extends PagePresenter
         foreach ($itemsData->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
 
-            if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
+            if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowFieldNames))) {
                 continue;
             }
 
@@ -1139,7 +1139,7 @@ class InventoryPresenter extends PagePresenter
             foreach ($itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
 
-                if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
+                if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowFieldNames))) {
                     continue;
                 }
                 
@@ -1194,7 +1194,7 @@ class InventoryPresenter extends PagePresenter
 
             // Append admin action column
             $historyButton = ChangelogService::displayHistoryButtonTable(
-                'inventory_items,inventory_item_data,inventory_item_lend_data',
+                'inventory_items,inventory_item_data,inventory_item_borrow_data',
                 $gCurrentUser->isAdministratorInventory(),
                 ['uuid' => $item['ini_uuid']]
             );
@@ -1213,20 +1213,20 @@ class InventoryPresenter extends PagePresenter
                     );
 
                     // Add lend action
-                    if (!$item['ini_retired'] && !$gSettingsManager->GetBool('inventory_items_disable_lending')) {
+                    if (!$item['ini_retired'] && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                         // check if the item is in inventory
                         if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
-                            $itemLended = false;
+                            $item_borrowed = false;
                             $icon ='bi bi-box-arrow-right';
-                            $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_LEND');
+                            $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
                         }
                         else {
-                            $itemLended = true;
+                            $item_borrowed = true;
                             $icon = 'bi bi-box-arrow-in-left';
                             $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                         }
                         $rowValues['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_lend', 'item_uuid' => $item['ini_uuid'], 'item_lended' => $itemLended)),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_borrow', 'item_uuid' => $item['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                             'icon' => $icon,
                             'tooltip' =>$tooltip
                         );

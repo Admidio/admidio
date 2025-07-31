@@ -81,11 +81,6 @@ class ItemField extends Entity
                  WHERE ifo_inf_id = ? -- $infId';
         $this->db->queryPrepared($sql, array($infId));
 
-        // delete all data of this field in the item lend data table
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
-                 WHERE inl_inf_id = ? -- $infId';
-        $this->db->queryPrepared($sql, array($infId));
-
         $return = parent::delete();
 
         $this->db->endTransaction();

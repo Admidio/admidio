@@ -221,8 +221,8 @@ class ImportService
             foreach ($items->getItemData() as $key => $itemData) {
                 $itemValue = $itemData->getValue('ind_value');
                 if ($itemData->getValue('inf_name_intern') === 'KEEPER' || $itemData->getValue('inf_name_intern') === 'LAST_RECEIVER' ||
-                        $itemData->getValue('inf_name_intern') === 'IN_INVENTORY' || $itemData->getValue('inf_name_intern') === 'RECEIVED_ON' ||
-                        $itemData->getValue('inf_name_intern') === 'RECEIVED_BACK_ON') {
+                        $itemData->getValue('inf_name_intern') === 'IN_INVENTORY' || $itemData->getValue('inf_name_intern') === 'BORROW_DATE' ||
+                        $itemData->getValue('inf_name_intern') === 'RETURN_DATE') {
                     continue;
                 }
                 
@@ -254,15 +254,15 @@ class ImportService
         
         // get all values of the item fields
         $importedItemData = array();
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrowing fields
+        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
 
         foreach ($assignedFieldColumn as $row => $values) {
             foreach ($items->getItemFields() as $fields){
                 $infId = $fields->getValue('inf_id');
                 $imfNameIntern = $fields->getValue('inf_name_intern');
-                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($imfNameIntern, $lendFieldNames)) {
-                    continue; // skip lending fields if lending is disabled
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($imfNameIntern, $borrowingFieldNames)) {
+                    continue; // skip borrowing fields if borrowing is disabled
                 }
                 if (isset($values[$infId]))
                 {
@@ -343,7 +343,7 @@ class ImportService
                         }
     
                     }
-                    elseif($imfNameIntern === 'RECEIVED_ON' || $imfNameIntern === 'RECEIVED_BACK_ON') {
+                    elseif($imfNameIntern === 'BORROWING_DATE' || $imfNameIntern === 'RETURN_DATE') {
                         $val = $values[$infId];
                         if ($val !== '') {
                             // date must be formatted
@@ -432,7 +432,7 @@ class ImportService
     private function compareArrays(array $array1, array $array2) : bool
     {
         $array1 = array_filter($array1, function($key) {
-            return $key !== 'KEEPER' && $key !== 'LAST_RECEIVER' && $key !== 'IN_INVENTORY' && $key !== 'RECEIVED_ON' && $key !== 'RECEIVED_BACK_ON';
+            return $key !== 'KEEPER' && $key !== 'LAST_RECEIVER' && $key !== 'IN_INVENTORY' && $key !== 'BORROW_DATE' && $key !== 'RETURN_DATE';
         }, ARRAY_FILTER_USE_KEY);
 
         foreach ($array1 as $value) {
