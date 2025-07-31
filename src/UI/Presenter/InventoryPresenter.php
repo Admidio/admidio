@@ -874,7 +874,7 @@ class InventoryPresenter extends PagePresenter
                     $content = in_array($mode, ['csv', 'pdf', 'xlsx', 'ods'])
                         ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
                         : $this->itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, ['DATE', 'DROPDOWN'])) {
+                } elseif (in_array($infType, ['DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'])) {
                     $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif ($infType === 'RADIO_BUTTON') {
                     $content = $mode === 'html'
@@ -1180,7 +1180,7 @@ class InventoryPresenter extends PagePresenter
                 if ($infType === 'CHECKBOX') {
                     $content = ($content != 1) ? 0 : 1;
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, ['DATE', 'DROPDOWN'])) {
+                } elseif (in_array($infType, ['DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'])) {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif ($infType === 'RADIO_BUTTON') {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);

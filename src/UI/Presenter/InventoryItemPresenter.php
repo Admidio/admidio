@@ -124,20 +124,31 @@ class InventoryItemPresenter extends PagePresenter
                     );
                     break;
         
-                case 'DROPDOWN':
-                    $form->addSelectBox(
+                case 'DROPDOWN': // fallthrough
+                case 'DROPDOWN_MULTISELECT':
+                    $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
+                    $defaultValue = $items->getValue($infNameIntern, 'database');
+                    // prevent adding an empty string to the selectbox
+                        if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
+                            // prevent adding an empty string to the selectbox
+                            $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
+                        }
+
+                        $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'ifo_inf_options'),
+                        $arrOptions,
                         array(
                             'property' => $fieldProperty,
-                            'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                            'defaultValue' => $defaultValue,
                             'helpTextId' => $helpId,
-                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
                     break;
-        
+
                 case 'RADIO_BUTTON':
                     $form->addRadioButton(
                         'INF-' . $infNameIntern,
@@ -386,17 +397,28 @@ class InventoryItemPresenter extends PagePresenter
                     );
                     break;
         
-                case 'DROPDOWN':
-                    $form->addSelectBox(
+                case 'DROPDOWN': // fallthrough
+                case 'DROPDOWN_MULTISELECT':
+                    $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
+                    $defaultValue = $items->getValue($infNameIntern, 'database');
+                    // prevent adding an empty string to the selectbox
+                        if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
+                            // prevent adding an empty string to the selectbox
+                            $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
+                        }
+
+                        $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'ifo_inf_options'),
+                        $arrOptions,
                         array(
                             'property' => $fieldProperty,
-                            'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                            'defaultValue' => $defaultValue,
                             'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
-                            'toggleable' => true
+                            'toggleable' => true,
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
                     break;
@@ -797,16 +819,27 @@ class InventoryItemPresenter extends PagePresenter
                     );
                     break;
         
-                case 'DROPDOWN':
-                    $form->addSelectBox(
+                case 'DROPDOWN': // fallthrough
+                case 'DROPDOWN_MULTISELECT':
+                    $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
+                    $defaultValue = $items->getValue($infNameIntern, 'database');
+                    // prevent adding an empty string to the selectbox
+                        if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
+                            // prevent adding an empty string to the selectbox
+                            $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
+                        }
+
+                        $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        $items->getProperty($infNameIntern, 'ifo_inf_options'),
+                        $arrOptions,
                         array(
                             'property' => $fieldProperty,
-                            'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                            'defaultValue' => $defaultValue,
                             'helpTextId' => $helpId,
-                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                            'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
                     break;

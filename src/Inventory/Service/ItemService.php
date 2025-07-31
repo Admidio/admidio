@@ -134,7 +134,9 @@ class ItemService
                 $postKey = 'INF-' . $infNameIntern;
 
                 if (isset($formValues[$postKey])) {
-                    if (strlen($formValues[$postKey]) === 0 && $itemField->getValue('inf_required_input') == 1) {
+                    if (is_array($formValues[$postKey]) && empty($formValues[$postKey])) {
+                        throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name'))));
+                    } elseif (is_string($formValues[$postKey]) && (strlen($formValues[$postKey]) === 0 && $itemField->getValue('inf_required_input') == 1)) {
                         throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name'))));
                     }
 

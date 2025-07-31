@@ -539,6 +539,47 @@ class ItemsData
                     }
                     break;
 
+                case 'DROPDOWN_MULTISELECT':
+                    $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
+                    $arrOptions = $this->mItemFields[$fieldNameIntern]->getValue('ifo_inf_options', 'database', false);
+
+                    foreach ($arrOptions as $values) {
+                        // if text is a translation-id then translate it
+                        $values['value'] = Language::translateIfTranslationStrId($values['value']);
+
+                        // save values in new array that starts with key = 1
+                        $arrOptionValuesWithKeys[$values['id']] = $values['value'];
+                    }
+
+                    if (count($arrOptionValuesWithKeys) > 0 && !empty($value)) {
+                        // split value by comma and trim each value
+                        $valueArray = explode(',', $value);
+                        foreach ($valueArray as &$val) {
+                            $val = trim($val);
+                        }
+                        unset($val);
+
+                        // now create html output for each value
+                        $htmlValue = '';
+                        foreach ($valueArray as $val) {
+                            if (array_key_exists($val, $arrOptionValuesWithKeys)) {
+                                // if value is the index of the array then we can use it
+                                if ($htmlValue !== '') {
+                                    $htmlValue .= ', ';
+                                }
+                                $htmlValue .= $arrOptionValuesWithKeys[$val];                              
+                            } else {
+                                if ($htmlValue !== '') {
+                                    $htmlValue .= ', ';
+                                }
+                                $htmlValue .= '<i>' . $gL10n->get('SYS_DELETED_ENTRY') . '</i>';
+                            }
+                        }
+                    } else {
+                        $htmlValue = '';
+                    }
+                    break;
+
                 case 'TEXT_BIG':
                     $htmlValue = nl2br($value);
                     break;
@@ -673,6 +714,24 @@ class ItemsData
                             $value = $arrOptions[$value];
                         }
                         break;
+
+                    case 'DROPDOWN_MULTISELECT':
+                        // the value in db is a comma separated list of positions, now search for the text
+                        if ($value !== '' && $format !== 'html') {
+                            $arrOptions = $this->mItemFields[$fieldNameIntern]->getValue('ifo_inf_options', $format, false);
+                            $valueArray = explode(',', $value);
+                            foreach ($valueArray as &$val) {
+                                $val = trim($val);
+                                if (array_key_exists($val, $arrOptions)) {
+                                    $val = $arrOptions[$val];
+                                } else {
+                                    $val = '<i>' . $GLOBALS['gL10n']->get('SYS_DELETED_ENTRY') . '</i>';
+                                }
+                            }
+                            unset($val);
+                            $value = implode(', ', $valueArray);
+                        }
+                        break;
                 }
             }
         }
@@ -759,6 +818,11 @@ class ItemsData
             } else {
                 $oldFieldValue = $this->mItemData[$infId]->getValue($prefix . '_value');
             }
+        }
+
+        if (is_array($newValue)) {
+            // if new value is an array then convert it to a string
+            $newValue = implode(',', $newValue);
         }
 
         // check if new value only contains spaces

@@ -60,7 +60,7 @@ class InventoryFieldsPresenter extends PagePresenter
 
         $this->addJavascript('
             $("#inf_type").change(function() {
-                if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "RADIO_BUTTON") {
+                if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "DROPDOWN_MULTISELECT" || $("#inf_type").val() === "RADIO_BUTTON") {
                     $("#ifo_inf_options_table").attr("required", "required");
                     $("#ifo_inf_options_group").addClass("admidio-form-group-required");
                     $("#ifo_inf_options_group").show("slow");
@@ -122,6 +122,7 @@ class InventoryFieldsPresenter extends PagePresenter
             'DATE' => $gL10n->get('SYS_DATE'),
             'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER'),
             'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+            'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
             'EMAIL' => $gL10n->get('SYS_EMAIL'),
             'NUMBER' => $gL10n->get('SYS_NUMBER'),
             'PHONE' => $gL10n->get('SYS_PHONE'),
@@ -270,6 +271,7 @@ class InventoryFieldsPresenter extends PagePresenter
                 'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
                 'DATE' => $gL10n->get('SYS_DATE'),
                 'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+                'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
                 'EMAIL' => $gL10n->get('SYS_EMAIL'),
                 'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
                 'PHONE' => $gL10n->get('SYS_PHONE'),
