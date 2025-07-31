@@ -882,6 +882,8 @@
   <string name="SYS_INVENTORY_SELECTION_RETIRE">Retire selected items</string>
   <string name="SYS_INVENTORY_SELECTION_RETIRE_DESC">You can retire the item from the inventory manager by choosing #VAR1_BOLD#. This has the advantage that the data is preserved and you can always later see who borrowed the item.</string>
   <string name="SYS_INVENTORY_SELECTION_RETIRED">The selected items have been retired.</string>
+  <string name="SYS_INVENTORY_STATUS">Status</string>
+  <string name="SYS_INVENTORY_STATUS_DESC">The current status of the item</string>
   <string name="SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT">Permission to edit the display name of system fields</string>
   <string name="SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC">If this option is enabled, the display names of the system item fields can be modified. (Default: no)</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER">Current user as default selection</string>

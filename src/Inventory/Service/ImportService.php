@@ -14,8 +14,10 @@ use PhpOffice\PhpSpreadsheet\Reader\Html;
 use Admidio\Categories\Service\CategoryService;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\Item;
 
 // PHP namespaces
@@ -341,7 +343,6 @@ class ImportService
                                 $val = $category->getValue('cat_uuid');
                             }
                         }
-    
                     }
                     elseif($imfNameIntern === 'BORROWING_DATE' || $imfNameIntern === 'RETURN_DATE') {
                         $val = $values[$infId];
@@ -380,6 +381,17 @@ class ImportService
                                 if ($date instanceof DateTime) {
                                     $val = $date->format($gSettingsManager->getString('system_date'));
                                 }
+                            }
+                        }
+                    }
+                    elseif($imfNameIntern === 'STATUS') {
+                        $option = new SelectOptions($gDb, $infId);
+                        $optionValues = $option->getAllOptions();
+                        $val = '';
+                        foreach ($optionValues as $optionData) {
+                            if (Language::translateIfTranslationStrId($optionData['value']) === $values[$infId]) {
+                                $val = $optionData['id'];
+                                break;
                             }
                         }
                     }

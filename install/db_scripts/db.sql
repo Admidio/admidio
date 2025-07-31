@@ -1086,7 +1086,7 @@ CREATE TABLE %PREFIX%_inventory_items
     ini_uuid                    varchar(36)         NOT NULL,
     ini_cat_id                  integer unsigned    NOT NULL,
     ini_org_id                  integer unsigned    NOT NULL,
-    ini_retired                 boolean             NOT NULL    DEFAULT false,
+    ini_status                  integer unsigned    NOT NULL,
     ini_usr_id_create           integer unsigned,
     ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ini_usr_id_change           integer unsigned,
@@ -1361,5 +1361,6 @@ ALTER TABLE %PREFIX%_inventory_item_borrow_data
     ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE %PREFIX%_inventory_items
     ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ini_status      FOREIGN KEY (ini_status)         REFERENCES %PREFIX%_inventory_field_select_options (ifo_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;

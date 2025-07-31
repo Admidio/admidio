@@ -11,6 +11,7 @@ use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Infrastructure\Language;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -152,7 +153,10 @@ class InventoryFieldsPresenter extends PagePresenter
         }
 
         $options = new SelectOptions($gDb, $itemField->getValue('inf_id'));
-        $optionValueList = $options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options'));
+        foreach ($options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options')) as $option) {
+            $option['value'] = Language::translateIfTranslationStrId($option['value']);
+            $optionValueList[] = $option;
+        }
         if (empty($optionValueList)) {
             $optionValueList = array(
                 0 => array('id' => 1, 'value' => '', 'system' => false, 'sequence' => 0, 'obsolete' => false)

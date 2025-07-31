@@ -6,6 +6,8 @@ namespace Admidio\Inventory\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Entity\ItemData;
+use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Changelog\Entity\LogChanges;
 
 /**
@@ -128,6 +130,45 @@ class Item extends Entity
         $itemData = new ItemData($gDb, $this->mItemsData);
         $itemData->readDataByColumns(array('ind_ini_id' => $this->itemId, 'ind_inf_id' => $this->mItemsData->getProperty('ITEMNAME', 'inf_id')));
         return $itemData->getValue('ind_value'); 
+    }
+
+    /**
+     * Get the status of the item.
+     * @return int The status of the item.
+     */
+    public function getStatus(): int
+    {
+        return $this->getValue('ini_status');
+    }
+
+    /**
+     * Check if the item is retired.
+     * @return bool Returns true if the item is retired, false otherwise.
+     */
+    public function isRetired(): bool
+    {
+        global $gDb;
+        $optionId = $this->getStatus();
+        $option = new SelectOptions($gDb);
+        if ($option->readDataById($optionId)) {
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_STATUS_RETIRED';
+        }
+        return false;
+    }
+
+    /**
+     * Check if the item is in use.
+     * @return bool Returns true if the item is in use, false otherwise.
+     */
+    public function isInUse(): bool
+    {
+        global $gDb;
+        $optionId = $this->getStatus();
+        $option = new SelectOptions($gDb);
+        if ($option->readDataById($optionId)) {
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_STATUS_IN_USE';
+        }
+        return false;
     }
     
     /**

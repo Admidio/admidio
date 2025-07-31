@@ -3,13 +3,12 @@
 namespace Admidio\UI\Presenter;
 
 // Admidio namespaces
-use Admidio\Categories\Entity\Category;
 use Admidio\Categories\Service\CategoryService;
-use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
@@ -77,11 +76,12 @@ class InventoryPresenter extends PagePresenter
         $this->getFilterString = admFuncVariableIsValid($_GET, 'items_filter_string', 'string', array('defaultValue' => ''));
         $this->getFilterCategoryUUID = admFuncVariableIsValid($_GET, 'items_filter_category', 'string', array('defaultValue' => ''));
         $this->getFilterKeeper = admFuncVariableIsValid($_GET, 'items_filter_keeper', 'int', array('defaultValue' => 0));
-        $this->getFilterItems = admFuncVariableIsValid($_GET, 'items_filter', 'int', array('defaultValue' => 0));
+        $this->getFilterItems = admFuncVariableIsValid($_GET, 'items_filter', 'int', array('defaultValue' => 1));
 
         $this->itemsData = new ItemsData($gDb, $gCurrentOrgId);
         
-        $this->showRetiredItems = ($this->getFilterItems >= 1) ? true : false;
+        // check if the user has selected to show retired items
+        $this->showRetiredItems = ($this->getFilterItems === 0 || $this->getFilterItems === 2) ? true : false;
         $this->itemsData->showRetiredItems($this->showRetiredItems);
         $this->itemsData->readItems();
 
@@ -279,11 +279,24 @@ class InventoryPresenter extends PagePresenter
             )
         );
 
-        $selectBoxValues = array(
-            '0' => $gL10n->get('SYS_INVENTORY_FILTER_IN_USE_ITEMS'),
-            '1' => $gL10n->get('SYS_INVENTORY_FILTER_RETIRED_ITEMS'),
-            '2' => $gL10n->get('SYS_ALL')
-        );
+        // get the status options for the filter
+/*         $sql = 'SELECT ifo_id, ifo_value
+                  FROM ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                 WHERE ifo_inf_id = ?';
+        $countFilteredStatement = $gDb->queryPrepared($sql, array($this->itemsData->getProperty('STATUS', 'inf_id')));
+        $selectBoxValues = array();
+        while ($row = $countFilteredStatement->fetch()) {
+            $selectBoxValues[$row['ifo_id']] = $row['ifo_value'];
+        } */
+        $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));
+        $values = $option->getAllOptions();
+        $selectBoxValues = array();
+        foreach ($values as $value) {
+            $selectBoxValues[$value['id']] = $value['value'];
+        }
+        // add select all items to select box values
+        $selectBoxValues[0] = $gL10n->get('SYS_ALL');
+
         // filter all items
         $form->addSelectBox(
             'items_filter',
@@ -708,8 +721,8 @@ class InventoryPresenter extends PagePresenter
         );
 
         // Set default alignment and headers for the first column (abbreviation)
-        $columnAlign[] = 'center';
-        $headers =  array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>');
+        ($mode === 'html') ? $columnAlign[] = 'center' : $columnAlign = array();
+        $headers =  ($mode === 'html') ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>') : array();
         $exportHeaders = array();
         $columnNumber = 1;
         //array with the internal field names of the borrowing fields
@@ -779,7 +792,7 @@ class InventoryPresenter extends PagePresenter
             $this->itemsData->readItemData($item['ini_uuid']);
             $rowValues = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
-            $strikethrough = $item['ini_retired'];
+            $strikethrough = $this->itemsData->isRetired();
             $columnNumber = 1;
 
             foreach ($this->itemsData->getItemFields() as $itemField) {
@@ -793,15 +806,16 @@ class InventoryPresenter extends PagePresenter
                 if (
                     ($this->getFilterCategoryUUID !== '' && $infNameIntern === 'CATEGORY' && $this->getFilterCategoryUUID != $this->itemsData->getValue($infNameIntern, 'database')) ||
                     ($this->getFilterKeeper !== 0 && $infNameIntern === 'KEEPER' && $this->getFilterKeeper != $this->itemsData->getValue($infNameIntern)) ||
-                    ($this->getFilterItems === 0 && $item['ini_retired']) ||
-                    ($this->getFilterItems === 1 && !$item['ini_retired'])
+                    ($this->getFilterItems !== 0 && $this->getFilterItems !== $this->itemsData->getStatus())
                 ) {
                     // skip to the next iteration of the next-outer loop
                     continue 2;
                 }
 
                 if ($columnNumber === 1) {
-                    $rowValues['data'][] = '<input type="checkbox"/>';
+                    if ($mode === 'html') {
+                        $rowValues['data'][] = '<input type="checkbox"/>';
+                    }
                     $rowValues['data'][] = $listRowNumber;
                 }
 
@@ -810,8 +824,8 @@ class InventoryPresenter extends PagePresenter
 
                 // Process ITEMNAME column
                 if ($infNameIntern === 'ITEMNAME' && strlen($content) > 0) {
-                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$item['ini_retired'])) {
-                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $item['ini_retired'])) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
+                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
                     } else {
                         $content = SecurityUtils::encodeHTML($content);
                     }
@@ -905,16 +919,16 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                    if (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$item['ini_retired']) {
+                    if (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired()) {
                         // Add edit action
                         $rowValues['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $item['ini_retired'])),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                             'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                         );
 
                         // Add borrow action
-                        if (!$item['ini_retired'] && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
+                        if (!$this->itemsData->isRetired() && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                             // check if the item is in inventory
                             if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
                                 $item_borrowed = false;
@@ -941,11 +955,11 @@ class InventoryPresenter extends PagePresenter
                         );
                     }
 
-                    if ($item['ini_retired']) {
+                    if ($this->itemsData->isRetired()) {
                         $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                         // Add reinstate action
                         $rowValues['actions'][] = array(
-                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $item['ini_retired'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                             'dataMessage' => $dataMessage,
                             'icon' => 'bi bi-eye',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE')
@@ -953,7 +967,7 @@ class InventoryPresenter extends PagePresenter
                     }
 
                     if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                        if (!$item['ini_retired']) {
+                        if (!$this->itemsData->isRetired()) {
                             // Addretire action
                             $rowValues['actions'][] = array(
                                 'popup' => true,
@@ -967,7 +981,7 @@ class InventoryPresenter extends PagePresenter
                         // Add delete/retire action
                         $rowValues['actions'][] = array(
                             'popup' => true,
-                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $item['ini_retired'])),
+                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                             'icon' => 'bi bi-trash',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                         );
@@ -1133,7 +1147,7 @@ class InventoryPresenter extends PagePresenter
             $itemsData->readItemData($item['ini_uuid']);
             $rowValues     = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
-            $strikethrough = $item['ini_retired'];
+            $strikethrough = $this->itemsData->isRetired();
             $columnNumber  = 1;
 
             foreach ($itemsData->getItemFields() as $itemField) {
@@ -1204,16 +1218,16 @@ class InventoryPresenter extends PagePresenter
             }
 
             if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_retired'])) {
+                if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$this->itemsData->isRetired())) {
                     // Add edit action
                     $rowValues['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $item['ini_retired'])),
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                     );
 
                     // Add lend action
-                    if (!$item['ini_retired'] && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
+                    if (!$this->itemsData->isRetired() && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                         // check if the item is in inventory
                         if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
                             $item_borrowed = false;
@@ -1240,11 +1254,11 @@ class InventoryPresenter extends PagePresenter
                     );
                 }
 
-                if ($item['ini_retired']) {
+                if ($this->itemsData->isRetired()) {
                     $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                     // Add reinstate action
                     $rowValues['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $item['ini_retired'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $dataMessage,
                         'icon' => 'bi bi-eye',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE')
@@ -1252,7 +1266,7 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                    if (!$item['ini_retired']) {
+                    if (!$this->itemsData->isRetired()) {
                         // Add retire action
                         $rowValues['actions'][] = array(
                             'popup' => true,
@@ -1266,7 +1280,7 @@ class InventoryPresenter extends PagePresenter
                     // Add delete/retire action
                     $rowValues['actions'][] = array(
                         'popup' => true,
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $item['ini_retired'])),
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                     );
