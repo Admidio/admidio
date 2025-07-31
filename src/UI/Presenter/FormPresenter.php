@@ -998,11 +998,25 @@ class FormPresenter
     {
         global $gL10n;
 
+        // sort values based on sortable or not sortable (system) fields
+        $sortable = array();
+        $notSortable = array();
+        foreach ($values as $key => $value) {
+            if (!$value['system']) {
+                $sortable[$key] = $value;
+            } else {
+                $notSortable[$key] = $value;
+            }
+        }
+
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type' => 'option-editor',
             'id' => $id,
             'label' => $label,
-            'values' => $values,
+            'values' => array(
+                'sortable' => $sortable,
+                'notSortable' => $notSortable
+            ),
             'filename' => 'profile-fields'
         ), $options));
         $attributes = array();
@@ -1037,10 +1051,10 @@ class FormPresenter
 
         $this->addJavascriptCode('
             function addOptionRow(dataId, checkUrl, deleteUrl, csrfToken, translationStrings) {
-                const table = document.getElementById(dataId + "_table").getElementsByTagName("tbody")[0];
+                const table = document.querySelector("#" + dataId + "_table tbody.admidio-sortable");
                 const newRow = document.createElement("tr");
                 const rows = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\');
-                let maxId = 0;
+                let maxId = document.querySelector("#" + dataId + "_table tbody.admidio-not-sortable").querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
                 rows.forEach(row => {
                     const currentId = row.id.replace(dataId + "_option_", "");
                     const num = parseInt(currentId, 10);
@@ -1100,7 +1114,7 @@ class FormPresenter
                     if (!row) return;
 
                     const table = row.parentNode;
-                    const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                    const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length + document.querySelector("#" + dataId + "_table tbody.admidio-not-sortable").querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
                     // If there is only one option left, do not delete it or mark it as obsolete
                     if (countOptions <= 1) return;
 

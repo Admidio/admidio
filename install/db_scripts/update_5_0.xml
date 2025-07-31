@@ -492,6 +492,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
             ifo_inf_id      integer unsigned    NOT NULL,
             ifo_value       varchar(255)        NOT NULL,
+            ifo_system      boolean             NOT NULL DEFAULT false,
             ifo_sequence    smallint            NOT NULL,
             ifo_obsolete    boolean             NOT NULL DEFAULT false,
             PRIMARY KEY (ifo_id)

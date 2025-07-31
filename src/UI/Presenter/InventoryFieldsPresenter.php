@@ -155,7 +155,7 @@ class InventoryFieldsPresenter extends PagePresenter
         $optionValueList = $options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options'));
         if (empty($optionValueList)) {
             $optionValueList = array(
-                0 => array('id' => 1, 'value' => '', 'sequence' => 0, 'obsolete' => false)
+                0 => array('id' => 1, 'value' => '', 'system' => false, 'sequence' => 0, 'obsolete' => false)
             );
         }
         $form->addOptionEditor(

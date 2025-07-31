@@ -151,7 +151,9 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
             if (isTbodyEmpty(tbodyElement)) {
                 $(tbodyElement).fadeOut("slow");
                 var tbodyElement2 = tbodyElement.previousElementSibling;
-                $(tbodyElement2).fadeOut("slow");
+                if (isTbodyEmpty(tbodyElement2)) {
+                    $(tbodyElement2).fadeOut("slow");
+                }
             }
         } else {
             // entry could not be deleted, then show content of data or a common error message
@@ -193,10 +195,13 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
         $(entry).fadeOut("slow");
 
         // then check if its <tbody> is now empty
-        var tb = entry.closest("tbody");
-        if (tb && tb.children.length === 0) {
-            $(tb).fadeOut("slow");
-            $(tb.previousElementSibling).fadeOut("slow");
+        var tbodyElement = entry.closest("tbody");
+        if (isTbodyEmpty(tbodyElement)) {
+            $(tbodyElement).fadeOut("slow");
+            var tbodyElement2 = tbodyElement.previousElementSibling;
+            if (isTbodyEmpty(tbodyElement2)) {
+                $(tbodyElement2).fadeOut("slow");
+            }
         }
     }
 
