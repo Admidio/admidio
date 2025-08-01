@@ -867,7 +867,7 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">When this option is enabled, the items managed by a member and those borrowed by a member are displayed in the member's profile view. (Default: yes)</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_FIELDS">Property fields to display in the profile view</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC">The table shows the items managed by you:</string>
-  <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items loaned to you:</string>
+  <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items borrrowed to you:</string>
   <string name="SYS_INVENTORY_RETURN_DATE">Return date</string>
   <string name="SYS_INVENTORY_RETURN_DATE_DESC">The date the item was returned to the keeper</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE">Delete selected items</string>

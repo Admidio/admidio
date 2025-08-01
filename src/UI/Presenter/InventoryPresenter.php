@@ -55,6 +55,10 @@ class InventoryPresenter extends PagePresenter
      */
     protected int $getFilterKeeper = 0;
     /**
+     * @var bool true if the current user is the keeper of an item
+     */
+    protected string $getFilterLastReceiver = '';
+    /**
      * @var int filter id for the status selection
      */
     protected int $getFilterStatus = 0;
@@ -76,6 +80,7 @@ class InventoryPresenter extends PagePresenter
         $this->getFilterString = admFuncVariableIsValid($_GET, 'items_filter_string', 'string', array('defaultValue' => ''));
         $this->getFilterCategoryUUID = admFuncVariableIsValid($_GET, 'items_filter_category', 'string', array('defaultValue' => ''));
         $this->getFilterKeeper = admFuncVariableIsValid($_GET, 'items_filter_keeper', 'int', array('defaultValue' => 0));
+        $this->getFilterLastReceiver = admFuncVariableIsValid($_GET, 'items_filter_last_receiver', 'string', array('defaultValue' => ''));
         $this->getFilterStatus = admFuncVariableIsValid($_GET, 'items_filter_status', 'int', array('defaultValue' => 1));
 
         $this->itemsData = new ItemsData($gDb, $gCurrentOrgId);
@@ -158,7 +163,7 @@ class InventoryPresenter extends PagePresenter
         
         $this->addJavascript('
             // only submit non-empty filter values
-            $("#items_filter_category, #items_filter_keeper, #items_filter_status").on("change", function(){
+            $("#items_filter_category, #items_filter_keeper, #items_filter_last_receiver, #items_filter_status").on("change", function(){
                 var form = $("#adm_navbar_filter_form");
 
                 // Text-Filter
@@ -185,7 +190,15 @@ class InventoryPresenter extends PagePresenter
                     keeperSelect.attr("name", "items_filter_keeper");
                 }
 
-                // items filter
+                // Last Receiver
+                var lastReceiverSelect = $("#items_filter_last_receiver");
+                if (lastReceiverSelect.val() === "") {
+                    lastReceiverSelect.removeAttr("name");
+                } else {
+                    lastReceiverSelect.attr("name", "items_filter_last_receiver");
+                }
+
+                // items status filter
                 var itemsSelect = $("#items_filter_status");
                 if (itemsSelect.val() === "") {
                     itemsSelect.removeAttr("name");
@@ -279,6 +292,42 @@ class InventoryPresenter extends PagePresenter
             )
         );
 
+        // get all last receivers
+        $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
+            CASE
+                WHEN borrowData.inb_last_receiver = \'-1\'
+                    THEN \'n/a\'
+                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
+                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+                ELSE
+                    borrowData.inb_last_receiver
+            END AS receiver_name
+            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
+            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
+                ON fields.inf_name_intern = \'LAST_RECEIVER\'
+            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
+            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                ON last_name.usd_usr_id  = borrowData.inb_last_receiver
+            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME','usf_id') . '
+            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                ON first_name.usd_usr_id  = borrowData.inb_last_receiver
+            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME','usf_id') . '
+            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
+            ORDER BY receiver_name ASC;';
+
+        // filter last receiver
+        $form->addSelectBoxFromSql(
+            'items_filter_last_receiver',
+            $gL10n->get('SYS_INVENTORY_LAST_RECEIVER'),
+            $gDb,
+            $sql,
+            array(
+                'property' => $showFilterForm,
+                'defaultValue' => $this->getFilterLastReceiver,
+                'showContextDependentFirstEntry' => true
+            )
+        );
+
         // get the status options for the filter
         $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));
         $values = $option->getAllOptions();
@@ -328,6 +377,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
                     'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_xlsx'
                 )
@@ -342,6 +392,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
                     'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_ods'
                 )
@@ -356,6 +407,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
                     'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_csv-ms'
                 )
@@ -370,6 +422,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
                     'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_csv-oo'
                 )
@@ -384,6 +437,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
                     'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_pdf'
                 )
@@ -398,6 +452,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
                     'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_pdfl'
                 )
@@ -798,6 +853,7 @@ class InventoryPresenter extends PagePresenter
                 if (
                     ($this->getFilterCategoryUUID !== '' && $infNameIntern === 'CATEGORY' && $this->getFilterCategoryUUID != $this->itemsData->getValue($infNameIntern, 'database')) ||
                     ($this->getFilterKeeper !== 0 && $infNameIntern === 'KEEPER' && $this->getFilterKeeper != $this->itemsData->getValue($infNameIntern)) ||
+                    ($this->getFilterLastReceiver !== '' && $infNameIntern === 'LAST_RECEIVER' && $this->getFilterLastReceiver != $this->itemsData->getValue($infNameIntern)) ||
                     ($this->getFilterStatus !== 0 && $this->getFilterStatus !== $this->itemsData->getStatus())
                 ) {
                     // skip to the next iteration of the next-outer loop
@@ -1122,7 +1178,7 @@ class InventoryPresenter extends PagePresenter
         }
 
         // Append the admin action column
-        if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
+        if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
             $columnAlign[] = 'end';
             $headers[]     = '&nbsp;';
         }
@@ -1139,7 +1195,7 @@ class InventoryPresenter extends PagePresenter
             $itemsData->readItemData($item['ini_uuid']);
             $rowValues     = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
-            $strikethrough = $this->itemsData->isRetired();
+            $strikethrough = $itemsData->isRetired();
             $columnNumber  = 1;
 
             foreach ($itemsData->getItemFields() as $itemField) {
@@ -1209,19 +1265,19 @@ class InventoryPresenter extends PagePresenter
                 $rowValues['actions'][] = $historyButton;
             }
 
-            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$this->itemsData->isRetired())) {
+            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
+                if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database')) && !$itemsData->isRetired())) {
                     // Add edit action
                     $rowValues['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                     );
 
                     // Add lend action
-                    if (!$this->itemsData->isRetired() && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
+                    if (!$itemsData->isRetired() && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                         // check if the item is in inventory
-                        if (!$this->itemsData->isBorrowed()) {
+                        if (!$itemsData->isBorrowed()) {
                             $item_borrowed = false;
                             $icon ='bi bi-box-arrow-right';
                             $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
@@ -1246,19 +1302,19 @@ class InventoryPresenter extends PagePresenter
                     );
                 }
 
-                if ($this->itemsData->isRetired()) {
-                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
+                if ($itemsData->isRetired()) {
+                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                     // Add reinstate action
                     $rowValues['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $dataMessage,
                         'icon' => 'bi bi-eye',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE')
                     );
                 }
 
-                if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                    if (!$this->itemsData->isRetired()) {
+                if ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
+                    if (!$itemsData->isRetired()) {
                         // Add retire action
                         $rowValues['actions'][] = array(
                             'popup' => true,
@@ -1272,7 +1328,7 @@ class InventoryPresenter extends PagePresenter
                     // Add delete/retire action
                     $rowValues['actions'][] = array(
                         'popup' => true,
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                     );
