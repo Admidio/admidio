@@ -278,10 +278,10 @@ class ItemService
             // Database storage
             $itemImage->copyToFile(null, $_FILES['userfile']['tmp_name'][0]);
             $itemImageData = fread(fopen($_FILES['userfile']['tmp_name'][0], 'rb'), $_FILES['userfile']['size'][0]);
+            
+            $gCurrentSession->setValue('ses_binary', $itemImageData);
+            $gCurrentSession->save();
         }
-
-        $gCurrentSession->setValue('ses_binary', $itemImageData);
-        $gCurrentSession->save();
 
         // delete image object
         $itemImage->delete();

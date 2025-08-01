@@ -296,7 +296,8 @@ class InventoryItemPresenter extends PagePresenter
         // the image can only be deleted if corresponding rights exist
         if ($gCurrentUser->isAdministratorInventory() || in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
             $this->assignSmartyVariable('urlItemPictureUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_choose', 'item_uuid' => $itemUUID)));
-            if ($item->getValue('ini_picture') !== '' && $item->getValue('ini_picture') !== null) {
+            if ((string)$item->getValue('ini_picture') !== '' && $gSettingsManager->getInt('inventory_item_picture_storage') === 0
+                || is_file(ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/' . $items->getItemId() . '.jpg') && $gSettingsManager->getInt('inventory_item_picture_storage') === 1) {
                 $this->assignSmartyVariable('urlItemPictureDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_delete', 'item_uuid' => $itemUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackItemPicture\')');
             }
         }
