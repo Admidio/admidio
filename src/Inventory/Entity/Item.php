@@ -9,6 +9,7 @@ use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Infrastructure\Language;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -149,7 +150,7 @@ class Item extends Entity
     {
         global $gDb;
         $optionId = $this->getStatus();
-        $option = new SelectOptions($gDb);
+        $option = new SelectOptions($gDb, $this->mItemsData->getProperty('STATUS', 'inf_id'));
         if ($option->readDataById($optionId)) {
             return $option->getValue('ifo_value') === 'SYS_INVENTORY_STATUS_RETIRED';
         }
@@ -164,7 +165,7 @@ class Item extends Entity
     {
         global $gDb;
         $optionId = $this->getStatus();
-        $option = new SelectOptions($gDb);
+        $option = new SelectOptions($gDb, $this->mItemsData->getProperty('STATUS', 'inf_id'));
         if ($option->readDataById($optionId)) {
             return $option->getValue('ifo_value') === 'SYS_INVENTORY_STATUS_IN_USE';
         }
@@ -194,7 +195,7 @@ class Item extends Entity
      * @throws Exception
      */
     protected function adjustLogEntry(LogChanges $logEntry): void
-    {      
+    {
         $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
         if (isset($_POST['INF-ITEMNAME']) && $itemName === '') {
             $itemName = $_POST['INF-ITEMNAME'];
@@ -202,6 +203,17 @@ class Item extends Entity
         elseif (!isset( $_POST['INF-ITEMNAME']) && $itemName === '') {
             $itemName =  $logEntry->getValue('log_record_name');
         }
+
+        // If the item status is changed convert the status id to the actual status text
+        if ($logEntry->getValue('log_field') === 'ini_status') {
+            global $gDb;
+            $itemStatusId = $logEntry->getValue('log_value_new');
+            $option = new SelectOptions($gDb, $this->mItemsData->getProperty('STATUS', 'inf_id'));
+            if ($option->readDataById($itemStatusId)) {
+                $logEntry->setValue('log_value_new', Language::translateIfTranslationStrId($option->getValue('ifo_value')));
+            }
+        }
+
         $logEntry->setValue('log_record_name', $itemName);
         $logEntry->setValue('log_related_id', $logEntry->getValue('log_record_id'));
     }
