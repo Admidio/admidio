@@ -166,7 +166,7 @@ class InventoryFieldsPresenter extends PagePresenter
             'ifo_inf_options',
             $gL10n->get('SYS_VALUE_LIST'),
             $optionValueList,
-            array('helpTextId' => array('SYS_VALUE_LIST_DESC' /* SYS_INVENTORY_VALUE_LIST_DESC */, array('<a href="https://icons.bootstrap.com" target="_blank">', '</a>')), 'filename' => 'inventory')
+            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com" target="_blank">', '</a>')), 'filename' => 'inventory')
         );
 
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES');
@@ -252,7 +252,7 @@ class InventoryFieldsPresenter extends PagePresenter
         $itemFieldCategoryID = -1;
         $prevItemFieldCategoryID = -1;
         //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         foreach ($items->getItemFields() as $itemField) {
             if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {

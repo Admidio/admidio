@@ -777,7 +777,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT">Edit permission for the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_DESC">When this option is enabled, the selected item fields can be modified by the item keeper. Otherwise, these fields are read-only and can only be changed by module administrators. (Default: no)</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Editable fields by the keeper</string>
-  <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "In Inventory", "Last Recipient", "Borrowed on", "Received back on")</string>
+  <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">The inventory manager module can be completely disabled, made accessible only to logged-in users, or restricted solely to module administrators via this setting. If access is granted only to logged-in users, then the module is hidden from guests. If only module administrators have access, the module is visible only to users with the "manage inventory" permission. (Default: Enabled)</string>
   <string name="SYS_INVENTORY_ADD_DATE">Append date</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
@@ -785,6 +785,7 @@
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
   <string name="SYS_INVENTORY_BORROW_DATE">Borrowing date</string>
   <string name="SYS_INVENTORY_BORROW_DATE_DESC">The borrowing date of the item to the last recipient</string>
+  <string name="SYS_INVENTORY_BORROW_DATE_WARNING">The borrowing date of the item must be before the return date!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">The category of an item</string>
   <string name="SYS_INVENTORY_COPY_PREFERENCES">Settings for copying a item:</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
@@ -803,8 +804,6 @@
   <string name="SYS_INVENTORY_IMPORT_DESC">Here you can import items from a previous export file or your own file.</string>
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Import items</string>
   <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned to any item fields in InventoryManager:</string>
-  <string name="SYS_INVENTORY_IN_INVENTORY">In inventory</string>
-  <string name="SYS_INVENTORY_IN_INVENTORY_DESC">Item is in inventory</string>
   <string name="SYS_INVENTORY_ITEM_COPIED">Item successfully copied</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Copy the item</string>
   <string name="SYS_INVENTORY_ITEM_CREATE">Create a item</string>
@@ -823,7 +822,6 @@
   <string name="SYS_INVENTORY_ITEM_RETIRE">Retire the item</string>
   <string name="SYS_INVENTORY_ITEM_RETIRE_DESC">You can #VAR1_BOLD#. This has the advantage that the data is preserved and you can later always see who has borrowed this item.</string>
   <string name="SYS_INVENTORY_ITEM_RETIRED">Item successfully retired</string>
-  <string name="SYS_INVENTORY_ITEM_RETIRED_CHANGELOG">Item retired?</string>
   <string name="SYS_INVENTORY_ITEM_RETURN">Return the item</string>
   <string name="SYS_INVENTORY_ITEMS">Items</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING">Disable borrowing functionality</string>
@@ -889,7 +887,6 @@
   <string name="SYS_INVENTORY_USE_CURRENT_USER">Current user as default selection</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER_DESC">If this option is enabled, the current user is used as the default selection for the keeper when creating a new item. (Default: no)</string>
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
-  <string name="SYS_INVENTORY_VALUE_LIST_DESC">In this field you can enter the items for the dropdown list or options field. Each line can record one entry for the dropdown list or options field.\n\nFor the item, the text is not stored later; instead, the selected position from the list is saved. Therefore, if you change the text on one line, all items already assigned will immediately receive the new text. However, if you move an entry to a different line, a different entry may be displayed for the item.\n\nFor an options field, an icon can be displayed instead of text. You can specify the name of an icon from the theme folder (e.g.: ok.png), the URL of an external image (e.g.: https://www.example.com/example.jpg), or an icon from the web font “Bootstrap Icons” (#VAR1#https://icons.getbootstrap.com#VAR2#). Optionally, a tooltip for the icon can be set via a vertical bar (e.g.: female.png|female).</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_KEEP_ORIGINAL">Save original files additionally</string>

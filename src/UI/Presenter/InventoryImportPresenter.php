@@ -269,7 +269,7 @@ class InventoryImportPresenter extends PagePresenter
         });
 
         //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
         $items = new ItemsData($gDb, $gCurrentOrgId);
         foreach ($items->getItemFields() as $itemField) {
             if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {

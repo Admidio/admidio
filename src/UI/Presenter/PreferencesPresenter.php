@@ -783,7 +783,7 @@ class PreferencesPresenter extends PagePresenter
         global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
         //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',

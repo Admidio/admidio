@@ -35,7 +35,7 @@ class ItemBorrowData extends Entity
      * Constructor that will create an object of a recordset of the table adm_user_data.
      * If the id is set than the specific item will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int $id The id of the item. If 0, an empty object of the table is created.
+     * @param int $id The id of the entry. If 0, an empty object of the table is created.
      * @throws Exception
      */
     public function __construct(Database $database, ?ItemsData $itemsData = null, int $id = 0)

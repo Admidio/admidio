@@ -43,7 +43,7 @@ class InventoryItemPresenter extends PagePresenter
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
         //array with the internal field names of the borrow fields not used in the edit form
-        $borrowFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
+        $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -81,15 +81,6 @@ class InventoryItemPresenter extends PagePresenter
             $infNameIntern = $itemField->getValue('inf_name_intern');
             // Skip borrow fields that are not used in the edit form
             if (in_array($itemField->getValue('inf_name_intern'), $borrowFieldNames)) {
-                if ($infNameIntern === 'IN_INVENTORY') {
-                    // we need to add the checkbox for IN_INVENTORY defaulting to true
-                    $form->addInput(
-                        'INF-' . $infNameIntern,
-                        $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool)$items->getValue($infNameIntern),
-                        array('property' => FormPresenter::FIELD_HIDDEN)
-                    );
-                }
                 continue;
             }       
 
@@ -305,7 +296,7 @@ class InventoryItemPresenter extends PagePresenter
         // array with the internal field names of the borrow fields not used in the edit form
         // we also exclude IITEMNAME from the edit form, because it is only used for displaying item values based on the first entry
         // and it is not wanted to change the item name for multiple items at once
-        $borrowFieldNames = array('ITEMNAME', 'IN_INVENTORY', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
+        $borrowFieldNames = array('ITEMNAME', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -613,7 +604,7 @@ class InventoryItemPresenter extends PagePresenter
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gL10n, $gCurrentOrgId, $gDb;
         //array with the internal field names of the borrow fields not used in the edit form
-        $borrowFieldNames = array('ITEMNAME', 'IN_INVENTORY', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
+        $borrowFieldNames = array('ITEMNAME', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -648,17 +639,14 @@ class InventoryItemPresenter extends PagePresenter
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
         
-            if($infNameIntern === 'IN_INVENTORY') {
-                $ivtInInventory = $infNameIntern;
-            }
-            elseif($infNameIntern === 'LAST_RECEIVER') {
+            if($infNameIntern === 'LAST_RECEIVER') {
                 $ivtLastReceiver = $infNameIntern;
             }
             elseif ($infNameIntern === 'BORROW_DATE') {
-                $ivtReceivedOn = $infNameIntern;
+                $ivtBorrowDate = $infNameIntern;
             }
             elseif ($infNameIntern === 'RETURN_DATE') {
-                $ivtReceivedBackOn = $infNameIntern;
+                $ivtReturnDate = $infNameIntern;
             }
 
             // Skip all fields not used in the borrow form
@@ -677,32 +665,30 @@ class InventoryItemPresenter extends PagePresenter
             if (!$gCurrentUser->isAdministratorInventory() && !in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
             }
-            
-            if (isset($ivtInInventory, $ivtLastReceiver, $ivtReceivedOn, $ivtReceivedBackOn)) {
-                // Add JavaScript to check the LAST_RECEIVER field and set the required attribute for ivtReceivedOnId and ivtReceivedBackOnId
+
+            if (isset($ivtLastReceiver, $ivtBorrowDate, $ivtReturnDate)) {
+                // Add JavaScript to check the LAST_RECEIVER field and set the required attribute for ivtBorrowDate and ivtReturnDate
                 $this->addJavascript('
                     document.addEventListener("DOMContentLoaded", function() {
-                        if (document.querySelector("[id=\'INF-' . $ivtReceivedOn . '_time\']")) {
+                        if (document.querySelector("[id=\'INF-' . $ivtBorrowDate . '_time\']")) {
                             var pDateTime = "true";
                         } else {
                             var pDateTime = "false";
                         }
         
-                        var ivtInInventoryField = document.querySelector("[id=\'INF-' . $ivtInInventory . '\']");
-                        var ivtInInventoryGroup = document.getElementById("INF-' . $ivtInInventory . '_group");
                         var ivtLastReceiverField = document.querySelector("[id=\'INF-' . $ivtLastReceiver . '\']");
-                        var ivtLastReceiverGroup = document.getElementById("INF-' . $ivtLastReceiver . '_group");
-                        var ivtReceivedOnField = document.querySelector("[id=\'INF-' . $ivtReceivedOn . '\']");
-        
+                        var ivtBorrowDateField = document.querySelector("[id=\'INF-' . $ivtBorrowDate . '\']");
+                        var ivtReturnDateField = document.querySelector("[id=\'INF-' . $ivtReturnDate . '\']");
+
                         if (pDateTime === "true") {
-                            var ivtReceivedOnFieldTime = document.querySelector("[id=\'INF-' . $ivtReceivedOn . '_time\']");
-                            var ivtReceivedBackOnFieldTime = document.querySelector("[id=\'INF-' . $ivtReceivedBackOn . '_time\']");
+                            var ivtBorrowDateFieldTime = document.querySelector("[id=\'INF-' . $ivtBorrowDate . '_time\']");
+                            var ivtReturnDateFieldTime = document.querySelector("[id=\'INF-' . $ivtReturnDate . '_time\']");
                         }
         
-                        var ivtReceivedOnGroup = document.getElementById("INF-' . $ivtReceivedOn . '_group");
-                        var ivtReceivedBackOnField = document.querySelector("[id=\'INF-' . $ivtReceivedBackOn . '\']");
-                        var ivtReceivedBackOnGroup = document.getElementById("INF-' . $ivtReceivedBackOn . '_group");
-        
+                        var ivtLastReceiverGroup = document.getElementById("INF-' . $ivtLastReceiver . '_group");
+                        var ivtBorrowDateGroup = document.getElementById("INF-' . $ivtBorrowDate . '_group");
+                        var ivtReturnDateGroup = document.getElementById("INF-' . $ivtReturnDate . '_group");
+
                         function setRequired(field, group, required) {
                             if (required) {
                             field.setAttribute("required", "required");
@@ -712,91 +698,58 @@ class InventoryItemPresenter extends PagePresenter
                             group.classList.remove("admidio-form-group-required");
                             }
                         }
-        
-                        window.checkivtInInventory = function() {
-                            var isInInventoryChecked = ivtInInventoryField.checked;
+
+                         window.checkItemBorrowState = function() {
                             var lastReceiverValue = ivtLastReceiverField.value;
-                            var receivedBackOnValue = ivtReceivedBackOnField.value;
-        
-                            setRequired(ivtReceivedOnField, ivtReceivedOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
-                            setRequired(ivtReceivedBackOnField, ivtReceivedBackOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
+                            var borrowDateValue = ivtBorrowDateField.value;
+                            var returnDateValue = ivtReturnDateField.value;
+                            var requiredLastReceiverCheck = borrowDateValue !== "" || returnDateValue !== "";
+                            var requiredBorrowDateCheck = (lastReceiverValue && lastReceiverValue !== "undefined") || returnDateValue !== "";
+
+                            setRequired(ivtLastReceiverField, ivtLastReceiverGroup, requiredLastReceiverCheck);
+                            setRequired(ivtBorrowDateField, ivtBorrowDateGroup, requiredBorrowDateCheck);
                             if (pDateTime === "true") {
-                                setRequired(ivtReceivedOnFieldTime, ivtReceivedOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
-                                setRequired(ivtReceivedBackOnFieldTime, ivtReceivedBackOnGroup, isInInventoryChecked && (lastReceiverValue && lastReceiverValue !== "undefined"));
+                                setRequired(ivtBorrowDateFieldTime, ivtBorrowDateGroup, requiredBorrowDateCheck);
                             }
         
-                            setRequired(ivtLastReceiverField, ivtLastReceiverGroup, !isInInventoryChecked);
-                            setRequired(ivtReceivedOnField, ivtReceivedOnGroup, !isInInventoryChecked);
-                            if (pDateTime === "true") {
-                                setRequired(ivtReceivedOnFieldTime, ivtReceivedOnGroup, !isInInventoryChecked);
-                            }
-        
-                            if (!isInInventoryChecked && (lastReceiverValue === "undefined" || !lastReceiverValue)) {
-                                ivtReceivedOnField.value = "";
-                                if (pDateTime === "true") {
-                                    ivtReceivedOnFieldTime.value = "";
-                                }
-                            }
-        
-                            if (receivedBackOnValue !== "") {
+                            if (returnDateValue !== "") {
                                 setRequired(ivtLastReceiverField, ivtLastReceiverGroup, true);
-                                setRequired(ivtReceivedOnField, ivtReceivedOnGroup, true);
+                                setRequired(ivtBorrowDateField, ivtBorrowDateGroup, true);
                                 if (pDateTime === "true") {
-                                    setRequired(ivtReceivedOnFieldTime, ivtReceivedOnGroup, true);
-                                    setRequired(ivtReceivedBackOnFieldTime, ivtReceivedBackOnGroup, true);
+                                    setRequired(ivtBorrowDateFieldTime, ivtBorrowDateGroup, true);
+                                    setRequired(ivtReturnDateFieldTime, ivtReturnDateGroup, true);
                                 }
-                            }
-        
-                            var previousivtInInventoryState = isInInventoryChecked;
-        
-                            ivtInInventoryField.addEventListener("change", function() {
-                                if (!ivtInInventoryField.checked && previousivtInInventoryState) {
-                                    ivtReceivedBackOnField.value = "";
-                                    if (pDateTime === "true") {
-                                        ivtReceivedBackOnFieldTime.value = "";
-                                    }
-                                }
-                                previousivtInInventoryState = ivtInInventoryField.checked;
-                                window.checkivtInInventory();
-                            });
-        
-                            ivtLastReceiverField.addEventListener("change", window.checkivtInInventory);
-                            ivtReceivedBackOnField.addEventListener("input", window.checkivtInInventory);
-                            ivtReceivedOnField.addEventListener("input", validateReceivedOnAndBackOn);
-                            if (pDateTime === "true") {
-                                ivtReceivedOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
-                                ivtReceivedBackOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
                             }
                         }
         
                         function validateReceivedOnAndBackOn() {
                             if (pDateTime === "true") {
-                                var receivedOnDate = new Date(ivtReceivedOnField.value + " " + ivtReceivedOnFieldTime.value);
-                                var receivedBackOnDate = new Date(ivtReceivedBackOnField.value + " " + ivtReceivedBackOnFieldTime.value);
+                                var receivedOnDate = new Date(ivtBorrowDateField.value + " " + ivtBorrowDateFieldTime.value);
+                                var receivedBackOnDate = new Date(ivtReturnDateField.value + " " + ivtReturnDateFieldTime.value);
                             } else {
-                                var receivedOnDate = new Date(ivtReceivedOnField.value);
-                                var receivedBackOnDate = new Date(ivtReceivedBackOnField.value);
+                                var receivedOnDate = new Date(ivtBorrowDateField.value);
+                                var receivedBackOnDate = new Date(ivtReturnDateField.value);
                             }
         
                             if (receivedOnDate > receivedBackOnDate) {
-                                ivtReceivedOnField.setCustomValidity("ReceivedOn date cannot be after ReceivedBack date.");
+                                ivtBorrowDateField.setCustomValidity("' . $gL10n->get('SYS_INVENTORY_BORROW_DATE_WARNING') . '");
                             } else {
-                                ivtReceivedOnField.setCustomValidity("");
+                                ivtBorrowDateField.setCustomValidity("");
                             }
                         }
         
-                        ivtInInventoryField.addEventListener("change", window.checkivtInInventory);
-                        ivtLastReceiverField.addEventListener("change", window.checkivtInInventory);
-        
-                        ivtReceivedOnField.addEventListener("input", validateReceivedOnAndBackOn);
-                        ivtReceivedBackOnField.addEventListener("input", window.checkivtInInventory);
-                        
+                        ivtLastReceiverField.addEventListener("change", window.checkItemBorrowState);
+                        ivtBorrowDateField.addEventListener("input",  window.checkItemBorrowState);
+                        ivtReturnDateField.addEventListener("input",  window.checkItemBorrowState);
+
+                        ivtBorrowDateField.addEventListener("input", validateReceivedOnAndBackOn);
+                        ivtReturnDateField.addEventListener("input", validateReceivedOnAndBackOn);
                         if (pDateTime === "true") {
-                            ivtReceivedOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
-                            ivtReceivedBackOnFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
+                            ivtBorrowDateFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
+                            ivtReturnDateFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
                         }
-                        ivtReceivedBackOnField.addEventListener("input", validateReceivedOnAndBackOn);
-                        window.checkivtInInventory();
+
+                        window.checkItemBorrowState();
                     });
                 ');
             }
@@ -875,7 +828,7 @@ class InventoryItemPresenter extends PagePresenter
                                 // Hole den aktuellen Wert des Select2-Feldes
                                 var renderedElement = $("#select2-INF-' . $ivtLastReceiver .'-container");
                                 if (renderedElement.length) {
-                                    window.checkivtInInventory();
+                                    window.checkItemBorrowState();
                                 }
                             }
                             // Prüfe, ob der Default-Wert in den Optionen enthalten ist

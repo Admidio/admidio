@@ -223,8 +223,7 @@ class ImportService
             foreach ($items->getItemData() as $key => $itemData) {
                 $itemValue = $itemData->getValue('ind_value');
                 if ($itemData->getValue('inf_name_intern') === 'KEEPER' || $itemData->getValue('inf_name_intern') === 'LAST_RECEIVER' ||
-                        $itemData->getValue('inf_name_intern') === 'IN_INVENTORY' || $itemData->getValue('inf_name_intern') === 'BORROW_DATE' ||
-                        $itemData->getValue('inf_name_intern') === 'RETURN_DATE') {
+                        $itemData->getValue('inf_name_intern') === 'BORROW_DATE' || $itemData->getValue('inf_name_intern') === 'RETURN_DATE') {
                     continue;
                 }
                 
@@ -267,7 +266,7 @@ class ImportService
         // get all values of the item fields
         $importedItemData = array();
         //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         foreach ($assignedFieldColumn as $row => $values) {
             foreach ($items->getItemFields() as $fields){
@@ -354,7 +353,7 @@ class ImportService
                             }
                         }
                     }
-                    elseif($imfNameIntern === 'BORROWING_DATE' || $imfNameIntern === 'RETURN_DATE') {
+                    elseif($imfNameIntern === 'BORROW_DATE' || $imfNameIntern === 'RETURN_DATE') {
                         $val = $values[$infId];
                         if ($val !== '') {
                             // date must be formatted
@@ -471,7 +470,7 @@ class ImportService
     private function compareArrays(array $array1, array $array2) : bool
     {
         $array1 = array_filter($array1, function($key) {
-            return $key !== 'KEEPER' && $key !== 'LAST_RECEIVER' && $key !== 'IN_INVENTORY' && $key !== 'BORROW_DATE' && $key !== 'RETURN_DATE';
+            return $key !== 'KEEPER' && $key !== 'LAST_RECEIVER' && $key !== 'BORROW_DATE' && $key !== 'RETURN_DATE';
         }, ARRAY_FILTER_USE_KEY);
 
         foreach ($array1 as $value) {

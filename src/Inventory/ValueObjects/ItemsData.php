@@ -854,6 +854,20 @@ class ItemsData
         return false;
     }
 
+    public function isBorrowed(): bool
+    {
+        // get Values of LAST_RECEIVER, BORROW_DATE and RETURN_DATE for current item
+        $borrowData = new ItemBorrowData($this->mDb, $this);
+        $borrowData->readDataByColumns(array('inb_ini_id' => $this->mItemId));
+        $lastReceiver = $borrowData->getValue('inb_last_receiver');
+        $borrowDate = $borrowData->getValue('inb_borrow_date');
+        $returnDate = $borrowData->getValue('inb_return_date');
+        // if last receiver is set and borrow date is set and return date is not set then item is borrowed
+        if ($lastReceiver !== '' && $borrowDate !== '' && $returnDate === '') {
+            return true;
+        }
+        return false;
+    }
     /**
      * If the recordset is new and wasn't read from database or was not stored in database
      * then this method will return true otherwise false
@@ -1269,12 +1283,6 @@ class ItemsData
                                         $key,
                                         isset($users[$value['oldValue']]) ? $users[$value['oldValue']] : $value['oldValue'],
                                         isset($users[$value['newValue']]) ? $users[$value['newValue']] : $value['newValue']
-                                    );
-                                } elseif ($key === 'IN_INVENTORY') {
-                                    $changes[] = array(
-                                        $key,
-                                        $value['oldValue'] == 1 ? $gL10n->get('SYS_YES') : ($value['oldValue'] == 0 ? $gL10n->get('SYS_NO') : $value['oldValue']),
-                                        $value['newValue'] == 1 ? $gL10n->get('SYS_YES') : ($value['newValue'] == 0 ? $gL10n->get('SYS_NO') : $value['newValue'])
                                     );
                                 } elseif ($options !== '') {
                                     $changes[] = array(

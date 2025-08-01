@@ -726,7 +726,7 @@ class InventoryPresenter extends PagePresenter
         $exportHeaders = array();
         $columnNumber = 1;
         //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROWING_DATE', 'RETURN_DATE');
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Build headers and column alignment for each item field
         foreach ($this->itemsData->getItemFields() as $itemField) {
@@ -930,7 +930,7 @@ class InventoryPresenter extends PagePresenter
                         // Add borrow action
                         if (!$this->itemsData->isRetired() && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                             // check if the item is in inventory
-                            if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
+                            if (!$this->itemsData->isBorrowed()) {
                                 $item_borrowed = false;
                                 $icon ='bi bi-box-arrow-right';
                                 $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
@@ -1083,7 +1083,7 @@ class InventoryPresenter extends PagePresenter
         $headers     = array();
         $columnNumber = 1;
         //array with the internal field names of the borrow fields
-        $borrowFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
+        $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // create array with all column heading values
         $profileItemFields = array('ITEMNAME');
@@ -1229,7 +1229,7 @@ class InventoryPresenter extends PagePresenter
                     // Add lend action
                     if (!$this->itemsData->isRetired() && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                         // check if the item is in inventory
-                        if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
+                        if (!$this->itemsData->isBorrowed()) {
                             $item_borrowed = false;
                             $icon ='bi bi-box-arrow-right';
                             $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
