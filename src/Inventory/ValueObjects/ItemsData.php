@@ -280,7 +280,7 @@ class ItemsData
         // first initialize existing data
         $this->mItems = array();
 
-        $sqlWhereCondition = '';
+        $sqlStatusCondition = '';
         if (!$this->showRetiredItems) {
             // get the option id of the retired status
             $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
@@ -292,7 +292,7 @@ class ItemsData
                     break;
                 }
             }
-            $sqlWhereCondition .= 'AND ini_status = ' . $retiredId;
+            $sqlStatusCondition .= 'AND ini_status = ' . $retiredId;
         }
 
         $sqlImfIds = 'AND (';
@@ -313,35 +313,38 @@ class ItemsData
                 WHERE (ini_org_id IS NULL
                     OR ini_org_id = ?)
                 AND ind_value = ?
-                ' . $sqlWhereCondition . ';';
+                ' . $sqlStatusCondition . ';';
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
 
         while ($row = $statement->fetch()) {
             $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
         }
 
-        // now read the item borrow data for each item
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
-                INNER JOIN ' . TBL_INVENTORY_ITEMS . '
-                    ON ini_id = inb_ini_id
+        // read the borrow data for the given user as receiver
+        if (in_array('LAST_RECEIVER', $fieldNames)) {
+            // now read the item borrow data for each item
+            $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+                    INNER JOIN ' . TBL_INVENTORY_ITEMS . '
+                        ON ini_id = inb_ini_id
                 WHERE (ini_org_id IS NULL
                     OR ini_org_id = ?)
-                AND inb_last_receiver = ?
-                ' . $sqlWhereCondition . ';';
-        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
-        // check if a item already exists in the items array
-        while ($row = $statement->fetch()) {
-            // check if item already exists in the items array
-            $itemExists = false;
-            foreach ($this->mItems as $item) {
-                if ($item['ini_id'] === $row['ini_id']) {
-                    $itemExists = true;
-                    break;
+                    AND inb_last_receiver = ?
+                    ' . $sqlStatusCondition . ';';
+            $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
+            // check if a item already exists in the items array
+            while ($row = $statement->fetch()) {
+                // check if item already exists in the items array
+                $itemExists = false;
+                foreach ($this->mItems as $item) {
+                    if ($item['ini_id'] === $row['ini_id']) {
+                        $itemExists = true;
+                        break;
+                    }
                 }
-            }
-            // if item doesn't exist, then add it to the items array
-            if (!$itemExists) {
-                $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
+                // if item doesn't exist, then add it to the items array
+                if (!$itemExists) {
+                    $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
+                }
             }
         }
     }
