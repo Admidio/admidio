@@ -188,20 +188,6 @@ class ItemsData
             $this->mItemId = $itemId;
             $this->mItemUUID = $itemUUID;
 
-            // read the values of the item itself
-            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEMS . '
-                    INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                        ON inf_name_intern IN ( ?, ? ) 
-                    WHERE ini_id = ?
-                    AND inf_org_id = ?;';
-            $itemDataStatement = $this->mDb->queryPrepared($sql, array('CATEGORY', 'STATUS', $itemId, $this->organizationId));
-
-            while ($row = $itemDataStatement->fetch()) {
-                if (!array_key_exists($row['inf_id'], $this->mItemData)) {
-                    $this->mItemData[$row['inf_id']] = new Item($this->mDb, $this, $itemId);
-                }
-                $this->mItemData[$row['inf_id']]->setArray($row);
-            }
 
             // read all item data
             $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_DATA . '
@@ -836,9 +822,9 @@ class ItemsData
     {
         global $gDb;
         $optionId = $this->getStatus();
-        $option = new SelectOptions($gDb);
+        $option = new SelectOptions($gDb, $this->getProperty('STATUS', 'inf_id'));
         if ($option->readDataById($optionId)) {
-            return $option->getValue('ifo_value') === 'SYS_INVENTORY_STATUS_RETIRED';
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS';
         }
         return false;
     }
@@ -847,9 +833,9 @@ class ItemsData
     {
         global $gDb;
         $optionId = $this->getStatus();
-        $option = new SelectOptions($gDb);
+        $option = new SelectOptions($gDb, $this->getProperty('STATUS', 'inf_id'));
         if ($option->readDataById($optionId)) {
-            return $option->getValue('ifo_value') === 'SYS_INVENTORY_STATUS_IN_USE';
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_FILTER_IN_USE_ITEMS';
         }
         return false;
     }
@@ -1131,7 +1117,7 @@ class ItemsData
             }
             
             // dont safe CATEGORY field to items data
-            if ($value instanceof ItemData && $value->getValue('ind_inf_id') === 2) {
+            if ($value instanceof ItemData && ($value->getValue('ind_inf_id') === 2 || $value->getValue('inf_name_intern') === 'CATEGORY')) { // 2 == CATEGORY field
                 $category = new Category($this->mDb);
                 $category->readDataByUuid($value->getValue('ind_value'));
                 $catID = $category->getValue('cat_id');
@@ -1141,7 +1127,7 @@ class ItemsData
                 $item->save();
                 $value->delete();
             }
-            elseif ($value instanceof ItemData && $value->getValue('ind_inf_id') === 8) {
+            elseif ($value instanceof ItemData && ($value->getValue('ind_inf_id') === 3 || $value->getValue('inf_name_intern') === 'STATUS')) { // 3 == STATUS field
                 $item = new Item($this->mDb, $this, $this->mItemId);
                 $item->setValue('ini_status', $value->getValue('ind_value'));
                 $item->save();

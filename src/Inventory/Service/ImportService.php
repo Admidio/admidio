@@ -226,28 +226,17 @@ class ImportService
                         $itemData->getValue('inf_name_intern') === 'BORROW_DATE' || $itemData->getValue('inf_name_intern') === 'RETURN_DATE') {
                     continue;
                 }
-                
-                if ($itemData->getValue('inf_name_intern') === 'CATEGORY') {
-                    $item = new Item($gDb,  $items, $items->getItemId());
-                    $catID = $item->getValue('ini_cat_id');
-                    $category = new Category($gDb);
-                    if ($category->readDataById($catID)) {
-                        $itemValues[] = array($itemData->getValue('inf_name_intern') => $category->getValue('cat_name'));
-                    }
-                    continue;
-                }
-                elseif ($itemData->getValue('inf_name_intern') === 'STATUS') {
-                    $item = new Item($gDb,  $items, $items->getItemId());
-                    $itemStatusId = $item->getStatus();
-                    $option = new SelectOptions($gDb, $itemData->getValue('inf_id'));
-                    if ($option->readDataById($itemStatusId)) {
-                        $itemValues[] = array($itemData->getValue('inf_name_intern') => Language::translateIfTranslationStrId($option->getValue('ifo_value')));
-                    }
-                    continue;
-                }
 
                 $itemValues[] = array($itemData->getValue('inf_name_intern') => $itemValue);
             }
+            // also add a column with the category if it exists
+            $item = new Item($gDb,  $items, $items->getItemId());
+            $catID = $item->getValue('ini_cat_id');
+            $category = new Category($gDb);
+            if ($category->readDataById($catID)) {
+                $itemValues[] = array('CATEGORY' => $category->getValue('cat_name'));
+            }
+
             $itemValues = array_merge_recursive(...$itemValues);
         
             if (count($assignedFieldColumn) === 0) {
@@ -336,7 +325,7 @@ class ImportService
                             $categoryService = new CategoryService($gDb, 'IVT');
                             $allCategories = $categoryService->getVisibleCategories();
                             foreach ($allCategories as $key => $category) {
-                                if ($category['cat_name'] === $catName) {
+                                if (Language::translateIfTranslationStrId($category['cat_name']) === $catName) {
                                     $val = $category['cat_uuid'];
                                     break;
                                 }

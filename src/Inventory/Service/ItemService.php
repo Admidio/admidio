@@ -145,14 +145,10 @@ class ItemService
                         isset($formValues[$postKey . '_time']) ? $dateValue = $formValues[$postKey] . ' ' . $formValues[$postKey . '_time'] : $dateValue = $formValues[$postKey];
 
                         // Write value from field to the item class object with time
-                        if (!$this->itemRessource->setValue($infNameIntern, $dateValue)) {
-                            throw new Exception($gL10n->get('SYS_DATABASE_ERROR'), $gL10n->get('SYS_ERROR'));
-                        }
+                        $this->itemRessource->setValue($infNameIntern, $dateValue);
                     } else {
                         // Write value from field to the item class object
-                        if (!$this->itemRessource->setValue($infNameIntern, $formValues[$postKey])) {
-                            throw new Exception($gL10n->get('SYS_DATABASE_ERROR'), $gL10n->get('SYS_ERROR'));
-                        }
+                        $this->itemRessource->setValue($infNameIntern, $formValues[$postKey]);
                     }
                 } elseif ($itemField->getValue('inf_type') === 'CHECKBOX' && !$multiEdit) {
                     // Set value to '0' for unchecked checkboxes

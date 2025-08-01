@@ -152,7 +152,7 @@ class Item extends Entity
         $optionId = $this->getStatus();
         $option = new SelectOptions($gDb, $this->mItemsData->getProperty('STATUS', 'inf_id'));
         if ($option->readDataById($optionId)) {
-            return $option->getValue('ifo_value') === 'SYS_INVENTORY_STATUS_RETIRED';
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS';
         }
         return false;
     }
@@ -167,7 +167,7 @@ class Item extends Entity
         $optionId = $this->getStatus();
         $option = new SelectOptions($gDb, $this->mItemsData->getProperty('STATUS', 'inf_id'));
         if ($option->readDataById($optionId)) {
-            return $option->getValue('ifo_value') === 'SYS_INVENTORY_STATUS_IN_USE';
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_FILTER_IN_USE_ITEMS';
         }
         return false;
     }

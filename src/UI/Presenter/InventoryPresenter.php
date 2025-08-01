@@ -55,9 +55,9 @@ class InventoryPresenter extends PagePresenter
      */
     protected int $getFilterKeeper = 0;
     /**
-     * @var int filter for all items
+     * @var int filter id for the status selection
      */
-    protected int $getFilterItems = 0;
+    protected int $getFilterStatus = 0;
     /**
      * @var bool true if all items should be shown
      */
@@ -76,12 +76,12 @@ class InventoryPresenter extends PagePresenter
         $this->getFilterString = admFuncVariableIsValid($_GET, 'items_filter_string', 'string', array('defaultValue' => ''));
         $this->getFilterCategoryUUID = admFuncVariableIsValid($_GET, 'items_filter_category', 'string', array('defaultValue' => ''));
         $this->getFilterKeeper = admFuncVariableIsValid($_GET, 'items_filter_keeper', 'int', array('defaultValue' => 0));
-        $this->getFilterItems = admFuncVariableIsValid($_GET, 'items_filter', 'int', array('defaultValue' => 1));
+        $this->getFilterStatus = admFuncVariableIsValid($_GET, 'items_filter_status', 'int', array('defaultValue' => 1));
 
         $this->itemsData = new ItemsData($gDb, $gCurrentOrgId);
         
         // check if the user has selected to show retired items
-        $this->showRetiredItems = ($this->getFilterItems === 0 || $this->getFilterItems === 2) ? true : false;
+        $this->showRetiredItems = ($this->getFilterStatus === 0 || $this->getFilterStatus === 2) ? true : false;
         $this->itemsData->showRetiredItems($this->showRetiredItems);
         $this->itemsData->readItems();
 
@@ -158,7 +158,7 @@ class InventoryPresenter extends PagePresenter
         
         $this->addJavascript('
             // only submit non-empty filter values
-            $("#items_filter_category, #items_filter_keeper, #items_filter").on("change", function(){
+            $("#items_filter_category, #items_filter_keeper, #items_filter_status").on("change", function(){
                 var form = $("#adm_navbar_filter_form");
 
                 // Text-Filter
@@ -186,11 +186,11 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 // items filter
-                var itemsSelect = $("#items_filter");
+                var itemsSelect = $("#items_filter_status");
                 if (itemsSelect.val() === "") {
                     itemsSelect.removeAttr("name");
                 } else {
-                    itemsSelect.attr("name", "items_filter");
+                    itemsSelect.attr("name", "items_filter_status");
                 }
 
                 form.submit();
@@ -218,15 +218,15 @@ class InventoryPresenter extends PagePresenter
             // create the print view link with the current filter values
             $("#menu_item_lists_print_view").off("click").on("click", function(e){
                 e.preventDefault();
-                var textFilter     = $("#items_filter_string").val() || "";
-                var category     = $("#items_filter_category").val()   || "";
-                var keeper  = $("#items_filter_keeper").val()     || "";
-                var filterItems = $("#items_filter").val()     || "";
+                var textFilter     = $("#items_filter_string").val()  || "";
+                var category     = $("#items_filter_category").val()  || "";
+                var keeper  = $("#items_filter_keeper").val()         || "";
+                var filterItems = $("#items_filter_status").val()     || "";
                 var url = "' . $printBaseUrl . '"
                         + "&items_filter_string="   + encodeURIComponent(textFilter)
                         + "&items_filter_category=" + encodeURIComponent(category)
                         + "&items_filter_keeper="   + encodeURIComponent(keeper)
-                        + "&items_filter="        + encodeURIComponent(filterItems);
+                        + "&items_filter_status="   + encodeURIComponent(filterItems);
             
                 window.open(url, "_blank");
             });',
@@ -280,14 +280,6 @@ class InventoryPresenter extends PagePresenter
         );
 
         // get the status options for the filter
-/*         $sql = 'SELECT ifo_id, ifo_value
-                  FROM ' . TBL_INVENTORY_FIELD_OPTIONS . '
-                 WHERE ifo_inf_id = ?';
-        $countFilteredStatement = $gDb->queryPrepared($sql, array($this->itemsData->getProperty('STATUS', 'inf_id')));
-        $selectBoxValues = array();
-        while ($row = $countFilteredStatement->fetch()) {
-            $selectBoxValues[$row['ifo_id']] = $row['ifo_value'];
-        } */
         $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));
         $values = $option->getAllOptions();
         $selectBoxValues = array();
@@ -299,12 +291,12 @@ class InventoryPresenter extends PagePresenter
 
         // filter all items
         $form->addSelectBox(
-            'items_filter',
+            'items_filter_status',
             $gL10n->get('SYS_INVENTORY_ITEMS'),
             $selectBoxValues,
             array(
                 'property' => $showFilterForm,
-                'defaultValue' => $this->getFilterItems,
+                'defaultValue' => $this->getFilterStatus,
                 'showContextDependentFirstEntry' => false
             )
         );
@@ -336,7 +328,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_xlsx'
                 )
             ),
@@ -350,7 +342,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_ods'
                 )
             ),
@@ -364,7 +356,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_csv-ms'
                 )
             ),
@@ -378,7 +370,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_csv-oo'
                 )
             ),
@@ -392,7 +384,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_pdf'
                 )
             ),
@@ -406,7 +398,7 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_pdfl'
                 )
             ),
@@ -428,16 +420,16 @@ class InventoryPresenter extends PagePresenter
             $.each(buttons, function(suffix, modeValue){
                 var selector = "#menu_item_lists_" + suffix;
                 $(selector).on("click", function(e){
-                    var textFilter = $("#items_filter_string").val()            || "";
-                    var category   = $("#items_filter_category").val()         || "";
-                    var keeper     = $("#items_filter_keeper").val()           || "";
-                    var filterItems = $("#items_filter").val()     || "";
+                    var textFilter = $("#items_filter_string").val()      || "";
+                    var category   = $("#items_filter_category").val()    || "";
+                    var keeper     = $("#items_filter_keeper").val()      || "";
+                    var filterItems = $("#items_filter_status").val()     || "";
                     var base = this.href.split("?")[0];
                     var qs = [
                     "items_filter_string="   + encodeURIComponent(textFilter),
                     "items_filter_category=" + encodeURIComponent(category),
                     "items_filter_keeper="   + encodeURIComponent(keeper),
-                    "items_filter="          + encodeURIComponent(filterItems),
+                    "items_filter_status="   + encodeURIComponent(filterItems),
                     "mode="                  + modeValue
                     ].join("&");
                     this.href = base + "?" + qs;
@@ -806,7 +798,7 @@ class InventoryPresenter extends PagePresenter
                 if (
                     ($this->getFilterCategoryUUID !== '' && $infNameIntern === 'CATEGORY' && $this->getFilterCategoryUUID != $this->itemsData->getValue($infNameIntern, 'database')) ||
                     ($this->getFilterKeeper !== 0 && $infNameIntern === 'KEEPER' && $this->getFilterKeeper != $this->itemsData->getValue($infNameIntern)) ||
-                    ($this->getFilterItems !== 0 && $this->getFilterItems !== $this->itemsData->getStatus())
+                    ($this->getFilterStatus !== 0 && $this->getFilterStatus !== $this->itemsData->getStatus())
                 ) {
                     // skip to the next iteration of the next-outer loop
                     continue 2;
