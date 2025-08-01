@@ -135,7 +135,7 @@ class ItemField extends Entity
             if (!isset($this->dbColumns['inf_description'])) {
                 $value = '';
             } elseif ($format === 'database') {
-                $value = html_entity_decode(StringUtils::strStripTags(Language::translateIfTranslationStrId($this->dbColumns['inf_description'])), ENT_QUOTES, 'UTF-8');
+                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['inf_description']), ENT_QUOTES, 'UTF-8');
             } else {
                 $value = Language::translateIfTranslationStrId($this->dbColumns['inf_description']);
             }

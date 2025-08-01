@@ -188,6 +188,21 @@ class ItemsData
             $this->mItemId = $itemId;
             $this->mItemUUID = $itemUUID;
 
+            // read the values of the item itself
+            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEMS . '
+                    INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+                        ON inf_name_intern IN ( ?, ? ) 
+                    WHERE ini_id = ?
+                    AND inf_org_id = ?;';
+            $itemDataStatement = $this->mDb->queryPrepared($sql, array('CATEGORY', 'STATUS', $itemId, $this->organizationId));
+
+            while ($row = $itemDataStatement->fetch()) {
+                if (!array_key_exists($row['inf_id'], $this->mItemData)) {
+                    $this->mItemData[$row['inf_id']] = new Item($this->mDb, $this, $itemId);
+                }
+                $this->mItemData[$row['inf_id']]->setArray($row);
+            }
+
             // read all item data
             $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_DATA . '
                     INNER JOIN ' . TBL_INVENTORY_FIELDS . '
@@ -204,8 +219,10 @@ class ItemsData
 
             // read all item borrow data
             $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+                    INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+                        ON inf_name_intern IN ( ?, ?, ? ) 
                     WHERE inb_ini_id = ?;';
-            $itemBorrowStatement = $this->mDb->queryPrepared($sql, array($itemId));
+            $itemBorrowStatement = $this->mDb->queryPrepared($sql, array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE', $itemId));
 
             while ($row = $itemBorrowStatement->fetch()) {
                 foreach ($this->getItemFields() as $itemField) {

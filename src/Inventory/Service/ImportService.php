@@ -232,11 +232,21 @@ class ImportService
                     $item = new Item($gDb,  $items, $items->getItemId());
                     $catID = $item->getValue('ini_cat_id');
                     $category = new Category($gDb);
-                    if ($category->readDataById($catID));
+                    if ($category->readDataById($catID)) {
                         $itemValues[] = array($itemData->getValue('inf_name_intern') => $category->getValue('cat_name'));
+                    }
                     continue;
                 }
-        
+                elseif ($itemData->getValue('inf_name_intern') === 'STATUS') {
+                    $item = new Item($gDb,  $items, $items->getItemId());
+                    $itemStatusId = $item->getStatus();
+                    $option = new SelectOptions($gDb, $itemData->getValue('inf_id'));
+                    if ($option->readDataById($itemStatusId)) {
+                        $itemValues[] = array($itemData->getValue('inf_name_intern') => Language::translateIfTranslationStrId($option->getValue('ifo_value')));
+                    }
+                    continue;
+                }
+
                 $itemValues[] = array($itemData->getValue('inf_name_intern') => $itemValue);
             }
             $itemValues = array_merge_recursive(...$itemValues);
@@ -385,13 +395,30 @@ class ImportService
                         }
                     }
                     elseif($imfNameIntern === 'STATUS') {
-                        $option = new SelectOptions($gDb, $infId);
-                        $optionValues = $option->getAllOptions();
+                        $statusValue = $values[$infId];
                         $val = '';
-                        foreach ($optionValues as $optionData) {
-                            if (Language::translateIfTranslationStrId($optionData['value']) === $values[$infId]) {
-                                $val = $optionData['id'];
-                                break;
+                        if ($statusValue !== '') {
+                            // if no status is given, set the default status
+                            $option = new SelectOptions($gDb, $fields->getValue('inf_id'));
+                            $optionValues = $option->getAllOptions();
+                            foreach ($optionValues as $optionData) {
+                                if (Language::translateIfTranslationStrId($optionData['value']) === $statusValue) {
+                                    $val = $optionData['id'];
+                                    break;
+                                }
+                            }
+                            if ($val === '') {
+                                $option = new SelectOptions($gDb, $fields->getValue('inf_id'));
+                                $options = $option->getAllOptions();
+                                $maxId = 0;
+                                foreach ($options as $optionData) {
+                                    if ($optionData['id'] > $maxId) {
+                                        $maxId = $optionData['id'];
+                                    }
+                                }
+                                $newOption[$maxId + 1] = array('value' => $statusValue);
+                                $option->setOptionValues($newOption);
+                                $val = $option->getValue('ifo_id');
                             }
                         }
                     }

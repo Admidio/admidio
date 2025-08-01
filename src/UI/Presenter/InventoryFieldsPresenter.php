@@ -180,7 +180,7 @@ class InventoryFieldsPresenter extends PagePresenter
         $form->addEditor(
             'inf_description',
             $gL10n->get('SYS_DESCRIPTION'),
-            $itemField->getValue('inf_description'),
+            $itemField->getValue('inf_description', 'database'),
             array('toolbar' => 'AdmidioComments'));
 
         $form->addSubmitButton(
