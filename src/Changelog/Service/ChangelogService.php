@@ -524,6 +524,7 @@ class ChangelogService {
             'inf_sequence' =>              'SYS_ORDER',
             'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS'),
+            'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE'),
             'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
             'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
             'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  

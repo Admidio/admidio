@@ -44,6 +44,7 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_items_per_page']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_field_history_days']}
     {include 'sys-template-parts/form.separator.tpl' data=$elements['inventory_separator_general_settings']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_item_picture_storage']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_show_obsolete_select_field_options']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_items_disable_borrowing']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_system_field_names_editable']}

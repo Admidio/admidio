@@ -7,6 +7,8 @@ use Admidio\Categories\Service\CategoryService;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\SystemInfoUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
@@ -67,6 +69,15 @@ class InventoryItemPresenter extends PagePresenter
                 $pimKeeper = $infNameIntern;
             }
         }
+
+        $this->addJavascript('
+            function callbackItemPicture() {
+                var imgSrc = $("#adm_inventory_item_picture").attr("src");
+                var timestamp = new Date().getTime();
+                $("#adm_button_delete_picture").hide();
+                $("#adm_inventory_item_picture").attr("src", imgSrc + "&" + timestamp);
+            }
+        ');
 
         // show form
         $form = new FormPresenter(
@@ -281,6 +292,15 @@ class InventoryItemPresenter extends PagePresenter
         $this->assignSmartyVariable('lastUserEditedName', $item->getNameOfLastEditingUser());
         $this->assignSmartyVariable('lastUserEditedTimestamp', $item->getValue('ini_timestamp_change'));
         
+        $this->assignSmartyVariable('urlItemPicture', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)));
+        // the image can only be deleted if corresponding rights exist
+        if ($gCurrentUser->isAdministratorInventory() || in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
+            $this->assignSmartyVariable('urlItemPictureUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_choose', 'item_uuid' => $itemUUID)));
+            if ($item->getValue('ini_picture') !== '' && $item->getValue('ini_picture') !== null) {
+                $this->assignSmartyVariable('urlItemPictureDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_delete', 'item_uuid' => $itemUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackItemPicture\')');
+            }
+        }
+
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -912,6 +932,78 @@ class InventoryItemPresenter extends PagePresenter
         $this->assignSmartyVariable('lastUserEditedName', $item->getNameOfLastEditingUser());
         $this->assignSmartyVariable('lastUserEditedTimestamp', $item->getValue('ini_timestamp_change'));
         
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
+    }
+
+    /**
+     * Create the data for the picture upload form of a item.
+     * @param string $itemUUID UUID of the item that should be edited.
+     */
+    public function createPictureChooseForm(string $itemUUID)
+    {
+        global $gCurrentSession, $gL10n;
+        // show form
+        $form = new FormPresenter(
+            'adm_upload_picture_form',
+            'modules/inventory.new-item-picture.upload.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_upload', 'item_uuid' => $itemUUID)),
+            $this,
+            array('enableFileUpload' => true)
+        );
+        $form->addCustomContent(
+            'item_picture_current',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT'),
+            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />'
+        );
+        $form->addFileUpload(
+            'item_picture_upload_file',
+            $gL10n->get('SYS_SELECT_PHOTO'),
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'allowedMimeTypes' => array('image/jpeg', 'image/png'),
+                'helpTextId' => array('SYS_INVENTORY_ITEM_PICTURE_RESTRICTIONS', array(round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2), round(PhpIniUtils::getUploadMaxSize() / 1024 ** 2, 2)))
+            )
+        );
+        $form->addSubmitButton(
+            'adm_button_upload',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_UPLOAD'),
+            array('icon' => 'bi-upload', 'class' => 'offset-sm-3')
+        );
+
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
+    }
+
+    /**
+     * Create the data for the picture preview form of a item.
+     * @param string $itemUUID UUID of the item that should be edited.
+     */
+    public function createPictureReviewForm(string $itemUUID)
+    {
+        global $gCurrentSession, $gL10n;
+        // show form
+        $form = new FormPresenter(
+            'adm_review_picture_form',
+            'modules/inventory.new-item-picture.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_save', 'item_uuid' => $itemUUID)),
+            $this
+        );
+        $form->addCustomContent(
+            'item_picture_current',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT'),
+            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />'
+        );
+        $form->addCustomContent(
+            'item_picture_new',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_NEW'),
+            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID, 'new_picture' => 1)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_NEW') . '" />'
+        );
+        $form->addSubmitButton(
+            'adm_button_save',
+            $gL10n->get('SYS_APPLY'),
+            array('icon' => 'bi-upload', 'class' => 'offset-sm-3')
+        );
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }

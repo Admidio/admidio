@@ -127,6 +127,8 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                             $(entryDeleted).fadeOut("slow", callbackFutureRoles);
                         } else if (callback === "callbackProfilePhoto") {
                             callbackProfilePhoto();
+                        } else if (callback === "callbackItemPicture") {
+                            callbackItemPicture();
                         } else {
                             $(entryDeleted).fadeOut("slow");
                         }
@@ -142,17 +144,21 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                     $(entryDeleted).fadeOut("slow", callbackFutureRoles);
                 } else if (callback === 'callbackProfilePhoto') {
                     callbackProfilePhoto();
+                } else if (callback === "callbackItemPicture") {
+                    callbackItemPicture();
                 } else {
                     $(entryDeleted).fadeOut("slow");
                 }
             }
 
-            var tbodyElement = entryDeleted.closest("tbody");
-            if (isTbodyEmpty(tbodyElement)) {
-                $(tbodyElement).fadeOut("slow");
-                var tbodyElement2 = tbodyElement.previousElementSibling;
-                if (isTbodyEmpty(tbodyElement2)) {
-                    $(tbodyElement2).fadeOut("slow");
+            if (entryDeleted) {
+                var tbodyElement = entryDeleted.closest("tbody");
+                if (isTbodyEmpty(tbodyElement)) {
+                    $(tbodyElement).fadeOut("slow");
+                    var tbodyElement2 = tbodyElement.previousElementSibling;
+                    if (isTbodyEmpty(tbodyElement2)) {
+                        $(tbodyElement2).fadeOut("slow");
+                    }
                 }
             }
         } else {

@@ -828,6 +828,14 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_COMMON')
         );
 
+        $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
+        $formInventory->addSelectBox(
+            'inventory_item_picture_storage',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURES_LOCATION'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_item_picture_storage'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ITEM_PICTURES_LOCATION_DESC')
+        );
+
         $formInventory->addCheckbox(
             'inventory_show_obsolete_select_field_options',
             $gL10n->get('SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS'),

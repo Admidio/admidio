@@ -1121,6 +1121,7 @@ CREATE TABLE %PREFIX%_inventory_items
     ini_cat_id                  integer unsigned    NOT NULL,
     ini_org_id                  integer unsigned    NOT NULL,
     ini_status                  integer unsigned    NOT NULL,
+    ini_picture                 blob                NULL        DEFAULT NULL,
     ini_usr_id_create           integer unsigned,
     ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ini_usr_id_change           integer unsigned,

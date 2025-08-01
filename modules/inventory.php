@@ -10,6 +10,7 @@ use Admidio\Inventory\Service\ExportService;
 use Admidio\Inventory\Service\ImportService;
 use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\Inventory\Service\ItemService;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\UI\Presenter\InventoryFieldsPresenter;
 use Admidio\UI\Presenter\InventoryImportPresenter;
 use Admidio\UI\Presenter\InventoryItemPresenter;
@@ -39,7 +40,7 @@ try {
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit','item_edit_borrow', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit','item_edit_borrow', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getOptionID = admFuncVariableIsValid($_GET, 'option_id', 'int', array('defaultValue' => 0));
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
@@ -59,6 +60,7 @@ try {
         }, $getItemUUIDs);
     }
     $getBorrowed = admFuncVariableIsValid($_GET, 'item_borrowed', 'bool', array('defaultValue' => false));
+    $getNewPicture = admFuncVariableIsValid($_GET, 'new_picture', 'bool', array('defaultValue' => false));
 
     // check if module is active
     if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
@@ -67,6 +69,12 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 3 && !$gCurrentUser->isAdministratorInventory()) {
         throw new Exception('SYS_NO_RIGHTS');
+    }
+
+    // when saving folders, check whether the subfolder in adm_my_files exists with the corresponding rights
+    if ((int)$gSettingsManager->get('inventory_item_picture_storage') === 1) {
+        // Create folder for item pictures in adm_my_files if necessary
+        FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures');
     }
 
     switch ($getMode) {
@@ -390,6 +398,78 @@ try {
 
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_DELETED')));
             }
+            break;
+
+        case 'item_picture_show':
+            $itemModule = new ItemService($gDb, $getiniUUID);
+            $itemModule->showItemPicture($getNewPicture);
+            break;
+
+        case 'item_picture_show_modal':
+            $msg = '
+                <div class="modal-header">
+                    <h3 class="modal-title">' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE') . '</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="adm_inventory_item_picture" class="rounded" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid'=> $getiniUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
+                </div>';
+
+                echo $msg;
+            break;
+
+            break;
+
+        case 'item_picture_choose':
+            $headline = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CHOOSE');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
+
+            $item = new InventoryItemPresenter('adm_item_picture_choose');
+            $item->setHeadline($headline);
+            $item->createPictureChooseForm($getiniUUID);
+            $item->show();
+            break;
+        
+        case 'item_picture_upload':
+            $itemModule = new ItemService($gDb, $getiniUUID);
+            $itemModule->uploadItemPicture();
+
+            echo json_encode(array(
+                'status' => 'success',
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_review', 'item_uuid' => $getiniUUID))
+            ));
+            break;
+
+        case 'item_picture_review':
+            $headline = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_REVIEW');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
+
+            $item = new InventoryItemPresenter('adm_item_picture_review');
+            $item->setHeadline($headline);
+            $item->createPictureReviewForm($getiniUUID);
+            $item->show();
+            break;
+            
+        case 'item_picture_save':
+            $itemModule = new ItemService($gDb, $getiniUUID);
+            $itemModule->saveItemPicture();
+
+            // back to the home page
+            // if url stack is bigger then 2 then delete until the edit page is reached
+            while (count($gNavigation->getStack()) > 2) {
+                $gNavigation->deleteLastUrl();
+            }
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_SAVED'), 'url' => $gNavigation->getUrl()));
+            break;
+
+        case 'item_picture_delete':
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $itemModule = new ItemService($gDb, $getiniUUID);
+            $itemModule->deleteItemPicture();
+
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_DELETED'), 'url' => $gNavigation->getUrl()));
             break;
 #endregion
 #region import
