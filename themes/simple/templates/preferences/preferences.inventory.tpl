@@ -2,9 +2,6 @@
     /* Function to handle the visibility of fields based on the corresponding option */
     $(function(){
         /* Keeper edit */
-        if(!$("#inventory_allow_keeper_edit").is(":checked")) {
-            $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
-        }
         $("#inventory_allow_keeper_edit").on("change", function() {
             if(!$("#inventory_allow_keeper_edit").is(":checked")) {
                 $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
@@ -13,9 +10,6 @@
             }
         });
         /* Profile view */
-        if(!$("#inventory_profile_view_enabled").is(":checked")) {
-            $("#inventory_profile_view_group").slideUp("slow");
-        }
         $("#inventory_profile_view_enabled").on("change", function() {
             if(!$("#inventory_profile_view_enabled").is(":checked")) {
                 $("#inventory_profile_view_group").slideUp("slow");
@@ -23,6 +17,21 @@
                 $("#inventory_profile_view_group").slideDown("slow");
             }
         });
+
+        // wait for the form to be fully visible
+        var interval = setInterval(function() {
+            if (!$("#inventory_profile_view_group").is(":hidden") && !$("#inventory_allowed_keeper_edit_fields_group").is(":hidden")) {
+                clearInterval(interval);
+
+                // now we can initialize the visibility of the fields
+                if(!$("#inventory_allow_keeper_edit").is(":checked")) {
+                    $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
+                }
+                if(!$("#inventory_profile_view_enabled").is(":checked")) {
+                    $("#inventory_profile_view_group").slideUp("slow");
+                }
+            }
+        }, 100);
     });
 </script>
 
