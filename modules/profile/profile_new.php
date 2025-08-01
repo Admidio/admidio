@@ -45,7 +45,7 @@ try {
         }, $getUserUuids);
 
         if (empty($getUserUuids)) {
-            $getUserUuids = array(admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => '')));
+            $getUserUuids = array(admFuncVariableIsValid($_GET, 'user_uuid', 'uuid'));
         }
     }
 

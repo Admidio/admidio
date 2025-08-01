@@ -44,14 +44,14 @@ jobs:
             echo "unused_found=false" >> $GITHUB_ENV
           fi
       - name: Annotate warning if unused
-        if: env.unused_found
+        if: env.unused_found == 'true'
         run: |
           while IFS= read -r key; do
             echo "::warning file=languages/en.xml::Unused translation key: $key"
           done < unused_keys.txt
 
       - name: Post PR review with unused keys on pull request
-        if: ${{ github.event_name == 'pull_request' && env.unused_found }}
+        if: ${{ github.event_name == 'pull_request' && env.unused_found == 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
