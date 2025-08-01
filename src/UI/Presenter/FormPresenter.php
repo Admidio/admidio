@@ -1054,7 +1054,8 @@ class FormPresenter
                 const table = document.querySelector("#" + dataId + "_table tbody.admidio-sortable");
                 const newRow = document.createElement("tr");
                 const rows = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\');
-                let maxId = document.querySelector("#" + dataId + "_table tbody.admidio-not-sortable").querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                let notSortableContainer = document.querySelector("#" + dataId + "_table tbody.admidio-not-sortable");
+                let maxId = notSortableContainer ? notSortableContainer.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length : 0;
                 rows.forEach(row => {
                     const currentId = row.id.replace(dataId + "_option_", "");
                     const num = parseInt(currentId, 10);

@@ -52,7 +52,7 @@ class ExportService
             [$exportMode, $charset, $orientation] = $modeSettings[$mode];
         }
 
-        $filename = $gSettingsManager->getString('inventory_export_filename');
+        $filename = $gSettingsManager->getString('inventory_export_filename') . '.' . $exportMode;
         if ($gSettingsManager->getBool('inventory_add_date')) {
             // add system date format to filename
             $filename = date('Y-m-d') . '_' . $filename;
