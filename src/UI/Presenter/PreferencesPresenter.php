@@ -823,8 +823,8 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // general settings
-        $formInventory->addSeperator(
-            'inventory_seperator_general_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_general_settings',
             $gL10n->get('SYS_COMMON')
         );
 
@@ -906,8 +906,8 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // profile view settings
-        $formInventory->addSeperator(
-            'inventory_seperator_profile_view_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_profile_view_settings',
             $gL10n->get('SYS_INVENTORY_PROFILE_VIEW')
         );
 
@@ -935,8 +935,8 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // export settings
-        $formInventory->addSeperator(
-            'inventory_seperator_export_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_export_settings',
             $gL10n->get('SYS_INVENTORY_EXPORT')
         );
 

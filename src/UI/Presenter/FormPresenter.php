@@ -465,10 +465,10 @@ class FormPresenter
      * If you don't need the field structure and want to add html then use the method addHtml()
      * @param string $label The label of the custom content.
      */
-    public function addSeperator(string $id, string $label = '', array $options = array()): void
+    public function addSeparator(string $id, string $label = '', array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'seperator',
+            'type'     => 'separator',
             'id'       => $id,
             'label'    => $label
         ), $options));
