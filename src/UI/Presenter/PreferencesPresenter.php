@@ -828,12 +828,33 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_COMMON')
         );
 
+        $formInventory->addCheckbox(
+            'inventory_item_picture_enabled',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_ENABLED'),
+            (bool) $formValues['inventory_item_picture_enabled'],
+            array('helpTextId' => 'SYS_INVENTORY_ITEM_PICTURE_ENABLED_DESC')
+        );
+
         $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
         $formInventory->addSelectBox(
             'inventory_item_picture_storage',
             $gL10n->get('SYS_INVENTORY_ITEM_PICTURES_LOCATION'),
             $selectBoxEntries,
             array('defaultValue' => $formValues['inventory_item_picture_storage'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ITEM_PICTURES_LOCATION_DESC')
+        );
+
+        $formInventory->addInput(
+            'inventory_item_picture_width',
+            $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
+            $formValues['inventory_item_picture_width'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
+        );
+
+        $formInventory->addInput(
+            'inventory_item_picture_height',
+            $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
+            $formValues['inventory_item_picture_height'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(130, 170)))
         );
 
         $formInventory->addCheckbox(

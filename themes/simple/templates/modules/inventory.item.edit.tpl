@@ -21,41 +21,45 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_PROPERTIES')}</div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-sm-8">
-                    {foreach $elements as $key => $itemField}
-                        {if {string_contains haystack=$key needle="INF-"} && $key != "INF-ITEMNAME"}
-                            {if $itemField.type == 'checkbox'}
-                                {include 'sys-template-parts/form.checkbox.tpl' data=$itemField}
-                            {elseif $itemField.type == 'multiline'}
-                                {include 'sys-template-parts/form.multiline.tpl' data=$itemField}
-                            {elseif $itemField.type == 'radio'}
-                                {include 'sys-template-parts/form.radio.tpl' data=$itemField}
-                            {elseif $itemField.type == 'select'}
-                                {include 'sys-template-parts/form.select.tpl' data=$itemField}
-                            {else}
-                                {if !{string_contains haystack=$key needle="_time"}}
-                                    {include 'sys-template-parts/form.input.tpl' data=$itemField}
+            {if isset($urlItemPicture)}
+                <div class="row">
+                    <div class="col-sm-8">
+            {/if}
+                        {foreach $elements as $key => $itemField}
+                            {if {string_contains haystack=$key needle="INF-"} && $key != "INF-ITEMNAME"}
+                                {if $itemField.type == 'checkbox'}
+                                    {include 'sys-template-parts/form.checkbox.tpl' data=$itemField}
+                                {elseif $itemField.type == 'multiline'}
+                                    {include 'sys-template-parts/form.multiline.tpl' data=$itemField}
+                                {elseif $itemField.type == 'radio'}
+                                    {include 'sys-template-parts/form.radio.tpl' data=$itemField}
+                                {elseif $itemField.type == 'select'}
+                                    {include 'sys-template-parts/form.select.tpl' data=$itemField}
+                                {else}
+                                    {if !{string_contains haystack=$key needle="_time"}}
+                                        {include 'sys-template-parts/form.input.tpl' data=$itemField}
+                                    {/if}
                                 {/if}
                             {/if}
+                        {/foreach}
+            {if isset($urlItemPicture)}
+                    </div>
+                    <div class="col-sm-4 text-end">
+                        <img id="adm_inventory_item_picture" class="rounded" src="{$urlItemPicture}" alt="{$l10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT')}" />
+                        {if isset($urlItemPictureUpload)}
+                            <ul class="list-unstyled">
+                                <li><a class="icon-link" href="{$urlItemPictureUpload}">
+                                    <i class="bi bi-upload"></i>{$l10n->get('SYS_INVENTORY_ITEM_PICTURE_UPLOAD')}</a></li>
+                                {if isset($urlItemPictureDelete)}
+                                    <li><a id="adm_button_delete_picture" class="icon-link admidio-messagebox" href="javascript:void(0);"
+                                        data-buttons="yes-no" data-message="{$l10n->get('SYS_INVENTORY_ITEM_PICTURE_WANT_DELETE')}"
+                                        data-href="{$urlItemPictureDelete}"><i class="bi bi-trash"></i>{$l10n->get('SYS_INVENTORY_ITEM_PICTURE_DELETE')}</a></li>
+                                {/if}
+                            </ul>
                         {/if}
-                    {/foreach}
+                    </div>
                 </div>
-                <div class="col-sm-4 text-end">
-                    <img id="adm_inventory_item_picture" class="rounded" src="{$urlItemPicture}" alt="{$l10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT')}" />
-                    {if isset($urlItemPictureUpload)}
-                        <ul class="list-unstyled">
-                            <li><a class="icon-link" href="{$urlItemPictureUpload}">
-                                <i class="bi bi-upload"></i>{$l10n->get('SYS_INVENTORY_ITEM_PICTURE_UPLOAD')}</a></li>
-                            {if isset($urlItemPictureDelete)}
-                                <li><a id="adm_button_delete_picture" class="icon-link admidio-messagebox" href="javascript:void(0);"
-                                    data-buttons="yes-no" data-message="{$l10n->get('SYS_INVENTORY_ITEM_PICTURE_WANT_DELETE')}"
-                                    data-href="{$urlItemPictureDelete}"><i class="bi bi-trash"></i>{$l10n->get('SYS_INVENTORY_ITEM_PICTURE_DELETE')}</a></li>
-                            {/if}
-                        </ul>
-                    {/if}
-                </div>
-            </div>
+            {/if}
         </div>
     </div>
     {if {array_key_exists array=$elements key='item_copy_number'}}

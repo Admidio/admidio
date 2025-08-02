@@ -269,13 +269,14 @@ class ItemService
         // Adjust picture to appropriate size
         $itemImage = new Image($_FILES['userfile']['tmp_name'][0]);
         $itemImage->setImageType('jpeg');
-        $itemImage->scale(130, 170);
 
         if ($gSettingsManager->getInt('inventory_item_picture_storage') === 1) {
             // Folder storage
+            $itemImage->scale($gSettingsManager->getInt('inventory_item_picture_width'), $gSettingsManager->getInt('inventory_item_picture_height'));
             $itemImage->copyToFile(null, ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/' . $this->itemRessource->getItemId() . '_new.jpg');
         } else {
             // Database storage
+            $itemImage->scale(130, 170);
             $itemImage->copyToFile(null, $_FILES['userfile']['tmp_name'][0]);
             $itemImageData = fread(fopen($_FILES['userfile']['tmp_name'][0], 'rb'), $_FILES['userfile']['size'][0]);
             

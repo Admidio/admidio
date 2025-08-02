@@ -820,6 +820,8 @@
   <string name="SYS_INVENTORY_ITEM_PICTURE_CURRENT">Current item picture</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_DELETE">Delete item picture</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_DELETED">Item picture successfully deleted</string>
+  <string name="SYS_INVENTORY_ITEM_PICTURE_ENABLED">Enable item pictures</string>
+  <string name="SYS_INVENTORY_ITEM_PICTURE_ENABLED_DESC">If this option is enabled, item pictures can be uploaded and displayed. If disabled, no item pictures can be uploaded and existing item pictures will not be displayed. (Default: yes)</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_NEW">New item picture</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_RESTRICTIONS">The picture may have a maximum resolution of #VAR1# MegaPixels. The picture file must not be larger than #VAR1# MB and must be in JPG or PNG format.</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_REVIEW">Review new item picture</string>
@@ -827,7 +829,7 @@
   <string name="SYS_INVENTORY_ITEM_PICTURE_UPLOAD">Upload item picture</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_WANT_DELETE">Do you want to delete the item picture?</string>
   <string name="SYS_INVENTORY_ITEM_PICTURES_LOCATION">Storage location of Item pictures</string>
-  <string name="SYS_INVENTORY_ITEM_PICTURES_LOCATION_DESC">Please define where to store item pictures (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. (default: database)</string>
+  <string name="SYS_INVENTORY_ITEM_PICTURES_LOCATION_DESC">Please define where to store item pictures (in the database or in folder adm_my_files). When a change is made, current pictures are not copied to new location. If Database is selected, the uploaded picture is scaled to 130 x 170 pixels. (default: Database)</string>
   <string name="SYS_INVENTORY_ITEM_REINSTATE">Reinstate the item</string>
   <string name="SYS_INVENTORY_ITEM_REINSTATE_CONFIRM">Do you really want to reinstate the item?</string>
   <string name="SYS_INVENTORY_ITEM_REINSTATED">Item successfully reinstated</string>

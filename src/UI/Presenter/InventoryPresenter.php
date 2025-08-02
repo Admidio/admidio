@@ -793,7 +793,7 @@ class InventoryPresenter extends PagePresenter
                 }
                 else {
                     $headers[] = $gL10n->get('SYS_ABR_NO');
-                    if ($mode === 'html') {
+                    if ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled')) {
                         // photo column
                         $headers[] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
                         $columnAlign[] = 'center';
@@ -871,7 +871,7 @@ class InventoryPresenter extends PagePresenter
                         $rowValues['data'][] = '<input type="checkbox"/>';
                     }
                     $rowValues['data'][] = $listRowNumber;
-                    if ($mode === 'html') {
+                    if ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled')) {
                         $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid'=> $item['ini_uuid']));
                         $itemPhotoModalUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show_modal', 'item_uuid'=> $item['ini_uuid']));
                         $itemPhotoContent = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . $itemPhotoModalUrl . '">

@@ -1,6 +1,33 @@
 <script type="text/javascript">
     /* Function to handle the visibility of fields based on the corresponding option */
     $(function(){
+        /* Item pictures */
+        $("#inventory_item_picture_enabled").on("change", function() {
+            if(!$("#inventory_item_picture_enabled").is(":checked")) {
+                $("#inventory_item_picture_storage_group").slideUp("slow");
+                $("#inventory_item_picture_width_group").slideUp("slow");
+                $("#inventory_item_picture_height_group").slideUp("slow");
+            } else {
+                $("#inventory_item_picture_storage_group").slideDown("slow");
+                if($("#inventory_item_picture_storage").val() == 1) {
+                    $("#inventory_item_picture_width_group").slideDown("slow");
+                    $("#inventory_item_picture_height_group").slideDown("slow");
+                } else {
+                    $("#inventory_item_picture_width_group").slideUp("slow");
+                    $("#inventory_item_picture_height_group").slideUp("slow");
+                }
+            }
+        });
+        /* Item pictures resolution */
+        $("#inventory_item_picture_storage").on("change", function() {
+            if($("#inventory_item_picture_storage").val() == 1) {
+                $("#inventory_item_picture_width_group").slideDown("slow");
+                $("#inventory_item_picture_height_group").slideDown("slow");
+            } else {
+                $("#inventory_item_picture_width_group").slideUp("slow");
+                $("#inventory_item_picture_height_group").slideUp("slow");
+            }
+        });
         /* Keeper edit */
         $("#inventory_allow_keeper_edit").on("change", function() {
             if(!$("#inventory_allow_keeper_edit").is(":checked")) {
@@ -20,10 +47,22 @@
 
         // wait for the form to be fully visible
         var interval = setInterval(function() {
-            if (!$("#inventory_profile_view_group").is(":hidden") && !$("#inventory_allowed_keeper_edit_fields_group").is(":hidden")) {
+            if (!$("#inventory_item_picture_enabled").is(":hidden") && !$("#inventory_profile_view_group").is(":hidden") && !$("#inventory_allowed_keeper_edit_fields_group").is(":hidden")) {
                 clearInterval(interval);
 
                 // now we can initialize the visibility of the fields
+                if(!$("#inventory_item_picture_enabled").is(":checked")) {
+                    $("#inventory_item_picture_storage_group").slideUp("slow");
+                    $("#inventory_item_picture_width_group").slideUp("slow");
+                    $("#inventory_item_picture_height_group").slideUp("slow");
+                }
+                if($("#inventory_item_picture_storage").val() == 1) {
+                    $("#inventory_item_picture_width_group").slideDown("slow");
+                    $("#inventory_item_picture_height_group").slideDown("slow");
+                } else {
+                    $("#inventory_item_picture_width_group").slideUp("slow");
+                    $("#inventory_item_picture_height_group").slideUp("slow");
+                }
                 if(!$("#inventory_allow_keeper_edit").is(":checked")) {
                     $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
                 }
@@ -44,7 +83,10 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_items_per_page']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_field_history_days']}
     {include 'sys-template-parts/form.separator.tpl' data=$elements['inventory_separator_general_settings']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_item_picture_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_item_picture_storage']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_item_picture_width']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_item_picture_height']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_show_obsolete_select_field_options']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_items_disable_borrowing']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_system_field_names_editable']}

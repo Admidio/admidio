@@ -559,9 +559,8 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('field_save', 'field_delete', 'sequence', 'item_save', 'import_read_file', 'import_items'))) {
-        echo// PHP namespaces
-        json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    if (in_array($getMode, array('field_save', 'field_delete', 'sequence', 'item_save', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items'))) {
+        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());
     }
