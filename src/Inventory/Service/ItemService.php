@@ -203,8 +203,8 @@ class ItemService
                 // show picture from database
                 if ($gSettingsManager->getInt('inventory_item_picture_storage') === 0) {
                     if ((string)$item->getValue('ini_picture') !== '') {
-                    $image = new Image();
-                    $image->setImageFromData($item->getValue('ini_picture'));
+                        $image = new Image();
+                        $image->setImageFromData($item->getValue('ini_picture'));
                     } else {
                         $image = new Image($picturePath);
                     }

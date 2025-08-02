@@ -292,13 +292,13 @@ class InventoryItemPresenter extends PagePresenter
         $this->assignSmartyVariable('lastUserEditedName', $item->getNameOfLastEditingUser());
         $this->assignSmartyVariable('lastUserEditedTimestamp', $item->getValue('ini_timestamp_change'));
         
-        $this->assignSmartyVariable('urlItemPicture', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)));
+        $this->assignSmartyVariable('urlItemPicture', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)));
         // the image can only be deleted if corresponding rights exist
         if ($gCurrentUser->isAdministratorInventory() || in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
-            $this->assignSmartyVariable('urlItemPictureUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_choose', 'item_uuid' => $itemUUID)));
+            $this->assignSmartyVariable('urlItemPictureUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_choose', 'item_uuid' => $itemUUID)));
             if ((string)$item->getValue('ini_picture') !== '' && $gSettingsManager->getInt('inventory_item_picture_storage') === 0
                 || is_file(ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/' . $items->getItemId() . '.jpg') && $gSettingsManager->getInt('inventory_item_picture_storage') === 1) {
-                $this->assignSmartyVariable('urlItemPictureDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_delete', 'item_uuid' => $itemUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackItemPicture\')');
+                $this->assignSmartyVariable('urlItemPictureDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_delete', 'item_uuid' => $itemUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackItemPicture\')');
             }
         }
 
@@ -948,14 +948,14 @@ class InventoryItemPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_upload_picture_form',
             'modules/inventory.new-item-picture.upload.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_upload', 'item_uuid' => $itemUUID)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_upload', 'item_uuid' => $itemUUID)),
             $this,
             array('enableFileUpload' => true)
         );
         $form->addCustomContent(
             'item_picture_current',
             $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT'),
-            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />'
+            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />'
         );
         $form->addFileUpload(
             'item_picture_upload_file',
@@ -987,18 +987,18 @@ class InventoryItemPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_review_picture_form',
             'modules/inventory.new-item-picture.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_save', 'item_uuid' => $itemUUID)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_save', 'item_uuid' => $itemUUID)),
             $this
         );
         $form->addCustomContent(
             'item_picture_current',
             $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT'),
-            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />'
+            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />'
         );
         $form->addCustomContent(
             'item_picture_new',
             $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_NEW'),
-            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID, 'new_picture' => 1)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_NEW') . '" />'
+            '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID, 'new_picture' => 1)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_NEW') . '" />'
         );
         $form->addSubmitButton(
             'adm_button_save',

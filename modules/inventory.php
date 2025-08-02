@@ -412,7 +412,7 @@ try {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="adm_inventory_item_picture" class="rounded" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_show', 'item_uuid'=> $getiniUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
+                    <img id="adm_inventory_item_picture" class="rounded" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid'=> $getiniUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
                 </div>';
 
                 echo $msg;
@@ -436,7 +436,7 @@ try {
 
             echo json_encode(array(
                 'status' => 'success',
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory.php', array('mode' => 'item_picture_review', 'item_uuid' => $getiniUUID))
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_review', 'item_uuid' => $getiniUUID))
             ));
             break;
 

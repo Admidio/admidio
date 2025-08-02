@@ -207,8 +207,8 @@ class Item extends Entity
         // If the item status is changed convert the status id to the actual status text
         if ($logEntry->getValue('log_field') === 'ini_status') {
             global $gDb;
-            $itemStatusIdNew = $logEntry->getValue('log_value_new');
-            $itemStatusIdOld = $logEntry->getValue('log_value_old');
+            $itemStatusIdNew = (int)$logEntry->getValue('log_value_new');
+            $itemStatusIdOld = (int)$logEntry->getValue('log_value_old');
             $option = new SelectOptions($gDb, $this->mItemsData->getProperty('STATUS', 'inf_id'));
             if ($option->readDataById($itemStatusIdNew)) {
                 $logEntry->setValue('log_value_new', Language::translateIfTranslationStrId($option->getValue('ifo_value')));
