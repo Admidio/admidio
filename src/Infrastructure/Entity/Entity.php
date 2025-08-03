@@ -395,7 +395,7 @@ class Entity
      */
     public function delete(): bool
     {
-        if (array_key_exists($this->keyColumnName, $this->dbColumns) && $this->dbColumns[$this->keyColumnName] !== '') {
+        if (array_key_exists($this->keyColumnName, $this->dbColumns) && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
             // Log record deletion, then delete
             $this->logDeletion();
             $sql = 'DELETE FROM ' . $this->tableName . '
@@ -531,7 +531,7 @@ class Entity
                 case 'timestamp': // fallthrough
                 case 'date': // fallthrough
                 case 'time':
-                    if ($columnValue !== '' && $columnValue !== null) {
+                    if (isset($columnValue) && $columnValue !== '') {
                         if ($format === '' && isset($gSettingsManager)) {
                             if (str_contains($this->columnsInfos[$columnName]['type'], 'timestamp')) {
                                 $format = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
@@ -765,7 +765,7 @@ class Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if (!$this->columnsValueChanged && $this->dbColumns[$this->keyColumnName] !== '') {
+        if (!$this->columnsValueChanged && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
             return false;
         }
 
@@ -817,19 +817,13 @@ class Entity
                 if (!$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed']) {
                     if ($this->insertRecord) {
                         // Prepare data for an insert
-                        if ($value !== '') {
-                            $sqlFieldArray[] = $key;
-                            $queryParams[] = $value;
-                        }
+                        $sqlFieldArray[] = $key;
+                        $queryParams[] = $value;
                     } else {
                         // Prepare data for an update
                         $sqlSetArray[] = $key . ' = ?';
 
-                        if ($value === '' || $value === null) {
-                            $queryParams[] = null;
-                        } else {
-                            $queryParams[] = $value;
-                        }
+                        $queryParams[] = $value;
                     }
                     // Ignore the usr_id_create and timestamp_create (and *_change) columns in the change log...
                     if (!in_array($key, $this->getIgnoredLogColumns())) {
@@ -947,7 +941,7 @@ class Entity
             foreach ($tableColumnsProperties as $columnName => $property) {
                 // some actions should only be done for columns of the main table from this class
                 if (str_starts_with($columnName, $this->columnPrefix . '_')) {
-                    $this->dbColumns[$columnName] = '';
+                    $this->dbColumns[$columnName] = null;
 
                     if ($property['serial']) {
                         $this->keyColumnName = $columnName;
@@ -1004,7 +998,7 @@ class Entity
         }
 
         // General plausibility checks based on the field type
-        if ($checkValue && $newValue !== '') {
+        if ($checkValue && isset($newValue) && $newValue !== '') {
             switch ($this->columnsInfos[$columnName]['type']) {
                 // Numeric
                 case 'integer': // fallthrough
@@ -1042,7 +1036,7 @@ class Entity
 
             // now mark all other columns with values of this object as changed
             foreach ($this->dbColumns as $column => $value) {
-                if ((is_array($value) && count($value) > 0) || (strlen((string)$value) > 0)) {
+                if ((is_array($value) && count($value) > 0) || isset($value)) {
                     $this->columnsInfos[$column]['changed'] = true;
                 }
             }
@@ -1073,7 +1067,7 @@ class Entity
     protected function valueChanged(string $columnName, ?string $newValue): bool
     {
         global $gSettingsManager;
-        $oldValue = $this->dbColumns[$columnName];
+        $oldValue = isset($this->columnsInfos[$columnName]['previousValue']) && !empty($this->columnsInfos[$columnName]['previousValue']) ? $this->columnsInfos[$columnName]['previousValue'] : null;
 
         // certain data types need special handling to detect changes
         //   * bool: unset/null and 0 mean false
@@ -1105,7 +1099,13 @@ class Entity
                 }
             default:
                 // only mark as "changed" if the value is different (DON'T use binary safe function!)
-                return strcmp((string)$oldValue, (string)$newValue) !== 0;
+                if (!isset($oldValue) && !isset($newValue)) {
+                    return false;
+                } elseif (!isset($oldValue) && isset($newValue)) {
+                    return true;
+                } else {
+                    return strcmp((string)$oldValue, (string)$newValue) !== 0;
+                }
         }
     }
 
