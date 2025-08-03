@@ -40,7 +40,7 @@ try {
     require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit','item_edit_borrow', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit', 'item_edit_borrow', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getOptionID = admFuncVariableIsValid($_GET, 'option_id', 'int', array('defaultValue' => 0));
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
@@ -376,7 +376,7 @@ try {
             else {
                 $itemModule = new ItemService($gDb, $getiniUUID);
                 $itemModule->reinstateItem();
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATED')));
+                echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATED')));
            }
 
             break;
@@ -399,7 +399,8 @@ try {
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_DELETED')));
             }
             break;
-
+#endregion
+#region item pictures
         case 'item_picture_show':
             $itemModule = new ItemService($gDb, $getiniUUID);
             $itemModule->showItemPicture($getNewPicture);
@@ -418,8 +419,6 @@ try {
                 echo $msg;
             break;
 
-            break;
-
         case 'item_picture_choose':
             $headline = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CHOOSE');
             $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -434,10 +433,7 @@ try {
             $itemModule = new ItemService($gDb, $getiniUUID);
             $itemModule->uploadItemPicture();
 
-            echo json_encode(array(
-                'status' => 'success',
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_review', 'item_uuid' => $getiniUUID))
-            ));
+            echo json_encode(array('status' => 'success', 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_review', 'item_uuid' => $getiniUUID))));
             break;
 
         case 'item_picture_review':
@@ -493,10 +489,7 @@ try {
          case 'import_read_file':
             $import = new ImportService();
             $import->readImportFile();
-            echo json_encode(array(
-                'status' => 'success',
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'import_assign_fields'))
-            ));
+            echo json_encode(array('status' => 'success', 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'import_assign_fields'))));
             break;
 
         case 'import_assign_fields':
@@ -559,7 +552,7 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('field_save', 'field_delete', 'sequence', 'item_save', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items'))) {
+    if (in_array($getMode, array('field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items'))) {
         echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
     } else {
         $gMessage->show($e->getMessage());
