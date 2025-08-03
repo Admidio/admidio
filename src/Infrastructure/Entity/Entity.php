@@ -1067,7 +1067,7 @@ class Entity
     protected function valueChanged(string $columnName, ?string $newValue): bool
     {
         global $gSettingsManager;
-        $oldValue = isset($this->columnsInfos[$columnName]['previousValue']) && !empty($this->columnsInfos[$columnName]['previousValue']) ? $this->columnsInfos[$columnName]['previousValue'] : null;
+        $oldValue = isset($this->dbColumns[$columnName]) && !empty($this->dbColumns[$columnName]) ? $this->dbColumns[$columnName] : null;
 
         // certain data types need special handling to detect changes
         //   * bool: unset/null and 0 mean false
@@ -1076,7 +1076,6 @@ class Entity
         switch ($this->columnsInfos[$columnName]['type']) {
             case 'boolean': // fallthrough
             case 'tinyint':
-                if (empty($oldValue)) $oldValue = 0;
                 if (empty($newValue)) $newValue = 0;
                 return $oldValue != $newValue;
             case 'timestamp': // fallthrough
