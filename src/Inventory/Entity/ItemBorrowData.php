@@ -8,8 +8,6 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Entity\LogChanges;
-use Admidio\Users\Entity\User;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\Entity\Item;
 
 /**

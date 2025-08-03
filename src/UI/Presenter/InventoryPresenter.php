@@ -798,7 +798,6 @@ class InventoryPresenter extends PagePresenter
                         $headers[] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
                         $columnAlign[] = 'center';
                     }
-
                 }
             }
 

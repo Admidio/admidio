@@ -188,7 +188,6 @@ class ItemsData
             $this->mItemId = $itemId;
             $this->mItemUUID = $itemUUID;
 
-
             // read all item data
             $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_DATA . '
                     INNER JOIN ' . TBL_INVENTORY_FIELDS . '
@@ -709,7 +708,6 @@ class ItemsData
                 } else {
                     $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('ind_value', $format);
                 }
-                
 
                 if ($format === 'database') {
                     return $value;
@@ -788,6 +786,11 @@ class ItemsData
         return $value;
     }
 
+    /**
+     * Returns the status of the item.
+     * 
+     * @return int                      Returns the status of the item
+     */
     public function getStatus(): int
     {
         $item = new Item($this->mDb, $this);
@@ -832,6 +835,11 @@ class ItemsData
         return false;
     }
 
+    /**
+     * Checks if the item is in use.
+     * 
+     * @return bool                     Returns true if the item is in use, otherwise false
+     */
     public function isInUse(): bool
     {
         global $gDb;
@@ -843,6 +851,11 @@ class ItemsData
         return false;
     }
 
+    /**
+     * Checks if the item is borrowed.
+     * 
+     * @return bool                     Returns true if the item is borrowed, otherwise false
+     */
     public function isBorrowed(): bool
     {
         // get Values of LAST_RECEIVER, BORROW_DATE and RETURN_DATE for current item
@@ -857,6 +870,7 @@ class ItemsData
         }
         return false;
     }
+
     /**
      * If the recordset is new and wasn't read from database or was not stored in database
      * then this method will return true otherwise false
@@ -1094,6 +1108,7 @@ class ItemsData
                 break;
             }
         }
+        
         $item = new Item($this->mDb, $this, $this->mItemId);
         $item->setValue('ini_status', $inUseId);
         $item->save();
