@@ -693,7 +693,7 @@ CREATE TABLE %PREFIX%_preferences
     prf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     prf_org_id                  integer unsigned    NOT NULL,
     prf_name                    varchar(50)         NOT NULL,
-    prf_value                   varchar(255),
+    prf_value                   varchar(255)        NOT NULL,
     PRIMARY KEY (prf_id)
 )
 ENGINE = InnoDB
