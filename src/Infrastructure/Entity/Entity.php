@@ -957,6 +957,11 @@ class Entity
                 $this->columnsInfos[$columnName]['null'] = $property['null'];
                 $this->columnsInfos[$columnName]['key'] = $property['key'];
                 $this->columnsInfos[$columnName]['serial'] = $property['serial'];
+                if (isset($property['default'])) {
+                    $this->columnsInfos[$columnName]['default'] = $property['default'];
+                } elseif ($property['null']) {
+                    $this->columnsInfos[$columnName]['default'] = null;
+                }
             }
         }
     }
@@ -997,35 +1002,126 @@ class Entity
             throw new Exception('Column ' . $columnName . ' does not exists in table ' . $this->tableName . '!');
         }
 
-        // General plausibility checks based on the field type
-        if ($checkValue && isset($newValue) && $newValue !== '') {
-            switch ($this->columnsInfos[$columnName]['type']) {
-                // Numeric
-                case 'integer': // fallthrough
-                case 'smallint':
-                    if (!is_numeric($newValue)) {
-                        $newValue = '';
+        $type     = strtolower($this->columnsInfos[$columnName]['type']);
+        $nullable = $this->columnsInfos[$columnName]['null'] ?? false;
+        $isKey    = $this->columnsInfos[$columnName]['key'] ?? false;
+
+        // normalize string values
+        $newValue = is_string($newValue) ? trim($newValue) : $newValue;
+
+        if ($checkValue) {
+            if (!isset($newValue) || $newValue === '') {
+                if ($nullable) {
+                    $newValue = null;
+                } else {
+                    // fallback to safe defaults when NULL not allowed
+                    if (preg_match('/int|tinyint|smallint|mediumint|bigint/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = 0;
+                        }
+                        // Key fields should not contain 0
+                        if ($isKey && (int)$newValue === 0) {
+                            $newValue = '';
+                        }
+                    } elseif (preg_match('/decimal|numeric|float|double|real/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = 0.0;
+                        }
+                    } elseif (preg_match('/date|time|year/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '1970-01-01';
+                        }
+                    } elseif (preg_match('/datetime|timestamp/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '1970-01-01 00:00:00';
+                        }
+                    } elseif (preg_match('/bool|tinyint\(1\)/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = false;
+                        }
+                    } else {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '';
+                        }
                     }
+                }
+            } else {
+                // Convert and sanitize based on type
+                switch ($type) {
+                    // Numeric
+                    case 'integer':
+                    case 'smallint':
+                    case 'bigint':
+                    case 'tinyint':
+                        if (!is_numeric($newValue)) {
+                            $newValue = $nullable ? null : 0;
+                        } else {
+                            $newValue = (int)$newValue;
+                        }
 
-                    // Key fields should not contain 0
-                    if ((int)$newValue === 0 &&
-                        ($this->columnsInfos[$columnName]['key'] || $this->columnsInfos[$columnName]['null'])) {
-                        $newValue = '';
-                    }
-                    break;
+                        // Key fields should not contain 0
+                        if ($isKey && (int)$newValue === 0) {
+                            $newValue = $nullable ? null : '';
+                        }
+                        break;
 
-                // String
-                case 'char': // fallthrough
-                case 'varchar': // fallthrough
-                case 'text':
-                    $newValue = StringUtils::strStripTags($newValue);
-                    break;
+                    // Decimal / Float
+                    case 'decimal':
+                    case 'numeric':
+                    case 'float':
+                    case 'double':
+                    case 'real':
+                        $newValue = (float)str_replace(',', '.', $newValue);
+                        break;
 
-                // Byte/Blob
-                case 'bytea':
-                    // Postgres can only store hex values in bytea, so we must decode binary in hex
-                    $newValue = bin2hex($newValue);
-                    break;
+                    // Boolean
+                    case 'boolean':
+                        $boolVal = filter_var($newValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                        $newValue = $boolVal ?? ($nullable ? null : false);
+                        break;
+
+                    // Date
+                    case 'date':
+                        $date = date_create($newValue);
+                        $newValue = $date ? $date->format('Y-m-d') : ($nullable ? null : '1970-01-01');
+                        break;
+
+                    // Datetime
+                    case 'datetime':
+                    case 'timestamp':
+                        $dateTime = date_create($newValue);
+                        $newValue = $dateTime ? $dateTime->format('Y-m-d H:i:s') : ($nullable ? null : '1970-01-01 00:00:00');
+                        break;
+
+                    // Strings
+                    case 'char':
+                    case 'varchar':
+                    case 'text':
+                        $newValue = StringUtils::strStripTags($newValue);
+                        break;
+
+                    // Byte/Blob
+                    case 'bytea':
+                        // Postgres can only store hex values in bytea, so we must decode binary in hex
+                        $newValue = bin2hex($newValue);
+                        break;
+
+                    default:
+                        // fallback sanitize
+                        $newValue = is_scalar($newValue) ? htmlspecialchars((string)$newValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') : $newValue;
+                }
             }
         }
 
