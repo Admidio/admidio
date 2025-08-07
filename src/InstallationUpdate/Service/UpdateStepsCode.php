@@ -44,9 +44,9 @@ final class UpdateStepsCode
 
     public static function updateStep50MoveFieldListValues()
     {
-        $sql = 'SELECT usf_id, usf_value_list FROM ' . TBL_USER_FIELDS . '
-                 WHERE usf_type = \'DROPDOWN\' 
-                 OR usf_type = \'RADIO_BUTTON\'';
+        $sql = 'SELECT usf_id, usf_value_list
+                  FROM ' . TBL_USER_FIELDS . '
+                 WHERE usf_type IN (\'DROPDOWN\', \'RADIO_BUTTON\')';
 
         $userFieldsStatement = self::$db->queryPrepared($sql);
         while ($row = $userFieldsStatement->fetch()) {
@@ -69,11 +69,11 @@ final class UpdateStepsCode
 
                 // update the user field values to use the new option id
                 $sql = 'UPDATE ' . TBL_USER_DATA . '
-                        JOIN ' . TBL_USER_FIELD_OPTIONS . '
-                            ON ufo_usf_id = usd_usf_id
-                            AND usd_value = ufo_sequence
-                        SET usd_value = ufo_id
-                            WHERE usd_usf_id = ? -- $row[\'usf_id\']';
+                           SET usd_value = (SELECT ufo_id
+                                              FROM ' . TBL_USER_FIELD_OPTIONS . '
+                                             WHERE ufo_usf_id = usd_usf_id
+                                               AND CAST(ufo_sequence AS CHAR) = usd_value)
+                         WHERE usd_usf_id = ? -- $row[\'usf_id\'] ';
                 self::$db->queryPrepared($sql, array((int)$row['usf_id']));
             }
         }
@@ -133,7 +133,7 @@ final class UpdateStepsCode
             }
         }
     }
-    
+
     /**
      * Create categories for the inventory for each organization.
      * @throws Exception
@@ -155,7 +155,7 @@ final class UpdateStepsCode
         while ($row = $organizationStatement->fetch()) {
             $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                            (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                    VALUES (?, ?, \'IVT\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
+                    VALUES (?, ?, \'IVT\', \'COMMON\', \'SYS_COMMON\', false, true, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
             self::$db->queryPrepared($sql, array((int)$row['org_id'], Uuid::uuid4(), $systemUserId, DATETIME_NOW));
 
             // set edit role rights to inventory categories for administrator role
