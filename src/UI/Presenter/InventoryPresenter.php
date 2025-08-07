@@ -3,13 +3,12 @@
 namespace Admidio\UI\Presenter;
 
 // Admidio namespaces
-use Admidio\Categories\Entity\Category;
 use Admidio\Categories\Service\CategoryService;
-use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
@@ -56,13 +55,17 @@ class InventoryPresenter extends PagePresenter
      */
     protected int $getFilterKeeper = 0;
     /**
-     * @var int filter for all items
+     * @var bool true if the current user is the keeper of an item
      */
-    protected int $getFilterItems = 0;
+    protected string $getFilterLastReceiver = '';
+    /**
+     * @var int filter id for the status selection
+     */
+    protected int $getFilterStatus = 0;
     /**
      * @var bool true if all items should be shown
      */
-    protected bool $showFormerItems = false;
+    protected bool $showRetiredItems = false;
 
 
     /**
@@ -77,12 +80,14 @@ class InventoryPresenter extends PagePresenter
         $this->getFilterString = admFuncVariableIsValid($_GET, 'items_filter_string', 'string', array('defaultValue' => ''));
         $this->getFilterCategoryUUID = admFuncVariableIsValid($_GET, 'items_filter_category', 'string', array('defaultValue' => ''));
         $this->getFilterKeeper = admFuncVariableIsValid($_GET, 'items_filter_keeper', 'int', array('defaultValue' => 0));
-        $this->getFilterItems = admFuncVariableIsValid($_GET, 'items_filter', 'int', array('defaultValue' => 0));
+        $this->getFilterLastReceiver = admFuncVariableIsValid($_GET, 'items_filter_last_receiver', 'string', array('defaultValue' => ''));
+        $this->getFilterStatus = admFuncVariableIsValid($_GET, 'items_filter_status', 'int', array('defaultValue' => 1));
 
         $this->itemsData = new ItemsData($gDb, $gCurrentOrgId);
         
-        $this->showFormerItems = ($this->getFilterItems >= 1) ? true : false;
-        $this->itemsData->showFormerItems($this->showFormerItems);
+        // check if the user has selected to show retired items
+        $this->showRetiredItems = ($this->getFilterStatus === 0 || $this->getFilterStatus === 2) ? true : false;
+        $this->itemsData->showRetiredItems($this->showRetiredItems);
         $this->itemsData->readItems();
 
         $this->categoryService = new CategoryService($gDb, 'IVT');
@@ -101,7 +106,7 @@ class InventoryPresenter extends PagePresenter
 
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to view inventory history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_lend_data');
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data');
            
             // show link to create new item
             $this->addPageFunctionsMenuItem(
@@ -158,7 +163,7 @@ class InventoryPresenter extends PagePresenter
         
         $this->addJavascript('
             // only submit non-empty filter values
-            $("#items_filter_category, #items_filter_keeper, #items_filter").on("change", function(){
+            $("#items_filter_category, #items_filter_keeper, #items_filter_last_receiver, #items_filter_status").on("change", function(){
                 var form = $("#adm_navbar_filter_form");
 
                 // Text-Filter
@@ -185,12 +190,20 @@ class InventoryPresenter extends PagePresenter
                     keeperSelect.attr("name", "items_filter_keeper");
                 }
 
-                // items filter
-                var itemsSelect = $("#items_filter");
+                // Last Receiver
+                var lastReceiverSelect = $("#items_filter_last_receiver");
+                if (lastReceiverSelect.val() === "") {
+                    lastReceiverSelect.removeAttr("name");
+                } else {
+                    lastReceiverSelect.attr("name", "items_filter_last_receiver");
+                }
+
+                // items status filter
+                var itemsSelect = $("#items_filter_status");
                 if (itemsSelect.val() === "") {
                     itemsSelect.removeAttr("name");
                 } else {
-                    itemsSelect.attr("name", "items_filter");
+                    itemsSelect.attr("name", "items_filter_status");
                 }
 
                 form.submit();
@@ -218,15 +231,15 @@ class InventoryPresenter extends PagePresenter
             // create the print view link with the current filter values
             $("#menu_item_lists_print_view").off("click").on("click", function(e){
                 e.preventDefault();
-                var textFilter     = $("#items_filter_string").val() || "";
-                var category     = $("#items_filter_category").val()   || "";
-                var keeper  = $("#items_filter_keeper").val()     || "";
-                var filterItems = $("#items_filter").val()     || "";
+                var textFilter     = $("#items_filter_string").val()  || "";
+                var category     = $("#items_filter_category").val()  || "";
+                var keeper  = $("#items_filter_keeper").val()         || "";
+                var filterItems = $("#items_filter_status").val()     || "";
                 var url = "' . $printBaseUrl . '"
                         + "&items_filter_string="   + encodeURIComponent(textFilter)
                         + "&items_filter_category=" + encodeURIComponent(category)
                         + "&items_filter_keeper="   + encodeURIComponent(keeper)
-                        + "&items_filter="        + encodeURIComponent(filterItems);
+                        + "&items_filter_status="   + encodeURIComponent(filterItems);
             
                 window.open(url, "_blank");
             });',
@@ -279,19 +292,60 @@ class InventoryPresenter extends PagePresenter
             )
         );
 
-        $selectBoxValues = array(
-            '0' => $gL10n->get('SYS_INVENTORY_FILTER_CURRENT_ITEMS'),
-            '1' => $gL10n->get('SYS_INVENTORY_FILTER_FORMER_ITEMS'),
-            '2' => $gL10n->get('SYS_ALL')
+        // get all last receivers
+        $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
+            CASE
+                WHEN borrowData.inb_last_receiver = \'-1\'
+                    THEN \'n/a\'
+                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
+                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+                ELSE
+                    borrowData.inb_last_receiver
+            END AS receiver_name
+            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
+            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
+                ON fields.inf_name_intern = \'LAST_RECEIVER\'
+            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
+            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                ON last_name.usd_usr_id  = borrowData.inb_last_receiver
+            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME','usf_id') . '
+            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                ON first_name.usd_usr_id  = borrowData.inb_last_receiver
+            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME','usf_id') . '
+            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
+            ORDER BY receiver_name ASC;';
+
+        // filter last receiver
+        $form->addSelectBoxFromSql(
+            'items_filter_last_receiver',
+            $gL10n->get('SYS_INVENTORY_LAST_RECEIVER'),
+            $gDb,
+            $sql,
+            array(
+                'property' => $showFilterForm,
+                'defaultValue' => $this->getFilterLastReceiver,
+                'showContextDependentFirstEntry' => true
+            )
         );
+
+        // get the status options for the filter
+        $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));
+        $values = $option->getAllOptions();
+        $selectBoxValues = array();
+        foreach ($values as $value) {
+            $selectBoxValues[$value['id']] = $value['value'];
+        }
+        // add select all items to select box values
+        $selectBoxValues[0] = $gL10n->get('SYS_ALL');
+
         // filter all items
         $form->addSelectBox(
-            'items_filter',
+            'items_filter_status',
             $gL10n->get('SYS_INVENTORY_ITEMS'),
             $selectBoxValues,
             array(
                 'property' => $showFilterForm,
-                'defaultValue' => $this->getFilterItems,
+                'defaultValue' => $this->getFilterStatus,
                 'showContextDependentFirstEntry' => false
             )
         );
@@ -323,7 +377,8 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_xlsx'
                 )
             ),
@@ -337,7 +392,8 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_ods'
                 )
             ),
@@ -351,7 +407,8 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_csv-ms'
                 )
             ),
@@ -365,7 +422,8 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_csv-oo'
                 )
             ),
@@ -379,7 +437,8 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_pdf'
                 )
             ),
@@ -393,7 +452,8 @@ class InventoryPresenter extends PagePresenter
                     'items_filter_string'   => $this->getFilterString,
                     'items_filter_category' => $this->getFilterCategoryUUID,
                     'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter'          => $this->getFilterItems,
+                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
+                    'items_filter_status'   => $this->getFilterStatus,
                     'mode'                  => 'print_pdfl'
                 )
             ),
@@ -415,16 +475,16 @@ class InventoryPresenter extends PagePresenter
             $.each(buttons, function(suffix, modeValue){
                 var selector = "#menu_item_lists_" + suffix;
                 $(selector).on("click", function(e){
-                    var textFilter = $("#items_filter_string").val()            || "";
-                    var category   = $("#items_filter_category").val()         || "";
-                    var keeper     = $("#items_filter_keeper").val()           || "";
-                    var filterItems = $("#items_filter").val()     || "";
+                    var textFilter = $("#items_filter_string").val()      || "";
+                    var category   = $("#items_filter_category").val()    || "";
+                    var keeper     = $("#items_filter_keeper").val()      || "";
+                    var filterItems = $("#items_filter_status").val()     || "";
                     var base = this.href.split("?")[0];
                     var qs = [
                     "items_filter_string="   + encodeURIComponent(textFilter),
                     "items_filter_category=" + encodeURIComponent(category),
                     "items_filter_keeper="   + encodeURIComponent(keeper),
-                    "items_filter="          + encodeURIComponent(filterItems),
+                    "items_filter_status="   + encodeURIComponent(filterItems),
                     "mode="                  + modeValue
                     ].join("&");
                     this.href = base + "?" + qs;
@@ -708,20 +768,20 @@ class InventoryPresenter extends PagePresenter
         );
 
         // Set default alignment and headers for the first column (abbreviation)
-        $columnAlign[] = 'center';
-        $headers =  array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>');
+        ($mode === 'html') ? $columnAlign[] = 'center' : $columnAlign = array();
+        $headers =  ($mode === 'html') ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>') : array();
         $exportHeaders = array();
         $columnNumber = 1;
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrowing fields
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Build headers and column alignment for each item field
         foreach ($this->itemsData->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
             $columnHeader  = $this->itemsData->getProperty($infNameIntern, 'inf_name');
 
-            if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
-                continue; // skip lending fields if lending is disabled
+            if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                continue; // skip borrowing fields if borrowing is disabled
             }
 
             // For the first column, add specific header configurations for export modes
@@ -733,6 +793,11 @@ class InventoryPresenter extends PagePresenter
                 }
                 else {
                     $headers[] = $gL10n->get('SYS_ABR_NO');
+                    if ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled')) {
+                        // photo column
+                        $headers[] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
+                        $columnAlign[] = 'center';
+                    }
                 }
             }
 
@@ -779,30 +844,40 @@ class InventoryPresenter extends PagePresenter
             $this->itemsData->readItemData($item['ini_uuid']);
             $rowValues = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
-            $strikethrough = $item['ini_former'];
+            $strikethrough = $this->itemsData->isRetired();
             $columnNumber = 1;
 
             foreach ($this->itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
 
-                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
-                    continue; // skip lending fields if lending is disabled
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                    continue; // skip borrowing fields if borrowing is disabled
                 }
 
                 // Apply filters for CATEGORY and KEEPER
                 if (
                     ($this->getFilterCategoryUUID !== '' && $infNameIntern === 'CATEGORY' && $this->getFilterCategoryUUID != $this->itemsData->getValue($infNameIntern, 'database')) ||
                     ($this->getFilterKeeper !== 0 && $infNameIntern === 'KEEPER' && $this->getFilterKeeper != $this->itemsData->getValue($infNameIntern)) ||
-                    ($this->getFilterItems === 0 && $item['ini_former']) ||
-                    ($this->getFilterItems === 1 && !$item['ini_former'])
+                    ($this->getFilterLastReceiver !== '' && $infNameIntern === 'LAST_RECEIVER' && $this->getFilterLastReceiver != $this->itemsData->getValue($infNameIntern)) ||
+                    ($this->getFilterStatus !== 0 && $this->getFilterStatus !== $this->itemsData->getStatus())
                 ) {
                     // skip to the next iteration of the next-outer loop
                     continue 2;
                 }
 
                 if ($columnNumber === 1) {
-                    $rowValues['data'][] = '<input type="checkbox"/>';
+                    if ($mode === 'html') {
+                        $rowValues['data'][] = '<input type="checkbox"/>';
+                    }
                     $rowValues['data'][] = $listRowNumber;
+                    if ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled')) {
+                        $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid'=> $item['ini_uuid']));
+                        $itemPhotoModalUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show_modal', 'item_uuid'=> $item['ini_uuid']));
+                        $itemPhotoContent = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . $itemPhotoModalUrl . '">
+                            <img id="adm_inventory_item_picture" class="rounded" style="max-height: 24px; max-width: 24px;" src="' . $itemPhotoUrl . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
+                        </a>';
+                        $rowValues['data'][] = $itemPhotoContent;
+                    }
                 }
 
                 $content = $this->itemsData->getValue($infNameIntern, 'database');
@@ -810,8 +885,8 @@ class InventoryPresenter extends PagePresenter
 
                 // Process ITEMNAME column
                 if ($infNameIntern === 'ITEMNAME' && strlen($content) > 0) {
-                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$item['ini_former'])) {
-                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
+                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
                     } else {
                         $content = SecurityUtils::encodeHTML($content);
                     }
@@ -874,7 +949,7 @@ class InventoryPresenter extends PagePresenter
                     $content = in_array($mode, ['csv', 'pdf', 'xlsx', 'ods'])
                         ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
                         : $this->itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, ['DATE', 'DROPDOWN'])) {
+                } elseif (in_array($infType, ['DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'])) {
                     $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif ($infType === 'RADIO_BUTTON') {
                     $content = $mode === 'html'
@@ -895,7 +970,7 @@ class InventoryPresenter extends PagePresenter
             // Append admin action column for HTML mode
             if ($mode === 'html') {
                 $historyButton = ChangelogService::displayHistoryButtonTable(
-                    'inventory_items,inventory_item_data,inventory_item_lend_data',
+                    'inventory_items,inventory_item_data,inventory_item_borrow_data',
                     $gCurrentUser->isAdministratorInventory(),
                     ['uuid' => $item['ini_uuid']]
                 );
@@ -905,29 +980,29 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                    if (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$item['ini_former']) {
+                    if (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired()) {
                         // Add edit action
                         $rowValues['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                             'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                         );
 
-                        // Add lend action
-                        if (!$item['ini_former'] && !$gSettingsManager->GetBool('inventory_items_disable_lending')) {
+                        // Add borrow action
+                        if (!$this->itemsData->isRetired() && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                             // check if the item is in inventory
-                            if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
-                                $itemLended = false;
+                            if (!$this->itemsData->isBorrowed()) {
+                                $item_borrowed = false;
                                 $icon ='bi bi-box-arrow-right';
-                                $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_LEND');
+                                $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
                             }
                             else {
-                                $itemLended = true;
+                                $item_borrowed = true;
                                 $icon = 'bi bi-box-arrow-in-left';
                                 $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                             }
                             $rowValues['actions'][] = array(
-                                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_lend', 'item_uuid' => $item['ini_uuid'], 'item_lended' => $itemLended)),
+                                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_borrow', 'item_uuid' => $item['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                                 'icon' => $icon,
                                 'tooltip' =>$tooltip
                             );
@@ -941,20 +1016,20 @@ class InventoryPresenter extends PagePresenter
                         );
                     }
 
-                    if ($item['ini_former']) {
-                        $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_UNDO_FORMER_DESC', array('SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM');
-                        // Add undo former action
+                    if ($this->itemsData->isRetired()) {
+                        $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
+                        // Add reinstate action
                         $rowValues['actions'][] = array(
-                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                             'dataMessage' => $dataMessage,
                             'icon' => 'bi bi-eye',
-                            'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER')
+                            'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE')
                         );
                     }
 
                     if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                        if (!$item['ini_former']) {
-                            // Add make former action
+                        if (!$this->itemsData->isRetired()) {
+                            // Addretire action
                             $rowValues['actions'][] = array(
                                 'popup' => true,
                                 'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $item['ini_uuid'])),
@@ -964,10 +1039,10 @@ class InventoryPresenter extends PagePresenter
                         }
                     }
                     else {
-                        // Add delete/make former action
+                        // Add delete/retire action
                         $rowValues['actions'][] = array(
                             'popup' => true,
-                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
+                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                             'icon' => 'bi bi-trash',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                         );
@@ -1068,8 +1143,8 @@ class InventoryPresenter extends PagePresenter
         $columnAlign[] = 'end'; // first column alignment
         $headers     = array();
         $columnNumber = 1;
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrow fields
+        $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // create array with all column heading values
         $profileItemFields = array('ITEMNAME');
@@ -1084,7 +1159,7 @@ class InventoryPresenter extends PagePresenter
         foreach ($itemsData->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
 
-            if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
+            if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowFieldNames))) {
                 continue;
             }
 
@@ -1116,7 +1191,7 @@ class InventoryPresenter extends PagePresenter
         }
 
         // Append the admin action column
-        if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
+        if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
             $columnAlign[] = 'end';
             $headers[]     = '&nbsp;';
         }
@@ -1133,13 +1208,13 @@ class InventoryPresenter extends PagePresenter
             $itemsData->readItemData($item['ini_uuid']);
             $rowValues     = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
-            $strikethrough = $item['ini_former'];
+            $strikethrough = $itemsData->isRetired();
             $columnNumber  = 1;
 
             foreach ($itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
 
-                if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
+                if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowFieldNames))) {
                     continue;
                 }
                 
@@ -1180,7 +1255,7 @@ class InventoryPresenter extends PagePresenter
                 if ($infType === 'CHECKBOX') {
                     $content = ($content != 1) ? 0 : 1;
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, ['DATE', 'DROPDOWN'])) {
+                } elseif (in_array($infType, ['DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'])) {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif ($infType === 'RADIO_BUTTON') {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
@@ -1194,7 +1269,7 @@ class InventoryPresenter extends PagePresenter
 
             // Append admin action column
             $historyButton = ChangelogService::displayHistoryButtonTable(
-                'inventory_items,inventory_item_data,inventory_item_lend_data',
+                'inventory_items,inventory_item_data,inventory_item_borrow_data',
                 $gCurrentUser->isAdministratorInventory(),
                 ['uuid' => $item['ini_uuid']]
             );
@@ -1203,30 +1278,30 @@ class InventoryPresenter extends PagePresenter
                 $rowValues['actions'][] = $historyButton;
             }
 
-            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                if ($gCurrentUser->isAdministratorInventory() || ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database')) && !$item['ini_former'])) {
+            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
+                if (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) && !$itemsData->isRetired()) {
                     // Add edit action
                     $rowValues['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
                     );
 
                     // Add lend action
-                    if (!$item['ini_former'] && !$gSettingsManager->GetBool('inventory_items_disable_lending')) {
+                    if (!$itemsData->isRetired() && !$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
                         // check if the item is in inventory
-                        if ($this->itemsData->getValue('IN_INVENTORY', 'database') === '1') {
-                            $itemLended = false;
+                        if (!$itemsData->isBorrowed()) {
+                            $item_borrowed = false;
                             $icon ='bi bi-box-arrow-right';
-                            $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_LEND');
+                            $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
                         }
                         else {
-                            $itemLended = true;
+                            $item_borrowed = true;
                             $icon = 'bi bi-box-arrow-in-left';
                             $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                         }
                         $rowValues['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_lend', 'item_uuid' => $item['ini_uuid'], 'item_lended' => $itemLended)),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',array('mode' => 'item_edit_borrow', 'item_uuid' => $item['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                             'icon' => $icon,
                             'tooltip' =>$tooltip
                         );
@@ -1240,20 +1315,20 @@ class InventoryPresenter extends PagePresenter
                     );
                 }
 
-                if ($item['ini_former']) {
-                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_UNDO_FORMER_DESC', array('SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER_CONFIRM');
-                    // Add undo former action
+                if ($itemsData->isRetired()) {
+                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
+                    // Add reinstate action
                     $rowValues['actions'][] = array(
-                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_undo_former', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $dataMessage,
                         'icon' => 'bi bi-eye',
-                        'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_UNDO_FORMER')
+                        'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE')
                     );
                 }
 
-                if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                    if (!$item['ini_former']) {
-                        // Add make former action
+                if ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
+                    if (!$itemsData->isRetired()) {
+                        // Add retire action
                         $rowValues['actions'][] = array(
                             'popup' => true,
                             'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $item['ini_uuid'])),
@@ -1263,10 +1338,10 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
                 else {
-                    // Add delete/make former action
+                    // Add delete/retire action
                     $rowValues['actions'][] = array(
                         'popup' => true,
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_former' => $item['ini_former'])),
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                     );

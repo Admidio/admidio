@@ -55,7 +55,7 @@ class SelectOptions extends Entity
 
         // if id is set than read the data of the recordset
         if ($this->infId > 0) {
-            $sql = 'SELECT ifo_id, ifo_value, ifo_sequence, ifo_obsolete
+            $sql = 'SELECT ifo_id, ifo_value, ifo_system, ifo_sequence, ifo_obsolete
                     FROM ' . TBL_INVENTORY_FIELD_OPTIONS . '
                     WHERE ifo_inf_id = ? -- $infId
                     ORDER BY ifo_sequence';
@@ -104,6 +104,7 @@ class SelectOptions extends Entity
                 $values[$value['ifo_id']] = array(
                     'id' => $value['ifo_id'],
                     'value' => $value['ifo_value'],
+                    'system' => $value['ifo_system'],
                     'sequence' => $value['ifo_sequence'],
                     'obsolete' => $value['ifo_obsolete']
                 );
@@ -252,10 +253,15 @@ class SelectOptions extends Entity
         $currentSequence = array();
         foreach ($allOptions as $option) {
             $currentSequence[$option['id']] = $option['sequence'] - 1; // -1 because sequence starts with 1 in database
+            if ($option['system'] == 1) {
+                $lastSystemSequence = $option['sequence'];
+            }
         }
         // determinate new sequence based on array position
         $newSequence = array();
-        $sequence = 0;
+        
+        // check if there are system options, if so then the sequence must start with the sequence of the last system option
+        $sequence = $lastSystemSequence ?? 0;
         foreach ($arrValues as $id => $values) {
             $newSequence[$id] = $sequence++;
         }

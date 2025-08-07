@@ -397,7 +397,7 @@ try {
 
     if ($gSettingsManager->getInt('inventory_module_enabled') > 0 && $gSettingsManager->getBool('inventory_profile_view_enabled')) {
         // ******************************************************************************
-        // Block with inventory items (optimized)
+        // Block with inventory items
         // ******************************************************************************
         $itemsKeeper = new ItemsData($gDb, $gCurrentOrgId);
         $itemsReceiver = new ItemsData($gDb, $gCurrentOrgId);
@@ -408,11 +408,11 @@ try {
         
         // Determine creation mode based on available items
         $creationMode = 'none';
-        if (!empty($itemsKeeper->getItems()) && (empty($itemsReceiver->getItems()) || $gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        if (!empty($itemsKeeper->getItems()) && (empty($itemsReceiver->getItems()) || $gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'keeper';
-        } elseif (empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        } elseif (empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'receiver';
-        } elseif (!empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        } elseif (!empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'both';
         }
         
@@ -440,7 +440,7 @@ try {
                 $page->assignSmartyVariable('keeperList', $templateData);
                 $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
                 if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_keeper' => $user->getValue('usr_id'))));     
                 }
                 break;
         
@@ -451,7 +451,7 @@ try {
                 $page->assignSmartyVariable('receiverList', $templateData);
                 $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
                 if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_last_receiver' => $user->getValue('usr_id'))));
                 }
                 break;
         
@@ -465,13 +465,13 @@ try {
                 $page->assignSmartyVariable('keeperList', $templateDataKeeper);
                 $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
                 if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_keeper' => $user->getValue('usr_id'))));
                 }  
             
                 $page->assignSmartyVariable('receiverList', $templateDataReceiver);
                 $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
                 if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_last_receiver' => $user->getValue('usr_id'))));
                 }
                 break;
         

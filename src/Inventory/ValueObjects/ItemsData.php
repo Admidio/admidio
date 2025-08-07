@@ -13,8 +13,9 @@ use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\ItemField;
-use Admidio\Inventory\Entity\ItemLendData;
+use Admidio\Inventory\Entity\ItemBorrowData;
 use Admidio\Categories\Entity\Category;
+use Admidio\Inventory\Entity\SelectOptions;
 
 // PHP namespaces
 use DateTime;
@@ -34,15 +35,15 @@ use DateTime;
  */
 class ItemsData
 {
-    private bool $mItemCreated = false;                   ///< flag if a new item was created
-    private bool $mItemChanged = false;                   ///< flag if a new item was changed
-    private bool $mItemDeleted = false;                   ///< flag if a item was deleted
-    private bool $mItemMadeFormer = false;                ///< flag if a item was made to former item
-    private bool $mItemUndoMadeFormer = false;             ///< flag if a item was made to normal again
-    private bool $mItemImported = false;                   ///< flag if a item was imported
-    private bool $showFormerItems = true;               ///< if true, than former items will be showed
-    private int $organizationId = -1;                ///< ID of the organization for which the item field structure should be read
-    private array $lendFieldNames = array('LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');  ///< array with the internal field names of the lend fields
+    private bool $mItemCreated = false;         ///< flag if a new item was created
+    private bool $mItemChanged = false;         ///< flag if a new item was changed
+    private bool $mItemDeleted = false;         ///< flag if a item was deleted
+    private bool $mItemRetired = false;         ///< flag if a item was retired
+    private bool $mItemReinstated = false;      ///< flag if a item was made to normal again
+    private bool $mItemImported = false;        ///< flag if a item was imported
+    private bool $showRetiredItems = true;      ///< if true, than retired items will be showed
+    private int $organizationId = -1;           ///< ID of the organization for which the item field structure should be read
+    private array $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');  ///< array with the internal field names of the borrow fields
 
     /**
      * @var Database An object of the class Database for communication with the database
@@ -163,7 +164,7 @@ class ItemsData
 
     /**
      * Reads the item data of all item fields out of database table @b adm_inventory_manager_data
-     * and @b adm_inventory_manager_items_lend
+     * and @b adm_inventory_manager_items_borrow
      * and adds an object for each field data to the @b mItemData array.
      * If profile fields structure wasn't read, this will be done before.
      * 
@@ -201,19 +202,27 @@ class ItemsData
                 $this->mItemData[$row['ind_inf_id']]->setArray($row);
             }
 
-            // read all item lend data
-            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
+            // read all item borrow data
+            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
                     INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                        ON inf_id = inl_inf_id
-                    WHERE inl_ini_id = ?;';
-            $itemLendStatement = $this->mDb->queryPrepared($sql, array($itemId));
-            
-            while ($row = $itemLendStatement->fetch()) {
-                if (!array_key_exists($row['inl_inf_id'], $this->mItemData)) {
-                    $this->mItemData[$row['inl_inf_id']] = new ItemLendData($this->mDb, $this, $row['inl_inf_id']);
+                        ON inf_name_intern IN ( ?, ?, ? ) 
+                    WHERE inb_ini_id = ?;';
+            $itemBorrowStatement = $this->mDb->queryPrepared($sql, array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE', $itemId));
+
+            while ($row = $itemBorrowStatement->fetch()) {
+                foreach ($this->getItemFields() as $itemField) {
+                    $itemBorrowData = new ItemBorrowData($this->mDb, $this, $row['inb_ini_id']);
+                    $fieldNameIntern = $itemField->getValue('inf_name_intern');
+                    $fieldId = $itemField->getValue('inf_id');
+                    if (in_array($fieldNameIntern, $this->borrowFieldNames)) {
+                        if (!array_key_exists($fieldId, $this->mItemData)) {
+                            $this->mItemData[$fieldId] = $itemBorrowData;
+                        }
+                        $this->mItemData[$fieldId]->setArray($row);
+                    }
                 }
-                $this->mItemData[$row['inl_inf_id']]->setArray($row);
-            }        } else {
+            }
+        } else {
             $this->mItemCreated = true;
         }
     }
@@ -230,11 +239,21 @@ class ItemsData
         $this->mItems = array();
 
         $sqlWhereCondition = '';
-        if (!$this->showFormerItems) {
-            $sqlWhereCondition .= 'AND ini_former = 0';
+        if (!$this->showRetiredItems) {
+            // get the option id of the retired status
+            $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
+            $values = $option->getAllOptions();
+            $retiredId = 0;
+            foreach ($values as $value) {
+                if ($value['value'] === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS') {
+                    $retiredId = $value['id'];
+                    break;
+                }
+            }
+            $sqlWhereCondition .= 'AND ini_status NOT IN (' . $retiredId . ')';
         }
 
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEMS . '
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
                 INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
                     ON ind_ini_id = ini_id
                 WHERE ini_org_id IS NULL
@@ -243,7 +262,7 @@ class ItemsData
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
         while ($row = $statement->fetch()) {
-            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
+            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
         }
     }
 
@@ -260,9 +279,19 @@ class ItemsData
         // first initialize existing data
         $this->mItems = array();
 
-        $sqlWhereCondition = '';
-        if (!$this->showFormerItems) {
-            $sqlWhereCondition .= 'AND ini_former = 0';
+        $sqlStatusCondition = '';
+        if (!$this->showRetiredItems) {
+            // get the option id of the retired status
+            $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
+            $values = $option->getAllOptions();
+            $retiredId = 0;
+            foreach ($values as $value) {
+                if ($value['value'] === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS') {
+                    $retiredId = $value['id'];
+                    break;
+                }
+            }
+            $sqlStatusCondition .= 'AND ini_status = ' . $retiredId;
         }
 
         $sqlImfIds = 'AND (';
@@ -274,7 +303,7 @@ class ItemsData
         }
 
         // first read all item data for the given user
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEM_DATA . '
+        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEM_DATA . '
                 INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                     ON inf_id = ind_inf_id
                     ' . $sqlImfIds . '
@@ -283,38 +312,38 @@ class ItemsData
                 WHERE (ini_org_id IS NULL
                     OR ini_org_id = ?)
                 AND ind_value = ?
-                ' . $sqlWhereCondition . ';';
+                ' . $sqlStatusCondition . ';';
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
 
         while ($row = $statement->fetch()) {
-            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
+            $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
         }
 
-        // now read the item lend data for each item
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_former FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
-                INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                    ON inf_id = inl_inf_id
-                    ' . $sqlImfIds . '
-                INNER JOIN ' . TBL_INVENTORY_ITEMS . '
-                    ON ini_id = inl_ini_id
+        // read the borrow data for the given user as receiver
+        if (in_array('LAST_RECEIVER', $fieldNames)) {
+            // now read the item borrow data for each item
+            $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+                    INNER JOIN ' . TBL_INVENTORY_ITEMS . '
+                        ON ini_id = inb_ini_id
                 WHERE (ini_org_id IS NULL
                     OR ini_org_id = ?)
-                AND inl_value = ?
-                ' . $sqlWhereCondition . ';';
-        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
-        // check if a item already exists in the items array
-        while ($row = $statement->fetch()) {
-            // check if item already exists in the items array
-            $itemExists = false;
-            foreach ($this->mItems as $item) {
-                if ($item['ini_id'] === $row['ini_id']) {
-                    $itemExists = true;
-                    break;
+                    AND inb_last_receiver = ?
+                    ' . $sqlStatusCondition . ';';
+            $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
+            // check if a item already exists in the items array
+            while ($row = $statement->fetch()) {
+                // check if item already exists in the items array
+                $itemExists = false;
+                foreach ($this->mItems as $item) {
+                    if ($item['ini_id'] === $row['ini_id']) {
+                        $itemExists = true;
+                        break;
+                    }
                 }
-            }
-            // if item doesn't exist, then add it to the items array
-            if (!$itemExists) {
-                $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_former' => $row['ini_former']);
+                // if item doesn't exist, then add it to the items array
+                if (!$itemExists) {
+                    $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
+                }
             }
         }
     }
@@ -536,6 +565,47 @@ class ItemsData
                     }
                     break;
 
+                case 'DROPDOWN_MULTISELECT':
+                    $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
+                    $arrOptions = $this->mItemFields[$fieldNameIntern]->getValue('ifo_inf_options', 'database', false);
+
+                    foreach ($arrOptions as $values) {
+                        // if text is a translation-id then translate it
+                        $values['value'] = Language::translateIfTranslationStrId($values['value']);
+
+                        // save values in new array that starts with key = 1
+                        $arrOptionValuesWithKeys[$values['id']] = $values['value'];
+                    }
+
+                    if (count($arrOptionValuesWithKeys) > 0 && !empty($value)) {
+                        // split value by comma and trim each value
+                        $valueArray = explode(',', $value);
+                        foreach ($valueArray as &$val) {
+                            $val = trim($val);
+                        }
+                        unset($val);
+
+                        // now create html output for each value
+                        $htmlValue = '';
+                        foreach ($valueArray as $val) {
+                            if (array_key_exists($val, $arrOptionValuesWithKeys)) {
+                                // if value is the index of the array then we can use it
+                                if ($htmlValue !== '') {
+                                    $htmlValue .= ', ';
+                                }
+                                $htmlValue .= $arrOptionValuesWithKeys[$val];                              
+                            } else {
+                                if ($htmlValue !== '') {
+                                    $htmlValue .= ', ';
+                                }
+                                $htmlValue .= '<i>' . $gL10n->get('SYS_DELETED_ENTRY') . '</i>';
+                            }
+                        }
+                    } else {
+                        $htmlValue = '';
+                    }
+                    break;
+
                 case 'TEXT_BIG':
                     $htmlValue = nl2br($value);
                     break;
@@ -615,13 +685,29 @@ class ItemsData
                     }
                 }
             }
-            elseif (array_key_exists($this->mItemFields[$fieldNameIntern]->getValue('inf_id'), $this->mItemData)) {
-                $prefix = 'ind';
-                if ($this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')] instanceof ItemLendData) {
-                    // if field is a lend field then use 'inl_' as prefix
-                    $prefix = 'inl';
+            elseif ($fieldNameIntern === 'STATUS') {
+                // special case for status
+                $item = new Item($this->mDb, $this, $this->mItemId);
+                $statusId = $item->getValue('ini_status');
+                if ($statusId > 0) {
+                    $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
+                    $values = $option->getAllOptions();
+                    foreach ($values as $valueArray) {
+                        if ($valueArray['id'] === $statusId) {
+                            if ($format === 'database') {
+                                return $valueArray['id'];
+                            }
+                            return Language::translateIfTranslationStrId($valueArray['value']);
+                        }
+                    }
                 }
-                $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue($prefix . '_value', $format);
+            }
+            elseif (array_key_exists($this->mItemFields[$fieldNameIntern]->getValue('inf_id'), $this->mItemData)) {
+                if ($this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')] instanceof ItemBorrowData) {
+                    $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('inb_' . strtolower($fieldNameIntern), $format);
+                } else {
+                    $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('ind_value', $format);
+                }
 
                 if ($format === 'database') {
                     return $value;
@@ -670,6 +756,24 @@ class ItemsData
                             $value = $arrOptions[$value];
                         }
                         break;
+
+                    case 'DROPDOWN_MULTISELECT':
+                        // the value in db is a comma separated list of positions, now search for the text
+                        if ($value !== '' && $format !== 'html') {
+                            $arrOptions = $this->mItemFields[$fieldNameIntern]->getValue('ifo_inf_options', $format, false);
+                            $valueArray = explode(',', $value);
+                            foreach ($valueArray as &$val) {
+                                $val = trim($val);
+                                if (array_key_exists($val, $arrOptions)) {
+                                    $val = $arrOptions[$val];
+                                } else {
+                                    $val = '<i>' . $GLOBALS['gL10n']->get('SYS_DELETED_ENTRY') . '</i>';
+                                }
+                            }
+                            unset($val);
+                            $value = implode(', ', $valueArray);
+                        }
+                        break;
                 }
             }
         }
@@ -683,6 +787,19 @@ class ItemsData
     }
 
     /**
+     * Returns the status of the item.
+     * 
+     * @return int                      Returns the status of the item
+     */
+    public function getStatus(): int
+    {
+        $item = new Item($this->mDb, $this);
+        $item->readDataByUuid($this->mItemUUID);
+
+        return $item->getStatus();
+    }
+
+    /**
      * Marks an item as imported.
      * 
      * @return void
@@ -693,18 +810,65 @@ class ItemsData
     }
 
     /**
-     * This method reads or stores the variable for showing former items.
+     * This method reads or stores the variable for showing retired items.
      * The values will be stored in database without any inspections!
      * 
-     * @param bool|null $newValue       If set, then the new value will be stored in @b showFormerItems.
-     * @return bool                     Returns the current value of @b showFormerItems
+     * @param bool|null $newValue       If set, then the new value will be stored in @b showRetiredItems.
+     * @return bool                     Returns the current value of @b showRetiredItems
      */
-    public function showFormerItems($newValue = null): bool
+    public function showRetiredItems($newValue = null): bool
     {
         if ($newValue !== null) {
-            $this->showFormerItems = $newValue;
+            $this->showRetiredItems = $newValue;
         }
-        return $this->showFormerItems;
+        return $this->showRetiredItems;
+    }
+
+    public function isRetired(): bool
+    {
+        global $gDb;
+        $optionId = $this->getStatus();
+        $option = new SelectOptions($gDb, $this->getProperty('STATUS', 'inf_id'));
+        if ($option->readDataById($optionId)) {
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS';
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the item is in use.
+     * 
+     * @return bool                     Returns true if the item is in use, otherwise false
+     */
+    public function isInUse(): bool
+    {
+        global $gDb;
+        $optionId = $this->getStatus();
+        $option = new SelectOptions($gDb, $this->getProperty('STATUS', 'inf_id'));
+        if ($option->readDataById($optionId)) {
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_FILTER_IN_USE_ITEMS';
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the item is borrowed.
+     * 
+     * @return bool                     Returns true if the item is borrowed, otherwise false
+     */
+    public function isBorrowed(): bool
+    {
+        // get Values of LAST_RECEIVER, BORROW_DATE and RETURN_DATE for current item
+        $borrowData = new ItemBorrowData($this->mDb, $this);
+        $borrowData->readDataByColumns(array('inb_ini_id' => $this->mItemId));
+        $lastReceiver = $borrowData->getValue('inb_last_receiver');
+        $borrowDate = $borrowData->getValue('inb_borrow_date');
+        $returnDate = $borrowData->getValue('inb_return_date');
+        // if last receiver is set and borrow date is set and return date is not set then item is borrowed
+        if ($lastReceiver !== '' && $borrowDate !== '' && $returnDate === '') {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -744,14 +908,23 @@ class ItemsData
         $infId = $this->mItemFields[$fieldNameIntern]->getValue('inf_id');
         $oldFieldValue = '';
         // default prefix is 'ind_' for item data
-        // if field is a lend field then use 'inl_' as prefix
+        // if field is a borrow field then use 'inb_' as prefix
         $prefix = 'ind';
-        if (in_array($fieldNameIntern, $this->lendFieldNames)) {
-            $prefix = 'inl';
+        if (in_array($fieldNameIntern, $this->borrowFieldNames)) {
+            $prefix = 'inb';
         }
 
         if (array_key_exists($infId, $this->mItemData)) {
-            $oldFieldValue = $this->mItemData[$infId]->getValue($prefix .'_value');
+            if ($this->mItemData[$infId] instanceof ItemBorrowData) {
+                $oldFieldValue = $this->mItemData[$infId]->getValue($prefix . '_' . strtolower($fieldNameIntern));
+            } else {
+                $oldFieldValue = $this->mItemData[$infId]->getValue($prefix . '_value');
+            }
+        }
+
+        if (is_array($newValue)) {
+            // if new value is an array then convert it to a string
+            $newValue = implode(',', $newValue);
         }
 
         // check if new value only contains spaces
@@ -796,16 +969,23 @@ class ItemsData
 
         // if item data object for this field does not exist then create it
         if (!array_key_exists($infId, $this->mItemData)) {
-            if (in_array($fieldNameIntern, $this->lendFieldNames)) {
-                $this->mItemData[$infId] = new ItemLendData($this->mDb, $this);
+            if (in_array($fieldNameIntern, $this->borrowFieldNames)) {
+                $this->mItemData[$infId] = new ItemBorrowData($this->mDb, $this);
             } else {
                 $this->mItemData[$infId] = new ItemData($this->mDb, $this);
+                $this->mItemData[$infId]->setValue($prefix . '_inf_id', $infId);
             }
-            $this->mItemData[$infId]->setValue($prefix . '_inf_id', $infId);
             $this->mItemData[$infId]->setValue($prefix . '_ini_id', $this->mItemId);
         }
         
-        return $this->mItemData[$infId]->setValue($prefix . '_value', $newValue);
+        $ret = false;
+        if ($this->mItemData[$infId] instanceof ItemBorrowData) {
+            $ret = $this->mItemData[$infId]->setValue($prefix . '_' . strtolower($fieldNameIntern), $newValue);
+        } else {
+            $ret = $this->mItemData[$infId]->setValue($prefix . '_value', $newValue);
+        }
+
+        return $ret;
     }
 
     /**
@@ -833,9 +1013,20 @@ class ItemsData
             $category = new Category($this->mDb);
             $category->readDataByUuid($catUUID);
 
+            // get the option id of the in use status
+            $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
+            $values = $option->getAllOptions();
+            $inUseId = 0;
+            foreach ($values as $value) {
+                if ($value['value'] === 'SYS_INVENTORY_FILTER_IN_USE_ITEMS') {
+                    $inUseId = $value['id'];
+                    break;
+                }
+            }
+
             $newItem = new Item($this->mDb, $this, 0);
             $newItem->setValue('ini_org_id', $this->organizationId);
-            $newItem->setValue('ini_former', 0);
+            $newItem->setValue('ini_status', $inUseId);
             $newItem->setValue('ini_cat_id', $category->getValue('cat_id'));
             $newItem->save();
 
@@ -862,8 +1053,8 @@ class ItemsData
         // delete all item data
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
-        // delete all item lend data
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . ' WHERE inl_ini_id = ?;';
+        // delete all item borrow data
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
         // delete item
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
@@ -873,35 +1064,57 @@ class ItemsData
     }
 
     /**
-     * Marks an item as former
+     * Marks an item as retired
      * 
-     * @param int $itemId 		    The ID of the item to be marked as former.
+     * @param int $itemId 		    The ID of the item to be retired.
      * @return void
      */
-    public function makeItemFormer(): void
+    public function retireItem(): void
     {
+        // get the option id of the retired status
+        $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
+        $values = $option->getAllOptions();
+        $retiredId = 0;
+        foreach ($values as $value) {
+            if ($value['value'] === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS') {
+                $retiredId = $value['id'];
+                break;
+            }
+        }
+
         $item = new Item($this->mDb, $this, $this->mItemId);
-        $item->setValue('ini_former', 1);
+        $item->setValue('ini_status', $retiredId);
         $item->save();
 
-        $this->mItemMadeFormer = true;
-        $this->mItemUndoMadeFormer = false;
+        $this->mItemRetired = true;
+        $this->mItemReinstated = false;
     }
 
     /**
-     * Marks an item as no longer former
+     * Marks an item as reinstated which means it is no longer retired.
      * 
-     * @param int $itemId               The ID of the item to be marked as no longer former.
+     * @param int $itemId               The ID of the item to be marked as reinstated.
      * @return void
      */
-    public function undoItemFormer(): void
+    public function reinstateItem(): void
     {
+        // get the option id of the in use status
+        $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
+        $values = $option->getAllOptions();
+        $inUseId = 0;
+        foreach ($values as $value) {
+            if ($value['value'] === 'SYS_INVENTORY_FILTER_IN_USE_ITEMS') {
+                $inUseId = $value['id'];
+                break;
+            }
+        }
+        
         $item = new Item($this->mDb, $this, $this->mItemId);
-        $item->setValue('ini_former', 0);
+        $item->setValue('ini_status', $inUseId);
         $item->save();
 
-        $this->mItemMadeFormer = false;
-        $this->mItemUndoMadeFormer = true;
+        $this->mItemRetired = false;
+        $this->mItemReinstated = true;
     }
 
     /**
@@ -913,7 +1126,7 @@ class ItemsData
     {
         global $gCurrentUser;
         $this->mDb->startTransaction();
-
+        $inbId = 0; // used for item borrow data
         // safe item data
         foreach ($this->mItemData as $value) {
             if ($value->hasColumnsValueChanged()) {
@@ -922,13 +1135,19 @@ class ItemsData
             }
             
             // dont safe CATEGORY field to items data
-            if ($value instanceof ItemData && $value->getValue('ind_inf_id') === 2) {
+            if ($value instanceof ItemData && ($value->getValue('ind_inf_id') === 2 || $value->getValue('inf_name_intern') === 'CATEGORY')) { // 2 == CATEGORY field
                 $category = new Category($this->mDb);
                 $category->readDataByUuid($value->getValue('ind_value'));
                 $catID = $category->getValue('cat_id');
 
                 $item = new Item($this->mDb, $this, $this->mItemId);
                 $item->setValue('ini_cat_id', $catID);
+                $item->save();
+                $value->delete();
+            }
+            elseif ($value instanceof ItemData && ($value->getValue('ind_inf_id') === 3 || $value->getValue('inf_name_intern') === 'STATUS')) { // 3 == STATUS field
+                $item = new Item($this->mDb, $this, $this->mItemId);
+                $item->setValue('ini_status', $value->getValue('ind_value'));
                 $item->save();
                 $value->delete();
             }
@@ -940,13 +1159,12 @@ class ItemsData
                     $value->save();
                 }
             }
-            elseif ($value instanceof ItemLendData) {
-                // if value exists and new value is empty then delete entry
-                if ($value->getValue('inl_id') > 0 && $value->getValue('inl_value') === '') {
-                    $value->delete();
-                } else {
-                    $value->save();
+            elseif ($value instanceof ItemBorrowData) {
+                if ($value->getValue('inb_id') === 0 && $inbId !== 0) {
+                    $value->updateRecordId($inbId);
                 }
+                $value->save();
+                $inbId = $value->getValue('inb_id');
             }
         }
 
@@ -964,7 +1182,7 @@ class ItemsData
     }
 
     /**
-     * Send a notification email that a new item was created, changed, deleted, or marked as former
+     * Send a notification email that a new item was created, changed, deleted, retired, reinstated or imported.
      * to all members of the notification role. This role is configured within the global preference
      * **system_notifications_role**. The email contains the item name, the name of the current user,
      * the timestamp, and the details of the changes.
@@ -994,12 +1212,12 @@ class ItemsData
             } elseif ($this->mItemDeleted) {
                 $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_DELETED';
                 $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_DELETED';
-            } elseif ($this->mItemMadeFormer) {
-                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_MADE_FORMER';
-                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_MADE_FORMER';
-            } elseif ($this->mItemUndoMadeFormer) {
-                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_UNDO_FORMER';
-                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_UNDO_FORMER';
+            } elseif ($this->mItemRetired) {
+                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_RETIRED';
+                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_RETIRED';
+            } elseif ($this->mItemReinstated) {
+                $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_REINSTATED';
+                $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_REINSTATED';
             } elseif ($this->mItemChanged) {
                 $messageTitleText = 'SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_CHANGED';
                 $messageHead = 'SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CHANGED';
@@ -1009,7 +1227,7 @@ class ItemsData
 
             // if items were imported then sent a message with all itemnames, the user and the date
             // if item was created or changed then sent a message with all changed fields in a table
-            // if item was deleted or made former then sent a message with the item name, the user and the date
+            // if item was deleted, retired or reinstated then sent a message with the item name, the user and the date
             if ($this->mItemImported || $this->mItemCreated || $this->mItemChanged) {
                 $format_hdr = "<tr><th> %s </th><th> %s </th><th> %s </th></tr>\n";
                 $format_row = "<tr><th> %s </th><td> %s </td><td> %s </td></tr>\n";
@@ -1069,12 +1287,6 @@ class ItemsData
                                         $key,
                                         isset($users[$value['oldValue']]) ? $users[$value['oldValue']] : $value['oldValue'],
                                         isset($users[$value['newValue']]) ? $users[$value['newValue']] : $value['newValue']
-                                    );
-                                } elseif ($key === 'IN_INVENTORY') {
-                                    $changes[] = array(
-                                        $key,
-                                        $value['oldValue'] == 1 ? $gL10n->get('SYS_YES') : ($value['oldValue'] == 0 ? $gL10n->get('SYS_NO') : $value['oldValue']),
-                                        $value['newValue'] == 1 ? $gL10n->get('SYS_YES') : ($value['newValue'] == 0 ? $gL10n->get('SYS_NO') : $value['newValue'])
                                     );
                                 } elseif ($options !== '') {
                                     $changes[] = array(

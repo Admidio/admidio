@@ -17,8 +17,6 @@ use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Entity\Post;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\Item;
-use Admidio\Inventory\Entity\ItemData;
-use Admidio\Inventory\Entity\ItemLendData;
 
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -192,7 +190,7 @@ class ChangelogService {
             'inventory_field_select_options' => 'SYS_INVENTORY_ITEMFIELD_SELECT_OPTIONS',
             'inventory_items' => 'SYS_INVENTORY_ITEMS',
             'inventory_item_data' => 'SYS_INVENTORY_ITEM_DATA',
-            'inventory_item_lend_data' => 'SYS_INVENTORY_ITEM_LEND_DATA',
+            'inventory_item_borrow_data' => 'SYS_INVENTORY_ITEM_BORROW_DATA',
 
             'organizations' => 'SYS_ORGANIZATION',
             'menu' => 'SYS_MENU_ITEM',
@@ -325,7 +323,7 @@ class ChangelogService {
             case 'inventory_fields':
                 return new ItemField($gDb);
             case 'inventory_item_data':
-            case 'inventory_item_lend_data':
+            case 'inventory_item_borrow_data':
             case 'inventory_items':
                 return new Item($gDb);
             default:
@@ -525,7 +523,8 @@ class ChangelogService {
             'inf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
             'inf_sequence' =>              'SYS_ORDER',
             'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
-            'ini_former' =>                array('name' => 'SYS_INVENTORY_ITEM_MADE_FORMER', 'type' => 'BOOL'),
+            'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS'),
+            'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE'),
             'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
             'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
             'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
@@ -533,17 +532,13 @@ class ChangelogService {
             'ind_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
             'ind_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
             'ind_value' =>                 'SYS_VALUE',  
-            'inl_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
-            'inl_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
-            'inl_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
-            'inl_value_url' =>             array('name' => 'SYS_VALUE', 'type' => 'URL'),
-            'inl_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
-            'inl_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
-            'inl_value' =>                 'SYS_VALUE',  
+            'inb_last_receiver' =>         array('name' => 'SYS_INVENTORY_LAST_RECEIVER', 'type' => 'USER'),
+            'inb_borrow_date' =>             array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATE'),
+            'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATE'),
             'ifo_value' =>                 'SYS_VALUE',
             'ifo_inf_id' =>                'SYS_INVENTORY_ITEMFIELD',
             'ifo_sequence' =>              'SYS_ORDER',
-            'ifo_obsolete' =>             array('name' => 'SYS_DELETED', 'type' => 'BOOL'),
+            'ifo_obsolete' =>              array('name' => 'SYS_DELETED', 'type' => 'BOOL'),
 
             'lnk_name' =>                  'SYS_LINK_NAME',
             'lnk_description' =>           'SYS_DESCRIPTION',
@@ -623,7 +618,7 @@ class ChangelogService {
             'cat_name_intern' =>           'SYS_INTERNAL_NAME',
             'cat_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             //'cat_type' =>                  '', // Holds indicators like USF, ROL, LNK, EVT, ANN,
-            'cat_system' =>                array('name' => 'SYS_SSYSTEM', 'type' => 'BOOL'),
+            'cat_system' =>                array('name' => 'SYS_SYSTEM', 'type' => 'BOOL'),
             'cat_default' =>               array('name' => $gL10n->get('SYS_DEFAULT_VAR', array($gL10n->get('SYS_CATEGORY'))), 'type' => 'BOOL'),
             'cat_sequence' =>              'SYS_ORDER',
 
@@ -732,8 +727,8 @@ class ChangelogService {
                 case 'inventory_item_data' : // Fall through
                 case 'inventory_items' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $uuid)); break;
-                case 'inventory_item_lend_data' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_lend', 'item_uuid' => $uuid)); break;
+                case 'inventory_item_borrow_data' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $uuid)); break;
                 case 'links' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
                 case 'lists' :

@@ -88,7 +88,7 @@ class ItemData extends Entity
             // Category changes are logged in the inventory items table
             return true;
         }
-        elseif ($infType === 'DROPDOWN' || $infType === 'RADIOBUTTON') {
+        elseif ($infType === 'DROPDOWN' || $infType === 'DROPDOWN_MULTISELECT' || $infType === 'RADIOBUTTON') {
             $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'ifo_inf_options');
             if (isset($vallist[$oldval])) {
                 $oldval = $vallist[$oldval];

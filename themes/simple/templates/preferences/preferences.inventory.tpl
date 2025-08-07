@@ -1,10 +1,34 @@
 <script type="text/javascript">
     /* Function to handle the visibility of fields based on the corresponding option */
     $(function(){
+        /* Item pictures */
+        $("#inventory_item_picture_enabled").on("change", function() {
+            if(!$("#inventory_item_picture_enabled").is(":checked")) {
+                $("#inventory_item_picture_storage_group").slideUp("slow");
+                $("#inventory_item_picture_width_group").slideUp("slow");
+                $("#inventory_item_picture_height_group").slideUp("slow");
+            } else {
+                $("#inventory_item_picture_storage_group").slideDown("slow");
+                if($("#inventory_item_picture_storage").val() == 1) {
+                    $("#inventory_item_picture_width_group").slideDown("slow");
+                    $("#inventory_item_picture_height_group").slideDown("slow");
+                } else {
+                    $("#inventory_item_picture_width_group").slideUp("slow");
+                    $("#inventory_item_picture_height_group").slideUp("slow");
+                }
+            }
+        });
+        /* Item pictures resolution */
+        $("#inventory_item_picture_storage").on("change", function() {
+            if($("#inventory_item_picture_storage").val() == 1) {
+                $("#inventory_item_picture_width_group").slideDown("slow");
+                $("#inventory_item_picture_height_group").slideDown("slow");
+            } else {
+                $("#inventory_item_picture_width_group").slideUp("slow");
+                $("#inventory_item_picture_height_group").slideUp("slow");
+            }
+        });
         /* Keeper edit */
-        if(!$("#inventory_allow_keeper_edit").is(":checked")) {
-            $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
-        }
         $("#inventory_allow_keeper_edit").on("change", function() {
             if(!$("#inventory_allow_keeper_edit").is(":checked")) {
                 $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
@@ -13,9 +37,6 @@
             }
         });
         /* Profile view */
-        if(!$("#inventory_profile_view_enabled").is(":checked")) {
-            $("#inventory_profile_view_group").slideUp("slow");
-        }
         $("#inventory_profile_view_enabled").on("change", function() {
             if(!$("#inventory_profile_view_enabled").is(":checked")) {
                 $("#inventory_profile_view_group").slideUp("slow");
@@ -23,6 +44,33 @@
                 $("#inventory_profile_view_group").slideDown("slow");
             }
         });
+
+        // wait for the form to be fully visible
+        var interval = setInterval(function() {
+            if (!$("#inventory_item_picture_enabled").is(":hidden") && !$("#inventory_profile_view_group").is(":hidden") && !$("#inventory_allowed_keeper_edit_fields_group").is(":hidden")) {
+                clearInterval(interval);
+
+                // now we can initialize the visibility of the fields
+                if(!$("#inventory_item_picture_enabled").is(":checked")) {
+                    $("#inventory_item_picture_storage_group").slideUp("slow");
+                    $("#inventory_item_picture_width_group").slideUp("slow");
+                    $("#inventory_item_picture_height_group").slideUp("slow");
+                }
+                if($("#inventory_item_picture_storage").val() == 1) {
+                    $("#inventory_item_picture_width_group").slideDown("slow");
+                    $("#inventory_item_picture_height_group").slideDown("slow");
+                } else {
+                    $("#inventory_item_picture_width_group").slideUp("slow");
+                    $("#inventory_item_picture_height_group").slideUp("slow");
+                }
+                if(!$("#inventory_allow_keeper_edit").is(":checked")) {
+                    $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
+                }
+                if(!$("#inventory_profile_view_enabled").is(":checked")) {
+                    $("#inventory_profile_view_group").slideUp("slow");
+                }
+            }
+        }, 100);
     });
 </script>
 
@@ -34,9 +82,13 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_module_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_items_per_page']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_field_history_days']}
-    {include 'sys-template-parts/form.seperator.tpl' data=$elements['inventory_seperator_general_settings']}
+    {include 'sys-template-parts/form.separator.tpl' data=$elements['inventory_separator_general_settings']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_item_picture_enabled']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_item_picture_storage']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_item_picture_width']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_item_picture_height']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_show_obsolete_select_field_options']}
-    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_items_disable_lending']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_items_disable_borrowing']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_system_field_names_editable']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_allow_keeper_edit']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_allowed_keeper_edit_fields']}
@@ -44,10 +96,10 @@
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_allow_negative_numbers']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_decimal_places']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_field_date_time_format']}
-    {include 'sys-template-parts/form.seperator.tpl' data=$elements['inventory_seperator_profile_view_settings']}
+    {include 'sys-template-parts/form.separator.tpl' data=$elements['inventory_separator_profile_view_settings']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_profile_view_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_profile_view']}
-    {include 'sys-template-parts/form.seperator.tpl' data=$elements['inventory_seperator_export_settings']}
+    {include 'sys-template-parts/form.separator.tpl' data=$elements['inventory_separator_export_settings']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_export_filename']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_add_date']}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_inventory']}
