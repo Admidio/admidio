@@ -478,17 +478,17 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1550">CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);</step>
     <step id="1560">ALTER TABLE %PREFIX%_inventory_item_borrow_data
         ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;</step>
-    <step id="1580">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory_admin boolean NOT NULL DEFAULT false</step>
-    <step id="1590">UPDATE %PREFIX%_roles SET rol_inventory_admin = true WHERE rol_administrator = true</step>
-    <step id="1600">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+    <step id="1570">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory_admin boolean NOT NULL DEFAULT false</step>
+    <step id="1580">UPDATE %PREFIX%_roles SET rol_inventory_admin = true WHERE rol_administrator = true</step>
+    <step id="1590">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES ('MODULE', 'SYS_INVENTORY', 'INVENTORY',  '5.0.0', 0)</step>
-    <step id="1610">UPDATE %PREFIX%_menu SET men_order = men_order + 1 WHERE men_men_id_parent = 1 AND men_order >= 8;</step>
-    <step id="1620">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+    <step id="1600">UPDATE %PREFIX%_menu SET men_order = men_order + 1 WHERE men_men_id_parent = 1 AND men_order >= 8;</step>
+    <step id="1610">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'INVENTORY'), 1, %UUID%, false, 8, true, 'inventory', '/modules/inventory.php', 'box-seam-fill', 'SYS_INVENTORY', 'SYS_INVENTORY_DESC')</step>
-    <step id="1630">UpdateStepsCode::updateStep50InventoryCategories</step>
+    <step id="1620">UpdateStepsCode::updateStep50InventoryCategories</step>
    <!-- disable module when updating an existing admidio instance -->
-    <step id="1640">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 WHERE prf_name = 'inventory_module_enabled'</step>
-    <step id="1650"> CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_field_select_options (
+    <step id="1630">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 WHERE prf_name = 'inventory_module_enabled'</step>
+    <step id="1640"> CREATE TABLE IF NOT EXISTS %PREFIX%_inventory_field_select_options (
             ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
             ifo_inf_id      integer unsigned    NOT NULL,
             ifo_value       varchar(255)        NOT NULL,
@@ -500,9 +500,9 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         ENGINE = InnoDB
         DEFAULT character SET = utf8
         COLLATE = utf8_unicode_ci;</step>
-    <step id="1660">ALTER TABLE %PREFIX%_inventory_field_select_options
+    <step id="1650">ALTER TABLE %PREFIX%_inventory_field_select_options
         ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id) REFERENCES %PREFIX%_inventory_fields (inf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
-    <step id="1565">ALTER TABLE %PREFIX%_inventory_items
+    <step id="1660">ALTER TABLE %PREFIX%_inventory_items
         ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)                     ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_ini_status      FOREIGN KEY (ini_status)         REFERENCES %PREFIX%_inventory_field_select_options (ifo_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)                          ON DELETE SET NULL ON UPDATE RESTRICT,
