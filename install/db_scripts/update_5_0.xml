@@ -502,13 +502,14 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         COLLATE = utf8_unicode_ci;</step>
     <step id="1670">ALTER TABLE %PREFIX%_inventory_field_select_options
         ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id) REFERENCES %PREFIX%_inventory_fields (inf_id) ON DELETE CASCADE ON UPDATE RESTRICT;</step>
-    <step id="1680">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+    <step id="1680">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_LOGIN_INFORMATION' WHERE txt_name = 'SYSMAIL_NEW_PASSWORD'</step>
+    <step id="1690">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES ('MODULE', 'SYS_PLUGIN_MANAGER', 'PLUGINS',  '5.0.0', 0)</step>
-    <step id="1690">ALTER TABLE %PREFIX%_components ADD COLUMN com_plg_sequence smallint NOT NULL DEFAULT 0 AFTER com_update_completed;</step>
-    <step id="1700">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+    <step id="1700">ALTER TABLE %PREFIX%_components ADD COLUMN com_plg_sequence smallint NOT NULL DEFAULT 0 AFTER com_update_completed;</step>
+    <step id="1710">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'PLUGINS'), 2, %UUID%, false, 5, true, 'plugins', '/modules/plugins.php', 'puzzle', 'SYS_PLUGIN_MANAGER', 'SYS_PLUGIN_MANAGER_DESC')</step>
-    <step id="1710">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_plugins', 'plugins') WHERE men_url LIKE '%/adm_plugins%'</step>
-    <step id="1720">UpdateStepsCode::updateStep50InstallOverviewPlugins</step>
-    <step id="1730">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(100) NOT NULL</step>
+    <step id="1720">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_plugins', 'plugins') WHERE men_url LIKE '%/adm_plugins%'</step>
+    <step id="1730">UpdateStepsCode::updateStep50InstallOverviewPlugins</step>
+    <step id="1740">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(100) NOT NULL</step>
     <step>stop</step>
 </update>

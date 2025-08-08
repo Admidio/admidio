@@ -2565,11 +2565,11 @@ class PreferencesPresenter extends PagePresenter
         $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
         $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_REFUSED', 'txt_org_id' => $gCurrentOrgId));
         $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrgId));
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_LOGIN_INFORMATION', 'txt_org_id' => $gCurrentOrgId));
         $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
         $formSystemNotifications->addMultilineTextInput(
-            'SYSMAIL_NEW_PASSWORD',
-            $gL10n->get('ORG_SEND_NEW_PASSWORD'),
+            'SYSMAIL_LOGIN_INFORMATION',
+            $gL10n->get('SYS_SEND_LOGIN_INFORMATION'),
             $text->getValue('txt_text'),
             7,
             array('helpTextId' => $htmlDesc)
@@ -2776,6 +2776,16 @@ class PreferencesPresenter extends PagePresenter
             $(document).on("shown.bs.collapse", "#adm_preferences_accordion .accordion-collapse", function() {
                 var panelId = this.id.replace(/^collapse_/, "");
                 loadPreferencesPanel(panelId);
+
+                // scroll to the top of the accordion panel header
+                var checkLoaded = setInterval(function(){
+                    if ($("#collapse_" + panelId).find(".spinner-border").length === 0) {
+                        clearInterval(checkLoaded);
+                        $("html, body").animate({
+                            scrollTop: $("#heading_" + panelId).offset().top
+                        }, 500);
+                    }
+                }, 100);
             });
             // initial: geöffnetes Accordion-Panel laden
             $("#adm_preferences_accordion .accordion-collapse.show").each(function() {
