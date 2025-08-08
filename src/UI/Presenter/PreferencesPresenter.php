@@ -2613,7 +2613,10 @@ class PreferencesPresenter extends PagePresenter
         $this->addJavascript('
             // === 1) Panel laden und Events binden ===
             function loadPreferencesPanel(panelId) {
-                var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+                var panelContainers = $("[data-preferences-panel=\"" + panelId + "\"]");
+                // only load the panel to the container that is currently visible
+                var panelContainer = panelContainers.filter(":visible").first();
+
                 if (!panelContainer.length) return;
 
                 // Schritt 1: Spinner einfügen
