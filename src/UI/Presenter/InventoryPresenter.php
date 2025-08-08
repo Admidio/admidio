@@ -884,7 +884,7 @@ class InventoryPresenter extends PagePresenter
                 $infType = $this->itemsData->getProperty($infNameIntern, 'inf_type');
 
                 // Process ITEMNAME column
-                if ($infNameIntern === 'ITEMNAME' && strlen($content) > 0) {
+                if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
                     if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
                         $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
                     } else {
@@ -893,7 +893,7 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 // Process KEEPER column
-                if ($infNameIntern === 'KEEPER' && strlen($content) > 0) {
+                if ($infNameIntern === 'KEEPER' && !empty($content)) {
                     $found = $user->readDataById($content);
                     if (!$found) {
                         $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
@@ -921,7 +921,7 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 // Process LAST_RECEIVER column
-                if ($infNameIntern === 'LAST_RECEIVER' && strlen($content) > 0 && is_numeric($content)) {
+                if ($infNameIntern === 'LAST_RECEIVER' && !empty($content) && is_numeric($content)) {
                     $found = $user->readDataById($content);
                     if ($found) {
                         if ($mode === 'html') {
@@ -1227,7 +1227,7 @@ class InventoryPresenter extends PagePresenter
                 $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
 
                 // Process the KEEPER column
-                if ($infNameIntern === 'KEEPER' && strlen($content) > 0) {
+                if ($infNameIntern === 'KEEPER' && !empty($content)) {
                     $found = $user->readDataById($content);
                     if (!$found) {
                         $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
@@ -1241,7 +1241,7 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 // Process the LAST_RECEIVER column
-                if ($infNameIntern === 'LAST_RECEIVER' && strlen($content) > 0 && is_numeric($content)) {
+                if ($infNameIntern === 'LAST_RECEIVER' && !empty($content) && is_numeric($content)) {
                     $found = $user->readDataById($content);
                     if ($found) {
                         $content = '<a href="' . SecurityUtils::encodeUrl(
