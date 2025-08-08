@@ -672,7 +672,7 @@ label {
     margin-left: 0.5rem;
 }
 
-#adm_profile_photo {
+#adm_profile_photo, #adm_inventory_item_picture {
     max-width: 300px;
     width: 100% !important;
     object-fit: cover !important;

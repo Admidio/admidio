@@ -1,4 +1,4 @@
-<div class="admidio-form-group admidio-form-seperator
+<div class="admidio-form-group admidio-form-separator
     {if $formType neq "vertical" and $formType neq "navbar"}row{/if}
     {if $formType neq "navbar"} mb-3{/if}">
 

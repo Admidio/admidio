@@ -11,6 +11,7 @@ use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Infrastructure\Language;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -60,7 +61,7 @@ class InventoryFieldsPresenter extends PagePresenter
 
         $this->addJavascript('
             $("#inf_type").change(function() {
-                if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "RADIO_BUTTON") {
+                if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "DROPDOWN_MULTISELECT" || $("#inf_type").val() === "RADIO_BUTTON") {
                     $("#ifo_inf_options_table").attr("required", "required");
                     $("#ifo_inf_options_group").addClass("admidio-form-group-required");
                     $("#ifo_inf_options_group").show("slow");
@@ -122,6 +123,7 @@ class InventoryFieldsPresenter extends PagePresenter
             'DATE' => $gL10n->get('SYS_DATE'),
             'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER'),
             'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+            'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
             'EMAIL' => $gL10n->get('SYS_EMAIL'),
             'NUMBER' => $gL10n->get('SYS_NUMBER'),
             'PHONE' => $gL10n->get('SYS_PHONE'),
@@ -151,17 +153,20 @@ class InventoryFieldsPresenter extends PagePresenter
         }
 
         $options = new SelectOptions($gDb, $itemField->getValue('inf_id'));
-        $optionValueList = $options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options'));
+        foreach ($options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options')) as $option) {
+            $option['value'] = Language::translateIfTranslationStrId($option['value']);
+            $optionValueList[] = $option;
+        }
         if (empty($optionValueList)) {
             $optionValueList = array(
-                0 => array('id' => 1, 'value' => '', 'sequence' => 0, 'obsolete' => false)
+                0 => array('id' => 1, 'value' => '', 'system' => false, 'sequence' => 0, 'obsolete' => false)
             );
         }
         $form->addOptionEditor(
             'ifo_inf_options',
             $gL10n->get('SYS_VALUE_LIST'),
             $optionValueList,
-            array('helpTextId' => array('SYS_VALUE_LIST_DESC' /* SYS_INVENTORY_VALUE_LIST_DESC */, array('<a href="https://icons.bootstrap.com" target="_blank">', '</a>')), 'filename' => 'inventory')
+            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com" target="_blank">', '</a>')), 'filename' => 'inventory')
         );
 
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES');
@@ -175,7 +180,7 @@ class InventoryFieldsPresenter extends PagePresenter
         $form->addEditor(
             'inf_description',
             $gL10n->get('SYS_DESCRIPTION'),
-            $itemField->getValue('inf_description'),
+            $itemField->getValue('inf_description', 'database'),
             array('toolbar' => 'AdmidioComments'));
 
         $form->addSubmitButton(
@@ -246,12 +251,12 @@ class InventoryFieldsPresenter extends PagePresenter
         $templateItemFields = array();
         $itemFieldCategoryID = -1;
         $prevItemFieldCategoryID = -1;
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrowing fields
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         foreach ($items->getItemFields() as $itemField) {
-            if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($itemField->getValue('inf_name_intern'), $lendFieldNames)) {
-                continue; // skip lending fields if lending is disabled
+            if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {
+                continue; // skip borrowing fields if borrowing is disabled
             }
             $prevItemFieldCategoryID = $itemFieldCategoryID;
             $itemFieldCategoryID = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;
@@ -270,6 +275,7 @@ class InventoryFieldsPresenter extends PagePresenter
                 'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
                 'DATE' => $gL10n->get('SYS_DATE'),
                 'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+                'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
                 'EMAIL' => $gL10n->get('SYS_EMAIL'),
                 'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
                 'PHONE' => $gL10n->get('SYS_PHONE'),

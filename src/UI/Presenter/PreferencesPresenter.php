@@ -497,7 +497,7 @@ class PreferencesPresenter extends PagePresenter
                     array(
                         'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
                         'id' => 'content_modules',
-                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_lend_data', 'links', 'others')
+                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'links', 'others')
                     ),
                     array(
                         'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
@@ -852,8 +852,8 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrowing fields
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',
@@ -893,9 +893,38 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // general settings
-        $formInventory->addSeperator(
-            'inventory_seperator_general_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_general_settings',
             $gL10n->get('SYS_COMMON')
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_item_picture_enabled',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_ENABLED'),
+            (bool) $formValues['inventory_item_picture_enabled'],
+            array('helpTextId' => 'SYS_INVENTORY_ITEM_PICTURE_ENABLED_DESC')
+        );
+
+        $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
+        $formInventory->addSelectBox(
+            'inventory_item_picture_storage',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURES_LOCATION'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_item_picture_storage'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ITEM_PICTURES_LOCATION_DESC')
+        );
+
+        $formInventory->addInput(
+            'inventory_item_picture_width',
+            $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
+            $formValues['inventory_item_picture_width'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
+        );
+
+        $formInventory->addInput(
+            'inventory_item_picture_height',
+            $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
+            $formValues['inventory_item_picture_height'],
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(130, 170)))
         );
 
         $formInventory->addCheckbox(
@@ -906,10 +935,10 @@ class PreferencesPresenter extends PagePresenter
         );
 
         $formInventory->addCheckbox(
-            'inventory_items_disable_lending',
-            $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_LENDING'),
-            (bool) $formValues['inventory_items_disable_lending'],
-            array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC')
+            'inventory_items_disable_borrowing',
+            $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_BORROWING'),
+            (bool) $formValues['inventory_items_disable_borrowing'],
+            array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_BORROWING_DESC')
         );
 
         $formInventory->addCheckbox(
@@ -932,8 +961,8 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries = array();
             foreach ($items->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
-                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
-                    continue; // skip lending fields if lending is disabled
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                    continue; // skip borrowing fields if borrowing is disabled
                 }
                 $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
             }
@@ -976,8 +1005,8 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // profile view settings
-        $formInventory->addSeperator(
-            'inventory_seperator_profile_view_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_profile_view_settings',
             $gL10n->get('SYS_INVENTORY_PROFILE_VIEW')
         );
 
@@ -991,7 +1020,7 @@ class PreferencesPresenter extends PagePresenter
         $selectBoxEntries = array();
         foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames))) {
                 continue;
             }
             $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
@@ -1005,8 +1034,8 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // export settings
-        $formInventory->addSeperator(
-            'inventory_seperator_export_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_export_settings',
             $gL10n->get('SYS_INVENTORY_EXPORT')
         );
 
@@ -2654,7 +2683,10 @@ class PreferencesPresenter extends PagePresenter
         $this->addJavascript('
             // === 1) Panel laden und Events binden ===
             function loadPreferencesPanel(panelId) {
-                var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+                var panelContainers = $("[data-preferences-panel=\"" + panelId + "\"]");
+                // only load the panel to the container that is currently visible
+                var panelContainer = panelContainers.filter(":visible").first();
+
                 if (!panelContainer.length) return;
 
                 // Schritt 1: Spinner einfügen

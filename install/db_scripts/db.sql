@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS %PREFIX%_menu                              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_item_lend_data          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
@@ -918,6 +918,23 @@ CREATE UNIQUE INDEX %PREFIX%_idx_usf_name_intern ON %PREFIX%_user_fields (usf_na
 CREATE UNIQUE INDEX %PREFIX%_idx_usf_uuid ON %PREFIX%_user_fields (usf_uuid);
 
 /*==============================================================*/
+/* Table: adm_user_field_select_options                         */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_user_field_select_options
+(
+    ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ufo_usf_id      integer unsigned    NOT NULL,                   -- Connected user field id
+    ufo_value       varchar(255)        NOT NULL,                   -- option value
+    ufo_system      boolean             NOT NULL DEFAULT false,     -- If true, the option is a system option an not editable
+    ufo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ufo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ufo_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+/*==============================================================*/
 /* Table: adm_user_data                                         */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_user_data
@@ -1044,6 +1061,23 @@ CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (i
 CREATE UNIQUE INDEX %PREFIX%_idx_inf_uuid ON %PREFIX%_inventory_fields (inf_uuid);
 
 /*==============================================================*/
+/* Table: adm_inventory_field_select_options                    */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_field_select_options
+(
+    ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ifo_inf_id      integer unsigned    NOT NULL,                   -- Connected inventory field id
+    ifo_value       varchar(255)        NOT NULL,                   -- option value
+    ifo_system      boolean             NOT NULL DEFAULT false,     -- If true, the option is a system option an not editable
+    ifo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ifo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ifo_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+/*==============================================================*/
 /* Table: adm_inventory_item_data                               */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_inventory_item_data
@@ -1061,21 +1095,22 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
 
 /*==============================================================*/
-/* Table: adm_inventory_item_lend_data                          */
+/* Table: adm_inventory_item_borrow_data                          */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_item_lend_data
+CREATE TABLE %PREFIX%_inventory_item_borrow_data
 (
-    inl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    inl_inf_id                  integer unsigned    NOT NULL,
-    inl_ini_id                  integer unsigned    NOT NULL,
-    inl_value                   varchar(4000),
-    PRIMARY KEY (inl_id)
+    inb_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inb_ini_id                  integer unsigned    NOT NULL,
+    inb_last_receiver           varchar(255)        NULL        DEFAULT NULL,
+    inb_borrow_date             varchar(100)        NULL        DEFAULT NULL,
+    inb_return_date             varchar(100)        NULL        DEFAULT NULL,
+    PRIMARY KEY (inb_id)
 )
 ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_inl_inf_ini_id ON %PREFIX%_inventory_item_lend_data (inl_inf_id, inl_ini_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);
 
 /*==============================================================*/
 /* Table: adm_inventory_items                                   */
@@ -1086,7 +1121,8 @@ CREATE TABLE %PREFIX%_inventory_items
     ini_uuid                    varchar(36)         NOT NULL,
     ini_cat_id                  integer unsigned    NOT NULL,
     ini_org_id                  integer unsigned    NOT NULL,
-    ini_former                  boolean             NOT NULL    DEFAULT false,
+    ini_status                  integer unsigned    NOT NULL,
+    ini_picture                 blob                NULL        DEFAULT NULL,
     ini_usr_id_create           integer unsigned,
     ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ini_usr_id_change           integer unsigned,
@@ -1138,22 +1174,6 @@ CREATE TABLE %PREFIX%_log_changes
     log_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     log_comment                 text                NULL,
     PRIMARY KEY (log_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-/*==============================================================*/
-/* Table: adm_user_field_select_options                         */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_user_field_select_options
-(
-    ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
-    ufo_usf_id      integer unsigned    NOT NULL,                   -- Connected user field id
-    ufo_value       varchar(255)        NOT NULL,                   -- option value
-    ufo_sequence    smallint            NOT NULL,                   -- Position in the list
-    ufo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
-    PRIMARY KEY (ufo_id)
 )
 ENGINE = InnoDB
 DEFAULT character SET = utf8
@@ -1325,6 +1345,9 @@ ALTER TABLE %PREFIX%_user_fields
     ADD CONSTRAINT %PREFIX%_fk_usf_usr_create  FOREIGN KEY (usf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usf_usr_change  FOREIGN KEY (usf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_user_field_select_options
+    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_user_data
     ADD CONSTRAINT %PREFIX%_fk_usd_usf         FOREIGN KEY (usd_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usd_usr         FOREIGN KEY (usd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -1345,23 +1368,22 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_user_field_select_options
-    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
-
 ALTER TABLE %PREFIX%_inventory_fields
     ADD CONSTRAINT %PREFIX%_fk_inf_org         FOREIGN KEY (inf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_inf_usr_create  FOREIGN KEY (inf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_inf_usr_change  FOREIGN KEY (inf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_inventory_field_select_options
+            ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)   ON DELETE CASCADE ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_inventory_item_data
     ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_inventory_item_lend_data
-    ADD CONSTRAINT %PREFIX%_fk_inl_inf         FOREIGN KEY (inl_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_inl_ini         FOREIGN KEY (inl_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
-
+ALTER TABLE %PREFIX%_inventory_item_borrow_data
+    ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE %PREFIX%_inventory_items
     ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ini_status      FOREIGN KEY (ini_status)         REFERENCES %PREFIX%_inventory_field_select_options (ifo_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;

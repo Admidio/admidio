@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Infrastructure\Plugins\PluginManager;
@@ -59,9 +60,11 @@ final class UpdateStepsCode
 
     public static function updateStep50MoveFieldListValues()
     {
-        $sql = 'SELECT usf_id, usf_value_list FROM ' . TBL_USER_FIELDS . '
-                 WHERE usf_type = \'DROPDOWN\' 
-                 OR usf_type = \'RADIO_BUTTON\'';
+        global $gDbType;
+
+        $sql = 'SELECT usf_id, usf_value_list
+                  FROM ' . TBL_USER_FIELDS . '
+                 WHERE usf_type IN (\'DROPDOWN\', \'RADIO_BUTTON\')';
 
         $userFieldsStatement = self::$db->queryPrepared($sql);
         while ($row = $userFieldsStatement->fetch()) {
@@ -82,13 +85,19 @@ final class UpdateStepsCode
                     self::$db->queryPrepared($sql, array((int)$row['usf_id'], $value, $key + 1));
                 }
 
+                if ($gDbType === 'pgsql') {
+                    $sqlUfoSequence = 'CAST(ufo_sequence AS CHAR)';
+                } else {
+                    $sqlUfoSequence = 'ufo_sequence';
+                }
+
                 // update the user field values to use the new option id
                 $sql = 'UPDATE ' . TBL_USER_DATA . '
-                        JOIN ' . TBL_USER_FIELD_OPTIONS . '
-                            ON ufo_usf_id = usd_usf_id
-                            AND usd_value = ufo_sequence
-                        SET usd_value = ufo_id
-                            WHERE usd_usf_id = ? -- $row[\'usf_id\']';
+                           SET usd_value = (SELECT ufo_id
+                                              FROM ' . TBL_USER_FIELD_OPTIONS . '
+                                             WHERE ufo_usf_id = usd_usf_id
+                                               AND ' . $sqlUfoSequence . ' = usd_value)
+                         WHERE usd_usf_id = ? -- $row[\'usf_id\'] ';
                 self::$db->queryPrepared($sql, array((int)$row['usf_id']));
             }
         }
@@ -103,11 +112,11 @@ final class UpdateStepsCode
         $arrItemFields = array(
             array('inf_type' => 'TEXT', 'inf_name_intern' => 'ITEMNAME', 'inf_name' => 'SYS_INVENTORY_ITEMNAME', 'inf_description' => 'SYS_INVENTORY_ITEMNAME_DESC', 'inf_required_input' => 1, 'inf_sequence' => 0),
             array('inf_type' => 'CATEGORY', 'inf_name_intern' => 'CATEGORY', 'inf_name' => 'SYS_CATEGORY', 'inf_description' => 'SYS_INVENTORY_CATEGORY_DESC', 'inf_required_input' => 1, 'inf_sequence' => 1),
-            array('inf_type' => 'TEXT', 'inf_name_intern' => 'KEEPER', 'inf_name' => 'SYS_INVENTORY_KEEPER', 'inf_description' => 'SYS_INVENTORY_KEEPER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 2),
-            array('inf_type' => 'CHECKBOX', 'inf_name_intern' => 'IN_INVENTORY', 'inf_name' => 'SYS_INVENTORY_IN_INVENTORY', 'inf_description' => 'SYS_INVENTORY_IN_INVENTORY_DESC', 'inf_required_input' => 0, 'inf_sequence' => 3),
+            array('inf_type' => 'DROPDOWN', 'inf_name_intern' => 'STATUS', 'inf_name' => 'SYS_INVENTORY_STATUS', 'inf_description' => 'SYS_INVENTORY_STATUS_DESC', 'inf_required_input' => 1, 'inf_sequence' => 2),
+            array('inf_type' => 'TEXT', 'inf_name_intern' => 'KEEPER', 'inf_name' => 'SYS_INVENTORY_KEEPER', 'inf_description' => 'SYS_INVENTORY_KEEPER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 3),
             array('inf_type' => 'TEXT', 'inf_name_intern' => 'LAST_RECEIVER', 'inf_name' => 'SYS_INVENTORY_LAST_RECEIVER', 'inf_description' => 'SYS_INVENTORY_LAST_RECEIVER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 4),
-            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 5),
-            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_BACK_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_BACK_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_BACK_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 6)
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'BORROW_DATE', 'inf_name' => 'SYS_INVENTORY_BORROW_DATE', 'inf_description' => 'SYS_INVENTORY_BORROW_DATE_DESC', 'inf_required_input' => 0, 'inf_sequence' => 5),
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'RETURN_DATE', 'inf_name' => 'SYS_INVENTORY_RETURN_DATE', 'inf_description' => 'SYS_INVENTORY_RETURN_DATE_DESC', 'inf_required_input' => 0, 'inf_sequence' => 6)
         );
 
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
@@ -129,8 +138,26 @@ final class UpdateStepsCode
             }
         }
 
+        // add default options for the status field
+        $sql = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . '
+                 WHERE inf_name_intern = \'STATUS\'';
+        $statusFieldId = self::$db->queryPrepared($sql)->fetchColumn();
+
+        if ($statusFieldId !== false) {
+            $arrStatusOptions = array(
+                array('inf_name' => 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 'ifo_sequence' => 1),
+                array('inf_name' => 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 'ifo_sequence' => 2),
+            );
+
+            foreach ($arrStatusOptions as $statusOption) {
+                $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                         (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
+                         VALUES (?, ?, ?, ?)';
+                self::$db->queryPrepared($sql, array($statusFieldId, $statusOption['inf_name'], true, $statusOption['ifo_sequence']));
+            }
+        }
     }
-    
+
     /**
      * Create categories for the inventory for each organization.
      * @throws Exception
@@ -152,7 +179,7 @@ final class UpdateStepsCode
         while ($row = $organizationStatement->fetch()) {
             $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                            (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                    VALUES (?, ?, \'IVT\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
+                    VALUES (?, ?, \'IVT\', \'COMMON\', \'SYS_COMMON\', false, true, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
             self::$db->queryPrepared($sql, array((int)$row['org_id'], Uuid::uuid4(), $systemUserId, DATETIME_NOW));
 
             // set edit role rights to inventory categories for administrator role
@@ -280,9 +307,9 @@ final class UpdateStepsCode
     public static function updateStep43RemoveInvalidVisibleRoleRights()
     {
         $sql = 'SELECT rrd_id
-                  FROM '.TBL_CATEGORIES.'
-                 INNER JOIN '.TBL_ROLES_RIGHTS.' ON ror_name_intern = \'category_view\'
-                 INNER JOIN '.TBL_ROLES_RIGHTS_DATA.' ON rrd_ror_id = ror_id
+                  FROM ' . TBL_CATEGORIES . '
+                 INNER JOIN ' . TBL_ROLES_RIGHTS . ' ON ror_name_intern = \'category_view\'
+                 INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . ' ON rrd_ror_id = ror_id
                    AND rrd_object_id = cat_id
                  WHERE cat_name_intern = \'BASIC_DATA\' ';
         $rolesRightsStatement = self::$db->queryPrepared($sql);
@@ -312,7 +339,7 @@ final class UpdateStepsCode
             if (!array_key_exists('LINKEDIN', $profileFields)) {
                 $profileFieldLinkedIn = new ProfileField(self::$db);
                 $profileFieldLinkedIn->saveChangesWithoutRights();
-                $profileFieldLinkedIn->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldLinkedIn->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
                 $profileFieldLinkedIn->setValue('usf_name_intern', 'LINKEDIN');
                 $profileFieldLinkedIn->setValue('usf_name', 'SYS_LINKEDIN');
@@ -325,7 +352,7 @@ final class UpdateStepsCode
             if (!array_key_exists('INSTAGRAM', $profileFields)) {
                 $profileFieldInstagram = new ProfileField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
-                $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldInstagram->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'INSTAGRAM');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_INSTAGRAM');
@@ -338,7 +365,7 @@ final class UpdateStepsCode
             if (!array_key_exists('MASTODON', $profileFields)) {
                 $profileFieldInstagram = new ProfileField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
-                $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldInstagram->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'MASTODON');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_MASTODON');

@@ -81,11 +81,6 @@ class ItemField extends Entity
                  WHERE ifo_inf_id = ? -- $infId';
         $this->db->queryPrepared($sql, array($infId));
 
-        // delete all data of this field in the item lend data table
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
-                 WHERE inl_inf_id = ? -- $infId';
-        $this->db->queryPrepared($sql, array($infId));
-
         $return = parent::delete();
 
         $this->db->endTransaction();
@@ -140,7 +135,7 @@ class ItemField extends Entity
             if (!isset($this->dbColumns['inf_description'])) {
                 $value = '';
             } elseif ($format === 'database') {
-                $value = html_entity_decode(StringUtils::strStripTags(Language::translateIfTranslationStrId($this->dbColumns['inf_description'])), ENT_QUOTES, 'UTF-8');
+                $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['inf_description']), ENT_QUOTES, 'UTF-8');
             } else {
                 $value = Language::translateIfTranslationStrId($this->dbColumns['inf_description']);
             }
@@ -167,7 +162,7 @@ class ItemField extends Entity
                     break;
 
                 case 'ifo_inf_options':
-                    if ($this->dbColumns['inf_type'] === 'DROPDOWN' || $this->dbColumns['inf_type'] === 'RADIO_BUTTON') {
+                    if ($this->dbColumns['inf_type'] === 'DROPDOWN' ||  $this->dbColumns['inf_type'] === 'DROPDOWN_MULTISELECT' || $this->dbColumns['inf_type'] === 'RADIO_BUTTON') {
                         $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
                         $arrOptions = $value;
 
