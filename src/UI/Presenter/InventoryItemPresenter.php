@@ -107,11 +107,6 @@ class InventoryItemPresenter extends PagePresenter
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
             }
             
-      
-            if ($itemField->getValue('inf_type') === 'DATE' && $itemField->getValue('inf_sequence') === '1') {
-                $form->addInput('dummy', 'dummy', 'dummy', ['type' => $gSettingsManager->getString('inventory_field_date_time_format'), 'property' => FormPresenter::FIELD_HIDDEN]);
-            }
-        
             switch ($items->getProperty($infNameIntern, 'inf_type')) {
                 case 'CHECKBOX':
                     $form->addCheckbox(
@@ -390,11 +385,6 @@ class InventoryItemPresenter extends PagePresenter
             $allowedFields = explode(',', $gSettingsManager->getString('inventory_allowed_keeper_edit_fields'));
             if (!$gCurrentUser->isAdministratorInventory() && !in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
-            }
-            
-      
-            if ($itemField->getValue('inf_type') === 'DATE' && $itemField->getValue('inf_sequence') === '1') {
-                $form->addInput('dummy', 'dummy', 'dummy', ['type' => $gSettingsManager->getString('inventory_field_date_time_format'), 'property' => FormPresenter::FIELD_HIDDEN]);
             }
         
             switch ($items->getProperty($infNameIntern, 'inf_type')) {
@@ -778,10 +768,6 @@ class InventoryItemPresenter extends PagePresenter
                 ');
             }
         
-            if ($itemField->getValue('inf_type') === 'DATE' && $itemField->getValue('inf_sequence') === '1') {
-                $form->addInput('dummy', 'dummy', 'dummy', ['type' => $gSettingsManager->getString('inventory_field_date_time_format'), 'property' => FormPresenter::FIELD_HIDDEN]);
-            }
-        
             switch ($items->getProperty($infNameIntern, 'inf_type')) {
                 case 'CHECKBOX':
                     $form->addCheckbox(
@@ -862,6 +848,9 @@ class InventoryItemPresenter extends PagePresenter
                                 $(selectIdLastReceiver).append(newOption).trigger("change");
                             }
         
+                            // remove placeholder option from select2 options 
+                            $(selectIdLastReceiver + " option[value=\'placeholder\']").remove();
+
                             $("#INF-' . $ivtLastReceiver .'").select2({
                                 theme: "bootstrap-5",
                                 allowClear: true,
