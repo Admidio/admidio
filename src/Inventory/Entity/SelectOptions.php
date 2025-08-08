@@ -206,7 +206,7 @@ class SelectOptions extends Entity
     {
         $ret = true;
         $newOption = false;
-        $arrValues = $newValues;
+        $arrValues = array();
         // first save the new values of the options
         foreach ($newValues as $id => $values) {
             if ($this->readDataById($id)) {                                       
@@ -214,6 +214,7 @@ class SelectOptions extends Entity
                     $this->setValue('ifo_' . $key, $value);
                 }
                 $ret = $this->save();
+                $arrValues[$id] = $values;
             } else {
                 $newOption = true;
                 $option = new SelectOptions($this->db);
@@ -227,18 +228,8 @@ class SelectOptions extends Entity
                 $ret = $option->save();
 
                 // update the ID of the new option in the array
-                if ($id != $option->getValue('ifo_id')) {
-                    $newId = $option->getValue('ifo_id');
-                    $newArr = [];
-                    foreach ($arrValues as $key => $value) {
-                        if ($key === $id) {
-                            $newArr[$newId] = $values;
-                        } else {
-                            $newArr[$key] = $value;
-                        }
-                    }
-                    $arrValues = $newArr;
-                }
+                $newId = $option->getValue('ifo_id');
+                $arrValues[$newId] = $values;
             }
         }
 
