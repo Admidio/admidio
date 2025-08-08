@@ -44,6 +44,8 @@ final class UpdateStepsCode
 
     public static function updateStep50MoveFieldListValues()
     {
+        global $gDbType;
+
         $sql = 'SELECT usf_id, usf_value_list
                   FROM ' . TBL_USER_FIELDS . '
                  WHERE usf_type IN (\'DROPDOWN\', \'RADIO_BUTTON\')';
@@ -67,12 +69,18 @@ final class UpdateStepsCode
                     self::$db->queryPrepared($sql, array((int)$row['usf_id'], $value, $key + 1));
                 }
 
+                if ($gDbType === 'pgsql') {
+                    $sqlUfoSequence = 'CAST(ufo_sequence AS CHAR)';
+                } else {
+                    $sqlUfoSequence = 'ufo_sequence';
+                }
+
                 // update the user field values to use the new option id
                 $sql = 'UPDATE ' . TBL_USER_DATA . '
                            SET usd_value = (SELECT ufo_id
                                               FROM ' . TBL_USER_FIELD_OPTIONS . '
                                              WHERE ufo_usf_id = usd_usf_id
-                                               AND CAST(ufo_sequence AS CHAR) = usd_value)
+                                               AND ' . $sqlUfoSequence . ' = usd_value)
                          WHERE usd_usf_id = ? -- $row[\'usf_id\'] ';
                 self::$db->queryPrepared($sql, array((int)$row['usf_id']));
             }

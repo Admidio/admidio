@@ -256,10 +256,14 @@ try {
         );
     }
 
-    $mainSql = 'SELECT DISTINCT ' . $contactsOfThisOrganizationSelect . ' AS member_this_orga, ' . $formerContactsOfThisOrganizationSelect . ' AS former_member_this_orga, ' . $contactsOfOtherOrganizationSelect . ' AS member_other_orga, ' . $formerContactsOfOtherOrganizationSelect . ' AS former_member_other_orga, 
-                (SELECT GROUP_CONCAT(DISTINCT cat_org.cat_org_id
-                        ORDER BY cat_org.cat_org_id
-                        SEPARATOR \',\')
+    if($gDbType === 'pgsql') {
+        $sqlOrganizationConcat = ' STRING_AGG(CAST(cat_org.cat_org_id AS text), \',\' ORDER BY cat_org.cat_org_id) ';
+    } else {
+        $sqlOrganizationConcat = ' GROUP_CONCAT(DISTINCT cat_org.cat_org_id ORDER BY cat_org.cat_org_id SEPARATOR \',\') ';
+    }
+
+    $mainSql = 'SELECT DISTINCT ' . $contactsOfThisOrganizationSelect . ' AS member_this_orga, ' . $formerContactsOfThisOrganizationSelect . ' AS former_member_this_orga, ' . $contactsOfOtherOrganizationSelect . ' AS member_other_orga, ' . $formerContactsOfOtherOrganizationSelect . ' AS former_member_other_orga,
+                (SELECT ' . $sqlOrganizationConcat . '
                     FROM ' . TBL_MEMBERS . ' AS mem_org
                     INNER JOIN ' . TBL_ROLES . ' AS rol_org
                         ON rol_org.rol_id = mem_org.mem_rol_id
@@ -363,7 +367,7 @@ try {
         // add icon link to user profile
         $columnValues[$columnNumberValues] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
         <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
-        
+
         // add all columns of the list configuration to the json array
         // start columnNumber with 4 because the first 2 columns are not of the list configuration
         for ($columnNumber = 1; $columnNumber <= $contactsListConfig->countColumns(); $columnNumber++) {
