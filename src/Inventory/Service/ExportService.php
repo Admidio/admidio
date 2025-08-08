@@ -19,7 +19,6 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\UI\Presenter\InventoryPresenter;
 
 // PHP namespaces
-use HtmlTable;
 use InvalidArgumentException;
 /**
  * @brief Class with methods to display the module pages.
@@ -52,7 +51,7 @@ class ExportService
             [$exportMode, $charset, $orientation] = $modeSettings[$mode];
         }
 
-        $filename = $gSettingsManager->getString('inventory_export_filename');
+        $filename = $gSettingsManager->getString('inventory_export_filename') . '.' . $exportMode;
         if ($gSettingsManager->getBool('inventory_add_date')) {
             // add system date format to filename
             $filename = date('Y-m-d') . '_' . $filename;
@@ -104,20 +103,19 @@ class ExportService
                 // add a page
                 $pdf->AddPage();
         
-                // Create table object for display
-                $exportTable = new HtmlTable('adm_inventory_table', $inventoryPage, false, false, 'table');
+                // Using Smarty templating engine for exporting table in PDF
+                $smarty = $inventoryPage->createSmartyObject();
+                $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
+                $smarty->assign('column_align', $data['column_align']);
+                $smarty->assign('headers', $data['headers']);
+                $smarty->assign('headersStyle', 'font-size:10;font-weight:bold;background-color:#C7C7C7;');
+                $smarty->assign('rows', $data['rows']);
+                $smarty->assign('rowsStyle', 'font-size:10;');
 
-                $exportTable->addAttribute('border', '1');
-                $exportTable->addAttribute('cellpadding', '1');
+                // Fetch the HTML table from our Smarty template
+                $htmlTable = $smarty->fetch('modules/inventory.list.export.tpl');
 
-                $exportTable->setColumnAlignByArray($data['column_align']);
-                $exportTable->addRowHeadingByArray($data['headers'],'', array('style' => 'font-size:10;font-weight:bold;background-color:#C7C7C7;'));
-
-                foreach ($data['rows'] as $row) {
-                    $exportTable->addRowByArray($row['data'], '', array('style' => 'font-size:10;'));
-                }
-
-                $pdf->writeHTML($exportTable->getHtmlTable(), true, false, true);
+                $pdf->writeHTML($htmlTable, true, false, true);
                 $file = ADMIDIO_PATH . FOLDER_DATA . '/temp/' . $filename;
                 $pdf->Output($file, 'F');
                 header('Content-Type: application/pdf');

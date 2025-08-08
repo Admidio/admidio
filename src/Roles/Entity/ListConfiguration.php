@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Roles\Entity;
 
 use Admidio\Infrastructure\Entity\Entity;
@@ -249,7 +250,8 @@ class ListConfiguration extends Entity
             } else {
                 if ($format === 'html') {
                     $content = '<span class="' . $buttonClass . '">' . $htmlText . '</span>';
-                } else {                    $content = $htmlText;
+                } else {
+                    $content = $htmlText;
                 }
             }
         } elseif ($column->getValue('lsc_special_field') === 'mem_duration') {
@@ -261,7 +263,7 @@ class ListConfiguration extends Entity
                     if (count($parts) === 2) {
                         $memBegin = $parts[0];
                         $memEnd = $parts[1] === 'ongoing' ? null : $parts[1];
-                        
+
                         // Create a temporary membership object to use its calculateDuration method
                         $membership = new Membership($gDb);
                         $duration = $membership->calculateDuration($memBegin, $memEnd);
@@ -337,7 +339,7 @@ class ListConfiguration extends Entity
     {
         global $gSettingsManager, $gL10n;
 
-        $lstId = (int) $this->getValue('lst_id');
+        $lstId = (int)$this->getValue('lst_id');
 
         // if this list is the default configuration of a module than it couldn't be deleted
         if ($lstId === $gSettingsManager->getInt('groups_roles_default_configuration')) {
@@ -354,7 +356,7 @@ class ListConfiguration extends Entity
 
         // Delete all columns of the list
         $sql = 'SELECT lsc_id
-                  FROM '.TBL_LIST_COLUMNS.'
+                  FROM ' . TBL_LIST_COLUMNS . '
                  WHERE lsc_lst_id = ? -- $lstId';
         $listColumnsStatement = $this->db->queryPrepared($sql, array($lstId));
 
@@ -523,7 +525,7 @@ class ListConfiguration extends Entity
             foreach ($this->columns as $listColumn) {
                 if ((int)$listColumn->getValue('lsc_usf_id') > 0) {
                     // get internal profile field name
-                    $this->columnsSqlNames[] = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern');
+                    $this->columnsSqlNames[] = strtolower($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern'));
                 } else {
                     // Special fields like usr_photo, mem_begin ...
                     $this->columnsSqlNames[] = $listColumn->getValue('lsc_special_field');
@@ -587,7 +589,7 @@ class ListConfiguration extends Entity
                         $arrOptions = $gProfileFields->getPropertyById($lscUsfId, 'ufo_usf_options', 'text');
 
                         foreach ($arrOptions as $key => $value) {
-                            $condition .= ' WHEN ' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ' = \'' . $key . '\' THEN \'' . $value . '\' ';
+                            $condition .= ' WHEN ' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ' = \'' . $key . '\' THEN \'' . $value . '\' ';
                         }
 
                         $condition .= ' ELSE \' \' END ';
@@ -596,15 +598,15 @@ class ListConfiguration extends Entity
 
                     case 'NUMBER': // fallthrough
                     case 'DECIMAL':
-                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', 0)';
+                        $arrSearchConditions[] = 'COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', 0)';
                         break;
 
                     case 'DATE':
-                        $arrSearchConditions[] = 'COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', \'1900-02-01\')';
+                        $arrSearchConditions[] = 'COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', \'1900-02-01\')';
                         break;
 
                     default:
-                        $arrSearchConditions[] = 'LOWER(COALESCE(' . $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern') . ', \'\'))';
+                        $arrSearchConditions[] = 'LOWER(COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', \'\'))';
                 }
             } else {
                 switch ($listColumn->getValue('lsc_special_field')) {
@@ -713,7 +715,7 @@ class ListConfiguration extends Entity
 
                 // usf_id is prefix for the table
                 $dbColumnName = $tableAlias . '.usd_value';
-                $sqlColumnName = $gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern');
+                $sqlColumnName = strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern'));
             } else {
                 // Special fields like usr_photo, mem_begin ...
                 $specialField = $listColumn->getValue('lsc_special_field');                // Handle special case for membership duration calculation
@@ -956,7 +958,7 @@ class ListConfiguration extends Entity
                            OR cat_org_id IS NULL )
                            ' . $sqlMemberStatus . ')' .
                 $sqlWhere .
-                $sqlOrderBys;     
+                $sqlOrderBys;
         } elseif ($optionsAll['showAllMembersDatabase']) {
             $sql = 'SELECT DISTINCT ' . $sqlMemLeader . $sqlIdColumns . $sqlColumnNames . '
                       FROM ' . TBL_USERS . '
@@ -1024,7 +1026,7 @@ class ListConfiguration extends Entity
 
             // only add columns to the array if the current user is allowed to view them
             if ($usfId === 0
-            // if only names should be shown, then check if it's a name field
+                // if only names should be shown, then check if it's a name field
                 || $gProfileFields->isVisible($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), $gCurrentUser->isAdministratorUsers())) {
                 if (!$this->showOnlyNames
                     || ($usfId > 0 && in_array($gProfileFields->getPropertyById($usfId, 'usf_name_intern'), array('FIRST_NAME', 'LAST_NAME')))
@@ -1132,7 +1134,7 @@ class ListConfiguration extends Entity
         }
 
         // if "lst_global" isn't set explicit to "1", set it to "0"
-        if ((int) $this->getValue('lst_global') !== 1) {
+        if ((int)$this->getValue('lst_global') !== 1) {
             $this->setValue('lst_global', 0);
         }
 
@@ -1167,7 +1169,7 @@ class ListConfiguration extends Entity
         }
     }
 
-   /**
+    /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * The Lists table also contains mem_rol_id and mem_usr_id, which cannot be changed,
      * so their initial setting on creation should not be logged. Instead, they will be used

@@ -14,8 +14,10 @@ use PhpOffice\PhpSpreadsheet\Reader\Html;
 use Admidio\Categories\Service\CategoryService;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\Item;
 
 // PHP namespaces
@@ -221,22 +223,20 @@ class ImportService
             foreach ($items->getItemData() as $key => $itemData) {
                 $itemValue = $itemData->getValue('ind_value');
                 if ($itemData->getValue('inf_name_intern') === 'KEEPER' || $itemData->getValue('inf_name_intern') === 'LAST_RECEIVER' ||
-                        $itemData->getValue('inf_name_intern') === 'IN_INVENTORY' || $itemData->getValue('inf_name_intern') === 'RECEIVED_ON' ||
-                        $itemData->getValue('inf_name_intern') === 'RECEIVED_BACK_ON') {
+                        $itemData->getValue('inf_name_intern') === 'BORROW_DATE' || $itemData->getValue('inf_name_intern') === 'RETURN_DATE') {
                     continue;
                 }
-                
-                if ($itemData->getValue('inf_name_intern') === 'CATEGORY') {
-                    $item = new Item($gDb,  $items, $items->getItemId());
-                    $catID = $item->getValue('ini_cat_id');
-                    $category = new Category($gDb);
-                    if ($category->readDataById($catID));
-                        $itemValues[] = array($itemData->getValue('inf_name_intern') => $category->getValue('cat_name'));
-                    continue;
-                }
-        
+
                 $itemValues[] = array($itemData->getValue('inf_name_intern') => $itemValue);
             }
+            // also add a column with the category if it exists
+            $item = new Item($gDb,  $items, $items->getItemId());
+            $catID = $item->getValue('ini_cat_id');
+            $category = new Category($gDb);
+            if ($category->readDataById($catID)) {
+                $itemValues[] = array('CATEGORY' => $category->getValue('cat_name'));
+            }
+
             $itemValues = array_merge_recursive(...$itemValues);
         
             if (count($assignedFieldColumn) === 0) {
@@ -254,15 +254,15 @@ class ImportService
         
         // get all values of the item fields
         $importedItemData = array();
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        //array with the internal field names of the borrowing fields
+        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         foreach ($assignedFieldColumn as $row => $values) {
             foreach ($items->getItemFields() as $fields){
                 $infId = $fields->getValue('inf_id');
                 $imfNameIntern = $fields->getValue('inf_name_intern');
-                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($imfNameIntern, $lendFieldNames)) {
-                    continue; // skip lending fields if lending is disabled
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($imfNameIntern, $borrowingFieldNames)) {
+                    continue; // skip borrowing fields if borrowing is disabled
                 }
                 if (isset($values[$infId]))
                 {
@@ -325,7 +325,7 @@ class ImportService
                             $categoryService = new CategoryService($gDb, 'IVT');
                             $allCategories = $categoryService->getVisibleCategories();
                             foreach ($allCategories as $key => $category) {
-                                if ($category['cat_name'] === $catName) {
+                                if (Language::translateIfTranslationStrId($category['cat_name']) === $catName) {
                                     $val = $category['cat_uuid'];
                                     break;
                                 }
@@ -341,9 +341,8 @@ class ImportService
                                 $val = $category->getValue('cat_uuid');
                             }
                         }
-    
                     }
-                    elseif($imfNameIntern === 'RECEIVED_ON' || $imfNameIntern === 'RECEIVED_BACK_ON') {
+                    elseif($imfNameIntern === 'BORROW_DATE' || $imfNameIntern === 'RETURN_DATE') {
                         $val = $values[$infId];
                         if ($val !== '') {
                             // date must be formatted
@@ -380,6 +379,34 @@ class ImportService
                                 if ($date instanceof DateTime) {
                                     $val = $date->format($gSettingsManager->getString('system_date'));
                                 }
+                            }
+                        }
+                    }
+                    elseif($imfNameIntern === 'STATUS') {
+                        $statusValue = $values[$infId];
+                        $val = '';
+                        if ($statusValue !== '') {
+                            // if no status is given, set the default status
+                            $option = new SelectOptions($gDb, $fields->getValue('inf_id'));
+                            $optionValues = $option->getAllOptions();
+                            foreach ($optionValues as $optionData) {
+                                if (Language::translateIfTranslationStrId($optionData['value']) === $statusValue) {
+                                    $val = $optionData['id'];
+                                    break;
+                                }
+                            }
+                            if ($val === '') {
+                                $option = new SelectOptions($gDb, $fields->getValue('inf_id'));
+                                $options = $option->getAllOptions();
+                                $maxId = 0;
+                                foreach ($options as $optionData) {
+                                    if ($optionData['id'] > $maxId) {
+                                        $maxId = $optionData['id'];
+                                    }
+                                }
+                                $newOption[$maxId + 1] = array('value' => $statusValue);
+                                $option->setOptionValues($newOption);
+                                $val = $option->getValue('ifo_id');
                             }
                         }
                     }
@@ -432,7 +459,7 @@ class ImportService
     private function compareArrays(array $array1, array $array2) : bool
     {
         $array1 = array_filter($array1, function($key) {
-            return $key !== 'KEEPER' && $key !== 'LAST_RECEIVER' && $key !== 'IN_INVENTORY' && $key !== 'RECEIVED_ON' && $key !== 'RECEIVED_BACK_ON';
+            return $key !== 'KEEPER' && $key !== 'LAST_RECEIVER' && $key !== 'BORROW_DATE' && $key !== 'RETURN_DATE';
         }, ARRAY_FILTER_USE_KEY);
 
         foreach ($array1 as $value) {
