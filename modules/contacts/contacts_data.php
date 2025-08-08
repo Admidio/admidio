@@ -170,7 +170,7 @@ try {
     }
 
     // create a subselect to check if the user is also an active member of another organization
-    if ($gCurrentOrganization->countAllRecords() > 1  && $gCurrentUser->isAdministrator() && $getMembersShowFilter === 3) {
+    if ($gCurrentOrganization->countAllRecords() > 1 && $gCurrentUser->isAdministrator() && $getMembersShowFilter === 3) {
         $contactsOfOtherOrganizationSelectPlaceholder = '
             FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
@@ -256,7 +256,7 @@ try {
         );
     }
 
-    if($gDbType === 'pgsql') {
+    if ($gDbType === 'pgsql') {
         $sqlOrganizationConcat = ' STRING_AGG(CAST(cat_org.cat_org_id AS text), \',\' ORDER BY cat_org.cat_org_id) ';
     } else {
         $sqlOrganizationConcat = ' GROUP_CONCAT(DISTINCT cat_org.cat_org_id ORDER BY cat_org.cat_org_id SEPARATOR \',\') ';
@@ -391,7 +391,7 @@ try {
                 // if email is set and systemmails are activated then administrators can send a new password to user
                 $userAdministration = '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'])) . '"
+                        data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($row['first_name'] . ' ' . $row['last_name'])) . '"
                         data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
             } else {
@@ -436,7 +436,7 @@ try {
                     // User is not member of any organization -> ask if delete completely
                     $userAdministration .= '
                         <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                            data-message="' . $gL10n->get('SYS_USER_DELETE_DESC', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'])) . '"
+                            data-message="' . $gL10n->get('SYS_USER_DELETE_DESC', array($row['first_name'] . ' ' . $row['last_name'])) . '"
                             data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                         </a>';
@@ -445,7 +445,7 @@ try {
                 // User could only be removed from this organization -> ask so
                 $userAdministration .= '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . $gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'], $gCurrentOrganization->getValue('org_longname'))) . '"
+                        data-message="' . $gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($row['first_name'] . ' ' . $row['last_name'], $gCurrentOrganization->getValue('org_longname'))) . '"
                         data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                     </a>';

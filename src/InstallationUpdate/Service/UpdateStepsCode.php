@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Categories\Entity\Category;
@@ -291,9 +292,9 @@ final class UpdateStepsCode
     public static function updateStep43RemoveInvalidVisibleRoleRights()
     {
         $sql = 'SELECT rrd_id
-                  FROM '.TBL_CATEGORIES.'
-                 INNER JOIN '.TBL_ROLES_RIGHTS.' ON ror_name_intern = \'category_view\'
-                 INNER JOIN '.TBL_ROLES_RIGHTS_DATA.' ON rrd_ror_id = ror_id
+                  FROM ' . TBL_CATEGORIES . '
+                 INNER JOIN ' . TBL_ROLES_RIGHTS . ' ON ror_name_intern = \'category_view\'
+                 INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . ' ON rrd_ror_id = ror_id
                    AND rrd_object_id = cat_id
                  WHERE cat_name_intern = \'BASIC_DATA\' ';
         $rolesRightsStatement = self::$db->queryPrepared($sql);
@@ -323,7 +324,7 @@ final class UpdateStepsCode
             if (!array_key_exists('LINKEDIN', $profileFields)) {
                 $profileFieldLinkedIn = new ProfileField(self::$db);
                 $profileFieldLinkedIn->saveChangesWithoutRights();
-                $profileFieldLinkedIn->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldLinkedIn->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
                 $profileFieldLinkedIn->setValue('usf_name_intern', 'LINKEDIN');
                 $profileFieldLinkedIn->setValue('usf_name', 'SYS_LINKEDIN');
@@ -336,7 +337,7 @@ final class UpdateStepsCode
             if (!array_key_exists('INSTAGRAM', $profileFields)) {
                 $profileFieldInstagram = new ProfileField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
-                $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldInstagram->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'INSTAGRAM');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_INSTAGRAM');
@@ -349,7 +350,7 @@ final class UpdateStepsCode
             if (!array_key_exists('MASTODON', $profileFields)) {
                 $profileFieldInstagram = new ProfileField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
-                $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldInstagram->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'MASTODON');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_MASTODON');
