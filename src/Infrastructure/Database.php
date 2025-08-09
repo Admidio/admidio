@@ -787,6 +787,10 @@ class Database
 
             if ($this->pdoStatement !== false) {
                 if (!$this->pdoStatement->execute($params)) {
+                    // throw an exception if the execute failed
+                    $errorInfo = $this->pdoStatement->errorInfo();
+                    $gLogger->critical('PDOStatement: ' . $errorInfo[2]);
+                    $this->showError($errorInfo[2], $errorInfo[1]);
                     return false;
                 }
 

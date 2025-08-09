@@ -395,7 +395,7 @@ class Entity
      */
     public function delete(): bool
     {
-        if (array_key_exists($this->keyColumnName, $this->dbColumns) && $this->dbColumns[$this->keyColumnName] !== '') {
+        if (array_key_exists($this->keyColumnName, $this->dbColumns) && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
             // Log record deletion, then delete
             $this->logDeletion();
             $sql = 'DELETE FROM ' . $this->tableName . '
@@ -531,7 +531,7 @@ class Entity
                 case 'timestamp': // fallthrough
                 case 'date': // fallthrough
                 case 'time':
-                    if ($columnValue !== '' && $columnValue !== null) {
+                    if (isset($columnValue) && $columnValue !== '') {
                         if ($format === '' && isset($gSettingsManager)) {
                             if (str_contains($this->columnsInfos[$columnName]['type'], 'timestamp')) {
                                 $format = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
@@ -765,7 +765,7 @@ class Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if (!$this->columnsValueChanged && $this->dbColumns[$this->keyColumnName] !== '') {
+        if (!$this->columnsValueChanged && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
             return false;
         }
 
@@ -817,19 +817,13 @@ class Entity
                 if (!$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed']) {
                     if ($this->insertRecord) {
                         // Prepare data for an insert
-                        if ($value !== '') {
-                            $sqlFieldArray[] = $key;
-                            $queryParams[] = $value;
-                        }
+                        $sqlFieldArray[] = $key;
+                        $queryParams[] = $value;
                     } else {
                         // Prepare data for an update
                         $sqlSetArray[] = $key . ' = ?';
 
-                        if ($value === '' || $value === null) {
-                            $queryParams[] = null;
-                        } else {
-                            $queryParams[] = $value;
-                        }
+                        $queryParams[] = $value;
                     }
                     // Ignore the usr_id_create and timestamp_create (and *_change) columns in the change log...
                     if (!in_array($key, $this->getIgnoredLogColumns())) {
@@ -947,7 +941,7 @@ class Entity
             foreach ($tableColumnsProperties as $columnName => $property) {
                 // some actions should only be done for columns of the main table from this class
                 if (str_starts_with($columnName, $this->columnPrefix . '_')) {
-                    $this->dbColumns[$columnName] = '';
+                    $this->dbColumns[$columnName] = null;
 
                     if ($property['serial']) {
                         $this->keyColumnName = $columnName;
@@ -963,6 +957,11 @@ class Entity
                 $this->columnsInfos[$columnName]['null'] = $property['null'];
                 $this->columnsInfos[$columnName]['key'] = $property['key'];
                 $this->columnsInfos[$columnName]['serial'] = $property['serial'];
+                if (isset($property['default'])) {
+                    $this->columnsInfos[$columnName]['default'] = $property['default'];
+                } elseif ($property['null']) {
+                    $this->columnsInfos[$columnName]['default'] = null;
+                }
             }
         }
     }
@@ -1003,35 +1002,126 @@ class Entity
             throw new Exception('Column ' . $columnName . ' does not exists in table ' . $this->tableName . '!');
         }
 
-        // General plausibility checks based on the field type
-        if ($checkValue && $newValue !== '') {
-            switch ($this->columnsInfos[$columnName]['type']) {
-                // Numeric
-                case 'integer': // fallthrough
-                case 'smallint':
-                    if (!is_numeric($newValue)) {
-                        $newValue = '';
+        $type     = strtolower($this->columnsInfos[$columnName]['type']);
+        $nullable = $this->columnsInfos[$columnName]['null'] ?? false;
+        $isKey    = $this->columnsInfos[$columnName]['key'] ?? false;
+
+        // normalize string values
+        $newValue = is_string($newValue) ? trim($newValue) : $newValue;
+
+        if ($checkValue) {
+            if (!isset($newValue) || $newValue === '') {
+                if ($nullable) {
+                    $newValue = null;
+                } else {
+                    // fallback to safe defaults when NULL not allowed
+                    if (preg_match('/int|tinyint|smallint|mediumint|bigint/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = 0;
+                        }
+                        // Key fields should not contain 0
+                        if ($isKey && (int)$newValue === 0) {
+                            $newValue = '';
+                        }
+                    } elseif (preg_match('/decimal|numeric|float|double|real/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = 0.0;
+                        }
+                    } elseif (preg_match('/date|time|year/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '1970-01-01';
+                        }
+                    } elseif (preg_match('/datetime|timestamp/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '1970-01-01 00:00:00';
+                        }
+                    } elseif (preg_match('/bool|tinyint\(1\)/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = false;
+                        }
+                    } else {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '';
+                        }
                     }
+                }
+            } else {
+                // Convert and sanitize based on type
+                switch ($type) {
+                    // Numeric
+                    case 'integer':
+                    case 'smallint':
+                    case 'bigint':
+                    case 'tinyint':
+                        if (!is_numeric($newValue)) {
+                            $newValue = $nullable ? null : 0;
+                        } else {
+                            $newValue = (int)$newValue;
+                        }
 
-                    // Key fields should not contain 0
-                    if ((int)$newValue === 0 &&
-                        ($this->columnsInfos[$columnName]['key'] || $this->columnsInfos[$columnName]['null'])) {
-                        $newValue = '';
-                    }
-                    break;
+                        // Key fields should not contain 0
+                        if ($isKey && (int)$newValue === 0) {
+                            $newValue = $nullable ? null : '';
+                        }
+                        break;
 
-                // String
-                case 'char': // fallthrough
-                case 'varchar': // fallthrough
-                case 'text':
-                    $newValue = StringUtils::strStripTags($newValue);
-                    break;
+                    // Decimal / Float
+                    case 'decimal':
+                    case 'numeric':
+                    case 'float':
+                    case 'double':
+                    case 'real':
+                        $newValue = (float)str_replace(',', '.', $newValue);
+                        break;
 
-                // Byte/Blob
-                case 'bytea':
-                    // Postgres can only store hex values in bytea, so we must decode binary in hex
-                    $newValue = bin2hex($newValue);
-                    break;
+                    // Boolean
+                    case 'boolean':
+                        $boolVal = filter_var($newValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                        $newValue = $boolVal ?? ($nullable ? null : false);
+                        break;
+
+                    // Date
+                    case 'date':
+                        $date = date_create($newValue);
+                        $newValue = $date ? $date->format('Y-m-d') : ($nullable ? null : '1970-01-01');
+                        break;
+
+                    // Datetime
+                    case 'datetime':
+                    case 'timestamp':
+                        $dateTime = date_create($newValue);
+                        $newValue = $dateTime ? $dateTime->format('Y-m-d H:i:s') : ($nullable ? null : '1970-01-01 00:00:00');
+                        break;
+
+                    // Strings
+                    case 'char':
+                    case 'varchar':
+                    case 'text':
+                        $newValue = StringUtils::strStripTags($newValue);
+                        break;
+
+                    // Byte/Blob
+                    case 'bytea':
+                        // Postgres can only store hex values in bytea, so we must decode binary in hex
+                        $newValue = bin2hex($newValue);
+                        break;
+
+                    default:
+                        // fallback sanitize
+                        $newValue = is_scalar($newValue) ? htmlspecialchars((string)$newValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') : $newValue;
+                }
             }
         }
 
@@ -1042,7 +1132,7 @@ class Entity
 
             // now mark all other columns with values of this object as changed
             foreach ($this->dbColumns as $column => $value) {
-                if ((is_array($value) && count($value) > 0) || (strlen((string)$value) > 0)) {
+                if ((is_array($value) && count($value) > 0) || isset($value)) {
                     $this->columnsInfos[$column]['changed'] = true;
                 }
             }
@@ -1073,7 +1163,7 @@ class Entity
     protected function valueChanged(string $columnName, ?string $newValue): bool
     {
         global $gSettingsManager;
-        $oldValue = $this->dbColumns[$columnName];
+        $oldValue = isset($this->dbColumns[$columnName]) && !empty($this->dbColumns[$columnName]) ? $this->dbColumns[$columnName] : null;
 
         // certain data types need special handling to detect changes
         //   * bool: unset/null and 0 mean false
@@ -1082,7 +1172,6 @@ class Entity
         switch ($this->columnsInfos[$columnName]['type']) {
             case 'boolean': // fallthrough
             case 'tinyint':
-                if (empty($oldValue)) $oldValue = 0;
                 if (empty($newValue)) $newValue = 0;
                 return $oldValue != $newValue;
             case 'timestamp': // fallthrough
@@ -1105,7 +1194,13 @@ class Entity
                 }
             default:
                 // only mark as "changed" if the value is different (DON'T use binary safe function!)
-                return strcmp((string)$oldValue, (string)$newValue) !== 0;
+                if (!isset($oldValue) && !isset($newValue)) {
+                    return false;
+                } elseif (!isset($oldValue) && isset($newValue)) {
+                    return true;
+                } else {
+                    return strcmp((string)$oldValue, (string)$newValue) !== 0;
+                }
         }
     }
 
