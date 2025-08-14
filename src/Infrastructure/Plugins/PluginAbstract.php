@@ -590,6 +590,21 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
+     * @param bool $enable
+     * @throws Exception
+     */
+    private static function toggleForeignKeyChecks(bool $enable): void
+    {
+        global $gDb;
+
+        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
+            // disable foreign key checks for mysql, so tables can easily be deleted
+            $sql = 'SET foreign_key_checks = ' . (int) $enable;
+            $gDb->queryPrepared($sql);
+        }
+    }
+
+    /**
      * @throws Exception
      * @return bool
      */
@@ -642,9 +657,11 @@ abstract class PluginAbstract implements PluginInterface
                     throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
                 }
 
+                self::toggleForeignKeyChecks(false);
                 foreach ($sqlStatements as $sqlStatement) {
                     $gDb->queryPrepared($sqlStatement);
                 }
+                self::toggleForeignKeyChecks(true);
             }
         }
 
@@ -721,9 +738,11 @@ abstract class PluginAbstract implements PluginInterface
                     throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
                 }
 
+                self::toggleForeignKeyChecks(false);
                 foreach ($sqlStatements as $sqlStatement) {
                     $gDb->queryPrepared($sqlStatement);
                 }
+                self::toggleForeignKeyChecks(true);
             }
         }
 
