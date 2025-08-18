@@ -370,7 +370,7 @@ try {
         // Felder zu Datensatz
         $columnNumber = 1;
         foreach ($memberdata as $key => $content) {
-            if ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf') {
+            if ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf' || $getMode == 'xlsx') {
                 if ($columnNumber === 1) {
                     // die Laufende Nummer noch davorsetzen
                     $columnValues[] = $listRowNumber;
