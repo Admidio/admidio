@@ -126,12 +126,12 @@ class InventoryItemPresenter extends PagePresenter
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
                     // prevent adding an empty string to the selectbox
-                        if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                            // prevent adding an empty string to the selectbox
-                            $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
-                        }
+                    if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
+                        // prevent adding an empty string to the selectbox
+                        $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
+                    }
 
-                        $form->addSelectBox(
+                    $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
                         $arrOptions,
@@ -407,12 +407,12 @@ class InventoryItemPresenter extends PagePresenter
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
                     // prevent adding an empty string to the selectbox
-                        if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                            // prevent adding an empty string to the selectbox
-                            $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
-                        }
+                    if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
+                        // prevent adding an empty string to the selectbox
+                        $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
+                    }
 
-                        $form->addSelectBox(
+                    $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
                         $arrOptions,
@@ -787,12 +787,12 @@ class InventoryItemPresenter extends PagePresenter
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
                     // prevent adding an empty string to the selectbox
-                        if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                            // prevent adding an empty string to the selectbox
-                            $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
-                        }
+                    if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
+                        // prevent adding an empty string to the selectbox
+                        $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
+                    }
 
-                        $form->addSelectBox(
+                    $form->addSelectBox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
                         $arrOptions,

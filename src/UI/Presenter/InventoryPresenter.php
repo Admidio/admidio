@@ -11,8 +11,6 @@ use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Component\DataTables;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 /**
@@ -234,11 +232,13 @@ class InventoryPresenter extends PagePresenter
                 var textFilter     = $("#items_filter_string").val()  || "";
                 var category     = $("#items_filter_category").val()  || "";
                 var keeper  = $("#items_filter_keeper").val()         || "";
+                var lastReceiver  = $("#items_filter_last_receiver").val()         || "";
                 var filterItems = $("#items_filter_status").val()     || "";
                 var url = "' . $printBaseUrl . '"
                         + "&items_filter_string="   + encodeURIComponent(textFilter)
                         + "&items_filter_category=" + encodeURIComponent(category)
                         + "&items_filter_keeper="   + encodeURIComponent(keeper)
+                        + "&items_filter_last_receiver="   + encodeURIComponent(lastReceiver)
                         + "&items_filter_status="   + encodeURIComponent(filterItems);
             
                 window.open(url, "_blank");
@@ -401,21 +401,6 @@ class InventoryPresenter extends PagePresenter
             'menu_item_lists_export'
         );
         $this->addPageFunctionsMenuItem(
-            'menu_item_lists_csv_ms',
-            $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_ISO_8859_1') . ')',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
-                    'items_filter_string'   => $this->getFilterString,
-                    'items_filter_category' => $this->getFilterCategoryUUID,
-                    'items_filter_keeper'   => $this->getFilterKeeper,
-                    'items_filter_last_receiver' => $this->getFilterLastReceiver,
-                    'items_filter_status'   => $this->getFilterStatus,
-                    'mode'                  => 'print_csv-ms'
-                )
-            ),
-            'bi-filetype-csv',
-            'menu_item_lists_export'
-        );
-        $this->addPageFunctionsMenuItem(
             'menu_item_lists_csv',
             $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_UTF8') . ')',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
@@ -466,7 +451,6 @@ class InventoryPresenter extends PagePresenter
             var buttons = {
                 xlsx:    "print_xlsx",
                 ods:     "print_ods",
-                csv_ms:  "print_csv-ms",
                 csv:     "print_csv-oo",
                 pdf:     "print_pdf",
                 pdfl:    "print_pdfl"
@@ -478,12 +462,14 @@ class InventoryPresenter extends PagePresenter
                     var textFilter = $("#items_filter_string").val()      || "";
                     var category   = $("#items_filter_category").val()    || "";
                     var keeper     = $("#items_filter_keeper").val()      || "";
+                    var lastReceiver = $("#items_filter_last_receiver").val()      || "";
                     var filterItems = $("#items_filter_status").val()     || "";
                     var base = this.href.split("?")[0];
                     var qs = [
                     "items_filter_string="   + encodeURIComponent(textFilter),
                     "items_filter_category=" + encodeURIComponent(category),
                     "items_filter_keeper="   + encodeURIComponent(keeper),
+                    "items_filter_last_receiver=" + encodeURIComponent(lastReceiver),
                     "items_filter_status="   + encodeURIComponent(filterItems),
                     "mode="                  + modeValue
                     ].join("&");
@@ -1029,7 +1015,7 @@ class InventoryPresenter extends PagePresenter
 
                     if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
                         if (!$this->itemsData->isRetired()) {
-                            // Addretire action
+                            // Add retire action
                             $rowValues['actions'][] = array(
                                 'popup' => true,
                                 'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $item['ini_uuid'])),
