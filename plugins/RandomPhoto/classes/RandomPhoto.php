@@ -45,8 +45,8 @@ class RandomPhoto extends PluginAbstract
             ORDER BY pho_begin DESC';
 
         // optional set a limit which albums should be scanned
-        if (self::$pluginConfig['random_photo_plugin_albums'] > 0) {
-            $sql .= ' LIMIT ' . self::$pluginConfig['random_photo_plugin_albums'];
+        if (self::$pluginConfig['random_photo_albums'] > 0) {
+            $sql .= ' LIMIT ' . self::$pluginConfig['random_photo_albums'];
         }
 
         $albumStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
@@ -63,10 +63,10 @@ class RandomPhoto extends PluginAbstract
             $album->setArray($albumList[mt_rand(0, $albumStatement->rowCount() - 1)]);
 
             // optionally select an image randomly
-            if (self::$pluginConfig['random_photo_plugin_album_photo_number'] === 0) {
+            if (self::$pluginConfig['random_photo_album_photo_number'] === 0) {
                 $photoNr = mt_rand(1, (int)$album->getValue('pho_quantity'));
             } else {
-                $photoNr = self::$pluginConfig['random_photo_plugin_album_photo_number'];
+                $photoNr = self::$pluginConfig['random_photo_album_photo_number'];
             }
 
             // Compose image path
@@ -74,14 +74,14 @@ class RandomPhoto extends PluginAbstract
             ++$i;
         }
 
-        if (self::$pluginConfig['random_photo_plugin_show_album_link'] && self::$pluginConfig['random_photo_plugin_max_char_per_word'] > 0) {
+        if (self::$pluginConfig['random_photo_show_album_link'] && self::$pluginConfig['random_photo_max_char_per_word'] > 0) {
             // Wrap link text if necessary
             $words = explode(' ', $album->getValue('pho_name'));
 
             foreach ($words as $word) {
-                if (strlen($word) > self::$pluginConfig['random_photo_plugin_max_char_per_word']) {
-                    $linkText .= substr($word, 0, self::$pluginConfig['random_photo_plugin_max_char_per_word']) . '-<br />' .
-                        substr($word, self::$pluginConfig['random_photo_plugin_max_char_per_word']) . ' ';
+                if (strlen($word) > self::$pluginConfig['random_photo_max_char_per_word']) {
+                    $linkText .= substr($word, 0, self::$pluginConfig['random_photo_max_char_per_word']) . '-<br />' .
+                        substr($word, self::$pluginConfig['random_photo_max_char_per_word']) . ' ';
                 } else {
                     $linkText .= $word . ' ';
                 }
@@ -126,9 +126,9 @@ class RandomPhoto extends PluginAbstract
                     $randomPhotoPlugin->assignTemplateVariable('photoUUID', $photoData['uuid']);
                     $randomPhotoPlugin->assignTemplateVariable('photoNr', $photoData['photoNr']);
                     $randomPhotoPlugin->assignTemplateVariable('photoTitle', $photoData['linkText']);
-                    $randomPhotoPlugin->assignTemplateVariable('photoMaxWidth', self::$pluginConfig['random_photo_plugin_max_width']);
-                    $randomPhotoPlugin->assignTemplateVariable('photoMaxHeight', self::$pluginConfig['random_photo_plugin_max_height']);
-                    $randomPhotoPlugin->assignTemplateVariable('photoShowLink', self::$pluginConfig['random_photo_plugin_show_album_link']);
+                    $randomPhotoPlugin->assignTemplateVariable('photoMaxWidth', self::$pluginConfig['random_photo_max_width']);
+                    $randomPhotoPlugin->assignTemplateVariable('photoMaxHeight', self::$pluginConfig['random_photo_max_height']);
+                    $randomPhotoPlugin->assignTemplateVariable('photoShowLink', self::$pluginConfig['random_photo_show_album_link']);
                 } else {
                     $randomPhotoPlugin->assignTemplateVariable('message',$gL10n->get('PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS'));
                 }

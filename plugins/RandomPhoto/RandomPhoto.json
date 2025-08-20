@@ -18,37 +18,43 @@
             "type": "integer",
             "value" : 1
         },
-        "random_photo_plugin_max_char_per_word": {
+        "random_photo_overview_sequence": {
+            "name": "SYS_OVERVIEW_SEQUENCE",
+            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
+            "type": "integer",
+            "value" : 4
+        },
+        "random_photo_max_char_per_word": {
             "name": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC",
             "type": "integer",
             "value" : 0
         },
-        "random_photo_plugin_max_width": {
+        "random_photo_max_width": {
             "name": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC",
             "type": "integer",
             "value" : 0
         },
-        "random_photo_plugin_max_height": {
+        "random_photo_max_height": {
             "name": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC",
             "type": "integer",
             "value" : 0
         },
-        "random_photo_plugin_albums": {
+        "random_photo_albums": {
             "name": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC",
             "type": "integer",
             "value" : 0
         },
-        "random_photo_plugin_album_photo_number": {
+        "random_photo_album_photo_number": {
             "name": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC",
             "type": "integer",
             "value" : 0
         },
-        "random_photo_plugin_show_album_link": {
+        "random_photo_show_album_link": {
             "name": "PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC",
             "type": "boolean",

@@ -52,40 +52,40 @@ class RandomPhotoPreferencesPresenter
             array('defaultValue' => $formValues['random_photo_plugin_enabled']['value'], 'showContextDependentFirstEntry' => false, 'helpTextId' => $formValues['random_photo_plugin_enabled']['description'])
         );
         $formRandomPhoto->addInput(
-            'random_photo_plugin_max_char_per_word',
-            Language::translateIfTranslationStrId($formValues['random_photo_plugin_max_char_per_word']['name']),
-            $formValues['random_photo_plugin_max_char_per_word']['value'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_plugin_max_char_per_word']['description'])
+            'random_photo_max_char_per_word',
+            Language::translateIfTranslationStrId($formValues['random_photo_max_char_per_word']['name']),
+            $formValues['random_photo_max_char_per_word']['value'],
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_max_char_per_word']['description'])
         );
         $formRandomPhoto->addInput(
-            'random_photo_plugin_max_width',
-            Language::translateIfTranslationStrId($formValues['random_photo_plugin_max_width']['name']),
-            $formValues['random_photo_plugin_max_width']['value'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_plugin_max_width']['description'])
+            'random_photo_max_width',
+            Language::translateIfTranslationStrId($formValues['random_photo_max_width']['name']),
+            $formValues['random_photo_max_width']['value'],
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_max_width']['description'])
         );
         $formRandomPhoto->addInput(
-            'random_photo_plugin_max_height',
-            Language::translateIfTranslationStrId($formValues['random_photo_plugin_max_height']['name']),
-            $formValues['random_photo_plugin_max_height']['value'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_plugin_max_height']['description'])
+            'random_photo_max_height',
+            Language::translateIfTranslationStrId($formValues['random_photo_max_height']['name']),
+            $formValues['random_photo_max_height']['value'],
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_max_height']['description'])
         );
         $formRandomPhoto->addInput(
-            'random_photo_plugin_albums',
-            Language::translateIfTranslationStrId($formValues['random_photo_plugin_albums']['name']),
-            $formValues['random_photo_plugin_albums']['value'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_plugin_albums']['description'])
+            'random_photo_albums',
+            Language::translateIfTranslationStrId($formValues['random_photo_albums']['name']),
+            $formValues['random_photo_albums']['value'],
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_albums']['description'])
         );
         $formRandomPhoto->addInput(
-            'random_photo_plugin_album_photo_number',
-            Language::translateIfTranslationStrId($formValues['random_photo_plugin_album_photo_number']['name']),
-            $formValues['random_photo_plugin_album_photo_number']['value'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_plugin_album_photo_number']['description'])
+            'random_photo_album_photo_number',
+            Language::translateIfTranslationStrId($formValues['random_photo_album_photo_number']['name']),
+            $formValues['random_photo_album_photo_number']['value'],
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['random_photo_album_photo_number']['description'])
         );
         $formRandomPhoto->addCheckbox(
-            'random_photo_plugin_show_album_link',
-            Language::translateIfTranslationStrId($formValues['random_photo_plugin_show_album_link']['name']),
-            $formValues['random_photo_plugin_show_album_link']['value'],
-            array('helpTextId' => $formValues['random_photo_plugin_show_album_link']['description'])
+            'random_photo_show_album_link',
+            Language::translateIfTranslationStrId($formValues['random_photo_show_album_link']['name']),
+            $formValues['random_photo_show_album_link']['value'],
+            array('helpTextId' => $formValues['random_photo_show_album_link']['description'])
         );
         $formRandomPhoto->addSubmitButton(
             'adm_button_save_random_photo',
