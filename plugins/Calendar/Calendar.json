@@ -20,6 +20,12 @@
             "type": "integer",
             "value" : 1
         },
+        "calendar_overview_sequence": {
+            "name": "SYS_OVERVIEW_SEQUENCE",
+            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
+            "type": "integer",
+            "value" : 3
+        },
         "calendar_show_events": {
             "name": "PLG_CALENDAR_PREFERENCES_SHOW_EVENTS",
             "description": "PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC",
