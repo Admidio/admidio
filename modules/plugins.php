@@ -19,9 +19,7 @@
  ***********************************************************************************************
  */
 
-use Admidio\Components\Service\ComponentService;
 use Admidio\Infrastructure\Exception;
-use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
 use Admidio\Infrastructure\Plugins\PluginManager;
@@ -109,29 +107,9 @@ try {
                 throw new Exception('SYS_PLUGIN_NAME_MISSING');
             }
             break;
-        case 'sequence':
-            // Update menu entry sequence
-            $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
-            $getOrder      = admFuncVariableIsValid($_GET, 'order', 'array');
-
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
-
-            $componentService = new ComponentService($gDb, $getPluginId);
-
-            if (!empty($getOrder)) {
-                // set new order (drag and drop)
-                $ret = $componentService->setSequence(explode(',', $getOrder));
-            } else {
-                $ret = $componentService->moveSequence($postDirection);
-            }
-
-            echo json_encode(array('status' =>  ($ret ? 'success' : 'error')));
-            break;
 
         default:
             throw new Exception('SYS_UNKNOWN_MODE');
-            break;
     }
 } catch (Throwable $e) {
     if (in_array($getMode, array('save', 'delete'))) {

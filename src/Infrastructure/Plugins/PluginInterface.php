@@ -5,6 +5,7 @@ namespace Admidio\Infrastructure\Plugins;
 use Admidio\UI\Presenter\PagePresenter;
 use InvalidArgumentException;
 use Exception;
+
 /**
  * Interface PluginInterface
  */
@@ -13,140 +14,144 @@ interface PluginInterface
     /**
      * @return PluginInterface
      */
-    public static function getInstance() ;
+    public static function getInstance(): PluginInterface;
 
     /**
      * @return string
      */
-    public static function getName() : string;
+    public static function getName(): string;
 
     /**
      * @return string
      */
-    public static function getVersion() : string;
+    public static function getVersion(): string;
 
     /**
      * @return array
      */
-    public static function getMetadata() : array;
+    public static function getMetadata(): array;
 
     /**
      * @return array
      */
-    public static function getDependencies() : array;
+    public static function getDependencies(): array;
 
     /**
      * @return array
      */
-    public static function getSupportedLanguages() : array;
+    public static function getSupportedLanguages(): array;
 
     /**
-     * @param string $type
+     * @param string|null $type
      * @param string $path
-     * @throws InvalidArgumentException
-     * @throws Exception
      * @return array
-     */
-    public static function getStaticFiles(?string $type = null, string $path = '') : array;
-
-    /**
+     * @throws Exception
      * @throws InvalidArgumentException
+     */
+    public static function getStaticFiles(?string $type = null, string $path = ''): array;
+
+    /**
+     * @return array
      * @throws Exception
+     * @throws InvalidArgumentException
+     */
+    public static function getPluginConfig(): array;
+
+    /**
      * @return string
      */
-    public static function getPluginConfig() : array;
+    public static function getPluginPath() : string;
 
     /**
-     * @throws Exception
      * @return int
      */
-    public static function getComponentId() : int;
+    public static function getComponentId(): int;
 
     /**
-     * @throws Exception
      * @return string
      */
-    public static function getComponentName() : string;
+    public static function getComponentName(): string;
 
     /**
-     * @throws Exception
      * @return int
+     * @throws Exception
      */
-    public static function getPluginSequence() : int;
+    public static function getPluginSequence(): int;
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function checkDependencies() : bool;
+    public static function checkDependencies(): bool;
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isInstalled() : bool;
+    public static function isInstalled(): bool;
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isActivated() : bool;
+    public static function isActivated(): bool;
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isVisible() : bool;
+    public static function isVisible(): bool;
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isOverviewPlugin() : bool;
+    public static function isOverviewPlugin(): bool;
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isUpdateAvailable() : bool;
+    public static function isUpdateAvailable(): bool;
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function doClassAutoload() : bool;
+    public static function doClassAutoload(): bool;
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function doInstall() : bool;
+    public static function doInstall(): bool;
 
     /**
      * @param array $options
+     * @return bool
+     * @throws Exception
      * @throws InvalidArgumentException
-     * @throws Exception
+     */
+    public static function doUninstall(array $options = array()): bool;
+
+    /**
      * @return bool
+     * @throws Exception
      */
-    public static function doUninstall(array $options = array()) : bool;
+    public static function doUpdate(): bool;
 
     /**
-     * @throws Exception
+     * @param array $params
      * @return bool
-     */
-    public static function doUpdate() : bool;
-
-    /**
      * @throws Exception
-     * @return void
      */
-    public static function initParams(array $params = array()) : bool;
+    public static function initParams(array $params = array()): bool;
 
     /**
-     * @param PagePresenter $page
+     * @param PagePresenter|null $page
+     * @return bool
+     * @throws Exception
      * @throws InvalidArgumentException
-     * @throws Exception
-     * @return bool
      */
-    public static function doRender(?PagePresenter $page = null) : bool;
+    public static function doRender(?PagePresenter $page = null): bool;
 }

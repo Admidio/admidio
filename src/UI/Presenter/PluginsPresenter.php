@@ -47,40 +47,6 @@ class PluginsPresenter extends PagePresenter
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this));
             });
-            $("tbody.admidio-sortable").sortable({
-                axis: "y",
-                handle: ".handle",
-                stop: function(event, ui) {
-                    const order = $(this).sortable("toArray", {attribute: "data-uuid"});
-                    const uid = ui.item.attr("data-uuid");
-                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/plugins.php?mode=sequence&uuid=" + uid + "&order=" + order,
-                        {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
-                    );
-                    updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
-                }
-            });
-            $(".admidio-plugin-move").click(function() {
-                moveTableRow(
-                    $(this),
-                    "' . ADMIDIO_URL . FOLDER_MODULES . '/plugins.php",
-                    "' . $gCurrentSession->getCsrfToken() . '"
-                );
-            });
-            $(document).ajaxComplete(function(event, xhr, settings) {
-                if (settings.url.indexOf("mode=delete") !== -1) {
-                    // wait for callUrlHideElement to finish hiding the element
-                    setTimeout(function() {
-                        updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
-                        updateMoveActions(".accordion", "adm_plugin_card_entry", "admidio-plugin-move");
-                    }, 1000);
-                } else {
-                    updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
-                    updateMoveActions(".accordion", "adm_plugin_card_entry", "admidio-plugin-move");
-                }
-            });
-
-            updateMoveActions("tbody.admidio-sortable", "adm_plugin_entry", "admidio-plugin-move");
-            updateMoveActions(".accordion", "adm_plugin_card_entry", "admidio-plugin-move");
             ', true
         );
 

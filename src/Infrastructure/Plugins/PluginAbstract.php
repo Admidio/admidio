@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Preferences\Service\PreferencesService;
@@ -9,21 +10,26 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 
 use InvalidArgumentException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ReflectionClass;
+use ReflectionException;
 use RuntimeException;
+
 /**
  * Class PluginAbstract
  */
 abstract class PluginAbstract implements PluginInterface
 {
-    private static $instances = array();
-    private static $pluginComId = 0;
-    
-    protected static $pluginPath = '';
-    protected static $name = '';
-    protected static $version = '0.0.0';
-    protected static $dependencies = array();
-    protected static $metadata = array();
-    protected static $defaultConfig = array();
+    private static array $instances = array();
+    private static int $pluginComId = 0;
+
+    protected static string $pluginPath = '';
+    protected static string $name = '';
+    protected static string $version = '0.0.0';
+    protected static array $dependencies = array();
+    protected static array $metadata = array();
+    protected static array $defaultConfig = array();
 
     /**
      *
@@ -54,7 +60,7 @@ abstract class PluginAbstract implements PluginInterface
      * This method is called during the installation of the plugin.
      * @throws Exception
      */
-    private static function addMenuEntry() : void
+    private static function addMenuEntry(): void
     {
         global $gDb;
 
@@ -80,7 +86,7 @@ abstract class PluginAbstract implements PluginInterface
      * This method is called during the uninstallation of the plugin.
      * @throws Exception
      */
-    private static function removeMenuEntry() : bool
+    private static function removeMenuEntry(): void
     {
         global $gDb;
 
@@ -92,7 +98,6 @@ abstract class PluginAbstract implements PluginInterface
             $pluginMenuEntry->delete();
         }
 
-        return true;
     }
 
     /**
@@ -103,7 +108,7 @@ abstract class PluginAbstract implements PluginInterface
     public static function initPreferencePanelCallback(): void
     {
         // find a preference panel for this plugin
-        $preferencesFile =  self::getPluginPath() . '/classes/Presenter/' . basename(self::getPluginPath()) . 'PreferencesPresenter.php';
+        $preferencesFile = self::getPluginPath() . '/classes/Presenter/' . basename(self::getPluginPath()) . 'PreferencesPresenter.php';
         $preferencesClass = is_file($preferencesFile) ? self::getClassNameFromFile($preferencesFile) : null;
         if (isset($preferencesClass) && class_exists($preferencesClass)) {
             // get the function name for the preferences panel
@@ -113,10 +118,10 @@ abstract class PluginAbstract implements PluginInterface
             }
             if (self::isOverviewPlugin()) {
                 // register the overview preferences presenter for this plugin
-                PreferencesService::addOverviewPluginPreferencesPresenter(self::getComponentId(), [ $preferencesClass, $functionName ]);
+                PreferencesService::addOverviewPluginPreferencesPresenter(self::getComponentId(), [$preferencesClass, $functionName]);
             } else {
                 // register the preferences presenter for this plugin
-                PreferencesService::addPluginPreferencesPresenter(self::getComponentId(), [ $preferencesClass, $functionName ]);
+                PreferencesService::addPluginPreferencesPresenter(self::getComponentId(), [$preferencesClass, $functionName]);
             }
         }
     }
@@ -155,10 +160,9 @@ abstract class PluginAbstract implements PluginInterface
     /**
      * Reads the plugin metadata from the plugin file.
      *
-     * @param string $class
      * @throws Exception
      */
-    private function readPluginMetadata() : void
+    private function readPluginMetadata(): void
     {
         // get the plugin name, version and metadata from the plugin file
         $configFiles = self::getStaticFiles('json');
@@ -181,8 +185,10 @@ abstract class PluginAbstract implements PluginInterface
 
     /**
      * @return PluginAbstract
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public static function getInstance() : PluginAbstract
+    public static function getInstance(): PluginAbstract
     {
         // reset global variables
         self::$pluginComId = 0;
@@ -195,14 +201,13 @@ abstract class PluginAbstract implements PluginInterface
 
         // get the class name of the called class
         $class = get_called_class();
-        if (!array_key_exists($class, self::$instances))
-        {
+        if (!array_key_exists($class, self::$instances)) {
             self::$instances[$class] = new $class();
             self::$instances[$class]->doClassAutoload();
         }
 
         // set the plugin path to the folder of this class
-        $reflection = new \ReflectionClass(self::$instances[$class]);
+        $reflection = new ReflectionClass(self::$instances[$class]);
         self::$pluginPath = dirname($reflection->getFileName(), 2);
 
         // read the plugin metadata
@@ -228,7 +233,7 @@ abstract class PluginAbstract implements PluginInterface
     /**
      * @return string
      */
-    public static function getName() : string
+    public static function getName(): string
     {
         return self::$name;
     }
@@ -236,7 +241,15 @@ abstract class PluginAbstract implements PluginInterface
     /**
      * @return string
      */
-    public static function getVersion() : string
+    public static function getIcon(): string
+    {
+        return self::$metadata['icon'] ?? '';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getVersion(): string
     {
         return self::$version;
     }
@@ -244,7 +257,7 @@ abstract class PluginAbstract implements PluginInterface
     /**
      * @return array
      */
-    public static function getMetadata() : array
+    public static function getMetadata(): array
     {
 
         return self::$metadata;
@@ -253,7 +266,7 @@ abstract class PluginAbstract implements PluginInterface
     /**
      * @return array
      */
-    public static function getDependencies() : array
+    public static function getDependencies(): array
     {
         return self::$dependencies;
     }
@@ -261,17 +274,15 @@ abstract class PluginAbstract implements PluginInterface
     /**
      * @return array
      */
-    public static function getSupportedLanguages() : array
+    public static function getSupportedLanguages(): array
     {
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'languages';
 
         $langFiles = array();
-        foreach (scandir($dir) as $entry)
-        {
+        foreach (scandir($dir) as $entry) {
             $entryPath = $dir . DIRECTORY_SEPARATOR . $entry;
             $entryInfo = pathinfo($entryPath);
-            if (is_file($entryPath) && $entryInfo['extension'] === 'xml')
-            {
+            if (is_file($entryPath) && $entryInfo['extension'] === 'xml') {
                 $langFiles[] = $entryInfo['filename'];
             }
         }
@@ -280,38 +291,35 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      * @param string $path
-     * @throws InvalidArgumentException
-     * @throws Exception
      * @return array
+     * @throws Exception
      */
-    public static function getStaticFiles(?string $type = null, string $path = '' /* self::$pluginPath */) : array
+    public static function getStaticFiles(?string $type = null, string $path = '' /* self::$pluginPath */): array
     {
         if ($path === '') {
             $path = self::$pluginPath;
         }
 
-        if ($type !== null && !is_string($type))
-        {
+        if ($type !== null && !is_string($type)) {
             throw new InvalidArgumentException('Type must be "null" or a "string".');
         }
 
-        if (!is_dir($path))
-        {
+        if (!is_dir($path)) {
             throw new Exception('Plugin path does not exist: ' . $path);
         }
 
         $files = array();
-        foreach (scandir($path) as $entry)
-        {
+        foreach (scandir($path) as $entry) {
             $entryPath = $path . DIRECTORY_SEPARATOR . $entry;
-            if (is_file($entryPath))
-            {
+            if (is_file($entryPath)) {
                 $entryInfo = pathinfo($entryPath);
 
-                if (!array_key_exists($entryInfo['extension'], $files))
-                {
+                if (!isset($entryInfo['extension'])) {
+                    $entryInfo['extension'] = '';
+                }
+                if (!array_key_exists($entryInfo['extension'], $files)) {
                     $files[$entryInfo['extension']] = array();
                 }
 
@@ -319,17 +327,14 @@ abstract class PluginAbstract implements PluginInterface
             }
         }
 
-        if ($type === null)
-        {
+        if ($type === null) {
             return $files;
-        }
-        else
-        {
+        } else {
             return (array_key_exists($type, $files)) ? $files[$type] : array();
         }
     }
 
-    public static function getPluginConfigValues() : array
+    public static function getPluginConfigValues(): array
     {
         global $gSettingsManager;
         $config = array();
@@ -372,7 +377,7 @@ abstract class PluginAbstract implements PluginInterface
      * Get the plugin configuration
      * @return array Returns the plugin configuration
      */
-    public static function getPluginConfig() : array
+    public static function getPluginConfig(): array
     {
         $config = self::$defaultConfig;
         // get the plugin config values from the database
@@ -384,49 +389,60 @@ abstract class PluginAbstract implements PluginInterface
         return $config;
     }
 
-    public static function getPluginPath() : string
+    /**
+     * @return string
+     */
+    public static function getPluginPath(): string
     {
         return self::$pluginPath;
     }
 
     /**
-     * @throws Exception
      * @return int
      */
-    public static function getComponentId() : int
+    public static function getComponentId(): int
     {
         return self::$pluginComId;
     }
 
     /**
-     * @throws Exception
      * @return string
      */
-    public static function getComponentName() : string
+    public static function getComponentName(): string
     {
         return basename(self::$pluginPath);
     }
-    
+
     /**
      * Get the sequence of the plugin in the components table.
-     * @throws Exception
      * @return int Returns the sequence of the plugin.
+     * @throws Exception
      */
-    public static function getPluginSequence() : int
+    public static function getPluginSequence(): int
     {
-        global $gDb;
-        // get the plugin sequence from the database
-        $sql = 'SELECT com_plg_sequence FROM ' . TBL_COMPONENTS . ' WHERE com_id = ?';
-        $statement = $gDb->queryPrepared($sql, array(self::getComponentId()));
-        return (int)$statement->fetchColumn();
+        $pluginConfig = self::getPluginConfig();
+        $sequenceSuffix = '_overview_sequence';
+        // find the sequence key in the plugin config
+        $sequenceKeys = array_filter(array_keys($pluginConfig), function($k) use ($sequenceSuffix) {
+            return substr($k, -strlen($sequenceSuffix)) === $sequenceSuffix;
+        });
+
+        if (!empty($sequenceKeys)) {
+            // get the first matching key
+            $sequenceKey = array_values($sequenceKeys)[0];
+
+            // return the value from the config if available
+            return $pluginConfig[$sequenceKey]['value'] ?? 0;
+        }
+        return 0;
     }
 
     /**
      * Check if the plugin has all dependencies installed.
-     * @throws Exception
      * @return bool Returns true if all dependencies are installed, false otherwise.
+     * @throws Exception
      */
-    public static function checkDependencies() : bool
+    public static function checkDependencies(): bool
     {
         // check if the plugin has dependencies
         if (empty(self::$dependencies)) {
@@ -435,7 +451,7 @@ abstract class PluginAbstract implements PluginInterface
 
         // ensure Composer’s PSR‑4 autoloader is registered
         if (!self::doClassAutoload()) {
-            throw new \RuntimeException('Could not load Composer autoloader at ' . ADMIDIO_PATH . '/vendor/autoload.php');
+            throw new RuntimeException('Could not load Composer autoloader at ' . ADMIDIO_PATH . '/vendor/autoload.php');
         }
         $missing = array();
 
@@ -476,11 +492,11 @@ abstract class PluginAbstract implements PluginInterface
         $srcDir = ADMIDIO_PATH . '/src';
         $prefix = 'Admidio\\';
 
-        $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($srcDir));
+        $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($srcDir));
 
         // iterate through the directory structure to find the class file
         foreach ($it as $file) {
-            if (! $file->isFile() || $file->getFilename() !== $shortName . '.php') {
+            if (!$file->isFile() || $file->getFilename() !== $shortName . '.php') {
                 continue;
             }
 
@@ -499,10 +515,10 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isInstalled() : bool
+    public static function isInstalled(): bool
     {
         global $gDb;
         // check if the plugin exists in components database table
@@ -514,21 +530,21 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isActivated() : bool
+    public static function isActivated(): bool
     {
         return self::isInstalled() && (self::getComponentId() > 0);
     }
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isVisible() : bool
+    public static function isVisible(): bool
     {
-        global $gValidLogin, $gCurrentUser;
+        global $gValidLogin;
 
         // check if the plugin is activated
         if (!self::isActivated()) {
@@ -548,10 +564,10 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isOverviewPlugin() : bool
+    public static function isOverviewPlugin(): bool
     {
         global $gDb;
         // check if the plugin exists in components database table and is of type 'ADM_PLUGIN'
@@ -563,24 +579,23 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function isUpdateAvailable() : bool
+    public static function isUpdateAvailable(): bool
     {
         return version_compare(self::$version, self::$metadata['version'], '<');
     }
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function doClassAutoload() : bool
+    public static function doClassAutoload(): bool
     {
         $autoloadPath = ADMIDIO_PATH . '/vendor/autoload.php';
 
-        if (is_file($autoloadPath))
-        {
+        if (is_file($autoloadPath)) {
             require_once($autoloadPath);
 
             return true;
@@ -599,16 +614,16 @@ abstract class PluginAbstract implements PluginInterface
 
         if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
             // disable foreign key checks for mysql, so tables can easily be deleted
-            $sql = 'SET foreign_key_checks = ' . (int) $enable;
+            $sql = 'SET foreign_key_checks = ' . (int)$enable;
             $gDb->queryPrepared($sql);
         }
     }
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function doInstall() : bool
+    public static function doInstall(): bool
     {
         global $gDb, $gSettingsManager;
 
@@ -622,7 +637,11 @@ abstract class PluginAbstract implements PluginInterface
         foreach ($configValues as $key => $value) {
             if (is_array($value)) {
                 $gSettingsManager->set($key, implode(',', $value));
-                $gSettingsManager->set($key . '_keys', implode(',', array_keys($value)));
+                // check if the value contains keys
+                if (array_keys($value) !== range(0, count($value) - 1)) {
+                    // if the value is an associative array, store the keys separately
+                    $gSettingsManager->set($key . '_keys', implode(',', array_keys($value)));
+                }
             } else {
                 $gSettingsManager->set($key, $value);
             }
@@ -633,7 +652,7 @@ abstract class PluginAbstract implements PluginInterface
         if (isset($sqlFiles) && count($sqlFiles) > 0) {
             $sqlFile = null;
             if (count($sqlFiles) === 1) {
-            // if there is only one sql file, take it
+                // if there is only one sql file, take it
                 $sqlFile = $sqlFiles[0];
             } else {
                 // if there are multiple sql files, we need to find the install file
@@ -653,7 +672,7 @@ abstract class PluginAbstract implements PluginInterface
 
                 try {
                     $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFile);
-                } catch (RuntimeException $exception) {
+                } catch (RuntimeException) {
                     throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
                 }
 
@@ -693,14 +712,13 @@ abstract class PluginAbstract implements PluginInterface
 
     /**
      * @param array $options
-     * @throws InvalidArgumentException
-     * @throws Exception
      * @return bool
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
-    public static function doUninstall(array $options = array()) : bool
+    public static function doUninstall(array $options = array()): bool
     {
-        if (!is_array($options))
-        {
+        if (!is_array($options)) {
             throw new InvalidArgumentException('Options must be an "array".');
         }
 
@@ -734,7 +752,7 @@ abstract class PluginAbstract implements PluginInterface
 
                 try {
                     $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFile);
-                } catch (RuntimeException $exception) {
+                } catch (RuntimeException) {
                     throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
                 }
 
@@ -758,7 +776,7 @@ abstract class PluginAbstract implements PluginInterface
 
         // remove the plugin menu entry
         self::removeMenuEntry();
-        
+
         // delete the plugin from the components table
         $plugin = new Component($gDb, self::$pluginComId);
         $plugin->delete();
@@ -775,10 +793,10 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
-     * @throws Exception
      * @return bool
+     * @throws Exception
      */
-    public static function doUpdate() : bool
+    public static function doUpdate(): bool
     {
         global $gDb, $gSettingsManager;
 
@@ -799,7 +817,7 @@ abstract class PluginAbstract implements PluginInterface
             }
         }
 
-        // update the plugin 
+        // update the plugin
         $componentUpdateHandle = new ComponentUpdate($gDb);
         $componentUpdateHandle->readDataByColumns(array('com_name' => self::getName(), 'com_name_intern' => basename(self::$pluginPath)));
         // define the update class namespace for the plugin
@@ -816,10 +834,9 @@ abstract class PluginAbstract implements PluginInterface
         return true;
     }
 
-    public static function initParams(array $params = array()) : bool
+    public static function initParams(array $params = array()): bool
     {
-        if (!is_array($params))
-        {
+        if (!is_array($params)) {
             throw new InvalidArgumentException('Params must be an "array".');
         }
 

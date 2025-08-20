@@ -1142,6 +1142,7 @@
   <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overview</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Overview extensions</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">The appearance of the overview extensions on the overview page can be changed here. The sequence of the extensions can be changed by drag &amp; drop (big screens) or by clicking the move buttons (small screens).\n\n The new sequence only takes effect after saving the settings!</string>
   <string name="SYS_PAGE_NEXT">Next</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>

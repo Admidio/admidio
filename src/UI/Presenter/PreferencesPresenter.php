@@ -5,6 +5,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -118,6 +119,7 @@ class PreferencesPresenter extends PagePresenter
                 'label'  => $gL10n->get('SYS_SYSTEM'),
                 'panels' => array(
                     array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false),
+                    array('id'=>'overview',             'title'=>$gL10n->get('SYS_OVERVIEW'),               'icon'=>'bi-house-door-fill',               'subcards'=>false),
                     array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
                     array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
                     array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
@@ -626,6 +628,80 @@ class PreferencesPresenter extends PagePresenter
         $formCommon->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formCommon);
         return $smarty->fetch('preferences/preferences.common.tpl');
+    }
+
+    /**
+     * Generates the HTML of the form from the plugin overview preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the contact preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createOverviewForm(): string
+    {
+        global $gL10n, $gCurrentSession;
+
+        // get all overview plugins and add them to the template
+        $pluginManager = new PluginManager();
+        $plugins = $pluginManager->getOverviewPlugins();
+
+        $overviewPlugins = array();
+        foreach ($plugins as $sequence => $plugin) {
+            $pluginInstance = $plugin['interface']::getInstance();
+            $pluginConfig = $pluginInstance->getPluginConfig();
+
+            // find the plugin sequence key
+            $sequenceKey = '';
+            $enabled = false;
+            foreach ($pluginConfig as $pluginConfigKey => $pluginConfigValue) {
+                if (str_ends_with($pluginConfigKey, '_overview_sequence')) {
+                    $sequenceKey = $pluginConfigKey;
+                } elseif (str_ends_with($pluginConfigKey, '_enabled')) {
+                    $enabled = !(($pluginConfigValue['value'] === 0));
+                }
+            }
+            $overviewPlugins[] =  array(
+                'id' => $plugin['id'],
+                'name' => Language::translateIfTranslationStrId($pluginInstance->getName()),
+                'icon' => $pluginInstance->getIcon(),
+                'enabled' => $enabled,
+                'sequence' => array('key' => $sequenceKey, 'value' => $sequence)
+            );
+        }
+
+        $formOverview = new FormPresenter(
+            'adm_preferences_form_overview',
+            'preferences/preferences.overview.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'overview')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        $formOverview->addDescription(
+            'adm_overview_description',
+            $gL10n->get('SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC')
+        );
+
+        // add hidden inputs for the plugin sequence
+        foreach ($overviewPlugins as $overviewPlugin) {
+            $formOverview->addInput(
+                $overviewPlugin['sequence']['key'],
+                '',
+                $overviewPlugin['sequence']['value'],
+                array('type' => 'number', 'property' => FormPresenter::FIELD_HIDDEN)
+            );
+        }
+
+        $formOverview->addSubmitButton(
+            'adm_button_save_overview',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $smarty->assign('overviewPlugins', $overviewPlugins);
+        $formOverview->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formOverview);
+        return $smarty->fetch('preferences/preferences.overview.tpl');
     }
 
     /**
