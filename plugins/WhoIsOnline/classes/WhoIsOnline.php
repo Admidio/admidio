@@ -38,7 +38,7 @@ class WhoIsOnline extends PluginAbstract
 
         // Set reference time
         $now = new DateTime();
-        $minutesOffset = new DateInterval('PT' . $config['who_is_online_plugin_time_still_active'] . 'M');
+        $minutesOffset = new DateInterval('PT' . $config['who_is_online_time_still_active'] . 'M');
         $refDate = $now->sub($minutesOffset)->format('Y-m-d H:i:s');
 
         // Find user IDs of all sessions that are in the specified current and reference time
@@ -49,11 +49,11 @@ class WhoIsOnline extends PluginAbstract
             WHERE ses_timestamp BETWEEN ? AND ? -- $refDate AND DATETIME_NOW
             AND ses_org_id = ? -- $gCurrentOrgId';
         $queryParams = array($refDate, DATETIME_NOW, $gCurrentOrgId);
-        if (!$config['who_is_online_plugin_show_visitors']) {
+        if (!$config['who_is_online_show_visitors']) {
             $sql .= '
             AND ses_usr_id IS NOT NULL';
         }
-        if (!$config['who_is_online_plugin_show_self'] && $gValidLogin) {
+        if (!$config['who_is_online_show_self'] && $gValidLogin) {
             $sql .= '
             AND ses_usr_id <> ? -- $gCurrentUserId';
             $queryParams[] = $gCurrentUserId;
@@ -72,7 +72,7 @@ class WhoIsOnline extends PluginAbstract
             while ($row = $onlineUsersStatement->fetch()) {
                 if ($row['ses_usr_id'] > 0) {
                     if (((int)$row['ses_usr_id'] !== $usrIdMerker)
-                        && ($config['who_is_online_plugin_show_members_to_visitors'] == 1 || $gValidLogin)) {
+                        && ($config['who_is_online_show_members_to_visitors'] == 1 || $gValidLogin)) {
                         $allVisibleOnlineUsers[] = '<strong><a title="' . $gL10n->get('SYS_SHOW_PROFILE') . '"
                         href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">' . $row['usr_login_name'] . '</a></strong>';
                         $usrIdMerker = (int)$row['ses_usr_id'];
@@ -83,7 +83,7 @@ class WhoIsOnline extends PluginAbstract
                 }
             }
 
-            if (!$gValidLogin && $config['who_is_online_plugin_show_members_to_visitors'] == 2 && $countMembers > 0) {
+            if (!$gValidLogin && $config['who_is_online_show_members_to_visitors'] == 2 && $countMembers > 0) {
                 if ($countMembers > 1) {
                     $allVisibleOnlineUsers[] = $gL10n->get('PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS', array($countMembers));
                 } else {
@@ -91,11 +91,11 @@ class WhoIsOnline extends PluginAbstract
                 }
             }
 
-            if ($config['who_is_online_plugin_show_visitors'] && $countVisitors > 0) {
+            if ($config['who_is_online_show_visitors'] && $countVisitors > 0) {
                 $allVisibleOnlineUsers[] = $gL10n->get('PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS', array($countVisitors));
             }
 
-            if ($config['who_is_online_plugin_show_users_side_by_side']) {
+            if ($config['who_is_online_show_users_side_by_side']) {
                 $textOnlineVisitors = implode(', ', $allVisibleOnlineUsers);
             } else {
                 $textOnlineVisitors = '<br />' . implode('<br />', $allVisibleOnlineUsers);

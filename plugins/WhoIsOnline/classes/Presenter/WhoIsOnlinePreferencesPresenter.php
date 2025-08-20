@@ -52,16 +52,16 @@ class WhoIsOnlinePreferencesPresenter
             array('defaultValue' => $formValues['who_is_online_plugin_enabled']['value'], 'showContextDependentFirstEntry' => false, 'helpTextId' => $formValues['who_is_online_plugin_enabled']['description'])
         );
         $formWhoIsOnline->addInput(
-            'who_is_online_plugin_time_still_active',
-            Language::translateIfTranslationStrId($formValues['who_is_online_plugin_time_still_active']['name']),
-            $formValues['who_is_online_plugin_time_still_active']['value'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['who_is_online_plugin_time_still_active']['description'])
+            'who_is_online_time_still_active',
+            Language::translateIfTranslationStrId($formValues['who_is_online_time_still_active']['name']),
+            $formValues['who_is_online_time_still_active']['value'],
+            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['who_is_online_time_still_active']['description'])
         );
         $formWhoIsOnline->addCheckbox(
-            'who_is_online_plugin_show_visitors',
-            Language::translateIfTranslationStrId($formValues['who_is_online_plugin_show_visitors']['name']),
-            $formValues['who_is_online_plugin_show_visitors']['value'],
-            array('helpTextId' => $formValues['who_is_online_plugin_show_visitors']['description'])
+            'who_is_online_show_visitors',
+            Language::translateIfTranslationStrId($formValues['who_is_online_show_visitors']['name']),
+            $formValues['who_is_online_show_visitors']['value'],
+            array('helpTextId' => $formValues['who_is_online_show_visitors']['description'])
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1'),
@@ -69,22 +69,22 @@ class WhoIsOnlinePreferencesPresenter
             '2' => $gL10n->get('PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3')
         );
         $formWhoIsOnline->addSelectBox(
-            'who_is_online_plugin_show_members_to_visitors',
-            Language::translateIfTranslationStrId($formValues['who_is_online_plugin_show_members_to_visitors']['name']),
+            'who_is_online_show_members_to_visitors',
+            Language::translateIfTranslationStrId($formValues['who_is_online_show_members_to_visitors']['name']),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['who_is_online_plugin_show_members_to_visitors']['value'], 'showContextDependentFirstEntry' => false, 'helpTextId' => $formValues['who_is_online_plugin_show_members_to_visitors']['description'])
+            array('defaultValue' => $formValues['who_is_online_show_members_to_visitors']['value'], 'showContextDependentFirstEntry' => false, 'helpTextId' => $formValues['who_is_online_show_members_to_visitors']['description'])
         );
         $formWhoIsOnline->addCheckbox(
-            'who_is_online_plugin_show_self',
-            Language::translateIfTranslationStrId($formValues['who_is_online_plugin_show_self']['name']),
-            $formValues['who_is_online_plugin_show_self']['value'],
-            array('helpTextId' => $formValues['who_is_online_plugin_show_self']['description'])
+            'who_is_online_show_self',
+            Language::translateIfTranslationStrId($formValues['who_is_online_show_self']['name']),
+            $formValues['who_is_online_show_self']['value'],
+            array('helpTextId' => $formValues['who_is_online_show_self']['description'])
         );
         $formWhoIsOnline->addCheckbox(
-            'who_is_online_plugin_show_users_side_by_side',
-            Language::translateIfTranslationStrId($formValues['who_is_online_plugin_show_users_side_by_side']['name']),
-            $formValues['who_is_online_plugin_show_users_side_by_side']['value'],
-            array('helpTextId' => $formValues['who_is_online_plugin_show_users_side_by_side']['description'])
+            'who_is_online_show_users_side_by_side',
+            Language::translateIfTranslationStrId($formValues['who_is_online_show_users_side_by_side']['name']),
+            $formValues['who_is_online_show_users_side_by_side']['value'],
+            array('helpTextId' => $formValues['who_is_online_show_users_side_by_side']['description'])
         );
         $formWhoIsOnline->addSubmitButton(
             'adm_button_save_who_is_online',
