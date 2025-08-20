@@ -11,8 +11,8 @@
   <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">This plugin displays visitors and registered members on the Overview page.</string>
   <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Who is Online</string>
   <!-- Plugin preferences -->
-  <string name="PLG_WHO_IS_ONLINE_PLUGIN_TIME_STILL_ACTIVE">Time still active</string>
-  <string name="PLG_WHO_IS_ONLINE_PLUGIN_TIME_STILL_ACTIVE_DESC">The time (in minutes) a user is considered still online after their last action. (default: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Time still active</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">The time (in minutes) a user is considered still online after their last action. (default: 10)</string>
   <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Show visitors</string>
   <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">If this setting is enabled the number of visitors will be displayed. Otherwise only logged-in users will be shown. (default: true)</string>
   <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Show members to visitors</string>
