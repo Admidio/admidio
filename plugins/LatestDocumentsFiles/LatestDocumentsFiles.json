@@ -20,6 +20,12 @@
             "type": "integer",
             "value" : 1
         },
+        "latest_documents_overview_sequence": {
+            "name": "SYS_OVERVIEW_SEQUENCE",
+            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
+            "type": "integer",
+            "value" : 5
+        },
         "latest_documents_files_files_count": {
             "name": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT",
             "description": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC",
