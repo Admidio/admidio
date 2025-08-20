@@ -52,35 +52,35 @@ class LoginFormPreferencesPresenter
             array('defaultValue' => $formValues['login_form_plugin_enabled']['value'], 'showContextDependentFirstEntry' => false, 'helpTextId' => $formValues['login_form_plugin_enabled']['description'])
         );
         $formLoginForm->addCheckbox(
-            'login_form_plugin_show_register_link',
-            Language::translateIfTranslationStrId($formValues['login_form_plugin_show_register_link']['name']),
-            $formValues['login_form_plugin_show_register_link']['value'],
-            array('helpTextId' => $formValues['login_form_plugin_show_register_link']['description'])
+            'login_form_show_register_link',
+            Language::translateIfTranslationStrId($formValues['login_form_show_register_link']['name']),
+            $formValues['login_form_show_register_link']['value'],
+            array('helpTextId' => $formValues['login_form_show_register_link']['description'])
         );
         $formLoginForm->addCheckbox(
-            'login_form_plugin_show_email_link',
-            Language::translateIfTranslationStrId($formValues['login_form_plugin_show_email_link']['name']),
-            $formValues['login_form_plugin_show_email_link']['value'],
-            array('helpTextId' => $formValues['login_form_plugin_show_email_link']['description'])
+            'login_form_show_email_link',
+            Language::translateIfTranslationStrId($formValues['login_form_show_email_link']['name']),
+            $formValues['login_form_show_email_link']['value'],
+            array('helpTextId' => $formValues['login_form_show_email_link']['description'])
         );
         $formLoginForm->addCheckbox(
-            'login_form_plugin_show_logout_link',
-            Language::translateIfTranslationStrId($formValues['login_form_plugin_show_logout_link']['name']),
-            $formValues['login_form_plugin_show_logout_link']['value'],
-            array('helpTextId' => $formValues['login_form_plugin_show_logout_link']['description'])
+            'login_form_show_logout_link',
+            Language::translateIfTranslationStrId($formValues['login_form_show_logout_link']['name']),
+            $formValues['login_form_show_logout_link']['value'],
+            array('helpTextId' => $formValues['login_form_show_logout_link']['description'])
         );
         $formLoginForm->addCheckbox(
-            'login_form_plugin_enable_ranks',
-            Language::translateIfTranslationStrId($formValues['login_form_plugin_enable_ranks']['name']),
-            $formValues['login_form_plugin_enable_ranks']['value'],
-            array('helpTextId' => $formValues['login_form_plugin_enable_ranks']['description'])
+            'login_form_enable_ranks',
+            Language::translateIfTranslationStrId($formValues['login_form_enable_ranks']['name']),
+            $formValues['login_form_enable_ranks']['value'],
+            array('helpTextId' => $formValues['login_form_enable_ranks']['description'])
         );
         $content = '';
         // create a table with the ranks
         $content .= '<table class="table table-striped table-bordered">';
         $content .= '<thead><tr><th>' . $gL10n->get('PLG_LOGIN_FORM_NUMBER_OF_LOGINS') . '</th><th>' . $gL10n->get('PLG_LOGIN_FORM_MEMBERRANK') . '</th></tr></thead>';
         $content .= '<tbody>';
-        foreach ($formValues['login_form_plugin_ranks']['value'] as $numLogins => $rankName) {
+        foreach ($formValues['login_form_ranks']['value'] as $numLogins => $rankName) {
             $content .= '<tr>';
             $content .= '<td>' . htmlspecialchars($numLogins) . '</td>';
             $content .= '<td>' . Language::translateIfTranslationStrId($rankName) . '</td>';
@@ -88,10 +88,10 @@ class LoginFormPreferencesPresenter
         }
         $content .= '</tbody></table>';
         $formLoginForm->addCustomContent(
-            'login_form_plugin_ranks',
-            Language::translateIfTranslationStrId($formValues['login_form_plugin_ranks']['name']),
+            'login_form_ranks',
+            Language::translateIfTranslationStrId($formValues['login_form_ranks']['name']),
             $content,
-            array('helpTextId' => $formValues['login_form_plugin_ranks']['description'])
+            array('helpTextId' => $formValues['login_form_ranks']['description'])
         );
 
         $formLoginForm->addSubmitButton(
