@@ -19,6 +19,12 @@
             "type": "integer",
             "value" : 1
         },
+        "birthday_overview_sequence": {
+            "name": "SYS_OVERVIEW_SEQUENCE",
+            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
+            "type": "integer",
+            "value" : 2
+        },
         "birthday_show_names_extern": {
             "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN",
             "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC",
