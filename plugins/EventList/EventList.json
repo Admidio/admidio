@@ -20,6 +20,12 @@
             "type": "integer",
             "value" : 1
         },
+        "event_list_overview_sequence": {
+            "name": "SYS_OVERVIEW_SEQUENCE",
+            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
+            "type": "integer",
+            "value" : 7
+        },
         "event_list_events_count": {
             "name": "PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT",
             "description": "PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC",
