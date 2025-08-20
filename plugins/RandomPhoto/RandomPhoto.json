@@ -19,8 +19,6 @@
             "value" : 1
         },
         "random_photo_overview_sequence": {
-            "name": "SYS_OVERVIEW_SEQUENCE",
-            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
             "type": "integer",
             "value" : 4
         },

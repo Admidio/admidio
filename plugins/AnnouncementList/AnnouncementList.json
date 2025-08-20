@@ -21,8 +21,6 @@
             "value" : 1
         },
         "announcement_list_overview_sequence": {
-            "name": "SYS_OVERVIEW_SEQUENCE",
-            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
             "type": "integer",
             "value" : 6
         },

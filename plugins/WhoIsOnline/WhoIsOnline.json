@@ -19,8 +19,6 @@
             "value" : 1
         },
         "who_is_online_overview_sequence": {
-            "name": "SYS_OVERVIEW_SEQUENCE",
-            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
             "type": "integer",
             "value" : 8
         },

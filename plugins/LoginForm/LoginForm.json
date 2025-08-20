@@ -22,8 +22,6 @@
             "value" : 1
         },
         "login_form_overview_sequence": {
-            "name": "SYS_OVERVIEW_SEQUENCE",
-            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
             "type": "integer",
             "value" : 1
         },
