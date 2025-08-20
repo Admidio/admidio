@@ -693,7 +693,7 @@ CREATE TABLE %PREFIX%_preferences
     prf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     prf_org_id                  integer unsigned    NOT NULL,
     prf_name                    varchar(50)         NOT NULL,
-    prf_value                   varchar(255),
+    prf_value                   varchar(255)        NOT NULL,
     PRIMARY KEY (prf_id)
 )
 ENGINE = InnoDB
@@ -1373,7 +1373,7 @@ ALTER TABLE %PREFIX%_inventory_fields
     ADD CONSTRAINT %PREFIX%_fk_inf_usr_change  FOREIGN KEY (inf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_inventory_field_select_options
-            ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)   ON DELETE CASCADE ON UPDATE RESTRICT;
+    ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)   ON DELETE CASCADE ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_inventory_item_data
     ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -1381,6 +1381,7 @@ ALTER TABLE %PREFIX%_inventory_item_data
 
 ALTER TABLE %PREFIX%_inventory_item_borrow_data
     ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_inventory_items
     ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_status      FOREIGN KEY (ini_status)         REFERENCES %PREFIX%_inventory_field_select_options (ifo_id) ON DELETE RESTRICT ON UPDATE RESTRICT,

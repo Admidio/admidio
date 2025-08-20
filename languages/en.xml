@@ -862,7 +862,7 @@
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Number of items per page</string>
   <string name="SYS_INVENTORY_KEEPER">Keeper</string>
   <string name="SYS_INVENTORY_KEEPER_DESC">Keeper of the item</string>
-  <string name="SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC">You can mark the item as former.\n\nIf you want to delete the item, please contact an administrator or the manager of the inventory manager!\n\n#VAR1#</string>
+  <string name="SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC">You can reinstate the item into the inventory manager.\n\nIf you want to delete the item, please contact an administrator or the manager of the inventory manager!\n\n#VAR1#</string>
   <string name="SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC">You can retire the item from the inventory manager. This has the advantage that the data is preserved and you can later always see who has borrowed this item.\n\nIf you want to delete the item, please contact an administrator or the manager of the inventory manager!</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER">Last receiver</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER_DESC">Last receiver of the item</string>
@@ -870,7 +870,7 @@
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CHANGED">The item #VAR1_BOLD# was changed by #VAR2_BOLD#:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CREATED">The item #VAR1_BOLD# was created by #VAR2_BOLD#:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_DELETED">The following item was deleted:</string>
-  <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_REINSTATED">The following item has been reinstated into the inventory:</string>
+  <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_REINSTATED">The following item has been reinstated:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_RETIRED">The following item has been retired:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEMS_IMPORTED">The following items were imported by #VAR1_BOLD#:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEM_CHANGED">An item in the inventory has been changed</string>
@@ -898,7 +898,7 @@
   <string name="SYS_INVENTORY_SELECTION_REINSTATE_DESC">You can reinstate the selected items back into the inventory manager by choosing #VAR1_BOLD#.</string>
   <string name="SYS_INVENTORY_SELECTION_REINSTATED">Selected items successfully reinstated.</string>
   <string name="SYS_INVENTORY_SELECTION_RETIRE">Retire selected items</string>
-  <string name="SYS_INVENTORY_SELECTION_RETIRE_DESC">You can retire the item from the inventory manager by choosing #VAR1_BOLD#. This has the advantage that the data is preserved and you can always later see who borrowed the item.</string>
+  <string name="SYS_INVENTORY_SELECTION_RETIRE_DESC">You can retire the selected items from the inventory manager by choosing #VAR1_BOLD#. This has the advantage that the data is preserved and you can always later see who borrowed the items.</string>
   <string name="SYS_INVENTORY_SELECTION_RETIRED">The selected items have been retired.</string>
   <string name="SYS_INVENTORY_STATUS">Status</string>
   <string name="SYS_INVENTORY_STATUS_DESC">The current status of the item</string>
