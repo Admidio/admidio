@@ -642,6 +642,9 @@ abstract class PluginAbstract implements PluginInterface
                     // if the value is an associative array, store the keys separately
                     $gSettingsManager->set($key . '_keys', implode(',', array_keys($value)));
                 }
+            } elseif (is_bool($value)) {
+                // if the value is a boolean, store it as an integer
+                $gSettingsManager->set($key, (int)$value);
             } else {
                 $gSettingsManager->set($key, $value);
             }
