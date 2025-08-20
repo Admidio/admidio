@@ -21,31 +21,37 @@
             "type": "integer",
             "value" : 1
         },
-        "login_form_plugin_show_register_link": {
+        "login_form_overview_sequence": {
+            "name": "SYS_OVERVIEW_SEQUENCE",
+            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
+            "type": "integer",
+            "value" : 1
+        },
+        "login_form_show_register_link": {
             "name": "PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK",
             "description": "PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC",
             "type": "boolean",
             "value" : false
         },
-        "login_form_plugin_show_email_link": {
+        "login_form_show_email_link": {
             "name": "PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK",
             "description": "PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC",
             "type": "boolean",
             "value" : true
         },
-        "login_form_plugin_show_logout_link": {
+        "login_form_show_logout_link": {
             "name": "PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK",
             "description": "PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC",
             "type": "boolean",
             "value" : false
         },
-        "login_form_plugin_enable_ranks": {
+        "login_form_enable_ranks": {
             "name": "PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS",
             "description": "PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC",
             "type": "boolean",
             "value" : true
         },
-        "login_form_plugin_ranks": {
+        "login_form_ranks": {
             "name": "PLG_LOGIN_FORM_PREFERENCES_RANKS",
             "description": "PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC",
             "type": "array",

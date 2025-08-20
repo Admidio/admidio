@@ -38,16 +38,16 @@ class LoginForm extends PluginAbstract
         // show the rank of the user if this is configured in the config.php
         $loginData['htmlUserRank'] = '';
 
-        if (self::$pluginConfig['login_form_plugin_enable_ranks']) {
+        if (self::$pluginConfig['login_form_enable_ranks']) {
             $currentUserRankTitle = '';
-            $rankTitle = reset(self::$pluginConfig['login_form_plugin_ranks']);
+            $rankTitle = reset(self::$pluginConfig['login_form_ranks']);
 
             while ($rankTitle !== false) {
-                $rankAssessment = key(self::$pluginConfig['login_form_plugin_ranks']);
+                $rankAssessment = key(self::$pluginConfig['login_form_ranks']);
                 if ($rankAssessment < $gCurrentUser->getValue('usr_number_login')) {
                     $currentUserRankTitle = $rankTitle;
                 }
-                $rankTitle = next(self::$pluginConfig['login_form_plugin_ranks']);
+                $rankTitle = next(self::$pluginConfig['login_form_ranks']);
             }
 
             if ($currentUserRankTitle !== '') {
@@ -78,7 +78,7 @@ class LoginForm extends PluginAbstract
             $getOrganizationShortName = $gCurrentOrganization->getValue('org_shortname');
         }
 
-        if (self::$pluginConfig['login_form_plugin_show_email_link']) {
+        if (self::$pluginConfig['login_form_show_email_link']) {
             // read id of administrator role
             $sql = 'SELECT MIN(rol_id) as rol_id
                   FROM ' . TBL_ROLES . '
@@ -195,7 +195,7 @@ class LoginForm extends PluginAbstract
                     $loginFormPlugin->assignTemplateVariable('loginActiveSince', $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')));
                     $loginFormPlugin->assignTemplateVariable('lastLogin', $loginData['lastLogin']);
                     $loginFormPlugin->assignTemplateVariable('numberOfLogins', $gCurrentUser->getValue('usr_number_login') . $loginData['htmlUserRank']);
-                    $loginFormPlugin->assignTemplateVariable('showLogoutLink', self::$pluginConfig['login_form_plugin_show_logout_link']);
+                    $loginFormPlugin->assignTemplateVariable('showLogoutLink', self::$pluginConfig['login_form_show_logout_link']);
 
                     if (isset($page)) {
                         echo $loginFormPlugin->html('plugin.login-form.view.tpl');
@@ -206,7 +206,7 @@ class LoginForm extends PluginAbstract
                     $form = self::createLoginForm();
                     $smarty = $loginFormPlugin->createSmartyObject();
                     $smarty->assign('settings', $gSettingsManager);
-                    $smarty->assign('showRegisterLink', self::$pluginConfig['login_form_plugin_show_register_link']);
+                    $smarty->assign('showRegisterLink', self::$pluginConfig['login_form_show_register_link']);
                     $form->addToSmarty($smarty);
                     $gCurrentSession->addFormObject($form);
                     echo $smarty->fetch('plugin.login-form.edit.tpl');
