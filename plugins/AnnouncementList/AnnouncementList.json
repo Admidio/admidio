@@ -20,6 +20,12 @@
             "type": "integer",
             "value" : 1
         },
+        "announcement_list_overview_sequence": {
+            "name": "SYS_OVERVIEW_SEQUENCE",
+            "description": "SYS_OVERVIEW_SEQUENCE_DESC",
+            "type": "integer",
+            "value" : 6
+        },
         "announcement_list_announcements_count": {
             "name": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT",
             "description": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC",
