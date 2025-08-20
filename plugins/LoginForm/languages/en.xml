@@ -20,5 +20,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Show ranks</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">If this option is enabled, a rank depending on the number of logins will be displayed after the username. (default: true)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Ranks</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Here you can define the ranks that will be displayed after the username if \'Show ranks\' is enabled. The key is the number of logins and the value is the name of the rank.</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Here you can define the ranks that will be displayed after the username if \'Show ranks\' is enabled. The key is the number of logins and the value is the name of the rank.\n To delete a rank just clear the \'Number of logins\' and \'Member rank\' inputs in the table.</string>
 </resources>

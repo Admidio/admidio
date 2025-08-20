@@ -75,20 +75,46 @@ class LoginFormPreferencesPresenter
             $formValues['login_form_enable_ranks']['value'],
             array('helpTextId' => $formValues['login_form_enable_ranks']['description'])
         );
+        // these inputs will never be displayed, but they are used to save the values later
+        // register an input filed for the ranks array and add the values from the plugin config
+        $formLoginForm->addInput(
+            'login_form_ranks_keys',
+            '',
+            implode(',', array_keys($formValues['login_form_ranks']['value'])),
+            array('type' => 'text', 'property' => FormPresenter::FIELD_HIDDEN)
+        );
+        // register an input filed for the ranks keys array and add the values from the plugin config
+        $formLoginForm->addInput(
+            'login_form_ranks',
+            '',
+            implode(',', $formValues['login_form_ranks']['value']),
+            array('type' => 'text', 'property' => FormPresenter::FIELD_HIDDEN)
+        );
         $content = '';
         // create a table with the ranks
         $content .= '<table class="table table-striped table-bordered">';
-        $content .= '<thead><tr><th>' . $gL10n->get('PLG_LOGIN_FORM_NUMBER_OF_LOGINS') . '</th><th>' . $gL10n->get('PLG_LOGIN_FORM_MEMBERRANK') . '</th></tr></thead>';
+        $content .= '<thead><tr><th style="width: 20%">' . $gL10n->get('PLG_LOGIN_FORM_NUMBER_OF_LOGINS') . '</th><th>' . $gL10n->get('PLG_LOGIN_FORM_MEMBERRANK') . '</th></tr></thead>';
         $content .= '<tbody>';
+        $id = 0;
         foreach ($formValues['login_form_ranks']['value'] as $numLogins => $rankName) {
-            $content .= '<tr>';
-            $content .= '<td>' . htmlspecialchars($numLogins) . '</td>';
-            $content .= '<td>' . Language::translateIfTranslationStrId($rankName) . '</td>';
+            $content .= '<tr id ="login_form_ranks_row_' . $id . '">';
+            $content .= '<td><input id="login_form_ranks_key_' . $id . '" name="login_form_ranks_key_' . $id . '" class="form-control focus-ring" type="number" min="0" value="' .$numLogins . '"></td>';
+            $content .= '<td><input id="login_form_ranks_value_' . $id . '" name="login_form_ranks_value_' . $id . '" class="form-control focus-ring" type="text" value="' .$rankName . '"></td>';
             $content .= '</tr>';
+            $id++;
         }
-        $content .= '</tbody></table>';
+        $content .= '</tbody>';
+        $content .= '<tfoot>
+                    <tr id="table_row_button">
+                        <td colspan="2">
+                            <a class="icon-text-link" href="javascript:void(0);" onclick="javascript:addLoginFormRanksRow();">
+                                <i class="bi bi-plus-circle-fill"></i> ' . $gL10n->get('SYS_ADD_ENTRY') . '
+                            </a>
+                        </td>
+                    </tr>';
+        $content .= '</tfoot></table>';
         $formLoginForm->addCustomContent(
-            'login_form_ranks',
+            'login_form_ranks_table',
             Language::translateIfTranslationStrId($formValues['login_form_ranks']['name']),
             $content,
             array('helpTextId' => $formValues['login_form_ranks']['description'])
