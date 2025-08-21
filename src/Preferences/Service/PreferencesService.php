@@ -397,7 +397,7 @@ class PreferencesService
                     $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
                     $gDb->queryPrepared($sql);
                     $gSettingsManager->set($key, $value);
-                } elseif (str_starts_with($value, '["') && str_ends_with($value, '"]')) { // check if the value is a JSON array
+                } elseif (is_string($value) && str_starts_with($value, '["') && str_ends_with($value, '"]')) { // check if the value is a JSON array
                     // decode JSON array and save it as an array
                     $value = implode(',', json_decode($value, true));
                     $gSettingsManager->set($key, $value);
