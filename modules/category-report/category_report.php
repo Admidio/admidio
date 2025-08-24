@@ -11,7 +11,7 @@
  *
  * Parameters:
  *
- * mode            : Output (html, print, csv-ms, csv-oo, pdf, pdfl)
+ * mode            : Output (html, print, xlsx, csv-oo, pdf, pdfl)
  * export_features  : 0 - (Default) No export menu
  *                    1 - Export menu is enabled
  * config            : the selected configuration
@@ -24,6 +24,10 @@ use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -43,7 +47,7 @@ try {
     $config = $report->getConfigArray();
 
     $getCrtId = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')));
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
     $getFilter = admFuncVariableIsValid($_GET, 'filter', 'string');
     $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
 
@@ -55,11 +59,8 @@ try {
     $orientation = '';
 
     switch ($getMode) {
-        case 'csv-ms':
-            $separator = ';';  // Microsoft Excel 2007 or new needs a semicolon
-            $valueQuotes = '"';  // all values should be set with quotes
-            $getMode = 'csv';
-            $charset = 'iso-8859-1';
+        case 'xlsx':
+            $charset = 'utf-8';
             break;
         case 'csv-oo':
             $separator = ',';  // a CSV file should have a comma
@@ -204,13 +205,13 @@ try {
                 // dropdown menu item with all export possibilities
                 $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'bi-download');
                 $page->addPageFunctionsMenuItem(
-                    'menu_item_lists_csv_ms',
-                    $gL10n->get('SYS_MICROSOFT_EXCEL'),
+                    'menu_item_lists_xlsx',
+                    $gL10n->get('SYS_MICROSOFT_EXCEL') .' (*.xlsx)',
                     SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
                         'crt_id' => $getCrtId,
                         'filter' => $getFilter,
                         'export_and_filter' => $getExportAndFilter,
-                        'mode' => 'csv-ms')),
+                        'mode' => 'xlsx')),
                     'bi-file-earmark-excel',
                     'menu_item_lists_export'
                 );
@@ -305,7 +306,7 @@ try {
             $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
             $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
         } else {
-            $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+            $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
         }
     }
 
@@ -335,6 +336,9 @@ try {
                 $table->addColumn($gL10n->get('SYS_ABR_NO'), array('style' => 'text-align: center;font-size:14;background-color:#C7C7C7;'), 'th');
             }
             $table->addColumn($columnHeader['data'], array('style' => 'text-align: center;font-size:14;background-color:#C7C7C7;'), 'th');
+        } elseif ($getMode === "xlsx") {
+            // convert html characters to plain text
+            $columnValues[] = html_entity_decode($columnHeader['data'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
         } elseif ($getMode == 'html' || $getMode == 'print') {
             $columnValues[] = $columnHeader['data'];
         }
@@ -343,6 +347,10 @@ try {
 
     if ($getMode === 'csv') {
         $csvStr .= "\n";
+    } elseif ($getMode === 'xlsx') {
+        $spreadsheet = new Spreadsheet();
+        $activeSheet = $spreadsheet->getActiveSheet();
+        $activeSheet->fromArray(array_values($columnValues));
     } elseif ($getMode === 'html' || $getMode === 'print') {
         $table->setColumnAlignByArray($columnAlign);
         $table->addRowHeadingByArray($columnValues);
@@ -362,7 +370,7 @@ try {
         // Felder zu Datensatz
         $columnNumber = 1;
         foreach ($memberdata as $key => $content) {
-            if ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf') {
+            if ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf' || $getMode == 'xlsx') {
                 if ($columnNumber === 1) {
                     // die Laufende Nummer noch davorsetzen
                     $columnValues[] = $listRowNumber;
@@ -401,10 +409,10 @@ try {
             }
 
             if ($usf_id === 0 && $content === true) {       // alle Spalten außer Profilfelder
-                if (in_array($getMode, array('csv', 'pdf'), true)) {
+                if (in_array($getMode, array('xlsx', 'csv', 'pdf'), true)) {
                     $content = 'X';
                 } else {
-                    $content = '<i class="bi bi-check-lg"</i>';
+                    $content = '<i class="bi bi-check-lg"></i>';
                 }
             }
 
@@ -453,6 +461,16 @@ try {
         if ($getFilter == '' || ($getFilter != '' && (stristr(implode('', $columnValues), $getFilter) || stristr($tmp_csv, $getFilter)))) {
             if ($getMode == 'csv') {
                 $csvStr .= $tmp_csv . "\n";
+            } elseif ($getMode === 'xlsx') {
+                $currentRow = $listRowNumber + 1; // +1 for headerColumn offset
+                foreach ($columnValues as $currentCol => $cell) {
+                    $currentCol += 1; // array starting with 0 but first column is 1 in spreadsheet
+
+                    // convert html characters to plain text
+                    $cell = html_entity_decode($cell, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $colLetter = Coordinate::stringFromColumnIndex($currentCol);
+                    $activeSheet->setCellValue($colLetter . $currentRow, $cell);
+                }
             } else {
                 $table->addRowByArray($columnValues, 'row-' . $listRowNumber, array('nobr' => 'true'));
             }
@@ -474,12 +492,17 @@ try {
     if ($getMode === 'csv') {
         // download CSV file
         header('Content-Type: text/comma-separated-values; charset=' . $charset);
+        echo $csvStr;
+    }elseif ($getMode === 'xlsx') {
+        $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
 
-        if ($charset === 'iso-8859-1') {
-            echo iconv("UTF-8", "ISO-8859-1", $csvStr);
-        } else {
-            echo $csvStr;
-        }
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=' . $charset);
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        formatSpreadsheet($spreadsheet, $columnCount + 1, true);
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
     } // send the new PDF to the User
     elseif ($getMode === 'pdf') {
         // output the HTML content
@@ -515,4 +538,41 @@ try {
     }
 } catch (Exception $e) {
     $gMessage->show($e->getMessage());
+}
+
+/**
+ * Formats the spreadsheet
+ *
+ * @param Spreadsheet $spreadsheet
+ * @param int $columnCount
+ * @param bool $containsHeadline
+ * @throws Exception
+ */
+function formatSpreadsheet(Spreadsheet $spreadsheet, int $columnCount, bool $containsHeadline) : void
+{
+    $activeSheet = $spreadsheet->getActiveSheet();
+    $lastColumn  = Coordinate::stringFromColumnIndex($columnCount);
+
+    if ($containsHeadline) {
+        $range = "A1:{$lastColumn}1";
+        $style = $activeSheet->getStyle($range);
+
+        $style->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB('FFDDDDDD');
+        $style->getFont()
+            ->setBold(true);
+    }
+
+    for ($i = 1; $i <= $columnCount; $i++) {
+        $colLetter = Coordinate::stringFromColumnIndex($i);
+        $activeSheet->getColumnDimension($colLetter)->setAutoSize(true);
+    }
+
+    try {
+        $spreadsheet->getDefaultStyle()->getAlignment()->setWrapText(true);
+    } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
+        throw new Exception($e);
+    }
 }
