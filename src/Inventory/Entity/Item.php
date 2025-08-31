@@ -5,11 +5,10 @@ namespace Admidio\Inventory\Entity;
 // Admidio namespaces
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
-use Admidio\Inventory\ValueObjects\ItemsData;
-use Admidio\Inventory\Entity\ItemData;
-use Admidio\Inventory\Entity\SelectOptions;
-use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -68,12 +67,12 @@ class Item extends Entity
 
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
         $this->itemId = $itemId;
-        
+
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'ini_cat_id');
 
         parent::__construct($database, TBL_INVENTORY_ITEMS, 'ini', $itemId);
     }
- 
+
     /**
      * Changes to user data could be sent as a notification email to a specific role if this
      * function is enabled in the settings. If you want to suppress this logic you can
@@ -81,7 +80,7 @@ class Item extends Entity
      * result in a notification email.
      * @return void
      */
-    public function disableChangeNotification()
+    public function disableChangeNotification(): void
     {
         $this->changeNotificationEnabled = false;
     }
@@ -121,8 +120,9 @@ class Item extends Entity
      * Return a human-readable representation of this record.
      * If a column [prefix]_name exists, it is returned, otherwise the id.
      * This method can be overridden in child classes for custom behavior.
-     * 
+     *
      * @return string The readable representation of the record (can also be a translatable identifier)
+     * @throws Exception
      */
     public function readableName(): string
     {
@@ -130,12 +130,13 @@ class Item extends Entity
         // check if mItemsData is set
         $itemData = new ItemData($gDb, $this->mItemsData);
         $itemData->readDataByColumns(array('ind_ini_id' => $this->itemId, 'ind_inf_id' => $this->mItemsData->getProperty('ITEMNAME', 'inf_id')));
-        return $itemData->getValue('ind_value'); 
+        return $itemData->getValue('ind_value');
     }
 
     /**
      * Get the status of the item.
      * @return int The status of the item.
+     * @throws Exception
      */
     public function getStatus(): int
     {
@@ -145,6 +146,7 @@ class Item extends Entity
     /**
      * Check if the item is retired.
      * @return bool Returns true if the item is retired, false otherwise.
+     * @throws Exception
      */
     public function isRetired(): bool
     {
@@ -160,6 +162,7 @@ class Item extends Entity
     /**
      * Check if the item is in use.
      * @return bool Returns true if the item is in use, false otherwise.
+     * @throws Exception
      */
     public function isInUse(): bool
     {
@@ -171,7 +174,7 @@ class Item extends Entity
         }
         return false;
     }
-    
+
     /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
@@ -199,9 +202,8 @@ class Item extends Entity
         $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
         if (isset($_POST['INF-ITEMNAME']) && $itemName === '') {
             $itemName = $_POST['INF-ITEMNAME'];
-        }
-        elseif (!isset( $_POST['INF-ITEMNAME']) && $itemName === '') {
-            $itemName =  $logEntry->getValue('log_record_name');
+        } elseif (!isset($_POST['INF-ITEMNAME']) && $itemName === '') {
+            $itemName = $logEntry->getValue('log_record_name');
         }
 
         // If the item status is changed convert the status id to the actual status text

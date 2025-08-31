@@ -27,17 +27,16 @@ use Admidio\UI\Presenter\InventoryPresenter;
  *  Parameters:
  *
  *  mode : list     - (default) Show page with a list of all item fields
- *         edit     - Show form to create or edit a item field
+ *         edit     - Show form to create or edit an item field
  *         save     - Save the data of the form
- *         delete   - Delete a item field
- *         sequence - Change sequence for a item field
+ *         delete   - Delete an item field
+ *         sequence - Change sequence for an item field
  * direction : Direction to change the sequence of the item field
  ***********************************************************************************************
  */
 
 try {
     require_once(__DIR__ . '/../system/common.php');
-    require(__DIR__ . '/../system/login_valid.php');
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit', 'item_edit_borrow', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
@@ -55,7 +54,7 @@ try {
     $getItemUUIDs = admFuncVariableIsValid($_GET, 'item_uuids', 'array', array('defaultValue' => array()));
     if (empty($getItemUUIDs)) {
         $getItemUUIDs = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
-        $getItemUUIDs = array_map(function($uuid) {
+        $getItemUUIDs = array_map(function ($uuid) {
             return preg_replace('/adm_inventory_item_/', '', $uuid);
         }, $getItemUUIDs);
     }
@@ -65,7 +64,7 @@ try {
     // check if module is active
     if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 1 && !$gValidLogin) {
+    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 2 && !$gValidLogin) {
         throw new Exception('SYS_NO_RIGHTS');
     } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 3 && !$gCurrentUser->isAdministratorInventory()) {
         throw new Exception('SYS_NO_RIGHTS');
@@ -171,7 +170,7 @@ try {
         case 'sequence':
             // Update menu entry sequence
             $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
-            $getOrder      = admFuncVariableIsValid($_GET, 'order', 'array');
+            $getOrder = admFuncVariableIsValid($_GET, 'order', 'array');
 
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
@@ -185,7 +184,7 @@ try {
                 $ret = $itemFieldsModule->moveSequence($postDirection);
             }
 
-            echo json_encode(array('status' =>  ($ret ? 'success' : 'error')));
+            echo json_encode(array('status' => ($ret ? 'success' : 'error')));
             break;
 #endregion
 #region items
@@ -193,18 +192,15 @@ try {
             // set headline of the script
             if ($getiniUUID !== '' && $getCopy) {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_COPY');
-            }
-            elseif (count($getItemUUIDs) > 1) {
+            } elseif (count($getItemUUIDs) > 1) {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEMS_EDIT');
-            }
-            elseif ($getiniUUID !== '' || count($getItemUUIDs) === 1) {
+            } elseif ($getiniUUID !== '' || count($getItemUUIDs) === 1) {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_EDIT');
                 // set the item uuid to the single selected item
                 if (count($getItemUUIDs) === 1) {
                     $getiniUUID = $getItemUUIDs[0];
                 }
-            }
-            else {
+            } else {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_CREATE');
             }
 
@@ -214,8 +210,7 @@ try {
                 $item = new InventoryItemPresenter('adm_items_edit');
                 $item->setHeadline($headline);
                 $item->createEditItemsForm($getItemUUIDs);
-            }
-            else {
+            } else {
                 $item = new InventoryItemPresenter('adm_item_edit');
                 $item->setHeadline($headline);
                 $item->createEditForm($getiniUUID, $getCopy);
@@ -228,8 +223,7 @@ try {
             // set headline of the script
             if ($getBorrowed) {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
-            }
-            else {
+            } else {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEM_BORROW');
             }
             $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -243,14 +237,11 @@ try {
             if ($getiniUUID !== '' && $getCopy) {
                 $getiniUUID = '';
                 $message = $gL10n->get('SYS_INVENTORY_ITEM_COPIED');
-            }
-            elseif (count($getItemUUIDs) > 0) {
+            } elseif (count($getItemUUIDs) > 0) {
                 $message = $gL10n->get('SYS_INVENTORY_SELECTION_EDITED');
-            }
-            elseif ($getiniUUID !== '') {
+            } elseif ($getiniUUID !== '') {
                 $message = $gL10n->get('SYS_INVENTORY_ITEM_EDITED');
-            }
-            else {
+            } else {
                 $message = $gL10n->get('SYS_INVENTORY_ITEM_CREATED');
             }
 
@@ -259,14 +250,13 @@ try {
                     $itemModule = new ItemService($gDb, $itemUuid, $postCopyField, $postCopyNumber, $postImported);
                     $itemModule->save(true);
                 }
-            }
-            else {
+            } else {
                 $itemModule = new ItemService($gDb, $getiniUUID, $postCopyField, $postCopyNumber, $postImported);
                 $itemModule->save();
             }
 
             $gNavigation->deleteLastUrl();
-            echo json_encode(array('status' => 'success', 'message' => $message,'url' => $gNavigation->getUrl()));
+            echo json_encode(array('status' => 'success', 'message' => $message, 'url' => $gNavigation->getUrl()));
             break;
 
         case 'item_delete_explain_msg':
@@ -275,60 +265,57 @@ try {
                 $retireOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 $deleteOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 $headerMsg = $gL10n->get('SYS_NOTE');
-            }
-            else {
+            } else {
                 $retireOnClick = 'callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 $deleteOnClick = 'callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 $headerMsg = $gL10n->get('SYS_INVENTORY_ITEM_DELETE');
             }
 
-            $msg =  '
+            $msg = '
                 <div class="modal-header">
                     <h3 class="modal-title">' . $headerMsg . '</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">';
-                if (count($getItemUUIDs) > 0) {
-                    $msg.= '<p><i class="bi bi-eye-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE'))) . '</p>';
-                    $msg.= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_RETIRE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_RETIRE'))) . '</p>';
-                    $msg.= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_DELETE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_DELETE'))) . '</p>';
+            if (count($getItemUUIDs) > 0) {
+                $msg .= '<p><i class="bi bi-eye-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE'))) . '</p>';
+                $msg .= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_RETIRE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_RETIRE'))) . '</p>';
+                $msg .= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_DELETE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_DELETE'))) . '</p>';
+            } else {
+                if (!$getRetired) {
+                    $msg .= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE_DESC', array($gL10n->get('SYS_INVENTORY_ITEM_RETIRE'))) . '</p>';
                 }
-                else {
-                    if (!$getRetired) {
-                        $msg.= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE_DESC', array($gL10n->get('SYS_INVENTORY_ITEM_RETIRE'))) . '</p>';
-                    }
-                    if ($gCurrentUser->isAdministratorInventory()) {
-                        $msg.= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE_DESC', array($gL10n->get('SYS_INVENTORY_ITEM_DELETE'))) . '</p>';
-                    }
+                if ($gCurrentUser->isAdministratorInventory()) {
+                    $msg .= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE_DESC', array($gL10n->get('SYS_INVENTORY_ITEM_DELETE'))) . '</p>';
                 }
-                $msg.='</div>
+            }
+            $msg .= '</div>
                 <div class="modal-footer">';
-                if (count($getItemUUIDs) > 0) {
-                    $msg .= '<button id="adm_button_reinstate" type="button" class="btn btn-primary mr-4" onclick="' . $reinstateOnClick . '">
+            if (count($getItemUUIDs) > 0) {
+                $msg .= '<button id="adm_button_reinstate" type="button" class="btn btn-primary mr-4" onclick="' . $reinstateOnClick . '">
                         <i class="bi bi-eye"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE') . '</button>';
-                    $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . $retireOnClick . '">
+                $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . $retireOnClick . '">
                         <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_RETIRE') . '</button>';
-                    $msg.= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
+                $msg .= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
                         <i class="bi bi-trash"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_DELETE') . '</button>';
-                }
-                else {
-                    if (!$getRetired) {
-                        $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . $retireOnClick . '">
+            } else {
+                if (!$getRetired) {
+                    $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . $retireOnClick . '">
                             <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE') . '</button>';
-                    }
-                    if ($gCurrentUser->isAdministratorInventory()) {
-                        $msg.= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
-                            <i class="bi bi-trash"></i>' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE') . '</button>';
-                    }
                 }
-                $msg.='<div id="adm_status_message" class="mt-4 w-100"></div>
+                if ($gCurrentUser->isAdministratorInventory()) {
+                    $msg .= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
+                            <i class="bi bi-trash"></i>' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE') . '</button>';
+                }
+            }
+            $msg .= '<div id="adm_status_message" class="mt-4 w-100"></div>
                 </div>';
 
-                echo $msg;
+            echo $msg;
             break;
-        
+
         case 'item_delete_keeper_explain_msg':
-            $msg =  '
+            $msg = '
                 <div class="modal-header">
                     <h3 class="modal-title">' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE') . '</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -342,7 +329,7 @@ try {
                 <div id="adm_status_message" class="mt-4 w-100"></div>
                 </div>';
 
-                echo $msg;
+            echo $msg;
             break;
 
         case 'item_retire':
@@ -354,12 +341,11 @@ try {
                     $itemModule->retireItem();
                 }
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_SELECTION_RETIRED')));
-            }
-            else {
+            } else {
                 $itemModule = new ItemService($gDb, $getiniUUID);
                 $itemModule->retireItem();
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_RETIRED')));
-           }
+            }
 
             break;
 
@@ -372,15 +358,14 @@ try {
                     $itemModule->reinstateItem();
                 }
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATED')));
-            }
-            else {
+            } else {
                 $itemModule = new ItemService($gDb, $getiniUUID);
                 $itemModule->reinstateItem();
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATED')));
-           }
+            }
 
             break;
-    
+
         case 'item_delete':
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
@@ -388,11 +373,10 @@ try {
             if (count($getItemUUIDs) > 0) {
                 foreach ($getItemUUIDs as $itemUuid) {
                     $itemModule = new ItemService($gDb, $itemUuid);
-                    $itemModule->delete();                   
+                    $itemModule->delete();
                 }
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_SELECTION_DELETED')));
-            }
-            else {
+            } else {
                 $itemModule = new ItemService($gDb, $getiniUUID);
                 $itemModule->delete();
 
@@ -413,10 +397,10 @@ try {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="adm_inventory_item_picture" class="rounded" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid'=> $getiniUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
+                    <img id="adm_inventory_item_picture" class="rounded" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $getiniUUID)) . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
                 </div>';
 
-                echo $msg;
+            echo $msg;
             break;
 
         case 'item_picture_choose':
@@ -428,7 +412,7 @@ try {
             $item->createPictureChooseForm($getiniUUID);
             $item->show();
             break;
-        
+
         case 'item_picture_upload':
             $itemModule = new ItemService($gDb, $getiniUUID);
             $itemModule->uploadItemPicture();
@@ -445,13 +429,13 @@ try {
             $item->createPictureReviewForm($getiniUUID);
             $item->show();
             break;
-            
+
         case 'item_picture_save':
             $itemModule = new ItemService($gDb, $getiniUUID);
             $itemModule->saveItemPicture();
 
             // back to the home page
-            // if url stack is bigger then 2 then delete until the edit page is reached
+            // if url stack is bigger than 2 then delete until the edit page is reached
             while (count($gNavigation->getStack()) > 2) {
                 $gNavigation->deleteLastUrl();
             }
@@ -473,8 +457,8 @@ try {
             // check if file_uploads is set to ON in the current server settings...
             if (!PhpIniUtils::isFileUploadEnabled()) {
                 $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
-                 // => EXIT
-                 break;
+                // => EXIT
+                break;
             }
 
             $headline = $gL10n->get('SYS_IMPORT');
@@ -486,7 +470,7 @@ try {
             $import->show();
             break;
 
-         case 'import_read_file':
+        case 'import_read_file':
             $import = new ImportService();
             $import->readImportFile();
             echo json_encode(array('status' => 'success', 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'import_assign_fields'))));
@@ -507,12 +491,12 @@ try {
             $retStr = $import->importItems();
 
             $gNavigation->deleteLastUrl();
-        
+
             // Go back to item view
             if ($gNavigation->count() > 1) {
                 $gNavigation->deleteLastUrl();
             }
-            
+
             // Unset the import request session
             if (isset($_SESSION['import_csv_request'])) {
                 unset($_SESSION['import_csv_request']);
@@ -522,7 +506,7 @@ try {
             if (isset($_SESSION['import_data'])) {
                 unset($_SESSION['import_data']);
             }
-            
+
             echo json_encode(array('status' => $retStr['success'], 'message' => $retStr['message'], 'url' => $gNavigation->getUrl()));
             break;
 #endregion

@@ -122,7 +122,7 @@ class ItemsData
     /**
      * Item data of all item fields will be initialized
      * the fields array will not be renewed
-     * 
+     *
      * @return void
      */
     public function clearItemData(): void
@@ -136,8 +136,8 @@ class ItemsData
     /**
      * Reads the item fields structure out of database table @b adm_inventory_fields
      * and adds an object for each field structure to the @b mItemFields array.
-     * 
-     * @param string $orderBy           The field by which the item fields should be sorted
+     *
+     * @param string $orderBy The field by which the item fields should be sorted
      * @return void
      */
     public function readItemFields($orderBy = 'inf_id'): void
@@ -167,8 +167,8 @@ class ItemsData
      * and @b adm_inventory_manager_items_borrow
      * and adds an object for each field data to the @b mItemData array.
      * If profile fields structure wasn't read, this will be done before.
-     * 
-     * @param string $itemUUID               The uuid of the item for which the item data should be read.
+     *
+     * @param string $itemUUID The uuid of the item for which the item data should be read.
      * @return void
      */
     public function readItemData(string $itemUUID = ''): void
@@ -205,7 +205,7 @@ class ItemsData
             // read all item borrow data
             $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
                     INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                        ON inf_name_intern IN ( ?, ?, ? ) 
+                        ON inf_name_intern IN ( ?, ?, ? )
                     WHERE inb_ini_id = ?;';
             $itemBorrowStatement = $this->mDb->queryPrepared($sql, array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE', $itemId));
 
@@ -230,7 +230,7 @@ class ItemsData
     /**
      * Reads the items out of database table @b adm_inventory_manager_items
      * and stores the values to the @b items array.
-     * 
+     *
      * @return void
      */
     public function readItems(): void
@@ -269,9 +269,9 @@ class ItemsData
     /**
      * Reads the items for a user out of database table @b adm_inventory_manager_items
      * and stores the values to the @b items array.
-     * 
-     * @param int $userId               The id of the user for which the items should be read.
-     * @param array $fieldNames         The internal unique profile field names for which the items should be read
+     *
+     * @param int $userId The id of the user for which the items should be read.
+     * @param array $fieldNames The internal unique profile field names for which the items should be read
      * @return void
      */
     public function readItemsByUser($userId, $fieldNames = array('KEEPER')): void
@@ -351,7 +351,7 @@ class ItemsData
     /**
      * Returns an array with all profile fields represented by a user fields objects.
      * The key is the usf_name_intern and the value is an object of class ProfileField
-     * 
+     *
      * @return array<string,ProfileField> $mProfileFields = [
      *      'LAST_NAME' => {ProfileField}
      *      'FIRST_NAME' => {ProfileField}
@@ -366,7 +366,7 @@ class ItemsData
     /**
      * Returns an array with all profile fields represented by a user fields objects.
      * The key is the usf_name_intern and the value is an object of class ProfileField
-     * 
+     *
      * @return array<string,ProfileField> $mProfileFields = [
      *      'LAST_NAME' => {ProfileField}
      *      'FIRST_NAME' => {ProfileField}
@@ -390,21 +390,21 @@ class ItemsData
 
     /**
      * Returns the item data of all item fields
-     * 
+     *
      * @return array<int,Entity> Array with all item data objects
      */
     public function getItemData(): array
     {
         return $this->mItemData;
     }
-    
+
     /**
      * Returns the value of a column from the table adm_inventory_fields for a given internal field name
-     * 
-     * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
-     * @param string $column            The column name of @b adm_inventory_fields for which you want the value
-     * @param string $format            Optional the format (is necessary for timestamps)
-     * @param bool $withObsoleteEnries  If set to **false** then the obsolete entries of the item field will not be considered.
+     *
+     * @param string $fieldNameIntern Expects the @b inf_name_intern of table @b adm_inventory_fields
+     * @param string $column The column name of @b adm_inventory_fields for which you want the value
+     * @param string $format Optional the format (is necessary for timestamps)
+     * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the item field will not be considered.
      * @return array|string             Returns the value for the column
      */
     public function getProperty($fieldNameIntern, $column, $format = '', bool $withObsoleteEnries = true)
@@ -421,16 +421,16 @@ class ItemsData
 
     /**
      * Returns the value of a column from the table adm_inventory_fields for a given field ID
-     * 
-     * @param int    $fieldId           Expects the @b inf_id of table @b adm_inventory_fields
-     * @param string $column            The column name of @b adm_inventory_fields for which you want the value
-     * @param string $format            Optional the format (is necessary for timestamps)
+     *
+     * @param int $fieldId Expects the @b inf_id of table @b adm_inventory_fields
+     * @param string $column The column name of @b adm_inventory_fields for which you want the value
+     * @param string $format Optional the format (is necessary for timestamps)
      * @return string                   Returns the value for the column.
      */
     public function getPropertyById($fieldId, $column, $format = ''): string
     {
         foreach ($this->mItemFields as $field) {
-            if ((int) $field->getValue('inf_id') === (int) $fieldId) {
+            if ((int)$field->getValue('inf_id') === (int)$fieldId) {
                 return $field->getValue($column, $format);
             }
         }
@@ -440,8 +440,8 @@ class ItemsData
 
     /**
      * Get all users with their id, name, and address
-     * 
-     * @return string 					SQL query to get all users with their ID and name
+     *
+     * @return string                    SQL query to get all users with their ID and name
      */
     public function getSqlOrganizationsUsersComplete(): string
     {
@@ -459,8 +459,8 @@ class ItemsData
 
     /**
      * Get all users with their id and name
-     * 
-     * @return string 					SQL query to get all users with their ID and name
+     *
+     * @return string                    SQL query to get all users with their ID and name
      */
     public function getSqlOrganizationsUsersShort(): string
     {
@@ -475,9 +475,9 @@ class ItemsData
 
     /**
      * Returns the value of the field in html format with consideration of all layout parameters
-     * 
-     * @param string $fieldNameIntern   Internal item field name of the field that should be html formatted
-     * @param string|null $value        The value that should be formatted must be committed so that layout
+     *
+     * @param string $fieldNameIntern Internal item field name of the field that should be html formatted
+     * @param string|null $value The value that should be formatted must be committed so that layout
      *                                  is also possible for values that aren't stored in database
      * @return string                   Returns an html formatted string that considered the profile field settings
      */
@@ -506,7 +506,7 @@ class ItemsData
                         if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
                             //check if date is datetime or only date
                             if (strpos($value, ' ') === false) {
-                                $value .=  ' 00:00';
+                                $value .= ' 00:00';
                             }
                             $date = DateTime::createFromFormat('Y-m-d H:i', $value);
                             if ($date instanceof DateTime) {
@@ -533,7 +533,7 @@ class ItemsData
                     foreach ($arrOptions as $option) {
                         // if value is imagefile or imageurl then show image
                         if ($infType === 'RADIO_BUTTON' && (Image::isBootstrapIcon($option['value'])
-                            || StringUtils::strContains($option['value'], '.png', false) || StringUtils::strContains($option['value'], '.jpg', false))) {
+                                || StringUtils::strContains($option['value'], '.png', false) || StringUtils::strContains($option['value'], '.jpg', false))) {
                             // if there is imagefile and text separated by | then explode them
                             if (StringUtils::strContains($option['value'], '|')) {
                                 list($optionValueImage, $optionValueText) = explode('|', $option['value']);
@@ -593,7 +593,7 @@ class ItemsData
                                 if ($htmlValue !== '') {
                                     $htmlValue .= ', ';
                                 }
-                                $htmlValue .= $arrOptionValuesWithKeys[$val];                              
+                                $htmlValue .= $arrOptionValuesWithKeys[$val];
                             } else {
                                 if ($htmlValue !== '') {
                                     $htmlValue .= ', ';
@@ -655,11 +655,11 @@ class ItemsData
 
     /**
      * Returns the item value for this column
-     * 
+     *
      * format = 'html'  :               returns the value in html-format if this is necessary for that field type
      * format = 'database' :            returns the value that is stored in database with no format applied
-     * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
-     * @param string $format            Returns the field value in a special format @b text, @b html, @b database
+     * @param string $fieldNameIntern Expects the @b inf_name_intern of table @b adm_inventory_fields
+     * @param string $format Returns the field value in a special format @b text, @b html, @b database
      *                                  or datetime (detailed description in method description)
      * @return string|int|bool          Returns the value for the column
      */
@@ -680,12 +680,11 @@ class ItemsData
                     $category->readDataById($catID);
                     if ($format === 'database') {
                         $value = $category->getValue('cat_uuid');
-                    }else {
+                    } else {
                         $value = $category->getValue('cat_name');
                     }
                 }
-            }
-            elseif ($fieldNameIntern === 'STATUS') {
+            } elseif ($fieldNameIntern === 'STATUS') {
                 // special case for status
                 $item = new Item($this->mDb, $this, $this->mItemId);
                 $statusId = $item->getValue('ini_status');
@@ -701,8 +700,7 @@ class ItemsData
                         }
                     }
                 }
-            }
-            elseif (array_key_exists($this->mItemFields[$fieldNameIntern]->getValue('inf_id'), $this->mItemData)) {
+            } elseif (array_key_exists($this->mItemFields[$fieldNameIntern]->getValue('inf_id'), $this->mItemData)) {
                 if ($this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')] instanceof ItemBorrowData) {
                     $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('inb_' . strtolower($fieldNameIntern), $format);
                 } else {
@@ -788,7 +786,7 @@ class ItemsData
 
     /**
      * Returns the status of the item.
-     * 
+     *
      * @return int                      Returns the status of the item
      */
     public function getStatus(): int
@@ -801,7 +799,7 @@ class ItemsData
 
     /**
      * Marks an item as imported.
-     * 
+     *
      * @return void
      */
     public function setImportedItem(): void
@@ -812,8 +810,8 @@ class ItemsData
     /**
      * This method reads or stores the variable for showing retired items.
      * The values will be stored in database without any inspections!
-     * 
-     * @param bool|null $newValue       If set, then the new value will be stored in @b showRetiredItems.
+     *
+     * @param bool|null $newValue If set, then the new value will be stored in @b showRetiredItems.
      * @return bool                     Returns the current value of @b showRetiredItems
      */
     public function showRetiredItems($newValue = null): bool
@@ -837,7 +835,7 @@ class ItemsData
 
     /**
      * Checks if the item is in use.
-     * 
+     *
      * @return bool                     Returns true if the item is in use, otherwise false
      */
     public function isInUse(): bool
@@ -853,7 +851,7 @@ class ItemsData
 
     /**
      * Checks if the item is borrowed.
-     * 
+     *
      * @return bool                     Returns true if the item is borrowed, otherwise false
      */
     public function isBorrowed(): bool
@@ -874,7 +872,7 @@ class ItemsData
     /**
      * If the recordset is new and wasn't read from database or was not stored in database
      * then this method will return true otherwise false
-     * 
+     *
      * @return bool                     Returns @b true if record is not stored in database
      */
     public function isNewItem(): bool
@@ -884,7 +882,7 @@ class ItemsData
 
     /**
      * If the recordset was deleted from database then this method will return true otherwise false
-     * 
+     *
      * @return bool                     Returns @b true if record is removed from databaseIf the recordset was deleted from database then this method will return true otherwise false
      */
     public function isDeletedItem(): bool
@@ -896,9 +894,9 @@ class ItemsData
      * Set a new value for the item field of the table adm_inventory_manager_data.
      * If the user log is activated then the change of the value will be logged in @b adm_inventory_manager_log.
      * The value is only saved in the object. You must call the method @b save to store the new value to the database
-     * 
-     * @param string $fieldNameIntern   The internal unique profile field name
-     * @param mixed $newValue           The new value that should be stored in the database field
+     *
+     * @param string $fieldNameIntern The internal unique profile field name
+     * @param mixed $newValue The new value that should be stored in the database field
      * @return bool                     Returns @b true if the value is stored in the current object and @b false if a check failed
      */
     public function setValue($fieldNameIntern, $newValue): bool
@@ -943,7 +941,7 @@ class ItemsData
                 if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
                     //check if date is datetime or only date
                     if (strpos($newValue, ' ') === false) {
-                        $newValue .=  ' 00:00';
+                        $newValue .= ' 00:00';
                     }
                     $date = DateTime::createFromFormat('Y-m-d H:i', $newValue);
                     if ($date !== false) {
@@ -977,7 +975,7 @@ class ItemsData
             }
             $this->mItemData[$infId]->setValue($prefix . '_ini_id', $this->mItemId);
         }
-        
+
         $ret = false;
         if ($this->mItemData[$infId] instanceof ItemBorrowData) {
             $ret = $this->mItemData[$infId]->setValue($prefix . '_' . strtolower($fieldNameIntern), $newValue);
@@ -990,7 +988,7 @@ class ItemsData
 
     /**
      * Generates a new ItemId. The new value will be stored in mItemId.
-     * 
+     *
      * @return int mItemId
      */
     public function createNewItem(string $catUUID): void
@@ -1040,8 +1038,8 @@ class ItemsData
 
     /**
      * delete an item
-     * 
-     * @param int $itemId               The id of the item that should be deleted
+     *
+     * @param int $itemId The id of the item that should be deleted
      * @return void
      */
     public function deleteItem(): void
@@ -1065,8 +1063,8 @@ class ItemsData
 
     /**
      * Marks an item as retired
-     * 
-     * @param int $itemId 		    The ID of the item to be retired.
+     *
+     * @param int $itemId The ID of the item to be retired.
      * @return void
      */
     public function retireItem(): void
@@ -1092,8 +1090,8 @@ class ItemsData
 
     /**
      * Marks an item as reinstated which means it is no longer retired.
-     * 
-     * @param int $itemId               The ID of the item to be marked as reinstated.
+     *
+     * @param int $itemId The ID of the item to be marked as reinstated.
      * @return void
      */
     public function reinstateItem(): void
@@ -1108,7 +1106,7 @@ class ItemsData
                 break;
             }
         }
-        
+
         $item = new Item($this->mDb, $this, $this->mItemId);
         $item->setValue('ini_status', $inUseId);
         $item->save();
@@ -1119,7 +1117,7 @@ class ItemsData
 
     /**
      * Save data of every item data field
-     * 
+     *
      * @return void
      */
     public function saveItemData(): void
@@ -1133,7 +1131,7 @@ class ItemsData
                 $this->columnsValueChanged = true;
                 $this->mItemChanged = true;
             }
-            
+
             // dont safe CATEGORY field to items data
             if ($value instanceof ItemData && ($value->getValue('ind_inf_id') === 2 || $value->getValue('inf_name_intern') === 'CATEGORY')) { // 2 == CATEGORY field
                 $category = new Category($this->mDb);
@@ -1144,22 +1142,19 @@ class ItemsData
                 $item->setValue('ini_cat_id', $catID);
                 $item->save();
                 $value->delete();
-            }
-            elseif ($value instanceof ItemData && ($value->getValue('ind_inf_id') === 3 || $value->getValue('inf_name_intern') === 'STATUS')) { // 3 == STATUS field
+            } elseif ($value instanceof ItemData && ($value->getValue('ind_inf_id') === 3 || $value->getValue('inf_name_intern') === 'STATUS')) { // 3 == STATUS field
                 $item = new Item($this->mDb, $this, $this->mItemId);
                 $item->setValue('ini_status', $value->getValue('ind_value'));
                 $item->save();
                 $value->delete();
-            }
-            elseif ($value instanceof ItemData) {
+            } elseif ($value instanceof ItemData) {
                 // if value exists and new value is empty then delete entry
                 if ($value->getValue('ind_id') > 0 && $value->getValue('ind_value') === '') {
                     $value->delete();
                 } else {
                     $value->save();
                 }
-            }
-            elseif ($value instanceof ItemBorrowData) {
+            } elseif ($value instanceof ItemBorrowData) {
                 if ($value->getValue('inb_id') === 0 && $inbId !== 0) {
                     $value->updateRecordId($inbId);
                 }
@@ -1328,7 +1323,7 @@ class ItemsData
                 $fieldName = $this->getProperty('ITEMNAME', 'inf_name');
 
                 $message = $gL10n->get($messageHead) . '<br/><br/>'
-                    . '<b>' . ((substr($fieldName, 3, 1) === '_') ? $gL10n->get($fieldName) : $fieldName)  . ':</b> ' . $this->getValue('ITEMNAME', 'html') . '<br/>'
+                    . '<b>' . ((substr($fieldName, 3, 1) === '_') ? $gL10n->get($fieldName) : $fieldName) . ':</b> ' . $this->getValue('ITEMNAME', 'html') . '<br/>'
                     . '<b>' . $gL10n->get($messageUserText) . ':</b> ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br/>'
                     . '<b>' . $gL10n->get($messageDateText) . ':</b> ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br/>';
             }

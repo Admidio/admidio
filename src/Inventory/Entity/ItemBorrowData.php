@@ -48,7 +48,7 @@ class ItemBorrowData extends Entity
         parent::__construct($database, TBL_INVENTORY_ITEM_BORROW_DATA, 'inb', $id);
     }
 
-    public function updateRecordId(int $recordId) : void
+    public function updateRecordId(int $recordId): void
     {
         if ($recordId !== 0) {
             $this->setValue('inb_id', $recordId);

@@ -54,15 +54,16 @@ class ItemData extends Entity
     /**
      * Since creation means setting value from NULL to something, deletion mean setting the field to empty,
      * we need one generic change log function that is called on creation, deletion and modification.
-     * 
+     *
      * The log entries are: record ID for ind_id, but uuid and link point to User id.
      * log_field is the inf_id and log_field_name is the fields external name.
-     * 
+     *
      * @param string $oldval previous value before the change (can be null)
      * @param string $newval new value after the change (can be null)
      * @return true returns **true** if no error occurred
      */
-    protected function logItemfieldChange(?string $oldval = null, ?string $newval = null) : bool {
+    protected function logItemfieldChange(?string $oldval = null, ?string $newval = null): bool
+    {
         global $gDb, $gProfileFields;
 
         if ($oldval === $newval) {
@@ -87,8 +88,7 @@ class ItemData extends Entity
         if ($infType === 'CATEGORY') {
             // Category changes are logged in the inventory items table
             return true;
-        }
-        elseif ($infType === 'DROPDOWN' || $infType === 'DROPDOWN_MULTISELECT' || $infType === 'RADIOBUTTON') {
+        } elseif ($infType === 'DROPDOWN' || $infType === 'DROPDOWN_MULTISELECT' || $infType === 'RADIOBUTTON') {
             $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'ifo_inf_options');
             if (isset($vallist[$oldval])) {
                 $oldval = $vallist[$oldval];
@@ -96,18 +96,14 @@ class ItemData extends Entity
             if (isset($vallist[$newval])) {
                 $newval = $vallist[$newval];
             }
-        } 
-        elseif ($infType === 'CHECKBOX') {
+        } elseif ($infType === 'CHECKBOX') {
             $fieldName = $fieldName . '_bool';
-        }
-        elseif ($infType === 'TEXT') {
+        } elseif ($infType === 'TEXT') {
             if ($fieldNameIntern === 'ITEMNAME' && $itemName === '') {
                 $itemName = $newval;
-            }
-            elseif ($fieldNameIntern === 'KEEPER') {
+            } elseif ($fieldNameIntern === 'KEEPER') {
                 $fieldName = $fieldName . '_usr';
-            }
-            elseif ($fieldNameIntern === 'LAST_RECEIVER') {
+            } elseif ($fieldNameIntern === 'LAST_RECEIVER') {
                 $user = new User($this->db, $gProfileFields);
                 if (is_numeric($oldval) && is_numeric($newval)) {
                     $foundOld = $user->readDataById($oldval);
@@ -115,8 +111,7 @@ class ItemData extends Entity
                     if ($foundOld && $foundNew) {
                         $fieldName = $fieldName . '_usr';
                     }
-                }
-                elseif (is_numeric($oldval)) {
+                } elseif (is_numeric($oldval)) {
                     if ($user->readDataById($oldval)) {
                         $oldval = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
                     }
@@ -126,17 +121,13 @@ class ItemData extends Entity
                     }
                 }
             }
-        }
-        elseif ($infType === 'DATE') {
+        } elseif ($infType === 'DATE') {
             $fieldName = $fieldName . '_date';
-        }
-        elseif ($infType === 'EMAIL') {
+        } elseif ($infType === 'EMAIL') {
             $fieldName = $fieldName . '_mail';
-        }
-        elseif ($infType === 'URL') {
+        } elseif ($infType === 'URL') {
             $fieldName = $fieldName . '_url';
-        }
-        elseif ($infType === 'ICON') {
+        } elseif ($infType === 'ICON') {
             $fieldName = $fieldName . '_icon';
         }
 
@@ -152,16 +143,19 @@ class ItemData extends Entity
      * Logs creation of the DB record -> For user fields, no need to log anything as
      * the actual value change from NULL to something will be logged as a modification
      * immediately after creation, anyway.
-     * 
+     *
      * @return true Returns **true** if no error occurred
      * @throws Exception
      */
-    public function logCreation(): bool { return true; }
+    public function logCreation(): bool
+    {
+        return true;
+    }
 
     /**
      * Logs deletion of the DB record
      * Deletion actually means setting the user field to an empty value, so log a change to empty instead of deletion!
-     * 
+     *
      * @return true Returns **true** if no error occurred
      */
     public function logDeletion(): bool
