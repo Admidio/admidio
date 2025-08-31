@@ -20,6 +20,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
@@ -79,7 +80,7 @@ try {
             $getMode = 'pdf';
             break;
         case 'html':
-            $classTable = 'table table-condensed';
+            $classTable = 'table table-condensed table-hover';
             break;
         case 'print':
             $classTable = 'table table-condensed table-striped';
@@ -90,6 +91,9 @@ try {
 
     // CSV file as string
     $csvStr = '';
+
+    // data array
+    $data = array('headers' => array(), 'rows' => array(), 'column_align' => array());
 
     // generate the display list
     $report->setConfiguration($getCrtId);
@@ -116,17 +120,16 @@ try {
     }
 
     if ($getMode !== 'csv') {
-        $datatable = false;
-        $hoverRows = false;
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report');
+        $smarty = $page->createSmartyObject();
 
         if ($getMode === 'print') {
-            $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-main-print');
             $page->setContentFullWidth();
             $page->setPrintMode();
             $page->setTitle($title);
             $page->setHeadline($headline);
             $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
-            $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+            $smarty->assign('classTable', $classTable);
         } elseif ($getMode === 'pdf') {
             if (ini_get('max_execution_time') < 600) {
                 ini_set('max_execution_time', 600); //600 seconds = 10 minutes
@@ -161,26 +164,11 @@ try {
             // add a page
             $pdf->AddPage();
 
-            // Create table object for display
-            $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
-            $table->addAttribute('border', '1');
-
-            $table->addTableHeader();
-            $table->addRow();
-            $table->addAttribute('align', 'center');
-            $table->addColumn($subHeadline, array('colspan' => $columnCount + 1));
-            $table->addRow();
+            // set subHeadline and class for table
+            $smarty->assign('subHeadline', $subHeadline);
+            $smarty->assign('classTable', $classTable);
         } elseif ($getMode === 'html') {
-            if ($getExportAndFilter) {
-                $datatable = false;
-            } else {
-                $datatable = true;
-            }
-
-            $hoverRows = true;
-
             // create html page object
-            $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-main-html');
             $page->setContentFullWidth();
             $page->setTitle($title);
             $page->setHeadline($headline);
@@ -303,14 +291,15 @@ try {
 
             $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
 
-            $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-            $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
-        } else {
-            $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
+            $smarty->assign('classTable', $classTable);
+            if (!$getExportAndFilter) {
+                $categoryReportTable = new DataTables($page, 'adm_lists_table');
+                $categoryReportTable->setRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
+            }
         }
     }
 
-    $columnAlign = array('center');
+    $columnAlign = array('right');
     $columnValues = array($gL10n->get('SYS_ABR_NO'));
     $columnNumber = 1;
 
@@ -321,8 +310,11 @@ try {
         if ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'NUMBER'
             || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DECIMAL_NUMBER') {
             $columnAlign[] = 'right';
-        } else {
+        } elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX' || $usf_id === 0) {
+            // bei allen Feldern, die kein Profilfeld sind (usf_id = 0) und Checkboxen wird zentriert
             $columnAlign[] = 'center';
+        } else {
+            $columnAlign[] = 'left';
         }
 
         if ($getMode == 'csv') {
@@ -331,15 +323,10 @@ try {
                 $csvStr .= $valueQuotes . $gL10n->get('SYS_ABR_NO') . $valueQuotes;
             }
             $csvStr .= $separator . $valueQuotes . $columnHeader['data'] . $valueQuotes;
-        } elseif ($getMode == 'pdf') {
-            if ($columnNumber === 1) {
-                $table->addColumn($gL10n->get('SYS_ABR_NO'), array('style' => 'text-align: center;font-size:14;background-color:#C7C7C7;'), 'th');
-            }
-            $table->addColumn($columnHeader['data'], array('style' => 'text-align: center;font-size:14;background-color:#C7C7C7;'), 'th');
         } elseif ($getMode === "xlsx") {
             // convert html characters to plain text
             $columnValues[] = html_entity_decode($columnHeader['data'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-        } elseif ($getMode == 'html' || $getMode == 'print') {
+        } elseif ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf') {
             $columnValues[] = $columnHeader['data'];
         }
         $columnNumber++;
@@ -351,12 +338,9 @@ try {
         $spreadsheet = new Spreadsheet();
         $activeSheet = $spreadsheet->getActiveSheet();
         $activeSheet->fromArray(array_values($columnValues));
-    } elseif ($getMode === 'html' || $getMode === 'print') {
-        $table->setColumnAlignByArray($columnAlign);
-        $table->addRowHeadingByArray($columnValues);
     } else {
-        $table->addTableBody();
-        $table->setColumnAlignByArray($columnAlign);
+        $data['headers'] = $columnValues;
+        $data['column_align'] = $columnAlign;
     }
 
     $listRowNumber = 1;
@@ -472,7 +456,7 @@ try {
                     $activeSheet->setCellValue($colLetter . $currentRow, $cell);
                 }
             } else {
-                $table->addRowByArray($columnValues, 'row-' . $listRowNumber, array('nobr' => 'true'));
+                $data['rows'][] = array('id' => 'row-' . $listRowNumber, 'data' => $columnValues);
             }
             $listRowNumber++;
         }
@@ -493,7 +477,7 @@ try {
         // download CSV file
         header('Content-Type: text/comma-separated-values; charset=' . $charset);
         echo $csvStr;
-    }elseif ($getMode === 'xlsx') {
+    } elseif ($getMode === 'xlsx') {
         $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=' . $charset);
@@ -503,10 +487,21 @@ try {
         formatSpreadsheet($spreadsheet, $columnCount + 1, true);
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
-    } // send the new PDF to the User
-    elseif ($getMode === 'pdf') {
+    } elseif ($getMode === 'pdf') {
+        // send the new PDF to the User
+        // Using Smarty templating engine for exporting table in PDF
+        $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
+        $smarty->assign('columnAlign', $data['column_align']);
+        $smarty->assign('headers', $data['headers']);
+        $smarty->assign('headersStyle', 'font-size:14;background-color:#C7C7C7;');
+        $smarty->assign('rows', $data['rows']);
+        $smarty->assign('rowsStyle', 'font-size:10;');
+
+        // Fetch the HTML table from our Smarty template
+        $htmlTable = $smarty->fetch('modules/category-report.export.tpl');
+
         // output the HTML content
-        $pdf->writeHTML($table->getHtmlTable(), true, false, true);
+        $pdf->writeHTML($htmlTable, true, false, true);
 
         $file = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
 
@@ -527,13 +522,33 @@ try {
         }
     } elseif ($getMode == 'html' && $getExportAndFilter) {
         $page->addHtml('<div style="width:100%; height: 500px; overflow:auto; border:20px;">');
-        $page->addHtml($table->show(false));
-        $page->addHtml('</div><br/>');
+        $smarty->assign('columnAlign', $data['column_align']);
+        $smarty->assign('headers', $data['headers']);
+        $smarty->assign('rows', $data['rows']);
 
+        // Fetch the HTML table from our Smarty template
+        $htmlTable = $smarty->fetch('modules/category-report.tpl');
+        $page->addHtml($htmlTable);
+        $page->addHtml('</div><br/>');
         $page->show();
     } elseif (($getMode == 'html' && !$getExportAndFilter) || $getMode == 'print') {
-        $page->addHtml($table->show(false));
+        if (isset($categoryReportTable)) {
+            // we are in datatable mode
+            $categoryReportTable->createJavascript(count($data['rows']), count($data['headers']));
+            $categoryReportTable->setColumnAlignByArray($data['column_align']);
+            $page->addHtml('<div class="table-responsive">');
+        }
 
+        $smarty->assign('columnAlign', $data['column_align']);
+        $smarty->assign('headers', $data['headers']);
+        $smarty->assign('rows', $data['rows']);
+
+        // Fetch the HTML table from our Smarty template
+        $htmlTable = $smarty->fetch('modules/category-report.tpl');
+        $page->addHtml($htmlTable);
+        if (isset($categoryReportTable)) {
+            $page->addHtml('</div>');
+        }
         $page->show();
     }
 } catch (Exception $e) {
