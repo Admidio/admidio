@@ -341,7 +341,7 @@ try {
 
     $contactsTable->createJavascript(0, count($columnHeading));
     $page->assignSmartyVariable('headers', $columnHeading);
-    $page->addHtmlByTemplate('modules/contacts.tpl');
+    $page->addHtmlByTemplate('modules/contacts.list.tpl');
     $page->show(); // show html of complete page
 } catch (Exception | \Smarty\Exception $e) {
     $gMessage->show($e->getMessage());
