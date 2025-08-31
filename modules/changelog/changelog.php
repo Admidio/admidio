@@ -23,6 +23,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Language;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
@@ -215,7 +216,7 @@ try {
     $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
     $form->addToHtmlPage();
 
-    $table = new HtmlTable('history_table', $page, true, true, 'table table-condensed');
+    $table = new DataTables($page, 'adm_history_table');
 
 
     /* For now, simply show all column of the changelog table. As time permits, we can improve this by hiding unneccessary columns and by better naming columns depending on the table.
@@ -243,7 +244,7 @@ try {
     $columnHeading[] = $gL10n->get('SYS_EDITED_BY');
     $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
 
-    $table->addRowHeadingByArray($columnHeading);
+    $page->assignSmartyVariable('headers', $columnHeading);
 
     $filterFields = array(
         'table' => $getTable,
@@ -256,18 +257,18 @@ try {
 
     $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog_data.php', $filterFields));
 //    $table->setColumnAlignByArray($columnAlignment);
-    $table->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
-    $table->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
+    $table->disableColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+    $table->setColumnsNotHideResponsive(array(count($columnHeading)));
     // $table->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
     $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
-
+    $table->createJavascript(0, count($columnHeading));
 
 
 
 
     $page->addHtml('<div class="alert alert-danger form-alert" id="DT_notice" style="display: none;"></div>');
-    $page->addHtml($table->show());
+    $page->addHtmlByTemplate('modules/changelog.list.tpl');
     $page->show();
-} catch (Exception $e) {
+} catch (Exception | \Smarty\Exception $e) {
     $gMessage->show($e->getMessage());
 }
