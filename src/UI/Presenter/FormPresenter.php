@@ -1115,8 +1115,14 @@ class FormPresenter
                     if (!row) return;
 
                     const table = row.parentNode;
+                    const tableNotSortable = table.parentNode.querySelector("tbody.admidio-not-sortable");
                     const countOptionsSortable = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
-                    const countOptions = countOptionsSortable + (table.querySelector("tbody.admidio-not-sortable") ? table.querySelector("tbody.admidio-not-sortable").querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length : 0);
+                    var countOptionsNotSortable = 0;
+                    if (tableNotSortable !== null) {
+                        countOptionsNotSortable = tableNotSortable.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                    }
+                    // Total count of options
+                    const countOptions = countOptionsSortable + countOptionsNotSortable;
                     // If there is only one option left, do not delete it or mark it as obsolete
                     if (countOptions <= 1) return;
 
