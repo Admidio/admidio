@@ -513,7 +513,7 @@ class ProfileFields
     public function isEditable(string $fieldNameIntern, bool $allowedToEditProfile): bool
     {
         return $this->isVisible($fieldNameIntern, $allowedToEditProfile)
-        && ($GLOBALS['gCurrentUser']->editUsers() || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
+        && (($GLOBALS['gCurrentUser']->editUsers() || $allowedToEditProfile) || $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 0);
     }
 
     /**
@@ -537,7 +537,7 @@ class ProfileFields
         // have the right to edit all users
         if (!$GLOBALS['gCurrentUser']->editUsers()
         && $this->mProfileFields[$fieldNameIntern]->getValue('usf_disabled') == 1
-        && $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 1) {
+        && (!$allowedToEditProfile && $this->mProfileFields[$fieldNameIntern]->getValue('usf_hidden') == 1)) {
             return false;
         }
 
