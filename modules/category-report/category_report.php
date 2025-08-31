@@ -122,7 +122,7 @@ try {
     if ($getMode !== 'csv') {
         $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report');
         $smarty = $page->createSmartyObject();
-
+        $smarty->assign('l10n', $gL10n);
         if ($getMode === 'print') {
             $page->setContentFullWidth();
             $page->setPrintMode();
@@ -498,7 +498,8 @@ try {
         $smarty->assign('rowsStyle', 'font-size:10;');
 
         // Fetch the HTML table from our Smarty template
-        $htmlTable = $smarty->fetch('modules/category-report.export.tpl');
+        $smarty->assign('exportMode', true);
+        $htmlTable = $smarty->fetch('modules/category-report.list.tpl');
 
         // output the HTML content
         $pdf->writeHTML($htmlTable, true, false, true);
@@ -527,7 +528,7 @@ try {
         $smarty->assign('rows', $data['rows']);
 
         // Fetch the HTML table from our Smarty template
-        $htmlTable = $smarty->fetch('modules/category-report.tpl');
+        $htmlTable = $smarty->fetch('modules/category-report.list.tpl');
         $page->addHtml($htmlTable);
         $page->addHtml('</div><br/>');
         $page->show();
@@ -544,7 +545,7 @@ try {
         $smarty->assign('rows', $data['rows']);
 
         // Fetch the HTML table from our Smarty template
-        $htmlTable = $smarty->fetch('modules/category-report.tpl');
+        $htmlTable = $smarty->fetch('modules/category-report.list.tpl');
         $page->addHtml($htmlTable);
         if (isset($categoryReportTable)) {
             $page->addHtml('</div>');
