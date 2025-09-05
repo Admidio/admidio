@@ -280,6 +280,13 @@ class DataTables
     public function setColumnAlignByArray(array $columnsAlign)
     {
         foreach ($columnsAlign as $columnNumber => $align) {
+            // replace left/right (style tags) with start/end (datatables classes)
+            if ($align === 'left') {
+                $align = 'start';
+            } elseif ($align === 'right') {
+                $align = 'end';
+            }
+
             $this->datatablesColumnDefs[] = '{ targets: ' . $columnNumber . ', className: \'text-' . $align . '\' }';
         }
     }
