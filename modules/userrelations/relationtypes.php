@@ -44,9 +44,6 @@ try {
 
     ChangelogService::displayHistoryButton($page, 'user_relation_types', 'user_relation_types');
 
-    // Create table object
-    $relationTypesOverview = new HtmlTable('tbl_relationtypes', $page, true);
-
     $relationTypes = array(
         'asymmetrical' => $gL10n->get('SYS_ASYMMETRICAL'),
         'symmetrical' => $gL10n->get('SYS_SYMMETRICAL'),
@@ -59,8 +56,8 @@ try {
         $gL10n->get('SYS_USER_RELATION_TYPE') . FormPresenter::getHelpTextIcon('SYS_RELATIONSHIP_TYPE_DESC'),
         '&nbsp;'
     );
-    $relationTypesOverview->setColumnAlignByArray(array('left', 'left', 'right'));
-    $relationTypesOverview->addRowHeadingByArray($columnHeading);
+    $columnAlign = array('left', 'left', 'right');
+    $rows = array();
 
     $sql = 'SELECT urt1.*, urt2.urt_name AS urt_name_inverse, urt2.urt_name_male AS urt_name_male_inverse, urt2.urt_name_female AS urt_name_female_inverse, urt2.urt_edit_user AS urt_edit_user_inverse
           FROM ' . TBL_USER_RELATION_TYPES . ' AS urt1
@@ -122,10 +119,18 @@ try {
             $relationTypes[$relationType1->getRelationTypeString()],
             $relationtypeAdministration
         );
-        $relationTypesOverview->addRowByArray($columnValues, 'row_' . $relationType1->getValue('urt_uuid'));
+        $rows[] =  array('id' => 'row_' . $relationType1->getValue('urt_uuid'), 'data' => $columnValues);
     }
 
-    $page->addHtml($relationTypesOverview->show());
+    $smarty = $page->createSmartyObject();
+    $smarty->assign('columnAlign', $columnAlign);
+    $smarty->assign('headers', $columnHeading);
+    $smarty->assign('rows', $rows);
+
+    // Fetch the HTML table from our Smarty template
+    $htmlTable = $smarty->fetch('modules/user-relations.types.list.tpl');
+    // add table list to the page
+    $page->addHtml($htmlTable);
     $page->show();
 } catch (Exception $e) {
     $gMessage->show($e->getMessage());
