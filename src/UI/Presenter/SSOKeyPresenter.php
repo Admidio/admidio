@@ -317,7 +317,7 @@ class SSOKeyPresenter extends PagePresenter
             array('icon' => 'bi-box-arrow-down')
         );
 
-        $smarty = \HtmlPage::createSmartyObject();
+        $smarty = $this->createSmartyObject();
         $form->addToSmarty($smarty);
         $gCurrentSession->addFormObject($form);
         echo $smarty->fetch('modules/sso_key.password.tpl');

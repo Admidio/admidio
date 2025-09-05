@@ -18,6 +18,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -151,7 +152,7 @@ try {
             array('icon' => 'bi-check-lg')
         );
 
-        $smarty = HtmlPage::createSmartyObject();
+        $smarty = PagePresenter::createSmartyObject();
         $smarty->assign('zxcvbnUserInputs', $zxcvbnUserInputs);
         $form->addToSmarty($smarty);
         $gCurrentSession->addFormObject($form);
