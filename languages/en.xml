@@ -1074,6 +1074,7 @@
   <string name="SYS_NO_ENTRY">Requested entry does not exist in the database.</string>
   <string name="SYS_NO_LEADER">No leader</string>
   <string name="SYS_NO_LOGIN_DATA">Don't have a login name and password?</string>
+  <string name="SYS_NO_MATCHING_ENTRIES">No matching entries found.</string>
   <string name="SYS_NO_MORE_COLUMN">For technical reasons, no more column can be added.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">No new registrations available.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">No permissions have been assigned.</string>

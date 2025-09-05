@@ -11,6 +11,7 @@ use Admidio\SSO\Service\OIDCService;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Roles\Entity\RolesRights;
+use Admidio\UI\Component\DataTables;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -195,7 +196,7 @@ class SSOClientPresenter extends PagePresenter
         // show form
         $form = new FormPresenter(
             'adm_saml_client_edit_form',
-            'modules/saml_client.edit.tpl',
+            'modules/sso_saml_client.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_saml')),
             $this
         );
@@ -211,7 +212,7 @@ class SSOClientPresenter extends PagePresenter
         $form->addCheckbox(
             'smc_enabled',
             $gL10n->get('SYS_ENABLED'),
-            $client->getValue('smc_enabled'),
+            boolval($client->getValue('smc_enabled')),
             array()
         );
         $form->addInput(
@@ -260,25 +261,25 @@ class SSOClientPresenter extends PagePresenter
         $form->addCheckbox(
             'smc_require_auth_signed',
             $gL10n->get('SYS_SSO_REQUIRE_AUTHN_SIGNED'),
-            $client->getValue('smc_require_auth_signed'),
+            boolval($client->getValue('smc_require_auth_signed')),
             array()
         );
         $form->addCheckbox(
             'smc_sign_assertions',
             $gL10n->get('SYS_SSO_SIGN_ASSERTIONS'),
-            $client->getValue('smc_sign_assertions'),
+            boolval($client->getValue('smc_sign_assertions')),
             array()
         );
         $form->addCheckbox(
             'smc_encrypt_assertions',
             $gL10n->get('SYS_SSO_ENCRYPT_ASSERTIONS'),
-            $client->getValue('smc_encrypt_assertions'),
+            boolval($client->getValue('smc_encrypt_assertions')),
             array()
         );
         $form->addCheckbox(
             'smc_validate_signatures',
             $gL10n->get('SYS_SSO_VALIDATE_SIGNATURES'),
-            $client->getValue('smc_validate_signatures'),
+            boolval($client->getValue('smc_validate_signatures')),
             array()
         );
 
@@ -837,24 +838,23 @@ class SSOClientPresenter extends PagePresenter
         /* ****************************************************/
         $this->addHtml('<h3 class="admidio-content-subheader">' . $gL10n->get('SYS_SSO_CLIENTS_SAML') . '</h3>');
 
-        $table = new \HtmlTable('adm_saml_clients_table', $this, true, false);
-
-        $table->addRowHeadingByArray(array(
+        $table = new DataTables($this, 'adm_saml_clients_table');
+        $columnHeading = array(
             $gL10n->get('SYS_ENABLED'),
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
             $gL10n->get('SYS_SSO_CLIENT_ID'),
             $gL10n->get('SYS_SSO_ACS_URL'),
             $gL10n->get('SYS_SSO_ROLES'),
             ''
-        ));
+        );
 
         $table->setMessageIfNoRowsFound('SYS_SSO_NO_SAML_CLIENTS_FOUND');
 
-        $table->disableDatatablesColumnsSort(array(3, 6));
-        $table->setDatatablesColumnsNotHideResponsive(array(6));
+        $table->disableColumnsSort(array(3, 6));
+        $table->setColumnsNotHideResponsive(array(6));
         // special settings for the table
 
-
+        $columnValues = array();
         $SAMLService = new SAMLService($gDb, $gCurrentUser);
         $templateClientNodes = array();
         foreach ($SAMLService->getUUIDs() as $clientUUID) {
@@ -882,11 +882,16 @@ class SSOClientPresenter extends PagePresenter
                 </a>';
             $templateClient[] = $actions;
 
-            $table->addRowByArray($templateClient, 'adm_saml_client_' . $clientUUID, array('nobr' => 'true'));
+            $columnValues[] = array('id' => 'adm_saml_client_' . $clientUUID, 'data' => $templateClient);
         }
 
         // add table to the form
-        $this->addHtml(html: $table->show());
+        $table->createJavascript(count($columnValues), count($columnHeading));
+
+        $this->assignSmartyVariable('headers', $columnHeading);
+        $this->assignSmartyVariable('rows', $columnValues);
+        // add table to the page
+        $this->addHtmlByTemplate('modules/sso_saml_clients.list.tpl');
 
 
 
@@ -896,24 +901,24 @@ class SSOClientPresenter extends PagePresenter
         /* ****************************************************/
         $this->addHtml('<h3 class="admidio-content-subheader">' . $gL10n->get('SYS_SSO_CLIENTS_OIDC') . '</h3>');
 
-        $table = new \HtmlTable('adm_oidc_clients_table', $this, true, false);
-
-        $table->addRowHeadingByArray(array(
+        $table = new DataTables($this, 'adm_oidc_clients_table');
+        $columnHeading = array(
             $gL10n->get('SYS_ENABLED'),
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
             $gL10n->get('SYS_SSO_CLIENT_ID'),
             $gL10n->get('SYS_SSO_REDIRECT_URI'),
             $gL10n->get('SYS_SSO_ROLES'),
             ''
-        ));
+        );
 
         $table->setMessageIfNoRowsFound('SYS_SSO_NO_OIDC_CLIENTS_FOUND');
 
-        $table->disableDatatablesColumnsSort(array(3, 6));
-        $table->setDatatablesColumnsNotHideResponsive(array(6));
+        $table->disableColumnsSort(array(3, 6));
+        $table->setColumnsNotHideResponsive(array(6));
         // special settings for the table
 
 
+        $columnValues = array();
         $OIDCService = new OIDCService($gDb, $gCurrentUser);
         $templateClientNodes = array();
         foreach ($OIDCService->getUUIDs() as $clientUUID) {
@@ -929,11 +934,11 @@ class SSOClientPresenter extends PagePresenter
             //$templateClient[] = $client->getValue('create_name');
 
             $actions = '';
-            // add link to edit SAML client
+            // add link to edit OIDC client
             $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
                     '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT') . '"></i></a>';
 
-            // add link to delete SAML client
+            // add link to delete OIDC client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                     data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($client->readableName())) . '"
                     data-href="callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
@@ -941,7 +946,7 @@ class SSOClientPresenter extends PagePresenter
                 </a>';
             $templateClient[] = $actions;
 
-            $table->addRowByArray($templateClient, 'adm_saml_client_' . $clientUUID, array('nobr' => 'true'));
+            $columnValues[] = array('id' => 'adm_oidc_client_' . $clientUUID, 'data' => $templateClient);
         }
 
         // Add JS for toggling clients (enabled/disabled)
@@ -983,7 +988,11 @@ class SSOClientPresenter extends PagePresenter
           ", true);
 
         // add table to the form
-        $this->addHtml(html: $table->show());
+        $table->createJavascript(count($columnValues), count($columnHeading));
 
+        $this->assignSmartyVariable('headers', $columnHeading);
+        $this->assignSmartyVariable('rows', $columnValues);
+        // add table to the page
+        $this->addHtmlByTemplate('modules/sso_oidc_clients.list.tpl');
     }
 }

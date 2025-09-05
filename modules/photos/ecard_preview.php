@@ -14,6 +14,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\ValueObject\ECard;
+use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -50,7 +51,7 @@ try {
         throw new Exception('SYS_ERROR_PAGE_NOT_FOUND');
     }
 
-    $smarty = HtmlPage::createSmartyObject();
+    $smarty = PagePresenter::createSmartyObject();
     $smarty->assign('l10n', $gL10n);
     $smarty->assign('ecardContent', $funcClass->parseEcardTemplate($imageUrl, $formValues['ecard_message'], $ecardDataToParse, '', ''));
     echo $smarty->fetch('modules/photos.ecard.preview.tpl');

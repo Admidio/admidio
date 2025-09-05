@@ -33,6 +33,7 @@ use Admidio\Events\Entity\Room;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
@@ -97,10 +98,11 @@ try {
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
 
+    // data array
+    $data = array('headers' => array(), 'rows' => array(), 'column_align' => array(), 'column_width' => array());
+
     if ($getViewMode === 'html') {
-        $datatable = true;
-        $hoverRows = true;
-        $classTable = 'table';
+        $page->assignSmartyVariable('classTable', 'table table-condensed table-hover');
 
         if ($gSettingsManager->getBool('enable_rss') && (int)$gSettingsManager->get('events_module_enabled') === 1) {
             $page->addRssFile(
@@ -251,9 +253,7 @@ try {
             $form->addToHtmlPage();
         }
     } else { // $getViewMode = 'print'
-        $datatable = false;
-        $hoverRows = false;
-        $classTable = 'table table-condensed table-striped';
+        $page->assignSmartyVariable('classTable', 'table table-condensed table-striped');
 
         // create html page object without the custom theme files
         $page->setPrintMode();
@@ -274,8 +274,8 @@ try {
         // Output table header for compact view
         if ($getView !== 'detail') { // $getView = 'compact' or 'room' or 'participants' or 'description'
             $page->setContentFullWidth();
-            $compactTable = new HtmlTable('events_compact_table', $page, $hoverRows, $datatable, $classTable);
-            $compactTable->setDatatablesRowsPerPage($gSettingsManager->getInt('events_per_page'));
+            $compactTable = new DataTables($page, 'adm_events_table');
+            $compactTable->setRowsPerPage($gSettingsManager->getInt('events_per_page'));
 
             $columnHeading = array();
             $columnAlign = array();
@@ -284,38 +284,39 @@ try {
                 case 'compact':
                     $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_VENUE'));
                     $columnAlign = array('center', 'left', 'left', 'left', 'left');
-                    $compactTable->disableDatatablesColumnsSort(array(6));
-                    $compactTable->setDatatablesColumnsNotHideResponsive(array(6));
+                    $compactTable->disableColumnsSort(array(6));
+                    $compactTable->setColumnsNotHideResponsive(array(6));
                     break;
                 case 'room':
                     $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'));
                     $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left');
-                    $compactTable->disableDatatablesColumnsSort(array(7));
-                    $compactTable->setDatatablesColumnsNotHideResponsive(array(7));
+                    $compactTable->disableColumnsSort(array(7));
+                    $compactTable->setColumnsNotHideResponsive(array(7));
                     break;
                 case 'participants':
                     $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'));
                     $columnAlign = array('center', 'left', 'left', 'left');
-                    $compactTable->disableDatatablesColumnsSort(array(5));
-                    $compactTable->setDatatablesColumnsNotHideResponsive(array(5));
-                    $compactTable->setColumnWidth(4, '35%');
+                    $compactTable->disableColumnsSort(array(5));
+                    $compactTable->setColumnsNotHideResponsive(array(5));
+                    $data['column_width'] = array('', '', '', '35%');
                     break;
                 case 'description':
                     $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_DESCRIPTION'));
                     $columnAlign = array('center', 'left', 'left', 'left');
-                    $compactTable->disableDatatablesColumnsSort(array(5));
-                    $compactTable->setDatatablesColumnsNotHideResponsive(array(5));
-                    $compactTable->setColumnWidth(4, '35%');
+                    $compactTable->disableColumnsSort(array(5));
+                    $compactTable->setColumnsNotHideResponsive(array(5));
+                    $data['column_width'] = array('', '', '', '35%');
                     break;
             }
 
             if ($getViewMode === 'html') {
                 $columnHeading[] = '&nbsp;';
                 $columnAlign[] = 'right';
+                $data['column_width'][] = '';
             }
 
-            $compactTable->setColumnAlignByArray($columnAlign);
-            $compactTable->addRowHeadingByArray($columnHeading);
+            $data['headers'] = $columnHeading;
+            $data['column_align'] = $columnAlign;
         }
 
         // create dummy date object
@@ -879,13 +880,21 @@ try {
                     $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
                 }
 
-                $compactTable->addRowByArray($columnValues, 'evt_' . $event->getValue('dat_uuid'), array('class' => $cssClass));
+                $data['rows'][] = array('id' => 'evt_' . $event->getValue('dat_uuid'), 'class' => $cssClass, 'data' => $columnValues);
             }
         }  // End foreach
 
         // Output table bottom for compact view
         if ($getView !== 'detail') { // $getView = 'compact' or 'room' or 'participants' or 'description'
-            $page->addHtml($compactTable->show());
+            $compactTable->setColumnAlignByArray($columnAlign);
+            $compactTable->createJavascript(count($data['rows']), count($data['headers']));
+
+            $page->assignSmartyVariable('columnAlign', $data['column_align']);
+            $page->assignSmartyVariable('columnWidth', $data['column_width']);
+            $page->assignSmartyVariable('headers', $data['headers']);
+            $page->assignSmartyVariable('rows', $data['rows']);
+
+            $page->addHtmlByTemplate('modules/events.list.tpl');
         }
     }
 

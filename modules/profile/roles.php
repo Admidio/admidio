@@ -59,11 +59,13 @@ try {
         unset($_SESSION['set_rol_id']);
     }
 
-    $page = null;
+    // we need a page object even in inline mode for the smarty engine
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-roles', $headline);
+    $smarty = $page->createSmartyObject();
 
     $javascript = '
     // if checkbox of role is clicked then change membership
-    $("#role_assignment_table input[type=checkbox]").click(function() {
+    $("#adm_role_assignment_table input[type=checkbox]").click(function() {
         var checkbox = $(this);
         var roleUuid = $(this).data("role");
 
@@ -144,7 +146,7 @@ try {
         $("#btn-next").click(function() {
             var oneMembershipSet = false;
             var messageOk = "' . $messageId . '";
-            $("#role_assignment_table input[type=checkbox]").each(function(){
+            $("#adm_role_assignment_table input[type=checkbox]").each(function(){
                 if($(this).data("type") === "membership" && $(this).prop("checked")) {
                     oneMembershipSet = true;
                 }
@@ -169,17 +171,14 @@ try {
         });', true);
     }
 
-    // Create table
-    $table = new HtmlTable('role_assignment_table');
     $columnHeading = array(
         '&nbsp;',
         $gL10n->get('SYS_ROLE'),
         $gL10n->get('SYS_DESCRIPTION'),
         $gL10n->get('SYS_LEADER')
     );
-    $table->addRowHeadingByArray($columnHeading);
-    $table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
-    $table->setColumnsWidth(array('10%', '30%', '45%', '15%'));
+    $columnAlign = array('center', 'left', 'left', 'left');
+    $columnWidth = array('10%', '30%', '45%', '15%');
 
     if ($gCurrentUser->isAdministratorRoles()) {
         // User with role rights may assign ALL roles
@@ -242,6 +241,7 @@ try {
     $statement = $gDb->queryPrepared($sql, $queryParams);
     $category = null;
     $role = new Role($gDb);
+    $groups = array();
 
     while ($row = $statement->fetch()) {
         $columnValues = array();
@@ -286,15 +286,10 @@ try {
         // if new category than display a category header
         if ($category !== (int)$role->getValue('cat_id')) {
             $blockId = 'adm_category_' . (int)$role->getValue('cat_id');
-
-            $table->addTableBody();
-            $table->addRow('', array('class' => 'admidio-group-heading', 'id' => 'group_' . $blockId));
-            $table->addColumn();
-            $table->addAttribute('colspan', '4', 'td');
-            $table->addData('<a id="caret_' . $blockId . '" class="admidio-icon-link admidio-open-close-caret" data-target="' . $blockId . '"><i class="bi bi-caret-down-fill"></i></a>' . $role->getValue('cat_name'));
-            $table->addTableBody('id', $blockId);
-
             $category = (int)$role->getValue('cat_id');
+
+            $groupHeading = '<a id="caret_' . $blockId . '" class="admidio-icon-link admidio-open-close-caret" data-target="' . $blockId . '"><i class="bi bi-caret-down-fill"></i></a>' . $role->getValue('cat_name');
+            $groups[$blockId] = array('id' => 'group_' . $blockId,'data' => $groupHeading, 'class' => 'admidio-group-heading', 'colspan' => count($columnHeading));
         }
 
         $leaderRights = '<input type="checkbox" id="leader-' . $role->getValue('rol_uuid') . '" name="leader-' . $role->getValue('rol_uuid') . '"
@@ -325,9 +320,17 @@ try {
         }
         $columnValues[] = $leaderRights;
 
-        $table->addRowByArray($columnValues);
+        $groups[$blockId]['rows'][] = array('id' => 'row_' . $role->getValue('rol_uuid'), 'data' => $columnValues);
     }
-    $html .= $table->show() . '<div id="admidio-profile-roles-alert" class="alert alert-danger form-alert" style="display: none;">&nbsp;</div>';
+    $smarty->assign('columnAlign', $columnAlign);
+    $smarty->assign('columnWidth', $columnWidth);
+    $smarty->assign('headers',$columnHeading);
+    $smarty->assign('groups', $groups);
+
+    // Fetch the HTML table from our Smarty template
+    $htmlTable = $smarty->fetch('modules/profile.roles.list.tpl');
+    $html .= $htmlTable;
+    $html .= '<div id="admidio-profile-roles-alert" class="alert alert-danger form-alert" style="display: none;">&nbsp;</div>';
 
     if ($getInline) {
         echo $html . '</div>';

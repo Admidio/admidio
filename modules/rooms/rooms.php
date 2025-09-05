@@ -137,7 +137,6 @@ try {
                         <div class="col-sm-4 col-8">&nbsp;</div>');
             }
 
-            //echo $table->getHtmlTable();
             $page->addHtml('</div>');
 
             if (strlen($room->getValue('room_description')) > 0) {
