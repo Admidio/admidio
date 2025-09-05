@@ -18,7 +18,7 @@
         </tr>
     {else}
     {foreach $rows as $row}
-        <tr id="{$row.id}" {if isset($exportMode)}style="{$rowsStyle}{/if}">
+        <tr id="{$row.id}" {if isset($exportMode)}style="{$rowsStyle}"{/if}>
         {foreach $row.data as $key => $cell}
             <td style="text-align:{$columnAlign[$key]};">{$cell}</td>
         {/foreach}
