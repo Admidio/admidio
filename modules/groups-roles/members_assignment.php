@@ -22,6 +22,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
@@ -122,7 +123,7 @@ try {
         });
 
         // if checkbox of user is clicked then change membership
-        $("#tbl_assign_role_membership").on("click", "input[type=checkbox]", function() {
+        $("#adm_assign_role_membership").on("click", "input[type=checkbox]", function() {
             var checkbox = $(this);
             var userUuid = $(this).data("user");
 
@@ -208,7 +209,7 @@ try {
         $form->addToHtmlPage();
 
         // create table object
-        $table = new HtmlTable('tbl_assign_role_membership', $page, true, true, 'table table-condensed');
+        $table = new DataTables($page, 'adm_assign_role_membership');
         $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
         // create column header to assign role leaders
@@ -235,7 +236,7 @@ try {
         $columnHeading = array(
             '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))) . '"></i>',
             $gL10n->get('SYS_MEMBER'));
-        $columnAlignment = array('left', 'left');
+        $columnAlignment = array('left', 'center');
 
         if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->isAdministratorUsers())) {
             $columnHeading[] = $gL10n->get('SYS_LASTNAME');
@@ -257,13 +258,21 @@ try {
             $columnAlignment[] = 'left';
         }
         $columnHeading[] = $gL10n->get('SYS_LEADER') . FormPresenter::getHelpTextIcon($htmlLeaderText);
-        $columnAlignment[] = 'left';
+        $columnAlignment[] = 'center';
 
         $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_uuid' => $getFilterRoleUuid, 'mem_show_all' => $getMembersShowAll)));
         $table->setColumnAlignByArray($columnAlignment);
-        $table->addRowHeadingByArray($columnHeading);
+        $table->setColumnsNotHideResponsive(array(1, count($columnHeading)));
+        $table->createJavascript(0, count($columnHeading));
 
-        $page->addHtml($table->show());
+        $smarty = $page->createSmartyObject();
+        $smarty->assign('columnAlign', $columnAlignment);
+        $smarty->assign('headers', $columnHeading);
+
+        // Fetch the HTML table from our Smarty template
+        $htmlTable = $smarty->fetch('modules/groups-roles.members-assignment.list.tpl');
+
+        $page->addHtml($htmlTable);
         $page->addHtml('<p>' . $gL10n->get('SYS_CHECKBOX_AUTOSAVE') . '</p>');
 
         $page->show();

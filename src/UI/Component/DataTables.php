@@ -81,6 +81,11 @@ class DataTables
     protected string $serverSideFile = '';
 
     /**
+     * @var string A message that should be shown if the table has no rows.
+     */
+    protected string $emptyTableMessage = '';
+
+    /**
      * Constructor creates the table element
      * @param HtmlPage|PagePresenter $htmlPage An object of the current HtmlPage where the HTML table is integrated.
      * @param string $tableID The HTML ID of the table which should be converted in a DataTables.
@@ -122,13 +127,17 @@ class DataTables
             $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datetime-luxon.js');
         }
 
-        $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json"}';
+        if (!empty($this->emptyTableMessage)) {
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json", "emptyTable": "' . $this->emptyTableMessage . '"}';
+        } else {
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json"}';
+        }
 
         if ($rowCount > 10 || $this->serverSideProcessing) {
             // set default page length of the table
             $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
             // set page length menu entries
-            // check if there is a entry with the value of -1, if not then add it
+            // check if there is an entry with the value of -1, if not then add it
             if (!array_key_exists(-1, $this->rowsPerPageMenuEntries)) {
                 $this->rowsPerPageMenuEntries[-1] = $gL10n->get('SYS_ALL');
             }
@@ -251,6 +260,18 @@ class DataTables
     }
 
     /**
+     * Set a text id of the translation files that should be shown if table has no rows.
+     * @param string $messageId Text id of the translation file.
+     * @throws Exception
+     */
+    public function setMessageIfNoRowsFound(string $messageId)
+    {
+        global $gL10n;
+
+        $this->emptyTableMessage = $gL10n->get($messageId);
+    }
+
+    /**
      * Set the align for each column of the current table. This method must be called
      * before a row is added to the table. Each entry of the array represents a column.
      * @param array<int,string> $columnsAlign An array which contains the align for each column of the table.
@@ -259,6 +280,13 @@ class DataTables
     public function setColumnAlignByArray(array $columnsAlign)
     {
         foreach ($columnsAlign as $columnNumber => $align) {
+            // replace left/right (style tags) with start/end (datatables classes)
+            if ($align === 'left') {
+                $align = 'start';
+            } elseif ($align === 'right') {
+                $align = 'end';
+            }
+
             $this->datatablesColumnDefs[] = '{ targets: ' . $columnNumber . ', className: \'text-' . $align . '\' }';
         }
     }

@@ -13,6 +13,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
@@ -112,7 +113,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
     $countShowRoles = 0;
     $member = new Membership($gDb);
     $role   = new Role($gDb);
-    $smarty = HtmlPage::createSmartyObject();
+    $smarty = PagePresenter::createSmartyObject();
     $smarty->assign('listID', $htmlListId);
     $smarty->assign('l10n', $gL10n);
     $smarty->assign('settings', $gSettingsManager);

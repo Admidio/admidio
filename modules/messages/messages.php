@@ -11,6 +11,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
@@ -80,29 +81,27 @@ try {
         );
     }
 
-    $table = new HtmlTable('adm_message_table', $page, true, true);
-    $table->setServerSideProcessing(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_data.php');
-
-    $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'right'));
-    $table->addRowHeadingByArray(array(
+    $columnAlign = array('start', 'start', 'start', 'start', 'start', 'end');
+    $columnHeading = array(
         '<i class="bi bi-envelope-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CATEGORY') . '"></i>',
         $gL10n->get('SYS_SUBJECT'),
         $gL10n->get('SYS_CONVERSATION_PARTNER'),
         '<i class="bi bi-paperclip" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ATTACHMENT') . '"></i>',
         $gL10n->get('SYS_DATE'),
         ''
-    ));
+    );
 
-    $table->disableDatatablesColumnsSort(array(3, 6));
-    $table->setDatatablesColumnsNotHideResponsive(array(6));
-    // special settings for the table
-    $table->setDatatablesOrderColumns(array(array(5, 'desc')));
+    $table =new DataTables($page, 'adm_messages_table');
+    $table->setServerSideProcessing(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_data.php');
+    $table->setColumnAlignByArray($columnAlign);
+    $table->disableColumnsSort(array(3, 6));
+    $table->setColumnsNotHideResponsive(array(6));
+    $table->setOrderColumns(array(array(5, 'desc')));
+    $table->createJavascript(0, count($columnHeading));
 
-    // add table to the form
-    $page->addHtml($table->show());
-
-    // add form to html page and show page
-    $page->show();
+    $page->assignSmartyVariable('headers', $columnHeading);
+    $page->addHtmlByTemplate('modules/messages.list.tpl');
+    $page->show(); // show html of complete page
 } catch (Exception $e) {
     if ($getMsgUuid !== '') {
         echo $e->getMessage();
