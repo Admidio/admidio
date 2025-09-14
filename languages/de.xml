@@ -1074,6 +1074,7 @@
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
   <string name="SYS_NO_LEADER">Ohne Leiter:in</string>
   <string name="SYS_NO_LOGIN_DATA">Du hast noch keinen Benutzernamen und kein Passwort?</string>
+  <string name="SYS_NO_MATCHING_ENTRIES">Keine passenden Einträge gefunden.</string>
   <string name="SYS_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">Es wurden keine Berechtigungen vergeben.</string>
