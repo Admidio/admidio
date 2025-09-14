@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Users\Entity\User;
+use DateTime;
 
 /**
  * @brief Handle memberships of roles and manage it in the database table adm_members
@@ -61,21 +62,29 @@ class Membership extends Entity
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
-        global $gChangeNotification, $gCurrentSession;
+        global $gChangeNotification, $gCurrentSession, $gSettingsManager;
 
         // New records will be logged in ::save, because their ID is only generated during first save
         if (!$this->newRecord && isset($gCurrentSession)) {
             if (in_array($columnName, array('mem_begin', 'mem_end'))) {
-                $oldValue = $this->getValue($columnName, 'Y-m-d');
+                $oldValue = $this->getValue($columnName, $gSettingsManager->getString('system_date'));
             } else {
                 $oldValue = $this->getValue($columnName);
             }
-            if ($oldValue != $newValue) {
+            // format the new value in system date format for logging and notification
+            $newValueLogging = $newValue;
+            $date = new DateTime($newValue);
+            if ($date !== false) {
+                $newValueLogging = $date->format($gSettingsManager->getString('system_date'));
+            }
+            if ($oldValue != $newValueLogging) {
+                $memId = $this->getValue('mem_id');
+                $obj = new self($this->db, $memId);
                 $gChangeNotification->logRoleChange(
-                    $this, 
+                    $obj,
                     $columnName,
                     (string) $oldValue,
-                    (string) $newValue
+                    (string) $newValueLogging
                 );
             }
         }
@@ -122,28 +131,29 @@ class Membership extends Entity
     public function delete(): bool
     {
         // Queue admin notification about membership deletion
-        global $gChangeNotification, $gCurrentSession;
+        global $gChangeNotification, $gCurrentSession, $gSettingsManager;
 
         // If this is a new record that hasn't been written to the database, simply ignore it
         if (!$this->newRecord && is_object($gChangeNotification)) {
+            $memId = $this->getValue('mem_id');
+            $obj = new self($this->db, $memId);
+
             // Log begin, end and leader as changed (set to NULL)
-            $usrId = $this->getValue('mem_usr_id');
-            $membership = $this->getValue('rol_name');
             $gChangeNotification->logRoleChange(
-                $this,
+                $obj,
                 'mem_begin',
-                $this->getValue('mem_begin', 'Y-m-d'),
+                $this->getValue('mem_begin', $gSettingsManager->getString('system_date')),
                 ''
             );
             $gChangeNotification->logRoleChange(
-                $this,
+                $obj,
                 'mem_end',
-                $this->getValue('mem_end', 'Y-m-d'),
+                $this->getValue('mem_end', $gSettingsManager->getString('system_date')),
                 ''
             );
             if ($this->getValue('mem_leader')) {
                 $gChangeNotification->logRoleChange(
-                    $this,
+                    $obj,
                     'mem_leader',
                     $this->getValue('mem_leader'),
                     ''
@@ -168,7 +178,7 @@ class Membership extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        global $gCurrentSession, $gChangeNotification, $gCurrentUser;
+        global $gCurrentSession, $gChangeNotification, $gCurrentUser, $gSettingsManager;
 
         // if role is administrator than only administrator can add new user,
         // but don't change their own membership, because there must be at least one administrator
@@ -192,28 +202,24 @@ class Membership extends Entity
             // the roles table => need to create a new object that loads the
             // role name from the database, too!
             $memId = $this->getValue('mem_id');
-
             $obj = new self($this->db, $memId);
 
             // Log begin, end and leader as changed (set to NULL)
-            $usrId = $obj->getValue('mem_usr_id');
-            $membership = $obj->getValue('rol_name');
-
             $gChangeNotification->logRoleChange(
-                $this,
+                $obj,
                 'mem_begin',
                 '',
-                $obj->getValue('mem_begin', 'Y-m-d')
+                $obj->getValue('mem_begin', $gSettingsManager->getString('system_date'))
             );
             $gChangeNotification->logRoleChange(
-                $this,
+                $obj,
                 'mem_end',
                 '',
-                $obj->getValue('mem_end', 'Y-m-d')
+                $obj->getValue('mem_end', $gSettingsManager->getString('system_date'))
             );
             if ($obj->getValue('mem_leader')) {
                 $gChangeNotification->logRoleChange(
-                    $this,
+                    $obj,
                     'mem_leader',
                     '',
                     $obj->getValue('mem_leader')
