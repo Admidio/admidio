@@ -426,7 +426,7 @@ class ProfileFields
                             }
 
                             // if no format or html is set then show date format from Admidio settings
-                            if ($format === '' || $format === 'html') {
+                            if ($format === '' || $format === 'text' || $format === 'html') {
                                 $value = $date->format($GLOBALS['gSettingsManager']->getString('system_date'));
                             } else {
                                 $value = $date->format($format);

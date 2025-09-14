@@ -311,7 +311,7 @@ class ChangeNotification
      */
     public function logUserDeletion(int $userID, User $user = null)
     {
-        global $gProfileFields, $gL10n, $gDb;
+        global $gProfileFields, $gL10n, $gDb, $gSettingsManager;
 
         // If user wasn't yet created in the DB, no need to log anything
         if ($userID == 0) {
@@ -364,9 +364,20 @@ class ChangeNotification
         $query = $gDb->queryPrepared($sql, array($userID));
 
         while ($row = $query->fetch()) {
-            $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], '', $user, /*deleting=*/true);
-            if ($row['mem_end']) {
-                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], '', $user, /*deleting=*/true);
+            $memBegin = $row['mem_begin'];
+            $memEnd = $row['mem_end'];
+
+            $date = new DateTime($memBegin);
+            if ($date !== false) {
+                $memBegin = $date->format($gSettingsManager->getString('system_date'));
+            }
+            $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $memBegin, '', $user, /*deleting=*/true);
+            if ($memEnd) {
+                $date = new DateTime($memEnd);
+                if ($date !== false) {
+                    $memEnd = $date->format($gSettingsManager->getString('system_date'));
+                }
+                $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $memEnd, '', $user, /*deleting=*/true);
             }
             if ($row['mem_leader']) {
                 $this->logRoleChange($userID, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], '', $user, /*deleting=*/true);

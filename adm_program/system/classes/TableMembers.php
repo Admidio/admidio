@@ -56,22 +56,30 @@ class TableMembers extends TableAccess
      */
     public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
     {
-        global $gChangeNotification, $gCurrentSession;
+        global $gChangeNotification, $gCurrentSession, $gSettingsManager;
 
         // New records will be logged in ::save, because their ID is only generated during first save
         if (!$this->newRecord && $gCurrentSession instanceof Session) {
             if (in_array($columnName, array('mem_begin', 'mem_end'))) {
-                $oldValue = $this->getValue($columnName, 'Y-m-d');
+                $oldValue = $this->getValue($columnName, $gSettingsManager->getString('system_date'));
             } else {
                 $oldValue = $this->getValue($columnName);
             }
-            if ($oldValue != $newValue) {
+            // format the new value in system date format for logging and notification
+            $newValueLogging = $newValue;
+            $date = new DateTime($newValue);
+            if ($date !== false) {
+                $newValueLogging = $date->format($gSettingsManager->getString('system_date'));
+            }
+            if ($oldValue != $newValueLogging) {
+                $memId = $this->getValue('mem_id');
+                $obj = new self($this->db, $memId);
                 $gChangeNotification->logRoleChange(
                     $this->getValue('mem_usr_id'),
-                    $this->getValue('rol_name'),
+                    $obj->getValue('rol_name', 'database'), // if the format is not set to database, SecurityUtils::encodeHTML is used
                     $columnName,
                     (string) $oldValue,
-                    (string) $newValue
+                    (string) $newValueLogging
                 );
             }
         }
@@ -118,19 +126,20 @@ class TableMembers extends TableAccess
     public function delete(): bool
     {
         // Queue admin notification about membership deletion
-        global $gChangeNotification, $gCurrentSession;
+        global $gChangeNotification, $gCurrentSession, $gSettingsManager;
 
         // If this is a new record that hasn't been written to the database, simply ignore it
         if (!$this->newRecord && is_object($gChangeNotification)) {
             // Log begin, end and leader as changed (set to NULL)
             $usrId = $this->getValue('mem_usr_id');
             $memId = $this->getValue('mem_id');
-            $membership = $this->getValue('rol_name');
+            $obj = new self($this->db, $memId);
+            $membership = $obj->getValue('rol_name', 'database');  // if the format is not set to database, SecurityUtils::encodeHTML is used
             $gChangeNotification->logRoleChange(
                 $usrId,
                 $membership,
                 'mem_begin',
-                $this->getValue('mem_begin', 'Y-m-d'),
+                $this->getValue('mem_begin', $gSettingsManager->getString('system_date')),
                 '',
                 null,
                 true
@@ -139,7 +148,7 @@ class TableMembers extends TableAccess
                 $usrId,
                 $membership,
                 'mem_end',
-                $this->getValue('mem_end', 'Y-m-d'),
+                $this->getValue('mem_end', $gSettingsManager->getString('system_date')),
                 '',
                 null,
                 true
@@ -175,7 +184,7 @@ class TableMembers extends TableAccess
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        global $gCurrentSession, $gChangeNotification, $gCurrentUser;
+        global $gCurrentSession, $gChangeNotification, $gCurrentUser, $gSettingsManager;
 
         // if role is administrator than only administrator can add new user,
         // but don't change their own membership, because there must be at least one administrator
@@ -204,13 +213,13 @@ class TableMembers extends TableAccess
 
             // Log begin, end and leader as changed (set to NULL)
             $usrId = $obj->getValue('mem_usr_id');
-            $membership = $obj->getValue('rol_name');
+            $membership = $obj->getValue('rol_name', 'database'); // if the format is not set to database, SecurityUtils::encodeHTML is used
             $gChangeNotification->logRoleChange(
                 $usrId,
                 $membership,
                 'mem_begin',
                 '',
-                $obj->getValue('mem_begin', 'Y-m-d'), // user=
+                $obj->getValue('mem_begin', $gSettingsManager->getString('system_date')), // user=
                 null,
                 true
             );
@@ -219,7 +228,7 @@ class TableMembers extends TableAccess
                 $membership,
                 'mem_end',
                 '',
-                $obj->getValue('mem_end', 'Y-m-d'), // user=
+                $obj->getValue('mem_end', $gSettingsManager->getString('system_date')), // user=
                 null,
                 true
             );
