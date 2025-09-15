@@ -517,6 +517,10 @@ class Entity
                     }
                     break;
 
+                case 'blob':
+                    // For blobs we return the raw data as is
+                    break;
+
                 case 'bytea':
                     // For Postgres, we must encode the stored resource hex value back to binary
                     if (is_resource($columnValue)) {
@@ -1113,6 +1117,10 @@ class Entity
                         break;
 
                     // Byte/Blob
+                    case 'blob':
+                        // For blobs we accept the raw data as is
+                        break;
+
                     case 'bytea':
                         // Postgres can only store hex values in bytea, so we must decode binary in hex
                         $newValue = bin2hex($newValue);
