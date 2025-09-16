@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Users\Entity\User;
 use DateTime;
+use Throwable;
 
 /**
  * @brief Handle memberships of roles and manage it in the database table adm_members
@@ -73,9 +74,11 @@ class Membership extends Entity
             }
             // format the new value in system date format for logging and notification
             $newValueLogging = $newValue;
-            $date = new DateTime($newValue);
-            if ($date !== false) {
+            try {
+                $date = new DateTime($newValue);
                 $newValueLogging = $date->format($gSettingsManager->getString('system_date'));
+            } catch (Throwable $e) {
+                // not a date, so keep original value
             }
             if ($oldValue != $newValueLogging) {
                 $memId = $this->getValue('mem_id');
@@ -308,7 +311,7 @@ class Membership extends Entity
 
         if (!$this->newRecord && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
             // subtract one day, so that user leaves role immediately
-            $now = new \DateTime();
+            $now = new DateTime();
             $oneDayOffset = new DateInterval('P1D');
             $nowDate = $now->format('Y-m-d');
             $endDate = $now->sub($oneDayOffset)->format('Y-m-d');
@@ -317,7 +320,7 @@ class Membership extends Entity
             // the actual date must be after the beginning
             // and the actual date must be before the end date
             if (strcmp($nowDate, $this->getValue('mem_begin', 'Y-m-d')) >= 0
-            &&  strcmp($endDate, $this->getValue('mem_end', 'Y-m-d')) < 0) {
+                &&  strcmp($endDate, $this->getValue('mem_end', 'Y-m-d')) < 0) {
                 // if role administrator then check if this membership is the last one -> don't delete it
                 if ((int) $this->getValue('rol_administrator') === 1) {
                     $sql = 'SELECT mem_id
@@ -370,53 +373,53 @@ class Membership extends Entity
     public function calculateDuration(?string $startDate = null, ?string $endDate = null): array
     {
         global $gL10n;
-        
+
         $startDate = $startDate ?? $this->getValue('mem_begin', 'Y-m-d');
         $endDate = $endDate ?? $this->getValue('mem_end', 'Y-m-d');
-        
-        $startDateTime = new \DateTime($startDate);
-        
+
+        $startDateTime = new DateTime($startDate);
+
         // If membership is ongoing, use current date as end date
         if ($endDate === DATE_MAX) {
-            $endDateTime = new \DateTime();
+            $endDateTime = new DateTime();
         } else {
-            $endDateTime = new \DateTime($endDate);
+            $endDateTime = new DateTime($endDate);
         }
-        
+
         // If end date is in the future, use current date for duration calculation
-        $now = new \DateTime();
+        $now = new DateTime();
         if ($endDateTime > $now && $endDate !== DATE_MAX) {
             $endDateTime = $now;
         }
-        
+
         // Calculate difference
         $interval = $startDateTime->diff($endDateTime);
-        
+
         $years = $interval->y;
         $months = $interval->m;
         $days = $interval->d;
-        
+
         // Format a human-readable string
         $durationText = '';
-        
+
         if ($years > 0) {
             $durationText .= $years . ' ' . ($years === 1 ? $gL10n->get('SYS_YEAR') : $gL10n->get('SYS_YEARS'));
         }
-        
+
         if ($months > 0) {
             if ($durationText !== '') {
                 $durationText .= ', ';
             }
             $durationText .= $months . ' ' . ($months === 1 ? $gL10n->get('SYS_MONTH') : $gL10n->get('SYS_MONTHS'));
         }
-        
+
         if ($days > 0 || ($years === 0 && $months === 0)) {
             if ($durationText !== '') {
                 $durationText .= ', ';
             }
             $durationText .= $days . ' ' . ($days === 1 ? $gL10n->get('SYS_DAY') : $gL10n->get('SYS_DAYS'));
         }
-        
+
         return [
             'years' => $years,
             'months' => $months,
