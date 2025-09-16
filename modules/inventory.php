@@ -278,15 +278,19 @@ try {
                 </div>
                 <div class="modal-body">';
             if (count($getItemUUIDs) > 0) {
-                $msg .= '<p><i class="bi bi-eye-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE'))) . '</p>';
-                $msg .= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_RETIRE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_RETIRE'))) . '</p>';
-                $msg .= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_DELETE_DESC', array($gL10n->get('SYS_INVENTORY_SELECTION_DELETE'))) . '</p>';
+                $msg .= '<p><i class="bi bi-eye-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE_DESC', array('SYS_INVENTORY_SELECTION_REINSTATE')) . '</p>';
+                $msg .= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_RETIRE_DESC', array('SYS_INVENTORY_SELECTION_RETIRE')) . '</p>';
+                if ($gCurrentUser->isAdministratorInventory()) {
+                    $msg .= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_SELECTION_DELETE_DESC', array('SYS_INVENTORY_SELECTION_DELETE')) . '</p>';
+                } else {
+                    $msg .= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC') . '</p>';
+                }
             } else {
                 if (!$getRetired) {
-                    $msg .= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE_DESC', array($gL10n->get('SYS_INVENTORY_ITEM_RETIRE'))) . '</p>';
+                    $msg .= '<p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE_DESC', array('SYS_INVENTORY_ITEM_RETIRE')) . '</p>';
                 }
                 if ($gCurrentUser->isAdministratorInventory()) {
-                    $msg .= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE_DESC', array($gL10n->get('SYS_INVENTORY_ITEM_DELETE'))) . '</p>';
+                    $msg .= '<p><i class="bi bi-trash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE_DESC', array('SYS_INVENTORY_ITEM_DELETE')) . '</p>';
                 }
             }
             $msg .= '</div>
@@ -296,8 +300,10 @@ try {
                         <i class="bi bi-eye"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE') . '</button>';
                 $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . $retireOnClick . '">
                         <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_RETIRE') . '</button>';
-                $msg .= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
+                if ($gCurrentUser->isAdministratorInventory()) {
+                    $msg .= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
                         <i class="bi bi-trash"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_DELETE') . '</button>';
+                }
             } else {
                 if (!$getRetired) {
                     $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . $retireOnClick . '">
@@ -321,7 +327,7 @@ try {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC') . '</p>
+                    <p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC')) . '</p>
                 </div>
                 <div class="modal-footer">
                 <button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">

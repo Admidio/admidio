@@ -856,8 +856,9 @@
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Number of items per page</string>
   <string name="SYS_INVENTORY_KEEPER">Keeper</string>
   <string name="SYS_INVENTORY_KEEPER_DESC">Keeper of the item</string>
-  <string name="SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC">You can reinstate the item into the inventory manager.\n\nIf you want to delete the item, please contact an administrator or the manager of the inventory manager!\n\n#VAR1#</string>
-  <string name="SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC">You can retire the item from the inventory manager. This has the advantage that the data is preserved and you can later always see who has borrowed this item.\n\nIf you want to delete the item, please contact an administrator or the manager of the inventory manager!</string>
+  <string name="SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC">If you want to delete the item, please contact an administrator or the manager of the inventory manager!</string>
+  <string name="SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC">You can reinstate the item into the inventory manager.\n\n#VAR1#\n\n#VAR2#</string>
+  <string name="SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC">You can retire the item from the inventory manager. This has the advantage that the data is preserved and you can later always see who has borrowed this item.\n\n#VAR1#</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER">Last receiver</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER_DESC">Last receiver of the item</string>
   <string name="SYS_INVENTORY_NO_NEW_IMPORT_DATA">There was no new data in the import file!</string>

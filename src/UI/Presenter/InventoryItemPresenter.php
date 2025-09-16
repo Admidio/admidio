@@ -497,7 +497,8 @@ class InventoryItemPresenter extends PagePresenter
                                 'type' => 'text',
                                 'property' => $fieldProperty,
                                 'helpTextId' => $helpId,
-                                'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
+                                'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
+                                'toggleable' => true
                             )
                         );
 
@@ -512,6 +513,7 @@ class InventoryItemPresenter extends PagePresenter
                                 array(
                                     'property' => FormPresenter::FIELD_REQUIRED,
                                     'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                    'toggleable' => true
                                 )
                             );
                         } else {
@@ -527,6 +529,7 @@ class InventoryItemPresenter extends PagePresenter
                                 array(
                                     'property' => FormPresenter::FIELD_REQUIRED,
                                     'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                    'toggleable' => true
                                 )
                             );
                         }

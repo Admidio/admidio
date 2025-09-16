@@ -998,7 +998,7 @@ class InventoryPresenter extends PagePresenter
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_COPY')
                         );
                     } else {
-                        $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
+                        $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                         // Add reinstate action
                         $rowValues['actions'][] = array(
                             'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
@@ -1008,7 +1008,7 @@ class InventoryPresenter extends PagePresenter
                         );
                     }
 
-                    if ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
+                    if (!$gCurrentUser->isAdministratorInventory() && $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
                         if (!$this->itemsData->isRetired()) {
                             // Add retire action
                             $rowValues['actions'][] = array(
@@ -1295,7 +1295,7 @@ class InventoryPresenter extends PagePresenter
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_COPY')
                     );
                 } else {
-                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
+                    $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                     // Add reinstate action
                     $rowValues['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
@@ -1305,7 +1305,7 @@ class InventoryPresenter extends PagePresenter
                     );
                 }
 
-                if ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
+                if (!$gCurrentUser->isAdministratorInventory() && $this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) {
                     if (!$itemsData->isRetired()) {
                         // Add retire action
                         $rowValues['actions'][] = array(
