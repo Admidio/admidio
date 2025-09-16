@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    {if !$print}
+    {if !$print && $editRights}
         <div id="adm_inventory_table_select_actions" class="mb-3">
             <ul class="nav admidio-menu-function-node">
                 <li class="nav-item">

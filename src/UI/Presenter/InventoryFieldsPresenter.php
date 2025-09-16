@@ -255,13 +255,13 @@ class InventoryFieldsPresenter extends PagePresenter
         $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         foreach ($items->getItemFields() as $itemField) {
-            if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {
+            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {
                 continue; // skip borrowing fields if borrowing is disabled
             }
             $prevItemFieldCategoryID = $itemFieldCategoryID;
             $itemFieldCategoryID = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;
 
-            if ($itemFieldCategoryID !== $prevItemFieldCategoryID &&  count($templateItemFields) > 0) {
+            if ($itemFieldCategoryID !== $prevItemFieldCategoryID && count($templateItemFields) > 0) {
                 $templateItemFieldsCategories[] = array(
                     'id' => $templateItemFields[0]['categoryID'],
                     'name' => $templateItemFields[0]['categoryName'],
@@ -304,7 +304,7 @@ class InventoryFieldsPresenter extends PagePresenter
             );
 
             $templateRowItemField['actions'][] = array(
-                'url' =>  $editUrl,
+                'url' => $editUrl,
                 'icon' => 'bi bi-pencil-square',
                 'tooltip' => $gL10n->get('SYS_EDIT')
             );

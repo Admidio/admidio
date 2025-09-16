@@ -32,7 +32,7 @@ class InventoryImportPresenter extends PagePresenter
     protected array $encoding = array();
     protected array $separator = array();
     protected array $enclosure = array();
-    
+
     /**
      * Constructor creates the page object and initialized all parameters.
      * @param string $objectUUID UUID of an object that represents the page. The data shown at the page will belong
@@ -49,7 +49,7 @@ class InventoryImportPresenter extends PagePresenter
             $this->formValues = SecurityUtils::encodeHTML(StringUtils::strStripTags($_SESSION['import_request']));
             unset($_SESSION['import_request']);
         }
-        
+
         // Make sure all potential form values have either a value from the previous request or the default
         if (!isset($this->formValues['format'])) {
             $this->formValues['format'] = '';
@@ -71,9 +71,9 @@ class InventoryImportPresenter extends PagePresenter
         $this->formats = array(
             'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
             'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),
-            'XLS'  => $gL10n->get('SYS_EXCEL_97_2003'),
-            'ODS'  => $gL10n->get('SYS_ODF_SPREADSHEET'),
-            'CSV'  => $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
+            'XLS' => $gL10n->get('SYS_EXCEL_97_2003'),
+            'ODS' => $gL10n->get('SYS_ODF_SPREADSHEET'),
+            'CSV' => $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
             'HTML' => $gL10n->get('SYS_HTML_TABLE')
         );
 
@@ -88,7 +88,7 @@ class InventoryImportPresenter extends PagePresenter
             'CP1252' => $gL10n->get('SYS_CP1252'),
             'ISO-8859-1' => $gL10n->get('SYS_ISO_8859_1')
         );
-        
+
         $this->separator = array(
             '' => $gL10n->get('SYS_AUTO_DETECT'),
             ',' => $gL10n->get('SYS_COMMA'),
@@ -130,8 +130,8 @@ class InventoryImportPresenter extends PagePresenter
             $gL10n->get('SYS_FORMAT'),
             $this->formats,
             array('showContextDependentFirstEntry' => false,
-            'property' => FormPresenter::FIELD_REQUIRED,
-            'defaultValue' => $this->formValues['format'])
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'defaultValue' => $this->formValues['format'])
         );
         $this->addJavascript(
             '
@@ -143,20 +143,20 @@ class InventoryImportPresenter extends PagePresenter
             $("#format").trigger("change");',
             true
         );
-        
+
         $form->addFileUpload(
             'userfile',
             $gL10n->get('SYS_CHOOSE_FILE'),
             array('property' => FormPresenter::FIELD_REQUIRED, 'allowedMimeTypes' => array('text/comma-separated-values',
-                    'text/csv',
-                    'text/html',
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'application/vnd.ms-excel',
-                    'application/vnd.oasis.opendocument.spreadsheet'
-                )
+                'text/csv',
+                'text/html',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-excel',
+                'application/vnd.oasis.opendocument.spreadsheet'
+            )
             )
         );
-        
+
         // Add format-specific settings (if specific format is selected)
         // o) Worksheet: AUTO, XLSX, XLS, ODS, HTML (not CSV)
         // o) Encoding (Default/Detect/UTF-8/ISO-8859-1/CP1252): CSV, HTML
@@ -167,28 +167,28 @@ class InventoryImportPresenter extends PagePresenter
             '',
             array('class' => 'import-setting import-XLSX import-XLS import-ODS import-HTML import-AUTO')
         );
-        
+
         $form->addSelectBox(
             'import_encoding',
             $gL10n->get('SYS_CODING'),
             $this->encoding,
             array('showContextDependentFirstEntry' => false, 'defaultValue' => $this->formValues['import_encoding'], 'class' => 'import-setting import-CSV import-HTML')
         );
-        
+
         $form->addSelectBox(
             'import_separator',
             $gL10n->get('SYS_SEPARATOR_FOR_CSV_FILE'),
             $this->separator,
             array('showContextDependentFirstEntry' => false, 'defaultValue' => $this->formValues['import_separator'], 'class' => 'import-setting import-CSV')
         );
-        
+
         $form->addSelectBox(
             'import_enclosure',
             $gL10n->get('SYS_FIELD_ENCLOSURE'),
             $this->enclosure,
             array('showContextDependentFirstEntry' => false, 'defaultValue' => $this->formValues['import_enclosure'], 'class' => 'import-setting import-CSV')
         );
-        
+
         $form->addSubmitButton(
             'btn_forward',
             $gL10n->get('SYS_ASSIGN_FIELDS'),
@@ -196,7 +196,7 @@ class InventoryImportPresenter extends PagePresenter
         );
 
         $form->addToHtmlPage();
-        $gCurrentSession->addFormObject($form);    
+        $gCurrentSession->addFormObject($form);
     }
 
     public function createAssignFieldsForm(): void
@@ -214,7 +214,7 @@ class InventoryImportPresenter extends PagePresenter
         } else {
             $formValues['first_row'] = true;
         }
-               
+
         // show form
         $form = new FormPresenter(
             'adm_inventory_import_assign_fields_form',
@@ -228,7 +228,7 @@ class InventoryImportPresenter extends PagePresenter
             $gL10n->get('SYS_FIRST_LINE_COLUMN_NAME'),
             $formValues['first_row']
         );
-        
+
         $this->addJavascript('
             $(".admidio-import-field").change(function() {
                 var available = [];
@@ -245,7 +245,7 @@ class InventoryImportPresenter extends PagePresenter
                 });
                 var outstr = "";
                 $(available).not(used).each(function(index, value) {
-                    if (value === "'. $gL10n->get('SYS_ABR_NO') .'") {
+                    if (value === "' . $gL10n->get('SYS_ABR_NO') . '") {
                         outstr += "<tr><td>" + value + "</td><td></td></tr>";
                     } else {
                         outstr += "<tr><td>" + value + "</td><td><a href=\"' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=field_edit&field_name=" + encodeURIComponent(value) + "&redirect_to_import=true\" class=\"btn btn-primary btn-sm\">' . $gL10n->get('SYS_INVENTORY_ITEMFIELD_CREATE') . '</a></td></tr>";
@@ -272,7 +272,7 @@ class InventoryImportPresenter extends PagePresenter
         $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
         $items = new ItemsData($gDb, $gCurrentOrgId);
         foreach ($items->getItemFields() as $itemField) {
-            if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {
+            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {
                 continue; // skip borrowing fields if borrowing is disabled
             }
 
@@ -283,13 +283,13 @@ class InventoryImportPresenter extends PagePresenter
                     $fieldDefaultValue = -1;
                 }
             }
-    
+
             // set required fields
             $fieldProperty = FormPresenter::FIELD_DEFAULT;
             if ($itemField->GetValue('inf_required_input') === 1) {
                 $fieldProperty = FormPresenter::FIELD_REQUIRED;
             }
-    
+
             $form->addSelectBox(
                 $itemField->GetValue('inf_id'),
                 $itemField->GetValue('inf_name'),
