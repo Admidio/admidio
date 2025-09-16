@@ -67,9 +67,11 @@ class TableMembers extends TableAccess
             }
             // format the new value in system date format for logging and notification
             $newValueLogging = $newValue;
-            $date = new DateTime($newValue);
-            if ($date !== false) {
+            try {
+                $date = new DateTime($newValue);
                 $newValueLogging = $date->format($gSettingsManager->getString('system_date'));
+            } catch (Throwable $e) {
+                // not a date, so keep original value
             }
             if ($oldValue != $newValueLogging) {
                 $memId = $this->getValue('mem_id');
