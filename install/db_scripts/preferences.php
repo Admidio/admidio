@@ -167,7 +167,7 @@ $defaultOrgPreferences = array(
     'inventory_items_disable_borrowing' => '0',
     'inventory_profile_view_enabled' => '1',
     'inventory_profile_view' => 'LAST_RECEIVER',
-    'inventory_export_filename' => $GLOBALS['gL10n']->get('SYS_INVENTORY'),
+    'inventory_export_filename' => 'SYS_INVENTORY',
     'inventory_add_date' => '0',
 
     // Events
