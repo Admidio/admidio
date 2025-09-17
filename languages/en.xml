@@ -960,6 +960,8 @@
   <string name="SYS_LOGIN_WITH_EMAIL_DESC">If a user has an e-mail address stored in their profile field, and the address is unique, it can be used as the user name for logging in. (default: no)</string>
   <string name="SYS_LOGO_FILE">Logo File</string>
   <string name="SYS_LOGO_FILE_DESC">The path to the logo file that is displayed in the top left corner. The path should be relative to your installation's root directory. If left empty, the default logo of the theme will be used. (default: empty)</string>
+  <string name="SYS_LOGO_FILE_MAX_HEIGHT">Maximum logo height</string>
+  <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">The maximum space available for the logo in the header is limited to this value. If the logo is higher than the specified value, it will be scaled down to this height. (default: 60 pixels)</string>
   <string name="SYS_LOGOUT">Sign out</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Signing out was successful.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">The new password has been sent to the e-mail address #VAR1_BOLD#!</string>

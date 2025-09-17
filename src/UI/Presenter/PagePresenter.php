@@ -319,9 +319,10 @@ class PagePresenter
         $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_module_enabled'));
         
         // Design variables
-        $this->smarty->assign('additionalStylesFile',  $gSettingsManager->getString('additional_styles_file'));
-        $this->smarty->assign('logoFile',  $gSettingsManager->getString('logo_file'));
-        $this->smarty->assign('faviconFile',  $gSettingsManager->getString('favicon_file'));
+        $this->smarty->assign('additionalStylesFile', $gSettingsManager->getString('additional_styles_file'));
+        $this->smarty->assign('logoFile', $gSettingsManager->getString('logo_file'));
+        $this->smarty->assign('logoFileMaxHeight', $gSettingsManager->getString('logo_file_max_height'));
+        $this->smarty->assign('faviconFile', $gSettingsManager->getString('favicon_file'));
         $this->smarty->assign('admidioHeadline', Language::translateIfTranslationStrId($gSettingsManager->getString('admidio_headline')));
 
         $styles = '';

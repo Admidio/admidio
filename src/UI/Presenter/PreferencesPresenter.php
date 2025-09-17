@@ -707,6 +707,12 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_LOGO_FILE_DESC')
         );
         $formDesign->addInput(
+            'logo_file_max_height',
+            $gL10n->get('SYS_LOGO_FILE_MAX_HEIGHT'),
+            $formValues['logo_file_max_height']??'',
+            array('property' => FormPresenter::FIELD_REQUIRED, 'type' => 'number', 'minNumber' => 40, 'maxNumber' => 200, 'step' => 1,'helpTextId' => 'SYS_LOGO_FILE_MAX_HEIGHT_DESC')
+        );
+        $formDesign->addInput(
             'admidio_headline',
             $gL10n->get('SYS_HEADLINE'),
             $formValues['admidio_headline']??'',

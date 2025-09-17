@@ -43,6 +43,7 @@ $defaultOrgPreferences = array(
     'color_primary' => '#349aaa',
     'color_secondary' => '#263340',
     'logo_file' => '',
+    'logo_file_max_height' => '60',
     'admidio_headline' => 'SYS_ONLINE_MEMBERSHIP_ADMINISTRATION',
     'favicon_file' => '',
     'additional_styles_file' => '',
