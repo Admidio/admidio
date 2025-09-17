@@ -2,6 +2,7 @@
 namespace Admidio\Changelog\Service;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -524,7 +525,7 @@ class ChangelogService {
             'inf_sequence' =>              'SYS_ORDER',
             'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS'),
-            'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE'),
+            'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE', 'type' => 'PICTURE'),
             'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
             'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
             'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
@@ -980,6 +981,18 @@ class ChangelogService {
                     $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_ROLES_ALLOTHER')]);
                     break;
 
+                case 'PICTURE':
+                    // The value is the base64-encoded image data so decode it and display the image
+                    $image = new Image();
+                    $data = base64_decode($value);
+                    try {
+                        $image->setImageFromData($data);
+                        $mime = $image->getMimeType(); // z\.B\. 'image/png'
+                        $htmlValue = '<img id="picture" class="rounded" style="max-height: 24px; max-width: 24px;" src="data:' . $mime . ';base64,' . $value . '" alt="Picture">';
+                    } catch (\Throwable $e) {
+                        $htmlValue = '&nbsp;'; // If the image cannot be created, return a non-breaking space
+                    }
+                    break;
             }
             $value = $htmlValue;
         }
