@@ -707,6 +707,12 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_LOGO_FILE_DESC')
         );
         $formDesign->addInput(
+            'admidio_headline',
+            $gL10n->get('SYS_HEADLINE'),
+            $formValues['admidio_headline']??'',
+            array('helpTextId' => 'SYS_ADMIDIO_HEADLINE_DESC')
+        );
+        $formDesign->addInput(
             'favicon_file',
             $gL10n->get('SYS_FAVICON_FILE'),
             $formValues['favicon_file']??'',

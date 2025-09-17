@@ -94,7 +94,7 @@
             <img src="{if ($logoFile)}{$urlAdmidio}/{$logoFile}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
         </a>
         <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
-        <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName} - {$l10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION')}</span>
+        <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName}{if $admidioHeadline} - {$admidioHeadline}{/if}</span>
 
         {if $validLogin}
             <span id="adm_dropdown_user_photo" class="dropdown ms-auto">

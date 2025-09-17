@@ -2,6 +2,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\MenuNode;
 use Smarty\Smarty;
 
@@ -321,6 +322,7 @@ class PagePresenter
         $this->smarty->assign('additionalStylesFile',  $gSettingsManager->getString('additional_styles_file'));
         $this->smarty->assign('logoFile',  $gSettingsManager->getString('logo_file'));
         $this->smarty->assign('faviconFile',  $gSettingsManager->getString('favicon_file'));
+        $this->smarty->assign('admidioHeadline', Language::translateIfTranslationStrId($gSettingsManager->getString('admidio_headline')));
 
         $styles = '';
         $color_primary = $gSettingsManager->getString('color_primary');
