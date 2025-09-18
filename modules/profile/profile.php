@@ -293,7 +293,7 @@ try {
                     // pseudo password field
                     $value = '';
                     if ($userId === $gCurrentUserId) {
-                            $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
+                        $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
                             '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
                     } elseif ($gCurrentUser->isAdministrator() && isMember($userId) &&  strlen($user->getValue('usr_login_name')) > 0) {
                         // Administrators can change or send password if login is configured and user is member of current organization
@@ -301,11 +301,11 @@ try {
                             $value = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0)" data-buttons="yes-no"
                                 data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '"
                                 data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">' .
-                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_SEND_LOGIN_INFORMATION') . '</a>';
+                                '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_SEND_LOGIN_INFORMATION') . '</a>';
                         } else {
-                            // if user has no email or send email is disabled then administrator could set a new password       
+                            // if user has no email or send email is disabled then administrator could set a new password
                             $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
-                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
+                                '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
                         }
                     }
                     if ($value !== '') {
@@ -370,9 +370,11 @@ try {
             $gCurrentUser->getValue('COUNTRY')
         ));
 
-        $page->assignSmartyVariable('urlMapAddress', SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => implode(',', $destination))));
-        if ($userId !== $gCurrentUserId) {
-            $page->assignSmartyVariable('urlMapRoute', SecurityUtils::encodeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => implode(',', $origin), 'destination' => implode(',', $destination))));
+        if ($gSettingsManager->getBool('profile_show_map_link')) {
+            $page->assignSmartyVariable('urlMapAddress', SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => implode(',', $destination))));
+            if ($userId !== $gCurrentUserId) {
+                $page->assignSmartyVariable('urlMapRoute', SecurityUtils::encodeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => implode(',', $origin), 'destination' => implode(',', $destination))));
+            }
         }
     }
 
@@ -403,11 +405,11 @@ try {
         // ******************************************************************************
         $itemsKeeper = new ItemsData($gDb, $gCurrentOrgId);
         $itemsReceiver = new ItemsData($gDb, $gCurrentOrgId);
-        
+
         // Read items by user
         $itemsKeeper->readItemsByUser($user->getValue('usr_id'), array('KEEPER'));
         $itemsReceiver->readItemsByUser($user->getValue('usr_id'), array('LAST_RECEIVER'));
-        
+
         // Determine creation mode based on available items
         $creationMode = 'none';
         if (!empty($itemsKeeper->getItems()) && (empty($itemsReceiver->getItems()) || $gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
@@ -417,9 +419,9 @@ try {
         } elseif (!empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'both';
         }
-        
+
         // Helper function to set up DataTables
-        function setupDataTable($page, $tableId, $templateData) 
+        function setupDataTable($page, $tableId, $templateData)
         {
             // create DataTable objects for tabs and accordions
             foreach (['_tab','_accordion'] as $suffix) {
@@ -432,51 +434,51 @@ try {
                 $dt->setRowsPerPage(10);
             }
         }
-        
+
         $inventoryPage = new InventoryPresenter();
         switch($creationMode) {
             case 'keeper':
                 $templateData = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
                 setupDataTable($page, 'adm_inventory_table_keeper', $templateData);
-            
+
                 $page->assignSmartyVariable('keeperList', $templateData);
                 $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
                 if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_keeper' => $user->getValue('usr_id'))));
                 }
                 break;
-        
+
             case 'receiver':
                 $templateData = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
                 setupDataTable($page, 'adm_inventory_table_receiver', $templateData);
-            
+
                 $page->assignSmartyVariable('receiverList', $templateData);
                 $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
                 if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
                     $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_last_receiver' => $user->getValue('usr_id'))));
                 }
                 break;
-        
+
             case 'both':
                 $templateDataKeeper = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
                 $templateDataReceiver = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
-            
+
                 setupDataTable($page, 'adm_inventory_table_keeper', $templateDataKeeper);
                 setupDataTable($page, 'adm_inventory_table_receiver', $templateDataReceiver);
-            
+
                 $page->assignSmartyVariable('keeperList', $templateDataKeeper);
                 $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
                 if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
                     $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_keeper' => $user->getValue('usr_id'))));
-                }  
-            
+                }
+
                 $page->assignSmartyVariable('receiverList', $templateDataReceiver);
                 $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
                 if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
                     $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_last_receiver' => $user->getValue('usr_id'))));
                 }
                 break;
-        
+
             default:
                 break;
         }
