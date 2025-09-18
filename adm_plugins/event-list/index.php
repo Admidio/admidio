@@ -67,7 +67,7 @@ try {
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = dat_cat_id
                  WHERE cat_id IN (' . Database::getQmForValues($catIdParams) . ')
-                   AND dat_begin >= ? -- DATETIME_NOW
+                   AND dat_end >= ? -- DATETIME_NOW
                        ' . $plgSqlCategories . '
               ORDER BY dat_begin
                  LIMIT ' . $plg_max_number_events_shown;
