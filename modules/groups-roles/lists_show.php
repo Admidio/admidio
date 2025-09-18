@@ -590,6 +590,7 @@ try {
         // no members found
         $page->addHtml('<div class="alert alert-warning" role="alert">' . $gL10n->get('SYS_NO_USER_FOUND') . '</div>');
         $page->show();
+        exit();
         // => EXIT
     }
 
