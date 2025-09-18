@@ -51,11 +51,11 @@ try {
         $plg_max_char_per_word = 0;
     }
 
-    if (!isset($plg_kal_cat)) {
+    if (empty($plg_kal_cat)) {
         $plg_kal_cat = array();
         $plgSqlCategories = '';
     } else {
-        $plgSqlCategories = ' AND cat_name IN (' . Database::getQmForValues($plg_categories) . ') ';
+        $plgSqlCategories = ' AND cat_name IN (' . Database::getQmForValues($plg_kal_cat) . ') ';
     }
 
     if ($gSettingsManager->getInt('events_module_enabled') > 0) {
