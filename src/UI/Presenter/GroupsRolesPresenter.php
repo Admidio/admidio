@@ -73,7 +73,7 @@ class GroupsRolesPresenter extends PagePresenter
                     );
                 }
                 $categoryUUID = $row['cat_uuid'];
-                $categoryName = $row['cat_name'];
+                $categoryName = $role->getValue('cat_name');
                 $templateDataRoles = array();
             }
 
