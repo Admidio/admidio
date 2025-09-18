@@ -1113,7 +1113,8 @@ class Entity
                     case 'char':
                     case 'varchar':
                     case 'text':
-                        $newValue = StringUtils::strStripTags($newValue);
+                        // no html tags and no html entities should be stored in the database
+                        $newValue = StringUtils::strStripTags(html_entity_decode($newValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
                         break;
 
                     // Byte/Blob
