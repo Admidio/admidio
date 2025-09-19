@@ -833,7 +833,7 @@ try {
 
                 // Member Fee
                 if ((string)$role->getValue('rol_cost') !== '') {
-                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTIONv'), 'value' => $role->getValue('rol_cost') . ' ' . $gSettingsManager->getString('system_currency'));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTION'), 'value' => $role->getValue('rol_cost') . ' ' . $gSettingsManager->getString('system_currency'));
                 }
 
                 // Fee period

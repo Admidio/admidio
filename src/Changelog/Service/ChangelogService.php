@@ -418,7 +418,6 @@ class ChangelogService {
             'usf_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'usf_type' =>                  array('name' => 'SYS_TYPE', 'type' => 'CUSTOM_LIST', 'entries' => $userFieldText),
             'usf_description' =>           'SYS_DESCRIPTION',
-            'usf_description_inline' =>    array('name' => 'SYS_DESCRIPTION_INLINE_DESC', 'type' => 'BOOL'),
             'usf_default_value' =>         'SYS_DEFAULT_VALUE',
             'usf_regex' =>                 'SYS_REGULAR_EXPRESSION',
             'usf_disabled' =>              array('name' => 'SYS_DISABLED', 'type' => 'BOOL'),
@@ -608,7 +607,7 @@ class ChangelogService {
             'crt_number_col' =>            array('name' => $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', 'type' => 'BOOL'),
 
             'lst_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
-            'lst_usr_id' =>                array('name' => 'SYS_USER', 'type' => 'USER'),
+            'lst_usr_id' =>                array('name' => 'SYS_MEMBER', 'type' => 'USER'),
             'lst_name' =>                  'SYS_NAME',
             'lst_global' =>                array('name' => 'SYS_CONFIGURATION_ALL_USERS', 'type' => 'BOOL'),
             'lsc_number' =>                'SYS_NUMBER',
