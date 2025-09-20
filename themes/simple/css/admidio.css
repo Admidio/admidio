@@ -180,6 +180,9 @@ a {
 
 .btn, .btn:hover {
     color: var(--bs-body-bg);
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
 }
 
 .btn-primary {
@@ -416,13 +419,13 @@ label {
     flex-wrap: nowrap;     /* never wrap */
     width: 100%;
 }
-  
+
 .admidio-tabs .nav-item, .admidio-tabs .nav-link {
     display: flex;
 }
-  
+
 .admidio-tabs .nav-link {
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: center;
     text-align: center;
     max-width: 250px;

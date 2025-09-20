@@ -203,12 +203,15 @@ class GroupsRolesPresenter extends PagePresenter
 
             // show count of members and leaders of this role
             $html = '';
-            $htmlLeader = '';
 
             if ($role->getValue('rol_max_members') > 0) {
-                $html .= $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array((int)$row['num_members'], (int)$role->getValue('rol_max_members')));
+                $html .= '<span class="d-block">' . $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array((int)$row['num_members'], (int)$role->getValue('rol_max_members'))) . '</span>';
             } else {
-                $html .= $row['num_members'] . ' ' . $gL10n->get('SYS_PARTICIPANTS');
+                $html .= '<span class="d-block">' . $row['num_members'] . ' ' . $gL10n->get('SYS_PARTICIPANTS') . '</span>';
+            }
+
+            if ($row['num_leader'] > 0) {
+                $html .= '<span class="d-block">' . $row['num_leader'] . ' ' . $gL10n->get('SYS_LEADERS') . '</span>';
             }
 
             if ($gCurrentUser->hasRightViewFormerRolesMembers($row['rol_id']) && $roleType === $this::ROLE_TYPE_ACTIVE && $row['num_former'] > 0) {
@@ -219,13 +222,10 @@ class GroupsRolesPresenter extends PagePresenter
                     $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                 }
 
-                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'], 'mem_show_filter' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
+                $html .= '<span class="d-block">' . $row['num_former'] . ' ' . $textFormerMembers . '</span>';
             }
 
-            if ($row['num_leader'] > 0) {
-                $htmlLeader = '<span class="d-block">' . $row['num_leader'] . ' ' . $gL10n->get('SYS_LEADERS') . '</span>';
-            }
-            $templateRow['information'][] = '<span class="d-block">' . $html . '</span>' . $htmlLeader;
+            $templateRow['information'][] = $html;
 
             $templateRow['buttons'][] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'])),
