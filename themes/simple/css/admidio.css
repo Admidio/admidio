@@ -181,6 +181,7 @@ a {
 .btn, .btn:hover {
     color: var(--bs-body-bg);
     overflow-wrap: normal;
+    word-wrap: normal;
     word-break: normal;
     hyphens: none;
 }
@@ -667,6 +668,10 @@ label {
 #adm_imprint {
     margin-bottom: 2rem;
     font-size: 80%;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    hyphens: none;
 }
 
 .admidio-info-icon {
@@ -817,7 +822,7 @@ ul.changelog-tableselect-list {
   font-weight: normal;
 }
 .subinfo-sub-row, .subinfo-row {
-  margin-bottom: 0pt !important;
+  margin-bottom: 0 !important;
 }
 .subinfo_head {
   margin-bottom: 1.5rem;
