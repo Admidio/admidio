@@ -144,7 +144,7 @@ class ModuleLogin
         $postPassword = ($formValues['usr_password'] ?? $formValues['plg_usr_password']);
         $postTotpCode = ($formValues['usr_totp_code'] ?? $formValues['plg_usr_totp_code'] ?? null);
         $postOrgShortName = ($formValues['org_shortname'] ?? ($formValues['plg_org_shortname'] ?? $gCurrentOrganization->getValue('org_shortname')));
-        $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login']);
+        $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login'] ?? false);
 
         // Search for username
         $sql = 'SELECT usr_id
