@@ -92,7 +92,8 @@ class GroupsRolesPresenter extends PagePresenter
             }
 
             // show link to export vCard if user is allowed to see the profiles of members and the role has members
-            if ($gCurrentUser->hasRightViewProfiles($row['rol_id'])
+            if (($gSettingsManager->getInt('groups_roles_export') === 1 // all users
+                || ($gSettingsManager->getInt('groups_roles_export') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user'))) // users with the right to edit all profiles
                 && ($row['num_members'] > 0 || $row['num_leader'] > 0)) {
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'export', 'role_uuid' => $row['rol_uuid'])),
