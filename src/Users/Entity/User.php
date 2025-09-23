@@ -1528,9 +1528,9 @@ class User extends Entity
         return $this->checkRolesRight('rol_documents_files');
     }
 
-        /**
-     * This method checks if the current user is allowed to administrate documents and files. With this right he can
-     * create and edit folders, upload new files and set rights for other users in this module
+    /**
+     * This method checks if the current user is allowed to administrate the inventory. With this right he can
+     * administrate all inventory functionalities
      * @return bool Return **true** if the user is admin of the module otherwise **false**
      * @throws Exception
      */

@@ -68,6 +68,8 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 3 && !$gCurrentUser->isAdministratorInventory()) {
         throw new Exception('SYS_NO_RIGHTS');
+    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 4 && !InventoryPresenter::isCurrentUserKeeper() && !$gCurrentUser->isAdministratorInventory()) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // when saving folders, check whether the subfolder in adm_my_files exists with the corresponding rights

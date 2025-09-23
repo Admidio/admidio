@@ -810,7 +810,8 @@ class PreferencesPresenter extends PagePresenter
             '0' => $gL10n->get('SYS_DISABLED'),
             '1' => $gL10n->get('SYS_ENABLED'),
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
-            '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR')
+            '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR'),
+            '4' => $gL10n->get('SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS')
         );
         $formInventory->addSelectBox(
             'inventory_module_enabled',

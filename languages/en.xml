@@ -880,6 +880,7 @@
   <string name="SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEMS_IMPORTED">Items have been imported into the inventory</string>
   <string name="SYS_INVENTORY_NUMBER">Number</string>
   <string name="SYS_INVENTORY_NUMBER_DESC">Number of items to be added</string>
+  <string name="SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS">Only for module administrators and item keepers</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW">Profile view settings</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">The selected item fields will be displayed in the member's profile view when the "Display in profile view" option is enabled. By default, only the item name is shown. (Default: "Last Receiver")</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED">Display in profile view</string>

@@ -5,6 +5,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\UI\Presenter\InventoryPresenter;
 
 /**
  * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
@@ -263,7 +264,8 @@ class Component extends Entity
             case 'INVENTORY':
                 if ($gSettingsManager->getInt('inventory_module_enabled') === 1
                 || ($gSettingsManager->getInt('inventory_module_enabled') === 2 && $gValidLogin)
-                || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 4 && ($gCurrentUser->isAdministratorInventory() || InventoryPresenter::isCurrentUserKeeper()))) {
                     return true;
                 }
                 break;

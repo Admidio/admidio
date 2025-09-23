@@ -715,12 +715,21 @@ class InventoryPresenter extends PagePresenter
      *
      * @return bool Returns true if the current user is a keeper, false otherwise.
      */
-    private function isCurrentUserKeeper(): bool
+    public static function isCurrentUserKeeper(): bool
     {
-        global $gCurrentUser, $gDb;
+        global $gCurrentUser, $gDb, $gCurrentOrgId;
 
         $sql = 'SELECT COUNT(*) as count FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_value = ? AND ind_inf_id = ?';
-        $params = array($gCurrentUser->getValue('usr_id'), $this->itemsData->getProperty('KEEPER', 'inf_id'));
+        // read the field id of the keeper field
+        $sqlKeeperFieldId = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_name_intern = \'KEEPER\' AND (inf_org_id = ? OR inf_org_id IS NULL) LIMIT 1';
+        $resultKeeperFieldId = $gDb->queryPrepared($sqlKeeperFieldId, array($gCurrentOrgId));
+        $rowKeeperFieldId = $resultKeeperFieldId->fetch();
+        if ($rowKeeperFieldId === false) {
+            return false;
+        }
+        $rowKeeperFieldId = $rowKeeperFieldId['inf_id'];
+
+        $params = array($gCurrentUser->getValue('usr_id'), $rowKeeperFieldId);
         $result = $gDb->queryPrepared($sql, $params);
         $row = $result->fetch();
         if ($row['count'] > 0) {
