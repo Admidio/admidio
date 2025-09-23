@@ -902,6 +902,10 @@ class PreferencesPresenter extends PagePresenter
             // create array of possible fields for keeper edit
             $items = new ItemsData($gDb, $gCurrentOrgId);
             $selectBoxEntries = array();
+            // add pseudo field 'ITEM_PICTURE' if item pictures are enabled
+            if ($formValues['inventory_item_picture_enabled']) {
+                $selectBoxEntries['ITEM_PICTURE'] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
+            }
             foreach ($items->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
                 if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
