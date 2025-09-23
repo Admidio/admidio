@@ -1,4 +1,26 @@
 <script type="text/javascript">
+    /* function to initialize the visibility of dependent fields in the inventory preferences form */
+    function initializeInventoryPreferencesVisibility(direct=false) {
+        // if the inventory module is disabled, hide all dependent fields
+        if(!$("#inventory_item_picture_enabled").is(":checked")) {
+            direct ? $("#inventory_item_picture_storage_group").hide() : $("#inventory_item_picture_storage_group").slideUp("slow");
+            direct ? $("#inventory_item_picture_width_group").hide() : $("#inventory_item_picture_width_group").slideUp("slow");
+            direct ? $("#inventory_item_picture_height_group").hide() : $("#inventory_item_picture_height_group").slideUp("slow");
+        }
+        if($("#inventory_item_picture_storage").val() == 1) {
+            direct ? $("#inventory_item_picture_width_group").show() : $("#inventory_item_picture_width_group").slideDown("slow");
+            direct ? $("#inventory_item_picture_height_group").show() : $("#inventory_item_picture_height_group").slideDown("slow");
+        } else {
+            direct ? $("#inventory_item_picture_width_group").hide() : $("#inventory_item_picture_width_group").slideUp("slow");
+            direct ? $("#inventory_item_picture_height_group").hide() : $("#inventory_item_picture_height_group").slideUp("slow");
+        }
+        if(!$("#inventory_allow_keeper_edit").is(":checked")) {
+            direct ? $("#inventory_allowed_keeper_edit_fields_group").hide() : $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
+        }
+        if(!$("#inventory_profile_view_enabled").is(":checked")) {
+            direct ? $("#inventory_profile_view_group").hide() : $("#inventory_profile_view_group").slideUp("slow");
+        }
+    }
     /* Function to handle the visibility of fields based on the corresponding option */
     $(function(){
         /* Item pictures */
@@ -49,28 +71,15 @@
         var interval = setInterval(function() {
             if (!$("#inventory_item_picture_enabled").is(":hidden") && !$("#inventory_profile_view_group").is(":hidden") && !$("#inventory_allowed_keeper_edit_fields_group").is(":hidden")) {
                 clearInterval(interval);
-
                 // now we can initialize the visibility of the fields
-                if(!$("#inventory_item_picture_enabled").is(":checked")) {
-                    $("#inventory_item_picture_storage_group").slideUp("slow");
-                    $("#inventory_item_picture_width_group").slideUp("slow");
-                    $("#inventory_item_picture_height_group").slideUp("slow");
-                }
-                if($("#inventory_item_picture_storage").val() == 1) {
-                    $("#inventory_item_picture_width_group").slideDown("slow");
-                    $("#inventory_item_picture_height_group").slideDown("slow");
-                } else {
-                    $("#inventory_item_picture_width_group").slideUp("slow");
-                    $("#inventory_item_picture_height_group").slideUp("slow");
-                }
-                if(!$("#inventory_allow_keeper_edit").is(":checked")) {
-                    $("#inventory_allowed_keeper_edit_fields_group").slideUp("slow");
-                }
-                if(!$("#inventory_profile_view_enabled").is(":checked")) {
-                    $("#inventory_profile_view_group").slideUp("slow");
-                }
+                initializeInventoryPreferencesVisibility();
             }
         }, 100);
+
+        // reinitialize visibility when the inventory module is enabled field changes
+        $("#inventory_module_enabled").on("change", function() {
+            initializeInventoryPreferencesVisibility(true);
+        });
     });
 </script>
 
