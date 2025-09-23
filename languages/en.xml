@@ -809,6 +809,7 @@
   <string name="SYS_INVENTORY_ITEM_COPIED">Item successfully copied</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Copy the item</string>
   <string name="SYS_INVENTORY_ITEM_CREATE">Create a item</string>
+  <string name="SYS_INVENTORY_ITEM_CREATE_PICTURE_INFO">An picture for this item can only be uploaded after it has been created.</string>
   <string name="SYS_INVENTORY_ITEM_CREATED">New item successfully created</string>
   <string name="SYS_INVENTORY_ITEM_DATA">Item data</string>
   <string name="SYS_INVENTORY_ITEM_DELETE">Delete the item</string>
