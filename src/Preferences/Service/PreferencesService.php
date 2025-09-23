@@ -194,7 +194,7 @@ class PreferencesService
 
         if ($versionUpdate !== 99 && $betaVersion !== 'n/a') {
             $html .= '
-                <a href="' . ADMIDIO_HOMEPAGE . 'download.php" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
+                <a href="' . ADMIDIO_HOMEPAGE . 'intern/adm_program/modules/announcements/announcements.php?cat_uuid=e2be424d-dd72-4c01-99ad-f8f91ec8830f" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
                 '<i class="bi bi-link"></i>' . $betaVersion . ' Beta ' . $betaRelease . '
                 </a>';
         } else {
