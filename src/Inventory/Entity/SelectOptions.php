@@ -124,16 +124,10 @@ class SelectOptions extends Entity
     public function isOptionUsed(int $ifoId): bool
     {
         if ($this->infId > 0) {
-            $sql = 'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_DATA . '
-                WHERE ind_inf_id = ? -- $infId
-                AND (
-                    ind_value = ? -- $ifoId
-                    OR POSITION(
-                        CONCAT(\',\', ?, \',\')  -- $ifoId
-                        IN CONCAT(\',\', ind_value, \',\')
-                    ) > 0
-                )';
-            $stmt = $this->db->queryPrepared($sql, array($this->infId, $ifoId, $ifoId));
+            $sql = 'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEMS . '
+                WHERE ini_status = ? -- $ifoId
+                ';
+            $stmt = $this->db->queryPrepared($sql, array($ifoId));
             return ((int)$stmt->fetchColumn() > 0);
         } else {
             // if no infId is set then it is a new profile field and no options are used in the database

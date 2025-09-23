@@ -329,13 +329,13 @@ class InventoryPresenter extends PagePresenter
         // add select all items to select box values as first entry
         $selectBoxValues = array('0' => $gL10n->get('SYS_ALL'));
         foreach ($values as $value) {
-            $selectBoxValues[$value['id']] = $value['value'];
+            $selectBoxValues[$value['id']] = $value['value'] . ($value['obsolete'] ? ' (' . $gL10n->get('SYS_DELETED_ENTRY') . ')' : '');
         }
 
         // filter all items
         $form->addSelectBox(
             'items_filter_status',
-            $gL10n->get('SYS_INVENTORY_ITEMS'),
+            $gL10n->get('SYS_INVENTORY_STATUS'),
             $selectBoxValues,
             array(
                 'defaultValue' => $this->getFilterStatus,
