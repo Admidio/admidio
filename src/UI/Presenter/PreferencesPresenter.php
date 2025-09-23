@@ -811,13 +811,43 @@ class PreferencesPresenter extends PagePresenter
             '1' => $gL10n->get('SYS_ENABLED'),
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
             '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR'),
-            '4' => $gL10n->get('SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS')
+            '4' => $gL10n->get('SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS'),
+            '5' => $gL10n->get('SYS_INVENTORY_ONLY_FOR_ADMINS_AND_ROLES')
         );
         $formInventory->addSelectBox(
             'inventory_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
             $selectBoxEntries,
             array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ACCESS_TO_MODULE_DESC')
+        );
+
+        // read all roles from db
+        $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
+                       FROM ' . TBL_ROLES . '
+                 INNER JOIN ' . TBL_CATEGORIES . '
+                         ON cat_id = rol_cat_id
+                 INNER JOIN ' . TBL_ORGANIZATIONS . '
+                         ON org_id = cat_org_id
+                      WHERE rol_valid  = true
+                        AND rol_system = false
+                        AND cat_name_intern <> \'EVENTS\'
+                   ORDER BY cat_name, rol_name';
+        $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
+
+        $selectBoxEntries = array();
+        while ($rowViewRoles = $rolesViewStatement->fetch()) {
+            // Each role is now added to this array
+            $selectBoxEntries[] = array(
+                $rowViewRoles['rol_id'],
+                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')',
+                $rowViewRoles['cat_name']
+            );
+        }
+        $formInventory->addSelectBox(
+            'inventory_visible_for',
+            $gL10n->get('SYS_VISIBLE_FOR'),
+            $selectBoxEntries,
+            array('defaultValue' => explode(',', $formValues['inventory_visible_for']), 'multiselect' => true, 'helpTextId' => 'SYS_MENU_RESTRICT_VISIBILITY')
         );
 
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));

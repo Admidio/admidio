@@ -64,11 +64,10 @@ try {
     // check if module is active
     if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 2 && !$gValidLogin) {
-        throw new Exception('SYS_NO_RIGHTS');
-    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 3 && !$gCurrentUser->isAdministratorInventory()) {
-        throw new Exception('SYS_NO_RIGHTS');
-    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 4 && !InventoryPresenter::isCurrentUserKeeper() && !$gCurrentUser->isAdministratorInventory()) {
+    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 2 && !$gValidLogin
+        || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && !$gCurrentUser->isAdministratorInventory())
+        || ($gSettingsManager->getInt('inventory_module_enabled') === 4 && !InventoryPresenter::isCurrentUserKeeper() && !$gCurrentUser->isAdministratorInventory())
+        || ($gSettingsManager->getInt('inventory_module_enabled') === 5 && !$gCurrentUser->isAllowedToSeeInventory() && !$gCurrentUser->isAdministratorInventory())) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 

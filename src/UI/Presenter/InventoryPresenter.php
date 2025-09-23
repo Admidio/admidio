@@ -715,7 +715,7 @@ class InventoryPresenter extends PagePresenter
      *
      * @return bool Returns true if the current user is a keeper, false otherwise.
      */
-    public static function isCurrentUserKeeper(): bool
+    public static function isCurrentUserKeeper(int $itemId = 0): bool
     {
         global $gCurrentUser, $gDb, $gCurrentOrgId;
 
@@ -728,8 +728,12 @@ class InventoryPresenter extends PagePresenter
             return false;
         }
         $rowKeeperFieldId = $rowKeeperFieldId['inf_id'];
-
         $params = array($gCurrentUser->getValue('usr_id'), $rowKeeperFieldId);
+
+        if ($itemId > 0) {
+            $sql .= ' AND ind_ini_id = ?';
+            $params[] = $itemId;
+        }
         $result = $gDb->queryPrepared($sql, $params);
         $row = $result->fetch();
         if ($row['count'] > 0) {

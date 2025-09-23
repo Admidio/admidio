@@ -319,7 +319,7 @@ class InventoryItemPresenter extends PagePresenter
             if (!$item->isNewRecord() && !$getCopy) {
                 $this->assignSmartyVariable('urlItemPicture', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)));
                 // the image can only be deleted if corresponding rights exist
-                if ($gCurrentUser->isAdministratorInventory() || in_array('ITEM_PICTURE', $allowedFields)) {
+                if ($gCurrentUser->isAdministratorInventory() || ($gSettingsManager->GetBool('inventory_allow_keeper_edit') && InventoryPresenter::isCurrentUserKeeper($items->getItemId()) && in_array('ITEM_PICTURE', $allowedFields))) {
                     $this->assignSmartyVariable('urlItemPictureUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_choose', 'item_uuid' => $itemUUID)));
                     if ((string)$item->getValue('ini_picture') !== '' && $gSettingsManager->getInt('inventory_item_picture_storage') === 0
                         || is_file(ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/' . $items->getItemId() . '.jpg') && $gSettingsManager->getInt('inventory_item_picture_storage') === 1) {

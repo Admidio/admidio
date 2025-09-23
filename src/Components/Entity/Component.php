@@ -265,7 +265,8 @@ class Component extends Entity
                 if ($gSettingsManager->getInt('inventory_module_enabled') === 1
                 || ($gSettingsManager->getInt('inventory_module_enabled') === 2 && $gValidLogin)
                 || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())
-                || ($gSettingsManager->getInt('inventory_module_enabled') === 4 && ($gCurrentUser->isAdministratorInventory() || InventoryPresenter::isCurrentUserKeeper()))) {
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 4 && ($gCurrentUser->isAdministratorInventory() || InventoryPresenter::isCurrentUserKeeper()))
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 5 && $gCurrentUser->isAllowedToSeeInventory())) {
                     return true;
                 }
                 break;

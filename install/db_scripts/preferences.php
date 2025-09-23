@@ -150,6 +150,7 @@ $defaultOrgPreferences = array(
 
     // Inventory
     'inventory_module_enabled' => '2',
+    'inventory_visible_for' => '',
     'inventory_items_per_page' => '25',
     'inventory_field_history_days' => '365',
     'inventory_item_picture_enabled' => '1',

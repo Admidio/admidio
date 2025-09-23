@@ -2,6 +2,11 @@
     /* function to initialize the visibility of dependent fields in the inventory preferences form */
     function initializeInventoryPreferencesVisibility(direct=false) {
         // if the inventory module is disabled, hide all dependent fields
+        if($("#inventory_module_enabled").val() == 5) {
+            direct ? $("#inventory_visible_for_group").show() : $("#inventory_visible_for_group").slideDown("slow");
+        } else {
+            direct ? $("#inventory_visible_for_group").hide() : $("#inventory_visible_for_group").slideUp("slow");
+        }
         if(!$("#inventory_item_picture_enabled").is(":checked")) {
             direct ? $("#inventory_item_picture_storage_group").hide() : $("#inventory_item_picture_storage_group").slideUp("slow");
             direct ? $("#inventory_item_picture_width_group").hide() : $("#inventory_item_picture_width_group").slideUp("slow");
@@ -23,6 +28,14 @@
     }
     /* Function to handle the visibility of fields based on the corresponding option */
     $(function(){
+        /* visible for */
+        $("#inventory_module_enabled").on("change", function() {
+            if($("#inventory_module_enabled").val() == 5) {
+                $("#inventory_visible_for_group").slideDown("slow");
+            } else {
+                $("#inventory_visible_for_group").slideUp("slow");
+            }
+        });
         /* Item pictures */
         $("#inventory_item_picture_enabled").on("change", function() {
             if(!$("#inventory_item_picture_enabled").is(":checked")) {
@@ -89,6 +102,7 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_module_enabled']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_visible_for']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_items_per_page']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_field_history_days']}
     {include 'sys-template-parts/form.separator.tpl' data=$elements['inventory_separator_general_settings']}

@@ -780,7 +780,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_DESC">When this option is enabled, the selected item fields can be modified by the item keeper. Otherwise, these fields are read-only and can only be changed by module administrators. (Default: no)</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Editable fields by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
-  <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">The inventory manager module can be completely disabled, made accessible only to logged-in users, or restricted solely to module administrators via this setting. If access is granted only to logged-in users, then the module is hidden from guests. If only module administrators have access, the module is visible only to users with the "manage inventory" permission. (Default: Enabled)</string>
+  <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">The inventory manager module can be completely disabled, made accessible only to logged-in users, restricted solely to module administrators, made accessible to module administrators and item keepers or made accessible to members of a selected role via this setting. If access is granted only to logged-in users, then the module is hidden from guests. If only module administrators have access, the module is visible only to users with the "manage inventory" permission. (Default: Enabled)</string>
   <string name="SYS_INVENTORY_ADD_DATE">Append date</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
@@ -880,7 +880,8 @@
   <string name="SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEMS_IMPORTED">Items have been imported into the inventory</string>
   <string name="SYS_INVENTORY_NUMBER">Number</string>
   <string name="SYS_INVENTORY_NUMBER_DESC">Number of items to be added</string>
-  <string name="SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS">Only for module administrators and item keepers</string>
+  <string name="SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS">For module administrators and item keepers</string>
+  <string name="SYS_INVENTORY_ONLY_FOR_ADMINS_AND_ROLES">For module administrators and role members</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW">Profile view settings</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">The selected item fields will be displayed in the member's profile view when the "Display in profile view" option is enabled. By default, only the item name is shown. (Default: "Last Receiver")</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED">Display in profile view</string>

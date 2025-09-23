@@ -1539,6 +1539,23 @@ class User extends Entity
         return $this->checkRolesRight('rol_inventory_admin');
     }
 
+    /* This method checks if the current user is allowed to see the inventory.
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAllowedToSeeInventory() : bool
+    {
+        global $gSettingsManager;
+        $allowedRoles = explode(',', $gSettingsManager->get('inventory_visible_for'));
+        $roleMemberships = $this->getRoleMemberships();
+        foreach($roleMemberships as $roleId) {
+            if(in_array($roleId, $allowedRoles)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * This method checks if the current user is allowed to administrate the forum. With this right he can create,
      * edit topics and set rights for other users in this module
