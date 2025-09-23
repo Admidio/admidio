@@ -688,6 +688,8 @@
   <string name="SYS_FIRSTNAME_LASTNAME">First name and lastname</string>
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
+  <string name="SYS_FOLDER_NAME_EMPTY">Folder name is missing!</string>
+  <string name="SYS_FOLDER_NAME_INVALID">The selected folder name #VAR1_BOLD# contains invalid characters. Please check the folder name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt; / \ </string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">You are not allowed to display selected folder.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask an #VAR2#administrator#VAR3# for help to check write permissions of the parent folder.</string>
@@ -1640,6 +1642,7 @@
   <string name="SYS_TFA">Two Factor Authentication</string>
   <string name="SYS_TFA_ENABLE">Enable Two-Factor Authentication (2FA)</string>
   <string name="SYS_TFA_ENABLE_DESC">Enable Two-Factor Authentication (2FA) for all users to require an additional verification step, increasing account security and protecting against unauthorized access.</string>
+  <string name="SYS_TFA_NOT_SETUP_FOR_USER">Administrators are not allowed to set up Two-Factor Authentication (2FA) for other users. Each user must set up 2FA for their own account.</string>
   <string name="SYS_TFA_RESET">Reset Two Factor Authentication</string>
   <string name="SYS_TFA_RESET_DESC">Remove the configured second factor.</string>
   <string name="SYS_TFA_RESET_SUCCESSFUL">Two Factor Authentication reset successfully.</string>
