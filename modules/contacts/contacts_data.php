@@ -429,7 +429,7 @@ try {
                     // User is ONLY member of this organization -> ask if user should make to former member or delete completely
                     $userAdministration .= '
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg')) . '">
+                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg', 'custom_callback' => ($getMembersShowFilter >= 2 ))) . '">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                         </a>';
                 } else {

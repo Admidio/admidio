@@ -163,6 +163,13 @@ try {
     $contactsTable->setRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
 
     if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        // callback function to update the table after member members where deleted
+        $page->addJavascript('
+                function refreshContactsTable() {
+                    var table = $("#adm_contacts_table").DataTable();
+                    table.ajax.reload(null, false); // user paging is not reset on reload
+                }
+            ');
         // add the checkbox for selecting items and action buttons
         $page->addJavascript('
             var table = $("#adm_contacts_table");
@@ -173,7 +180,7 @@ try {
 
                 // base URLs
                 var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('mode' => 'html_selection')) . '";
-                var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg', 'show_former_button' => ($getMembersShowFilter !== 1))) . '";
+                var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg', 'show_former_button' => ($getMembersShowFilter !== 1), 'custom_callback' => ($getMembersShowFilter === 2))) . '";
 
                 // cache jQuery objects
                 var editButton = $("#edit-selected");
