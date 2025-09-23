@@ -491,177 +491,184 @@ class InventoryPresenter extends PagePresenter
 
             // initialize and set the parameter for DataTables
             $dataTables = new DataTables($this, 'adm_inventory_table');
+
+            // callback function to update the table on deletion of an item or reinstantiation of a retired item
+            $this->addJavascript('
+                function refreshInventoryTable() {
+                    location.reload();
+                }
+            ');
             // add the checkbox for selecting items and action buttons
             $this->addJavascript('
-                    var table = $("#adm_inventory_table");
+                var table = $("#adm_inventory_table");
 
-                    table.one("init.dt", function() {
-                        var tableApi = table.DataTable();
-                        var initialPageLength = tableApi.page.len();
+                table.one("init.dt", function() {
+                    var tableApi = table.DataTable();
+                    var initialPageLength = tableApi.page.len();
 
-                        // base URLs
-                        var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
-                        var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg")) . '";
+                    // base URLs
+                    var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
+                    var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg", "items_filter_status" => $this->getFilterStatus)) . '";
 
-                        // cache jQuery objects
-                        var editButton = $("#edit-selected");
-                        var deleteButon = $("#delete-selected");
-                        var headChk = table.find("thead input[type=checkbox]");
-                        var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
-                        var actions = $("#adm_inventory_table_select_actions");
+                    // cache jQuery objects
+                    var editButton = $("#edit-selected");
+                    var deleteButon = $("#delete-selected");
+                    var headChk = table.find("thead input[type=checkbox]");
+                    var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
+                    var actions = $("#adm_inventory_table_select_actions");
 
-                        // master list of selected IDs
-                        var selectedIds = [];
+                    // master list of selected IDs
+                    var selectedIds = [];
 
-                        function anySelected() {
-                            return selectedIds.length > 0;
+                    function anySelected() {
+                        return selectedIds.length > 0;
+                    }
+
+                    function refreshActions() {
+                        editButton.prop("disabled", !anySelected());
+                        deleteButon.prop("disabled", !anySelected());
+                    }
+
+                    function updateHeaderState() {
+                        var total = rowChks().length;
+                        var checked = selectedIds.length;
+                        if (checked === 0) {
+                            headChk.prop({ checked: false, indeterminate: false });
+                        } else if (checked === total) {
+                            headChk.prop({ checked: true, indeterminate: false });
+                        } else {
+                            headChk.prop({ checked: false, indeterminate: true });
                         }
+                    }
 
-                        function refreshActions() {
-                            editButton.prop("disabled", !anySelected());
-                            deleteButon.prop("disabled", !anySelected());
-                        }
+                    // header-checkbox → select/unselect *all* rows
+                    headChk.on("change", function() {
+                        var checkAll = this.checked;
 
-                        function updateHeaderState() {
-                            var total = rowChks().length;
-                            var checked = selectedIds.length;
-                            if (checked === 0) {
-                                headChk.prop({ checked: false, indeterminate: false });
-                            } else if (checked === total) {
-                                headChk.prop({ checked: true, indeterminate: false });
-                            } else {
-                                headChk.prop({ checked: false, indeterminate: true });
-                            }
-                        }
-
-                        // header-checkbox → select/unselect *all* rows
-                        headChk.on("change", function() {
-                            var checkAll = this.checked;
-
-                            if (checkAll) {
-                                // register a one-time draw event to collect all IDs
-                                tableApi.one("draw.dt", function() {
-                                    // clear the selectedIds array
-                                    selectedIds = [];
-
-                                    // grab every row
-                                    tableApi.rows().every(function() {
-                                        if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
-                                            selectedIds.push(this.node().id.replace(/^adm_inventory_item_/, ""));
-                                            $(this.node()).find("input[type=checkbox]").prop("checked", true);
-                                        }
-                                    });
-
-                                    updateHeaderState();
-                                    refreshActions();
-                                });
-
-                                // update the initial page length and set it to -1 (all rows)
-                                initialPageLength = tableApi.page.len();
-                                tableApi.page.len(-1).draw();
-                            } else {
-                                // set the checked state of all selected rows to false
-                                selectedIds.forEach(function(id) {
-                                    var row = table.find("#adm_inventory_item_" + id);
-                                    if (row.length > 0) {
-                                        row.find("input[type=checkbox]").prop("checked", false);
-                                    }
-                                });
-
+                        if (checkAll) {
+                            // register a one-time draw event to collect all IDs
+                            tableApi.one("draw.dt", function() {
                                 // clear the selectedIds array
                                 selectedIds = [];
 
+                                // grab every row
+                                tableApi.rows().every(function() {
+                                    if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
+                                        selectedIds.push(this.node().id.replace(/^adm_inventory_item_/, ""));
+                                        $(this.node()).find("input[type=checkbox]").prop("checked", true);
+                                    }
+                                });
+
                                 updateHeaderState();
                                 refreshActions();
-                                
-                                // reset the page length to the initial value
-                                tableApi.page.len(initialPageLength).draw();
-                            }
-                        });
+                            });
 
-                        // individual row-checkbox → toggle just that ID
-                        table.on("change", "tbody input[type=checkbox]", function() {
-                            var id = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
-                            var idx = selectedIds.indexOf(id);
-                            if (this.checked && idx === -1) {
-                                selectedIds.push(id);
-                            } else if (!this.checked && idx !== -1) {
-                                selectedIds.splice(idx, 1);
-                            }
-
-                            updateHeaderState();
-                            refreshActions();
-                        });
-
-                        // when the order changes, recheck selected ids
-                        tableApi.on("draw.dt", function() {
-                            //recheck selected ids
+                            // update the initial page length and set it to -1 (all rows)
+                            initialPageLength = tableApi.page.len();
+                            tableApi.page.len(-1).draw();
+                        } else {
+                            // set the checked state of all selected rows to false
                             selectedIds.forEach(function(id) {
                                 var row = table.find("#adm_inventory_item_" + id);
                                 if (row.length > 0) {
-                                    row.find("input[type=checkbox]").prop("checked", true);
+                                    row.find("input[type=checkbox]").prop("checked", false);
                                 }
                             });
 
+                            // clear the selectedIds array
+                            selectedIds = [];
+
                             updateHeaderState();
                             refreshActions();
+                            
+                            // reset the page length to the initial value
+                            tableApi.page.len(initialPageLength).draw();
+                        }
+                    });
+
+                    // individual row-checkbox → toggle just that ID
+                    table.on("change", "tbody input[type=checkbox]", function() {
+                        var id = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
+                        var idx = selectedIds.indexOf(id);
+                        if (this.checked && idx === -1) {
+                            selectedIds.push(id);
+                        } else if (!this.checked && idx !== -1) {
+                            selectedIds.splice(idx, 1);
+                        }
+
+                        updateHeaderState();
+                        refreshActions();
+                    });
+
+                    // when the order changes, recheck selected ids
+                    tableApi.on("draw.dt", function() {
+                        //recheck selected ids
+                        selectedIds.forEach(function(id) {
+                            var row = table.find("#adm_inventory_item_" + id);
+                            if (row.length > 0) {
+                                row.find("input[type=checkbox]").prop("checked", true);
+                            }
                         });
 
-                        // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
-                        actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
-                            // build uuids[] querystring
-                            var qs = selectedIds.map(function(id) {
-                                return "item_uuids[]=" + encodeURIComponent(id);
-                            }).join("&");
+                        updateHeaderState();
+                        refreshActions();
+                    });
 
-                            // full URL to your explain_msg endpoint
-                            var popupUrl = explainDeleteUrlBase + "&" + qs;
+                    // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
+                    actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
+                        // build uuids[] querystring
+                        var qs = selectedIds.map(function(id) {
+                            return "item_uuids[]=" + encodeURIComponent(id);
+                        }).join("&");
 
-                            // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
-                            $("<a>", {
-                                href: "javascript:void(0);",
-                                class: "admidio-icon-link openPopup",
-                                "data-href": popupUrl
-                            }).appendTo("body")
-                            .click()    // trigger the built-in openPopup handler
-                            .remove();
+                        // full URL to your explain_msg endpoint
+                        var popupUrl = explainDeleteUrlBase + "&" + qs;
 
-                            // when the popup closes, unselect all items
-                            $(document).one("hidden.bs.modal", function() {
-                                selectedIds = [];
-                                headChk.prop({ checked: false, indeterminate: false });
-                                rowChks().prop("checked", false);
-                                
-                                // initialize button states
-                                updateHeaderState();
-                                refreshActions();
+                        // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
+                        $("<a>", {
+                            href: "javascript:void(0);",
+                            class: "admidio-icon-link openPopup",
+                            "data-href": popupUrl
+                        }).appendTo("body")
+                        .click()    // trigger the built-in openPopup handler
+                        .remove();
 
-                                // redraw the table to reset the page length
-                                tableApi.page.len(initialPageLength).draw();
-                            });
-                        });
-
-                        // bulk-edit button → fire Admidio’s openPopup against item_edit URL
-                        actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
-                            // build uuids[] querystring
-                            var qs = selectedIds.map(function(id) {
-                                return "item_uuids[]=" + encodeURIComponent(id);
-                            }).join("&");
-
-                            // full URL to the edit endpoint
-                            var editUrl = editUrlBase + "&" + qs;
-
-                            // open the editUrl directly in the current window
-                            window.location.href = editUrl;
+                        // when the popup closes, unselect all items
+                        $(document).one("hidden.bs.modal", function() {
+                            selectedIds = [];
+                            headChk.prop({ checked: false, indeterminate: false });
+                            rowChks().prop("checked", false);
                             
                             // initialize button states
                             updateHeaderState();
                             refreshActions();
-                        });
 
+                            // redraw the table to reset the page length
+                            tableApi.page.len(initialPageLength).draw();
+                        });
+                    });
+
+                    // bulk-edit button → fire Admidio’s openPopup against item_edit URL
+                    actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
+                        // build uuids[] querystring
+                        var qs = selectedIds.map(function(id) {
+                            return "item_uuids[]=" + encodeURIComponent(id);
+                        }).join("&");
+
+                        // full URL to the edit endpoint
+                        var editUrl = editUrlBase + "&" + qs;
+
+                        // open the editUrl directly in the current window
+                        window.location.href = editUrl;
+                        
                         // initialize button states
+                        updateHeaderState();
                         refreshActions();
-                    });',
+                    });
+
+                    // initialize button states
+                    refreshActions();
+                });',
                 true
             );
 
@@ -673,8 +680,8 @@ class InventoryPresenter extends PagePresenter
                 $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers'])));
             }
             $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
-            $dataTables->createJavascript(count($templateData['rows']), count($templateData['headers']));
             $dataTables->setColumnAlignByArray($templateData['column_align']);
+            $dataTables->createJavascript(count($templateData['rows']), count($templateData['headers']));
         } else {
             $templateData = $this->prepareData('print');
         }
@@ -1001,7 +1008,7 @@ class InventoryPresenter extends PagePresenter
                         $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                         // Add reinstate action
                         $rowValues['actions'][] = array(
-                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\''. (($this->getFilterStatus === 0) ? ', \'refreshInventoryTable\'' : '') . ');',
                             'dataMessage' => $dataMessage,
                             'icon' => 'bi bi-eye',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE')
@@ -1022,7 +1029,7 @@ class InventoryPresenter extends PagePresenter
                         // Add delete/retire action
                         $rowValues['actions'][] = array(
                             'popup' => true,
-                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
+                            'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => $this->getFilterStatus, 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                             'icon' => 'bi bi-trash',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                         );
@@ -1319,7 +1326,7 @@ class InventoryPresenter extends PagePresenter
                     // Add delete/retire action
                     $rowValues['actions'][] = array(
                         'popup' => true,
-                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => $this->getFilterStatus, 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
                     );

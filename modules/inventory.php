@@ -260,13 +260,15 @@ try {
             break;
 
         case 'item_delete_explain_msg':
+            // check if all items are shown
+            $showAll = admFuncVariableIsValid($_GET, 'items_filter_status', 'int', array('defaultValue' => 1)) === 0;
             if (count($getItemUUIDs) > 0) {
-                $reinstateOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
-                $retireOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
-                $deleteOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+                $reinstateOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . ($showAll ? ', \'refreshInventoryTable\'' : '') . ')';
+                $retireOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . ($showAll ? ', \'refreshInventoryTable\'' : '') . ')';
+                $deleteOnClick = 'callUrlHideElements(\'adm_inventory_item_\', [\'' . implode('\', \'', $getItemUUIDs) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . ($showAll ? ', \'refreshInventoryTable\'' : '') . ')';
                 $headerMsg = $gL10n->get('SYS_NOTE');
             } else {
-                $retireOnClick = 'callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+                $retireOnClick = 'callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . ($showAll ? ', \'refreshInventoryTable\'' : '') . ')';
                 $deleteOnClick = 'callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 $headerMsg = $gL10n->get('SYS_INVENTORY_ITEM_DELETE');
             }
@@ -321,6 +323,9 @@ try {
             break;
 
         case 'item_delete_keeper_explain_msg':
+            // check if all items are shown
+            $showAll = admFuncVariableIsValid($_GET, 'items_filter_status', 'int', array('defaultValue' => 1)) === 0;
+
             $msg = '
                 <div class="modal-header">
                     <h3 class="modal-title">' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE') . '</h3>
@@ -330,7 +335,7 @@ try {
                     <p><i class="bi bi-eye-slash-fill"></i>&nbsp;' . $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC')) . '</p>
                 </div>
                 <div class="modal-footer">
-                <button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                <button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', ' . $showAll ?  '\'refreshInventoryTable\'' : ' \'\' ' . ')">
                         <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE') . '</button>
                 <div id="adm_status_message" class="mt-4 w-100"></div>
                 </div>';
