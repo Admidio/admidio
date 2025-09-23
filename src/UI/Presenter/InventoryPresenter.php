@@ -326,12 +326,11 @@ class InventoryPresenter extends PagePresenter
         // get the status options for the filter
         $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));
         $values = $option->getAllOptions();
-        $selectBoxValues = array();
+        // add select all items to select box values as first entry
+        $selectBoxValues = array('0' => $gL10n->get('SYS_ALL'));
         foreach ($values as $value) {
             $selectBoxValues[$value['id']] = $value['value'];
         }
-        // add select all items to select box values
-        $selectBoxValues[0] = $gL10n->get('SYS_ALL');
 
         // filter all items
         $form->addSelectBox(
