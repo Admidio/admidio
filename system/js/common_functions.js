@@ -129,6 +129,9 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                             callbackProfilePhoto();
                         } else if (callback === "callbackItemPicture") {
                             callbackItemPicture();
+                        } else if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                            // call the custom callback function
+                            window[callback]();
                         } else {
                             $(entryDeleted).fadeOut("slow");
                         }
@@ -146,6 +149,9 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                     callbackProfilePhoto();
                 } else if (callback === "callbackItemPicture") {
                     callbackItemPicture();
+                } else if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                    // call the custom callback function
+                    window[callback]();
                 } else {
                     $(entryDeleted).fadeOut("slow");
                 }
@@ -179,8 +185,9 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
  * @param {array}   elementId  This is the array of ids of the html elements that should be hidden.
  * @param {string}   url        This is the url that will be called.
  * @param {string}   csrfToken  If this is set than it will be added to the post request.
+ * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
-function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
+function callUrlHideElements(elementPrefix, elementIds, url, csrfToken, callback) {
     // 1) normalize to an array
     var rawIds = Array.isArray(elementIds)
         ? elementIds.slice()         // clone the array if it already is one
@@ -237,34 +244,57 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
                 $modalMsg.html('<div class="alert alert-success"><i class="bi bi-check-lg"></i> '+msg+'</div>');
                 setTimeout(function(){
                     $("#adm_modal, #adm_modal_messagebox").modal("hide");
-                    // fade out each
-                    ids.forEach(_fadeOutById);
+
+                    // fade out each if no custom callback is set
+                    if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                        // call the custom callback function
+                        window[callback]();
+                    } else {
+                        ids.forEach(_fadeOutById);
+                    }
                 }, 1500);
             } else {
                 $("#adm_modal, #adm_modal_messagebox").modal("hide");
-                ids.forEach(_fadeOutById);
+                // fade out each if no custom callback is set
+                if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                    // call the custom callback function
+                    window[callback]();
+                } else {
+                    ids.forEach(_fadeOutById);
+                }
             }
         } else if(status === "warning") {
             if (msg) {
                 $modalMsg.html('<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i> '+msg+'</div>');
                 setTimeout(function(){
                     $("#adm_modal, #adm_modal_messagebox").modal("hide");
-                    // fade out each
-                    ids.forEach(function(id){
+                    // fade out each if no custom callback is set
+                    if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                        // call the custom callback function
+                        window[callback]();
+                    } else {
+                        ids.forEach(function (id) {
+                            var pureId = id.startsWith(elementPrefix) ? id.substring(elementPrefix.length) : id;
+                            if (statusData[pureId] === "success") {
+                                _fadeOutById(id);
+                            }
+                        });
+                    }
+                }, 1500);
+            } else {
+                $("#adm_modal, #adm_modal_messagebox").modal("hide");
+                // fade out each if no custom callback is set
+                if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                    // call the custom callback function
+                    window[callback]();
+                } else {
+                    ids.forEach(function (id) {
                         var pureId = id.startsWith(elementPrefix) ? id.substring(elementPrefix.length) : id;
                         if (statusData[pureId] === "success") {
                             _fadeOutById(id);
                         }
                     });
-                }, 1500);
-            } else {
-                $("#adm_modal, #adm_modal_messagebox").modal("hide");
-                ids.forEach(function(id){
-                    var pureId = id.startsWith(elementPrefix) ? id.substring(elementPrefix.length) : id;
-                    if (statusData[pureId] === "success") {
-                        _fadeOutById(id);
-                    }
-                });
+                }
             }
         } else {
             if (!msg) {
