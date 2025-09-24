@@ -20,7 +20,11 @@
     {foreach $rows as $row}
         <tr id="{$row.id}" {if isset($row.class)}class="{$row.class}"{/if} {if isset($exportMode)}style="{$rowsStyle}"{/if}>
         {foreach $row.data as $key => $cell}
-            <td {if isset($row.colspan)}colspan="{$row.colspan}"{/if} style="text-align:{$columnAlign[$key]};">{$cell}</td>
+            {if $cell|is_array && $cell['order']|isset}
+                <td {if isset($row.colspan)}colspan="{$row.colspan}"{/if} data-order="{$cell['order']}" style="text-align:{$columnAlign[$key]};">{$cell['value']}</td>
+            {else}
+                <td {if isset($row.colspan)}colspan="{$row.colspan}"{/if} style="text-align:{$columnAlign[$key]};">{$cell}</td>
+            {/if}
         {/foreach}
         </tr>
     {/foreach}
