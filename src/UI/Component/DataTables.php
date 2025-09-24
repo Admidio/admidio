@@ -2,6 +2,7 @@
 namespace Admidio\UI\Component;
 
 use Admidio\UI\Presenter\PagePresenter;
+use HtmlPage;
 
 /**
  * @brief Creates the Javascript output for the jQuery DataTables plugin
