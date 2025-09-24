@@ -191,7 +191,7 @@ try {
                 $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
 
                 // dropdown menu item with all export possibilities
-                $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT_TO'), '#', 'bi-download');
+                $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT'), '#', 'bi-download');
                 $page->addPageFunctionsMenuItem(
                     'menu_item_lists_xlsx',
                     $gL10n->get('SYS_MICROSOFT_EXCEL') .' (*.xlsx)',

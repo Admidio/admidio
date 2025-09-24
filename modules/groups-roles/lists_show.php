@@ -258,7 +258,7 @@ try {
         if ($getMembersShowFiler === 2) {
             $arrColumnNames = $list->getColumnNames();
             $arrColumnNames[] = $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP');
-             $listData->setColumnHeadlines($arrColumnNames);
+            $listData->setColumnHeadlines($arrColumnNames);
         } else {
             $listData->setColumnHeadlines($list->getColumnNames());
         }
@@ -520,7 +520,16 @@ try {
         // dropdown menu item with all export possibilities
         if ($gSettingsManager->getInt('groups_roles_export') === 1 // all users
             || ($gSettingsManager->getInt('groups_roles_export') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user'))) { // users with the right to edit all profiles
-            $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_DOWNLOAD_FILE'), '#', 'bi-download');
+            $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT'), '#', 'bi-download');
+            if ($numberRoles === 1) {
+                $page->addPageFunctionsMenuItem(
+                    'menu_item_lists_vcard',
+                    $gL10n->get('SYS_VCARD') . ' (*.vcf)',
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'export', 'role_uuid' => $role->getValue('rol_uuid'))),
+                    'bi-file-earmark-person',
+                    'menu_item_lists_export'
+                );
+            }
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_excel',
                 $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
@@ -600,7 +609,7 @@ try {
 
     // set the first column for the counter
     if ($getMode === 'html') {
-         // add column for former status
+        // add column for former status
         if ($getMembersShowFiler === 2) {
             array_unshift($arrColumnNames, '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP') . '"></i>');
             array_unshift($arrColumnAlign, 'center');
@@ -614,8 +623,7 @@ try {
             // add column for edit link
             $arrColumnNames[] = '&nbsp;';
         }
-    }
-    elseif ($getMembersShowFiler === 2) {
+    } elseif ($getMembersShowFiler === 2) {
         array_unshift($arrColumnNames, $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP'));
         array_unshift($arrColumnAlign, 'left');
     }
@@ -663,8 +671,7 @@ try {
                 if ($member['mem_former']) {
                     $icon = 'bi-person-fill-dash text-danger';
                     $iconText = $gL10n->get('SYS_FORMER_MEMBER_OF_ROLE_GROUP', array($roleName));
-                }
-                else {
+                } else {
                     $icon = 'bi-person-fill-check';
                     $iconText = $gL10n->get('SYS_MEMBER_OF_ROLE_GROUP', array($roleName));
                 }
@@ -712,7 +719,7 @@ try {
                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
         }
 
-        $rows[] =  array('id' => 'row-' . $listRowNumber, 'data' => array_values($columnValues));
+        $rows[] = array('id' => 'row-' . $listRowNumber, 'data' => array_values($columnValues));
         ++$listRowNumber;
     }  // End-While (end found User)
 
@@ -728,7 +735,7 @@ try {
 
     if ($getMode === 'pdf') {
         // send the new PDF to the User
-        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '',  html_entity_decode($roleName, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', html_entity_decode($roleName, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
         // file name in the current directory...
         if ((string)$list->getValue('lst_name') !== '') {
