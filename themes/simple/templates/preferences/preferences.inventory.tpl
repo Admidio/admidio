@@ -1,11 +1,11 @@
 <script type="text/javascript">
     /* function to initialize the visibility of dependent fields in the inventory preferences form */
-    function initializeInventoryPreferencesVisibility(direct=false) {
-        // if the inventory module is disabled, hide all dependent fields
+    function initializeInventoryPreferencesVisibility(direct=false, directModule=false) {
+        // special case:
         if($("#inventory_module_enabled").val() == 5) {
-            direct ? $("#inventory_visible_for_group").show() : $("#inventory_visible_for_group").slideDown("slow");
+            directModule ? $("#inventory_visible_for_group").show() : $("#inventory_visible_for_group").slideDown("slow");
         } else {
-            direct ? $("#inventory_visible_for_group").hide() : $("#inventory_visible_for_group").slideUp("slow");
+            directModule ? $("#inventory_visible_for_group").hide() : $("#inventory_visible_for_group").slideUp("slow");
         }
         if(!$("#inventory_item_picture_enabled").is(":checked")) {
             direct ? $("#inventory_item_picture_storage_group").hide() : $("#inventory_item_picture_storage_group").slideUp("slow");
@@ -90,8 +90,16 @@
         }, 100);
 
         // reinitialize visibility when the inventory module is enabled field changes
+        let prevInventoryModuleEnabled = $("#inventory_module_enabled").val();
         $("#inventory_module_enabled").on("change", function() {
-            initializeInventoryPreferencesVisibility(true);
+            const currentVal = $(this).val();
+            let directModule = false;
+            if (prevInventoryModuleEnabled != 5 && currentVal != 5) {
+                // direct animation for "inventory_visible_for" field only if the value did not change to/from "5 - For module administrators and role members"
+                directModule = true;
+            }
+            initializeInventoryPreferencesVisibility(true, directModule);
+            prevInventoryModuleEnabled = currentVal;
         });
     });
 </script>
