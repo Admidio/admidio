@@ -646,11 +646,10 @@
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXISTING_CONTACTS">Existing contacts</string>
+  <string name="SYS_EXPORT">Export</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
-  <string name="SYS_EXPORT_TO">Export to</string>
   <string name="SYS_EXPORT_VCARD">Export vCard</string>
-  <string name="SYS_EXPORT_VCARD_FROM_VAR">Export vCard of #VAR1#</string>
   <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FAVICON_FILE">Favicon File</string>

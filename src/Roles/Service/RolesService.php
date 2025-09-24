@@ -59,12 +59,16 @@ class RolesService
      */
     public function export(): void
     {
-        global $gCurrentUser, $gCurrentOrganization, $gProfileFields;
+        global $gCurrentUser, $gCurrentOrganization, $gProfileFields, $gSettingsManager;
 
         $role = new Role($this->db);
         $role->readDataByUuid($this->UUID);
 
         if (!$gCurrentUser->hasRightViewProfiles($role->getValue('rol_id'))) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        if ($gSettingsManager->getInt('groups_roles_export') === 0 // nobody
+            || ($gSettingsManager->getInt('groups_roles_export') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user'))) { // users with not the right to edit all profiles
             throw new Exception('SYS_NO_RIGHTS');
         }
 

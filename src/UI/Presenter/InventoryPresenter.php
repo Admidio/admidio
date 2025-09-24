@@ -213,7 +213,7 @@ class InventoryPresenter extends PagePresenter
                 if (initFilter !== "") {
                     tableApi.search(initFilter).draw();
                 }
-            
+
                 // set the filter string in the form when the DataTable is searched
                 table.on("search.dt", function(){
                 var textFilter = tableApi.search() || "";
@@ -222,7 +222,7 @@ class InventoryPresenter extends PagePresenter
                     .val(textFilter);
                 });
             });
-        
+
             // create the print view link with the current filter values
             $("#menu_item_lists_print_view").off("click").on("click", function(e){
                 e.preventDefault();
@@ -237,7 +237,7 @@ class InventoryPresenter extends PagePresenter
                         + "&items_filter_keeper="   + encodeURIComponent(keeper)
                         + "&items_filter_last_receiver="   + encodeURIComponent(lastReceiver)
                         + "&items_filter_status="   + encodeURIComponent(filterItems);
-            
+
                 window.open(url, "_blank");
             });',
             true
@@ -257,8 +257,8 @@ class InventoryPresenter extends PagePresenter
         );
 
         // read all keeper
-        $sql = 'SELECT DISTINCT ind_value, 
-            CASE 
+        $sql = 'SELECT DISTINCT ind_value,
+            CASE
                 WHEN ind_value = -1 THEN \'n/a\'
                 ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
             END as keeper_name
@@ -359,7 +359,7 @@ class InventoryPresenter extends PagePresenter
         // create the export dropdown menu
         $this->addPageFunctionsMenuItem(
             'menu_item_lists_export',
-            $gL10n->get('SYS_EXPORT_TO'),
+            $gL10n->get('SYS_EXPORT'),
             '#',
             'bi-download'
         );
@@ -579,7 +579,7 @@ class InventoryPresenter extends PagePresenter
 
                             updateHeaderState();
                             refreshActions();
-                            
+
                             // reset the page length to the initial value
                             tableApi.page.len(initialPageLength).draw();
                         }
@@ -637,7 +637,7 @@ class InventoryPresenter extends PagePresenter
                             selectedIds = [];
                             headChk.prop({ checked: false, indeterminate: false });
                             rowChks().prop("checked", false);
-                            
+
                             // initialize button states
                             updateHeaderState();
                             refreshActions();
@@ -659,7 +659,7 @@ class InventoryPresenter extends PagePresenter
 
                         // open the editUrl directly in the current window
                         window.location.href = editUrl;
-                        
+
                         // initialize button states
                         updateHeaderState();
                         refreshActions();

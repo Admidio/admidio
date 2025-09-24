@@ -141,8 +141,8 @@ try {
             break;
 
         case 'save':
-            $groupsRoles = new RolesService($gDb, $getRoleUUID);
-            $groupsRoles->save();
+            $rolesService = new RolesService($gDb, $getRoleUUID);
+            $rolesService->save();
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
             break;
@@ -174,8 +174,8 @@ try {
 
         case 'export':
             // Export every member of a role into one vCard file
-            $groupsRoles = new RolesService($gDb, $getRoleUUID);
-            $groupsRoles->export();
+            $rolesService = new RolesService($gDb, $getRoleUUID);
+            $rolesService->export();
             break;
     }
 } catch (Throwable $e) {
