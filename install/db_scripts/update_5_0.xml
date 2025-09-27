@@ -509,6 +509,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
         ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)                          ON DELETE SET NULL ON UPDATE RESTRICT;</step>
     <step id="1670">UpdateStepsCode::updateStep50AddInventoryFields</step>
     <step id="1680">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_LOGIN_INFORMATION' WHERE txt_name = 'SYSMAIL_NEW_PASSWORD'</step>
+    <step id="1685">UPDATE %PREFIX%_preferences SET prf_value = '' WHERE prf_value IS NULL</step>
     <step id="1690" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_value varchar(255) NOT NULL</step>
     <step id="1700" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_value SET NOT NULL</step>
     <step>stop</step>
