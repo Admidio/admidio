@@ -424,7 +424,7 @@ class Database
     {
         $sqlFileContent = FileSystemUtils::readFile($sqlFilePath);
 
-        $sqlArray = explode(';', $sqlFileContent);
+        $sqlArray = preg_split('/;\s*[\r\n]+/', $sqlFileContent, -1, PREG_SPLIT_NO_EMPTY);
 
         $sqlStatements = array();
         foreach ($sqlArray as $sql) {
