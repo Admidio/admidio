@@ -128,11 +128,4 @@ class DatabaseDateTimeEdit
             $this->db->queryPrepared($sqlUpdate, array($newDateTime, $newDateTimeRelative, $row[$columnName]));
         }
     }
-
-    public function updateDateTimeFields(): void
-    {
-        $this->updateDateTimeField(TBL_ANNOUNCEMENTS, 'ann_timestamp_create', 0, 15, true);
-        $this->updateTwoRelativeDateTimeField(TBL_EVENTS, 'dat_begin', 'dat_end', 0, 60);
-        $this->updateBirthdays();
-    }
 }

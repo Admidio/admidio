@@ -20,8 +20,6 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Session\Entity\Session;
 
-require_once(__DIR__ . '/DatabaseDateTimeEdit.php');
-
 $rootPath = dirname(__DIR__);
 
 // embed a config file
@@ -231,7 +229,7 @@ function getInstalledDbVersion(): string
  */
 function doInstallation(string $language)
 {
-    global $gDb, $gL10n; // necessary for "data_edit.php"
+    global $gDb, $gDbType, $gL10n; // necessary for "data_edit.php"
 
     // set runtime of script to 2 minutes because of the many work to do
     PhpIniUtils::startNewExecutionTimeLimit(120);
@@ -244,8 +242,7 @@ function doInstallation(string $language)
 
     // manipulate some dates so that it's suitable to the current date
     echo 'Edit data of database ...<br />';
-    $databaseDateTimeEdit = new DatabaseDateTimeEdit($gDb);
-    $databaseDateTimeEdit->updateDateTimeFields();
+    require_once(__DIR__ . '/data_edit.php');
 
     // in postgresql all sequences must get a new start value because our inserts have given ids
     resetPostgresSequences();
