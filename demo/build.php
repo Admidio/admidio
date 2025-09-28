@@ -20,6 +20,8 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Session\Entity\Session;
 
+require_once(__DIR__ . '/DatabaseDateTimeEdit.php');
+
 $rootPath = dirname(__DIR__);
 
 // embed a config file
@@ -242,7 +244,8 @@ function doInstallation(string $language)
 
     // manipulate some dates so that it's suitable to the current date
     echo 'Edit data of database ...<br />';
-    require_once(__DIR__ . '/data_edit.php');
+    $databaseDateTimeEdit = new DatabaseDateTimeEdit($gDb);
+    $databaseDateTimeEdit->updateDateTimeFields();
 
     // in postgresql all sequences must get a new start value because our inserts have given ids
     resetPostgresSequences();
