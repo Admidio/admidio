@@ -4,22 +4,27 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <title>Fill Admidio demo data</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1.2rem;
+        }
+    </style>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
 <h1>Fill Admidio demo data</h1>
 
-<p>This script will fill you Admidio database with a set of sample data. It use the database connection that is configured in the config.php.</p>
-<p style="color: #cc0000;">Please make sure that you have a current backup of your database or you don't need the data in the database anymore.<br />
-The script will delete all Admidio data that belongs to the table prefix configured in the config.php.</p>
+<div style="max-width: 700px;">
+    <p>This script fills your Admidio database with a set of sample data. It uses the database connection configured in the config.php file. The structure of the database always corresponds to an earlier Admidio version, so that an update via the Admidio Update Wizard is always necessary after filling.</p>
+    <p style="color: #cc0000;">Please make sure that you have a current backup of your database or you don't need the data in the database anymore.
+    The script will <strong>delete all Admidio data</strong> that belongs to the table prefix configured in the config.php.</p>
 
-<ul>
-    <li><a href="build.php?lang=de">Fill database with demo data in german</a></li>
-    <li><a href="build.php?lang=en">Fill database with demo data in english</a></li>
-</ul>
+    <p><strong><a href="build.php">Fill database with demo data</a></strong></p>
 
-<p style="font-size: 9pt;">&copy; 2004-2023&nbsp;&nbsp;The Admidio team</p>
-
+    <p style="font-size: 9pt;">&copy; 2004-2025&nbsp;&nbsp;The Admidio team</p>
+</div>
 </body>
 </html>

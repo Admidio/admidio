@@ -44,6 +44,37 @@ class DatabaseDateTimeEdit
         return $newDate->format('Y-m-d H:i:s');
     }
 
+    public function updateBirthdays(): void
+    {
+        $dayInYear = 0;
+
+        $sql = 'SELECT usf_id
+                  FROM ' . TBL_USER_FIELDS . '
+                 WHERE usf_name_intern = \'BIRTHDAY\' ';
+        $birthdayFieldID = $this->db->queryPrepared($sql)->fetchColumn();
+
+        $sql = 'SELECT usd_id, usd_value
+                  FROM ' . TBL_USER_DATA . '
+                 WHERE usd_usf_id = ?
+                   AND usd_value IS NOT NULL ';
+
+        $statement = $this->db->queryPrepared($sql, array($birthdayFieldID));
+        while ($row = $statement->fetch()) {
+            $dayInYear += 2;
+            if ($dayInYear > 365) {
+                $dayInYear = 1;
+            }
+            $year = random_int(1960, 2015);
+            $newBirthday =  $this->addDaysToDate($year . '-01-01', $dayInYear);
+
+            $sqlUpdate = 'UPDATE ' . TBL_USER_DATA . '
+                             SET usd_value = ?
+                           WHERE usd_id = ? ';
+
+            $this->db->queryPrepared($sqlUpdate, array($newBirthday, $row['usd_id']));
+        }
+    }
+
     /**
      * @throws \Admidio\Infrastructure\Exception
      * @throws \Random\RandomException
@@ -102,5 +133,6 @@ class DatabaseDateTimeEdit
     {
         $this->updateDateTimeField(TBL_ANNOUNCEMENTS, 'ann_timestamp_create', 0, 15, true);
         $this->updateTwoRelativeDateTimeField(TBL_EVENTS, 'dat_begin', 'dat_end', 0, 60);
+        $this->updateBirthdays();
     }
 }
