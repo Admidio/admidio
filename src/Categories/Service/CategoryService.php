@@ -79,6 +79,11 @@ class CategoryService
         if ($this->editableCategories === null) {
             $editableCategoryIDs = $gCurrentUser->getAllEditableCategories($this->type);
 
+            if (count($editableCategoryIDs) === 0) {
+                // No editable categories
+                return array();
+            }
+
             $sql = 'SELECT cat_id, cat_uuid, cat_name, cat_default
                       FROM ' . TBL_CATEGORIES . '
                      WHERE cat_id IN (' . Database::getQmForValues($editableCategoryIDs) . ')';
@@ -121,6 +126,11 @@ class CategoryService
 
         if ($this->visibleCategories === null) {
             $visibleCategoryIDs = $gCurrentUser->getAllVisibleCategories($this->type);
+
+            if (count($visibleCategoryIDs) === 0) {
+                // No visible categories
+                return array();
+            }
 
             $sql = 'SELECT cat_id, cat_uuid, cat_name, cat_default
                       FROM ' . TBL_CATEGORIES . '
