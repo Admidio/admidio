@@ -11,8 +11,6 @@ use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\ValueObjects\ItemsData;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use DateTime;
 use Ramsey\Uuid\Uuid;
@@ -191,7 +189,7 @@ class InventoryItemPresenter extends PagePresenter
                         );
 
                     } elseif ($categoryService->count() > 0) {
-                        if (!empty($gCurrentUser->getAllEditableCategories('IVT'))) {
+                        if (!empty($categoryService->getEditableCategories())) {
                             $form->addSelectBoxForCategories(
                                 'INF-' . $infNameIntern,
                                 $gL10n->get('SYS_CATEGORY'),
@@ -204,18 +202,14 @@ class InventoryItemPresenter extends PagePresenter
                                 )
                             );
                         } else {
-                            $categories = array();
-                            foreach ($categoryService->getVisibleCategories() as $category) {
-                                $categories[$category['cat_uuid']] = $category['cat_name'];
-                            }
-
-                            $form->addSelectBox(
+                            $form->addInput(
                                 'INF-' . $infNameIntern,
                                 $gL10n->get('SYS_CATEGORY'),
-                                $categories,
+                                $items->getValue($infNameIntern),
                                 array(
-                                    'property' => FormPresenter::FIELD_REQUIRED,
-                                    'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                    'type' => 'text',
+                                    'property' => FormPresenter::FIELD_DISABLED,
+                                    'helpTextId' => 'SYS_INVENTORY_NO_EDITABLE_CATEGORIES'
                                 )
                             );
                         }
@@ -929,9 +923,9 @@ class InventoryItemPresenter extends PagePresenter
                             $maxlength = null;
                             $date = new DateTime('now');
                             if ($fieldType === 'datetime') {
-                                $defaultDate = $date->format('Y-m-d H:i');
+                                $defaultDate = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                             } else {
-                                $defaultDate = $date->format('Y-m-d');
+                                $defaultDate = $date->format($gSettingsManager->getString('system_date'));
                             }
 
                         } elseif ($infNameIntern === 'ITEMNAME') {
