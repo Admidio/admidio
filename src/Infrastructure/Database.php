@@ -488,6 +488,25 @@ class Database
     }
 
     /**
+     * Method checks if a table exists in the current database.
+     * @param string $tableName
+     * @return bool
+     * @throws Exception
+     */
+    public function tableExists(string $tableName): bool
+    {
+        $tableExists = false;
+
+        $sql = 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?';
+        $statement = $this->queryPrepared($sql, array(DB_NAME, $tableName));
+        if ($statement->fetchColumn() > 0) {
+            $tableExists = true;
+        }
+
+        return $tableExists;
+    }
+
+    /**
      * Method gets all columns and their properties from the database table.
      *
      * The array has the following format:
