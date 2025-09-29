@@ -864,8 +864,8 @@
   <string name="SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC">You can retire the item from the inventory manager. This has the advantage that the data is preserved and you can later always see who has borrowed this item.\n\n#VAR1#</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER">Last receiver</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER_DESC">Last receiver of the item</string>
-  <string name="SYS_INVENTORY_NO_NEW_IMPORT_DATA">There was no new data in the import file!</string>
   <string name="SYS_INVENTORY_NO_EDITABLE_CATEGORIES">There are no categories available for you that can be assigned to items. Please contact an administrator of the inventory manager.</string>
+  <string name="SYS_INVENTORY_NO_NEW_IMPORT_DATA">There was no new data in the import file!</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CHANGED">The item #VAR1_BOLD# was changed by #VAR2_BOLD#:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CREATED">The item #VAR1_BOLD# was created by #VAR2_BOLD#:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_DELETED">The following item was deleted:</string>
