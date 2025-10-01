@@ -1108,6 +1108,8 @@
   <string name="SYS_NOT_SET">Not set</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Please use a valid date as condition for field #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Note</string>
+  <string name="SYS_NOTIFICATION_INVENTORY_CHANGES">Notification for changes in the inventory</string>
+  <string name="SYS_NOTIFICATION_INVENTORY_CHANGES_DESC">Members of the stored notification role will get a system notification if items in the inventory are created, changed, deleted, reinstated, retired or imported. (Default: no)</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new or changed entries</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Members of the stored notification role will get a system notification for new or changed entries in the modules Announcements, Events, Documents &amp; Files, Photos, Web Links and forum. (Default: no)</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification after a new registration</string>

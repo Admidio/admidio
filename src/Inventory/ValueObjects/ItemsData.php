@@ -1192,7 +1192,7 @@ class ItemsData
         global $gCurrentUser, $gSettingsManager, $gL10n;
 
         // check if notifications are enabled
-        if ($gSettingsManager->getBool('system_notifications_new_entries')) {
+        if ($gSettingsManager->getBool('system_notifications_inventory_changes')) {
             $notification = new Email();
             $messageDateText = 'SYS_CHANGED_AT';
 
