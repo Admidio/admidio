@@ -943,6 +943,12 @@ class InventoryPresenter extends PagePresenter
                                 }
                             }
                         }
+                    } else {
+                        // user not found, but it is a numeric id -> user was deleted
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        $content = $mode === 'html'
+                            ? '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>'
+                            : '<i>' . $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]) . '</i>';
                     }
                 }
 
@@ -1249,6 +1255,10 @@ class InventoryPresenter extends PagePresenter
                                 ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
                                 ['user_uuid' => $user->getValue('usr_uuid')]
                             ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                    } else {
+                        // user not found, but it is a numeric id -> user was deleted
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
                     }
                 }
 
