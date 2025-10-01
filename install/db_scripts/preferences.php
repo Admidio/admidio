@@ -114,6 +114,7 @@ $defaultOrgPreferences = array(
     'system_notifications_role' => '',
     'system_notifications_new_entries' => '0',
     'system_notifications_profile_changes' => '0',
+    'system_notifications_inventory_changes' => '0',
 
     // Captcha
     'captcha_type' => 'pic',
