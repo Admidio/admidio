@@ -67,7 +67,7 @@ try {
             $deleteButtonText = $gL10n->get('SYS_DELETE_SELECTION');
         } else {
             $formerOnClick = 'callUrlHideElement(\'row_members_' . implode('\', \'', $getUserUuids) . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $getUserUuids[0])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . ($customCallback ? ', \'refreshContactsTable\'' : '') . ')';
-            $deleteOnClick = 'callUrlHideElement(\'row_members_' . implode('\', \'', $getUserUuids) . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $getUserUuids[0])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'';
+            $deleteOnClick = 'callUrlHideElement(\'row_members_' . implode('\', \'', $getUserUuids) . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $getUserUuids[0])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
             $headerMsg = $gL10n->get('SYS_REMOVE_CONTACT');
             $formerMsg = $gL10n->get('SYS_MAKE_FORMER');
             $removeMsg = $gL10n->get('SYS_REMOVE_CONTACT_DESC', array($gL10n->get('SYS_DELETE')));

@@ -864,6 +864,7 @@
   <string name="SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC">You can retire the item from the inventory manager. This has the advantage that the data is preserved and you can later always see who has borrowed this item.\n\n#VAR1#</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER">Last receiver</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER_DESC">Last receiver of the item</string>
+  <string name="SYS_INVENTORY_NO_EDITABLE_CATEGORIES">There are no categories available for you that can be assigned to items. Please contact an administrator of the inventory manager.</string>
   <string name="SYS_INVENTORY_NO_NEW_IMPORT_DATA">There was no new data in the import file!</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CHANGED">The item #VAR1_BOLD# was changed by #VAR2_BOLD#:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CREATED">The item #VAR1_BOLD# was created by #VAR2_BOLD#:</string>
@@ -1107,6 +1108,8 @@
   <string name="SYS_NOT_SET">Not set</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Please use a valid date as condition for field #VAR1_BOLD#.</string>
   <string name="SYS_NOTE">Note</string>
+  <string name="SYS_NOTIFICATION_INVENTORY_CHANGES">Notification for changes in the inventory</string>
+  <string name="SYS_NOTIFICATION_INVENTORY_CHANGES_DESC">Members of the stored notification role will get a system notification if items in the inventory are created, changed, deleted, reinstated, retired or imported. (Default: no)</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new or changed entries</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Members of the stored notification role will get a system notification for new or changed entries in the modules Announcements, Events, Documents &amp; Files, Photos, Web Links and forum. (Default: no)</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification after a new registration</string>

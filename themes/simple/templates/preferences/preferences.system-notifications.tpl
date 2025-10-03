@@ -6,6 +6,7 @@
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_notifications_enabled']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_notifications_new_entries']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_notifications_profile_changes']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_notifications_inventory_changes']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['system_notifications_role']}
     <div class="admidio-form-group admidio-form-custom-content row mb-3">
         <label for="systemNotifications" class="col-sm-3 col-form-label">

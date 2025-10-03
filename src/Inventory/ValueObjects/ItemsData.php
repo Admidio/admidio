@@ -1192,7 +1192,7 @@ class ItemsData
         global $gCurrentUser, $gSettingsManager, $gL10n;
 
         // check if notifications are enabled
-        if ($gSettingsManager->getBool('system_notifications_new_entries')) {
+        if ($gSettingsManager->getBool('system_notifications_inventory_changes')) {
             $notification = new Email();
             $messageDateText = 'SYS_CHANGED_AT';
 
@@ -1250,6 +1250,11 @@ class ItemsData
                                 $options = $this->getProperty($key, 'ifo_inf_options');
                                 if ($key === 'ITEMNAME') {
                                     $itemName = $value['newValue'];
+                                } elseif ($key === 'CATEGORY') {
+                                    $value['oldValue'] = $this->getHtmlValue('CATEGORY', $value['oldValue']);
+                                    $value['newValue'] = $this->getHtmlValue('CATEGORY', $value['newValue']);
+
+                                    $changes[] = array($key, $value['oldValue'], $value['newValue']);
                                 } elseif ($key === 'KEEPER') {
                                     $sql = $this->getSqlOrganizationsUsersComplete();
 

@@ -1018,7 +1018,7 @@ class PreferencesPresenter extends PagePresenter
 
         $formInventory->addInput(
             'inventory_export_filename',
-            $gL10n->get('SYS_INVENTORY_FILENAME'),
+            'SYS_INVENTORY_FILENAME',
             $formValues['inventory_export_filename'],
             array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_FILENAME_DESC')
         );
@@ -2537,6 +2537,12 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_NOTIFICATION_PROFILE_CHANGES'),
             (bool) $formValues['system_notifications_profile_changes'],
             array('helpTextId' => 'SYS_NOTIFICATION_PROFILE_CHANGES_DESC')
+        );
+        $formSystemNotifications->addCheckbox(
+            'system_notifications_inventory_changes',
+            $gL10n->get('SYS_NOTIFICATION_INVENTORY_CHANGES'),
+            (bool) $formValues['system_notifications_inventory_changes'],
+            array('helpTextId' => 'SYS_NOTIFICATION_INVENTORY_CHANGES_DESC')
         );
 
         // read all roles of the organization
