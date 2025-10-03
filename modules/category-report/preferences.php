@@ -46,7 +46,7 @@ try {
         // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
     }
 
-    if ($getDelete > 0) {
+    if ($getDelete > 0 && isset($config[$getDelete - 1])) {
         $config[$getDelete - 1]['id'] = $config[$getDelete - 1]['id'] * (-1);                   // id negieren, als Kennzeichen für "Deleted"
         $config = $report->saveConfigArray($config);
     }
