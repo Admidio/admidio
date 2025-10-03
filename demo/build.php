@@ -113,7 +113,7 @@ function executeSqlStatements(array $sqlStatements, string $filename): void
     global $gDb, $gL10n;
 
     foreach ($sqlStatements as $sqlStatement) {
-        if ($filename === 'admidio.sql') {
+        if ($filename === 'admidio-mysql.sql') {
             // search for translation strings with the prefix DDT or SYS and try to replace them
             preg_match_all('/(DDT_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
 
@@ -238,7 +238,7 @@ function doInstallation(string $language)
     toggleForeignKeyChecks(false);
 
     readAndExecuteSQLFromFile('cleanup.sql');
-    readAndExecuteSQLFromFile('admidio.sql');
+    readAndExecuteSQLFromFile('admidio-mysql.sql');
 
     // manipulate some dates so that it's suitable to the current date
     echo 'Edit data of database ...<br />';

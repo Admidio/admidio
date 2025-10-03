@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Erstellungszeit: 27. Sep 2025 um 09:06
+-- Erstellungszeit: 03. Okt 2025 um 06:19
 -- Server-Version: 8.0.35
 -- PHP-Version: 8.2.20
 
@@ -25,16 +25,15 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_announcements`
+-- Tabellenstruktur für Tabelle `%PREFIX%_announcements`
 --
 
-DROP TABLE IF EXISTS `adm_announcements`;
-CREATE TABLE `adm_announcements` (
+CREATE TABLE `%PREFIX%_announcements` (
   `ann_id` int UNSIGNED NOT NULL,
   `ann_cat_id` int UNSIGNED NOT NULL,
-  `ann_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ann_headline` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ann_description` text COLLATE utf8mb3_unicode_ci,
+  `ann_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ann_headline` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ann_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `ann_usr_id_create` int UNSIGNED DEFAULT NULL,
   `ann_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ann_usr_id_change` int UNSIGNED DEFAULT NULL,
@@ -42,25 +41,24 @@ CREATE TABLE `adm_announcements` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_announcements`
+-- Daten für Tabelle `%PREFIX%_announcements`
 --
 
-INSERT INTO `adm_announcements` (`ann_id`, `ann_cat_id`, `ann_uuid`, `ann_headline`, `ann_description`, `ann_usr_id_create`, `ann_timestamp_create`, `ann_usr_id_change`, `ann_timestamp_change`) VALUES
-(1, 13, 'e49d66f4-0546-4a23-bb57-27eb2b97d271', 'New jerseys', 'Starting next season, there are new jerseys for all active players. These can be picked up before the first training at the trainer.', 1, '2025-09-20 07:12:34', NULL, NULL),
-(2, 13, 'e84aae2a-7e1d-4f91-b2e1-ead4bac900ed', 'Aerobics course', 'During the holidays we offer a <i>aerobic course</i> to all interested members.<br /><br />Registrations are accepted on our <b>homepage</b> or in our <b>office</b>.', 1, '2025-09-24 09:30:59', 1, '2025-09-25 17:21:32'),
-(3, 300, '934346cc-123c-4162-9506-86b07c6c08ce', 'Welcome to the demo area', '<p>In this area you can play around with Admidio and see whether the program\'s functions meet your needs.</p><p>We have also provided some test data so that you can see in the individual modules how this could look later on your site. However, emails are not actually sent in the demo area so that this function cannot be abused. You are welcome to play with this installation.</p><p>We have created a few test accounts with different rights:</p><p><span style=\"color:#008080;\"><strong>Administrator</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Admin</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rights:</td><td>Can see and edit everything. More rights are not possible :)</td></tr></tbody></table><p><span style=\"color:#008080;\"><strong>Chairman</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Chairman</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rights:</td><td>Can edit and view everything, except assigning roles and changing program/module settings.</td></tr></tbody></table><p><span style=\"color:#008080;\"><strong>Member</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Member</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rechte:</td><td>Can edit his profile and view lists of roles, where he is a member.</td></tr></tbody></table><p>Have fun trying !<br />The Admidio Team</p>', 1, '2025-09-26 22:15:33', NULL, NULL);
+INSERT INTO `%PREFIX%_announcements` (`ann_id`, `ann_cat_id`, `ann_uuid`, `ann_headline`, `ann_description`, `ann_usr_id_create`, `ann_timestamp_create`, `ann_usr_id_change`, `ann_timestamp_change`) VALUES
+(1, 13, 'e49d66f4-0546-4a23-bb57-27eb2b97d271', 'New jerseys', 'Starting next season, there are new jerseys for all active players. These can be picked up before the first training at the trainer.', 1, '2025-09-11 07:12:34', NULL, NULL),
+(2, 13, 'e84aae2a-7e1d-4f91-b2e1-ead4bac900ed', 'Aerobics course', 'During the holidays we offer a <i>aerobic course</i> to all interested members.<br /><br />Registrations are accepted on our <b>homepage</b> or in our <b>office</b>.', 1, '2025-09-09 09:30:59', 1, '2025-09-25 17:21:32'),
+(3, 300, '934346cc-123c-4162-9506-86b07c6c08ce', 'Welcome to the demo area', '<p>In this area you can play around with Admidio and see whether the program\'s functions meet your needs.</p><p>We have also provided some test data so that you can see in the individual modules how this could look later on your site. However, emails are not actually sent in the demo area so that this function cannot be abused. You are welcome to play with this installation.</p><p>We have created a few test accounts with different rights:</p><p><span style=\"color:#008080;\"><strong>Administrator</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Admin</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rights:</td><td>Can see and edit everything. More rights are not possible :)</td></tr></tbody></table><p><span style=\"color:#008080;\"><strong>Chairman</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Chairman</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rights:</td><td>Can edit and view everything, except assigning roles and changing program/module settings.</td></tr></tbody></table><p><span style=\"color:#008080;\"><strong>Member</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Member</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rechte:</td><td>Can edit his profile and view lists of roles, where he is a member.</td></tr></tbody></table><p>Have fun trying !<br />The Admidio Team</p>', 1, '2025-09-21 22:15:33', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_auto_login`
+-- Tabellenstruktur für Tabelle `%PREFIX%_auto_login`
 --
 
-DROP TABLE IF EXISTS `adm_auto_login`;
-CREATE TABLE `adm_auto_login` (
+CREATE TABLE `%PREFIX%_auto_login` (
   `atl_id` int UNSIGNED NOT NULL,
-  `atl_auto_login_id` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `atl_session_id` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `atl_auto_login_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `atl_session_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `atl_org_id` int UNSIGNED NOT NULL,
   `atl_usr_id` int UNSIGNED NOT NULL,
   `atl_last_login` timestamp NULL DEFAULT NULL,
@@ -68,26 +66,25 @@ CREATE TABLE `adm_auto_login` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_auto_login`
+-- Daten für Tabelle `%PREFIX%_auto_login`
 --
 
-INSERT INTO `adm_auto_login` (`atl_id`, `atl_auto_login_id`, `atl_session_id`, `atl_org_id`, `atl_usr_id`, `atl_last_login`, `atl_number_invalid`) VALUES
-(1, '1:mWawXqCrTeBX6OSVXGpZEK90qFS2YvTdhlQF61HS', '', 1, 1, '2025-09-27 09:00:41', 0);
+INSERT INTO `%PREFIX%_auto_login` (`atl_id`, `atl_auto_login_id`, `atl_session_id`, `atl_org_id`, `atl_usr_id`, `atl_last_login`, `atl_number_invalid`) VALUES
+(2, '1:PyQIIXAENPZ8KOcGp26cPGo7erNAod2Zzj8cdV7m', '', 1, 1, '2025-09-28 10:14:39', 0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_categories`
+-- Tabellenstruktur für Tabelle `%PREFIX%_categories`
 --
 
-DROP TABLE IF EXISTS `adm_categories`;
-CREATE TABLE `adm_categories` (
+CREATE TABLE `%PREFIX%_categories` (
   `cat_id` int UNSIGNED NOT NULL,
   `cat_org_id` int UNSIGNED DEFAULT NULL,
-  `cat_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `cat_type` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `cat_name_intern` varchar(110) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `cat_name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cat_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cat_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cat_name_intern` varchar(110) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cat_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `cat_system` tinyint(1) NOT NULL DEFAULT '0',
   `cat_default` tinyint(1) NOT NULL DEFAULT '0',
   `cat_sequence` smallint NOT NULL,
@@ -98,83 +95,81 @@ CREATE TABLE `adm_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_categories`
+-- Daten für Tabelle `%PREFIX%_categories`
 --
 
-INSERT INTO `adm_categories` (`cat_id`, `cat_org_id`, `cat_uuid`, `cat_type`, `cat_name_intern`, `cat_name`, `cat_system`, `cat_default`, `cat_sequence`, `cat_usr_id_create`, `cat_timestamp_create`, `cat_usr_id_change`, `cat_timestamp_change`) VALUES
-(1, NULL, '4404540e-bdad-46b7-8c52-f30e7ab51675', 'USF', 'BASIC_DATA', 'Basic data', 1, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
-(2, NULL, 'f8e89d85-325d-4620-a7d4-36b42ae06f45', 'USF', 'SOCIAL_NETWORKS', 'Social networks', 0, 0, 2, 1, '2012-01-08 10:12:07', NULL, NULL),
-(3, 1, 'dd483a2f-c8dd-47da-a4d1-cb97d58a62a0', 'ROL', 'COMMON', 'General', 0, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
-(4, 1, '1f3d2f16-e81d-4f63-9582-2e9e4419aba8', 'ROL', 'GROUPS', 'Groups', 0, 1, 2, 1, '2012-01-08 10:12:05', NULL, NULL),
-(5, 1, 'e5329e2d-8fc5-4cc2-994c-a5f687289754', 'ROL', 'COURSES', 'Courses', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
-(6, 1, '22a1c65c-588c-427a-939e-0ea30dad2012', 'ROL', 'TEAMS', 'Teams', 0, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
-(7, 1, 'c0778d6e-804b-4d19-b624-802663ebcdca', 'LNK', 'COMMON', 'General', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(8, NULL, 'ad3a3cd8-3108-4df2-b08b-60aa3dad4975', 'USF', 'ADDIDIONAL_DATA', 'Additional information', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
+INSERT INTO `%PREFIX%_categories` (`cat_id`, `cat_org_id`, `cat_uuid`, `cat_type`, `cat_name_intern`, `cat_name`, `cat_system`, `cat_default`, `cat_sequence`, `cat_usr_id_create`, `cat_timestamp_create`, `cat_usr_id_change`, `cat_timestamp_change`) VALUES
+(1, NULL, '4404540e-bdad-46b7-8c52-f30e7ab51675', 'USF', 'BASIC_DATA', 'SYS_BASIC_DATA', 1, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
+(2, NULL, 'f8e89d85-325d-4620-a7d4-36b42ae06f45', 'USF', 'SOCIAL_NETWORKS', 'SYS_SOCIAL_NETWORKS', 0, 0, 2, 1, '2012-01-08 10:12:07', NULL, NULL),
+(3, 1, 'dd483a2f-c8dd-47da-a4d1-cb97d58a62a0', 'ROL', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
+(4, 1, '1f3d2f16-e81d-4f63-9582-2e9e4419aba8', 'ROL', 'GROUPS', 'INS_GROUPS', 0, 1, 2, 1, '2012-01-08 10:12:05', NULL, NULL),
+(5, 1, 'e5329e2d-8fc5-4cc2-994c-a5f687289754', 'ROL', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
+(6, 1, '22a1c65c-588c-427a-939e-0ea30dad2012', 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
+(7, 1, 'c0778d6e-804b-4d19-b624-802663ebcdca', 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(8, NULL, 'ad3a3cd8-3108-4df2-b08b-60aa3dad4975', 'USF', 'ADDIDIONAL_DATA', 'INS_ADDIDIONAL_DATA', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
 (9, 1, '32edc214-cb7b-42f1-a4af-7336a28ada5e', 'LNK', 'ADMIDIO', 'Admidio', 0, 1, 3, 1, '2011-04-06 20:05:20', 2, '2025-09-27 09:00:21'),
-(10, 1, '67850ca7-990b-4791-a238-5fd370caa23d', 'EVT', 'COMMON', 'General', 0, 1, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(11, 1, '22c1edc4-4af3-4098-9bb9-375341f1e6c4', 'EVT', 'COURSES', 'Courses', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(12, 1, '63573db9-9ad4-47c6-9064-ff77f53d9e6e', 'EVT', 'TRAINING', 'Training', 0, 0, 4, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(13, 1, 'ab11ce61-471b-4f49-8735-92134b417d6e', 'ANN', 'COMMON', 'General', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(14, 1, '8803b2aa-f36e-4c9b-99ed-52685b5048d7', 'ANN', 'IMPORTANT', 'Important', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(100, 2, '6beea24e-58b7-4668-8ac6-6ccc625cc989', 'ROL', 'COMMON', 'General', 0, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
-(101, 2, '93456821-ec9f-4ca0-a645-9bb1433985ac', 'ROL', 'GROUPS', 'Groups', 0, 0, 2, 1, '2012-01-08 10:12:05', NULL, NULL),
-(102, 2, 'cd47a540-d0e1-4cac-8ef9-e1c64880dedd', 'ROL', 'COURSES', 'Courses', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
-(103, 2, '160819d4-d192-4120-82f7-88e565e2bf18', 'ROL', 'TEAMS', 'Teams', 0, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
-(104, 2, '9bf1a1ea-69b4-4226-aa55-2517455ed32d', 'LNK', 'COMMON', 'General', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(10, 1, '67850ca7-990b-4791-a238-5fd370caa23d', 'EVT', 'COMMON', 'SYS_COMMON', 0, 1, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(11, 1, '22c1edc4-4af3-4098-9bb9-375341f1e6c4', 'EVT', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(12, 1, '63573db9-9ad4-47c6-9064-ff77f53d9e6e', 'EVT', 'TRAINING', 'INS_TRAINING', 0, 0, 4, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(13, 1, 'ab11ce61-471b-4f49-8735-92134b417d6e', 'ANN', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(14, 1, '8803b2aa-f36e-4c9b-99ed-52685b5048d7', 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(100, 2, '6beea24e-58b7-4668-8ac6-6ccc625cc989', 'ROL', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
+(101, 2, '93456821-ec9f-4ca0-a645-9bb1433985ac', 'ROL', 'GROUPS', 'INS_GROUPS', 0, 0, 2, 1, '2012-01-08 10:12:05', NULL, NULL),
+(102, 2, 'cd47a540-d0e1-4cac-8ef9-e1c64880dedd', 'ROL', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
+(103, 2, '160819d4-d192-4120-82f7-88e565e2bf18', 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
+(104, 2, '9bf1a1ea-69b4-4226-aa55-2517455ed32d', 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
 (105, 2, '9a4b3de1-3cab-40db-97f6-77719c731f01', 'LNK', 'ADMIDIO', 'Admidio', 0, 0, 3, 1, '2011-04-06 20:05:20', 2, '2025-09-27 09:00:21'),
-(106, 2, '1141cb37-7e15-4107-aa3f-15e1cd740860', 'EVT', 'COMMON', 'General', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(107, 2, 'b1c33600-6e8a-47db-88a0-0665e7005fec', 'EVT', 'COURSES', 'Courses', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(108, 2, '0001df5c-1ef1-49da-bed2-c88152cfa792', 'EVT', 'TRAINING', 'Training', 0, 0, 4, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(109, 2, '84205a4e-4fd7-49e4-bed9-63e3280a70d8', 'ANN', 'COMMON', 'General', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(110, 2, 'c9767836-63fe-470c-abc8-1187d8143d19', 'ANN', 'IMPORTANT', 'Important', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(200, 1, 'fff9f4cf-2368-43c4-bb3a-322008830729', 'ROL', 'EVENTS', 'Events - Confirmation of attendance', 1, 0, 5, 1, '2012-01-08 10:12:05', NULL, NULL),
-(201, 2, '6ee60a30-4721-4427-ac12-dc11f624c5fb', 'ROL', 'EVENTS', 'Events - Confirmation of attendance', 1, 0, 5, 1, '2012-01-08 10:12:05', NULL, NULL),
-(300, NULL, 'a657459f-cef8-4f68-8008-0c5e34f4bfa5', 'ANN', 'ANN_ALL_ORGANIZATIONS', 'All organizations', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(301, NULL, 'f4d498ba-87db-4a4e-a894-7b7f42bd4d12', 'EVT', 'EVT_ALL_ORGANIZATIONS', 'All organizations', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(302, NULL, 'a0fa893e-c600-4157-831e-a946cc73fb58', 'LNK', 'LNK_ALL_ORGANIZATIONS', 'All organizations', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(303, 1, 'ae3d3f73-a23a-4b08-8c4f-72d1251d4ca0', 'FOT', 'COMMON', 'Allgemein', 0, 0, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
-(304, 2, 'bea45e89-b8c7-4624-b997-f2c4f69eac4c', 'FOT', 'COMMON', 'Allgemein', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(106, 2, '1141cb37-7e15-4107-aa3f-15e1cd740860', 'EVT', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(107, 2, 'b1c33600-6e8a-47db-88a0-0665e7005fec', 'EVT', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(108, 2, '0001df5c-1ef1-49da-bed2-c88152cfa792', 'EVT', 'TRAINING', 'INS_TRAINING', 0, 0, 4, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(109, 2, '84205a4e-4fd7-49e4-bed9-63e3280a70d8', 'ANN', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(110, 2, 'c9767836-63fe-470c-abc8-1187d8143d19', 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(200, 1, 'fff9f4cf-2368-43c4-bb3a-322008830729', 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 1, 0, 5, 1, '2012-01-08 10:12:05', NULL, NULL),
+(201, 2, '6ee60a30-4721-4427-ac12-dc11f624c5fb', 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 1, 0, 5, 1, '2012-01-08 10:12:05', NULL, NULL),
+(300, NULL, 'a657459f-cef8-4f68-8008-0c5e34f4bfa5', 'ANN', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(301, NULL, 'f4d498ba-87db-4a4e-a894-7b7f42bd4d12', 'EVT', 'EVT_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(302, NULL, 'a0fa893e-c600-4157-831e-a946cc73fb58', 'LNK', 'LNK_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(303, 1, 'ae3d3f73-a23a-4b08-8c4f-72d1251d4ca0', 'FOT', 'COMMON', 'SYS_COMMON', 0, 0, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(304, 2, 'bea45e89-b8c7-4624-b997-f2c4f69eac4c', 'FOT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
 (305, 1, 'f6b2e061-4db1-411a-9371-85d1d19666da', 'IVT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
 (306, 2, 'c16e3a6d-49f3-4ce7-bb0c-0d6f2b6a585f', 'IVT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_category_report`
+-- Tabellenstruktur für Tabelle `%PREFIX%_category_report`
 --
 
-DROP TABLE IF EXISTS `adm_category_report`;
-CREATE TABLE `adm_category_report` (
+CREATE TABLE `%PREFIX%_category_report` (
   `crt_id` int UNSIGNED NOT NULL,
   `crt_org_id` int UNSIGNED DEFAULT NULL,
-  `crt_name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `crt_col_fields` text COLLATE utf8mb3_unicode_ci,
-  `crt_selection_role` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `crt_selection_cat` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `crt_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `crt_col_fields` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `crt_selection_role` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `crt_selection_cat` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `crt_number_col` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_category_report`
+-- Daten für Tabelle `%PREFIX%_category_report`
 --
 
-INSERT INTO `adm_category_report` (`crt_id`, `crt_org_id`, `crt_name`, `crt_col_fields`, `crt_selection_role`, `crt_selection_cat`, `crt_number_col`) VALUES
+INSERT INTO `%PREFIX%_category_report` (`crt_id`, `crt_org_id`, `crt_name`, `crt_col_fields`, `crt_selection_role`, `crt_selection_cat`, `crt_number_col`) VALUES
 (1, 1, 'General role assignment', 'p2,p1,p3,p5,r1', NULL, NULL, 0),
 (2, 2, 'General role assignment', 'p2,p1,p3,p5,r6', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_components`
+-- Tabellenstruktur für Tabelle `%PREFIX%_components`
 --
 
-DROP TABLE IF EXISTS `adm_components`;
-CREATE TABLE `adm_components` (
+CREATE TABLE `%PREFIX%_components` (
   `com_id` int UNSIGNED NOT NULL,
-  `com_type` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `com_name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `com_name_intern` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `com_version` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `com_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `com_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `com_name_intern` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `com_version` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `com_beta` smallint NOT NULL DEFAULT '0',
   `com_update_step` int NOT NULL DEFAULT '0',
   `com_update_completed` tinyint(1) NOT NULL DEFAULT '1',
@@ -182,51 +177,50 @@ CREATE TABLE `adm_components` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_components`
+-- Daten für Tabelle `%PREFIX%_components`
 --
 
-INSERT INTO `adm_components` (`com_id`, `com_type`, `com_name`, `com_name_intern`, `com_version`, `com_beta`, `com_update_step`, `com_update_completed`, `com_timestamp_installed`) VALUES
-(10, 'SYSTEM', 'Admidio Core', 'CORE', '5.0.0', 1, 1700, 1, '2025-09-27 09:00:17'),
-(20, 'MODULE', 'Announcements', 'ANNOUNCEMENTS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(30, 'MODULE', 'Events', 'EVENTS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(40, 'MODULE', 'Messages', 'MESSAGES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(50, 'MODULE', 'Groups & roles', 'GROUPS-ROLES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(60, 'MODULE', 'Contacts', 'CONTACTS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(70, 'MODULE', 'Documents & Files', 'DOCUMENTS-FILES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(80, 'MODULE', 'Photos', 'PHOTOS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(90, 'MODULE', 'Category report', 'CATEGORY-REPORT', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(100, 'MODULE', 'Web links', 'LINKS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(110, 'MODULE', 'SYS_FORUM', 'FORUM', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(120, 'MODULE', 'Preferences', 'PREFERENCES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(130, 'MODULE', 'Registration', 'REGISTRATION', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(140, 'MODULE', 'Menu', 'MENU', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(200, 'MODULE', 'Categories', 'CATEGORIES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(210, 'MODULE', 'Profile', 'PROFILE', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(220, 'MODULE', 'Room administration', 'ROOMS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
-(221, 'MODULE', 'SYS_ORGANIZATION', 'ORGANIZATIONS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:23'),
-(222, 'MODULE', 'SYS_INVENTORY', 'INVENTORY', '5.0.0', 1, 0, 1, '2025-09-27 09:00:24');
+INSERT INTO `%PREFIX%_components` (`com_id`, `com_type`, `com_name`, `com_name_intern`, `com_version`, `com_beta`, `com_update_step`, `com_update_completed`, `com_timestamp_installed`) VALUES
+(10, 'SYSTEM', 'Admidio Core', 'CORE', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(30, 'MODULE', 'SYS_EVENTS', 'EVENTS', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(40, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(50, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(60, 'MODULE', 'SYS_CONTACTS', 'CONTACTS', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(70, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(80, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(90, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(100, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(110, 'MODULE', 'SYS_FORUM', 'FORUM', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(120, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(130, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(140, 'MODULE', 'SYS_MENU', 'MENU', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(200, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(210, 'MODULE', 'SYS_PROFILE', 'PROFILE', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(220, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '5.1.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(221, 'MODULE', 'SYS_ORGANIZATION', 'ORGANIZATIONS', '5.1.0', 1, 0, 1, '2025-09-27 09:00:23'),
+(222, 'MODULE', 'SYS_INVENTORY', 'INVENTORY', '5.1.0', 1, 0, 1, '2025-09-27 09:00:24');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_events`
+-- Tabellenstruktur für Tabelle `%PREFIX%_events`
 --
 
-DROP TABLE IF EXISTS `adm_events`;
-CREATE TABLE `adm_events` (
+CREATE TABLE `%PREFIX%_events` (
   `dat_id` int UNSIGNED NOT NULL,
   `dat_cat_id` int UNSIGNED NOT NULL,
   `dat_rol_id` int UNSIGNED DEFAULT NULL,
   `dat_room_id` int UNSIGNED DEFAULT NULL,
-  `dat_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `dat_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `dat_begin` timestamp NULL DEFAULT NULL,
   `dat_end` timestamp NULL DEFAULT NULL,
   `dat_all_day` tinyint(1) NOT NULL DEFAULT '0',
-  `dat_headline` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `dat_description` text COLLATE utf8mb3_unicode_ci,
+  `dat_headline` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `dat_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `dat_highlight` tinyint(1) NOT NULL DEFAULT '0',
-  `dat_location` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `dat_country` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `dat_location` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `dat_country` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `dat_deadline` timestamp NULL DEFAULT NULL,
   `dat_max_members` int NOT NULL DEFAULT '0',
   `dat_usr_id_create` int UNSIGNED DEFAULT NULL,
@@ -238,39 +232,38 @@ CREATE TABLE `adm_events` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_events`
+-- Daten für Tabelle `%PREFIX%_events`
 --
 
-INSERT INTO `adm_events` (`dat_id`, `dat_cat_id`, `dat_rol_id`, `dat_room_id`, `dat_uuid`, `dat_begin`, `dat_end`, `dat_all_day`, `dat_headline`, `dat_description`, `dat_highlight`, `dat_location`, `dat_country`, `dat_deadline`, `dat_max_members`, `dat_usr_id_create`, `dat_timestamp_create`, `dat_usr_id_change`, `dat_timestamp_change`, `dat_allow_comments`, `dat_additional_guests`) VALUES
-(3, 12, NULL, NULL, 'e539f6d4-a5ac-4536-8779-df203a83ef39', '2025-10-11 14:00:00', '2025-10-11 16:00:00', 0, 'Youth training 1', 'Today we will put the focus on physical fitness and stamina.<br /><br />Please appear all in time with running shoes on the sports field!', 0, 'Sports field Norwich', 'GBR', NULL, 0, 1, '2017-07-06 15:38:26', NULL, NULL, 0, 0),
-(4, 10, 8, NULL, '2bc7d168-7b4e-4ec1-9765-18989e32030c', '2025-10-01 17:00:00', '2025-10-01 21:30:00', 0, 'Barbecue', 'Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.', 1, NULL, NULL, NULL, 0, 1, '2017-07-06 15:41:18', NULL, NULL, 1, 1),
-(5, 10, NULL, NULL, '10408fec-1534-4115-a83d-60681c13bcfd', '2025-10-26 23:00:00', '2025-11-01 22:59:59', 1, 'Trainer course', 'A four-day training course for youth coaches from the tennis department :)', 1, 'Youth hostel Lyon', 'FRA', NULL, 0, 1, '2017-07-06 15:49:13', NULL, NULL, 0, 0),
-(6, 301, NULL, NULL, '0df388d7-b8f0-4c11-88f4-fbac697b2297', '2025-10-07 13:00:00', '2025-10-07 17:00:00', 0, 'Computer course', 'The focus of this course lies with the Office products.', 0, 'Munich Marienplatz', 'DEU', NULL, 0, 1, '2017-01-06 10:25:13', NULL, NULL, 0, 0),
-(7, 301, NULL, NULL, '2a0151ef-2f03-4b6f-abe3-ce86d5a74ba8', '2025-09-24 22:00:00', '2025-09-25 21:59:59', 1, 'Trip to Amsterdam', 'On this hopefully sunny day it goes to Amsterdam.<br /><br />A canal cruise and a shopping trip are planned.', 0, 'Amsterdam Gracht', 'NLD', NULL, 0, 1, '2018-01-06 10:25:13', NULL, NULL, 0, 0),
-(8, 12, NULL, NULL, '2c610a75-15e8-4ab2-9bd5-63769800d2e8', '2025-09-23 15:00:00', '2025-09-23 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(9, 12, NULL, NULL, '236c9f98-c826-4f42-a0e4-8421f83e11ff', '2025-09-30 15:00:00', '2025-09-30 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(10, 12, NULL, NULL, '9dbbb1d4-ec43-4704-b4d5-3a4f29d5dab1', '2025-10-07 15:00:00', '2025-10-07 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(11, 12, NULL, NULL, '86c27d41-caf3-49b6-9d68-a079c532dbe3', '2025-10-14 15:00:00', '2025-10-14 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(12, 12, NULL, NULL, 'fadeff52-a0e0-4ab9-8e43-a2a0578ab5ed', '2025-10-21 15:00:00', '2025-10-21 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(13, 12, NULL, NULL, 'cd9f4490-ddae-4949-a083-a826a12ea3d1', '2025-10-28 16:00:00', '2025-10-28 17:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(14, 107, 9, NULL, '6fa731ef-e166-49ed-bb56-182243cbc5c8', '2025-10-17 11:00:00', '2025-10-17 12:00:00', 0, 'Yoga for beginners', 'This course teaches the basics of yoga.<br /><br />A registration for this course is required.', 1, 'Madrid center', 'ESP', NULL, 0, 1, '2017-07-06 15:41:18', NULL, NULL, 0, 0),
-(15, 10, 10, NULL, '7095ed97-9cf5-4247-b057-613164aaa512', '2025-09-30 18:00:00', '2025-09-30 20:00:00', 0, 'Board meeting', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 1, '2018-05-06 21:03:18', NULL, NULL, 0, 0),
-(16, 10, 11, NULL, '217da340-7419-4e07-8f5f-bf037cbd2a4f', '2025-10-29 19:00:00', '2025-10-29 21:00:00', 0, 'Board meeting', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 1, '2018-05-06 21:03:18', NULL, NULL, 0, 0),
-(17, 10, 12, NULL, 'b89b03a5-867b-4747-8429-981c76e0b61e', '2025-10-05 17:00:00', '2025-10-05 21:30:00', 0, 'Team evening', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 355, '2018-02-14 17:38:18', NULL, NULL, 0, 0);
+INSERT INTO `%PREFIX%_events` (`dat_id`, `dat_cat_id`, `dat_rol_id`, `dat_room_id`, `dat_uuid`, `dat_begin`, `dat_end`, `dat_all_day`, `dat_headline`, `dat_description`, `dat_highlight`, `dat_location`, `dat_country`, `dat_deadline`, `dat_max_members`, `dat_usr_id_create`, `dat_timestamp_create`, `dat_usr_id_change`, `dat_timestamp_change`, `dat_allow_comments`, `dat_additional_guests`) VALUES
+(3, 12, NULL, NULL, 'e539f6d4-a5ac-4536-8779-df203a83ef39', '2025-11-21 14:00:00', '2025-11-21 16:00:00', 0, 'Youth training 1', 'Today we will put the focus on physical fitness and stamina.<br /><br />Please appear all in time with running shoes on the sports field!', 0, 'Sports field Norwich', 'GBR', NULL, 0, 1, '2017-07-06 15:38:26', NULL, NULL, 0, 0),
+(4, 10, 8, NULL, '2bc7d168-7b4e-4ec1-9765-18989e32030c', '2025-11-30 17:00:00', '2025-11-30 21:30:00', 0, 'Barbecue', 'Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.', 1, NULL, NULL, NULL, 0, 1, '2017-07-06 15:41:18', NULL, NULL, 1, 1),
+(5, 10, NULL, NULL, '10408fec-1534-4115-a83d-60681c13bcfd', '2025-11-07 23:00:00', '2025-11-18 22:59:59', 1, 'Trainer course', 'A four-day training course for youth coaches from the tennis department :)', 1, 'Youth hostel Lyon', 'FRA', NULL, 0, 1, '2017-07-06 15:49:13', NULL, NULL, 0, 0),
+(6, 301, NULL, NULL, '0df388d7-b8f0-4c11-88f4-fbac697b2297', '2025-11-03 13:00:00', '2025-11-03 17:00:00', 0, 'Computer course', 'The focus of this course lies with the Office products.', 0, 'Munich Marienplatz', 'DEU', NULL, 0, 1, '2017-01-06 10:25:13', NULL, NULL, 0, 0),
+(7, 301, NULL, NULL, '2a0151ef-2f03-4b6f-abe3-ce86d5a74ba8', '2025-10-30 22:00:00', '2025-10-31 21:59:59', 1, 'Trip to Amsterdam', 'On this hopefully sunny day it goes to Amsterdam.<br /><br />A canal cruise and a shopping trip are planned.', 0, 'Amsterdam Gracht', 'NLD', NULL, 0, 1, '2018-01-06 10:25:13', NULL, NULL, 0, 0),
+(8, 12, NULL, NULL, '2c610a75-15e8-4ab2-9bd5-63769800d2e8', '2025-10-29 15:00:00', '2025-10-29 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(9, 12, NULL, NULL, '236c9f98-c826-4f42-a0e4-8421f83e11ff', '2025-11-08 15:00:00', '2025-11-08 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(10, 12, NULL, NULL, '9dbbb1d4-ec43-4704-b4d5-3a4f29d5dab1', '2025-12-06 15:00:00', '2025-12-06 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(11, 12, NULL, NULL, '86c27d41-caf3-49b6-9d68-a079c532dbe3', '2025-11-26 15:00:00', '2025-11-26 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(12, 12, NULL, NULL, 'fadeff52-a0e0-4ab9-8e43-a2a0578ab5ed', '2025-11-07 15:00:00', '2025-11-07 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(13, 12, NULL, NULL, 'cd9f4490-ddae-4949-a083-a826a12ea3d1', '2025-11-12 16:00:00', '2025-11-12 17:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(14, 107, 9, NULL, '6fa731ef-e166-49ed-bb56-182243cbc5c8', '2025-10-27 11:00:00', '2025-10-27 12:00:00', 0, 'Yoga for beginners', 'This course teaches the basics of yoga.<br /><br />A registration for this course is required.', 1, 'Madrid center', 'ESP', NULL, 0, 1, '2017-07-06 15:41:18', NULL, NULL, 0, 0),
+(15, 10, 10, NULL, '7095ed97-9cf5-4247-b057-613164aaa512', '2025-11-03 18:00:00', '2025-11-03 20:00:00', 0, 'Board meeting', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 1, '2018-05-06 21:03:18', NULL, NULL, 0, 0),
+(16, 10, 11, NULL, '217da340-7419-4e07-8f5f-bf037cbd2a4f', '2025-11-22 19:00:00', '2025-11-22 21:00:00', 0, 'Board meeting', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 1, '2018-05-06 21:03:18', NULL, NULL, 0, 0),
+(17, 10, 12, NULL, 'b89b03a5-867b-4747-8429-981c76e0b61e', '2025-11-22 17:00:00', '2025-11-22 21:30:00', 0, 'Team evening', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 355, '2018-02-14 17:38:18', NULL, NULL, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_files`
+-- Tabellenstruktur für Tabelle `%PREFIX%_files`
 --
 
-DROP TABLE IF EXISTS `adm_files`;
-CREATE TABLE `adm_files` (
+CREATE TABLE `%PREFIX%_files` (
   `fil_id` int UNSIGNED NOT NULL,
   `fil_fol_id` int UNSIGNED NOT NULL,
-  `fil_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `fil_name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `fil_description` text COLLATE utf8mb3_unicode_ci,
+  `fil_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fil_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fil_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `fil_locked` tinyint(1) NOT NULL DEFAULT '0',
   `fil_counter` int DEFAULT NULL,
   `fil_usr_id` int UNSIGNED DEFAULT NULL,
@@ -278,10 +271,10 @@ CREATE TABLE `adm_files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_files`
+-- Daten für Tabelle `%PREFIX%_files`
 --
 
-INSERT INTO `adm_files` (`fil_id`, `fil_fol_id`, `fil_uuid`, `fil_name`, `fil_description`, `fil_locked`, `fil_counter`, `fil_usr_id`, `fil_timestamp`) VALUES
+INSERT INTO `%PREFIX%_files` (`fil_id`, `fil_fol_id`, `fil_uuid`, `fil_name`, `fil_description`, `fil_locked`, `fil_counter`, `fil_usr_id`, `fil_timestamp`) VALUES
 (1, 2, '445789b2-dee8-4a95-a116-9a3f0974841c', 'gpl-1.0.txt', NULL, 0, 15, 1, '2015-08-13 06:24:45'),
 (2, 2, 'ef0334bd-53e5-4dcd-8417-6cde7d460d20', 'gpl-2.0.txt', NULL, 0, 45, 1, '2015-08-13 06:24:45'),
 (3, 2, 'bb7b5322-c04d-44e2-8bdb-cc539a827560', 'gpl-3.0.txt', NULL, 0, 8, 1, '2015-08-13 06:24:45'),
@@ -295,19 +288,18 @@ INSERT INTO `adm_files` (`fil_id`, `fil_fol_id`, `fil_uuid`, `fil_name`, `fil_de
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_folders`
+-- Tabellenstruktur für Tabelle `%PREFIX%_folders`
 --
 
-DROP TABLE IF EXISTS `adm_folders`;
-CREATE TABLE `adm_folders` (
+CREATE TABLE `%PREFIX%_folders` (
   `fol_id` int UNSIGNED NOT NULL,
   `fol_org_id` int UNSIGNED NOT NULL,
   `fol_fol_id_parent` int UNSIGNED DEFAULT NULL,
-  `fol_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `fol_type` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `fol_name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `fol_description` text COLLATE utf8mb3_unicode_ci,
-  `fol_path` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fol_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fol_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fol_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fol_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `fol_path` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `fol_locked` tinyint(1) NOT NULL DEFAULT '0',
   `fol_public` tinyint(1) NOT NULL DEFAULT '0',
   `fol_usr_id` int UNSIGNED DEFAULT NULL,
@@ -315,27 +307,26 @@ CREATE TABLE `adm_folders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_folders`
+-- Daten für Tabelle `%PREFIX%_folders`
 --
 
-INSERT INTO `adm_folders` (`fol_id`, `fol_org_id`, `fol_fol_id_parent`, `fol_uuid`, `fol_type`, `fol_name`, `fol_description`, `fol_path`, `fol_locked`, `fol_public`, `fol_usr_id`, `fol_timestamp`) VALUES
-(1, 1, NULL, '80b3c79b-27d1-4cdc-b86c-d9e8d79d59eb', 'DOCUMENTS', 'documents_demo', NULL, '/adm_my_files', 0, 1, 1, '2025-09-19 22:00:00'),
-(2, 1, 1, 'b1621a3d-0cea-4cbd-94c4-fc0cde15f324', 'DOCUMENTS', 'licenses', NULL, '/adm_my_files/documents_demo', 0, 1, 1, '2014-02-05 13:05:34'),
-(3, 1, 1, '3e26f7db-a167-445b-8441-215eb63153f5', 'DOCUMENTS', 'board-meeting', NULL, '/adm_my_files/documents_demo', 0, 0, 354, '2016-04-15 11:25:06'),
-(100, 2, NULL, '63973fe1-1a26-4561-b564-b1065f2c863b', 'DOCUMENTS', 'documents_test', NULL, '/adm_my_files', 0, 1, 1, '2014-01-01 21:35:07');
+INSERT INTO `%PREFIX%_folders` (`fol_id`, `fol_org_id`, `fol_fol_id_parent`, `fol_uuid`, `fol_type`, `fol_name`, `fol_description`, `fol_path`, `fol_locked`, `fol_public`, `fol_usr_id`, `fol_timestamp`) VALUES
+(1, 1, NULL, '80b3c79b-27d1-4cdc-b86c-d9e8d79d59eb', 'DOCUMENTS', 'documents_demo', NULL, '/%PREFIX%_my_files', 0, 1, 1, '2025-09-19 22:00:00'),
+(2, 1, 1, 'b1621a3d-0cea-4cbd-94c4-fc0cde15f324', 'DOCUMENTS', 'licenses', NULL, '/%PREFIX%_my_files/documents_demo', 0, 1, 1, '2014-02-05 13:05:34'),
+(3, 1, 1, '3e26f7db-a167-445b-8441-215eb63153f5', 'DOCUMENTS', 'board-meeting', NULL, '/%PREFIX%_my_files/documents_demo', 0, 0, 354, '2016-04-15 11:25:06'),
+(100, 2, NULL, '63973fe1-1a26-4561-b564-b1065f2c863b', 'DOCUMENTS', 'documents_test', NULL, '/%PREFIX%_my_files', 0, 1, 1, '2014-01-01 21:35:07');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_forum_posts`
+-- Tabellenstruktur für Tabelle `%PREFIX%_forum_posts`
 --
 
-DROP TABLE IF EXISTS `adm_forum_posts`;
-CREATE TABLE `adm_forum_posts` (
+CREATE TABLE `%PREFIX%_forum_posts` (
   `fop_id` int UNSIGNED NOT NULL,
   `fop_fot_id` int UNSIGNED NOT NULL,
-  `fop_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `fop_text` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fop_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fop_text` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `fop_usr_id_create` int UNSIGNED DEFAULT NULL,
   `fop_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fop_usr_id_change` int UNSIGNED DEFAULT NULL,
@@ -345,16 +336,15 @@ CREATE TABLE `adm_forum_posts` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_forum_topics`
+-- Tabellenstruktur für Tabelle `%PREFIX%_forum_topics`
 --
 
-DROP TABLE IF EXISTS `adm_forum_topics`;
-CREATE TABLE `adm_forum_topics` (
+CREATE TABLE `%PREFIX%_forum_topics` (
   `fot_id` int UNSIGNED NOT NULL,
-  `fot_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fot_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `fot_cat_id` int UNSIGNED NOT NULL,
   `fot_fop_id_first_post` int UNSIGNED DEFAULT NULL,
-  `fot_title` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fot_title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `fot_views` int UNSIGNED NOT NULL DEFAULT '0',
   `fot_usr_id_create` int UNSIGNED DEFAULT NULL,
   `fot_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -363,71 +353,10 @@ CREATE TABLE `adm_forum_topics` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_guestbook`
+-- Tabellenstruktur für Tabelle `%PREFIX%_ids`
 --
 
-DROP TABLE IF EXISTS `adm_guestbook`;
-CREATE TABLE `adm_guestbook` (
-  `gbo_id` int UNSIGNED NOT NULL,
-  `gbo_org_id` int UNSIGNED NOT NULL,
-  `gbo_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `gbo_name` varchar(60) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `gbo_text` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `gbo_email` varchar(254) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gbo_homepage` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gbo_ip_address` varchar(39) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `gbo_locked` tinyint(1) NOT NULL DEFAULT '0',
-  `gbo_usr_id_create` int UNSIGNED DEFAULT NULL,
-  `gbo_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `gbo_usr_id_change` int UNSIGNED DEFAULT NULL,
-  `gbo_timestamp_change` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
---
--- Daten für Tabelle `adm_guestbook`
---
-
-INSERT INTO `adm_guestbook` (`gbo_id`, `gbo_org_id`, `gbo_uuid`, `gbo_name`, `gbo_text`, `gbo_email`, `gbo_homepage`, `gbo_ip_address`, `gbo_locked`, `gbo_usr_id_create`, `gbo_timestamp_create`, `gbo_usr_id_change`, `gbo_timestamp_change`) VALUES
-(1, 1, '5d4aac57-ec05-4d10-b240-9dff8a54801b', 'Paul Schmidt', 'Welcome to the guestbook of the demo area.<br /><br />Here you can play around and test the capabilities of Admidio.<br /><br />We hope you enjoy it and that we can convince you of this great program.', 'administrator@admidio.org', 'https://www.admidio.org/', '84.63.38.55', 0, 1, '2025-09-13 10:14:42', NULL, NULL),
-(2, 1, '6ab5808d-3d7e-4809-b4a4-406b0614508d', 'Sepp Mayerchen', 'Then I\'m going to look at the program.', NULL, NULL, '84.63.38.55', 0, NULL, '2025-09-22 18:16:42', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `adm_guestbook_comments`
---
-
-DROP TABLE IF EXISTS `adm_guestbook_comments`;
-CREATE TABLE `adm_guestbook_comments` (
-  `gbc_id` int UNSIGNED NOT NULL,
-  `gbc_gbo_id` int UNSIGNED NOT NULL,
-  `gbc_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `gbc_name` varchar(60) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `gbc_text` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `gbc_email` varchar(254) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gbc_ip_address` varchar(39) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `gbc_locked` tinyint(1) NOT NULL DEFAULT '0',
-  `gbc_usr_id_create` int UNSIGNED DEFAULT NULL,
-  `gbc_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `gbc_usr_id_change` int UNSIGNED DEFAULT NULL,
-  `gbc_timestamp_change` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
---
--- Daten für Tabelle `adm_guestbook_comments`
---
-
-INSERT INTO `adm_guestbook_comments` (`gbc_id`, `gbc_gbo_id`, `gbc_uuid`, `gbc_name`, `gbc_text`, `gbc_email`, `gbc_ip_address`, `gbc_locked`, `gbc_usr_id_create`, `gbc_timestamp_create`, `gbc_usr_id_change`, `gbc_timestamp_change`) VALUES
-(1, 2, '3d449b6f-0f17-47bf-b642-7af7db6f9307', 'Paul Schmidt', 'For more information about the program look in the <a href=\"https://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index\">documentation</a>.<br /><br />For questions and suggestions just visit our <a href=\"https://forum.admidio.org\">forum</a>.', 'administrator@admidio.org', '84.63.38.55', 0, 1, '2025-09-23 14:23:12', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `adm_ids`
---
-
-DROP TABLE IF EXISTS `adm_ids`;
-CREATE TABLE `adm_ids` (
+CREATE TABLE `%PREFIX%_ids` (
   `ids_usr_id` int UNSIGNED NOT NULL,
   `ids_reference_id` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -435,18 +364,17 @@ CREATE TABLE `adm_ids` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_inventory_fields`
+-- Tabellenstruktur für Tabelle `%PREFIX%_inventory_fields`
 --
 
-DROP TABLE IF EXISTS `adm_inventory_fields`;
-CREATE TABLE `adm_inventory_fields` (
+CREATE TABLE `%PREFIX%_inventory_fields` (
   `inf_id` int UNSIGNED NOT NULL,
-  `inf_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `inf_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `inf_org_id` int UNSIGNED NOT NULL,
-  `inf_type` varchar(30) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `inf_name_intern` varchar(110) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `inf_name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `inf_description` text COLLATE utf8mb3_unicode_ci,
+  `inf_type` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `inf_name_intern` varchar(110) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `inf_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `inf_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `inf_system` tinyint(1) NOT NULL DEFAULT '0',
   `inf_required_input` smallint NOT NULL DEFAULT '0',
   `inf_sequence` smallint NOT NULL,
@@ -457,59 +385,57 @@ CREATE TABLE `adm_inventory_fields` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_inventory_fields`
+-- Daten für Tabelle `%PREFIX%_inventory_fields`
 --
 
-INSERT INTO `adm_inventory_fields` (`inf_id`, `inf_uuid`, `inf_org_id`, `inf_type`, `inf_name_intern`, `inf_name`, `inf_description`, `inf_system`, `inf_required_input`, `inf_sequence`, `inf_usr_id_create`, `inf_timestamp_create`, `inf_usr_id_change`, `inf_timestamp_change`) VALUES
-(1, '87e206b9-550f-41b9-b810-cd1d845a3a1b', 1, 'TEXT', 'ITEMNAME', 'SYS_INVENTORY_ITEMNAME', 'SYS_INVENTORY_ITEMNAME_DESC', 1, 1, 0, 2, '2025-09-27 09:00:21', NULL, NULL),
-(2, '712b3a8f-b4c0-448f-8fc8-d28cdfb26527', 1, 'CATEGORY', 'CATEGORY', 'SYS_CATEGORY', 'SYS_INVENTORY_CATEGORY_DESC', 1, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
-(3, 'e9cf9d7d-7403-4aa9-ac63-2b27f941bf1c', 1, 'DROPDOWN', 'STATUS', 'SYS_INVENTORY_STATUS', 'SYS_INVENTORY_STATUS_DESC', 1, 1, 2, 2, '2025-09-27 09:00:21', NULL, NULL),
-(4, 'acc1905f-36a6-424d-9884-939288d022ba', 1, 'TEXT', 'KEEPER', 'SYS_INVENTORY_KEEPER', 'SYS_INVENTORY_KEEPER_DESC', 1, 0, 3, 2, '2025-09-27 09:00:21', NULL, NULL),
-(5, 'abaceca6-b781-4121-ba67-38d120940731', 1, 'TEXT', 'LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER_DESC', 1, 0, 4, 2, '2025-09-27 09:00:21', NULL, NULL),
-(6, '4d88c91e-a37d-4985-837c-15c357d44dd2', 1, 'DATE', 'BORROW_DATE', 'SYS_INVENTORY_BORROW_DATE', 'SYS_INVENTORY_BORROW_DATE_DESC', 1, 0, 5, 2, '2025-09-27 09:00:21', NULL, NULL),
-(7, 'f80f3bea-460b-4aaa-be04-afd561acac89', 1, 'DATE', 'RETURN_DATE', 'SYS_INVENTORY_RETURN_DATE', 'SYS_INVENTORY_RETURN_DATE_DESC', 1, 0, 6, 2, '2025-09-27 09:00:21', NULL, NULL),
-(8, '3981704a-568a-4f4d-9bad-df6bb78e610e', 2, 'TEXT', 'ITEMNAME', 'SYS_INVENTORY_ITEMNAME', 'SYS_INVENTORY_ITEMNAME_DESC', 1, 1, 0, 2, '2025-09-27 09:00:21', NULL, NULL),
-(9, '31e78677-fbd3-4c51-91d2-0aeafceb2bfc', 2, 'CATEGORY', 'CATEGORY', 'SYS_CATEGORY', 'SYS_INVENTORY_CATEGORY_DESC', 1, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
-(10, '5233418f-d381-462a-af50-92fbf5c6388d', 2, 'DROPDOWN', 'STATUS', 'SYS_INVENTORY_STATUS', 'SYS_INVENTORY_STATUS_DESC', 1, 1, 2, 2, '2025-09-27 09:00:21', NULL, NULL),
-(11, '294c2d85-b6c2-4138-a0be-437ae6854162', 2, 'TEXT', 'KEEPER', 'SYS_INVENTORY_KEEPER', 'SYS_INVENTORY_KEEPER_DESC', 1, 0, 3, 2, '2025-09-27 09:00:21', NULL, NULL),
-(12, '01b46909-4755-4409-a045-155c5058f432', 2, 'TEXT', 'LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER_DESC', 1, 0, 4, 2, '2025-09-27 09:00:21', NULL, NULL),
-(13, '1279bd8f-7b29-4ba1-ade8-dbec6bc6466d', 2, 'DATE', 'BORROW_DATE', 'SYS_INVENTORY_BORROW_DATE', 'SYS_INVENTORY_BORROW_DATE_DESC', 1, 0, 5, 2, '2025-09-27 09:00:21', NULL, NULL),
-(14, 'ce37d8be-da97-45ef-9145-6d7d7f39b4a7', 2, 'DATE', 'RETURN_DATE', 'SYS_INVENTORY_RETURN_DATE', 'SYS_INVENTORY_RETURN_DATE_DESC', 1, 0, 6, 2, '2025-09-27 09:00:21', NULL, NULL);
+INSERT INTO `%PREFIX%_inventory_fields` (`inf_id`, `inf_uuid`, `inf_org_id`, `inf_type`, `inf_name_intern`, `inf_name`, `inf_description`, `inf_system`, `inf_required_input`, `inf_sequence`, `inf_usr_id_create`, `inf_timestamp_create`, `inf_usr_id_change`, `inf_timestamp_change`) VALUES
+(1, '87e206b9-550f-41b9-b810-cd1d845a3a1b', 1, 'TEXT', 'ITEMNAME', 'Artikelname', 'Der Name des Gegenstandes', 1, 1, 0, 2, '2025-09-27 09:00:21', NULL, NULL),
+(2, '712b3a8f-b4c0-448f-8fc8-d28cdfb26527', 1, 'CATEGORY', 'CATEGORY', 'Kategorie', 'Die Kategorie des Gegenstandes', 1, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(3, 'e9cf9d7d-7403-4aa9-ac63-2b27f941bf1c', 1, 'DROPDOWN', 'STATUS', 'Status', 'Der aktuelle Status des Gegenstandes', 1, 1, 2, 2, '2025-09-27 09:00:21', NULL, NULL),
+(4, 'acc1905f-36a6-424d-9884-939288d022ba', 1, 'TEXT', 'KEEPER', 'Verwalter', 'Der Verwalter des Gegenstandes', 1, 0, 3, 2, '2025-09-27 09:00:21', NULL, NULL),
+(5, 'abaceca6-b781-4121-ba67-38d120940731', 1, 'TEXT', 'LAST_RECEIVER', 'Letzter Empfänger', 'Der letzte Empfänger des Gegenstandes', 1, 0, 4, 2, '2025-09-27 09:00:21', NULL, NULL),
+(6, '4d88c91e-a37d-4985-837c-15c357d44dd2', 1, 'DATE', 'BORROW_DATE', 'Ausleihdatum', 'Das Verleihdatum des Gegenstandes an den letzten Empfänger', 1, 0, 5, 2, '2025-09-27 09:00:21', NULL, NULL),
+(7, 'f80f3bea-460b-4aaa-be04-afd561acac89', 1, 'DATE', 'RETURN_DATE', 'Rückgabedatum', 'Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde', 1, 0, 6, 2, '2025-09-27 09:00:21', NULL, NULL),
+(8, '3981704a-568a-4f4d-9bad-df6bb78e610e', 2, 'TEXT', 'ITEMNAME', 'Artikelname', 'Der Name des Gegenstandes', 1, 1, 0, 2, '2025-09-27 09:00:21', NULL, NULL),
+(9, '31e78677-fbd3-4c51-91d2-0aeafceb2bfc', 2, 'CATEGORY', 'CATEGORY', 'Kategorie', 'Die Kategorie des Gegenstandes', 1, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(10, '5233418f-d381-462a-af50-92fbf5c6388d', 2, 'DROPDOWN', 'STATUS', 'Status', 'Der aktuelle Status des Gegenstandes', 1, 1, 2, 2, '2025-09-27 09:00:21', NULL, NULL),
+(11, '294c2d85-b6c2-4138-a0be-437ae6854162', 2, 'TEXT', 'KEEPER', 'Verwalter', 'Der Verwalter des Gegenstandes', 1, 0, 3, 2, '2025-09-27 09:00:21', NULL, NULL),
+(12, '01b46909-4755-4409-a045-155c5058f432', 2, 'TEXT', 'LAST_RECEIVER', 'Letzter Empfänger', 'Der letzte Empfänger des Gegenstandes', 1, 0, 4, 2, '2025-09-27 09:00:21', NULL, NULL),
+(13, '1279bd8f-7b29-4ba1-ade8-dbec6bc6466d', 2, 'DATE', 'BORROW_DATE', 'Ausleihdatum', 'Das Verleihdatum des Gegenstandes an den letzten Empfänger', 1, 0, 5, 2, '2025-09-27 09:00:21', NULL, NULL),
+(14, 'ce37d8be-da97-45ef-9145-6d7d7f39b4a7', 2, 'DATE', 'RETURN_DATE', 'Rückgabedatum', 'Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde', 1, 0, 6, 2, '2025-09-27 09:00:21', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_inventory_field_select_options`
+-- Tabellenstruktur für Tabelle `%PREFIX%_inventory_field_select_options`
 --
 
-DROP TABLE IF EXISTS `adm_inventory_field_select_options`;
-CREATE TABLE `adm_inventory_field_select_options` (
+CREATE TABLE `%PREFIX%_inventory_field_select_options` (
   `ifo_id` int UNSIGNED NOT NULL,
   `ifo_inf_id` int UNSIGNED NOT NULL,
-  `ifo_value` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ifo_value` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ifo_system` tinyint(1) NOT NULL DEFAULT '0',
   `ifo_sequence` smallint NOT NULL,
   `ifo_obsolete` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_inventory_field_select_options`
+-- Daten für Tabelle `%PREFIX%_inventory_field_select_options`
 --
 
-INSERT INTO `adm_inventory_field_select_options` (`ifo_id`, `ifo_inf_id`, `ifo_value`, `ifo_system`, `ifo_sequence`, `ifo_obsolete`) VALUES
-(1, 3, 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 1, 1, 0),
-(2, 3, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 1, 2, 0);
+INSERT INTO `%PREFIX%_inventory_field_select_options` (`ifo_id`, `ifo_inf_id`, `ifo_value`, `ifo_system`, `ifo_sequence`, `ifo_obsolete`) VALUES
+(1, 3, 'In Verwendung', 1, 1, 0),
+(2, 3, 'Ausgesondert', 1, 2, 0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_inventory_items`
+-- Tabellenstruktur für Tabelle `%PREFIX%_inventory_items`
 --
 
-DROP TABLE IF EXISTS `adm_inventory_items`;
-CREATE TABLE `adm_inventory_items` (
+CREATE TABLE `%PREFIX%_inventory_items` (
   `ini_id` int UNSIGNED NOT NULL,
-  `ini_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ini_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ini_cat_id` int UNSIGNED NOT NULL,
   `ini_org_id` int UNSIGNED NOT NULL,
   `ini_status` int UNSIGNED NOT NULL,
@@ -523,46 +449,43 @@ CREATE TABLE `adm_inventory_items` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_inventory_item_borrow_data`
+-- Tabellenstruktur für Tabelle `%PREFIX%_inventory_item_borrow_data`
 --
 
-DROP TABLE IF EXISTS `adm_inventory_item_borrow_data`;
-CREATE TABLE `adm_inventory_item_borrow_data` (
+CREATE TABLE `%PREFIX%_inventory_item_borrow_data` (
   `inb_id` int UNSIGNED NOT NULL,
   `inb_ini_id` int UNSIGNED NOT NULL,
-  `inb_last_receiver` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `inb_borrow_date` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `inb_return_date` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `inb_last_receiver` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `inb_borrow_date` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `inb_return_date` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_inventory_item_data`
+-- Tabellenstruktur für Tabelle `%PREFIX%_inventory_item_data`
 --
 
-DROP TABLE IF EXISTS `adm_inventory_item_data`;
-CREATE TABLE `adm_inventory_item_data` (
+CREATE TABLE `%PREFIX%_inventory_item_data` (
   `ind_id` int UNSIGNED NOT NULL,
   `ind_inf_id` int UNSIGNED NOT NULL,
   `ind_ini_id` int UNSIGNED NOT NULL,
-  `ind_value` varchar(4000) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `ind_value` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_links`
+-- Tabellenstruktur für Tabelle `%PREFIX%_links`
 --
 
-DROP TABLE IF EXISTS `adm_links`;
-CREATE TABLE `adm_links` (
+CREATE TABLE `%PREFIX%_links` (
   `lnk_id` int UNSIGNED NOT NULL,
   `lnk_cat_id` int UNSIGNED NOT NULL,
-  `lnk_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `lnk_name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `lnk_description` text COLLATE utf8mb3_unicode_ci,
-  `lnk_url` varchar(2000) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `lnk_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `lnk_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `lnk_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `lnk_url` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `lnk_counter` int NOT NULL DEFAULT '0',
   `lnk_usr_id_create` int UNSIGNED DEFAULT NULL,
   `lnk_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -572,10 +495,10 @@ CREATE TABLE `adm_links` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_links`
+-- Daten für Tabelle `%PREFIX%_links`
 --
 
-INSERT INTO `adm_links` (`lnk_id`, `lnk_cat_id`, `lnk_uuid`, `lnk_name`, `lnk_description`, `lnk_url`, `lnk_counter`, `lnk_usr_id_create`, `lnk_timestamp_create`, `lnk_usr_id_change`, `lnk_timestamp_change`, `lnk_sequence`) VALUES
+INSERT INTO `%PREFIX%_links` (`lnk_id`, `lnk_cat_id`, `lnk_uuid`, `lnk_name`, `lnk_description`, `lnk_url`, `lnk_counter`, `lnk_usr_id_create`, `lnk_timestamp_create`, `lnk_usr_id_change`, `lnk_timestamp_change`, `lnk_sequence`) VALUES
 (1, 7, '07bdb749-e925-4715-ba92-360bf3b2821d', 'Sample page', 'On this site there\'s not much news :(', 'https://www.example.com', 6, 1, '2025-09-22 22:00:00', 1, '2025-09-23 22:00:00', 1),
 (2, 9, 'ae39a20e-b5b2-4ebb-8b1a-882bd6d777d5', 'Admidio', 'The homepage of the <b>best</b> open source membership management in the net.', 'https://www.admidio.org/', 157, 1, '2025-09-22 22:00:00', NULL, NULL, 1),
 (3, 9, '476855ec-6c36-449c-a4ac-c17b27a34e11', 'Forum', 'The forum for the online membership management software. Here gets everyone support, who has encountered a problem while installing or setting up Admidio. But also suggestions and tips can be posted here.', 'https://www.admidio.org/forum/', 46, 1, '2025-09-22 22:00:00', NULL, NULL, 2),
@@ -584,25 +507,24 @@ INSERT INTO `adm_links` (`lnk_id`, `lnk_cat_id`, `lnk_uuid`, `lnk_name`, `lnk_de
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_lists`
+-- Tabellenstruktur für Tabelle `%PREFIX%_lists`
 --
 
-DROP TABLE IF EXISTS `adm_lists`;
-CREATE TABLE `adm_lists` (
+CREATE TABLE `%PREFIX%_lists` (
   `lst_id` int UNSIGNED NOT NULL,
   `lst_org_id` int UNSIGNED NOT NULL,
   `lst_usr_id` int UNSIGNED NOT NULL,
-  `lst_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `lst_name` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `lst_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `lst_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `lst_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lst_global` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_lists`
+-- Daten für Tabelle `%PREFIX%_lists`
 --
 
-INSERT INTO `adm_lists` (`lst_id`, `lst_org_id`, `lst_usr_id`, `lst_uuid`, `lst_name`, `lst_timestamp`, `lst_global`) VALUES
+INSERT INTO `%PREFIX%_lists` (`lst_id`, `lst_org_id`, `lst_usr_id`, `lst_uuid`, `lst_name`, `lst_timestamp`, `lst_global`) VALUES
 (1, 1, 1, '485a11f0-e4f9-4771-a71c-1eacff12dd4c', 'Address list', '2009-02-27 20:50:57', 1),
 (2, 1, 1, '914693d9-5e08-42f9-a97f-1b1e8ed8ae2a', 'Phone list', '2009-02-27 20:50:57', 1),
 (3, 1, 1, 'c28f0e74-d95f-44d7-8e02-2ca80ee220ae', 'Contact information', '2009-02-27 20:50:57', 1),
@@ -623,25 +545,24 @@ INSERT INTO `adm_lists` (`lst_id`, `lst_org_id`, `lst_usr_id`, `lst_uuid`, `lst_
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_list_columns`
+-- Tabellenstruktur für Tabelle `%PREFIX%_list_columns`
 --
 
-DROP TABLE IF EXISTS `adm_list_columns`;
-CREATE TABLE `adm_list_columns` (
+CREATE TABLE `%PREFIX%_list_columns` (
   `lsc_id` int UNSIGNED NOT NULL,
   `lsc_lst_id` int UNSIGNED NOT NULL,
   `lsc_number` smallint NOT NULL,
   `lsc_usf_id` int UNSIGNED DEFAULT NULL,
-  `lsc_special_field` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `lsc_sort` varchar(5) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `lsc_filter` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `lsc_special_field` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `lsc_sort` varchar(5) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `lsc_filter` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_list_columns`
+-- Daten für Tabelle `%PREFIX%_list_columns`
 --
 
-INSERT INTO `adm_list_columns` (`lsc_id`, `lsc_lst_id`, `lsc_number`, `lsc_usf_id`, `lsc_special_field`, `lsc_sort`, `lsc_filter`) VALUES
+INSERT INTO `%PREFIX%_list_columns` (`lsc_id`, `lsc_lst_id`, `lsc_number`, `lsc_usf_id`, `lsc_special_field`, `lsc_sort`, `lsc_filter`) VALUES
 (1, 1, 1, 1, NULL, 'ASC', NULL),
 (2, 1, 2, 2, NULL, 'ASC', NULL),
 (3, 1, 3, 10, NULL, NULL, NULL),
@@ -736,34 +657,33 @@ INSERT INTO `adm_list_columns` (`lsc_id`, `lsc_lst_id`, `lsc_number`, `lsc_usf_i
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_log_changes`
+-- Tabellenstruktur für Tabelle `%PREFIX%_log_changes`
 --
 
-DROP TABLE IF EXISTS `adm_log_changes`;
-CREATE TABLE `adm_log_changes` (
+CREATE TABLE `%PREFIX%_log_changes` (
   `log_id` int NOT NULL,
-  `log_table` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `log_table` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `log_record_id` int UNSIGNED NOT NULL,
-  `log_record_uuid` varchar(36) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `log_record_name` text COLLATE utf8mb3_unicode_ci,
-  `log_record_linkid` text COLLATE utf8mb3_unicode_ci,
-  `log_related_id` text COLLATE utf8mb3_unicode_ci,
-  `log_related_name` text COLLATE utf8mb3_unicode_ci,
-  `log_field` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `log_field_name` text COLLATE utf8mb3_unicode_ci,
-  `log_action` varchar(32) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `log_value_old` text COLLATE utf8mb3_unicode_ci,
-  `log_value_new` text COLLATE utf8mb3_unicode_ci,
+  `log_record_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `log_record_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_record_linkid` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_related_id` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_related_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_field` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `log_field_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_action` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `log_value_old` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_value_new` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `log_usr_id_create` int UNSIGNED DEFAULT NULL,
   `log_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `log_comment` text COLLATE utf8mb3_unicode_ci
+  `log_comment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_log_changes`
+-- Daten für Tabelle `%PREFIX%_log_changes`
 --
 
-INSERT INTO `adm_log_changes` (`log_id`, `log_table`, `log_record_id`, `log_record_uuid`, `log_record_name`, `log_record_linkid`, `log_related_id`, `log_related_name`, `log_field`, `log_field_name`, `log_action`, `log_value_old`, `log_value_new`, `log_usr_id_create`, `log_timestamp_create`, `log_comment`) VALUES
+INSERT INTO `%PREFIX%_log_changes` (`log_id`, `log_table`, `log_record_id`, `log_record_uuid`, `log_record_name`, `log_record_linkid`, `log_related_id`, `log_related_name`, `log_field`, `log_field_name`, `log_action`, `log_value_old`, `log_value_new`, `log_usr_id_create`, `log_timestamp_create`, `log_comment`) VALUES
 (1, 'user_data', 3, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '3', 'Street', 'MODIFY', 'Musterallee 25', 'Unter den Linden 45', 1, '2025-09-17 18:42:25', NULL),
 (2, 'user_data', 4, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '4', 'Postal code', 'MODIFY', '54897', '10117', 1, '2025-09-17 18:42:25', NULL),
 (3, 'user_data', 5, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '5', 'City', 'MODIFY', 'Düren', 'Berlin', 1, '2025-09-17 18:42:25', NULL),
@@ -777,15 +697,14 @@ INSERT INTO `adm_log_changes` (`log_id`, `log_table`, `log_record_id`, `log_reco
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_members`
+-- Tabellenstruktur für Tabelle `%PREFIX%_members`
 --
 
-DROP TABLE IF EXISTS `adm_members`;
-CREATE TABLE `adm_members` (
+CREATE TABLE `%PREFIX%_members` (
   `mem_id` int UNSIGNED NOT NULL,
   `mem_rol_id` int UNSIGNED NOT NULL,
   `mem_usr_id` int UNSIGNED NOT NULL,
-  `mem_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `mem_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `mem_begin` date NOT NULL,
   `mem_end` date NOT NULL DEFAULT '9999-12-31',
   `mem_leader` tinyint(1) NOT NULL DEFAULT '0',
@@ -794,15 +713,15 @@ CREATE TABLE `adm_members` (
   `mem_usr_id_change` int UNSIGNED DEFAULT NULL,
   `mem_timestamp_change` timestamp NULL DEFAULT NULL,
   `mem_approved` int UNSIGNED DEFAULT NULL,
-  `mem_comment` varchar(4000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `mem_comment` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `mem_count_guests` int UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_members`
+-- Daten für Tabelle `%PREFIX%_members`
 --
 
-INSERT INTO `adm_members` (`mem_id`, `mem_rol_id`, `mem_usr_id`, `mem_uuid`, `mem_begin`, `mem_end`, `mem_leader`, `mem_usr_id_create`, `mem_timestamp_create`, `mem_usr_id_change`, `mem_timestamp_change`, `mem_approved`, `mem_comment`, `mem_count_guests`) VALUES
+INSERT INTO `%PREFIX%_members` (`mem_id`, `mem_rol_id`, `mem_usr_id`, `mem_uuid`, `mem_begin`, `mem_end`, `mem_leader`, `mem_usr_id_create`, `mem_timestamp_create`, `mem_usr_id_change`, `mem_timestamp_change`, `mem_approved`, `mem_comment`, `mem_count_guests`) VALUES
 (1, 1, 1, 'fd3e1942-1285-4fe0-b3c0-eb3c5cebfad0', '2008-04-20', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
 (2, 2, 1, '46da7d44-9209-45cb-acaa-f4b9ba7fa40b', '2008-04-20', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
 (3, 4, 1, '3fbe3c81-dfa4-4354-ba96-06d531ba712a', '2008-04-20', '2009-10-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
@@ -1025,72 +944,70 @@ INSERT INTO `adm_members` (`mem_id`, `mem_rol_id`, `mem_usr_id`, `mem_uuid`, `me
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_menu`
+-- Tabellenstruktur für Tabelle `%PREFIX%_menu`
 --
 
-DROP TABLE IF EXISTS `adm_menu`;
-CREATE TABLE `adm_menu` (
+CREATE TABLE `%PREFIX%_menu` (
   `men_id` int UNSIGNED NOT NULL,
   `men_men_id_parent` int UNSIGNED DEFAULT NULL,
   `men_com_id` int UNSIGNED DEFAULT NULL,
-  `men_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `men_name_intern` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `men_name` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `men_description` varchar(4000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `men_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `men_name_intern` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `men_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `men_description` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `men_node` tinyint(1) NOT NULL DEFAULT '0',
   `men_order` int UNSIGNED DEFAULT NULL,
   `men_standard` tinyint(1) NOT NULL DEFAULT '0',
-  `men_url` varchar(2000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `men_icon` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `men_url` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `men_icon` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_menu`
+-- Daten für Tabelle `%PREFIX%_menu`
 --
 
-INSERT INTO `adm_menu` (`men_id`, `men_men_id_parent`, `men_com_id`, `men_uuid`, `men_name_intern`, `men_name`, `men_description`, `men_node`, `men_order`, `men_standard`, `men_url`, `men_icon`) VALUES
-(1, NULL, NULL, 'fbc2b774-8666-4d3d-996c-4c86e137d189', 'modules', 'Modules', '', 1, 1, 1, NULL, ''),
-(2, NULL, NULL, '9f27b3da-805c-4b1a-adfd-9ac7cc9d4c82', 'administration', 'Administration', '', 1, 2, 1, NULL, ''),
+INSERT INTO `%PREFIX%_menu` (`men_id`, `men_men_id_parent`, `men_com_id`, `men_uuid`, `men_name_intern`, `men_name`, `men_description`, `men_node`, `men_order`, `men_standard`, `men_url`, `men_icon`) VALUES
+(1, NULL, NULL, 'fbc2b774-8666-4d3d-996c-4c86e137d189', 'modules', 'SYS_MODULES', '', 1, 1, 1, NULL, ''),
+(2, NULL, NULL, '9f27b3da-805c-4b1a-adfd-9ac7cc9d4c82', 'administration', 'SYS_ADMINISTRATION', '', 1, 2, 1, NULL, ''),
 (3, NULL, NULL, '4317f28b-ce43-4ac1-a8eb-7e583d16add4', 'extensions', 'SYS_EXTENSIONS', '', 1, 3, 1, NULL, ''),
-(4, 1, NULL, 'f037c6b0-e71e-4961-80d7-9ea5e42ddb7a', 'overview', 'Overview', '', 0, 1, 1, '/modules/overview.php', 'house-door-fill'),
-(5, 1, 20, 'd96ba837-9b02-4c4e-afa5-c12167cd01db', 'announcements', 'Announcements', 'Display or edit announcements, news and other information.', 0, 2, 1, '/modules/announcements.php', 'newspaper'),
-(6, 1, 30, '446a2c54-b269-4b6c-8a1c-869901b35b01', 'events', 'Events', 'Events can be created and viewed. Members can register for special events if they wish.', 0, 3, 1, '/modules/events/events.php', 'calendar-week-fill'),
-(7, 1, 40, 'edb6a573-fb66-4dfb-ba90-466317572204', 'messages', 'Messages', 'Overview of all written e-mails and private messages. New emails and private messages can be entered and sent to individual contacts or roles.', 0, 4, 1, '/modules/messages/messages.php', 'envelope-fill'),
-(8, 1, 50, 'ebd216b3-26eb-48ec-a082-d1d9645bb051', 'groups-roles', 'Groups & roles', 'Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.', 0, 5, 1, '/modules/groups-roles/groups_roles.php', 'people-fill'),
-(9, 1, 60, '168ad66e-e34d-4f14-8a65-a78dd7dbd058', 'contacts', 'Contacts', 'Display and organize all active and former members here. New contacts can be imported or created.', 0, 6, 1, '/modules/contacts/contacts.php', 'person-vcard-fill'),
-(10, 1, 70, '187c7c07-4b2a-4f3f-925c-6f40c03e740b', 'documents-files', 'Documents & Files', 'Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.', 0, 7, 1, '/modules/documents-files.php', 'file-earmark-arrow-down-fill'),
-(11, 1, 80, '21db7ac5-7aae-4616-bf88-5b29507d4a02', 'photo', 'Photos', 'Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.', 0, 9, 1, '/modules/photos/photos.php', 'image-fill'),
-(12, 1, 90, 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b', 'category-report', 'Category report', 'Generates a listing of a member\'s role and category memberships.', 0, 10, 1, '/modules/category-report/category_report.php', 'list-stars'),
-(13, 1, 100, '5b8b3e60-bc71-4375-bfc3-a9783a63bb72', 'weblinks', 'Web links', 'Create and organize by categories interesting hyperlinks.', 0, 11, 1, '/modules/links/links.php', 'link-45deg'),
-(14, 1, 110, 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e', 'forum', 'SYS_FORUM', 'SYS_FORUM_DESC', 0, 12, 1, '/modules/forum.php', 'chat-dots-fill'),
-(15, 2, 120, '2965d083-8dd3-4a43-9b27-53018e5f22c1', 'orgprop', 'Preferences', 'ORG_ORGANIZATION_PROPERTIES_DESC', 0, 1, 1, '/modules/preferences.php', 'gear-fill'),
-(16, 2, 130, '62330cbc-4c15-4860-b841-10a35d88cd3c', 'registration', 'Registrations', 'New registrations of visitors can be listed, approved or refused here.', 0, 2, 1, '/modules/registration.php', 'card-checklist'),
-(17, 2, 140, 'ef4b5380-3500-4ec4-a432-a7f4099a2a92', 'menu', 'Menu', 'The menu can be configured here. Beside the URL a description and an icon can be deposited. In addition, it can be determined who is allowed to view the menu entry.', 0, 3, 1, '/modules/menu.php', 'menu-button-wide-fill'),
-(19, 2, 221, 'e946f478-4228-4afa-9d11-d8235f93e18c', 'organization', 'SYS_ORGANIZATION', 'SYS_ORGANIZATION_DESC', 0, 4, 1, '/modules/organizations.php', 'diagram-3-fill'),
-(20, 1, 222, 'ffe47320-d4d0-4893-9914-148bbbfd8237', 'inventory', 'SYS_INVENTORY', 'SYS_INVENTORY_DESC', 0, 8, 1, '/modules/inventory.php', 'box-seam-fill');
+(4, 1, NULL, 'f037c6b0-e71e-4961-80d7-9ea5e42ddb7a', 'overview', 'SYS_OVERVIEW', '', 0, 1, 1, '/modules/overview.php', 'house-door-fill'),
+(5, 1, 20, 'd96ba837-9b02-4c4e-afa5-c12167cd01db', 'announcements', 'SYS_ANNOUNCEMENTS', 'Display or edit announcements, news and other information.', 0, 2, 1, '/modules/announcements.php', 'newspaper'),
+(6, 1, 30, '446a2c54-b269-4b6c-8a1c-869901b35b01', 'events', 'SYS_EVENTS', 'Events can be created and viewed. Members can register for special events if they wish.', 0, 3, 1, '/modules/events/events.php', 'calendar-week-fill'),
+(7, 1, 40, 'edb6a573-fb66-4dfb-ba90-466317572204', 'messages', 'SYS_MESSAGES', 'Overview of all written e-mails and private messages. New emails and private messages can be entered and sent to individual contacts or roles.', 0, 4, 1, '/modules/messages/messages.php', 'envelope-fill'),
+(8, 1, 50, 'ebd216b3-26eb-48ec-a082-d1d9645bb051', 'groups-roles', 'SYS_GROUPS_ROLES', 'Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.', 0, 5, 1, '/modules/groups-roles/groups_roles.php', 'people-fill'),
+(9, 1, 60, '168ad66e-e34d-4f14-8a65-a78dd7dbd058', 'contacts', 'SYS_CONTACTS', 'Display and organize all active and former members here. New contacts can be imported or created.', 0, 6, 1, '/modules/contacts/contacts.php', 'person-vcard-fill'),
+(10, 1, 70, '187c7c07-4b2a-4f3f-925c-6f40c03e740b', 'documents-files', 'SYS_DOCUMENTS_FILES', 'Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.', 0, 7, 1, '/modules/documents-files.php', 'file-earmark-arrow-down-fill'),
+(11, 1, 80, '21db7ac5-7aae-4616-bf88-5b29507d4a02', 'photo', 'SYS_PHOTOS', 'Pictures of events can be uploaded and displayed. Pictures can be organized in albums which can be interlinked.', 0, 9, 1, '/modules/photos/photos.php', 'image-fill'),
+(12, 1, 90, 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b', 'category-report', 'SYS_CATEGORY_REPORT', 'Generates a listing of a member\'s role and category memberships.', 0, 10, 1, '/modules/category-report/category_report.php', 'list-stars'),
+(13, 1, 100, '5b8b3e60-bc71-4375-bfc3-a9783a63bb72', 'weblinks', 'SYS_WEBLINKS', 'Create and organize by categories interesting hyperlinks.', 0, 11, 1, '/modules/links/links.php', 'link-45deg'),
+(14, 1, 110, 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e', 'forum', 'SYS_FORUM', 'Ein einfaches Forum für Diskussionen innerhalb einer Organisation. Es können verschiedene Themen veröffentlicht und diskutiert werden.', 0, 12, 1, '/modules/forum.php', 'chat-dots-fill'),
+(15, 2, 120, '2965d083-8dd3-4a43-9b27-53018e5f22c1', 'orgprop', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', 0, 1, 1, '/modules/preferences.php', 'gear-fill'),
+(16, 2, 130, '62330cbc-4c15-4860-b841-10a35d88cd3c', 'registration', 'SYS_REGISTRATION', 'New registrations of visitors can be listed, approved or refused here.', 0, 2, 1, '/modules/registration.php', 'card-checklist'),
+(17, 2, 140, 'ef4b5380-3500-4ec4-a432-a7f4099a2a92', 'menu', 'SYS_MENU', 'The menu can be configured here. Beside the URL a description and an icon can be deposited. In addition, it can be determined who is allowed to view the menu entry.', 0, 3, 1, '/modules/menu.php', 'menu-button-wide-fill'),
+(19, 2, 221, 'e946f478-4228-4afa-9d11-d8235f93e18c', 'organization', 'SYS_ORGANIZATION', 'Name und Kontaktangaben der aktuellen Organisation mit der Möglichkeit, Unterorganisationen zu erstellen und anzuzeigen.', 0, 4, 1, '/modules/organizations.php', 'diagram-3-fill'),
+(20, 1, 222, 'ffe47320-d4d0-4893-9914-148bbbfd8237', 'inventory', 'SYS_INVENTORY', 'Die Inventarverwaltung ermöglicht es, Gegenstände zu organisieren, zu verwalten und zu verfolgen.', 0, 8, 1, '/modules/inventory.php', 'box-seam-fill');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_messages`
+-- Tabellenstruktur für Tabelle `%PREFIX%_messages`
 --
 
-DROP TABLE IF EXISTS `adm_messages`;
-CREATE TABLE `adm_messages` (
+CREATE TABLE `%PREFIX%_messages` (
   `msg_id` int UNSIGNED NOT NULL,
-  `msg_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `msg_type` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `msg_subject` varchar(256) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msg_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msg_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msg_subject` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `msg_usr_id_sender` int UNSIGNED NOT NULL,
   `msg_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `msg_read` smallint NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_messages`
+-- Daten für Tabelle `%PREFIX%_messages`
 --
 
-INSERT INTO `adm_messages` (`msg_id`, `msg_uuid`, `msg_type`, `msg_subject`, `msg_usr_id_sender`, `msg_timestamp`, `msg_read`) VALUES
+INSERT INTO `%PREFIX%_messages` (`msg_id`, `msg_uuid`, `msg_type`, `msg_subject`, `msg_usr_id_sender`, `msg_timestamp`, `msg_read`) VALUES
 (1, '39a0e3e2-8163-4cbf-bb9b-ac87dbf8ab77', 'EMAIL', 'Events on the website', 1, '2021-01-20 13:58:16', 0),
 (2, 'd12a108d-0bc7-468c-86a5-b05626a21f15', 'EMAIL', 'New module unlocked', 1, '2021-02-01 15:07:01', 0),
 (3, '479fb7ae-52eb-401e-aba7-a3ca74f69c32', 'EMAIL', 'New training times', 1, '2021-02-03 11:08:02', 0),
@@ -1103,38 +1020,36 @@ INSERT INTO `adm_messages` (`msg_id`, `msg_uuid`, `msg_type`, `msg_subject`, `ms
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_messages_attachments`
+-- Tabellenstruktur für Tabelle `%PREFIX%_messages_attachments`
 --
 
-DROP TABLE IF EXISTS `adm_messages_attachments`;
-CREATE TABLE `adm_messages_attachments` (
+CREATE TABLE `%PREFIX%_messages_attachments` (
   `msa_id` int UNSIGNED NOT NULL,
   `msa_msg_id` int UNSIGNED NOT NULL,
-  `msa_file_name` varchar(256) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `msa_original_file_name` varchar(256) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `msa_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL
+  `msa_file_name` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msa_original_file_name` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msa_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_messages_content`
+-- Tabellenstruktur für Tabelle `%PREFIX%_messages_content`
 --
 
-DROP TABLE IF EXISTS `adm_messages_content`;
-CREATE TABLE `adm_messages_content` (
+CREATE TABLE `%PREFIX%_messages_content` (
   `msc_id` int UNSIGNED NOT NULL,
   `msc_msg_id` int UNSIGNED NOT NULL,
   `msc_usr_id` int UNSIGNED DEFAULT NULL,
-  `msc_message` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msc_message` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `msc_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_messages_content`
+-- Daten für Tabelle `%PREFIX%_messages_content`
 --
 
-INSERT INTO `adm_messages_content` (`msc_id`, `msc_msg_id`, `msc_usr_id`, `msc_message`, `msc_timestamp`) VALUES
+INSERT INTO `%PREFIX%_messages_content` (`msc_id`, `msc_msg_id`, `msc_usr_id`, `msc_message`, `msc_timestamp`) VALUES
 (1, 1, 1, '<p>Hi all,</p><br /><p>please maintain your schedules on the website so that all members have the opportunity to view and participate.</p><br /><p>Regards</p><br /><p>Paul</p><br />', '2021-02-03 03:58:16'),
 (2, 2, 1, '<p>Hello Board,</p><br /><p>I have now unlocked the <strong>Documents and Files</strong> module. Please log in and have a look at this module</p><br /><p>The module has among others. following functions:</p><br /><ul><br /> <li>Files and documents can be uploaded by the board</li><br /> <li>Files and documents can be downloaded by all members</li><br /> <li>Files and documents can be displayed directly on the web</li><br /><br /ul><br /><p>You can send feedback directly to me. </p><br /><p>Best regards</p><br /><p>Paul</p><br />', '2021-02-03 04:07:01'),
 (3, 3, 1, '<p>Hello everyone,</p><br /><p>I have put the new training times on the website.</p><br /><p>Many greetings</p><br /><p>Paul</p><br />', '2021-02-03 04:08:02'),
@@ -1148,11 +1063,10 @@ INSERT INTO `adm_messages_content` (`msc_id`, `msc_msg_id`, `msc_usr_id`, `msc_m
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_messages_recipients`
+-- Tabellenstruktur für Tabelle `%PREFIX%_messages_recipients`
 --
 
-DROP TABLE IF EXISTS `adm_messages_recipients`;
-CREATE TABLE `adm_messages_recipients` (
+CREATE TABLE `%PREFIX%_messages_recipients` (
   `msr_id` int UNSIGNED NOT NULL,
   `msr_msg_id` int UNSIGNED NOT NULL,
   `msr_rol_id` int UNSIGNED DEFAULT NULL,
@@ -1161,10 +1075,10 @@ CREATE TABLE `adm_messages_recipients` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_messages_recipients`
+-- Daten für Tabelle `%PREFIX%_messages_recipients`
 --
 
-INSERT INTO `adm_messages_recipients` (`msr_id`, `msr_msg_id`, `msr_rol_id`, `msr_usr_id`, `msr_role_mode`) VALUES
+INSERT INTO `%PREFIX%_messages_recipients` (`msr_id`, `msr_msg_id`, `msr_rol_id`, `msr_usr_id`, `msr_role_mode`) VALUES
 (1, 1, NULL, 313, 0),
 (2, 1, NULL, 332, 0),
 (3, 1, NULL, 355, 0),
@@ -1184,16 +1098,15 @@ INSERT INTO `adm_messages_recipients` (`msr_id`, `msr_msg_id`, `msr_rol_id`, `ms
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_oidc_access_tokens`
+-- Tabellenstruktur für Tabelle `%PREFIX%_oidc_access_tokens`
 --
 
-DROP TABLE IF EXISTS `adm_oidc_access_tokens`;
-CREATE TABLE `adm_oidc_access_tokens` (
+CREATE TABLE `%PREFIX%_oidc_access_tokens` (
   `oat_id` int UNSIGNED NOT NULL,
   `oat_usr_id` int UNSIGNED NOT NULL,
   `oat_ocl_id` int UNSIGNED NOT NULL,
-  `oat_token` text COLLATE utf8mb3_unicode_ci,
-  `oat_scope` text COLLATE utf8mb3_unicode_ci,
+  `oat_token` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `oat_scope` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `oat_expires_at` timestamp NOT NULL,
   `oat_revoked` tinyint(1) DEFAULT '0',
   `oat_usr_id_create` int UNSIGNED DEFAULT NULL,
@@ -1203,20 +1116,19 @@ CREATE TABLE `adm_oidc_access_tokens` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_oidc_auth_codes`
+-- Tabellenstruktur für Tabelle `%PREFIX%_oidc_auth_codes`
 --
 
-DROP TABLE IF EXISTS `adm_oidc_auth_codes`;
-CREATE TABLE `adm_oidc_auth_codes` (
+CREATE TABLE `%PREFIX%_oidc_auth_codes` (
   `oac_id` int UNSIGNED NOT NULL,
   `oac_usr_id` int UNSIGNED NOT NULL,
   `oac_ocl_id` int UNSIGNED NOT NULL,
-  `oac_token` text COLLATE utf8mb3_unicode_ci,
-  `oac_scope` text COLLATE utf8mb3_unicode_ci,
-  `oac_nonce` varchar(2550) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `oac_token` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `oac_scope` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `oac_nonce` varchar(2550) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `oac_expires_at` timestamp NOT NULL,
   `oac_revoked` tinyint(1) DEFAULT '0',
-  `oac_redirect_uri` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `oac_redirect_uri` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `oac_used` tinyint(1) DEFAULT '0',
   `oac_usr_id_create` int UNSIGNED DEFAULT NULL,
   `oac_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -1225,23 +1137,22 @@ CREATE TABLE `adm_oidc_auth_codes` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_oidc_clients`
+-- Tabellenstruktur für Tabelle `%PREFIX%_oidc_clients`
 --
 
-DROP TABLE IF EXISTS `adm_oidc_clients`;
-CREATE TABLE `adm_oidc_clients` (
+CREATE TABLE `%PREFIX%_oidc_clients` (
   `ocl_id` int UNSIGNED NOT NULL,
-  `ocl_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ocl_client_id` varchar(64) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ocl_client_name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_client_id` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_client_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ocl_enabled` tinyint(1) DEFAULT '1',
-  `ocl_client_secret` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ocl_redirect_uri` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ocl_grant_types` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ocl_scope` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `ocl_userid_field` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'usr_id',
-  `ocl_field_mapping` text COLLATE utf8mb3_unicode_ci,
-  `ocl_role_mapping` text COLLATE utf8mb3_unicode_ci,
+  `ocl_client_secret` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_redirect_uri` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_grant_types` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_scope` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `ocl_userid_field` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'usr_id',
+  `ocl_field_mapping` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `ocl_role_mapping` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `ocl_usr_id_create` int UNSIGNED DEFAULT NULL,
   `ocl_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ocl_usr_id_change` int UNSIGNED DEFAULT NULL,
@@ -1251,16 +1162,15 @@ CREATE TABLE `adm_oidc_clients` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_oidc_refresh_tokens`
+-- Tabellenstruktur für Tabelle `%PREFIX%_oidc_refresh_tokens`
 --
 
-DROP TABLE IF EXISTS `adm_oidc_refresh_tokens`;
-CREATE TABLE `adm_oidc_refresh_tokens` (
+CREATE TABLE `%PREFIX%_oidc_refresh_tokens` (
   `ort_id` int UNSIGNED NOT NULL,
   `ort_usr_id` int UNSIGNED NOT NULL,
   `ort_ocl_id` int UNSIGNED NOT NULL,
-  `ort_token` text COLLATE utf8mb3_unicode_ci,
-  `ort_scope` text COLLATE utf8mb3_unicode_ci,
+  `ort_token` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `ort_scope` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `ort_expires_at` timestamp NOT NULL,
   `ort_revoked` tinyint(1) DEFAULT '0',
   `ort_usr_id_create` int UNSIGNED DEFAULT NULL,
@@ -1270,47 +1180,45 @@ CREATE TABLE `adm_oidc_refresh_tokens` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_organizations`
+-- Tabellenstruktur für Tabelle `%PREFIX%_organizations`
 --
 
-DROP TABLE IF EXISTS `adm_organizations`;
-CREATE TABLE `adm_organizations` (
+CREATE TABLE `%PREFIX%_organizations` (
   `org_id` int UNSIGNED NOT NULL,
-  `org_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `org_shortname` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `org_longname` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `org_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `org_shortname` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `org_longname` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `org_org_id_parent` int UNSIGNED DEFAULT NULL,
-  `org_homepage` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `org_email_administrator` varchar(254) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `org_homepage` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `org_email_administrator` varchar(254) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `org_show_org_select` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_organizations`
+-- Daten für Tabelle `%PREFIX%_organizations`
 --
 
-INSERT INTO `adm_organizations` (`org_id`, `org_uuid`, `org_shortname`, `org_longname`, `org_org_id_parent`, `org_homepage`, `org_email_administrator`, `org_show_org_select`) VALUES
+INSERT INTO `%PREFIX%_organizations` (`org_id`, `org_uuid`, `org_shortname`, `org_longname`, `org_org_id_parent`, `org_homepage`, `org_email_administrator`, `org_show_org_select`) VALUES
 (1, 'f04eef83-91ad-40bf-8267-09cd40ce0799', 'DEMO', 'Demo-Organisation', NULL, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1),
 (2, '8418cd76-3ac9-455f-bfb4-ed6561abdb7b', 'TEST', 'Test-Organisation', 1, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_photos`
+-- Tabellenstruktur für Tabelle `%PREFIX%_photos`
 --
 
-DROP TABLE IF EXISTS `adm_photos`;
-CREATE TABLE `adm_photos` (
+CREATE TABLE `%PREFIX%_photos` (
   `pho_id` int UNSIGNED NOT NULL,
   `pho_org_id` int UNSIGNED NOT NULL,
   `pho_pho_id_parent` int UNSIGNED DEFAULT NULL,
-  `pho_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pho_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `pho_quantity` int UNSIGNED NOT NULL DEFAULT '0',
-  `pho_name` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pho_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `pho_begin` date NOT NULL,
   `pho_end` date NOT NULL,
-  `pho_description` varchar(4000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `pho_photographers` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `pho_description` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `pho_photographers` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `pho_locked` tinyint(1) NOT NULL DEFAULT '0',
   `pho_usr_id_create` int UNSIGNED DEFAULT NULL,
   `pho_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1319,10 +1227,10 @@ CREATE TABLE `adm_photos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_photos`
+-- Daten für Tabelle `%PREFIX%_photos`
 --
 
-INSERT INTO `adm_photos` (`pho_id`, `pho_org_id`, `pho_pho_id_parent`, `pho_uuid`, `pho_quantity`, `pho_name`, `pho_begin`, `pho_end`, `pho_description`, `pho_photographers`, `pho_locked`, `pho_usr_id_create`, `pho_timestamp_create`, `pho_usr_id_change`, `pho_timestamp_change`) VALUES
+INSERT INTO `%PREFIX%_photos` (`pho_id`, `pho_org_id`, `pho_pho_id_parent`, `pho_uuid`, `pho_quantity`, `pho_name`, `pho_begin`, `pho_end`, `pho_description`, `pho_photographers`, `pho_locked`, `pho_usr_id_create`, `pho_timestamp_create`, `pho_usr_id_change`, `pho_timestamp_change`) VALUES
 (1, 1, NULL, 'b4aaf3eb-8735-45b3-a2f0-f2a7e9d289eb', 0, 'Croatia', '2022-10-05', '2022-10-11', 'An unforgettable vacation in Croatia with most beautiful sunshine and much nature.', 'Steven Smith and others', 0, 1, '2022-10-23 16:15:37', NULL, NULL),
 (2, 1, 1, '3d45f9cf-957e-41be-bb48-f452429fcd05', 5, 'Plitvice lakes', '2022-10-05', '2022-10-07', NULL, 'Steven Smith and others', 0, 1, '2022-10-23 16:17:44', NULL, NULL),
 (3, 1, 1, 'bf174cf8-f190-4898-bb3e-af881ad68780', 4, 'Krka', '2022-10-08', '2022-10-11', NULL, 'Steven Smith and others', 0, 1, '2022-10-23 16:18:44', NULL, NULL),
@@ -1331,22 +1239,21 @@ INSERT INTO `adm_photos` (`pho_id`, `pho_org_id`, `pho_pho_id_parent`, `pho_uuid
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_preferences`
+-- Tabellenstruktur für Tabelle `%PREFIX%_preferences`
 --
 
-DROP TABLE IF EXISTS `adm_preferences`;
-CREATE TABLE `adm_preferences` (
+CREATE TABLE `%PREFIX%_preferences` (
   `prf_id` int UNSIGNED NOT NULL,
   `prf_org_id` int UNSIGNED NOT NULL,
-  `prf_name` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `prf_value` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL
+  `prf_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `prf_value` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_preferences`
+-- Daten für Tabelle `%PREFIX%_preferences`
 --
 
-INSERT INTO `adm_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) VALUES
+INSERT INTO `%PREFIX%_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) VALUES
 (1000, 1, 'announcements_per_page', '10'),
 (1100, 1, 'photo_ecard_scale', '500'),
 (2000, 1, 'photo_ecard_template', 'postcard.tpl'),
@@ -1435,7 +1342,7 @@ INSERT INTO `adm_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) 
 (9305, 1, 'system_cookie_note', '1'),
 (9310, 1, 'system_date', 'd.m.Y'),
 (9320, 1, 'system_js_editor_enabled', '1'),
-(9340, 1, 'system_language', 'en'),
+(9340, 1, 'system_language', 'de'),
 (9360, 1, 'system_search_similar', '1'),
 (9365, 1, 'system_show_create_edit', '1'),
 (9370, 1, 'system_time', 'H:i'),
@@ -1534,7 +1441,7 @@ INSERT INTO `adm_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) 
 (93015, 2, 'system_cookie_note', '1'),
 (93020, 2, 'system_date', 'd.m.Y'),
 (93030, 2, 'system_js_editor_enabled', '1'),
-(93050, 2, 'system_language', 'en'),
+(93050, 2, 'system_language', 'de'),
 (93070, 2, 'system_search_similar', '1'),
 (93080, 2, 'system_time', 'H:i'),
 (93650, 2, 'system_show_create_edit', '2'),
@@ -1572,7 +1479,7 @@ INSERT INTO `adm_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) 
 (94194, 1, 'color_secondary', '#263340'),
 (94195, 1, 'logo_file', ''),
 (94196, 1, 'logo_file_max_height', '60'),
-(94197, 1, 'admidio_headline', 'SYS_ONLINE_MEMBERSHIP_ADMINISTRATION'),
+(94197, 1, 'admidio_headline', 'Mitgliederverwaltung'),
 (94198, 1, 'favicon_file', ''),
 (94199, 1, 'additional_styles_file', ''),
 (94200, 1, 'registration_module_enabled', '1'),
@@ -1635,7 +1542,7 @@ INSERT INTO `adm_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) 
 (94257, 1, 'inventory_items_disable_borrowing', '0'),
 (94258, 1, 'inventory_profile_view_enabled', '1'),
 (94259, 1, 'inventory_profile_view', 'LAST_RECEIVER'),
-(94260, 1, 'inventory_export_filename', 'SYS_INVENTORY'),
+(94260, 1, 'inventory_export_filename', 'Inventarverwaltung'),
 (94261, 1, 'inventory_add_date', '0'),
 (94262, 1, 'events_clamp_text_lines', '0'),
 (94263, 1, 'forum_module_enabled', '0'),
@@ -1663,7 +1570,7 @@ INSERT INTO `adm_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) 
 (94285, 2, 'color_secondary', '#263340'),
 (94286, 2, 'logo_file', ''),
 (94287, 2, 'logo_file_max_height', '60'),
-(94288, 2, 'admidio_headline', 'SYS_ONLINE_MEMBERSHIP_ADMINISTRATION'),
+(94288, 2, 'admidio_headline', 'Mitgliederverwaltung'),
 (94289, 2, 'favicon_file', ''),
 (94290, 2, 'additional_styles_file', ''),
 (94291, 2, 'registration_module_enabled', '1'),
@@ -1726,7 +1633,7 @@ INSERT INTO `adm_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) 
 (94348, 2, 'inventory_items_disable_borrowing', '0'),
 (94349, 2, 'inventory_profile_view_enabled', '1'),
 (94350, 2, 'inventory_profile_view', 'LAST_RECEIVER'),
-(94351, 2, 'inventory_export_filename', 'SYS_INVENTORY'),
+(94351, 2, 'inventory_export_filename', 'Inventarverwaltung'),
 (94352, 2, 'inventory_add_date', '0'),
 (94353, 2, 'events_clamp_text_lines', '0'),
 (94354, 2, 'forum_module_enabled', '0'),
@@ -1753,42 +1660,40 @@ INSERT INTO `adm_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_registrations`
+-- Tabellenstruktur für Tabelle `%PREFIX%_registrations`
 --
 
-DROP TABLE IF EXISTS `adm_registrations`;
-CREATE TABLE `adm_registrations` (
+CREATE TABLE `%PREFIX%_registrations` (
   `reg_id` int UNSIGNED NOT NULL,
   `reg_org_id` int UNSIGNED NOT NULL,
   `reg_usr_id` int UNSIGNED NOT NULL,
   `reg_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `reg_validation_id` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `reg_validation_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_registrations`
+-- Daten für Tabelle `%PREFIX%_registrations`
 --
 
-INSERT INTO `adm_registrations` (`reg_id`, `reg_org_id`, `reg_usr_id`, `reg_timestamp`, `reg_validation_id`) VALUES
-(1, 1, 352, '2025-09-25 11:45:23', 'sdovijoi2342lfvsdnmvoi32n5249090fewklfn342klnklf9'),
+INSERT INTO `%PREFIX%_registrations` (`reg_id`, `reg_org_id`, `reg_usr_id`, `reg_timestamp`, `reg_validation_id`) VALUES
+(1, 1, 352, '2025-09-28 11:45:23', 'sdovijoi2342lfvsdnmvoi32n5249090fewklfn342klnklf9'),
 (2, 1, 353, '2025-09-26 18:54:12', NULL),
-(3, 2, 360, '2025-09-25 11:45:23', NULL),
-(4, 1, 359, '2025-09-26 03:03:52', NULL);
+(3, 2, 360, '2025-09-28 11:45:23', NULL),
+(4, 1, 359, '2025-09-29 03:03:52', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_roles`
+-- Tabellenstruktur für Tabelle `%PREFIX%_roles`
 --
 
-DROP TABLE IF EXISTS `adm_roles`;
-CREATE TABLE `adm_roles` (
+CREATE TABLE `%PREFIX%_roles` (
   `rol_id` int UNSIGNED NOT NULL,
   `rol_cat_id` int UNSIGNED NOT NULL,
   `rol_lst_id` int UNSIGNED DEFAULT NULL,
-  `rol_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `rol_name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `rol_description` varchar(4000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `rol_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `rol_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `rol_description` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `rol_assign_roles` tinyint(1) NOT NULL DEFAULT '0',
   `rol_approve_users` tinyint(1) NOT NULL DEFAULT '0',
   `rol_announcements` tinyint(1) NOT NULL DEFAULT '0',
@@ -1810,7 +1715,7 @@ CREATE TABLE `adm_roles` (
   `rol_end_date` date DEFAULT NULL,
   `rol_end_time` time DEFAULT NULL,
   `rol_weekday` smallint DEFAULT NULL,
-  `rol_location` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `rol_location` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `rol_max_members` int DEFAULT NULL,
   `rol_cost` float DEFAULT NULL,
   `rol_cost_period` smallint DEFAULT NULL,
@@ -1826,59 +1731,57 @@ CREATE TABLE `adm_roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_roles`
+-- Daten für Tabelle `%PREFIX%_roles`
 --
 
-INSERT INTO `adm_roles` (`rol_id`, `rol_cat_id`, `rol_lst_id`, `rol_uuid`, `rol_name`, `rol_description`, `rol_assign_roles`, `rol_approve_users`, `rol_announcements`, `rol_events`, `rol_documents_files`, `rol_edit_user`, `rol_mail_to_all`, `rol_mail_this_role`, `rol_photo`, `rol_profile`, `rol_weblinks`, `rol_all_lists_view`, `rol_default_registration`, `rol_leader_rights`, `rol_view_memberships`, `rol_view_members_profiles`, `rol_start_date`, `rol_start_time`, `rol_end_date`, `rol_end_time`, `rol_weekday`, `rol_location`, `rol_max_members`, `rol_cost`, `rol_cost_period`, `rol_usr_id_create`, `rol_timestamp_create`, `rol_usr_id_change`, `rol_timestamp_change`, `rol_valid`, `rol_system`, `rol_administrator`, `rol_forum_admin`, `rol_inventory_admin`) VALUES
-(1, 3, NULL, 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 'Administrator', 'Group of system administrators', 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 20:35:08', 1, '2008-04-20 20:35:08', 1, 0, 1, 1, 1),
-(2, 3, NULL, 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 'Member', 'All organization members', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 14:26:36', 1, '2008-05-03 14:26:36', 1, 0, 0, 0, 0),
+INSERT INTO `%PREFIX%_roles` (`rol_id`, `rol_cat_id`, `rol_lst_id`, `rol_uuid`, `rol_name`, `rol_description`, `rol_assign_roles`, `rol_approve_users`, `rol_announcements`, `rol_events`, `rol_documents_files`, `rol_edit_user`, `rol_mail_to_all`, `rol_mail_this_role`, `rol_photo`, `rol_profile`, `rol_weblinks`, `rol_all_lists_view`, `rol_default_registration`, `rol_leader_rights`, `rol_view_memberships`, `rol_view_members_profiles`, `rol_start_date`, `rol_start_time`, `rol_end_date`, `rol_end_time`, `rol_weekday`, `rol_location`, `rol_max_members`, `rol_cost`, `rol_cost_period`, `rol_usr_id_create`, `rol_timestamp_create`, `rol_usr_id_change`, `rol_timestamp_change`, `rol_valid`, `rol_system`, `rol_administrator`, `rol_forum_admin`, `rol_inventory_admin`) VALUES
+(1, 3, NULL, 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 'SYS_ADMINISTRATOR', 'Group of system administrators', 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 20:35:08', 1, '2008-04-20 20:35:08', 1, 0, 1, 1, 1),
+(2, 3, NULL, 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 'SYS_MEMBER', 'All organization members', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 14:26:36', 1, '2008-05-03 14:26:36', 1, 0, 0, 0, 0),
 (3, 3, NULL, '621fa25f-2fac-4310-af52-af939041cb66', 'Association\'s board', 'Administrative board of association', 0, 0, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 2, 2, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 14:26:12', 1, '2008-05-03 14:26:12', 1, 0, 0, 0, 0),
 (4, 6, NULL, '685c8a84-e58c-4d40-8297-8d2671e1fb89', '1. youth team', 'Young people between 12 and 15 years', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 3, 1, 1, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 14:24:41', 1, '2008-05-03 14:24:41', 1, 0, 0, 0, 0),
 (5, 6, NULL, '5f4fb933-806c-4161-a333-212cba85ae6c', '2. youth team', 'Young people between 16 and 18 years', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 3, 1, 1, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 14:25:58', 1, '2008-05-03 14:25:58', 1, 0, 0, 0, 0),
-(6, 100, NULL, '7a9e3ff4-197a-48db-9abc-c32c4cc79567', 'Administrator', 'Group of system administrators', 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 20:35:08', 1, '2010-01-21 19:35:08', 1, 0, 1, 1, 1),
-(7, 100, NULL, '77b0c6cc-cc66-4384-a34e-3277cdf081c6', 'Member', 'All organization members', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 14:26:36', 1, '2010-12-22 05:34:06', 1, 0, 0, 0, 0),
-(8, 200, NULL, '515c99a1-28d6-4395-b966-4b04cd512f12', '2025-10-01 19:00 Barbecue', 'Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
-(9, 200, NULL, '1b3d4123-2898-40e5-b9c4-b4db65207133', '2025-10-17 13:00 Yoga for beginners', 'This course teaches the basics of yoga.<br /><br />A registration for this course is required.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 11:08:23', NULL, NULL, 1, 0, 0, 0, 0),
-(10, 200, NULL, '040b4f49-2e45-460a-a354-1004d8bef27e', '2025-09-30 19:00 Board meeting', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
-(11, 200, NULL, '7450a81b-5b69-43c6-906b-47e343ecb55f', '2025-10-29 19:00 Board meeting', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
-(12, 200, NULL, '3c16c9da-9425-4ee3-9b53-8aed1c19bc34', '2025-10-05 20:00 Team evening', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 17:38:18', NULL, NULL, 1, 0, 0, 0, 0);
+(6, 100, NULL, '7a9e3ff4-197a-48db-9abc-c32c4cc79567', 'SYS_ADMINISTRATOR', 'Group of system administrators', 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 20:35:08', 1, '2010-01-21 19:35:08', 1, 0, 1, 1, 1),
+(7, 100, NULL, '77b0c6cc-cc66-4384-a34e-3277cdf081c6', 'SYS_MEMBER', 'All organization members', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 14:26:36', 1, '2010-12-22 05:34:06', 1, 0, 0, 0, 0),
+(8, 200, NULL, '515c99a1-28d6-4395-b966-4b04cd512f12', '2025-11-30 17:00 Barbecue', 'Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
+(9, 200, NULL, '1b3d4123-2898-40e5-b9c4-b4db65207133', '2025-10-27 11:00 Yoga for beginners', 'This course teaches the basics of yoga.<br /><br />A registration for this course is required.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 11:08:23', NULL, NULL, 1, 0, 0, 0, 0),
+(10, 200, NULL, '040b4f49-2e45-460a-a354-1004d8bef27e', '2025-11-03 18:00 Board meeting', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
+(11, 200, NULL, '7450a81b-5b69-43c6-906b-47e343ecb55f', '2025-11-22 19:00 Board meeting', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
+(12, 200, NULL, '3c16c9da-9425-4ee3-9b53-8aed1c19bc34', '2025-11-22 17:00 Team evening', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 17:38:18', NULL, NULL, 1, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_roles_rights`
+-- Tabellenstruktur für Tabelle `%PREFIX%_roles_rights`
 --
 
-DROP TABLE IF EXISTS `adm_roles_rights`;
-CREATE TABLE `adm_roles_rights` (
+CREATE TABLE `%PREFIX%_roles_rights` (
   `ror_id` int UNSIGNED NOT NULL,
-  `ror_name_intern` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ror_table` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ror_name_intern` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ror_table` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ror_ror_id_parent` int UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_roles_rights`
+-- Daten für Tabelle `%PREFIX%_roles_rights`
 --
 
-INSERT INTO `adm_roles_rights` (`ror_id`, `ror_name_intern`, `ror_table`, `ror_ror_id_parent`) VALUES
-(1, 'folder_view', 'adm_folders', NULL),
-(2, 'folder_upload', 'adm_folders', NULL),
-(3, 'category_view', 'adm_categories', NULL),
-(4, 'category_edit', 'adm_categories', 3),
-(5, 'event_participation', 'adm_events', NULL),
-(6, 'menu_view', 'adm_menu', NULL),
-(7, 'sso_saml_access', 'adm_saml_clients', NULL),
-(8, 'sso_oidc_access', 'adm_oidc_clients', NULL);
+INSERT INTO `%PREFIX%_roles_rights` (`ror_id`, `ror_name_intern`, `ror_table`, `ror_ror_id_parent`) VALUES
+(1, 'folder_view', '%PREFIX%_folders', NULL),
+(2, 'folder_upload', '%PREFIX%_folders', NULL),
+(3, 'category_view', '%PREFIX%_categories', NULL),
+(4, 'category_edit', '%PREFIX%_categories', 3),
+(5, 'event_participation', '%PREFIX%_events', NULL),
+(6, 'menu_view', '%PREFIX%_menu', NULL),
+(7, 'sso_saml_access', '%PREFIX%_saml_clients', NULL),
+(8, 'sso_oidc_access', '%PREFIX%_oidc_clients', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_roles_rights_data`
+-- Tabellenstruktur für Tabelle `%PREFIX%_roles_rights_data`
 --
 
-DROP TABLE IF EXISTS `adm_roles_rights_data`;
-CREATE TABLE `adm_roles_rights_data` (
+CREATE TABLE `%PREFIX%_roles_rights_data` (
   `rrd_id` int UNSIGNED NOT NULL,
   `rrd_ror_id` int UNSIGNED NOT NULL,
   `rrd_rol_id` int UNSIGNED NOT NULL,
@@ -1888,10 +1791,10 @@ CREATE TABLE `adm_roles_rights_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_roles_rights_data`
+-- Daten für Tabelle `%PREFIX%_roles_rights_data`
 --
 
-INSERT INTO `adm_roles_rights_data` (`rrd_id`, `rrd_ror_id`, `rrd_rol_id`, `rrd_object_id`, `rrd_usr_id_create`, `rrd_timestamp_create`) VALUES
+INSERT INTO `%PREFIX%_roles_rights_data` (`rrd_id`, `rrd_ror_id`, `rrd_rol_id`, `rrd_object_id`, `rrd_usr_id_create`, `rrd_timestamp_create`) VALUES
 (1, 1, 3, 3, 1, '2015-01-08 12:12:05'),
 (2, 2, 3, 1, 1, '2015-03-08 14:56:35'),
 (3, 2, 1, 2, 1, '2016-10-07 23:45:05'),
@@ -1905,14 +1808,13 @@ INSERT INTO `adm_roles_rights_data` (`rrd_id`, `rrd_ror_id`, `rrd_rol_id`, `rrd_
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_role_dependencies`
+-- Tabellenstruktur für Tabelle `%PREFIX%_role_dependencies`
 --
 
-DROP TABLE IF EXISTS `adm_role_dependencies`;
-CREATE TABLE `adm_role_dependencies` (
+CREATE TABLE `%PREFIX%_role_dependencies` (
   `rld_rol_id_parent` int UNSIGNED NOT NULL,
   `rld_rol_id_child` int UNSIGNED NOT NULL,
-  `rld_comment` text COLLATE utf8mb3_unicode_ci,
+  `rld_comment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `rld_usr_id` int UNSIGNED DEFAULT NULL,
   `rld_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -1920,15 +1822,14 @@ CREATE TABLE `adm_role_dependencies` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_rooms`
+-- Tabellenstruktur für Tabelle `%PREFIX%_rooms`
 --
 
-DROP TABLE IF EXISTS `adm_rooms`;
-CREATE TABLE `adm_rooms` (
+CREATE TABLE `%PREFIX%_rooms` (
   `room_id` int UNSIGNED NOT NULL,
-  `room_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `room_name` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `room_description` text COLLATE utf8mb3_unicode_ci,
+  `room_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `room_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `room_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `room_capacity` int NOT NULL,
   `room_overhang` int DEFAULT NULL,
   `room_usr_id_create` int UNSIGNED DEFAULT NULL,
@@ -1938,34 +1839,33 @@ CREATE TABLE `adm_rooms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_rooms`
+-- Daten für Tabelle `%PREFIX%_rooms`
 --
 
-INSERT INTO `adm_rooms` (`room_id`, `room_uuid`, `room_name`, `room_description`, `room_capacity`, `room_overhang`, `room_usr_id_create`, `room_timestamp_create`, `room_usr_id_change`, `room_timestamp_change`) VALUES
+INSERT INTO `%PREFIX%_rooms` (`room_id`, `room_uuid`, `room_name`, `room_description`, `room_capacity`, `room_overhang`, `room_usr_id_create`, `room_timestamp_create`, `room_usr_id_change`, `room_timestamp_change`) VALUES
 (1, 'fcc15de8-0c3c-4e2a-a3a5-df20f0fee1c3', 'Meeting room', 'In this room meetings can take place. The room must be reserved in advance. A projector is available.', 15, NULL, 1, '2011-04-07 17:15:08', NULL, NULL),
 (2, '0faef968-2a2d-41bd-a668-911e322b4e50', 'Function room', 'The function room can be used for birthday parties, annual meetings or party\'s. Advance booking is desirable.', 65, 15, 1, '2012-01-15 09:03:38', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_saml_clients`
+-- Tabellenstruktur für Tabelle `%PREFIX%_saml_clients`
 --
 
-DROP TABLE IF EXISTS `adm_saml_clients`;
-CREATE TABLE `adm_saml_clients` (
+CREATE TABLE `%PREFIX%_saml_clients` (
   `smc_id` int UNSIGNED NOT NULL,
-  `smc_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `smc_org_id` int UNSIGNED NOT NULL,
-  `smc_client_id` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `smc_client_name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_client_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_client_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `smc_enabled` tinyint(1) DEFAULT '1',
-  `smc_metadata_url` text COLLATE utf8mb3_unicode_ci,
-  `smc_acs_url` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `smc_slo_url` text COLLATE utf8mb3_unicode_ci,
-  `smc_x509_certificate` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `smc_userid_field` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'usr_id',
-  `smc_field_mapping` text COLLATE utf8mb3_unicode_ci,
-  `smc_role_mapping` text COLLATE utf8mb3_unicode_ci,
+  `smc_metadata_url` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `smc_acs_url` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_slo_url` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `smc_x509_certificate` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_userid_field` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'usr_id',
+  `smc_field_mapping` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `smc_role_mapping` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `smc_allowed_clock_skew` int UNSIGNED DEFAULT NULL,
   `smc_assertion_lifetime` int UNSIGNED DEFAULT NULL,
   `smc_sign_assertions` tinyint(1) DEFAULT '1',
@@ -1981,18 +1881,17 @@ CREATE TABLE `adm_saml_clients` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_sessions`
+-- Tabellenstruktur für Tabelle `%PREFIX%_sessions`
 --
 
-DROP TABLE IF EXISTS `adm_sessions`;
-CREATE TABLE `adm_sessions` (
+CREATE TABLE `%PREFIX%_sessions` (
   `ses_id` int UNSIGNED NOT NULL,
   `ses_usr_id` int UNSIGNED DEFAULT NULL,
   `ses_org_id` int UNSIGNED NOT NULL,
-  `ses_session_id` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ses_session_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ses_begin` timestamp NULL DEFAULT NULL,
   `ses_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ses_ip_address` varchar(39) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ses_ip_address` varchar(39) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ses_binary` blob,
   `ses_reload` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -2000,19 +1899,18 @@ CREATE TABLE `adm_sessions` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_sso_keys`
+-- Tabellenstruktur für Tabelle `%PREFIX%_sso_keys`
 --
 
-DROP TABLE IF EXISTS `adm_sso_keys`;
-CREATE TABLE `adm_sso_keys` (
+CREATE TABLE `%PREFIX%_sso_keys` (
   `key_id` int UNSIGNED NOT NULL,
-  `key_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `key_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `key_org_id` int UNSIGNED NOT NULL,
-  `key_name` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `key_algorithm` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'RSA',
-  `key_private` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `key_public` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `key_certificate` text COLLATE utf8mb3_unicode_ci,
+  `key_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `key_algorithm` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'RSA',
+  `key_private` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `key_public` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `key_certificate` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `key_expires_at` date DEFAULT NULL,
   `key_is_active` tinyint(1) NOT NULL DEFAULT '1',
   `key_usr_id_create` int UNSIGNED DEFAULT NULL,
@@ -2024,22 +1922,21 @@ CREATE TABLE `adm_sso_keys` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_texts`
+-- Tabellenstruktur für Tabelle `%PREFIX%_texts`
 --
 
-DROP TABLE IF EXISTS `adm_texts`;
-CREATE TABLE `adm_texts` (
+CREATE TABLE `%PREFIX%_texts` (
   `txt_id` int UNSIGNED NOT NULL,
   `txt_org_id` int UNSIGNED NOT NULL,
-  `txt_name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `txt_text` text COLLATE utf8mb3_unicode_ci
+  `txt_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `txt_text` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_texts`
+-- Daten für Tabelle `%PREFIX%_texts`
 --
 
-INSERT INTO `adm_texts` (`txt_id`, `txt_org_id`, `txt_name`, `txt_text`) VALUES
+INSERT INTO `%PREFIX%_texts` (`txt_id`, `txt_org_id`, `txt_name`, `txt_text`) VALUES
 (1, 1, 'SYSMAIL_REGISTRATION_APPROVED', '#subject# Registration at #organization_long_name# confirmed\r\n#content# Hello #user_first_name#,\r\n\r\nyour registration on #organization_homepage# has been confirmed.\r\n\r\nYou can now log in to the homepage with your username #user_login_name# and your password.\r\n\r\nIf you have any questions, write an email to #administrator_email#.\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
 (2, 1, 'SYSMAIL_REGISTRATION_NEW', '#subject# New registration at #organization_long_name# website\r\n#content# A new user has registered on #organization_homepage#.\r\n\r\nSurname: #user_last_name#\r\nFirst Name: #user_first_name#\r\nE-Mail: #user_email#\r\n\r\n\r\nThis message was generated automatically.'),
 (3, 1, 'SYSMAIL_LOGIN_INFORMATION', '#subject# Login data for #organization_long_name#\r\n#content# Hello #user_first_name#,\r\n\r\nYou receive your login data for the website #organization_homepage#.\r\nUsername: #user_login_name#\r\nPassword: #variable1#\r\n\r\nThe password was generated automatically,\r\nYou should change it after logging in to #organization_homepage# in your profile.\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
@@ -2056,18 +1953,17 @@ INSERT INTO `adm_texts` (`txt_id`, `txt_org_id`, `txt_name`, `txt_text`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_users`
+-- Tabellenstruktur für Tabelle `%PREFIX%_users`
 --
 
-DROP TABLE IF EXISTS `adm_users`;
-CREATE TABLE `adm_users` (
+CREATE TABLE `%PREFIX%_users` (
   `usr_id` int UNSIGNED NOT NULL,
-  `usr_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `usr_login_name` varchar(254) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `usr_password` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usr_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usr_login_name` varchar(254) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usr_password` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `usr_photo` blob,
-  `usr_text` text COLLATE utf8mb3_unicode_ci,
-  `usr_pw_reset_id` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usr_text` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `usr_pw_reset_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `usr_pw_reset_timestamp` timestamp NULL DEFAULT NULL,
   `usr_last_login` timestamp NULL DEFAULT NULL,
   `usr_actual_login` timestamp NULL DEFAULT NULL,
@@ -2079,15 +1975,15 @@ CREATE TABLE `adm_users` (
   `usr_usr_id_change` int UNSIGNED DEFAULT NULL,
   `usr_timestamp_change` timestamp NULL DEFAULT NULL,
   `usr_valid` tinyint(1) NOT NULL DEFAULT '0',
-  `usr_tfa_secret` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `usr_tfa_secret` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_users`
+-- Daten für Tabelle `%PREFIX%_users`
 --
 
-INSERT INTO `adm_users` (`usr_id`, `usr_uuid`, `usr_login_name`, `usr_password`, `usr_photo`, `usr_text`, `usr_pw_reset_id`, `usr_pw_reset_timestamp`, `usr_last_login`, `usr_actual_login`, `usr_number_login`, `usr_date_invalid`, `usr_number_invalid`, `usr_usr_id_create`, `usr_timestamp_create`, `usr_usr_id_change`, `usr_timestamp_change`, `usr_valid`, `usr_tfa_secret`) VALUES
-(1, '7a854ed2-50db-49ee-9379-31d07f467d47', 'admin', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, '2009-02-27 21:31:17', '2025-09-27 09:00:41', 27, NULL, 0, 2, '2008-05-03 07:43:02', 354, '2009-02-24 08:43:02', 1, NULL),
+INSERT INTO `%PREFIX%_users` (`usr_id`, `usr_uuid`, `usr_login_name`, `usr_password`, `usr_photo`, `usr_text`, `usr_pw_reset_id`, `usr_pw_reset_timestamp`, `usr_last_login`, `usr_actual_login`, `usr_number_login`, `usr_date_invalid`, `usr_number_invalid`, `usr_usr_id_create`, `usr_timestamp_create`, `usr_usr_id_change`, `usr_timestamp_change`, `usr_valid`, `usr_tfa_secret`) VALUES
+(1, '7a854ed2-50db-49ee-9379-31d07f467d47', 'admin', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, '2025-09-27 09:00:41', '2025-09-28 10:14:39', 28, NULL, 0, 2, '2008-05-03 07:43:02', 354, '2009-02-24 08:43:02', 1, NULL),
 (2, '5b84e9c8-b9b9-44d1-acf2-29fbb1015d01', 'System', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, '2008-05-03 07:40:43', NULL, NULL, 0, NULL),
 (202, '93ce816e-7cfd-45e1-b025-a3644828c47c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:44:59', NULL, NULL, 1, NULL),
 (203, 'f4361cf5-0b58-4602-b6f9-9ce4535b111f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:44:59', 1, '2009-02-14 14:24:39', 1, NULL),
@@ -2252,22 +2148,21 @@ INSERT INTO `adm_users` (`usr_id`, `usr_uuid`, `usr_login_name`, `usr_password`,
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_user_data`
+-- Tabellenstruktur für Tabelle `%PREFIX%_user_data`
 --
 
-DROP TABLE IF EXISTS `adm_user_data`;
-CREATE TABLE `adm_user_data` (
+CREATE TABLE `%PREFIX%_user_data` (
   `usd_id` int UNSIGNED NOT NULL,
   `usd_usr_id` int UNSIGNED NOT NULL,
   `usd_usf_id` int UNSIGNED NOT NULL,
-  `usd_value` varchar(4000) COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `usd_value` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_user_data`
+-- Daten für Tabelle `%PREFIX%_user_data`
 --
 
-INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) VALUES
+INSERT INTO `%PREFIX%_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) VALUES
 (1, 1, 1, 'Schmidt'),
 (2, 1, 2, 'Paul'),
 (3, 1, 3, 'Unter den Linden 45'),
@@ -2275,7 +2170,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (5, 1, 5, 'Berlin'),
 (6, 1, 6, 'DEU'),
 (7, 1, 7, '0211-85858585'),
-(8, 1, 10, '1968-04-16'),
+(8, 1, 10, '2006-01-03'),
 (9, 1, 11, '1'),
 (10, 1, 12, 'administrator@admidio.org'),
 (11, 1, 13, 'https://www.admidio.org/'),
@@ -2289,7 +2184,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (19, 202, 6, 'DEU'),
 (20, 202, 7, '0875-2255773'),
 (21, 202, 8, '0170-457412'),
-(22, 202, 10, '2000-09-27'),
+(22, 202, 10, '1997-01-05'),
 (23, 202, 11, '2'),
 (24, 202, 12, 'ahrends.dagmar@example.com'),
 (26, 203, 1, 'Allegre'),
@@ -2300,7 +2195,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (31, 203, 6, 'DEU'),
 (32, 203, 7, '0876-2255773'),
 (33, 203, 8, '0171-457412'),
-(34, 203, 10, '1988-01-02'),
+(34, 203, 10, '1969-01-07'),
 (35, 203, 11, '1'),
 (36, 203, 12, 'allegre.dagobert@example.com'),
 (38, 204, 1, 'Appel'),
@@ -2311,7 +2206,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (43, 204, 6, 'DEU'),
 (44, 204, 7, '0877-2255773'),
 (45, 204, 8, '0172-457412'),
-(46, 204, 10, '1988-01-03'),
+(46, 204, 10, '2011-01-09'),
 (47, 204, 11, '2'),
 (48, 204, 12, 'appel.daisy@example.com'),
 (50, 205, 1, 'Arndt'),
@@ -2322,7 +2217,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (55, 205, 6, 'DEU'),
 (56, 205, 7, '0878-2255773'),
 (57, 205, 8, '0173-457412'),
-(58, 205, 10, '1988-01-04'),
+(58, 205, 10, '1961-01-11'),
 (59, 205, 11, '2'),
 (60, 205, 12, 'arndt.dakota@example.com'),
 (62, 206, 1, 'Baade'),
@@ -2333,7 +2228,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (67, 206, 6, 'DEU'),
 (68, 206, 7, '0879-2255773'),
 (69, 206, 8, '0174-457412'),
-(70, 206, 10, '1988-01-05'),
+(70, 206, 10, '1999-01-13'),
 (71, 206, 11, '1'),
 (72, 206, 12, 'baade.dale@example.com'),
 (74, 207, 1, 'Bachmann'),
@@ -2344,7 +2239,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (79, 207, 6, 'DEU'),
 (80, 207, 7, '0880-2255773'),
 (81, 207, 8, '0175-457412'),
-(82, 207, 10, '1988-01-06'),
+(82, 207, 10, '2012-01-15'),
 (83, 207, 11, '1'),
 (84, 207, 12, 'bachmann.dallas@example.com'),
 (86, 208, 1, 'Barbosa'),
@@ -2355,7 +2250,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (91, 208, 6, 'DEU'),
 (92, 208, 7, '0881-2255773'),
 (93, 208, 8, '0176-457412'),
-(94, 208, 10, '1988-01-07'),
+(94, 208, 10, '1977-01-17'),
 (95, 208, 11, '1'),
 (96, 208, 12, 'barbosa.daltin@example.com'),
 (98, 209, 1, 'Baumgarten'),
@@ -2366,7 +2261,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (103, 209, 6, 'CHE'),
 (104, 209, 7, '0882-2255773'),
 (105, 209, 8, '0177-457412'),
-(106, 209, 10, '1988-01-08'),
+(106, 209, 10, '1961-01-19'),
 (107, 209, 11, '1'),
 (108, 209, 12, 'baumgarten.dalton@example.com'),
 (110, 210, 1, 'Báierle'),
@@ -2377,7 +2272,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (115, 210, 6, 'CHE'),
 (116, 210, 7, '0883-2255773'),
 (117, 210, 8, '0178-457412'),
-(118, 210, 10, '1988-01-09'),
+(118, 210, 10, '1989-01-21'),
 (119, 210, 11, '1'),
 (121, 211, 1, 'Beck'),
 (122, 211, 2, 'Damian'),
@@ -2387,7 +2282,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (126, 211, 6, 'DEU'),
 (127, 211, 7, '0884-2255773'),
 (128, 211, 8, '0179-457412'),
-(129, 211, 10, '1988-01-10'),
+(129, 211, 10, '2000-01-23'),
 (130, 211, 11, '1'),
 (131, 211, 12, 'beck.damian@example.com'),
 (133, 212, 1, 'Becker'),
@@ -2398,7 +2293,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (138, 212, 6, 'DEU'),
 (139, 212, 7, '0885-2255773'),
 (140, 212, 8, '0180-457412'),
-(141, 212, 10, '1988-01-11'),
+(141, 212, 10, '1988-01-25'),
 (142, 212, 11, '1'),
 (143, 212, 12, 'becker.damien@example.com'),
 (145, 213, 1, 'Begunk'),
@@ -2409,7 +2304,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (150, 213, 6, 'DEU'),
 (151, 213, 7, '0886-2255773'),
 (152, 213, 8, '0181-457412'),
-(153, 213, 10, '1988-01-12'),
+(153, 213, 10, '1975-01-27'),
 (154, 213, 11, '1'),
 (155, 213, 12, 'begunk.damion@example.com'),
 (157, 214, 1, 'Behnke'),
@@ -2420,7 +2315,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (162, 214, 6, 'DEU'),
 (163, 214, 7, '0887-2255773'),
 (164, 214, 8, '0182-457412'),
-(165, 214, 10, '1988-01-13'),
+(165, 214, 10, '1984-01-29'),
 (166, 214, 11, '1'),
 (167, 214, 12, 'behnke.damon@example.com'),
 (169, 215, 1, 'Behrend'),
@@ -2431,7 +2326,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (174, 215, 6, 'DEU'),
 (175, 215, 7, '0888-2255773'),
 (176, 215, 8, '0183-457412'),
-(177, 215, 10, '1988-01-14'),
+(177, 215, 10, '1981-01-31'),
 (178, 215, 11, '1'),
 (179, 215, 12, 'behrend.dan@example.com'),
 (181, 216, 1, 'Bender'),
@@ -2442,7 +2337,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (186, 216, 6, 'DEU'),
 (187, 216, 7, '0889-2255773'),
 (188, 216, 8, '0184-457412'),
-(189, 216, 10, '1988-01-15'),
+(189, 216, 10, '1994-02-02'),
 (190, 216, 11, '2'),
 (191, 216, 12, 'bender.dana@example.com'),
 (193, 217, 1, 'Benn'),
@@ -2453,7 +2348,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (198, 217, 6, 'DEU'),
 (199, 217, 7, '0890-2255773'),
 (200, 217, 8, '0185-457412'),
-(201, 217, 10, '1988-01-16'),
+(201, 217, 10, '2010-02-04'),
 (202, 217, 11, '2'),
 (203, 217, 12, 'benn.dania@example.com'),
 (205, 218, 1, 'Bensien'),
@@ -2464,7 +2359,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (210, 218, 6, 'DEU'),
 (211, 218, 7, '0891-2255773'),
 (212, 218, 8, '0186-457412'),
-(213, 218, 10, '1988-01-17'),
+(213, 218, 10, '1979-02-06'),
 (214, 218, 11, '1'),
 (215, 218, 12, 'bensien.daniel@example.com'),
 (217, 219, 1, 'Berodt'),
@@ -2475,7 +2370,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (222, 219, 6, 'DEU'),
 (223, 219, 7, '0892-2255773'),
 (224, 219, 8, '0187-457412'),
-(225, 219, 10, '1993-09-25'),
+(225, 219, 10, '2007-02-08'),
 (226, 219, 11, '2'),
 (227, 219, 12, 'berodt.daniela@example.com'),
 (229, 220, 1, 'Besemann'),
@@ -2486,7 +2381,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (234, 220, 6, 'DEU'),
 (235, 220, 7, '0893-2255773'),
 (236, 220, 8, '0188-457412'),
-(237, 220, 10, '1988-01-19'),
+(237, 220, 10, '2014-02-10'),
 (238, 220, 11, '2'),
 (239, 220, 12, 'besemann.daniella@example.com'),
 (241, 221, 1, 'Bicalho'),
@@ -2497,7 +2392,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (246, 221, 6, 'DEU'),
 (247, 221, 7, '0894-2255773'),
 (248, 221, 8, '0189-457412'),
-(249, 221, 10, '1988-01-20'),
+(249, 221, 10, '1971-02-12'),
 (250, 221, 11, '2'),
 (251, 221, 12, 'bicalho.danielle@example.com'),
 (253, 222, 1, 'Bielfeld'),
@@ -2508,7 +2403,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (258, 222, 6, 'DEU'),
 (259, 222, 7, '0895-2255773'),
 (260, 222, 8, '0190-457412'),
-(261, 222, 10, '1988-01-21'),
+(261, 222, 10, '1961-02-14'),
 (262, 222, 11, '2'),
 (263, 222, 12, 'bielfeld.danika@example.com'),
 (265, 223, 1, 'Blar'),
@@ -2519,7 +2414,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (270, 223, 6, 'DEU'),
 (271, 223, 7, '0896-2255773'),
 (272, 223, 8, '0191-457412'),
-(273, 223, 10, '1988-01-22'),
+(273, 223, 10, '1984-02-16'),
 (274, 223, 11, '2'),
 (275, 223, 12, 'blar.dannika@example.com'),
 (277, 224, 1, 'Bleidorn'),
@@ -2530,7 +2425,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (282, 224, 6, 'DEU'),
 (283, 224, 7, '0897-2255773'),
 (284, 224, 8, '0192-457412'),
-(285, 224, 10, '1988-01-23'),
+(285, 224, 10, '1975-02-18'),
 (286, 224, 11, '2'),
 (287, 224, 12, 'bleidorn.danny@example.com'),
 (289, 225, 1, 'Blöcker'),
@@ -2541,7 +2436,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (294, 225, 6, 'DEU'),
 (295, 225, 7, '0898-2255773'),
 (296, 225, 8, '0193-457412'),
-(297, 225, 10, '1988-01-24'),
+(297, 225, 10, '1972-02-20'),
 (298, 225, 11, '1'),
 (300, 226, 1, 'Blunck'),
 (301, 226, 2, 'Daphne'),
@@ -2551,7 +2446,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (305, 226, 6, 'DEU'),
 (306, 226, 7, '0899-2255773'),
 (307, 226, 8, '0194-457412'),
-(308, 226, 10, '1988-01-25'),
+(308, 226, 10, '1985-02-22'),
 (309, 226, 11, '2'),
 (310, 226, 12, 'blunck.daphne@example.com'),
 (312, 227, 1, 'Bobsien'),
@@ -2562,7 +2457,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (317, 227, 6, 'DEU'),
 (318, 227, 7, '0900-2255773'),
 (319, 227, 8, '0195-457412'),
-(320, 227, 10, '1988-01-26'),
+(320, 227, 10, '1990-02-24'),
 (321, 227, 11, '2'),
 (322, 227, 12, 'bobsien.daria@example.com'),
 (324, 228, 1, 'Boddin'),
@@ -2573,7 +2468,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (329, 228, 6, 'DEU'),
 (330, 228, 7, '0901-2255773'),
 (331, 228, 8, '0196-457412'),
-(332, 228, 10, '1988-01-27'),
+(332, 228, 10, '2004-02-26'),
 (333, 228, 11, '1'),
 (334, 228, 12, 'boddin.darin@example.com'),
 (336, 229, 1, 'Bohlen'),
@@ -2584,7 +2479,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (341, 229, 6, 'BEL'),
 (342, 229, 7, '0902-2255773'),
 (343, 229, 8, '0197-457412'),
-(344, 229, 10, '1988-01-28'),
+(344, 229, 10, '1984-02-28'),
 (345, 229, 11, '1'),
 (346, 229, 12, 'bohlen.dario@example.com'),
 (348, 230, 1, 'Bohmgohren'),
@@ -2595,7 +2490,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (353, 230, 6, 'DEU'),
 (354, 230, 7, '0903-2255773'),
 (355, 230, 8, '0198-457412'),
-(356, 230, 10, '1988-01-29'),
+(356, 230, 10, '2008-03-01'),
 (357, 230, 11, '1'),
 (358, 230, 12, 'bohmgohren.darius@example.com'),
 (360, 231, 1, 'Borchers'),
@@ -2606,7 +2501,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (365, 231, 6, 'BEL'),
 (366, 231, 7, '0904-2255773'),
 (367, 231, 8, '0199-457412'),
-(368, 231, 10, '1988-01-30'),
+(368, 231, 10, '1966-03-04'),
 (369, 231, 11, '2'),
 (370, 231, 12, 'borchers.darla@example.com'),
 (372, 232, 1, 'Bornholdt'),
@@ -2617,7 +2512,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (377, 232, 6, 'DEU'),
 (378, 232, 7, '0905-2255773'),
 (379, 232, 8, '0200-457412'),
-(380, 232, 10, '1988-01-31'),
+(380, 232, 10, '2014-03-06'),
 (381, 232, 11, '2'),
 (382, 232, 12, 'bornholdt.darleen@example.com'),
 (384, 233, 1, 'Borstelmann'),
@@ -2628,7 +2523,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (389, 233, 6, 'DEU'),
 (390, 233, 7, '0906-2255773'),
 (391, 233, 8, '0201-457412'),
-(392, 233, 10, '1988-02-01'),
+(392, 233, 10, '2005-03-08'),
 (393, 233, 11, '2'),
 (394, 233, 12, 'borstelmann.darlene@example.com'),
 (396, 234, 1, 'Böckler'),
@@ -2639,7 +2534,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (401, 234, 6, 'DEU'),
 (402, 234, 7, '0907-2255773'),
 (403, 234, 8, '0202-457412'),
-(404, 234, 10, '1988-02-02'),
+(404, 234, 10, '1978-03-10'),
 (405, 234, 11, '1'),
 (407, 235, 1, 'Böttger'),
 (408, 235, 2, 'Darrell'),
@@ -2649,7 +2544,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (412, 235, 6, 'DEU'),
 (413, 235, 7, '0908-2255773'),
 (414, 235, 8, '0203-457412'),
-(415, 235, 10, '1988-02-03'),
+(415, 235, 10, '1977-03-12'),
 (416, 235, 11, '1'),
 (418, 236, 1, 'Brandão'),
 (419, 236, 2, 'Darren'),
@@ -2659,7 +2554,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (423, 236, 6, 'DEU'),
 (424, 236, 7, '0909-2255773'),
 (425, 236, 8, '0204-457412'),
-(426, 236, 10, '1988-02-04'),
+(426, 236, 10, '2005-03-14'),
 (427, 236, 11, '1'),
 (429, 237, 1, 'Brandt'),
 (430, 237, 2, 'Darrin'),
@@ -2669,7 +2564,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (434, 237, 6, 'DEU'),
 (435, 237, 7, '0910-2255773'),
 (436, 237, 8, '0205-457412'),
-(437, 237, 10, '1988-02-05'),
+(437, 237, 10, '1984-03-15'),
 (438, 237, 11, '1'),
 (439, 237, 12, 'brandt.darrin@example.com'),
 (441, 238, 1, 'Brill'),
@@ -2680,7 +2575,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (446, 238, 6, 'DEU'),
 (447, 238, 7, '0911-2255773'),
 (448, 238, 8, '0206-457412'),
-(449, 238, 10, '1988-02-06'),
+(449, 238, 10, '2012-03-17'),
 (450, 238, 11, '2'),
 (451, 238, 12, 'brill.darrlyn@example.com'),
 (453, 239, 1, 'Broska'),
@@ -2691,7 +2586,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (458, 239, 6, 'DEU'),
 (459, 239, 7, '0912-2255773'),
 (460, 239, 8, '0207-457412'),
-(461, 239, 10, '1988-02-07'),
+(461, 239, 10, '1973-03-20'),
 (462, 239, 11, '1'),
 (463, 239, 12, 'broska.darryl@example.com'),
 (465, 240, 1, 'Brufau'),
@@ -2702,7 +2597,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (470, 240, 6, 'DEU'),
 (471, 240, 7, '0913-2255773'),
 (472, 240, 8, '0208-457412'),
-(473, 240, 10, '1988-02-08'),
+(473, 240, 10, '1965-03-22'),
 (474, 240, 11, '1'),
 (475, 240, 12, 'brufau.darwin@example.com'),
 (477, 241, 1, 'Bruhns'),
@@ -2713,7 +2608,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (482, 241, 6, 'DEU'),
 (483, 241, 7, '0914-2255773'),
 (484, 241, 8, '0209-457412'),
-(485, 241, 10, '1988-02-09'),
+(485, 241, 10, '1965-03-24'),
 (486, 241, 11, '2'),
 (487, 241, 12, 'bruhns.daryl@example.com'),
 (489, 242, 1, 'Brügmann'),
@@ -2724,7 +2619,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (494, 242, 6, 'DEU'),
 (495, 242, 7, '0915-2255773'),
 (496, 242, 8, '0210-457412'),
-(497, 242, 10, '1988-02-10'),
+(497, 242, 10, '2002-03-26'),
 (498, 242, 11, '1'),
 (500, 243, 1, 'Bubert'),
 (501, 243, 2, 'David'),
@@ -2734,7 +2629,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (505, 243, 6, 'DEU'),
 (506, 243, 7, '0916-2255773'),
 (507, 243, 8, '0211-457412'),
-(508, 243, 10, '1988-02-11'),
+(508, 243, 10, '1969-03-28'),
 (509, 243, 11, '1'),
 (510, 243, 12, 'bubert.david@example.com'),
 (512, 244, 1, 'Buck'),
@@ -2745,7 +2640,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (517, 244, 6, 'DEU'),
 (518, 244, 7, '0917-2255773'),
 (519, 244, 8, '0212-457412'),
-(520, 244, 10, '1988-02-12'),
+(520, 244, 10, '1989-03-30'),
 (521, 244, 11, '1'),
 (522, 244, 12, 'buck.davis@example.com'),
 (524, 245, 1, 'Buddenbohm'),
@@ -2756,7 +2651,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (529, 245, 6, 'DEU'),
 (530, 245, 7, '0918-2255773'),
 (531, 245, 8, '0213-457412'),
-(532, 245, 10, '1988-02-13'),
+(532, 245, 10, '1965-04-01'),
 (533, 245, 11, '1'),
 (534, 245, 12, 'buddenbohm.dawn@example.com'),
 (536, 246, 1, 'Burmeister'),
@@ -2767,7 +2662,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (541, 246, 6, 'DEU'),
 (542, 246, 7, '0919-2255773'),
 (543, 246, 8, '0214-457412'),
-(544, 246, 10, '1988-02-14'),
+(544, 246, 10, '1972-04-02'),
 (545, 246, 11, '1'),
 (546, 246, 12, 'burmeister.dawson@example.com'),
 (548, 247, 1, 'Busch'),
@@ -2778,7 +2673,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (553, 247, 6, 'DEU'),
 (554, 247, 7, '0920-2255773'),
 (555, 247, 8, '0215-457412'),
-(556, 247, 10, '1988-02-15'),
+(556, 247, 10, '1986-04-05'),
 (557, 247, 11, '2'),
 (558, 247, 12, 'busch.dayana@example.com'),
 (560, 248, 1, 'Cardoso'),
@@ -2789,7 +2684,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (565, 248, 6, 'DEU'),
 (566, 248, 7, '0921-2255773'),
 (567, 248, 8, '0216-457412'),
-(568, 248, 10, '1988-02-16'),
+(568, 248, 10, '1961-04-07'),
 (569, 248, 11, '1'),
 (570, 248, 12, 'cardoso.dean@example.com'),
 (572, 249, 1, 'Carstens'),
@@ -2800,7 +2695,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (577, 249, 6, 'DEU'),
 (578, 249, 7, '0922-2255773'),
 (579, 249, 8, '0217-457412'),
-(580, 249, 10, '1988-02-17'),
+(580, 249, 10, '1961-04-09'),
 (581, 249, 11, '2'),
 (582, 249, 12, 'carstens.deana@example.com'),
 (584, 250, 1, 'Christier'),
@@ -2811,7 +2706,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (589, 250, 6, 'DEU'),
 (590, 250, 7, '0923-2255773'),
 (591, 250, 8, '0218-457412'),
-(592, 250, 10, '1988-02-18'),
+(592, 250, 10, '2008-04-10'),
 (593, 250, 11, '1'),
 (594, 250, 12, 'christier.deandre@example.com'),
 (596, 251, 1, 'Cölle'),
@@ -2822,7 +2717,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (601, 251, 6, 'DEU'),
 (602, 251, 7, '0924-2255773'),
 (603, 251, 8, '0219-457412'),
-(604, 251, 10, '1988-02-19'),
+(604, 251, 10, '1996-04-12'),
 (605, 251, 11, '2'),
 (607, 252, 1, 'Cornelsen'),
 (608, 252, 2, 'Debbie'),
@@ -2832,7 +2727,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (612, 252, 6, 'DEU'),
 (613, 252, 7, '0925-2255773'),
 (614, 252, 8, '0220-457412'),
-(615, 252, 10, '1988-02-20'),
+(615, 252, 10, '1976-04-14'),
 (616, 252, 11, '2'),
 (617, 252, 12, 'cornelsen.debbie@example.com'),
 (619, 253, 1, 'Dabelstein'),
@@ -2843,7 +2738,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (624, 253, 6, 'DEU'),
 (625, 253, 7, '0926-2255773'),
 (626, 253, 8, '0221-457412'),
-(627, 253, 10, '1988-02-21'),
+(627, 253, 10, '1996-04-16'),
 (628, 253, 11, '2'),
 (629, 253, 12, 'dabelstein.debora@example.com'),
 (631, 254, 1, 'Danielsen'),
@@ -2854,7 +2749,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (636, 254, 6, 'DEU'),
 (637, 254, 7, '0927-2255773'),
 (638, 254, 8, '0222-457412'),
-(639, 254, 10, '1988-02-22'),
+(639, 254, 10, '1987-04-19'),
 (640, 254, 11, '2'),
 (641, 254, 12, 'danielsen.deborah@example.com'),
 (643, 255, 1, 'Danisch'),
@@ -2865,7 +2760,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (648, 255, 6, 'DEU'),
 (649, 255, 7, '0928-2255773'),
 (650, 255, 8, '0223-457412'),
-(651, 255, 10, '1988-02-23'),
+(651, 255, 10, '1996-04-20'),
 (652, 255, 11, '2'),
 (653, 255, 12, 'danisch.debra@example.com'),
 (655, 256, 1, 'Dassau'),
@@ -2876,7 +2771,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (660, 256, 6, 'DEU'),
 (661, 256, 7, '0929-2255773'),
 (662, 256, 8, '0224-457412'),
-(663, 256, 10, '1988-02-24'),
+(663, 256, 10, '2004-04-22'),
 (664, 256, 11, '1'),
 (665, 256, 12, 'dassau.dee@example.com'),
 (667, 257, 1, 'Dautert'),
@@ -2887,7 +2782,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (672, 257, 6, 'DEU'),
 (673, 257, 7, '0930-2255773'),
 (674, 257, 8, '0225-457412'),
-(675, 257, 10, '1988-02-25'),
+(675, 257, 10, '2002-04-25'),
 (676, 257, 11, '1'),
 (677, 257, 12, 'dautert.degenhard@example.com'),
 (679, 258, 1, 'Pode'),
@@ -2898,7 +2793,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (684, 258, 6, 'DEU'),
 (685, 258, 7, '0931-2255773'),
 (686, 258, 8, '0226-457412'),
-(687, 258, 10, '1988-02-26'),
+(687, 258, 10, '2009-04-27'),
 (688, 258, 11, '1'),
 (689, 258, 12, 'pode.freitas@example.com'),
 (691, 259, 1, 'Pode'),
@@ -2909,7 +2804,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (696, 259, 6, 'DEU'),
 (697, 259, 7, '0932-2255773'),
 (698, 259, 8, '0227-457412'),
-(699, 259, 10, '1988-02-27'),
+(699, 259, 10, '1971-04-29'),
 (700, 259, 11, '1'),
 (701, 259, 12, 'pode.paulo@example.com'),
 (703, 260, 1, 'Derwaldt'),
@@ -2920,7 +2815,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (708, 260, 6, 'DEU'),
 (709, 260, 7, '0933-2255773'),
 (710, 260, 8, '0228-457412'),
-(711, 260, 10, '1988-02-28'),
+(711, 260, 10, '2008-04-30'),
 (712, 260, 11, '2'),
 (713, 260, 12, 'derwaldt.delia@example.com'),
 (715, 261, 1, 'Dettenborn'),
@@ -2931,7 +2826,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (720, 261, 6, 'DEU'),
 (721, 261, 7, '0934-2255773'),
 (722, 261, 8, '0229-457412'),
-(723, 261, 10, '1988-05-29'),
+(723, 261, 10, '1988-05-02'),
 (724, 261, 11, '2'),
 (725, 261, 12, 'dettenborn.della@example.com'),
 (727, 262, 1, 'Dibbern'),
@@ -2942,7 +2837,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (732, 262, 6, 'DEU'),
 (733, 262, 7, '0935-2255773'),
 (734, 262, 8, '0230-457412'),
-(735, 262, 10, '1988-03-01'),
+(735, 262, 10, '2007-05-05'),
 (736, 262, 11, '2'),
 (737, 262, 12, 'dibbern.delores@example.com'),
 (739, 263, 1, 'Dieckvoß'),
@@ -2953,7 +2848,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (744, 263, 6, 'DEU'),
 (745, 263, 7, '0936-2255773'),
 (746, 263, 8, '0231-457412'),
-(747, 263, 10, '1988-03-02'),
+(747, 263, 10, '1973-05-07'),
 (748, 263, 11, '2'),
 (750, 264, 1, 'Diestel'),
 (751, 264, 2, 'Demetrius'),
@@ -2963,7 +2858,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (755, 264, 6, 'DEU'),
 (756, 264, 7, '0937-2255773'),
 (757, 264, 8, '0232-457412'),
-(758, 264, 10, '1988-03-03'),
+(758, 264, 10, '1960-05-08'),
 (759, 264, 11, '1'),
 (760, 264, 12, 'diestel.demetrius@example.com'),
 (762, 265, 1, 'Dittmer'),
@@ -2974,7 +2869,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (767, 265, 6, 'DEU'),
 (768, 265, 7, '0938-2255773'),
 (769, 265, 8, '0233-457412'),
-(770, 265, 10, '1988-03-04'),
+(770, 265, 10, '1973-05-11'),
 (771, 265, 11, '2'),
 (772, 265, 12, 'dittmer.dena@example.com'),
 (774, 266, 1, 'Donamore'),
@@ -2985,7 +2880,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (779, 266, 6, 'DEU'),
 (780, 266, 7, '0939-2255773'),
 (781, 266, 8, '0234-457412'),
-(782, 266, 10, '1988-03-05'),
+(782, 266, 10, '1974-05-13'),
 (783, 266, 11, '2'),
 (784, 266, 12, 'donamore.denise@example.com'),
 (786, 267, 1, 'Dorka'),
@@ -2996,7 +2891,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (791, 267, 6, 'DEU'),
 (792, 267, 7, '0940-2255773'),
 (793, 267, 8, '0235-457412'),
-(794, 267, 10, '1988-03-06'),
+(794, 267, 10, '1988-05-14'),
 (795, 267, 11, '1'),
 (796, 267, 12, 'dorka.dennis@example.com'),
 (798, 268, 1, 'Drews'),
@@ -3007,7 +2902,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (803, 268, 6, 'DEU'),
 (804, 268, 7, '0941-2255773'),
 (805, 268, 8, '0236-457412'),
-(806, 268, 10, '1988-03-07'),
+(806, 268, 10, '2001-05-17'),
 (807, 268, 11, '2'),
 (809, 269, 1, 'Dümon'),
 (810, 269, 2, 'Desiree'),
@@ -3017,7 +2912,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (814, 269, 6, 'DEU'),
 (815, 269, 7, '0942-2255773'),
 (816, 269, 8, '0237-457412'),
-(817, 269, 10, '1988-03-08'),
+(817, 269, 10, '1979-05-19'),
 (818, 269, 11, '2'),
 (820, 270, 1, 'Düren'),
 (821, 270, 2, 'Destiny'),
@@ -3027,7 +2922,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (825, 270, 6, 'DEU'),
 (826, 270, 7, '0943-2255773'),
 (827, 270, 8, '0238-457412'),
-(828, 270, 10, '1988-03-09'),
+(828, 270, 10, '1966-05-21'),
 (829, 270, 11, '2'),
 (831, 271, 1, 'Dwenger'),
 (832, 271, 2, 'Detlev'),
@@ -3037,7 +2932,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (836, 271, 6, 'DEU'),
 (837, 271, 7, '0944-2255773'),
 (838, 271, 8, '0239-457412'),
-(839, 271, 10, '1988-03-10'),
+(839, 271, 10, '1973-05-23'),
 (840, 271, 11, '1'),
 (841, 271, 12, 'dwenger.detlev@example.com'),
 (843, 272, 1, 'Eckholt'),
@@ -3048,7 +2943,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (848, 272, 6, 'DEU'),
 (849, 272, 7, '0945-2255773'),
 (850, 272, 8, '0240-457412'),
-(851, 272, 10, '1988-03-11'),
+(851, 272, 10, '1969-05-25'),
 (852, 272, 11, '1'),
 (853, 272, 12, 'eckholt.devan@example.com'),
 (855, 273, 1, 'Eckmann'),
@@ -3059,7 +2954,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (860, 273, 6, 'DEU'),
 (861, 273, 7, '0946-2255773'),
 (862, 273, 8, '0241-457412'),
-(863, 273, 10, '1988-03-12'),
+(863, 273, 10, '2009-05-27'),
 (864, 273, 11, '1'),
 (865, 273, 12, 'eckmann.deven@example.com'),
 (867, 274, 1, 'Eggers'),
@@ -3070,7 +2965,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (872, 274, 6, 'DEU'),
 (873, 274, 7, '0947-2255773'),
 (874, 274, 8, '0242-457412'),
-(875, 274, 10, '1988-03-13'),
+(875, 274, 10, '1985-05-29'),
 (876, 274, 11, '1'),
 (877, 274, 12, 'eggers.devin@example.com'),
 (879, 275, 1, 'Eggerstedt'),
@@ -3081,7 +2976,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (884, 275, 6, 'DEU'),
 (885, 275, 7, '0948-2255773'),
 (886, 275, 8, '0243-457412'),
-(887, 275, 10, '1988-03-14'),
+(887, 275, 10, '1979-05-31'),
 (888, 275, 11, '1'),
 (889, 275, 12, 'eggerstedt.devon@example.com'),
 (891, 276, 1, 'Ehlers'),
@@ -3092,7 +2987,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (896, 276, 6, 'DEU'),
 (897, 276, 7, '0949-2255773'),
 (898, 276, 8, '0244-457412'),
-(899, 276, 10, '1988-03-15'),
+(899, 276, 10, '1986-06-02'),
 (900, 276, 11, '1'),
 (901, 276, 12, 'ehlers.dewayne@example.com'),
 (903, 277, 1, 'Ehmling'),
@@ -3103,7 +2998,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (908, 277, 6, 'DEU'),
 (909, 277, 7, '0950-2255773'),
 (910, 277, 8, '0245-457412'),
-(911, 277, 10, '1988-03-16'),
+(911, 277, 10, '2015-06-04'),
 (912, 277, 11, '1'),
 (913, 277, 12, 'ehmling.dewey@example.com'),
 (915, 278, 1, 'Engel'),
@@ -3114,7 +3009,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (920, 278, 6, 'DEU'),
 (921, 278, 7, '0951-2255773'),
 (922, 278, 8, '0246-457412'),
-(923, 278, 10, '1988-03-17'),
+(923, 278, 10, '1982-06-06'),
 (924, 278, 11, '1'),
 (925, 278, 12, 'engel.dewitt@example.com'),
 (927, 279, 1, 'Feldhusen'),
@@ -3125,7 +3020,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (932, 279, 6, 'DEU'),
 (933, 279, 7, '0952-2255773'),
 (934, 279, 8, '0247-457412'),
-(935, 279, 10, '1988-03-18'),
+(935, 279, 10, '1979-06-08'),
 (936, 279, 11, '1'),
 (937, 279, 12, 'feldhusen.dexter@example.com'),
 (939, 280, 1, 'Fischeder'),
@@ -3136,7 +3031,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (944, 280, 6, 'DEU'),
 (945, 280, 7, '0953-2255773'),
 (946, 280, 8, '0248-457412'),
-(947, 280, 10, '1988-03-19'),
+(947, 280, 10, '1970-06-10'),
 (948, 280, 11, '2'),
 (949, 280, 12, 'fischeder.dharma@example.com'),
 (951, 281, 1, 'Fischer'),
@@ -3147,7 +3042,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (956, 281, 6, 'DEU'),
 (957, 281, 7, '0954-2255773'),
 (958, 281, 8, '0249-457412'),
-(959, 281, 10, '1988-03-20'),
+(959, 281, 10, '1997-06-12'),
 (960, 281, 11, '2'),
 (961, 281, 12, 'fischer.diamond@example.com'),
 (963, 282, 1, 'Flint'),
@@ -3158,7 +3053,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (968, 282, 6, 'DEU'),
 (969, 282, 7, '0955-2255773'),
 (970, 282, 8, '0250-457412'),
-(971, 282, 10, '1988-03-21'),
+(971, 282, 10, '1986-06-14'),
 (972, 282, 11, '2'),
 (973, 282, 12, 'flint.diana@example.com'),
 (975, 283, 1, 'Fuhrmann'),
@@ -3169,7 +3064,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (980, 283, 6, 'DEU'),
 (981, 283, 7, '0956-2255773'),
 (982, 283, 8, '0251-457412'),
-(983, 283, 10, '1988-03-22'),
+(983, 283, 10, '1973-06-16'),
 (984, 283, 11, '2'),
 (985, 283, 12, 'fuhrmann.diane@example.com'),
 (987, 284, 1, 'Furtado'),
@@ -3180,7 +3075,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (992, 284, 6, 'DEU'),
 (993, 284, 7, '0957-2255773'),
 (994, 284, 8, '0252-457412'),
-(995, 284, 10, '1988-03-23'),
+(995, 284, 10, '2004-06-17'),
 (996, 284, 11, '2'),
 (997, 284, 12, 'furtado.dianna@example.com'),
 (999, 285, 1, 'Galle'),
@@ -3191,7 +3086,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1004, 285, 6, 'DEU'),
 (1005, 285, 7, '0958-2255773'),
 (1006, 285, 8, '0253-457412'),
-(1007, 285, 10, '1988-03-24'),
+(1007, 285, 10, '1998-06-20'),
 (1008, 285, 11, '2'),
 (1009, 285, 12, 'galle.dianne@example.com'),
 (1011, 286, 1, 'Gardeleben'),
@@ -3202,7 +3097,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1016, 286, 6, 'DEU'),
 (1017, 286, 7, '0959-2255773'),
 (1018, 286, 8, '0254-457412'),
-(1019, 286, 10, '1988-03-25'),
+(1019, 286, 10, '1964-06-21'),
 (1020, 286, 11, '1'),
 (1021, 286, 12, 'gardeleben.dick@example.com'),
 (1023, 287, 1, 'Östermann'),
@@ -3213,7 +3108,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1028, 287, 6, 'DEU'),
 (1029, 287, 7, '0960-2255773'),
 (1030, 287, 8, '0255-457412'),
-(1031, 287, 10, '1988-03-26'),
+(1031, 287, 10, '2005-06-24'),
 (1032, 287, 11, '1'),
 (1033, 287, 12, 'oestermann.diego@example.com'),
 (1035, 288, 1, 'Geertzen'),
@@ -3224,7 +3119,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1040, 288, 6, 'DEU'),
 (1041, 288, 7, '0961-2255773'),
 (1042, 288, 8, '0256-457412'),
-(1043, 288, 10, '1988-03-27'),
+(1043, 288, 10, '2008-06-25'),
 (1044, 288, 11, '1'),
 (1046, 289, 1, 'Gerdau'),
 (1047, 289, 2, 'Dietbert'),
@@ -3234,7 +3129,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1051, 289, 6, 'DEU'),
 (1052, 289, 7, '0962-2255773'),
 (1053, 289, 8, '0257-457412'),
-(1054, 289, 10, '1988-03-28'),
+(1054, 289, 10, '1988-06-27'),
 (1055, 289, 11, '1'),
 (1056, 289, 12, 'gerdau.dietbert@example.com'),
 (1058, 290, 1, 'Gerken'),
@@ -3245,7 +3140,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1063, 290, 6, 'DEU'),
 (1064, 290, 7, '0963-2255773'),
 (1065, 290, 8, '0258-457412'),
-(1066, 290, 10, '1979-09-29'),
+(1066, 290, 10, '1973-06-30'),
 (1067, 290, 11, '1'),
 (1068, 290, 12, 'gerken.dieter@example.com'),
 (1070, 291, 1, 'Gerstenkorn'),
@@ -3256,7 +3151,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1075, 291, 6, 'DEU'),
 (1076, 291, 7, '0964-2255773'),
 (1077, 291, 8, '0259-457412'),
-(1078, 291, 10, '1988-03-30'),
+(1078, 291, 10, '1976-07-01'),
 (1079, 291, 11, '1'),
 (1080, 291, 12, 'gerstenkorn.dietger@example.com'),
 (1082, 292, 1, 'Giesemann'),
@@ -3267,7 +3162,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1087, 292, 6, 'DEU'),
 (1088, 292, 7, '0965-2255773'),
 (1089, 292, 8, '0260-457412'),
-(1090, 292, 10, '1988-03-31'),
+(1090, 292, 10, '1996-07-03'),
 (1091, 292, 11, '1'),
 (1092, 292, 12, 'giesemann.diethard@example.com'),
 (1094, 293, 1, 'Göben'),
@@ -3278,7 +3173,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1099, 293, 6, 'DEU'),
 (1100, 293, 7, '0966-2255773'),
 (1101, 293, 8, '0261-457412'),
-(1102, 293, 10, '1988-04-01'),
+(1102, 293, 10, '1969-07-06'),
 (1103, 293, 11, '2'),
 (1105, 294, 1, 'Gollmann'),
 (1106, 294, 2, 'Dietlinde'),
@@ -3288,7 +3183,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1110, 294, 6, 'DEU'),
 (1111, 294, 7, '0967-2255773'),
 (1112, 294, 8, '0262-457412'),
-(1113, 294, 10, '1988-04-02'),
+(1113, 294, 10, '1963-07-08'),
 (1114, 294, 11, '2'),
 (1115, 294, 12, 'gollmann.dietlinde@example.com'),
 (1117, 295, 1, 'Griem'),
@@ -3299,7 +3194,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1122, 295, 6, 'DEU'),
 (1123, 295, 7, '0968-2255773'),
 (1124, 295, 8, '0263-457412'),
-(1125, 295, 10, '1988-04-03'),
+(1125, 295, 10, '1980-07-09'),
 (1126, 295, 11, '1'),
 (1127, 295, 12, 'griem.dietmar@example.com'),
 (1129, 296, 1, 'Grivot'),
@@ -3310,7 +3205,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1134, 296, 6, 'DEU'),
 (1135, 296, 7, '0969-2255773'),
 (1136, 296, 8, '0264-457412'),
-(1137, 296, 10, '1988-04-04'),
+(1137, 296, 10, '1994-07-12'),
 (1138, 296, 11, '1'),
 (1139, 296, 12, 'grivot.dietrich@example.com'),
 (1141, 297, 1, 'Groskopf'),
@@ -3321,7 +3216,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1146, 297, 6, 'DEU'),
 (1147, 297, 7, '0970-2255773'),
 (1148, 297, 8, '0265-457412'),
-(1149, 297, 10, '1988-04-05'),
+(1149, 297, 10, '1960-07-13'),
 (1150, 297, 11, '1'),
 (1151, 297, 12, 'groskopf.dillon@example.com'),
 (1153, 298, 1, 'Groth'),
@@ -3332,7 +3227,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1158, 298, 6, 'DEU'),
 (1159, 298, 7, '0971-2255773'),
 (1160, 298, 8, '0266-457412'),
-(1161, 298, 10, '1988-04-06'),
+(1161, 298, 10, '1960-07-15'),
 (1162, 298, 11, '2'),
 (1163, 298, 12, 'groth.dina@example.com'),
 (1165, 299, 1, 'Grube'),
@@ -3343,7 +3238,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1170, 299, 6, 'DEU'),
 (1171, 299, 7, '0972-2255773'),
 (1172, 299, 8, '0267-457412'),
-(1173, 299, 10, '1988-04-07'),
+(1173, 299, 10, '1963-07-18'),
 (1174, 299, 11, '1'),
 (1175, 299, 12, 'grube.dinoysius@example.com'),
 (1177, 300, 1, 'Grunwald'),
@@ -3354,7 +3249,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1182, 300, 6, 'DEU'),
 (1183, 300, 7, '0973-2255773'),
 (1184, 300, 8, '0268-457412'),
-(1185, 300, 10, '1988-04-08'),
+(1185, 300, 10, '2004-07-19'),
 (1186, 300, 11, '1'),
 (1187, 300, 12, 'grunwald.dion@example.com'),
 (1189, 301, 1, 'Grutschus'),
@@ -3365,7 +3260,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1194, 301, 6, 'DEU'),
 (1195, 301, 7, '0974-2255773'),
 (1196, 301, 8, '0269-457412'),
-(1197, 301, 10, '1988-04-09'),
+(1197, 301, 10, '1985-07-22'),
 (1198, 301, 11, '2'),
 (1199, 301, 12, 'grutschus.diona@example.com'),
 (1201, 302, 1, 'Hack'),
@@ -3376,7 +3271,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1206, 302, 6, 'DEU'),
 (1207, 302, 7, '0975-2255773'),
 (1208, 302, 8, '0270-457412'),
-(1209, 302, 10, '1988-04-10'),
+(1209, 302, 10, '2007-07-24'),
 (1210, 302, 11, '2'),
 (1211, 302, 12, 'hack.dione@example.com'),
 (1213, 303, 1, 'Hacker'),
@@ -3387,7 +3282,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1218, 303, 6, 'DEU'),
 (1219, 303, 7, '0976-2255773'),
 (1220, 303, 8, '0271-457412'),
-(1221, 303, 10, '1988-04-11'),
+(1221, 303, 10, '1995-07-26'),
 (1222, 303, 11, '2'),
 (1223, 303, 12, 'hacker.dionysia@example.com'),
 (1225, 304, 1, 'Häfner'),
@@ -3398,7 +3293,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1230, 304, 6, 'DEU'),
 (1231, 304, 7, '0977-2255773'),
 (1232, 304, 8, '0272-457412'),
-(1233, 304, 10, '1988-04-12'),
+(1233, 304, 10, '1964-07-27'),
 (1234, 304, 11, '1'),
 (1236, 305, 1, 'Hamann'),
 (1237, 305, 2, 'Dixie'),
@@ -3408,7 +3303,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1241, 305, 6, 'DEU'),
 (1242, 305, 7, '0978-2255773'),
 (1243, 305, 8, '0273-457412'),
-(1244, 305, 10, '1988-04-13'),
+(1244, 305, 10, '2009-07-30'),
 (1245, 305, 11, '2'),
 (1246, 305, 12, 'hamann.dixie@example.com'),
 (1248, 306, 1, 'Hamdorf'),
@@ -3419,7 +3314,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1253, 306, 6, 'DEU'),
 (1254, 306, 7, '0979-2255773'),
 (1255, 306, 8, '0274-457412'),
-(1256, 306, 10, '1988-04-14'),
+(1256, 306, 10, '1967-08-01'),
 (1257, 306, 11, '2'),
 (1258, 306, 12, 'hamdorf.dolly@example.com'),
 (1260, 307, 1, 'Hansel'),
@@ -3430,7 +3325,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1265, 307, 6, 'DEU'),
 (1266, 307, 7, '0980-2255773'),
 (1267, 307, 8, '0275-457412'),
-(1268, 307, 10, '1988-04-15'),
+(1268, 307, 10, '1991-08-03'),
 (1269, 307, 11, '2'),
 (1270, 307, 12, 'hansel.dolores@example.com'),
 (1272, 308, 1, 'Harder'),
@@ -3441,7 +3336,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1277, 308, 6, 'DEU'),
 (1278, 308, 7, '0981-2255773'),
 (1279, 308, 8, '0276-457412'),
-(1280, 308, 10, '1988-04-16'),
+(1280, 308, 10, '1991-08-05'),
 (1281, 308, 11, '1'),
 (1282, 308, 12, 'harder.domingo@example.com'),
 (1284, 309, 1, 'Harms'),
@@ -3452,7 +3347,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1289, 309, 6, 'DEU'),
 (1290, 309, 7, '0982-2255773'),
 (1291, 309, 8, '0277-457412'),
-(1292, 309, 10, '1988-04-17'),
+(1292, 309, 10, '1965-08-07'),
 (1293, 309, 11, '1'),
 (1294, 309, 12, 'harms.dominic@example.com'),
 (1296, 310, 1, 'Harten'),
@@ -3463,7 +3358,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1301, 310, 6, 'DEU'),
 (1302, 310, 7, '0983-2255773'),
 (1303, 310, 8, '0278-457412'),
-(1304, 310, 10, '1988-04-18'),
+(1304, 310, 10, '1995-08-09'),
 (1305, 310, 11, '1'),
 (1306, 310, 12, 'harten.dominick@example.com'),
 (1308, 311, 1, 'Hartkop'),
@@ -3474,7 +3369,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1313, 311, 6, 'DEU'),
 (1314, 311, 7, '0984-2255773'),
 (1315, 311, 8, '0279-457412'),
-(1316, 311, 10, '1988-04-19'),
+(1316, 311, 10, '1999-08-11'),
 (1317, 311, 11, '2'),
 (1318, 311, 12, 'hartkop.dominika@example.com'),
 (1320, 312, 1, 'Hasenkämper'),
@@ -3485,7 +3380,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1325, 312, 6, 'DEU'),
 (1326, 312, 7, '0985-2255773'),
 (1327, 312, 8, '0280-457412'),
-(1328, 312, 10, '1988-04-20'),
+(1328, 312, 10, '1989-08-13'),
 (1329, 312, 11, '1'),
 (1331, 313, 1, 'Heerde'),
 (1332, 313, 2, 'Dominique'),
@@ -3495,7 +3390,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1336, 313, 6, 'DEU'),
 (1337, 313, 7, '0986-2255773'),
 (1338, 313, 8, '0281-457412'),
-(1339, 313, 10, '1988-04-21'),
+(1339, 313, 10, '2003-08-15'),
 (1340, 313, 11, '1'),
 (1341, 313, 12, 'heerde.dominique@example.com'),
 (1343, 314, 1, 'Heinrich'),
@@ -3506,7 +3401,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1348, 314, 6, 'DEU'),
 (1349, 314, 7, '0987-2255773'),
 (1350, 314, 8, '0282-457412'),
-(1351, 314, 10, '1988-04-22'),
+(1351, 314, 10, '1997-08-17'),
 (1352, 314, 11, '1'),
 (1353, 314, 12, 'heinrich.domitian@example.com'),
 (1355, 315, 1, 'Heitmann'),
@@ -3517,7 +3412,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1360, 315, 6, 'DEU'),
 (1361, 315, 7, '0988-2255773'),
 (1362, 315, 8, '0283-457412'),
-(1363, 315, 10, '1988-04-23'),
+(1363, 315, 10, '1991-08-19'),
 (1364, 315, 11, '1'),
 (1365, 315, 12, 'heitmann.don@example.com'),
 (1367, 316, 1, 'Helmke'),
@@ -3528,7 +3423,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1372, 316, 6, 'DEU'),
 (1373, 316, 7, '0989-2255773'),
 (1374, 316, 8, '0284-457412'),
-(1375, 316, 10, '1988-04-24'),
+(1375, 316, 10, '1984-08-20'),
 (1376, 316, 11, '1'),
 (1377, 316, 12, 'helmke.donald@example.com'),
 (1379, 317, 1, 'Hemsath'),
@@ -3539,7 +3434,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1384, 317, 6, 'DEU'),
 (1385, 317, 7, '0990-2255773'),
 (1386, 317, 8, '0285-457412'),
-(1387, 317, 10, '1988-04-25'),
+(1387, 317, 10, '1962-08-23'),
 (1388, 317, 11, '1'),
 (1389, 317, 12, 'hemsath.donatus@example.com'),
 (1391, 318, 1, 'Henning'),
@@ -3550,7 +3445,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1396, 318, 6, 'DEU'),
 (1397, 318, 7, '0991-2255773'),
 (1398, 318, 8, '0286-457412'),
-(1399, 318, 10, '1988-04-26'),
+(1399, 318, 10, '1961-08-25'),
 (1400, 318, 11, '2'),
 (1401, 318, 12, 'henning.donna@example.com'),
 (1403, 319, 1, 'Heruth'),
@@ -3561,7 +3456,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1408, 319, 6, 'DEU'),
 (1409, 319, 7, '0992-2255773'),
 (1410, 319, 8, '0287-457412'),
-(1411, 319, 10, '1988-04-27'),
+(1411, 319, 10, '2001-08-27'),
 (1412, 319, 11, '2'),
 (1413, 319, 12, 'heruth.donnie@example.com'),
 (1415, 320, 1, 'Heuck'),
@@ -3572,7 +3467,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1420, 320, 6, 'DEU'),
 (1421, 320, 7, '0993-2255773'),
 (1422, 320, 8, '0288-457412'),
-(1423, 320, 10, '1988-04-28'),
+(1423, 320, 10, '2007-08-29'),
 (1424, 320, 11, '1'),
 (1425, 320, 12, 'heuck.donovan@example.com'),
 (1427, 321, 1, 'Heuer'),
@@ -3583,7 +3478,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1432, 321, 6, 'DEU'),
 (1433, 321, 7, '0994-2255773'),
 (1434, 321, 8, '0289-457412'),
-(1435, 321, 10, '1988-04-29'),
+(1435, 321, 10, '1986-08-31'),
 (1436, 321, 11, '2'),
 (1437, 321, 12, 'heuer.dora@example.com'),
 (1439, 322, 1, 'Heyn'),
@@ -3594,7 +3489,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1444, 322, 6, 'DEU'),
 (1445, 322, 7, '0995-2255773'),
 (1446, 322, 8, '0290-457412'),
-(1447, 322, 10, '1988-04-30'),
+(1447, 322, 10, '1993-09-02'),
 (1448, 322, 11, '2'),
 (1449, 322, 12, 'heyn.doreen@example.com'),
 (1451, 323, 1, 'Hildenbrandt'),
@@ -3605,7 +3500,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1456, 323, 6, 'DEU'),
 (1457, 323, 7, '0996-2255773'),
 (1458, 323, 8, '0291-457412'),
-(1459, 323, 10, '1988-05-01'),
+(1459, 323, 10, '1966-09-04'),
 (1460, 323, 11, '2'),
 (1461, 323, 12, 'hildenbrandt.doris@example.com'),
 (1463, 324, 1, 'Hinsch'),
@@ -3616,7 +3511,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1468, 324, 6, 'DEU'),
 (1469, 324, 7, '0997-2255773'),
 (1470, 324, 8, '0292-457412'),
-(1471, 324, 10, '1988-05-02'),
+(1471, 324, 10, '1960-09-05'),
 (1472, 324, 11, '2'),
 (1473, 324, 12, 'hinsch.dorothea@example.com'),
 (1475, 325, 1, 'Hochbruck'),
@@ -3627,7 +3522,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1480, 325, 6, 'DEU'),
 (1481, 325, 7, '0998-2255773'),
 (1482, 325, 8, '0293-457412'),
-(1483, 325, 10, '1988-05-03'),
+(1483, 325, 10, '2005-09-08'),
 (1484, 325, 11, '2'),
 (1485, 325, 12, 'hochbruck.dorothy@example.com'),
 (1487, 326, 1, 'Hoff'),
@@ -3638,7 +3533,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1492, 326, 6, 'DEU'),
 (1493, 326, 7, '0999-2255773'),
 (1494, 326, 8, '0294-457412'),
-(1495, 326, 10, '1988-05-04'),
+(1495, 326, 10, '1981-09-10'),
 (1496, 326, 11, '2'),
 (1497, 326, 12, 'hoff.dorthy@example.com'),
 (1499, 327, 1, 'Holst'),
@@ -3649,7 +3544,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1504, 327, 6, 'DEU'),
 (1505, 327, 7, '1000-2255773'),
 (1506, 327, 8, '0295-457412'),
-(1507, 327, 10, '1988-05-05'),
+(1507, 327, 10, '1974-09-12'),
 (1508, 327, 11, '1'),
 (1509, 327, 12, 'holstholz.doug@example.com'),
 (1511, 328, 1, 'Homann'),
@@ -3660,7 +3555,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1516, 328, 6, 'DEU'),
 (1517, 328, 7, '1001-2255773'),
 (1518, 328, 8, '0296-457412'),
-(1519, 328, 10, '1988-05-06'),
+(1519, 328, 10, '1988-09-13'),
 (1520, 328, 11, '1'),
 (1521, 328, 12, 'hohmann.douglas@example.com'),
 (1523, 329, 1, 'Hoopt'),
@@ -3671,7 +3566,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1528, 329, 6, 'DEU'),
 (1529, 329, 7, '1002-2255773'),
 (1530, 329, 8, '0297-457412'),
-(1531, 329, 10, '1988-05-07'),
+(1531, 329, 10, '1990-09-16'),
 (1532, 329, 11, '2'),
 (1533, 329, 12, 'hoopt.doyle@example.com'),
 (1535, 330, 1, 'Hübenbecker'),
@@ -3682,7 +3577,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1540, 330, 6, 'DEU'),
 (1541, 330, 7, '1003-2255773'),
 (1542, 330, 8, '0298-457412'),
-(1543, 330, 10, '1988-05-08'),
+(1543, 330, 10, '2004-09-17'),
 (1544, 330, 11, '1'),
 (1546, 331, 1, 'Hüttmann'),
 (1547, 331, 2, 'Drew'),
@@ -3692,7 +3587,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1551, 331, 6, 'DEU'),
 (1552, 331, 7, '1004-2255773'),
 (1553, 331, 8, '0299-457412'),
-(1554, 331, 10, '1988-05-09'),
+(1554, 331, 10, '1974-09-20'),
 (1555, 331, 11, '1'),
 (1557, 332, 1, 'Ilse'),
 (1558, 332, 2, 'Drutmar'),
@@ -3702,7 +3597,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1562, 332, 6, 'DEU'),
 (1563, 332, 7, '1005-2255773'),
 (1564, 332, 8, '0300-457412'),
-(1565, 332, 10, '1988-05-10'),
+(1565, 332, 10, '2014-09-22'),
 (1566, 332, 11, '2'),
 (1567, 332, 12, 'ilse.drutmar@example.com'),
 (1569, 333, 1, 'Jachs'),
@@ -3713,7 +3608,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1574, 333, 6, 'DEU'),
 (1575, 333, 7, '1006-2255773'),
 (1576, 333, 8, '0301-457412'),
-(1577, 333, 10, '1988-05-11'),
+(1577, 333, 10, '1976-09-23'),
 (1578, 333, 11, '2'),
 (1579, 333, 12, 'jachs.duane@example.com'),
 (1581, 334, 1, 'Jacobsen'),
@@ -3724,7 +3619,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1586, 334, 6, 'DEU'),
 (1587, 334, 7, '1007-2255773'),
 (1588, 334, 8, '0302-457412'),
-(1589, 334, 10, '1988-05-12'),
+(1589, 334, 10, '1973-09-26'),
 (1590, 334, 11, '1'),
 (1591, 334, 12, 'jacobsen.dustin@example.com'),
 (1593, 335, 1, 'Jagelowicz'),
@@ -3735,7 +3630,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1598, 335, 6, 'DEU'),
 (1599, 335, 7, '1008-2255773'),
 (1600, 335, 8, '0303-457412'),
-(1601, 335, 10, '1988-05-13'),
+(1601, 335, 10, '1975-09-28'),
 (1602, 335, 11, '1'),
 (1603, 335, 12, 'jagelowicz.dwayne@example.com'),
 (1605, 336, 1, 'Jens'),
@@ -3746,7 +3641,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1610, 336, 6, 'DEU'),
 (1611, 336, 7, '1009-2255773'),
 (1612, 336, 8, '0304-457412'),
-(1613, 336, 10, '1988-05-14'),
+(1613, 336, 10, '1982-09-30'),
 (1614, 336, 11, '1'),
 (1615, 336, 12, 'jens.dwight@example.com'),
 (1617, 337, 1, 'Jenschke'),
@@ -3757,7 +3652,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1622, 337, 6, 'DEU'),
 (1623, 337, 7, '1010-2255773'),
 (1624, 337, 8, '0305-457412'),
-(1625, 337, 10, '1988-05-15'),
+(1625, 337, 10, '1988-10-01'),
 (1626, 337, 11, '1'),
 (1628, 338, 1, 'Jensen'),
 (1629, 338, 2, 'Reba'),
@@ -3767,7 +3662,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1633, 338, 6, 'DEU'),
 (1634, 338, 7, '1011-2255773'),
 (1635, 338, 8, '0306-457412'),
-(1636, 338, 10, '1988-05-16'),
+(1636, 338, 10, '2008-10-03'),
 (1637, 338, 11, '2'),
 (1638, 338, 12, 'jensen.reba@example.com'),
 (1640, 339, 1, 'Jessulat'),
@@ -3778,7 +3673,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1645, 339, 6, 'DEU'),
 (1646, 339, 7, '1012-2255773'),
 (1647, 339, 8, '0307-457412'),
-(1648, 339, 10, '1988-05-17'),
+(1648, 339, 10, '1961-10-06'),
 (1649, 339, 11, '2'),
 (1650, 339, 12, 'jessulat.rebeca@example.com'),
 (1652, 340, 1, 'Jürs'),
@@ -3789,7 +3684,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1657, 340, 6, 'DEU'),
 (1658, 340, 7, '1013-2255773'),
 (1659, 340, 8, '0308-457412'),
-(1660, 340, 10, '1988-05-18'),
+(1660, 340, 10, '1991-10-08'),
 (1661, 340, 11, '2'),
 (1663, 341, 1, 'Juret'),
 (1664, 341, 2, 'Rebekah'),
@@ -3799,7 +3694,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1668, 341, 6, 'DEU'),
 (1669, 341, 7, '1014-2255773'),
 (1670, 341, 8, '0309-457412'),
-(1671, 341, 10, '1988-05-19'),
+(1671, 341, 10, '1965-10-10'),
 (1672, 341, 11, '2'),
 (1673, 341, 12, 'juret.rebekah@example.com'),
 (1675, 342, 1, 'Kähler'),
@@ -3810,7 +3705,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1680, 342, 6, 'DEU'),
 (1681, 342, 7, '1015-2255773'),
 (1682, 342, 8, '0310-457412'),
-(1683, 342, 10, '1988-05-20'),
+(1683, 342, 10, '1974-10-12'),
 (1684, 342, 11, '2'),
 (1686, 343, 1, 'Kälberer'),
 (1687, 343, 2, 'Regan'),
@@ -3820,7 +3715,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1691, 343, 6, 'DEU'),
 (1692, 343, 7, '1016-2255773'),
 (1693, 343, 8, '0311-457412'),
-(1694, 343, 10, '1988-05-21'),
+(1694, 343, 10, '1990-10-14'),
 (1695, 343, 11, '1'),
 (1697, 344, 1, 'Kahns'),
 (1698, 344, 2, 'Regina'),
@@ -3830,7 +3725,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1702, 344, 6, 'DEU'),
 (1703, 344, 7, '1017-2255773'),
 (1704, 344, 8, '0312-457412'),
-(1705, 344, 10, '1988-05-22'),
+(1705, 344, 10, '1990-10-16'),
 (1706, 344, 11, '2'),
 (1707, 344, 12, 'kahns.regina@example.com'),
 (1709, 345, 1, 'Kamm'),
@@ -3841,7 +3736,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1714, 345, 6, 'DEU'),
 (1715, 345, 7, '1018-2255773'),
 (1716, 345, 8, '0313-457412'),
-(1717, 345, 10, '1988-05-23'),
+(1717, 345, 10, '1990-10-18'),
 (1718, 345, 11, '1'),
 (1719, 345, 12, 'kamm.reginald@example.com'),
 (1721, 346, 1, 'Kassebaum'),
@@ -3852,7 +3747,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1726, 346, 6, 'DEU'),
 (1727, 346, 7, '1019-2255773'),
 (1728, 346, 8, '0314-457412'),
-(1729, 346, 10, '1988-05-24'),
+(1729, 346, 10, '1964-10-19'),
 (1730, 346, 11, '1'),
 (1731, 346, 12, 'kassebaum.reginbald@example.com'),
 (1733, 347, 1, 'Kaths'),
@@ -3863,7 +3758,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1738, 347, 6, 'DEU'),
 (1739, 347, 7, '1020-2255773'),
 (1740, 347, 8, '0315-457412'),
-(1741, 347, 10, '1988-05-25'),
+(1741, 347, 10, '1962-10-22'),
 (1742, 347, 11, '2'),
 (1743, 347, 12, 'kaths.regine@example.com'),
 (1745, 348, 1, 'Kauffmann'),
@@ -3874,7 +3769,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1750, 348, 6, 'DEU'),
 (1751, 348, 7, '1021-2255773'),
 (1752, 348, 8, '0316-457412'),
-(1753, 348, 10, '1988-05-26'),
+(1753, 348, 10, '1987-10-24'),
 (1754, 348, 11, '1'),
 (1755, 348, 12, 'kauffmann.reginhard@example.com'),
 (1757, 349, 1, 'Kerl'),
@@ -3885,7 +3780,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1762, 349, 6, 'DEU'),
 (1763, 349, 7, '1022-2255773'),
 (1764, 349, 8, '0317-457412'),
-(1765, 349, 10, '1988-05-27'),
+(1765, 349, 10, '1965-10-26'),
 (1766, 349, 11, '2'),
 (1767, 349, 12, 'kerl.reginlind@example.com'),
 (1769, 350, 1, 'Keßler'),
@@ -3896,7 +3791,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1774, 350, 6, 'DEU'),
 (1775, 350, 7, '1023-2255773'),
 (1776, 350, 8, '0318-457412'),
-(1777, 350, 10, '1988-05-28'),
+(1777, 350, 10, '1962-10-28'),
 (1778, 350, 11, '2'),
 (1780, 351, 1, 'Demo'),
 (1781, 351, 2, 'User'),
@@ -3905,7 +3800,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1784, 351, 5, 'Berlin'),
 (1785, 351, 6, 'DEU'),
 (1786, 351, 7, '030-85858585'),
-(1787, 351, 10, '1973-12-24'),
+(1787, 351, 10, '2009-10-30'),
 (1788, 351, 11, '1'),
 (1789, 351, 12, 'demo@admidio.org'),
 (1790, 351, 13, 'https://www.admidio.org/demo'),
@@ -3916,7 +3811,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1796, 352, 4, '10707'),
 (1797, 352, 5, 'Berlin'),
 (1798, 352, 6, 'DEU'),
-(1799, 352, 10, '1972-08-10'),
+(1799, 352, 10, '2010-11-01'),
 (1800, 352, 11, '1'),
 (1801, 352, 12, 'kasper@example.com'),
 (1802, 352, 20, '025789'),
@@ -3947,7 +3842,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1903, 356, 4, '10117'),
 (1904, 356, 5, 'Berlin'),
 (1905, 356, 6, 'DEU'),
-(1906, 356, 10, '2011-07-15'),
+(1906, 356, 10, '1986-11-03'),
 (1907, 356, 11, '2'),
 (1910, 357, 1, 'Schmidt'),
 (1911, 357, 2, 'Stefan'),
@@ -3955,7 +3850,7 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 (1913, 357, 4, '10117'),
 (1914, 357, 5, 'Berlin'),
 (1915, 357, 6, 'DEU'),
-(1916, 357, 10, '2014-01-21'),
+(1916, 357, 10, '2003-11-05'),
 (1917, 357, 11, '1'),
 (2000, 358, 1, 'Suppenkasper'),
 (2001, 358, 2, 'Walter'),
@@ -4000,22 +3895,21 @@ INSERT INTO `adm_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_user_fields`
+-- Tabellenstruktur für Tabelle `%PREFIX%_user_fields`
 --
 
-DROP TABLE IF EXISTS `adm_user_fields`;
-CREATE TABLE `adm_user_fields` (
+CREATE TABLE `%PREFIX%_user_fields` (
   `usf_id` int UNSIGNED NOT NULL,
   `usf_cat_id` int UNSIGNED NOT NULL,
-  `usf_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `usf_type` varchar(30) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `usf_name_intern` varchar(110) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `usf_name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `usf_description` text COLLATE utf8mb3_unicode_ci,
-  `usf_default_value` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `usf_regex` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `usf_icon` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `usf_url` varchar(2000) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usf_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usf_type` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usf_name_intern` varchar(110) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usf_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usf_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `usf_default_value` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usf_regex` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usf_icon` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usf_url` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `usf_system` tinyint(1) NOT NULL DEFAULT '0',
   `usf_disabled` tinyint(1) NOT NULL DEFAULT '0',
   `usf_hidden` tinyint(1) NOT NULL DEFAULT '0',
@@ -4029,10 +3923,10 @@ CREATE TABLE `adm_user_fields` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_user_fields`
+-- Daten für Tabelle `%PREFIX%_user_fields`
 --
 
-INSERT INTO `adm_user_fields` (`usf_id`, `usf_cat_id`, `usf_uuid`, `usf_type`, `usf_name_intern`, `usf_name`, `usf_description`, `usf_default_value`, `usf_regex`, `usf_icon`, `usf_url`, `usf_system`, `usf_disabled`, `usf_hidden`, `usf_registration`, `usf_required_input`, `usf_sequence`, `usf_usr_id_create`, `usf_timestamp_create`, `usf_usr_id_change`, `usf_timestamp_change`) VALUES
+INSERT INTO `%PREFIX%_user_fields` (`usf_id`, `usf_cat_id`, `usf_uuid`, `usf_type`, `usf_name_intern`, `usf_name`, `usf_description`, `usf_default_value`, `usf_regex`, `usf_icon`, `usf_url`, `usf_system`, `usf_disabled`, `usf_hidden`, `usf_registration`, `usf_required_input`, `usf_sequence`, `usf_usr_id_create`, `usf_timestamp_create`, `usf_usr_id_change`, `usf_timestamp_change`) VALUES
 (1, 1, '8bd39525-1bb0-4306-85b0-a08c7c71faad', 'TEXT', 'LAST_NAME', 'Surname', NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 1, 1, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
 (2, 1, '424592e0-5abc-4abe-ab18-c4088cfb17fa', 'TEXT', 'FIRST_NAME', 'First name', NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 1, 1, 2, 1, '2012-01-08 10:12:05', NULL, NULL),
 (3, 1, '34c57527-f0e6-426f-9ff7-4cf51c5b0238', 'TEXT', 'STREET', 'Street', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
@@ -4046,7 +3940,7 @@ INSERT INTO `adm_user_fields` (`usf_id`, `usf_cat_id`, `usf_uuid`, `usf_type`, `
 (12, 1, '09556bd3-0bc5-4e97-800a-4ed347f6327e', 'EMAIL', 'EMAIL', 'E-mail', NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 1, 2, 13, 1, '2012-01-08 10:12:05', NULL, NULL),
 (13, 1, '627c57a6-f17b-44df-9d31-3d668634eb97', 'URL', 'WEBSITE', 'Website', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 14, 1, '2012-01-08 10:12:05', NULL, NULL),
 (14, 1, 'd1b9314d-953c-4198-8250-d10f4661abe7', 'CHECKBOX', 'DATA_PROTECTION_PERMISSION', 'I consent to the processing of the data.', 'I have read the information provided by the organization. As far as the personal data provided by me are not necessary data for the fulfillment of the contract, I declare my consent to the processing of these data. My data will be stored exclusively for the purposes of the organization and treated confidentially.', NULL, NULL, NULL, NULL, 0, 0, 0, 1, 2, 15, 1, '2012-01-08 10:12:05', NULL, NULL),
-(18, 2, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 'TEXT', 'SKYPE', '#SYS_SKYPE#', '#SYS_SOCIAL_NETWORK_FIELD_DESC#', NULL, NULL, 'skype', NULL, 0, 0, 0, 0, 0, 5, 1, '2012-01-08 10:12:07', NULL, NULL),
+(18, 2, 'f4d0eca5-8a8c-4805-9379-be9d2e824a89', 'TEXT', 'SKYPE', '##SYS_SKYPE##', '##SYS_SOCIAL_NETWORK_FIELD_DESC##', NULL, NULL, 'skype', NULL, 0, 0, 0, 0, 0, 5, 1, '2012-01-08 10:12:07', NULL, NULL),
 (20, 8, '89b33bc0-913a-404c-9899-e53ad5080fec', 'NUMBER', 'MEMBERSHIP_NUMBER', 'Membership number', NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 0, 1, 1, '2011-04-06 20:05:20', NULL, NULL),
 (21, 8, '15b324bc-29d8-4b79-bee9-10072b8d7489', 'TEXT', 'FAVORITE_COLOR', 'Favorite color', 'Any member may enter his favorite color', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 2, 1, '2011-04-06 20:05:20', NULL, NULL),
 (22, 2, '041f1bb5-4305-47d7-8538-c1e7163339a6', 'TEXT', 'FACEBOOK', 'Facebook', 'Would you like to set a link to your profile of this social network? Your login name is required. Log in to your account of the social network and go to your profile. Now copy the URL in this field and save your profile here. Visitors of your profile are now able to open your profile directly.', NULL, NULL, 'facebook', 'https://www.facebook.com/#user_content#', 0, 0, 0, 0, 0, 1, 1, '2012-01-08 10:11:40', NULL, NULL),
@@ -4059,27 +3953,26 @@ INSERT INTO `adm_user_fields` (`usf_id`, `usf_cat_id`, `usf_uuid`, `usf_type`, `
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_user_field_select_options`
+-- Tabellenstruktur für Tabelle `%PREFIX%_user_field_select_options`
 --
 
-DROP TABLE IF EXISTS `adm_user_field_select_options`;
-CREATE TABLE `adm_user_field_select_options` (
+CREATE TABLE `%PREFIX%_user_field_select_options` (
   `ufo_id` int UNSIGNED NOT NULL,
   `ufo_usf_id` int UNSIGNED NOT NULL,
-  `ufo_value` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ufo_value` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ufo_system` tinyint(1) NOT NULL DEFAULT '0',
   `ufo_sequence` smallint NOT NULL,
   `ufo_obsolete` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_user_field_select_options`
+-- Daten für Tabelle `%PREFIX%_user_field_select_options`
 --
 
-INSERT INTO `adm_user_field_select_options` (`ufo_id`, `ufo_usf_id`, `ufo_value`, `ufo_system`, `ufo_sequence`, `ufo_obsolete`) VALUES
-(1, 11, 'gender-male|SYS_MALE', 0, 1, 0),
-(2, 11, 'gender-female|SYS_FEMALE', 0, 2, 0),
-(3, 11, 'gender-trans|SYS_DIVERSE', 0, 3, 0),
+INSERT INTO `%PREFIX%_user_field_select_options` (`ufo_id`, `ufo_usf_id`, `ufo_value`, `ufo_system`, `ufo_sequence`, `ufo_obsolete`) VALUES
+(1, 11, 'gender-male|Männlich', 0, 1, 0),
+(2, 11, 'gender-female|Weiblich', 0, 2, 0),
+(3, 11, 'gender-trans|Divers', 0, 3, 0),
 (4, 25, 'Bayern', 0, 1, 0),
 (5, 25, 'Baden-Württemberg', 0, 2, 0),
 (6, 25, 'Berlin', 0, 3, 0),
@@ -4100,11 +3993,10 @@ INSERT INTO `adm_user_field_select_options` (`ufo_id`, `ufo_usf_id`, `ufo_value`
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_user_relations`
+-- Tabellenstruktur für Tabelle `%PREFIX%_user_relations`
 --
 
-DROP TABLE IF EXISTS `adm_user_relations`;
-CREATE TABLE `adm_user_relations` (
+CREATE TABLE `%PREFIX%_user_relations` (
   `ure_id` int UNSIGNED NOT NULL,
   `ure_urt_id` int UNSIGNED NOT NULL,
   `ure_usr_id1` int UNSIGNED NOT NULL,
@@ -4113,14 +4005,14 @@ CREATE TABLE `adm_user_relations` (
   `ure_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ure_usr_id_change` int UNSIGNED DEFAULT NULL,
   `ure_timestamp_change` timestamp NULL DEFAULT NULL,
-  `ure_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL
+  `ure_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_user_relations`
+-- Daten für Tabelle `%PREFIX%_user_relations`
 --
 
-INSERT INTO `adm_user_relations` (`ure_id`, `ure_urt_id`, `ure_usr_id1`, `ure_usr_id2`, `ure_usr_id_create`, `ure_timestamp_create`, `ure_usr_id_change`, `ure_timestamp_change`, `ure_uuid`) VALUES
+INSERT INTO `%PREFIX%_user_relations` (`ure_id`, `ure_urt_id`, `ure_usr_id1`, `ure_usr_id2`, `ure_usr_id_create`, `ure_timestamp_create`, `ure_usr_id_change`, `ure_timestamp_change`, `ure_uuid`) VALUES
 (1, 4, 1, 355, 1, '2016-12-06 19:02:09', NULL, NULL, 'a88952e5-77d8-4503-87b2-5f5251aca5b2'),
 (2, 4, 355, 1, 1, '2016-12-06 19:02:09', NULL, NULL, 'e4aa38fa-ba34-4bf6-aec1-cc5daa4d1cef'),
 (3, 2, 1, 356, 1, '2016-12-06 19:02:23', NULL, NULL, 'f08fc1a9-27e2-4f21-a3f7-099d566d2503'),
@@ -4137,16 +4029,15 @@ INSERT INTO `adm_user_relations` (`ure_id`, `ure_urt_id`, `ure_usr_id1`, `ure_us
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `adm_user_relation_types`
+-- Tabellenstruktur für Tabelle `%PREFIX%_user_relation_types`
 --
 
-DROP TABLE IF EXISTS `adm_user_relation_types`;
-CREATE TABLE `adm_user_relation_types` (
+CREATE TABLE `%PREFIX%_user_relation_types` (
   `urt_id` int UNSIGNED NOT NULL,
-  `urt_uuid` varchar(36) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `urt_name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `urt_name_male` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `urt_name_female` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urt_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urt_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urt_name_male` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urt_name_female` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `urt_edit_user` tinyint(1) NOT NULL DEFAULT '0',
   `urt_id_inverse` int UNSIGNED DEFAULT NULL,
   `urt_usr_id_create` int UNSIGNED DEFAULT NULL,
@@ -4156,10 +4047,10 @@ CREATE TABLE `adm_user_relation_types` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
--- Daten für Tabelle `adm_user_relation_types`
+-- Daten für Tabelle `%PREFIX%_user_relation_types`
 --
 
-INSERT INTO `adm_user_relation_types` (`urt_id`, `urt_uuid`, `urt_name`, `urt_name_male`, `urt_name_female`, `urt_edit_user`, `urt_id_inverse`, `urt_usr_id_create`, `urt_timestamp_create`, `urt_usr_id_change`, `urt_timestamp_change`) VALUES
+INSERT INTO `%PREFIX%_user_relation_types` (`urt_id`, `urt_uuid`, `urt_name`, `urt_name_male`, `urt_name_female`, `urt_edit_user`, `urt_id_inverse`, `urt_usr_id_create`, `urt_timestamp_create`, `urt_usr_id_change`, `urt_timestamp_change`) VALUES
 (1, '3f716ce8-f05e-4eb9-a89e-20a8a277aa18', 'Parent', 'Father', 'Mother', 0, 2, 2, '2016-11-22 04:29:56', NULL, NULL),
 (2, 'e728bdd5-cc1f-46a3-aef3-a3a12cc8aad6', 'Child', 'Son', 'Daughter', 0, 1, 2, '2016-11-22 04:29:56', NULL, NULL),
 (3, '7d31dd74-77a4-461d-9402-37ae8fe2cfcf', 'Sibling', 'Brother', 'Sister', 0, 3, 2, '2016-11-22 04:29:56', NULL, NULL),
@@ -4174,755 +4065,723 @@ INSERT INTO `adm_user_relation_types` (`urt_id`, `urt_uuid`, `urt_name`, `urt_na
 --
 
 --
--- Indizes für die Tabelle `adm_announcements`
+-- Indizes für die Tabelle `%PREFIX%_announcements`
 --
-ALTER TABLE `adm_announcements`
+ALTER TABLE `%PREFIX%_announcements`
   ADD PRIMARY KEY (`ann_id`),
-  ADD UNIQUE KEY `adm_idx_ann_uuid` (`ann_uuid`),
-  ADD KEY `adm_fk_ann_cat` (`ann_cat_id`),
-  ADD KEY `adm_fk_ann_usr_create` (`ann_usr_id_create`),
-  ADD KEY `adm_fk_ann_usr_change` (`ann_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_ann_uuid` (`ann_uuid`),
+  ADD KEY `%PREFIX%_fk_ann_cat` (`ann_cat_id`),
+  ADD KEY `%PREFIX%_fk_ann_usr_create` (`ann_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_ann_usr_change` (`ann_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_auto_login`
+-- Indizes für die Tabelle `%PREFIX%_auto_login`
 --
-ALTER TABLE `adm_auto_login`
+ALTER TABLE `%PREFIX%_auto_login`
   ADD PRIMARY KEY (`atl_id`),
-  ADD KEY `adm_fk_atl_usr` (`atl_usr_id`),
-  ADD KEY `adm_fk_atl_org` (`atl_org_id`);
+  ADD KEY `%PREFIX%_fk_atl_usr` (`atl_usr_id`),
+  ADD KEY `%PREFIX%_fk_atl_org` (`atl_org_id`);
 
 --
--- Indizes für die Tabelle `adm_categories`
+-- Indizes für die Tabelle `%PREFIX%_categories`
 --
-ALTER TABLE `adm_categories`
+ALTER TABLE `%PREFIX%_categories`
   ADD PRIMARY KEY (`cat_id`),
-  ADD UNIQUE KEY `adm_idx_cat_uuid` (`cat_uuid`),
-  ADD KEY `adm_fk_cat_org` (`cat_org_id`),
-  ADD KEY `adm_fk_cat_usr_create` (`cat_usr_id_create`),
-  ADD KEY `adm_fk_cat_usr_change` (`cat_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_cat_uuid` (`cat_uuid`),
+  ADD KEY `%PREFIX%_fk_cat_org` (`cat_org_id`),
+  ADD KEY `%PREFIX%_fk_cat_usr_create` (`cat_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_cat_usr_change` (`cat_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_category_report`
+-- Indizes für die Tabelle `%PREFIX%_category_report`
 --
-ALTER TABLE `adm_category_report`
+ALTER TABLE `%PREFIX%_category_report`
   ADD PRIMARY KEY (`crt_id`),
-  ADD KEY `adm_fk_crt_org` (`crt_org_id`);
+  ADD KEY `%PREFIX%_fk_crt_org` (`crt_org_id`);
 
 --
--- Indizes für die Tabelle `adm_components`
+-- Indizes für die Tabelle `%PREFIX%_components`
 --
-ALTER TABLE `adm_components`
+ALTER TABLE `%PREFIX%_components`
   ADD PRIMARY KEY (`com_id`);
 
 --
--- Indizes für die Tabelle `adm_events`
+-- Indizes für die Tabelle `%PREFIX%_events`
 --
-ALTER TABLE `adm_events`
+ALTER TABLE `%PREFIX%_events`
   ADD PRIMARY KEY (`dat_id`),
-  ADD UNIQUE KEY `adm_idx_dat_uuid` (`dat_uuid`),
-  ADD KEY `adm_fk_dat_cat` (`dat_cat_id`),
-  ADD KEY `adm_fk_dat_rol` (`dat_rol_id`),
-  ADD KEY `adm_fk_dat_room` (`dat_room_id`),
-  ADD KEY `adm_fk_dat_usr_create` (`dat_usr_id_create`),
-  ADD KEY `adm_fk_dat_usr_change` (`dat_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_dat_uuid` (`dat_uuid`),
+  ADD KEY `%PREFIX%_fk_dat_cat` (`dat_cat_id`),
+  ADD KEY `%PREFIX%_fk_dat_rol` (`dat_rol_id`),
+  ADD KEY `%PREFIX%_fk_dat_room` (`dat_room_id`),
+  ADD KEY `%PREFIX%_fk_dat_usr_create` (`dat_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_dat_usr_change` (`dat_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_files`
+-- Indizes für die Tabelle `%PREFIX%_files`
 --
-ALTER TABLE `adm_files`
+ALTER TABLE `%PREFIX%_files`
   ADD PRIMARY KEY (`fil_id`),
-  ADD UNIQUE KEY `adm_idx_fil_uuid` (`fil_uuid`),
-  ADD KEY `adm_fk_fil_fol` (`fil_fol_id`),
-  ADD KEY `adm_fk_fil_usr` (`fil_usr_id`);
+  ADD UNIQUE KEY `%PREFIX%_idx_fil_uuid` (`fil_uuid`),
+  ADD KEY `%PREFIX%_fk_fil_fol` (`fil_fol_id`),
+  ADD KEY `%PREFIX%_fk_fil_usr` (`fil_usr_id`);
 
 --
--- Indizes für die Tabelle `adm_folders`
+-- Indizes für die Tabelle `%PREFIX%_folders`
 --
-ALTER TABLE `adm_folders`
+ALTER TABLE `%PREFIX%_folders`
   ADD PRIMARY KEY (`fol_id`),
-  ADD UNIQUE KEY `adm_idx_fol_uuid` (`fol_uuid`),
-  ADD KEY `adm_fk_fol_org` (`fol_org_id`),
-  ADD KEY `adm_fk_fol_fol_parent` (`fol_fol_id_parent`),
-  ADD KEY `adm_fk_fol_usr` (`fol_usr_id`);
+  ADD UNIQUE KEY `%PREFIX%_idx_fol_uuid` (`fol_uuid`),
+  ADD KEY `%PREFIX%_fk_fol_org` (`fol_org_id`),
+  ADD KEY `%PREFIX%_fk_fol_fol_parent` (`fol_fol_id_parent`),
+  ADD KEY `%PREFIX%_fk_fol_usr` (`fol_usr_id`);
 
 --
--- Indizes für die Tabelle `adm_forum_posts`
+-- Indizes für die Tabelle `%PREFIX%_forum_posts`
 --
-ALTER TABLE `adm_forum_posts`
+ALTER TABLE `%PREFIX%_forum_posts`
   ADD PRIMARY KEY (`fop_id`),
-  ADD UNIQUE KEY `adm_idx_fop_uuid` (`fop_uuid`),
-  ADD KEY `adm_fk_fop_fot` (`fop_fot_id`),
-  ADD KEY `adm_fk_fop_usr_create` (`fop_usr_id_create`),
-  ADD KEY `adm_fk_fop_usr_change` (`fop_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_fop_uuid` (`fop_uuid`),
+  ADD KEY `%PREFIX%_fk_fop_fot` (`fop_fot_id`),
+  ADD KEY `%PREFIX%_fk_fop_usr_create` (`fop_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_fop_usr_change` (`fop_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_forum_topics`
+-- Indizes für die Tabelle `%PREFIX%_forum_topics`
 --
-ALTER TABLE `adm_forum_topics`
+ALTER TABLE `%PREFIX%_forum_topics`
   ADD PRIMARY KEY (`fot_id`),
-  ADD UNIQUE KEY `adm_idx_fot_uuid` (`fot_uuid`),
-  ADD KEY `adm_fk_fot_cat` (`fot_cat_id`),
-  ADD KEY `adm_fk_fot_first_fop` (`fot_fop_id_first_post`),
-  ADD KEY `adm_fk_fot_usr_create` (`fot_usr_id_create`);
+  ADD UNIQUE KEY `%PREFIX%_idx_fot_uuid` (`fot_uuid`),
+  ADD KEY `%PREFIX%_fk_fot_cat` (`fot_cat_id`),
+  ADD KEY `%PREFIX%_fk_fot_first_fop` (`fot_fop_id_first_post`),
+  ADD KEY `%PREFIX%_fk_fot_usr_create` (`fot_usr_id_create`);
 
 --
--- Indizes für die Tabelle `adm_guestbook`
+-- Indizes für die Tabelle `%PREFIX%_ids`
 --
-ALTER TABLE `adm_guestbook`
-  ADD PRIMARY KEY (`gbo_id`),
-  ADD UNIQUE KEY `adm_idx_gbo_uuid` (`gbo_uuid`),
-  ADD KEY `adm_fk_gbo_org` (`gbo_org_id`),
-  ADD KEY `adm_fk_gbo_usr_create` (`gbo_usr_id_create`),
-  ADD KEY `adm_fk_gbo_usr_change` (`gbo_usr_id_change`);
+ALTER TABLE `%PREFIX%_ids`
+  ADD KEY `%PREFIX%_fk_ids_usr_id` (`ids_usr_id`);
 
 --
--- Indizes für die Tabelle `adm_guestbook_comments`
+-- Indizes für die Tabelle `%PREFIX%_inventory_fields`
 --
-ALTER TABLE `adm_guestbook_comments`
-  ADD PRIMARY KEY (`gbc_id`),
-  ADD UNIQUE KEY `adm_idx_gbc_uuid` (`gbc_uuid`),
-  ADD KEY `adm_fk_gbc_gbo` (`gbc_gbo_id`),
-  ADD KEY `adm_fk_gbc_usr_create` (`gbc_usr_id_create`),
-  ADD KEY `adm_fk_gbc_usr_change` (`gbc_usr_id_change`);
-
---
--- Indizes für die Tabelle `adm_ids`
---
-ALTER TABLE `adm_ids`
-  ADD KEY `adm_fk_ids_usr_id` (`ids_usr_id`);
-
---
--- Indizes für die Tabelle `adm_inventory_fields`
---
-ALTER TABLE `adm_inventory_fields`
+ALTER TABLE `%PREFIX%_inventory_fields`
   ADD PRIMARY KEY (`inf_id`),
-  ADD UNIQUE KEY `adm_idx_inf_name_intern` (`inf_org_id`,`inf_name_intern`),
-  ADD UNIQUE KEY `adm_idx_inf_uuid` (`inf_uuid`),
-  ADD KEY `adm_fk_inf_usr_create` (`inf_usr_id_create`),
-  ADD KEY `adm_fk_inf_usr_change` (`inf_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_inf_name_intern` (`inf_org_id`,`inf_name_intern`),
+  ADD UNIQUE KEY `%PREFIX%_idx_inf_uuid` (`inf_uuid`),
+  ADD KEY `%PREFIX%_fk_inf_usr_create` (`inf_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_inf_usr_change` (`inf_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_inventory_field_select_options`
+-- Indizes für die Tabelle `%PREFIX%_inventory_field_select_options`
 --
-ALTER TABLE `adm_inventory_field_select_options`
+ALTER TABLE `%PREFIX%_inventory_field_select_options`
   ADD PRIMARY KEY (`ifo_id`),
-  ADD KEY `adm_fk_ifo_inf` (`ifo_inf_id`);
+  ADD KEY `%PREFIX%_fk_ifo_inf` (`ifo_inf_id`);
 
 --
--- Indizes für die Tabelle `adm_inventory_items`
+-- Indizes für die Tabelle `%PREFIX%_inventory_items`
 --
-ALTER TABLE `adm_inventory_items`
+ALTER TABLE `%PREFIX%_inventory_items`
   ADD PRIMARY KEY (`ini_id`),
-  ADD UNIQUE KEY `adm_idx_ini_uuid` (`ini_uuid`),
-  ADD KEY `adm_fk_ini_cat` (`ini_cat_id`),
-  ADD KEY `adm_fk_ini_status` (`ini_status`),
-  ADD KEY `adm_fk_ini_usr_create` (`ini_usr_id_create`),
-  ADD KEY `adm_fk_ini_usr_change` (`ini_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_ini_uuid` (`ini_uuid`),
+  ADD KEY `%PREFIX%_fk_ini_cat` (`ini_cat_id`),
+  ADD KEY `%PREFIX%_fk_ini_status` (`ini_status`),
+  ADD KEY `%PREFIX%_fk_ini_usr_create` (`ini_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_ini_usr_change` (`ini_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_inventory_item_borrow_data`
+-- Indizes für die Tabelle `%PREFIX%_inventory_item_borrow_data`
 --
-ALTER TABLE `adm_inventory_item_borrow_data`
+ALTER TABLE `%PREFIX%_inventory_item_borrow_data`
   ADD PRIMARY KEY (`inb_id`),
-  ADD UNIQUE KEY `adm_idx_inb_ini_id` (`inb_ini_id`);
+  ADD UNIQUE KEY `%PREFIX%_idx_inb_ini_id` (`inb_ini_id`);
 
 --
--- Indizes für die Tabelle `adm_inventory_item_data`
+-- Indizes für die Tabelle `%PREFIX%_inventory_item_data`
 --
-ALTER TABLE `adm_inventory_item_data`
+ALTER TABLE `%PREFIX%_inventory_item_data`
   ADD PRIMARY KEY (`ind_id`),
-  ADD UNIQUE KEY `adm_idx_ind_inf_ini_id` (`ind_inf_id`,`ind_ini_id`),
-  ADD KEY `adm_fk_ind_ini` (`ind_ini_id`);
+  ADD UNIQUE KEY `%PREFIX%_idx_ind_inf_ini_id` (`ind_inf_id`,`ind_ini_id`),
+  ADD KEY `%PREFIX%_fk_ind_ini` (`ind_ini_id`);
 
 --
--- Indizes für die Tabelle `adm_links`
+-- Indizes für die Tabelle `%PREFIX%_links`
 --
-ALTER TABLE `adm_links`
+ALTER TABLE `%PREFIX%_links`
   ADD PRIMARY KEY (`lnk_id`),
-  ADD UNIQUE KEY `adm_idx_lnk_uuid` (`lnk_uuid`),
-  ADD KEY `adm_fk_lnk_cat` (`lnk_cat_id`),
-  ADD KEY `adm_fk_lnk_usr_create` (`lnk_usr_id_create`),
-  ADD KEY `adm_fk_lnk_usr_change` (`lnk_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_lnk_uuid` (`lnk_uuid`),
+  ADD KEY `%PREFIX%_fk_lnk_cat` (`lnk_cat_id`),
+  ADD KEY `%PREFIX%_fk_lnk_usr_create` (`lnk_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_lnk_usr_change` (`lnk_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_lists`
+-- Indizes für die Tabelle `%PREFIX%_lists`
 --
-ALTER TABLE `adm_lists`
+ALTER TABLE `%PREFIX%_lists`
   ADD PRIMARY KEY (`lst_id`),
-  ADD UNIQUE KEY `adm_idx_lst_uuid` (`lst_uuid`),
-  ADD KEY `adm_fk_lst_usr` (`lst_usr_id`),
-  ADD KEY `adm_fk_lst_org` (`lst_org_id`);
+  ADD UNIQUE KEY `%PREFIX%_idx_lst_uuid` (`lst_uuid`),
+  ADD KEY `%PREFIX%_fk_lst_usr` (`lst_usr_id`),
+  ADD KEY `%PREFIX%_fk_lst_org` (`lst_org_id`);
 
 --
--- Indizes für die Tabelle `adm_list_columns`
+-- Indizes für die Tabelle `%PREFIX%_list_columns`
 --
-ALTER TABLE `adm_list_columns`
+ALTER TABLE `%PREFIX%_list_columns`
   ADD PRIMARY KEY (`lsc_id`),
-  ADD KEY `adm_fk_lsc_lst` (`lsc_lst_id`),
-  ADD KEY `adm_fk_lsc_usf` (`lsc_usf_id`);
+  ADD KEY `%PREFIX%_fk_lsc_lst` (`lsc_lst_id`),
+  ADD KEY `%PREFIX%_fk_lsc_usf` (`lsc_usf_id`);
 
 --
--- Indizes für die Tabelle `adm_log_changes`
+-- Indizes für die Tabelle `%PREFIX%_log_changes`
 --
-ALTER TABLE `adm_log_changes`
+ALTER TABLE `%PREFIX%_log_changes`
   ADD PRIMARY KEY (`log_id`);
 
 --
--- Indizes für die Tabelle `adm_members`
+-- Indizes für die Tabelle `%PREFIX%_members`
 --
-ALTER TABLE `adm_members`
+ALTER TABLE `%PREFIX%_members`
   ADD PRIMARY KEY (`mem_id`),
-  ADD UNIQUE KEY `adm_idx_mem_uuid` (`mem_uuid`),
-  ADD KEY `adm_idx_mem_rol_usr_id` (`mem_rol_id`,`mem_usr_id`),
-  ADD KEY `adm_fk_mem_usr` (`mem_usr_id`),
-  ADD KEY `adm_fk_mem_usr_create` (`mem_usr_id_create`),
-  ADD KEY `adm_fk_mem_usr_change` (`mem_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_mem_uuid` (`mem_uuid`),
+  ADD KEY `%PREFIX%_idx_mem_rol_usr_id` (`mem_rol_id`,`mem_usr_id`),
+  ADD KEY `%PREFIX%_fk_mem_usr` (`mem_usr_id`),
+  ADD KEY `%PREFIX%_fk_mem_usr_create` (`mem_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_mem_usr_change` (`mem_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_menu`
+-- Indizes für die Tabelle `%PREFIX%_menu`
 --
-ALTER TABLE `adm_menu`
+ALTER TABLE `%PREFIX%_menu`
   ADD PRIMARY KEY (`men_id`),
-  ADD UNIQUE KEY `adm_idx_men_uuid` (`men_uuid`),
-  ADD KEY `adm_idx_men_men_id_parent` (`men_men_id_parent`),
-  ADD KEY `adm_fk_men_com_id` (`men_com_id`);
+  ADD UNIQUE KEY `%PREFIX%_idx_men_uuid` (`men_uuid`),
+  ADD KEY `%PREFIX%_idx_men_men_id_parent` (`men_men_id_parent`),
+  ADD KEY `%PREFIX%_fk_men_com_id` (`men_com_id`);
 
 --
--- Indizes für die Tabelle `adm_messages`
+-- Indizes für die Tabelle `%PREFIX%_messages`
 --
-ALTER TABLE `adm_messages`
+ALTER TABLE `%PREFIX%_messages`
   ADD PRIMARY KEY (`msg_id`),
-  ADD UNIQUE KEY `adm_idx_msg_uuid` (`msg_uuid`),
-  ADD KEY `adm_fk_msg_usr_sender` (`msg_usr_id_sender`);
+  ADD UNIQUE KEY `%PREFIX%_idx_msg_uuid` (`msg_uuid`),
+  ADD KEY `%PREFIX%_fk_msg_usr_sender` (`msg_usr_id_sender`);
 
 --
--- Indizes für die Tabelle `adm_messages_attachments`
+-- Indizes für die Tabelle `%PREFIX%_messages_attachments`
 --
-ALTER TABLE `adm_messages_attachments`
+ALTER TABLE `%PREFIX%_messages_attachments`
   ADD PRIMARY KEY (`msa_id`),
-  ADD UNIQUE KEY `adm_idx_msa_uuid` (`msa_uuid`),
-  ADD KEY `adm_fk_msa_msg_id` (`msa_msg_id`);
+  ADD UNIQUE KEY `%PREFIX%_idx_msa_uuid` (`msa_uuid`),
+  ADD KEY `%PREFIX%_fk_msa_msg_id` (`msa_msg_id`);
 
 --
--- Indizes für die Tabelle `adm_messages_content`
+-- Indizes für die Tabelle `%PREFIX%_messages_content`
 --
-ALTER TABLE `adm_messages_content`
+ALTER TABLE `%PREFIX%_messages_content`
   ADD PRIMARY KEY (`msc_id`),
-  ADD KEY `adm_fk_msc_msg_id` (`msc_msg_id`),
-  ADD KEY `adm_fk_msc_usr_id` (`msc_usr_id`);
+  ADD KEY `%PREFIX%_fk_msc_msg_id` (`msc_msg_id`),
+  ADD KEY `%PREFIX%_fk_msc_usr_id` (`msc_usr_id`);
 
 --
--- Indizes für die Tabelle `adm_messages_recipients`
+-- Indizes für die Tabelle `%PREFIX%_messages_recipients`
 --
-ALTER TABLE `adm_messages_recipients`
+ALTER TABLE `%PREFIX%_messages_recipients`
   ADD PRIMARY KEY (`msr_id`),
-  ADD KEY `adm_fk_msr_msg_id` (`msr_msg_id`),
-  ADD KEY `adm_fk_msr_rol_id` (`msr_rol_id`),
-  ADD KEY `adm_fk_msr_usr_id` (`msr_usr_id`);
+  ADD KEY `%PREFIX%_fk_msr_msg_id` (`msr_msg_id`),
+  ADD KEY `%PREFIX%_fk_msr_rol_id` (`msr_rol_id`),
+  ADD KEY `%PREFIX%_fk_msr_usr_id` (`msr_usr_id`);
 
 --
--- Indizes für die Tabelle `adm_oidc_access_tokens`
+-- Indizes für die Tabelle `%PREFIX%_oidc_access_tokens`
 --
-ALTER TABLE `adm_oidc_access_tokens`
+ALTER TABLE `%PREFIX%_oidc_access_tokens`
   ADD PRIMARY KEY (`oat_id`),
-  ADD KEY `adm_fk_oat_usr_id` (`oat_usr_id`),
-  ADD KEY `adm_fk_oat_ocl_id` (`oat_ocl_id`),
-  ADD KEY `adm_fk_oat_usr_create` (`oat_usr_id_create`);
+  ADD KEY `%PREFIX%_fk_oat_usr_id` (`oat_usr_id`),
+  ADD KEY `%PREFIX%_fk_oat_ocl_id` (`oat_ocl_id`),
+  ADD KEY `%PREFIX%_fk_oat_usr_create` (`oat_usr_id_create`);
 
 --
--- Indizes für die Tabelle `adm_oidc_auth_codes`
+-- Indizes für die Tabelle `%PREFIX%_oidc_auth_codes`
 --
-ALTER TABLE `adm_oidc_auth_codes`
+ALTER TABLE `%PREFIX%_oidc_auth_codes`
   ADD PRIMARY KEY (`oac_id`),
-  ADD KEY `adm_fk_oac_usr_id` (`oac_usr_id`),
-  ADD KEY `adm_fk_oac_ocl_id` (`oac_ocl_id`),
-  ADD KEY `adm_fk_oac_usr_create` (`oac_usr_id_create`);
+  ADD KEY `%PREFIX%_fk_oac_usr_id` (`oac_usr_id`),
+  ADD KEY `%PREFIX%_fk_oac_ocl_id` (`oac_ocl_id`),
+  ADD KEY `%PREFIX%_fk_oac_usr_create` (`oac_usr_id_create`);
 
 --
--- Indizes für die Tabelle `adm_oidc_clients`
+-- Indizes für die Tabelle `%PREFIX%_oidc_clients`
 --
-ALTER TABLE `adm_oidc_clients`
+ALTER TABLE `%PREFIX%_oidc_clients`
   ADD PRIMARY KEY (`ocl_id`),
-  ADD KEY `adm_fk_ocl_usr_create` (`ocl_usr_id_create`),
-  ADD KEY `adm_fk_ocl_usr_change` (`ocl_usr_id_change`);
+  ADD KEY `%PREFIX%_fk_ocl_usr_create` (`ocl_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_ocl_usr_change` (`ocl_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_oidc_refresh_tokens`
+-- Indizes für die Tabelle `%PREFIX%_oidc_refresh_tokens`
 --
-ALTER TABLE `adm_oidc_refresh_tokens`
+ALTER TABLE `%PREFIX%_oidc_refresh_tokens`
   ADD PRIMARY KEY (`ort_id`),
-  ADD KEY `adm_fk_ort_usr_id` (`ort_usr_id`),
-  ADD KEY `adm_fk_ort_ocl_id` (`ort_ocl_id`),
-  ADD KEY `adm_fk_ort_usr_create` (`ort_usr_id_create`);
+  ADD KEY `%PREFIX%_fk_ort_usr_id` (`ort_usr_id`),
+  ADD KEY `%PREFIX%_fk_ort_ocl_id` (`ort_ocl_id`),
+  ADD KEY `%PREFIX%_fk_ort_usr_create` (`ort_usr_id_create`);
 
 --
--- Indizes für die Tabelle `adm_organizations`
+-- Indizes für die Tabelle `%PREFIX%_organizations`
 --
-ALTER TABLE `adm_organizations`
+ALTER TABLE `%PREFIX%_organizations`
   ADD PRIMARY KEY (`org_id`),
-  ADD UNIQUE KEY `adm_idx_org_shortname` (`org_shortname`),
-  ADD UNIQUE KEY `adm_idx_org_uuid` (`org_uuid`),
-  ADD KEY `adm_fk_org_org_parent` (`org_org_id_parent`);
+  ADD UNIQUE KEY `%PREFIX%_idx_org_shortname` (`org_shortname`),
+  ADD UNIQUE KEY `%PREFIX%_idx_org_uuid` (`org_uuid`),
+  ADD KEY `%PREFIX%_fk_org_org_parent` (`org_org_id_parent`);
 
 --
--- Indizes für die Tabelle `adm_photos`
+-- Indizes für die Tabelle `%PREFIX%_photos`
 --
-ALTER TABLE `adm_photos`
+ALTER TABLE `%PREFIX%_photos`
   ADD PRIMARY KEY (`pho_id`),
-  ADD UNIQUE KEY `adm_idx_pho_uuid` (`pho_uuid`),
-  ADD KEY `adm_fk_pho_pho_parent` (`pho_pho_id_parent`),
-  ADD KEY `adm_fk_pho_org` (`pho_org_id`),
-  ADD KEY `adm_fk_pho_usr_create` (`pho_usr_id_create`),
-  ADD KEY `adm_fk_pho_usr_change` (`pho_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_pho_uuid` (`pho_uuid`),
+  ADD KEY `%PREFIX%_fk_pho_pho_parent` (`pho_pho_id_parent`),
+  ADD KEY `%PREFIX%_fk_pho_org` (`pho_org_id`),
+  ADD KEY `%PREFIX%_fk_pho_usr_create` (`pho_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_pho_usr_change` (`pho_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_preferences`
+-- Indizes für die Tabelle `%PREFIX%_preferences`
 --
-ALTER TABLE `adm_preferences`
+ALTER TABLE `%PREFIX%_preferences`
   ADD PRIMARY KEY (`prf_id`),
-  ADD UNIQUE KEY `adm_idx_prf_org_id_name` (`prf_org_id`,`prf_name`);
+  ADD UNIQUE KEY `%PREFIX%_idx_prf_org_id_name` (`prf_org_id`,`prf_name`);
 
 --
--- Indizes für die Tabelle `adm_registrations`
+-- Indizes für die Tabelle `%PREFIX%_registrations`
 --
-ALTER TABLE `adm_registrations`
+ALTER TABLE `%PREFIX%_registrations`
   ADD PRIMARY KEY (`reg_id`),
-  ADD KEY `adm_fk_reg_org` (`reg_org_id`),
-  ADD KEY `adm_fk_reg_usr` (`reg_usr_id`);
+  ADD KEY `%PREFIX%_fk_reg_org` (`reg_org_id`),
+  ADD KEY `%PREFIX%_fk_reg_usr` (`reg_usr_id`);
 
 --
--- Indizes für die Tabelle `adm_roles`
+-- Indizes für die Tabelle `%PREFIX%_roles`
 --
-ALTER TABLE `adm_roles`
+ALTER TABLE `%PREFIX%_roles`
   ADD PRIMARY KEY (`rol_id`),
-  ADD UNIQUE KEY `adm_idx_rol_uuid` (`rol_uuid`),
-  ADD KEY `adm_fk_rol_cat` (`rol_cat_id`),
-  ADD KEY `adm_fk_rol_lst_id` (`rol_lst_id`),
-  ADD KEY `adm_fk_rol_usr_create` (`rol_usr_id_create`),
-  ADD KEY `adm_fk_rol_usr_change` (`rol_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_rol_uuid` (`rol_uuid`),
+  ADD KEY `%PREFIX%_fk_rol_cat` (`rol_cat_id`),
+  ADD KEY `%PREFIX%_fk_rol_lst_id` (`rol_lst_id`),
+  ADD KEY `%PREFIX%_fk_rol_usr_create` (`rol_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_rol_usr_change` (`rol_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_roles_rights`
+-- Indizes für die Tabelle `%PREFIX%_roles_rights`
 --
-ALTER TABLE `adm_roles_rights`
+ALTER TABLE `%PREFIX%_roles_rights`
   ADD PRIMARY KEY (`ror_id`),
-  ADD KEY `adm_fk_ror_ror_parent` (`ror_ror_id_parent`);
+  ADD KEY `%PREFIX%_fk_ror_ror_parent` (`ror_ror_id_parent`);
 
 --
--- Indizes für die Tabelle `adm_roles_rights_data`
+-- Indizes für die Tabelle `%PREFIX%_roles_rights_data`
 --
-ALTER TABLE `adm_roles_rights_data`
+ALTER TABLE `%PREFIX%_roles_rights_data`
   ADD PRIMARY KEY (`rrd_id`),
-  ADD UNIQUE KEY `adm_idx_rrd_ror_rol_object_id` (`rrd_ror_id`,`rrd_rol_id`,`rrd_object_id`),
-  ADD KEY `adm_fk_rrd_rol` (`rrd_rol_id`),
-  ADD KEY `adm_fk_rrd_usr_create` (`rrd_usr_id_create`);
+  ADD UNIQUE KEY `%PREFIX%_idx_rrd_ror_rol_object_id` (`rrd_ror_id`,`rrd_rol_id`,`rrd_object_id`),
+  ADD KEY `%PREFIX%_fk_rrd_rol` (`rrd_rol_id`),
+  ADD KEY `%PREFIX%_fk_rrd_usr_create` (`rrd_usr_id_create`);
 
 --
--- Indizes für die Tabelle `adm_role_dependencies`
+-- Indizes für die Tabelle `%PREFIX%_role_dependencies`
 --
-ALTER TABLE `adm_role_dependencies`
+ALTER TABLE `%PREFIX%_role_dependencies`
   ADD PRIMARY KEY (`rld_rol_id_parent`,`rld_rol_id_child`),
-  ADD KEY `adm_fk_rld_rol_child` (`rld_rol_id_child`),
-  ADD KEY `adm_fk_rld_usr` (`rld_usr_id`);
+  ADD KEY `%PREFIX%_fk_rld_rol_child` (`rld_rol_id_child`),
+  ADD KEY `%PREFIX%_fk_rld_usr` (`rld_usr_id`);
 
 --
--- Indizes für die Tabelle `adm_rooms`
+-- Indizes für die Tabelle `%PREFIX%_rooms`
 --
-ALTER TABLE `adm_rooms`
+ALTER TABLE `%PREFIX%_rooms`
   ADD PRIMARY KEY (`room_id`),
-  ADD UNIQUE KEY `adm_idx_room_uuid` (`room_uuid`),
-  ADD KEY `adm_fk_room_usr_create` (`room_usr_id_create`),
-  ADD KEY `adm_fk_room_usr_change` (`room_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_room_uuid` (`room_uuid`),
+  ADD KEY `%PREFIX%_fk_room_usr_create` (`room_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_room_usr_change` (`room_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_saml_clients`
+-- Indizes für die Tabelle `%PREFIX%_saml_clients`
 --
-ALTER TABLE `adm_saml_clients`
+ALTER TABLE `%PREFIX%_saml_clients`
   ADD PRIMARY KEY (`smc_id`),
   ADD UNIQUE KEY `smc_client_id` (`smc_client_id`),
-  ADD KEY `adm_fk_smc_usr_create` (`smc_usr_id_create`),
-  ADD KEY `adm_fk_smc_usr_change` (`smc_usr_id_change`);
+  ADD KEY `%PREFIX%_fk_smc_usr_create` (`smc_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_smc_usr_change` (`smc_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_sessions`
+-- Indizes für die Tabelle `%PREFIX%_sessions`
 --
-ALTER TABLE `adm_sessions`
+ALTER TABLE `%PREFIX%_sessions`
   ADD PRIMARY KEY (`ses_id`),
-  ADD KEY `adm_idx_session_id` (`ses_session_id`),
-  ADD KEY `adm_fk_ses_org` (`ses_org_id`),
-  ADD KEY `adm_fk_ses_usr` (`ses_usr_id`);
+  ADD KEY `%PREFIX%_idx_session_id` (`ses_session_id`),
+  ADD KEY `%PREFIX%_fk_ses_org` (`ses_org_id`),
+  ADD KEY `%PREFIX%_fk_ses_usr` (`ses_usr_id`);
 
 --
--- Indizes für die Tabelle `adm_sso_keys`
+-- Indizes für die Tabelle `%PREFIX%_sso_keys`
 --
-ALTER TABLE `adm_sso_keys`
+ALTER TABLE `%PREFIX%_sso_keys`
   ADD PRIMARY KEY (`key_id`),
-  ADD KEY `adm_fk_key_org` (`key_org_id`),
-  ADD KEY `adm_fk_key_usr_change` (`key_usr_id_change`),
-  ADD KEY `adm_fk_key_usr_create` (`key_usr_id_create`);
+  ADD KEY `%PREFIX%_fk_key_org` (`key_org_id`),
+  ADD KEY `%PREFIX%_fk_key_usr_change` (`key_usr_id_change`),
+  ADD KEY `%PREFIX%_fk_key_usr_create` (`key_usr_id_create`);
 
 --
--- Indizes für die Tabelle `adm_texts`
+-- Indizes für die Tabelle `%PREFIX%_texts`
 --
-ALTER TABLE `adm_texts`
+ALTER TABLE `%PREFIX%_texts`
   ADD PRIMARY KEY (`txt_id`),
-  ADD KEY `adm_fk_txt_org` (`txt_org_id`);
+  ADD KEY `%PREFIX%_fk_txt_org` (`txt_org_id`);
 
 --
--- Indizes für die Tabelle `adm_users`
+-- Indizes für die Tabelle `%PREFIX%_users`
 --
-ALTER TABLE `adm_users`
+ALTER TABLE `%PREFIX%_users`
   ADD PRIMARY KEY (`usr_id`),
-  ADD UNIQUE KEY `adm_idx_usr_uuid` (`usr_uuid`),
-  ADD UNIQUE KEY `adm_idx_usr_login_name` (`usr_login_name`),
-  ADD KEY `adm_fk_usr_usr_create` (`usr_usr_id_create`),
-  ADD KEY `adm_fk_usr_usr_change` (`usr_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_usr_uuid` (`usr_uuid`),
+  ADD UNIQUE KEY `%PREFIX%_idx_usr_login_name` (`usr_login_name`),
+  ADD KEY `%PREFIX%_fk_usr_usr_create` (`usr_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_usr_usr_change` (`usr_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_user_data`
+-- Indizes für die Tabelle `%PREFIX%_user_data`
 --
-ALTER TABLE `adm_user_data`
+ALTER TABLE `%PREFIX%_user_data`
   ADD PRIMARY KEY (`usd_id`),
-  ADD UNIQUE KEY `adm_idx_usd_usr_usf_id` (`usd_usr_id`,`usd_usf_id`),
-  ADD KEY `adm_fk_usd_usf` (`usd_usf_id`);
+  ADD UNIQUE KEY `%PREFIX%_idx_usd_usr_usf_id` (`usd_usr_id`,`usd_usf_id`),
+  ADD KEY `%PREFIX%_fk_usd_usf` (`usd_usf_id`);
 
 --
--- Indizes für die Tabelle `adm_user_fields`
+-- Indizes für die Tabelle `%PREFIX%_user_fields`
 --
-ALTER TABLE `adm_user_fields`
+ALTER TABLE `%PREFIX%_user_fields`
   ADD PRIMARY KEY (`usf_id`),
-  ADD UNIQUE KEY `adm_idx_usf_name_intern` (`usf_name_intern`),
-  ADD UNIQUE KEY `adm_idx_usf_uuid` (`usf_uuid`),
-  ADD KEY `adm_fk_usf_cat` (`usf_cat_id`),
-  ADD KEY `adm_fk_usf_usr_create` (`usf_usr_id_create`),
-  ADD KEY `adm_fk_usf_usr_change` (`usf_usr_id_change`);
+  ADD UNIQUE KEY `%PREFIX%_idx_usf_name_intern` (`usf_name_intern`),
+  ADD UNIQUE KEY `%PREFIX%_idx_usf_uuid` (`usf_uuid`),
+  ADD KEY `%PREFIX%_fk_usf_cat` (`usf_cat_id`),
+  ADD KEY `%PREFIX%_fk_usf_usr_create` (`usf_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_usf_usr_change` (`usf_usr_id_change`);
 
 --
--- Indizes für die Tabelle `adm_user_field_select_options`
+-- Indizes für die Tabelle `%PREFIX%_user_field_select_options`
 --
-ALTER TABLE `adm_user_field_select_options`
+ALTER TABLE `%PREFIX%_user_field_select_options`
   ADD PRIMARY KEY (`ufo_id`),
-  ADD KEY `adm_fk_ufo_usf` (`ufo_usf_id`);
+  ADD KEY `%PREFIX%_fk_ufo_usf` (`ufo_usf_id`);
 
 --
--- Indizes für die Tabelle `adm_user_relations`
+-- Indizes für die Tabelle `%PREFIX%_user_relations`
 --
-ALTER TABLE `adm_user_relations`
+ALTER TABLE `%PREFIX%_user_relations`
   ADD PRIMARY KEY (`ure_id`),
-  ADD UNIQUE KEY `adm_idx_ure_urt_usr` (`ure_urt_id`,`ure_usr_id1`,`ure_usr_id2`),
-  ADD UNIQUE KEY `adm_idx_ure_uuid` (`ure_uuid`),
-  ADD KEY `adm_fk_ure_usr1` (`ure_usr_id1`),
-  ADD KEY `adm_fk_ure_usr2` (`ure_usr_id2`),
-  ADD KEY `adm_fk_ure_usr_change` (`ure_usr_id_change`),
-  ADD KEY `adm_fk_ure_usr_create` (`ure_usr_id_create`);
+  ADD UNIQUE KEY `%PREFIX%_idx_ure_urt_usr` (`ure_urt_id`,`ure_usr_id1`,`ure_usr_id2`),
+  ADD UNIQUE KEY `%PREFIX%_idx_ure_uuid` (`ure_uuid`),
+  ADD KEY `%PREFIX%_fk_ure_usr1` (`ure_usr_id1`),
+  ADD KEY `%PREFIX%_fk_ure_usr2` (`ure_usr_id2`),
+  ADD KEY `%PREFIX%_fk_ure_usr_change` (`ure_usr_id_change`),
+  ADD KEY `%PREFIX%_fk_ure_usr_create` (`ure_usr_id_create`);
 
 --
--- Indizes für die Tabelle `adm_user_relation_types`
+-- Indizes für die Tabelle `%PREFIX%_user_relation_types`
 --
-ALTER TABLE `adm_user_relation_types`
+ALTER TABLE `%PREFIX%_user_relation_types`
   ADD PRIMARY KEY (`urt_id`),
-  ADD UNIQUE KEY `adm_idx_ure_urt_name` (`urt_name`),
-  ADD UNIQUE KEY `adm_idx_urt_uuid` (`urt_uuid`),
-  ADD KEY `adm_fk_urt_id_inverse` (`urt_id_inverse`),
-  ADD KEY `adm_fk_urt_usr_change` (`urt_usr_id_change`),
-  ADD KEY `adm_fk_urt_usr_create` (`urt_usr_id_create`);
+  ADD UNIQUE KEY `%PREFIX%_idx_ure_urt_name` (`urt_name`),
+  ADD UNIQUE KEY `%PREFIX%_idx_urt_uuid` (`urt_uuid`),
+  ADD KEY `%PREFIX%_fk_urt_id_inverse` (`urt_id_inverse`),
+  ADD KEY `%PREFIX%_fk_urt_usr_change` (`urt_usr_id_change`),
+  ADD KEY `%PREFIX%_fk_urt_usr_create` (`urt_usr_id_create`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
 --
 
 --
--- AUTO_INCREMENT für Tabelle `adm_announcements`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_announcements`
 --
-ALTER TABLE `adm_announcements`
+ALTER TABLE `%PREFIX%_announcements`
   MODIFY `ann_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_auto_login`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_auto_login`
 --
-ALTER TABLE `adm_auto_login`
-  MODIFY `atl_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `%PREFIX%_auto_login`
+  MODIFY `atl_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_categories`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_categories`
 --
-ALTER TABLE `adm_categories`
+ALTER TABLE `%PREFIX%_categories`
   MODIFY `cat_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=307;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_category_report`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_category_report`
 --
-ALTER TABLE `adm_category_report`
+ALTER TABLE `%PREFIX%_category_report`
   MODIFY `crt_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_components`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_components`
 --
-ALTER TABLE `adm_components`
+ALTER TABLE `%PREFIX%_components`
   MODIFY `com_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_events`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_events`
 --
-ALTER TABLE `adm_events`
+ALTER TABLE `%PREFIX%_events`
   MODIFY `dat_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_files`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_files`
 --
-ALTER TABLE `adm_files`
+ALTER TABLE `%PREFIX%_files`
   MODIFY `fil_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_folders`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_folders`
 --
-ALTER TABLE `adm_folders`
+ALTER TABLE `%PREFIX%_folders`
   MODIFY `fol_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_forum_posts`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_forum_posts`
 --
-ALTER TABLE `adm_forum_posts`
+ALTER TABLE `%PREFIX%_forum_posts`
   MODIFY `fop_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_forum_topics`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_forum_topics`
 --
-ALTER TABLE `adm_forum_topics`
+ALTER TABLE `%PREFIX%_forum_topics`
   MODIFY `fot_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_guestbook`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_inventory_fields`
 --
-ALTER TABLE `adm_guestbook`
-  MODIFY `gbo_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT für Tabelle `adm_guestbook_comments`
---
-ALTER TABLE `adm_guestbook_comments`
-  MODIFY `gbc_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT für Tabelle `adm_inventory_fields`
---
-ALTER TABLE `adm_inventory_fields`
+ALTER TABLE `%PREFIX%_inventory_fields`
   MODIFY `inf_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_inventory_field_select_options`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_inventory_field_select_options`
 --
-ALTER TABLE `adm_inventory_field_select_options`
+ALTER TABLE `%PREFIX%_inventory_field_select_options`
   MODIFY `ifo_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_inventory_items`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_inventory_items`
 --
-ALTER TABLE `adm_inventory_items`
+ALTER TABLE `%PREFIX%_inventory_items`
   MODIFY `ini_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_inventory_item_borrow_data`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_inventory_item_borrow_data`
 --
-ALTER TABLE `adm_inventory_item_borrow_data`
+ALTER TABLE `%PREFIX%_inventory_item_borrow_data`
   MODIFY `inb_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_inventory_item_data`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_inventory_item_data`
 --
-ALTER TABLE `adm_inventory_item_data`
+ALTER TABLE `%PREFIX%_inventory_item_data`
   MODIFY `ind_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_links`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_links`
 --
-ALTER TABLE `adm_links`
+ALTER TABLE `%PREFIX%_links`
   MODIFY `lnk_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_lists`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_lists`
 --
-ALTER TABLE `adm_lists`
+ALTER TABLE `%PREFIX%_lists`
   MODIFY `lst_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_list_columns`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_list_columns`
 --
-ALTER TABLE `adm_list_columns`
+ALTER TABLE `%PREFIX%_list_columns`
   MODIFY `lsc_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_log_changes`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_log_changes`
 --
-ALTER TABLE `adm_log_changes`
+ALTER TABLE `%PREFIX%_log_changes`
   MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_members`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_members`
 --
-ALTER TABLE `adm_members`
+ALTER TABLE `%PREFIX%_members`
   MODIFY `mem_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=544;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_menu`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_menu`
 --
-ALTER TABLE `adm_menu`
+ALTER TABLE `%PREFIX%_menu`
   MODIFY `men_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_messages`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_messages`
 --
-ALTER TABLE `adm_messages`
+ALTER TABLE `%PREFIX%_messages`
   MODIFY `msg_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_messages_attachments`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_messages_attachments`
 --
-ALTER TABLE `adm_messages_attachments`
+ALTER TABLE `%PREFIX%_messages_attachments`
   MODIFY `msa_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_messages_content`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_messages_content`
 --
-ALTER TABLE `adm_messages_content`
+ALTER TABLE `%PREFIX%_messages_content`
   MODIFY `msc_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_messages_recipients`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_messages_recipients`
 --
-ALTER TABLE `adm_messages_recipients`
+ALTER TABLE `%PREFIX%_messages_recipients`
   MODIFY `msr_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_oidc_access_tokens`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_oidc_access_tokens`
 --
-ALTER TABLE `adm_oidc_access_tokens`
+ALTER TABLE `%PREFIX%_oidc_access_tokens`
   MODIFY `oat_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_oidc_auth_codes`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_oidc_auth_codes`
 --
-ALTER TABLE `adm_oidc_auth_codes`
+ALTER TABLE `%PREFIX%_oidc_auth_codes`
   MODIFY `oac_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_oidc_clients`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_oidc_clients`
 --
-ALTER TABLE `adm_oidc_clients`
+ALTER TABLE `%PREFIX%_oidc_clients`
   MODIFY `ocl_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_oidc_refresh_tokens`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_oidc_refresh_tokens`
 --
-ALTER TABLE `adm_oidc_refresh_tokens`
+ALTER TABLE `%PREFIX%_oidc_refresh_tokens`
   MODIFY `ort_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_organizations`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_organizations`
 --
-ALTER TABLE `adm_organizations`
+ALTER TABLE `%PREFIX%_organizations`
   MODIFY `org_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_photos`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_photos`
 --
-ALTER TABLE `adm_photos`
+ALTER TABLE `%PREFIX%_photos`
   MODIFY `pho_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_preferences`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_preferences`
 --
-ALTER TABLE `adm_preferences`
+ALTER TABLE `%PREFIX%_preferences`
   MODIFY `prf_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94374;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_registrations`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_registrations`
 --
-ALTER TABLE `adm_registrations`
+ALTER TABLE `%PREFIX%_registrations`
   MODIFY `reg_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_roles`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_roles`
 --
-ALTER TABLE `adm_roles`
+ALTER TABLE `%PREFIX%_roles`
   MODIFY `rol_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_roles_rights`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_roles_rights`
 --
-ALTER TABLE `adm_roles_rights`
+ALTER TABLE `%PREFIX%_roles_rights`
   MODIFY `ror_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_roles_rights_data`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_roles_rights_data`
 --
-ALTER TABLE `adm_roles_rights_data`
+ALTER TABLE `%PREFIX%_roles_rights_data`
   MODIFY `rrd_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_rooms`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_rooms`
 --
-ALTER TABLE `adm_rooms`
+ALTER TABLE `%PREFIX%_rooms`
   MODIFY `room_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_saml_clients`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_saml_clients`
 --
-ALTER TABLE `adm_saml_clients`
+ALTER TABLE `%PREFIX%_saml_clients`
   MODIFY `smc_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_sessions`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_sessions`
 --
-ALTER TABLE `adm_sessions`
+ALTER TABLE `%PREFIX%_sessions`
   MODIFY `ses_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_sso_keys`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_sso_keys`
 --
-ALTER TABLE `adm_sso_keys`
+ALTER TABLE `%PREFIX%_sso_keys`
   MODIFY `key_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_texts`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_texts`
 --
-ALTER TABLE `adm_texts`
+ALTER TABLE `%PREFIX%_texts`
   MODIFY `txt_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_users`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_users`
 --
-ALTER TABLE `adm_users`
+ALTER TABLE `%PREFIX%_users`
   MODIFY `usr_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=361;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_user_data`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_user_data`
 --
-ALTER TABLE `adm_user_data`
+ALTER TABLE `%PREFIX%_user_data`
   MODIFY `usd_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18136;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_user_fields`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_user_fields`
 --
-ALTER TABLE `adm_user_fields`
+ALTER TABLE `%PREFIX%_user_fields`
   MODIFY `usf_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_user_field_select_options`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_user_field_select_options`
 --
-ALTER TABLE `adm_user_field_select_options`
+ALTER TABLE `%PREFIX%_user_field_select_options`
   MODIFY `ufo_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_user_relations`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_user_relations`
 --
-ALTER TABLE `adm_user_relations`
+ALTER TABLE `%PREFIX%_user_relations`
   MODIFY `ure_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT für Tabelle `adm_user_relation_types`
+-- AUTO_INCREMENT für Tabelle `%PREFIX%_user_relation_types`
 --
-ALTER TABLE `adm_user_relation_types`
+ALTER TABLE `%PREFIX%_user_relation_types`
   MODIFY `urt_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
@@ -4930,352 +4789,352 @@ ALTER TABLE `adm_user_relation_types`
 --
 
 --
--- Constraints der Tabelle `adm_announcements`
+-- Constraints der Tabelle `%PREFIX%_announcements`
 --
-ALTER TABLE `adm_announcements`
-  ADD CONSTRAINT `adm_fk_ann_cat` FOREIGN KEY (`ann_cat_id`) REFERENCES `adm_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ann_usr_change` FOREIGN KEY (`ann_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ann_usr_create` FOREIGN KEY (`ann_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_announcements`
+  ADD CONSTRAINT `%PREFIX%_fk_ann_cat` FOREIGN KEY (`ann_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ann_usr_change` FOREIGN KEY (`ann_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ann_usr_create` FOREIGN KEY (`ann_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_auto_login`
+-- Constraints der Tabelle `%PREFIX%_auto_login`
 --
-ALTER TABLE `adm_auto_login`
-  ADD CONSTRAINT `adm_fk_atl_org` FOREIGN KEY (`atl_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_atl_usr` FOREIGN KEY (`atl_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_auto_login`
+  ADD CONSTRAINT `%PREFIX%_fk_atl_org` FOREIGN KEY (`atl_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_atl_usr` FOREIGN KEY (`atl_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_categories`
+-- Constraints der Tabelle `%PREFIX%_categories`
 --
-ALTER TABLE `adm_categories`
-  ADD CONSTRAINT `adm_fk_cat_org` FOREIGN KEY (`cat_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_cat_usr_change` FOREIGN KEY (`cat_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_cat_usr_create` FOREIGN KEY (`cat_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_categories`
+  ADD CONSTRAINT `%PREFIX%_fk_cat_org` FOREIGN KEY (`cat_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_cat_usr_change` FOREIGN KEY (`cat_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_cat_usr_create` FOREIGN KEY (`cat_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_category_report`
+-- Constraints der Tabelle `%PREFIX%_category_report`
 --
-ALTER TABLE `adm_category_report`
-  ADD CONSTRAINT `adm_fk_crt_org` FOREIGN KEY (`crt_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_category_report`
+  ADD CONSTRAINT `%PREFIX%_fk_crt_org` FOREIGN KEY (`crt_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_events`
+-- Constraints der Tabelle `%PREFIX%_events`
 --
-ALTER TABLE `adm_events`
-  ADD CONSTRAINT `adm_fk_dat_cat` FOREIGN KEY (`dat_cat_id`) REFERENCES `adm_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_dat_rol` FOREIGN KEY (`dat_rol_id`) REFERENCES `adm_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_dat_room` FOREIGN KEY (`dat_room_id`) REFERENCES `adm_rooms` (`room_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_dat_usr_change` FOREIGN KEY (`dat_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_dat_usr_create` FOREIGN KEY (`dat_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_events`
+  ADD CONSTRAINT `%PREFIX%_fk_dat_cat` FOREIGN KEY (`dat_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_dat_rol` FOREIGN KEY (`dat_rol_id`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_dat_room` FOREIGN KEY (`dat_room_id`) REFERENCES `%PREFIX%_rooms` (`room_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_dat_usr_change` FOREIGN KEY (`dat_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_dat_usr_create` FOREIGN KEY (`dat_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_files`
+-- Constraints der Tabelle `%PREFIX%_files`
 --
-ALTER TABLE `adm_files`
-  ADD CONSTRAINT `adm_fk_fil_fol` FOREIGN KEY (`fil_fol_id`) REFERENCES `adm_folders` (`fol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_fil_usr` FOREIGN KEY (`fil_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_files`
+  ADD CONSTRAINT `%PREFIX%_fk_fil_fol` FOREIGN KEY (`fil_fol_id`) REFERENCES `%PREFIX%_folders` (`fol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fil_usr` FOREIGN KEY (`fil_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_folders`
+-- Constraints der Tabelle `%PREFIX%_folders`
 --
-ALTER TABLE `adm_folders`
-  ADD CONSTRAINT `adm_fk_fol_fol_parent` FOREIGN KEY (`fol_fol_id_parent`) REFERENCES `adm_folders` (`fol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_fol_org` FOREIGN KEY (`fol_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_fol_usr` FOREIGN KEY (`fol_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_folders`
+  ADD CONSTRAINT `%PREFIX%_fk_fol_fol_parent` FOREIGN KEY (`fol_fol_id_parent`) REFERENCES `%PREFIX%_folders` (`fol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fol_org` FOREIGN KEY (`fol_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fol_usr` FOREIGN KEY (`fol_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_forum_posts`
+-- Constraints der Tabelle `%PREFIX%_forum_posts`
 --
-ALTER TABLE `adm_forum_posts`
-  ADD CONSTRAINT `adm_fk_fop_fot` FOREIGN KEY (`fop_fot_id`) REFERENCES `adm_forum_topics` (`fot_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_fop_usr_change` FOREIGN KEY (`fop_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_fop_usr_create` FOREIGN KEY (`fop_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_forum_posts`
+  ADD CONSTRAINT `%PREFIX%_fk_fop_fot` FOREIGN KEY (`fop_fot_id`) REFERENCES `%PREFIX%_forum_topics` (`fot_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fop_usr_change` FOREIGN KEY (`fop_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fop_usr_create` FOREIGN KEY (`fop_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_forum_topics`
+-- Constraints der Tabelle `%PREFIX%_forum_topics`
 --
-ALTER TABLE `adm_forum_topics`
-  ADD CONSTRAINT `adm_fk_fot_cat` FOREIGN KEY (`fot_cat_id`) REFERENCES `adm_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_fot_first_fop` FOREIGN KEY (`fot_fop_id_first_post`) REFERENCES `adm_forum_posts` (`fop_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_fot_usr_create` FOREIGN KEY (`fot_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_forum_topics`
+  ADD CONSTRAINT `%PREFIX%_fk_fot_cat` FOREIGN KEY (`fot_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fot_first_fop` FOREIGN KEY (`fot_fop_id_first_post`) REFERENCES `%PREFIX%_forum_posts` (`fop_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fot_usr_create` FOREIGN KEY (`fot_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_ids`
+-- Constraints der Tabelle `%PREFIX%_ids`
 --
-ALTER TABLE `adm_ids`
-  ADD CONSTRAINT `adm_fk_ids_usr_id` FOREIGN KEY (`ids_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_ids`
+  ADD CONSTRAINT `%PREFIX%_fk_ids_usr_id` FOREIGN KEY (`ids_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_inventory_fields`
+-- Constraints der Tabelle `%PREFIX%_inventory_fields`
 --
-ALTER TABLE `adm_inventory_fields`
-  ADD CONSTRAINT `adm_fk_inf_org` FOREIGN KEY (`inf_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_inf_usr_change` FOREIGN KEY (`inf_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_inf_usr_create` FOREIGN KEY (`inf_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_inventory_fields`
+  ADD CONSTRAINT `%PREFIX%_fk_inf_org` FOREIGN KEY (`inf_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_inf_usr_change` FOREIGN KEY (`inf_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_inf_usr_create` FOREIGN KEY (`inf_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_inventory_field_select_options`
+-- Constraints der Tabelle `%PREFIX%_inventory_field_select_options`
 --
-ALTER TABLE `adm_inventory_field_select_options`
-  ADD CONSTRAINT `adm_fk_ifo_inf` FOREIGN KEY (`ifo_inf_id`) REFERENCES `adm_inventory_fields` (`inf_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_inventory_field_select_options`
+  ADD CONSTRAINT `%PREFIX%_fk_ifo_inf` FOREIGN KEY (`ifo_inf_id`) REFERENCES `%PREFIX%_inventory_fields` (`inf_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_inventory_items`
+-- Constraints der Tabelle `%PREFIX%_inventory_items`
 --
-ALTER TABLE `adm_inventory_items`
-  ADD CONSTRAINT `adm_fk_ini_cat` FOREIGN KEY (`ini_cat_id`) REFERENCES `adm_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ini_status` FOREIGN KEY (`ini_status`) REFERENCES `adm_inventory_field_select_options` (`ifo_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ini_usr_change` FOREIGN KEY (`ini_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ini_usr_create` FOREIGN KEY (`ini_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_inventory_items`
+  ADD CONSTRAINT `%PREFIX%_fk_ini_cat` FOREIGN KEY (`ini_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ini_status` FOREIGN KEY (`ini_status`) REFERENCES `%PREFIX%_inventory_field_select_options` (`ifo_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ini_usr_change` FOREIGN KEY (`ini_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ini_usr_create` FOREIGN KEY (`ini_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_inventory_item_borrow_data`
+-- Constraints der Tabelle `%PREFIX%_inventory_item_borrow_data`
 --
-ALTER TABLE `adm_inventory_item_borrow_data`
-  ADD CONSTRAINT `adm_fk_inb_ini` FOREIGN KEY (`inb_ini_id`) REFERENCES `adm_inventory_items` (`ini_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_inventory_item_borrow_data`
+  ADD CONSTRAINT `%PREFIX%_fk_inb_ini` FOREIGN KEY (`inb_ini_id`) REFERENCES `%PREFIX%_inventory_items` (`ini_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_inventory_item_data`
+-- Constraints der Tabelle `%PREFIX%_inventory_item_data`
 --
-ALTER TABLE `adm_inventory_item_data`
-  ADD CONSTRAINT `adm_fk_ind_inf` FOREIGN KEY (`ind_inf_id`) REFERENCES `adm_inventory_fields` (`inf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ind_ini` FOREIGN KEY (`ind_ini_id`) REFERENCES `adm_inventory_items` (`ini_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_inventory_item_data`
+  ADD CONSTRAINT `%PREFIX%_fk_ind_inf` FOREIGN KEY (`ind_inf_id`) REFERENCES `%PREFIX%_inventory_fields` (`inf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ind_ini` FOREIGN KEY (`ind_ini_id`) REFERENCES `%PREFIX%_inventory_items` (`ini_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_links`
+-- Constraints der Tabelle `%PREFIX%_links`
 --
-ALTER TABLE `adm_links`
-  ADD CONSTRAINT `adm_fk_lnk_cat` FOREIGN KEY (`lnk_cat_id`) REFERENCES `adm_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_lnk_usr_change` FOREIGN KEY (`lnk_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_lnk_usr_create` FOREIGN KEY (`lnk_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_links`
+  ADD CONSTRAINT `%PREFIX%_fk_lnk_cat` FOREIGN KEY (`lnk_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_lnk_usr_change` FOREIGN KEY (`lnk_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_lnk_usr_create` FOREIGN KEY (`lnk_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_lists`
+-- Constraints der Tabelle `%PREFIX%_lists`
 --
-ALTER TABLE `adm_lists`
-  ADD CONSTRAINT `adm_fk_lst_org` FOREIGN KEY (`lst_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_lst_usr` FOREIGN KEY (`lst_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_lists`
+  ADD CONSTRAINT `%PREFIX%_fk_lst_org` FOREIGN KEY (`lst_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_lst_usr` FOREIGN KEY (`lst_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_list_columns`
+-- Constraints der Tabelle `%PREFIX%_list_columns`
 --
-ALTER TABLE `adm_list_columns`
-  ADD CONSTRAINT `adm_fk_lsc_lst` FOREIGN KEY (`lsc_lst_id`) REFERENCES `adm_lists` (`lst_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_lsc_usf` FOREIGN KEY (`lsc_usf_id`) REFERENCES `adm_user_fields` (`usf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_list_columns`
+  ADD CONSTRAINT `%PREFIX%_fk_lsc_lst` FOREIGN KEY (`lsc_lst_id`) REFERENCES `%PREFIX%_lists` (`lst_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_lsc_usf` FOREIGN KEY (`lsc_usf_id`) REFERENCES `%PREFIX%_user_fields` (`usf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_members`
+-- Constraints der Tabelle `%PREFIX%_members`
 --
-ALTER TABLE `adm_members`
-  ADD CONSTRAINT `adm_fk_mem_rol` FOREIGN KEY (`mem_rol_id`) REFERENCES `adm_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_mem_usr` FOREIGN KEY (`mem_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_mem_usr_change` FOREIGN KEY (`mem_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_mem_usr_create` FOREIGN KEY (`mem_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_members`
+  ADD CONSTRAINT `%PREFIX%_fk_mem_rol` FOREIGN KEY (`mem_rol_id`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_mem_usr` FOREIGN KEY (`mem_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_mem_usr_change` FOREIGN KEY (`mem_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_mem_usr_create` FOREIGN KEY (`mem_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_menu`
+-- Constraints der Tabelle `%PREFIX%_menu`
 --
-ALTER TABLE `adm_menu`
-  ADD CONSTRAINT `adm_fk_men_com_id` FOREIGN KEY (`men_com_id`) REFERENCES `adm_components` (`com_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_men_men_parent` FOREIGN KEY (`men_men_id_parent`) REFERENCES `adm_menu` (`men_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_menu`
+  ADD CONSTRAINT `%PREFIX%_fk_men_com_id` FOREIGN KEY (`men_com_id`) REFERENCES `%PREFIX%_components` (`com_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_men_men_parent` FOREIGN KEY (`men_men_id_parent`) REFERENCES `%PREFIX%_menu` (`men_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_messages`
+-- Constraints der Tabelle `%PREFIX%_messages`
 --
-ALTER TABLE `adm_messages`
-  ADD CONSTRAINT `adm_fk_msg_usr_sender` FOREIGN KEY (`msg_usr_id_sender`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_messages`
+  ADD CONSTRAINT `%PREFIX%_fk_msg_usr_sender` FOREIGN KEY (`msg_usr_id_sender`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_messages_attachments`
+-- Constraints der Tabelle `%PREFIX%_messages_attachments`
 --
-ALTER TABLE `adm_messages_attachments`
-  ADD CONSTRAINT `adm_fk_msa_msg_id` FOREIGN KEY (`msa_msg_id`) REFERENCES `adm_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_messages_attachments`
+  ADD CONSTRAINT `%PREFIX%_fk_msa_msg_id` FOREIGN KEY (`msa_msg_id`) REFERENCES `%PREFIX%_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_messages_content`
+-- Constraints der Tabelle `%PREFIX%_messages_content`
 --
-ALTER TABLE `adm_messages_content`
-  ADD CONSTRAINT `adm_fk_msc_msg_id` FOREIGN KEY (`msc_msg_id`) REFERENCES `adm_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_msc_usr_id` FOREIGN KEY (`msc_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_messages_content`
+  ADD CONSTRAINT `%PREFIX%_fk_msc_msg_id` FOREIGN KEY (`msc_msg_id`) REFERENCES `%PREFIX%_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_msc_usr_id` FOREIGN KEY (`msc_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_messages_recipients`
+-- Constraints der Tabelle `%PREFIX%_messages_recipients`
 --
-ALTER TABLE `adm_messages_recipients`
-  ADD CONSTRAINT `adm_fk_msr_msg_id` FOREIGN KEY (`msr_msg_id`) REFERENCES `adm_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_msr_rol_id` FOREIGN KEY (`msr_rol_id`) REFERENCES `adm_roles` (`rol_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_msr_usr_id` FOREIGN KEY (`msr_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_messages_recipients`
+  ADD CONSTRAINT `%PREFIX%_fk_msr_msg_id` FOREIGN KEY (`msr_msg_id`) REFERENCES `%PREFIX%_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_msr_rol_id` FOREIGN KEY (`msr_rol_id`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_msr_usr_id` FOREIGN KEY (`msr_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_oidc_access_tokens`
+-- Constraints der Tabelle `%PREFIX%_oidc_access_tokens`
 --
-ALTER TABLE `adm_oidc_access_tokens`
-  ADD CONSTRAINT `adm_fk_oat_ocl_id` FOREIGN KEY (`oat_ocl_id`) REFERENCES `adm_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `adm_fk_oat_usr_create` FOREIGN KEY (`oat_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_oat_usr_id` FOREIGN KEY (`oat_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `%PREFIX%_oidc_access_tokens`
+  ADD CONSTRAINT `%PREFIX%_fk_oat_ocl_id` FOREIGN KEY (`oat_ocl_id`) REFERENCES `%PREFIX%_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `%PREFIX%_fk_oat_usr_create` FOREIGN KEY (`oat_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_oat_usr_id` FOREIGN KEY (`oat_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `adm_oidc_auth_codes`
+-- Constraints der Tabelle `%PREFIX%_oidc_auth_codes`
 --
-ALTER TABLE `adm_oidc_auth_codes`
-  ADD CONSTRAINT `adm_fk_oac_ocl_id` FOREIGN KEY (`oac_ocl_id`) REFERENCES `adm_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `adm_fk_oac_usr_create` FOREIGN KEY (`oac_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_oac_usr_id` FOREIGN KEY (`oac_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `%PREFIX%_oidc_auth_codes`
+  ADD CONSTRAINT `%PREFIX%_fk_oac_ocl_id` FOREIGN KEY (`oac_ocl_id`) REFERENCES `%PREFIX%_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `%PREFIX%_fk_oac_usr_create` FOREIGN KEY (`oac_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_oac_usr_id` FOREIGN KEY (`oac_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `adm_oidc_clients`
+-- Constraints der Tabelle `%PREFIX%_oidc_clients`
 --
-ALTER TABLE `adm_oidc_clients`
-  ADD CONSTRAINT `adm_fk_ocl_usr_change` FOREIGN KEY (`ocl_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ocl_usr_create` FOREIGN KEY (`ocl_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_oidc_clients`
+  ADD CONSTRAINT `%PREFIX%_fk_ocl_usr_change` FOREIGN KEY (`ocl_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ocl_usr_create` FOREIGN KEY (`ocl_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_oidc_refresh_tokens`
+-- Constraints der Tabelle `%PREFIX%_oidc_refresh_tokens`
 --
-ALTER TABLE `adm_oidc_refresh_tokens`
-  ADD CONSTRAINT `adm_fk_ort_ocl_id` FOREIGN KEY (`ort_ocl_id`) REFERENCES `adm_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `adm_fk_ort_usr_create` FOREIGN KEY (`ort_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ort_usr_id` FOREIGN KEY (`ort_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `%PREFIX%_oidc_refresh_tokens`
+  ADD CONSTRAINT `%PREFIX%_fk_ort_ocl_id` FOREIGN KEY (`ort_ocl_id`) REFERENCES `%PREFIX%_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `%PREFIX%_fk_ort_usr_create` FOREIGN KEY (`ort_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ort_usr_id` FOREIGN KEY (`ort_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `adm_organizations`
+-- Constraints der Tabelle `%PREFIX%_organizations`
 --
-ALTER TABLE `adm_organizations`
-  ADD CONSTRAINT `adm_fk_org_org_parent` FOREIGN KEY (`org_org_id_parent`) REFERENCES `adm_organizations` (`org_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_organizations`
+  ADD CONSTRAINT `%PREFIX%_fk_org_org_parent` FOREIGN KEY (`org_org_id_parent`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_photos`
+-- Constraints der Tabelle `%PREFIX%_photos`
 --
-ALTER TABLE `adm_photos`
-  ADD CONSTRAINT `adm_fk_pho_org` FOREIGN KEY (`pho_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_pho_pho_parent` FOREIGN KEY (`pho_pho_id_parent`) REFERENCES `adm_photos` (`pho_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_pho_usr_change` FOREIGN KEY (`pho_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_pho_usr_create` FOREIGN KEY (`pho_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_photos`
+  ADD CONSTRAINT `%PREFIX%_fk_pho_org` FOREIGN KEY (`pho_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_pho_pho_parent` FOREIGN KEY (`pho_pho_id_parent`) REFERENCES `%PREFIX%_photos` (`pho_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_pho_usr_change` FOREIGN KEY (`pho_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_pho_usr_create` FOREIGN KEY (`pho_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_preferences`
+-- Constraints der Tabelle `%PREFIX%_preferences`
 --
-ALTER TABLE `adm_preferences`
-  ADD CONSTRAINT `adm_fk_prf_org` FOREIGN KEY (`prf_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_preferences`
+  ADD CONSTRAINT `%PREFIX%_fk_prf_org` FOREIGN KEY (`prf_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_registrations`
+-- Constraints der Tabelle `%PREFIX%_registrations`
 --
-ALTER TABLE `adm_registrations`
-  ADD CONSTRAINT `adm_fk_reg_org` FOREIGN KEY (`reg_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_reg_usr` FOREIGN KEY (`reg_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_registrations`
+  ADD CONSTRAINT `%PREFIX%_fk_reg_org` FOREIGN KEY (`reg_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_reg_usr` FOREIGN KEY (`reg_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_roles`
+-- Constraints der Tabelle `%PREFIX%_roles`
 --
-ALTER TABLE `adm_roles`
-  ADD CONSTRAINT `adm_fk_rol_cat` FOREIGN KEY (`rol_cat_id`) REFERENCES `adm_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_rol_lst_id` FOREIGN KEY (`rol_lst_id`) REFERENCES `adm_lists` (`lst_id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `adm_fk_rol_usr_change` FOREIGN KEY (`rol_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_rol_usr_create` FOREIGN KEY (`rol_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_roles`
+  ADD CONSTRAINT `%PREFIX%_fk_rol_cat` FOREIGN KEY (`rol_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rol_lst_id` FOREIGN KEY (`rol_lst_id`) REFERENCES `%PREFIX%_lists` (`lst_id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `%PREFIX%_fk_rol_usr_change` FOREIGN KEY (`rol_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rol_usr_create` FOREIGN KEY (`rol_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_roles_rights`
+-- Constraints der Tabelle `%PREFIX%_roles_rights`
 --
-ALTER TABLE `adm_roles_rights`
-  ADD CONSTRAINT `adm_fk_ror_ror_parent` FOREIGN KEY (`ror_ror_id_parent`) REFERENCES `adm_roles_rights` (`ror_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_roles_rights`
+  ADD CONSTRAINT `%PREFIX%_fk_ror_ror_parent` FOREIGN KEY (`ror_ror_id_parent`) REFERENCES `%PREFIX%_roles_rights` (`ror_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_roles_rights_data`
+-- Constraints der Tabelle `%PREFIX%_roles_rights_data`
 --
-ALTER TABLE `adm_roles_rights_data`
-  ADD CONSTRAINT `adm_fk_rrd_rol` FOREIGN KEY (`rrd_rol_id`) REFERENCES `adm_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_rrd_ror` FOREIGN KEY (`rrd_ror_id`) REFERENCES `adm_roles_rights` (`ror_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_rrd_usr_create` FOREIGN KEY (`rrd_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_roles_rights_data`
+  ADD CONSTRAINT `%PREFIX%_fk_rrd_rol` FOREIGN KEY (`rrd_rol_id`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rrd_ror` FOREIGN KEY (`rrd_ror_id`) REFERENCES `%PREFIX%_roles_rights` (`ror_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rrd_usr_create` FOREIGN KEY (`rrd_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_role_dependencies`
+-- Constraints der Tabelle `%PREFIX%_role_dependencies`
 --
-ALTER TABLE `adm_role_dependencies`
-  ADD CONSTRAINT `adm_fk_rld_rol_child` FOREIGN KEY (`rld_rol_id_child`) REFERENCES `adm_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_rld_rol_parent` FOREIGN KEY (`rld_rol_id_parent`) REFERENCES `adm_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_rld_usr` FOREIGN KEY (`rld_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_role_dependencies`
+  ADD CONSTRAINT `%PREFIX%_fk_rld_rol_child` FOREIGN KEY (`rld_rol_id_child`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rld_rol_parent` FOREIGN KEY (`rld_rol_id_parent`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rld_usr` FOREIGN KEY (`rld_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_rooms`
+-- Constraints der Tabelle `%PREFIX%_rooms`
 --
-ALTER TABLE `adm_rooms`
-  ADD CONSTRAINT `adm_fk_room_usr_change` FOREIGN KEY (`room_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_room_usr_create` FOREIGN KEY (`room_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_rooms`
+  ADD CONSTRAINT `%PREFIX%_fk_room_usr_change` FOREIGN KEY (`room_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_room_usr_create` FOREIGN KEY (`room_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_saml_clients`
+-- Constraints der Tabelle `%PREFIX%_saml_clients`
 --
-ALTER TABLE `adm_saml_clients`
-  ADD CONSTRAINT `adm_fk_smc_usr_change` FOREIGN KEY (`smc_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_smc_usr_create` FOREIGN KEY (`smc_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_saml_clients`
+  ADD CONSTRAINT `%PREFIX%_fk_smc_usr_change` FOREIGN KEY (`smc_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_smc_usr_create` FOREIGN KEY (`smc_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_sessions`
+-- Constraints der Tabelle `%PREFIX%_sessions`
 --
-ALTER TABLE `adm_sessions`
-  ADD CONSTRAINT `adm_fk_ses_org` FOREIGN KEY (`ses_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ses_usr` FOREIGN KEY (`ses_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_sessions`
+  ADD CONSTRAINT `%PREFIX%_fk_ses_org` FOREIGN KEY (`ses_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ses_usr` FOREIGN KEY (`ses_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_sso_keys`
+-- Constraints der Tabelle `%PREFIX%_sso_keys`
 --
-ALTER TABLE `adm_sso_keys`
-  ADD CONSTRAINT `adm_fk_key_org` FOREIGN KEY (`key_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_key_usr_change` FOREIGN KEY (`key_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_key_usr_create` FOREIGN KEY (`key_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_sso_keys`
+  ADD CONSTRAINT `%PREFIX%_fk_key_org` FOREIGN KEY (`key_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_key_usr_change` FOREIGN KEY (`key_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_key_usr_create` FOREIGN KEY (`key_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_texts`
+-- Constraints der Tabelle `%PREFIX%_texts`
 --
-ALTER TABLE `adm_texts`
-  ADD CONSTRAINT `adm_fk_txt_org` FOREIGN KEY (`txt_org_id`) REFERENCES `adm_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_texts`
+  ADD CONSTRAINT `%PREFIX%_fk_txt_org` FOREIGN KEY (`txt_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_users`
+-- Constraints der Tabelle `%PREFIX%_users`
 --
-ALTER TABLE `adm_users`
-  ADD CONSTRAINT `adm_fk_usr_usr_change` FOREIGN KEY (`usr_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_usr_usr_create` FOREIGN KEY (`usr_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_users`
+  ADD CONSTRAINT `%PREFIX%_fk_usr_usr_change` FOREIGN KEY (`usr_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_usr_usr_create` FOREIGN KEY (`usr_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_user_data`
+-- Constraints der Tabelle `%PREFIX%_user_data`
 --
-ALTER TABLE `adm_user_data`
-  ADD CONSTRAINT `adm_fk_usd_usf` FOREIGN KEY (`usd_usf_id`) REFERENCES `adm_user_fields` (`usf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_usd_usr` FOREIGN KEY (`usd_usr_id`) REFERENCES `adm_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_user_data`
+  ADD CONSTRAINT `%PREFIX%_fk_usd_usf` FOREIGN KEY (`usd_usf_id`) REFERENCES `%PREFIX%_user_fields` (`usf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_usd_usr` FOREIGN KEY (`usd_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_user_fields`
+-- Constraints der Tabelle `%PREFIX%_user_fields`
 --
-ALTER TABLE `adm_user_fields`
-  ADD CONSTRAINT `adm_fk_usf_cat` FOREIGN KEY (`usf_cat_id`) REFERENCES `adm_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_usf_usr_change` FOREIGN KEY (`usf_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_usf_usr_create` FOREIGN KEY (`usf_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_user_fields`
+  ADD CONSTRAINT `%PREFIX%_fk_usf_cat` FOREIGN KEY (`usf_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_usf_usr_change` FOREIGN KEY (`usf_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_usf_usr_create` FOREIGN KEY (`usf_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_user_field_select_options`
+-- Constraints der Tabelle `%PREFIX%_user_field_select_options`
 --
-ALTER TABLE `adm_user_field_select_options`
-  ADD CONSTRAINT `adm_fk_ufo_usf` FOREIGN KEY (`ufo_usf_id`) REFERENCES `adm_user_fields` (`usf_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_user_field_select_options`
+  ADD CONSTRAINT `%PREFIX%_fk_ufo_usf` FOREIGN KEY (`ufo_usf_id`) REFERENCES `%PREFIX%_user_fields` (`usf_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_user_relations`
+-- Constraints der Tabelle `%PREFIX%_user_relations`
 --
-ALTER TABLE `adm_user_relations`
-  ADD CONSTRAINT `adm_fk_ure_urt` FOREIGN KEY (`ure_urt_id`) REFERENCES `adm_user_relation_types` (`urt_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ure_usr1` FOREIGN KEY (`ure_usr_id1`) REFERENCES `adm_users` (`usr_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ure_usr2` FOREIGN KEY (`ure_usr_id2`) REFERENCES `adm_users` (`usr_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ure_usr_change` FOREIGN KEY (`ure_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_ure_usr_create` FOREIGN KEY (`ure_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_user_relations`
+  ADD CONSTRAINT `%PREFIX%_fk_ure_urt` FOREIGN KEY (`ure_urt_id`) REFERENCES `%PREFIX%_user_relation_types` (`urt_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ure_usr1` FOREIGN KEY (`ure_usr_id1`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ure_usr2` FOREIGN KEY (`ure_usr_id2`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ure_usr_change` FOREIGN KEY (`ure_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ure_usr_create` FOREIGN KEY (`ure_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 
 --
--- Constraints der Tabelle `adm_user_relation_types`
+-- Constraints der Tabelle `%PREFIX%_user_relation_types`
 --
-ALTER TABLE `adm_user_relation_types`
-  ADD CONSTRAINT `adm_fk_urt_id_inverse` FOREIGN KEY (`urt_id_inverse`) REFERENCES `adm_user_relation_types` (`urt_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_urt_usr_change` FOREIGN KEY (`urt_usr_id_change`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
-  ADD CONSTRAINT `adm_fk_urt_usr_create` FOREIGN KEY (`urt_usr_id_create`) REFERENCES `adm_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE `%PREFIX%_user_relation_types`
+  ADD CONSTRAINT `%PREFIX%_fk_urt_id_inverse` FOREIGN KEY (`urt_id_inverse`) REFERENCES `%PREFIX%_user_relation_types` (`urt_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_urt_usr_change` FOREIGN KEY (`urt_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_urt_usr_create` FOREIGN KEY (`urt_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
