@@ -410,8 +410,8 @@ foreach ($report->listData as $member => $memberdata) {
                     $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content);
                     $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))).'">'.$htmlValue.'</a>';
                 } else {
-                    // within print mode no links should be set
-                    if ($getMode === 'print'
+                    // within print or Excel mode no links should be set
+                    if (($getMode === 'print' || $getMode === 'xlsx')
                         &&    ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
                             || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
                             || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL')) {
