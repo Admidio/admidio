@@ -166,7 +166,7 @@ class InventoryFieldsPresenter extends PagePresenter
             'ifo_inf_options',
             $gL10n->get('SYS_VALUE_LIST'),
             $optionValueList,
-            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com" target="_blank">', '</a>')), 'filename' => 'inventory')
+            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.getbootstrap.com" target="_blank">', '</a>')), 'filename' => 'inventory')
         );
 
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES');

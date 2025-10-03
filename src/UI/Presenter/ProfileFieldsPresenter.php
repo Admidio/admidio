@@ -183,7 +183,7 @@ class ProfileFieldsPresenter extends PagePresenter
             'ufo_usf_options',
             $gL10n->get('SYS_VALUE_LIST'),
             $optionValueList,
-            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com">', '</a>')))
+            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.getbootstrap.com/" target="_blank">', '</a>')))
         );
 
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
