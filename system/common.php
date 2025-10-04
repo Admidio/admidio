@@ -232,7 +232,7 @@ if ($sesUsrId > 0) {
 
 // update session recordset (i.a. refresh timestamp)
 $gCurrentSession->setValue('ses_reload', 0);
-if ($gCurrentSession->isNewRecord() && !$gDb->tableExists(TBL_LOG)) {
+if ($gCurrentSession->isNewRecord() && !$gDb->tableExists(TBL_LOG_CHANGES)) {
     //temporary disable logging cause log table doesn't exist yet
     $gCurrentSession->setLoggingEnabled(false);
     $gCurrentSession->save();

@@ -42,7 +42,7 @@ if (!isset($gImportDemoData) || !$gImportDemoData) {
 
 require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
-// this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
+// This must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore.
 const TBL_DATES = TABLE_PREFIX . '_dates';
 const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
 
@@ -113,7 +113,7 @@ function executeSqlStatements(array $sqlStatements, string $filename): void
     global $gDb, $gL10n;
 
     foreach ($sqlStatements as $sqlStatement) {
-        if ($filename === 'data.sql') {
+        if ($filename === 'admidio-mysql.sql') {
             // search for translation strings with the prefix DDT or SYS and try to replace them
             preg_match_all('/(DDT_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
 
@@ -229,7 +229,7 @@ function getInstalledDbVersion(): string
  */
 function doInstallation(string $language)
 {
-    global $gDb, $gL10n; // necessary for "data_edit.php"
+    global $gDb, $gDbType, $gL10n; // necessary for "data_edit.php"
 
     // set runtime of script to 2 minutes because of the many work to do
     PhpIniUtils::startNewExecutionTimeLimit(120);
@@ -237,8 +237,8 @@ function doInstallation(string $language)
     // disable foreign key checks for mysql, so tables can easily be deleted
     toggleForeignKeyChecks(false);
 
-    readAndExecuteSQLFromFile('db.sql');
-    readAndExecuteSQLFromFile('data.sql');
+    readAndExecuteSQLFromFile('cleanup.sql');
+    readAndExecuteSQLFromFile('admidio-mysql.sql');
 
     // manipulate some dates so that it's suitable to the current date
     echo 'Edit data of database ...<br />';
