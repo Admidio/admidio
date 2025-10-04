@@ -888,32 +888,32 @@ class ChangelogService {
                     break;
                 case 'ORG':
                     $obj = new Organization($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'organizations', $obj->getValue('org_id'), $obj->getValue('org_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'organizations', $obj->getValue('org_id'), $obj->getValue('org_uuid'));
                     break;
                 case 'RELATION_TYPE':
                     $obj = new UserRelationType($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'user_relation_types', $obj->getValue('urt_id'), $obj->getValue('urt_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'user_relation_types', $obj->getValue('urt_id'), $obj->getValue('urt_uuid'));
                     break;
                 case 'ALBUM':
                     $obj = new Album($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'photos', $obj->getValue('pho_id'), $obj->getValue('pho_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'photos', $obj->getValue('pho_id'), $obj->getValue('pho_uuid'));
                     break;
                 case 'FOLDER':
                     $obj = new Folder($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'folders', $obj->getValue('fol_id'), $obj->getValue('fol_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'folders', $obj->getValue('fol_id'), $obj->getValue('fol_uuid'));
                     break;
                 case 'ROLE':
                     $obj = new Role($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'roles', $obj->getValue('rol_id'), $obj->getValue('rol_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'roles', $obj->getValue('rol_id'), $obj->getValue('rol_uuid'));
                     break;
                 case 'CATEGORY':
                     $obj = new Category($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'categories', $obj->getValue('cat_id'), $obj->getValue('cat_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId(Language::translateIfTranslationStrId($obj->readableName())), 'categories', $obj->getValue('cat_id'), $obj->getValue('cat_uuid'));
                     break;
                 case 'USER':
                     if ($value > 0) {
                         $obj = new User($gDb, $gProfileFields, $value);
-                        $htmlValue = self::createLink($obj->readableName(), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
+                        $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
                     } else {
                         $orgName = '"' . $gCurrentOrganization->getValue('org_longname'). '"';
                         $htmlValue = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION',array($orgName)))) . '</i>';
@@ -921,7 +921,7 @@ class ChangelogService {
                     break;
                 case 'ROOM':
                     $obj = new Room($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'rooms', $obj->getValue('room_id'), $obj->getValue('room_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'rooms', $obj->getValue('room_id'), $obj->getValue('room_uuid'));
                     break;
                 case 'COUNTRY':
                     $htmlValue = $gL10n->getCountryName($value);
@@ -935,23 +935,23 @@ class ChangelogService {
                     break;
                 case 'LIST':
                     $obj = new ListConfiguration($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'lists', $obj->getValue('lst_id'), $obj->getValue('lst_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'lists', $obj->getValue('lst_id'), $obj->getValue('lst_uuid'));
                     break;
                 case 'MENU':
                     $obj = new MenuEntry($gDb, $value);
-                    $htmlValue = $obj->readableName(); //createLink($obj->readableName(), 'lists', $obj->getValue('men_id'), $obj->getValue('men_uuid'));
+                    $htmlValue = Language::translateIfTranslationStrId($obj->readableName()); //createLink(Language::translateIfTranslationStrId($obj->readableName()), 'lists', $obj->getValue('men_id'), $obj->getValue('men_uuid'));
                     break;
                 case 'COMPONENT':
                     $obj = new Component($gDb, $value);
-                    $htmlValue = $obj->readableName();
+                    $htmlValue = Language::translateIfTranslationStrId($obj->readableName());
                     break;
                 case 'TOPIC':
                     $obj = new Topic($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'forum_topics', $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'forum_topics', $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
                     break;
                 case 'POST':
                     $obj = new POST($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'forum_posts', $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'forum_posts', $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
                     break;
                 case 'CUSTOM_LIST':
                     $value = $entries[$value]??$value;
@@ -1230,7 +1230,7 @@ class ChangelogService {
             $table = explode(',', $table);
 
         $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-        // Admin always has acces. Other users can have permissions per table.
+        // Admin always has access. Other users can have permissions per table.
         $hasAccess = $gCurrentUser->isAdministrator() ||
             (!empty($table) && empty(array_diff($table, $tablesPermitted)));
 
@@ -1288,7 +1288,7 @@ class ChangelogService {
             $table = explode(',', $table);
 
         $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-        // Admin always has acces. Other users can have permissions per table.
+        // Admin always has access. Other users can have permissions per table.
         $hasAccess = $gCurrentUser->isAdministrator() ||
             (!empty($table) && empty(array_diff($table, $tablesPermitted)));
 
@@ -1341,14 +1341,14 @@ ChangelogService::registerCallback('formatValue', 'TOPIC', function($value, $typ
     global $gDb;
     if (empty($value)) return '';
     $obj = new Topic($gDb, $value??0);
-    return ChangelogService::createLink($obj->readableName(), 'forum_topics',
+    return ChangelogService::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'forum_topics',
             $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
 });
 ChangelogService::registerCallback('formatValue', 'POST', function($value, $type, $entries = []) {
     global $gDb;
     if (empty($value)) return '';
     $obj = new POST($gDb, $value??0);
-    return ChangelogService::createLink($obj->readableName(), 'forum_posts',
+    return ChangelogService::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'forum_posts',
             $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
 });
 
