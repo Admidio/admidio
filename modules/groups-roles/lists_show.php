@@ -131,6 +131,9 @@ try {
             $event = new Event($gDb);
             $event->readDataByRoleId($roleID);
 
+            // it's an event, so there is no need to show former members
+            $hasRightViewFormerMembers = false;
+
             $showComment = $event->getValue('dat_allow_comments');
             $showCountGuests = $event->getValue('dat_additional_guests');
 
@@ -141,8 +144,23 @@ try {
     }
 
     // if user should not view former roles members then disallow it
-    if (!$hasRightViewFormerMembers) {
+    if (!$hasRightViewFormerMembers && !isset($event)) {
         $getMembersShowFiler = 0;
+        $getDateFrom = DATE_NOW;
+        $getDateTo = DATE_NOW;
+    } elseif (!$hasRightViewFormerMembers && isset($event)) {
+        // if it's an event list then show only active members
+        // if the event is in the past then show all members that were registered for this event
+        $eventEnd = $event->getValue('dat_end', 'Y-m-d');
+        $eventEnd = DateTime::createFromFormat('Y-m-d', $eventEnd);
+        $dateNow = DateTime::createFromFormat('Y-m-d',DATE_NOW);
+        if ($dateNow === false) {
+            // check if DATE_NOW has system format
+            $dateNow = DateTime::createFromFormat($gSettingsManager->getString('system_date'), DATE_NOW);
+            $dateNow->format('Y-m-d');
+        }
+
+        $getMembersShowFiler = ($eventEnd < $dateNow) ? 2 : 0;
         $getDateFrom = DATE_NOW;
         $getDateTo = DATE_NOW;
     }
