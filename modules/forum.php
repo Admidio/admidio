@@ -60,31 +60,31 @@ try {
 
     switch ($getMode) {
         case 'cards':
-            $page = new ForumPresenter($getCategoryUUID);
-            $page->createCards($getOffset);
-            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
-            $page->show();
+            $forum = new ForumPresenter($getCategoryUUID);
+            $forum->createCards($getOffset);
+            $gNavigation->addStartUrl(CURRENT_URL, $forum->getHeadline(), 'bi-chat-dots-fill');
+            $forum->show();
             break;
 
         case 'list':
-            $page = new ForumPresenter($getCategoryUUID);
-            $page->createList();
-            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
-            $page->show();
+            $forum = new ForumPresenter($getCategoryUUID);
+            $forum->createList();
+            $gNavigation->addStartUrl(CURRENT_URL, $forum->getHeadline(), 'bi-chat-dots-fill');
+            $forum->show();
             break;
 
         case 'topic':
-            $page = new ForumTopicPresenter($getTopicUUID);
-            $page->createCards($getOffset);
-            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
-            $page->show();
+            $forumTopic = new ForumTopicPresenter($getTopicUUID);
+            $forumTopic->createCards($getOffset);
+            $gNavigation->addUrl(CURRENT_URL, $forumTopic->getHeadline());
+            $forumTopic->show();
             break;
 
         case 'topic_edit':
-            $page = new ForumTopicPresenter($getTopicUUID);
-            $page->createEditForm();
-            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
-            $page->show();
+            $forumTopic = new ForumTopicPresenter($getTopicUUID);
+            $forumTopic->createEditForm();
+            $gNavigation->addUrl(CURRENT_URL, $forumTopic->getHeadline());
+            $forumTopic->show();
             break;
 
         case 'topic_save':
@@ -108,10 +108,10 @@ try {
             break;
 
         case 'post_edit':
-            $page = new ForumPostPresenter($getPostUUID);
-            $page->createEditForm($getTopicUUID);
-            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
-            $page->show();
+            $forumPost = new ForumPostPresenter($getPostUUID);
+            $forumPost->createEditForm($getTopicUUID);
+            $gNavigation->addUrl(CURRENT_URL, $forumPost->getHeadline());
+            $forumPost->show();
             break;
 
         case 'post_save':
