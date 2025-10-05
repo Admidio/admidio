@@ -171,7 +171,7 @@ class ProfileField extends Entity
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '', bool $withObsoleteEnries = true)
+    public function getValue(string $columnName, string $format = '', bool $withObsoleteEnries = true): mixed
     {
         if ($columnName === 'usf_description') {
             if (!isset($this->dbColumns['usf_description'])) {

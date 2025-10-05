@@ -1020,7 +1020,7 @@ class User extends Entity
      * ```
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gSettingsManager;
 

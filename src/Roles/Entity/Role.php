@@ -368,11 +368,11 @@ class Role extends Entity
      *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
      *                                * 'database' : returns the value that is stored in database with no format applied
-     * @return int|float|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 

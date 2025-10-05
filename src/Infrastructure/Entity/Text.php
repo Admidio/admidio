@@ -32,11 +32,11 @@ class Text extends Entity
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         if ($columnName === 'txt_text') {
             return $this->dbColumns['txt_text'];
@@ -88,7 +88,7 @@ class Text extends Entity
      * Return a human-readable representation of this record.
      * If a column [prefix]_name exists, it is returned, otherwise the id.
      * This method can be overridden in child classes for custom behavior.
-     * 
+     *
      * @return string The readable representation of the record (can also be a translatable identifier)
      */
     public function readableName(): string
