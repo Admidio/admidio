@@ -217,11 +217,11 @@ class Event extends Entity
      *                           the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return
      *                           the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 

@@ -661,9 +661,10 @@ class ItemsData
      * @param string $fieldNameIntern Expects the @b inf_name_intern of table @b adm_inventory_fields
      * @param string $format Returns the field value in a special format @b text, @b html, @b database
      *                                  or datetime (detailed description in method description)
-     * @return string|int|bool          Returns the value for the column
+     * @return mixed          Returns the value for the column
+     * @throws Exception
      */
-    public function getValue($fieldNameIntern, $format = '')
+    public function getValue(string $fieldNameIntern, string $format = ''): mixed
     {
         global $gSettingsManager;
         $value = '';

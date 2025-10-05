@@ -7,9 +7,6 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
- * Parameters:
- *
- * lang : de (default) the language for the demo db
  ***********************************************************************************************
  */
 
@@ -42,13 +39,13 @@ if (!isset($gImportDemoData) || !$gImportDemoData) {
 
 require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
-// this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
+// This must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore.
 const TBL_DATES = TABLE_PREFIX . '_dates';
 const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
 
 /**
  * Deletes all files and folder within adm_my_files except the config.php . After that, all
- * files and folders of the demo_data folder adm_my_files will be copied to the original adm_my_files folder.
+ * files and folders of the demo folder adm_my_files will be copied to the original adm_my_files folder.
  * @throws RuntimeException
  * @throws UnexpectedValueException
  */
@@ -85,7 +82,7 @@ function prepareAdmidioDataFolder(): void
     }
     closedir($dh);
 
-    FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/demo_data/adm_my_files', ADMIDIO_PATH . FOLDER_DATA, array('overwriteContent' => true));
+    FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/demo/adm_my_files', ADMIDIO_PATH . FOLDER_DATA, array('overwriteContent' => true));
 }
 
 /**
@@ -110,29 +107,9 @@ function toggleForeignKeyChecks(bool $enable): void
  */
 function executeSqlStatements(array $sqlStatements, string $filename): void
 {
-    global $gDb, $gL10n;
+    global $gDb;
 
     foreach ($sqlStatements as $sqlStatement) {
-        if ($filename === 'data.sql') {
-            // search for translation strings with the prefix DDT or SYS and try to replace them
-            preg_match_all('/(DDT_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
-
-            foreach ($results[0] as $value) {
-                // if it's a string of a systemmail then html line feeds must be replaced
-                if (str_starts_with($value, 'SYS_SYSMAIL_')) {
-                    // convert <br /> to a normal line feed
-                    $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
-                } else {
-                    $convertedText = $gL10n->get($value);
-                }
-
-                // search for the exact value as a separate word and replace it with the translation
-                // in l10n the single quote is transformed in html entity, but we need the original sql escaped
-                $escapedText = $gDb->escapeString(str_replace('&rsquo;', '\'', $convertedText));
-                $sqlStatement = preg_replace('/\b'.$value.'\b/', substr($escapedText, 1, strlen($escapedText) - 2), $sqlStatement);
-            }
-        }
-
         $gDb->queryPrepared($sqlStatement);
     }
 }
@@ -182,20 +159,6 @@ function resetPostgresSequences(): void
 }
 
 /**
- * @param string $language
- * @throws \Admidio\Infrastructure\Exception
- */
-function setInstallationLanguage(string $language): void
-{
-    global $gDb;
-
-    $sql = 'UPDATE '.TBL_PREFERENCES.'
-               SET prf_value = ? -- $language
-             WHERE prf_name = \'system_language\'';
-    $gDb->queryPrepared($sql, array($language));
-}
-
-/**
  * @return string
  * @throws Exception
  */
@@ -224,12 +187,11 @@ function getInstalledDbVersion(): string
 }
 
 /**
- * @param string $language
  * @throws RuntimeException|\Admidio\Infrastructure\Exception
  */
-function doInstallation(string $language)
+function doInstallation()
 {
-    global $gDb, $gL10n; // necessary for "data_edit.php"
+    global $gDb, $gDbType, $gL10n; // necessary for "data_edit.php"
 
     // set runtime of script to 2 minutes because of the many work to do
     PhpIniUtils::startNewExecutionTimeLimit(120);
@@ -237,8 +199,8 @@ function doInstallation(string $language)
     // disable foreign key checks for mysql, so tables can easily be deleted
     toggleForeignKeyChecks(false);
 
-    readAndExecuteSQLFromFile('db.sql');
-    readAndExecuteSQLFromFile('data.sql');
+    readAndExecuteSQLFromFile('cleanup.sql');
+    readAndExecuteSQLFromFile('admidio-mysql.sql');
 
     // manipulate some dates so that it's suitable to the current date
     echo 'Edit data of database ...<br />';
@@ -247,15 +209,9 @@ function doInstallation(string $language)
     // in postgresql all sequences must get a new start value because our inserts have given ids
     resetPostgresSequences();
 
-    // set parameter lang to the default language for this installation
-    setInstallationLanguage($language);
-
     // activate foreign key checks, so a database is consistent
     toggleForeignKeyChecks(true);
 }
-
-// Initialize and check the parameters
-$getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultValue' => 'de'));
 
 // start a php session and remove a session object with all data so that
 // all data will be read after the update
@@ -267,8 +223,7 @@ try {
 unset($_SESSION['gCurrentSession']);
 
 // create a language object to handle translations
-$gL10n = new Language($getLanguage);
-$gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
+$gL10n = new Language('en');
 
 // copy content of folder adm_my_files to productive folder
 try {
@@ -288,7 +243,7 @@ try {
 
 echo 'Start installing ...<br />';
 
-doInstallation($getLanguage);
+doInstallation();
 
 echo 'Installation successful!<br />';
 

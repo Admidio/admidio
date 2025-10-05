@@ -351,7 +351,7 @@ class ProfileFields
                                 if ($htmlValue !== '') {
                                     $htmlValue .= ', ';
                                 }
-                                $htmlValue .= $arrOptionValuesWithKeys[$val];                              
+                                $htmlValue .= $arrOptionValuesWithKeys[$val];
                             } else {
                                 if ($htmlValue !== '') {
                                     $htmlValue .= ', ';
@@ -430,10 +430,10 @@ class ProfileFields
      *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
      *                                * 'database' : returns the value that is stored in database with no format applied
-     * @return string|int|bool Returns the value for the column.
+     * @return mixed Returns the value for the column.
      * @throws Exception
      */
-    public function getValue(string $fieldNameIntern, string $format = '')
+    public function getValue(string $fieldNameIntern, string $format = ''): mixed
     {
         $value = '';
 
