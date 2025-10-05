@@ -107,29 +107,9 @@ function toggleForeignKeyChecks(bool $enable): void
  */
 function executeSqlStatements(array $sqlStatements, string $filename): void
 {
-    global $gDb, $gL10n;
+    global $gDb;
 
     foreach ($sqlStatements as $sqlStatement) {
-        if ($filename === 'admidio-mysql.sql') {
-            // search for translation strings with the prefix DDT or SYS and try to replace them
-            preg_match_all('/(DDT_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/', $sqlStatement, $results);
-
-            foreach ($results[0] as $value) {
-                // if it's a string of a systemmail then html line feeds must be replaced
-                if (str_starts_with($value, 'SYS_SYSMAIL_')) {
-                    // convert <br /> to a normal line feed
-                    $convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13).chr(10), $gL10n->get($value));
-                } else {
-                    $convertedText = $gL10n->get($value);
-                }
-
-                // search for the exact value as a separate word and replace it with the translation
-                // in l10n the single quote is transformed in html entity, but we need the original sql escaped
-                $escapedText = $gDb->escapeString(str_replace('&rsquo;', '\'', $convertedText));
-                $sqlStatement = preg_replace('/\b'.$value.'\b/', substr($escapedText, 1, strlen($escapedText) - 2), $sqlStatement);
-            }
-        }
-
         $gDb->queryPrepared($sqlStatement);
     }
 }
