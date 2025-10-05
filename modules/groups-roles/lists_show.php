@@ -151,10 +151,14 @@ try {
     } elseif (!$hasRightViewFormerMembers && isset($event)) {
         // if it's an event list then show only active members
         // if the event is in the past then show all members that were registered for this event
-        $eventEnd = DateTime::createFromTimestamp(strtotime($event->getValue('dat_end')));
-        $eventEnd->format('Y-m-d');
-        $dateNow = DateTime::createFromTimestamp(strtotime(DATE_NOW));
-        $dateNow->format('Y-m-d');
+        $eventEnd = $event->getValue('dat_end', 'Y-m-d');
+        $eventEnd = DateTime::createFromFormat('Y-m-d', $eventEnd);
+        $dateNow = DateTime::createFromFormat('Y-m-d',DATE_NOW);
+        if ($dateNow === false) {
+            // check if DATE_NOW has system format
+            $dateNow = DateTime::createFromFormat($gSettingsManager->getString('system_date'), DATE_NOW);
+            $dateNow->format('Y-m-d');
+        }
 
         $getMembersShowFiler = ($eventEnd < $dateNow) ? 2 : 0;
         $getDateFrom = DATE_NOW;
