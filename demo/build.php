@@ -7,9 +7,6 @@
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  *
- * Parameters:
- *
- * lang : de (default) the language for the demo db
  ***********************************************************************************************
  */
 
@@ -48,7 +45,7 @@ const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
 
 /**
  * Deletes all files and folder within adm_my_files except the config.php . After that, all
- * files and folders of the demo_data folder adm_my_files will be copied to the original adm_my_files folder.
+ * files and folders of the demo folder adm_my_files will be copied to the original adm_my_files folder.
  * @throws RuntimeException
  * @throws UnexpectedValueException
  */
@@ -85,7 +82,7 @@ function prepareAdmidioDataFolder(): void
     }
     closedir($dh);
 
-    FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/demo_data/adm_my_files', ADMIDIO_PATH . FOLDER_DATA, array('overwriteContent' => true));
+    FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/demo/adm_my_files', ADMIDIO_PATH . FOLDER_DATA, array('overwriteContent' => true));
 }
 
 /**
@@ -182,20 +179,6 @@ function resetPostgresSequences(): void
 }
 
 /**
- * @param string $language
- * @throws \Admidio\Infrastructure\Exception
- */
-function setInstallationLanguage(string $language): void
-{
-    global $gDb;
-
-    $sql = 'UPDATE '.TBL_PREFERENCES.'
-               SET prf_value = ? -- $language
-             WHERE prf_name = \'system_language\'';
-    $gDb->queryPrepared($sql, array($language));
-}
-
-/**
  * @return string
  * @throws Exception
  */
@@ -224,10 +207,9 @@ function getInstalledDbVersion(): string
 }
 
 /**
- * @param string $language
  * @throws RuntimeException|\Admidio\Infrastructure\Exception
  */
-function doInstallation(string $language)
+function doInstallation()
 {
     global $gDb, $gDbType, $gL10n; // necessary for "data_edit.php"
 
@@ -247,15 +229,9 @@ function doInstallation(string $language)
     // in postgresql all sequences must get a new start value because our inserts have given ids
     resetPostgresSequences();
 
-    // set parameter lang to the default language for this installation
-    setInstallationLanguage($language);
-
     // activate foreign key checks, so a database is consistent
     toggleForeignKeyChecks(true);
 }
-
-// Initialize and check the parameters
-$getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultValue' => 'de'));
 
 // start a php session and remove a session object with all data so that
 // all data will be read after the update
@@ -267,8 +243,7 @@ try {
 unset($_SESSION['gCurrentSession']);
 
 // create a language object to handle translations
-$gL10n = new Language($getLanguage);
-$gL10n->addLanguageFolderPath(ADMIDIO_PATH . '/demo_data/languages');
+$gL10n = new Language('en');
 
 // copy content of folder adm_my_files to productive folder
 try {
@@ -288,7 +263,7 @@ try {
 
 echo 'Start installing ...<br />';
 
-doInstallation($getLanguage);
+doInstallation();
 
 echo 'Installation successful!<br />';
 
