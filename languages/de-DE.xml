@@ -221,6 +221,7 @@
   <string name="SYS_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
   <string name="SYS_ADDRESS">Adresse</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Gehe zur Admidio-Downloadseite</string>
+  <string name="SYS_ADMIDIO_HEADLINE_DESC">Die Überschrift wird in der Navigationsleiste von Admidio angezeigt. Hier kann auch der Name eines Übersetzungsstrings angegeben werden. (Voreinstellung: SYS_ONLINE_MEMBERSHIP_ADMINISTRATION)</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio-Version</string>
   <string name="SYS_ADMIDIO_VERSION_BACKUP">Admidio Version und Backup</string>
@@ -645,11 +646,10 @@
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXISTING_CONTACTS">Existierende Kontakte</string>
+  <string name="SYS_EXPORT">Export</string>
   <string name="SYS_EXPORT_LISTS">Listen exportieren</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listen von Gruppen und Rollen können von Benutzerinnnen und Benutzern exportiert werden, sofern sie das Recht haben diese Listen zu sehen. Mit dieser Einstellung kann die Exportfunktion eingeschränkt werden. (Voreinstellung: Alle)</string>
-  <string name="SYS_EXPORT_TO">Exportieren nach</string>
   <string name="SYS_EXPORT_VCARD">vCard exportieren</string>
-  <string name="SYS_EXPORT_VCARD_FROM_VAR">vCard von #VAR1# exportieren</string>
   <string name="SYS_EXTENSIONS">Erweiterungen</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FAVICON_FILE">Favicon-Datei</string>
@@ -687,6 +687,8 @@
   <string name="SYS_FIRSTNAME_LASTNAME">Vorname und Nachname</string>
   <string name="SYS_FOLDER">Ordner</string>
   <string name="SYS_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Namen für den Ordner aus.</string>
+  <string name="SYS_FOLDER_NAME_EMPTY">Es wurde kein Ordnername angegeben!</string>
+  <string name="SYS_FOLDER_NAME_INVALID">Der ausgewählte Ordnername #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Ordnernamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt; / \ </string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Es stehen keine Dateien zum Download für Gäste zur Verfügung.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Sie besitzen keine Rechte den gewählten Ordner zu sehen.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWenden Sie Sich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
@@ -777,7 +779,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_DESC">Wenn diese Option aktiviert ist, können die ausgewählten Eigenschaftsfelder von den Verwaltern der Gegenstände geändert werden. Andernfalls sind diese Felder schreibgeschützt und können nur von Modul-Administrator:innen geändert werden. (Voreinstellung: nein)</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Editierbare Eigenschaftsfelder durch den Verwalter</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Die hier ausgewählten Eigenschaftsfelder können von den Verwaltern der Gegenstände bearbeitet werden, wenn die Option \"Editierberechtigung für den Verwalter\" akiviert ist. Alle anderen Felder sind schreibgeschützt und können nur von Modul-Administrator:innen geändert werden. (Voreinstellung: \"Letzter Empfänger\", \"Ausleihdatum\", \"Rückgabedatum\")</string>
-  <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Die Inventarverwaltung kann über diese Einstellung komplett deaktiviert, nur für angemeldete Benutzer:innen oder nur für Modul-Administrator:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Wenn nur Modul-Adminisrator:innen Zugriff haben, ist das Modul nur für Benutzer:innen mit der Berechtigung \"Inventar verwalten\" sichtbar. (Voreinstellung: Aktiviert)</string>
+  <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Die Inventarverwaltung kann über diese Einstellung komplett deaktiviert, nur für angemeldete Benutzer:innen, nur für Modul-Administrator:innen, für Modul-Aministrator:innen und Gegenstandsverwalter oder für Modul-Aministrator:innen und Mitglieder der ausgewählten Rollen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Wenn nur Modul-Adminisrator:innen Zugriff haben, ist das Modul nur für Benutzer:innen mit der Berechtigung \"Inventar verwalten\" sichtbar. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_INVENTORY_ADD_DATE">Datum anfügen</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Wenn diese Option aktiviert ist, wird an den Dateinamen der Exportdatei das aktuelle Datum im Format JJJJ-MM-TT vorangestellt. (Voreinstellung: nein)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Negative Zahlen erlauben</string>
@@ -808,6 +810,7 @@
   <string name="SYS_INVENTORY_ITEM_COPIED">Gegenstand erfolgreich kopiert</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Gegenstand kopieren</string>
   <string name="SYS_INVENTORY_ITEM_CREATE">Neuen Gegenstand anlegen</string>
+  <string name="SYS_INVENTORY_ITEM_CREATE_PICTURE_INFO">Ein Bild für diesen Gegenstand kann erst hochgeladen werden, nachdem er erstellt wurde.</string>
   <string name="SYS_INVENTORY_ITEM_CREATED">Neuer Gegenstand erfolgreich angelegt</string>
   <string name="SYS_INVENTORY_ITEM_DATA">Gegenstandsdaten</string>
   <string name="SYS_INVENTORY_ITEM_DELETE">Gegenstand löschen</string>
@@ -856,10 +859,12 @@
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Anzahl der Gegenstände pro Seite</string>
   <string name="SYS_INVENTORY_KEEPER">Verwalter</string>
   <string name="SYS_INVENTORY_KEEPER_DESC">Der Verwalter des Gegenstandes</string>
-  <string name="SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC">Sie können den Gegenstand wieder in die Inventarverwaltung aufnehmen.\n\nWenn Sie den Gegenstand löschen möchten, wenden Sie sich an einen Administrator oder den Verwalter der Inventarverwaltung!\n\n#VAR1#</string>
-  <string name="SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC">Sie können den Gegenstand aus der Inventarverwaltung aussondern. Dies hat den Vorteil, dass die Daten erhalten bleiben und Sie später immer wieder sehen können, wer diesen Gegenstand ausgeliehen hat.\n\nWenn Sie den Gegenstand löschen möchten, wenden Sie sich an einen Administrator oder den Verwalter der Inventarverwaltung!</string>
+  <string name="SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC">Wenn Sie den Gegenstand löschen möchten, wenden Sie sich an einen Administrator oder den Verwalter der Inventarverwaltung!</string>
+  <string name="SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC">Sie können den Gegenstand wieder in die Inventarverwaltung aufnehmen.\n\n#VAR1#\n\n#VAR2#</string>
+  <string name="SYS_INVENTORY_KEEPER_ITEM_RETIRE_DESC">Sie können den Gegenstand aus der Inventarverwaltung aussondern. Dies hat den Vorteil, dass die Daten erhalten bleiben und Sie später immer wieder sehen können, wer diesen Gegenstand ausgeliehen hat.\n\n#VAR1#</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER">Letzter Empfänger</string>
   <string name="SYS_INVENTORY_LAST_RECEIVER_DESC">Der letzte Empfänger des Gegenstandes</string>
+  <string name="SYS_INVENTORY_NO_EDITABLE_CATEGORIES">Es sind keine Kategorien verfügbar, die Sie einem Gegenstand zuweisen könnten. Bitte wenden Sie sich an einen Administrator der Inventarverwaltung.</string>
   <string name="SYS_INVENTORY_NO_NEW_IMPORT_DATA">In der Importdatei waren keine neuen Daten vorhanden!</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CHANGED">Der Gegenstand #VAR1_BOLD# wurde von #VAR2_BOLD# geändert:</string>
   <string name="SYS_INVENTORY_NOTIFICATION_MESSAGE_ITEM_CREATED">Der Gegenstand #VAR1_BOLD# wurde von #VAR2_BOLD# angelegt:</string>
@@ -875,6 +880,8 @@
   <string name="SYS_INVENTORY_NOTIFICATION_SUBJECT_ITEMS_IMPORTED">Gegenstände wurden in das Inventar importiert</string>
   <string name="SYS_INVENTORY_NUMBER">Zahl</string>
   <string name="SYS_INVENTORY_NUMBER_DESC">Anzahl der anzufügenden Gegenstände</string>
+  <string name="SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS">Für Modul-Administrator:innen und Gegenstandsverwalter</string>
+  <string name="SYS_INVENTORY_ONLY_FOR_ADMINS_AND_ROLES">Für Modul-Administrator:innen und Rollenmitglieder</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW">Einstellungen für die Profilansicht</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">Die hier ausgewählten Eigenschafsfelder werden in der Profilansicht des Mitglieds angezeigt, wenn die Option \"In der Profilansicht anzeigen\" akiviert ist. Standardmäßig wird nur der Gegenstandsname angezeigt. (Voreinstelluing: \"Letzter Empfänger\")</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED">In der Profilansicht anzeigen</string>
@@ -958,6 +965,8 @@
   <string name="SYS_LOGIN_WITH_EMAIL_DESC">Wenn ein:e Benutzer:in eine E-Mail-Adresse angegeben hat (und diese im System eindeutig ist), kann anstelle des Benutzernamens auch die E-Mail-Adresse für den Login benutzt werden. (Voreinstellung: nein)</string>
   <string name="SYS_LOGO_FILE">Logo-Datei</string>
   <string name="SYS_LOGO_FILE_DESC">Der Pfad zur Logodatei, die in der oberen linken Ecke angezeigt wird. Der Pfad sollte relativ zum Stammverzeichnis Ihrer Installation sein. Bleibt er leer, wird das Standardlogo des Themes verwendet. (Standard: leer)</string>
+  <string name="SYS_LOGO_FILE_MAX_HEIGHT">Maximale Logohöhe</string>
+  <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">Der maximal verfügbare Platz für das Logo in der Kopfzeile ist auf diesen Wert begrenzt. Wenn das Logo höher als der angegebene Wert ist, wird es auf diese Höhe verkleinert. (Standard: 60 Pixel)</string>
   <string name="SYS_LOGOUT">Abmelden</string>
   <string name="SYS_LOGOUT_SUCCESSFUL">Sie wurden erfolgreich abgemeldet.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Das neue Passwort wurde an die E-Mail-Adresse #VAR1_BOLD# geschickt!</string>
@@ -1099,6 +1108,8 @@
   <string name="SYS_NOT_SET">nicht gesetzt</string>
   <string name="SYS_NOT_VALID_DATE_FORMAT">Bitte in der Bedingung des Feldes #VAR1_BOLD# ein gültiges Datum verwenden.</string>
   <string name="SYS_NOTE">Hinweis</string>
+  <string name="SYS_NOTIFICATION_INVENTORY_CHANGES">Benachrichtigung bei Inventaränderungen</string>
+  <string name="SYS_NOTIFICATION_INVENTORY_CHANGES_DESC">Mitglieder der hinterlegten Rolle für Benachrichtigungen erhalten eine Systembenachrichtigung, wenn Gegenstände im Inventar erstellt, geändert, gelöscht, wieder ins Inventar aufgenommen, ausgesondert oder importiert werden. (Voreinstellung: nein)</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Benachrichtigung bei neuen oder geänderten Einträgen</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Mitglieder der gespeicherten Benachrichtigungsrolle erhalten eine Systembenachrichtigung für neue oder geänderte Einträge in den Modulen Ankündigungen, Veranstaltungen, Dokumente &amp; Dateien, Fotos, Weblinks und Forum. (Standard: nein)</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Benachrichtigung nach einer neuen Registrierung</string>
@@ -1635,6 +1646,7 @@
   <string name="SYS_TFA">Zwei-Faktor-Authentifizierung</string>
   <string name="SYS_TFA_ENABLE">Zwei-Faktoren-Authentifizierung (2FA) aktivieren</string>
   <string name="SYS_TFA_ENABLE_DESC">Aktivieren Sie die Zwei-Faktor-Authentifizierung (2FA) für alle Benutzer:innen, um einen zusätzlichen Überprüfungsschritt zu verlangen, der die Kontosicherheit erhöht und vor unberechtigtem Zugriff schützt.</string>
+  <string name="SYS_TFA_NOT_SETUP_FOR_USER">Administratoren dürfen keine Zwei-Faktor-Authentifizierung (2FA) für andere Benutzer einrichten. Jeder Benutzer muss die 2FA für sein eigenes Konto einrichten.</string>
   <string name="SYS_TFA_RESET">Zwei-Faktor-Authentifizierung zurücksetzen</string>
   <string name="SYS_TFA_RESET_DESC">Entferne den konfigurierten zweiten Faktor.</string>
   <string name="SYS_TFA_RESET_SUCCESSFUL">Zwei-Faktor-Authentifizierung erfolgreich zurückgesetzt.</string>
@@ -1708,7 +1720,7 @@
   <string name="SYS_VIEW">Ansicht</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Bild in voller Größe anzeigen</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">Profile der Rollenmitglieder einsehen</string>
-  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer die Profile der Mitglieder dieser Rolle sehen kann. Der Benutzer bzw. die Benutzerin kann das Profil der jeweiligen Person aufrufen und in Listen zu der Rolle alle hinterlegten Spalten sehen. Das Rollenrecht #VAR1_BOLD# überschreibt dieser Einstellung.</string>
+  <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">Mit dieser Einstellung kann festgelegt werden, wer die Profile der Mitglieder dieser Rolle sehen kann. Der Benutzer bzw. die Benutzerin kann das Profil der jeweiligen Person aufrufen und in Listen zu der Rolle alle hinterlegten Spalten sehen. Das Rollenrecht #VAR1_BOLD# überschreibt diese Einstellung.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Rollenmitgliedschaft sehen</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Mit dieser Einstellung kann festgelegt werden, wer die Mitglieder dieser Rolle sehen kann. Der Benutzer bzw. die Benutzerin kann die Rollenmitgliedschaft im Profil der jeweiligen Person sehen und in Listen zu der Rolle. Mit dieser Einstellung wird kein Zugriff auf das Profil der Rollenmitglieder ermöglicht. In Listen werden nur Name und Vorname angezeigt. Das Rollenrecht #VAR1_BOLD# überschreibt diese Einstellung.</string>
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Es werden Ihnen hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldeten Benutzer:innen sichtbar sind. Falls Sie auch Mitglied dieser Organisation sind, werden Ihnen zusätzlich die Rollen angezeigt, die Sie mit Ihren Rechten innerhalb der jeweiligen Organisation sehen dürfen.</string>
