@@ -4066,14 +4066,14 @@ CREATE TABLE `%PREFIX%_user_relation_types` (
 --
 
 INSERT INTO `%PREFIX%_user_relation_types` (`urt_id`, `urt_uuid`, `urt_name`, `urt_name_male`, `urt_name_female`, `urt_edit_user`, `urt_id_inverse`, `urt_usr_id_create`, `urt_timestamp_create`, `urt_usr_id_change`, `urt_timestamp_change`) VALUES
-(1, '3f716ce8-f05e-4eb9-a89e-20a8a277aa18', 'INS_PARENT', 'INS_FATHER', 'INS_MOTHER', 0, 2, 2, '2016-11-22 04:29:56', NULL, NULL),
-(2, 'e728bdd5-cc1f-46a3-aef3-a3a12cc8aad6', 'INS_CHILD', 'INS_SON', 'INS_DAUGHTER', 0, 1, 2, '2016-11-22 04:29:56', NULL, NULL),
-(3, '7d31dd74-77a4-461d-9402-37ae8fe2cfcf', 'INS_SIBLING', 'INS_BROTHER', 'INS_SISTER', 0, 3, 2, '2016-11-22 04:29:56', NULL, NULL),
-(4, '91b3c6a0-2559-4e7a-bfcc-4f47e56efd35', 'INS_SPOUSE', 'INS_HUSBAND', 'INS_WIFE', 0, 4, 2, '2016-11-22 04:29:56', NULL, NULL),
-(5, 'be687ee3-bd7d-499e-b388-b0387fb89389', 'INS_COHABITANT', 'INS_COHABITANT_MALE', 'INS_COHABITANT_FEMALE', 0, 5, 2, '2016-11-22 04:29:56', NULL, NULL),
+(1, '3f716ce8-f05e-4eb9-a89e-20a8a277aa18', 'SYS_PARENT', 'SYS_FATHER', 'SYS_MOTHER', 0, 2, 2, '2016-11-22 04:29:56', NULL, NULL),
+(2, 'e728bdd5-cc1f-46a3-aef3-a3a12cc8aad6', 'SYS_CHILD', 'SYS_SON', 'SYS_DAUGHTER', 0, 1, 2, '2016-11-22 04:29:56', NULL, NULL),
+(3, '7d31dd74-77a4-461d-9402-37ae8fe2cfcf', 'SYS_SIBLING', 'SYS_BROTHER', 'SYS_SISTER', 0, 3, 2, '2016-11-22 04:29:56', NULL, NULL),
+(4, '91b3c6a0-2559-4e7a-bfcc-4f47e56efd35', 'SYS_SPOUSE', 'SYS_HUSBAND', 'SYS_WIFE', 0, 4, 2, '2016-11-22 04:29:56', NULL, NULL),
+(5, 'be687ee3-bd7d-499e-b388-b0387fb89389', 'SYS_COHABITANT', 'SYS_COHABITANT_MALE', 'SYS_COHABITANT_FEMALE', 0, 5, 2, '2016-11-22 04:29:56', NULL, NULL),
 (6, '7a7acc74-7c9f-404f-bd74-abe7482c4126', 'SYS_COMPANION', 'SYS_BOYFRIEND', 'SYS_GIRLFRIEND', 0, 6, 2, '2016-11-22 04:29:56', NULL, NULL),
 (7, '7169f73a-49a9-4ce3-981a-102c6eb2c3c9', 'SYS_SUPERIOR', 'SYS_SUPERIOR_MALE', 'SYS_SUPERIOR_FEMALE', 0, 8, 2, '2016-11-22 04:29:56', NULL, NULL),
-(8, 'a7ab66fb-67c1-4828-aeda-dc31d09050dc', 'INS_SUBORDINATE', 'INS_SUBORDINATE_MALE', 'INS_SUBORDINATE_FEMALE', 0, 7, 2, '2016-11-22 04:29:56', NULL, NULL);
+(8, 'a7ab66fb-67c1-4828-aeda-dc31d09050dc', 'SYS_SUBORDINATE', 'SYS_SUBORDINATE_MALE', 'SYS_SUBORDINATE_FEMALE', 0, 7, 2, '2016-11-22 04:29:56', NULL, NULL);
 
 --
 -- Indizes der exportierten Tabellen

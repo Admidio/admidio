@@ -169,14 +169,14 @@ $db->query($sql); // TODO add more params
 // create user relation types
 $sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.'
                (urt_id, urt_uuid, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-        VALUES (1, \'' . Uuid::uuid4() . '\', \'INS_PARENT\',      \'INS_FATHER\',           \'INS_MOTHER\',          null, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (2, \'' . Uuid::uuid4() . '\', \'INS_CHILD\',       \'INS_SON\',              \'INS_DAUGHTER\',           1, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (3, \'' . Uuid::uuid4() . '\', \'INS_SIBLING\',     \'INS_BROTHER\',          \'INS_SISTER\',             3, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (4, \'' . Uuid::uuid4() . '\', \'INS_SPOUSE\',      \'INS_HUSBAND\',          \'INS_WIFE\',               4, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (5, \'' . Uuid::uuid4() . '\', \'INS_COHABITANT\',  \'INS_COHABITANT_MALE\',  \'INS_COHABITANT_FEMALE\',  5, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+        VALUES (1, \'' . Uuid::uuid4() . '\', \'SYS_PARENT\',      \'SYS_FATHER\',           \'SYS_MOTHER\',          null, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , (2, \'' . Uuid::uuid4() . '\', \'SYS_CHILD\',       \'SYS_SON\',              \'SYS_DAUGHTER\',           1, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , (3, \'' . Uuid::uuid4() . '\', \'SYS_SIBLING\',     \'SYS_BROTHER\',          \'SYS_SISTER\',             3, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , (4, \'' . Uuid::uuid4() . '\', \'SYS_SPOUSE\',      \'SYS_HUSBAND\',          \'SYS_WIFE\',               4, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
+             , (5, \'' . Uuid::uuid4() . '\', \'SYS_COHABITANT\',  \'SYS_COHABITANT_MALE\',  \'SYS_COHABITANT_FEMALE\',  5, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , (6, \'' . Uuid::uuid4() . '\', \'SYS_COMPANION\',   \'SYS_BOYFRIEND\',        \'SYS_GIRLFRIEND\',         6, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
              , (7, \'' . Uuid::uuid4() . '\', \'SYS_SUPERIOR\',    \'SYS_SUPERIOR_MALE\',    \'SYS_SUPERIOR_FEMALE\', null, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (8, \'' . Uuid::uuid4() . '\', \'INS_SUBORDINATE\', \'INS_SUBORDINATE_MALE\', \'INS_SUBORDINATE_FEMALE\', 7, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
+             , (8, \'' . Uuid::uuid4() . '\', \'SYS_SUBORDINATE\', \'SYS_SUBORDINATE_MALE\', \'SYS_SUBORDINATE_FEMALE\', 7, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
 $db->query($sql); // TODO add more params
 
 $sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
