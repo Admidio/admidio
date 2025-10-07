@@ -1222,19 +1222,17 @@ final class UpdateStepsCode
      */
     public static function updateStep32InstallDefaultUserRelationTypes()
     {
-        global $gL10n;
-
         $sql = 'INSERT INTO ' . TBL_USER_RELATION_TYPES . '
                        (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-                VALUES (1, \'' . $gL10n->get('INS_PARENT') . '\',      \'' . $gL10n->get('INS_FATHER') . '\',           \'' . $gL10n->get('INS_MOTHER') . '\',             2, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (2, \'' . $gL10n->get('INS_CHILD') . '\',       \'' . $gL10n->get('INS_SON') . '\',              \'' . $gL10n->get('INS_DAUGHTER') . '\',           1, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (3, \'' . $gL10n->get('INS_SIBLING') . '\',     \'' . $gL10n->get('INS_BROTHER') . '\',          \'' . $gL10n->get('INS_SISTER') . '\',             3, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (4, \'' . $gL10n->get('INS_SPOUSE') . '\',      \'' . $gL10n->get('INS_HUSBAND') . '\',          \'' . $gL10n->get('INS_WIFE') . '\',               4, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (5, \'' . $gL10n->get('INS_COHABITANT') . '\',  \'' . $gL10n->get('INS_COHABITANT_MALE') . '\',  \'' . $gL10n->get('INS_COHABITANT_FEMALE') . '\',  5, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (6, \'' . $gL10n->get('SYS_COMPANION') . '\',   \'' . $gL10n->get('SYS_BOYFRIEND') . '\',        \'' . $gL10n->get('SYS_GIRLFRIEND') . '\',         6, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (7, \'' . $gL10n->get('SYS_SUPERIOR') . '\',    \'' . $gL10n->get('SYS_SUPERIOR_MALE') . '\',    \'' . $gL10n->get('SYS_SUPERIOR_FEMALE') . '\',    8, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (8, \'' . $gL10n->get('INS_SUBORDINATE') . '\', \'' . $gL10n->get('INS_SUBORDINATE_MALE') . '\', \'' . $gL10n->get('INS_SUBORDINATE_FEMALE') . '\', 7, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')';
-        self::$db->query($sql); // TODO add more params
+                VALUES (1, \'SYS_PARENT\',      \'SYS_FATHER\',           \'SYS_MOTHER\',             2, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (2, \'SYS_CHILD\',       \'SYS_SON\',              \'SYS_DAUGHTER\',           1, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (3, \'SYS_SIBLING\',     \'SYS_BROTHER\',          \'SYS_SISTER\',             3, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (4, \'SYS_SPOUSE\',      \'SYS_HUSBAND\',          \'SYS_WIFE\',               4, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (5, \'SYS_COHABITANT\',  \'SYS_COHABITANT_MALE\',  \'SYS_COHABITANT_FEMALE\',  5, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (6, \'SYS_COMPANION\',   \'SYS_BOYFRIEND\',        \'SYS_GIRLFRIEND\',         6, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (7, \'SYS_SUPERIOR\',    \'SYS_SUPERIOR_MALE\',    \'SYS_SUPERIOR_FEMALE\',    8, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (8, \'SYS_SUBORDINATE\', \'SYS_SUBORDINATE_MALE\', \'SYS_SUBORDINATE_FEMALE\', 7, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')';
+        self::$db->query($sql);
     }
 
     /**

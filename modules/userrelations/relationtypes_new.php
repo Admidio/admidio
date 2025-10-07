@@ -98,19 +98,19 @@ try {
     $form->addInput(
         'urt_name',
         $gL10n->get('SYS_NAME'),
-        $relationType1->getValue('urt_name'),
+        htmlentities($relationType1->getValue('urt_name', 'database'), ENT_QUOTES),
         array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'urt_name_male',
         $gL10n->get('SYS_MALE'),
-        ($relationType1->getValue('urt_name_male') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_male') : '',
+        ($relationType1->getValue('urt_name_male', 'database') !== $relationType1->getValue('urt_name', 'database')) ? htmlentities($relationType1->getValue('urt_name_male', 'database'), ENT_QUOTES) : '',
         array('maxLength' => 100)
     );
     $form->addInput(
         'urt_name_female',
         $gL10n->get('SYS_FEMALE'),
-        ($relationType1->getValue('urt_name_female') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_female') : '',
+        ($relationType1->getValue('urt_name_female', 'database') !== $relationType1->getValue('urt_name', 'database')) ? htmlentities($relationType1->getValue('urt_name_female', 'database'), ENT_QUOTES) : '',
         array('maxLength' => 100)
     );
     $form->addCheckbox(
@@ -138,19 +138,19 @@ try {
     $form->addInput(
         'urt_name_inverse',
         $gL10n->get('SYS_NAME'),
-        $relationType2->getValue('urt_name'),
+        htmlentities($relationType2->getValue('urt_name', 'database'), ENT_QUOTES),
         array('maxLength' => 100)
     );
     $form->addInput(
         'urt_name_male_inverse',
         $gL10n->get('SYS_MALE'),
-        ($relationType2->getValue('urt_name_male') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_male') : '',
+        ($relationType2->getValue('urt_name_male', 'database') !== $relationType2->getValue('urt_name', 'database')) ? htmlentities($relationType2->getValue('urt_name_male', 'database'), ENT_QUOTES) : '',
         array('maxLength' => 100)
     );
     $form->addInput(
         'urt_name_female_inverse',
         $gL10n->get('SYS_FEMALE'),
-        ($relationType2->getValue('urt_name_female') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_female') : '',
+        ($relationType2->getValue('urt_name_female', 'database') !== $relationType2->getValue('urt_name', 'database')) ? htmlentities($relationType2->getValue('urt_name_female', 'database'), ENT_QUOTES) : '',
         array('maxLength' => 100)
     );
     $form->addCheckbox(
