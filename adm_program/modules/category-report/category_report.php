@@ -413,7 +413,7 @@ foreach ($report->listData as $member => $memberdata) {
                 $user->readDataById($member);
 
                 if ($getMode === 'html'
-                    &&    ($usf_id === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+                    && ($usf_id === (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
                         || $usf_id === (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'))) {
                     $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content);
                     $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))).'">'.$htmlValue.'</a>';
@@ -424,8 +424,15 @@ foreach ($report->listData as $member => $memberdata) {
                             || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
                             || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL')) {
                         $columnValues[] = $content;
-                    } elseif ($getMode === 'xlsx' && $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
-                        $columnValues[] = ($content) ? 'X' : '';
+                    } elseif ($getMode === 'xlsx'
+                        && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
+                            || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON'
+                            || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')) {
+                        if ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
+                            $columnValues[] = ($content) ? 'X' : '';
+                        } else {
+                            $columnValues[] = $content;
+                        }
                     } else {
                         // checkbox must set a sorting value
                         if ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
