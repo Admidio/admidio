@@ -122,11 +122,25 @@ try {
             }
 
             // add login data to the user
-            if ($userLoginName !== '' && $userPassword !== '') {
-                try {
-                    $userImport->setLoginData($userLoginName, $userPassword);
-                } catch (Exception $e) {
-                    $importMessages[] = $e->getMessage();
+            // Ideally, both username and password are set using the same import
+            // Setting username without password is possible (user needs to reset password to be able to log in)
+            // Setting the password only should only be possible if an existing user already has a username assigned
+            if ($userPassword !== '') {
+                if ($userLoginName == '') {
+                    $userLoginName = $userImport->getValue('usr_login_name');
+                }
+                if (!empty($userLoginName)) {
+                    try {
+                        $userImport->setLoginData($userLoginName, $userPassword);
+                    } catch (Exception $e) {
+                        $importMessages[] = $e->getMessage();
+                    }
+                } else {
+                    $importMessages[] = $userImport->getValue('FIRST_NAME') . ' ' . $userImport->getValue('LAST_NAME') . ": password given for new user, but no username";
+                }
+            } else {
+                if (!empty($userLoginName)) {
+                    $userImport->setValue('usr_login_name', $userLoginName);
                 }
             }
 
