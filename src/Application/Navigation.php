@@ -170,7 +170,11 @@ class Navigation
      */
     public function getStackEntryUrl(int $index): string
     {
-        return $this->urlStack[$index]['url'];
+        if (isset($this->urlStack[$index])) {
+            return $this->urlStack[$index]['url'];
+        } else {
+            return '';
+        }
     }
 
     /**
