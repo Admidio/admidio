@@ -245,6 +245,22 @@ class Organization extends Entity
         );
         $this->db->queryPrepared($sql, $queryParams);
 
+        // insert default values for inventory field 'status'
+        $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                       (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
+                VALUES ((SELECT inf_id
+                          FROM ' . TBL_INVENTORY_FIELDS . '
+                         WHERE inf_org_id = ? -- $orgId
+                           AND inf_name_intern = \'STATUS\'),
+                        ?, ?, ?)';
+
+        // status in use
+        $queryParams = array($orgId, 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', true, 1);
+        $this->db->queryPrepared($sql, $queryParams);
+        // status retired
+        $queryParams = array($orgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', true, 2);
+        $this->db->queryPrepared($sql, $queryParams);
+
         // now create default roles
 
         // Create role administrator
