@@ -401,9 +401,17 @@ try {
             }
 
             if ($getMode == 'csv') {
+                // special case for checkbox profile fields
+                if ($usf_id !== 0 && $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
+                    $content = ($content) ? 'X' : '';
+                }
                 $tmp_csv .= $separator . $valueQuotes . $content . $valueQuotes;
             } // pdf should show only text and not much html content
             elseif ($getMode === 'pdf') {
+                // special case for checkbox profile fields
+                if ($usf_id !== 0 && $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
+                    $content = ($content) ? 'X' : '';
+                }
                 $columnValues[] = $content;
             } else {                   // create output in html layout for getMode = html or print
                 if ($usf_id !== 0) {     // profile fields
@@ -421,6 +429,8 @@ try {
                                 || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
                                 || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL')) {
                             $columnValues[] = $content;
+                        } elseif ($getMode === 'xlsx' && $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
+                            $columnValues[] = ($content) ? 'X' : '';
                         } else {
                             // checkbox must set a sorting value
                             if ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
