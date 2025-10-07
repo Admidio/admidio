@@ -374,7 +374,7 @@ try {
             $usf_id = $report->headerData[$key]['id'];
 
             if ($usf_id !== 0
-                && in_array($getMode, array('csv', 'pdf'), true)
+                && in_array($getMode, array('xlsx', 'csv', 'pdf'), true)
                 && $content > 0
                 && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
                     || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN_MULTISELECT'
@@ -429,8 +429,16 @@ try {
                                 || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
                                 || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL')) {
                             $columnValues[] = $content;
-                        } elseif ($getMode === 'xlsx' && $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
-                            $columnValues[] = ($content) ? 'X' : '';
+                        } elseif ($getMode === 'xlsx'
+                            && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
+                                || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN_MULTISELECT'
+                                || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON'
+                                || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')) {
+                            if ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
+                                $columnValues[] = ($content) ? 'X' : '';
+                            } else {
+                                $columnValues[] = $content;
+                            }
                         } else {
                             // checkbox must set a sorting value
                             if ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
