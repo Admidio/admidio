@@ -93,13 +93,9 @@ try {
                 );
             }
 
-            foreach ($line as $columnKey => $columnValue) {
-                if (empty($columnValue)) {
-                    $columnValue = '';
-                }
+            foreach ($importProfileFields as $assignedFieldColumnId => $columnKey) {
+                $columnValue = $line[$columnKey] ?? '';
 
-                // get usf id or database column name
-                $assignedFieldColumnId = array_search($columnKey, $importProfileFields);
                 // remove spaces and html tags
                 $columnValue = trim(strip_tags($columnValue));
 
