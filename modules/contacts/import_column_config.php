@@ -70,6 +70,13 @@ try {
     $categoryId = null;
     $arrayImportableFields = array();
 
+    // Cleanup CSV columns: If a column does not have a header (null value), use its position instead
+    foreach ($arrayCsvColumns as $pos => $column) {
+        if (empty($column)) {
+          $arrayCsvColumns[$pos] =  $gL10n->get('SYS_COLUMN_POS', array($pos));
+        } 
+    }
+
     $arrayImportableFields[] = array(
         'cat_name' => $gL10n->get('SYS_BASIC_DATA'),
         'cat_tooltip' => '',
