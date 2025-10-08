@@ -344,6 +344,7 @@
   <string name="SYS_COLOR_SECONDARY">Secondary Color</string>
   <string name="SYS_COLOR_SECONDARY_DESC">The secondary color used for Admidio. The side bar will use this color, as well as the preferences sections.</string>
   <string name="SYS_COLUMN">Column</string>
+  <string name="SYS_COLUMN_POS">Column #VAR1#</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
   <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
   <string name="SYS_COMMA">Comma (,)</string>
