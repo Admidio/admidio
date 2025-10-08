@@ -182,6 +182,9 @@ try {
 
     $currentNumberConf = 0;
     $categoryReports = array();
+    $key_to_open = ($getAdd) ? array_key_last($config) : array_key_first($config);
+    
+
 
     foreach ($config as $key => $value) {
         $categoryReport = array(
@@ -191,7 +194,8 @@ try {
             'selection_cat' => 'selection_cat' . $key,
             'number_col' => 'number_col' . $key,
             'id' => 'id' . $key,
-            'default_conf' => 'default_conf' . $key
+            'default_conf' => 'default_conf' . $key,
+            'open' => ($key == $key_to_open),
         );
         $formConfigurations->addInput('name' . $key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
             array('property' => FormPresenter::FIELD_REQUIRED));
