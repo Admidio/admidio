@@ -307,7 +307,7 @@
   <string name="SYS_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor, the font size will be reduced. (Default: 40)</string>
   <string name="SYS_CARBON_COPY">Carbon copy (CC)</string>
   <string name="SYS_CAT_SELECTION">Category selection</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">The category selection can be used to restrict a configuration to the members of roles of the selected categories.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
+  <string name="SYS_CAT_SELECTION_CONF_DESC">The category selection can be used to restrict a configuration to the members of roles of the selected categories. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORIES">Categories</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
@@ -346,7 +346,7 @@
   <string name="SYS_COLUMN">Column</string>
   <string name="SYS_COLUMN_POS">Column #VAR1#</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
-  <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list.\n\n Inactive roles are marked with (*).</string>
+  <string name="SYS_COLUMN_SELECTION_DESC">Selects the columns to be displayed in the list. Inactive roles are marked with (*).</string>
   <string name="SYS_COMMA">Comma (,)</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Comma-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
@@ -1328,7 +1328,7 @@
   <string name="SYS_ROLE_RIGHTS">Role Rights</string>
   <string name="SYS_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
   <string name="SYS_ROLE_SELECTION">Role selection</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be restricted a configuration to the members of the selected roles.\n\n If no restriction is to be made, both fields (role selection and category selection) must be left blank.</string>
+  <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be used to restrict a configuration to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_ROLE_TYPES">Role types</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Role without leader</string>
   <string name="SYS_ROLES">Roles</string>
