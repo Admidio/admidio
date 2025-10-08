@@ -11,8 +11,8 @@
         <div class="card admidio-field-group">
             <div class="card-header"><a id="{$categoryReport.key}_caret" class=" admidio-open-close-caret" data-target="{$categoryReport.key}_contents">
                 <i class="bi bi-caret-{if $categoryReport.open}down{else}right{/if}-fill" style="margin-right: 0"></i>
-            </a> 
-            {$l10n->get('SYS_CONFIGURATION')} - {$elements[$categoryReport.name].value}</div>
+             
+            {$l10n->get('SYS_CONFIGURATION')} - {$elements[$categoryReport.name].value}</a></div>
             <div class="card-body" id="{$categoryReport.key}_contents" {if $categoryReport.open}{else} style="display: none;"{/if}>
                 {include 'sys-template-parts/form.input.tpl' data=$elements[$categoryReport.name]}
                 <div class="admidio-form-group admidio-form-custom-content row mb-3">
