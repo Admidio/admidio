@@ -314,10 +314,10 @@ CREATE TABLE `%PREFIX%_folders` (
 --
 
 INSERT INTO `%PREFIX%_folders` (`fol_id`, `fol_org_id`, `fol_fol_id_parent`, `fol_uuid`, `fol_type`, `fol_name`, `fol_description`, `fol_path`, `fol_locked`, `fol_public`, `fol_usr_id`, `fol_timestamp`) VALUES
-(1, 1, NULL, '80b3c79b-27d1-4cdc-b86c-d9e8d79d59eb', 'DOCUMENTS', 'documents_demo', NULL, '/%PREFIX%_my_files', 0, 1, 1, '2025-09-19 22:00:00'),
-(2, 1, 1, 'b1621a3d-0cea-4cbd-94c4-fc0cde15f324', 'DOCUMENTS', 'licenses', NULL, '/%PREFIX%_my_files/documents_demo', 0, 1, 1, '2014-02-05 13:05:34'),
-(3, 1, 1, '3e26f7db-a167-445b-8441-215eb63153f5', 'DOCUMENTS', 'board-meeting', NULL, '/%PREFIX%_my_files/documents_demo', 0, 0, 354, '2016-04-15 11:25:06'),
-(100, 2, NULL, '63973fe1-1a26-4561-b564-b1065f2c863b', 'DOCUMENTS', 'documents_test', NULL, '/%PREFIX%_my_files', 0, 1, 1, '2014-01-01 21:35:07');
+(1, 1, NULL, '80b3c79b-27d1-4cdc-b86c-d9e8d79d59eb', 'DOCUMENTS', 'documents_demo', NULL, '/adm_my_files', 0, 1, 1, '2025-09-19 22:00:00'),
+(2, 1, 1, 'b1621a3d-0cea-4cbd-94c4-fc0cde15f324', 'DOCUMENTS', 'licenses', NULL, '/adm_my_files/documents_demo', 0, 1, 1, '2014-02-05 13:05:34'),
+(3, 1, 1, '3e26f7db-a167-445b-8441-215eb63153f5', 'DOCUMENTS', 'board-meeting', NULL, '/adm_my_files/documents_demo', 0, 0, 354, '2016-04-15 11:25:06'),
+(100, 2, NULL, '63973fe1-1a26-4561-b564-b1065f2c863b', 'DOCUMENTS', 'documents_test', NULL, '/adm_my_files', 0, 1, 1, '2014-01-01 21:35:07');
 
 -- --------------------------------------------------------
 
