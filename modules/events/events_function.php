@@ -380,7 +380,7 @@ try {
             $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database')) . '.ics';
             $events->setParameter('dat_uuid', $getEventUuid);
         } else {
-            $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname'));
+            $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname')) . '.ics';
             $events->setDateRange($getDateFrom, $getDateTo);
 
             if ($getCatUuid !== '') {
