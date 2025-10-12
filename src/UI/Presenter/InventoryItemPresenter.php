@@ -783,7 +783,6 @@ class InventoryItemPresenter extends PagePresenter
                                 setRequired(ivtBorrowDateField, ivtBorrowDateGroup, true);
                                 if (pDateTime === "true") {
                                     setRequired(ivtBorrowDateFieldTime, ivtBorrowDateGroup, true);
-                                    setRequired(ivtReturnDateFieldTime, ivtReturnDateGroup, true);
                                 }
                             }
                         }
@@ -801,6 +800,21 @@ class InventoryItemPresenter extends PagePresenter
                                 ivtBorrowDateField.setCustomValidity("' . $gL10n->get('SYS_INVENTORY_BORROW_DATE_WARNING') . '");
                             } else {
                                 ivtBorrowDateField.setCustomValidity("");
+                            }
+                                                   
+                            // make sure it is not possible to save a borrow or return time without a date and vise versa
+                            if (pDateTime === "true") {
+                                if (ivtBorrowDateFieldTime.value !== "" && ivtBorrowDateField.value === "") {
+                                    setRequired(ivtBorrowDateField, ivtBorrowDateGroup, true);
+                                } else {
+                                    setRequired(ivtBorrowDateField, ivtBorrowDateGroup, false);
+                                }
+                                
+                                if (ivtReturnDateFieldTime.value !== "" && ivtReturnDateField.value === "") {
+                                    setRequired(ivtReturnDateField, ivtReturnDateGroup, true);
+                                } else {
+                                    setRequired(ivtReturnDateField, ivtReturnDateGroup, false);
+                                }
                             }
                         }
         
