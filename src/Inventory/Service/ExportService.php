@@ -3,6 +3,7 @@
 namespace Admidio\Inventory\Service;
 
 // PhpSpreadsheet namespaces
+use Admidio\Infrastructure\Language;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -60,7 +61,7 @@ class ExportService
             throw new InvalidArgumentException('Invalid export mode: ' . $mode);
         }
 
-        $filename = $gSettingsManager->getString('inventory_export_filename') . '.' . $exportMode;
+        $filename = Language::translateIfTranslationStrId($gSettingsManager->getString('inventory_export_filename')) . '.' . $exportMode;
         if ($gSettingsManager->getBool('inventory_add_date')) {
             // add system date format to filename
             $filename = date('Y-m-d') . '_' . $filename;
