@@ -1141,7 +1141,7 @@ class InventoryPresenter extends PagePresenter
         );
 
         // Build headers and set column alignment (only for HTML mode)
-        $columnAlign[] = array();
+        $columnAlign = array();
         $headers = array();
         $columnNumber = 1;
         //array with the internal field names of the borrow fields
