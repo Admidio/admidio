@@ -11,13 +11,12 @@ use DateTime;
 use ModuleEvents;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\Roles\Entity\ListColumns;
 
 /**
  * @brief Class manages the list configuration
  *
- * This class creates a list configuration object. With this object it's possible
- * to manage the configuration in the database. You can easily create new lists,
+ * This class creates a list configuration object. With this object, it's possible
+ * to manage the configuration in the database. You can create new lists,
  * add new columns or remove columns. The object will only list columns of the configuration
  * which the current user is allowed to view.
  *
@@ -32,11 +31,11 @@ class ListConfiguration extends Entity
      */
     protected array $columns = array();
     /**
-     * @var array<int,Entity> array with all column names of the sql statement that belong to the select clause
+     * @var array<int,Entity> array with all column names of the SQL statement that belong to the select clause
      */
     protected array $columnsSqlNames = array();
     /**
-     * @var array<int,string> Array with the usr_id as key and the first name, last name as values
+     * @var array<int,string> Array with the usr_id as a key and the first name, last name as values
      */
     protected array $arrUserNames = array();
     /**
@@ -45,7 +44,7 @@ class ListConfiguration extends Entity
      */
     protected bool $showOnlyNames = false;
     /**
-     * @var boolean Flag if leaders should be shown. If there is more than one role this flag is set to **false**.
+     * @var boolean Flag if leaders should be shown. If there is more than one role, this flag is set to **false**.
      * should be removed.
      */
     protected bool $showLeaders = false;
@@ -54,7 +53,7 @@ class ListConfiguration extends Entity
     /**
      * Constructor that will create an object to handle the configuration of lists.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param int $listID The ID of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param int $listID The ID of the recordset that should be loaded. If id isn't set, then an empty object of the table is created.
      * @throws Exception
      */
     public function __construct(Database $database, $listID = 0)
@@ -67,7 +66,7 @@ class ListConfiguration extends Entity
     }
 
     /**
-     * Add new column to column array. The number of the column will be the maximum number of the current
+     * Add new column to a column array. The number of the column will be the maximum number of the current
      * array plus one. The special field usr_uuid could only be added by users with the right to edit all users.
      * @param int|string $field Usf-Id of a profile field or the name of a special field.
      * @param int $number Optional the number of the column. This is useful if the list already exists
@@ -77,7 +76,7 @@ class ListConfiguration extends Entity
      * @return bool Returns true if the field was added to the column list.
      * @throws Exception
      */
-    public function addColumn($field, int $number = 0, string $sort = '', string $filter = ''): bool
+    public function addColumn(int|string $field, int $number = 0, string $sort = '', string $filter = ''): bool
     {
         global $gCurrentUser;
 
@@ -97,7 +96,7 @@ class ListConfiguration extends Entity
             return false;
         }
 
-        // If column doesn't exist create object
+        // If column doesn't exist create an object
         if (!array_key_exists($number, $this->columns)) {
             $this->columns[$number] = new ListColumns($this->db);
             $this->columns[$number]->setValue('lsc_lst_id', (int)$this->getValue('lst_id'));
@@ -119,7 +118,7 @@ class ListConfiguration extends Entity
         return true;
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->columns = array();
         $this->columnsSqlNames = array();
@@ -137,18 +136,18 @@ class ListConfiguration extends Entity
     }
 
     /**
-     * Convert the content of the column independence of the output format.
+     * Convert the content from the column independence of the output format.
      * Therefore, the method will check which datatype the column has and which format the
      * output should have.
      * @param int $columnNumber Number of the column for which the content should be converted. The column number starts with 1.
      * @param string $format The following formats are possible 'html', 'print', 'csv', 'xlsx', 'ods' or 'pdf'
      * @param string $content The content that should be converted.
      * @param string $userUuid Uuid of the user for which the content should be converted. This is not the login user.
-     * @param bool $setSortValue If set to **true** a special sort value for checkboxes will be set, when using server side processing set to **false**.
+     * @param bool $setSortValue If set to **true** a special sort value for checkboxes will be set, when using a server side processing set to **false**.
      * @return string Returns the converted content.
      * @throws Exception
      */
-    public function convertColumnContentForOutput(int $columnNumber, string $format, string $content, string $userUuid, bool $setSortValue = true)
+    public function convertColumnContentForOutput(int $columnNumber, string $format, string $content, string $userUuid, bool $setSortValue = true): mixed
     {
         global $gDb, $gProfileFields, $gL10n, $gSettingsManager;
 
@@ -160,12 +159,12 @@ class ListConfiguration extends Entity
             $usfId = (int)$column->getValue('lsc_usf_id');
         }
 
-        // in some cases the content must have a special output format
+        // in some cases, the content must have a special output format
 
         if ($usfId > 0 && $usfId === (int)$gProfileFields->getProperty('COUNTRY', 'usf_id')) {
             $content = $gL10n->getCountryName($content);
         } elseif ($column->getValue('lsc_special_field') === 'usr_photo') {
-            // show user photo
+            // show a user photo
             if (in_array($format, array('html', 'print'), true)) {
                 $content = '<img src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $userUuid)) . '"
                     style="max-width: 200px; width: 100%; object-fit: cover;" alt="' . $gL10n->get('SYS_PROFILE_PHOTO') . '" />';
@@ -198,12 +197,12 @@ class ListConfiguration extends Entity
             if (strlen($content) > 0) {
                 // show selected text of option field or combobox
                 $arrOptions = $gProfileFields->getPropertyById($usfId, 'ufo_usf_options', 'text');
-                // if the contnent is a list of values then explode it
+                // if the content is a list of values, then explode it
                 if ($gProfileFields->getPropertyById($usfId, 'usf_type') === 'DROPDOWN_MULTISELECT') {
                     // explode the content by comma
                     $content = explode(',', $content);
                     $content = array_map(function ($value) use ($arrOptions) {
-                        return isset($arrOptions[$value]) ? $arrOptions[$value] : '';
+                        return $arrOptions[$value] ?? '';
                     }, $content);
                     $content = implode(', ', $content);
                 } else {
@@ -271,7 +270,7 @@ class ListConfiguration extends Entity
                     } else {
                         $content = '';
                     }
-                } catch (Exception $e) {
+                } catch (\Throwable) {
                     // If calculation fails, show empty content
                     $content = '';
                 }
@@ -279,7 +278,7 @@ class ListConfiguration extends Entity
                 $content = '';
             }
         } elseif (in_array($column->getValue('lsc_special_field'), array('usr_usr_id_create', 'usr_usr_id_change', 'mem_usr_id_change')) && (int)$content) {
-            // Get User Information and store information in array
+            // Get User Information and store information in an array
             $userId = (int)$content;
 
             if (array_key_exists($userId, $this->arrUserNames)) {
@@ -295,12 +294,12 @@ class ListConfiguration extends Entity
         if (in_array($format, array('csv', 'xlsx', 'ods'))) {
             // replace tab and line feed
             $content = preg_replace("/\t/", "\\t", $content);
-            // replace special chars in Excel so no app or function could be implicit executed
+            // replace special chars in Excel so no app or function could be implicitly executed
             $outputContent = preg_replace("/^[@=]/", "#", $content);
-        } // pdf should show only text and not much html content
+        } // PDF should show only text and not much HTML content
         elseif ($format === 'pdf') {
             $outputContent = $content;
-        } // create output in html layout
+        } // create output in HTML layout
         else {
             // firstname and lastname get a link to the profile
             if ($format === 'html'
@@ -331,7 +330,7 @@ class ListConfiguration extends Entity
 
     /**
      * Deletes the selected list with all associated fields.
-     * After that the class will be initialize.
+     * After that, the class will be initialized.
      * @return bool **true** if no error occurred
      * @throws Exception SYS_ERROR_DELETE_DEFAULT_LIST
      */
@@ -392,7 +391,7 @@ class ListConfiguration extends Entity
                 array_pop($this->columns);
             }
         } else {
-            // only one column is deleted and following are going one step up
+            // only one column is deleted and following is going one step up
             for ($newColumnNumber = $number, $max = $this->countColumns(); $newColumnNumber < $max; ++$newColumnNumber) {
                 $newColumn = $this->columns[$newColumnNumber];
                 $oldColumn = $this->columns[$newColumnNumber + 1];
@@ -443,7 +442,7 @@ class ListConfiguration extends Entity
         for ($columnNumber = 1, $iMax = $this->countColumns(); $columnNumber <= $iMax; ++$columnNumber) {
             $column = $this->getColumnObject($columnNumber);
 
-            // Find name of the field
+            // Find the name of the field
             if ($column->getValue('lsc_usf_id') > 0) {
                 $usfId = (int)$column->getValue('lsc_usf_id');
 
@@ -499,7 +498,7 @@ class ListConfiguration extends Entity
         for ($columnNumber = 1, $iMax = $this->countColumns(); $columnNumber <= $iMax; ++$columnNumber) {
             $column = $this->getColumnObject($columnNumber);
 
-            // Find name of the field
+            // Find the name of the field
             if ($column->getValue('lsc_usf_id') > 0) {
                 $arrColumnNames[] = $gProfileFields->getPropertyById((int)$column->getValue('lsc_usf_id'), 'usf_name');
             } else {
@@ -511,10 +510,10 @@ class ListConfiguration extends Entity
     }
 
     /**
-     * Returns an array with all column names of the sql statement that belong to the select clause.
+     * Returns an array with all column names of the SQL statement that belong to the select clause.
      * This will be the internal profile field name e.g. **LAST_NAME** or the db column name
      * of the special field e.g. **mem_begin**
-     * @return array Array with all column names of this sql select clause.
+     * @return array Array with all column names of this SQL select clause.
      * @throws Exception
      */
     public function getColumnNamesSql(): array
@@ -539,11 +538,11 @@ class ListConfiguration extends Entity
     /**
      * Returns the column object with the corresponding number.
      * The numbers will start with 1 and end with the count of all columns.
-     * If that column doesn't exist the method try to repair the
-     * column list. If that doesn't help then **null** will be returned.
-     * @param int $number The internal number of the column. The column number start with 1.
+     * If that column doesn't exist, the method tries to repair the
+     * column list. If that doesn't help, then **null** will be returned.
+     * @param int $number The internal number of the column. The column number starts with 1.
      *                    This will be the position of the column in the list.
-     * @return Entity|null Returns a Entity object of the database table **adm_list_columns**.
+     * @return Entity|null Returns an Entity object of the database table **adm_list_columns**.
      * @throws Exception
      */
     public function getColumnObject(int $number): ?Entity
@@ -552,7 +551,7 @@ class ListConfiguration extends Entity
             return $this->columns[$number];
         }
 
-        // column not found, then try to repair list
+        // column isn't found, then try to repair a list
         $this->repair();
         if (array_key_exists($number, $this->columns)) {
             return $this->columns[$number];
@@ -563,7 +562,7 @@ class ListConfiguration extends Entity
 
     /**
      * Returns an array with all list columns and a search condition for each column. Especially the null value
-     * will be replaced with a default value. This array can then be used to add it to the main sql statement.
+     * will be replaced with a default value. This array can then be used to add it to the main SQL statement.
      * @return array<int,string> Returns an array with all list columns and a search condition for each column.
      * @throws Exception
      */
@@ -629,26 +628,26 @@ class ListConfiguration extends Entity
     }
 
     /**
-     * Prepare SQL of the current list configuration. Therefore, all roles of the array and there users will be selected
+     * Prepare SQL of the current list configuration. Therefore, all roles of the array and their users will be selected
      * and joined with the columns of the list configuration. The time period of the membership will be considered and
      * could be influenced with parameters. There is also a possibility to join users of a relationship and hide special
      * columns of event roles. Each profile field of the select list will have their internal profile field name as column
      * name. The special field will still have their database column name.
      * @param array $options (optional) An array with the following possible entries:
-     *                                 - **showAllMembersThisOrga** : Set to true all users with an active membership
+     *                                 - **showAllMembersThisOrga**: Set to true all users with an active membership
      *                                   to at least one role of the current organization will be shown.
      *                                   This setting could be combined with **showFormerMembers** or **showRelationTypes**.
-     *                                 - **showAllMembersDatabase** : Set to true all users of the database will be shown
+     *                                 - **showAllMembersDatabase**: Set to true all users of the database will be shown
      *                                   independent of the membership to roles or organizations
-     *                                 - **showRolesMembers** : An array with all roles ids could be set and only members
-     *                                   of this roles will be shown.
+     *                                 - **showRolesMembers**: An array with all roles UUIDs could be set and only members
+     *                                   of this role will be shown.
      *                                   This setting could be combined with **showFormerMembers** or **showRelationTypes**.
-     *                                 - **showFormerMembers** : Set to true if roles members or members of the organization
+     *                                 - **showFormerMembers**: Set to true if role members or members of the organization
      *                                   should be shown and also former members should be listed
-     *                                 - **showRelationTypes** : An array with relation types. The sql will be expanded with
+     *                                 - **showRelationTypes**: An array with relation types. The sql will be expanded with
      *                                   all users who are in such a relationship to the selected role users.
      *                                 - **showUserUUID** : If set to true the first column of the SQL will be the usr_uuid.
-     *                                 - **showLeaderFlag** : If set to true the first columns of the SQL will be
+     *                                 - **showLeaderFlag** : If set to true, the first columns of the SQL will be
      *                                   the flag if a user is a leader in the role or not.
      *                                 - **useConditions** : false - Don't add additional conditions to the SQL
      *                                                       true  - Conditions will be added as stored in the settings
@@ -656,16 +655,16 @@ class ListConfiguration extends Entity
      *                                                 true  - Sorting is added as stored in the settings
      *                                 - **startDate** : The start date if memberships that should be considered. The time period of
      *                                   the membership must be at least one day after this date.
-     *                                 - **endDate** : The end date if memberships that should be considered.The time period of
+     *                                 - **endDate**: The end date if memberships that should be considered. The time period of
      *                                   the membership must be at least one day before this date.
-     * @return string Returns a valid sql that represents all users with the columns of the list configuration.
+     * @return string Returns a valid SQL that represents all users with the columns of the list configuration.
      * @throws Exception
      */
     public function getSQL(array $options = array()): string
     {
-        global $gL10n, $gProfileFields;
+        global $gL10n, $gProfileFields, $gCurrentOrgId;
 
-        // create array with all options
+        // create an array with all options
         $optionsDefault = array(
             'showAllMembersThisOrga' => false,
             'showAllMembersDatabase' => false,
@@ -698,6 +697,18 @@ class ListConfiguration extends Entity
             $this->showLeaders = false;
         }
 
+        if (count($optionsAll['showRolesMembers']) > 0) {
+            $sqlRoleUUIDs = '(\'' . implode('\', \'', $optionsAll['showRolesMembers']) . '\')';
+        } else {
+            $sqlRoleUUIDs = '(SELECT rol_uuid
+                              FROM ' . TBL_CATEGORIES . '
+                             INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
+                             WHERE (  cat_org_id = ' . $gCurrentOrgId . '
+                                   OR cat_org_id IS NULL )
+                               AND cat_name_intern <> \'EVENTS\'
+                            )';
+        }
+
         foreach ($this->columns as $listColumn) {
             $lscUsfId = (int)$listColumn->getValue('lsc_usf_id');
             $userFieldType = $gProfileFields->getPropertyById($lscUsfId, 'usf_type');
@@ -718,14 +729,30 @@ class ListConfiguration extends Entity
                 $sqlColumnName = strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern'));
             } else {
                 // Special fields like usr_photo, mem_begin ...
-                $specialField = $listColumn->getValue('lsc_special_field');                // Handle special case for membership duration calculation
-                if ($specialField === 'mem_duration') {
-                    // Display membership duration as formatted string mem_begin|mem_end
-                    $dbColumnName = 'CONCAT(mem_begin, \'|\', CASE WHEN mem_end >= \'' . DATE_NOW . '\' THEN \'ongoing\' ELSE mem_end END)';
-                } else {
-                    $dbColumnName = $specialField;
+                $sqlColumnName = $listColumn->getValue('lsc_special_field');
+                // Handle a special case for membership fields
+                switch ($sqlColumnName) {
+                    case 'mem_duration':
+                        // Display membership duration as formatted string mem_begin|mem_end
+                        $dbColumnName = 'CONCAT(mem_begin, \'|\', CASE WHEN mem_end >= \'' . DATE_NOW . '\' THEN \'ongoing\' ELSE mem_end END)';
+                        break;
+                    case 'mem_begin':
+                        $dbColumnName = '(SELECT MIN(mem_begin)
+                                            FROM ' . TBL_MEMBERS . '
+                                           INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
+                                           WHERE mem_usr_id = usr_id
+                                             AND rol_uuid IN ' . $sqlRoleUUIDs . ')';
+                        break;
+                    case 'mem_end':
+                        $dbColumnName = '(SELECT MAX(mem_end)
+                                            FROM ' . TBL_MEMBERS . '
+                                           INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
+                                           WHERE mem_usr_id = usr_id
+                                             AND rol_uuid IN ' . $sqlRoleUUIDs . ')';
+                        break;
+                    default:
+                        $dbColumnName = $sqlColumnName;
                 }
-                $sqlColumnName = $specialField;
             }
 
             if (in_array($sqlColumnName, $arrSqlColumnNames)) {
@@ -743,7 +770,7 @@ class ListConfiguration extends Entity
                 }
 
                 if ($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL') {
-                    // if a field has numeric values then there must be a cast because database
+                    // If a field has numeric values, then there must be a cast because the database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
                     if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
                         $columnType = 'numeric';
@@ -853,18 +880,6 @@ class ListConfiguration extends Entity
             }
         }
 
-        if (count($optionsAll['showRolesMembers']) > 0) {
-            $sqlRoleIds = '(\'' . implode('\', \'', $optionsAll['showRolesMembers']) . '\')';
-        } else {
-            $sqlRoleIds = '(SELECT rol_uuid
-                              FROM ' . TBL_CATEGORIES . '
-                             INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
-                             WHERE (  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
-                                   OR cat_org_id IS NULL )
-                               AND cat_name_intern <> \'EVENTS\'
-                            )';
-        }
-
         // Set state of membership
         $dateStart = ($optionsAll['startDate'] !== null) ? $optionsAll['startDate'] . ' 00:00:00' : DATE_NOW;
         $dateEnd = ($optionsAll['endDate'] !== null) ? $optionsAll['endDate'] . ' 23:59:59' : DATE_NOW;
@@ -918,7 +933,7 @@ class ListConfiguration extends Entity
             $sqlMemLeader = ' mem_leader, ';
         }
 
-        // add columns usr_id, usr_uuid, mem_leaders to the sql
+        // add columns usr_id, usr_uuid, mem_leaders to the SQL
         if ($optionsAll['showUserUUID']) {
             $sqlIdColumns = ' usr_uuid, ';
         }
@@ -948,13 +963,13 @@ class ListConfiguration extends Entity
                            ' . $sqlJoin . '
                      WHERE usr_valid = true
                        AND rol_valid = true
-                       AND rol_uuid IN ' . $sqlRoleIds . '
+                       AND rol_uuid IN ' . $sqlRoleUUIDs . '
                            ' . $sqlRelationTypeWhere . '
-                       AND (((  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
+                       AND (((  cat_org_id = ' . $gCurrentOrgId . '
                            OR cat_org_id IS NULL )
                            AND mem_begin <= \'' . $dateEnd . '\'
                            AND mem_end >= \'' . $dateStart . '\')
-                        OR (  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
+                        OR (  cat_org_id = ' . $gCurrentOrgId . '
                            OR cat_org_id IS NULL )
                            ' . $sqlMemberStatus . ')' .
                 $sqlWhere .
@@ -977,9 +992,9 @@ class ListConfiguration extends Entity
                            ' . $sqlJoin . '
                      WHERE usr_valid = true
                        AND rol_valid = true
-                       AND rol_uuid IN ' . $sqlRoleIds . '
+                       AND rol_uuid IN ' . $sqlRoleUUIDs . '
                            ' . $sqlRelationTypeWhere . '
-                       AND (  cat_org_id = ' . $GLOBALS['gCurrentOrgId'] . '
+                       AND (  cat_org_id = ' . $gCurrentOrgId . '
                            OR cat_org_id IS NULL )
                            ' . $sqlMemberStatus .
                 $sqlWhere .
@@ -1000,12 +1015,12 @@ class ListConfiguration extends Entity
     }
 
     /**
-     * Read data of responsible columns and store in object. Only columns of profile fields which the current
-     * user is allowed to view will be stored in the object. If only the role membership should be shown than
+     * Read data of responsible columns and store in an object. Only columns of profile fields which the current
+     * user is allowed to view will be stored in the object. If only the role membership should be shown, then
      * remove all columns except first name, last name and assignment timestamps.
      * @throws Exception
      */
-    public function readColumns()
+    public function readColumns(): void
     {
         global $gCurrentUser, $gProfileFields;
 
@@ -1044,9 +1059,9 @@ class ListConfiguration extends Entity
     }
 
     /**
-     * Reads a record out of the table in database selected by the unique uuid column in the table.
-     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
-     * Per default all columns of the default table will be read and stored in the object.
+     * Reads a record out of the table in the database selected by the unique uuid column in the table.
+     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g., usr_uuid.
+     * Per default, all columns of the default table will be read and stored in the object.
      * Not every Admidio table has an uuid. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
@@ -1066,11 +1081,11 @@ class ListConfiguration extends Entity
     }
 
     /**
-     * Removes a column from the list configuration array, but only in the memory and not in database.
+     * Removes a column from the list configuration array, but only in the memory and not in the database.
      * @param string $columnNameOrUsfId Accept the usfId or the name of the special field that should be removed.
      * @throws Exception
      */
-    public function removeColumn(string $columnNameOrUsfId)
+    public function removeColumn(string $columnNameOrUsfId): void
     {
         $currentNumber = 1;
 
@@ -1096,7 +1111,7 @@ class ListConfiguration extends Entity
      * This is in some cases a necessary fix if a column number was lost.
      * @throws Exception
      */
-    public function repair()
+    public function repair(): void
     {
         // restore columns from database
         $this->columns = array();
@@ -1124,13 +1139,15 @@ class ListConfiguration extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
+        global $gCurrentOrgId;
+
         $this->db->startTransaction();
 
         $this->setValue('lst_timestamp', DATETIME_NOW);
         $this->setValue('lst_usr_id', $GLOBALS['gCurrentUserId']);
 
         if ($this->newRecord && empty($this->getValue('lst_org_id'))) {
-            $this->setValue('lst_org_id', $GLOBALS['gCurrentOrgId']);
+            $this->setValue('lst_org_id', $gCurrentOrgId);
         }
 
         // if "lst_global" isn't set explicit to "1", set it to "0"
@@ -1154,13 +1171,13 @@ class ListConfiguration extends Entity
     }
 
     /**
-     * Set a mode that only first name and last name will be returned if the sql is called or columns should be
+     * Set a mode that only first name, and last name will be returned if the SQL is called or columns should be
      * returned. This is useful is a role has the setting that no profile information should be shown, but the
      * membership could be viewed.
      * @return void
      * @throws Exception
      */
-    public function setModeShowOnlyNames()
+    public function setModeShowOnlyNames(): void
     {
         $this->showOnlyNames = true;
 
