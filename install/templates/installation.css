@@ -94,6 +94,10 @@ a {
     border-color: var(--bs-primary);
 }
 
+.bg-info {
+    background-color: var(--bs-secondary) !important;
+}
+
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,

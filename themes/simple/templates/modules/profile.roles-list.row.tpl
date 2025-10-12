@@ -12,7 +12,7 @@
                         <span class="me-2">
                             {$membership.period}
                             {if isset($membership.duration)}
-                                <span class="badge rounded-pill bg-info ms-1" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MEMBERSHIP_DURATION')}">{$membership.duration}</span>
+                                <span class="badge bg-info ms-1" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MEMBERSHIP_DURATION')}">{$membership.duration}</span>
                             {/if}
                         </span>
                         {if isset($membership.linkMembershipEdit)}
