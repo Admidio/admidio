@@ -387,14 +387,15 @@ class Membership extends Entity
         } else {
             $endDateTime = new DateTime($endDate);
         }
-        // Add one day to include the end date in the duration
-        $endDateTime->modify('+1 day');
 
         // If the end date is in the future, use the current date for duration calculation
         $now = new DateTime();
         if ($endDateTime > $now && $endDate !== DATE_MAX) {
             $endDateTime = $now;
         }
+
+        // Add one day to include the end date in the duration
+        $endDateTime->modify('+1 day');
 
         // Calculate difference
         $interval = $startDateTime->diff($endDateTime);
