@@ -1018,7 +1018,7 @@ class PreferencesPresenter extends PagePresenter
 
         $formInventory->addInput(
             'inventory_export_filename',
-            'SYS_INVENTORY_FILENAME',
+            $gL10n->get('SYS_INVENTORY_FILENAME'),
             $formValues['inventory_export_filename'],
             array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_FILENAME_DESC')
         );
