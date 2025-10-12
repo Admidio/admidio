@@ -490,8 +490,8 @@ CREATE TABLE `%PREFIX%_inventory_item_borrow_data` (
   `inb_id` int UNSIGNED NOT NULL,
   `inb_ini_id` int UNSIGNED NOT NULL,
   `inb_last_receiver` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `inb_borrow_date` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `inb_return_date` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
+  `inb_borrow_date` timestamp NULL DEFAULT NULL,
+  `inb_return_date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 --
@@ -499,8 +499,8 @@ CREATE TABLE `%PREFIX%_inventory_item_borrow_data` (
 --
 
 INSERT INTO `%PREFIX%_inventory_item_borrow_data` (`inb_id`, `inb_ini_id`, `inb_last_receiver`, `inb_borrow_date`, `inb_return_date`) VALUES
-(1, 2, '206', '28.06.2025', '12.07.2025'),
-(2, 3, '202', '14.09.2025', NULL);
+(1, 2, '206', '2025-06-28 22:00:00', '2025-07-11 22:00:00'),
+(2, 3, '202', '2025-09-13 22:00:00', NULL);
 
 -- --------------------------------------------------------
 
