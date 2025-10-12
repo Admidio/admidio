@@ -791,7 +791,7 @@ class InventoryPresenter extends PagePresenter
             // For the first column, add item picture column when enabled and in html mode
             if ($columnNumber === 1 && ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled'))) {
                     // photo column
-                    $headers[] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
+                    $headers[] = '&nbsp;';
                     $columnAlign[] = 'center';
             }
 
@@ -865,8 +865,8 @@ class InventoryPresenter extends PagePresenter
                             $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $item['ini_uuid']));
                             $itemPhotoModalUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show_modal', 'item_uuid' => $item['ini_uuid']));
                             $itemPhotoContent = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . $itemPhotoModalUrl . '">
-                                <img id="adm_inventory_item_picture" class="rounded" style="max-height: 24px; max-width: 24px;" src="' . $itemPhotoUrl . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
-                            </a>';
+                                    <img id="adm_inventory_item_picture" class="rounded" style="max-height: 24px; max-width: 24px;" src="' . $itemPhotoUrl . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
+                                </a>';
                             $rowValues['data'][] = $itemPhotoContent;
                         }
                     }
