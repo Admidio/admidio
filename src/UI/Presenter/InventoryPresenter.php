@@ -788,20 +788,11 @@ class InventoryPresenter extends PagePresenter
                 continue; // skip borrowing fields if borrowing is disabled
             }
 
-            // For the first column, add specific header configurations for export modes
-            if ($columnNumber === 1) {
-                $columnAlign[] = 'end';
-
-                if (in_array($mode, ['csv', 'ods', 'xlsx'])) {
-                    $exportHeaders[$gL10n->get('SYS_ABR_NO')] = 'string';
-                } else {
-                    $headers[] = $gL10n->get('SYS_ABR_NO');
-                    if ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled')) {
-                        // photo column
-                        $headers[] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
-                        $columnAlign[] = 'center';
-                    }
-                }
+            // For the first column, add item picture column when enabled and in html mode
+            if ($columnNumber === 1 && ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled'))) {
+                    // photo column
+                    $headers[] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
+                    $columnAlign[] = 'center';
             }
 
             // Decide alignment based on inf_type
@@ -839,7 +830,6 @@ class InventoryPresenter extends PagePresenter
 
         $rows = array();
         $strikethroughs = array();
-        $listRowNumber = 1;
         $actionsHeaderAdded = false;
 
         // Iterate over each item to fill the table rows
@@ -871,15 +861,14 @@ class InventoryPresenter extends PagePresenter
                 if ($columnNumber === 1) {
                     if ($mode === 'html') {
                         $rowValues['data'][] = ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? '<input type="checkbox"/>' : '';
-                    }
-                    $rowValues['data'][] = $listRowNumber;
-                    if ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled')) {
-                        $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $item['ini_uuid']));
-                        $itemPhotoModalUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show_modal', 'item_uuid' => $item['ini_uuid']));
-                        $itemPhotoContent = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . $itemPhotoModalUrl . '">
-                            <img id="adm_inventory_item_picture" class="rounded" style="max-height: 24px; max-width: 24px;" src="' . $itemPhotoUrl . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
-                        </a>';
-                        $rowValues['data'][] = $itemPhotoContent;
+                        if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
+                            $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $item['ini_uuid']));
+                            $itemPhotoModalUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show_modal', 'item_uuid' => $item['ini_uuid']));
+                            $itemPhotoContent = '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . $itemPhotoModalUrl . '">
+                                <img id="adm_inventory_item_picture" class="rounded" style="max-height: 24px; max-width: 24px;" src="' . $itemPhotoUrl . '" alt="' . $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_CURRENT') . '" />
+                            </a>';
+                            $rowValues['data'][] = $itemPhotoContent;
+                        }
                     }
                 }
 
@@ -1098,23 +1087,23 @@ class InventoryPresenter extends PagePresenter
                     $strikethroughs[] = $strikethrough;
                 }
             }
-
-            $listRowNumber++;
         }
 
         // check if actionHeader was set, if so, make shure every row has an actions column
-        if ($actionsHeaderAdded) {
-            foreach ($rows as &$row) {
-                if (!isset($row['actions'])) {
-                    $row['actions'] = array();
+        if ($mode === 'html') {
+            if ($actionsHeaderAdded) {
+                foreach ($rows as &$row) {
+                    if (!isset($row['actions'])) {
+                        $row['actions'] = array();
+                    }
                 }
-            }
-        } else {
-            // remove the checkbox column alignment and header if no action column was added
-            array_shift($preparedData['column_align']);
-            array_shift($preparedData['headers']);
-            foreach ($rows as &$row) {
-                array_shift($row['data']);
+            } else {
+                // remove the checkbox column alignment and header if no action column was added
+                array_shift($preparedData['column_align']);
+                array_shift($preparedData['headers']);
+                foreach ($rows as &$row) {
+                    array_shift($row['data']);
+                }
             }
         }
 
@@ -1152,7 +1141,7 @@ class InventoryPresenter extends PagePresenter
         );
 
         // Build headers and set column alignment (only for HTML mode)
-        $columnAlign[] = 'end'; // first column alignment
+        $columnAlign[] = array();
         $headers = array();
         $columnNumber = 1;
         //array with the internal field names of the borrow fields
@@ -1162,7 +1151,7 @@ class InventoryPresenter extends PagePresenter
         $profileItemFields = array('ITEMNAME');
 
         foreach (explode(',', $gSettingsManager->getString('inventory_profile_view')) as $itemField) {
-            // we are in the keeper view, so we dont need the keeper field in the table
+            // we are in the keeper view, so we don't need the keeper field in the table
             if ($itemField !== $itemFieldFilter && $itemField !== "0") {
                 $profileItemFields[] = $itemField;
             }
@@ -1193,11 +1182,6 @@ class InventoryPresenter extends PagePresenter
                     break;
             }
 
-            // For the first column, add a specific header
-            if ($columnNumber === 1) {
-                $headers[] = $gL10n->get('SYS_ABR_NO');
-            }
-
             $headers[] = $columnHeader;
             $columnNumber++;
         }
@@ -1208,7 +1192,6 @@ class InventoryPresenter extends PagePresenter
         // Build table rows from the predefined ItemsData element (HTML mode only)
         $rows = array();
         $strikethroughs = array();
-        $listRowNumber = 1;
         $actionsHeaderAdded = false;
 
         foreach ($itemsData->getItems() as $item) {
@@ -1223,11 +1206,6 @@ class InventoryPresenter extends PagePresenter
 
                 if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowFieldNames))) {
                     continue;
-                }
-
-                // For the first column, add a row number
-                if ($columnNumber === 1) {
-                    $rowValues['data'][] = $listRowNumber;
                 }
 
                 $content = $itemsData->getValue($infNameIntern, 'database');
@@ -1364,7 +1342,6 @@ class InventoryPresenter extends PagePresenter
 
             $rows[] = $rowValues;
             $strikethroughs[] = $strikethrough;
-            $listRowNumber++;
         }
 
         // check if actionHeader was set, if so, make shure every row has an actions column
