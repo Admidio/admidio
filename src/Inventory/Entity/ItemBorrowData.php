@@ -88,6 +88,25 @@ class ItemBorrowData extends Entity
         $itemUUID = $item->getValue('ini_uuid');
         $itemName = $item->readableName();
 
+        $itemDateNew = $logEntry->getValue('log_value_new');
+        $itemDateOld = $logEntry->getValue('log_value_old');
+
+        if ($logEntry->getValue('log_field') === 'inb_borrow_date') {
+            $infNameIntern = 'BORROW_DATE';
+        } else {
+            $infNameIntern = 'RETURN_DATE';
+        }
+
+        // remove seconds from datetime fields
+        if (!empty($itemDateNew) && str_contains($itemDateNew, ' ')) {
+            $itemDateNew = substr($itemDateNew, 0, 16);
+        }
+        if (!empty($itemDateOld) && str_contains($itemDateNew, ' ')) {
+            $itemDateOld = substr($itemDateOld, 0, 16);
+        }
+
+        $logEntry->setValue('log_value_new', $this->mItemsData->getHtmlValue($infNameIntern, $itemDateNew));
+        $logEntry->setValue('log_value_old', $this->mItemsData->getHtmlValue($infNameIntern, $itemDateOld));
         $logEntry->setValue('log_record_name', $itemName);
         $logEntry->setValue('log_record_uuid', $itemUUID);
     }
