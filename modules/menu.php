@@ -88,7 +88,12 @@ try {
     }
 } catch (Throwable $e) {
     if (in_array($getMode, array('save', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        if ($gDebug) {
+            echo json_encode(array('status' => 'error',
+                'message' => $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine() . '<br />Stacktrace:' . $e->getTraceAsString()));
+        } else {
+            echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        }
     } else {
         $gMessage->show($e->getMessage());
     }
