@@ -227,7 +227,7 @@ try {
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'update')),
                 $page
             );
-            if (isset($gLoginForUpdate) && $gLoginForUpdate) {
+            if (!isset($gLoginForUpdate) || $gLoginForUpdate) {
                 $form->addInput(
                     'adm_login_name',
                     $gL10n->get('SYS_USERNAME'),
