@@ -280,10 +280,10 @@ class SSOKeyPresenter extends PagePresenter
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3'));
 
-        $this->smarty->assign('nameUserCreated', $key->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $key->getValue('key_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $key->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $key->getValue('key_timestamp_change'));
+        $this->smarty->assign('userCreatedName', $key->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $key->getValue('key_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $key->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $key->getValue('key_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
