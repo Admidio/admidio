@@ -555,7 +555,7 @@ class SSOClientPresenter extends PagePresenter
         $form->addCheckbox(
             'ocl_enabled',
             $gL10n->get('SYS_ENABLED'),
-            $client->getValue('ocl_enabled'),
+            $client->getValue('ocl_enabled') ?? false,
             array()
         );
         $form->addInput(
