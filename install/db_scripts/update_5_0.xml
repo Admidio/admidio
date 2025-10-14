@@ -240,7 +240,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_smc_usr_create FOREIGN KEY (smc_usr_id_create)   REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
             ADD CONSTRAINT %PREFIX%_fk_smc_usr_change FOREIGN KEY (smc_usr_id_change)   REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
     <step id="1010">INSERT INTO %PREFIX%_roles_rights (ror_name_intern, ror_table)
-                   VALUES ('sso_saml_access', 'adm_saml_clients')</step>
+                   VALUES ('sso_saml_access', '%PREFIX%_saml_clients')</step>
     <step id="1020">CREATE TABLE IF NOT EXISTS %PREFIX%_sso_keys (
             key_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
             key_uuid                    varchar(36)         NOT NULL,
@@ -512,5 +512,12 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1685">UPDATE %PREFIX%_preferences SET prf_value = '' WHERE prf_value IS NULL</step>
     <step id="1690" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_value varchar(255) NOT NULL</step>
     <step id="1700" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_value SET NOT NULL</step>
+    <step id="1710">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_folders' WHERE ror_name_intern = 'folder_view'</step>
+    <step id="1720">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_folders' WHERE ror_name_intern = 'folder_edit'</step>
+    <step id="1730">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_categories' WHERE ror_name_intern = 'category_view'</step>
+    <step id="1740">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_categories' WHERE ror_name_intern = 'category_edit'</step>
+    <step id="1750">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_events' WHERE ror_name_intern = 'event_participation'</step>
+    <step id="1760">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_menu' WHERE ror_name_intern = 'menu_view'</step>
+    <step id="1770">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_saml_clients' WHERE ror_name_intern = 'sso_saml_access'</step>
     <step>stop</step>
 </update>
