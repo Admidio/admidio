@@ -9,12 +9,13 @@
  *
  * Parameters:
  *
- * user_uuid : UUID of the first user in the new relation
+ * user_uuid: UUID of the first user in the new relation
  ***********************************************************************************************
  */
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
@@ -58,7 +59,7 @@ try {
     $headline = $gL10n->get('SYS_CREATE_RELATIONSHIP');
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    // create html page object
+    // create an HTML page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-userrelations-edit', $headline);
 
     // show form
@@ -71,7 +72,7 @@ try {
 
     $sqlData = array();
     if ($gCurrentUser->isAdministratorUsers()) {
-        // the user has the edit right, therefore he can edit all visible users
+        // the user has the edit right, therefore, he can edit all visible users
         $sqlData['query'] = 'SELECT usr_uuid, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
                            FROM ' . TBL_MEMBERS . '
                      INNER JOIN ' . TBL_ROLES . '
@@ -110,7 +111,7 @@ try {
             )
         );
     } else {
-        // select all users which the current user can edit because of role leader rights
+        // select all users that the current user can edit because of role leader rights
         $sqlData['query'] = 'SELECT usr_uuid, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
                            FROM ' . TBL_MEMBERS . '
                      INNER JOIN ' . TBL_USERS . '
@@ -164,14 +165,23 @@ try {
         array('property' => FormPresenter::FIELD_REQUIRED, 'search' => true, 'placeholder' => '- ' . $gL10n->get('SYS_PLEASE_CHOOSE') . ' -')
     );
     // select box showing all relation types
-    $sql = 'SELECT urt_uuid, REPLACE(\'' . $gL10n->get('SYS_IS_VAR_FROM') . '\', \'#VAR1#\', urt_name)
+    $sql = 'SELECT urt_uuid, urt_name
           FROM ' . TBL_USER_RELATION_TYPES . '
       ORDER BY urt_name';
-    $form->addSelectBoxFromSql(
+    $userRelationTypeStatement = $gDb->queryPrepared($sql);
+    $userRelationTypes = array();
+    while ($row = $userRelationTypeStatement->fetch()) {
+        $userRelationTypes[] = array(
+            $row['urt_uuid'],
+            $gL10n->get('SYS_IS_VAR_FROM', array(
+                (Language::isTranslationStringId($row['urt_name']) ? $gL10n->get($row['urt_name']) : $row['urt_name'])
+            ))
+        );
+    }
+    $form->addSelectBox(
         'urt_uuid',
         $gL10n->get('SYS_USER_RELATION'),
-        $gDb,
-        $sql,
+        $userRelationTypes,
         array('property' => FormPresenter::FIELD_REQUIRED)
     );
 

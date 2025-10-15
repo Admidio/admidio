@@ -11,6 +11,8 @@ use Admidio\Organizations\Entity\Organization;
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
+use RuntimeException;
+use UnexpectedValueException;
 
 /**
  * @brief Class to implement useful method for installation and update process.
@@ -25,7 +27,7 @@ class Update
      * checks if login is required and if so, if it is valid
      * @throws Exception
      */
-    public function checkLogin()
+    public function checkLogin(): void
     {
         global $gDb, $gLoginForUpdate, $gProfileFields, $gCurrentUser;
 
@@ -44,16 +46,16 @@ class Update
         $userStatement = $gDb->queryPrepared($sql, array($loginName));
 
         if ($userStatement->rowCount() === 0) {
-            // show message that username or password is incorrect
+            // show a message that username or password is incorrect
             throw new Exception('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT');
             // => EXIT
         } else {
-            // create object with current user field structure und user object
+            // create an object with current user field structure und user object
             $gCurrentUser = new User($gDb, $gProfileFields, (int) $userStatement->fetchColumn());
 
-            // check login data. If login failed an exception will be thrown.
-            // Don't update the current session with user id and don't do a rehash of the password
-            // because in former versions the password field was too small for the current hashes
+            // Check login data. If login failed, an exception will be thrown.
+            // Don't update the current session with user id and don't do a rehash of the password.
+            // In former versions, the password field was too small for the current hashes,
             // and the update of this field will be done after this check.
             $gCurrentUser->checkLogin($password, false, false, false, true);
         }
@@ -63,7 +65,7 @@ class Update
      * @param string $installedDbVersion
      * @throws Exception
      */
-    public function doAdmidioUpdate(string $installedDbVersion)
+    public function doAdmidioUpdate(string $installedDbVersion): void
     {
         global $gLogger, $gDb, $gL10n, $gProfileFields, $gCurrentUser;
 
@@ -96,7 +98,7 @@ class Update
         $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
         $componentUpdateHandle->update(ADMIDIO_VERSION);
 
-        // activate foreign key checks, so database is consistent
+        // activate foreign key checks, so a database is consistent
         $this->toggleForeignKeyChecks(true);
 
         // create ".htaccess" file for folder "adm_my_files"
@@ -109,7 +111,7 @@ class Update
         try {
             // remove compiled templates so new ones will be created with the new version
             FileSystemUtils::deleteDirectoryIfExists(ADMIDIO_PATH . FOLDER_DATA . '/templates', true);
-        } catch (\UnexpectedValueException|\RuntimeException $e) {
+        } catch (UnexpectedValueException|RuntimeException) {
             $gLogger->warning('Folder adm_my_files/templates could not be deleted!');
         }
 
@@ -121,7 +123,7 @@ class Update
         $sql = 'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = \'true\'';
         $gDb->queryPrepared($sql);
 
-        // remove session object with all data, so that
+        // remove a session object with all data, so that
         // all data will be read after the update
         session_unset();
         session_destroy();
@@ -130,7 +132,7 @@ class Update
     /**
      * @throws Exception
      */
-    public function updateOrgPreferences()
+    public function updateOrgPreferences(): void
     {
         global $gDb, $gPasswordHashAlgorithm;
 
@@ -160,12 +162,12 @@ class Update
     }
 
     /**
-     * Method will activate / deactivate the foreign key check in the database. This
+     * The Method will activate / deactivate the foreign key check in the database. This
      * will only work for a MySQL database.
-     * @param bool $enable If set to **true** the foreign key check will be activated.
+     * @param bool $enable If set to **true **, the foreign key check will be activated.
      * @throws Exception
      */
-    public function toggleForeignKeyChecks(bool $enable)
+    public function toggleForeignKeyChecks(bool $enable): void
     {
         global $gDb;
 

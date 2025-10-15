@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\InstallationUpdate\Service\Installation;
 use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
@@ -16,7 +17,7 @@ use Admidio\UI\Presenter\InstallationPresenter;
 
 /**
  ***********************************************************************************************
- * Handle update of Admidio database to a new version
+ * Handle update of an Admidio database to a new version
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -24,9 +25,9 @@ use Admidio\UI\Presenter\InstallationPresenter;
  *
  * Parameters:
  *
- * mode = dialog : (Default) Check update status and show dialog with status
- *        update : Perform update
- *        result : Show result of update
+ * mode = dialog: (Default) Check update status and show dialog with status
+ *        update: Perform update
+ *        result: Show result of update
  ***********************************************************************************************
  */
 const THEME_URL = 'layout';
@@ -37,7 +38,6 @@ try {
      * @param string $message Message that should be shown to the user.
      * @param bool $reloadPage If set to **true** than the user could reload the update page.
      * @return void
-     * @throws \Admidio\Infrastructure\Exception
      */
     function showErrorMessage(string $message, bool $reloadPage = false): void
     {
@@ -91,11 +91,11 @@ try {
         // TODO
     }
 
-    // create session object
+    // create a session object
     if (array_key_exists('gCurrentSession', $_SESSION)) {
         $gCurrentSession = $_SESSION['gCurrentSession'];
     } else {
-        // create new session object and store it in PHP session
+        // create a new session object and store it in PHP session
         $gCurrentSession = new Session($gDb, COOKIE_PREFIX);
         $_SESSION['gCurrentSession'] = $gCurrentSession;
     }
@@ -116,7 +116,7 @@ try {
 
 
     /* Disable logging changes to the database. This will not be reverted,
-     *  i.e. during installation / setup no logs are written. The next user
+     *  i.e., during installation / setup no logs are written. The next user
      * call will use the default value of true and properly log changes...
      */
     Entity::setLoggingEnabled(false);
@@ -137,15 +137,15 @@ try {
     // read organization specific parameters from adm_preferences
     $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 
-    // create language and language data object to handle translations
+    // create a language and language data object to handle translations
     if (!$gSettingsManager->has('system_language')) {
         $gSettingsManager->set('system_language', 'de');
     }
     $gL10n = new Language($gSettingsManager->getString('system_language'), true);
     $gChangeNotification = new ChangeNotification();
 
-    // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
-    \Admidio\InstallationUpdate\Service\Installation::checkFolderPermissions();
+    // check if adm_my_files has "write" privileges and check some subfolders of adm_my_files
+    Installation::checkFolderPermissions();
 
     // config.php exists at wrong place
     if (is_file(ADMIDIO_PATH . '/config.php') && is_file(ADMIDIO_PATH . FOLDER_DATA . '/config.php')) {
@@ -158,7 +158,7 @@ try {
     }
 
     // check database version
-    $message = \Admidio\InstallationUpdate\Service\Installation::checkDatabaseVersion($gDb);
+    $message = Installation::checkDatabaseVersion($gDb);
 
     if ($message !== '') {
         showErrorMessage($message);
@@ -173,13 +173,13 @@ try {
 
     $sql = 'SELECT 1 FROM ' . TBL_COMPONENTS;
     if (!$gDb->queryPrepared($sql, array(), false)) {
-        // in Admidio version 2 the database version was stored in preferences table
+        // in Admidio version 2, the database version was stored in preference table
         if ($gSettingsManager->has('db_version')) {
             $installedDbVersion = $gSettingsManager->getString('db_version');
             $installedDbBetaVersion = $gSettingsManager->getInt('db_version_beta');
         }
     } else {
-        // read system component
+        // read a system component
         $componentUpdateHandle = new ComponentUpdate($gDb);
         $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
 
@@ -191,7 +191,7 @@ try {
         }
     }
 
-    // if a beta was installed then create the version string with Beta version
+    // if a beta was installed, then create the version string with a Beta version
     if ($installedDbBetaVersion > 0) {
         $installedDbVersion = $installedDbVersion . ' Beta ' . $installedDbBetaVersion;
     }
@@ -201,7 +201,7 @@ try {
         // => EXIT
     }
 
-    // if database version is not set then show notice
+    // if a database version is not set, then show notice
     if ($installedDbVersion === '') {
         showErrorMessage($gL10n->get('INS_UPDATE_NOT_POSSIBLE') . '<p>' . $gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', array(ADMIDIO_VERSION_TEXT)) . '</p>');
         // => EXIT
@@ -210,8 +210,8 @@ try {
     if ($getMode === 'dialog') {
         $gLogger->info('UPDATE: Show update start-view');
 
-        // if database version is smaller than source version -> update
-        // if database version is equal to source but beta has a difference -> update
+        // if a database version is smaller than source version -> update
+        // if a database version is equal to source but beta has a difference -> update
         if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
             || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
             // create a page with the notice that the installation must be configured on the next pages
@@ -227,7 +227,7 @@ try {
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'update')),
                 $page
             );
-            if ($gLoginForUpdate) {
+            if (!isset($gLoginForUpdate) || $gLoginForUpdate) {
                 $form->addInput(
                     'adm_login_name',
                     $gL10n->get('SYS_USERNAME'),
