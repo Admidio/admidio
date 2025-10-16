@@ -307,7 +307,7 @@ try {
     }
 } catch (Throwable $e) {
     if ($getMode === 'update') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        handleException($e, true);
     } else {
         showErrorMessage($e->getMessage(), true);
     }

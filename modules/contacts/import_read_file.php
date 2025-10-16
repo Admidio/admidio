@@ -147,6 +147,6 @@ try {
         'url' => ADMIDIO_URL . FOLDER_MODULES . '/contacts/import_column_config.php'
     ));
     exit();
-} catch (Exception|\PhpOffice\PhpSpreadsheet\Exception|Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

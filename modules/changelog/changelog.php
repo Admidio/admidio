@@ -269,6 +269,6 @@ try {
     $page->addHtml('<div class="alert alert-danger form-alert" id="DT_notice" style="display: none;"></div>');
     $page->addHtmlByTemplate('modules/changelog.list.tpl');
     $page->show();
-} catch (Exception | \Smarty\Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

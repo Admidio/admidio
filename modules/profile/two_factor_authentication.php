@@ -153,12 +153,7 @@ try {
         $gCurrentSession->addFormObject($form);
         echo $smarty->fetch($template);
     }
-
 } catch (Throwable $e) {
-    if ($getMode === 'setup') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->showInModalWindow();
-        $gMessage->show($e->getMessage());
-    }
+    $gMessage->showInModalWindow();
+    handleException($e, $getMode == 'setup');
 }

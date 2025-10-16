@@ -223,6 +223,6 @@ try {
     } else {
         throw new Exception('SYS_ECARD_NOT_SUCCESSFULLY_SEND');
     }
-} catch (Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

@@ -283,7 +283,7 @@ try {
                                 $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                             }
                         }
-                        
+
                         $form->addSelectBox(
                             $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
                             $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
@@ -396,7 +396,7 @@ try {
 
             $page->show();
             break;
-        
+
         case 'html_selection':
             // set headline of the script
             $headline = $gL10n->get('SYS_EDIT_PROFILES');
@@ -441,7 +441,7 @@ try {
                 $fieldProperty = FormPresenter::FIELD_DEFAULT;
                 $helpId = '';
                 $usfNameIntern = $field->getValue('usf_name_intern');
-                
+
                 if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
                     // do not show last name and first name in selection mode
                     continue;
@@ -495,7 +495,7 @@ try {
                             $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                         }
                     }
-                    
+
                     $form->addSelectBox(
                         $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
                         $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
@@ -780,9 +780,5 @@ try {
             break;
     }
 } catch (Exception $e) {
-    if ($getMode === 'save') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, $getMode == 'save');
 }

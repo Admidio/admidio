@@ -263,5 +263,3 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
         throw new \Admidio\Infrastructure\Exception($e->getMessage());
     }
 }
-
-// This function has been moved to the Membership class as calculateDuration() method

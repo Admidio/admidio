@@ -253,7 +253,7 @@ try {
         ));
         exit();
     } elseif ($getMode === 'review') {
-        // show dialog with current and new profile photo for review
+        // show dialog with the current and new profile photo for review
 
         if ((int)$user->getValue('usr_id') === $gCurrentUserId) {
             $headline = $gL10n->get('SYS_EDIT_MY_PROFILE_PICTURE');
@@ -261,7 +261,7 @@ try {
             $headline = $gL10n->get('SYS_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
         }
 
-        // create html page object
+        // create HTML page object
         $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-photo-edit', $headline);
         $page->addTemplateFile('modules/profile.new-photo.tpl');
         $page->assignSmartyVariable('urlCurrentProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'timestamp' => $user->getValue('usr_timestamp_change', 'Y-m-d-H-i-s'))));
@@ -269,10 +269,6 @@ try {
         $page->assignSmartyVariable('urlNextPage', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'save', 'user_uuid' => $getUserUuid)));
         $page->show();
     }
-} catch (Exception|Exception|RuntimeException $e) {
-    if (in_array($getMode, array('upload', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, in_array($getMode, array('upload', 'delete')));
 }

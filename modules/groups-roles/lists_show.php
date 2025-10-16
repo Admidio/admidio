@@ -879,8 +879,6 @@ try {
         // show complete html page
         $page->show();
     }
-} catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
-    echo $e->getMessage();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

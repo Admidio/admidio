@@ -462,6 +462,6 @@ try {
 
     // show HTML of the complete page
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

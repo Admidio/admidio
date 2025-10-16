@@ -297,7 +297,7 @@ try {
             "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_END') . '",
             "usf_name_intern": "mem_end"
         };
-        
+
         userFields[' . ++$i . '] = {
             "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
             "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_DURATION') . '",
@@ -644,6 +644,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

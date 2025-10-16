@@ -28,17 +28,28 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
  */
 function handleException(Throwable $e, bool $jsonResponse = false): void
 {
+    global $gDebug, $gMessage;
+
     $message = $e->getMessage();
 
-    if ($GLOBALS['gDebug']) {
-        $message .= ' in ' . $e->getFile() . ', in line ' . $e->getLine() . '<br />Stacktrace:' . $e->getTraceAsString();
+    if ($gDebug) {
+        $message .= ' in ' . $e->getFile() . ', in line ' . $e->getLine() . '<br /><br />Stacktrace:<br />' . $e->getTraceAsString();
     }
 
     if ($jsonResponse) {
         echo json_encode(array('status' => 'error', 'message' => $message));
     } else {
-        $GLOBALS['gMessage']->show($message);
+        if (isset($gMessage)) {
+            try {
+                $gMessage->show($message);
+            } catch (Throwable $exceptionMessage) {
+                echo $exceptionMessage->getMessage();
+            }
+        } else {
+            echo $message;
+        }
     }
+    exit();
 }
 
 /**

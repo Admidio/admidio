@@ -338,6 +338,6 @@ try {
             throw new Exception('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
         }
     }
-} catch (Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

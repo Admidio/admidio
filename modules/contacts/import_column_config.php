@@ -74,7 +74,7 @@ try {
     foreach ($arrayCsvColumns as $pos => $column) {
         if (empty($column)) {
           $arrayCsvColumns[$pos] =  $gL10n->get('SYS_COLUMN_POS', array($pos));
-        } 
+        }
     }
 
     $arrayImportableFields[] = array(
@@ -157,6 +157,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

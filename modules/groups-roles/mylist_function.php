@@ -140,6 +140,6 @@ try {
         echo json_encode(array('status' => 'success', 'url' => ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php'));
         exit();
     }
-} catch (Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }
