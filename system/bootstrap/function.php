@@ -20,8 +20,30 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
 }
 
 /**
+ * This function handles exceptions and shows the error message.
+ * If **jsonResponse** is set to true, then the error message will be returned as JSON object.
+ * @param Throwable $e The exception that should be handled
+ * @param bool $jsonResponse (optional) If set to true than the error message will be returned as JSON object
+ * @return void
+ */
+function handleException(Throwable $e, bool $jsonResponse = false): void
+{
+    $message = $e->getMessage();
+
+    if ($GLOBALS['gDebug']) {
+        $message .= ' in ' . $e->getFile() . ', in line ' . $e->getLine() . '<br />Stacktrace:' . $e->getTraceAsString();
+    }
+
+    if ($jsonResponse) {
+        echo json_encode(array('status' => 'error', 'message' => $message));
+    } else {
+        $GLOBALS['gMessage']->show($message);
+    }
+}
+
+/**
  * Function checks if the user is a member of the role.
- * If **userId** is not set than this will be checked for the current user
+ * If **userId** is not set then this will be checked for the current user
  * @param string $roleName The name of the role where the membership of the user should be checked
  * @param int $userId The id of the user who should be checked if he is a member of the role.
  *                         If @userId is not set than this will be checked for the current user
@@ -81,7 +103,7 @@ function isMember(int $userId): bool
 
 /**
  * Function checks if the user is a group leader in a role of the current organization.
- * If you use the **roleId** parameter you can check if the user is group leader of that role.
+ * If you use the **roleId** parameter, you can check if the user is group leader of that role.
  * @param int $userId The id of the user who should be checked if he is a group leader
  * @param int $roleId (optional) If set <> 0 than the function checks if the user is group leader of this role
  *                    otherwise it checks if the user is group leader in one role of the current organization
@@ -122,13 +144,13 @@ function isGroupLeader(int $userId, int $roleId = 0): bool
  * This function returns a page navigation depending on the number of pages.
  * Parts of this function are from generatePagination from phpBB2.
  * Example:
- *     Page: < Previous 1  2  3 ... 9  10  11 Next >
+ *     Page: < Previous 1 2 3 ... 9 10 11 Next >
  *
  * @param string $baseUrl Basislink zum Modul
  * @param int $itemsCount Gesamtanzahl an Elementen
  * @param int $itemsPerPage Anzahl Elemente pro Seite
  * @param int $pageStartItem Mit dieser Elementnummer beginnt die aktuelle Seite
- * @param bool $addPrevNextText Show link with "Previous" and "Next"
+ * @param bool $addPrevNextText Show a link with "Previous" and "Next"
  * @param string $queryParamName (optional) You can set a new name for the parameter that should be used as start parameter.
  * @return string
  * @throws Exception
@@ -176,7 +198,7 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
      * @param string $className
      * @param string $url
      * @param string $paramName
-     * @param int|null $paramValue
+     * @param int $paramValue
      * @return string
      */
     function getListElementString(string $linkText, string $className = '', string $url = '', string $paramName = '', int $paramValue = 0): string
@@ -242,8 +264,8 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  * Verify the content of an array element if it's the expected datatype
  *
  * The function is designed to check the content of **$_GET** and **$_POST** elements and should be used at the
- * beginning of a script. If the value of the defined datatype is not valid then an error will be shown. If no
- * value was set then the parameter will be initialized. The function can be used with every array and their elements.
+ * beginning of a script. If the value of the defined datatype is not valid, then an error will be shown. If no
+ * value was set, then the parameter will be initialized. The function can be used with every array and their elements.
  * You can set several flags (like required value, datatype …) that should be checked.
  *
  * @param array<string,mixed> $array The array with the element that should be checked
@@ -254,17 +276,17 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  *                                          preferences or the english date format **Y-m-d**
  * @param array<string,mixed> $options (optional) An array with the following possible entries:
  *                                          - defaultValue : A value that will be set if the variable has no value
- *                                          - **requireValue** : If set to **true** than a value is required otherwise the function
+ *                                          - **requireValue**: If set to **true** than a value is required otherwise the function
  *                                                              returns an error
- *                                          - **validValues** :  An array with all values that the variable could have. If another
- *                                                              value is found than the function returns an error
- *                                          - **directOutput** : If set to **true** the function returns only the error string, if set
- *                                                              to false a html message with the error will be returned
+ *                                          - **validValues**: An array with all values that the variable could have. If another
+ *                                                              value is found, then the function returns an error
+ *                                          - **directOutput**: If set to **true** the function returns only the error string, if set
+ *                                                              to false an HTML message with the error will be returned
  * @return mixed|null Returns the value of the element or the error message if a test failed
  *
  * **Code example**
  * ```
- * // numeric value that would get a default value 0 if not set
+ * // numeric value that would get default value 0 if not set
  * $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));
  *
  * // string that will be initialized with text of id SYS_EVENTS
@@ -275,15 +297,15 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  * ```
  * @throws Exception
  */
-function admFuncVariableIsValid(array $array, string $variableName, string $datatype, array $options = array())
+function admFuncVariableIsValid(array $array, string $variableName, string $datatype, array $options = array()): mixed
 {
     global $gSettingsManager;
 
-    // create array with all options
+    // create an array with all options
     $optionsDefault = array('defaultValue' => null, 'requireValue' => false, 'validValues' => null, 'directOutput' => null);
     $optionsAll = array_replace($optionsDefault, $options);
 
-    // set default value for each datatype if no value is given and no value was required
+    // set the default value for each datatype if no value is given and no value was required
     if (array_key_exists($variableName, $array) && $array[$variableName] !== '') {
         if ($datatype === 'bool' || $datatype === 'boolean') {
             $value = (bool)$array[$variableName];
@@ -298,10 +320,10 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
         }
     } else {
         if ($optionsAll['requireValue']) {
-            // if value is required and no value is given then show error
+            // if a value is required and no value is given, then show error
             throw new Exception('The mandatory parameter "' . $variableName . '" has no value!');
         } elseif ($optionsAll['defaultValue'] !== null) {
-            // if a default value was set then take this value
+            // if a default value was set, then take this value
             if (is_string($optionsAll['defaultValue'])) {
                 $value = html_entity_decode($optionsAll['defaultValue']);
             } else {
@@ -324,7 +346,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
     }
 
     // check if parameter has a valid value
-    // do a strict check with in_array because the function don't work properly
+    // do a strict check with in_array because the function doesn't work properly
     if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true)) {
         throw new Exception('The parameter "' . $variableName . '" has an invalid value!');
     }
@@ -383,7 +405,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
             break;
 
         case 'html':
-            // check html string vor invalid tags and scripts
+            // check HTML string vor invalid tags and scripts
             $config = HTMLPurifier_Config::createDefault();
             $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
             $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
@@ -410,14 +432,14 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
 }
 
 /**
- * Creates a html fragment with information about user and time when the recordset was created
+ * Creates an HTML fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore, all necessary data must be set in the function
- * parameters. If userId is not set then the function will show **deleted user**.
+ * parameters. If userId is not set, then the function will show **deleted user**.
  * @param int $userIdCreated ID of the user who create the recordset.
- * @param string $timestampCreate Date and time of the moment when the user create the recordset.
- * @param int $userIdEdited ID of the user last changed the recordset.
+ * @param string $timestampCreate Date and time of the moment when the user creates the recordset.
+ * @param int $userIdEdited The ID of the user last changed the recordset.
  * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
- * @return string Returns a html string with usernames who creates item and edit item the last time
+ * @return string Returns an HTML string with usernames who create item and edit item the last time
  * @throws Exception
  * @deprecated 5.0.0:5.1.0 "admFuncShowCreateChangeInfoById()" is deprecated, use "Entity::getNameOfCreatingUser()" instead.
  */
@@ -430,7 +452,7 @@ function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCr
         return '';
     }
 
-    // compose name of user who create the recordset
+    // compose name of user who creates the recordset
     $htmlCreateName = '';
     $userUuidCreated = '';
     if ($timestampCreate !== '') {
@@ -448,7 +470,7 @@ function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCr
         }
     }
 
-    // compose name of user who edit the recordset
+    // compose name of user who edits the recordset
     $htmlEditName = '';
     $userUuidEdited = '';
     if ($timestampEdited !== '') {
@@ -470,7 +492,7 @@ function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCr
         return '';
     }
 
-    // get html output from other function
+    // get HTML output from another function
     return admFuncShowCreateChangeInfoByName(
         $htmlCreateName,
         $timestampCreate,
@@ -482,18 +504,18 @@ function admFuncShowCreateChangeInfoById(int $userIdCreated, string $timestampCr
 }
 
 /**
- * Creates a html fragment with information about user and time when the recordset was created
+ * Creates an HTML fragment with information about user and time when the recordset was created
  * and when it was at last edited. Therefore, all necessary data must be set in the function
- * parameters. If username is not set then the function will show **deleted user**.
+ * parameters. If the username is not set, then the function will show **deleted user**.
  * @param string $userNameCreated ID of the user who create the recordset.
- * @param string $timestampCreate Date and time of the moment when the user create the recordset.
- * @param string|null $userNameEdited ID of the user last changed the recordset.
- * @param string|null $timestampEdited Date and time of the moment when the user last changed the recordset
+ * @param string $timestampCreate Date and time of the moment when the user creates the recordset.
+ * @param string $userNameEdited The ID of the user last changed the recordset.
+ * @param string $timestampEdited Date and time of the moment when the user last changed the recordset
  * @param string $userUuidCreated (optional) The uuid of the user who create the recordset.
- *                                      If uuid is set than a link to the user profile will be created
+ *                                      If uuid is set, then a link to the user profile will be created
  * @param string $userUuidEdited (optional) The uuid of the user last changed the recordset.
- *                                      If uuid is set than a link to the user profile will be created
- * @return string Returns a html string with usernames who creates item and edit item the last time
+ *                                      If uuid is set, then a link to the user profile will be created
+ * @return string Returns an HTML string with usernames who create item and edit item the last time
  * @throws Exception
  * @deprecated 5.0.0:5.1.0 "admFuncShowCreateChangeInfoByName()" is deprecated, use "Entity::getNameOfCreatingUser()" instead.
  */
@@ -508,7 +530,7 @@ function admFuncShowCreateChangeInfoByName(string $userNameCreated, string $time
 
     $html = '';
 
-    // compose name of user who create the recordset
+    // compose name of user who creates the recordset
     if ($timestampCreate !== '') {
         $userNameCreated = trim($userNameCreated);
 
@@ -525,7 +547,7 @@ function admFuncShowCreateChangeInfoByName(string $userNameCreated, string $time
         $html .= '<span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY_AND_AT', array($userNameCreated, $timestampCreate)) . '</span>';
     }
 
-    // compose name of user who edit the recordset
+    // compose name of user who edits the recordset
     if ($timestampEdited !== '') {
         $userNameEdited = trim($userNameEdited);
 
@@ -554,7 +576,7 @@ function admFuncShowCreateChangeInfoByName(string $userNameCreated, string $time
  * @param $url string
  * @return false|string
  */
-function admFuncCheckUrl(string $url)
+function admFuncCheckUrl(string $url): false|string
 {
     // Homepage url have to start with "http://"
     if (!StringUtils::strStartsWith($url, 'http://', false) && !StringUtils::strStartsWith($url, 'https://', false)) {
@@ -576,7 +598,7 @@ function admFuncCheckUrl(string $url)
  * @throws Exception
  * @see https://www.owasp.org/index.php/Open_redirect
  */
-function admRedirect(string $url, int $statusCode = 303)
+function admRedirect(string $url, int $statusCode = 303): void
 {
     global $gLogger, $gMessage, $gL10n;
 
@@ -602,7 +624,7 @@ function admRedirect(string $url, int $statusCode = 303)
     }
 
     // Check if $url starts with the Admidio URL
-    if (strpos($url, ADMIDIO_URL) === 0) {
+    if (str_starts_with($url, ADMIDIO_URL)) {
         $gLogger->info('REDIRECT: Redirecting to internal URL!', $loggerObject);
 
         // TODO check if user is authorized for url
@@ -616,14 +638,13 @@ function admRedirect(string $url, int $statusCode = 303)
     // Detect AJAX
     $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
     if ($isAjax) {
-        //sent a custom header X-ADMIDIO-REDIRECT to handle he redirect with JavaScript
+        //sent a custom header X-ADMIDIO-REDIRECT to handle he redirects with JavaScript
         $gLogger->info('REDIRECT: Redirecting via AJAX!', $loggerObject);
         header('X-ADMIDIO-REDIRECT: ' . $redirectUrl, true, $statusCode);
-        exit();
     } else {
         header('Location: ' . $redirectUrl, true, $statusCode);
-        exit();
     }
+    exit();
 }
 
 /**
@@ -645,20 +666,20 @@ function getExecutionTime(float $startTime): string
  * theme). As the fallback theme will be used, when the main
  * theme does not contain a file, each file needs to be
  * checked separately!
- * @param string filename desired file name relative to the theme path
- * @return string the path to the file including the theme /
- *                fallback theme, depening on which of them provides
- *                the file for real. If the file is not found in either 
+ * @param string $filePath The desired file name relative to the theme path
+ * @return string The path to the file including the theme /
+ *                fallback theme, depending on which of them provides
+ *                the file for real. If the file is not found in either
  *                the theme and the fallback theme, the path inside
  *                the fallback theme is returned without error.
  */
-function getThemedFile(string $filepath): string
+function getThemedFile(string $filePath): string
 {
-    $themepath = THEME_PATH . $filepath;
-    if (!file_exists($themepath) && defined('THEME_FALLBACK_PATH')) {
-        $themepath = THEME_FALLBACK_PATH . $filepath;
+    $themePath = THEME_PATH . $filePath;
+    if (!file_exists($themePath) && defined('THEME_FALLBACK_PATH')) {
+        $themePath = THEME_FALLBACK_PATH . $filePath;
     }
-    return $themepath;
+    return $themePath;
 }
 
 
