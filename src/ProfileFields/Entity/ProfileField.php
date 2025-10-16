@@ -276,13 +276,13 @@ class ProfileField extends Entity
 
         $requiredInput = $this->getValue('usf_required_input');
 
-        if ($requiredInput === ProfileField::USER_FIELD_REQUIRED_INPUT_YES) {
+        if ($requiredInput == ProfileField::USER_FIELD_REQUIRED_INPUT_YES) {
             return true;
-        } elseif ($requiredInput === ProfileField::USER_FIELD_REQUIRED_INPUT_ONLY_REGISTRATION) {
+        } elseif ($requiredInput == ProfileField::USER_FIELD_REQUIRED_INPUT_ONLY_REGISTRATION) {
             if ($userId === $gCurrentUserId || $registration) {
                 return true;
             }
-        } elseif ($requiredInput === ProfileField::USER_FIELD_REQUIRED_INPUT_NOT_REGISTRATION && !$registration) {
+        } elseif ($requiredInput == ProfileField::USER_FIELD_REQUIRED_INPUT_NOT_REGISTRATION && !$registration) {
             return true;
         }
 
