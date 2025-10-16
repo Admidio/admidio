@@ -9,11 +9,12 @@
  *
  * Parameters:
  *
- * photo_uuid : UUID of the album which photos should be shown
- * start_thumbnail : Number of the thumbnail which is the first that should be shown
- * start      : Position of query recordset where the visual output should start
+ * photo_uuid: UUID of the album which photos should be shown
+ * start_thumbnail: Number of the thumbnail which is the first that should be shown
+ * start: Position of query recordset where the visual output should start
  *
  *****************************************************************************/
+
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
@@ -291,13 +292,13 @@ try {
             $page->addHtml($photoThumbnailTable);
         }
 
-        // show information about user who creates the recordset and changed it
-        $page->addHtml(admFuncShowCreateChangeInfoById(
-            (int)$photoAlbum->getValue('pho_usr_id_create'),
-            $photoAlbum->getValue('pho_timestamp_create'),
-            (int)$photoAlbum->getValue('pho_usr_id_change'),
-            $photoAlbum->getValue('pho_timestamp_change')
-        ));
+        // show information about the user who creates the recordset and changed it
+        $page->addHtml('<div class="admidio-info-created-edited">
+            <span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY_AND_AT', array($photoAlbum->getNameOfCreatingUser(), $photoAlbum->getValue('pho_timestamp_create'))) . '</span>');
+            if ($photoAlbum->getNameOfLastEditingUser() !== '') {
+                $page->addHtml('<span class="admidio-info-created">' . $gL10n->get('SYS_LAST_EDITED_BY', array($photoAlbum->getNameOfLastEditingUser(), $photoAlbum->getValue('pho_timestamp_change'))) . '</span>');
+            }
+        $page->addHtml('</div>');
 
         // show page navigations through thumbnails
         $page->addHtml(admFuncGeneratePagination(
@@ -313,8 +314,8 @@ try {
 
     // show all albums of the current level
     $sql = 'SELECT *
-          FROM ' . TBL_PHOTOS . '
-         WHERE pho_org_id = ? -- $gCurrentOrgId';
+              FROM ' . TBL_PHOTOS . '
+             WHERE pho_org_id = ? -- $gCurrentOrgId';
     $queryParams = array($gCurrentOrgId);
     if ($getPhotoUuid !== '') {
         $sql .= '
@@ -356,7 +357,7 @@ try {
             // folder of the album
             $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $childPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $childPhotoAlbum->getValue('pho_id');
 
-            // show album if the album is not locked, or it has child albums or the user has the photo module edit right
+            // show album if the album is not locked, or it has child albums, or the user has the photo module edit right
             if ((is_dir($albumFolder) && $childPhotoAlbum->isVisible())
                 || $childPhotoAlbum->hasChildAlbums()) {
                 // Get random image for preview
@@ -381,7 +382,7 @@ try {
                             class="card-img-top" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $shuffleImage['shuffle_pho_uuid'], 'photo_nr' => $shuffleImage['shuffle_img_nr'], 'thumb' => 1)) . '" alt="' . $gL10n->get('SYS_PHOTOS') . '" /></a>
                         <div class="card-body">
                             <h5 class="card-title">' . $albumTitle);
-                // if the user has admin rights for photo module then show some functions
+                // if the user has admin rights for photo module, then show some functions
                 if ($gCurrentUser->isAdministratorPhotos()) {
                     if ((bool)$childPhotoAlbum->getValue('pho_locked') === false) {
                         $htmlLock = '<li><a class="dropdown-item admidio-album-lock" href="javascript:void(0)" data-id="' . $childPhotoAlbum->getValue('pho_uuid') . '" data-mode="lock">
@@ -414,7 +415,7 @@ try {
                     $albumDescription = $childPhotoAlbum->getValue('pho_description', 'html');
 
                     if (strlen($albumDescription) > 200) {
-                        // read the first 200 chars of a text, then search for the last space and cut the text there. After that add a "more" link
+                        // Read the first 200 chars of a text, then search for the last space and cut the text there. After that, add a "more" link
                         $textPrev = substr($albumDescription, 0, 200);
                         $maxPosPrev = strrpos($textPrev, ' ');
                         $albumDescription = substr($textPrev, 0, $maxPosPrev) .
