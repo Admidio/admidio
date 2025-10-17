@@ -274,7 +274,7 @@ class ProfileField extends Entity
     {
         global $gCurrentUserId;
 
-        $requiredInput = $this->getValue('usf_required_input');
+        $requiredInput = (int)$this->getValue('usf_required_input');
 
         if ($requiredInput === ProfileField::USER_FIELD_REQUIRED_INPUT_YES) {
             return true;
