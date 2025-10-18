@@ -1075,7 +1075,7 @@ INSERT INTO `%PREFIX%_menu` (`men_id`, `men_men_id_parent`, `men_com_id`, `men_u
 (16, 2, 130, '62330cbc-4c15-4860-b841-10a35d88cd3c', 'registration', 'SYS_REGISTRATION', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', 0, 2, 1, '/modules/registration.php', 'card-checklist'),
 (17, 2, 140, 'ef4b5380-3500-4ec4-a432-a7f4099a2a92', 'menu', 'SYS_MENU', 'SYS_MENU_DESC', 0, 3, 1, '/modules/menu.php', 'menu-button-wide-fill'),
 (19, 2, 221, 'e946f478-4228-4afa-9d11-d8235f93e18c', 'organization', 'SYS_ORGANIZATION', 'SYS_ORGANIZATION_DESC', 0, 4, 1, '/modules/organizations.php', 'diagram-3-fill'),
-(20, 1, 222, 'ffe47320-d4d0-4893-9914-148bbbfd8237', 'inventory', 'SYS_INVENTORY', 'DSYS_INVENTORY_DESC', 0, 9, 1, '/modules/inventory.php', 'box-seam-fill');
+(20, 1, 222, 'ffe47320-d4d0-4893-9914-148bbbfd8237', 'inventory', 'SYS_INVENTORY', 'SYS_INVENTORY_DESC', 0, 9, 1, '/modules/inventory.php', 'box-seam-fill');
 
 -- --------------------------------------------------------
 
