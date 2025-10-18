@@ -857,7 +857,7 @@ class Organization extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             // org_shortname shouldn't be edited
@@ -885,9 +885,9 @@ class Organization extends Entity
 
     /**
      * Adjust the changelog entry for this db record: Add the parent fold as a related object
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
     protected function adjustLogEntry(LogChanges $logEntry) {
@@ -897,7 +897,7 @@ class Organization extends Entity
                       FROM '.TBL_ORGANIZATIONS.'
                      WHERE org_id = ?';
             $pdoStatement = $this->db->queryPrepared($sql, [$orgParentId]);
-    
+
             while ($row = $pdoStatement->fetch()) {
                 $logEntry->setLogRelated($row['org_id'], $row['org_longname']);
             }
@@ -906,7 +906,7 @@ class Organization extends Entity
     /**
      * Return a human-readable representation of this record.
      * For organizations, simply use the longname
-     * 
+     *
      * @return string The readable representation of the record (can also be a translatable identifier)
      */
     public function readableName(): string

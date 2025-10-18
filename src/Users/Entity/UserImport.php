@@ -205,7 +205,7 @@ class UserImport extends User
      * ```
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gLogger;
 
