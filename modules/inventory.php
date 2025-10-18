@@ -548,9 +548,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items')));
 }

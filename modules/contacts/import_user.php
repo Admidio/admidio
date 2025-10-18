@@ -193,6 +193,6 @@ try {
         ));
         // => EXIT
     }
-} catch (Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

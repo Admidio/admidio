@@ -119,5 +119,5 @@ try {
     echo $smarty->fetch('modules/events.participation.edit.tpl');
 } catch (Throwable $e) {
     $gMessage->showInModalWindow();
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

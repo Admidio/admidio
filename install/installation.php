@@ -205,5 +205,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    handleException($e, true);
 }

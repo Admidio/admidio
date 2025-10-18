@@ -159,10 +159,6 @@ try {
         echo $smarty->fetch('modules/profile.password.edit.tpl');
     }
 } catch (Throwable $e) {
-    if ($getMode === 'change') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->showInModalWindow();
-        $gMessage->show($e->getMessage());
-    }
+    $gMessage->showInModalWindow();
+    handleException($e, $getMode == 'change');
 }

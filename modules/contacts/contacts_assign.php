@@ -27,7 +27,7 @@ try {
     $contactsNewForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
     $formValues = $contactsNewForm->validate($_POST);
 
-    // create html page object
+    // create an HTML page object
     $page = new ModuleContacts('admidio-registration-assign', $gL10n->get('SYS_ASSIGN_REGISTRATION'));
     $newUser = new User($gDb, $gProfileFields);
     $newUser->setValue('LAST_NAME', $postLastname);
@@ -43,6 +43,6 @@ try {
         );
         exit();
     } else {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        handleException($e, true);
     }
 }

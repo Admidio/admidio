@@ -22,5 +22,5 @@ try {
     // show php info page
     phpinfo();
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

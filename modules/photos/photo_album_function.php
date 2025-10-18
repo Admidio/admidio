@@ -159,10 +159,6 @@ try {
         echo 'done';
         exit();
     }
-} catch (Exception $e) {
-    if (in_array($getMode, array('edit', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, in_array($getMode, array('edit', 'delete')));
 }

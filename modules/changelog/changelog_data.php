@@ -468,8 +468,6 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (Exception $e) {
-    $jsonArray['error'] = $e->getMessage();
-    echo json_encode($jsonArray);
-    exit();
+} catch (Throwable $e) {
+    handleException($e, true);
 }

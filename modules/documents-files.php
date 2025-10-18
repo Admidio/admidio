@@ -228,9 +228,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save')));
 }

@@ -769,10 +769,6 @@ try {
         default:
             throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
-} catch (Exception $e) {
-    if ($getMode === 'save') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, $getMode == 'save');
 }
