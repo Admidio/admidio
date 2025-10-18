@@ -919,6 +919,7 @@
   <string name="SYS_LAST_EDITED_AT">Last edited at #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# at #VAR2#</string>
   <string name="SYS_LAST_LOGIN_ON">Last login on #VAR1# at #VAR2#</string>
+  <string name="SYS_LAST_LOGIN">Last login</string>
   <string name="SYS_LAST_POST">Last post</string>
   <string name="SYS_LAST_REPLY_BY_AT">#VAR1#Last reply#VAR2# by #VAR3# at #VAR4#</string>
   <string name="SYS_LASTNAME">Surname</string>
@@ -1126,6 +1127,7 @@
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is 0, all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is "All", all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_LOGINS">Number of logins</string>
   <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Number of posts per page</string>
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Number of topics per page</string>
   <string name="SYS_NUMBER_RECIPIENTS">Number of recipients</string>
@@ -1325,6 +1327,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Role memberships</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Change role memberships</string>
   <string name="SYS_ROLE_NAME_EXISTS">Role with same name already exists in this category.</string>
+  <string name="SYS_ROLE_PAST">Past role</string>
   <string name="SYS_ROLE_RIGHTS">Role Rights</string>
   <string name="SYS_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
   <string name="SYS_ROLE_SELECTION">Role selection</string>
@@ -1707,6 +1710,7 @@
   <string name="SYS_UTF32BE">UTF-32BE</string>
   <string name="SYS_UTF32LE">UTF-32LE</string>
   <string name="SYS_UTF8">UTF-8</string>
+  <string name="SYS_UUID">Unique user ID</string>
   <string name="SYS_VALID_FROM" description="Date valid from">Valid from</string>
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
   <string name="SYS_VALUE">Value</string>
