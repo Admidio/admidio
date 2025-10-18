@@ -242,12 +242,12 @@ class MenuEntry extends Entity
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($newValue !== parent::getValue($columnName) && $checkValue) {
             if ($columnName === 'men_icon' && $newValue !== '') {

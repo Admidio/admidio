@@ -80,7 +80,7 @@ class User extends Entity
      */
     protected array $rolesMembershipNoLeader = array();
     /**
-     * @var int the organization for which the rights are read, could be changed with method **setOrganization**
+     * @var int the organization for which the rights are read could be changed with method **setOrganization**
      */
     protected int $organizationId;
     /**
@@ -105,8 +105,8 @@ class User extends Entity
     protected bool $changeNotificationEnabled;
 
     /**
-     * Constructor that will create an object of a recordset of the users table.
-     * If the id is set than this recordset will be loaded.
+     * Constructor that will create an object of a recordset from the user's table.
+     * If the id is set, then this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param ProfileFields|null $userFields An object of the ProfileFields class with the profile field structure
      *                                  of the current organization. This could be the default object **$gProfileFields**.
@@ -119,10 +119,10 @@ class User extends Entity
         $this->changeNotificationEnabled = true;
 
         if ($userFields !== null) {
-            $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
+            $this->mProfileFieldsData = clone $userFields; // create an explicit copy of the object (param is in PHP5 a reference)
         } else {
             global $gProfileFields;
-            $this->mProfileFieldsData = clone $gProfileFields; // create explicit a copy of the object (param is in PHP5 a reference)
+            $this->mProfileFieldsData = clone $gProfileFields; // create an explicit copy of the object (param is in PHP5 a reference)
         }
 
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
@@ -131,7 +131,7 @@ class User extends Entity
     }
 
     /**
-     * Checks if the current user is allowed to edit a profile field of the user of the parameter.
+     * Checks if the current user is allowed to edit a profile field of the user from the parameter.
      * @param User $user User object of the user that should be checked if the current user can view his profile field.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
@@ -1737,34 +1737,74 @@ class User extends Entity
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             if (isset($this->mProfileFieldsData)) {
-                // read data of all user fields from current user
+                // read data of all user fields from the current user
                 $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
             }
             return true;
-        } else {
-            $this->setDefaultValues();
         }
 
         return false;
     }
 
     /**
+     * Reads a record out of the table in the database selected by the unique id column in the table.
+     * Per default, all columns of the default table will be read and stored in the object.
+     * @param int $id Unique id of id column of the table.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataByUuid
+     */
+    public function readDataById(int $id): bool
+    {
+        $returnValue = parent::readDataById($id);
+
+        if ($id === 0) {
+            $this->setDefaultValues();
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Reads a record out of the table in the database selected by the unique uuid column in the table.
+     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g., usr_uuid.
+     * Per default, all columns of the default table will be read and stored in the object.
+     * Not every Admidio table has a UUID. Please check the database structure before you use this method.
+     * @param string $uuid Unique uuid that should be searched.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataById
+     */
+    public function readDataByUuid(string $uuid): bool
+    {
+        $returnValue = parent::readDataByUuid($uuid);
+
+        if ($uuid === '') {
+            $this->setDefaultValues();
+        }
+
+        return $returnValue;
+    }
+
+    /**
      * Rehashes the password of the user if necessary.
      * @param string $password The password for the current user. This should not be encoded.
-     * @return bool Returns true if password was rehashed.
+     * @return void Returns true if password was rehashed.
      * @throws Exception
      */
-    private function rehashIfNecessary(string $password): bool
+    private function rehashIfNecessary(string $password): void
     {
         if (!PasswordUtils::needsRehash($this->getValue('usr_password'))) {
-            return false;
+            return;
         }
 
         $this->saveChangesWithoutRights();
         $this->setPassword($password);
-        $this->save(); // TODO Exception handling
-
-        return true;
+        $this->save();
     }
 
     /**
@@ -1975,7 +2015,7 @@ class User extends Entity
      * @return void
      * @throws Exception
      */
-    public function setDefaultValues()
+    public function setDefaultValues(): void
     {
         foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
             $defaultValue = $profileField->getValue('usf_default_value');
@@ -1992,7 +2032,7 @@ class User extends Entity
      * @param int $organizationId ID of the organization
      * @return void
      */
-    public function setOrganization(int $organizationId)
+    public function setOrganization(int $organizationId): void
     {
         if ($organizationId !== $this->organizationId) {
             $this->organizationId = $organizationId;
@@ -2122,7 +2162,7 @@ class User extends Entity
      * ```
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gSettingsManager, $gChangeNotification;
 

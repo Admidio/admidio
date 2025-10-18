@@ -62,7 +62,7 @@ class Membership extends Entity
      * @throws Exception
      * @see Entity#getValue
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gChangeNotification, $gCurrentSession, $gSettingsManager;
 
