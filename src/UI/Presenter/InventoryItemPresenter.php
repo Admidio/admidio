@@ -119,7 +119,8 @@ class InventoryItemPresenter extends PagePresenter
                     break;
 
                 case 'DROPDOWN': // fallthrough
-                case 'DROPDOWN_MULTISELECT':
+                case 'DROPDOWN_MULTISELECT': // fallthrough
+                case 'DROPDOWN_DATE_INTERVAL':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
                     // prevent adding an empty string to the selectbox
@@ -428,7 +429,8 @@ class InventoryItemPresenter extends PagePresenter
                     break;
 
                 case 'DROPDOWN': // fallthrough
-                case 'DROPDOWN_MULTISELECT':
+                case 'DROPDOWN_MULTISELECT': // fallthrough
+                case 'DROPDOWN_DATE_INTERVAL':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
                     // prevent adding an empty string to the selectbox

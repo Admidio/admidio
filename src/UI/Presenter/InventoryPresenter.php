@@ -9,9 +9,12 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Entity\SelectOptions;
+use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Component\DataTables;
 use Admidio\Users\Entity\User;
+
+use DateInterval;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -949,6 +952,68 @@ class InventoryPresenter extends PagePresenter
                         : $this->itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif (in_array($infType, ['DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'])) {
                     $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif ($infType ===  'DROPDOWN_DATE_INTERVAL') {
+                    $content = $this->itemsData->getValue($infNameIntern, 'database');
+                    if (isset($content) && is_numeric($content)) {
+                        $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+                        $selectOptions = $option->getAllOptions();
+
+                        if (in_array($mode, ['csv', 'pdf', 'xlsx', 'ods'])) {
+                            // in export modes use the stored value
+                            $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
+
+                        } else {
+                            $connectedFieldUuid = $itemField->getValue('inf_connected_field_uuid');
+                            $connectedField = new ItemField($gDb);
+                            $connectedField->readDataByUuid($connectedFieldUuid);
+                            $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
+                            $filteredSelectOptions = array();
+
+                            foreach ($selectOptions as $option) {
+                                $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
+                            }
+                            //use part after # as internal_name for last test date
+                            if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
+                                $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
+                                $compDate2 = date_create();
+
+                                //Calculate future test date
+                                $dateAdditionSplit = array();
+                                preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$content], $dateAdditionSplit);
+
+                                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                                    switch ($dateAdditionSplit[2]) {
+                                        case 'w':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
+                                            break;
+                                        case 'm':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
+                                            break;
+                                        case 'y':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
+                                            break;
+                                        case 'd':
+                                        default:
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
+                                            break;
+                                    }
+                                }
+
+                                //Compare last test date with future date and output days
+                                $dateDiff = date_diff($compDate2, $compDate1);
+                                $daysRemaining = $dateDiff->format('%R%a');
+
+                                // check if days remaining is only one day
+                                if ($daysRemaining === '1' || $daysRemaining === '-1') {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
+                                } else {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
+                                }
+                            } else {
+                                $content = '';
+                            }
+                        }
+                    }
                 } elseif ($infType === 'RADIO_BUTTON') {
                     $content = $mode === 'html'
                         ? $this->itemsData->getHtmlValue($infNameIntern, $content)
@@ -1143,7 +1208,6 @@ class InventoryPresenter extends PagePresenter
         // Build headers and set column alignment (only for HTML mode)
         $columnAlign = array();
         $headers = array();
-        $columnNumber = 1;
         //array with the internal field names of the borrow fields
         $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
@@ -1183,7 +1247,6 @@ class InventoryPresenter extends PagePresenter
             }
 
             $headers[] = $columnHeader;
-            $columnNumber++;
         }
 
         $preparedData['headers'] = $headers;
@@ -1199,7 +1262,6 @@ class InventoryPresenter extends PagePresenter
             $rowValues = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
             $strikethrough = $itemsData->isRetired();
-            $columnNumber = 1;
 
             foreach ($itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
@@ -1246,6 +1308,63 @@ class InventoryPresenter extends PagePresenter
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif (in_array($infType, ['DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'])) {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif ($infType ===  'DROPDOWN_DATE_INTERVAL') {
+                    if (isset($content) && is_numeric($content)) {
+                        // Load item data to get connected field value
+                        $this->itemsData->readItemData($item['ini_uuid']);
+                        $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+                        $selectOptions = $option->getAllOptions();
+
+                        $connectedFieldUuid = $itemField->getValue('inf_connected_field_uuid');
+                        $connectedField = new ItemField($gDb);
+                        $connectedField->readDataByUuid($connectedFieldUuid);
+                        $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
+                        $filteredSelectOptions = array();
+
+                        foreach ($selectOptions as $option) {
+                            $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
+                        }
+                        //use part after # as internal_name for last test date
+                        if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
+                            $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
+                            $compDate2 = date_create();
+
+                            //Calculate future test date
+                            $dateAdditionSplit = array();
+                            preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$content], $dateAdditionSplit);
+
+                            if(is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                                switch ($dateAdditionSplit[2]) {
+                                    case 'w':
+                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
+                                        break;
+                                    case 'm':
+                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
+                                        break;
+                                    case 'y':
+                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
+                                        break;
+                                    case 'd':
+                                    default:
+                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
+                                        break;
+                                }
+                            }
+
+                            //Compare last test date with future date and output days
+                            $dateDiff = date_diff($compDate2, $compDate1);
+                            $daysRemaining = $dateDiff->format('%R%a');
+
+                            // check if days remaining is only one day
+                            if ($daysRemaining === '1' || $daysRemaining === '-1') {
+                                $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
+                            } else {
+                                $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
+                            }
+                        } else {
+                            $content = '';
+                        }
+                    }
                 } elseif ($infType === 'RADIO_BUTTON') {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif ($infType === 'CATEGORY') {
@@ -1253,7 +1372,6 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 $rowValues['data'][] = ($strikethrough) ? '<s>' . $content . '</s>' : $content;
-                $columnNumber++;
             }
 
             // Append admin action column

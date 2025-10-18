@@ -1046,6 +1046,7 @@ CREATE TABLE %PREFIX%_inventory_fields
     inf_system                  boolean             NOT NULL    DEFAULT false,
     inf_required_input          smallint            NOT NULL    DEFAULT 0,
     inf_sequence                smallint            NOT NULL,
+    inf_connected_field_uuid    varchar(36)         NULL        DEFAULT NULL,
     inf_usr_id_create           integer unsigned,
     inf_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     inf_usr_id_change           integer unsigned,

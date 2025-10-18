@@ -88,7 +88,7 @@ class ItemData extends Entity
         if ($infType === 'CATEGORY') {
             // Category changes are logged in the inventory items table
             return true;
-        } elseif ($infType === 'DROPDOWN' || $infType === 'DROPDOWN_MULTISELECT' || $infType === 'RADIOBUTTON') {
+        } elseif ($infType === 'DROPDOWN' || $infType === 'DROPDOWN_MULTISELECT' || $infType === 'DROPDOWN_DATE_INTERVAL' || $infType === 'RADIOBUTTON') {
             $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'ifo_inf_options');
             if (isset($vallist[$oldval])) {
                 $oldval = $vallist[$oldval];

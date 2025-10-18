@@ -123,13 +123,13 @@ class ItemField extends Entity
      *
      * format = 'html'  :               returns the value in html-format if this is necessary for that field type
      * format = 'database' :            returns the value that is stored in database with no format applied
-     * @param string $fieldNameIntern Expects the @b inf_name_intern of table @b adm_inventory_fields
-     * @param string $format Returns the field value in a special format @b text, @b html, @b database
+     * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
+     * @param string $format            Returns the field value in a special format @b text, @b html, @b database
      *                                  or datetime (detailed description in method description)
-     * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the inventory field will not be considered.
+     * @param bool $withObsoleteEnries  If set to **false** then the obsolete entries of the inventory field will not be considered.
      * @return mixed                    Returns the value for the column
      */
-    public function getValue($fieldNameIntern, $format = '', bool $withObsoleteEnries = true): mixed
+    public function getValue(string $fieldNameIntern, string $format = '', bool $withObsoleteEnries = true): mixed
     {
         if ($fieldNameIntern === 'inf_description') {
             if (!isset($this->dbColumns['inf_description'])) {
@@ -162,7 +162,7 @@ class ItemField extends Entity
                     break;
 
                 case 'ifo_inf_options':
-                    if ($this->dbColumns['inf_type'] === 'DROPDOWN' || $this->dbColumns['inf_type'] === 'DROPDOWN_MULTISELECT' || $this->dbColumns['inf_type'] === 'RADIO_BUTTON') {
+                    if ($this->dbColumns['inf_type'] === 'DROPDOWN' || $this->dbColumns['inf_type'] === 'DROPDOWN_MULTISELECT' || $this->dbColumns['inf_type'] === 'DROPDOWN_DATE_INTERVAL' || $this->dbColumns['inf_type'] === 'RADIO_BUTTON') {
                         $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
                         $arrOptions = $value;
 

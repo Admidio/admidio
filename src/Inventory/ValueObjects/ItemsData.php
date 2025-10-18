@@ -517,6 +517,7 @@ class ItemsData
                     break;
 
                 case 'DROPDOWN':
+                case 'DROPDOWN_DATE_INTERVAL':
                 case 'RADIO_BUTTON':
                     $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
                     $arrOptions = $this->mItemFields[$fieldNameIntern]->getValue('ifo_inf_options', 'database', false);
@@ -748,6 +749,7 @@ class ItemsData
                         break;
 
                     case 'DROPDOWN':
+                    case 'DROPDOWN_DATE_INTERVAL':
                     case 'RADIO_BUTTON':
                         // the value in db is only the position, now search for the text
                         if ($value > 0 && $format !== 'html') {
@@ -1183,12 +1185,11 @@ class ItemsData
      * **system_notifications_role**. The email contains the item name, the name of the current user,
      * the timestamp, and the details of the changes.
      *
-     * @param array $importData The data of the imported items
+     * @param array|null $importData    The data of the imported items
      * @return bool                     Returns **true** if the notification was sent
-     * @throws AdmException             'SYS_EMAIL_NOT_SEND'
      * @throws Exception
      */
-    public function sendNotification($importData = null): bool
+    public function sendNotification(array $importData = null): bool
     {
         global $gCurrentUser, $gSettingsManager, $gL10n;
 

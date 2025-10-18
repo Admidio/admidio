@@ -61,11 +61,11 @@ class InventoryFieldsPresenter extends PagePresenter
 
         $this->addJavascript('
             $("#inf_type").change(function() {
-                if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "DROPDOWN_MULTISELECT" || $("#inf_type").val() === "RADIO_BUTTON") {
+                if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "DROPDOWN_MULTISELECT" || $("#inf_type").val() === "DROPDOWN_DATE_INTERVAL" || $("#inf_type").val() === "RADIO_BUTTON") {
                     $("#ifo_inf_options_table").attr("required", "required");
                     $("#ifo_inf_options_group").addClass("admidio-form-group-required");
                     $("#ifo_inf_options_group").show("slow");
-                    // find all option input fields in the table and set the required atribute
+                    // find all option input fields in the table and set the required attribute
                     $("#ifo_inf_options_table").find("input[name$=\'[value]\']").each(function() {
                         $(this).attr("required", "required");
                     });
@@ -73,10 +73,27 @@ class InventoryFieldsPresenter extends PagePresenter
                     $("#ifo_inf_options_table").removeAttr("required");
                     $("#ifo_inf_options_group").removeClass("admidio-form-group-required");
                     $("#ifo_inf_options_group").hide();
-                    // find all options and remove the required atribute from the input field
+                    // find all options and remove the required attribute from the input field
                     $("#ifo_inf_options_table").find("input[name$=\'[value]\']").each(function() {
                         $(this).removeAttr("required");
                     });
+                }
+
+                var valueListTooltipContainer = document.getElementById("ifo_inf_options_group").getElementsByTagName("div")[0].getElementsByClassName("form-text")[0];
+                if ($("#inf_type").val() === "DROPDOWN_DATE_INTERVAL") {
+                    // if the field type is dropdown date interval, then the connected field must be a date field
+                    $("#inf_connected_field_uuid").attr("required", "required");
+                    $("#inf_connected_field_uuid_group").addClass("admidio-form-group-required");
+                    $("#inf_connected_field_uuid_group").show();
+                    
+                    valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_INVENTORY_DATE_INTERVAL_LIST_DESC') . '";
+                } else {
+                    // if the field type is not dropdown date interval, then the connected field must not be required
+                    $("#inf_connected_field_uuid").removeAttr("required");
+                    $("#inf_connected_field_uuid_group").removeClass("admidio-form-group-required");
+                    $("#inf_connected_field_uuid_group").hide();
+                    
+                    valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_VALUE_LIST_DESC') . '";
                 }
             });
             $("#inf_type").trigger("change");', true
@@ -124,6 +141,7 @@ class InventoryFieldsPresenter extends PagePresenter
             'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER'),
             'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
             'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
+            'DROPDOWN_DATE_INTERVAL' => $gL10n->get('SYS_DROPDOWN_DATE_INTERVAL_LISTBOX'),
             'EMAIL' => $gL10n->get('SYS_EMAIL'),
             'NUMBER' => $gL10n->get('SYS_NUMBER'),
             'PHONE' => $gL10n->get('SYS_PHONE'),
@@ -151,6 +169,18 @@ class InventoryFieldsPresenter extends PagePresenter
                 array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $itemField->getValue('inf_type'))
             );
         }
+
+        // get all date fields from the database
+        $sql = 'SELECT inf_uuid, inf_name FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_org_id = ' . $gCurrentOrgId
+            . ' AND inf_type = \'DATE\' ORDER BY inf_name';
+
+        $form->addSelectBoxFromSql(
+            'inf_connected_field_uuid',
+            $gL10n->get('SYS_INVENTORY_CONNECTED_FIELD'),
+            $gDb,
+            $sql,
+            array('defaultValue' => $itemField->getValue('inf_connected_field_uuid')),
+        );
 
         $options = new SelectOptions($gDb, $itemField->getValue('inf_id'));
         foreach ($options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options')) as $option) {
@@ -276,6 +306,7 @@ class InventoryFieldsPresenter extends PagePresenter
                 'DATE' => $gL10n->get('SYS_DATE'),
                 'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
                 'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
+                'DROPDOWN_DATE_INTERVAL' => $gL10n->get('SYS_DROPDOWN_DATE_INTERVAL_LISTBOX'),
                 'EMAIL' => $gL10n->get('SYS_EMAIL'),
                 'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
                 'PHONE' => $gL10n->get('SYS_PHONE'),
