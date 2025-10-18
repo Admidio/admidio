@@ -349,14 +349,10 @@ class ItemsData
     }
 
     /**
-     * Returns an array with all profile fields represented by a user fields objects.
-     * The key is the usf_name_intern and the value is an object of class ProfileField
+     * Returns an array with all item fields represented by an item fields object.
+     * The key is the inf_name_intern and the value is an object of class ItemField
      *
-     * @return array<string,ProfileField> $mProfileFields = [
-     *      'LAST_NAME' => {ProfileField}
-     *      'FIRST_NAME' => {ProfileField}
-     *      'STREET' => {ProfileField}
-     *  ]
+     * @return array
      */
     public function getItemFields(): array
     {
@@ -364,14 +360,9 @@ class ItemsData
     }
 
     /**
-     * Returns an array with all profile fields represented by a user fields objects.
-     * The key is the usf_name_intern and the value is an object of class ProfileField
+     * Returns an array with all items.
      *
-     * @return array<string,ProfileField> $mProfileFields = [
-     *      'LAST_NAME' => {ProfileField}
-     *      'FIRST_NAME' => {ProfileField}
-     *      'STREET' => {ProfileField}
-     *  ]
+     * @return array
      */
     public function getItems(): array
     {
@@ -703,7 +694,16 @@ class ItemsData
                 }
             } elseif (array_key_exists($this->mItemFields[$fieldNameIntern]->getValue('inf_id'), $this->mItemData)) {
                 if ($this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')] instanceof ItemBorrowData) {
-                    $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('inb_' . strtolower($fieldNameIntern), $format);
+                    if ($fieldNameIntern === 'BORROW_DATE' || $fieldNameIntern === 'RETURN_DATE') {
+                        // determine the correct date format
+                        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                            $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('inb_' . strtolower($fieldNameIntern), 'Y-m-d H:i');
+                        } else {
+                            $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('inb_' . strtolower($fieldNameIntern), 'Y-m-d');
+                        }
+                    } else {
+                        $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('inb_' . strtolower($fieldNameIntern), $format);
+                    }
                 } else {
                     $value = $this->mItemData[$this->mItemFields[$fieldNameIntern]->getValue('inf_id')]->getValue('ind_value', $format);
                 }
