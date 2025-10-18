@@ -17,7 +17,7 @@ use Admidio\Infrastructure\Exception;
  * {
  *     FormValidation::checkCaptcha($_POST['adm_captcha_code']);
  * }
- * catch(Exception $e)
+ * catch(Throwable $e)
  * {
  *     $e->showHtml();
  * }

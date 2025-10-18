@@ -27,7 +27,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * {
  *     $gDb = new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
  * }
- * catch (Exception $e)
+ * catch (Throwable $e)
  * {
  *     $e->showText();
  * }

@@ -154,6 +154,6 @@ try {
     }
 
     $rss->getRssFeed();
-} catch (Exception $e) {
+} catch (Throwable $e) {
     handleException($e);
 }

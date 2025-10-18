@@ -779,6 +779,6 @@ try {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
             break;
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     handleException($e, $getMode == 'save');
 }

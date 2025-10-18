@@ -476,7 +476,7 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     $jsonArray['error'] = $e->getMessage();
     echo json_encode($jsonArray);
     exit();
