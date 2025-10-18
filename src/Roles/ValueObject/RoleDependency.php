@@ -69,7 +69,7 @@ class RoleDependency
     /**
      * Initializes all class parameters and deletes all read data.
      */
-    public function clear()
+    public function clear(): void
     {
         $this->roleIdParent     = 0;
         $this->roleIdChild      = 0;

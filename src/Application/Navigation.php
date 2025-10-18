@@ -56,7 +56,7 @@ class Navigation
      * Initialize the url stack and set the internal counter to 0
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $this->urlStack = array();
     }

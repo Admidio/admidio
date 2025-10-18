@@ -92,7 +92,7 @@ class Event extends Entity
      * Calls clear() Method of parent class and initialize child class specific parameters
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
