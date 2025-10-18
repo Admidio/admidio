@@ -99,7 +99,7 @@ class RolesRights extends Entity
      * Initializes all class parameters and deletes all read data.
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         $this->rolesRightsDataObjects = array();
         $this->rolesIds = array();
