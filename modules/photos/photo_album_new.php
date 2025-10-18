@@ -9,7 +9,7 @@
  *
  * Parameters:
  * photo_uuid : UUID of the album that should be edited
- * parent_photo_uuid : UUID of the parent album in which the new album should be created
+ * parent_photo_uuid: UUID of the parent album in which the new album should be created
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
@@ -34,7 +34,7 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    // create photo album object
+    // create a photo album object
     $photoAlbum = new Album($gDb);
 
     if ($getPhotoUuid === '') {
@@ -59,7 +59,7 @@ try {
      * @param string $vorschub
      * @param int $currentAlbumPhoId
      */
-    function subfolder(int $parentId, string $vorschub, int $currentAlbumPhoId)
+    function subfolder(int $parentId, string $vorschub, int $currentAlbumPhoId): void
     {
         global $gDb, $gCurrentOrgId, $photoAlbumsArray;
 
@@ -88,7 +88,7 @@ try {
             $parentPhotoAlbum->clear();
             $parentPhotoAlbum->setArray($admPhotoChild);
 
-            // add entry to array of all photo albums
+            // add entry to an array of all photo albums
             $photoAlbumsArray[$parentPhotoAlbum->getValue('pho_uuid')] =
                 $vorschub . '&#151; ' . $parentPhotoAlbum->getValue('pho_name') . '&nbsp(' . $parentPhotoAlbum->getValue('pho_begin', 'Y') . ')';
 
@@ -96,7 +96,7 @@ try {
         }//while
     }//function
 
-    // create html page object
+    // create HTML page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-photo-album-edit', $headline);
 
     ChangelogService::displayHistoryButton($page, 'photos', 'photos', !empty($getPhotoUuid), array('uuid' => $getPhotoUuid));
@@ -164,13 +164,13 @@ try {
     );
 
     $page->assignSmartyVariable('userCreatedName', $photoAlbum->getNameOfCreatingUser());
-    $page->assignSmartyVariable('userCreatedTimestamp', $photoAlbum->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('userCreatedTimestamp', $photoAlbum->getValue('pho_timestamp_create'));
     $page->assignSmartyVariable('lastUserEditedName', $photoAlbum->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('lastUserEditedTimestamp', $photoAlbum->getValue('ann_timestamp_change'));
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $photoAlbum->getValue('pho_timestamp_change'));
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

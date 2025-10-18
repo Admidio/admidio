@@ -51,5 +51,5 @@ try {
     $gCurrentSession->addFormObject($form);
     echo $smarty->fetch('modules/contacts.new.tpl');
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

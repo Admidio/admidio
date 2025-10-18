@@ -132,6 +132,6 @@ try {
     // add table list to the page
     $page->addHtml($htmlTable);
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

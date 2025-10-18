@@ -28,7 +28,7 @@ try {
         throw new \Admidio\Infrastructure\Exception('SYS_REDIRECT_URL_INVALID');
     }
 
-    // create html page object
+    // create an HTML page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-redirect', $gL10n->get('SYS_REDIRECT'));
 
     // add special header for automatic redirection after x seconds
@@ -62,8 +62,8 @@ try {
         '</p>'
     );
 
-    // show html of complete page
+    // show HTML of complete page
     $page->show();
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

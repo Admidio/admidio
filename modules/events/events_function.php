@@ -494,9 +494,5 @@ try {
         exit();
     }
 } catch (Throwable $e) {
-    if ($getMode === 'export') {
-        $gMessage->show($e->getMessage());
-    } else {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    }
+    handleException($e, !($getMode === 'export'));
 }

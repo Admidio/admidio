@@ -93,6 +93,6 @@ try {
             )
         )
     );
-} catch (Throwable $exception) {
-    echo json_encode(array('error' => array('message' => $exception->getMessage())));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

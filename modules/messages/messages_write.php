@@ -622,7 +622,7 @@ try {
                 }
 
                 foreach ($attachments as $attachment) {
-                    // get complete path with filename of the attachment
+                    // get a complete path with filename of the attachment
                     $attachmentPath = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'];
 
                     if (file_exists($attachmentPath)) {
@@ -638,18 +638,17 @@ try {
             }
 
             $page->addHtml('
-        <div class="card admidio-blog">
-            <div class="card-header">
-                <i class="bi ' . $messageIcon . '"></i>' . $messageHeader . '
-            </div>
-            <div class="card-body">' . $messageContent->getValue('msc_message') . '</div>
-            ' . $messageFooter . '
-        </div>');
+            <div class="card admidio-blog">
+                <div class="card-header">
+                    <i class="bi ' . $messageIcon . '"></i>' . $messageHeader . '
+                </div>
+                <div class="card-body">' . $messageContent->getValue('msc_message') . '</div>
+                ' . $messageFooter . '
+            </div>');
         }
     }
 
-    // show page
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }
