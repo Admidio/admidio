@@ -260,8 +260,9 @@ class ImportService
             foreach ($items->getItemFields() as $fields) {
                 $val = '';
                 $infId = $fields->getValue('inf_id');
-                $imfNameIntern = $fields->getValue('inf_name_intern');
-                if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($imfNameIntern, $items->borrowFieldNames)) {
+                $infNameIntern = $fields->getValue('inf_name_intern');
+                $infType = $fields->getValue('inf_type');
+                if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames)) {
                     continue; // skip borrowing fields if borrowing is disabled
                 }
                 if (isset($values[$infId])) {
@@ -273,12 +274,12 @@ class ImportService
                         }
                     }
 
-                    if ($imfNameIntern === 'ITEMNAME') {
+                    if ($infNameIntern === 'ITEMNAME') {
                         if ($values[$infId] === '') {
                             break;
                         }
                         $val = $values[$infId];
-                    } elseif ($imfNameIntern === 'KEEPER') {
+                    } elseif ($infNameIntern === 'KEEPER') {
                         if (substr_count($values[$infId], ',') === 1) {
                             $sql = $items->getSqlOrganizationsUsersShort();
                         } else {
@@ -294,7 +295,7 @@ class ImportService
                             }
                             $val = '-1';
                         }
-                    } elseif ($imfNameIntern === 'LAST_RECEIVER') {
+                    } elseif ($infNameIntern === 'LAST_RECEIVER') {
                         if (substr_count($values[$infId], ',') === 1) {
                             $sql = $items->getSqlOrganizationsUsersShort();
                         } else {
@@ -310,7 +311,7 @@ class ImportService
                             }
                             $val = $values[$infId];
                         }
-                    } elseif ($imfNameIntern === 'CATEGORY') {
+                    } elseif ($infNameIntern === 'CATEGORY') {
                         $catName = $values[$infId];
                         if ($catName !== '') {
                             $categoryService = new CategoryService($gDb, 'IVT');
@@ -332,7 +333,7 @@ class ImportService
                                 $val = $category->getValue('cat_uuid');
                             }
                         }
-                    } elseif ($imfNameIntern === 'BORROW_DATE' || $imfNameIntern === 'RETURN_DATE') {
+                    } elseif ($infNameIntern === 'BORROW_DATE' || $infNameIntern === 'RETURN_DATE') {
                         $val = $values[$infId];
                         if ($val !== '') {
                             // date must be formatted
@@ -370,14 +371,13 @@ class ImportService
                                 }
                             }
                         }
-                    } elseif ($imfNameIntern === 'STATUS') {
-                        $statusValue = $values[$infId];
-                        if ($statusValue !== '') {
-                            // if no status is given, set the default status
+                    } elseif ($infNameIntern === 'STATUS' || in_array($infType, array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'RADIOBUTTON'))) {
+                        $optionValue = $values[$infId];
+                        if ($optionValue !== '') {
                             $option = new SelectOptions($gDb, $fields->getValue('inf_id'));
                             $optionValues = $option->getAllOptions();
                             foreach ($optionValues as $optionData) {
-                                if (Language::translateIfTranslationStrId($optionData['value']) === $statusValue) {
+                                if (Language::translateIfTranslationStrId($optionData['value']) === $optionValue) {
                                     $val = $optionData['id'];
                                     break;
                                 }
@@ -391,17 +391,26 @@ class ImportService
                                         $maxId = $optionData['id'];
                                     }
                                 }
-                                $newOption[$maxId + 1] = array('value' => $statusValue);
+                                $newOption[$maxId + 1] = array('value' => $optionValue);
                                 $option->setOptionValues($newOption);
-                                $val = $option->getValue('ifo_id');
+                                // reload all options to get the id of the new option
+                                $options = $option->getAllOptions();
+                                foreach ($options as $optionData) {
+                                    if (Language::translateIfTranslationStrId($optionData['value']) === $optionValue) {
+                                        $val = $optionData['id'];
+                                        break;
+                                    } else {
+                                        $val = $values[$infId];
+                                    }
+                                }
                             }
                         }
                     } else {
                         $val = $values[$infId];
                     }
                 }
-                $_POST['INF-' . $imfNameIntern] = $val;
-                $itemData[] = array($items->getItemFields()[$imfNameIntern]->getValue('inf_name') => array('oldValue' => "", 'newValue' => $val));
+                $_POST['INF-' . $infNameIntern] = $val;
+                $itemData[] = array($items->getItemFields()[$infNameIntern]->getValue('inf_name') => array('oldValue' => "", 'newValue' => $val));
             }
 
             $importedItemData[] = $itemData;
