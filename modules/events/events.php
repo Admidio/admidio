@@ -768,7 +768,9 @@ try {
                         if ($event->getNameOfLastEditingUser() !== '') {
                             $page->addHtml('<span class="admidio-info-created">' . $gL10n->get('SYS_LAST_EDITED_BY', array($event->getNameOfLastEditingUser(), $event->getValue('dat_timestamp_change'))) . '</span>');
                         }
-                $page->addHtml('</div>
+                $page->addHtml('
+                        </div>
+                    </div>
                 </div>');
             } else { // $getView = 'compact' or 'room' or 'participants' or 'description'
                 // show table view of events
