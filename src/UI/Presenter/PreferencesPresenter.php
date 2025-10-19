@@ -847,7 +847,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_visible_for',
             $gL10n->get('SYS_VISIBLE_FOR'),
             $selectBoxEntries,
-            array('defaultValue' => explode(',', $formValues['inventory_visible_for']), 'multiselect' => true, 'helpTextId' => 'SYS_MENU_RESTRICT_VISIBILITY')
+            array('defaultValue' => explode(',', $formValues['inventory_visible_for']), 'multiselect' => true)
         );
 
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
