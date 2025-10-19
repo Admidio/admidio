@@ -102,7 +102,7 @@ class AnnouncementsService
         $sqlConditions = '';
         $sqlLimitOffset = '';
         $sqlQueryParameters = array();
-        $visibleCategoryIDs = $gCurrentUser->getAllVisibleCategories('ANN');
+        $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
 
         if ($this->categoryUUID !== '') {
             $sqlConditions .= ' AND cat_uuid = ?';

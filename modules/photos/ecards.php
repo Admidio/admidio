@@ -154,22 +154,24 @@ try {
     // create list with all possible recipients
     $list = array();
 
+    $rolesWriteMails = array_merge(array(0), $gCurrentUser->getRolesWriteMails());
+
     // list all roles where login users could send mails to
     $sql = 'SELECT rol_uuid, rol_name
           FROM ' . TBL_ROLES . '
     INNER JOIN ' . TBL_CATEGORIES . '
             ON cat_id = rol_cat_id
-         WHERE rol_uuid IN (' . Database::getQmForValues($gCurrentUser->getRolesWriteMails()) . ')
+         WHERE rol_uuid IN (' . Database::getQmForValues($rolesWriteMails) . ')
            AND cat_name_intern <> \'EVENTS\'
       ORDER BY rol_name';
-    $statement = $gDb->queryPrepared($sql, $gCurrentUser->getRolesWriteMails());
+    $statement = $gDb->queryPrepared($sql, $rolesWriteMails);
 
     while ($row = $statement->fetch()) {
         $list[] = array('groupID: ' . $row['rol_uuid'], $row['rol_name'], $gL10n->get('SYS_ROLES'));
     }
 
     // select all users
-    $arrayRoles = array_merge($gCurrentUser->getRolesWriteMails(), $gCurrentUser->getRolesViewMemberships());
+    $arrayRoles = array_merge($rolesWriteMails, $gCurrentUser->getRolesViewMemberships());
     $arrayUniqueRoles = array_unique($arrayRoles);
 
     $sql = 'SELECT DISTINCT usr_uuid, first_name.usd_value AS first_name, last_name.usd_value AS last_name

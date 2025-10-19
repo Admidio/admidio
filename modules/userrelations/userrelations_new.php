@@ -72,6 +72,8 @@ try {
 
     $sqlData = array();
     if ($gCurrentUser->isAdministratorUsers()) {
+        $rolesViewMemberships = array_merge(array(0), $gCurrentUser->getRolesViewMemberships());
+
         // the user has the edit right, therefore, he can edit all visible users
         $sqlData['query'] = 'SELECT usr_uuid, CONCAT(first_name.usd_value, \' \', last_name.usd_value) AS name
                            FROM ' . TBL_MEMBERS . '
@@ -88,7 +90,7 @@ try {
                              ON first_name.usd_usr_id = usr_id
                             AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                           WHERE usr_id <> ? -- $user->getValue(\'usr_id\')
-                            AND rol_uuid IN (' . Database::getQmForValues($gCurrentUser->getRolesViewMemberships()) . ')
+                            AND rol_uuid IN (' . Database::getQmForValues($rolesViewMemberships) . ')
                             AND rol_valid   = true
                             AND cat_name_intern <> \'EVENTS\'
                             AND ( cat_org_id = ? -- $gCurrentOrgId
@@ -103,7 +105,7 @@ try {
                 $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
                 $user->getValue('usr_id')
             ),
-            $gCurrentUser->getRolesViewMemberships(),
+            $rolesViewMemberships,
             array(
                 $gCurrentOrgId,
                 DATE_NOW,
