@@ -794,8 +794,7 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
-        //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
+        $items = new ItemsData($gDb, $gCurrentOrgId);
 
         $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',
@@ -921,7 +920,7 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
         );
 
-        if ($formValues['inventory_module_enabled'] !== 3  || ($formValues['inventory_module_enabled'] === 3 && $gCurrentUser->isAdministratorInventory())) {
+        if ($formValues['inventory_module_enabled'] !== '3'  || ($formValues['inventory_module_enabled'] === '3' && $gCurrentUser->isAdministratorInventory())) {
             $formInventory->addCheckbox(
                 'inventory_allow_keeper_edit',
                 $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
@@ -930,7 +929,6 @@ class PreferencesPresenter extends PagePresenter
             );
 
             // create array of possible fields for keeper edit
-            $items = new ItemsData($gDb, $gCurrentOrgId);
             $selectBoxEntries = array();
             // add pseudo field 'ITEM_PICTURE' if item pictures are enabled
             if ($formValues['inventory_item_picture_enabled']) {
@@ -938,7 +936,7 @@ class PreferencesPresenter extends PagePresenter
             }
             foreach ($items->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
-                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames)) {
                     continue; // skip borrowing fields if borrowing is disabled
                 }
                 $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
@@ -997,7 +995,7 @@ class PreferencesPresenter extends PagePresenter
         $selectBoxEntries = array();
         foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames))) {
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames))) {
                 continue;
             }
             $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');

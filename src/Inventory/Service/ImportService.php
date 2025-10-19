@@ -254,7 +254,6 @@ class ImportService
         // get all values of the item fields
         $importedItemData = array();
         //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         foreach ($assignedFieldColumn as $row => $values) {
             $itemData = array();
@@ -262,7 +261,7 @@ class ImportService
                 $val = '';
                 $infId = $fields->getValue('inf_id');
                 $imfNameIntern = $fields->getValue('inf_name_intern');
-                if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($imfNameIntern, $borrowingFieldNames)) {
+                if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($imfNameIntern, $items->borrowFieldNames)) {
                     continue; // skip borrowing fields if borrowing is disabled
                 }
                 if (isset($values[$infId])) {

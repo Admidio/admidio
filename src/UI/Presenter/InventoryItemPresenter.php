@@ -35,15 +35,15 @@ use Ramsey\Uuid\Uuid;
 class InventoryItemPresenter extends PagePresenter
 {
     /**
-     * Create the data for the edit form of a item field.
-     * @param string $itemFieldID ID of the item field that should be edited.
+     * Create the data for the edit form of an item field.
+     * @param string $itemUUID UUID of the item that should be edited.
+     * @param bool $getCopy Indicates whether a copy of the item should be created.
+     * @return void
      * @throws Exception
      */
-    public function createEditForm(string $itemUUID = '', bool $getCopy = false)
+    public function createEditForm(string $itemUUID = '', bool $getCopy = false): void
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
-        //array with the internal field names of the borrow fields not used in the edit form
-        $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
@@ -64,7 +64,7 @@ class InventoryItemPresenter extends PagePresenter
         foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
             if ($infNameIntern === 'KEEPER') {
-                $pimKeeper = $infNameIntern;
+                $ivtKeeper = $infNameIntern;
             }
         }
 
@@ -89,7 +89,7 @@ class InventoryItemPresenter extends PagePresenter
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
             // Skip borrow fields that are not used in the edit form
-            if (in_array($infNameIntern, $borrowFieldNames)) {
+            if (in_array($infNameIntern, $items->borrowFieldNames)) {
                 continue;
             }
 
@@ -122,9 +122,9 @@ class InventoryItemPresenter extends PagePresenter
                 case 'DROPDOWN_MULTISELECT':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
-                    // prevent adding an empty string to the selectbox
+                    // prevent adding an empty string to the select-box
                     if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                        // prevent adding an empty string to the selectbox
+                        // prevent adding an empty string to the select-box
                         $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                     }
 
@@ -137,7 +137,7 @@ class InventoryItemPresenter extends PagePresenter
                             'defaultValue' => $defaultValue,
                             'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
-                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT'),
                             'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
@@ -242,7 +242,7 @@ class InventoryItemPresenter extends PagePresenter
 
                         $this->addJavascript('
                             // Select2 für KEEPER initialisieren
-                            $("#INF-' . $pimKeeper . '").select2({
+                            $("#INF-' . $ivtKeeper . '").select2({
                                 theme: "bootstrap-5",
                                 allowClear: true,
                                 placeholder: "",
@@ -294,8 +294,8 @@ class InventoryItemPresenter extends PagePresenter
         );
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
-        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
-        // so we need to do it here, even when no selectbox will be used...
+        // is loaded on-demand, when there is no html page anymore to insert the css/JS file loading,
+        // so we need to do it here, even when no select-box will be used...
         // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
@@ -308,7 +308,7 @@ class InventoryItemPresenter extends PagePresenter
         $this->assignSmartyVariable('lastUserEditedName', $item->getNameOfLastEditingUser());
         $this->assignSmartyVariable('lastUserEditedTimestamp', $item->getValue('ini_timestamp_change'));
 
-        // only show the item picture if the module setting is enabled, the item is not new and we don't want to create a copy of the item
+        // only show the item picture if the module setting is enabled, the item is not new, and we don't want to create a copy of the item
         if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
             if (!$item->isNewRecord() && !$getCopy) {
                 $this->assignSmartyVariable('urlItemPicture', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)));
@@ -331,21 +331,23 @@ class InventoryItemPresenter extends PagePresenter
     }
 
     /**
-     * Create the data for the edit form of a item field.
+     * Create the data for the edit form of an item field.
      * @param array $itemUUIDs IDs of the items that should be edited.
+     * @return void
      * @throws Exception
      */
-    public function createEditItemsForm(array $itemUUIDs = array())
+    public function createEditItemsForm(array $itemUUIDs = array()): void
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
-        // array with the internal field names of the borrow fields not used in the edit form
-        // we also exclude IITEMNAME from the edit form, because it is only used for displaying item values based on the first entry
-        // and it is not wanted to change the item name for multiple items at once
-        $borrowFieldNames = array('ITEMNAME', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
         $categoryService = new CategoryService($gDb, 'IVT');
+
+        // array with the internal field names of the borrow fields not used in the edit form
+        // we also exclude ITEMNAME from the edit form, because it is only used for displaying item values based on the first entry,
+        // and it is not wanted to change the item name for multiple items at once
+        $borrowFieldNames = array_merge($items->borrowFieldNames, array('ITEMNAME'));
 
         // for editing multiple items, we will use the first itemUUID as value reference
         $itemUUID = $itemUUIDs[0] ?? '';
@@ -362,7 +364,7 @@ class InventoryItemPresenter extends PagePresenter
         foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
             if ($infNameIntern === 'KEEPER') {
-                $pimKeeper = $infNameIntern;
+                $ivtKeeper = $infNameIntern;
             }
         }
 
@@ -431,9 +433,9 @@ class InventoryItemPresenter extends PagePresenter
                 case 'DROPDOWN_MULTISELECT':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
-                    // prevent adding an empty string to the selectbox
+                    // prevent adding an empty string to the select-box
                     if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                        // prevent adding an empty string to the selectbox
+                        // prevent adding an empty string to the select-box
                         $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                     }
 
@@ -447,7 +449,7 @@ class InventoryItemPresenter extends PagePresenter
                             'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
                             'toggleable' => true,
-                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT'),
                             'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
@@ -562,7 +564,7 @@ class InventoryItemPresenter extends PagePresenter
 
                         $this->addJavascript('
                             // Select2 für KEEPER initialisieren
-                            $("#INF-' . $pimKeeper . '").select2({
+                            $("#INF-' . $ivtKeeper . '").select2({
                                 theme: "bootstrap-5",
                                 allowClear: true,
                                 placeholder: "",
@@ -640,8 +642,8 @@ class InventoryItemPresenter extends PagePresenter
         );
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
-        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
-        // so we need to do it here, even when no selectbox will be used...
+        // is loaded on-demand, when there is no html page anymore to insert the css/JS file loading,
+        // so we need to do it here, even when no select-box will be used...
         // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
@@ -650,7 +652,7 @@ class InventoryItemPresenter extends PagePresenter
 
         $item = new Item($gDb, $items, $items->getItemId());
 
-        // add a information that this is a multi-edit form
+        // add an information that this is a multi-edit form
         $infoAlert = $gL10n->get('SYS_INVENTORY_ITEMS_EDIT_DESC');
 
         $this->assignSmartyVariable('infoAlert', $infoAlert);
@@ -665,18 +667,21 @@ class InventoryItemPresenter extends PagePresenter
     }
 
     /**
-     * Create the data for the edit form of a item field.
-     * @param string $itemFieldID ID of the item field that should be edited.
+     * Create the data for the edit form of an item field.
+     * @param string $itemUUID UUID of the item that should be borrowed.
+     * @return void
      * @throws Exception
      */
-    public function createEditBorrowForm(string $itemUUID)
+    public function createEditBorrowForm(string $itemUUID): void
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gL10n, $gCurrentOrgId, $gDb;
-        //array with the internal field names of the borrow fields not used in the edit form
-        $borrowFieldNames = array('ITEMNAME', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
+
+        // array with the internal field names of the borrow fields used in the edit borrow form
+        // we also include ITEMNAME for displaying the item name in the borrow form
+        $borrowFieldNames = array_merge($items->borrowFieldNames, array('ITEMNAME'));
 
         // Check if itemUUID is valid
         if (!Uuid::isValid($itemUUID)) {
@@ -852,9 +857,9 @@ class InventoryItemPresenter extends PagePresenter
                 case 'DROPDOWN_MULTISELECT':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
-                    // prevent adding an empty string to the selectbox
+                    // prevent adding an empty string to the select-box
                     if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                        // prevent adding an empty string to the selectbox
+                        // prevent adding an empty string to the select-box
                         $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                     }
 
@@ -867,7 +872,7 @@ class InventoryItemPresenter extends PagePresenter
                             'defaultValue' => $defaultValue,
                             'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
-                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT'),
                             'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
@@ -974,8 +979,8 @@ class InventoryItemPresenter extends PagePresenter
         );
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
-        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
-        // so we need to do it here, even when no selectbox will be used...
+        // is loaded on-demand, when there is no html page anymore to insert the css/JS file loading,
+        // so we need to do it here, even when no select-box will be used...
         // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
@@ -993,10 +998,12 @@ class InventoryItemPresenter extends PagePresenter
     }
 
     /**
-     * Create the data for the picture upload form of a item.
+     * Create the data for the picture upload form of an item.
      * @param string $itemUUID UUID of the item that should be edited.
+     * @return void
+     * @throws Exception
      */
-    public function createPictureChooseForm(string $itemUUID)
+    public function createPictureChooseForm(string $itemUUID): void
     {
         global $gCurrentSession, $gL10n;
         // show form
@@ -1032,10 +1039,12 @@ class InventoryItemPresenter extends PagePresenter
     }
 
     /**
-     * Create the data for the picture preview form of a item.
+     * Create the data for the picture preview form of an item.
      * @param string $itemUUID UUID of the item that should be edited.
+     * @return void
+     * @throws Exception
      */
-    public function createPictureReviewForm(string $itemUUID)
+    public function createPictureReviewForm(string $itemUUID): void
     {
         global $gCurrentSession, $gL10n;
         // show form

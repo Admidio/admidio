@@ -107,6 +107,11 @@ class InventoryImportPresenter extends PagePresenter
         parent::__construct($objectUUID);
     }
 
+    /**
+     * Creates the form to select the import file and format-specific settings.
+     * @return void
+     * @throws Exception
+     */
     public function createImportFileSelectionForm(): void
     {
         global $gL10n, $gCurrentSession;
@@ -199,6 +204,11 @@ class InventoryImportPresenter extends PagePresenter
         $gCurrentSession->addFormObject($form);
     }
 
+    /**
+     * Creates the form to assign the CSV columns to the inventory item fields.
+     * @return void
+     * @throws Exception
+     */
     public function createAssignFieldsForm(): void
     {
         global $gL10n, $gCurrentSession, $gDb, $gCurrentOrgId, $gSettingsManager;
@@ -269,10 +279,9 @@ class InventoryImportPresenter extends PagePresenter
         });
 
         //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
         $items = new ItemsData($gDb, $gCurrentOrgId);
         foreach ($items->getItemFields() as $itemField) {
-            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {
+            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $items->borrowFieldNames)) {
                 continue; // skip borrowing fields if borrowing is disabled
             }
 
