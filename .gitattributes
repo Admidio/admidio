@@ -7,7 +7,7 @@
 
 # exclude some folders in zip
 /.* export-ignore
-/demo_data/ export-ignore
+/demo/ export-ignore
 /hooks/ export-ignore
 /dockerscripts/ export-ignore
 /Dockerfile export-ignore
