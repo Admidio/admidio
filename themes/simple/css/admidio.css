@@ -380,6 +380,11 @@ label {
     }
 }
 
+.admidio-form-custom-content > div {
+    padding-top: calc(0.375rem + 1px);
+    padding-bottom: calc(0.375rem + 1px);
+}
+
 /***********************************/
 /* Cards */
 /***********************************/
