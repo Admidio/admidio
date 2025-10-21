@@ -38,6 +38,7 @@ class Update
         // get username and password
         $loginName = admFuncVariableIsValid($_POST, 'adm_login_name', 'string', array('requireValue' => true, 'directOutput' => true));
         $password  = $_POST['adm_password']; // password could contain special chars, so no conversation should be done
+        $totpCode = admFuncVariableIsValid($_POST, 'adm_totp_code', 'string', array('directOutput' => true));
 
         // Search for username
         $sql = 'SELECT usr_id
@@ -57,7 +58,7 @@ class Update
             // Don't update the current session with user id and don't do a rehash of the password.
             // In former versions, the password field was too small for the current hashes,
             // and the update of this field will be done after this check.
-            $gCurrentUser->checkLogin($password, false, false, false, true);
+            $gCurrentUser->checkLogin($password, false, false, false, true, $totpCode);
         }
     }
 
