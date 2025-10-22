@@ -50,7 +50,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getRoleUuid       = admFuncVariableIsValid($_GET, 'role_uuid', 'string', array('requireValue' => true, 'directOutput' => true));
-$getFilterRoleUuid = StringUtils::strValidCharacters(admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'string'), 'noSpecialChar');
+$getFilterRoleUuid = admFuncVariableIsValid($_GET, 'filter_rol_uuid', 'string');
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'bool', array('defaultValue' => false));
 $getDraw   = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
 $getStart  = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
