@@ -31,7 +31,7 @@ class Update
     {
         global $gDb, $gLoginForUpdate, $gProfileFields, $gCurrentUser;
 
-        if (isset($gLoginForUpdate) && !$gLoginForUpdate) {
+        if (!isset($gLoginForUpdate) || !$gLoginForUpdate) {
             return;
         }
 
