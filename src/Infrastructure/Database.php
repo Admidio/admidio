@@ -845,6 +845,11 @@ class Database
      */
     public static function getQmForValues(array $valuesArray): string
     {
+        // if no values are given return NULL to avoid syntax errors in sql statements
+        if (empty($valuesArray)) {
+            return 'NULL';
+        }
+
         return implode(',', array_fill(0, count($valuesArray), '?'));
     }
 
