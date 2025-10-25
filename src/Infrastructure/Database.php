@@ -841,7 +841,7 @@ class Database
     /**
      * Get a string with question marks that are comma separated.
      * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
-     * @return string Question marks string
+     * @return string returns 'NULL' if the values array is empty otherwise a question marks string
      */
     public static function getQmForValues(array $valuesArray): string
     {
