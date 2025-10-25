@@ -58,7 +58,7 @@ class ForumService
         $sqlConditions = '';
         $sqlLimitOffset = '';
         $sqlQueryParameters = array();
-        $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('FOT'));
+        $visibleCategoryIDs = $gCurrentUser->getAllVisibleCategories('FOT');
 
         if ($this->categoryUUID !== '') {
             $sqlConditions .= ' AND cat_uuid = ?';

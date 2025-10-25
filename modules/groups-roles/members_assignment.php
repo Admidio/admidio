@@ -179,7 +179,7 @@ try {
 
         ChangelogService::displayHistoryButton($page, 'membership', 'members', true, array('uuid' => $getUserUuid, 'related_id' => $getRoleUuid));
 
-        $allVisibleRoles = array_merge(array(0), $gCurrentUser->getRolesViewMemberships());
+        $allVisibleRoles = $gCurrentUser->getRolesViewMemberships();
         $sqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
                            FROM ' . TBL_ROLES . '
                      INNER JOIN ' . TBL_CATEGORIES . '
