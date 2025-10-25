@@ -37,7 +37,7 @@ try {
             'defaultValue' => 'html',
             'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check')
         ));
-    $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
+    $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
 
     // only administrators are allowed to view, edit organization preferences or create new organizations
     if (!$gCurrentUser->isAdministrator()) {
