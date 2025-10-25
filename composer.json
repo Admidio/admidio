@@ -75,6 +75,7 @@
             "!adm_plugins/login_form",
             "!adm_plugins/random_photo",
             "!adm_plugins/who-is-online",
+            "demo",
             "demo_data",
             "!vendor/*",
             "vendor/maennchen/zipstream-php/test",
