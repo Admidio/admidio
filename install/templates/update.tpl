@@ -31,7 +31,7 @@
         <p>{$l10n->get('INS_ADMINISTRATOR_LOGIN_DESC')}</p>
         {include 'sys-template-parts/form.input.tpl' data=$elements['adm_login_name']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['adm_password']}
-        {if $settings->getBool('two_factor_authentication_enabled')}
+        {if $settings->has('two_factor_authentication_enabled') && $settings->getBool('two_factor_authentication_enabled')}
             {include 'sys-template-parts/form.input.tpl' data=$elements['adm_totp_code']}
         {/if}
     {/if}
