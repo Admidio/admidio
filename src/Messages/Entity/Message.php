@@ -6,7 +6,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
-use Role;
+use Admidio\Roles\Entity\Role;
 
 /**
  * @brief Class manages access to database table adm_messages
@@ -255,7 +255,7 @@ class Message extends Entity
 
         if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2) {
             // first delete attachments files and the database entry
-            $attachments   = $this->getAttachmentsInformations();
+            $attachments   = $this->getAttachmentsInformation();
 
             foreach ($attachments as $attachment) {
                 // delete attachment in file system
@@ -294,7 +294,7 @@ class Message extends Entity
      * @return array Returns an array with all attachments and the following elements: **msa_id** and **file_name**
      * @throws Exception
      */
-    public function getAttachmentsInformations(): array
+    public function getAttachmentsInformation(): array
     {
         $attachments = array();
 
@@ -569,21 +569,17 @@ class Message extends Entity
      * Saves the files of the stored filenames in the array **$msgAttachments** within the filesystem folder
      * adm_my_files/messages_attachments. Therefore, the filename will get the prefix with the id of this
      * message.
-     * @throw RuntimeException Folder could not be created
      * @throws Exception
      */
     protected function saveAttachments()
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gCurrentOrganization;
 
         if ($gSettingsManager->getBool('mail_save_attachments')) {
             try {
                 FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
-            } catch (\RuntimeException $exception) {
-                return array(
-                    'text' => 'SYS_FOLDER_NOT_CREATED',
-                    'path' => ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments'
-                );
+            } catch (\Throwable) {
+                throw new Exception('SYS_FOLDER_NOT_CREATED', array(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments', '<a href="mailto:' . $gCurrentOrganization->getValue('org_email_administrator') . '">', '</a>'));
             }
         }
 
