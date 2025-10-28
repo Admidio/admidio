@@ -1,5 +1,7 @@
-{if strlen($infoAlert) > 0}
-    <div class="alert alert-info" role="alert"><i class="bi bi-info-circle-fill"></i>{$infoAlert}</div>
+{if count($infoAlerts) > 0}
+    {foreach $infoAlerts as $infoAlert}
+        <div class="alert alert-{$infoAlert['type']}" role="alert"><i class="bi bi-info-circle-fill"></i>{$infoAlert['value']}</div>
+    {/foreach}
 {/if}
 
 <form {foreach $attributes as $attribute}

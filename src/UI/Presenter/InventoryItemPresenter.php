@@ -187,7 +187,6 @@ class InventoryItemPresenter extends PagePresenter
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
                             )
                         );
-
                     } elseif ($categoryService->count() > 0) {
                         if (!empty($categoryService->getEditableCategories())) {
                             $form->addSelectBoxForCategories(
@@ -208,10 +207,11 @@ class InventoryItemPresenter extends PagePresenter
                                 $items->getValue($infNameIntern),
                                 array(
                                     'type' => 'text',
-                                    'property' => FormPresenter::FIELD_DISABLED,
-                                    'helpTextId' => 'SYS_INVENTORY_NO_EDITABLE_CATEGORIES'
+                                    'property' => FormPresenter::FIELD_DISABLED
                                 )
                             );
+                            // add an information that no editable categories are available
+                            $this->smarty->append('infoAlerts', array('type' => 'warning', 'value' => $gL10n->get('SYS_INVENTORY_NO_EDITABLE_CATEGORIES')));
                         }
                     }
                     break;
@@ -287,11 +287,29 @@ class InventoryItemPresenter extends PagePresenter
             $sql = 'SELECT inf_id, inf_name FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_type = \'NUMBER\' AND (inf_org_id = ' . $gCurrentOrgId . ' OR inf_org_id IS NULL);';
             $form->addSelectBoxFromSql('item_copy_field', $gL10n->get('SYS_INVENTORY_FIELD'), $gDb, $sql, array('multiselect' => false, 'helpTextId' => 'SYS_INVENTORY_FIELD_DESC'));
         }
-        $form->addSubmitButton(
-            'adm_button_save',
-            $gL10n->get('SYS_SAVE'),
-            array('icon' => 'bi-check-lg')
-        );
+
+        if ($getCopy) {
+            if ($form->getElements()['INF-CATEGORY']['type'] === 'text') {
+                // when copying an item and the user is not allowed to change the category, we cannot create copies
+                $form->addSubmitButton(
+                    'adm_button_save',
+                    $gL10n->get('SYS_COPY'),
+                    array('icon' => 'bi-plus-lg', 'property' => FormPresenter::FIELD_DISABLED)
+                );
+            } else {
+                $form->addSubmitButton(
+                    'adm_button_save',
+                    $gL10n->get('SYS_COPY'),
+                    array('icon' => 'bi-plus-lg')
+                );
+            }
+        } else {
+            $form->addSubmitButton(
+                'adm_button_save',
+                $gL10n->get('SYS_SAVE'),
+                array('icon' => 'bi-check-lg')
+            );
+        }
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
         // is loaded on-demand, when there is no html page anymore to insert the css/JS file loading,
@@ -322,7 +340,7 @@ class InventoryItemPresenter extends PagePresenter
                 }
             } else {
                 // we create a new item or a copy of an existing item, so we can only upload a picture after saving the new item
-                $this->assignSmartyVariable('infoAlert', $gL10n->get('SYS_INVENTORY_ITEM_CREATE_PICTURE_INFO'));
+                $this->smarty->append('infoAlerts', array('type' => 'info', 'value' => $gL10n->get('SYS_INVENTORY_ITEM_CREATE_PICTURE_INFO')));
             }
         }
 
