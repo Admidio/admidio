@@ -930,13 +930,6 @@ class ItemsData
         // check if new value only contains spaces
         $newValue = (trim((string)$newValue) !== '') ? (string)$newValue : '';
 
-        // save old and new data for notification
-        if (array_key_exists($infId, $this->mItemData)) {
-            $this->mChangedItemData[] = array($this->mItemData[$infId]->getValue('inf_name_intern') => array('oldValue' => $oldFieldValue, 'newValue' => $newValue));
-        } else {
-            $this->mChangedItemData[] = array($this->mItemFields[$fieldNameIntern]->getValue('inf_name_intern') => array('oldValue' => $oldFieldValue, 'newValue' => $newValue));
-        }
-
         // format of date will be local but database has stored Y-m-d format must be changed for compare
         if ($this->mItemFields[$fieldNameIntern]->getValue('inf_type') === 'DATE') {
             if ($newValue !== '') {
@@ -960,11 +953,27 @@ class ItemsData
                     }
                 }
             }
+            if ($oldFieldValue !== '') {
+                // convert old value to same format for comparison
+                $oldValue = strtotime($oldFieldValue);
+                if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                    $oldFieldValue = date('Y-m-d H:i', $oldValue);
+                } else {
+                    $oldFieldValue = date('Y-m-d', $oldValue);
+                }
+            }
         }
 
         // only do an update if value has changed
         if (strcmp($oldFieldValue, $newValue) === 0) {
             return true;
+        }
+
+        // save old and new data for notification
+        if (array_key_exists($infId, $this->mItemData)) {
+            $this->mChangedItemData[] = array($this->mItemData[$infId]->getValue('inf_name_intern') => array('oldValue' => $oldFieldValue, 'newValue' => $newValue));
+        } else {
+            $this->mChangedItemData[] = array($this->mItemFields[$fieldNameIntern]->getValue('inf_name_intern') => array('oldValue' => $oldFieldValue, 'newValue' => $newValue));
         }
 
         // if item data object for this field does not exist then create it
@@ -1250,6 +1259,7 @@ class ItemsData
                                 $options = $this->getProperty($key, 'ifo_inf_options');
                                 if ($key === 'ITEMNAME') {
                                     $itemName = $value['newValue'];
+                                    $changes[] = array($key, $value['oldValue'], $value['newValue']);
                                 } elseif ($key === 'CATEGORY') {
                                     $value['oldValue'] = $this->getHtmlValue('CATEGORY', $value['oldValue']);
                                     $value['newValue'] = $this->getHtmlValue('CATEGORY', $value['newValue']);
@@ -1288,6 +1298,25 @@ class ItemsData
                                         isset($users[$value['oldValue']]) ? $users[$value['oldValue']] : $value['oldValue'],
                                         isset($users[$value['newValue']]) ? $users[$value['newValue']] : $value['newValue']
                                     );
+                                } elseif ($this->getProperty($key, 'inf_type') === 'DATE') {
+                                    // format date values for notification
+                                    if ($value['oldValue'] !== '') {
+                                        $oldDate = strtotime($value['oldValue']);
+                                        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                                            $value['oldValue'] = date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $oldDate);
+                                        } else {
+                                            $value['oldValue'] = date($gSettingsManager->getString('system_date'), $oldDate);
+                                        }
+                                    }
+                                    if ($value['newValue'] !== '') {
+                                        $newDate = strtotime($value['newValue']);
+                                        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                                            $value['newValue'] = date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $newDate);
+                                        } else {
+                                            $value['newValue'] = date($gSettingsManager->getString('system_date'), $newDate);
+                                        }
+                                    }
+                                    $changes[] = array($key, $value['oldValue'], $value['newValue']);
                                 } elseif ($options !== '') {
                                     $changes[] = array(
                                         $key,
