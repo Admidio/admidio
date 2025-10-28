@@ -519,5 +519,9 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1750">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_events' WHERE ror_name_intern = 'event_participation'</step>
     <step id="1760">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_menu' WHERE ror_name_intern = 'menu_view'</step>
     <step id="1770">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_saml_clients' WHERE ror_name_intern = 'sso_saml_access'</step>
+    <step id="1780" database="mysql">ALTER TABLE %PREFIX%_inventory_item_borrow_data MODIFY COLUMN inb_borrow_date timestamp NULL DEFAULT NULL;</step>
+    <step id="1790" database="pgsql">ALTER TABLE %PREFIX%_inventory_item_borrow_data ALTER COLUMN inb_borrow_date TYPE timestamp;</step>
+    <step id="1800" database="mysql">ALTER TABLE %PREFIX%_inventory_item_borrow_data MODIFY COLUMN inb_return_date timestamp NULL DEFAULT NULL;</step>
+    <step id="1810" database="pgsql">ALTER TABLE %PREFIX%_inventory_item_borrow_data ALTER COLUMN inb_return_date TYPE timestamp;</step>
     <step>stop</step>
 </update>
