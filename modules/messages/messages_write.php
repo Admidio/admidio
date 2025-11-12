@@ -615,7 +615,7 @@ try {
             } else {
                 $messageHeader = $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
                 $messageIcon = 'bi-envelope-fill';
-                $attachments = $message->getAttachmentsInformations();
+                $attachments = $message->getAttachmentsInformation();
 
                 if (count($attachments) > 0) {
                     $messageFooter .= '<div class="card-footer"><span class="mr-3"><i class="bi bi-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT') . '</span>';
