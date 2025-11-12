@@ -34,6 +34,12 @@ use DateTime;
  */
 class ImportService
 {
+    /**
+     * Reads the uploaded import file and saves the data in the session.
+     *
+     * @return void
+     * @throws Exception
+     */
     public function readImportFile(): void
     {
         global $gL10n, $gMessage, $gCurrentSession;
@@ -153,6 +159,12 @@ class ImportService
         }
     }
 
+    /**
+     * Imports items from the previously read import file into the database.
+     *
+     * @return array An array containing the success status and message of the import operation.
+     * @throws Exception
+     */
     public function importItems(): array
     {
         global $gL10n, $gDb, $gCurrentOrgId, $gSettingsManager, $gCurrentSession;
@@ -417,7 +429,7 @@ class ImportService
             unset($itemData);
             if (count($assignedFieldColumn) > 0) {
 
-                $itemModule = new ItemService($gDb, '', 0, 1, 1);
+                $itemModule = new ItemService($gDb, '', 0, 1, true);
                 $itemModule->save();
 
                 $importSuccess = true;

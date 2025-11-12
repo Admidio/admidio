@@ -281,14 +281,13 @@ class InventoryFieldsPresenter extends PagePresenter
         $templateItemFieldsCategories = array();
         $templateItemFields = array();
         $itemFieldCategoryID = -1;
-        $prevItemFieldCategoryID = -1;
 
         foreach ($items->getItemFields() as $itemField) {
             if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $items->borrowFieldNames)) {
                 continue; // skip borrowing fields if borrowing is disabled
             }
             $prevItemFieldCategoryID = $itemFieldCategoryID;
-            $itemFieldCategoryID = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;
+            $itemFieldCategoryID = ($itemField->getValue('inf_system')) ? 1 : 2;
 
             if ($itemFieldCategoryID !== $prevItemFieldCategoryID && count($templateItemFields) > 0) {
                 $templateItemFieldsCategories[] = array(
@@ -322,16 +321,16 @@ class InventoryFieldsPresenter extends PagePresenter
             // if the field is a category, the edit URL is different from the other fields
             $editUrl = ($itemField->getValue('inf_type') === 'CATEGORY') ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'IVT')) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_uuid')));
 
-            $templateRowItemField = array(
-                'categoryID' => ((bool)$itemField->getValue('inf_system')) ? 1 : 2,
-                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS'),
+            $templateRowItemField = [
+                'categoryID' => ($itemField->getValue('inf_system')) ? 1 : 2,
+                'categoryName' => ($itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS'),
                 'uuid' => $itemField->getValue('inf_uuid'),
                 'name' => $itemField->getValue('inf_name'),
                 'description' => $itemField->getValue('inf_description'),
                 'urlEdit' => $editUrl,
                 'dataType' => $itemFieldText[$itemField->getValue('inf_type')],
                 'mandatory' => $gL10n->get($mandatoryFieldValues[$itemField->getValue('inf_required_input')]),
-            );
+            ];
 
             $templateRowItemField['actions'][] = array(
                 'url' => $editUrl,

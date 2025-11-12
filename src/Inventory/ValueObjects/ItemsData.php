@@ -42,7 +42,7 @@ class ItemsData
     private bool $mItemReinstated = false;      ///< flag if an item was made to normal again
     private bool $mItemImported = false;        ///< flag if an item was imported
     private bool $showRetiredItems = true;      ///< if true, then retired items will be shown
-    private int $organizationId = -1;           ///< ID of the organization for which the item field structure should be read
+    private int $organizationId;           ///< ID of the organization for which the item field structure should be read
     public array $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');  ///< array with the internal field names of the borrow fields
 
     /**
@@ -139,6 +139,7 @@ class ItemsData
      *
      * @param string $orderBy The field by which the item fields should be sorted
      * @return void
+     * @throws Exception
      */
     public function readItemFields(string $orderBy = 'inf_id'): void
     {
@@ -170,6 +171,7 @@ class ItemsData
      *
      * @param string $itemUUID The uuid of the item for which the item data should be read.
      * @return void
+     * @throws Exception
      */
     public function readItemData(string $itemUUID = ''): void
     {
@@ -233,6 +235,7 @@ class ItemsData
      * and stores the values to the @b items array.
      *
      * @return void
+     * @throws Exception
      */
     public function readItems(): void
     {
@@ -274,6 +277,7 @@ class ItemsData
      * @param int $userId The id of the user for which the items should be read.
      * @param array $fieldNames The internal unique profile field names for which the items should be read
      * @return void
+     * @throws Exception
      */
     public function readItemsByUser(int $userId, array $fieldNames = array('KEEPER')): void
     {
@@ -397,18 +401,17 @@ class ItemsData
      * @param string $column The column name of @b adm_inventory_fields for which you want the value
      * @param string $format Optional the format (is necessary for timestamps)
      * @param bool $withObsoleteEntries If set to **false** then the obsolete entries of the item field will not be considered.
-     * @return array|string             Returns the value for the column
+     * @return mixed             Returns the value for the column
+     * @throws Exception
      */
-    public function getProperty(string $fieldNameIntern, string $column, string $format = '', bool $withObsoleteEntries = true)
+    public function getProperty(string $fieldNameIntern, string $column, string $format = '', bool $withObsoleteEntries = true): mixed
     {
         if (!array_key_exists($fieldNameIntern, $this->mItemFields)) {
             // if id-field not exists then return zero
             return (strpos($column, '_id') > 0) ? 0 : '';
         }
 
-        $value = $this->mItemFields[$fieldNameIntern]->getValue($column, $format, $withObsoleteEntries);
-
-        return $value;
+        return $this->mItemFields[$fieldNameIntern]->getValue($column, $format, $withObsoleteEntries);
     }
 
     /**
@@ -418,6 +421,7 @@ class ItemsData
      * @param string $column The column name of @b adm_inventory_fields for which you want the value
      * @param string $format Optional the format (is necessary for timestamps)
      * @return string                   Returns the value for the column.
+     * @throws Exception
      */
     public function getPropertyById(int $fieldId, string $column, string $format = ''): string
     {
@@ -434,6 +438,7 @@ class ItemsData
      * Get all users with their id, name, and address
      *
      * @return string                    SQL query to get all users with their ID and name
+     * @throws Exception
      */
     public function getSqlOrganizationsUsersComplete(): string
     {
@@ -453,6 +458,7 @@ class ItemsData
      * Get all users with their id and name
      *
      * @return string                    SQL query to get all users with their ID and name
+     * @throws Exception
      */
     public function getSqlOrganizationsUsersShort(): string
     {
@@ -472,6 +478,7 @@ class ItemsData
      * @param string|null $value The value that should be formatted must be committed so that layout
      *                                  is also possible for values that aren't stored in database
      * @return string                   Returns a html formatted string that considered the profile field settings
+     * @throws Exception
      */
     public function getHtmlValue(string $fieldNameIntern, ?string $value): string
     {
@@ -493,26 +500,24 @@ class ItemsData
                     break;
 
                 case 'DATE':
-                    if ($value !== '') {
-                        // date must be formatted
-                        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
-                            //check if date is datetime or only date
-                            if (strpos($value, ' ') === false) {
-                                $value .= ' 00:00';
-                            }
-                            $date = DateTime::createFromFormat('Y-m-d H:i', $value);
-                            if ($date instanceof DateTime) {
-                                $htmlValue = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
-                            }
-                        } else {
-                            // check if date is date or datetime
-                            if (strpos($value, ' ') !== false) {
-                                $value = substr($value, 0, 10);
-                            }
-                            $date = DateTime::createFromFormat('Y-m-d', $value);
-                            if ($date instanceof DateTime) {
-                                $htmlValue = $date->format($gSettingsManager->getString('system_date'));
-                            }
+                    // date must be formatted
+                    if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                        //check if date is datetime or only date
+                        if (!str_contains($value, ' ')) {
+                            $value .= ' 00:00';
+                        }
+                        $date = DateTime::createFromFormat('Y-m-d H:i', $value);
+                        if ($date instanceof DateTime) {
+                            $htmlValue = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+                        }
+                    } else {
+                        // check if date is date or datetime
+                        if (str_contains($value, ' ')) {
+                            $value = substr($value, 0, 10);
+                        }
+                        $date = DateTime::createFromFormat('Y-m-d', $value);
+                        if ($date instanceof DateTime) {
+                            $htmlValue = $date->format($gSettingsManager->getString('system_date'));
                         }
                     }
                     break;
@@ -581,16 +586,13 @@ class ItemsData
                         // now create html output for each value
                         $htmlValue = '';
                         foreach ($valueArray as $val) {
+                            if ($htmlValue !== '') {
+                                $htmlValue .= ', ';
+                            }
                             if (array_key_exists($val, $arrOptionValuesWithKeys)) {
                                 // if value is the index of the array then we can use it
-                                if ($htmlValue !== '') {
-                                    $htmlValue .= ', ';
-                                }
                                 $htmlValue .= $arrOptionValuesWithKeys[$val];
                             } else {
-                                if ($htmlValue !== '') {
-                                    $htmlValue .= ', ';
-                                }
                                 $htmlValue .= '<i>' . $gL10n->get('SYS_DELETED_ENTRY') . '</i>';
                             }
                         }
@@ -608,8 +610,6 @@ class ItemsData
                     $category->readDataByUuid($value);
                     if ($category->getValue('cat_id') > 0) {
                         $htmlValue = $category->getValue('cat_name');
-                    } else {
-                        $htmlValue = $value;
                     }
                     break;
             }
@@ -625,7 +625,16 @@ class ItemsData
         return (string)$value;
     }
 
-    public function getExportValue($fieldNameIntern, $value): string
+    /**
+     * Returns the export value of the field in text format with consideration of all layout parameters
+     *
+     * @param string $fieldNameIntern Internal item field name of the field that should be text formatted
+     * @param mixed $value The value that should be formatted must be committed so that layout
+     *                                  is also possible for values that aren't stored in database
+     * @return string                   Returns a text formatted string that considered the profile field settings
+     * @throws Exception
+     */
+    public function getExportValue(string $fieldNameIntern, mixed $value): string
     {
         global $gL10n;
 
@@ -720,13 +729,13 @@ class ItemsData
                             // if date field then the current date format must be used
                             if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
                                 //check if date is datetime or only date
-                                if (strpos($value, ' ') === false) {
+                                if (!str_contains($value, ' ')) {
                                     $value .= ' 00:00';
                                 }
                                 $date = DateTime::createFromFormat('Y-m-d H:i', $value);
                             } else {
                                 // check if date is date or datetime
-                                if (strpos($value, ' ') !== false) {
+                                if (str_contains($value, ' ')) {
                                     $value = substr($value, 0, 10);
                                 }
                                 $date = DateTime::createFromFormat('Y-m-d', $value);
@@ -792,6 +801,7 @@ class ItemsData
      * Returns the status of the item.
      *
      * @return int                      Returns the status of the item
+     * @throws Exception
      */
     public function getStatus(): int
     {
@@ -826,6 +836,12 @@ class ItemsData
         return $this->showRetiredItems;
     }
 
+    /**
+     * Checks if the item is retired.
+     *
+     * @return bool                     Returns true if the item is retired, otherwise false
+     * @throws Exception
+     */
     public function isRetired(): bool
     {
         global $gDb;
@@ -841,6 +857,7 @@ class ItemsData
      * Checks if the item is in use.
      *
      * @return bool                     Returns true if the item is in use, otherwise false
+     * @throws Exception
      */
     public function isInUse(): bool
     {
@@ -857,6 +874,7 @@ class ItemsData
      * Checks if the item is borrowed.
      *
      * @return bool                     Returns true if the item is borrowed, otherwise false
+     * @throws Exception
      */
     public function isBorrowed(): bool
     {
@@ -902,6 +920,7 @@ class ItemsData
      * @param string $fieldNameIntern The internal unique profile field name
      * @param mixed $newValue The new value that should be stored in the database field
      * @return bool                     Returns @b true if the value is stored in the current object and @b false if a check failed
+     * @throws Exception
      */
     public function setValue(string $fieldNameIntern, mixed $newValue): bool
     {
@@ -937,7 +956,7 @@ class ItemsData
             if ($newValue !== '') {
                 if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
                     //check if date is datetime or only date
-                    if (strpos($newValue, ' ') === false) {
+                    if (!str_contains($newValue, ' ')) {
                         $newValue .= ' 00:00';
                     }
                     $date = DateTime::createFromFormat('Y-m-d H:i', $newValue);
@@ -946,7 +965,7 @@ class ItemsData
                     }
                 } else {
                     // check if date is date or datetime
-                    if (strpos($newValue, ' ') !== false) {
+                    if (str_contains($newValue, ' ')) {
                         $newValue = substr($newValue, 0, 10);
                     }
                     $date = DateTime::createFromFormat('Y-m-d', $newValue);
@@ -989,7 +1008,6 @@ class ItemsData
             $this->mItemData[$infId]->setValue($prefix . '_ini_id', $this->mItemId);
         }
 
-        $ret = false;
         if ($this->mItemData[$infId] instanceof ItemBorrowData) {
             $ret = $this->mItemData[$infId]->setValue($prefix . '_' . strtolower($fieldNameIntern), $newValue);
         } else {
@@ -1004,6 +1022,7 @@ class ItemsData
      *
      * @param string $catUUID The UUID of the category where the new item should be created
      * @return void
+     * @throws Exception
      */
     public function createNewItem(string $catUUID): void
     {
@@ -1054,6 +1073,7 @@ class ItemsData
      * delete an item
      *
      * @return void
+     * @throws Exception
      */
     public function deleteItem(): void
     {
@@ -1078,6 +1098,7 @@ class ItemsData
      * Marks an item as retired
      *
      * @return void
+     * @throws Exception
      */
     public function retireItem(): void
     {
@@ -1104,6 +1125,7 @@ class ItemsData
      * Marks an item as reinstated which means it is no longer retired.
      *
      * @return void
+     * @throws Exception
      */
     public function reinstateItem(): void
     {
@@ -1130,6 +1152,7 @@ class ItemsData
      * Save data of every item data field
      *
      * @return void
+     * @throws Exception
      */
     public function saveItemData(): void
     {
@@ -1354,7 +1377,6 @@ class ItemsData
                 }
             } else {
                 $messageUserText = 'SYS_CHANGED_BY';
-                $messageDateText = 'SYS_CHANGED_AT';
                 $fieldName = $this->getProperty('ITEMNAME', 'inf_name');
 
                 $message = $gL10n->get($messageHead) . '<br/><br/>'

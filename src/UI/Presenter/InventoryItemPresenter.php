@@ -109,7 +109,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool)$items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
@@ -438,7 +438,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool)$items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
@@ -850,7 +850,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool)$items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
