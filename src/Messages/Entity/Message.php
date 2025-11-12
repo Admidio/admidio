@@ -290,7 +290,7 @@ class Message extends Entity
     /**
      * Read all attachments from the database and will return an array with all necessary information about
      * the attachments. The array contains for each attachment a subarray with the following elements:
-     * **msa_id** and **file_name** and **admidio_file_name**.
+     * **msa_uuid** and **file_name** and **admidio_file_name**.
      * @return array Returns an array with all attachments and the following elements: **msa_id** and **file_name**
      * @throws Exception
      */
@@ -304,7 +304,7 @@ class Message extends Entity
         $attachmentsStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
         while ($row = $attachmentsStatement->fetch()) {
-            $attachments[] = array('msa_id' => $row['msa_id'], 'file_name' => $row['msa_original_file_name'], 'admidio_file_name' => $row['msa_file_name']);
+            $attachments[] = array('msa_uuid' => $row['msa_uuid'], 'file_name' => $row['msa_original_file_name'], 'admidio_file_name' => $row['msa_file_name']);
         }
 
         return $attachments;
