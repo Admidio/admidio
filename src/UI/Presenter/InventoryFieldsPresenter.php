@@ -280,22 +280,10 @@ class InventoryFieldsPresenter extends PagePresenter
         $items = new ItemsData($gDb, $gCurrentOrgId);
         $templateItemFieldsCategories = array();
         $templateItemFields = array();
-        $itemFieldCategoryID = -1;
 
         foreach ($items->getItemFields() as $itemField) {
             if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $items->borrowFieldNames)) {
                 continue; // skip borrowing fields if borrowing is disabled
-            }
-            $prevItemFieldCategoryID = $itemFieldCategoryID;
-            $itemFieldCategoryID = ($itemField->getValue('inf_system')) ? 1 : 2;
-
-            if ($itemFieldCategoryID !== $prevItemFieldCategoryID && count($templateItemFields) > 0) {
-                $templateItemFieldsCategories[] = array(
-                    'id' => $templateItemFields[0]['categoryID'],
-                    'name' => $templateItemFields[0]['categoryName'],
-                    'entries' => $templateItemFields
-                );
-                $templateItemFields = array();
             }
 
             $itemFieldText = array(
@@ -322,8 +310,7 @@ class InventoryFieldsPresenter extends PagePresenter
             $editUrl = ($itemField->getValue('inf_type') === 'CATEGORY') ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'IVT')) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_uuid')));
 
             $templateRowItemField = [
-                'categoryID' => ($itemField->getValue('inf_system')) ? 1 : 2,
-                'categoryName' => ($itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS'),
+                'system' => ($itemField->getValue('inf_system')),
                 'uuid' => $itemField->getValue('inf_uuid'),
                 'name' => $itemField->getValue('inf_name'),
                 'description' => $itemField->getValue('inf_description'),
@@ -356,13 +343,7 @@ class InventoryFieldsPresenter extends PagePresenter
             $templateItemFields[] = $templateRowItemField;
         }
 
-        $templateItemFieldsCategories[] = array(
-            'id' => $templateItemFields[0]['categoryID'],
-            'name' => $templateItemFields[0]['categoryName'],
-            'entries' => $templateItemFields
-        );
-
-        $this->smarty->assign('list', $templateItemFieldsCategories);
+        $this->smarty->assign('list', $templateItemFields);
         $this->smarty->assign('l10n', $gL10n);
         $this->addJavascript('
             function checkEmptyCategories() {
