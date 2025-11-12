@@ -134,7 +134,7 @@ try {
             $gL10n->get('SYS_ABR_NO'),
             '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ORGANIZATION_AFFILIATION') . '"></i>'
         );
-    } else {    
+    } else {
         array_unshift(
             $columnHeading,
             $gL10n->get('SYS_ABR_NO'),
@@ -149,7 +149,7 @@ try {
     } else {
         array_unshift($columnAlignment, 'start', 'start');
     }
-    
+
     $columnAlignment[] = 'end';
     $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('mem_show_filter' => $getMembersShowFilter)));
     $contactsTable->setColumnAlignByArray($columnAlignment);
@@ -252,7 +252,7 @@ try {
 
                         updateHeaderState();
                         refreshActions();
-                        
+
                         // reset the page length to the initial value
                         tableApi.page.len(initialPageLength).draw();
                     }
@@ -310,7 +310,7 @@ try {
                         selectedIds = [];
                         headChk.prop({ checked: false, indeterminate: false });
                         rowChks().prop("checked", false);
-                        
+
                         // initialize button states
                         updateHeaderState();
                         refreshActions();
@@ -332,7 +332,7 @@ try {
 
                     // open the editUrl directly in the current window
                     window.location.href = editUrl;
-                    
+
                     // initialize button states
                     updateHeaderState();
                     refreshActions();
@@ -349,7 +349,7 @@ try {
     $contactsTable->createJavascript(0, count($columnHeading));
     $page->assignSmartyVariable('headers', $columnHeading);
     $page->addHtmlByTemplate('modules/contacts.list.tpl');
-    $page->show(); // show html of complete page
-} catch (Exception | \Smarty\Exception $e) {
-    $gMessage->show($e->getMessage());
+    $page->show();
+} catch (Throwable $e) {
+    handleException($e);
 }

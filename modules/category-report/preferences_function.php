@@ -45,7 +45,7 @@ try {
                 if (empty($_POST['columns' . $conf])) {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
                 }
-                
+
                 $values['col_fields'] = implode(',', $_POST['columns' . $conf]);
                 $config[] = $values;
             }
@@ -58,6 +58,6 @@ try {
         default:
             throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
-} catch (Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

@@ -27,7 +27,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * {
  *     $gDb = new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
  * }
- * catch (Exception $e)
+ * catch (Throwable $e)
  * {
  *     $e->showText();
  * }
@@ -805,11 +805,10 @@ class Database
             $this->pdoStatement = $this->pdo->prepare($sql);
 
             if ($this->pdoStatement !== false) {
-                if (!$this->pdoStatement->execute($params)) {
-                    // throw an exception if the execute failed
-                    $errorInfo = $this->pdoStatement->errorInfo();
-                    $gLogger->critical('PDOStatement: ' . $errorInfo[2]);
-                    $this->showError($errorInfo[2], $errorInfo[1]);
+                $success = $this->pdoStatement->execute($params);
+
+                // When executing PostgreSQL statements, at least if there is a table missing, no exception is thrown. But the PDOStatement.execute() returns false.
+                if (!$success) {
                     return false;
                 }
 
@@ -841,10 +840,15 @@ class Database
     /**
      * Get a string with question marks that are comma separated.
      * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
-     * @return string Question marks string
+     * @return string returns 'NULL' if the values array is empty otherwise a question marks string
      */
     public static function getQmForValues(array $valuesArray): string
     {
+        // if no values are given return NULL to avoid syntax errors in sql statements
+        if (empty($valuesArray)) {
+            return 'NULL';
+        }
+
         return implode(',', array_fill(0, count($valuesArray), '?'));
     }
 

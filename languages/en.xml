@@ -220,11 +220,11 @@
   <string name="SYS_ADDITIONAL_CSS_FILE_DESC">The path to a .css file with additional style definitions. This file will be loaded last, even after the theme's admidio.css file. (default: empty)</string>
   <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
   <string name="SYS_ADDRESS">Address</string>
+  <string name="SYS_ADMIDIO">Admidio</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Go to the Admidio download page</string>
   <string name="SYS_ADMIDIO_HEADLINE_DESC">The headline is displayed in the navigation bar of Admidio. Here you can also enter the name of a translation string. (default: SYS_ONLINE_MEMBERSHIP_ADMINISTRATION)</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">The online management system for associations, groups and organizations</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio version</string>
-  <string name="SYS_ADMIDIO_VERSION_BACKUP">Admidio version and backup</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administrators</string>

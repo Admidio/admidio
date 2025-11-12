@@ -135,9 +135,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('topic_save', 'topic_delete', 'post_save', 'post_delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('topic_save', 'topic_delete', 'post_save', 'post_delete')));
 }

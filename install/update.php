@@ -215,7 +215,7 @@ try {
         if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
             || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
             // create a page with the notice that the installation must be configured on the next pages
-            $page = new InstallationPresenter('admidio-update', $gL10n->get('INS_UPDATE'));
+            $page = new InstallationPresenter('admidio-update', $gL10n->get('INS_UPDATE_VERSION', array(ADMIDIO_VERSION_TEXT)));
             $page->addTemplateFile('update.tpl');
             $page->setUpdateModus();
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
@@ -240,12 +240,19 @@ try {
                     '',
                     array('type' => 'password', 'property' => FormPresenter::FIELD_REQUIRED, 'class' => 'form-control-small')
                 );
+                $form->addInput(
+                    'adm_totp_code',
+                    $gL10n->get('SYS_SECURITY_CODE'),
+                    '',
+                    array('maxLength' => 6, 'class' => 'form-control-small')
+                );
             }
             $form->addSubmitButton(
                 'adm_next_page',
                 $gL10n->get('INS_UPDATE_DATABASE'),
                 array('icon' => 'bi-arrow-repeat')
             );
+            $page->assignSmartyVariable('settings', $gSettingsManager);
             $form->addToHtmlPage();
             $_SESSION['updateLoginForm'] = $form;
             $page->show();
@@ -307,7 +314,7 @@ try {
     }
 } catch (Throwable $e) {
     if ($getMode === 'update') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        handleException($e, true);
     } else {
         showErrorMessage($e->getMessage(), true);
     }

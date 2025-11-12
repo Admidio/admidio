@@ -38,7 +38,7 @@ try {
 
     switch ($getMode) {
         case 'list':
-            // create html page object
+            // create an HTML page object
             $page = new MenuPresenter();
             $page->createList();
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-menu-button-wide-fill');
@@ -46,7 +46,7 @@ try {
             break;
 
         case 'edit':
-            // create html page object
+            // create an HTML page object
             $page = new MenuPresenter($getMenuUUID);
             $page->createEditForm();
             $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
@@ -87,14 +87,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('save', 'delete'))) {
-        if ($gDebug) {
-            echo json_encode(array('status' => 'error',
-                'message' => $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine() . '<br />Stacktrace:' . $e->getTraceAsString()));
-        } else {
-            echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-        }
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('save', 'delete')));
 }

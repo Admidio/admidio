@@ -217,6 +217,6 @@ try {
             fpassthru($fp);
         }
     }
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

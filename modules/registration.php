@@ -122,12 +122,12 @@ try {
         $user->readDataByUuid($getUserUUIDAssigned);
         $user->sendNewPassword();
 
-        // delete the registration because it isn't needed anymore
+        // delete the registration because it isn't necessary anymore
         $registrationUser->notSendEmail();
         $registrationUser->delete();
         admRedirect(ADMIDIO_URL.FOLDER_MODULES.'/registration.php');
         // => EXIT
     }
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

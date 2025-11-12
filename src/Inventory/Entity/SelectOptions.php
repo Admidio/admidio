@@ -6,7 +6,6 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Changelog\Entity\LogChanges;
-use Admidio\Inventory\Entity\ItemField;
 
 /**
  * @brief Class manages access to database table adm_inventory_field_selection_options.
@@ -43,6 +42,7 @@ class SelectOptions extends Entity
      * Read all options of the select field with the id $infId from the database and store them in the internal array $optionValues.
      * The values are stored in the array with their ID as key.
      * If no id is set than no data will be read.
+     * @param int $infId The ID of the select field to read the options for. If 0 then the id of the object will be used.
      * @throws Exception
      */
     public function readDataByFieldId(int $infId = 0): void
@@ -90,17 +90,17 @@ class SelectOptions extends Entity
      * Returns an array with all options of the select field.
      * If the parameter $format is set to 'database' then the values will be returned with their database column names.
      * If the parameter $format is not set or empty then the values will be returned with their value.
-     * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the profile field will not be considered.
+     * @param bool $withObsoleteEntries If set to **false** then the obsolete entries of the profile field will not be considered.
      * @return array Returns an array with all options of the select field.
      */
-    public function getAllOptions(bool $withObsoleteEnries = true): array
+    public function getAllOptions(bool $withObsoleteEntries = true): array
     {
         $values = array();
         if (!empty($this->optionValues)) {
             // if format is not database than return the values with their value
             foreach ($this->optionValues as $value) {
                 // if obsolete entries should not be returned then skip them
-                if (!$withObsoleteEnries && $value['ifo_obsolete']) {
+                if (!$withObsoleteEntries && $value['ifo_obsolete']) {
                     continue;
                 }
                 $values[$value['ifo_id']] = array(
@@ -120,6 +120,7 @@ class SelectOptions extends Entity
      * This is used to check if an option can be deleted or not.
      * @param int $ifoId The ID of the option to check.
      * @return bool Returns true if the option is used in the database, otherwise false.
+     * @throws Exception
      */
     public function isOptionUsed(int $ifoId): bool
     {
@@ -162,7 +163,7 @@ class SelectOptions extends Entity
 
     /**
      * Option will change the complete sequence.
-     * @param array $sequence the new sequence of opions (option IDs)
+     * @param array $sequence the new sequence of options (option IDs)
      * @return bool Return true if the sequence of the options could be changed, otherwise false.
      * @throws Exception
      */
@@ -172,7 +173,7 @@ class SelectOptions extends Entity
 
         $sql = 'UPDATE ' . TBL_INVENTORY_FIELD_OPTIONS . '
                    SET ifo_sequence = ? -- new order sequence
-                 WHERE ifo_id     = ? -- opion ID;
+                 WHERE ifo_id     = ? -- option ID;
             ';
 
         $newSequence = -1;
@@ -229,14 +230,14 @@ class SelectOptions extends Entity
             }
         }
 
-        // if new Opions were added then the sequence of the options must be updated
+        // if new Options were added then the sequence of the options must be updated
         if ($newOption) {
             $this->readDataByFieldId($this->infId);
         }
         // now change the sequence of the options
         $allOptions = $this->getAllOptions(); // load all options of the options
 
-        // determinalte current sequence based on allOpions sequence values
+        // determinate current sequence based on allOptions sequence values
         $currentSequence = array();
         foreach ($allOptions as $option) {
             $currentSequence[$option['id']] = $option['sequence'] - 1; // -1 because sequence starts with 1 in database
@@ -247,8 +248,17 @@ class SelectOptions extends Entity
         // determinate new sequence based on array position
         $newSequence = array();
 
-        // check if there are system options, if so then the sequence must start with the sequence of the last system option
+        // if there are system options then start the sequence after the last system option
         $sequence = $lastSystemSequence ?? 0;
+
+        // if there are already other options defined and these options are not in the new values array
+        // then add them to the new sequence to keep them
+        foreach ($allOptions as $option) {
+            if (!isset($arrValues[$option['id']])) {
+                $newSequence[$option['id']] = $sequence++;
+            }
+        }
+        // now add all options from the new values array to the new sequence
         foreach ($arrValues as $id => $values) {
             $newSequence[$id] = $sequence++;
         }

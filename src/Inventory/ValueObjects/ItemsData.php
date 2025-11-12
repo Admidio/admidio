@@ -37,13 +37,13 @@ class ItemsData
 {
     private bool $mItemCreated = false;         ///< flag if a new item was created
     private bool $mItemChanged = false;         ///< flag if a new item was changed
-    private bool $mItemDeleted = false;         ///< flag if a item was deleted
-    private bool $mItemRetired = false;         ///< flag if a item was retired
-    private bool $mItemReinstated = false;      ///< flag if a item was made to normal again
-    private bool $mItemImported = false;        ///< flag if a item was imported
-    private bool $showRetiredItems = true;      ///< if true, than retired items will be showed
+    private bool $mItemDeleted = false;         ///< flag if an item was deleted
+    private bool $mItemRetired = false;         ///< flag if an item was retired
+    private bool $mItemReinstated = false;      ///< flag if an item was made to normal again
+    private bool $mItemImported = false;        ///< flag if an item was imported
+    private bool $showRetiredItems = true;      ///< if true, then retired items will be shown
     private int $organizationId = -1;           ///< ID of the organization for which the item field structure should be read
-    private array $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');  ///< array with the internal field names of the borrow fields
+    public array $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');  ///< array with the internal field names of the borrow fields
 
     /**
      * @var Database An object of the class Database for communication with the database
@@ -140,7 +140,7 @@ class ItemsData
      * @param string $orderBy The field by which the item fields should be sorted
      * @return void
      */
-    public function readItemFields($orderBy = 'inf_id'): void
+    public function readItemFields(string $orderBy = 'inf_id'): void
     {
         // first initialize existing data
         $this->mItemFields = array();
@@ -207,7 +207,8 @@ class ItemsData
                     INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                         ON inf_name_intern IN ( ?, ?, ? )
                     WHERE inb_ini_id = ?;';
-            $itemBorrowStatement = $this->mDb->queryPrepared($sql, array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE', $itemId));
+            $params = array_merge($this->borrowFieldNames, array($itemId));
+            $itemBorrowStatement = $this->mDb->queryPrepared($sql, $params);
 
             while ($row = $itemBorrowStatement->fetch()) {
                 foreach ($this->getItemFields() as $itemField) {
@@ -274,7 +275,7 @@ class ItemsData
      * @param array $fieldNames The internal unique profile field names for which the items should be read
      * @return void
      */
-    public function readItemsByUser($userId, $fieldNames = array('KEEPER')): void
+    public function readItemsByUser(int $userId, array $fieldNames = array('KEEPER')): void
     {
         // first initialize existing data
         $this->mItems = array();
@@ -330,7 +331,7 @@ class ItemsData
                     AND inb_last_receiver = ?
                     ' . $sqlStatusCondition . ';';
             $statement = $this->mDb->queryPrepared($sql, array($this->organizationId, $userId));
-            // check if a item already exists in the items array
+            // check if an item already exists in the items array
             while ($row = $statement->fetch()) {
                 // check if item already exists in the items array
                 $itemExists = false;
@@ -395,17 +396,17 @@ class ItemsData
      * @param string $fieldNameIntern Expects the @b inf_name_intern of table @b adm_inventory_fields
      * @param string $column The column name of @b adm_inventory_fields for which you want the value
      * @param string $format Optional the format (is necessary for timestamps)
-     * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the item field will not be considered.
+     * @param bool $withObsoleteEntries If set to **false** then the obsolete entries of the item field will not be considered.
      * @return array|string             Returns the value for the column
      */
-    public function getProperty($fieldNameIntern, $column, $format = '', bool $withObsoleteEnries = true)
+    public function getProperty(string $fieldNameIntern, string $column, string $format = '', bool $withObsoleteEntries = true)
     {
         if (!array_key_exists($fieldNameIntern, $this->mItemFields)) {
             // if id-field not exists then return zero
             return (strpos($column, '_id') > 0) ? 0 : '';
         }
 
-        $value = $this->mItemFields[$fieldNameIntern]->getValue($column, $format, $withObsoleteEnries);
+        $value = $this->mItemFields[$fieldNameIntern]->getValue($column, $format, $withObsoleteEntries);
 
         return $value;
     }
@@ -418,10 +419,10 @@ class ItemsData
      * @param string $format Optional the format (is necessary for timestamps)
      * @return string                   Returns the value for the column.
      */
-    public function getPropertyById($fieldId, $column, $format = ''): string
+    public function getPropertyById(int $fieldId, string $column, string $format = ''): string
     {
         foreach ($this->mItemFields as $field) {
-            if ((int)$field->getValue('inf_id') === (int)$fieldId) {
+            if ((int)$field->getValue('inf_id') === $fieldId) {
                 return $field->getValue($column, $format);
             }
         }
@@ -470,9 +471,9 @@ class ItemsData
      * @param string $fieldNameIntern Internal item field name of the field that should be html formatted
      * @param string|null $value The value that should be formatted must be committed so that layout
      *                                  is also possible for values that aren't stored in database
-     * @return string                   Returns an html formatted string that considered the profile field settings
+     * @return string                   Returns a html formatted string that considered the profile field settings
      */
-    public function getHtmlValue($fieldNameIntern, $value): string
+    public function getHtmlValue(string $fieldNameIntern, ?string $value): string
     {
         global $gSettingsManager, $gL10n;
 
@@ -661,7 +662,7 @@ class ItemsData
         global $gSettingsManager;
         $value = '';
 
-        // exists a item field with that name ?
+        // exists an item field with that name ?
         // then check if item has a data object for this field and then read value of this object
         if (array_key_exists($fieldNameIntern, $this->mItemFields)) {
             if ($fieldNameIntern === 'CATEGORY') {
@@ -817,7 +818,7 @@ class ItemsData
      * @param bool|null $newValue If set, then the new value will be stored in @b showRetiredItems.
      * @return bool                     Returns the current value of @b showRetiredItems
      */
-    public function showRetiredItems($newValue = null): bool
+    public function showRetiredItems(?bool $newValue = null): bool
     {
         if ($newValue !== null) {
             $this->showRetiredItems = $newValue;
@@ -902,7 +903,7 @@ class ItemsData
      * @param mixed $newValue The new value that should be stored in the database field
      * @return bool                     Returns @b true if the value is stored in the current object and @b false if a check failed
      */
-    public function setValue($fieldNameIntern, $newValue): bool
+    public function setValue(string $fieldNameIntern, mixed $newValue): bool
     {
         global $gSettingsManager;
 
@@ -931,13 +932,6 @@ class ItemsData
         // check if new value only contains spaces
         $newValue = (trim((string)$newValue) !== '') ? (string)$newValue : '';
 
-        // save old and new data for notification
-        if (array_key_exists($infId, $this->mItemData)) {
-            $this->mChangedItemData[] = array($this->mItemData[$infId]->getValue('inf_name_intern') => array('oldValue' => $oldFieldValue, 'newValue' => $newValue));
-        } else {
-            $this->mChangedItemData[] = array($this->mItemFields[$fieldNameIntern]->getValue('inf_name_intern') => array('oldValue' => $oldFieldValue, 'newValue' => $newValue));
-        }
-
         // format of date will be local but database has stored Y-m-d format must be changed for compare
         if ($this->mItemFields[$fieldNameIntern]->getValue('inf_type') === 'DATE') {
             if ($newValue !== '') {
@@ -961,11 +955,27 @@ class ItemsData
                     }
                 }
             }
+            if ($oldFieldValue !== '') {
+                // convert old value to same format for comparison
+                $oldValue = strtotime($oldFieldValue);
+                if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                    $oldFieldValue = date('Y-m-d H:i', $oldValue);
+                } else {
+                    $oldFieldValue = date('Y-m-d', $oldValue);
+                }
+            }
         }
 
         // only do an update if value has changed
         if (strcmp($oldFieldValue, $newValue) === 0) {
             return true;
+        }
+
+        // save old and new data for notification
+        if (array_key_exists($infId, $this->mItemData)) {
+            $this->mChangedItemData[] = array($this->mItemData[$infId]->getValue('inf_name_intern') => array('oldValue' => $oldFieldValue, 'newValue' => $newValue));
+        } else {
+            $this->mChangedItemData[] = array($this->mItemFields[$fieldNameIntern]->getValue('inf_name_intern') => array('oldValue' => $oldFieldValue, 'newValue' => $newValue));
         }
 
         // if item data object for this field does not exist then create it
@@ -992,7 +1002,8 @@ class ItemsData
     /**
      * Generates a new ItemId. The new value will be stored in mItemId.
      *
-     * @return int mItemId
+     * @param string $catUUID The UUID of the category where the new item should be created
+     * @return void
      */
     public function createNewItem(string $catUUID): void
     {
@@ -1042,7 +1053,6 @@ class ItemsData
     /**
      * delete an item
      *
-     * @param int $itemId The id of the item that should be deleted
      * @return void
      */
     public function deleteItem(): void
@@ -1067,7 +1077,6 @@ class ItemsData
     /**
      * Marks an item as retired
      *
-     * @param int $itemId The ID of the item to be retired.
      * @return void
      */
     public function retireItem(): void
@@ -1094,7 +1103,6 @@ class ItemsData
     /**
      * Marks an item as reinstated which means it is no longer retired.
      *
-     * @param int $itemId The ID of the item to be marked as reinstated.
      * @return void
      */
     public function reinstateItem(): void
@@ -1135,7 +1143,7 @@ class ItemsData
                 $this->mItemChanged = true;
             }
 
-            // dont safe CATEGORY field to items data
+            // don't safe CATEGORY field to items data
             if ($value instanceof ItemData && ($value->getValue('ind_inf_id') === 2 || $value->getValue('inf_name_intern') === 'CATEGORY')) { // 2 == CATEGORY field
                 $category = new Category($this->mDb);
                 $category->readDataByUuid($value->getValue('ind_value'));
@@ -1189,7 +1197,7 @@ class ItemsData
      * @return bool                     Returns **true** if the notification was sent
      * @throws Exception
      */
-    public function sendNotification(array $importData = null): bool
+    public function sendNotification(?array $importData = null): bool
     {
         global $gCurrentUser, $gSettingsManager, $gL10n;
 
@@ -1222,7 +1230,7 @@ class ItemsData
                 return false;
             }
 
-            // if items were imported then sent a message with all itemnames, the user and the date
+            // if items were imported then sent a message with all item names, the user and the date
             // if item was created or changed then sent a message with all changed fields in a table
             // if item was deleted, retired or reinstated then sent a message with the item name, the user and the date
             if ($this->mItemImported || $this->mItemCreated || $this->mItemChanged) {
@@ -1252,6 +1260,7 @@ class ItemsData
                                 $options = $this->getProperty($key, 'ifo_inf_options');
                                 if ($key === 'ITEMNAME') {
                                     $itemName = $value['newValue'];
+                                    $changes[] = array($key, $value['oldValue'], $value['newValue']);
                                 } elseif ($key === 'CATEGORY') {
                                     $value['oldValue'] = $this->getHtmlValue('CATEGORY', $value['oldValue']);
                                     $value['newValue'] = $this->getHtmlValue('CATEGORY', $value['newValue']);
@@ -1290,6 +1299,25 @@ class ItemsData
                                         isset($users[$value['oldValue']]) ? $users[$value['oldValue']] : $value['oldValue'],
                                         isset($users[$value['newValue']]) ? $users[$value['newValue']] : $value['newValue']
                                     );
+                                } elseif ($this->getProperty($key, 'inf_type') === 'DATE') {
+                                    // format date values for notification
+                                    if ($value['oldValue'] !== '') {
+                                        $oldDate = strtotime($value['oldValue']);
+                                        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                                            $value['oldValue'] = date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $oldDate);
+                                        } else {
+                                            $value['oldValue'] = date($gSettingsManager->getString('system_date'), $oldDate);
+                                        }
+                                    }
+                                    if ($value['newValue'] !== '') {
+                                        $newDate = strtotime($value['newValue']);
+                                        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+                                            $value['newValue'] = date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $newDate);
+                                        } else {
+                                            $value['newValue'] = date($gSettingsManager->getString('system_date'), $newDate);
+                                        }
+                                    }
+                                    $changes[] = array($key, $value['oldValue'], $value['newValue']);
                                 } elseif ($options !== '') {
                                     $changes[] = array(
                                         $key,

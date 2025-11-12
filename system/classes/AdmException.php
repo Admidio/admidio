@@ -17,7 +17,7 @@ use Admidio\Infrastructure\Database;
  *        throw new Exception(SYS_NOT_VALID_DATE_FORMAT);
  *    }
  *    ...
- * } catch(Exception $e) {
+ * } catch(Throwable $e) {
  *    // show html message
  *    $e->showHtml();
  *

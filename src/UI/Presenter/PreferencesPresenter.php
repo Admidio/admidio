@@ -79,11 +79,11 @@ class PreferencesPresenter extends PagePresenter
                 'key'    => 'system',
                 'label'  => $gL10n->get('SYS_SYSTEM'),
                 'panels' => array(
+                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
                     array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false),
                     array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
                     array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
                     array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
-                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
                 ),
             ),
 
@@ -794,8 +794,7 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
-        //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
+        $items = new ItemsData($gDb, $gCurrentOrgId);
 
         $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',
@@ -847,7 +846,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_visible_for',
             $gL10n->get('SYS_VISIBLE_FOR'),
             $selectBoxEntries,
-            array('defaultValue' => explode(',', $formValues['inventory_visible_for']), 'multiselect' => true, 'helpTextId' => 'SYS_MENU_RESTRICT_VISIBILITY')
+            array('defaultValue' => explode(',', $formValues['inventory_visible_for']), 'multiselect' => true)
         );
 
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
@@ -921,7 +920,7 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
         );
 
-        if ($formValues['inventory_module_enabled'] !== 3  || ($formValues['inventory_module_enabled'] === 3 && $gCurrentUser->isAdministratorInventory())) {
+        if ($formValues['inventory_module_enabled'] !== '3'  || ($formValues['inventory_module_enabled'] === '3' && $gCurrentUser->isAdministratorInventory())) {
             $formInventory->addCheckbox(
                 'inventory_allow_keeper_edit',
                 $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
@@ -930,7 +929,6 @@ class PreferencesPresenter extends PagePresenter
             );
 
             // create array of possible fields for keeper edit
-            $items = new ItemsData($gDb, $gCurrentOrgId);
             $selectBoxEntries = array();
             // add pseudo field 'ITEM_PICTURE' if item pictures are enabled
             if ($formValues['inventory_item_picture_enabled']) {
@@ -938,7 +936,7 @@ class PreferencesPresenter extends PagePresenter
             }
             foreach ($items->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
-                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames)) {
                     continue; // skip borrowing fields if borrowing is disabled
                 }
                 $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
@@ -997,7 +995,7 @@ class PreferencesPresenter extends PagePresenter
         $selectBoxEntries = array();
         foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames))) {
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames))) {
                 continue;
             }
             $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
@@ -2491,7 +2489,7 @@ class PreferencesPresenter extends PagePresenter
 
         //assign card titles and corresponding template files
         $cards = array(
-            array('title'=>$gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
+            array('title'=>$gL10n->get('SYS_ADMIDIO'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
             array('title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),        'icon'=>'bi-info-circle-fill', 'templateFile'=>'preferences/preferences.system-information.tpl'),
             array('title'=>$gL10n->get('SYS_PHP'),                 'icon'=>'bi-filetype-php', 'templateFile'=>'preferences/preferences.php.tpl'),
         );

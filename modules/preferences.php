@@ -37,7 +37,7 @@ try {
             'defaultValue' => 'html',
             'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check')
         ));
-    $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
+    $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
 
     // only administrators are allowed to view, edit organization preferences or create new organizations
     if (!$gCurrentUser->isAdministrator()) {
@@ -120,12 +120,6 @@ try {
             echo $preferences->showUpdateInfo();
             break;
     }
-} catch (Throwable $exception) {
-    if (in_array($getMode, array('save', 'new_org_create'))) {
-        echo json_encode(array('status' => 'error', 'message' => $exception->getMessage()));
-    } elseif ($getMode === 'html_form') {
-        echo $exception->getMessage();
-    } else {
-        $gMessage->show($exception->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, $getMode == 'save');
 }

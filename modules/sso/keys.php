@@ -20,7 +20,7 @@ $validModes = array('list', 'edit', 'save', 'delete', 'import', 'export', 'expor
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => $validModes));
 
 try {
-    
+
     // Only administrators are allowed to manage SSO keys (both SAML 2.0 and OIDC)
     if (!$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
@@ -67,7 +67,7 @@ try {
             // Check if key is set as this IdP's signing or encryption key
             if ($gSettingsManager->get('sso_saml_signing_key') == $keyId ||
                 $gSettingsManager->get('sso_saml_encryption_key') == $keyId) {
-                    echo json_encode(array('status' => 'error', 
+                    echo json_encode(array('status' => 'error',
                             'message' => $gL10n->get('SYS_SSO_KEY_IN_USE')));
             } else {
                 $key->delete();
@@ -79,7 +79,7 @@ try {
             // TODO_RK
 
             break;
-            
+
         case 'export_password':
             $page = new SSOKeyPresenter($getKeyUUID);
             $page->createExportPasswordForm();
@@ -99,9 +99,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('save', 'delete', 'export'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('save', 'delete', 'export')));
 }

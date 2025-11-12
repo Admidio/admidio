@@ -8,8 +8,6 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Language;
 
@@ -33,11 +31,13 @@ use Admidio\Infrastructure\Language;
 class InventoryFieldsPresenter extends PagePresenter
 {
     /**
-     * Create the data for the edit form of a item field.
-     * @param string $itemFieldID ID of the item field that should be edited.
+     * Create the data for the edit form of an item field.
+     * @param string $itemFieldUUID UUID of the item field to edit. If empty, a new item field will be created.
+     * @param string $itemFieldName Name of the item field to create. Only used if $itemFieldUUID is "0".
+     * @return void
      * @throws Exception
      */
-    public function createEditForm(string $itemFieldUUID = '', string $itemFieldName = '')
+    public function createEditForm(string $itemFieldUUID = '', string $itemFieldName = ''): void
     {
         global $gCurrentSession, $gCurrentUser, $gSettingsManager, $gL10n, $gCurrentOrgId, $gDb;
 
@@ -234,10 +234,11 @@ class InventoryFieldsPresenter extends PagePresenter
 
     /**
      * Create the list with all item fields and their preferences.
+     * @return void
      * @throws Exception
      * @throws \Smarty\Exception
      */
-    public function createList()
+    public function createList(): void
     {
         global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentUser, $gSettingsManager;
 
@@ -281,11 +282,9 @@ class InventoryFieldsPresenter extends PagePresenter
         $templateItemFields = array();
         $itemFieldCategoryID = -1;
         $prevItemFieldCategoryID = -1;
-        //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         foreach ($items->getItemFields() as $itemField) {
-            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $borrowingFieldNames)) {
+            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $items->borrowFieldNames)) {
                 continue; // skip borrowing fields if borrowing is disabled
             }
             $prevItemFieldCategoryID = $itemFieldCategoryID;

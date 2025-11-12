@@ -183,7 +183,7 @@ CREATE TABLE `%PREFIX%_components` (
 --
 
 INSERT INTO `%PREFIX%_components` (`com_id`, `com_type`, `com_name`, `com_name_intern`, `com_version`, `com_beta`, `com_update_step`, `com_update_completed`, `com_timestamp_installed`) VALUES
-(10, 'SYSTEM', 'Admidio Core', 'CORE', '5.0.0', 1, 1700, 1700, '2025-09-27 09:00:17'),
+(10, 'SYSTEM', 'Admidio Core', 'CORE', '5.0.0', 0, 1810, 1810, '2025-09-27 09:00:17'),
 (20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
 (30, 'MODULE', 'SYS_EVENTS', 'EVENTS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
 (40, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
