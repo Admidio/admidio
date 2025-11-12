@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
+    <step id="5">UPDATE %PREFIX%_preferences SET prf_value = 'simple' WHERE prf_name = 'theme'</step>
     <step id="10">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'photo_show_mode' AND prf_value = '0'</step>
     <step id="20">ALTER TABLE %PREFIX%_user_fields DROP COLUMN usf_description_inline</step>
     <step id="30">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'system_js_editor_color'</step>
