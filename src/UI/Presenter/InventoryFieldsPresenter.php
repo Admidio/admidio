@@ -243,9 +243,6 @@ class InventoryFieldsPresenter extends PagePresenter
         global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentUser, $gSettingsManager;
 
         $this->addJavascript('
-            $(".admidio-open-close-caret").click(function() {
-                showHideBlock($(this));
-            });
             $("tbody.admidio-sortable").sortable({
                 axis: "y",
                 handle: ".handle",
@@ -255,6 +252,7 @@ class InventoryFieldsPresenter extends PagePresenter
                     $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=sequence&uuid=" + uuid + "&order=" + order,
                         {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
                     );
+                    updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
                 }
             });
             $(".admidio-field-move").click(function() {
@@ -263,7 +261,20 @@ class InventoryFieldsPresenter extends PagePresenter
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });', true
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_item_field", "admidio-field-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_item_field", "admidio-field-move");
+                }
+            });
+
+            updateMoveActions("tbody.admidio-sortable", "adm_item_field", "admidio-field-move");
+            ', true
         );
 
         // show link to view inventory fields history
