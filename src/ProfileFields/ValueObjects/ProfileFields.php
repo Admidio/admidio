@@ -228,15 +228,19 @@ class ProfileFields
     /**
      * Returns the value of the field in HTML format with consideration of all layout parameters
      * @param string $fieldNameIntern Internal profile field name of the field that should be HTML formatted
-     * @param int|string $value The value that should be formatted must be committed so that layout
+     * @param int|string|null $value The value that should be formatted must be committed so that layout
      *                                    is also possible for values that aren't stored in a database
      * @param string $value2 An optional parameter that is necessary for some special fields like email to commit the user uuid
      * @return int|string Returns an HTML formatted string that considered the profile field settings
      * @throws Exception
      */
-    public function getHtmlValue(string $fieldNameIntern, int|string $value, string $value2 = ''): int|string
+    public function getHtmlValue(string $fieldNameIntern, int|string|null $value, string $value2 = ''): int|string
     {
         global $gSettingsManager, $gL10n;
+
+        if (is_null($value)) {
+            $value = '';
+        }
 
         if (!array_key_exists($fieldNameIntern, $this->mProfileFields)) {
             return $value;
