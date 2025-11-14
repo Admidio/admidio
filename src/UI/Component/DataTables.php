@@ -128,10 +128,15 @@ class DataTables
             $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datetime-luxon.js');
         }
 
+        $langCode = $gL10n->getLanguageIsoCode();
+        if (empty($langCode)) {
+            $langCode = 'en';
+        }
+
         if (!empty($this->emptyTableMessage)) {
-            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json", "emptyTable": "' . $this->emptyTableMessage . '"}';
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $langCode . '.json", "emptyTable": "' . $this->emptyTableMessage . '"}';
         } else {
-            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json"}';
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $langCode . '.json"}';
         }
 
         if ($rowCount > 10 || $this->serverSideProcessing) {
