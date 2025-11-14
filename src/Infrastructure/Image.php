@@ -168,7 +168,7 @@ class Image
                 if ($text !== '') {
                     return '<i class="' . $icon . ' ' . $cssClass . '" data-bs-toggle="tooltip" title="' . $text . '"></i>';
                 } else {
-                    return '<i class="' . $icon . ' ' . $cssClass . '></i>';
+                    return '<i class="' . $icon . ' ' . $cssClass . '"></i>';
                 }
             }
 

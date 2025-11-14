@@ -11,43 +11,55 @@
 /*==============================================================*/
 /* Table Cleanup                                                */
 /*==============================================================*/
-DROP TABLE IF EXISTS %PREFIX%_announcements        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_auto_login           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_category_report      CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_components           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_events               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_files                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_folders              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook_comments   CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_links                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_members              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_attachments CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_content     CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_messages_recipients  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_photos               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_preferences          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_registrations        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_role_dependencies    CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles_rights         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_roles_rights_data    CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_list_columns         CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_lists                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_rooms                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_sessions             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_texts                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_relations       CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_relation_types  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_log             CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_data            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_user_fields          CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_categories           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_users                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_organizations        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_ids                  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_menu                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_announcements                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_auto_login                        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_category_report                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_components                        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_events                            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_files                             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_folders                           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_guestbook_comments                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_guestbook                         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_topics                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_forum_posts                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_links                             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_members                           CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages                          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_attachments              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_content                  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_messages_recipients               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_photos                            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_preferences                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_registrations                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_role_dependencies                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles                             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles_rights                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_roles_rights_data                 CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_list_columns                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_lists                             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_log_changes                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_rooms                             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sessions                          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_texts                             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_relations                    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_relation_types               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_data                         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_fields                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_user_field_select_options         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_categories                        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_users                             CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_organizations                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_ids                               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_menu                              CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_fields                  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
+
+
 
 
 /*==============================================================*/
@@ -236,55 +248,46 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_fol_uuid ON %PREFIX%_folders (fol_uuid);
 
 /*==============================================================*/
-/* Table: adm_guestbook                                         */
+/* Table: adm_forum_topics                                      */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_guestbook
+CREATE TABLE %PREFIX%_forum_topics
 (
-    gbo_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    gbo_org_id                  integer unsigned    NOT NULL,
-    gbo_uuid                    varchar(36)         NOT NULL,
-    gbo_name                    varchar(60)         NOT NULL,
-    gbo_text                    text                NOT NULL,
-    gbo_email                   varchar(254),
-    gbo_homepage                varchar(50),
-    gbo_ip_address              varchar(39)         NOT NULL,
-    gbo_locked                  boolean             NOT NULL    DEFAULT false,
-    gbo_usr_id_create           integer unsigned,
-    gbo_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    gbo_usr_id_change           integer unsigned,
-    gbo_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (gbo_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+    fot_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    fot_uuid                    varchar(36)         NOT NULL,
+    fot_cat_id                  integer unsigned    NOT NULL,
+    fot_fop_id_first_post       integer unsigned,
+    fot_title                   varchar(255)        NOT NULL,
+    fot_views                   integer unsigned    NOT NULL    DEFAULT 0,
+    fot_usr_id_create           integer unsigned,
+    fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (fot_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT character SET = utf8
+    COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_gbo_uuid ON %PREFIX%_guestbook (gbo_uuid);
+CREATE UNIQUE INDEX %PREFIX%_idx_fot_uuid ON %PREFIX%_forum_topics (fot_uuid);
 
 /*==============================================================*/
-/* Table: adm_guestbook_comments                                */
+/* Table: adm_forum_posts                                       */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_guestbook_comments
+CREATE TABLE %PREFIX%_forum_posts
 (
-    gbc_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    gbc_gbo_id                  integer unsigned    NOT NULL,
-    gbc_uuid                    varchar(36)         NOT NULL,
-    gbc_name                    varchar(60)         NOT NULL,
-    gbc_text                    text                NOT NULL,
-    gbc_email                   varchar(254),
-    gbc_ip_address              varchar(39)         NOT NULL,
-    gbc_locked                  boolean             NOT NULL    DEFAULT false,
-    gbc_usr_id_create           integer unsigned,
-    gbc_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    gbc_usr_id_change           integer unsigned,
-    gbc_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (gbc_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+    fop_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    fop_fot_id                  integer unsigned    NOT NULL,
+    fop_uuid                    varchar(36)         NOT NULL,
+    fop_text                    text                NOT NULL,
+    fop_usr_id_create           integer unsigned,
+    fop_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    fop_usr_id_change           integer unsigned,
+    fop_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (fop_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT character SET = utf8
+    COLLATE = utf8_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_gbc_uuid ON %PREFIX%_guestbook_comments (gbc_uuid);
+CREATE UNIQUE INDEX %PREFIX%_idx_fop_uuid ON %PREFIX%_forum_posts (fop_uuid);
 
 /*==============================================================*/
 /* Table: adm_ids                                               */
@@ -310,6 +313,7 @@ CREATE TABLE %PREFIX%_links
     lnk_description             text,
     lnk_url                     varchar(2000)       NOT NULL,
     lnk_counter                 integer             NOT NULL    DEFAULT 0,
+    lnk_sequence                smallint            NOT NULL,
     lnk_usr_id_create           integer unsigned,
     lnk_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     lnk_usr_id_change           integer unsigned,
@@ -484,6 +488,153 @@ ENGINE = InnoDB
 DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
+
+/*==============================================================*/
+/* Tables: adm_oidc_clients, adm_oidc_access_tokens,          */
+/*         adm_oidc_refresh_tokens, adm_oidc_auth_codes,      */
+/*         adm_oidc_jwks                                       */
+/* Data storage for oidc (client settings and tokens)          */
+/*==============================================================*/
+
+CREATE TABLE %PREFIX%_oidc_clients (
+    ocl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ocl_uuid                    varchar(36)         NOT NULL,
+    ocl_client_id               varchar(64)         NOT NULL,
+    ocl_client_name             varchar(255)        NOT NULL,
+    ocl_enabled                 bool                DEFAULT true,
+    ocl_client_secret           varchar(255)        NOT NULL,
+    ocl_redirect_uri            text                NOT NULL,
+    ocl_grant_types             varchar(255)        NOT NULL,
+    ocl_scope                   varchar(255)        DEFAULT NULL,
+    ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
+    ocl_field_mapping           text                NULL,
+    ocl_role_mapping            text                NULL,
+    ocl_usr_id_create           integer unsigned,
+    ocl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    ocl_usr_id_change           integer unsigned,
+    ocl_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (ocl_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE TABLE %PREFIX%_oidc_access_tokens (
+    oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    oat_usr_id                  integer unsigned    NOT NULL,
+    oat_ocl_id                  integer unsigned    NOT NULL,
+    oat_token                   text,
+    oat_scope                   text,
+    oat_expires_at              timestamp           NOT NULL,
+    oat_revoked                 boolean             DEFAULT FALSE,
+    oat_usr_id_create           integer unsigned,
+    oat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (oat_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE TABLE %PREFIX%_oidc_refresh_tokens (
+    ort_id                      integer unsigned    AUTO_INCREMENT,
+    ort_ocl_id                  integer unsigned    NOT NULL,
+    ort_usr_id                  integer unsigned    NULL,
+    ort_token                   text,
+    ort_scope                   text,
+    ort_expires_at              timestamp           NOT NULL,
+    ort_revoked                 boolean             DEFAULT FALSE,
+    ort_usr_id_create           integer unsigned,
+    ort_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (ort_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE TABLE %PREFIX%_oidc_auth_codes (
+    oac_id                      integer unsigned    AUTO_INCREMENT,
+    oac_usr_id                  integer unsigned    NOT NULL,
+    oac_ocl_id                  integer unsigned    NOT NULL,
+    oac_token                   text,
+    oac_scope                   text,
+    oac_nonce                   varchar(2550)       NULL,
+    oac_expires_at              timestamp           NOT NULL,
+    oac_revoked                 boolean             DEFAULT FALSE,
+    oac_redirect_uri            text                NOT NULL,
+    oac_used                    boolean             DEFAULT FALSE,
+    oac_usr_id_create           integer unsigned,
+    oac_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (oac_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+
+/*==============================================================*/
+/* Tables: adm_saml_clients                                     */
+/* Data storage for saml  (client settings and tokens)          */
+/*==============================================================*/
+
+CREATE TABLE %PREFIX%_saml_clients (
+    smc_id                      integer unsigned    AUTO_INCREMENT,
+    smc_uuid                    varchar(36)         NOT NULL,
+    smc_org_id                  integer unsigned    NOT NULL,
+    smc_client_id               varchar(255)        NOT NULL UNIQUE,
+    smc_client_name             varchar(255)        NOT NULL,
+    smc_enabled                 bool                DEFAULT true,
+    smc_metadata_url            text                NULL,
+    smc_acs_url                 text                NOT NULL,
+    smc_slo_url                 text                NULL,
+    smc_x509_certificate        text                NOT NULL,
+    smc_userid_field            varchar(50)         NOT NULL    default 'usr_id',
+    smc_field_mapping           text                NULL,
+    smc_role_mapping            text                NULL,
+
+    smc_allowed_clock_skew      integer unsigned    NULL,
+    smc_assertion_lifetime      integer unsigned    NULL,
+    smc_sign_assertions         bool                DEFAULT true,
+    smc_encrypt_assertions      bool                DEFAULT false,
+    smc_require_auth_signed     bool                DEFAULT false,
+    smc_validate_signatures     bool                DEFAULT true,
+
+    smc_usr_id_create           integer unsigned,
+    smc_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    smc_usr_id_change           integer unsigned,
+    smc_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (smc_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+/*==============================================================*/
+/* Table: adm_sso_keys                                               */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_sso_keys (
+    key_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    key_uuid                    varchar(36)         NOT NULL,
+    key_org_id                  integer unsigned    NOT NULL,
+    key_name                    text                NOT NULL,
+-- TODO: Add key_type ENUM ('RSA', 'EC') or key_algorithm varchar(16) for signing algorithm e.g. RS256, ES256, etc.    
+    key_algorithm               varchar(50)         NOT NULL    DEFAULT 'RSA',
+    key_private                 text                NOT NULL,
+    key_public                  text                NOT NULL,
+    key_certificate             text                NULL,
+    key_expires_at              date                NULL,
+    key_is_active               boolean             NOT NULL    DEFAULT true,
+    key_usr_id_create           integer unsigned,
+    key_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    key_usr_id_change           integer unsigned,
+    key_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (key_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
 /*==============================================================*/
 /* Table: adm_organizations                                     */
 /*==============================================================*/
@@ -542,7 +693,7 @@ CREATE TABLE %PREFIX%_preferences
     prf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     prf_org_id                  integer unsigned    NOT NULL,
     prf_name                    varchar(50)         NOT NULL,
-    prf_value                   varchar(255),
+    prf_value                   varchar(255)        NOT NULL,
     PRIMARY KEY (prf_id)
 )
 ENGINE = InnoDB
@@ -599,9 +750,9 @@ CREATE TABLE %PREFIX%_roles
     rol_announcements           boolean             NOT NULL    DEFAULT false,
     rol_events                  boolean             NOT NULL    DEFAULT false,
     rol_documents_files         boolean             NOT NULL    DEFAULT false,
+    rol_inventory_admin         boolean             NOT NULL    DEFAULT false,
     rol_edit_user               boolean             NOT NULL    DEFAULT false,
-    rol_guestbook               boolean             NOT NULL    DEFAULT false,
-    rol_guestbook_comments      boolean             NOT NULL    DEFAULT false,
+    rol_forum_admin             boolean             NOT NULL    DEFAULT false,
     rol_mail_to_all             boolean             NOT NULL    DEFAULT false,
     rol_mail_this_role          smallint            NOT NULL    DEFAULT 0,
     rol_photo                   boolean             NOT NULL    DEFAULT false,
@@ -742,7 +893,6 @@ CREATE TABLE %PREFIX%_user_fields
     usf_name_intern             varchar(110)        NOT NULL,
     usf_name                    varchar(100)        NOT NULL,
     usf_description             text,
-    usf_value_list              text,
     usf_default_value           varchar(100),
     usf_regex                   varchar(100),
     usf_icon                    varchar(100),
@@ -767,6 +917,23 @@ CREATE UNIQUE INDEX %PREFIX%_idx_usf_name_intern ON %PREFIX%_user_fields (usf_na
 CREATE UNIQUE INDEX %PREFIX%_idx_usf_uuid ON %PREFIX%_user_fields (usf_uuid);
 
 /*==============================================================*/
+/* Table: adm_user_field_select_options                         */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_user_field_select_options
+(
+    ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ufo_usf_id      integer unsigned    NOT NULL,                   -- Connected user field id
+    ufo_value       varchar(255)        NOT NULL,                   -- option value
+    ufo_system      boolean             NOT NULL DEFAULT false,     -- If true, the option is a system option an not editable
+    ufo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ufo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ufo_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+/*==============================================================*/
 /* Table: adm_user_data                                         */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_user_data
@@ -784,25 +951,6 @@ COLLATE = utf8_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_usd_usr_usf_id ON %PREFIX%_user_data (usd_usr_id, usd_usf_id);
 
 /*==============================================================*/
-/* Table: adm_user_log                                          */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_user_log
-(
-    usl_id                      integer             NOT NULL    AUTO_INCREMENT,
-    usl_usr_id                  integer unsigned    NOT NULL,
-    usl_usf_id                  integer unsigned    NOT NULL,
-    usl_value_old               varchar(4000)       NULL,
-    usl_value_new               varchar(4000)       NULL,
-    usl_usr_id_create           integer unsigned    NULL,
-    usl_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    usl_comment                 varchar(255)        NULL,
-    PRIMARY KEY (usl_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
-
-/*==============================================================*/
 /* Table: adm_users                                             */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_users
@@ -811,6 +959,7 @@ CREATE TABLE %PREFIX%_users
     usr_uuid                    varchar(36)         NOT NULL,
     usr_login_name              varchar(254),
     usr_password                varchar(255),
+    usr_tfa_secret              varchar(255),
     usr_photo                   blob,
     usr_text                    text,
     usr_pw_reset_id             varchar(50),
@@ -883,6 +1032,153 @@ CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_uuid ON %PREFIX%_user_relations (ure_uuid);
 
 /*==============================================================*/
+/* Table: adm_inventory_fields                                  */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_fields
+(
+    inf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inf_uuid                    varchar(36)         NOT NULL,
+    inf_org_id                  integer unsigned    NOT NULL,
+    inf_type                    varchar(30)         NOT NULL,
+    inf_name_intern             varchar(110)        NOT NULL,
+    inf_name                    varchar(100)        NOT NULL,
+    inf_description             text,
+    inf_system                  boolean             NOT NULL    DEFAULT false,
+    inf_required_input          smallint            NOT NULL    DEFAULT 0,
+    inf_sequence                smallint            NOT NULL,
+    inf_usr_id_create           integer unsigned,
+    inf_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    inf_usr_id_change           integer unsigned,
+    inf_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (inf_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (inf_org_id, inf_name_intern);
+CREATE UNIQUE INDEX %PREFIX%_idx_inf_uuid ON %PREFIX%_inventory_fields (inf_uuid);
+
+/*==============================================================*/
+/* Table: adm_inventory_field_select_options                    */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_field_select_options
+(
+    ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ifo_inf_id      integer unsigned    NOT NULL,                   -- Connected inventory field id
+    ifo_value       varchar(255)        NOT NULL,                   -- option value
+    ifo_system      boolean             NOT NULL DEFAULT false,     -- If true, the option is a system option an not editable
+    ifo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ifo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ifo_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+/*==============================================================*/
+/* Table: adm_inventory_item_data                               */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_item_data
+(
+    ind_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ind_inf_id                  integer unsigned    NOT NULL,
+    ind_ini_id                  integer unsigned    NOT NULL,
+    ind_value                   varchar(4000),
+    PRIMARY KEY (ind_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
+
+/*==============================================================*/
+/* Table: adm_inventory_item_borrow_data                          */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_item_borrow_data
+(
+    inb_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inb_ini_id                  integer unsigned    NOT NULL,
+    inb_last_receiver           varchar(255)        NULL        DEFAULT NULL,
+    inb_borrow_date             timestamp           NULL        DEFAULT NULL,
+    inb_return_date             timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (inb_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);
+
+/*==============================================================*/
+/* Table: adm_inventory_items                                   */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_items
+(
+    ini_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ini_uuid                    varchar(36)         NOT NULL,
+    ini_cat_id                  integer unsigned    NOT NULL,
+    ini_org_id                  integer unsigned    NOT NULL,
+    ini_status                  integer unsigned    NOT NULL,
+    ini_picture                 blob                NULL        DEFAULT NULL,
+    ini_usr_id_create           integer unsigned,
+    ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    ini_usr_id_change           integer unsigned,
+    ini_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (ini_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);
+
+/*==============================================================*/
+/* Table: adm_log_changes                                       */
+/*    Generic table for logging changes to various other tables */
+/*    The meaning of the subsequent columns depend heavily on   */
+/*    the log_table field and describe entries in different     */
+/*    tables. For this reason, no forein key restraints are     */
+/*    possible (or even desired), since the original db record  */
+/*    might even be deleted in the meantime. The corresponding  */
+/*    log records, however, should still exist in the DB for    */
+/*    audit reasons!                                            */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_log_changes
+(
+    log_id                      integer             NOT NULL    AUTO_INCREMENT,
+    log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
+
+    log_record_id               integer unsigned    NOT NULL, -- The record id in the original table
+    log_record_uuid             varchar(36)         NULL,     -- The record uuid in the original table
+    log_record_name             text                NULL,     -- Textual representation in case the original record 
+                                                              -- no longer exists (e.g. group membership was deleted)
+    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id 
+                                                              -- is mem_id, but the link should point to the group 
+                                                              -- (since the membership does not have its own page in admidio!)
+
+    log_related_id              text                NULL,     -- Optional Secondary object linked to the record id
+    log_related_name            text                NULL,     -- Textual representation in case the original record 
+                                                              -- no longer exists (e.g. group membership was deleted)
+
+    log_field                   varchar(255)        NULL,     -- The id of the modified/affected field
+    log_field_name              text                NULL,     -- Textual representation of the field
+
+    log_action                  varchar(32)         NOT NULL, -- enum of "MODIFY", "CREATED", "DELETED"
+    log_value_old               text                NULL,
+    log_value_new               text                NULL,
+
+    log_usr_id_create           integer unsigned    NULL,
+    log_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    log_comment                 text                NULL,
+    PRIMARY KEY (log_id)
+)
+ENGINE = InnoDB
+DEFAULT character SET = utf8
+COLLATE = utf8_unicode_ci;
+
+/*==============================================================*/
 /* Foreign Key Constraints                                      */
 /*==============================================================*/
 ALTER TABLE %PREFIX%_announcements
@@ -918,15 +1214,15 @@ ALTER TABLE %PREFIX%_folders
     ADD CONSTRAINT %PREFIX%_fk_fol_fol_parent  FOREIGN KEY (fol_fol_id_parent)  REFERENCES %PREFIX%_folders (fol_id)             ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_fol_usr         FOREIGN KEY (fol_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_guestbook
-    ADD CONSTRAINT %PREFIX%_fk_gbo_org         FOREIGN KEY (gbo_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_gbo_usr_create  FOREIGN KEY (gbo_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_gbo_usr_change  FOREIGN KEY (gbo_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE %PREFIX%_forum_topics
+    ADD CONSTRAINT %PREFIX%_fk_fot_cat         FOREIGN KEY (fot_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY (fot_fop_id_first_post)   REFERENCES %PREFIX%_forum_posts (fop_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_guestbook_comments
-    ADD CONSTRAINT %PREFIX%_fk_gbc_gbo         FOREIGN KEY (gbc_gbo_id)         REFERENCES %PREFIX%_guestbook (gbo_id)           ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_gbc_usr_create  FOREIGN KEY (gbc_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_gbc_usr_change  FOREIGN KEY (gbc_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+ALTER TABLE %PREFIX%_forum_posts
+    ADD CONSTRAINT %PREFIX%_fk_fop_fot         FOREIGN KEY (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)        ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fop_usr_create  FOREIGN KEY (fop_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_fop_usr_change  FOREIGN KEY (fop_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_ids
     ADD CONSTRAINT %PREFIX%_fk_ids_usr_id      FOREIGN KEY (ids_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -969,6 +1265,25 @@ ALTER TABLE %PREFIX%_messages_recipients
     ADD CONSTRAINT %PREFIX%_fk_msr_rol_id      FOREIGN KEY (msr_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_msr_usr_id      FOREIGN KEY (msr_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_oidc_clients
+    ADD CONSTRAINT %PREFIX%_fk_ocl_usr_create  FOREIGN KEY (ocl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ocl_usr_change  FOREIGN KEY (ocl_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_oidc_access_tokens
+    ADD CONSTRAINT %PREFIX%_fk_oat_usr_id      FOREIGN KEY (oat_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oat_ocl_id      FOREIGN KEY (oat_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oat_usr_create  FOREIGN KEY (oat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_oidc_refresh_tokens
+    ADD CONSTRAINT %PREFIX%_fk_ort_usr_id      FOREIGN KEY (ort_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_ort_ocl_id      FOREIGN KEY (ort_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_ort_usr_create  FOREIGN KEY (ort_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_oidc_auth_codes
+    ADD CONSTRAINT %PREFIX%_fk_oac_usr_id      FOREIGN KEY (oac_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oac_ocl_id      FOREIGN KEY (oac_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oac_usr_create  FOREIGN KEY (oac_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_organizations
     ADD CONSTRAINT %PREFIX%_fk_org_org_parent  FOREIGN KEY (org_org_id_parent)  REFERENCES %PREFIX%_organizations (org_id)       ON DELETE SET NULL ON UPDATE RESTRICT;
 
@@ -1008,6 +1323,15 @@ ALTER TABLE %PREFIX%_rooms
     ADD CONSTRAINT %PREFIX%_fk_room_usr_create FOREIGN KEY (room_usr_id_create) REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_room_usr_change FOREIGN KEY (room_usr_id_change) REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_saml_clients
+    ADD CONSTRAINT %PREFIX%_fk_smc_usr_create FOREIGN KEY (smc_usr_id_create)   REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_smc_usr_change FOREIGN KEY (smc_usr_id_change)   REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_sso_keys
+    ADD CONSTRAINT %PREFIX%_fk_key_org         FOREIGN KEY (key_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_key_usr_change  FOREIGN KEY (key_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_key_usr_create  FOREIGN KEY (key_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_sessions
     ADD CONSTRAINT %PREFIX%_fk_ses_org         FOREIGN KEY (ses_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ses_usr         FOREIGN KEY (ses_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -1020,14 +1344,12 @@ ALTER TABLE %PREFIX%_user_fields
     ADD CONSTRAINT %PREFIX%_fk_usf_usr_create  FOREIGN KEY (usf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usf_usr_change  FOREIGN KEY (usf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_user_field_select_options
+    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_user_data
     ADD CONSTRAINT %PREFIX%_fk_usd_usf         FOREIGN KEY (usd_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usd_usr         FOREIGN KEY (usd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE %PREFIX%_user_log
-    ADD CONSTRAINT %PREFIX%_fk_user_log_1      FOREIGN KEY (usl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_user_log_2      FOREIGN KEY (usl_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_user_log_3      FOREIGN KEY (usl_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_users
     ADD CONSTRAINT %PREFIX%_fk_usr_usr_create  FOREIGN KEY (usr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
@@ -1044,3 +1366,24 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr2        FOREIGN KEY (ure_usr_id2)        REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE  ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_inventory_fields
+    ADD CONSTRAINT %PREFIX%_fk_inf_org         FOREIGN KEY (inf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_inf_usr_create  FOREIGN KEY (inf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_inf_usr_change  FOREIGN KEY (inf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_inventory_field_select_options
+    ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)   ON DELETE CASCADE ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_inventory_item_data
+    ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_inventory_item_borrow_data
+    ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_inventory_items
+    ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ini_status      FOREIGN KEY (ini_status)         REFERENCES %PREFIX%_inventory_field_select_options (ifo_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;

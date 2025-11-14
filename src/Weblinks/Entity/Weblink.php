@@ -18,6 +18,9 @@ use Admidio\Infrastructure\Utils\StringUtils;
  */
 class Weblink extends Entity
 {
+    public const MOVE_UP = 'UP';
+    public const MOVE_DOWN = 'DOWN';
+
     /**
      * Constructor that will create an object of a recordset of the table adm_links.
      * If the id is set than the specific weblink will be loaded.
@@ -35,15 +38,15 @@ class Weblink extends Entity
 
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string Returns the value of the database column.
-     *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @param string $format For date or timestamp columns, the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     *                           For text columns, the format can be **database** that would return the original database value without any transformations
+     * @return mixed Returns the value of the database column.
+     *                    If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -77,13 +80,15 @@ class Weblink extends Entity
      */
     public function isEditable(): bool
     {
-        global $gCurrentOrganization, $gCurrentUser;
+        global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
 
-        if ($gCurrentUser->editWeblinksRight()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)) {
+        if ($gCurrentUser->isAdministratorWeblinks()
+            || (in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)
+                && $gCurrentUser->getValue('usr_id') === $this->getValue('lnk_usr_id_create'))
+        ) {
             // if category belongs to current organization than weblinks are editable
             if ($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
+            && (int) $this->getValue('cat_org_id') === $gCurrentOrgId) {
                 return true;
             }
 
@@ -184,7 +189,7 @@ class Weblink extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 
@@ -214,5 +219,35 @@ class Weblink extends Entity
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * Weblink will change the sequence one step up or one step down.
+     * @param string $mode mode if the weblink move up or down, values are Weblink::MOVE_UP, Weblink::MOVE_DOWN
+     * @return bool Return true if the sequence of the weblink could be changed, otherwise false.
+     * @throws Exception
+     */
+    public function moveSequence(string $mode): bool
+    {
+        $lnkSequence = (int)$this->getValue('lnk_sequence');
+        $lnkCatId = (int)$this->getValue('lnk_cat_id');
+        $sql = 'UPDATE ' . TBL_LINKS . '
+                   SET lnk_sequence = ? -- $usfSequence
+                 WHERE lnk_cat_id   = ? -- $usfCatId
+                   AND lnk_sequence = ? -- $usfSequence -/+ 1';
+
+        // profile field will get one number lower and therefore move a position up in the list
+        if ($mode === self::MOVE_UP) {
+            $newSequence = $lnkSequence - 1;
+        } // profile field will get one number higher and therefore move a position down in the list
+        elseif ($mode === self::MOVE_DOWN) {
+            $newSequence = $lnkSequence + 1;
+        }
+
+        // update the existing entry with the sequence of the field that should get the new sequence
+        $this->db->queryPrepared($sql, array($lnkSequence, $lnkCatId, $newSequence));
+
+        $this->setValue('lnk_sequence', $newSequence);
+        return $this->save();
     }
 }

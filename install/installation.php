@@ -4,7 +4,8 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Session\Entity\Session;
-use Admidio\UI\View\Installation;
+use Admidio\UI\Presenter\InstallationPresenter;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  ***********************************************************************************************
@@ -60,7 +61,7 @@ try {
         $g_root_path = getAdmidioUrl();
     }
 
-    require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
+    require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
     $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation', 'installation_successful');
 
@@ -99,6 +100,12 @@ try {
 
     $language = $gL10n->getLanguage();
 
+    /* Disable logging changes to the database. This will not be reverted,
+     *  i.e. during installation / setup no logs are written. The next user
+     * call will use the default value of true and properly log changes...
+     */
+    Entity::setLoggingEnabled(false);
+
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
     \Admidio\InstallationUpdate\Service\Installation::checkFolderPermissions();
 
@@ -109,7 +116,7 @@ try {
         $gDb = $db; // Make the database object globally available to all classes, just like after installation
 
         if (!is_object($db)) {
-            $page = new Installation('adm_installation_message', $gL10n->get('INS_INSTALLATION'));
+            $page = new InstallationPresenter('adm_installation_message', $gL10n->get('INS_INSTALLATION'));
             $page->showMessage(
                 'error',
                 $gL10n->get('SYS_NOTE'),
@@ -128,7 +135,7 @@ try {
         // Check the query for results in case installation is running at this time and the config file is already created but database is not installed so far
         if ($pdoStatement !== false && $pdoStatement->rowCount() > 0) {
             // valid installation exists -> exit installation
-            $page = new Installation('adm_installation_message', $gL10n->get('INS_INSTALLATION'));
+            $page = new InstallationPresenter('adm_installation_message', $gL10n->get('INS_INSTALLATION'));
             $page->showMessage(
                 'error',
                 $gL10n->get('SYS_NOTE'),
@@ -198,5 +205,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    handleException($e, true);
 }

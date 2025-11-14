@@ -29,11 +29,12 @@ ENV APACHE_DOCUMENT_ROOT="/opt/app-root/src"
 ENV DEBIAN_FRONTEND=noninteractive
 
 # install package updates and required dependencies
-RUN apt-get update \
-    && apt-get full-upgrade -y \
-    && apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    apt-get full-upgrade -y && \
+    apt-get install -y --no-install-recommends \
         apache2 \
         ca-certificates \
+        cron \
         curl \
         imagemagick \
         libapache2-mod-php8.3 \
@@ -64,25 +65,40 @@ RUN apt-get update \
         postfix \
         rsync \
         tzdata \
-    && apt-get -y autoremove \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+        && \
+    apt-get -y autoremove && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
     \
-    && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
-    && sed -ri -e 's|^ErrorLog .*$|ErrorLog /dev/stderr|' /etc/apache2/apache2.conf \
-    && sed -ri -e '/^ErrorLog /a TransferLog /dev/stdout' /etc/apache2/apache2.conf \
-    && sed -ri -e '/ErrorLog /d' -e '/CustomLog /d' /etc/apache2/sites-available/*.conf
+    sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf && \
+    sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf && \
+    sed -ri -e 's|^ErrorLog .*$|ErrorLog /dev/stderr|' /etc/apache2/apache2.conf && \
+    sed -ri -e '/^ErrorLog /a TransferLog /dev/stdout' /etc/apache2/apache2.conf && \
+    sed -ri -e '/ErrorLog /d' -e '/CustomLog /d' /etc/apache2/sites-available/*.conf
 
 COPY . ${APACHE_DOCUMENT_ROOT}/
 WORKDIR ${APACHE_DOCUMENT_ROOT}
 
 RUN mkdir ${APACHE_DOCUMENT_ROOT}/provisioning && \
-    cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/install ${APACHE_DOCUMENT_ROOT}/libs ${APACHE_DOCUMENT_ROOT}/src ${APACHE_DOCUMENT_ROOT}/themes ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/adm_program ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
-    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/themes ${APACHE_DOCUMENT_ROOT}/adm_my_files && \
+    \
+    cp -a ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/install ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/languages ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/libs ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/modules ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/rss ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/src ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/system ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/themes ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    \
+    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_my_files && \
+    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins && \
+    rm -rf ${APACHE_DOCUMENT_ROOT}/themes && \
+    \
     echo -n ${ADMIDIO_VERSION} > /opt/app-root/src/.admidio_image_version
 
-VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/themes", "/opt/app-root/src/adm_plugins"]
+VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/adm_plugins", "/opt/app-root/src/themes"]
 
 # Latest release
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer

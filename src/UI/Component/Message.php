@@ -2,14 +2,14 @@
 namespace Admidio\UI\Component;
 
 use Admidio\Infrastructure\Exception;
-use HtmlPage;
+use Admidio\UI\Presenter\PagePresenter;
 
 /**
  * @brief Simple presentation of messages to the user
  *
  * This class creates a new html page with a simple headline and a message. It's
  * designed to easily integrate this class into your code. An object **$gMessage**
- * of this class is created in the common.php. You can set an url that should be
+ * of this class is created in the common.php. You can set a url that should be
  * open after user confirmed the message, or you can show a question with two
  * default buttons yes and no. There is also an option to automatically leave the
  * message after some time.
@@ -141,7 +141,7 @@ class Message
 
         if (!isset($page) || !$this->inline) {
             // create html page object
-            $page = new HtmlPage('admidio-message', $headline);
+            $page = PagePresenter::withHtmlIDAndHeadline('admidio-message', $headline);
             $page->hideBackLink();
 
             if (!$this->includeThemeBody) {

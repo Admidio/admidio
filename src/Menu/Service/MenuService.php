@@ -42,6 +42,44 @@ class MenuService
     }
 
     /**
+     * Read the parent menu entries in an array and adds a sub array with all entries of the parent.
+     * The returned array contains the following information:
+     * men_id, men_uuid, men_name,
+     * entries [men_id, men_uuid, men_men_id_parent, men_name, men_description, men_standard, men_url, men_icon]
+     * @return array Returns an array with all menu entries and their parents.
+     * @throws Exception
+     */
+    public function getData(): array
+    {
+        global $gDb;
+
+        $templateRowMenuParent = array();
+
+        $sql = 'SELECT men_id, men_uuid, men_name
+                  FROM ' . TBL_MENU . '
+                 WHERE men_men_id_parent IS NULL
+              ORDER BY men_order';
+        $mainMenStatement = $gDb->queryPrepared($sql);
+
+        while ($mainMen = $mainMenStatement->fetch()) {
+            $sql = 'SELECT men_id, men_uuid, men_men_id_parent, men_name, men_description, men_standard, men_url, men_icon
+                      FROM ' . TBL_MENU . '
+                     WHERE men_men_id_parent = ? -- $mainMen[\'men_id\']
+                  ORDER BY men_men_id_parent DESC, men_order';
+            $menuStatement = $gDb->queryPrepared($sql, array($mainMen['men_id']));
+
+            // Get data
+            $templateEntries = $menuStatement->fetchAll();
+
+            if(count($templateEntries) >0) {
+                $templateRowMenuParent[] = array_merge($mainMen, array('entries' => $templateEntries));
+            }
+        }
+
+        return $templateRowMenuParent;
+    }
+
+    /**
      * Save data from the menu form into the database.
      * @throws Exception
      */
@@ -74,7 +112,10 @@ class MenuService
             }
         }
 
-        if($this->menuRessource->save()) {
+        // save menu entry
+        // if we edit an existing menu entry and only changed the visible for field then $this->menuRessource->save() will return false
+        // so we need to check whether we have an ID for the menu item that indicates that the menu item is present in the database so that we can save the changed role rights.
+        if($this->menuRessource->save() || !empty($this->menuRessource->getValue('men_id'))) {
             // save changed roles rights of the menu
             if (isset($_POST['menu_view'])) {
                 $menuViewRoles = array_map('intval', $_POST['menu_view']);
@@ -99,14 +140,14 @@ class MenuService
      * @return string[] Returns an array with all parent menu entries
      * @throws Exception
      */
-    static function subMenu(int $level, int $menuID, int $parentID = null, array $menuList = array()): array
+    static function subMenu(int $level, int $menuID, int|null $parentID = null, array $menuList = array()): array
     {
         global $gDb;
 
         $sqlConditionParentId = '';
         $queryParams = array($menuID);
 
-        // Erfassen des auszugebenden Menu
+        // Erfassen des auszugebenden MenuPresenter
         if ($parentID > 0) {
             $sqlConditionParentId .= ' AND men_men_id_parent = ? -- $parentID';
             $queryParams[] = $parentID;

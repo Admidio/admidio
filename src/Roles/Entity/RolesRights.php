@@ -5,6 +5,8 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 
+ include_once __DIR__ . '/RolesRightsData.php';
+
 /**
  * Manages the assignment of roles to an object.
  *
@@ -81,7 +83,7 @@ class RolesRights extends Entity
     {
         foreach ($roleIds as $roleId) {
             if (!in_array($roleId, $this->rolesIds, true) && $roleId > 0) {
-                $rolesRightsData = new Entity($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
+                $rolesRightsData = new RolesRightsData($this->db);
                 $rolesRightsData->setValue('rrd_ror_id', (int) $this->getValue('ror_id'));
                 $rolesRightsData->setValue('rrd_rol_id', $roleId);
                 $rolesRightsData->setValue('rrd_object_id', $this->objectId);
@@ -97,7 +99,7 @@ class RolesRights extends Entity
      * Initializes all class parameters and deletes all read data.
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         $this->rolesRightsDataObjects = array();
         $this->rolesIds = array();
@@ -192,7 +194,7 @@ class RolesRights extends Entity
 
             while ($row = $rolesRightsStatement->fetch()) {
                 $rolId = (int) $row['rrd_rol_id'];
-                $this->rolesRightsDataObjects[$rolId] = new Entity($this->db, TBL_ROLES_RIGHTS_DATA, 'rrd');
+                $this->rolesRightsDataObjects[$rolId] = new RolesRightsData($this->db);
                 $this->rolesRightsDataObjects[$rolId]->setArray($row);
                 $this->rolesIds[] = $rolId;
             }

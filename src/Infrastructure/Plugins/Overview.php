@@ -15,6 +15,7 @@
  */
 namespace Admidio\Infrastructure\Plugins;
 
+use Admidio\UI\Presenter\PagePresenter;
 use Smarty\Smarty;
 use Admidio\Infrastructure\Exception;
 
@@ -28,6 +29,10 @@ class Overview
      * @var Smarty An object ot the Smarty template engine.
      */
     protected Smarty $smarty;
+    /**
+     * @var array An array with all the variables that should be assigned to the template.
+     */
+    protected array $smartyVariables = array();
 
     /**
      * Constructor for the overview plugin.
@@ -39,18 +44,14 @@ class Overview
     }
 
     /**
-     * Method assigns a Smarty
+     * Method assigns a variable to the template that should be used. The variable could be an array or a string.
      * @param string $name Name of the variable within the template
-     * @param string|array $value Content of the variable.
+     * @param array|string $value Content of the variable.
      * @return void
-     * @throws Exception
      */
-    public function assignTemplateVariable(string $name, $value)
+    public function assignTemplateVariable(string $name, array|string $value): void
     {
-        if (!isset($this->smarty)) {
-            $this->createSmartyObject();
-        }
-        $this->smarty->assign($name, $value);
+        $this->smartyVariables[$name] = $value;
     }
 
     /**
@@ -66,12 +67,16 @@ class Overview
             $this->smarty = new Smarty();
 
             // initialize php template engine smarty
-            $this->smarty->setTemplateDir(THEME_PATH . '/templates/');
-            $this->smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/');
+            $this->smarty->addTemplateDir(THEME_PATH . '/templates/');
+            if (defined('THEME_FALLBACK_PATH')) {
+                $this->smarty->addTemplateDir(THEME_FALLBACK_PATH . '/templates/');
+            }
+            $this->smarty->prependTemplateDir(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/');
             $this->smarty->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $this->smarty->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
             $this->smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
             $this->smarty->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
+            $this->smarty->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
 
             $this->smarty->assign('name', $this->name);
             $this->smarty->assign('l10n', $gL10n);
@@ -84,8 +89,28 @@ class Overview
         }
     }
 
+
+    /**
+     * Creates the html page of the given template. In addition to the html method, this method
+     * also includes the html header with javascript and css files.
+     * @param string $template Name of the template file that should be used.
+     */
+    public function showHtmlPage(string $template): void
+    {
+        $overviewPage = new PagePresenter('adm_overview_plugin');
+        $overviewPage->setInlineMode();
+        $overviewPage->addTemplateFile(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->name . '/templates/' . $template);
+
+        foreach($this->smartyVariables as $name => $value) {
+            $overviewPage->assignSmartyVariable($name, $value);
+        }
+
+        $overviewPage->show();
+    }
+
     /**
      * Creates the html of the given template and return the complete html code.
+     * @param string $template Name of the template file that should be used.
      * @return string Returns the html of the template
      * @throws Exception
      */
@@ -94,6 +119,10 @@ class Overview
         try {
             if (!isset($this->smarty)) {
                 $this->createSmartyObject();
+            }
+
+            foreach($this->smartyVariables as $name => $value) {
+                $this->smarty->assign($name, $value);
             }
 
             return $this->smarty->fetch($template);

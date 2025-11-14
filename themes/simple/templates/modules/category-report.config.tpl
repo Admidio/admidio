@@ -9,8 +9,11 @@
 
     {foreach $categoryReports as $categoryReport}
         <div class="card admidio-field-group">
-            <div class="card-header">{$l10n->get('SYS_CONFIGURATION')}</div>
-            <div class="card-body">
+            <div class="card-header"><a id="{$categoryReport.key}_caret" class=" admidio-open-close-caret" data-target="{$categoryReport.key}_contents">
+                <i class="bi bi-caret-{if $categoryReport.open}down{else}right{/if}-fill" style="margin-right: 0"></i>
+             
+            {$l10n->get('SYS_CONFIGURATION')} - {$elements[$categoryReport.name].value}</a></div>
+            <div class="card-body" id="{$categoryReport.key}_contents" {if $categoryReport.open}{else} style="display: none;"{/if}>
                 {include 'sys-template-parts/form.input.tpl' data=$elements[$categoryReport.name]}
                 <div class="admidio-form-group admidio-form-custom-content row mb-3">
                     <label class="col-sm-3 col-form-label">
@@ -18,17 +21,20 @@
                     </label>
                     <div class="col-sm-9">
                         <div class="table-responsive">
-                            <table class="table table-condensed" id="mylist_fields_table">
+                            <table class="table table-condensed catreport-columns-table" id="mylist_fields_table{$categoryReport.key}">
                                 <thead>
                                 <tr>
-                                    <th style="width: 20%;">{$l10n->get('SYS_ABR_NO')}</th>
-                                    <th style="width: 37%;">{$l10n->get('SYS_CONTENT')}</th>
+                                    <th style="width: 30%;">{$l10n->get('SYS_ABR_NO')}</th>
+                                    <th style="width: 60%;">{$l10n->get('SYS_CONTENT')}</th>
+                                    <th style="width: !60px;"></th>
                                 </tr>
                                 </thead>
                                 <tbody id="mylist_fields_tbody{$categoryReport.key}">
+                                </tbody>
+                                <tfoot>
                                 <tr id="table_row_button">
-                                    <td colspan="2">
-                                        <a class="icon-text-link" href="javascript:addColumn{$categoryReport.key}()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_COLUMN')}</a>
+                                    <td colspan="3">
+                                        <a class="icon-text-link" href="javascript:addColumnToConfiguration({$categoryReport.key})"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_COLUMN')}</a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -66,3 +72,9 @@
     <div class="form-alert" style="display: none;">&nbsp;</div>
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_configurations']}
 </form>
+
+<script>
+    $(".admidio-open-close-caret").click(function() {
+        showHideBlock($(this));
+    });
+</script>

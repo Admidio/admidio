@@ -32,11 +32,11 @@ class Text extends Entity
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         if ($columnName === 'txt_text') {
             return $this->dbColumns['txt_text'];
@@ -74,7 +74,7 @@ class Text extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($columnName === 'txt_text') {
             // convert <br /> to a normal line feed
@@ -82,5 +82,47 @@ class Text extends Entity
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * Return a human-readable representation of this record.
+     * If a column [prefix]_name exists, it is returned, otherwise the id.
+     * This method can be overridden in child classes for custom behavior.
+     *
+     * @return string The readable representation of the record (can also be a translatable identifier)
+     */
+    public function readableName(): string
+    {
+        $textLabels = array(
+            'SYSMAIL_REGISTRATION_CONFIRMATION' => 'SYS_NOTIFICATION_REGISTRATION_CONFIRMATION',
+            'SYSMAIL_REGISTRATION_NEW' => 'SYS_NOTIFICATION_NEW_REGISTRATION',
+            'SYSMAIL_REGISTRATION_APPROVED' => 'SYS_NOTIFICATION_REGISTRATION_APPROVAL',
+            'SYSMAIL_REGISTRATION_REFUSED' => 'ORG_REFUSE_REGISTRATION',
+            'SYSMAIL_LOGIN_INFORMATION' => 'SYS_SEND_LOGIN_INFORMATION',
+            'SYSMAIL_PASSWORD_RESET' => 'SYS_PASSWORD_FORGOTTEN',
+        );
+//        $textLabel = Language::translateIfTranslationStrId($textLabels[$row['name']]);
+        if (array_key_exists($this->columnPrefix.'_name', $this->dbColumns)) {
+            $textLabel = $this->dbColumns[$this->columnPrefix.'_name'];
+            if (array_key_exists($textLabel, $textLabels)) {
+                return $textLabels[$textLabel];
+            } else {
+                return $textLabel;
+            }
+        } else {
+            return $this->dbColumns[$this->keyColumnName];
+        }
+    }
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns.
+     * The textx table also contains txt_org_id and txt_name, which we don't want to log.
+     *
+     * @return array Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        return array_merge(parent::getIgnoredLogColumns(), ['txt_name']);
     }
 }

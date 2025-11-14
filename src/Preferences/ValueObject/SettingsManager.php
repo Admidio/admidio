@@ -1,8 +1,11 @@
 <?php
+
 namespace Admidio\Preferences\ValueObject;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\Preferences\Entity\Preferences;
 
 /**
  * @brief Class the manage the settings of an organization
@@ -81,7 +84,7 @@ class SettingsManager
      */
     private function delete(string $name)
     {
-        $sql = 'DELETE FROM '.TBL_PREFERENCES.'
+        $sql = 'DELETE FROM ' . TBL_PREFERENCES . '
                  WHERE prf_org_id = ? -- $orgId
                    AND prf_name   = ? -- $name';
         $this->db->queryPrepared($sql, array($this->orgId, $name));
@@ -145,7 +148,7 @@ class SettingsManager
             throw new Exception('Settings name "' . $name . '" does not exist!');
         }
 
-        return $this->settings[$name];
+        return (string)$this->settings[$name];
     }
 
     /**
@@ -250,7 +253,7 @@ class SettingsManager
      */
     private static function isValidName(string $name): bool
     {
-        return (bool) preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
+        return (bool)preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
     }
 
     /**
@@ -271,7 +274,7 @@ class SettingsManager
     private function loadAll(): array
     {
         $sql = 'SELECT prf_name, prf_value
-                  FROM '.TBL_PREFERENCES.'
+                  FROM ' . TBL_PREFERENCES . '
                  WHERE prf_org_id = ? -- $this->orgId';
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId));
 
@@ -287,13 +290,13 @@ class SettingsManager
     /**
      * Loads a specific setting from the database
      * @param string $name The setting name from the wanted value
-     * @return string Returns the setting value
+     * @return string|null Returns the setting value
      * @throws \UnexpectedValueException|Exception Throws if there is no setting to the given name found
      */
-    private function load(string $name): string
+    private function load(string $name): string|null
     {
         $sql = 'SELECT prf_value
-                  FROM '.TBL_PREFERENCES.'
+                  FROM ' . TBL_PREFERENCES . '
                  WHERE prf_org_id = ? -- $this->orgId
                    AND prf_name   = ? -- $name';
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
@@ -313,10 +316,11 @@ class SettingsManager
      */
     private function insert(string $name, string $value)
     {
-        $sql = 'INSERT INTO '.TBL_PREFERENCES.'
-                       (prf_org_id, prf_name, prf_value)
-                VALUES (?, ?, ?) -- $orgId, $name, $value';
-        $this->db->queryPrepared($sql, array($this->orgId, $name, $value));
+        $prf = new Preferences($this->db);
+        $prf->setValue('prf_org_id', $this->orgId);
+        $prf->setValue('prf_name', $name);
+        $prf->setValue('prf_value', $value);
+        $prf->save();
     }
 
     /**
@@ -350,7 +354,7 @@ class SettingsManager
         $this->db->startTransaction();
 
         foreach ($settings as $name => $value) {
-            $this->updateOrInsertSetting($name, (string) $value, $update);
+            $this->updateOrInsertSetting($name, (string)$value, $update);
         }
 
         $this->db->endTransaction();
@@ -370,11 +374,17 @@ class SettingsManager
         if (!self::isValidName($name)) {
             throw new Exception('Settings name "' . $name . '" is an invalid string!');
         }
+
+        // if array is given, convert to string
+        if (is_array($value)) {
+            $value = implode(',', $value);
+        }
+
         if (!self::isValidValue($value)) {
             throw new Exception('Settings value "' . $value . '" is an invalid value!');
         }
 
-        $this->updateOrInsertSetting($name, (string) $value, $update);
+        $this->updateOrInsertSetting($name, (string)$value, $update);
 
         try {
             $this->settings[$name] = $this->load($name);
@@ -393,11 +403,13 @@ class SettingsManager
      */
     private function update(string $name, string $value)
     {
-        $sql = 'UPDATE '.TBL_PREFERENCES.'
-                   SET prf_value  = ? -- $value
-                 WHERE prf_org_id = ? -- $orgId
-                   AND prf_name   = ? -- $name';
-        $this->db->queryPrepared($sql, array($value, $this->orgId, $name));
+        $prf = new Preferences($this->db);
+        $found = $prf->readDataByColumns(array('prf_org_id' => $this->orgId, 'prf_name' => $name));
+
+        if ($found) {
+            $prf->setValue('prf_value', $value);
+            $prf->save();
+        }
     }
 
     /**

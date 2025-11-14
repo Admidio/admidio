@@ -2,9 +2,11 @@
 namespace Admidio\Components\Entity;
 
 use Admidio\Infrastructure\Exception;
-use ComponentUpdateSteps;
+use Admidio\InstallationUpdate\Service\UpdateStepsCode;
 use Admidio\Infrastructure\Database;
+use SimpleXMLElement;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * @brief Manage the update of a component from the actual version to the target version
@@ -13,8 +15,8 @@ use Throwable;
  * component. It will read the database version from the component and set this as
  * source version. Then you should set the target version. The class will then search
  * for specific update xml files in special directories. For the system this should be
- * **adm_program/installation/db_scripts** and for plugins there should be an installed folder within the
- * plugin directory. The xml files should have the prefix update and then the main und subversion
+ * **install/db_scripts** and for plugins there should be an installed folder within the
+ * plugin directory. The XML files should have the prefix update and then the main und subversion
  * within their filename e.g. **update_3_0.xml**.
  *
  * **Code example**
@@ -41,7 +43,7 @@ class ComponentUpdate extends Component
     {
         parent::__construct($database);
 
-        ComponentUpdateSteps::setDatabase($database);
+        UpdateStepsCode::setDatabase($database);
     }
 
     /**
@@ -59,10 +61,10 @@ class ComponentUpdate extends Component
      * must be passed to successfully update Admidio to this version
      * @param int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
      * @param int $minorVersion Contains a string with the main version number e.g. 1 or 2 from x.1 or x.2.
-     * @return \SimpleXMLElement
-     * @throws \UnexpectedValueException|Exception
+     * @return SimpleXMLElement
+     * @throws UnexpectedValueException|Exception
      */
-    private function getXmlObject(int $mainVersion, int $minorVersion): \SimpleXMLElement
+    private function getXmlObject(int $mainVersion, int $minorVersion): SimpleXMLElement
     {
         global $gLogger;
 
@@ -72,7 +74,7 @@ class ComponentUpdate extends Component
 
             if (is_file($updateFile)) {
                 try {
-                    return new \SimpleXMLElement($updateFile, 0, true);
+                    return new SimpleXMLElement($updateFile, 0, true);
                 } catch (\Exception $e) {
                     throw new Exception($e->getMessage());
                 }
@@ -81,10 +83,10 @@ class ComponentUpdate extends Component
             $message = 'XML-Update file not found!';
             $gLogger->warning($message, array('filePath' => $updateFile));
 
-            throw new \UnexpectedValueException($message);
+            throw new UnexpectedValueException($message);
         }
 
-        throw new \UnexpectedValueException('No System update!');
+        throw new UnexpectedValueException('No System update!');
     }
 
     /**
@@ -102,7 +104,7 @@ class ComponentUpdate extends Component
             try {
                 // open xml file for this version
                 $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
-            } catch (\UnexpectedValueException $exception) {
+            } catch (UnexpectedValueException $exception) {
                 return 0;
             } catch (Exception $exception) {
                 throw new Exception($exception->getMessage());
@@ -127,10 +129,10 @@ class ComponentUpdate extends Component
      */
     private static function executeUpdateMethod(string $updateStepContent)
     {
-        // get the method name (remove "ComponentUpdateSteps::")
-        $methodName = substr($updateStepContent, 22);
+        // get the method name (remove "UpdateStepsCode::")
+        $methodName = substr($updateStepContent, strrpos($updateStepContent, '::') + 2);
         // now call the method
-        ComponentUpdateSteps::{$methodName}();
+        UpdateStepsCode::{$methodName}();
     }
 
     /**
@@ -154,11 +156,11 @@ class ComponentUpdate extends Component
      * if the value of the attribute is equal to your current **DB_ENGINE**. If the node has
      * an attribute **error** and this is set to **ignore** than a sql error will not stop
      * the update script.
-     * @param \SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
+     * @param SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      * @param string $version A version string of the version corresponding to the $xmlNode
      * @throws Exception
      */
-    private function executeStep(\SimpleXMLElement $xmlNode, string $version = '')
+    private function executeStep(SimpleXMLElement $xmlNode, string $version = '')
     {
         global $gLogger;
 
@@ -176,7 +178,7 @@ class ComponentUpdate extends Component
 
             // if a method of this class was set in the update step
             // then call this function and don't execute a SQL statement
-            if (str_starts_with($updateStepContent, 'ComponentUpdateSteps::')) {
+            if (str_starts_with($updateStepContent, 'UpdateStepsCode::')) {
                 try {
                     self::executeUpdateMethod($updateStepContent);
                 } catch (Throwable $e) {
@@ -278,7 +280,7 @@ class ComponentUpdate extends Component
                     }
                 } catch (Exception $exception) {
                     throw new Exception($exception->getMessage());
-                } catch (\UnexpectedValueException|\Exception $exception) {
+                } catch (UnexpectedValueException|\Exception $exception) {
                     // TODO
                 }
 

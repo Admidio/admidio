@@ -10,10 +10,11 @@
  */
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
-use Admidio\UI\View\Installation;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'connect_database.php') {
     exit('This page may not be called directly!');
@@ -45,12 +46,12 @@ if ($mode === 'html') {
     }
 
     // create a page to enter all necessary database connection information
-    $page = new Installation('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_installation_connect_database_form',
         'installation.connect-database.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'connect_database', 'mode' => 'check')),
@@ -59,16 +60,16 @@ if ($mode === 'html') {
     $form->addSelectBoxFromXml(
         'adm_db_engine',
         $gL10n->get('INS_DATABASE_SYSTEM'),
-        ADMIDIO_PATH . '/adm_program/system/databases.xml',
+        ADMIDIO_PATH . FOLDER_SYSTEM . '/databases.xml',
         'identifier',
         'name',
-        array('property' => Form::FIELD_REQUIRED, 'defaultValue' => $dbEngine)
+        array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $dbEngine)
     );
     $form->addInput(
         'adm_db_host',
         $gL10n->get('SYS_HOST'),
         $dbHost,
-        array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => Form::FIELD_REQUIRED, 'helpTextId' => 'INS_DATABASE_HOST_INFO')
+        array('pattern' => $hostRegex, 'maxLength' => 64, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'INS_DATABASE_HOST_INFO')
     );
     $form->addInput(
         'adm_db_port',
@@ -80,13 +81,13 @@ if ($mode === 'html') {
         'adm_db_name',
         $gL10n->get('SYS_DATABASE'),
         $dbName,
-        array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => Form::FIELD_REQUIRED)
+        array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'adm_db_username',
         $gL10n->get('SYS_USERNAME'),
         $dbUsername,
-        array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => Form::FIELD_REQUIRED)
+        array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 64, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'adm_db_password',
@@ -98,7 +99,7 @@ if ($mode === 'html') {
         'adm_table_prefix',
         $gL10n->get('INS_TABLE_PREFIX'),
         $tablePrefix,
-        array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => Form::FIELD_REQUIRED, 'class' => 'form-control-small')
+        array('pattern' => $sqlIdentifiersRegex, 'maxLength' => 10, 'property' => FormPresenter::FIELD_REQUIRED, 'class' => 'form-control-small')
     );
     $form->addButton(
         'adm_previous_page',

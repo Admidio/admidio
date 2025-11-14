@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\ProfileFields\Entity;
 
+use Admidio\ProfileFields\Entity\SelectOptions;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Image;
@@ -54,7 +55,7 @@ class ProfileField extends Entity
      * Additional to the parent method visible roles array and flag will be initialized.
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -102,17 +103,17 @@ class ProfileField extends Entity
             $this->db->queryPrepared($sql, array($rowLst['lsc_lst_id'], $rowLst['lsc_number']));
         }
 
-        // delete all dependencies in other tables
-        $sql = 'DELETE FROM ' . TBL_USER_LOG . '
-                 WHERE usl_usf_id = ? -- $usfId';
-        $this->db->queryPrepared($sql, array($usfId));
-
+        // delete all dependencies in other tables, except for the changelog (which needs to be audit proof)
         $sql = 'DELETE FROM ' . TBL_USER_DATA . '
                  WHERE usd_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
 
         $sql = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
                  WHERE lsc_usf_id = ? -- $usfId';
+        $this->db->queryPrepared($sql, array($usfId));
+
+        $sql = 'DELETE FROM ' . TBL_USER_FIELD_OPTIONS . '
+                 WHERE ufo_usf_id = ? -- $usfId';
         $this->db->queryPrepared($sql, array($usfId));
 
         $return = parent::delete();
@@ -161,15 +162,16 @@ class ProfileField extends Entity
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For column **usf_value_list** the following format is accepted:
-     *                           * **database** returns database value of **usf_value_list** without any transformations
-     *                           * **text** extract only text from **usf_value_list**, image infos will be ignored
+     * @param string $format For column **ufo_usf_options** the following format is accepted:
+     *                           * **database** returns database value of **ufo_usf_options** without any transformations
+     *                           * **text** extract only text from **ufo_usf_options**, image infos will be ignored
      *                           * For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**
+     * @param bool $withObsoleteEnries If set to **false** then the obsolete entries of the profile field will not be considered.
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = '', bool $withObsoleteEnries = true): mixed
     {
         if ($columnName === 'usf_description') {
             if (!isset($this->dbColumns['usf_description'])) {
@@ -182,11 +184,15 @@ class ProfileField extends Entity
         } elseif ($columnName === 'usf_name_intern') {
             // internal name should be read with no conversion
             $value = parent::getValue($columnName, 'database');
+        } elseif ($columnName === 'ufo_usf_options') {
+            // if value is a list of options then return the options as array
+            $options = new SelectOptions($this->db, (int)$this->dbColumns['usf_id']);
+            $value = $options->getAllOptions($withObsoleteEnries);
         } else {
             $value = parent::getValue($columnName, $format);
         }
 
-        if (strlen((string) $value) === 0 || $value === null) {
+        if ((is_array($value) && empty($value)) || (!is_array($value) && (strlen((string)$value) === 0 || $value === null))) {
             return '';
         }
 
@@ -198,50 +204,47 @@ class ProfileField extends Entity
                     $value = Language::translateIfTranslationStrId($value);
 
                     break;
-                case 'usf_value_list':
-                    if ($this->dbColumns['usf_type'] === 'DROPDOWN' || $this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
-                        $arrListValuesWithKeys = array(); // array with list values and keys that represents the internal value
+                case 'ufo_usf_options':
+                    if ($this->dbColumns['usf_type'] === 'DROPDOWN' ||  $this->dbColumns['usf_type'] === 'DROPDOWN_MULTISELECT' || $this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
+                        $arrOptionValuesWithKeys = array(); // array with list values and keys that represents the internal value
+                        $arrOptions = $value;
 
-                        // first replace windows new line with unix new line and then create an array
-                        $valueFormatted = str_replace("\r\n", "\n", $value);
-                        $arrListValues = explode("\n", $valueFormatted);
-
-                        foreach ($arrListValues as $key => &$listValue) {
+                        foreach ($arrOptions as &$option) {
                             if ($this->dbColumns['usf_type'] === 'RADIO_BUTTON') {
                                 // if value is bootstrap icon or icon separated from text
-                                if (Image::isBootstrapIcon($listValue) || str_contains($listValue, '|')) {
+                                if (Image::isBootstrapIcon($option['value']) || str_contains($option['value'], '|')) {
                                     // if there is bootstrap icon and text separated by | then explode them
-                                    if (str_contains($listValue, '|')) {
-                                        list($listValueImage, $listValueText) = explode('|', $listValue);
+                                    if (str_contains($option['value'], '|')) {
+                                        list($optionValueImage, $optionValueText) = explode('|', $option['value']);
                                     } else {
-                                        $listValueImage = $listValue;
-                                        $listValueText = $this->getValue('usf_name');
+                                        $optionValueImage = $option['value'];
+                                        $optionValueText = $this->getValue('usf_name');
                                     }
 
                                     // if text is a translation-id then translate it
-                                    $listValueText = Language::translateIfTranslationStrId($listValueText);
+                                    $optionValueText = Language::translateIfTranslationStrId($optionValueText);
 
                                     if ($format === 'html') {
-                                        $listValue = Image::getIconHtml($listValueImage, $listValueText) . ' ' . $listValueText;
+                                        $option['value'] = Image::getIconHtml($optionValueImage, $optionValueText) . ' ' . $optionValueText;
                                     } else {
                                         // if no image is wanted then return the text part or only the position of the entry
-                                        if (str_contains($listValue, '|')) {
-                                            $listValue = $listValueText;
+                                        if (str_contains($option['value'], '|')) {
+                                            $option['value'] = $optionValueText;
                                         } else {
-                                            $listValue = $key + 1;
+                                            $option['value'] = $option['id'];
                                         }
                                     }
                                 }
                             }
 
                             // if text is a translation-id then translate it
-                            $listValue = Language::translateIfTranslationStrId($listValue);
+                            $option['value'] = Language::translateIfTranslationStrId($option['value']);
 
                             // save values in new array that starts with key = 1
-                            $arrListValuesWithKeys[++$key] = $listValue;
+                            $arrOptionValuesWithKeys[$option['id']] = $option['value'];
                         }
-                        unset($listValue);
-                        $value = $arrListValuesWithKeys;
+                        unset($option);
+                        $value = $arrOptionValuesWithKeys;
                     }
 
                     break;
@@ -271,7 +274,7 @@ class ProfileField extends Entity
     {
         global $gCurrentUserId;
 
-        $requiredInput = $this->getValue('usf_required_input');
+        $requiredInput = (int)$this->getValue('usf_required_input');
 
         if ($requiredInput === ProfileField::USER_FIELD_REQUIRED_INPUT_YES) {
             return true;
@@ -416,7 +419,7 @@ class ProfileField extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 
@@ -470,5 +473,17 @@ class ProfileField extends Entity
             return parent::setValue($columnName, $newValue, $checkValue);
         }
         return false;
+    }
+
+    /**
+     * Set the values of the options of a dropdown, radio button or multiselect field.
+     * The values are stored in the database and the sequence of the options is updated.
+     * @param array $newValues Array with new values for the options. The key is the option ID and the value is an array with the new values.
+     * @return bool Returns true if the values could be saved, otherwise false.
+     * @throws Exception
+     */
+    public function setSelectOptions(array $newValues): bool
+    {
+        return (new SelectOptions($this->db, (int)$this->getValue('usf_id')))->setOptionValues($newValues);
     }
 }

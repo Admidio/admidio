@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Entity\Entity;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -56,6 +57,9 @@ class OrganizationService
         $newOrganization->setValue('org_show_org_select', true);
         $newOrganization->setValue('org_org_id_parent', $gCurrentOrgId);
         $newOrganization->save();
+
+        // After setting up the base organization record, we don't want to add changelog entries for all the copying of the settings to the new org!
+        Entity::setLoggingEnabled(false);
 
         // write all preferences from preferences.php in table adm_preferences
         require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');

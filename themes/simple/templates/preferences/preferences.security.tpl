@@ -8,6 +8,7 @@
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['enable_auto_login']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['security_login_email_address_enabled']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['enable_password_recovery']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['two_factor_authentication_enabled']}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_security']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

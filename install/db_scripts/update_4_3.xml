@@ -23,7 +23,7 @@
     <step id="210">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_REGISTRATION_REFUSED' WHERE txt_name = 'SYSMAIL_REFUSE_REGISTRATION'</step>
     <step id="220">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_REGISTRATION_APPROVED' WHERE txt_name = 'SYSMAIL_REGISTRATION_USER'</step>
     <step id="230">UPDATE %PREFIX%_texts SET txt_name = 'SYSMAIL_REGISTRATION_NEW' WHERE txt_name = 'SYSMAIL_REGISTRATION_WEBMASTER'</step>
-    <step id="240">ComponentUpdateSteps::updateStep43AddNewNotificationText</step>
+    <step id="240">UpdateStepsCode::updateStep43AddNewNotificationText</step>
     <step id="250" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_registration_admin_mail' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_send_notification_email'</step>
     <step id="260" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_registration_admin_mail' AND pr1.prf_name = 'registration_send_notification_email'</step>
     <step id="270">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_registration_admin_mail'</step>
@@ -106,13 +106,13 @@
     <step id="1050">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_events boolean not null default false</step>
     <step id="1060">UPDATE %PREFIX%_roles SET rol_events = rol_dates</step>
     <step id="1070">ALTER TABLE %PREFIX%_roles DROP COLUMN rol_dates</step>
-    <step id="1080">ComponentUpdateSteps::updateStep43AddSocialNetworkProfileFields</step>
+    <step id="1080">UpdateStepsCode::updateStep43AddSocialNetworkProfileFields</step>
     <step id="1090">DELETE FROM %PREFIX%_roles_rights_data WHERE rrd_id IN (SELECT temp.id FROM (SELECT rrd.rrd_id as id FROM %PREFIX%_roles_rights ror INNER JOIN %PREFIX%_roles_rights_data rrd ON rrd.rrd_ror_id = ror.ror_id INNER JOIN %PREFIX%_menu men ON men.men_id = rrd.rrd_object_id AND men.men_standard = true WHERE ror.ror_name_intern = 'menu_view') AS temp)</step>
     <step id="1100">UPDATE %PREFIX%_menu SET men_name = 'SYS_MESSAGES', men_name_intern = 'messages', men_icon='fa-comments', men_url='/adm_program/modules/messages/messages.php', men_description='SYS_MESSAGES_DESC' WHERE men_name_intern = 'mail'</step>
     <step id="1110">UPDATE %PREFIX%_menu SET men_name = 'SYS_REGISTRATIONS', men_name_intern = 'registration' WHERE men_name_intern = 'newreg'</step>
     <step id="1120">UPDATE %PREFIX%_categories SET cat_name_intern = 'EVT_ALL_ORGANIZATIONS' WHERE cat_name_intern = 'DAT_ALL_ORGANIZATIONS'</step>
     <step id="1130">UPDATE %PREFIX%_menu SET men_description = 'SYS_EVENTS_DESC' WHERE men_name_intern = 'events'</step>
-    <step id="1140">ComponentUpdateSteps::updateStep43RemoveInvalidVisibleRoleRights</step>
+    <step id="1140">UpdateStepsCode::updateStep43RemoveInvalidVisibleRoleRights</step>
     <step id="1150">UPDATE %PREFIX%_menu SET men_standard = false WHERE men_name_intern IN ('statistics', 'statistics_editor');</step>
     <step id="1160" database="mysql">UPDATE %PREFIX%_preferences SET prf_value = '500' WHERE prf_name = 'photo_thumbs_scale' AND CAST(prf_value AS unsigned) &lt; 500</step>
     <step id="1170" database="pgsql">UPDATE %PREFIX%_preferences SET prf_value = '500' WHERE prf_name = 'photo_thumbs_scale' AND prf_value::int &lt; 500</step>
@@ -125,5 +125,6 @@
     <step id="1240">UPDATE %PREFIX%_categories SET cat_type = 'EVT' WHERE cat_type = 'DAT'</step>
     <step id="1250">UPDATE %PREFIX%_categories SET cat_org_id = 1 WHERE cat_org_id IS NULL AND cat_name_intern = 'EVENTS'</step>
     <step id="1255">UPDATE %PREFIX%_roles_rights SET ror_table = '%PREFIX%_events' WHERE ror_table = '%PREFIX%_dates'</step>
+    <step id="1260">UpdateStepsCode::updateStep43RepairDocumentsPath</step>
     <step>stop</step>
 </update>

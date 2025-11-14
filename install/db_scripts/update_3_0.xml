@@ -143,7 +143,7 @@
             collate = utf8_unicode_ci;</step>
     <step id="530">alter table %PREFIX%_ids add constraint %PREFIX%_FK_IDS_USR_ID foreign key (ids_usr_id) references %PREFIX%_users (usr_id) on delete restrict on update restrict</step>
     <step id="540">UPDATE %PREFIX%_preferences SET prf_value = '13' WHERE prf_name = 'captcha_signature_font_size' AND prf_value = '9'</step>
-    <step id="550">ComponentUpdateSteps::updateStep30DeleteDateRoles</step>
+    <step id="550">UpdateStepsCode::updateStep30DeleteDateRoles</step>
     <step id="560">create unique index IDX_%PREFIX%_IND_ITM_INF_ID on %PREFIX%_invent_data (ind_itm_id, ind_inf_id)</step>
     <step id="570">create unique index IDX_%PREFIX%_INF_NAME_INTERN on %PREFIX%_invent_fields (inf_name_intern)</step>
     <step id="580" database="mysql">ALTER TABLE %PREFIX%_components MODIFY COLUMN com_beta smallint not null default 0</step>

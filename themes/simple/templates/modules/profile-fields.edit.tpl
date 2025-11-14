@@ -26,7 +26,7 @@
             {else}
                 {include 'sys-template-parts/form.select.tpl' data=$elements['usf_type']}
             {/if}
-            {include 'sys-template-parts/form.multiline.tpl' data=$elements['usf_value_list']}
+            {include 'sys-template-parts/form.option-editor.tpl' data=$elements['ufo_usf_options']}
             {if $fieldNameIntern == 'LAST_NAME' || $fieldNameIntern == 'FIRST_NAME'}
                 {include 'sys-template-parts/form.input.tpl' data=$elements['usf_required_input']}
             {else}

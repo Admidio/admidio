@@ -7,6 +7,7 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -120,7 +121,7 @@ class File extends Entity
         }
 
         // If current user has download-admin-rights => allow
-        if ($gCurrentUser->adminDocumentsFiles()) {
+        if ($gCurrentUser->isAdministratorDocumentsFiles()) {
             return true;
         }
 
@@ -171,11 +172,11 @@ class File extends Entity
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         $value = parent::getValue($columnName, $format);
 
@@ -269,12 +270,45 @@ class File extends Entity
                 . $gL10n->get('SYS_FOLDER') . ': ' . $this->getValue('fol_name') . '<br />'
                 . $gL10n->get('SYS_CREATED_BY') . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get('SYS_CREATED_AT') . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files/documents_files.php?folder_uuid=' . $this->getValue('fol_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php?folder_uuid=' . $this->getValue('fol_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get('SYS_FILE_CREATED_TITLE', array($gCurrentOrganization->getValue('org_longname'))),
                 $message
             );
         }
         return false;
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
+     * to log changes to these columns.
+     * The folder table also contains fol_usr_id and fol_timestamp. We also don't want to log
+     * download counter increases...
+     * When a file is created, we also don't need to log some columns, because they are already
+     * in the creation log record.
+     *
+     * @return array Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        $ignored = parent::getIgnoredLogColumns();
+        $ignored = array_merge($ignored, ['fil_counter', 'fil_usr_id', 'fil_timestamp']);
+        if ($this->insertRecord) {
+            $ignored = array_merge($ignored, ['fil_fol_id', 'fil_name']);
+        }
+        return $ignored;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record: Add the parent fold as a related object
+     *
+     * @param LogChanges $logEntry The log entry to adjust
+     *
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry) {
+        $folEntry = new Folder($this->db, $this->getValue('fil_fol_id'));
+        $logEntry->setLogRelated($folEntry->getValue('fol_uuid'), $folEntry->getValue('fol_name'));
     }
 }

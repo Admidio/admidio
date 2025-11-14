@@ -13,6 +13,9 @@
         {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['plg_usr_login_name']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['plg_usr_password']}
+        {if $settings->getBool('two_factor_authentication_enabled')}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['usr_totp_code']}
+        {/if}
         {if $currentOrganization->getValue('org_show_org_select')}
             {include 'sys-template-parts/form.select.tpl' data=$elements['plg_org_shortname']}
         {/if}
@@ -23,7 +26,7 @@
         <div class="form-alert" style="display: none;">&nbsp;</div>
     </form>
 
-    {if $showRegisterLink && $settings->getBool('registration_enable_module')}
-        <a class="icon-link" href="{$urlAdmidio}/adm_program/modules/registration.php"><i class="bi bi-card-checklist"></i>{$l10n->get('SYS_REGISTRATION')}</a>
+    {if $showRegisterLink && $settings->getBool('registration_module_enabled')}
+        <a class="icon-link" href="{$urlAdmidio}/modules/registration.php"><i class="bi bi-card-checklist"></i>{$l10n->get('SYS_REGISTRATION')}</a>
     {/if}
 </div>

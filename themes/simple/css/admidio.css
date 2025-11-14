@@ -15,6 +15,7 @@
     --admidio-header-link-color-hover: #000000;
     --admidio-menu-bg-color-hover: #3d5266;
     --admidio-menu-font-color-hover: #ffffff;
+    --admidio-clamp-text-lines: 0;
     --bs-primary: #349aaa;
     --bs-primary-rgb: 52, 154, 170;
     --bs-secondary: #263340;
@@ -24,10 +25,10 @@
     --bs-success: #04e01a;
     --bs-body-color: #263340;
     --bs-body-bg: #ffffff;
-    --bs-link-color: #349aaa;
-    --bs-link-color-rgb: 52, 154, 170;
-    --bs-link-hover-color: #4fb8c9;
-    --bs-link-hover-color-rgb: 79, 184, 201;
+    --bs-link-color: var(--bs-primary);
+    --bs-link-color-rgb: var(--bs-primary-rgb);
+    --bs-link-hover-color: color-mix(in srgb, var(--bs-link-color) 80%, white);
+    --bs-link-hover-color-rgb: color-mix(in srgb, rgb(var(--bs-link-color-rgb)) 80%, white);
     --bs-focus-ring-color: #c4e9ef;
 }
 
@@ -79,6 +80,13 @@
     padding-left: 1rem;
     padding-right: 1rem;
     max-width: 1000px;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    word-break: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .admidio-max-content {
@@ -172,11 +180,19 @@ a {
 
 .btn, .btn:hover {
     color: var(--bs-body-bg);
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    hyphens: none;
 }
 
 .btn-primary {
     background-color: var(--bs-link-color);
     border-color: var(--bs-link-color);
+}
+
+.dropdown-toggle {
+    white-space: normal;
 }
 
 .btn-primary:hover {
@@ -189,6 +205,21 @@ a {
     border-color: var(--bs-primary);
 }
 
+.btn-outline-primary, .btn-outline-primary:hover {
+    color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}
+
+.btn-check:checked + .btn {
+    color: var(--bs-body-bg) !important;
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary) !important;
+}
+
+.bg-info {
+    background-color: var(--bs-secondary) !important;
+}
+
 /* default distance between elements */
 .admidio-blog, .admidio-field-group, .pagination,
 .admidio-info-created-edited, .admidio-img-presenter,
@@ -196,6 +227,16 @@ a {
 .dt-container, .admidio-margin-bottom, .admidio-content-header,
 .admidio-content-subheader, .tab-content {
     margin-bottom: 2rem;
+}
+
+.admidio-tabbed-field-group, .admidio-accordion-field-group {
+    margin-bottom: 1rem;
+}
+
+.admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group),
+.admidio-tabbed-field-group .table-responsive, .admidio-accordion-field-group .table-responsive,
+.admidio-tabbed-field-group .table-responsive .dt-container, .admidio-accordion-field-group .table-responsive .dt-container {
+    margin-bottom: 0;
 }
 
 /* add 5px distance to all icons within a icon text combination */
@@ -307,6 +348,15 @@ label {
     font-weight: bold;
 }
 
+.form-separator-line {
+    border-top: 2px solid;
+    margin-bottom: 0;
+}
+
+.form-separator-line + label {
+    font-size: 1.25em;
+}
+
 @media (min-width: 768px) {
     .form-control-small {
         width: 50%;
@@ -321,13 +371,29 @@ label {
     min-height: 300px;
 }
 
+@media (min-width: 768px) {
+    .admidio-form-membership-period .admidio-form-group {
+            word-wrap: normal !important;
+            word-break: normal !important;
+            padding: 0 !important;
+            margin: 0 !important;
+    }
+}
+
+.admidio-form-custom-content > div {
+    padding-top: calc(0.375rem + 1px);
+    padding-bottom: calc(0.375rem + 1px);
+}
+
 /***********************************/
 /* Cards */
 /***********************************/
 
-.admidio-blog, .admidio-field-group, .admidio-blog .card-header, .admidio-blog .card-body,
+.admidio-blog, .admidio-field-group, .admidio-tabbed-field-group, .admidio-accordion-field-group, .admidio-blog .card-header, .admidio-blog .card-body,
 .admidio-blog .card-footer, .admidio-field-group .card-header, .admidio-field-group .card-body,
-.admidio-field-group .card-footer {
+.admidio-field-group .card-footer, .admidio-tabbed-field-group .card-header, .admidio-tabbed-field-group .card-body,
+.admidio-tabbed-field-group .card-footer, .admidio-accordion-field-group .card-header, .admidio-accordion-field-group .card-body,
+.admidio-accordion-field-group .card-footer {
     border: none;
     background-color: var(--bs-tertiary);
 }
@@ -359,14 +425,52 @@ label {
     padding: 0;
 }
 
+.admidio-tabs {
+    flex-wrap: nowrap;     /* never wrap */
+    width: 100%;
+}
+
+.admidio-tabs .nav-item, .admidio-tabs .nav-link {
+    display: flex;
+}
+
+.admidio-tabs .nav-link {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    max-width: 250px;
+}
+
+.admidio-tabs .dropdown-toggle {
+    white-space: normal;
+    text-align: center;
+    align-content: center;
+}
+
+.admidio-tabbed-field-group .card-body, .admidio-accordion-field-group .card-body {
+    border-radius: var(--bs-card-inner-border-radius);
+}
+
+.admidio-tabbed-field-group .card-body .list-group-item, .admidio-accordion-field-group .card-body .list-group-item {
+    background-color: var(--bs-tertiary);
+}
+
+.admidio-tabbed-field-group .list-group-item, .admidio-accordion-field-group .list-group-item {
+    border: none;
+    padding: 0 0 1rem 0;
+}
+
+.admidio-tabbed-field-group .button, .admidio-accordion-field-group .button {
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.admidio-tabbed-field-group .list-group-item .list-group-item, .admidio-accordion-field-group .list-group-item .list-group-item {
+    padding: 0;
+}
+
 .card .admidio-info-created-edited {
     margin-bottom: 0;
     margin-top: 0;
-}
-
-.card-body .list-group-item {
-    padding-left: 0;
-    background-color: var(--bs-tertiary);
 }
 
 .card-footer .admidio-info-created-edited {
@@ -411,6 +515,18 @@ label {
 }
 
 /***********************************/
+/* Tabs */
+/***********************************/
+
+.tab-content {
+    padding: 1rem 1rem 0 1rem;
+}
+
+.tab-content:has( > .tab-pane > .accordion) {
+    padding: unset;
+}
+
+/***********************************/
 /* Accordion */
 /***********************************/
 
@@ -421,6 +537,20 @@ label {
     --bs-accordion-active-bg: var(--bs-secondary);
 }
 
+.accordion-button::after {
+    background-image: none !important;
+    background-color: var(--bs-accordion-btn-color);
+    mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='black'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") no-repeat center;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-color: var(--bs-accordion-active-color);
+}
+
+.accordion-body {
+    padding: 1rem 1rem 0 1rem;
+}
+
 .accordion-button {
     font-size: 1.3rem;
 }
@@ -428,6 +558,24 @@ label {
 .accordion-button:focus {
     box-shadow: none;
 }
+
+.tab-content .accordion .accordion-item:first-child {
+    border-top: unset;
+}
+
+.tab-content .accordion .accordion-item:last-child {
+    border-bottom: unset;
+}
+
+.tab-content .accordion .accordion-item {
+    border-left: unset;
+    border-right: unset;
+}
+
+.tab-content .accordion .accordion-item:first-of-type > .accordion-header .accordion-button {
+    border-radius: unset;
+}
+
 
 /***********************************/
 /* Navbar */
@@ -441,22 +589,39 @@ label {
     background-color: var(--bs-tertiary);
 }
 
+.nav-tabs {
+    margin-bottom: 0;
+}
+
 .nav-tabs .nav-link {
     background-color: var(--bs-tertiary);
+    border-color: var(--bs-nav-tabs-border-color);
     font-weight: bold;
 }
 
-.navbar .form-floating.admidio-form-group {
+.navbar .admidio-form-group {
     margin-right: 0.5rem;
 }
 
 /***********************************/
-/* Various settings */
+/* Tables */
 /***********************************/
 
 .table td, .table th {
     color: var(--bs-secondary);
 }
+
+.table-hover tbody tr td .admidio-functions {
+    visibility: hidden;
+}
+
+.table-hover tbody tr:hover td .admidio-functions {
+    visibility: visible;
+}
+
+/***********************************/
+/* Various settings */
+/***********************************/
 
 .admidio-opacity-reduced {
     opacity: 0.4;
@@ -512,6 +677,10 @@ label {
 #adm_imprint {
     margin-bottom: 2rem;
     font-size: 80%;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    hyphens: none;
 }
 
 .admidio-info-icon {
@@ -520,7 +689,7 @@ label {
     margin-left: 0.5rem;
 }
 
-#adm_profile_photo {
+#adm_profile_photo, #adm_inventory_item_picture {
     max-width: 300px;
     width: 100% !important;
     object-fit: cover !important;
@@ -570,6 +739,14 @@ tr.admidio-event-highlight {
     height: auto;
 }
 
+.admidio-forum-entry-info {
+    font-size: 80%;
+}
+
+.admidio-forum-topic p {
+    margin: 0 !important;
+}
+
 #adm_password_strength {
     margin-top: 0.5rem;
 }
@@ -592,8 +769,8 @@ tr.admidio-event-highlight {
 /* Overview page */
 /***********************************/
 
-#plgCalendarTable {
-    width: 100%;
+.admidio-plugin-content .list-group-item {
+    padding-left: 0;
 }
 
 #plgCalendarTable td.plgCalendarToday {
@@ -608,4 +785,84 @@ tr.admidio-event-highlight {
 
 #plugin-login-form .btn {
     margin-bottom: 1rem;
+}
+
+/***********************************/
+/* Preferences page */
+/***********************************/
+
+.admidio-preferences-group {
+    width: 100%;
+}
+
+.admidio-preferences-group .list-group-item.nav-item {
+    border-right: none;
+    border-bottom: none;
+    padding: 0 0 0 0;
+}
+
+.admidio-preferences-group .list-group-item.group-heading {
+    width: 100%;
+    border-bottom: none;
+    border-top: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+    border-top-left-radius: var(--bs-list-group-border-radius);
+    border-top-right-radius: unset;
+}
+
+.admidio-preferences-group .list-group-item.group-last {
+    margin-bottom: 1rem;
+    border-bottom-left-radius: var(--bs-list-group-border-radius);
+}
+
+/***********************************/
+/* Changelog configuration  */
+/***********************************/
+
+ul.changelog-tableselect-list {
+    list-style-type: none;
+}
+
+/************************************/
+/* subinfo form controls (showing/hiding rows) */
+/************************************/
+
+.subinfo-row .subinfo-sub-row label, .col-form-sublabel {
+  padding-left: 2.5em;
+  font-weight: normal;
+}
+.subinfo-sub-row, .subinfo-row {
+  margin-bottom: 0 !important;
+}
+.subinfo_head {
+  margin-bottom: 1.5rem;
+}
+.col-form-label.col-form-sublabel {
+    padding-top: 2pt;
+    padding-bottom: 2pt;
+}
+
+.subinfo-row .form-control-plaintext {
+  width: 75%;
+}
+.subinfo-sub-row .form-control-plaintext {
+  width: 75%;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+/***********************************/
+/* Clamp text */
+/***********************************/
+.clamp-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--admidio-clamp-text-lines);
+  line-clamp: var(--admidio-clamp-text-lines);
+  overflow: hidden;
+}
+
+.clamp-text.expanded {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
 }

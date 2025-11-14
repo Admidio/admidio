@@ -11,8 +11,8 @@
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\UI\Component\Form;
-use Admidio\UI\View\Installation;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'create_config.php') {
     exit('This page may not be called directly!');
@@ -51,7 +51,7 @@ $configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces)
 
 $_SESSION['config_file_content'] = $configFileContent;
 
-$page = new Installation('adm_installation_create_config', $gL10n->get('INS_INSTALLATION'));
+$page = new InstallationPresenter('adm_installation_create_config', $gL10n->get('INS_INSTALLATION'));
 $page->addTemplateFile('installation.tpl');
 
 // now save new configuration file in Admidio folder if user has write access to this folder
@@ -67,7 +67,7 @@ if ($configFileHandle) {
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));
     $page->assignSmartyVariable('urlInstallation', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')));
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_installation_install_admidio_form',
         'installation.install-admidio.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')),
@@ -83,7 +83,7 @@ if ($configFileHandle) {
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', array('config.php', ADMIDIO_URL . FOLDER_DATA, 'adm_my_files')));
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_installation_install_admidio_form',
         'installation.download-config.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION. '/installation.php', array('step' => 'start_installation')),

@@ -70,7 +70,7 @@ class Participants
     /**
      * Initialize all parameters of the object
      */
-    public function clear()
+    public function clear(): void
     {
         $this->count      = -1;
         $this->leader     = -1;

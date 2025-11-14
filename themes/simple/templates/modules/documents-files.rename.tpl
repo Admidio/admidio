@@ -5,12 +5,12 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {if {array_key_exists array=$elements key='file_type'}}
-        {include 'sys-template-parts/form.input.tpl' data=$elements['file_type']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['adm_file_type']}
     {/if}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['previous_name']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['new_name']}
-    {include 'sys-template-parts/form.multiline.tpl' data=$elements['new_description']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['btn_rename']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_previous_name']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_new_name']}
+    {include 'sys-template-parts/form.multiline.tpl' data=$elements['adm_new_description']}
+    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_btn_rename']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
     {include file="sys-template-parts/system.info-create-edit.tpl"}
 </form>

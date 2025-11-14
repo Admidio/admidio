@@ -73,14 +73,18 @@ class Language
      * @param string $language The ISO code of the language for which the texts should be read e.g. **'de'**
      *                         If no language is set than the browser language will be determined.
      */
-    public function __construct(string $language)
+    public function __construct(string $language, bool $useBrowserLanguageIfAvailable = false)
     {
-        if ($language === '') {
+        if ($useBrowserLanguageIfAvailable) {
             // get browser language and set this language as default
-            $language = static::determineBrowserLanguage(self::REFERENCE_LANGUAGE);
+            if(!$this->setLanguage(static::determineBrowserLanguage($language))) {
+                // if the browser language is not available then set the default language
+                $this->setLanguage($language);
+            }
+        } else {
+            $this->setLanguage($language);
         }
 
-        $this->setLanguage($language);
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
 
         $this->addPluginLanguageFolderPaths();
@@ -173,9 +177,16 @@ class Language
             }
 
             if ($prioritySelected < $priority && $langCodes[0] !== '*') {
-                $languageSelected = $langCodes[0];
+                $languageSelected = $matches[1]; //$langCodes[0];
                 $prioritySelected = $priority;
             }
+        }
+
+        // special case for the german language code
+        if ($languageSelected === 'de' && $defaultLanguage === 'de-DE') {
+            $languageSelected = 'de-DE';
+        } elseif ($languageSelected === 'de-DE' && $defaultLanguage === 'de') {
+            $languageSelected = 'de';
         }
 
         return $languageSelected;
@@ -187,8 +198,8 @@ class Language
      * than you must set more parameters to replace them.
      * @param string $textId Unique text id of the text that should be read e.g. SYS_COMMON
      * @param array<int,string> $params Optional parameter to replace placeholders in the text.
-     *                                  $params[0] will replace **#VAR1#** or **#VAR1_BOLD#**,
-     *                                  $params[1] will replace **#VAR2#** or **#VAR2_BOLD#** etc.
+     *                                  $params[0] will replace **#VAR1#**, **#VAR1_BOLD#** or **#VAR1_ITALIC#**,
+     *                                  $params[1] will replace **#VAR2#**, **#VAR2_BOLD#** or **#VAR2_ITALIC#** etc.
      * @return string Returns the text string with replaced placeholders of the text id.
      *
      * **Code example**
@@ -463,7 +474,8 @@ class Language
 
             $replaces = array(
                 '#VAR' . $paramNr . '#'      => $param,
-                '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>'
+                '#VAR' . $paramNr . '_BOLD#' => '<strong>' . $param . '</strong>',
+                '#VAR' . $paramNr . '_ITALIC#' => '<em>' . $param . '</em>'
             );
             $text = StringUtils::strMultiReplace($text, $replaces);
         }
@@ -555,25 +567,27 @@ class Language
     /**
      * Set a language to this object. If there was a language before than initialize the cache
      * @param string $language ISO code of the language that should be set to this object.
-     * @return bool Returns true if language changed.
+     * @return bool Returns true if language exists and could be set.
      */
     public function setLanguage(string $language): bool
     {
         require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
 
-        if ($language === $this->language) {
+        if (!array_key_exists($language, $gSupportedLanguages)) {
             return false;
         }
 
-        // initialize data
-        $this->xmlLanguageObjects    = array();
-        $this->xmlRefLanguageObjects = array();
-        $this->countries = array();
-        $this->textCache = array();
+        if ($language <> $this->language) {
+            // initialize data
+            $this->xmlLanguageObjects    = array();
+            $this->xmlRefLanguageObjects = array();
+            $this->countries = array();
+            $this->textCache = array();
 
-        $this->language = $language;
-        $this->languageLibs = $gSupportedLanguages[$language]['libs'];
-        $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
+            $this->language = $language;
+            $this->languageLibs = $gSupportedLanguages[$language]['libs'];
+            $this->languageIsoCode = $gSupportedLanguages[$language]['isocode'];
+        }
 
         return true;
     }

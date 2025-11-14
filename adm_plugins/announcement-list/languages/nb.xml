@@ -2,4 +2,5 @@
 <resources>
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Alle oppføringer</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Kunngjøringer</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Kunngjøringer er ikke tilgjengelig for besøkende. Logg inn for å se kunngjøringene.</string>
 </resources>

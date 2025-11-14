@@ -21,6 +21,10 @@
 !/adm_plugins/who-is-online/
 !/adm_plugins/category_report/
 
+# Only allow commit of official themes
+/themes/*
+!/themes/simple/
+
 # Don't commit the external libs from vendor folder
 /vendor
 
@@ -29,6 +33,10 @@
 .DS_Store
 php-cs-fixer
 
+# Project-specific IDE settings are local for each developer
+/.vscode/
+
 # For custom configuration
 /.php_cs
 /.idea
+custom_*.*

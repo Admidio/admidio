@@ -92,7 +92,7 @@ class Event extends Entity
      * Calls clear() Method of parent class and initialize child class specific parameters
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -217,11 +217,11 @@ class Event extends Entity
      *                           the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return
      *                           the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -271,22 +271,24 @@ class Event extends Entity
     }
 
     /**
-     * This method checks if the current user is allowed to edit this event. Therefore,
-     * the event must be visible to the user and must be of the current organization.
-     * The user must be a member of at least one role that have the right to manage events.
-     * Global events could be only edited by the parent organization.
+     * This method checks if the current user is allowed to edit this event. Therefore, the event
+     * must be of the current organization. The user must have the right to administrate events or
+     * must be a member of at least one role that have the right to manage events and the event
+     * was created by the current user. Global events could be only edited by the parent organization.
      * @return bool Return true if the current user is allowed to edit this event
      * @throws Exception
      */
     public function isEditable(): bool
     {
-        global $gCurrentOrganization, $gCurrentUser;
+        global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
 
-        if ($gCurrentUser->editEvents()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)) {
+        if ($gCurrentUser->isAdministratorEvents()
+            || (in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('EVT'), true)
+                && $gCurrentUser->getValue('usr_id') === $this->getValue('dat_usr_id_create'))
+        ) {
             // if category belongs to current organization than events are editable
             if ($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
+            && (int) $this->getValue('cat_org_id') === $gCurrentOrgId) {
                 return true;
             }
 
@@ -456,7 +458,7 @@ class Event extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 

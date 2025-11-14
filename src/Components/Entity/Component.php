@@ -5,6 +5,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\UI\Presenter\InventoryPresenter;
 
 /**
  * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
@@ -20,7 +21,7 @@ use Admidio\Infrastructure\Entity\Entity;
  *     $systemComponent = new Component($gDb);
  *     $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
  *     $systemComponent->checkDatabaseVersion(true, 'administrator@example.com');
- * } catch(Exception $e) {
+ * } catch(Throwable $e) {
  *     $e->showHtml();
  * }
  * ```
@@ -119,55 +120,61 @@ class Component extends Entity
         if (self::isVisible($componentName)) {
             switch ($componentName) {
                 case 'ANNOUNCEMENTS':
-                    if ($gCurrentUser->editAnnouncements()) {
+                    if ($gCurrentUser->isAdministratorAnnouncements()) {
                         return true;
                     }
                     break;
 
                 case 'CATEGORY-REPORT':
-                    if ($gCurrentUser->checkRolesRight('rol_assign_roles')) {
+                    if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                         return true;
                     }
                     break;
 
                 case 'EVENTS':
-                    if ($gCurrentUser->editEvents()) {
+                    if ($gCurrentUser->isAdministratorEvents()) {
                         return true;
                     }
                     break;
 
                 case 'DOCUMENTS-FILES':
-                    if ($gCurrentUser->adminDocumentsFiles()) {
+                    if ($gCurrentUser->isAdministratorDocumentsFiles()) {
                         return true;
                     }
                     break;
 
-                case 'GUESTBOOK':
-                    if ($gCurrentUser->editGuestbookRight()) {
+                case 'INVENTORY':
+                    if ($gCurrentUser->isAdministratorInventory()) {
+                        return true;
+                    }
+                    break;
+
+                case 'FORUM':
+                    if ($gCurrentUser->isAdministratorForum()) {
                         return true;
                     }
                     break;
 
                 case 'LINKS':
-                    if ($gCurrentUser->editWeblinksRight()) {
+                    if ($gCurrentUser->isAdministratorWeblinks()) {
                         return true;
                     }
                     break;
 
                 case 'GROUPS-ROLES':
-                    if ($gCurrentUser->manageRoles()) {
+                    if ($gCurrentUser->isAdministratorRoles()) {
                         return true;
                     }
                     break;
 
                 case 'CONTACTS':
-                    if ($gCurrentUser->editUsers()) {
+                    if ($gCurrentUser->isAdministratorUsers()) {
                         return true;
                     }
                     break;
 
                 case 'PHOTOS':
-                    if ($gCurrentUser->editPhotoRight()) {
+                    if ($gCurrentUser->isAdministratorPhotos()) {
                         return true;
                     }
                     break;
@@ -179,7 +186,7 @@ class Component extends Entity
                     break;
 
                 case 'REGISTRATION':
-                    if ($gCurrentUser->approveUsers()) {
+                    if ($gCurrentUser->isAdministratorRegistration()) {
                         return true;
                     }
                     break;
@@ -222,27 +229,28 @@ class Component extends Entity
                 break;
 
             case 'ANNOUNCEMENTS':
-                if ((int) $gSettingsManager->get('announcements_module_enabled') === 1
-                || ((int) $gSettingsManager->get('announcements_module_enabled') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('announcements_module_enabled') === 1
+                || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
 
             case 'CATEGORY-REPORT':
-                if ($gCurrentUser->checkRolesRight('rol_assign_roles')) {
+                if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                     return true;
                 }
                 break;
 
             case 'EVENTS':
-                if ((int) $gSettingsManager->get('events_module_enabled') === 1
-                || ((int) $gSettingsManager->get('events_module_enabled') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('events_module_enabled') === 1
+                || ($gSettingsManager->getInt('events_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
 
             case 'DOCUMENTS-FILES':
-                if ($gSettingsManager->getBool('documents_files_module_enabled')) {
+                if ($gSettingsManager->getInt('documents_files_module_enabled') === 1
+                || ($gSettingsManager->getInt('documents_files_module_enabled') === 2 && $gValidLogin)) {
                     try {
                         $documentsRootFolder = new Folder($gDb);
                         $documentsRootFolder->getFolderForDownload('');
@@ -253,36 +261,46 @@ class Component extends Entity
                 }
                 break;
 
-            case 'GUESTBOOK':
-                if ((int) $gSettingsManager->get('enable_guestbook_module') === 1
-                || ((int) $gSettingsManager->get('enable_guestbook_module') === 2 && $gValidLogin)) {
+            case 'INVENTORY':
+                if ($gSettingsManager->getInt('inventory_module_enabled') === 1
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 2 && $gValidLogin)
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 4 && ($gCurrentUser->isAdministratorInventory() || InventoryPresenter::isCurrentUserKeeper()))
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 5 && $gCurrentUser->isAllowedToSeeInventory())) {
+                    return true;
+                }
+                break;
+
+            case 'FORUM':
+                if ($gSettingsManager->getInt('forum_module_enabled') === 1
+                || ($gSettingsManager->getInt('forum_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
 
             case 'LINKS':
-                if ((int) $gSettingsManager->get('enable_weblinks_module') === 1
-                || ((int) $gSettingsManager->get('enable_weblinks_module') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('weblinks_module_enabled') === 1
+                || ($gSettingsManager->getInt('weblinks_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
 
             case 'GROUPS-ROLES':
-                if ($gSettingsManager->getBool('groups_roles_enable_module') && $gValidLogin) {
+                if ($gSettingsManager->getBool('groups_roles_module_enabled') && $gValidLogin) {
                     return true;
                 }
                 break;
 
             case 'MESSAGES':
-                if ($gSettingsManager->getBool('enable_mail_module')
-                || ($gSettingsManager->getBool('enable_pm_module') && $gValidLogin)) {
+                if (($gSettingsManager->getInt('mail_module_enabled') === 1 || ($gSettingsManager->getInt('mail_module_enabled') === 2 && $gValidLogin))
+                || ($gSettingsManager->getBool('pm_module_enabled') && $gValidLogin)) {
                     return true;
                 }
                 break;
 
             case 'PHOTOS':
-                if ((int) $gSettingsManager->get('photo_module_enabled') === 1
-                || ((int) $gSettingsManager->get('photo_module_enabled') === 2 && $gValidLogin)) {
+                if ($gSettingsManager->getInt('photo_module_enabled') === 1
+                || ($gSettingsManager->getInt('photo_module_enabled') === 2 && $gValidLogin)) {
                     return true;
                 }
                 break;
@@ -294,7 +312,7 @@ class Component extends Entity
                 break;
 
             case 'REGISTRATION':
-                if ($gSettingsManager->getBool('registration_enable_module') && $gCurrentUser->approveUsers()) {
+                if ($gSettingsManager->getBool('registration_module_enabled') && $gCurrentUser->isAdministratorRegistration()) {
                     return true;
                 }
                 break;

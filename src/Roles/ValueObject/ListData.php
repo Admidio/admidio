@@ -4,6 +4,8 @@ namespace Admidio\Roles\ValueObject;
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\ListConfiguration;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -80,6 +82,8 @@ class ListData
      */
     protected function prepareOutputFormat(string $outputFormat): array
     {
+        global $gL10n;
+
         $outputData = array();
         $startRow = 0;
 
@@ -94,6 +98,14 @@ class ListData
             foreach($this->data[$rowNumber] as $columnValueKey => $columnValue) {
                 if (in_array($columnValueKey, array('mem_leader', 'usr_uuid'))) {
                     $outputData[$rowNumber][$columnValueKey] = $columnValue;
+                } elseif ($columnValueKey === 'mem_former') {
+                    if ($outputFormat === 'html' || $outputFormat === 'print' || $outputFormat === 'pdf') {
+                        // For HTML, print, and pdf formats, we keep the boolean value as is
+                        $outputData[$rowNumber][$columnValueKey] = (bool)$columnValue;
+                    } else {
+                        // For all other formats, we convert the boolean value to a string
+                        $outputData[$rowNumber][$columnValueKey] = (bool)$columnValue ? $gL10n->get('SYS_FORMER_MEMBER') : $gL10n->get('SYS_MEMBER');
+                    }
                 } else {
                     $outputData[$rowNumber][$columnValueKey] =
                         $this->listConfiguration->convertColumnContentForOutput(
@@ -115,33 +127,34 @@ class ListData
      */
     protected function format()
     {
-        $alphabet = range('A', 'Z');
-        $column = $alphabet[count($this->data[0])-1];
-
+        $activeSheet = $this->spreadsheet->getActiveSheet();
+        $columnCount = count($this->data[0]);
+        $lastColumn  = Coordinate::stringFromColumnIndex($columnCount);
+    
         if ($this->containsHeadline) {
-            $this->spreadsheet
-                ->getActiveSheet()
-                ->getStyle('A1:'.$column.'1')
-                ->getFill()
-                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            $range = "A1:{$lastColumn}1";
+            $style = $activeSheet->getStyle($range);
+    
+            $style->getFill()
+                ->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()
-                ->setARGB('ffdddddd');
-            $this->spreadsheet
-                ->getActiveSheet()
-                ->getStyle('A1:'.$column.'1')
-                ->getFont()
+                ->setARGB('FFDDDDDD');
+            $style->getFont()
                 ->setBold(true);
         }
-
-        for($number = 0; $number < count($this->data[0]); $number++) {
-            $this->spreadsheet->getActiveSheet()->getColumnDimension($alphabet[$number])->setAutoSize(true);
+    
+        for ($i = 1; $i <= $columnCount; $i++) {
+            $colLetter = Coordinate::stringFromColumnIndex($i);
+            $activeSheet->getColumnDimension($colLetter)->setAutoSize(true);
         }
+    
         try {
             $this->spreadsheet->getDefaultStyle()->getAlignment()->setWrapText(true);
         } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
             throw new Exception($e);
         }
     }
+    
     /**
      * Set the column headline for each column of the data array.
      * @param array $headlines Array with the column headline for each column.

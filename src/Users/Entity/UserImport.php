@@ -69,7 +69,7 @@ class UserImport extends User
      * @return void
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -175,9 +175,9 @@ class UserImport extends User
         } elseif (strlen($this->getValue('usr_login_name')) > 0) {
             throw new Exception('Contact ' . $this->getValue('FIRST_NAME'). ' '.$this->getValue('LAST_NAME') . ' already has a username and password.');
         } elseif (strlen($password) < PASSWORD_MIN_LENGTH) {
-            throw new Exception($this->getValue('FIRST_NAME') . ' UserImport.php' .$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum length of '.PASSWORD_MIN_LENGTH.' characters.');
+            throw new Exception($this->getValue('FIRST_NAME') . ' ' .$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum length of '.PASSWORD_MIN_LENGTH.' characters.');
         } elseif (PasswordUtils::passwordStrength($password, $this->getPasswordUserData()) < $gSettingsManager->getInt('password_min_strength')) {
-            throw new Exception($this->getValue('FIRST_NAME') . ' UserImport.php' .$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum passwort strength.');
+            throw new Exception($this->getValue('FIRST_NAME') . ' ' .$this->getValue('LAST_NAME') . ' password doesn\'t meet the required minimum passwort strength.');
         } else {
             $this->setValue('usr_login_name', $loginName);
             $this->setPassword($password);
@@ -205,7 +205,7 @@ class UserImport extends User
      * ```
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gLogger;
 
@@ -241,15 +241,41 @@ class UserImport extends User
                     case 'DROPDOWN': // fallthrough
                     case 'RADIO_BUTTON':
                         // save position of combobox
-                        $arrListValues = $this->mProfileFieldsData->getProperty($columnName, 'usf_value_list', 'text');
+                        $arrOptions = $this->mProfileFieldsData->getProperty($columnName, 'ufo_usf_options', 'text');
 
-                        for ($position = 1; $position <= count($arrListValues); $position++) {
-                            if (StringUtils::strToLower($newValue) === StringUtils::strToLower(trim($arrListValues[$position]))) {
+                        for ($position = 1; $position <= count($arrOptions); $position++) {
+                            if (StringUtils::strToLower($newValue) === StringUtils::strToLower(trim($arrOptions[$position]))) {
                                 // if col_value is text than save position if text is equal to text of position
                                 $validValue = $position;
-                            } elseif (is_numeric($newValue) && !is_numeric($arrListValues[$position]) && $newValue > 0 && $newValue < 1000) {
+                            } elseif (is_numeric($newValue) && !is_numeric($arrOptions[$position]) && $newValue > 0 && $newValue < 1000) {
                                 // if col_value is numeric than save position if col_value is equal to position
                                 $validValue = $newValue;
+                            }
+                        }
+                        break;
+                    case 'DROPDOWN_MULTISELECT':
+                        // save position of combobox
+                        $arrOptions = $this->mProfileFieldsData->getProperty($columnName, 'ufo_usf_options', 'text');
+                        $validValue = '';
+
+                        // split the value by comma and check each value
+                        $values = explode(',', $newValue);
+                        foreach ($values as $value) {
+                            $value = trim($value);
+                            for ($position = 1; $position <= count($arrOptions); $position++) {
+                                if (StringUtils::strToLower($value) === StringUtils::strToLower(trim($arrOptions[$position]))) {
+                                    // if col_value is text than save position if text is equal to text of position
+                                    if ($validValue !== '') {
+                                        $validValue .= ',';
+                                    }
+                                    $validValue .= $position;
+                                } elseif (is_numeric($value) && !is_numeric($arrOptions[$position]) && $value > 0 && $value < 1000) {
+                                    // if col_value is numeric than save position if col_value is equal to position
+                                    if ($validValue !== '') {
+                                        $validValue .= ',';
+                                    }
+                                    $validValue .= $value;
+                                }
                             }
                         }
                         break;

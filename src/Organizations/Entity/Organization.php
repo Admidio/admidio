@@ -1,9 +1,11 @@
 <?php
+
 namespace Admidio\Organizations\Entity;
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Events\Entity\Event;
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Database;
 use Admidio\Photos\Entity\Album;
 use Admidio\Preferences\ValueObject\SettingsManager;
@@ -13,8 +15,10 @@ use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Roles\Entity\RolesRights;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Handle organization data of Admidio and is connected to database table adm_organizations
@@ -85,7 +89,7 @@ class Organization extends Entity
      * @return void
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -136,7 +140,7 @@ class Organization extends Entity
             'SYSMAIL_REGISTRATION_NEW' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
             'SYSMAIL_REGISTRATION_APPROVED' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
             'SYSMAIL_REGISTRATION_REFUSED' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
-            'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
+            'SYSMAIL_LOGIN_INFORMATION' => $gL10n->get('SYS_SYSMAIL_LOGIN_INFORMATION'),
             'SYSMAIL_PASSWORD_RESET' => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
         );
         $text = new Text($this->db);
@@ -169,9 +173,11 @@ class Organization extends Entity
                      , (?, ?, \'LNK\', \'INTERN\',    \'INS_INTERN\',    false, false, 2, ?, ?)
                      , (?, ?, \'ANN\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'ANN\', \'IMPORTANT\', \'SYS_IMPORTANT\', false, false, 2, ?, ?)
+                     , (?, ?, \'FOT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'EVT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)
                      , (?, ?, \'EVT\', \'TRAINING\',  \'INS_TRAINING\',  false, false, 2, ?, ?)
-                     , (?, ?, \'EVT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)';
+                     , (?, ?, \'EVT\', \'COURSES\',   \'INS_COURSES\',   false, false, 3, ?, ?)
+                     , (?, ?, \'IVT\', \'COMMON\',    \'SYS_COMMON\',    true, false, 1, ?, ?)';
         $queryParams = array(
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
@@ -183,7 +189,9 @@ class Organization extends Entity
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
             $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
-            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
+            $orgId, Uuid::uuid4(), $systemUserId, DATETIME_NOW,
         );
         $this->db->queryPrepared($sql, $queryParams);
 
@@ -215,6 +223,44 @@ class Organization extends Entity
         $queryParams = array($orgId, Uuid::uuid4(), Folder::getRootFolderName('documents', $this->getValue('org_shortname')), FOLDER_DATA, $systemUserId, DATETIME_NOW);
         $this->db->queryPrepared($sql, $queryParams);
 
+        // insert inventory fields
+        $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELDS . '
+                       (inf_uuid, inf_org_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_required_input, inf_sequence, inf_usr_id_create, inf_timestamp_create, inf_usr_id_change, inf_timestamp_change)
+                VALUES (?, ?, \'TEXT\', \'ITEMNAME\', \'SYS_INVENTORY_ITEMNAME\', \'SYS_INVENTORY_ITEMNAME_DESC\', 1, 1, 0, ?, ?, NULL, NULL),
+                       (?, ?, \'CATEGORY\', \'CATEGORY\', \'SYS_CATEGORY\', \'SYS_INVENTORY_CATEGORY_DESC\', 1, 1, 1, ?, ?, NULL, NULL),
+                       (?, ?, \'DROPDOWN\', \'STATUS\', \'SYS_INVENTORY_STATUS\', \'SYS_INVENTORY_STATUS_DESC\', 1, 1, 2, ?, ?, NULL, NULL),
+                       (?, ?, \'TEXT\', \'KEEPER\', \'SYS_INVENTORY_KEEPER\', \'SYS_INVENTORY_KEEPER_DESC\', 1, 0, 3, ?, ?, NULL, NULL),
+                       (?, ?, \'TEXT\', \'LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER_DESC\', 1, 0, 4, ?, ?, NULL, NULL),
+                       (?, ?, \'DATE\', \'BORROW_DATE\', \'SYS_INVENTORY_BORROW_DATE\', \'SYS_INVENTORY_BORROW_DATE_DESC\', 1, 0, 5, ?, ?, NULL, NULL),
+                       (?, ?, \'DATE\', \'RETURN_DATE\', \'SYS_INVENTORY_RETURN_DATE\', \'SYS_INVENTORY_RETURN_DATE_DESC\', 1, 0, 6, ?, ?, NULL, NULL);
+                ';
+        $queryParams = array(
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
+            Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW
+        );
+        $this->db->queryPrepared($sql, $queryParams);
+
+        // insert default values for inventory field 'status'
+        $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                       (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
+                VALUES ((SELECT inf_id
+                          FROM ' . TBL_INVENTORY_FIELDS . '
+                         WHERE inf_org_id = ? -- $orgId
+                           AND inf_name_intern = \'STATUS\'),
+                        ?, ?, ?)';
+
+        // status in use
+        $queryParams = array($orgId, 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', true, 1);
+        $this->db->queryPrepared($sql, $queryParams);
+        // status retired
+        $queryParams = array($orgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', true, 2);
+        $this->db->queryPrepared($sql, $queryParams);
+
         // now create default roles
 
         // Create role administrator
@@ -228,10 +274,10 @@ class Organization extends Entity
         $roleAdministrator->setValue('rol_announcements', 1);
         $roleAdministrator->setValue('rol_events', 1);
         $roleAdministrator->setValue('rol_documents_files', 1);
-        $roleAdministrator->setValue('rol_guestbook', 1);
-        $roleAdministrator->setValue('rol_guestbook_comments', 1);
+        $roleAdministrator->setValue('rol_forum_admin', 1);
         $roleAdministrator->setValue('rol_photo', 1);
         $roleAdministrator->setValue('rol_weblinks', 1);
+        $roleAdministrator->setValue('rol_inventory_admin', 1);
         $roleAdministrator->setValue('rol_edit_user', 1);
         $roleAdministrator->setValue('rol_mail_to_all', 1);
         $roleAdministrator->setValue('rol_mail_this_role', 3);
@@ -269,6 +315,17 @@ class Organization extends Entity
         $roleManagement->setValue('rol_all_lists_view', 1);
         $roleManagement->setValue('rol_view_memberships', Role::VIEW_LOGIN_USERS);
         $roleManagement->save();
+
+        // set edit role rights to forum categories for role member
+        $sql = 'SELECT cat_id
+                  FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type = \'FOT\'
+                   AND cat_org_id = ? -- $orgId';
+        $pdoStatement = $this->db->queryPrepared($sql, array($orgId));
+        $row = $pdoStatement->fetch();
+
+        $rightCategoryView = new RolesRights($this->db, 'category_edit', (int)$row['cat_id']);
+        $rightCategoryView->saveRoles(array($roleMember->getValue('rol_id')));
 
         // Create membership for user in role 'Administrator' and 'Members'
         $membershipAdministrator = new Membership($this->db);
@@ -442,6 +499,29 @@ class Organization extends Entity
             $event->delete();
         }
 
+        // delete all forum posts
+        $sql = 'DELETE FROM ' . TBL_FORUM_POSTS . '
+                 WHERE fop_fot_id IN (
+                       SELECT fot.fot_id
+                         FROM (SELECT fot_id
+                                 FROM ' . TBL_FORUM_TOPICS . '
+                                INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = fot_cat_id
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) fot
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all forum topics
+        $sql = 'DELETE FROM ' . TBL_FORUM_TOPICS . '
+                 WHERE fot_cat_id IN (
+                       SELECT cat.cat_id
+                         FROM (SELECT cat_id
+                                 FROM ' . TBL_CATEGORIES . '
+                                WHERE cat_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) cat
+                       )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
         // delete all photos
         $sql = 'SELECT pho.*
                   FROM ' . TBL_PHOTOS . ' pho
@@ -596,6 +676,49 @@ class Organization extends Entity
                      ';
         $this->db->queryPrepared($sql, array($this->getValue('org_id')));
 
+        // delete all inventory item data
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . '
+                    WHERE ind_ini_id IN (
+                        SELECT ivt.ini_id
+                            FROM (SELECT ini_id
+                                    FROM ' . TBL_INVENTORY_ITEMS . '
+                                    WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                                    ) ivt
+                        )';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all inventory item lend data
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+                 WHERE inb_ini_id IN (
+                       SELECT ini.ini_id
+                         FROM (SELECT ini_id
+                                 FROM ' . TBL_INVENTORY_ITEMS . '
+                                WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) ini
+                       )';
+
+        // delete all inventory items
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . '
+                 WHERE ini_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
+        // delete all inventory field options
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                 WHERE ifo_inf_id IN (
+                       SELECT inf.inf_id
+                         FROM (SELECT inf_id
+                                 FROM ' . TBL_INVENTORY_FIELDS . '
+                                WHERE inf_org_id = ? -- $this->getValue(\'org_id\')
+                                 ) inf
+                       )';
+
+        // delete all inventory fields
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_FIELDS . '
+                 WHERE inf_org_id = ? -- $this->getValue(\'org_id\')
+                     ';
+        $this->db->queryPrepared($sql, array($this->getValue('org_id')));
+
         // now delete the organization
         parent::delete();
 
@@ -734,7 +857,7 @@ class Organization extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             // org_shortname shouldn't be edited
@@ -758,5 +881,40 @@ class Organization extends Entity
     public function getDbColumns(): array
     {
         return $this->dbColumns;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record: Add the parent fold as a related object
+     *
+     * @param LogChanges $logEntry The log entry to adjust
+     *
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry) {
+        $orgParentId = (int) $this->getValue('org_org_id_parent');
+        if ($orgParentId > 0) {
+            $sql = 'SELECT org_id, org_longname, org_shortname
+                      FROM '.TBL_ORGANIZATIONS.'
+                     WHERE org_id = ?';
+            $pdoStatement = $this->db->queryPrepared($sql, [$orgParentId]);
+
+            while ($row = $pdoStatement->fetch()) {
+                $logEntry->setLogRelated($row['org_id'], $row['org_longname']);
+            }
+        }
+    }
+    /**
+     * Return a human-readable representation of this record.
+     * For organizations, simply use the longname
+     *
+     * @return string The readable representation of the record (can also be a translatable identifier)
+     */
+    public function readableName(): string
+    {
+        if (array_key_exists($this->columnPrefix.'_longname', $this->dbColumns)) {
+            return $this->dbColumns[$this->columnPrefix.'_longname'];
+        } else {
+            return $this->dbColumns[$this->keyColumnName];
+        }
     }
 }

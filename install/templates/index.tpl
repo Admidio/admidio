@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{$languageIsoCode}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,16 +8,27 @@
 
     <!-- (c) 2004 - 2023 The Admidio Team - https://www.admidio.org -->
 
-    <link rel="shortcut icon" type="image/x-icon" href="{$urlAdmidio}/adm_program/system/logo/favicon.ico" />
-    <link rel="icon" type="image/png" href="{$urlAdmidio}/adm_program/system/logo/admidio_logo_32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="{$urlAdmidio}/adm_program/system/logo/admidio_logo_16.png" sizes="16x16" />
-    <link rel="apple-touch-icon" type="image/png" href="{$urlAdmidio}/adm_program/system/logo/apple-touch-icon.png" sizes="180x180" />
+    <link rel="shortcut icon" type="image/x-icon" href="{$urlAdmidio}/system/logo/favicon.ico" />
+    <link rel="icon" type="image/png" href="{$urlAdmidio}/system/logo/admidio_logo_32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{$urlAdmidio}/system/logo/admidio_logo_16.png" sizes="16x16" />
+    <link rel="apple-touch-icon" type="image/png" href="{$urlAdmidio}/system/logo/apple-touch-icon.png" sizes="180x180" />
 
     <title>Admidio - {$title}</title>
 
     {include file="js_css_files.tpl"}
 
     {$additionalHeaderData}
+
+    {if count($cssFiles) > 0}
+        {foreach $cssFiles as $key => $file}
+            <link rel="stylesheet" type="text/css" href="{$file}" />
+        {/foreach}
+    {/if}
+    {if count($javascriptFiles) > 0}
+        {foreach $javascriptFiles as $key => $file}
+            <script type="text/javascript" src="{$file}"></script>
+        {/foreach}
+    {/if}
 
     <link rel="stylesheet" type="text/css" href="{$urlAdmidio}/install/templates/installation.css" />
 
@@ -33,7 +44,7 @@
 <body id="{$id}" class="admidio">
     <div id="adm_installation_header" class="admidio-area">
         <div class="admidio-container container">
-            <img id="adm_logo" src="{$urlAdmidio}/adm_program/system/logo/admidio_writing_white_150.png" alt="Logo" />
+            <img id="adm_logo" src="{$urlAdmidio}/system/logo/admidio_writing_white_150.png" alt="Logo" />
             <span id="adm_installation_headline" class="align-middle">{$headline}</span>
         </div>
     </div>

@@ -40,7 +40,7 @@ INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_node, men_order, m
 (NULL, NULL, true, 2, true, 'administration', NULL, '', 'SYS_ADMINISTRATION', '', '9f27b3da-805c-4b1a-adfd-9ac7cc9d4c82'),
 (NULL, NULL, true, 3, true, 'plugins', NULL, '', 'SYS_PLUGINS', '', '4317f28b-ce43-4ac1-a8eb-7e583d16add4'),
 (NULL, 1, false, 1, true, 'overview', '/adm_program/overview.php', 'fa-home', 'SYS_OVERVIEW', '', 'f037c6b0-e71e-4961-80d7-9ea5e42ddb7a'),
-(20, 1, false, 2, true, 'announcements', '/adm_program/modules/announcements/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC', 'd96ba837-9b02-4c4e-afa5-c12167cd01db'),
+(20, 1, false, 2, true, 'announcements', '/adm_program/modules/announcements.php', 'fa-newspaper', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC', 'd96ba837-9b02-4c4e-afa5-c12167cd01db'),
 (30, 1, false, 3, true, 'events', '/adm_program/modules/events/events.php', 'fa-calendar-alt', 'SYS_EVENTS', 'SYS_EVENTS_DESC', '446a2c54-b269-4b6c-8a1c-869901b35b01'),
 (40, 1, false, 4, true, 'messages', '/adm_program/modules/messages/messages.php', 'fa-comments', 'SYS_MESSAGES', 'SYS_MESSAGES_DESC', 'edb6a573-fb66-4dfb-ba90-466317572204'),
 (50, 1, false, 5, true, 'groups-roles', '/adm_program/modules/groups-roles/groups_roles.php', 'fa-users', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 'ebd216b3-26eb-48ec-a082-d1d9645bb051'),
@@ -252,6 +252,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (3600, 1, 'enable_mail_module', '1'),
     (3610, 1, 'enable_pm_module', '1'),
     (3700, 1, 'enable_password_recovery', '1'),
+    (3710, 1, 'two_factor_authentication_enabled', '0'),
     (3800, 1, 'photo_module_enabled', '1'),
     (3900, 1, 'registration_enable_captcha', '1'),
     (4000, 1, 'registration_send_notification_email', '0'),
@@ -272,7 +273,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (4900, 1, 'default_country', 'DEU'),
     (5000, 1, 'flooding_protection_time', '60'),
     (6200, 1, 'guestbook_entries_per_page', '10'),
-    (6300, 1, 'homepage_logout', 'adm_program/modules/announcements/announcements.php'),
+    (6300, 1, 'homepage_logout', 'adm_program/modules/announcements.php'),
     (6400, 1, 'homepage_login', 'adm_program/overview.php'),
     (6450, 1, 'groups_roles_enable_module', '1'),
     (6455, 1, 'groups_roles_export', '1'),
@@ -370,6 +371,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (36001, 2, 'enable_mail_module', '1'),
     (36010, 2, 'enable_pm_module', '0'),
     (37001, 2, 'enable_password_recovery', '1'),
+    (37010, 2, 'two_factor_authentication_enabled', '0'),
     (38001, 2, 'photo_module_enabled', '1'),
     (39001, 2, 'registration_enable_captcha', '1'),
     (40001, 2, 'registration_send_notification_email', '0'),
@@ -390,7 +392,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
     (49001, 2, 'default_country', 'DEU'),
     (50001, 2, 'flooding_protection_time', '60'),
     (62001, 2, 'guestbook_entries_per_page', '10'),
-    (63001, 2, 'homepage_logout', 'adm_program/modules/announcements/announcements.php'),
+    (63001, 2, 'homepage_logout', 'adm_program/modules/announcements.php'),
     (64001, 2, 'homepage_login', 'adm_program/overview.php'),
     (64050, 2, 'groups_roles_enable_module', '1'),
     (64055, 2, 'groups_roles_export', '1'),
@@ -549,12 +551,12 @@ INSERT INTO %PREFIX%_roles (rol_id, rol_uuid, rol_cat_id, rol_name, rol_descript
 --
 
 INSERT INTO %PREFIX%_roles_rights (ror_id, ror_name_intern, ror_table, ror_ror_id_parent) VALUES
-(1, 'folder_view', 'adm_folders', null),
-(2, 'folder_upload', 'adm_folders', null),
-(3, 'category_view', 'adm_categories', null),
-(4, 'category_edit', 'adm_categories', 3),
-(5, 'event_participation', 'adm_dates', null),
-(6, 'menu_view', 'adm_menu', null);
+(1, 'folder_view', '%PREFIX%_folders', null),
+(2, 'folder_upload', '%PREFIX%_folders', null),
+(3, 'category_view', '%PREFIX%_categories', null),
+(4, 'category_edit', '%PREFIX%_categories', 3),
+(5, 'event_participation', '%PREFIX%_dates', null),
+(6, 'menu_view', '%PREFIX%_menu', null);
 
 --
 -- Data for table adm_roles_rights_data
@@ -1189,13 +1191,13 @@ INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, s
 INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 (1, 1, 'SYSMAIL_REGISTRATION_APPROVED', 'SYS_SYSMAIL_REGISTRATION_USER'),
 (2, 1, 'SYSMAIL_REGISTRATION_NEW', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
-(3, 1, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
+(3, 1, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_LOGIN_INFORMATION'),
 (4, 1, 'SYSMAIL_PASSWORD_RESET', 'SYS_SYSMAIL_PASSWORD_RESET'),
 (5, 1, 'SYSMAIL_REGISTRATION_REFUSED', 'SYS_SYSMAIL_REFUSE_REGISTRATION'),
 (6, 1, 'SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_CONFIRMATION'),
 (101, 2, 'SYSMAIL_REGISTRATION_APPROVED', 'SYS_SYSMAIL_REGISTRATION_USER'),
 (102, 2, 'SYSMAIL_REGISTRATION_NEW', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
-(103, 2, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
+(103, 2, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_LOGIN_INFORMATION'),
 (104, 2, 'SYSMAIL_PASSWORD_RESET', 'SYS_SYSMAIL_PASSWORD_RESET'),
 (105, 2, 'SYSMAIL_REGISTRATION_REFUSED', 'SYS_SYSMAIL_REFUSE_REGISTRATION'),
 (106, 2, 'SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_CONFIRMATION');

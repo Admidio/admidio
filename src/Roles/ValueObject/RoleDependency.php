@@ -4,9 +4,15 @@ namespace Admidio\Roles\ValueObject;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\Role;
+use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Roles\Entity\RolesDependencies;
 
 /**
  * @brief Class to manage dependencies between different roles.
+ * 
+ * The RoleDependency DB record differs from all other records, since
+ * there is no auto-increment ID, but a primary key consisting of parent and child role.
+ * 
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -63,7 +69,7 @@ class RoleDependency
     /**
      * Initializes all class parameters and deletes all read data.
      */
-    public function clear()
+    public function clear(): void
     {
         $this->roleIdParent     = 0;
         $this->roleIdChild      = 0;
@@ -81,11 +87,11 @@ class RoleDependency
      */
     public function delete()
     {
-        $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
-                 WHERE rld_rol_id_child  = ? -- $this->roleIdChildOrig
-                   AND rld_rol_id_parent = ? -- $this->roleIdParentOrig';
-        $this->db->queryPrepared($sql, array($this->roleIdChildOrig, $this->roleIdParentOrig));
-
+        $dep = new RolesDependencies($this->db);
+        $found = $dep->readDataByColumns(['rld_rol_id_parent' => $this->roleIdParentOrig, 'rld_rol_id_child' => $this->roleIdChildOrig]);
+        if ($found) {
+            $dep->delete();
+        }
         $this->clear();
     }
 
@@ -195,11 +201,13 @@ class RoleDependency
     public function insert(int $loginUserId): bool
     {
         if ($loginUserId > 0 && !$this->isEmpty()) {
-            $sql = 'INSERT INTO '.TBL_ROLE_DEPENDENCIES.'
-                           (rld_rol_id_parent, rld_rol_id_child, rld_comment, rld_usr_id, rld_timestamp)
-                    VALUES (?, ?, ?, ?, ?) -- $this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW';
-            $queryParams = array($this->roleIdParent, $this->roleIdChild, $this->comment, $loginUserId, DATETIME_NOW);
-            $this->db->queryPrepared($sql, $queryParams);
+            $dep = new RolesDependencies($this->db);
+            $dep->setValue('rld_rol_id_parent', $this->roleIdParent);
+            $dep->setValue('rld_rol_id_child', $this->roleIdChild);
+            $dep->setValue('rld_comment', $this->comment);
+            $dep->setValue('rld_usr_id', $loginUserId);
+            $dep->setValue('rld_timestamp', DATETIME_NOW);
+            $dep->save();
             $this->persisted = true;
 
             return true;
@@ -217,10 +225,14 @@ class RoleDependency
     public static function removeChildRoles(Database $database, int $parentId): bool
     {
         if ($parentId > 0) {
-            $sql = 'DELETE FROM '.TBL_ROLE_DEPENDENCIES.'
-                     WHERE rld_rol_id_parent = ? -- $parentId';
-            $database->queryPrepared($sql, array($parentId));
-
+            $children = self::getChildRoles($database, $parentId);
+            foreach ($children as $child) {
+                $dep = new RolesDependencies($database);
+                $found = $dep->readDataByColumns(['rld_rol_id_parent' => $parentId, 'rld_rol_id_child' => $child]);
+                if ($found) {
+                    $dep->delete();
+                }
+            }
             return true;
         }
 
@@ -268,6 +280,7 @@ class RoleDependency
     public function update(int $loginUserId): bool
     {
         if ($loginUserId > 0 && !$this->isEmpty()) {
+            // TODO_RK
             $sql = 'UPDATE '.TBL_ROLE_DEPENDENCIES.'
                        SET rld_rol_id_parent = ? -- $this->roleIdParent
                          , rld_rol_id_child  = ? -- $this->roleIdChild

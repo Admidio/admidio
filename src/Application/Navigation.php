@@ -56,7 +56,7 @@ class Navigation
      * Initialize the url stack and set the internal counter to 0
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $this->urlStack = array();
     }
@@ -170,7 +170,11 @@ class Navigation
      */
     public function getStackEntryUrl(int $index): string
     {
-        return $this->urlStack[$index]['url'];
+        if (isset($this->urlStack[$index])) {
+            return $this->urlStack[$index]['url'];
+        } else {
+            return '';
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_photos
@@ -43,7 +44,7 @@ class Album extends Entity
      * @return void
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -108,49 +109,35 @@ class Album extends Entity
      */
     public function delete(): bool
     {
-        if ($this->deleteInDatabase((int) $this->getValue('pho_id'))) {
-            return parent::delete();
-        }
-
-        return false;
-    }
-
-    /**
-     * Recursive function that deletes the given photo album and all subordinate photo albums.
-     * @param int $photoId
-     * @return bool
-     * @throws Exception
-     */
-    public function deleteInDatabase(int $photoId): bool
-    {
         $returnValue = true;
+        $albumId = $this->getValue('pho_id');
 
         $this->db->startTransaction();
 
-        // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
+        // First, delete all sub-albums (recursively)
         $sql = 'SELECT pho_id
                   FROM '.TBL_PHOTOS.'
-                 WHERE pho_pho_id_parent = ? -- $photoId';
-        $childAlbumStatement = $this->db->queryPrepared($sql, array($photoId));
+                 WHERE pho_pho_id_parent = ? -- $albumId';
+        $childAlbumStatement = $this->db->queryPrepared($sql, array($albumId));
 
         while ($phoId = $childAlbumStatement->fetchColumn()) {
             if ($returnValue) {
-                $returnValue = $this->deleteInDatabase((int) $phoId);
+                $subAlbum = new Album($this->db, $phoId);
+                $returnValue = $returnValue &&
+                    $subAlbum->delete();
             }
         }
 
-        // delete folder and database entry
+        // delete folder and then the database entry
         if ($returnValue) {
-            $folder = ADMIDIO_PATH . FOLDER_DATA. '/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$photoId;
+            $folder = ADMIDIO_PATH . FOLDER_DATA. '/photos/'.$this->getValue('pho_begin', 'Y-m-d').'_'.$albumId;
 
             // delete current folder including sub folders and files if it exists.
             try {
                 $dirDeleted = FileSystemUtils::deleteDirectoryIfExists($folder, true);
 
                 if ($dirDeleted) {
-                    $sql = 'DELETE FROM '.TBL_PHOTOS.'
-                             WHERE pho_id = ? -- $photoId';
-                    $this->db->queryPrepared($sql, array($photoId));
+                    parent::delete();
                 }
             } catch (\RuntimeException $exception) {
             }
@@ -189,11 +176,11 @@ class Album extends Entity
      *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
      *                                * 'database' : returns the value that is stored in database with no format applied
-     * @return int|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         if ($columnName === 'pho_description' && $format === 'html') {
             $value = nl2br(parent::getValue($columnName));
@@ -234,7 +221,7 @@ class Album extends Entity
     {
         global $gCurrentUser;
 
-        return $gCurrentUser->editPhotoRight() && ($this->isVisible() || (int) $this->getValue('pho_id') === 0);
+        return $gCurrentUser->isAdministratorPhotos() && ($this->isVisible() || (int) $this->getValue('pho_id') === 0);
     }
 
     /**
@@ -251,7 +238,7 @@ class Album extends Entity
             return false;
         }
         // locked photo album could only be viewed by module administrators
-        elseif ($this->getValue('pho_locked') && !$GLOBALS['gCurrentUser']->editPhotoRight()) {
+        elseif ($this->getValue('pho_locked') && !$GLOBALS['gCurrentUser']->isAdministratorPhotos()) {
             return false;
         }
 
@@ -366,5 +353,18 @@ class Album extends Entity
         }
 
         return $shuffleImage;
+    }
+    /**
+     * Adjust the changelog entry for this db record: Add the parent Album as a related object
+     *
+     * @param LogChanges $logEntry The log entry to adjust
+     *
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry): void {
+        if (!empty($this->getValue('pho_pho_id_parent'))) {
+            $parEntry = new Album($this->db, $this->getValue('pho_pho_id_parent'));
+            $logEntry->setLogRelated($parEntry->getValue('pho_uuid'), $parEntry->getValue('pho_name'));
+        }
     }
 }

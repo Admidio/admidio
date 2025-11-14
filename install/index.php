@@ -12,13 +12,13 @@
 
 use Admidio\Infrastructure\Database;
 
-$rootPath = dirname(__DIR__, 2);
+$rootPath = dirname(__DIR__);
 
 // check if installation is necessary
 if (is_file($rootPath . '/adm_my_files/config.php')) {
     // load config and init bootstrapping
     require_once($rootPath . '/adm_my_files/config.php');
-    require_once($rootPath . '/adm_program/system/bootstrap/bootstrap.php');
+    require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
     // check for empty db and redirect to installation wizard
     try {

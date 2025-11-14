@@ -9,9 +9,10 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Component\Form;
-use Admidio\UI\View\Installation;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\InstallationPresenter;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
     exit('This page may not be called directly!');
@@ -20,7 +21,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
 if ($mode === 'html') {
     // create a page with the notice that the installation must be configured on the next pages
     // create form with select box where user can select a language
-    $page = new Installation('adm_installation_welcome', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_welcome', $gL10n->get('INS_INSTALLATION'));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
     $page->assignSmartyVariable('text', $gL10n->get(
@@ -31,7 +32,7 @@ if ($mode === 'html') {
         )
     ));
 
-    $form = new Form(
+    $form = new FormPresenter(
         'adm_installation_welcome_form',
         'installation.welcome.tpl',
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'welcome', 'mode' => 'check')),
@@ -43,7 +44,7 @@ if ($mode === 'html') {
         'adm_system_language',
         $gL10n->get('INS_PLEASE_CHOOSE_LANGUAGE'),
         $gL10n->getAvailableLanguages(),
-        array('defaultValue' => $gL10n->getLanguage(), 'showContextDependentFirstEntry' => false)
+        array('defaultValue' => Language::determineBrowserLanguage('en'), 'showContextDependentFirstEntry' => false)
     );
     $form->addSubmitButton(
         'adm_next_page',

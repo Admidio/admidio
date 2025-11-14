@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Users\Entity;
 
 use Admidio\Infrastructure\Database;
@@ -12,6 +13,9 @@ use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Changelog\Entity\LogChanges;
+use RobThree\Auth\TwoFactorAuth;
+use RobThree\Auth\Providers\Qr\QRServerProvider;
 
 /**
  * @brief Class handle role rights, cards and other things of users
@@ -76,7 +80,7 @@ class User extends Entity
      */
     protected array $rolesMembershipNoLeader = array();
     /**
-     * @var int the organization for which the rights are read, could be changed with method **setOrganization**
+     * @var int the organization for which the rights are read could be changed with method **setOrganization**
      */
     protected int $organizationId;
     /**
@@ -101,8 +105,8 @@ class User extends Entity
     protected bool $changeNotificationEnabled;
 
     /**
-     * Constructor that will create an object of a recordset of the users table.
-     * If the id is set than this recordset will be loaded.
+     * Constructor that will create an object of a recordset from the user's table.
+     * If the id is set, then this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param ProfileFields|null $userFields An object of the ProfileFields class with the profile field structure
      *                                  of the current organization. This could be the default object **$gProfileFields**.
@@ -110,15 +114,15 @@ class User extends Entity
      *                                  object with no specific user is created.
      * @throws Exception
      */
-    public function __construct(Database $database, ProfileFields $userFields = null, int $userId = 0)
+    public function __construct(Database $database, ?ProfileFields $userFields = null, int $userId = 0)
     {
         $this->changeNotificationEnabled = true;
 
         if ($userFields !== null) {
-            $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
+            $this->mProfileFieldsData = clone $userFields; // create an explicit copy of the object (param is in PHP5 a reference)
         } else {
             global $gProfileFields;
-            $this->mProfileFieldsData = clone $gProfileFields; // create explicit a copy of the object (param is in PHP5 a reference)
+            $this->mProfileFieldsData = clone $gProfileFields; // create an explicit copy of the object (param is in PHP5 a reference)
         }
 
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
@@ -127,7 +131,7 @@ class User extends Entity
     }
 
     /**
-     * Checks if the current user is allowed to edit a profile field of the user of the parameter.
+     * Checks if the current user is allowed to edit a profile field of the user from the parameter.
      * @param User $user User object of the user that should be checked if the current user can view his profile field.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
@@ -239,7 +243,7 @@ class User extends Entity
      * @return bool Return true if a special right should be checked and the user has this right.
      * @throws Exception
      */
-    public function checkRolesRight(string $right = null): bool
+    public function checkRolesRight(?string $right = null): bool
     {
         $sqlFetchedRows = array();
 
@@ -254,11 +258,11 @@ class User extends Entity
                 'rol_announcements' => false,
                 'rol_approve_users' => false,
                 'rol_assign_roles' => false,
-                'rol_events' => false,
                 'rol_documents_files' => false,
+                'rol_events' => false,
+                'rol_inventory_admin' => false,
                 'rol_edit_user' => false,
-                'rol_guestbook' => false,
-                'rol_guestbook_comments' => false,
+                'rol_forum_admin' => false,
                 'rol_mail_to_all' => false,
                 'rol_photo' => false,
                 'rol_profile' => false,
@@ -295,8 +299,10 @@ class User extends Entity
 
                         // if role leader could assign new members then remember this setting
                         // roles for confirmation of events should be ignored
-                        if ($row['cat_name_intern'] !== 'EVENTS'
-                            && ($rolLeaderRights === Role::ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT)) {
+                        if (
+                            $row['cat_name_intern'] !== 'EVENTS'
+                            && ($rolLeaderRights === Role::ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+                        ) {
                             $this->assignRoles = true;
                         }
                     } else {
@@ -415,20 +421,37 @@ class User extends Entity
      *                                       SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION
      *                                       SYS_LOGIN_USER_NO_ADMINISTRATOR
      *                                       SYS_LOGIN_USERNAME_PASSWORD_INCORRECT
+     *                                       SYS_SECURITY_CODE_INVALID
      */
-    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false): bool
+    public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, ?string $totpCode = null): bool
     {
-        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
+        if ($this->checkPassword($password) && $this->checkMembership($isAdministrator) && $this->checkTotp($totpCode)) {
+            $this->updateSession($setAutoLogin, $updateSessionCookies);
+            if ($updateHash) {
+                $this->rehashIfNecessary($password);
+            }
+            return true;
+        }
+        return false;
+    }
 
+    private function checkPassword(string $password): bool
+    {
         if ($this->hasMaxInvalidLogins()) {
             throw new Exception('SYS_LOGIN_MAX_INVALID_LOGIN');
         }
 
         if (!PasswordUtils::verify($password, $this->getValue('usr_password'))) {
-            $incorrectLoginMessage = $this->handleIncorrectPasswordLogin();
+            $incorrectLoginMessage = $this->handleIncorrectLogin('password');
 
             throw new Exception($incorrectLoginMessage);
         }
+        return true;
+    }
+
+    public function checkMembership(bool $isAdministrator = false): bool
+    {
+        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if (!$this->getValue('usr_valid')) {
             throw new Exception('SYS_LOGIN_NOT_ACTIVATED');
@@ -444,9 +467,54 @@ class User extends Entity
             throw new Exception('SYS_LOGIN_USER_NO_ADMINISTRATOR', array($orgLongName));
         }
 
-        if ($updateHash) {
-            $this->rehashIfNecessary($password);
+        return true;
+    }
+
+    /**
+     * Check the totp code of the current user. If the code is correct the session will be updated
+     * @param string|null $totpCode The current totp code for the current user.
+     * @return true Return true if totp code was correct
+     * @throws Exception SYS_TFA_TOTP_CODE_MISSING
+     * @throws Exception|\RobThree\Auth\TwoFactorAuthException SYS_SECURITY_CODE_INVALID
+     */
+    private function checkTotp(string|null $totpCode): bool
+    {
+        global $gSettingsManager;
+
+        if ($gSettingsManager->has('two_factor_authentication_enabled') && !$gSettingsManager->getBool('two_factor_authentication_enabled')) {
+            return true;
         }
+
+        $secret = $this->getValue('usr_tfa_secret');
+        // return true if the user did not set up two-factor authentication
+        if (!$secret) {
+            return true;
+        }
+        // return false if no totp code entered
+        if (!$totpCode) {
+            throw new Exception('SYS_TFA_TOTP_CODE_MISSING');
+        }
+
+        $tfa = new TwoFactorAuth(new QRServerProvider());
+        if (!$tfa->verifyCode($secret, $totpCode)) {
+            $incorrectLoginMessage = $this->handleIncorrectLogin('totp');
+
+            throw new Exception($incorrectLoginMessage);
+        }
+        return true;
+    }
+
+    public function hasSetupTfa(): string
+    {
+        if ($this->getValue('usr_tfa_secret')) {
+            return true;
+        }
+        return false;
+    }
+
+    private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true): bool
+    {
+        global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($updateSessionCookies) {
             $gCurrentSession->setValue('ses_usr_id', (int)$this->getValue('usr_id'));
@@ -479,7 +547,7 @@ class User extends Entity
      * @return void
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -555,13 +623,17 @@ class User extends Entity
                             SET fil_usr_id = NULL
                           WHERE fil_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_GUESTBOOK . '
-                            SET gbo_usr_id_create = NULL
-                          WHERE gbo_usr_id_create = ' . $usrId;
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_TOPICS . '
+                            SET fot_usr_id_create = NULL
+                          WHERE fot_usr_id_create = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_GUESTBOOK . '
-                            SET gbo_usr_id_change = NULL
-                          WHERE gbo_usr_id_change = ' . $usrId;
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_POSTS . '
+                            SET fop_usr_id_create = NULL
+                          WHERE fop_usr_id_create = ' . $usrId;
+
+        $sqlQueries[] = 'UPDATE ' . TBL_FORUM_POSTS . '
+                            SET fop_usr_id_change = NULL
+                          WHERE fop_usr_id_change = ' . $usrId;
 
         $sqlQueries[] = 'UPDATE ' . TBL_LINKS . '
                             SET lnk_usr_id_create = NULL
@@ -596,30 +668,26 @@ class User extends Entity
                             SET rld_usr_id = NULL
                           WHERE rld_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'UPDATE ' . TBL_USER_LOG . '
-                            SET usl_usr_id_create = NULL
-                          WHERE usl_usr_id_create = ' . $usrId;
-
         $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_create = NULL
-                          WHERE usr_usr_id_create = ' . $usrId;
+                            WHERE usr_usr_id_create = ' . $usrId;
 
         $sqlQueries[] = 'UPDATE ' . TBL_USERS . '
                             SET usr_usr_id_change = NULL
-                          WHERE usr_usr_id_change = ' . $usrId;
+                            WHERE usr_usr_id_change = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
                           WHERE lsc_lst_id IN (SELECT lst_id
                                                  FROM ' . TBL_LISTS . '
                                                 WHERE lst_usr_id = ' . $usrId . '
-                                                  AND lst_global = false)';
+                                                AND lst_global = false)';
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
                           WHERE lst_global = false
-                            AND lst_usr_id = ' . $usrId;
+                          AND lst_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_GUESTBOOK_COMMENTS . '
-                          WHERE gbc_usr_id_create = ' . $usrId;
+        WHERE gbc_usr_id_create = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MEMBERS . '
                           WHERE mem_usr_id = ' . $usrId;
@@ -658,23 +726,20 @@ class User extends Entity
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                                            WHERE msr_msg_id = msc_msg_id)';
+                          WHERE msr_msg_id = msc_msg_id)';
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
                           WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                                            WHERE msr_msg_id = msg_id)';
+                          WHERE msr_msg_id = msg_id)';
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_REGISTRATIONS . '
                           WHERE reg_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_AUTO_LOGIN . '
-                          WHERE atl_usr_id = ' . $usrId;
+        WHERE atl_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
                           WHERE ses_usr_id = ' . $usrId;
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_USER_LOG . '
-                          WHERE usl_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
                           WHERE usd_usr_id = ' . $usrId;
@@ -717,18 +782,23 @@ class User extends Entity
     /**
      * Creates an array with all categories of one type where the user has the right to edit them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @param string $idType The type of the id that should be returned e.g. id or uuid
      * @return array<int,int> Array with categories ids where user has the right to edit them
      * @throws Exception
      */
-    public function getAllEditableCategories(string $categoryType): array
+    public function getAllEditableCategories(string $categoryType, string $idType = 'id'): array
     {
         $queryParams = array($categoryType, $this->organizationId);
 
-        if (($categoryType === 'ANN' && $this->editAnnouncements())
-            || ($categoryType === 'EVT' && $this->editEvents())
-            || ($categoryType === 'LNK' && $this->editWeblinksRight())
-            || ($categoryType === 'USF' && $this->editUsers())
-            || ($categoryType === 'ROL' && $this->manageRoles())) {
+        if (
+            ($categoryType === 'ANN' && $this->isAdministratorAnnouncements())
+            || ($categoryType === 'EVT' && $this->isAdministratorEvents())
+            || ($categoryType === 'FOT' && $this->isAdministratorForum())
+            || ($categoryType === 'LNK' && $this->isAdministratorWeblinks())
+            || ($categoryType === 'USF' && $this->isAdministratorUsers())
+            || ($categoryType === 'ROL' && $this->isAdministratorRoles())
+            || ($categoryType === 'IVT' && $this->isAdministratorInventory())
+        ) {
             $condition = '';
         } else {
             $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
@@ -744,7 +814,7 @@ class User extends Entity
                     )';
         }
 
-        $sql = 'SELECT cat_id
+        $sql = 'SELECT cat_id, cat_uuid
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
@@ -753,8 +823,12 @@ class User extends Entity
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $arrEditableCategories = array();
-        while ($catId = $pdoStatement->fetchColumn()) {
-            $arrEditableCategories[] = (int)$catId;
+        while ($row = $pdoStatement->fetch()) {
+            if ($idType === 'uuid') {
+                $arrEditableCategories[] = $row['cat_uuid'];
+            } else {
+                $arrEditableCategories[] = (int)$row['cat_id'];
+            }
         }
 
         return $arrEditableCategories;
@@ -763,18 +837,23 @@ class User extends Entity
     /**
      * Creates an array with all categories of one type where the user has the right to view them
      * @param string $categoryType The type of the category that should be checked e.g. ANN, USF or DAT
+     * @param string $idType The type of the id that should be returned e.g. id or uuid
      * @return array<int,int> Array with categories ids where user has the right to view them
      * @throws Exception
      */
-    public function getAllVisibleCategories(string $categoryType): array
+    public function getAllVisibleCategories(string $categoryType, string $idType = 'id'): array
     {
         $queryParams = array($categoryType, $this->organizationId);
 
-        if (($categoryType === 'ANN' && $this->editAnnouncements())
-            || ($categoryType === 'EVT' && $this->editEvents())
-            || ($categoryType === 'LNK' && $this->editWeblinksRight())
-            || ($categoryType === 'USF' && $this->editUsers())
-            || ($categoryType === 'ROL' && $this->assignRoles())) {
+        if (
+            ($categoryType === 'ANN' && $this->isAdministratorAnnouncements())
+            || ($categoryType === 'EVT' && $this->isAdministratorEvents())
+            || ($categoryType === 'FOT' && $this->isAdministratorForum())
+            || ($categoryType === 'LNK' && $this->isAdministratorWeblinks())
+            || ($categoryType === 'USF' && $this->isAdministratorUsers())
+            || ($categoryType === 'ROL' && $this->isAdministratorRoles())
+            || ($categoryType === 'IVT' && $this->isAdministratorInventory())
+        ) {
             $condition = '';
         } else {
             $rolIdParams = array_merge(array(0), $this->getRoleMemberships());
@@ -796,7 +875,7 @@ class User extends Entity
                     )';
         }
 
-        $sql = 'SELECT cat_id
+        $sql = 'SELECT cat_id, cat_uuid
                   FROM ' . TBL_CATEGORIES . '
                  WHERE cat_type = ? -- $categoryType
                    AND (  cat_org_id IS NULL
@@ -805,8 +884,12 @@ class User extends Entity
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         $arrVisibleCategories = array();
-        while ($catId = $pdoStatement->fetchColumn()) {
-            $arrVisibleCategories[] = (int)$catId;
+        while ($row = $pdoStatement->fetch()) {
+            if ($idType === 'uuid') {
+                $arrVisibleCategories[] = $row['cat_uuid'];
+            } else {
+                $arrVisibleCategories[] = (int)$row['cat_id'];
+            }
         }
 
         return $arrVisibleCategories;
@@ -889,7 +972,7 @@ class User extends Entity
             $this->getValue('COUNTRY')
         );
 
-        return array_filter($userData, function(string $value) {
+        return array_filter($userData, function (string $value) {
             return $value !== '';
         });
     }
@@ -937,7 +1020,7 @@ class User extends Entity
      * ```
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gSettingsManager;
 
@@ -991,10 +1074,12 @@ class User extends Entity
         if ($gCurrentUser->allowedViewProfileField($this, 'FAX') && $this->getValue('FAX') !== '') {
             $vCard[] = 'TEL;TYPE=home,fax:' . $this->getValue('FAX');
         }
-        if ($gCurrentUser->allowedViewProfileField($this, 'STREET')
+        if (
+            $gCurrentUser->allowedViewProfileField($this, 'STREET')
             && $gCurrentUser->allowedViewProfileField($this, 'CITY')
             && $gCurrentUser->allowedViewProfileField($this, 'POSTCODE')
-            && $gCurrentUser->allowedViewProfileField($this, 'COUNTRY')) {
+            && $gCurrentUser->allowedViewProfileField($this, 'COUNTRY')
+        ) {
             $vCard[] = 'ADR;TYPE=home:;;' .
                 $this->getValue('STREET', 'database') . ';' .
                 $this->getValue('CITY', 'database') . ';;' .
@@ -1010,9 +1095,6 @@ class User extends Entity
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'YOUTUBE') && $this->getValue('YOUTUBE') !== '') {
             $vCard[] = 'X-SOCIALPROFILE;TYPE=YOUTUBE:' . $this->getValue('YOUTUBE');
-        }
-        if ($gCurrentUser->allowedViewProfileField($this, 'SKYPE') && $this->getValue('SKYPE') !== '') {
-            $vCard[] = 'X-SOCIALPROFILE;TYPE=SKYPE:' . $this->getValue('SKYPE');
         }
         if ($gCurrentUser->allowedViewProfileField($this, 'LINKEDIN') && $this->getValue('LINKEDIN') !== '') {
             $vCard[] = 'X-SOCIALPROFILE;TYPE=LINKEDIN:' . $this->getValue('LINKEDIN');
@@ -1084,8 +1166,10 @@ class User extends Entity
         }
 
         foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {// => $profileFieldConfig)
-            if ($profileField->getValue('usf_type') === 'EMAIL'
-                && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== '') {
+            if (
+                $profileField->getValue('usf_type') === 'EMAIL'
+                && $this->mProfileFieldsData->getValue($profileField->getValue('usf_name_intern')) !== ''
+            ) {
                 return true;
             }
         }
@@ -1146,7 +1230,7 @@ class User extends Entity
 
         $returnValue = false;
 
-        if ($this->editUsers()) {
+        if ($this->isAdministratorUsers()) {
             $returnValue = true;
         } else {
             if (count($this->rolesMembershipLeader) > 0) {
@@ -1179,7 +1263,7 @@ class User extends Entity
             }
         }
 
-        // add result into cache
+        // add a result into cache
         $this->usersEditAllowed[$userId] = $returnValue;
 
         return $returnValue;
@@ -1194,7 +1278,7 @@ class User extends Entity
      */
     private function hasRightRole(array $rightsList, string $rightName, int $roleId): bool
     {
-        // if user has right to view all lists then he could also view this role
+        // if user has a right to view all lists, then he could also view this role
         if ($this->checkRolesRight($rightName)) {
             return true;
         }
@@ -1216,7 +1300,8 @@ class User extends Entity
 
     /**
      * Checks the necessary rights if this user could view former roles members. Therefore,
-     * the user must also have the right to view the role. So you must also check this right.
+     * the user must have global rights to view all users or edit roles, and the global preference must be set.
+     * Otherwise, the user must be a leader of the role and leaders are allowed to edit all users or to assign members.
      * @param int $roleId ID of the role that should be checked.
      * @return bool Return **true** if the user has the right to view former roles members
      * @throws Exception
@@ -1225,13 +1310,17 @@ class User extends Entity
     {
         global $gSettingsManager;
 
-        if ((int)$gSettingsManager->get('groups_roles_show_former_members') !== 1
+        if (
+            (int)$gSettingsManager->get('groups_roles_show_former_members') === 1
             && ($this->checkRolesRight('rol_assign_roles')
-                || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3), true)))) {
+                || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(1, 3), true)))
+        ) {
             return true;
-        } elseif ((int)$gSettingsManager->get('groups_roles_show_former_members') !== 2
+        } elseif (
+            (int)$gSettingsManager->get('groups_roles_show_former_members') === 2
             && ($this->checkRolesRight('rol_edit_user')
-                || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3), true)))) {
+                || ($this->isLeaderOfRole($roleId) && in_array($this->rolesMembershipLeader[$roleId], array(2, 3), true)))
+        ) {
             return true;
         }
 
@@ -1240,7 +1329,7 @@ class User extends Entity
 
     /**
      * Checks if the current user is allowed to view the profile of the user of the parameter.
-     * It will check if user has edit rights with method **hasRightEditProfile** or if the user is a member
+     * It will check if user has edit rights with method **hasRightEditProfile**, or if the user is a member
      * of a role where the current user has the right to view profiles.
      * @param User $user User object of the user that should be checked if the current user can view his profile.
      * @return bool Return **true** if the current user is allowed to view the profile of the user from **$user**.
@@ -1325,11 +1414,12 @@ class User extends Entity
     }
 
     /**
-     * Handles the incorrect given login password.
+     * Handles the incorrect given login password or totp code.
+     * @param string $mode Mode to differentiate if password or totp code (2FA) is incorrect. Allowed values: 'password', 'totp'
      * @return string Return string with the reason why the login failed.
      * @throws Exception
      */
-    private function handleIncorrectPasswordLogin(): string
+    private function handleIncorrectLogin(string $mode): string
     {
         // log invalid logins
         if ($this->getValue('usr_number_invalid') >= self::MAX_INVALID_LOGINS) {
@@ -1350,7 +1440,13 @@ class User extends Entity
 
         $this->clear();
 
-        return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
+        switch ($mode) {
+            case 'password':
+                return 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT';
+            case 'totp':
+                return 'SYS_SECURITY_CODE_INVALID';
+        }
+        throw new Exception('Unreachable Case');
     }
 
     /**
@@ -1397,6 +1493,133 @@ class User extends Entity
         $this->checkRolesRight();
 
         return $this->administrator;
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate announcements. With this right he can create,
+     * edit announcements and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorAnnouncements(): bool
+    {
+        return $this->checkRolesRight('rol_announcements');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate events. With this right he can create,
+     * edit events and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorEvents(): bool
+    {
+        return $this->checkRolesRight('rol_events');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate documents and files. With this right he can
+     * create and edit folders, upload new files and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorDocumentsFiles(): bool
+    {
+        return $this->checkRolesRight('rol_documents_files');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate the inventory. With this right he can
+     * administrate all inventory functionalities
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorInventory(): bool
+    {
+        return $this->checkRolesRight('rol_inventory_admin');
+    }
+
+    /* This method checks if the current user is allowed to see the inventory.
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAllowedToSeeInventory() : bool
+    {
+        global $gSettingsManager;
+        $allowedRoles = explode(',', $gSettingsManager->get('inventory_visible_for'));
+        $roleMemberships = $this->getRoleMemberships();
+        foreach($roleMemberships as $roleId) {
+            if(in_array($roleId, $allowedRoles)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate the forum. With this right he can create,
+     * edit topics and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorForum(): bool
+    {
+        return $this->checkRolesRight('rol_forum_admin');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate the photos' module. With this right he can create,
+     * edit albums and upload photos.
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorPhotos(): bool
+    {
+        return $this->checkRolesRight('rol_photo');
+    }
+
+    /**
+     * Method checks if the current user is allowed to approve or reject registrations and therefore has
+     * admin access to the registration module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function isAdministratorRegistration(): bool
+    {
+        return $this->checkRolesRight('rol_approve_users');
+    }
+
+    /**
+     * Method checks if the current user is allowed to manage roles and therefore has
+     * admin access to the groups and roles module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function isAdministratorRoles(): bool
+    {
+        return $this->checkRolesRight('rol_assign_roles');
+    }
+
+    /**
+     * Method checks if the current user is allowed to administrate other user profiles and therefore
+     * has access to the user management module.
+     * @return bool Return true if the user is admin of the module otherwise false
+     * @throws Exception
+     */
+    public function isAdministratorUsers(): bool
+    {
+        return $this->checkRolesRight('rol_edit_user');
+    }
+
+    /**
+     * This method checks if the current user is allowed to administrate weblinks. With this right he can create,
+     * edit weblinks and set rights for other users in this module
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAdministratorWeblinks(): bool
+    {
+        return $this->checkRolesRight('rol_weblinks');
     }
 
     /**
@@ -1499,70 +1722,89 @@ class User extends Entity
     }
 
     /**
-     * Reads a user record out of the table adm_users in database selected by the unique user id.
-     * All profile fields of the object **mProfileFieldsData** will also be read. If no user was
-     * found than the default values of all profile fields will be set.
-     * @param int $id Unique id of the user that should be read
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the sql find more than one record the method returns **false**.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
      * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readDataById
+     * @see Entity#readDataByUuid
      */
-    public function readDataById(int $id): bool
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
-        if (parent::readDataById($id)) {
-            // read data of all user fields from current user
-            $this->mProfileFieldsData->readUserData($id, $this->organizationId);
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
+            if (isset($this->mProfileFieldsData)) {
+                // read data of all user fields from the current user
+                $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
+            }
             return true;
-        } else {
-            $this->setDefaultValues();
         }
 
         return false;
     }
 
     /**
-     * Reads a record out of the table in database selected by the unique uuid column in the table.
-     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
-     * Per default all columns of the default table will be read and stored in the object. If no user
-     * was found than the default values of all profile fields will be set.
-     * Not every Admidio table has an uuid. Please check the database structure before you use this method.
+     * Reads a record out of the table in the database selected by the unique id column in the table.
+     * Per default, all columns of the default table will be read and stored in the object.
+     * @param int $id Unique id of id column of the table.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataByUuid
+     */
+    public function readDataById(int $id): bool
+    {
+        $returnValue = parent::readDataById($id);
+
+        if ($id === 0) {
+            $this->setDefaultValues();
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Reads a record out of the table in the database selected by the unique uuid column in the table.
+     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g., usr_uuid.
+     * Per default, all columns of the default table will be read and stored in the object.
+     * Not every Admidio table has a UUID. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
      * @throws Exception
      * @see Entity#readDataByColumns
      * @see Entity#readData
+     * @see Entity#readDataById
      */
     public function readDataByUuid(string $uuid): bool
     {
-        if (parent::readDataByUuid($uuid)) {
-            if (isset($this->mProfileFieldsData)) {
-                // read data of all user fields from current user
-                $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
-            }
-            return true;
-        } else {
+        $returnValue = parent::readDataByUuid($uuid);
+
+        if ($uuid === '') {
             $this->setDefaultValues();
         }
 
-        return false;
+        return $returnValue;
     }
 
     /**
      * Rehashes the password of the user if necessary.
      * @param string $password The password for the current user. This should not be encoded.
-     * @return bool Returns true if password was rehashed.
+     * @return void Returns true if password was rehashed.
      * @throws Exception
      */
-    private function rehashIfNecessary(string $password): bool
+    private function rehashIfNecessary(string $password): void
     {
         if (!PasswordUtils::needsRehash($this->getValue('usr_password'))) {
-            return false;
+            return;
         }
 
         $this->saveChangesWithoutRights();
         $this->setPassword($password);
-        $this->save(); // TODO Exception handling
-
-        return true;
+        $this->save();
     }
 
     /**
@@ -1748,8 +1990,10 @@ class User extends Entity
 
         // E-Mail support must be enabled
         // Only administrators are allowed to send new login data or users who want to approve login data
-        if ($gSettingsManager->getBool('system_notifications_enabled')
-            && ($gCurrentUser->isAdministrator() || $gCurrentUser->approveUsers())) {
+        if (
+            $gSettingsManager->getBool('system_notifications_enabled')
+            && ($gCurrentUser->isAdministrator() || $gCurrentUser->isAdministratorRegistration())
+        ) {
             // Generate new secure-random password and save it
             $password = SecurityUtils::getRandomString(PASSWORD_GEN_LENGTH, PASSWORD_GEN_CHARS);
             $this->setPassword($password);
@@ -1759,7 +2003,7 @@ class User extends Entity
             $sysMail = new SystemMail($this->db);
             $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
             $sysMail->setVariable(1, $password);
-            $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $this);
+            $sysMail->sendSystemMail('SYSMAIL_LOGIN_INFORMATION', $this);
         } else {
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -1771,7 +2015,7 @@ class User extends Entity
      * @return void
      * @throws Exception
      */
-    public function setDefaultValues()
+    public function setDefaultValues(): void
     {
         foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
             $defaultValue = $profileField->getValue('usf_default_value');
@@ -1788,7 +2032,7 @@ class User extends Entity
      * @param int $organizationId ID of the organization
      * @return void
      */
-    public function setOrganization(int $organizationId)
+    public function setOrganization(int $organizationId): void
     {
         if ($organizationId !== $this->organizationId) {
             $this->organizationId = $organizationId;
@@ -1815,6 +2059,7 @@ class User extends Entity
                     'usr_password',
                     $this->getValue('usr_password'),
                     $newPassword,
+                    "MODIFIED",
                     $this
                 );
             }
@@ -1839,10 +2084,40 @@ class User extends Entity
                 'usr_password',
                 $this->getValue('usr_password'),
                 $newPasswordHash,
+                "MODIFIED",
                 $this
             );
         }
         if (parent::setValue('usr_password', $newPasswordHash, false)) {
+            // for security reasons remove all sessions and auto login of the user
+            return $this->invalidateAllOtherLogins();
+        }
+
+        return false;
+    }
+
+    /**
+     * Set a new value for a second factor secret column of the database table.
+     * The value is only saved in the object. You must call the method **save** to store the new value to the database
+     * @param string|null $newSecret The new value that should be stored in the database field
+     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
+     * @throws Exception
+     */
+    public function setSecondFactorSecret(string|null $newSecret): bool
+    {
+        global $gChangeNotification;
+
+        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
+            $gChangeNotification->logUserChange(
+                (int)$this->getValue('usr_id'),
+                'usr_tfa_secret',
+                $this->getValue('usr_tfa_secret'),
+                $newSecret || 'null',
+                "MODIFIED",
+                $this
+            );
+        }
+        if (parent::setValue('usr_tfa_secret', $newSecret, false)) {
             // for security reasons remove all sessions and auto login of the user
             return $this->invalidateAllOtherLogins();
         }
@@ -1887,7 +2162,7 @@ class User extends Entity
      * ```
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gSettingsManager, $gChangeNotification;
 
@@ -1918,6 +2193,7 @@ class User extends Entity
                     $columnName,
                     (string)$this->getValue($columnName),
                     (string)$newValue,
+                    "MODIFIED",
                     $this
                 );
             }
@@ -1929,7 +2205,12 @@ class User extends Entity
         $oldFieldValue = $this->mProfileFieldsData->getValue($columnName);
         $oldFieldValue_db = $this->mProfileFieldsData->getValue($columnName, 'database');
 
-        $newValue = (string)$newValue;
+        // check if the value is an array, if so then convert it to a string and remove empty values
+        if (is_array($newValue)) {
+            $newValue = implode(',', array_filter($newValue));
+        } else {
+            $newValue = (string)$newValue;
+        }
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE') {
@@ -1938,8 +2219,10 @@ class User extends Entity
             if ($date !== false) {
                 $newValue = $date->format('Y-m-d');
             }
-        } elseif ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'CHECKBOX'
-        && $oldFieldValue === '' && $newValue === '0') {
+        } elseif (
+            $this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'CHECKBOX'
+            && $oldFieldValue === '' && $newValue === '0'
+        ) {
             // don't change value if checkbox is not set and old value was emtpy
             $newValue = '';
         }
@@ -1954,11 +2237,13 @@ class User extends Entity
         // Disabled fields can only be edited by users with the right "edit_users" except on registration.
         // Here is no need to check hidden fields because we check on save() method that only users who
         // can edit the profile are allowed to save and change data.
-        if (($this->getValue('usr_id') === 0 && $GLOBALS['gCurrentUserId'] === 0)
+        if (
+            ($this->getValue('usr_id') === 0 && $GLOBALS['gCurrentUserId'] === 0)
             || (int)$this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 0
             || ((int)$this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') === 1
                 && $GLOBALS['gCurrentUser']->hasRightEditProfile($this, false))
-            || $this->saveChangesWithoutRights === true) {
+            || $this->saveChangesWithoutRights === true
+        ) {
             $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
         }
 
@@ -1978,6 +2263,7 @@ class User extends Entity
                 // Old and new values in raw database:
                 (string)$oldFieldValue_db,
                 (string)$newValue,
+                "MODIFIED",
                 $this
             );
         }
@@ -2003,126 +2289,60 @@ class User extends Entity
     }
 
     /**
-     * Function checks if the logged-in user is allowed to create and edit announcements
-     * @return bool
-     * @throws Exception
-     */
-    public function editAnnouncements(): bool
-    {
-        return $this->checkRolesRight('rol_announcements');
-    }
-
-    /**
-     * Function checks if the logged-in user is allowed to edit and assign registrations
-     * @return bool
-     * @throws Exception
-     */
-    public function approveUsers(): bool
-    {
-        return $this->checkRolesRight('rol_approve_users');
-    }
-
-    /**
-     * Checks if the user has the right to assign members to at least one role. This method also returns
-     * true if the user is a leader of the role and could assign other members to that role.
-     * @return bool Return **true** if the user can assign members to at least one role.
-     * @throws Exception
-     */
-    public function assignRoles(): bool
-    {
-        $this->checkRolesRight();
-
-        return $this->assignRoles;
-    }
-
-    /**
-     * Method checks if the current user is allowed to manage roles and therefore has
-     * admin access to the groups and roles module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function manageRoles(): bool
-    {
-        return $this->checkRolesRight('rol_assign_roles');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the event module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editEvents(): bool
-    {
-        return $this->checkRolesRight('rol_events');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the documents and files module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function adminDocumentsFiles(): bool
-    {
-        return $this->checkRolesRight('rol_documents_files');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate other user profiles and therefore
-     * has access to the user management module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editUsers(): bool
-    {
-        return $this->checkRolesRight('rol_edit_user');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the guestbook module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editGuestbookRight(): bool
-    {
-        return $this->checkRolesRight('rol_guestbook');
-    }
-
-    /**
-     * Method checks if the current user is allowed to comment guestbook entries.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function commentGuestbookRight(): bool
-    {
-        return $this->checkRolesRight('rol_guestbook_comments');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the photo's module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editPhotoRight(): bool
-    {
-        return $this->checkRolesRight('rol_photo');
-    }
-
-    /**
-     * Method checks if the current user is allowed to administrate the web links module.
-     * @return bool Return true if the user is admin of the module otherwise false
-     * @throws Exception
-     */
-    public function editWeblinksRight(): bool
-    {
-        return $this->checkRolesRight('rol_weblinks');
-    }
-
-    /**
      * Return the (internal) representation of this user's profile fields
      * @return object<ProfileFields> All profile fields of the user
      */
     public function getProfileFieldsData()
     {
         return $this->mProfileFieldsData;
+    }
+
+    /**
+     * Return the human-readable name of this record.
+     *
+     * @return string The readable representation of the record ("Lastname, Firstname")
+     */
+    public function readableName(): string
+    {
+        return $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME');
+    }
+
+    /**
+     * Retrieve the list of database fields that are ignored for the changelog.
+     * For the users table, we also ignore usr_valid, usr_*_login, etc.
+     *
+     * @return array Returns the list of database columns to be ignored for logging.
+     */
+    public function getIgnoredLogColumns(): array
+    {
+        $ignored = parent::getIgnoredLogColumns();
+        $ignored[] = 'usr_uuid';
+        $ignored[] = 'usr_pw_reset_id';
+        $ignored[] = 'usr_pw_reset_timestamp';
+        $ignored[] = 'usr_last_login';
+        $ignored[] = 'usr_actual_login';
+        $ignored[] = 'usr_number_login';
+        $ignored[] = 'usr_date_invalid';
+        $ignored[] = 'usr_number_invalid';
+        $ignored[] = 'usr_valid';
+        return $ignored;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record: Don't store the actual password, just '********'. Also, the photo cannot be stores, so indicate this by '[...]', too.
+     *
+     * @param LogChanges $logEntry The log entry to adjust
+     *
+     * @return void
+     */
+    protected function adjustLogEntry(LogChanges $logEntry)
+    {
+        if ($logEntry->getValue('log_field') == 'usr_password') {
+            $logEntry->setValue('log_value_old', '********');
+            $logEntry->setValue('log_value_new', '********');
+        } elseif ($logEntry->getValue('log_field') == 'usr_photo') {
+            $logEntry->setValue('log_value_old', '[...]');
+            $logEntry->setValue('log_value_new', '[...]');
+        }
     }
 }

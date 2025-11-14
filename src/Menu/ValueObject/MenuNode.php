@@ -4,8 +4,8 @@ namespace Admidio\Menu\ValueObject;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Roles\Entity\RolesRights;
-use Admidio\UI\View\Registration;
 
 /**
  * @brief Create a menu node from database and serve several output formats
@@ -49,10 +49,12 @@ class MenuNode
      * @param string $nodeName The name of this menu node that should be displayed for the user
      * @throws Exception
      */
-    public function __construct(string $nodeTextId, string $nodeName)
+    public function __construct(string $nodeTextId, string $nodeName = '')
     {
         $this->textId = $nodeTextId;
-        $this->name   = Language::translateIfTranslationStrId($nodeName);
+        if ($nodeName !== '') {
+            $this->name = Language::translateIfTranslationStrId($nodeName);
+        }
     }
 
     /**
@@ -158,8 +160,8 @@ class MenuNode
                         $message = new \Admidio\Messages\Entity\Message($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
                     } elseif ($node['men_name_intern'] === 'registration') {
-                        $registration = new Registration('registration');
-                        $badgeCount = count($registration->getRegistrationsArray());
+                        $registration = new RegistrationService($gDb);
+                        $badgeCount = count($registration->findAll());
                     }
 
                     $this->addItem($node['men_name_intern'], $node['men_name'], $node['men_url'], (string) $node['men_icon'], '', $badgeCount, (string) $node['men_description']);

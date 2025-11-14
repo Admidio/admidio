@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Announcements\Entity;
 
 use Admidio\Categories\Entity\Category;
@@ -59,15 +60,15 @@ class Announcement extends Entity
 
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
-     *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @param string $format For date or timestamp columns, the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     *                           For text columns, the format can be **database** that would return the original database value without any transformations
+     * @return mixed Returns the value of the database column.
+     *                         If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -95,27 +96,29 @@ class Announcement extends Entity
 
     /**
      * This method checks if the current user is allowed to edit this announcement. Therefore,
-     * the announcement must be visible to the user and must be of the current organization.
-     * The user must be a member of at least one role that have the right to manage announcements.
-     * Global announcements could be only edited by the parent organization.
+     * must be of the current organization. The user must have the right to administrate announcements or
+     * must be a member of at least one role that have the right to manage announcements and the announcement
+     * was created by the current user. Global announcements could be only edited by the parent organization.
      * @return bool Return true if the current user is allowed to edit this announcement
      * @throws Exception
      */
     public function isEditable(): bool
     {
-        global $gCurrentOrganization, $gCurrentUser;
+        global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
 
         // check if the current user could edit the category of the announcement
-        if ($gCurrentUser->editAnnouncements()
-        || in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)) {
+        if ($gCurrentUser->isAdministratorAnnouncements()
+            || (in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)
+                && $gCurrentUser->getValue('usr_id') === $this->getValue('ann_usr_id_create'))
+        ) {
             // if category belongs to current organization than announcements are editable
             if ($this->getValue('cat_org_id') > 0
-            && (int) $this->getValue('cat_org_id') === $GLOBALS['gCurrentOrgId']) {
+                && (int)$this->getValue('cat_org_id') === $gCurrentOrgId) {
                 return true;
             }
 
             // if category belongs to all organizations, child organization couldn't edit it
-            if ((int) $this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization()) {
+            if ((int)$this->getValue('cat_org_id') === 0 && !$gCurrentOrganization->isChildOrganization()) {
                 return true;
             }
         }
@@ -134,7 +137,7 @@ class Announcement extends Entity
         global $gCurrentUser;
 
         // check if the current user could view the category of the announcement
-        return in_array((int) $this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('ANN'), true);
+        return in_array((int)$this->getValue('cat_id'), $gCurrentUser->getAllVisibleCategories('ANN'), true);
     }
 
     /**
@@ -150,7 +153,7 @@ class Announcement extends Entity
     {
         global $gCurrentUser;
 
-        if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('ann_cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)) {
+        if (!$this->saveChangesWithoutRights && !in_array((int)$this->getValue('ann_cat_id'), $gCurrentUser->getAllEditableCategories('ANN'), true)) {
             throw new Exception('Announcement could not be saved because you are not allowed to edit announcements of this category.');
         }
 
@@ -187,7 +190,7 @@ class Announcement extends Entity
                 . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('ann_headline') . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/announcements/announcements.php?ann_uuid=' . $this->getValue('ann_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/announcements.php?announcement_uuid=' . $this->getValue('ann_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message
@@ -205,7 +208,7 @@ class Announcement extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             if ($columnName === 'ann_description') {
@@ -213,13 +216,13 @@ class Announcement extends Entity
                 $checkValue = false;
             } elseif ($columnName === 'ann_cat_id') {
                 $category = new Category($this->db);
-                if(is_int($newValue)) {
-                    if(!$category->readDataById($newValue)) {
-                        throw new Exception('No Category with the given id '. $newValue. ' was found in the database.');
+                if (is_int($newValue)) {
+                    if (!$category->readDataById($newValue)) {
+                        throw new Exception('No Category with the given id ' . $newValue . ' was found in the database.');
                     }
                 } else {
-                    if(!$category->readDataByUuid($newValue)) {
-                        throw new Exception('No Category with the given uuid '. $newValue. ' was found in the database.');
+                    if (!$category->readDataByUuid($newValue)) {
+                        throw new Exception('No Category with the given uuid ' . $newValue . ' was found in the database.');
                     }
                     $newValue = $category->getValue('cat_id');
                 }
