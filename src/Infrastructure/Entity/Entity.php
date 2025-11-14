@@ -10,6 +10,7 @@ use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
 use DateTime;
 use Ramsey\Uuid\Uuid;
+use Throwable;
 
 /**
  * @brief Controls read and write access to database tables
@@ -512,6 +513,9 @@ class Entity
                     if ($format !== 'database') {
                         // if text field and format not 'database' then convert all quotes to HTML syntax
                         $columnValue = SecurityUtils::encodeHTML((string)$columnValue);
+                    } else {
+                        // Postgres returns null for empty text fields, so we convert it to empty string here
+                        $columnValue = $columnValue ?? '';
                     }
                     break;
 
@@ -548,7 +552,7 @@ class Entity
                         try {
                             $datetime = new DateTime($columnValue);
                             $columnValue = $datetime->format($format);
-                        } catch (Exception) {
+                        } catch (Throwable) {
                             $columnValue = $this->dbColumns[$columnName];
                         }
                     } else {
