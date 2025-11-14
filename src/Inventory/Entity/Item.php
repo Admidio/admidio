@@ -53,8 +53,7 @@ class Item extends Entity
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param ItemsData|null $itemFields An object of the ItemsData class with the profile field structure
-     *                                  of the current organization.
+     * @param ItemsData|null $itemsData object with current item field structure
      * @param int $itemId The id of the item which should be loaded. If id isn't set than an empty
      *                                  object with no specific item is created.
      * @throws Exception
