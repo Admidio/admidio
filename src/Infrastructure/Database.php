@@ -565,8 +565,11 @@ class Database
                 $tableColumnsProperties[$properties['Field']] = $props;
             }
         } elseif ($this->engine === self::PDO_ENGINE_PGSQL) {
-            $sql = 'SELECT column_name, column_default, is_nullable, data_type
-                      FROM information_schema.columns
+            $sql = 'SELECT column_name, column_default, is_nullable, data_type,
+                           (SELECT \'YES\' from information_schema.key_column_usage kcu
+                             WHERE kcu.table_name  = c.table_name
+                               and kcu.column_name = c.column_name ) as key
+                      FROM information_schema.columns c
                      WHERE table_name = ?';
             $columnsStatement = $this->queryPrepared($sql, array($table));
             $columnsList = $columnsStatement->fetchAll();
@@ -575,7 +578,7 @@ class Database
                 $props = array(
                     'serial'   => str_contains((string) $properties['column_default'], 'nextval'),
                     'null'     => $properties['is_nullable'] === 'YES',
-                    'key'      => null,
+                    'key'      => $properties['key'] === 'YES',
                     'default'  => $properties['column_default'],
                     'unsigned' => null
                 );
