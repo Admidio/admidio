@@ -189,13 +189,7 @@ class DataTables
                     });
 
                     if (settings.json && settings.json.notice) {
-                        $.each(settings.json.notice, function (key, value) {
-                            if (value.trim() !== \'\') {
-                                $(\'#\' + key).text(value).show();
-                            } else {
-                                $(\'#\' + key).hide();
-                            }
-                        });
+                        $.each(settings.json.notice, showMessageDiv);
                     }
                 }';
             $javascriptGroupFunction = '
@@ -212,13 +206,7 @@ class DataTables
             $this->datatablesInitParameters[] = '"drawCallback": function(settings) {
                     if (settings.json && settings.json.notice) {
                         // Iterate through the notice object
-                        $.each(settings.json.notice, function (key, value) {
-                            if (value.trim() !== \'\') {
-                                $(\'#\' + key).html(value).show();
-                            } else {
-                                $(\'#\' + key).hide();
-                            }
-                        });
+                        $.each(settings.json.notice, showMessageDiv);
                     }
                 }';
 
@@ -250,6 +238,17 @@ class DataTables
                         }
                         new bootstrap.Tooltip(el);
                     });
+                });
+                ', true
+            );
+            // Use Admidio's error <div> rather than DataTable's _fnLog function in Javascript, which would display a modal popup box:
+            // Intercept errors before DataTables shows the alert (turn off default error handling and use our own handler!)
+            $this->htmlPage->addJavascript(
+                '
+                $.fn.dataTable.ext.errMode = \'none\';
+                $("#' . $this->id . '").on("dt-error.dt", function (e, settings, techNote, message) {
+                    e.preventDefault(); // stops the built-in alert/modal
+                    showMessageDiv("DT_notice", message);
                 });
                 ', true
             );

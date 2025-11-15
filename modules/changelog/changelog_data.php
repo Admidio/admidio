@@ -469,5 +469,8 @@ try {
 
     echo json_encode($jsonArray);
 } catch (Throwable $e) {
-    handleException($e, true);
+    // NOTE: DataTables expects the form {'error' => 'message'}, so we can't use the default handleException($e, true); call!
+    $jsonArray['error'] = $e->getMessage();
+    echo json_encode($jsonArray);
+    exit();
 }
