@@ -162,9 +162,9 @@ try {
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('userCreatedName', $relationType1->getNameOfCreatingUser());
-    $page->assignSmartyVariable('userCreatedTimestamp', $relationType1->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('userCreatedTimestamp', $relationType1->getValue('urt_timestamp_create'));
     $page->assignSmartyVariable('lastUserEditedName', $relationType1->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('lastUserEditedTimestamp', $relationType1->getValue('ann_timestamp_change'));
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $relationType1->getValue('urt_timestamp_change'));
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
 
