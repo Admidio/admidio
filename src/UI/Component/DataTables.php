@@ -128,10 +128,15 @@ class DataTables
             $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datetime-luxon.js');
         }
 
+        $langCode = $gL10n->getLanguageIsoCode();
+        if (empty($langCode)) {
+            $langCode = 'en';
+        }
+
         if (!empty($this->emptyTableMessage)) {
-            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json", "emptyTable": "' . $this->emptyTableMessage . '"}';
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $langCode . '.json", "emptyTable": "' . $this->emptyTableMessage . '"}';
         } else {
-            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json"}';
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $langCode . '.json"}';
         }
 
         if ($rowCount > 10 || $this->serverSideProcessing) {
@@ -184,13 +189,7 @@ class DataTables
                     });
 
                     if (settings.json && settings.json.notice) {
-                        $.each(settings.json.notice, function (key, value) {
-                            if (value.trim() !== \'\') {
-                                $(\'#\' + key).text(value).show();
-                            } else {
-                                $(\'#\' + key).hide();
-                            }
-                        });
+                        $.each(settings.json.notice, showMessageDiv);
                     }
                 }';
             $javascriptGroupFunction = '
@@ -207,13 +206,7 @@ class DataTables
             $this->datatablesInitParameters[] = '"drawCallback": function(settings) {
                     if (settings.json && settings.json.notice) {
                         // Iterate through the notice object
-                        $.each(settings.json.notice, function (key, value) {
-                            if (value.trim() !== \'\') {
-                                $(\'#\' + key).html(value).show();
-                            } else {
-                                $(\'#\' + key).hide();
-                            }
-                        });
+                        $.each(settings.json.notice, showMessageDiv);
                     }
                 }';
 
@@ -245,6 +238,17 @@ class DataTables
                         }
                         new bootstrap.Tooltip(el);
                     });
+                });
+                ', true
+            );
+            // Use Admidio's error <div> rather than DataTable's _fnLog function in Javascript, which would display a modal popup box:
+            // Intercept errors before DataTables shows the alert (turn off default error handling and use our own handler!)
+            $this->htmlPage->addJavascript(
+                '
+                $.fn.dataTable.ext.errMode = \'none\';
+                $("#' . $this->id . '").on("dt-error.dt", function (e, settings, techNote, message) {
+                    e.preventDefault(); // stops the built-in alert/modal
+                    showMessageDiv("DT_notice", message);
                 });
                 ', true
             );
