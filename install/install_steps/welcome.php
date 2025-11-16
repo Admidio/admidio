@@ -21,7 +21,7 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'welcome.php') {
 if ($mode === 'html') {
     // create a page with the notice that the installation must be configured on the next pages
     // create form with select box where user can select a language
-    $page = new InstallationPresenter('adm_installation_welcome', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_welcome', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
     $page->assignSmartyVariable('text', $gL10n->get(
