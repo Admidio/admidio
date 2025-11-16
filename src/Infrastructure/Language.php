@@ -126,7 +126,7 @@ class Language
      * Read language folder of each plugin in adm_plugins and add this folder to the language folder
      * array of this class.
      */
-    public function addPluginLanguageFolderPaths()
+    public function addPluginLanguageFolderPaths(): void
     {
         global $gLogger;
 
@@ -385,12 +385,12 @@ class Language
         // first search text id in text-cache
         try {
             return $this->getTextCache($textId);
-        } catch (\OutOfBoundsException $exception) {
+        } catch (\OutOfBoundsException) {
             // if text id wasn't found than search for it in language
             try {
                 // search for text id in every \SimpleXMLElement (language file) of the object array
                 return $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->language, $textId);
-            } catch (\OutOfBoundsException $exception) {
+            } catch (\OutOfBoundsException) {
                 // if text id wasn't found than search for it in reference language
                 try {
                     // search for text id in every \SimpleXMLElement (language file) of the object array
@@ -556,7 +556,7 @@ class Language
                 $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
 
                 return $this->searchLanguageText($xmlLanguageObjects, $languageFilePath, $textId);
-            } catch (\OutOfBoundsException $exception) {
+            } catch (\OutOfBoundsException) {
                 // continue searching, no debug output because this will be default way if you have several language path through plugins
             }
         }
@@ -574,7 +574,15 @@ class Language
         require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
 
         if (!array_key_exists($language, $gSupportedLanguages)) {
-            return false;
+            // if language with country code is not available try to set only the language code
+            if (strlen($language) > 2) {
+                $language = substr($language, 0, 2);
+                if (!array_key_exists($language, $gSupportedLanguages)) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         }
 
         if ($language <> $this->language) {
