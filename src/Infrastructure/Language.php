@@ -189,6 +189,20 @@ class Language
             $languageSelected = 'de';
         }
 
+        require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
+
+        if (!array_key_exists($languageSelected, $gSupportedLanguages)) {
+            // if language with country code is not available try to set only the language code
+            if (strlen($languageSelected) > 2) {
+                $languageSelected = substr($languageSelected, 0, 2);
+                if (!array_key_exists($languageSelected, $gSupportedLanguages)) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
         return $languageSelected;
     }
 
