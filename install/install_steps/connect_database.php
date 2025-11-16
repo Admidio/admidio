@@ -46,7 +46,7 @@ if ($mode === 'html') {
     }
 
     // create a page to enter all necessary database connection information
-    $page = new InstallationPresenter('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
