@@ -1714,6 +1714,7 @@
   <string name="SYS_VALUE_LIST_DESC">In dieser Tabelle können Sie die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Für jede Zeile kann hier ein Eintrag des Dropdown-Listenfelds oder des Optionsfelds eingegeben werden.\nDas Profil wird später nicht als Text gespeichert, sondern die ausgewählte Position aus der Liste. Wenn du den Text in einer Zeile änderst, sehen alle bereits zugeordneten Benutzer:innen den neuen Text sofort in ihrem Profil.\nEin Wert eines Optionsfeldes kann als Symbol anstelle eines Textes angezeigt werden. Das Symbol muss in der Web-Schriftart „Bootstrap Icons“ dargestellt werden. Gehe zu #VAR1#https://icons.getbootstrap.com#VAR2# und wähle ein Icon aus der Sammlung. Ein Tooltip für das Icon (z.B. gender-female|Dies ist ein weibliches Icon) kann optional über eine vertikale Trennlinie gesetzt werden.</string>
   <string name="SYS_VARIOUS_ROLES">Verschiedene Rollen</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
+  <string name="SYS_VCARD">vCard</string>
   <string name="SYS_VENUE">Veranstaltungsort</string>
   <string name="SYS_VENUE_LINK">Wenn genügend Informationen (Stadt, Straße, Treffpunkt) über den Veranstaltungsort eingegeben werden, kann ein Link oder eine Route über Google Maps erstellt werden.</string>
   <string name="SYS_VERSION">Version</string>
