@@ -136,7 +136,7 @@ try {
         }
 
         foreach ($searchString as $searchWord) {
-            $searchCondition .= ' AND concat(' . implode(', ', $searchColumns) . ') LIKE CONCAT(\'%\', ' . $searchValue . ', \'%\') ';
+            $searchCondition .= ' AND LOWER(CONCAT(' . implode(', ', $searchColumns) . ')) LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
             $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
         }
 
