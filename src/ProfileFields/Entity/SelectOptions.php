@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\ProfileFields\Entity;
 
 use Admidio\Infrastructure\Database;
@@ -15,10 +16,11 @@ use Admidio\Changelog\Entity\LogChanges;
  */
 class SelectOptions extends Entity
 {
-    public const MOVE_UP   = 'UP';
+    public const MOVE_UP = 'UP';
     public const MOVE_DOWN = 'DOWN';
     protected int $usfId = 0;
     protected array $optionValues = array();
+
     /**
      * Constructor that will create an object of a recordset of the table adm_field_selection_options.
      * If the id is set than the specific weblink will be loaded.
@@ -42,7 +44,7 @@ class SelectOptions extends Entity
      * If no id is set than no data will be read.
      * @throws Exception
      */
-    public function readDataByFieldId(int $usfId = 0) : void
+    public function readDataByFieldId(int $usfId = 0): void
     {
         // if no id is set then use the id of the object
         if ($usfId > 0) {
@@ -73,7 +75,7 @@ class SelectOptions extends Entity
      * @return bool Returns true if the data could be read, otherwise false.
      * @throws Exception
      */
-    public function readDataById(int $id) : bool
+    public function readDataById(int $id): bool
     {
         // check if the id is an option of the select field
         if (isset($this->optionValues[$id])) {
@@ -90,7 +92,7 @@ class SelectOptions extends Entity
      * @param bool $withObsoleteEntries If set to **false** then the obsolete entries of the profile field will not be considered.
      * @return array Returns an array with all options of the select field.
      */
-    public function getAllOptions(bool $withObsoleteEntries = true) : array
+    public function getAllOptions(bool $withObsoleteEntries = true): array
     {
         $values = array();
         if (!empty($this->optionValues)) {
@@ -119,16 +121,16 @@ class SelectOptions extends Entity
      * @return bool Returns true if the option is used in the database, otherwise false.
      * @throws Exception
      */
-    public function isOptionUsed(int $ufoId) : bool
+    public function isOptionUsed(int $ufoId): bool
     {
         if ($this->usfId > 0) {
             $sql = 'SELECT COUNT(*) FROM ' . TBL_USER_DATA . '
                 WHERE usd_usf_id = ? -- $this->usfId
                 AND (  usd_value = ? -- $ufoId
-                    OR POSITION( ? IN usd_value) > 0  -- $ufoId
+                    OR POSITION( ? IN CONCAT(\',\', usd_value, \',\')) > 0  -- $ufoId
                 )';
-        $stmt = $this->db->queryPrepared($sql, array($this->usfId, (string) $ufoId, (string) $ufoId));
-        return ((int)$stmt->fetchColumn() > 0);
+            $stmt = $this->db->queryPrepared($sql, array($this->usfId, (string)$ufoId, '\',' . $ufoId . ',\''));
+            return ((int)$stmt->fetchColumn() > 0);
         } else {
             // if no usfId is set then it is a new profile field and no options are used in the database
             return false;
@@ -142,7 +144,7 @@ class SelectOptions extends Entity
      * @return bool Returns true if the option could be deleted, otherwise false.
      * @throws Exception
      */
-    public function deleteOption(int $ufoId) : bool
+    public function deleteOption(int $ufoId): bool
     {
         if ($this->usfId > 0) {
             // delete the option from the database
@@ -166,7 +168,7 @@ class SelectOptions extends Entity
      * @return bool Return true if the sequence of the options could be changed, otherwise false.
      * @throws Exception
      */
-    public function setSequence(array $sequence) : bool
+    public function setSequence(array $sequence): bool
     {
         $ufoID = $this->getValue('ufo_id');
 
@@ -198,7 +200,7 @@ class SelectOptions extends Entity
      * @return bool Returns true if the values could be saved, otherwise false.
      * @throws Exception
      */
-    public function setOptionValues(array $newValues) : bool
+    public function setOptionValues(array $newValues): bool
     {
         $ret = true;
         $newOption = false;
@@ -282,7 +284,7 @@ class SelectOptions extends Entity
      * @return bool If an update or insert into the database was done then return true, otherwise false.
      * @throws Exception
      */
-    public function save(bool $updateFingerPrint = true) : bool
+    public function save(bool $updateFingerPrint = true): bool
     {
         $this->db->startTransaction();
 
@@ -290,7 +292,7 @@ class SelectOptions extends Entity
             $this->usfId = (int)$this->dbColumns['ufo_usf_id'];
             // Determine the highest sequence number of the option when inserting
             $sql = 'SELECT COUNT(*) AS count
-                      FROM '.TBL_USER_FIELD_OPTIONS.'
+                      FROM ' . TBL_USER_FIELD_OPTIONS . '
                      WHERE ufo_usf_id = ? -- $this->usfId';
             $countOptionsStatement = $this->db->queryPrepared($sql, array($this->usfId));
 
@@ -315,7 +317,7 @@ class SelectOptions extends Entity
      * @return void
      * @throws Exception
      */
-    protected function adjustLogEntry(LogChanges $logEntry) : void
+    protected function adjustLogEntry(LogChanges $logEntry): void
     {
         $profileField = new ProfileField($this->db);
 
