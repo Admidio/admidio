@@ -524,5 +524,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1790" database="pgsql">ALTER TABLE %PREFIX%_inventory_item_borrow_data ALTER COLUMN inb_borrow_date TYPE timestamp;</step>
     <step id="1800" database="mysql">ALTER TABLE %PREFIX%_inventory_item_borrow_data MODIFY COLUMN inb_return_date timestamp NULL DEFAULT NULL;</step>
     <step id="1810" database="pgsql">ALTER TABLE %PREFIX%_inventory_item_borrow_data ALTER COLUMN inb_return_date TYPE timestamp;</step>
+    <step id="1820">ALTER TABLE %PREFIX%_inventory_fields ADD COLUMN inf_inf_uuid_connected varchar(36) NULL DEFAULT NULL;</step>
     <step>stop</step>
 </update>

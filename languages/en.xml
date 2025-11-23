@@ -533,6 +533,7 @@
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
   <string name="SYS_DOWNLOAD_ZIP_ERROR">An error occurred when creating the zip file.</string>
   <string name="SYS_DQUOTE">Double quote (")</string>
+  <string name="SYS_DROPDOWN_DATE_INTERVAL_LISTBOX">Drop-down list box (date interval)</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
   <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Drop-down list box (multi-select)</string>
   <string name="SYS_DUPLICATE">Duplicate</string>
@@ -789,7 +790,9 @@
   <string name="SYS_INVENTORY_BORROW_DATE_DESC">The borrowing date of the item to the last recipient</string>
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">The borrowing date of the item must be before the return date!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">The category of an item</string>
-  <string name="SYS_INVENTORY_COPY_PREFERENCES">Settings for copying a item:</string>
+  <string name="SYS_INVENTORY_CONNECTED_FIELD">Connected field</string>
+  <string name="SYS_INVENTORY_COPY_PREFERENCES">Settings for copying an item:</string>
+  <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">In this table, you can enter the entries for the date intervals. A table row can be added here for each subsequent entry in the drop-down list box.\nThe list entry is not stored as text later, but the selected position from the list. If you change the text in a row, all users will immediately see the new text.\nThe date interval must be written in the same row separated by the |-symbol after the title. e.g. Yearly | 1y \nIf no unit is specified, days are assumed. \nPossible units: d: days, w: weeks, m: months, y: years</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal steps</string>

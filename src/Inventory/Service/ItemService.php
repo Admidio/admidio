@@ -29,14 +29,17 @@ class ItemService
     protected string $itemUUID;
     protected int $postCopyField;
     protected int $postCopyNumber;
-    protected int $postImported;
+    protected bool $postImported;
 
     /**
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string $profileFieldUUID UUID if the profile field that should be managed within this class
+     * @param string $itemUUID UUID if the item that should be managed within this class
+     * @param int $postCopyField Field ID which should be used for numbering when copying items
+     * @param int $postCopyNumber Number of items to be created when copying
+     * @param bool $postImported Indicates whether the item is being imported
      * @throws Exception
      */
-    public function __construct(Database $database, string $itemUUID = '', int $postCopyField = 0, int $postCopyNumber = 1, int $postImported = 0)
+    public function __construct(Database $database, string $itemUUID = '', int $postCopyField = 0, int $postCopyNumber = 1, bool $postImported = false)
     {
         global $gCurrentOrgId;
 
@@ -114,7 +117,7 @@ class ItemService
                 }
             }
 
-            if (isset($itemCopyField)) {
+            if (isset($itemCopyFieldName)) {
                 $startIdx = (int)$formValues['INF-' . $itemCopyFieldName] + 1;
             }
         }
@@ -164,7 +167,7 @@ class ItemService
         }
 
         //mark item as imported to prevent notification
-        if ($this->postImported == 1) {
+        if ($this->postImported) {
             $this->itemRessource->setImportedItem();
         }
 
@@ -184,7 +187,6 @@ class ItemService
 
         // Initialize default picture path
         $picturePath = getThemedFile('/images/inventory-item-picture.png');
-        $image = null;
 
         if ($item->getValue('ini_id') !== 0) {
             if ($getNewPicture) {
