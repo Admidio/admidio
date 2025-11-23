@@ -962,7 +962,7 @@ class InventoryPresenter extends PagePresenter
                         $selectOptions = $option->getAllOptions();
 
                         // Calculate days remaining based on selected date field value and selected interval
-                        $connectedFieldUuid = $itemField->getValue('inf_connected_field_uuid');
+                        $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
                         $connectedField = new ItemField($gDb);
                         $connectedField->readDataByUuid($connectedFieldUuid);
                         $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
@@ -1325,7 +1325,7 @@ class InventoryPresenter extends PagePresenter
                             $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
                             $selectOptions = $option->getAllOptions();
 
-                            $connectedFieldUuid = $itemField->getValue('inf_connected_field_uuid');
+                            $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
                             $connectedField = new ItemField($gDb);
                             $connectedField->readDataByUuid($connectedFieldUuid);
                             $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');

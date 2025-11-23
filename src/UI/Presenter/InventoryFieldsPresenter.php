@@ -82,16 +82,16 @@ class InventoryFieldsPresenter extends PagePresenter
                 var valueListTooltipContainer = document.getElementById("ifo_inf_options_group").getElementsByTagName("div")[0].getElementsByClassName("form-text")[0];
                 if ($("#inf_type").val() === "DROPDOWN_DATE_INTERVAL") {
                     // if the field type is dropdown date interval, then the connected field must be a date field
-                    $("#inf_connected_field_uuid").attr("required", "required");
-                    $("#inf_connected_field_uuid_group").addClass("admidio-form-group-required");
-                    $("#inf_connected_field_uuid_group").show();
+                    $("#inf_inf_uuid_connected").attr("required", "required");
+                    $("#infinf_inf_uuid_connected_group").addClass("admidio-form-group-required");
+                    $("#inf_inf_uuid_connected_group").show();
                     
                     valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_INVENTORY_DATE_INTERVAL_LIST_DESC') . '";
                 } else {
                     // if the field type is not dropdown date interval, then the connected field must not be required
-                    $("#inf_connected_field_uuid").removeAttr("required");
-                    $("#inf_connected_field_uuid_group").removeClass("admidio-form-group-required");
-                    $("#inf_connected_field_uuid_group").hide();
+                    $("#inf_inf_uuid_connected").removeAttr("required");
+                    $("#inf_inf_uuid_connected_group").removeClass("admidio-form-group-required");
+                    $("#inf_inf_uuid_connected_group").hide();
                     
                     valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_VALUE_LIST_DESC') . '";
                 }
@@ -175,11 +175,11 @@ class InventoryFieldsPresenter extends PagePresenter
             . ' AND inf_type = \'DATE\' ORDER BY inf_name';
 
         $form->addSelectBoxFromSql(
-            'inf_connected_field_uuid',
+            'inf_inf_uuid_connected',
             $gL10n->get('SYS_INVENTORY_CONNECTED_FIELD'),
             $gDb,
             $sql,
-            array('defaultValue' => $itemField->getValue('inf_connected_field_uuid')),
+            array('defaultValue' => $itemField->getValue('inf_inf_uuid_connected')),
         );
 
         $options = new SelectOptions($gDb, $itemField->getValue('inf_id'));

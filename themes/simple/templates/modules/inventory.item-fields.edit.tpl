@@ -17,7 +17,7 @@
         <div class="card-header">{$l10n->get('SYS_PROPERTIES')}</div>
         <div class="card-body">
             {include 'sys-template-parts/form.select.tpl' data=$elements['inf_type']}
-            {include 'sys-template-parts/form.select.tpl' data=$elements['inf_connected_field_uuid']}
+            {include 'sys-template-parts/form.select.tpl' data=$elements['inf_inf_uuid_connected']}
             {include 'sys-template-parts/form.option-editor.tpl' data=$elements['ifo_inf_options']}
             {include 'sys-template-parts/form.select.tpl' data=$elements['inf_required_input']}
         </div>
