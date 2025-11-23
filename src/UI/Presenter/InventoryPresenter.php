@@ -957,70 +957,71 @@ class InventoryPresenter extends PagePresenter
                 } elseif ($infType ===  'DROPDOWN_DATE_INTERVAL') {
                     $content = $this->itemsData->getValue($infNameIntern, 'database');
                     if (isset($content) && is_numeric($content)) {
+                        $selectedOption = $content;
                         $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
                         $selectOptions = $option->getAllOptions();
 
-                        if (in_array($mode, ['csv', 'pdf', 'xlsx', 'ods'])) {
-                            // in export modes use the stored value
-                            $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
+                        // Calculate days remaining based on selected date field value and selected interval
+                        $connectedFieldUuid = $itemField->getValue('inf_connected_field_uuid');
+                        $connectedField = new ItemField($gDb);
+                        $connectedField->readDataByUuid($connectedFieldUuid);
+                        $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
+                        $filteredSelectOptions = array();
 
-                        } else {
-                            $connectedFieldUuid = $itemField->getValue('inf_connected_field_uuid');
-                            $connectedField = new ItemField($gDb);
-                            $connectedField->readDataByUuid($connectedFieldUuid);
-                            $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
-                            $filteredSelectOptions = array();
+                        foreach ($selectOptions as $option) {
+                            $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
+                        }
 
-                            foreach ($selectOptions as $option) {
-                                $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
-                            }
-                            //use part after # as internal_name for last test date
-                            if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
-                                try {
-                                    $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
-                                    $compDate2 = date_create();
+                        if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
+                            try {
+                                $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
+                                $compDate2 = date_create();
 
-                                    //Calculate future test date
-                                    $dateAdditionSplit = array();
-                                    preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$content], $dateAdditionSplit);
+                                //Calculate future test date
+                                $dateAdditionSplit = array();
+                                preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$selectedOption], $dateAdditionSplit);
 
-                                    if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
-                                        switch ($dateAdditionSplit[2]) {
-                                            case 'w':
-                                                date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
-                                                break;
-                                            case 'm':
-                                                date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
-                                                break;
-                                            case 'y':
-                                                date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
-                                                break;
-                                            case 'd':
-                                            default:
-                                                date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
-                                                break;
-                                        }
+                                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                                    switch ($dateAdditionSplit[2]) {
+                                        case 'w':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
+                                            break;
+                                        case 'm':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
+                                            break;
+                                        case 'y':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
+                                            break;
+                                        case 'd':
+                                        default:
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
+                                            break;
                                     }
-
-                                    //Compare last test date with future date and output days
-                                    $dateDiff = date_diff($compDate2, $compDate1);
-                                    $daysRemaining = $dateDiff->format('%R%a');
-
-                                    // check if days remaining is only one day
-                                    if ($daysRemaining === '1' || $daysRemaining === '-1') {
-                                        $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
-                                    } elseif ($daysRemaining === '-0') {
-                                        $content = '0 ' . $gL10n->get('SYS_DAYS');
-                                    }  else {
-                                        $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
-                                    }
-                                } catch (\Exception $e) {
-                                    // in case of error set content to empty
-                                    $content = '';
                                 }
-                            } else {
+
+                                //Compare last test date with future date and output days
+                                $dateDiff = date_diff($compDate2, $compDate1);
+                                $daysRemaining = $dateDiff->format('%R%a');
+
+                                // check if days remaining is only one day
+                                if ($daysRemaining === '1' || $daysRemaining === '-1') {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
+                                } elseif ($daysRemaining === '-0') {
+                                    $content = '0 ' . $gL10n->get('SYS_DAYS');
+                                }  else {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
+                                }
+                            } catch (\Exception $e) {
+                                // in case of error set content to empty
                                 $content = '';
                             }
+                        } else {
+                            $content = '';
+                        }
+
+                        // in export modes append the stored value for possible later import
+                        if (!empty($content) && in_array($mode, ['csv', 'xlsx', 'ods'])) {
+                            $content .= " [" . $this->itemsData->getHtmlValue($infNameIntern, $selectedOption) . "]";
                         }
                     }
                 } elseif ($infType === 'RADIO_BUTTON') {

@@ -417,6 +417,24 @@ class ImportService
                                 }
                             }
                         }
+                    } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
+                        $optionValue = $values[$infId];
+                        if ($optionValue !== '') {
+                            // check, if the option value is given in [] brackets
+                            if (preg_match('/\[(.*?)]/', $optionValue, $matches)) {
+                                $optionValue = $matches[1];
+                            }
+                            $option = new SelectOptions($gDb, $fields->getValue('inf_id'));
+                            $optionValues = $option->getAllOptions();
+                            foreach ($optionValues as $optionData) {
+                                if (Language::translateIfTranslationStrId($optionData['value']) === $optionValue) {
+                                    $val = $optionData['id'];
+                                    break;
+                                } else {
+                                    $val = $values[$infId];
+                                }
+                            }
+                        }
                     } else {
                         $val = $values[$infId];
                     }
