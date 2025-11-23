@@ -34,6 +34,12 @@ use DateTime;
  */
 class ImportService
 {
+    /**
+     * Reads the uploaded import file and saves the data in the session.
+     *
+     * @return void
+     * @throws Exception
+     */
     public function readImportFile(): void
     {
         global $gL10n, $gMessage, $gCurrentSession;
@@ -153,6 +159,12 @@ class ImportService
         }
     }
 
+    /**
+     * Imports items from the previously read import file into the database.
+     *
+     * @return array An array containing the success status and message of the import operation.
+     * @throws Exception
+     */
     public function importItems(): array
     {
         global $gL10n, $gDb, $gCurrentOrgId, $gSettingsManager, $gCurrentSession;
@@ -405,6 +417,24 @@ class ImportService
                                 }
                             }
                         }
+                    } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
+                        $optionValue = $values[$infId];
+                        if ($optionValue !== '') {
+                            // check, if the option value is given in [] brackets
+                            if (preg_match('/\[(.*?)]/', $optionValue, $matches)) {
+                                $optionValue = $matches[1];
+                            }
+                            $option = new SelectOptions($gDb, $fields->getValue('inf_id'));
+                            $optionValues = $option->getAllOptions();
+                            foreach ($optionValues as $optionData) {
+                                if (Language::translateIfTranslationStrId($optionData['value']) === $optionValue) {
+                                    $val = $optionData['id'];
+                                    break;
+                                } else {
+                                    $val = $values[$infId];
+                                }
+                            }
+                        }
                     } else {
                         $val = $values[$infId];
                     }
@@ -417,7 +447,7 @@ class ImportService
             unset($itemData);
             if (count($assignedFieldColumn) > 0) {
 
-                $itemModule = new ItemService($gDb, '', 0, 1, 1);
+                $itemModule = new ItemService($gDb, '', 0, 1, true);
                 $itemModule->save();
 
                 $importSuccess = true;

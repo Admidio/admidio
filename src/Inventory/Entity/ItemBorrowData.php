@@ -8,7 +8,6 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Entity\LogChanges;
-use Admidio\Inventory\Entity\Item;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -48,6 +47,14 @@ class ItemBorrowData extends Entity
         parent::__construct($database, TBL_INVENTORY_ITEM_BORROW_DATA, 'inb', $id);
     }
 
+    /**
+     * Update the record ID of this entity.
+     * This method is used when the record ID is generated outside of this entity,
+     * for example, after inserting a new record into the database.
+     * @param int $recordId The new record ID to set.
+     * @return void
+     * @throws Exception
+     */
     public function updateRecordId(int $recordId): void
     {
         if ($recordId !== 0) {

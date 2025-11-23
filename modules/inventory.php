@@ -47,7 +47,7 @@ try {
     $postCopyNumber = admFuncVariableIsValid($_POST, 'item_copy_number', 'numeric', array('defaultValue' => 1));
     $postCopyField = admFuncVariableIsValid($_POST, 'item_copy_field', 'int', array('defaultValue' => 0));
     $postRedirect = admFuncVariableIsValid($_POST, 'redirect', 'numeric', array('defaultValue' => 1));
-    $postImported = admFuncVariableIsValid($_POST, 'imported', 'numeric', array('defaultValue' => 0));
+    $postImported = admFuncVariableIsValid($_POST, 'imported', 'bool', array('defaultValue' => false));
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool', array('defaultValue' => false));
     $getRetired = admFuncVariableIsValid($_GET, 'item_retired', 'bool', array('defaultValue' => false));
     $getRedirectToImport = admFuncVariableIsValid($_GET, 'redirect_to_import', 'bool', array('defaultValue' => false));
@@ -113,8 +113,8 @@ try {
             break;
 
         case 'field_save':
-            $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
-            $itemFieldsModule->save();
+            $itemFieldService = new ItemFieldService($gDb, $getinfUUID);
+            $itemFieldService->save();
 
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
@@ -124,8 +124,8 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
-            $itemFieldsModule->delete();
+            $itemFieldService = new ItemFieldService($gDb, $getinfUUID);
+            $itemFieldService->delete();
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEMFIELD_DELETED')));
             break;
@@ -137,9 +137,9 @@ try {
             $status = 'error';
             // check if the option entry has any dependencies in the database
             if ($getOptionID > 0) {
-                $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
+                $itemFieldService = new ItemFieldService($gDb, $getinfUUID);
 
-                $option = new SelectOptions($gDb, $itemFieldsModule->getFieldID());
+                $option = new SelectOptions($gDb, $itemFieldService->getFieldID());
                 if ($option->isOptionUsed($getOptionID)) {
                     // if the option is used in a profile field, then it cannot be deleted
                     $status = 'used';
@@ -158,9 +158,9 @@ try {
             $status = 'error';
             // check if the option entry has any dependencies in the database
             if ($getOptionID > 0) {
-                $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
+                $itemFieldService = new ItemFieldService($gDb, $getinfUUID);
 
-                $option = new SelectOptions($gDb, $itemFieldsModule->getFieldID());
+                $option = new SelectOptions($gDb, $itemFieldService->getFieldID());
                 // delete the option entry
                 $option->deleteOption($getOptionID);
                 $status = 'success';
@@ -176,13 +176,13 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemFieldsModule = new ItemFieldService($gDb, $getinfUUID);
+            $itemFieldService = new ItemFieldService($gDb, $getinfUUID);
 
             if (!empty($getOrder)) {
                 // set new order (drag and drop)
-                $ret = $itemFieldsModule->setSequence(explode(',', $getOrder));
+                $ret = $itemFieldService->setSequence(explode(',', $getOrder));
             } else {
-                $ret = $itemFieldsModule->moveSequence($postDirection);
+                $ret = $itemFieldService->moveSequence($postDirection);
             }
 
             echo json_encode(array('status' => ($ret ? 'success' : 'error')));
@@ -248,12 +248,12 @@ try {
 
             if (count($getItemUUIDs) > 0) {
                 foreach ($getItemUUIDs as $itemUuid) {
-                    $itemModule = new ItemService($gDb, $itemUuid, $postCopyField, $postCopyNumber, $postImported);
-                    $itemModule->save(true);
+                    $itemService = new ItemService($gDb, $itemUuid, $postCopyField, $postCopyNumber, $postImported);
+                    $itemService->save(true);
                 }
             } else {
-                $itemModule = new ItemService($gDb, $getiniUUID, $postCopyField, $postCopyNumber, $postImported);
-                $itemModule->save();
+                $itemService = new ItemService($gDb, $getiniUUID, $postCopyField, $postCopyNumber, $postImported);
+                $itemService->save();
             }
 
             $gNavigation->deleteLastUrl();
@@ -349,13 +349,13 @@ try {
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
             if (count($getItemUUIDs) > 0) {
                 foreach ($getItemUUIDs as $itemUuid) {
-                    $itemModule = new ItemService($gDb, $itemUuid);
-                    $itemModule->retireItem();
+                    $itemService = new ItemService($gDb, $itemUuid);
+                    $itemService->retireItem();
                 }
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_SELECTION_RETIRED')));
             } else {
-                $itemModule = new ItemService($gDb, $getiniUUID);
-                $itemModule->retireItem();
+                $itemService = new ItemService($gDb, $getiniUUID);
+                $itemService->retireItem();
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_RETIRED')));
             }
 
@@ -366,13 +366,13 @@ try {
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
             if (count($getItemUUIDs) > 0) {
                 foreach ($getItemUUIDs as $itemUuid) {
-                    $itemModule = new ItemService($gDb, $itemUuid);
-                    $itemModule->reinstateItem();
+                    $itemService = new ItemService($gDb, $itemUuid);
+                    $itemService->reinstateItem();
                 }
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATED')));
             } else {
-                $itemModule = new ItemService($gDb, $getiniUUID);
-                $itemModule->reinstateItem();
+                $itemService = new ItemService($gDb, $getiniUUID);
+                $itemService->reinstateItem();
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATED')));
             }
 
@@ -384,13 +384,13 @@ try {
 
             if (count($getItemUUIDs) > 0) {
                 foreach ($getItemUUIDs as $itemUuid) {
-                    $itemModule = new ItemService($gDb, $itemUuid);
-                    $itemModule->delete();
+                    $itemService = new ItemService($gDb, $itemUuid);
+                    $itemService->delete();
                 }
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_SELECTION_DELETED')));
             } else {
-                $itemModule = new ItemService($gDb, $getiniUUID);
-                $itemModule->delete();
+                $itemService = new ItemService($gDb, $getiniUUID);
+                $itemService->delete();
 
                 echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_DELETED')));
             }
@@ -398,8 +398,8 @@ try {
 #endregion
 #region item pictures
         case 'item_picture_show':
-            $itemModule = new ItemService($gDb, $getiniUUID);
-            $itemModule->showItemPicture($getNewPicture);
+            $itemService = new ItemService($gDb, $getiniUUID);
+            $itemService->showItemPicture($getNewPicture);
             break;
 
         case 'item_picture_show_modal':
@@ -426,8 +426,8 @@ try {
             break;
 
         case 'item_picture_upload':
-            $itemModule = new ItemService($gDb, $getiniUUID);
-            $itemModule->uploadItemPicture();
+            $itemService = new ItemService($gDb, $getiniUUID);
+            $itemService->uploadItemPicture();
 
             echo json_encode(array('status' => 'success', 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_review', 'item_uuid' => $getiniUUID))));
             break;
@@ -443,8 +443,8 @@ try {
             break;
 
         case 'item_picture_save':
-            $itemModule = new ItemService($gDb, $getiniUUID);
-            $itemModule->saveItemPicture();
+            $itemService = new ItemService($gDb, $getiniUUID);
+            $itemService->saveItemPicture();
 
             // back to the home page
             // if url stack is bigger than 2 then delete until the edit page is reached
@@ -458,8 +458,8 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $itemModule = new ItemService($gDb, $getiniUUID);
-            $itemModule->deleteItemPicture();
+            $itemService = new ItemService($gDb, $getiniUUID);
+            $itemService->deleteItemPicture();
 
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_DELETED'), 'url' => $gNavigation->getUrl()));
             break;
@@ -483,8 +483,8 @@ try {
             break;
 
         case 'import_read_file':
-            $import = new ImportService();
-            $import->readImportFile();
+            $importService = new ImportService();
+            $importService->readImportFile();
             echo json_encode(array('status' => 'success', 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'import_assign_fields'))));
             break;
 
@@ -499,8 +499,8 @@ try {
             break;
 
         case 'import_items':
-            $import = new ImportService();
-            $retStr = $import->importItems();
+            $importService = new ImportService();
+            $retStr = $importService->importItems();
 
             $gNavigation->deleteLastUrl();
 

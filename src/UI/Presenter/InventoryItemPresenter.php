@@ -109,7 +109,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool)$items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
@@ -119,7 +119,8 @@ class InventoryItemPresenter extends PagePresenter
                     break;
 
                 case 'DROPDOWN': // fallthrough
-                case 'DROPDOWN_MULTISELECT':
+                case 'DROPDOWN_MULTISELECT': // fallthrough
+                case 'DROPDOWN_DATE_INTERVAL':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
                     // prevent adding an empty string to the select-box
@@ -437,7 +438,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool)$items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
@@ -448,7 +449,8 @@ class InventoryItemPresenter extends PagePresenter
                     break;
 
                 case 'DROPDOWN': // fallthrough
-                case 'DROPDOWN_MULTISELECT':
+                case 'DROPDOWN_MULTISELECT': // fallthrough
+                case 'DROPDOWN_DATE_INTERVAL':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
                     // prevent adding an empty string to the select-box
@@ -848,7 +850,7 @@ class InventoryItemPresenter extends PagePresenter
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool)$items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
