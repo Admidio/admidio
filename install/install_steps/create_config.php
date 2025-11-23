@@ -51,7 +51,7 @@ $configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces)
 
 $_SESSION['config_file_content'] = $configFileContent;
 
-$page = new InstallationPresenter('adm_installation_create_config', $gL10n->get('INS_INSTALLATION'));
+$page = new InstallationPresenter('adm_installation_create_config', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
 $page->addTemplateFile('installation.tpl');
 
 // now save new configuration file in Admidio folder if user has write access to this folder

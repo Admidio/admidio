@@ -139,7 +139,7 @@ try {
 
     // create a language and language data object to handle translations
     if (!$gSettingsManager->has('system_language')) {
-        $gSettingsManager->set('system_language', 'de');
+        $gSettingsManager->set('system_language', 'en');
     }
     $gL10n = new Language($gSettingsManager->getString('system_language'), true);
     $gChangeNotification = new ChangeNotification();

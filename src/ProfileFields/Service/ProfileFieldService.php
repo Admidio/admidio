@@ -96,9 +96,14 @@ class ProfileFieldService
             if (str_starts_with($key, 'usf_')) {
                 $this->profileFieldRessource->setValue($key, $value);
             } elseif (str_starts_with($key, 'ufo_')) {
-                // if the key starts with 'ufo_' then it is a user field option
+                // if the key starts with 'ufo_' then it is a user field option,
                 // and we save it in the user field options table
-                $options = $value;
+                $options = array_map(function($item) {
+                    if ($item['obsolete'] === '') {
+                        $item['obsolete'] = '0';
+                    }
+                    return $item;
+                }, $value);
             }
         }
 

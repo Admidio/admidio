@@ -100,6 +100,7 @@ try {
     $table->createJavascript(0, count($columnHeading));
 
     $page->assignSmartyVariable('headers', $columnHeading);
+    $page->addHtml('<div class="alert alert-danger form-alert" id="DT_notice" style="display: none;"></div>');
     $page->addHtmlByTemplate('modules/messages.list.tpl');
     $page->show();
 } catch (Throwable $e) {

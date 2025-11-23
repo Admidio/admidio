@@ -27,6 +27,21 @@ function showHideBlock(element) {
 }
 
 /**
+ * This function can be used to consistently show or hide a message block with the given message. 
+ * The HTML element must exist and will not be created.
+ * @param {string} id The HTML id of the message block
+ * @param {string} message The message to show (optionally with HTML markup), or empty string to 
+ *                       hide the message block.
+ */
+function showMessageDiv(id, message) {
+    if (message.trim() !== '') {
+        $('#' + id).html(message).show();
+    } else {
+        $('#' + id).hide();
+    }
+}
+
+/**
  * The function can be used to show or hide a text block that is longer than the
  * visible area. Therefore, a small caret is used that will change his orientation
  * if the text block is hidden.

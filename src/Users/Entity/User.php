@@ -2329,7 +2329,7 @@ class User extends Entity
     }
 
     /**
-     * Adjust the changelog entry for this db record: Don't store the actual password, just '********'. Also, the photo cannot be stores, so indicate this by '[...]', too.
+     * Adjust the changelog entry for this db record: Don't store the actual password, just '********'. Also, the photo cannot be stored, so indicate this by '[...]', too.
      *
      * @param LogChanges $logEntry The log entry to adjust
      *

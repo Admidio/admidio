@@ -383,9 +383,9 @@ try {
             if ($users[0]['uuid'] !== '') {
                 // show information about the user who creates the recordset and changed it
                 $page->assignSmartyVariable('userCreatedName', $users[0]['user']->getNameOfCreatingUser());
-                $page->assignSmartyVariable('userCreatedTimestamp', $users[0]['user']->getValue('ann_timestamp_create'));
+                $page->assignSmartyVariable('userCreatedTimestamp', $users[0]['user']->getValue('usr_timestamp_create'));
                 $page->assignSmartyVariable('lastUserEditedName', $users[0]['user']->getNameOfLastEditingUser());
-                $page->assignSmartyVariable('lastUserEditedTimestamp', $users[0]['user']->getValue('ann_timestamp_change'));
+                $page->assignSmartyVariable('lastUserEditedTimestamp', $users[0]['user']->getValue('usr_timestamp_change'));
             }
 
             $form->addToHtmlPage();
