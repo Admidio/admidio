@@ -162,7 +162,7 @@ class ItemField extends Entity
                     break;
 
                 case 'ifo_inf_options':
-                    if ($this->dbColumns['inf_type'] === 'DROPDOWN' || $this->dbColumns['inf_type'] === 'DROPDOWN_MULTISELECT' || $this->dbColumns['inf_type'] === 'DROPDOWN_DATE_INTERVAL' || $this->dbColumns['inf_type'] === 'RADIO_BUTTON') {
+                    if (in_array($this->dbColumns['inf_type'], array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'DROPDOWN_DATE_INTERVAL', 'RADIO_BUTTON'))) {
                         $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
                         $arrOptions = $value;
 
