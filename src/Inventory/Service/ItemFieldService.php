@@ -70,6 +70,8 @@ class ItemFieldService
         } // item field will get one number higher and therefore move a position down in the list
         elseif ($mode === self::MOVE_DOWN) {
             $newSequence = $infSequence + 1;
+        } else {
+            throw new Exception('Invalid mode for moveSequence');
         }
 
         // update the existing entry with the sequence of the field that should get the new sequence
@@ -82,6 +84,7 @@ class ItemFieldService
     /**
      * Get the ID of the item field.
      * @return int The ID of the item field.
+     * @throws Exception
      */
     public function getFieldID(): int
     {
@@ -157,8 +160,7 @@ class ItemFieldService
             if (str_starts_with($key, 'inf_')) {
                 $this->itemFieldRessource->setValue($key, $value);
             } elseif (str_starts_with($key, 'ifo_')) {
-                // if the key starts with 'ufo_' then it is a user field option
-                // and we save it in the user field options table
+                // if the key starts with 'ufo_' then it is a user field option, and we save it in the user field options table
                 $options = $value;
             }
         }
