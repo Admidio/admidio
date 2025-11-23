@@ -172,7 +172,7 @@ class CategoryService
         // if it's a profile field category and only 1 organization exists,
         // if it's the role category of events
         if (($this->type !== 'ROL' && isset($_POST['show_in_several_organizations']))
-            || ($this->type === 'USF' && $gCurrentOrganization->countAllRecords() === 1)
+            || ($this->type === 'USF' && ($gCurrentOrganization->countAllRecords() === 1 || $this->categoryRessource->getValue('cat_system') === true))
             || ($this->type === 'ROL' && $this->categoryRessource->getValue('cat_name_intern') === 'EVENTS')) {
             $this->categoryRessource->setValue('cat_org_id', 0);
             $sqlSearchOrga = ' AND (  cat_org_id = ? -- $gCurrentOrgId
@@ -182,7 +182,7 @@ class CategoryService
             $sqlSearchOrga = ' AND cat_org_id = ? -- $gCurrentOrgId';
         }
 
-        if ($this->categoryRessource->getValue('cat_name') !== $_POST['cat_name']) {
+        if (isset($_POST['cat_name']) && $this->categoryRessource->getValue('cat_name') !== $_POST['cat_name']) {
             // See if the category already exists
             $sql = 'SELECT COUNT(*) AS count
                   FROM ' . TBL_CATEGORIES . '
