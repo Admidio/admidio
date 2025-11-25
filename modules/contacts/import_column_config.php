@@ -58,9 +58,10 @@ try {
             });
             var outstr = $(available).not(used).get().join(", ");
             if (outstr == "") {
-                outstr = "-";
+                $("#admidio-import-unused").hide();
+            } else {
+                $("#admidio-import-unused #admidio-import-unused-fields").html(outstr);
             }
-            $("#admidio-import-unused #admidio-import-unused-fields").html(outstr);
         });
         $(".admidio-import-field").trigger("change");',
         true
@@ -145,7 +146,7 @@ try {
             array(
                 'category' => $column['cat_name'],
                 'property' => $fieldProperty,
-                'defaultValue' => $fieldDefaultValue,
+                'defaultValue' => (in_array($fieldDefaultValue, $arrayCsvColumns) ? array_search($fieldDefaultValue, $arrayCsvColumns) : ''),
                 'firstEntry' => $gL10n->get('SYS_ASSIGN_FILE_COLUMN'),
                 'class' => 'admidio-import-field'
             )
