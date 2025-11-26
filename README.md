@@ -34,13 +34,12 @@ To install Admidio on your web server, ensure you have PHP 8.2 or higher and eit
 
 ## Update
 
-Keep your Admidio installation up to date by following our [online update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update). Here's a brief update overview:
+Keep your Admidio installation up to date by following our [online update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update). Here's a brief update overview if you don't have custom themes installed:
 
-1. Delete the folder "adm_program" and the "index.php" of the previous version.
-2. Copy the folder "adm_program" and the "index.php" from the new version.
+1. Delete all folders and files except "adm_my_files" and "adm_plugins" of the previous version.
+2. Copy all folders except "adm_my_files" from the new version.
 3. Update the "adm_plugins" folder with the newly delivered plugins.
 4. Access the "index.php" in your Admidio folder to initiate the update.
-5. Update or replace the theme in the "adm_theme" folder.
 
 ## Docker
 
