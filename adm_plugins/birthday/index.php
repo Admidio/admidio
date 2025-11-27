@@ -85,10 +85,10 @@ try {
     }
 
     // Check if the role condition has been set
-    if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0) {
-        $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
-    } else {
+    if (empty($plg_rolle_sql)) {
         $sqlRol = 'IS NOT NULL';
+    } else {
+        $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
     }
 
     // Check if the sort condition has been set
