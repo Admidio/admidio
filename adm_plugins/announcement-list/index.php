@@ -47,7 +47,7 @@ try {
         $plg_max_char_per_word = 0;
     }
 
-    if (!isset($plg_categories)) {
+    if (empty($plg_categories)) {
         $plg_categories = array();
         $plgSqlCategories = '';
     } else {
