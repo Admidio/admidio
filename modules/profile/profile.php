@@ -320,24 +320,26 @@ try {
             $masterData['COUNTRY'] = array('id' => 'COUNTRY', 'label' => '', 'value' => '');
         }
 
-        // set urls for map and route
-        $destination = array_filter(array(
-            $masterData['STREET']['value'],
-            $masterData['POSTCODE']['value'],
-            $masterData['CITY']['value'],
-            $masterData['COUNTRY']['value']
-        ));
-        $origin = array_filter(array(
-            $gCurrentUser->getValue('STREET'),
-            $gCurrentUser->getValue('POSTCODE'),
-            $gCurrentUser->getValue('CITY'),
-            $gCurrentUser->getValue('COUNTRY')
-        ));
-
         if ($gSettingsManager->getBool('profile_show_map_link')) {
-            $page->assignSmartyVariable('urlMapAddress', SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => implode(',', $destination))));
-            if ($userId !== $gCurrentUserId) {
-                $page->assignSmartyVariable('urlMapRoute', SecurityUtils::encodeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => implode(',', $origin), 'destination' => implode(',', $destination))));
+            // set urls for map and route
+            $destination = array_filter(array(
+                $masterData['STREET']['value'],
+                $masterData['POSTCODE']['value'],
+                $masterData['CITY']['value'],
+                $masterData['COUNTRY']['value']
+            ));
+            $origin = array_filter(array(
+                $gCurrentUser->getValue('STREET'),
+                $gCurrentUser->getValue('POSTCODE'),
+                $gCurrentUser->getValue('CITY'),
+                $gCurrentUser->getValue('COUNTRY')
+            ));
+
+            if ((string)$masterData['CITY']['value'] !== '') {
+                $page->assignSmartyVariable('urlMapAddress', SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => implode(',', $destination))));
+                if ($userId !== $gCurrentUserId) {
+                    $page->assignSmartyVariable('urlMapRoute', SecurityUtils::encodeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => implode(',', $origin), 'destination' => implode(',', $destination))));
+                }
             }
         }
     }
