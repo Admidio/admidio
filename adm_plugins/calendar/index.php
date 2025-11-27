@@ -79,9 +79,9 @@ try {
 
     // check if role conditions where set
     if (empty($plg_rolle_sql)) {
-        $sqlRol = 'IS NOT NULL';
+        $sqlRoleIds = 'IS NOT NULL';
     } else {
-        $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
+        $sqlRoleIds = 'IN (' . implode(',', $plg_rolle_sql) . ')';
     }
 
     header('Content-Type: text/html; charset=utf-8');
