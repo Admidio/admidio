@@ -40,8 +40,8 @@
     </label>
     <div class="col-sm-9">
         <div>
-            <a id="donate" href="{$admidioHomepage}donate.php" target="_blank">
-                <i class="bi bi-heart-fill admidio-icon-chain"></i>{$l10n->get('SYS_DONATE')}</a>
+            <a id="donate" class="icon-link" href="{$admidioHomepage}donate.php" target="_blank">
+                <i class="bi bi-heart-fill"></i>{$l10n->get('SYS_DONATE')}</a>
             <div class="form-text">{$l10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT')}</div>
         </div>
     </div>
