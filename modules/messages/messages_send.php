@@ -94,7 +94,7 @@ try {
         // if user is logged in then show sender name and email
         if ($gCurrentUserId > 0) {
             $formValues['namefrom'] = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
-            if (!isset($formValues['mailfrom']) || !StringUtils::strValidCharacters((string) $formValues['mailfrom'], 'email')) {
+            if (!isset($formValues['mailfrom']) || !StringUtils::strValidCharacters((string)$formValues['mailfrom'], 'email')) {
                 $formValues['mailfrom'] = $gCurrentUser->getValue('EMAIL');
             }
         }
@@ -108,7 +108,7 @@ try {
         if (isset($postTo)) {
             if ($postListUuid !== '') { // the uuid of a list was passed
                 $postTo = explode(',', $postUserUuidList);
-                foreach ($postListUuid as $key => $uuid) {
+                foreach ($postTo as $key => $uuid) {
                     if (!UUID::isValid($uuid)) {
                         unset($postListUuid[$key]);
                     }
@@ -216,7 +216,7 @@ try {
                                 StringUtils::strIsValidFileName($_FILES['userfile']['name'][$currentAttachmentNo], false);
 
                                 // check for valid file extension of attachment
-                                if(!FileSystemUtils::allowedFileExtension($_FILES['userfile']['name'][$currentAttachmentNo])) {
+                                if (!FileSystemUtils::allowedFileExtension($_FILES['userfile']['name'][$currentAttachmentNo])) {
                                     throw new Exception('SYS_FILE_EXTENSION_INVALID');
                                 }
 
@@ -251,7 +251,7 @@ try {
         }
 
         // set flag if copy should be sent to sender
-        if ( isset($formValues['carbon_copy']) && $formValues['carbon_copy']) {
+        if (isset($formValues['carbon_copy']) && $formValues['carbon_copy']) {
             $email->setCopyToSenderFlag();
         }
 
