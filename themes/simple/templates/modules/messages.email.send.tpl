@@ -4,10 +4,10 @@
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {if {array_key_exists array=$elements key='userUuidList'}}
-        {include 'sys-template-parts/form.select.tpl' data=$elements['userUuidList']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['userUuidList']}
     {/if}
     {if {array_key_exists array=$elements key='list_uuid'}}
-        {include 'sys-template-parts/form.select.tpl' data=$elements['list_uuid']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['list_uuid']}
     {/if}
 
     <div class="card admidio-field-group">
