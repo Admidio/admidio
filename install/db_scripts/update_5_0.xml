@@ -526,5 +526,8 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1810" database="pgsql">ALTER TABLE %PREFIX%_inventory_item_borrow_data ALTER COLUMN inb_return_date TYPE timestamp</step>
     <step id="1820">ALTER TABLE %PREFIX%_inventory_fields ADD COLUMN inf_inf_uuid_connected varchar(36) NULL DEFAULT NULL</step>
     <step id="1830">UPDATE %PREFIX%_categories SET cat_org_id = null WHERE cat_name_intern = 'BASIC_DATA'</step>
+    <step id="1840">UPDATE %PREFIX%_user_fields SET usf_name = 'Skype' WHERE usf_name = 'SYS_SKYPE'</step>
+    <step id="1850">UPDATE %PREFIX%_user_fields SET usf_name = 'ICQ' WHERE usf_name = 'SYS_ICQ'</step>
+    <step id="1860">UPDATE %PREFIX%_user_fields SET usf_name = 'X' WHERE usf_name = 'SYS_TWITTER'</step>
     <step>stop</step>
 </update>
