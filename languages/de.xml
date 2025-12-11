@@ -533,6 +533,7 @@
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
   <string name="SYS_DOWNLOAD_ZIP_ERROR">Bei der Erstellung der Zip-Datei ist ein Fehler aufgetreten.</string>
   <string name="SYS_DQUOTE">Anführungszeichen (\")</string>
+  <string name="SYS_DROPDOWN_DATE_INTERVAL_LISTBOX">Dropdown-Listenfeld (Datumsintervall)</string>
   <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
   <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Dropdown-Listenfeld (Mehrfachauswahl)</string>
   <string name="SYS_DUPLICATE">Duplizieren</string>
@@ -789,7 +790,9 @@
   <string name="SYS_INVENTORY_BORROW_DATE_DESC">Das Verleihdatum des Gegenstandes an den letzten Empfänger</string>
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">Das Ausleihdatum des Gegenstandes muss vor dem Rückgabedatum liegen!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">Die Kategorie des Gegenstandes</string>
+  <string name="SYS_INVENTORY_CONNECTED_FIELD">Verbundenes Feld</string>
   <string name="SYS_INVENTORY_COPY_PREFERENCES">Einstellungen für das Kopieren eines Gegenstandes:</string>
+  <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">In dieser Tabelle kannst du die Einträge für die Datumsintervalle eingeben. Für jeden weiteren Eintrag im Dropdown-Listenfeld kann hier eine Tabellenzeile hinzugefügt werden. Der Listeneintrag wird später nicht als Text gespeichert, sondern die ausgewählte Position aus der Liste. Wenn du den Text in einer Zeile änderst, sehen alle Benutzer sofort den neuen Text. Das Datumsintervall muss in derselben Zeile nach dem Titel durch das Symbol | getrennt geschrieben werden. z. B. Jährlich | 1y Wenn keine Einheit angegeben ist, werden Tage angenommen. Mögliche Einheiten: d: Tage, w: Wochen, m: Monate, y: Jahre</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Datumsdarstellung</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Auswahl des Datumsformats, das für die Anzeige von Datums- und Zeitangaben in der Inventarverwaltung verwendet werden soll. (Voreinstellung: Datum (TT.MM.JJJJ))</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES">Anzahl Dezimalstellen</string>
