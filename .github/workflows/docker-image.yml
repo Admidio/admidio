@@ -5,7 +5,11 @@ on:
     tags:
       - 'v*'
   release:
-    types: [published]
+    types:
+        - published
+        - prereleased
+        - released
+        - edited
   workflow_dispatch:
 
 jobs:
