@@ -1,20 +1,23 @@
 name: Docker Multi-Arch Build
 
 on:
-  workflow_dispatch:
   push:
     tags:
-      - 'v*'
+      - 'te*'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout source
         uses: actions/checkout@v4
         with:
-          ref: refs/tags/v5.0.3
           fetch-depth: 0
+
+      - name: Extract Git tag
+        run: |
+          echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -28,10 +31,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract tag name
-        id: tag
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -39,5 +38,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            admidio/admidio:latest
-            admidio/admidio:v5.0.3
+            admidio/admidio:${{ env.RELEASE_TAG }}
