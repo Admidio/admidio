@@ -3,7 +3,7 @@ name: Docker Multi-Arch Build
 on:
   push:
     tags:
-      - 'te*'
+      - '*'
   workflow_dispatch:
 
 jobs:
