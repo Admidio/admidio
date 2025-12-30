@@ -3,7 +3,9 @@ name: Docker Multi-Arch Build
 on:
   push:
     tags:
-      - '*'
+      - 'v*'
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -15,9 +17,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract Git tag
+      - name: Extract release tag
         run: |
-          echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+            echo "RELEASE_TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          else
+            echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          fi
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
