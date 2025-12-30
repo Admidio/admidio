@@ -40,4 +40,4 @@ jobs:
           push: true
           tags: |
             admidio/admidio:latest
-            admidio/admidio:${{ env.TAG_NAME }}
+            admidio/admidio:v5.0.3
