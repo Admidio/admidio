@@ -37,4 +37,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            admidio/admidio:${{ env.BRANCH_NAME }}
+            admidio/admidio:branch_${{ env.BRANCH_NAME }}
