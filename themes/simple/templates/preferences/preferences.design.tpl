@@ -10,7 +10,9 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['additional_styles_file']}
     
     {include 'sys-template-parts/form.input.tpl' data=$elements['logo_file']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['logo_file_max_height']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['favicon_file']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['admidio_headline']}
 
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_design']}
     <div class="form-alert" style="display: none;">&nbsp;</div>

@@ -179,15 +179,15 @@ class Category extends Entity
 
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
-     *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @param string $format For date or timestamp columns, the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     *                           For text columns, the format can be **database** that would return the original database value without any transformations
+     * @return mixed Returns the value of the database column.
+     *                         If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -198,7 +198,7 @@ class Category extends Entity
             $value = parent::getValue($columnName, $format);
         }
 
-        // if text is a translation-id then translate it
+        // if a text is a translation-id, then translate it
         if ($columnName === 'cat_name' && $format !== 'database' && Language::isTranslationStringId($value)) {
             $value = $gL10n->get($value);
         }
@@ -209,7 +209,7 @@ class Category extends Entity
     /**
      * This method checks if the current user is allowed to edit this category. Therefore,
      * the category must be visible to the user and must be of the current organization.
-     * If this is a global category than the current organization must be the parent organization.
+     * If this is a global category, then the current organization must be the parent organization.
      * @return bool Return true if the current user is allowed to edit this category
      * @throws Exception
      */
@@ -502,7 +502,7 @@ class Category extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             // System categories should not be renamed

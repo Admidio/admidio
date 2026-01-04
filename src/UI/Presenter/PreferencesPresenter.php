@@ -118,13 +118,13 @@ class PreferencesPresenter extends PagePresenter
                 'key'    => 'system',
                 'label'  => $gL10n->get('SYS_SYSTEM'),
                 'panels' => array(
+                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
                     array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false),
                     array('id'=>'overview',             'title'=>$gL10n->get('SYS_OVERVIEW'),               'icon'=>'bi-house-door-fill',               'subcards'=>false),
                     array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
                     array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
                     array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
-                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
-                )
+                ),
             ),
 
             // === 2) Login and Security ===
@@ -853,6 +853,18 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_LOGO_FILE_DESC')
         );
         $formDesign->addInput(
+            'logo_file_max_height',
+            $gL10n->get('SYS_LOGO_FILE_MAX_HEIGHT'),
+            $formValues['logo_file_max_height']??'',
+            array('property' => FormPresenter::FIELD_REQUIRED, 'type' => 'number', 'minNumber' => 40, 'maxNumber' => 200, 'step' => 1,'helpTextId' => 'SYS_LOGO_FILE_MAX_HEIGHT_DESC')
+        );
+        $formDesign->addInput(
+            'admidio_headline',
+            $gL10n->get('SYS_HEADLINE'),
+            $formValues['admidio_headline']??'',
+            array('helpTextId' => 'SYS_ADMIDIO_HEADLINE_DESC')
+        );
+        $formDesign->addInput(
             'favicon_file',
             $gL10n->get('SYS_FAVICON_FILE'),
             $formValues['favicon_file']??'',
@@ -928,8 +940,7 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
-        //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
+        $items = new ItemsData($gDb, $gCurrentOrgId);
 
         $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',
@@ -944,13 +955,44 @@ class PreferencesPresenter extends PagePresenter
             '0' => $gL10n->get('SYS_DISABLED'),
             '1' => $gL10n->get('SYS_ENABLED'),
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
-            '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR')
+            '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR'),
+            '4' => $gL10n->get('SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS'),
+            '5' => $gL10n->get('SYS_INVENTORY_ONLY_FOR_ADMINS_AND_ROLES')
         );
         $formInventory->addSelectBox(
             'inventory_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
             $selectBoxEntries,
             array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ACCESS_TO_MODULE_DESC')
+        );
+
+        // read all roles from db
+        $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
+                       FROM ' . TBL_ROLES . '
+                 INNER JOIN ' . TBL_CATEGORIES . '
+                         ON cat_id = rol_cat_id
+                 INNER JOIN ' . TBL_ORGANIZATIONS . '
+                         ON org_id = cat_org_id
+                      WHERE rol_valid  = true
+                        AND rol_system = false
+                        AND cat_name_intern <> \'EVENTS\'
+                   ORDER BY cat_name, rol_name';
+        $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
+
+        $selectBoxEntries = array();
+        while ($rowViewRoles = $rolesViewStatement->fetch()) {
+            // Each role is now added to this array
+            $selectBoxEntries[] = array(
+                $rowViewRoles['rol_id'],
+                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')',
+                $rowViewRoles['cat_name']
+            );
+        }
+        $formInventory->addSelectBox(
+            'inventory_visible_for',
+            $gL10n->get('SYS_VISIBLE_FOR'),
+            $selectBoxEntries,
+            array('defaultValue' => explode(',', $formValues['inventory_visible_for']), 'multiselect' => true)
         );
 
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
@@ -1024,7 +1066,7 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
         );
 
-        if ($formValues['inventory_module_enabled'] !== 3  || ($formValues['inventory_module_enabled'] === 3 && $gCurrentUser->isAdministratorInventory())) {
+        if ($formValues['inventory_module_enabled'] !== '3'  || ($formValues['inventory_module_enabled'] === '3' && $gCurrentUser->isAdministratorInventory())) {
             $formInventory->addCheckbox(
                 'inventory_allow_keeper_edit',
                 $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
@@ -1033,11 +1075,14 @@ class PreferencesPresenter extends PagePresenter
             );
 
             // create array of possible fields for keeper edit
-            $items = new ItemsData($gDb, $gCurrentOrgId);
             $selectBoxEntries = array();
+            // add pseudo field 'ITEM_PICTURE' if item pictures are enabled
+            if ($formValues['inventory_item_picture_enabled']) {
+                $selectBoxEntries['ITEM_PICTURE'] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
+            }
             foreach ($items->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
-                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames)) {
                     continue; // skip borrowing fields if borrowing is disabled
                 }
                 $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
@@ -1096,7 +1141,7 @@ class PreferencesPresenter extends PagePresenter
         $selectBoxEntries = array();
         foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames))) {
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames))) {
                 continue;
             }
             $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
@@ -2590,7 +2635,7 @@ class PreferencesPresenter extends PagePresenter
 
         //assign card titles and corresponding template files
         $cards = array(
-            array('title'=>$gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
+            array('title'=>$gL10n->get('SYS_ADMIDIO'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
             array('title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),        'icon'=>'bi-info-circle-fill', 'templateFile'=>'preferences/preferences.system-information.tpl'),
             array('title'=>$gL10n->get('SYS_PHP'),                 'icon'=>'bi-filetype-php', 'templateFile'=>'preferences/preferences.php.tpl'),
         );
@@ -2636,6 +2681,12 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_NOTIFICATION_PROFILE_CHANGES'),
             (bool) $formValues['system_notifications_profile_changes'],
             array('helpTextId' => 'SYS_NOTIFICATION_PROFILE_CHANGES_DESC')
+        );
+        $formSystemNotifications->addCheckbox(
+            'system_notifications_inventory_changes',
+            $gL10n->get('SYS_NOTIFICATION_INVENTORY_CHANGES'),
+            (bool) $formValues['system_notifications_inventory_changes'],
+            array('helpTextId' => 'SYS_NOTIFICATION_INVENTORY_CHANGES_DESC')
         );
 
         // read all roles of the organization

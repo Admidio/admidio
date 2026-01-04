@@ -33,13 +33,13 @@ if (!is_file($configPath)) {
 // first check if session is filled (if installation was aborted then this is not filled)
 // if previous dialogs were filled then check if the settings are equal to config file
 if (isset($_SESSION['table_prefix'])
-&&    ($_SESSION['db_engine']      !== DB_ENGINE
-    || $_SESSION['db_host']        !== DB_HOST
-    || $_SESSION['db_port']        !== DB_PORT
-    || $_SESSION['db_name']        !== DB_NAME
-    || $_SESSION['db_username']    !== DB_USERNAME
-    || $_SESSION['db_password']    !== DB_PASSWORD
-    || $_SESSION['table_prefix']   !== TABLE_PREFIX)) {
+    && ($_SESSION['db_engine'] !== DB_ENGINE
+        || $_SESSION['db_host'] !== DB_HOST
+        || $_SESSION['db_port'] !== DB_PORT
+        || $_SESSION['db_name'] !== DB_NAME
+        || $_SESSION['db_username'] !== DB_USERNAME
+        || $_SESSION['db_password'] !== DB_PASSWORD
+        || $_SESSION['table_prefix'] !== TABLE_PREFIX)) {
     throw new Exception('INS_DATA_DO_NOT_MATCH', array('config.php'));
 }
 
@@ -71,7 +71,7 @@ $gCurrentUser->save(false); // no registered user -> UserIdCreate couldn't be fi
 $gCurrentUserId = $gCurrentUser->getValue('usr_id');
 
 // create all modules components
-$sql = 'INSERT INTO '.TBL_COMPONENTS.'
+$sql = 'INSERT INTO ' . TBL_COMPONENTS . '
                (com_type, com_name, com_name_intern, com_version, com_beta)
         VALUES (\'MODULE\', \'SYS_ANNOUNCEMENTS\',   \'ANNOUNCEMENTS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
              , (\'MODULE\', \'SYS_CATEGORIES\',      \'CATEGORIES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
@@ -95,98 +95,98 @@ $sql = 'INSERT INTO '.TBL_COMPONENTS.'
 $db->query($sql); // TODO add more params
 
 // create organization independent categories
-$sql = 'INSERT INTO '.TBL_CATEGORIES.'
+$sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
         VALUES (NULL, \'' . Uuid::uuid4() . '\', \'USF\', \'BASIC_DATA\', \'SYS_BASIC_DATA\', false, true, 1, ?, ?) -- $gCurrentUserId, DATETIME_NOW';
 $db->queryPrepared($sql, array($gCurrentUserId, DATETIME_NOW));
 $categoryIdMasterData = $db->lastInsertId();
 
-$sql = 'INSERT INTO '.TBL_CATEGORIES.'
+$sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
         VALUES (NULL, \'' . Uuid::uuid4() . '\', \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', false, false, 2, ?, ?) -- $gCurrentUserId, DATETIME_NOW';
 $db->queryPrepared($sql, array($gCurrentUserId, DATETIME_NOW));
 $categoryIdSocialNetworks = $db->lastInsertId();
 
-$sql = 'INSERT INTO '.TBL_CATEGORIES.'
+$sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
         VALUES (NULL, \'' . Uuid::uuid4() . '\', \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', false, false, 3, ?, ?) -- $gCurrentUserId, DATETIME_NOW';
 $db->queryPrepared($sql, array($gCurrentUserId, DATETIME_NOW));
 $categoryIdAddidionalData = $db->lastInsertId();
 
 // create roles rights
-$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
+$sql = 'INSERT INTO ' . TBL_ROLES_RIGHTS . '
                (ror_name_intern, ror_table)
-        VALUES (\'folder_view\',   \'adm_folders\')
-             , (\'folder_upload\', \'adm_folders\')
-             , (\'category_view\', \'adm_categories\')
-             , (\'event_participation\', \'adm_events\')
-             , (\'menu_view\',     \'adm_menu\')
-             , (\'sso_saml_access\', \'adm_saml_clients\')
-             , (\'sso_oidc_access\', \'adm_oidc_clients\')
+        VALUES (\'folder_view\',   \'' . TBL_FOLDERS . '\')
+             , (\'folder_upload\', \'' . TBL_FOLDERS . '\')
+             , (\'category_view\', \'' . TBL_CATEGORIES . '\')
+             , (\'event_participation\', \'' . TBL_CATEGORIES . '\')
+             , (\'menu_view\',     \'' . TBL_MENU . '\')
+             , (\'sso_saml_access\', \'' . TBL_SAML_CLIENTS . '\')
+             , (\'sso_oidc_access\', \'' . TBL_OIDC_CLIENTS . '\')
              ';
 $db->queryPrepared($sql);
 
 // add edit categories right with reference to parent right
-$sql = 'INSERT INTO '.TBL_ROLES_RIGHTS.'
+$sql = 'INSERT INTO ' . TBL_ROLES_RIGHTS . '
                (ror_name_intern, ror_table, ror_ror_id_parent)
-        VALUES (\'category_edit\', \'adm_categories\', (SELECT rr.ror_id FROM '.TBL_ROLES_RIGHTS.' rr WHERE rr.ror_name_intern = \'category_view\'))';
+        VALUES (\'category_edit\', \'' . TBL_CATEGORIES . '\', (SELECT rr.ror_id FROM ' . TBL_ROLES_RIGHTS . ' rr WHERE rr.ror_name_intern = \'category_view\'))';
 $db->queryPrepared($sql);
 
 // create profile fields of category basic data
-$sql = 'INSERT INTO '.TBL_USER_FIELDS.'
+$sql = 'INSERT INTO ' . TBL_USER_FIELDS . '
                (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_disabled, usf_required_input, usf_registration, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-        VALUES ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, true, true, 1, true, 1,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, true, true, 1, true, 2,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, false, false, 0, false, 3,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'POSTCODE\',   \'SYS_POSTCODE\',  NULL, false, false, 0, false, 4,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'CITY\',       \'SYS_CITY\',      NULL, false, false, 0, false, 5,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, false, false, 0, false, 6,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, false, false, 0, false, 7,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, false, false, 0, false, 8,  '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, false, false, 0, false, 10, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, false, false, 0, false, 11, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, true, false, 2, true, 12, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdMasterData.', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, false, false, 0, false, 13, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdAddidionalData.', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \''.$gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC').'\', false, false, 2, false, 14, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
+        VALUES (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'LAST_NAME\',  \'SYS_LASTNAME\',  NULL, true, true, 1, true, 1,  ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'FIRST_NAME\', \'SYS_FIRSTNAME\', NULL, true, true, 1, true, 2,  ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'STREET\',     \'SYS_STREET\',    NULL, false, false, 0, false, 3,  ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'POSTCODE\',   \'SYS_POSTCODE\',  NULL, false, false, 0, false, 4,  ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'CITY\',       \'SYS_CITY\',      NULL, false, false, 0, false, 5,  ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'TEXT\',         \'COUNTRY\',    \'SYS_COUNTRY\',   NULL, false, false, 0, false, 6,  ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'PHONE\',      \'SYS_PHONE\',     NULL, false, false, 0, false, 7,  ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'PHONE\',        \'MOBILE\',     \'SYS_MOBILE\',    NULL, false, false, 0, false, 8,  ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'DATE\',         \'BIRTHDAY\',   \'SYS_BIRTHDAY\',  NULL, false, false, 0, false, 10, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, false, false, 0, false, 11, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, true, false, 2, true, 12, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, false, false, 0, false, 13, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdAddidionalData . ', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \'' . $gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC') . '\', false, false, 2, false, 14, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')';
 $db->query($sql); // TODO add more params
 
 // add gender options to database
-$sql = 'INSERT INTO '.TBL_USER_FIELD_OPTIONS.'
+$sql = 'INSERT INTO ' . TBL_USER_FIELD_OPTIONS . '
                (ufo_usf_id, ufo_value, ufo_sequence)
-        VALUES ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-male|SYS_MALE\', 1)
-             , ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-female|SYS_FEMALE\', 2)
-             , ((SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = '.$categoryIdMasterData.' AND usf_name_intern = \'GENDER\'), \'gender-trans|SYS_DIVERSE\', 3)';
+        VALUES ((SELECT usf_id FROM ' . TBL_USER_FIELDS . ' WHERE usf_cat_id = ' . $categoryIdMasterData . ' AND usf_name_intern = \'GENDER\'), \'gender-male|SYS_MALE\', 1)
+             , ((SELECT usf_id FROM ' . TBL_USER_FIELDS . ' WHERE usf_cat_id = ' . $categoryIdMasterData . ' AND usf_name_intern = \'GENDER\'), \'gender-female|SYS_FEMALE\', 2)
+             , ((SELECT usf_id FROM ' . TBL_USER_FIELDS . ' WHERE usf_cat_id = ' . $categoryIdMasterData . ' AND usf_name_intern = \'GENDER\'), \'gender-trans|SYS_DIVERSE\', 3)';
 $db->query($sql);
 
 // create profile fields of category social networks
-$sql = 'INSERT INTO '.TBL_USER_FIELDS.'
+$sql = 'INSERT INTO ' . TBL_USER_FIELDS . '
                (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-        VALUES ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'FACEBOOK\',              \'SYS_FACEBOOK\',    \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'facebook\',  \'https://www.facebook.com/#user_content#\',     false, 1, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'INSTAGRAM\',             \'SYS_INSTAGRAM\',   \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'instagram\', \'https://www.instagram.com/#user_content#\',    false, 2, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'LINKEDIN\',              \'SYS_LINKEDIN\',    \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'linkedin\',  \'https://www.linkedin.com/in/#user_content#\',  false, 3, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'MASTODON\',              \'SYS_MASTODON\',    \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', \'mastodon\',  \'https://mastodon.social/#user_content#\',      false, 4, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , ('.$categoryIdSocialNetworks.', \'' . Uuid::uuid4() . '\', \'TEXT\', \'XING\',                  \'SYS_XING\',        \''.$gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC').'\', null,          \'https://www.xing.com/profile/#user_content#\', false, 7, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
+        VALUES (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'FACEBOOK\',              \'SYS_FACEBOOK\',    \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'facebook\',  \'https://www.facebook.com/#user_content#\',     false, 1, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'INSTAGRAM\',             \'SYS_INSTAGRAM\',   \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'instagram\', \'https://www.instagram.com/#user_content#\',    false, 2, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'LINKEDIN\',              \'SYS_LINKEDIN\',    \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'linkedin\',  \'https://www.linkedin.com/in/#user_content#\',  false, 3, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'MASTODON\',              \'SYS_MASTODON\',    \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'mastodon\',  \'https://mastodon.social/#user_content#\',      false, 4, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'XING\',                  \'SYS_XING\',        \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', null,          \'https://www.xing.com/profile/#user_content#\', false, 7, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')';
 $db->query($sql); // TODO add more params
 
 // create user relation types
-$sql = 'INSERT INTO '.TBL_USER_RELATION_TYPES.'
+$sql = 'INSERT INTO ' . TBL_USER_RELATION_TYPES . '
                (urt_id, urt_uuid, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-        VALUES (1, \'' . Uuid::uuid4() . '\', \''.$gL10n->get('INS_PARENT').'\',      \''.$gL10n->get('INS_FATHER').'\',           \''.$gL10n->get('INS_MOTHER').'\',          null, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (2, \'' . Uuid::uuid4() . '\', \''.$gL10n->get('INS_CHILD').'\',       \''.$gL10n->get('INS_SON').'\',              \''.$gL10n->get('INS_DAUGHTER').'\',           1, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (3, \'' . Uuid::uuid4() . '\', \''.$gL10n->get('INS_SIBLING').'\',     \''.$gL10n->get('INS_BROTHER').'\',          \''.$gL10n->get('INS_SISTER').'\',             3, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (4, \'' . Uuid::uuid4() . '\', \''.$gL10n->get('INS_SPOUSE').'\',      \''.$gL10n->get('INS_HUSBAND').'\',          \''.$gL10n->get('INS_WIFE').'\',               4, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (5, \'' . Uuid::uuid4() . '\', \''.$gL10n->get('INS_COHABITANT').'\',  \''.$gL10n->get('INS_COHABITANT_MALE').'\',  \''.$gL10n->get('INS_COHABITANT_FEMALE').'\',  5, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (6, \'' . Uuid::uuid4() . '\', \''.$gL10n->get('SYS_COMPANION').'\',   \''.$gL10n->get('SYS_BOYFRIEND').'\',        \''.$gL10n->get('SYS_GIRLFRIEND').'\',         6, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (7, \'' . Uuid::uuid4() . '\', \''.$gL10n->get('SYS_SUPERIOR').'\',    \''.$gL10n->get('SYS_SUPERIOR_MALE').'\',    \''.$gL10n->get('SYS_SUPERIOR_FEMALE').'\', null, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')
-             , (8, \'' . Uuid::uuid4() . '\', \''.$gL10n->get('INS_SUBORDINATE').'\', \''.$gL10n->get('INS_SUBORDINATE_MALE').'\', \''.$gL10n->get('INS_SUBORDINATE_FEMALE').'\', 7, '.$gCurrentUserId.', \''. DATETIME_NOW.'\')';
+        VALUES (1, \'' . Uuid::uuid4() . '\', \'SYS_PARENT\',      \'SYS_FATHER\',           \'SYS_MOTHER\',          null, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (2, \'' . Uuid::uuid4() . '\', \'SYS_CHILD\',       \'SYS_SON\',              \'SYS_DAUGHTER\',           1, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (3, \'' . Uuid::uuid4() . '\', \'SYS_SIBLING\',     \'SYS_BROTHER\',          \'SYS_SISTER\',             3, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (4, \'' . Uuid::uuid4() . '\', \'SYS_SPOUSE\',      \'SYS_HUSBAND\',          \'SYS_WIFE\',               4, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (5, \'' . Uuid::uuid4() . '\', \'SYS_COHABITANT\',  \'SYS_COHABITANT_MALE\',  \'SYS_COHABITANT_FEMALE\',  5, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (6, \'' . Uuid::uuid4() . '\', \'SYS_COMPANION\',   \'SYS_BOYFRIEND\',        \'SYS_GIRLFRIEND\',         6, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (7, \'' . Uuid::uuid4() . '\', \'SYS_SUPERIOR\',    \'SYS_SUPERIOR_MALE\',    \'SYS_SUPERIOR_FEMALE\', null, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')
+             , (8, \'' . Uuid::uuid4() . '\', \'SYS_SUBORDINATE\', \'SYS_SUBORDINATE_MALE\', \'SYS_SUBORDINATE_FEMALE\', 7, ' . $gCurrentUserId . ', \'' . DATETIME_NOW . '\')';
 $db->query($sql); // TODO add more params
 
-$sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
+$sql = 'UPDATE ' . TBL_USER_RELATION_TYPES . '
            SET urt_id_inverse = 2
          WHERE urt_id = 1';
 $db->queryPrepared($sql);
 
-$sql = 'UPDATE '.TBL_USER_RELATION_TYPES.'
+$sql = 'UPDATE ' . TBL_USER_RELATION_TYPES . '
            SET urt_id_inverse = 8
          WHERE urt_id = 7';
 $db->queryPrepared($sql);
@@ -214,7 +214,7 @@ $administrator->save(false); // no registered user -> UserIdCreate couldn't be f
 $adminUsrId = $administrator->getValue('usr_id');
 
 // write all preferences from preferences.php in table adm_preferences
-require_once(ADMIDIO_PATH . FOLDER_INSTALLATION. '/db_scripts/preferences.php');
+require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
 
 // set some specific preferences whose values came from user input of the installation wizard
 $defaultOrgPreferences['system_language'] = $language;
@@ -231,7 +231,7 @@ $gSettingsManager->setMulti($defaultOrgPreferences, false);
 $gCurrentOrganization->createBasicData($adminUsrId);
 
 // create default room for room module in database
-$sql = 'INSERT INTO '.TBL_ROOMS.'
+$sql = 'INSERT INTO ' . TBL_ROOMS . '
                (room_uuid, room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
         VALUES (\'' . Uuid::uuid4() . '\', ?, ?, 15, ?, ?) -- $gL10n->get(\'INS_CONFERENCE_ROOM\'), $gL10n->get(\'INS_DESCRIPTION_CONFERENCE_ROOM\'), $gCurrentUserId, DATETIME_NOW';
 $params = array(
@@ -261,7 +261,7 @@ $systemUser->save(false); // no registered user -> UserIdCreate couldn't be fill
 $gCurrentUser->readDataById($gCurrentUserId);
 
 // Menu entries for the standard installation
-$sql = 'INSERT INTO '.TBL_MENU.'
+$sql = 'INSERT INTO ' . TBL_MENU . '
                (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 1, true, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
              , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 2, true, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')

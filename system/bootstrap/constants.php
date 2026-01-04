@@ -22,7 +22,7 @@ define('SCRIPT_START_TIME', microtime(true));
 const MIN_PHP_VERSION = '8.2.0';
 
 const ADMIDIO_VERSION_MAIN = 5;
-const ADMIDIO_VERSION_MINOR = 0;
+const ADMIDIO_VERSION_MINOR = 1;
 const ADMIDIO_VERSION_PATCH = 0;
 const ADMIDIO_VERSION_BETA = 1;
 
@@ -126,7 +126,7 @@ const TBL_IDS = TABLE_PREFIX . '_ids';
 const TBL_LINKS = TABLE_PREFIX . '_links';
 const TBL_LIST_COLUMNS = TABLE_PREFIX . '_list_columns';
 const TBL_LISTS = TABLE_PREFIX . '_lists';
-const TBL_LOG = TABLE_PREFIX . '_log_changes';
+const TBL_LOG_CHANGES = TABLE_PREFIX . '_log_changes';
 const TBL_MEMBERS = TABLE_PREFIX . '_members';
 const TBL_MENU = TABLE_PREFIX . '_menu';
 const TBL_MESSAGES = TABLE_PREFIX . '_messages';

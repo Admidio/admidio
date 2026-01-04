@@ -32,7 +32,6 @@ try {
     header("Content-Type: application/xml");
 
     echo $metadata;
-
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

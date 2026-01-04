@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
 use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\UI\Presenter\InventoryPresenter;
 
 /**
  * @brief Handle different components of Admidio (e.g. system, plugins or modules) and manage them in the database
@@ -22,7 +23,7 @@ use Admidio\Infrastructure\Plugins\PluginManager;
  *     $systemComponent = new Component($gDb);
  *     $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
  *     $systemComponent->checkDatabaseVersion(true, 'administrator@example.com');
- * } catch(Exception $e) {
+ * } catch(Throwable $e) {
  *     $e->showHtml();
  * }
  * ```
@@ -149,7 +150,7 @@ class Component extends Entity
                         return true;
                     }
                     break;
-    
+
                 case 'FORUM':
                     if ($gCurrentUser->isAdministratorForum()) {
                         return true;
@@ -266,11 +267,13 @@ class Component extends Entity
             case 'INVENTORY':
                 if ($gSettingsManager->getInt('inventory_module_enabled') === 1
                 || ($gSettingsManager->getInt('inventory_module_enabled') === 2 && $gValidLogin)
-                || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 4 && ($gCurrentUser->isAdministratorInventory() || InventoryPresenter::isCurrentUserKeeper()))
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 5 && $gCurrentUser->isAllowedToSeeInventory())) {
                     return true;
                 }
                 break;
-    
+
             case 'FORUM':
                 if ($gSettingsManager->getInt('forum_module_enabled') === 1
                 || ($gSettingsManager->getInt('forum_module_enabled') === 2 && $gValidLogin)) {

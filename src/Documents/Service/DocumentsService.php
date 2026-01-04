@@ -7,6 +7,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Roles\Entity\RolesRights;
 use DateTime;
 use RuntimeException;
@@ -338,6 +339,9 @@ class DocumentsService
 
             $oldFolder = $this->folder->getFullFolderPath();
 
+            // check if the folder name is valid
+            StringUtils::strIsValidFolderName($formValues['adm_new_name']);
+
             // check if folder already exists in filesystem
             if ($formValues['adm_new_name'] !== $this->folder->getValue('fol_name')
                 && is_dir(ADMIDIO_PATH . $this->folder->getValue('fol_path') . '/' . $formValues['adm_new_name'])) {
@@ -364,9 +368,6 @@ class DocumentsService
             if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
                 throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NEW_NAME')));
             }
-            if ($e->getMessage() === 'SYS_FILENAME_INVALID' && $this->folderUUID !== '') {
-                throw new Exception('SYS_FOLDER_NAME_INVALID');
-            }
             throw new Exception($e->getMessage());
         }
     }
@@ -384,6 +385,9 @@ class DocumentsService
             // check form field input and sanitized it from malicious content
             $documentsFilesFolderNewForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $documentsFilesFolderNewForm->validate($_POST);
+
+            // check if the folder name is valid
+            StringUtils::strIsValidFolderName($formValues['adm_folder_name']);
 
             // Test if the folder already exists in the file system
             if (is_dir($this->folder->getFullFolderPath() . '/' . $formValues['adm_folder_name'])) {
@@ -422,9 +426,6 @@ class DocumentsService
         } catch (Exception $e) {
             if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
                 throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME')));
-            }
-            if ($e->getMessage() === 'SYS_FILENAME_INVALID') {
-                throw new Exception('SYS_FOLDER_NAME_INVALID');
             }
             throw new Exception($e->getMessage());
         }

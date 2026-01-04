@@ -9,11 +9,12 @@
  ***********************************************************************************************
  */
 
-// preview will be called before form is send, so there are now POST parameters available
-// then show nothing. Second call is with POST parameters then show preview
+// Preview will be called before the form is sent, so there are now POST parameters available
+// then show nothing. The Second call is with POST parameters then show preview
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\ValueObject\ECard;
+use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
 
@@ -43,18 +44,18 @@ try {
 
     $funcClass = new ECard($gL10n);
 
-    // read content of template file
+    // read the content of a template file
     $ecardDataToParse = $funcClass->getEcardTemplate($formValues['ecard_template']);
 
     if ($ecardDataToParse === null) {
         throw new Exception('SYS_ERROR_PAGE_NOT_FOUND');
     }
 
-    $smarty = HtmlPage::createSmartyObject();
+    $smarty = PagePresenter::createSmartyObject();
     $smarty->assign('l10n', $gL10n);
     $smarty->assign('ecardContent', $funcClass->parseEcardTemplate($imageUrl, $formValues['ecard_message'], $ecardDataToParse, '', ''));
     echo $smarty->fetch('modules/photos.ecard.preview.tpl');
 } catch (Throwable $e) {
     $gMessage->showInModalWindow();
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

@@ -49,18 +49,14 @@
                                 {if $masterData.STREET.value !== ''}
                                     {$masterData.STREET.value}<br />
                                 {/if}
-                                {if $masterData.POSTCODE.value !== '' || $masterData.CITY.value !== ''}
-                                    {if $masterData.POSTCODE.value !== ''}
-                                        {$masterData.POSTCODE.value}
-                                    {/if}
-                                    {if $masterData.POSTCODE.value !== '' && $masterData.CITY.value !== ''}
-                                        &nbsp;
-                                    {/if}
-                                    {if $masterData.CITY.value !== ''}
-                                        {$masterData.CITY.value}
-                                    {/if}
-                                    <br />
+
+                                {assign var="postcode" value=$masterData.POSTCODE.value}
+                                {assign var="city" value=$masterData.CITY.value}
+
+                                {if $postcode || $city}
+                                    {$postcode}{if $postcode && $city} {/if}{$city}<br />
                                 {/if}
+
                                 {if $masterData.COUNTRY.value !== ''}
                                     {$masterData.COUNTRY.value}
                                 {/if}

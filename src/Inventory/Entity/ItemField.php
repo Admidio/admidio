@@ -10,7 +10,6 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Changelog\Entity\LogChanges;
-use Admidio\Inventory\Entity\SelectOptions;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -75,7 +74,7 @@ class ItemField extends Entity
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . '
                  WHERE ind_inf_id = ? -- $infId';
         $this->db->queryPrepared($sql, array($infId));
-        
+
         // delete all data of this field in the field select options table
         $sql = 'DELETE FROM ' . TBL_INVENTORY_FIELD_OPTIONS . '
                  WHERE ifo_inf_id = ? -- $infId';
@@ -120,16 +119,17 @@ class ItemField extends Entity
 
     /**
      * Returns the item value for this column
-     * 
+     *
      * format = 'html'  :               returns the value in html-format if this is necessary for that field type
      * format = 'database' :            returns the value that is stored in database with no format applied
      * @param string $fieldNameIntern   Expects the @b inf_name_intern of table @b adm_inventory_fields
      * @param string $format            Returns the field value in a special format @b text, @b html, @b database
      *                                  or datetime (detailed description in method description)
-     * @param bool $withObsoleteEnries  If set to **false** then the obsolete entries of the inventory field will not be considered.
+     * @param bool $withObsoleteEntries If set to **false** then the obsolete entries of the inventory field will not be considered.
      * @return mixed                    Returns the value for the column
+     * @throws Exception
      */
-    public function getValue($fieldNameIntern, $format = '', bool $withObsoleteEnries = true): mixed
+    public function getValue(string $fieldNameIntern, string $format = '', bool $withObsoleteEntries = true): mixed
     {
         if ($fieldNameIntern === 'inf_description') {
             if (!isset($this->dbColumns['inf_description'])) {
@@ -145,7 +145,7 @@ class ItemField extends Entity
         } elseif ($fieldNameIntern === 'ifo_inf_options') {
             // if value is a list of options then return the options as array
             $options = new SelectOptions($this->db, (int)$this->dbColumns['inf_id']);
-            $value = $options->getAllOptions($withObsoleteEnries);
+            $value = $options->getAllOptions($withObsoleteEntries);
         } else {
             $value = parent::getValue($fieldNameIntern, $format);
         }
@@ -162,7 +162,7 @@ class ItemField extends Entity
                     break;
 
                 case 'ifo_inf_options':
-                    if ($this->dbColumns['inf_type'] === 'DROPDOWN' ||  $this->dbColumns['inf_type'] === 'DROPDOWN_MULTISELECT' || $this->dbColumns['inf_type'] === 'RADIO_BUTTON') {
+                    if (in_array($this->dbColumns['inf_type'], array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'DROPDOWN_DATE_INTERVAL', 'RADIO_BUTTON'))) {
                         $arrOptionValuesWithKeys = array(); // array with option values and keys that represents the internal value
                         $arrOptions = $value;
 
@@ -232,8 +232,6 @@ class ItemField extends Entity
             // => EXIT
         }
 
-        $fieldsChanged = $this->columnsValueChanged;
-
         // if new field than generate new name intern, otherwise no change will be made
         if ($this->newRecord && $this->getValue('inf_name_intern') === '') {
             $this->setValue('inf_name_intern', $this->getNewNameIntern($this->getValue('inf_name', 'database'), 1));
@@ -261,10 +259,8 @@ class ItemField extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
-        global $gL10n;
-
         if ($newValue !== parent::getValue($columnName)) {
             if ($checkValue) {
                 if ($columnName === 'inf_description') {
@@ -273,7 +269,7 @@ class ItemField extends Entity
                 }
 
                 // name, category and type couldn't be edited if it's a system field
-                if (in_array($columnName, array('inf_type'), true) && (int)$this->getValue('inf_system') === 1) {
+                if ($columnName === 'inf_type' && (int)$this->getValue('inf_system') === 1) {
                     throw new Exception('The item field ' . $this->getValue('inf_name_intern') . ' is a system field. You could
                         not change the type.');
                 }
@@ -311,16 +307,4 @@ class ItemField extends Entity
             ($this->newRecord)?[$this->columnPrefix.'_text']:[] */
         );
     }
-
-    /**
-     * Adjust the changelog entry for this db record: Add the first forum post as a related object
-     * @param LogChanges $logEntry The log entry to adjust
-     * @return void
-     * @throws Exception
-     */
-    protected function adjustLogEntry(LogChanges $logEntry): void
-    {
-/*         $fotEntry = new ItemField($this->db, (int)$this->getValue('fot_fop_id_first_post'));
-        $logEntry->setLogRelated($fotEntry->getValue('fop_uuid'), $fotEntry->getValue('fop_text'));
- */    }
 }

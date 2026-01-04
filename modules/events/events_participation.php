@@ -18,6 +18,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -109,7 +110,7 @@ try {
         array('icon' => 'bi-x-circle-fill admidio-event-approval-state-cancel', 'class' => 'btn-primary')
     );
 
-    $smarty = HtmlPage::createSmartyObject();
+    $smarty = PagePresenter::createSmartyObject();
     $smarty->assign('urlFormAction', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $getEventUuid, 'user_uuid' => $getUserUuid, 'mode' => '')));
     $smarty->assign('eventHeadline', $event->getValue('dat_headline'));
     $smarty->assign('eventPeriod', $event->getDateTimePeriod());
@@ -118,5 +119,5 @@ try {
     echo $smarty->fetch('modules/events.participation.edit.tpl');
 } catch (Throwable $e) {
     $gMessage->showInModalWindow();
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

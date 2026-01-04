@@ -27,7 +27,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * {
  *     $gDb = new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
  * }
- * catch (Exception $e)
+ * catch (Throwable $e)
  * {
  *     $e->showText();
  * }
@@ -424,7 +424,7 @@ class Database
     {
         $sqlFileContent = FileSystemUtils::readFile($sqlFilePath);
 
-        $sqlArray = explode(';', $sqlFileContent);
+        $sqlArray = preg_split('/;\s*[\r\n]+/', $sqlFileContent, -1, PREG_SPLIT_NO_EMPTY);
 
         $sqlStatements = array();
         foreach ($sqlArray as $sql) {
@@ -488,6 +488,25 @@ class Database
     }
 
     /**
+     * Method checks if a table exists in the current database.
+     * @param string $tableName
+     * @return bool
+     * @throws Exception
+     */
+    public function tableExists(string $tableName): bool
+    {
+        $tableExists = false;
+
+        $sql = 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?';
+        $statement = $this->queryPrepared($sql, array(DB_NAME, $tableName));
+        if ($statement->fetchColumn() > 0) {
+            $tableExists = true;
+        }
+
+        return $tableExists;
+    }
+
+    /**
      * Method gets all columns and their properties from the database table.
      *
      * The array has the following format:
@@ -546,8 +565,11 @@ class Database
                 $tableColumnsProperties[$properties['Field']] = $props;
             }
         } elseif ($this->engine === self::PDO_ENGINE_PGSQL) {
-            $sql = 'SELECT column_name, column_default, is_nullable, data_type
-                      FROM information_schema.columns
+            $sql = 'SELECT column_name, column_default, is_nullable, data_type,
+                           (SELECT \'YES\' from information_schema.key_column_usage kcu
+                             WHERE kcu.table_name  = c.table_name
+                               and kcu.column_name = c.column_name ) as key
+                      FROM information_schema.columns c
                      WHERE table_name = ?';
             $columnsStatement = $this->queryPrepared($sql, array($table));
             $columnsList = $columnsStatement->fetchAll();
@@ -556,7 +578,7 @@ class Database
                 $props = array(
                     'serial'   => str_contains((string) $properties['column_default'], 'nextval'),
                     'null'     => $properties['is_nullable'] === 'YES',
-                    'key'      => null,
+                    'key'      => $properties['key'] === 'YES',
                     'default'  => $properties['column_default'],
                     'unsigned' => null
                 );
@@ -786,11 +808,10 @@ class Database
             $this->pdoStatement = $this->pdo->prepare($sql);
 
             if ($this->pdoStatement !== false) {
-                if (!$this->pdoStatement->execute($params)) {
-                    // throw an exception if the execute failed
-                    $errorInfo = $this->pdoStatement->errorInfo();
-                    $gLogger->critical('PDOStatement: ' . $errorInfo[2]);
-                    $this->showError($errorInfo[2], $errorInfo[1]);
+                $success = $this->pdoStatement->execute($params);
+
+                // When executing PostgreSQL statements, at least if there is a table missing, no exception is thrown. But the PDOStatement.execute() returns false.
+                if (!$success) {
                     return false;
                 }
 
@@ -822,10 +843,15 @@ class Database
     /**
      * Get a string with question marks that are comma separated.
      * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
-     * @return string Question marks string
+     * @return string returns 'NULL' if the values array is empty otherwise a question marks string
      */
     public static function getQmForValues(array $valuesArray): string
     {
+        // if no values are given return NULL to avoid syntax errors in sql statements
+        if (empty($valuesArray)) {
+            return 'NULL';
+        }
+
         return implode(',', array_fill(0, count($valuesArray), '?'));
     }
 

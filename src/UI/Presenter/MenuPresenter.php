@@ -119,7 +119,7 @@ class MenuPresenter extends PagePresenter
         $form->addInput(
             'men_name',
             $gL10n->get('SYS_NAME'),
-            htmlentities($menu->getValue('men_name', 'database'), ENT_QUOTES),
+            htmlentities((string)$menu->getValue('men_name', 'database'), ENT_QUOTES),
             array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_MENU_NAME_DESC')
         );
 

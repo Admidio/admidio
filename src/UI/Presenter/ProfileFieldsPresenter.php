@@ -183,7 +183,7 @@ class ProfileFieldsPresenter extends PagePresenter
             'ufo_usf_options',
             $gL10n->get('SYS_VALUE_LIST'),
             $optionValueList,
-            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.bootstrap.com">', '</a>')))
+            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.getbootstrap.com/" target="_blank">', '</a>')))
         );
 
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES', 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE', 3 => 'SYS_NOT_AT_REGISTRATION');
@@ -268,9 +268,9 @@ class ProfileFieldsPresenter extends PagePresenter
         $this->assignSmartyVariable('fieldNameIntern', $usfNameIntern);
         $this->assignSmartyVariable('systemField', $userField->getValue('usf_system'));
         $this->assignSmartyVariable('userCreatedName', $userField->getNameOfCreatingUser());
-        $this->assignSmartyVariable('userCreatedTimestamp', $userField->getValue('ann_timestamp_create'));
+        $this->assignSmartyVariable('userCreatedTimestamp', $userField->getValue('usf_timestamp_create'));
         $this->assignSmartyVariable('lastUserEditedName', $userField->getNameOfLastEditingUser());
-        $this->assignSmartyVariable('lastUserEditedTimestamp', $userField->getValue('ann_timestamp_change'));
+        $this->assignSmartyVariable('lastUserEditedTimestamp', $userField->getValue('usf_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }

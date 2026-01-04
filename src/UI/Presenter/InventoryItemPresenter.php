@@ -11,8 +11,6 @@ use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\ValueObjects\ItemsData;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use DateTime;
 use Ramsey\Uuid\Uuid;
@@ -37,24 +35,24 @@ use Ramsey\Uuid\Uuid;
 class InventoryItemPresenter extends PagePresenter
 {
     /**
-     * Create the data for the edit form of a item field.
-     * @param string $itemFieldID ID of the item field that should be edited.
+     * Create the data for the edit form of an item field.
+     * @param string $itemUUID UUID of the item that should be edited.
+     * @param bool $getCopy Indicates whether a copy of the item should be created.
+     * @return void
      * @throws Exception
      */
-    public function createEditForm(string $itemUUID = '', bool $getCopy = false)
+    public function createEditForm(string $itemUUID = '', bool $getCopy = false): void
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
-        //array with the internal field names of the borrow fields not used in the edit form
-        $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
         $categoryService = new CategoryService($gDb, 'IVT');
-    
+
         if ($itemUUID !== '') {
             $items->readItemData($itemUUID);
             // Check whether the field belongs to the current organization
-             if ($items->getValue('ini_org_id') > 0
+            if ($items->getValue('ini_org_id') > 0
                 && (int)$items->getItemFields()[0]->getValue('ini_org_id') !== $gCurrentOrgId) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
@@ -63,10 +61,10 @@ class InventoryItemPresenter extends PagePresenter
         // display History button
         ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_item_data', $gCurrentUser->isAdministratorInventory(), ['uuid' => $itemUUID]);
 
-        foreach ($items->getItemFields() as $itemField) {  
+        foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
             if ($infNameIntern === 'KEEPER') {
-                $pimKeeper = $infNameIntern;
+                $ivtKeeper = $infNameIntern;
             }
         }
 
@@ -86,33 +84,32 @@ class InventoryItemPresenter extends PagePresenter
             ($getCopy) ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_uuid' => $itemUUID, 'mode' => 'item_save', 'copy' => true)) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_uuid' => $itemUUID, 'mode' => 'item_save')),
             $this
         );
-        
-        foreach ($items->getItemFields() as $itemField) {  
+
+        foreach ($items->getItemFields() as $itemField) {
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
             // Skip borrow fields that are not used in the edit form
-            if (in_array($itemField->getValue('inf_name_intern'), $borrowFieldNames)) {
+            if (in_array($infNameIntern, $items->borrowFieldNames)) {
                 continue;
-            }       
+            }
 
             if ($items->getProperty($infNameIntern, 'inf_required_input') == 1) {
                 $fieldProperty = FormPresenter::FIELD_REQUIRED;
-            }
-            else {
+            } else {
                 $fieldProperty = FormPresenter::FIELD_DEFAULT;
             }
-        
+
             $allowedFields = explode(',', $gSettingsManager->getString('inventory_allowed_keeper_edit_fields'));
-            if (!$gCurrentUser->isAdministratorInventory() && !in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
+            if (!$gCurrentUser->isAdministratorInventory() && !in_array($infNameIntern, $allowedFields)) {
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
             }
-            
+
             switch ($items->getProperty($infNameIntern, 'inf_type')) {
                 case 'CHECKBOX':
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool) $items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
@@ -120,14 +117,15 @@ class InventoryItemPresenter extends PagePresenter
                         )
                     );
                     break;
-        
+
                 case 'DROPDOWN': // fallthrough
-                case 'DROPDOWN_MULTISELECT':
+                case 'DROPDOWN_MULTISELECT': // fallthrough
+                case 'DROPDOWN_DATE_INTERVAL':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
-                    // prevent adding an empty string to the selectbox
+                    // prevent adding an empty string to the select-box
                     if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                        // prevent adding an empty string to the selectbox
+                        // prevent adding an empty string to the select-box
                         $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                     }
 
@@ -140,7 +138,7 @@ class InventoryItemPresenter extends PagePresenter
                             'defaultValue' => $defaultValue,
                             'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
-                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT'),
                             'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
@@ -160,7 +158,7 @@ class InventoryItemPresenter extends PagePresenter
                         )
                     );
                     break;
-        
+
                 case 'TEXT_BIG':
                     $form->addMultilineTextInput(
                         'INF-' . $infNameIntern,
@@ -175,33 +173,60 @@ class InventoryItemPresenter extends PagePresenter
                         )
                     );
                     break;
-                
+
                 case 'CATEGORY':
-                    if ($categoryService->count() > 0) {
-                        $form->addSelectBoxForCategories(
+                    if ($fieldProperty === FormPresenter::FIELD_DISABLED) {
+                        // user is not allowed to edit the category, so we display the current value as disabled text field
+                        $form->addInput(
                             'INF-' . $infNameIntern,
-                            $gL10n->get('SYS_CATEGORY'),
-                            $gDb,
-                            'IVT',
-                            FormPresenter::SELECT_BOX_MODUS_EDIT,
+                            $items->getProperty($infNameIntern, 'inf_name'),
+                            $items->getValue($infNameIntern),
                             array(
-                                'property' => FormPresenter::FIELD_REQUIRED,
-                                'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                'type' => 'text',
+                                'property' => $fieldProperty,
+                                'helpTextId' => $helpId,
+                                'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database')
                             )
                         );
+                    } elseif ($categoryService->count() > 0) {
+                        if (!empty($categoryService->getEditableCategories())) {
+                            $form->addSelectBoxForCategories(
+                                'INF-' . $infNameIntern,
+                                $gL10n->get('SYS_CATEGORY'),
+                                $gDb,
+                                'IVT',
+                                FormPresenter::SELECT_BOX_MODUS_EDIT,
+                                array(
+                                    'property' => FormPresenter::FIELD_REQUIRED,
+                                    'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                )
+                            );
+                        } else {
+                            $form->addInput(
+                                'INF-' . $infNameIntern,
+                                $gL10n->get('SYS_CATEGORY'),
+                                $items->getValue($infNameIntern),
+                                array(
+                                    'type' => 'text',
+                                    'property' => FormPresenter::FIELD_DISABLED
+                                )
+                            );
+                            // add an information that no editable categories are available
+                            $this->smarty->append('infoAlerts', array('type' => 'warning', 'value' => $gL10n->get('SYS_INVENTORY_NO_EDITABLE_CATEGORIES')));
+                        }
                     }
                     break;
                 default:
                     $fieldType = 'text';
                     $maxlength = '50';
-        
+
                     if ($infNameIntern === 'KEEPER') {
                         $sql = $items->getSqlOrganizationsUsersComplete();
                         if ($gSettingsManager->getBool('inventory_current_user_default_keeper')) {
                             $user = new User($gDb, $gProfileFields);
                             $user->readDataByUuid($gCurrentUser->getValue('usr_uuid'));
                         }
-                        
+
                         $form->addSelectBoxFromSql(
                             'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
@@ -218,7 +243,7 @@ class InventoryItemPresenter extends PagePresenter
 
                         $this->addJavascript('
                             // Select2 für KEEPER initialisieren
-                            $("#INF-' . $pimKeeper .'").select2({
+                            $("#INF-' . $ivtKeeper . '").select2({
                                 theme: "bootstrap-5",
                                 allowClear: true,
                                 placeholder: "",
@@ -226,18 +251,15 @@ class InventoryItemPresenter extends PagePresenter
                             });',
                             true
                         );
-                    }
-                    else {
+                    } else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
                             $fieldType = $gSettingsManager->getString('inventory_field_date_time_format');
                             $maxlength = null;
-                        }
-                        elseif ($items->getProperty($infNameIntern, 'inf_type') === 'NUMBER') {
+                        } elseif ($items->getProperty($infNameIntern, 'inf_type') === 'NUMBER') {
                             $fieldType = 'number';
                             $minNumber = $gSettingsManager->getBool('inventory_allow_negative_numbers') ? null : '0';
                             $step = '1';
-                        }
-                        elseif ($items->getProperty($infNameIntern, 'inf_type') === 'DECIMAL') {
+                        } elseif ($items->getProperty($infNameIntern, 'inf_type') === 'DECIMAL') {
                             $fieldType = 'number';
                             $minNumber = $gSettingsManager->getBool('inventory_allow_negative_numbers') ? null : '0';
                             $step = pow(10, -$gSettingsManager->getInt('inventory_decimal_places'));
@@ -260,43 +282,66 @@ class InventoryItemPresenter extends PagePresenter
                     break;
             }
         }
-        
-        if ($getCopy) {     
+
+        if ($getCopy) {
             $form->addInput('item_copy_number', $gL10n->get('SYS_INVENTORY_NUMBER'), 1, array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_INVENTORY_NUMBER_DESC'));
             $sql = 'SELECT inf_id, inf_name FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_type = \'NUMBER\' AND (inf_org_id = ' . $gCurrentOrgId . ' OR inf_org_id IS NULL);';
-            $form->addSelectBoxFromSql('item_copy_field', $gL10n->get('SYS_INVENTORY_FIELD'), $gDb, $sql, array('multiselect' => false, 'helpTextId' => 'SYS_INVENTORY_FIELD_DESC'));        
+            $form->addSelectBoxFromSql('item_copy_field', $gL10n->get('SYS_INVENTORY_FIELD'), $gDb, $sql, array('multiselect' => false, 'helpTextId' => 'SYS_INVENTORY_FIELD_DESC'));
         }
-        $form->addSubmitButton(
-            'adm_button_save',
-            $gL10n->get('SYS_SAVE'),
-            array('icon' => 'bi-check-lg')
-        );
+
+        if ($getCopy) {
+            if ($form->getElements()['INF-CATEGORY']['type'] === 'text') {
+                // when copying an item and the user is not allowed to change the category, we cannot create copies
+                $form->addSubmitButton(
+                    'adm_button_save',
+                    $gL10n->get('SYS_COPY'),
+                    array('icon' => 'bi-plus-lg', 'property' => FormPresenter::FIELD_DISABLED)
+                );
+            } else {
+                $form->addSubmitButton(
+                    'adm_button_save',
+                    $gL10n->get('SYS_COPY'),
+                    array('icon' => 'bi-plus-lg')
+                );
+            }
+        } else {
+            $form->addSubmitButton(
+                'adm_button_save',
+                $gL10n->get('SYS_SAVE'),
+                array('icon' => 'bi-check-lg')
+            );
+        }
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
-        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
-        // so we need to do it here, even when no selectbox will be used...
+        // is loaded on-demand, when there is no html page anymore to insert the css/JS file loading,
+        // so we need to do it here, even when no select-box will be used...
         // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
-        $item = new Item($gDb,  $items, $items->getItemId());
+        $item = new Item($gDb, $items, $items->getItemId());
         $this->assignSmartyVariable('userCreatedName', $item->getNameOfCreatingUser());
         $this->assignSmartyVariable('userCreatedTimestamp', $item->getValue('ini_timestamp_create'));
         $this->assignSmartyVariable('lastUserEditedName', $item->getNameOfLastEditingUser());
         $this->assignSmartyVariable('lastUserEditedTimestamp', $item->getValue('ini_timestamp_change'));
-        
-        // only show the item picture if the module setting is enabled
+
+        // only show the item picture if the module setting is enabled, the item is not new, and we don't want to create a copy of the item
         if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
-            $this->assignSmartyVariable('urlItemPicture', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)));
-            // the image can only be deleted if corresponding rights exist
-            if ($gCurrentUser->isAdministratorInventory() || in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
-                $this->assignSmartyVariable('urlItemPictureUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_choose', 'item_uuid' => $itemUUID)));
-                if ((string)$item->getValue('ini_picture') !== '' && $gSettingsManager->getInt('inventory_item_picture_storage') === 0
-                    || is_file(ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/' . $items->getItemId() . '.jpg') && $gSettingsManager->getInt('inventory_item_picture_storage') === 1) {
-                    $this->assignSmartyVariable('urlItemPictureDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_delete', 'item_uuid' => $itemUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackItemPicture\')');
+            if (!$item->isNewRecord() && !$getCopy) {
+                $this->assignSmartyVariable('urlItemPicture', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $itemUUID)));
+                // the image can only be deleted if corresponding rights exist
+                if ($gCurrentUser->isAdministratorInventory() || ($gSettingsManager->GetBool('inventory_allow_keeper_edit') && InventoryPresenter::isCurrentUserKeeper($items->getItemId()) && in_array('ITEM_PICTURE', $allowedFields))) {
+                    $this->assignSmartyVariable('urlItemPictureUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_choose', 'item_uuid' => $itemUUID)));
+                    if ((string)$item->getValue('ini_picture') !== '' && $gSettingsManager->getInt('inventory_item_picture_storage') === 0
+                        || is_file(ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/' . $items->getItemId() . '.jpg') && $gSettingsManager->getInt('inventory_item_picture_storage') === 1) {
+                        $this->assignSmartyVariable('urlItemPictureDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_delete', 'item_uuid' => $itemUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackItemPicture\')');
+                    }
                 }
+            } else {
+                // we create a new item or a copy of an existing item, so we can only upload a picture after saving the new item
+                $this->smarty->append('infoAlerts', array('type' => 'info', 'value' => $gL10n->get('SYS_INVENTORY_ITEM_CREATE_PICTURE_INFO')));
             }
         }
 
@@ -305,38 +350,40 @@ class InventoryItemPresenter extends PagePresenter
     }
 
     /**
-     * Create the data for the edit form of a item field.
+     * Create the data for the edit form of an item field.
      * @param array $itemUUIDs IDs of the items that should be edited.
+     * @return void
      * @throws Exception
      */
-    public function createEditItemsForm(array $itemUUIDs = array())
+    public function createEditItemsForm(array $itemUUIDs = array()): void
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gProfileFields, $gL10n, $gCurrentOrgId, $gDb;
-        // array with the internal field names of the borrow fields not used in the edit form
-        // we also exclude IITEMNAME from the edit form, because it is only used for displaying item values based on the first entry
-        // and it is not wanted to change the item name for multiple items at once
-        $borrowFieldNames = array('ITEMNAME', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
         $categoryService = new CategoryService($gDb, 'IVT');
-    
+
+        // array with the internal field names of the borrow fields not used in the edit form
+        // we also exclude ITEMNAME from the edit form, because it is only used for displaying item values based on the first entry,
+        // and it is not wanted to change the item name for multiple items at once
+        $borrowFieldNames = array_merge($items->borrowFieldNames, array('ITEMNAME'));
+
         // for editing multiple items, we will use the first itemUUID as value reference
         $itemUUID = $itemUUIDs[0] ?? '';
 
         if ($itemUUID !== '') {
             $items->readItemData($itemUUID);
             // Check whether the field belongs to the current organization
-             if ($items->getValue('ini_org_id') > 0
+            if ($items->getValue('ini_org_id') > 0
                 && (int)$items->getItemFields()[0]->getValue('ini_org_id') !== $gCurrentOrgId) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
         }
 
-        foreach ($items->getItemFields() as $itemField) {  
+        foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
             if ($infNameIntern === 'KEEPER') {
-                $pimKeeper = $infNameIntern;
+                $ivtKeeper = $infNameIntern;
             }
         }
 
@@ -347,12 +394,12 @@ class InventoryItemPresenter extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_uuids' => $itemUUIDs, 'mode' => 'item_save')),
             $this
         );
-        
-        foreach ($items->getItemFields() as $itemField) {  
+
+        foreach ($items->getItemFields() as $itemField) {
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
             // Skip borrow fields that are not used in the edit form
-            if (in_array($itemField->getValue('inf_name_intern'), $borrowFieldNames)) {
+            if (in_array($infNameIntern, $borrowFieldNames)) {
                 if ($infNameIntern === 'ITEMNAME') {
                     // If the item is new, we need to add the input for ITEMNAME
                     $itemNames = '';
@@ -373,26 +420,25 @@ class InventoryItemPresenter extends PagePresenter
                     );
                 }
                 continue;
-            }       
+            }
 
             if ($items->getProperty($infNameIntern, 'inf_required_input') == 1) {
                 $fieldProperty = FormPresenter::FIELD_REQUIRED;
-            }
-            else {
+            } else {
                 $fieldProperty = FormPresenter::FIELD_DEFAULT;
             }
-        
+
             $allowedFields = explode(',', $gSettingsManager->getString('inventory_allowed_keeper_edit_fields'));
-            if (!$gCurrentUser->isAdministratorInventory() && !in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
+            if (!$gCurrentUser->isAdministratorInventory() && !in_array($infNameIntern, $allowedFields)) {
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
             }
-        
+
             switch ($items->getProperty($infNameIntern, 'inf_type')) {
                 case 'CHECKBOX':
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool) $items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
@@ -401,14 +447,15 @@ class InventoryItemPresenter extends PagePresenter
                         )
                     );
                     break;
-        
+
                 case 'DROPDOWN': // fallthrough
-                case 'DROPDOWN_MULTISELECT':
+                case 'DROPDOWN_MULTISELECT': // fallthrough
+                case 'DROPDOWN_DATE_INTERVAL':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
-                    // prevent adding an empty string to the selectbox
+                    // prevent adding an empty string to the select-box
                     if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                        // prevent adding an empty string to the selectbox
+                        // prevent adding an empty string to the select-box
                         $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                     }
 
@@ -422,12 +469,12 @@ class InventoryItemPresenter extends PagePresenter
                             'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
                             'toggleable' => true,
-                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT'),
                             'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
                     break;
-        
+
                 case 'RADIO_BUTTON':
                     $form->addRadioButton(
                         'INF-' . $infNameIntern,
@@ -443,7 +490,7 @@ class InventoryItemPresenter extends PagePresenter
                         )
                     );
                     break;
-        
+
                 case 'TEXT_BIG':
                     $form->addMultilineTextInput(
                         'INF-' . $infNameIntern,
@@ -459,34 +506,67 @@ class InventoryItemPresenter extends PagePresenter
                         )
                     );
                     break;
-                
+
                 case 'CATEGORY':
-                    if ($categoryService->count() > 0) {
-                        $form->addSelectBoxForCategories(
+                    if ($fieldProperty === FormPresenter::FIELD_DISABLED) {
+                        // user is not allowed to edit the category, so we display the current value as disabled text field
+                        $form->addInput(
                             'INF-' . $infNameIntern,
-                            $gL10n->get('SYS_CATEGORY'),
-                            $gDb,
-                            'IVT',
-                            FormPresenter::SELECT_BOX_MODUS_EDIT,
+                            $items->getProperty($infNameIntern, 'inf_name'),
+                            $items->getValue($infNameIntern),
                             array(
-                                'property' => FormPresenter::FIELD_REQUIRED,
-                                'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                'type' => 'text',
+                                'property' => $fieldProperty,
+                                'helpTextId' => $helpId,
+                                'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
                                 'toggleable' => true
                             )
                         );
+
+                    } elseif ($categoryService->count() > 0) {
+                        if (!empty($gCurrentUser->getAllEditableCategories('IVT'))) {
+                            $form->addSelectBoxForCategories(
+                                'INF-' . $infNameIntern,
+                                $gL10n->get('SYS_CATEGORY'),
+                                $gDb,
+                                'IVT',
+                                FormPresenter::SELECT_BOX_MODUS_EDIT,
+                                array(
+                                    'property' => FormPresenter::FIELD_REQUIRED,
+                                    'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                    'toggleable' => true
+                                )
+                            );
+                        } else {
+                            $categories = array();
+                            foreach ($categoryService->getVisibleCategories() as $category) {
+                                $categories[$category['cat_uuid']] = $category['cat_name'];
+                            }
+
+                            $form->addSelectBox(
+                                'INF-' . $infNameIntern,
+                                $gL10n->get('SYS_CATEGORY'),
+                                $categories,
+                                array(
+                                    'property' => FormPresenter::FIELD_REQUIRED,
+                                    'defaultValue' => $items->getValue($infNameIntern, 'database'),
+                                    'toggleable' => true
+                                )
+                            );
+                        }
                     }
                     break;
                 default:
                     $fieldType = 'text';
                     $maxlength = '50';
-        
+
                     if ($infNameIntern === 'KEEPER') {
                         $sql = $items->getSqlOrganizationsUsersComplete();
                         if ($gSettingsManager->getBool('inventory_current_user_default_keeper')) {
                             $user = new User($gDb, $gProfileFields);
                             $user->readDataByUuid($gCurrentUser->getValue('usr_uuid'));
                         }
-                        
+
                         $form->addSelectBoxFromSql(
                             'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
@@ -504,7 +584,7 @@ class InventoryItemPresenter extends PagePresenter
 
                         $this->addJavascript('
                             // Select2 für KEEPER initialisieren
-                            $("#INF-' . $pimKeeper .'").select2({
+                            $("#INF-' . $ivtKeeper . '").select2({
                                 theme: "bootstrap-5",
                                 allowClear: true,
                                 placeholder: "",
@@ -512,18 +592,15 @@ class InventoryItemPresenter extends PagePresenter
                             });',
                             true
                         );
-                    }
-                    else {
+                    } else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
                             $fieldType = $gSettingsManager->getString('inventory_field_date_time_format');
                             $maxlength = null;
-                        }
-                        elseif ($items->getProperty($infNameIntern, 'inf_type') === 'NUMBER') {
+                        } elseif ($items->getProperty($infNameIntern, 'inf_type') === 'NUMBER') {
                             $fieldType = 'number';
                             $minNumber = $gSettingsManager->getBool('inventory_allow_negative_numbers') ? null : '0';
                             $step = '1';
-                        }
-                        elseif ($items->getProperty($infNameIntern, 'inf_type') === 'DECIMAL') {
+                        } elseif ($items->getProperty($infNameIntern, 'inf_type') === 'DECIMAL') {
                             $fieldType = 'number';
                             $minNumber = $gSettingsManager->getBool('inventory_allow_negative_numbers') ? null : '0';
                             $step = pow(10, -$gSettingsManager->getInt('inventory_decimal_places'));
@@ -547,7 +624,7 @@ class InventoryItemPresenter extends PagePresenter
                     break;
             }
         }
-        
+
         $form->addSubmitButton(
             'adm_button_save',
             $gL10n->get('SYS_SAVE'),
@@ -585,17 +662,17 @@ class InventoryItemPresenter extends PagePresenter
         );
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
-        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
-        // so we need to do it here, even when no selectbox will be used...
+        // is loaded on-demand, when there is no html page anymore to insert the css/JS file loading,
+        // so we need to do it here, even when no select-box will be used...
         // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
-        $item = new Item($gDb,  $items, $items->getItemId());
+        $item = new Item($gDb, $items, $items->getItemId());
 
-        // add a information that this is a multi-edit form
+        // add an information that this is a multi-edit form
         $infoAlert = $gL10n->get('SYS_INVENTORY_ITEMS_EDIT_DESC');
 
         $this->assignSmartyVariable('infoAlert', $infoAlert);
@@ -604,25 +681,28 @@ class InventoryItemPresenter extends PagePresenter
         $this->assignSmartyVariable('userCreatedTimestamp', $item->getValue('ini_timestamp_create'));
         $this->assignSmartyVariable('lastUserEditedName', $item->getNameOfLastEditingUser());
         $this->assignSmartyVariable('lastUserEditedTimestamp', $item->getValue('ini_timestamp_change'));
-        
+
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
-    
+
     /**
-     * Create the data for the edit form of a item field.
-     * @param string $itemFieldID ID of the item field that should be edited.
+     * Create the data for the edit form of an item field.
+     * @param string $itemUUID UUID of the item that should be borrowed.
+     * @return void
      * @throws Exception
      */
-    public function createEditBorrowForm(string $itemUUID)
+    public function createEditBorrowForm(string $itemUUID): void
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gL10n, $gCurrentOrgId, $gDb;
-        //array with the internal field names of the borrow fields not used in the edit form
-        $borrowFieldNames = array('ITEMNAME', 'LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Create user-defined field object
         $items = new ItemsData($gDb, $gCurrentOrgId);
-    
+
+        // array with the internal field names of the borrow fields used in the edit borrow form
+        // we also include ITEMNAME for displaying the item name in the borrow form
+        $borrowFieldNames = array_merge($items->borrowFieldNames, array('ITEMNAME'));
+
         // Check if itemUUID is valid
         if (!Uuid::isValid($itemUUID)) {
             throw new Exception('The parameter "' . $itemUUID . '" is not a valid UUID!');
@@ -648,18 +728,16 @@ class InventoryItemPresenter extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_uuid' => $itemUUID, 'mode' => 'item_save')),
             $this
         );
-        
-        foreach ($items->getItemFields() as $itemField) {  
+
+        foreach ($items->getItemFields() as $itemField) {
             $helpId = '';
             $infNameIntern = $itemField->getValue('inf_name_intern');
-        
-            if($infNameIntern === 'LAST_RECEIVER') {
+
+            if ($infNameIntern === 'LAST_RECEIVER') {
                 $ivtLastReceiver = $infNameIntern;
-            }
-            elseif ($infNameIntern === 'BORROW_DATE') {
+            } elseif ($infNameIntern === 'BORROW_DATE') {
                 $ivtBorrowDate = $infNameIntern;
-            }
-            elseif ($infNameIntern === 'RETURN_DATE') {
+            } elseif ($infNameIntern === 'RETURN_DATE') {
                 $ivtReturnDate = $infNameIntern;
             }
 
@@ -670,11 +748,10 @@ class InventoryItemPresenter extends PagePresenter
 
             if ($items->getProperty($infNameIntern, 'inf_required_input') == 1) {
                 $fieldProperty = FormPresenter::FIELD_REQUIRED;
-            }
-            else {
+            } else {
                 $fieldProperty = FormPresenter::FIELD_DEFAULT;
             }
-        
+
             $allowedFields = explode(',', $gSettingsManager->getString('inventory_allowed_keeper_edit_fields'));
             if (!$gCurrentUser->isAdministratorInventory() && !in_array($itemField->getValue('inf_name_intern'), $allowedFields)) {
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
@@ -767,13 +844,13 @@ class InventoryItemPresenter extends PagePresenter
                     });
                 ');
             }
-        
+
             switch ($items->getProperty($infNameIntern, 'inf_type')) {
                 case 'CHECKBOX':
                     $form->addCheckbox(
                         'INF-' . $infNameIntern,
                         $items->getProperty($infNameIntern, 'inf_name'),
-                        ($itemUUID === '') ? true : (bool) $items->getValue($infNameIntern),
+                        $itemUUID === '' || $items->getValue($infNameIntern),
                         array(
                             'property' => $fieldProperty,
                             'helpTextId' => $helpId,
@@ -781,14 +858,14 @@ class InventoryItemPresenter extends PagePresenter
                         )
                     );
                     break;
-        
+
                 case 'DROPDOWN': // fallthrough
                 case 'DROPDOWN_MULTISELECT':
                     $arrOptions = $items->getProperty($infNameIntern, 'ifo_inf_options', '', false);
                     $defaultValue = $items->getValue($infNameIntern, 'database');
-                    // prevent adding an empty string to the selectbox
+                    // prevent adding an empty string to the select-box
                     if ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') {
-                        // prevent adding an empty string to the selectbox
+                        // prevent adding an empty string to the select-box
                         $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                     }
 
@@ -801,19 +878,19 @@ class InventoryItemPresenter extends PagePresenter
                             'defaultValue' => $defaultValue,
                             'helpTextId' => $helpId,
                             'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
-                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'multiselect' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT'),
                             'maximumSelectionNumber' => ($items->getProperty($infNameIntern, 'inf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                         )
                     );
                     break;
-        
+
                 default:
                     $fieldType = 'text';
                     $maxlength = '50';
-        
+
                     if ($infNameIntern === "LAST_RECEIVER") {
                         $sql = $items->getSqlOrganizationsUsersComplete();
-        
+
                         $form->addSelectBoxFromSql(
                             'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
@@ -827,7 +904,7 @@ class InventoryItemPresenter extends PagePresenter
                                 'multiselect' => false
                             )
                         );
-            
+
                         $this->addJavascript('
                             var selectIdLastReceiver = "#INF-' . $ivtLastReceiver . '";
         
@@ -836,7 +913,7 @@ class InventoryItemPresenter extends PagePresenter
         
                             function isSelect2Empty(selectId) {
                                 // Hole den aktuellen Wert des Select2-Feldes
-                                var renderedElement = $("#select2-INF-' . $ivtLastReceiver .'-container");
+                                var renderedElement = $("#select2-INF-' . $ivtLastReceiver . '-container");
                                 if (renderedElement.length) {
                                     window.checkItemBorrowState();
                                 }
@@ -851,7 +928,7 @@ class InventoryItemPresenter extends PagePresenter
                             // remove placeholder option from select2 options 
                             $(selectIdLastReceiver + " option[value=\'placeholder\']").remove();
 
-                            $("#INF-' . $ivtLastReceiver .'").select2({
+                            $("#INF-' . $ivtLastReceiver . '").select2({
                                 theme: "bootstrap-5",
                                 allowClear: true,
                                 placeholder: "",
@@ -865,23 +942,20 @@ class InventoryItemPresenter extends PagePresenter
                             });',
                             true
                         );
-                    }
-                    else {
+                    } else {
                         if ($items->getProperty($infNameIntern, 'inf_type') === 'DATE') {
                             $fieldType = $gSettingsManager->getString('inventory_field_date_time_format');
                             $maxlength = null;
                             $date = new DateTime('now');
                             if ($fieldType === 'datetime') {
-                                $defaultDate = $date->format('Y-m-d H:i');
+                                $defaultDate = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                             } else {
-                                $defaultDate = $date->format('Y-m-d');
+                                $defaultDate = $date->format($gSettingsManager->getString('system_date'));
                             }
 
-                        }
-                        elseif ($infNameIntern === 'ITEMNAME') {
+                        } elseif ($infNameIntern === 'ITEMNAME') {
                             $fieldProperty = FormPresenter::FIELD_DISABLED;
-                        }
-                        else {
+                        } else {
                             break;
                         }
 
@@ -903,7 +977,7 @@ class InventoryItemPresenter extends PagePresenter
                     break;
             }
         }
-        
+
         $form->addSubmitButton(
             'adm_button_save',
             $gL10n->get('SYS_SAVE'),
@@ -911,29 +985,31 @@ class InventoryItemPresenter extends PagePresenter
         );
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
-        // is loaded on-demand, when there is no html page any more to insert the css/JS file loading,
-        // so we need to do it here, even when no selectbox will be used...
+        // is loaded on-demand, when there is no html page anymore to insert the css/JS file loading,
+        // so we need to do it here, even when no select-box will be used...
         // TODO_RK: Can/Shall we load these select2 files only on demand (used by some subsections like the changelog)?
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
-        $item = new Item($gDb,  $items, $items->getItemId());
+        $item = new Item($gDb, $items, $items->getItemId());
         $this->assignSmartyVariable('userCreatedName', $item->getNameOfCreatingUser());
         $this->assignSmartyVariable('userCreatedTimestamp', $item->getValue('ini_timestamp_create'));
         $this->assignSmartyVariable('lastUserEditedName', $item->getNameOfLastEditingUser());
         $this->assignSmartyVariable('lastUserEditedTimestamp', $item->getValue('ini_timestamp_change'));
-        
+
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
 
     /**
-     * Create the data for the picture upload form of a item.
+     * Create the data for the picture upload form of an item.
      * @param string $itemUUID UUID of the item that should be edited.
+     * @return void
+     * @throws Exception
      */
-    public function createPictureChooseForm(string $itemUUID)
+    public function createPictureChooseForm(string $itemUUID): void
     {
         global $gCurrentSession, $gL10n;
         // show form
@@ -969,10 +1045,12 @@ class InventoryItemPresenter extends PagePresenter
     }
 
     /**
-     * Create the data for the picture preview form of a item.
+     * Create the data for the picture preview form of an item.
      * @param string $itemUUID UUID of the item that should be edited.
+     * @return void
+     * @throws Exception
      */
-    public function createPictureReviewForm(string $itemUUID)
+    public function createPictureReviewForm(string $itemUUID): void
     {
         global $gCurrentSession, $gL10n;
         // show form

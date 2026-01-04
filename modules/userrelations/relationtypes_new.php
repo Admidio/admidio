@@ -98,19 +98,19 @@ try {
     $form->addInput(
         'urt_name',
         $gL10n->get('SYS_NAME'),
-        $relationType1->getValue('urt_name'),
+        htmlentities($relationType1->getValue('urt_name', 'database'), ENT_QUOTES),
         array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
         'urt_name_male',
         $gL10n->get('SYS_MALE'),
-        ($relationType1->getValue('urt_name_male') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_male') : '',
+        ($relationType1->getValue('urt_name_male', 'database') !== $relationType1->getValue('urt_name', 'database')) ? htmlentities($relationType1->getValue('urt_name_male', 'database'), ENT_QUOTES) : '',
         array('maxLength' => 100)
     );
     $form->addInput(
         'urt_name_female',
         $gL10n->get('SYS_FEMALE'),
-        ($relationType1->getValue('urt_name_female') !== $relationType1->getValue('urt_name')) ? $relationType1->getValue('urt_name_female') : '',
+        ($relationType1->getValue('urt_name_female', 'database') !== $relationType1->getValue('urt_name', 'database')) ? htmlentities($relationType1->getValue('urt_name_female', 'database'), ENT_QUOTES) : '',
         array('maxLength' => 100)
     );
     $form->addCheckbox(
@@ -138,19 +138,19 @@ try {
     $form->addInput(
         'urt_name_inverse',
         $gL10n->get('SYS_NAME'),
-        $relationType2->getValue('urt_name'),
+        htmlentities($relationType2->getValue('urt_name', 'database'), ENT_QUOTES),
         array('maxLength' => 100)
     );
     $form->addInput(
         'urt_name_male_inverse',
         $gL10n->get('SYS_MALE'),
-        ($relationType2->getValue('urt_name_male') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_male') : '',
+        ($relationType2->getValue('urt_name_male', 'database') !== $relationType2->getValue('urt_name', 'database')) ? htmlentities($relationType2->getValue('urt_name_male', 'database'), ENT_QUOTES) : '',
         array('maxLength' => 100)
     );
     $form->addInput(
         'urt_name_female_inverse',
         $gL10n->get('SYS_FEMALE'),
-        ($relationType2->getValue('urt_name_female') !== $relationType2->getValue('urt_name')) ? $relationType2->getValue('urt_name_female') : '',
+        ($relationType2->getValue('urt_name_female', 'database') !== $relationType2->getValue('urt_name', 'database')) ? htmlentities($relationType2->getValue('urt_name_female', 'database'), ENT_QUOTES) : '',
         array('maxLength' => 100)
     );
     $form->addCheckbox(
@@ -162,13 +162,13 @@ try {
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('userCreatedName', $relationType1->getNameOfCreatingUser());
-    $page->assignSmartyVariable('userCreatedTimestamp', $relationType1->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('userCreatedTimestamp', $relationType1->getValue('urt_timestamp_create'));
     $page->assignSmartyVariable('lastUserEditedName', $relationType1->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('lastUserEditedTimestamp', $relationType1->getValue('ann_timestamp_change'));
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $relationType1->getValue('urt_timestamp_change'));
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

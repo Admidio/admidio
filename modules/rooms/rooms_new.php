@@ -80,13 +80,13 @@ try {
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('userCreatedName', $room->getNameOfCreatingUser());
-    $page->assignSmartyVariable('userCreatedTimestamp', $room->getValue('ann_timestamp_create'));
+    $page->assignSmartyVariable('userCreatedTimestamp', $room->getValue('room_timestamp_create'));
     $page->assignSmartyVariable('lastUserEditedName', $room->getNameOfLastEditingUser());
-    $page->assignSmartyVariable('lastUserEditedTimestamp', $room->getValue('ann_timestamp_change'));
+    $page->assignSmartyVariable('lastUserEditedTimestamp', $room->getValue('room_timestamp_change'));
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

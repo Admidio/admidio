@@ -38,15 +38,15 @@ class Weblink extends Entity
 
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string Returns the value of the database column.
-     *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * @param string $format For date or timestamp columns, the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     *                           For text columns, the format can be **database** that would return the original database value without any transformations
+     * @return mixed Returns the value of the database column.
+     *                    If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -189,7 +189,7 @@ class Weblink extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 
@@ -220,7 +220,7 @@ class Weblink extends Entity
 
         return parent::setValue($columnName, $newValue, $checkValue);
     }
-    
+
     /**
      * Weblink will change the sequence one step up or one step down.
      * @param string $mode mode if the weblink move up or down, values are Weblink::MOVE_UP, Weblink::MOVE_DOWN

@@ -259,7 +259,7 @@ try {
         log_value_new as value_new, log_value_old as value_old,
         log_usr_id_create as usr_id_create, usr_create.usr_uuid as uuid_usr_create, create_last_name.usd_value AS create_last_name, create_first_name.usd_value AS create_first_name,
         log_timestamp_create as timestamp
-        FROM ' . TBL_LOG . '
+        FROM ' . TBL_LOG_CHANGES . '
         -- Extract data of the creating user...
         INNER JOIN '.TBL_USERS.' usr_create
                 ON usr_create.usr_id = log_usr_id_create
@@ -468,7 +468,8 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (Exception $e) {
+} catch (Throwable $e) {
+    // NOTE: DataTables expects the form {'error' => 'message'}, so we can't use the default handleException($e, true); call!
     $jsonArray['error'] = $e->getMessage();
     echo json_encode($jsonArray);
     exit();

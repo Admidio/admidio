@@ -47,5 +47,5 @@ try {
     $gMessage->show($gL10n->get('SYS_LOGOUT_SUCCESSFUL'));
     // => EXIT
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

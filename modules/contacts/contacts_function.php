@@ -33,6 +33,7 @@ try {
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('delete_explain_msg', 'remove', 'delete', 'send_login')));
     $showFormerButton = admFuncVariableIsValid($_GET, 'show_former_button', 'bool', array('defaultValue' => true));
+    $customCallback = admFuncVariableIsValid($_GET, 'custom_callback', 'bool', array('defaultValue' => false));
     $getUserUuids = admFuncVariableIsValid($_GET, 'user_uuids', 'array', array('defaultValue' => array()));
     if (empty($getUserUuids)) {
         $getUserUuids = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
@@ -57,15 +58,15 @@ try {
 
     if ($getMode === 'delete_explain_msg') {
         if (count($getUserUuids) > 1) {
-            $formerOnClick = 'callUrlHideElements(\'row_members_\', [\'' . implode('\', \'', $getUserUuids) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
-            $deleteOnClick = 'callUrlHideElements(\'row_members_\', [\'' . implode('\', \'', $getUserUuids) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+            $formerOnClick = 'callUrlHideElements(\'row_members_\', [\'' . implode('\', \'', $getUserUuids) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . ($customCallback ? ', \'refreshContactsTable\'' : '') . ')';
+            $deleteOnClick = 'callUrlHideElements(\'row_members_\', [\'' . implode('\', \'', $getUserUuids) . '\'], \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . ($customCallback ? ', \'refreshContactsTable\'' : '') . ')';
             $headerMsg = $gL10n->get('SYS_REMOVE_CONTACT_SELECTION');
             $formerMsg = $gL10n->get('SYS_MAKE_FORMER_SELECTION');
             $removeMsg = $gL10n->get('SYS_REMOVE_CONTACT_SELECTION_DESC', array($gL10n->get('SYS_DELETE_SELECTION')));
             $formerButtonText = $gL10n->get('SYS_FORMER_SELECTION');
             $deleteButtonText = $gL10n->get('SYS_DELETE_SELECTION');
         } else {
-            $formerOnClick = 'callUrlHideElement(\'row_members_' . implode('\', \'', $getUserUuids) . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $getUserUuids[0])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+            $formerOnClick = 'callUrlHideElement(\'row_members_' . implode('\', \'', $getUserUuids) . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $getUserUuids[0])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . ($customCallback ? ', \'refreshContactsTable\'' : '') . ')';
             $deleteOnClick = 'callUrlHideElement(\'row_members_' . implode('\', \'', $getUserUuids) . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $getUserUuids[0])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
             $headerMsg = $gL10n->get('SYS_REMOVE_CONTACT');
             $formerMsg = $gL10n->get('SYS_MAKE_FORMER');
@@ -168,7 +169,7 @@ try {
             }
             // Delete user from database
             $user->delete();
-            
+
             $statusMsg = $gL10n->get('SYS_DELETE_DATA');
             $statusData[$userUuid] = 'success';
         } elseif ($getMode === 'send_login') {
@@ -193,6 +194,6 @@ try {
         $gMessage->showInModalWindow();
         $gMessage->show($e->getMessage());
     } else {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        handleException($e, true);
     }
 }

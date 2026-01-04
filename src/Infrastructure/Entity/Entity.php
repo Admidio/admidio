@@ -8,7 +8,9 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
+use DateTime;
 use Ramsey\Uuid\Uuid;
+use Throwable;
 
 /**
  * @brief Controls read and write access to database tables
@@ -39,19 +41,19 @@ use Ramsey\Uuid\Uuid;
 class Entity
 {
     /**
-     * @var array<string,string> Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+     * @var array<string,string> Array with subarray that contains additional tables and their connected fields that should be selected when data is read
      */
     protected array $additionalTables = array();
     /**
-     * @var string Name of the database table of this object. This must be the table name with the installation specific prefix e.g. **demo_users**
+     * @var string Name of the database table from this object. This must be the table name with the installation-specific prefix e.g. **demo_users**
      */
     protected string $tableName;
     /**
-     * @var string The prefix of each column that this table has. E.g. the table adm_users has the column prefix **usr**
+     * @var string The prefix of each column that this table has. E.g., the table adm_users has the column prefix **usr**
      */
     protected string $columnPrefix;
     /**
-     * @var string Name of the unique autoincrement index column of the database table
+     * @var string Name of the unique autoincrement index column from the database table
      */
     protected string $keyColumnName = '';
     /**
@@ -68,7 +70,7 @@ class Entity
      */
     protected bool $insertRecord;
     /**
-     * @var bool Flag will be set to true if data in array dbColumns was changed
+     * @var bool The Flag will be set to true if data in array dbColumns was changed
      */
     protected bool $columnsValueChanged;
     /**
@@ -80,34 +82,34 @@ class Entity
      */
     protected array $columnsInfos = array();
     /**
-     * @var bool If this flag is set then some right checks will be disabled, so that the object could be saved also
+     * @var bool If this flag is set, then some right checks will be disabled, so that the object could be saved also
      * if the current user doesn't have the right to do this.
      */
     protected bool $saveChangesWithoutRights;
 
     /**
      * Flag to enable/disable logging changes to the database.
-     * @var bool If this flag is set (default), all changes will be logged to the database, if the corresponding preferences item is set.
+     * @var bool If this flag is set (default), all changes will be logged to the database if the corresponding preferences item is set.
      * Setting this to false will disable logging in all cases, even with the preference set.
      */
-    protected static $loggingEnabled = true;
+    protected static bool $loggingEnabled = true;
 
     /**
-     * Constructor that will create an object of a recordset of the specified table.
-     * If the id is set than this recordset will be loaded.
+     * Constructor that will create an object of a recordset from the specified table.
+     * If the id is set, then this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string $tableName The name of the database table. Because of specific prefixes this should be the defined value e.g. **TBL_USERS**
-     * @param string $columnPrefix The prefix of each column of that table. E.g. for table **adm_roles** this is **rol**
-     * @param string|int $id The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param string $tableName The name of the database table. Because of specific prefixes, this should be the defined value e.g. **TBL_USERS**
+     * @param string $columnPrefix The prefix of each column from that table. E.g., for table **adm_roles** this is **rol**
+     * @param int|string $id The id of the recordset that should be loaded. If id isn't set, then an empty object of the table is created.
      * @throws Exception
      */
-    public function __construct(Database $database, string $tableName, string $columnPrefix, $id = '')
+    public function __construct(Database $database, string $tableName, string $columnPrefix, int|string $id = '')
     {
         $this->db =& $database;
         $this->tableName = $tableName;
         $this->columnPrefix = $columnPrefix;
 
-        // if an ID is committed, then read data out of database
+        // if an ID is committed, then read data out of a database
         if ($id > 0) {
             $this->readDataById($id);
         } else {
@@ -133,7 +135,7 @@ class Entity
      * read and stored in the arrays **dbColumns** and **columnsInfos**
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         $this->newRecord = true;
         $this->insertRecord = true;
@@ -149,7 +151,7 @@ class Entity
             }
             unset($fieldValue);
         } else {
-            // read all columns information of the tables
+            // read all column information of the tables
             $this->setColumnsInfos();
         }
     }
@@ -172,7 +174,7 @@ class Entity
      * }
      * ```
      */
-    public function connectAdditionalTable(string $table, string $columnNameAdditionalTable, string $columnNameClassTable)
+    public function connectAdditionalTable(string $table, string $columnNameAdditionalTable, string $columnNameClassTable): void
     {
         $this->additionalTables[] = array(
             'table' => $table,
@@ -182,7 +184,7 @@ class Entity
     }
 
     /**
-     * Get the name of the underlying database table. This can be used to construct sql queries  without hardcoding the table.
+     * Get the name of the underlying database table. This can be used to construct SQL queries without hardcoding the table.
      * @return string The name of the underlying database table
      */
     public function getTableName(): string
@@ -200,7 +202,7 @@ class Entity
     }
 
     /**
-     * Get the key column of the underlying database table. This can be used to construct sql queries names without hardcoding the column name.
+     * Get the key column of the underlying database table. This can be used to construct SQL queries names without hardcoding the column name.
      * @return string The key column name used for the underlying database table
      */
     public function getKeyColumnName(): string
@@ -209,7 +211,7 @@ class Entity
     }
 
     /**
-     * Reads the number of all records of this table
+     * Reads the number of all records from this table
      * @return int Number of records of this table
      * @throws Exception
      */
@@ -255,11 +257,11 @@ class Entity
     }
 
     /**
-     * Enable/disable logging globally, irrespective of the preference setting. Used e.g. during setup / updates
+     * Enable/disable logging globally, irrespective of the preference setting. Used, e.g., during setup / updates
      * @param mixed $enabled Whether logging should be enabled or not.
      * @return void
      */
-    public static function setLoggingEnabled($enabled)
+    public static function setLoggingEnabled(mixed $enabled): void
     {
         self::$loggingEnabled = $enabled;
     }
@@ -268,14 +270,14 @@ class Entity
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns. Subclasses can also add further fields
-     * (e.g. the users table stores and auto-increments the login count, which
+     * (e.g., the user's table stores and auto-increments the login count, which
      * we do not want to log)
      *
      * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {
-        $ignored = [
+        return [
             $this->columnPrefix . '_uuid',
             $this->columnPrefix . '_usr_id_create',
             $this->columnPrefix . '_timestamp_create',
@@ -284,12 +286,11 @@ class Entity
             $this->columnPrefix . '_usr_id',
             $this->columnPrefix . '_timestamp'
         ];
-        return $ignored;
     }
 
     /**
      * Adjust the changelog entry for this db record. By default, record_id, record_name are taken
-     * from this record, linkid and related are left empty, and the field is the column name of each change.
+     * from this record, linked and related are left empty, and the field is the column name of each change.
      *
      * @param LogChanges $logEntry The log entry to adjust
      *
@@ -302,9 +303,6 @@ class Entity
 
     /**
      * Logs creation of the DB record
-     * @param integer $id the unique index of the new record in the database table
-     * @param string $record_name the human-readable representation of the record
-     *
      * @return true Returns **true** if no error occurred
      * @throws Exception
      */
@@ -330,6 +328,7 @@ class Entity
      * Logs deletion of the DB record
      *
      * @return true Returns **true** if no error occurred
+     * @throws Exception
      */
     public function logDeletion(): bool
     {
@@ -410,7 +409,7 @@ class Entity
     /**
      * Get the first name and last name of the person who has created this record. In dependence of the preference
      * system_show_create_edit the login name will be shown. If the current user has a valid login and the
-     * parameter **$linkToProfile** is set than a html link to the profile is set around the name.
+     * parameter **$linkToProfile** is set, then an HTML link to the profile is set around the name.
      * @param bool $linkToProfile If set to **true** a link to the profile is set around the name.
      * @return string Returns the first name and last name of the person optional with a link to the profile.
      * @throws Exception
@@ -446,7 +445,7 @@ class Entity
     /**
      * Get the first name and last name of the person who was the last editor of this record. In dependence of the preference
      * system_show_create_edit the login name will be shown. If the current user has a valid login and the
-     * parameter **$linkToProfile** is set than a html link to the profile is set around the name.
+     * parameter **$linkToProfile** is set, then an HTML link to the profile is set around the name.
      * @param bool $linkToProfile If set to **true** a link to the profile is set around the name.
      * @return string Returns the first name and last name of the person optional with a link to the profile.
      * @throws Exception
@@ -481,23 +480,23 @@ class Entity
 
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return the original database value without any transformations
+     * @param string $format For date or timestamp columns, the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     *                           For text columns, the format can be **database** that would return the original database value without any transformations
      * @return mixed Returns the value of the database column.
-     *               If the value was manipulated before with **setValue** than the manipulated value is returned.
+     *               If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @throws Exception
      * @see Entity#setValue
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gSettingsManager;
 
         $columnValue = '';
 
         if (array_key_exists($columnName, $this->dbColumns)) {
-            // if key field is empty, return 0
+            // if the key field is empty, return 0
             if ($this->keyColumnName === $columnName && empty($this->dbColumns[$columnName])) {
                 $columnValue = 0;
             } else {
@@ -512,9 +511,16 @@ class Entity
                 case 'varchar': // fallthrough
                 case 'text':
                     if ($format !== 'database') {
-                        // if text field and format not 'database' then convert all quotes to html syntax
+                        // if text field and format not 'database' then convert all quotes to HTML syntax
                         $columnValue = SecurityUtils::encodeHTML((string)$columnValue);
+                    } else {
+                        // Postgres returns null for empty text fields, so we convert it to empty string here
+                        $columnValue = $columnValue ?? '';
                     }
+                    break;
+
+                case 'blob':
+                    // For blobs, we return the raw data as is
                     break;
 
                 case 'bytea':
@@ -544,9 +550,9 @@ class Entity
 
                         // try to format the date, else output the available data
                         try {
-                            $datetime = new \DateTime($columnValue);
+                            $datetime = new DateTime($columnValue);
                             $columnValue = $datetime->format($format);
-                        } catch (Exception $e) {
+                        } catch (Throwable) {
                             $columnValue = $this->dbColumns[$columnName];
                         }
                     } else {
@@ -560,7 +566,7 @@ class Entity
     }
 
     /**
-     * If a column of the row in this object has changed throw setValue then this method
+     * If a column of the row in this object has changed throw setValue, then this method
      * will return **true** otherwise @false
      * @return bool Returns **true** if at least one value of one column has changed
      *              after the recordset was loaded otherwise **false**
@@ -571,9 +577,9 @@ class Entity
     }
 
     /**
-     * If the recordset is new and wasn't read from database or was not stored in database
+     * If the recordset is new and wasn't read from a database or was not stored in a database,
      * then this method will return true otherwise false
-     * @return bool Returns **true** if record is not stored in database
+     * @return bool Returns **true** if record is not stored in a database
      */
     public function isNewRecord(): bool
     {
@@ -581,9 +587,9 @@ class Entity
     }
 
     /**
-     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
-     * If the sql find more than one record the method returns **false**.
-     * Per default all columns of the default table will be read and stored in the object.
+     * Reads a record out of the table in the database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the SQL finds more than one record, the method returns **false**.
+     * Per default, all columns of the default table will be read and stored in the object.
      * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
@@ -596,7 +602,7 @@ class Entity
     {
         $sqlAdditionalTables = '';
 
-        // create sql to connect additional tables to the select statement
+        // create SQL to connect additional tables to the select statement
         if (count($this->additionalTables) > 0) {
             foreach ($this->additionalTables as $arrAdditionalTable) {
                 $sqlAdditionalTables .= ', ' . $arrAdditionalTable['table'];
@@ -604,7 +610,7 @@ class Entity
             }
         }
 
-        // if condition starts with AND then remove this
+        // if the condition starts with AND then remove this
         if (StringUtils::strStartsWith(ltrim($sqlWhereCondition), 'AND', false)) {
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }
@@ -646,8 +652,8 @@ class Entity
     }
 
     /**
-     * Reads a record out of the table in database selected by the unique id column in the table.
-     * Per default all columns of the default table will be read and stored in the object.
+     * Reads a record out of the table in the database selected by the unique id column in the table.
+     * Per default, all columns of the default table will be read and stored in the object.
      * @param int $id Unique id of id column of the table.
      * @return bool Returns **true** if one record is found
      * @throws Exception
@@ -660,9 +666,9 @@ class Entity
         // initialize the object, so that all fields are empty
         $this->clear();
 
-        // add id to sql condition
+        // add id to SQL condition
         if ($id > 0) {
-            // call method to read data out of database
+            // call method to read data out of a database
             return $this->readData(' AND ' . $this->keyColumnName . ' = ? ', array($id));
         }
 
@@ -670,9 +676,9 @@ class Entity
     }
 
     /**
-     * Reads a record out of the table in database selected by the unique uuid column in the table.
-     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
-     * Per default all columns of the default table will be read and stored in the object.
+     * Reads a record out of the table in the database selected by the unique uuid column in the table.
+     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g., usr_uuid.
+     * Per default, all columns of the default table will be read and stored in the object.
      * Not every Admidio table has a UUID. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
@@ -686,9 +692,9 @@ class Entity
         // initialize the object, so that all fields are empty
         $this->clear();
 
-        // add id to sql condition
+        // add id to SQL condition
         if ($uuid !== '') {
-            // call method to read data out of database
+            // call method to read data out of a database
             return $this->readData(' AND ' . $this->columnPrefix . '_uuid = ? ', array($uuid));
         }
 
@@ -698,10 +704,10 @@ class Entity
     /**
      * Reads a record out of the table in database selected by different columns in the table.
      * The columns are committed with an array where every element index is the column name and the value is the column value.
-     * If you want a column to be null than set the value to **NULL**
+     * If you want a column to be null, then set the value to **NULL**
      * The columns and values must be selected so that they identify only one record.
-     * If the sql find more than one record the method returns **false**.
-     * Per default all columns of the default table will be read and stored in the object.
+     * If the SQL finds more than one record, the method returns **false**.
+     * Per default, all columns of the default table will be read and stored in the object.
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
      *
@@ -728,7 +734,7 @@ class Entity
         $sqlWhereCondition = '';
         $sqlParams = array();
 
-        // add every array element as a sql condition to the condition string
+        // add every array element as an SQL condition to the condition string
         foreach ($columnArray as $columnName => $columnValue) {
             if ($columnValue === 'NULL') {
                 $sqlWhereCondition .= ' AND ' . $columnName . ' IS NULL ';
@@ -738,10 +744,10 @@ class Entity
             }
         }
 
-        // call method to read data out of database
+        // call method to read data out of a database
         $returnCode = $this->readData($sqlWhereCondition, array_values($sqlParams));
 
-        // if no record was found then save the array fields in the object
+        // if no record was found, then save the array fields in the object
         if (!$returnCode) {
             foreach ($columnArray as $columnName => $columnValue) {
                 if (str_starts_with($columnName, $this->columnPrefix . '_')) {
@@ -754,13 +760,13 @@ class Entity
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
+     * Save all changed columns of the recordset in table of a database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
-     * If the table has columns for creator or editor than these column with their timestamp will be updated.
-     * For a new record if there is an uuid column a new uuid will be created and stored.
+     * If the table has columns for creator or editor, then these columns with their timestamp will be updated.
+     * For a new record if there is a UUID column, a new uuid will be created and stored.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
-     *                                if table has columns like **usr_id_create** or **usr_id_change**
-     * @return bool If an update or insert into the database was done then return true, otherwise false.
+     *                                if a table has columns like **usr_id_create** or **usr_id_change**
+     * @return bool If an update or insert into the database was done, then return true, otherwise false.
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -769,7 +775,7 @@ class Entity
             return false;
         }
 
-        // if new role then set create the uuid
+        // if a new role then set create the uuid
         if ($this->isNewRecord()
             && array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)
             && (string)$this->getValue($this->columnPrefix . '_uuid') === '') {
@@ -818,13 +824,12 @@ class Entity
                     if ($this->insertRecord) {
                         // Prepare data for an insert
                         $sqlFieldArray[] = $key;
-                        $queryParams[] = $value;
                     } else {
                         // Prepare data for an update
                         $sqlSetArray[] = $key . ' = ?';
 
-                        $queryParams[] = $value;
                     }
+                    $queryParams[] = $value;
                     // Ignore the usr_id_create and timestamp_create (and *_change) columns in the change log...
                     if (!in_array($key, $this->getIgnoredLogColumns())) {
                         $logChanges[$key] = array('oldValue' => $this->columnsInfos[$key]['previousValue'], 'newValue' => $value);
@@ -867,21 +872,21 @@ class Entity
     }
 
     /**
-     * If this method is set then the current user can save changes to this object if he hasn't the necessary rights.
+     * If this method is set, then the current user can save changes to this object if he hasn't the necessary rights.
      * The flag must be used within the class implementation.
      * @return void
      */
-    public function saveChangesWithoutRights()
+    public function saveChangesWithoutRights(): void
     {
         $this->saveChangesWithoutRights = true;
     }
 
     /**
-     * The method requires an array with all fields of one recordset of the table object.
+     * The method requires an array with all fields of one recordset from the table object.
      * These fields will be added to the object as if you read one record with **readDataById**
      * but without a separate SQL. This method is useful if you have several recordset of the
      * table and want to use a table object for each recordset. So you don't have to do a
-     * separate sql read for each record. This is a performant way to fill the object with
+     * separate SQL read for each record. This is a performant way to fill the object with
      * the necessary data.
      * @param array $fieldArray An array with all fields and their values of the table. If the object has
      *                          more connected tables than you should add the fields of these tables, too.
@@ -893,7 +898,7 @@ class Entity
      * $announcementsStatement = $gDb->queryPrepared($sql);
      * $announcement = new Announcements($gDb);
      *
-     * while ($row = $announcementsStatement->fetch())
+     * While ($row = $announcementsStatement->fetch())
      * {
      *     // add each recordset to an object without a separate sql within the object
      *     $announcement->clear();
@@ -903,7 +908,7 @@ class Entity
      * ```
      * @throws Exception
      */
-    public function setArray(array $fieldArray)
+    public function setArray(array $fieldArray): void
     {
         foreach ($fieldArray as $field => $value) {
             if (!empty($this->dbColumns[$field])) {
@@ -926,9 +931,9 @@ class Entity
      * **null** (or not), **key** and **serial**. Also, the changed flag will be set to false.
      * @throws Exception
      */
-    protected function setColumnsInfos()
+    protected function setColumnsInfos(): void
     {
-        // create array with base table and all connected tables
+        // create an array with base table and all connected tables
         $tables = array($this->tableName);
 
         foreach ($this->additionalTables as $values) {
@@ -972,7 +977,7 @@ class Entity
      * @return void
      * @throws Exception
      */
-    public function setNewRecord()
+    public function setNewRecord(): void
     {
         $this->newRecord = true;
         $this->insertRecord = true;
@@ -988,15 +993,15 @@ class Entity
     /**
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method **save** to store the new value to the database. If the unique key
-     * column is set to 0 than this record will be a new record and all other columns are marked as changed.
+     * column is set to 0, then this record will be a new record and all other columns are marked as changed.
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed $newValue The new value that should be stored in the database field
-     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** then the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws Exception If **columnName** doesn't exist. exception->text contains a string with the reason why the login failed.
+     * @throws Exception If **columnName** doesn't exist. Exception->text contains a string with the reason why the login failed.
      * @see Entity#getValue
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if (!array_key_exists($columnName, $this->dbColumns)) {
             throw new Exception('Column ' . $columnName . ' does not exists in table ' . $this->tableName . '!');
@@ -1109,10 +1114,15 @@ class Entity
                     case 'char':
                     case 'varchar':
                     case 'text':
-                        $newValue = StringUtils::strStripTags($newValue);
+                        // no HTML tags and no HTML entities should be stored in the database
+                        $newValue = StringUtils::strStripTags(html_entity_decode($newValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
                         break;
 
                     // Byte/Blob
+                    case 'blob':
+                        // For blobs, we accept the raw data as is
+                        break;
+
                     case 'bytea':
                         // Postgres can only store hex values in bytea, so we must decode binary in hex
                         $newValue = bin2hex($newValue);
@@ -1152,17 +1162,16 @@ class Entity
      * Check if the given column has changed, considering the DB column type.
      * Since loading from the database converts to the actual data types, but setting
      * uses strings, some datatypes need special-casing. Boolean false are read as null,
-     * but set as 0 -> null and 0 must be considered as false. Similarily, loading a
-     * (date)time will include seconds, but setting will not include seconds in the string
+     * but set as 0 -> null and 0 must be considered as false. Similarly, loading a
+     * (date)time will include seconds, but the setting will not include seconds in the string
      * value.
      *
      * @param string $columnName the database column name to check
-     * @param string $newValue the new value to set
-     * @return bool Whether the $newValue can be considered differnt from the current value
+     * @param string|null $newValue the new value to set
+     * @return bool Whether the $newValue can be considered different from the current value
      */
     protected function valueChanged(string $columnName, ?string $newValue): bool
     {
-        global $gSettingsManager;
         $oldValue = isset($this->dbColumns[$columnName]) && !empty($this->dbColumns[$columnName]) ? $this->dbColumns[$columnName] : null;
 
         // certain data types need special handling to detect changes
@@ -1185,10 +1194,10 @@ class Entity
                 }
                 try {
                     // Convert old and new to a DateTime and compare that directly
-                    $oldDate = new \DateTime($oldValue);
-                    $newDate = new \DateTime($newValue);
-                    return ($oldDate != $newDate) ? true : false;
-                } catch (\Exception $e) {
+                    $oldDate = new DateTime($oldValue);
+                    $newDate = new DateTime($newValue);
+                    return $oldDate != $newDate;
+                } catch (\Exception) {
                     // if DateTime-conversion did not work, compare the strings
                     return $oldValue != $newValue;
                 }

@@ -46,7 +46,7 @@ try {
         // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
     }
 
-    if ($getDelete > 0) {
+    if ($getDelete > 0 && isset($config[$getDelete - 1])) {
         $config[$getDelete - 1]['id'] = $config[$getDelete - 1]['id'] * (-1);                   // id negieren, als Kennzeichen für "Deleted"
         $config = $report->saveConfigArray($config);
     }
@@ -82,10 +82,10 @@ try {
             	if (category != field.cat_name) {
                 	if (category.length > 0) {
                     	htmlCboFields += "</optgroup>";
-                	}    
+                	}
                 	htmlCboFields += "<optgroup label=\"" + field.cat_name + "\">";
                 	category = field.cat_name;
-            	}    
+            	}
             	var selected = ((val != null) && (field.id == val)) ? " selected=\"selected\" " : "";
              	htmlCboFields += "<option value=\"" + field.id + "\" " + selected + ">" + field.data + "</option>";
         	}
@@ -107,9 +107,9 @@ try {
         	var newCellField = newTableRow.insertCell(-1);
         	newCellField.innerHTML = createUserFieldSelect(config, val);
             var newCellButtons = newTableRow.insertCell(-1);
-            newCellButtons.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+            newCellButtons.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
                         "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
-                        "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+                        "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
                         "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
 
         	$(newTableRow).fadeIn("slow");
@@ -135,7 +135,7 @@ try {
         $javascriptCodeExecute .= "
         createColumnsArray{$key}().forEach(item => addColumnToConfiguration({$key}, item));
         $(\"#mylist_fields_tbody{$key}\").sortable({
-            handle: \".admidio-move-row\", 
+            handle: \".admidio-move-row\",
             items: \"tr\",
             update: updateNumbering
         });
@@ -182,6 +182,9 @@ try {
 
     $currentNumberConf = 0;
     $categoryReports = array();
+    $key_to_open = ($getAdd) ? array_key_last($config) : array_key_first($config);
+
+
 
     foreach ($config as $key => $value) {
         $categoryReport = array(
@@ -191,7 +194,8 @@ try {
             'selection_cat' => 'selection_cat' . $key,
             'number_col' => 'number_col' . $key,
             'id' => 'id' . $key,
-            'default_conf' => 'default_conf' . $key
+            'default_conf' => 'default_conf' . $key,
+            'open' => ($key == $key_to_open),
         );
         $formConfigurations->addInput('name' . $key, $gL10n->get('SYS_DESIGNATION'), $value['name'],
             array('property' => FormPresenter::FIELD_REQUIRED));
@@ -231,6 +235,6 @@ try {
     $gCurrentSession->addFormObject($formConfigurations);
 
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

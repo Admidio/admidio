@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * mode - card       : (Default) Show all groups and roles in card view
+ * mode - cards      : (Default) Show all groups and roles in card view
  *      - permissions : Show permissions of all groups and roles in list view
  *      - edit       : Show dialog to create or edit a role.
  *      - save       : Save data of role form dialog
@@ -36,7 +36,7 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
-    $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'card', 'validValues' => array('card', 'permissions', 'edit', 'save', 'delete', 'activate', 'deactivate', 'export')));
+    $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'permissions', 'edit', 'save', 'delete', 'activate', 'deactivate', 'export')));
     $getCategoryUUID  = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getRoleUUID = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
     $getRoleType = admFuncVariableIsValid($_GET, 'role_type', 'int', array('defaultValue' => 1));
@@ -46,14 +46,14 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    if ($getMode !== 'card') {
+    if ($getMode !== 'cards') {
         // only users with the special right are allowed to manage roles
         if (!$gCurrentUser->isAdministratorRoles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
-    if (in_array($getMode, array('card', 'permissions'))) {
+    if (in_array($getMode, array('cards', 'permissions'))) {
         // set headline
         switch ($getRoleType) {
             case GroupsRolesPresenter::ROLE_TYPE_INACTIVE:
@@ -85,7 +85,7 @@ try {
             $headline .= ' - ' . $category->getValue('cat_name');
         }
 
-        if ($getMode === 'card') {
+        if ($getMode === 'cards') {
             // Navigation of the module starts here
             $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-people-fill');
         } else {
@@ -117,7 +117,7 @@ try {
     }
 
     switch ($getMode) {
-        case 'card':
+        case 'cards':
             $groupsRoles->createCards($getCategoryUUID, $getRoleType);
             $groupsRoles->show();
             break;
@@ -141,8 +141,8 @@ try {
             break;
 
         case 'save':
-            $groupsRoles = new RolesService($gDb, $getRoleUUID);
-            $groupsRoles->save();
+            $rolesService = new RolesService($gDb, $getRoleUUID);
+            $rolesService->save();
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
             break;
@@ -174,14 +174,10 @@ try {
 
         case 'export':
             // Export every member of a role into one vCard file
-            $groupsRoles = new RolesService($gDb, $getRoleUUID);
-            $groupsRoles->export();
+            $rolesService = new RolesService($gDb, $getRoleUUID);
+            $rolesService->export();
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('save', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('save', 'delete')));
 }

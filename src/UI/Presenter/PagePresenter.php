@@ -2,6 +2,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\MenuNode;
 use Smarty\Smarty;
 
@@ -9,7 +10,7 @@ use Smarty\Smarty;
  * @brief Creates an Admidio specific complete HTML page with the template engine Smarty.
  *
  * This class creates an HTML page with head and body and integrates some Admidio
- * specific elements like CSS files, JavaScript files and JavaScript code. The class is derived
+ * specific elements like CSS files, JavaScript files, and JavaScript code. The class is derived
  * from the Smarty class. It provides a method to add new HTML data to the page and also set or
  * choose the necessary template files. The generated page will automatically integrate the
  * chosen theme. You can also create an HTML reduces page without a menu header and footer
@@ -99,7 +100,7 @@ class PagePresenter
      */
     protected string $templateFile = '';
     /**
-     * @var bool Flag that will be responsible for a back button with the url to the previous page will be shown.
+     * @var bool The Flag that will be responsible for a back button with the url to the previous page will be shown.
      */
     protected bool $showBackLink = false;
 
@@ -120,7 +121,7 @@ class PagePresenter
     }
 
     /**
-     * Constructor creates the page object and initialized all parameters.
+     * Constructor creates the page object and initializes all parameters.
      * @param string $objectUUID UUID of an object that represents the page. The data shown on the page will belong
      *                           to this object.
      * @throws Exception
@@ -190,7 +191,7 @@ class PagePresenter
     /**
      * Adds any JavaScript content to the page. The JavaScript will be added in the order you call this method.
      * @param string $javascriptCode       A valid JavaScript code that will be added to the header of the page.
-     * @param bool $executeAfterPageLoad (optional) If set to **true** the JavaScript code will be executed after
+     * @param bool $executeAfterPageLoad (optional) If set to **true**, the JavaScript code will be executed after
      *                                     the page is fully loaded.
      */
     public function addJavascript(string $javascriptCode, bool $executeAfterPageLoad = false): void
@@ -316,11 +317,13 @@ class PagePresenter
         $this->smarty->assign('validLogin', $gValidLogin);
         $this->smarty->assign('debug', $gDebug);
         $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_module_enabled'));
-        
+
         // Design variables
-        $this->smarty->assign('additionalStylesFile',  $gSettingsManager->getString('additional_styles_file'));
-        $this->smarty->assign('logoFile',  $gSettingsManager->getString('logo_file'));
-        $this->smarty->assign('faviconFile',  $gSettingsManager->getString('favicon_file'));
+        $this->smarty->assign('additionalStylesFile', $gSettingsManager->getString('additional_styles_file'));
+        $this->smarty->assign('logoFile', $gSettingsManager->getString('logo_file'));
+        $this->smarty->assign('logoFileMaxHeight', $gSettingsManager->getString('logo_file_max_height'));
+        $this->smarty->assign('faviconFile', $gSettingsManager->getString('favicon_file'));
+        $this->smarty->assign('admidioHeadline', Language::translateIfTranslationStrId($gSettingsManager->getString('admidio_headline')));
 
         $styles = '';
         $color_primary = $gSettingsManager->getString('color_primary');
@@ -375,17 +378,17 @@ class PagePresenter
     /**
      * Public method to assign new variables to the Smarty template of the PagePresenter.
      * @param string $variable Name of the variable within the Smarty template.
-     * @param array|string $value Value of the variable.
+     * @param mixed $value Value of the variable.
      * @return void
      */
-    public function assignSmartyVariable(string $variable, array|string $value): void
+    public function assignSmartyVariable(string $variable, mixed $value): void
     {
         $this->smarty->assign($variable, $value);
     }
 
     /**
      * Create an object of the template engine Smarty. This object uses the template folder of the
-     * current theme. The all cacheable and compilable files will be stored in the templates folder
+     * current theme. All cacheable and compilable files will be stored in the templates folder
      * of **adm_my_files**.
      * @return Smarty Returns the initialized Smarty object.
      * @throws Exception
@@ -402,7 +405,7 @@ class PagePresenter
             if (defined('THEME_FALLBACK_PATH')) {
                 $smartyObject->addTemplateDir(THEME_FALLBACK_PATH . '/templates/');
             }
-            
+
             $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
             $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
@@ -453,7 +456,7 @@ class PagePresenter
     }
 
     /**
-     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
+     * Returns the headline of the current Admidio page. This is the text of the <h1> tag from the page.
      * @return string Returns the headline of the current Admidio page.
      */
     public function getHeadline(): string
@@ -572,8 +575,8 @@ class PagePresenter
 
     /**
      * If print mode is set, then the reduced template file **index.reduced.tpl** will be loaded with
-     * a print specific CSS file **print.css**. All styles will be more print-compatible and are
-     * only black, grey and white.
+     * a print-specific CSS file **print.css**. All styles will be more print-compatible and are
+     * only black, gray and white.
      * @return void
      */
     public function setPrintMode(): void
@@ -630,7 +633,7 @@ class PagePresenter
             }
         } catch (\Smarty\Exception $exception) {
             echo $exception->getMessage();
-            echo '<br />Please check if the theme folder "<strong>' . $gSettingsManager->getString('theme') . '</strong>" exists within the folder "themes".';
+            echo '<br />Please check if the theme folder <strong>' . $gSettingsManager->getString('theme') . '</strong> exists within the folder <strong>themes</strong>.';
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

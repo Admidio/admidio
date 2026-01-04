@@ -32,6 +32,7 @@ use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Service\RolesService;
 use Admidio\Roles\ValueObject\ListData;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
@@ -130,6 +131,9 @@ try {
             $event = new Event($gDb);
             $event->readDataByRoleId($roleID);
 
+            // it's an event, so there is no need to show former members
+            $hasRightViewFormerMembers = false;
+
             $showComment = $event->getValue('dat_allow_comments');
             $showCountGuests = $event->getValue('dat_additional_guests');
 
@@ -140,8 +144,23 @@ try {
     }
 
     // if user should not view former roles members then disallow it
-    if (!$hasRightViewFormerMembers) {
+    if (!$hasRightViewFormerMembers && !isset($event)) {
         $getMembersShowFiler = 0;
+        $getDateFrom = DATE_NOW;
+        $getDateTo = DATE_NOW;
+    } elseif (!$hasRightViewFormerMembers && isset($event)) {
+        // if it's an event list then show only active members
+        // if the event is in the past then show all members that were registered for this event
+        $eventEnd = $event->getValue('dat_end', 'Y-m-d');
+        $eventEnd = DateTime::createFromFormat('Y-m-d', $eventEnd);
+        $dateNow = DateTime::createFromFormat('Y-m-d',DATE_NOW);
+        if ($dateNow === false) {
+            // check if DATE_NOW has system format
+            $dateNow = DateTime::createFromFormat($gSettingsManager->getString('system_date'), DATE_NOW);
+            $dateNow->format('Y-m-d');
+        }
+
+        $getMembersShowFiler = ($eventEnd < $dateNow) ? 2 : 0;
         $getDateFrom = DATE_NOW;
         $getDateTo = DATE_NOW;
     }
@@ -257,11 +276,11 @@ try {
         if ($getMembersShowFiler === 2) {
             $arrColumnNames = $list->getColumnNames();
             $arrColumnNames[] = $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP');
-             $listData->setColumnHeadlines($arrColumnNames);
+            $listData->setColumnHeadlines($arrColumnNames);
         } else {
             $listData->setColumnHeadlines($list->getColumnNames());
         }
-        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
+        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', html_entity_decode($roleName, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
         if ((string)$list->getValue('lst_name') !== '') {
             $filename .= '-' . str_replace('.', '', $list->getValue('lst_name'));
         }
@@ -297,7 +316,7 @@ try {
             $getMode = 'pdf';
             break;
         case 'html':
-            $classTable = 'table table-condensed';
+            $classTable = 'table table-condensed table-hover';
             break;
         case 'print':
             $classTable = 'table table-condensed table-striped';
@@ -340,9 +359,6 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
     }
 
-    $datatable = false;
-    $hoverRows = false;
-
     if ($getMode !== 'html') {
         if ($getMembersShowFiler === 1) {
             $htmlSubHeadline .= ' - ' . $gL10n->get('SYS_FORMER_MEMBERS');
@@ -361,15 +377,22 @@ try {
         $htmlSubHeadline .= ' - ' . $relationTypeName;
     }
 
+    // create html page object
+    $page = PagePresenter::withHtmlIDAndHeadline('admidio-lists-show', $headline);
+    $page->setContentFullWidth();
+    $page->setTitle($title);
+    $smarty = $page->createSmartyObject();
+    $smarty->assign('l10n', $gL10n);
+    $smarty->assign('classTable', $classTable);
+
     if ($getMode === 'print') {
-        // create html page object without the custom theme files
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-lists-show', $headline);
-        $page->setContentFullWidth();
         $page->setPrintMode();
-        $page->setTitle($title);
         $page->addHtml('<h5 class="admidio-content-subheader">' . $htmlSubHeadline . '</h5>');
-        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
     } elseif ($getMode === 'pdf') {
+        // decode the headline and the subheadline for the PDF document
+        $headline = html_entity_decode($headline, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $subHeadline = html_entity_decode($htmlSubHeadline, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
         $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
@@ -399,18 +422,9 @@ try {
         // add a page
         $pdf->AddPage();
 
-        // Create table object for display
-        $table = new HtmlTable('adm_lists_table', null, $hoverRows, $datatable, $classTable);
-        $table->addAttribute('border', '1');
+        // set subHeadline for table
+        $smarty->assign('subHeadline', $subHeadline);
     } elseif ($getMode === 'html') {
-        $datatable = true;
-        $hoverRows = true;
-
-        // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-lists-show', $headline);
-        $page->setContentFullWidth();
-        $page->setTitle($title);
-
         // create select box with all list configurations
         $sql = 'SELECT lst_uuid, lst_name, lst_global
               FROM ' . TBL_LISTS . '
@@ -524,7 +538,16 @@ try {
         // dropdown menu item with all export possibilities
         if ($gSettingsManager->getInt('groups_roles_export') === 1 // all users
             || ($gSettingsManager->getInt('groups_roles_export') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user'))) { // users with the right to edit all profiles
-            $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_DOWNLOAD_FILE'), '#', 'bi-download');
+            $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT'), '#', 'bi-download');
+            if ($numberRoles === 1) {
+                $page->addPageFunctionsMenuItem(
+                    'menu_item_lists_vcard',
+                    $gL10n->get('SYS_VCARD') . ' (*.vcf)',
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'export', 'role_uuid' => $role->getValue('rol_uuid'))),
+                    'bi-file-earmark-person',
+                    'menu_item_lists_export'
+                );
+            }
             $page->addPageFunctionsMenuItem(
                 'menu_item_lists_excel',
                 $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
@@ -585,17 +608,16 @@ try {
         }
 
         ChangelogService::displayHistoryButton($page, 'roles', 'members', true, array('related_id' => $getRoleList));
-
-        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
-        $table->setDatatablesRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
-    } else {
-        $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
+        // Initialize the datatables object
+        $table = new DataTables($page, 'adm_lists_table');
+        $table->setRowsPerPage($gSettingsManager->getInt('groups_roles_members_per_page'));
     }
 
     if ($numMembers === 0) {
         // no members found
         $page->addHtml('<div class="alert alert-warning" role="alert">' . $gL10n->get('SYS_NO_USER_FOUND') . '</div>');
         $page->show();
+        exit();
         // => EXIT
     }
 
@@ -605,7 +627,7 @@ try {
 
     // set the first column for the counter
     if ($getMode === 'html') {
-         // add column for former status
+        // add column for former status
         if ($getMembersShowFiler === 2) {
             array_unshift($arrColumnNames, '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP') . '"></i>');
             array_unshift($arrColumnAlign, 'center');
@@ -619,8 +641,7 @@ try {
             // add column for edit link
             $arrColumnNames[] = '&nbsp;';
         }
-    }
-    elseif ($getMembersShowFiler === 2) {
+    } elseif ($getMembersShowFiler === 2) {
         array_unshift($arrColumnNames, $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP'));
         array_unshift($arrColumnAlign, 'left');
     }
@@ -629,26 +650,10 @@ try {
     array_unshift($arrColumnNames, $gL10n->get('SYS_ABR_NO'));
     array_unshift($arrColumnAlign, 'left');
 
-    if ($getMode === 'html' || $getMode === 'print') {
-        $table->setColumnAlignByArray($arrColumnAlign);
-        $table->addRowHeadingByArray($arrColumnNames);
-    } elseif ($getMode === 'pdf') {
-        $table->setColumnAlignByArray($arrColumnAlign);
-        $table->addTableHeader();
-        $table->addRow();
-        $table->addAttribute('align', 'center');
-        $table->addColumn($headline, array('colspan' => count($arrColumnNames)));
-        $table->addRow();
-
-        // Write valid column headings
-        for ($column = 0, $max = count($arrColumnNames); $column < $max; ++$column) {
-            $table->addColumn($arrColumnNames[$column], array('style' => 'text-align: ' . $arrColumnAlign[$column] . '; font-size: 14px; background-color: #c7c7c7;'), 'th');
-        }
-    }
-
     $listHasLeaders = false; // Mark for change between leader and member
     $lastMemberIsLeader = false;
     $listRowNumber = 1;
+    $rows = array();
 
     foreach ($membersList as $member) {
         $memberIsLeader = false;
@@ -670,7 +675,7 @@ try {
 
             if ($getMode === 'print' || $getMode === 'pdf') {
                 $colspan = ($getMembersShowFiler === 2) ? $list->countColumns() + 2 : $list->countColumns() + 1;
-                $table->addRowByArray(array($title), '', array('class' => 'admidio-group-heading'), $colspan);
+                $rows[] = array('id' => 'row-leader-group', 'data' => array($title), 'class' => 'admidio-group-heading', 'colspan' => $colspan);
             }
             $lastMemberIsLeader = $memberIsLeader;
         }
@@ -684,8 +689,7 @@ try {
                 if ($member['mem_former']) {
                     $icon = 'bi-person-fill-dash text-danger';
                     $iconText = $gL10n->get('SYS_FORMER_MEMBER_OF_ROLE_GROUP', array($roleName));
-                }
-                else {
+                } else {
                     $icon = 'bi-person-fill-check';
                     $iconText = $gL10n->get('SYS_MEMBER_OF_ROLE_GROUP', array($roleName));
                 }
@@ -733,8 +737,7 @@ try {
                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
         }
 
-        $table->addRowByArray($columnValues, '', array('nobr' => 'true'));
-
+        $rows[] = array('id' => 'row-' . $listRowNumber, 'data' => array_values($columnValues));
         ++$listRowNumber;
     }  // End-While (end found User)
 
@@ -742,15 +745,15 @@ try {
     // if html mode and the role has leaders then group all data between leaders and members
     if ($getMode === 'html') {
         if ($list->isShowingLeaders() && $listHasLeaders) {
-            $table->setDatatablesGroupColumn(2);
+            $table->setGroupColumn(2);
         } else {
-            $table->setDatatablesColumnsHide(array(2));
+            $table->setColumnsHide(array(2));
         }
     }
 
     if ($getMode === 'pdf') {
         // send the new PDF to the User
-        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $roleName);
+        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', html_entity_decode($roleName, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
         // file name in the current directory...
         if ((string)$list->getValue('lst_name') !== '') {
@@ -767,8 +770,19 @@ try {
         header('Cache-Control: private');
         header('Pragma: public');
 
+        $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
+        $smarty->assign('columnAlign', $arrColumnAlign);
+        $smarty->assign('headers', $arrColumnNames);
+        $smarty->assign('headersStyle', 'font-size:14;background-color:#C7C7C7;');
+        $smarty->assign('rows', $rows);
+        $smarty->assign('rowsStyle', 'font-size:10;');
+
+        // Fetch the HTML table from our Smarty template
+        $smarty->assign('exportMode', true);
+        $htmlTable = $smarty->fetch('modules/groups-roles.list.tpl');
+
         // output the HTML content
-        $pdf->writeHTML($table->getHtmlTable(), true, false, true);
+        $pdf->writeHTML($htmlTable, true, false, true);
 
         // Save PDF to file
         $pdf->Output($file, 'F');
@@ -783,8 +797,24 @@ try {
             // TODO
         }
     } else {
+        if (isset($table)) {
+            // we are in datatable mode
+            $table->createJavascript(count($rows), count($arrColumnNames));
+            $table->setColumnAlignByArray($arrColumnAlign);
+            $page->addHtml('<div class="table-responsive">');
+        }
+
+        $smarty->assign('columnAlign', $arrColumnAlign);
+        $smarty->assign('headers', $arrColumnNames);
+        $smarty->assign('rows', $rows);
+
+        // Fetch the HTML table from our Smarty template
+        $htmlTable = $smarty->fetch('modules/groups-roles.list.tpl');
         // add table list to the page
-        $page->addHtml($table->show());
+        $page->addHtml($htmlTable);
+        if (isset($table)) {
+            $page->addHtml('</div>');
+        }
 
         // create an infobox for the role
         if ($getMode === 'html' && $numberRoles === 1) {
@@ -795,8 +825,6 @@ try {
                 || (string)$role->getValue('rol_location') !== ''
                 || !empty($role->getValue('rol_cost'))
                 || !empty($role->getValue('rol_max_members'))) {
-                $smarty = HtmlPage::createSmartyObject();
-                $smarty->assign('l10n', $gL10n);
                 $smarty->assign('role', $role->getValue('rol_name'));
 
                 $roleProperties = array(array('label' => $gL10n->get('SYS_CATEGORY'), 'value' => $role->getValue('cat_name')));
@@ -830,7 +858,7 @@ try {
 
                 // Member Fee
                 if ((string)$role->getValue('rol_cost') !== '') {
-                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTIONv'), 'value' => $role->getValue('rol_cost') . ' ' . $gSettingsManager->getString('system_currency'));
+                    $roleProperties[] = array('label' => $gL10n->get('SYS_CONTRIBUTION'), 'value' => $role->getValue('rol_cost') . ' ' . $gSettingsManager->getString('system_currency'));
                 }
 
                 // Fee period
@@ -851,8 +879,6 @@ try {
         // show complete html page
         $page->show();
     }
-} catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
-    echo $e->getMessage();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

@@ -293,7 +293,8 @@ class HtmlForm
             'class'            => '',
             'alertWarning'     => '',
             'id'               => $id,
-            'label'            => $label
+            'label'            => $label,
+            'toggleable'       => false
         );
         $optionsAll = array_replace($optionsDefault, $options);
         $attributes = array();
@@ -631,7 +632,8 @@ class HtmlForm
             'helpTextId'       => '',
             'icon'             => '',
             'class'            => '',
-            'alertWarning'     => ''
+            'alertWarning'     => '',
+            'toggleable'       => false
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
@@ -835,7 +837,8 @@ class HtmlForm
             'class'            => '',
             'id'               => $id,
             'label'            => $label,
-            'value'            => $value
+            'value'            => $value,
+            'toggleable'       => false
         );
         $optionsAll = array_replace($optionsDefault, $options);
         $attributes = array();
@@ -933,7 +936,8 @@ class HtmlForm
             'class'             => '',
             'id'                => $id,
             'label'             => $label,
-            'values'            => $values
+            'values'            => $values,
+            'toggleable'       => false
         );
         $optionsAll = array_replace($optionsDefault, $options);
         $attributes = array();
@@ -1027,7 +1031,8 @@ class HtmlForm
             'icon'                           => '',
             'class'                          => '',
             'id'                             => $id,
-            'label'                          => $label
+            'label'                          => $label,
+            'toggleable'       => false
         );
         $optionsAll = array_replace($optionsDefault, $options);
         $attributes = array('name' => $id);

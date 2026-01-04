@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    {if !$print}
+    {if !$print && $editRights}
         <div id="adm_inventory_table_select_actions" class="mb-3">
             <ul class="nav admidio-menu-function-node">
                 <li class="nav-item">
@@ -27,7 +27,7 @@
             {foreach from=$list.rows item=row}
                 <tr id="adm_inventory_item_{$row.item_uuid}">
                     {foreach from=$row.data item=cell name=table}
-                        <td class="text-{$list.column_align[$smarty.foreach.table.index]}">{$cell|raw}</td>
+                        <td class="text-{$list.column_align[$smarty.foreach.table.index]}" style="min-width: 40px;">{$cell|raw}</td>
                     {/foreach}
                     {if isset($row.actions)}
                         <td class="text-end">

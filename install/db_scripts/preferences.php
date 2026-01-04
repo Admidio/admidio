@@ -43,6 +43,8 @@ $defaultOrgPreferences = array(
     'color_primary' => '#349aaa',
     'color_secondary' => '#263340',
     'logo_file' => '',
+    'logo_file_max_height' => '60',
+    'admidio_headline' => 'SYS_ONLINE_MEMBERSHIP_ADMINISTRATION',
     'favicon_file' => '',
     'additional_styles_file' => '',
 
@@ -112,6 +114,7 @@ $defaultOrgPreferences = array(
     'system_notifications_role' => '',
     'system_notifications_new_entries' => '0',
     'system_notifications_profile_changes' => '0',
+    'system_notifications_inventory_changes' => '0',
 
     // Captcha
     'captcha_type' => 'pic',
@@ -148,6 +151,7 @@ $defaultOrgPreferences = array(
 
     // Inventory
     'inventory_module_enabled' => '2',
+    'inventory_visible_for' => '',
     'inventory_items_per_page' => '25',
     'inventory_field_history_days' => '365',
     'inventory_item_picture_enabled' => '1',
@@ -165,7 +169,7 @@ $defaultOrgPreferences = array(
     'inventory_items_disable_borrowing' => '0',
     'inventory_profile_view_enabled' => '1',
     'inventory_profile_view' => 'LAST_RECEIVER',
-    'inventory_export_filename' => $GLOBALS['gL10n']->get('SYS_INVENTORY'),
+    'inventory_export_filename' => 'SYS_INVENTORY',
     'inventory_add_date' => '0',
 
     // Events

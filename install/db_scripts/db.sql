@@ -1046,6 +1046,7 @@ CREATE TABLE %PREFIX%_inventory_fields
     inf_system                  boolean             NOT NULL    DEFAULT false,
     inf_required_input          smallint            NOT NULL    DEFAULT 0,
     inf_sequence                smallint            NOT NULL,
+    inf_inf_uuid_connected      varchar(36)         NULL        DEFAULT NULL,
     inf_usr_id_create           integer unsigned,
     inf_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     inf_usr_id_change           integer unsigned,
@@ -1101,8 +1102,8 @@ CREATE TABLE %PREFIX%_inventory_item_borrow_data
     inb_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     inb_ini_id                  integer unsigned    NOT NULL,
     inb_last_receiver           varchar(255)        NULL        DEFAULT NULL,
-    inb_borrow_date             varchar(100)        NULL        DEFAULT NULL,
-    inb_return_date             varchar(100)        NULL        DEFAULT NULL,
+    inb_borrow_date             timestamp           NULL        DEFAULT NULL,
+    inb_return_date             timestamp           NULL        DEFAULT NULL,
     PRIMARY KEY (inb_id)
 )
 ENGINE = InnoDB

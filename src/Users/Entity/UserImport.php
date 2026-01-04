@@ -69,7 +69,7 @@ class UserImport extends User
      * @return void
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -205,7 +205,7 @@ class UserImport extends User
      * ```
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gLogger;
 
@@ -221,80 +221,68 @@ class UserImport extends User
             // convert the value of the import file to an Admidio expected value
             $validValue = '';
 
-            if ($columnName === 'COUNTRY') {
-                try {
-                    $validValue = $gL10n->getCountryIsoCode($newValue);
-                } catch (Exception $e) {
-                    $gLogger->info($e->getMessage());
-                }
-            } else {
-                switch ($this->mProfileFieldsData->getProperty($columnName, 'usf_type')) {
-                    case 'CHECKBOX':
-                        $columnValueToLower = StringUtils::strToLower($newValue);
-                        if (in_array($columnValueToLower, array('y', 'yes', '1', 'j', StringUtils::strToLower($gL10n->get('SYS_YES'))), true)) {
-                            $validValue = '1';
-                        }
-                        if (in_array($columnValueToLower, array('n', 'no', '0', '', StringUtils::strToLower($gL10n->get('SYS_NO'))), true)) {
-                            $validValue = '0';
-                        }
-                        break;
-                    case 'DROPDOWN': // fallthrough
-                    case 'RADIO_BUTTON':
-                        // save position of combobox
-                        $arrOptions = $this->mProfileFieldsData->getProperty($columnName, 'ufo_usf_options', 'text');
-
-                        for ($position = 1; $position <= count($arrOptions); $position++) {
-                            if (StringUtils::strToLower($newValue) === StringUtils::strToLower(trim($arrOptions[$position]))) {
-                                // if col_value is text than save position if text is equal to text of position
-                                $validValue = $position;
-                            } elseif (is_numeric($newValue) && !is_numeric($arrOptions[$position]) && $newValue > 0 && $newValue < 1000) {
-                                // if col_value is numeric than save position if col_value is equal to position
-                                $validValue = $newValue;
+            if (strlen($newValue) > 0) {
+                if ($columnName === 'COUNTRY') {
+                    try {
+                        $validValue = $gL10n->getCountryIsoCode($newValue);
+                    } catch (Exception $e) {
+                        $gLogger->info($e->getMessage());
+                    }
+                } else {
+                    switch ($this->mProfileFieldsData->getProperty($columnName, 'usf_type')) {
+                        case 'CHECKBOX':
+                            $columnValueToLower = StringUtils::strToLower($newValue);
+                            if (in_array($columnValueToLower, array('y', 'yes', '1', 'j', StringUtils::strToLower($gL10n->get('SYS_YES'))), true)) {
+                                $validValue = '1';
                             }
-                        }
-                        break;
-                    case 'DROPDOWN_MULTISELECT':
-                        // save position of combobox
-                        $arrOptions = $this->mProfileFieldsData->getProperty($columnName, 'ufo_usf_options', 'text');
-                        $validValue = '';
+                            if (in_array($columnValueToLower, array('n', 'no', '0', '', StringUtils::strToLower($gL10n->get('SYS_NO'))), true)) {
+                                $validValue = '0';
+                            }
+                            break;
+                        case 'DROPDOWN': // fallthrough
+                        case 'RADIO_BUTTON':
+                            // save position of combobox
+                            $arrOptions = $this->mProfileFieldsData->getProperty($columnName, 'ufo_usf_options', 'text');
 
-                        // split the value by comma and check each value
-                        $values = explode(',', $newValue);
-                        foreach ($values as $value) {
-                            $value = trim($value);
-                            for ($position = 1; $position <= count($arrOptions); $position++) {
-                                if (StringUtils::strToLower($value) === StringUtils::strToLower(trim($arrOptions[$position]))) {
-                                    // if col_value is text than save position if text is equal to text of position
-                                    if ($validValue !== '') {
-                                        $validValue .= ',';
-                                    }
-                                    $validValue .= $position;
-                                } elseif (is_numeric($value) && !is_numeric($arrOptions[$position]) && $value > 0 && $value < 1000) {
-                                    // if col_value is numeric than save position if col_value is equal to position
-                                    if ($validValue !== '') {
-                                        $validValue .= ',';
-                                    }
-                                    $validValue .= $value;
+                            if (in_array($newValue, $arrOptions, true)) {
+                                $validValue = array_search($newValue, $arrOptions, true);
+                            }
+                            break;
+                        case 'DROPDOWN_MULTISELECT':
+                            // save position of combobox
+                            $arrOptions = $this->mProfileFieldsData->getProperty($columnName, 'ufo_usf_options', 'text');
+
+                            // split the value by comma and check each value
+                            $values = explode(',', $newValue);
+                            foreach ($values as $value) {
+                                $value = trim($value);
+                                if (in_array($value, $arrOptions, true)) {
+                                    $validValue = ',' . array_search($value, $arrOptions, true);
                                 }
                             }
-                        }
-                        break;
-                    case 'EMAIL':
-                        if (StringUtils::strValidCharacters($newValue, 'email')) {
-                            $validValue = substr($newValue, 0, 255);
-                        }
-                        break;
-                    case 'INTEGER':
-                        // number could contain dot and comma
-                        if (is_numeric(strtr($newValue, ',.', '00'))) {
-                            $validValue = $newValue;
-                        }
-                        break;
-                    case 'TEXT':
-                        $validValue = substr($newValue, 0, 100);
-                        break;
-                    default:
-                        $validValue = substr($newValue, 0, 4000);
+
+                            if (strlen($validValue) > 0) {
+                                // remove leading comma
+                                $validValue = substr($validValue, 1);
+                            }
+                            break;
+                        case 'EMAIL':
+                            if (StringUtils::strValidCharacters($newValue, 'email')) {
+                                $validValue = substr($newValue, 0, 255);
+                            }
+                            break;
+                        case 'INTEGER':
+                            // number could contain dot and comma
+                            if (is_numeric(strtr($newValue, ',.', '00'))) {
+                                $validValue = $newValue;
+                            }
+                            break;
+                        case 'TEXT':
+                            $validValue = substr($newValue, 0, 100);
+                            break;
+                        default:
+                            $validValue = substr($newValue, 0, 4000);
+                    }
                 }
             }
 

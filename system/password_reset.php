@@ -9,8 +9,8 @@
  *
  * Parameters:
  *
- * id        : Validation id for the link if this is a valid password reset request
- * user_uuid : UUID of the user who wants a reset his password
+ * id: Validation id for the link if this is a valid password reset request
+ * user_uuid: UUID of the user who wants a reset his password
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
@@ -40,9 +40,9 @@ try {
     }
 
     if ($getUserUuid !== '') {
-        // user has clicked the link in his email, and now we must check if it's a valid request and then show password form
+        // user has clicked the link in his email, and now we must check if it's a valid request and then show a password form
 
-        // search for user with the email address that have a valid login and membership to a role
+        // search for a user with the email address that has a valid login and membership to a role
         $sql = 'SELECT usr_id, usr_pw_reset_timestamp
               FROM ' . TBL_USERS . '
              WHERE usr_uuid = ? -- $getUserUuid
@@ -75,7 +75,7 @@ try {
                 $passwordResetSetPasswordForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
                 $formValues = $passwordResetSetPasswordForm->validate($_POST);
 
-                // check password and save new password in database
+                // check password and save new password in a database
                 $newPassword = $formValues['new_password'];
                 $newPasswordConfirm = $formValues['new_password_confirm'];
 
@@ -90,7 +90,7 @@ try {
                             $user->setValue('usr_pw_reset_timestamp', '');
                             $user->save();
 
-                            // if user has tried login several times we should reset the invalid counter,
+                            // if a user has tried to log in several times, we should reset the invalid counter,
                             // so he could log in with the new password immediately
                             $user->resetInvalidLogins();
 
@@ -155,14 +155,14 @@ try {
             $page->show();
         }
     } elseif (!empty($_POST['recipient_email'])) {
-        // password reset form was send, and now we should create an email for the user
+        // password reset form was sent, and now we should create an email for the user
         try {
             // check form field input and sanitized it from malicious content
             $passwordResetForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $passwordResetForm->validate($_POST);
 
             if (StringUtils::strValidCharacters($formValues['recipient_email'], 'email')) {
-                // search for user with the email address that have a valid login and membership to a role
+                // search for a user with the email address that has a valid login and membership to a role
                 $sql = 'SELECT usr_id
                       FROM ' . TBL_MEMBERS . '
                 INNER JOIN ' . TBL_ROLES . '
@@ -187,10 +187,8 @@ try {
                     DATE_NOW,
                     DATE_NOW
                 );
-                $userStatement = $gDb->queryPrepared($sql, $queryParams);
-                $count = $userStatement->rowCount();
             } else {
-                // first try to find user with username. Also, an email could be a username.
+                // First try to find user with username. Also, an email could be a username.
                 $sql = 'SELECT usr_id
                       FROM ' . TBL_MEMBERS . '
                 INNER JOIN ' . TBL_ROLES . '
@@ -210,9 +208,9 @@ try {
                     DATE_NOW,
                     DATE_NOW
                 );
-                $userStatement = $gDb->queryPrepared($sql, $queryParams);
-                $count = $userStatement->rowCount();
             }
+            $userStatement = $gDb->queryPrepared($sql, $queryParams);
+            $count = $userStatement->rowCount();
 
             // show error if more than one user found
             if ($count > 1) {
@@ -236,7 +234,7 @@ try {
                 $user->save(false);
             }
 
-            // always show a positive feedback to prevent hackers to validate an email-address or username
+            // always show positive feedback to prevent hackers to validate an email-address or username
             $gMessage->setForwardUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/login.php');
 
             if (StringUtils::strValidCharacters($_POST['recipient_email'], 'email')) {
@@ -269,10 +267,8 @@ try {
         // save url to navigation stack
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
-        // create html page object
+        // create an HTML page object
         $page = PagePresenter::withHtmlIDAndHeadline('admidio-password-reset', $headline);
-
-        $page->addHtml('<p class="lead">' . $gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION') . '</p>');
 
         // show form
         $form = new FormPresenter(
@@ -288,7 +284,7 @@ try {
             array('maxLength' => 254, 'property' => FormPresenter::FIELD_REQUIRED)
         );
 
-        // if captchas are enabled then visitors of the website must resolve this
+        // if captchas are enabled, then visitors of the website must resolve this
         if (!$gValidLogin && $gSettingsManager->getBool('mail_captcha_enabled')) {
             $form->addCaptcha('adm_captcha_code');
         }
@@ -303,6 +299,6 @@ try {
         $gCurrentSession->addFormObject($form);
         $page->show();
     }
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

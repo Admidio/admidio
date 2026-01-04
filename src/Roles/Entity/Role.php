@@ -124,7 +124,7 @@ class Role extends Entity
      * Calls clear() Method of parent class and initialize child class specific parameters
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -368,11 +368,11 @@ class Role extends Entity
      *                                * 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function
      *                                * 'html'  : returns the value in html-format if this is necessary for that field type.
      *                                * 'database' : returns the value that is stored in database with no format applied
-     * @return int|float|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                               If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -714,7 +714,7 @@ class Role extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gCurrentUser;
 

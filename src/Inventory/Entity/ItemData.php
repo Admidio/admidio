@@ -10,7 +10,6 @@ use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Inventory\Entity\Item;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -54,15 +53,17 @@ class ItemData extends Entity
     /**
      * Since creation means setting value from NULL to something, deletion mean setting the field to empty,
      * we need one generic change log function that is called on creation, deletion and modification.
-     * 
+     *
      * The log entries are: record ID for ind_id, but uuid and link point to User id.
      * log_field is the inf_id and log_field_name is the fields external name.
-     * 
-     * @param string $oldval previous value before the change (can be null)
-     * @param string $newval new value after the change (can be null)
-     * @return true returns **true** if no error occurred
+     *
+     * @param string|null $oldval previous value before the change (can be null)
+     * @param string|null $newval new value after the change (can be null)
+     * @return bool returns **true** if no error occurred
+     * @throws Exception
      */
-    protected function logItemfieldChange(?string $oldval = null, ?string $newval = null) : bool {
+    protected function logItemfieldChange(?string $oldval = null, ?string $newval = null): bool
+    {
         global $gDb, $gProfileFields;
 
         if ($oldval === $newval) {
@@ -79,16 +80,15 @@ class ItemData extends Entity
         $id = $this->dbColumns[$this->keyColumnName];
         $field = $this->getValue('ind_inf_id');
         $fieldName = 'ind_value';
-        $objectName = $this->mItemsData->getPropertyById($field, 'inf_name', 'database');
-        $fieldNameIntern = $this->mItemsData->getPropertyById($field, 'inf_name_intern', 'database');
-        $infType = $this->mItemsData->getPropertyById($field, 'inf_type');
+        $objectName = $this->mItemsData->getPropertyById((int)$field, 'inf_name', 'database');
+        $fieldNameIntern = $this->mItemsData->getPropertyById((int)$field, 'inf_name_intern', 'database');
+        $infType = $this->mItemsData->getPropertyById((int)$field, 'inf_type');
         $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
 
         if ($infType === 'CATEGORY') {
             // Category changes are logged in the inventory items table
             return true;
-        }
-        elseif ($infType === 'DROPDOWN' || $infType === 'DROPDOWN_MULTISELECT' || $infType === 'RADIOBUTTON') {
+        } elseif (in_array($infType, array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'DROPDOWN_DATE_INTERVAL', 'RADIOBUTTON'))) {
             $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'ifo_inf_options');
             if (isset($vallist[$oldval])) {
                 $oldval = $vallist[$oldval];
@@ -96,18 +96,14 @@ class ItemData extends Entity
             if (isset($vallist[$newval])) {
                 $newval = $vallist[$newval];
             }
-        } 
-        elseif ($infType === 'CHECKBOX') {
+        } elseif ($infType === 'CHECKBOX') {
             $fieldName = $fieldName . '_bool';
-        }
-        elseif ($infType === 'TEXT') {
+        } elseif ($infType === 'TEXT') {
             if ($fieldNameIntern === 'ITEMNAME' && $itemName === '') {
                 $itemName = $newval;
-            }
-            elseif ($fieldNameIntern === 'KEEPER') {
+            } elseif ($fieldNameIntern === 'KEEPER') {
                 $fieldName = $fieldName . '_usr';
-            }
-            elseif ($fieldNameIntern === 'LAST_RECEIVER') {
+            } elseif ($fieldNameIntern === 'LAST_RECEIVER') {
                 $user = new User($this->db, $gProfileFields);
                 if (is_numeric($oldval) && is_numeric($newval)) {
                     $foundOld = $user->readDataById($oldval);
@@ -115,8 +111,7 @@ class ItemData extends Entity
                     if ($foundOld && $foundNew) {
                         $fieldName = $fieldName . '_usr';
                     }
-                }
-                elseif (is_numeric($oldval)) {
+                } elseif (is_numeric($oldval)) {
                     if ($user->readDataById($oldval)) {
                         $oldval = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
                     }
@@ -126,17 +121,13 @@ class ItemData extends Entity
                     }
                 }
             }
-        }
-        elseif ($infType === 'DATE') {
+        } elseif ($infType === 'DATE') {
             $fieldName = $fieldName . '_date';
-        }
-        elseif ($infType === 'EMAIL') {
+        } elseif ($infType === 'EMAIL') {
             $fieldName = $fieldName . '_mail';
-        }
-        elseif ($infType === 'URL') {
+        } elseif ($infType === 'URL') {
             $fieldName = $fieldName . '_url';
-        }
-        elseif ($infType === 'ICON') {
+        } elseif ($infType === 'ICON') {
             $fieldName = $fieldName . '_icon';
         }
 
@@ -152,17 +143,20 @@ class ItemData extends Entity
      * Logs creation of the DB record -> For user fields, no need to log anything as
      * the actual value change from NULL to something will be logged as a modification
      * immediately after creation, anyway.
-     * 
-     * @return true Returns **true** if no error occurred
-     * @throws Exception
+     *
+     * @return bool Returns **true** if no error occurred
      */
-    public function logCreation(): bool { return true; }
+    public function logCreation(): bool
+    {
+        return true;
+    }
 
     /**
      * Logs deletion of the DB record
      * Deletion actually means setting the user field to an empty value, so log a change to empty instead of deletion!
-     * 
-     * @return true Returns **true** if no error occurred
+     *
+     * @return bool Returns **true** if no error occurred
+     * @throws Exception
      */
     public function logDeletion(): bool
     {
@@ -174,7 +168,7 @@ class ItemData extends Entity
     /**
      * Logs all modifications of the DB record
      * @param array $logChanges Array of all changes, generated by the save method
-     * @return true Returns **true** if no error occurred
+     * @return bool Returns **true** if no error occurred
      * @throws Exception
      */
     public function logModifications(array $logChanges): bool

@@ -89,7 +89,7 @@ class Organization extends Entity
      * @return void
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -243,6 +243,22 @@ class Organization extends Entity
             Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
             Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW
         );
+        $this->db->queryPrepared($sql, $queryParams);
+
+        // insert default values for inventory field 'status'
+        $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                       (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
+                VALUES ((SELECT inf_id
+                          FROM ' . TBL_INVENTORY_FIELDS . '
+                         WHERE inf_org_id = ? -- $orgId
+                           AND inf_name_intern = \'STATUS\'),
+                        ?, ?, ?)';
+
+        // status in use
+        $queryParams = array($orgId, 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', true, 1);
+        $this->db->queryPrepared($sql, $queryParams);
+        // status retired
+        $queryParams = array($orgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', true, 2);
         $this->db->queryPrepared($sql, $queryParams);
 
         // now create default roles
@@ -841,7 +857,7 @@ class Organization extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             // org_shortname shouldn't be edited
@@ -869,9 +885,9 @@ class Organization extends Entity
 
     /**
      * Adjust the changelog entry for this db record: Add the parent fold as a related object
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
     protected function adjustLogEntry(LogChanges $logEntry) {
@@ -881,7 +897,7 @@ class Organization extends Entity
                       FROM '.TBL_ORGANIZATIONS.'
                      WHERE org_id = ?';
             $pdoStatement = $this->db->queryPrepared($sql, [$orgParentId]);
-    
+
             while ($row = $pdoStatement->fetch()) {
                 $logEntry->setLogRelated($row['org_id'], $row['org_longname']);
             }
@@ -890,7 +906,7 @@ class Organization extends Entity
     /**
      * Return a human-readable representation of this record.
      * For organizations, simply use the longname
-     * 
+     *
      * @return string The readable representation of the record (can also be a translatable identifier)
      */
     public function readableName(): string

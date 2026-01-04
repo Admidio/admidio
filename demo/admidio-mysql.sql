@@ -1,0 +1,5219 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.2
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Oct 12, 2025 at 04:58 PM
+-- Server version: 9.3.0
+-- PHP Version: 8.4.10
+
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `admidio_master`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_announcements`
+--
+
+CREATE TABLE `%PREFIX%_announcements` (
+  `ann_id` int UNSIGNED NOT NULL,
+  `ann_cat_id` int UNSIGNED NOT NULL,
+  `ann_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ann_headline` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ann_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `ann_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `ann_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ann_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `ann_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_announcements`
+--
+
+INSERT INTO `%PREFIX%_announcements` (`ann_id`, `ann_cat_id`, `ann_uuid`, `ann_headline`, `ann_description`, `ann_usr_id_create`, `ann_timestamp_create`, `ann_usr_id_change`, `ann_timestamp_change`) VALUES
+(1, 13, 'e49d66f4-0546-4a23-bb57-27eb2b97d271', 'New jerseys', 'Starting next season, there are new jerseys for all active players. These can be picked up before the first training at the trainer.', 1, '2025-08-19 07:12:34', NULL, NULL),
+(2, 13, 'e84aae2a-7e1d-4f91-b2e1-ead4bac900ed', 'Aerobics course', 'During the holidays we offer a <i>aerobic course</i> to all interested members.<br /><br />Registrations are accepted on our <b>homepage</b> or in our <b>office</b>.', 1, '2025-08-23 09:30:59', 1, '2025-09-25 17:21:32'),
+(3, 300, '934346cc-123c-4162-9506-86b07c6c08ce', 'Welcome to the demo area', '<p>In this area you can play around with Admidio and see whether the program\'s functions meet your needs.</p><p>We have also provided some test data so that you can see in the individual modules how this could look later on your site. However, emails are not actually sent in the demo area so that this function cannot be abused. You are welcome to play with this installation.</p><p>We have created a few test accounts with different rights:</p><p><span style=\"color:#008080;\"><strong>Administrator</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Admin</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rights:</td><td>Can see and edit everything. More rights are not possible :)</td></tr></tbody></table><p><span style=\"color:#008080;\"><strong>Chairman</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Chairman</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rights:</td><td>Can edit and view everything, except assigning roles and changing program/module settings.</td></tr></tbody></table><p><span style=\"color:#008080;\"><strong>Member</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Member</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rechte:</td><td>Can edit his profile and view lists of roles, where he is a member.</td></tr></tbody></table><p>Have fun trying !<br />The Admidio Team</p>', 1, '2025-09-05 22:15:33', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_auto_login`
+--
+
+CREATE TABLE `%PREFIX%_auto_login` (
+  `atl_id` int UNSIGNED NOT NULL,
+  `atl_auto_login_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `atl_session_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `atl_org_id` int UNSIGNED NOT NULL,
+  `atl_usr_id` int UNSIGNED NOT NULL,
+  `atl_last_login` timestamp NULL DEFAULT NULL,
+  `atl_number_invalid` smallint NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_auto_login`
+--
+
+INSERT INTO `%PREFIX%_auto_login` (`atl_id`, `atl_auto_login_id`, `atl_session_id`, `atl_org_id`, `atl_usr_id`, `atl_last_login`, `atl_number_invalid`) VALUES
+(4, '355:LuftagL7PluArgKlsnO7v6FJsrFwo2uhqCjQxDqO', '5vg0ulq7o3qkotrkv8tsptclsd', 1, 355, '2025-10-05 12:55:01', 0),
+(5, '354:dWti04JF0K111e2OWp6VIEqR0cgg5K6vggBK0fYz', 'ahl7gobab8ir0omd2ig92sa7li', 1, 354, '2025-10-05 12:56:59', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_categories`
+--
+
+CREATE TABLE `%PREFIX%_categories` (
+  `cat_id` int UNSIGNED NOT NULL,
+  `cat_org_id` int UNSIGNED DEFAULT NULL,
+  `cat_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cat_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cat_name_intern` varchar(110) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cat_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cat_system` tinyint(1) NOT NULL DEFAULT '0',
+  `cat_default` tinyint(1) NOT NULL DEFAULT '0',
+  `cat_sequence` smallint NOT NULL,
+  `cat_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `cat_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `cat_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `cat_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_categories`
+--
+
+INSERT INTO `%PREFIX%_categories` (`cat_id`, `cat_org_id`, `cat_uuid`, `cat_type`, `cat_name_intern`, `cat_name`, `cat_system`, `cat_default`, `cat_sequence`, `cat_usr_id_create`, `cat_timestamp_create`, `cat_usr_id_change`, `cat_timestamp_change`) VALUES
+(1, NULL, '4404540e-bdad-46b7-8c52-f30e7ab51675', 'USF', 'BASIC_DATA', 'SYS_BASIC_DATA', 1, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
+(2, NULL, 'f8e89d85-325d-4620-a7d4-36b42ae06f45', 'USF', 'SOCIAL_NETWORKS', 'SYS_SOCIAL_NETWORKS', 0, 0, 2, 1, '2012-01-08 10:12:07', NULL, NULL),
+(3, 1, 'dd483a2f-c8dd-47da-a4d1-cb97d58a62a0', 'ROL', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
+(4, 1, '1f3d2f16-e81d-4f63-9582-2e9e4419aba8', 'ROL', 'GROUPS', 'INS_GROUPS', 0, 1, 2, 1, '2012-01-08 10:12:05', NULL, NULL),
+(5, 1, 'e5329e2d-8fc5-4cc2-994c-a5f687289754', 'ROL', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
+(6, 1, '22a1c65c-588c-427a-939e-0ea30dad2012', 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
+(7, 1, 'c0778d6e-804b-4d19-b624-802663ebcdca', 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(8, NULL, 'ad3a3cd8-3108-4df2-b08b-60aa3dad4975', 'USF', 'ADDIDIONAL_DATA', 'INS_ADDIDIONAL_DATA', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
+(9, 1, '32edc214-cb7b-42f1-a4af-7336a28ada5e', 'LNK', 'ADMIDIO', 'Admidio', 0, 1, 3, 1, '2011-04-06 20:05:20', 2, '2025-09-27 09:00:21'),
+(10, 1, '67850ca7-990b-4791-a238-5fd370caa23d', 'EVT', 'COMMON', 'SYS_COMMON', 0, 1, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(11, 1, '22c1edc4-4af3-4098-9bb9-375341f1e6c4', 'EVT', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(12, 1, '63573db9-9ad4-47c6-9064-ff77f53d9e6e', 'EVT', 'TRAINING', 'INS_TRAINING', 0, 0, 4, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(13, 1, 'ab11ce61-471b-4f49-8735-92134b417d6e', 'ANN', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(14, 1, '8803b2aa-f36e-4c9b-99ed-52685b5048d7', 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(100, 2, '6beea24e-58b7-4668-8ac6-6ccc625cc989', 'ROL', 'COMMON', 'SYS_COMMON', 0, 0, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
+(101, 2, '93456821-ec9f-4ca0-a645-9bb1433985ac', 'ROL', 'GROUPS', 'INS_GROUPS', 0, 0, 2, 1, '2012-01-08 10:12:05', NULL, NULL),
+(102, 2, 'cd47a540-d0e1-4cac-8ef9-e1c64880dedd', 'ROL', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
+(103, 2, '160819d4-d192-4120-82f7-88e565e2bf18', 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
+(104, 2, '9bf1a1ea-69b4-4226-aa55-2517455ed32d', 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(105, 2, '9a4b3de1-3cab-40db-97f6-77719c731f01', 'LNK', 'ADMIDIO', 'Admidio', 0, 0, 3, 1, '2011-04-06 20:05:20', 2, '2025-09-27 09:00:21'),
+(106, 2, '1141cb37-7e15-4107-aa3f-15e1cd740860', 'EVT', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(107, 2, 'b1c33600-6e8a-47db-88a0-0665e7005fec', 'EVT', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(108, 2, '0001df5c-1ef1-49da-bed2-c88152cfa792', 'EVT', 'TRAINING', 'INS_TRAINING', 0, 0, 4, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(109, 2, '84205a4e-4fd7-49e4-bed9-63e3280a70d8', 'ANN', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(110, 2, 'c9767836-63fe-470c-abc8-1187d8143d19', 'ANN', 'IMPORTANT', 'SYS_IMPORTANT', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(200, 1, 'fff9f4cf-2368-43c4-bb3a-322008830729', 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 1, 0, 5, 1, '2012-01-08 10:12:05', NULL, NULL),
+(201, 2, '6ee60a30-4721-4427-ac12-dc11f624c5fb', 'ROL', 'EVENTS', 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 1, 0, 5, 1, '2012-01-08 10:12:05', NULL, NULL),
+(300, NULL, 'a657459f-cef8-4f68-8008-0c5e34f4bfa5', 'ANN', 'ANN_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(301, NULL, 'f4d498ba-87db-4a4e-a894-7b7f42bd4d12', 'EVT', 'EVT_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(302, NULL, 'a0fa893e-c600-4157-831e-a946cc73fb58', 'LNK', 'LNK_ALL_ORGANIZATIONS', 'SYS_ALL_ORGANIZATIONS', 0, 0, 1, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
+(303, 1, 'ae3d3f73-a23a-4b08-8c4f-72d1251d4ca0', 'FOT', 'COMMON', 'SYS_COMMON', 0, 0, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(304, 2, 'bea45e89-b8c7-4624-b997-f2c4f69eac4c', 'FOT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(305, 1, 'f6b2e061-4db1-411a-9371-85d1d19666da', 'IVT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(306, 2, 'c16e3a6d-49f3-4ce7-bb0c-0d6f2b6a585f', 'IVT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(307, 1, 'dd6630ae-4362-40cb-9c5a-a948e0365582', 'IVT', '', 'Audio Equipment', 0, 0, 2, 1, '2025-10-12 16:52:02', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_category_report`
+--
+
+CREATE TABLE `%PREFIX%_category_report` (
+  `crt_id` int UNSIGNED NOT NULL,
+  `crt_org_id` int UNSIGNED DEFAULT NULL,
+  `crt_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `crt_col_fields` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `crt_selection_role` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `crt_selection_cat` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `crt_number_col` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_category_report`
+--
+
+INSERT INTO `%PREFIX%_category_report` (`crt_id`, `crt_org_id`, `crt_name`, `crt_col_fields`, `crt_selection_role`, `crt_selection_cat`, `crt_number_col`) VALUES
+(1, 1, 'General role assignment', 'p2,p1,p3,p5,r1', NULL, NULL, 0),
+(2, 2, 'General role assignment', 'p2,p1,p3,p5,r6', NULL, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_components`
+--
+
+CREATE TABLE `%PREFIX%_components` (
+  `com_id` int UNSIGNED NOT NULL,
+  `com_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `com_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `com_name_intern` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `com_version` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `com_beta` smallint NOT NULL DEFAULT '0',
+  `com_update_step` int NOT NULL DEFAULT '0',
+  `com_update_completed` tinyint(1) NOT NULL DEFAULT '1',
+  `com_timestamp_installed` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_components`
+--
+
+INSERT INTO `%PREFIX%_components` (`com_id`, `com_type`, `com_name`, `com_name_intern`, `com_version`, `com_beta`, `com_update_step`, `com_update_completed`, `com_timestamp_installed`) VALUES
+(10, 'SYSTEM', 'Admidio Core', 'CORE', '5.0.0', 0, 1810, 1810, '2025-09-27 09:00:17'),
+(20, 'MODULE', 'SYS_ANNOUNCEMENTS', 'ANNOUNCEMENTS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(30, 'MODULE', 'SYS_EVENTS', 'EVENTS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(40, 'MODULE', 'SYS_MESSAGES', 'MESSAGES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(50, 'MODULE', 'SYS_GROUPS_ROLES', 'GROUPS-ROLES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(60, 'MODULE', 'SYS_CONTACTS', 'CONTACTS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(70, 'MODULE', 'SYS_DOCUMENTS_FILES', 'DOCUMENTS-FILES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(80, 'MODULE', 'SYS_PHOTOS', 'PHOTOS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(90, 'MODULE', 'SYS_CATEGORY_REPORT', 'CATEGORY-REPORT', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(100, 'MODULE', 'SYS_WEBLINKS', 'LINKS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(110, 'MODULE', 'SYS_FORUM', 'FORUM', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(120, 'MODULE', 'SYS_SETTINGS', 'PREFERENCES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(130, 'MODULE', 'SYS_REGISTRATION', 'REGISTRATION', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(140, 'MODULE', 'SYS_MENU', 'MENU', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(200, 'MODULE', 'SYS_CATEGORIES', 'CATEGORIES', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(210, 'MODULE', 'SYS_PROFILE', 'PROFILE', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(220, 'MODULE', 'SYS_ROOM_MANAGEMENT', 'ROOMS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:17'),
+(221, 'MODULE', 'SYS_ORGANIZATION', 'ORGANIZATIONS', '5.0.0', 1, 0, 1, '2025-09-27 09:00:23'),
+(222, 'MODULE', 'SYS_INVENTORY', 'INVENTORY', '5.0.0', 1, 0, 1, '2025-09-27 09:00:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_events`
+--
+
+CREATE TABLE `%PREFIX%_events` (
+  `dat_id` int UNSIGNED NOT NULL,
+  `dat_cat_id` int UNSIGNED NOT NULL,
+  `dat_rol_id` int UNSIGNED DEFAULT NULL,
+  `dat_room_id` int UNSIGNED DEFAULT NULL,
+  `dat_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `dat_begin` timestamp NULL DEFAULT NULL,
+  `dat_end` timestamp NULL DEFAULT NULL,
+  `dat_all_day` tinyint(1) NOT NULL DEFAULT '0',
+  `dat_headline` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `dat_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `dat_highlight` tinyint(1) NOT NULL DEFAULT '0',
+  `dat_location` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `dat_country` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `dat_deadline` timestamp NULL DEFAULT NULL,
+  `dat_max_members` int NOT NULL DEFAULT '0',
+  `dat_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `dat_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dat_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `dat_timestamp_change` timestamp NULL DEFAULT NULL,
+  `dat_allow_comments` tinyint(1) NOT NULL DEFAULT '0',
+  `dat_additional_guests` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_events`
+--
+
+INSERT INTO `%PREFIX%_events` (`dat_id`, `dat_cat_id`, `dat_rol_id`, `dat_room_id`, `dat_uuid`, `dat_begin`, `dat_end`, `dat_all_day`, `dat_headline`, `dat_description`, `dat_highlight`, `dat_location`, `dat_country`, `dat_deadline`, `dat_max_members`, `dat_usr_id_create`, `dat_timestamp_create`, `dat_usr_id_change`, `dat_timestamp_change`, `dat_allow_comments`, `dat_additional_guests`) VALUES
+(3, 12, NULL, NULL, 'e539f6d4-a5ac-4536-8779-df203a83ef39', '2025-12-25 14:00:00', '2025-12-25 16:00:00', 0, 'Youth training 1', 'Today we will put the focus on physical fitness and stamina.<br /><br />Please appear all in time with running shoes on the sports field!', 0, 'Sports field Norwich', 'GBR', NULL, 0, 1, '2017-07-06 15:38:26', NULL, NULL, 0, 0),
+(4, 10, 8, NULL, '2bc7d168-7b4e-4ec1-9765-18989e32030c', '2026-03-01 17:00:00', '2026-03-01 21:30:00', 0, 'Barbecue', 'Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.', 1, NULL, NULL, NULL, 0, 1, '2017-07-06 15:41:18', NULL, NULL, 1, 1),
+(5, 10, NULL, NULL, '10408fec-1534-4115-a83d-60681c13bcfd', '2026-02-26 23:00:00', '2026-04-08 22:59:59', 1, 'Trainer course', 'A four-day training course for youth coaches from the tennis department :)', 1, 'Youth hostel Lyon', 'FRA', NULL, 0, 1, '2017-07-06 15:49:13', NULL, NULL, 0, 0),
+(6, 301, NULL, NULL, '0df388d7-b8f0-4c11-88f4-fbac697b2297', '2026-01-09 13:00:00', '2026-01-09 17:00:00', 0, 'Computer course', 'The focus of this course lies with the Office products.', 0, 'Munich Marienplatz', 'DEU', NULL, 0, 1, '2017-01-06 10:25:13', NULL, NULL, 0, 0),
+(7, 301, NULL, NULL, '2a0151ef-2f03-4b6f-abe3-ce86d5a74ba8', '2025-11-10 22:00:00', '2025-11-11 21:59:59', 1, 'Trip to Amsterdam', 'On this hopefully sunny day it goes to Amsterdam.<br /><br />A canal cruise and a shopping trip are planned.', 0, 'Amsterdam Gracht', 'NLD', NULL, 0, 1, '2018-01-06 10:25:13', NULL, NULL, 0, 0),
+(8, 12, NULL, NULL, '2c610a75-15e8-4ab2-9bd5-63769800d2e8', '2025-12-23 15:00:00', '2025-12-23 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(9, 12, NULL, NULL, '236c9f98-c826-4f42-a0e4-8421f83e11ff', '2026-01-19 15:00:00', '2026-01-19 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(10, 12, NULL, NULL, '9dbbb1d4-ec43-4704-b4d5-3a4f29d5dab1', '2026-01-19 15:00:00', '2026-01-19 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(11, 12, NULL, NULL, '86c27d41-caf3-49b6-9d68-a079c532dbe3', '2025-12-28 15:00:00', '2025-12-28 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(12, 12, NULL, NULL, 'fadeff52-a0e0-4ab9-8e43-a2a0578ab5ed', '2025-12-03 15:00:00', '2025-12-03 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(13, 12, NULL, NULL, 'cd9f4490-ddae-4949-a083-a826a12ea3d1', '2026-01-19 16:00:00', '2026-01-19 17:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
+(14, 107, 9, NULL, '6fa731ef-e166-49ed-bb56-182243cbc5c8', '2025-12-16 11:00:00', '2025-12-16 12:00:00', 0, 'Yoga for beginners', 'This course teaches the basics of yoga.<br /><br />A registration for this course is required.', 1, 'Madrid center', 'ESP', NULL, 0, 1, '2017-07-06 15:41:18', NULL, NULL, 0, 0),
+(15, 10, 10, NULL, '7095ed97-9cf5-4247-b057-613164aaa512', '2026-02-07 18:00:00', '2026-02-07 20:00:00', 0, 'Board meeting', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 1, '2018-05-06 21:03:18', NULL, NULL, 0, 0),
+(16, 10, 11, NULL, '217da340-7419-4e07-8f5f-bf037cbd2a4f', '2026-01-03 19:00:00', '2026-01-03 21:00:00', 0, 'Board meeting', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 1, '2018-05-06 21:03:18', NULL, NULL, 0, 0),
+(17, 10, 12, NULL, 'b89b03a5-867b-4747-8429-981c76e0b61e', '2025-12-03 17:00:00', '2025-12-03 21:30:00', 0, 'Team evening', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 355, '2018-02-14 17:38:18', NULL, NULL, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_files`
+--
+
+CREATE TABLE `%PREFIX%_files` (
+  `fil_id` int UNSIGNED NOT NULL,
+  `fil_fol_id` int UNSIGNED NOT NULL,
+  `fil_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fil_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fil_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `fil_locked` tinyint(1) NOT NULL DEFAULT '0',
+  `fil_counter` int DEFAULT NULL,
+  `fil_usr_id` int UNSIGNED DEFAULT NULL,
+  `fil_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_files`
+--
+
+INSERT INTO `%PREFIX%_files` (`fil_id`, `fil_fol_id`, `fil_uuid`, `fil_name`, `fil_description`, `fil_locked`, `fil_counter`, `fil_usr_id`, `fil_timestamp`) VALUES
+(1, 2, '445789b2-dee8-4a95-a116-9a3f0974841c', 'gpl-1.0.txt', NULL, 0, 15, 1, '2015-08-13 06:24:45'),
+(2, 2, 'ef0334bd-53e5-4dcd-8417-6cde7d460d20', 'gpl-2.0.txt', NULL, 0, 45, 1, '2015-08-13 06:24:45'),
+(3, 2, 'bb7b5322-c04d-44e2-8bdb-cc539a827560', 'gpl-3.0.txt', NULL, 0, 8, 1, '2015-08-13 06:24:45'),
+(4, 2, '9c856e3b-784b-461d-96b2-ae1286197211', 'lgpl-3.0.txt', NULL, 0, 0, 1, '2015-08-13 06:24:45'),
+(5, 1, '2fee7e92-a38a-4129-864c-77d4c90bcf77', 'admidio-readme.md', NULL, 0, 134, 1, '2015-07-01 08:05:23'),
+(6, 1, '9792023e-a74d-4a89-ab89-8a15645b94a4', 'admidio-logo.png', NULL, 0, 45, 1, '2015-07-01 08:07:23'),
+(7, 3, 'd9b14196-e272-44cb-b263-6dd46d704692', '20160511_meeting.txt', NULL, 0, 45, 354, '2015-07-01 08:07:23'),
+(100, 100, '2859ffec-8691-4d22-a0df-188215e7df25', 'admidio-readme.md', NULL, 0, 14, 1, '2015-07-01 08:05:23'),
+(101, 100, '0213c7e4-3564-4448-ad39-8a19bc56adcb', 'admidio-logo.png', NULL, 0, 6, 1, '2015-07-01 08:07:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_folders`
+--
+
+CREATE TABLE `%PREFIX%_folders` (
+  `fol_id` int UNSIGNED NOT NULL,
+  `fol_org_id` int UNSIGNED NOT NULL,
+  `fol_fol_id_parent` int UNSIGNED DEFAULT NULL,
+  `fol_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fol_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fol_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fol_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `fol_path` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fol_locked` tinyint(1) NOT NULL DEFAULT '0',
+  `fol_public` tinyint(1) NOT NULL DEFAULT '0',
+  `fol_usr_id` int UNSIGNED DEFAULT NULL,
+  `fol_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_folders`
+--
+
+INSERT INTO `%PREFIX%_folders` (`fol_id`, `fol_org_id`, `fol_fol_id_parent`, `fol_uuid`, `fol_type`, `fol_name`, `fol_description`, `fol_path`, `fol_locked`, `fol_public`, `fol_usr_id`, `fol_timestamp`) VALUES
+(1, 1, NULL, '80b3c79b-27d1-4cdc-b86c-d9e8d79d59eb', 'DOCUMENTS', 'documents_demo', NULL, '/adm_my_files', 0, 1, 1, '2025-09-19 22:00:00'),
+(2, 1, 1, 'b1621a3d-0cea-4cbd-94c4-fc0cde15f324', 'DOCUMENTS', 'licenses', NULL, '/adm_my_files/documents_demo', 0, 1, 1, '2014-02-05 13:05:34'),
+(3, 1, 1, '3e26f7db-a167-445b-8441-215eb63153f5', 'DOCUMENTS', 'board-meeting', NULL, '/adm_my_files/documents_demo', 0, 0, 354, '2016-04-15 11:25:06'),
+(100, 2, NULL, '63973fe1-1a26-4561-b564-b1065f2c863b', 'DOCUMENTS', 'documents_test', NULL, '/adm_my_files', 0, 1, 1, '2014-01-01 21:35:07');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_forum_posts`
+--
+
+CREATE TABLE `%PREFIX%_forum_posts` (
+  `fop_id` int UNSIGNED NOT NULL,
+  `fop_fot_id` int UNSIGNED NOT NULL,
+  `fop_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fop_text` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fop_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `fop_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fop_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `fop_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_forum_posts`
+--
+
+INSERT INTO `%PREFIX%_forum_posts` (`fop_id`, `fop_fot_id`, `fop_uuid`, `fop_text`, `fop_usr_id_create`, `fop_timestamp_create`, `fop_usr_id_change`, `fop_timestamp_change`) VALUES
+(4, 4, 'e01359ab-98a3-4024-ae1e-55d2dfdfa002', '<p>Hi everyone,<br>the new <strong>training plan</strong> for the upcoming season is now available in the members’ area.</p><p>We’ve adjusted some of the sessions to better fit everyone’s fitness levels and training goals.</p><p>There are also a few new activities designed for beginners who want to build endurance gradually.</p><p>I’d love to hear your thoughts — what do you think about the new structure?</p>', 355, '2025-10-05 12:56:26', NULL, NULL),
+(5, 4, '4a26f9a7-8810-407f-9ea6-2c5f5804eae1', '<p>I really like the idea of adding more variety to the sessions.<br>Mixing running drills with strength exercises keeps things interesting.</p><p>Will we still have separate groups for different experience levels?</p>', 354, '2025-10-05 12:57:25', NULL, NULL),
+(6, 4, '7b1131e0-e70e-4fd9-8b87-ff083c76ee04', '<p>Yes, Eric — we’ll continue with the same three training groups: beginners, intermediate, and advanced.</p><p>The goal is to make sure everyone trains at a pace that suits their current level while still being challenged.</p>', 355, '2025-10-05 12:58:18', NULL, NULL),
+(7, 4, '21de6139-e513-4c35-8243-d722232e6f9f', '<p>Love it!<br>The new plan seems balanced and motivating.<br>Thanks to everyone who worked on organizing it — really appreciate the effort that goes into keeping this club running smoothly.</p>', 1, '2025-10-05 12:58:54', NULL, NULL),
+(8, 5, '02354806-5e4d-42a2-943b-0a7c04d3ec2b', '<p>Hi everyone,<br>as we prepare for our upcoming club events, we’re looking for a few <strong>volunteers</strong> to help with organization and setup.</p><p>Tasks include welcoming guests, handing out water and snacks, and assisting with registration.</p><p>It’s a great way to get involved and meet other members — no special experience required!</p><p>Anyone interested?</p>', 354, '2025-10-05 13:00:30', NULL, NULL),
+(9, 5, '103e21c4-52b5-4170-ba49-0df98b92be25', '<p>Count me in!<br>I can help with registration or setup — whatever’s needed.<br>Always happy to give something back to the club.</p>', 355, '2025-10-05 13:01:07', NULL, NULL),
+(10, 6, '2f19c641-617d-4ffa-b9d3-b5c5e6b8ee0b', '<p>Hi everyone,<br>next week we’ll be organizing a <strong>community clean-up day</strong> at the club grounds.</p><p>It’s a great opportunity to keep our training area in top shape and spend some time together outside of regular practice.</p><p>All members are welcome to join — tools and materials will be provided by the club.</p><p>Thanks in advance to everyone who helps make our environment clean and welcoming for all!</p>', 1, '2025-10-05 13:02:03', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_forum_topics`
+--
+
+CREATE TABLE `%PREFIX%_forum_topics` (
+  `fot_id` int UNSIGNED NOT NULL,
+  `fot_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fot_cat_id` int UNSIGNED NOT NULL,
+  `fot_fop_id_first_post` int UNSIGNED DEFAULT NULL,
+  `fot_title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `fot_views` int UNSIGNED NOT NULL DEFAULT '0',
+  `fot_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `fot_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_forum_topics`
+--
+
+INSERT INTO `%PREFIX%_forum_topics` (`fot_id`, `fot_uuid`, `fot_cat_id`, `fot_fop_id_first_post`, `fot_title`, `fot_views`, `fot_usr_id_create`, `fot_timestamp_create`) VALUES
+(4, '85944966-4967-44f3-8b76-b6a425225970', 303, 4, 'Thoughts on the New Training Plan?', 8, 355, '2025-10-05 12:56:26'),
+(5, '5cb5159a-8cea-4dc2-a154-f9faadfc8d48', 303, 8, 'Volunteers Needed for Upcoming Club Events', 3, 354, '2025-10-05 13:00:30'),
+(6, 'a5807ef6-92c3-4eda-bb12-10c66ca0a9b8', 303, 10, 'Community Clean-Up Day at the Club Grounds', 0, 1, '2025-10-05 13:02:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_ids`
+--
+
+CREATE TABLE `%PREFIX%_ids` (
+  `ids_usr_id` int UNSIGNED NOT NULL,
+  `ids_reference_id` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_inventory_fields`
+--
+
+CREATE TABLE `%PREFIX%_inventory_fields` (
+  `inf_id` int UNSIGNED NOT NULL,
+  `inf_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `inf_org_id` int UNSIGNED NOT NULL,
+  `inf_type` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `inf_name_intern` varchar(110) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `inf_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `inf_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `inf_system` tinyint(1) NOT NULL DEFAULT '0',
+  `inf_required_input` smallint NOT NULL DEFAULT '0',
+  `inf_sequence` smallint NOT NULL,
+  `inf_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `inf_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `inf_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `inf_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_inventory_fields`
+--
+
+INSERT INTO `%PREFIX%_inventory_fields` (`inf_id`, `inf_uuid`, `inf_org_id`, `inf_type`, `inf_name_intern`, `inf_name`, `inf_description`, `inf_system`, `inf_required_input`, `inf_sequence`, `inf_usr_id_create`, `inf_timestamp_create`, `inf_usr_id_change`, `inf_timestamp_change`) VALUES
+(1, '87e206b9-550f-41b9-b810-cd1d845a3a1b', 1, 'TEXT', 'ITEMNAME', 'SYS_INVENTORY_ITEMNAME', 'SYS_INVENTORY_ITEMNAME_DESC', 1, 1, 0, 2, '2025-09-27 09:00:21', NULL, NULL),
+(2, '712b3a8f-b4c0-448f-8fc8-d28cdfb26527', 1, 'CATEGORY', 'CATEGORY', 'SYS_CATEGORY', 'SYS_INVENTORY_CATEGORY_DESC', 1, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(3, 'e9cf9d7d-7403-4aa9-ac63-2b27f941bf1c', 1, 'DROPDOWN', 'STATUS', 'SYS_INVENTORY_STATUS', 'SYS_INVENTORY_STATUS_DESC', 1, 1, 2, 2, '2025-09-27 09:00:21', NULL, NULL),
+(4, 'acc1905f-36a6-424d-9884-939288d022ba', 1, 'TEXT', 'KEEPER', 'SYS_INVENTORY_KEEPER', 'SYS_INVENTORY_KEEPER_DESC', 1, 0, 3, 2, '2025-09-27 09:00:21', NULL, NULL),
+(5, 'abaceca6-b781-4121-ba67-38d120940731', 1, 'TEXT', 'LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER_DESC', 1, 0, 4, 2, '2025-09-27 09:00:21', NULL, NULL),
+(6, '4d88c91e-a37d-4985-837c-15c357d44dd2', 1, 'DATE', 'BORROW_DATE', 'SYS_INVENTORY_BORROW_DATE', 'SYS_INVENTORY_BORROW_DATE_DESC', 1, 0, 5, 2, '2025-09-27 09:00:21', NULL, NULL),
+(7, 'f80f3bea-460b-4aaa-be04-afd561acac89', 1, 'DATE', 'RETURN_DATE', 'SYS_INVENTORY_RETURN_DATE', 'SYS_INVENTORY_RETURN_DATE_DESC', 1, 0, 6, 2, '2025-09-27 09:00:21', NULL, NULL),
+(8, '3981704a-568a-4f4d-9bad-df6bb78e610e', 2, 'TEXT', 'ITEMNAME', 'SYS_INVENTORY_ITEMNAME', 'SYS_INVENTORY_ITEMNAME_DESC', 1, 1, 0, 2, '2025-09-27 09:00:21', NULL, NULL),
+(9, '31e78677-fbd3-4c51-91d2-0aeafceb2bfc', 2, 'CATEGORY', 'CATEGORY', 'SYS_CATEGORY', 'SYS_INVENTORY_CATEGORY_DESC', 1, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
+(10, '5233418f-d381-462a-af50-92fbf5c6388d', 2, 'DROPDOWN', 'STATUS', 'SYS_INVENTORY_STATUS', 'SYS_INVENTORY_STATUS_DESC', 1, 1, 2, 2, '2025-09-27 09:00:21', NULL, NULL),
+(11, '294c2d85-b6c2-4138-a0be-437ae6854162', 2, 'TEXT', 'KEEPER', 'SYS_INVENTORY_KEEPER', 'SYS_INVENTORY_KEEPER_DESC', 1, 0, 3, 2, '2025-09-27 09:00:21', NULL, NULL),
+(12, '01b46909-4755-4409-a045-155c5058f432', 2, 'TEXT', 'LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER', 'SYS_INVENTORY_LAST_RECEIVER_DESC', 1, 0, 4, 2, '2025-09-27 09:00:21', NULL, NULL),
+(13, '1279bd8f-7b29-4ba1-ade8-dbec6bc6466d', 2, 'DATE', 'BORROW_DATE', 'SYS_INVENTORY_BORROW_DATE', 'SYS_INVENTORY_BORROW_DATE_DESC', 1, 0, 5, 2, '2025-09-27 09:00:21', NULL, NULL),
+(14, 'ce37d8be-da97-45ef-9145-6d7d7f39b4a7', 2, 'DATE', 'RETURN_DATE', 'SYS_INVENTORY_RETURN_DATE', 'SYS_INVENTORY_RETURN_DATE_DESC', 1, 0, 6, 2, '2025-09-27 09:00:21', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_inventory_field_select_options`
+--
+
+CREATE TABLE `%PREFIX%_inventory_field_select_options` (
+  `ifo_id` int UNSIGNED NOT NULL,
+  `ifo_inf_id` int UNSIGNED NOT NULL,
+  `ifo_value` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ifo_system` tinyint(1) NOT NULL DEFAULT '0',
+  `ifo_sequence` smallint NOT NULL,
+  `ifo_obsolete` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_inventory_field_select_options`
+--
+
+INSERT INTO `%PREFIX%_inventory_field_select_options` (`ifo_id`, `ifo_inf_id`, `ifo_value`, `ifo_system`, `ifo_sequence`, `ifo_obsolete`) VALUES
+(1, 3, 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 1, 1, 0),
+(2, 3, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 1, 2, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_inventory_items`
+--
+
+CREATE TABLE `%PREFIX%_inventory_items` (
+  `ini_id` int UNSIGNED NOT NULL,
+  `ini_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ini_cat_id` int UNSIGNED NOT NULL,
+  `ini_org_id` int UNSIGNED NOT NULL,
+  `ini_status` int UNSIGNED NOT NULL,
+  `ini_picture` blob,
+  `ini_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `ini_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ini_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `ini_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_inventory_items`
+--
+
+INSERT INTO `%PREFIX%_inventory_items` (`ini_id`, `ini_uuid`, `ini_cat_id`, `ini_org_id`, `ini_status`, `ini_picture`, `ini_usr_id_create`, `ini_timestamp_create`, `ini_usr_id_change`, `ini_timestamp_change`) VALUES
+(1, 'bba7a1ed-5bea-460c-bfeb-0b48d55956f6', 307, 1, 1, 0xffd8ffe000104a46494600010101006000600000fffe003b43524541544f523a2067642d6a7065672076312e3020287573696e6720494a47204a50454720763830292c207175616c697479203d2039350affdb0043000201010101010201010102020202020403020202020504040304060506060605060606070908060709070606080b08090a0a0a0a0a06080b0c0b0a0c090a0a0affdb004301020202020202050303050a0706070a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0affc00011080082008203012200021101031101ffc4001f0000010501010101010100000000000000000102030405060708090a0bffc400b5100002010303020403050504040000017d01020300041105122131410613516107227114328191a1082342b1c11552d1f02433627282090a161718191a25262728292a3435363738393a434445464748494a535455565758595a636465666768696a737475767778797a838485868788898a92939495969798999aa2a3a4a5a6a7a8a9aab2b3b4b5b6b7b8b9bac2c3c4c5c6c7c8c9cad2d3d4d5d6d7d8d9dae1e2e3e4e5e6e7e8e9eaf1f2f3f4f5f6f7f8f9faffc4001f0100030101010101010101010000000000000102030405060708090a0bffc400b51100020102040403040705040400010277000102031104052131061241510761711322328108144291a1b1c109233352f0156272d10a162434e125f11718191a262728292a35363738393a434445464748494a535455565758595a636465666768696a737475767778797a82838485868788898a92939495969798999aa2a3a4a5a6a7a8a9aab2b3b4b5b6b7b8b9bac2c3c4c5c6c7c8c9cad2d3d4d5d6d7d8d9dae2e3e4e5e6e7e8e9eaf2f3f4f5f6f7f8f9faffda000c03010002110311003f00fdf66660c70c7afad26f7fef1fce87fbe7eb49400bbdff00bc7f3a37bff78fe74945002ef7fef1fceb86f107c51d7f49fda5bc25f066ded6ddb4cd7fc0de22d6aeee1a263324f6179a2410a2b6f0a1197529cb028c49442197690fdc75eb5e53e3058c7edbff000ee462037fc2abf192ae4f5cea5e1838fd3f4a00f57deffde3f9d1bdff00bc7f3a4a280177b7673f9d1bdffbc7f3a43d7ad1400bbdff00bc7f3a37bff78fe74945002ef7fef1fce8deff00de3f9d275eb45002ef7fef1fce8deffde3f9d251400a5db3c31fce8a0f53f5a28007fbe7eb494aff007cfd692800ebd68a28a003af5af96ff6aebab883fe0a63fb26c104f222ce3c78b32a3901d068d0b6d603a8dc14e0f7507b57d49d7ad7e77fedf9ff00050bfd8cbe167fc1407f664f89be21fda3fc2573e1ef0a4fe3487c5fa8e89ac26a5fd8ad73a4c715b7da23b3f3644324a8d1aa95c9393d149001fa21d7ad15f067c47ff83963fe0905e01d25aff49fda2353f145ca92069be1df05ea5e6b6149e1aea0862ec07327523b648f35d6bfe0ed7ff825a692aa6dbc3bf15afc9dd95b4f0a5a02b8f5f36f53afb7af38a2e07e9e9ebd68afc6cf1a7fc1e4dfb31d86aad17c3efd8f3c6faad881c5d6afaf5a58ca4e4f58e359c018c73bfb9f4c9f58fd81ff00e0e82fd9bff6dffda0bc35fb3227ecc1f10b42f1478bb55fb168c74cf2357b54f919da5b868cc72c5122a3bbbac4eb1a21772a8acca0ae8fd3bebd68a28a061d7ad1475eb45001d7ad1451400a7a9fad141ea7eb45000ff7cfd693af5a57fbe7eb4940075eb475eb451401e5ff00b6cda6a9a9fec83f13747d23c296dadcba8781f52b2934dbdd4bec90cb14d6ef14a649bcb93622c6eee708e4852029240afe513e1e78135ff863f1774ef02fc6ff00831a0eb264d6e78e7f0a7892f2fa2b2b968e09924432d85cdbce8559a329b2619754cef5dc8dfd737c668c4ff07fc5713f47f0ddf039f7b77afe707fe0a31a05ee8dfb5837c66d0be12f8b758bad04fd8ac6d2d1b659ce4c2c2499944523160aeaa19005291c793b91c54b6f9ac3b687cf7fb64fc43f82ba76bb7bf0ff0041fd923c05e16b048a39fc2b169d2df2cac8ee8acb737125c35c498f9f0cf2b0dd1be0e0fcbf3ae8179ab477cbad786fc37e06b28eee39102ea7a85a5d22212c8498afe595d0f0482543630c3b1afa43e207c6fd5be24e9e746f137ec7d05d4f1c6eb6d36bf2b32c0cd8dc54bc28549dab9daea781cf02b89f04685e2ed16e3ecda3fecaff000e24f35be69355824bb099effbfbb723e807e14d295b6135a973e1b7fc143bf6e9fd9e7c3761f0c7e1afede3a9f85fc3160d20b2f0f7833c43770d8da79b2349218e1b48c44a4c8ef21c632ccc4e4939a5fb3f78ebc29f157e2deb1f107e2b681a96b57b77af25ddc789a7bab87d46f2fae67924fb45cceb21669649792770dccc793d0f7de18f807fb4fde6a2356f06eb7f0cb4690bee892cfc376d1f95cf0037d859b8ff0078d779ae7ec95fb5278a74f8f52f14fed637d6f74a3260d0b4e6862ffbea1921ddf8a53e59305747eb7fec61ff0005b6d4b44bdb6f863fb66d88974ffdd43a6fc41d3f74b72649250a16fad6388011a061fe931b31c005e3e1e53f77782bf6b4fd97be235d69da7f823f688f056a57bab04fecfd3adbc4d6c6ee6661908202fe607f542a181c82010457f2b1f113f66ff897a458cb67e3af8f5e22d66dd972219efa4456c7aac92480d78aea5f0f34dd22ed3ec9aa994862c8a67560d82a7f847fb4bff7d0f5a3964b71b3fb52ebd68ebd6bcfbf64ad2fc75a1feca9f0cb45f8a1e249759f1359fc3ed160f116af3decb72f7d7c9630adc4ed34dfbc959e40ec5dfe662d96e49af41a041d7ad1d7ad1450029ea7eb4507a9fad14003fdf3f5a4a57fbe7eb4940075eb4514500737f19091f087c56475ff00846efbff0049debf10bf6a593ec5e36f1bde2b82f60f14f6f1c8bb94975b6539efff002d1fa11f9715fb79f19be6f83fe2b1ebe1abff00fd277afc35fdb96e5748f1978c141e6ef46b6988fa4f027fec953f6d0fa1f9f1f123e3c7882e75cb9d31b4dd043a6af25b6f9219d1045bc88e5321971eb1be0615e273d30073337c64f135ba158346b7b464bdf29ae16190e571c85567396079eb82a2b1fe205eb36bd78916a11b2c7e21794c37d1e2152c701d718ca9da51d4f742c3efd62476b35acd3a4b65a8c330d4c04cc9ba77236fca07f0b0e0e71ce40f6abbb11ed3f0ebe34f8d351d4a0d23fe123d4a1924d42581adf4ab18e4ba0a23f94a2153bf2db5768e7cd99016daac2bd8f45f887e21bfd2f4fd7f57f1eff675bdcdae90ad71710c9a9e93a80f2aee495f744c1ed598c91b0561f3e74f421965635f2c7c3a6bb8f5db389f4ebf948d6e461059de0b795a43115dcb74e710ca725482301a491fa462bd63c05e20d26cbc3f02f81cdfc57a2c6cc6a57be13b98609ee1d60b865fb4594aa155be756c8cecf350eec59ed5a4dd80e53e2b3e897822d4a5d334e679adacdae6e2d3c66d35bcae22d2b711bd99ce4e793924287fe3e7ca7c3b0c2b721add205458994b5b4ac509de83a37fba7e61d738fe1aeffe266b3fe993db19e59a48e21cbf80e3b69f0a96646e503645954071fc2a4aff00cb2e38bd0d246d3aeae24f344915e157fb43ab38cc92752bc0e9f73b1cb747a803fb41d2ac20d2b4cb6d2ed8623b681228c0ecaaa00fd054f473dcd140075eb451450029ea7eb4507a9fad14003fde3f5a4c9f5a57fbe7eb4940064fad193eb451401cdfc6624fc1ff0015ff00d8b77dff00a4ef5f83dff0534bcfecaf88da847e67fc7c783edd8a9ef8be619ffc76bf787e329ff8b43e2b27fe85bbeffd277afc00ff0082b46af15b7c5e8903712f816d980c9e737d39fe94bed8fa1f9b5e36d42fa4bfd40437ea9ff13b1228ba80ba161c315201da3680251c7c810f39aa70432c6d7d6d0e9f32c497ca8618b50dfe5a060563925e8a37162ac072c47a1a7f88afc8bed45a369d376a4bf20877c6c72c3775e18601c7f183fec62a9dc3c4d3dc4062b158bed0a44692916e06e18c21f9a44f4c72bf337606988e9bc2b7f1d9c91c92cb666c86a01654d4e56166c3ca6f9664505ce00605d7ef22bf7901aeb8f885e2d3123f12cd633ffa0a0853c4c930ca88ae01f2ae2dc7ef064ca1b71e7fd280e654cf9d6973345a844e96f335d7da5191ed50cb74010b808b8d92479d8403ce4463a035aba46a256175d28491836e77ff0063df8dadc2a83e54f90a3fd5e318c0589baabd300f887abdbde0ba925d47796694086e7c5ed78b9c31e028cbb165cf3c17666fbb20ac7f0e5f2af87b558b6aa8fed3528b1c6635c1331caa1e71fed1e4f4e8a29de299ef1e59d585d468cce1e46d260b245045ce325416c601f9546700a758d6b27c3f720586ac9b890f7a8c087dd9e1bf88f2c79ebd3d2901fdb2e4fad193eb475eb4500193eb464fad1450029ea7eb4507a9fad14003fdf3f5a4a57fbe7eb4940075eb451450060fc55892e3e1878920946564d06f1587a8303d7f3a5ff0575d4cb7c66d21524ceff879627afadd5c1cd7f463f1279f877afe4f5d16eb9ffb62d5fcd5ff00c15ab5190fc60f0ea1c6e3f0db4dcfd7ce9cd25f18fa1f07ea92c9f6ad4e61e660de8c88a552cc7749b576763c36d7fe1f981fbe2904b04dadb979565dd759de967e5ceffdef2d30523278ca1e30401d6a1be904916a6c043cdc9dee5ca3ecdec1b9e8c87e5dc0fcd9d84746ab17a937db26591e5706750cd2c8047d58805d7fd69c83890753cf45a622c493d8bdb46db1044ad1a138916d4b60e732677a49c9c8e98dc41e94f62d1db7da2fa35c4a18a1d5accbab7ef00f95e3c96e7703903399077155841b6fe1023b833b4d0929b40b80a7180a0fc8c3a618f3c2f6dd4eb5d420b7061b686289d7891adae2485c9fb429cb1391e98da3a053fc27201535efb3dc453cf6f696a18e497b6b59642389ff008a53b4641049ebf7587f1550d2ae9105fb07dc5de362492727673f377c7b703a0a9afee85d6224bc1231238370d311f7b1c70bd4f7ee4f66aceb06f92e981ddba28792d9cfc8475fe8381d3b502ea7f6fdd7ad1475eb45030ebd68a28a0053d4fd68a0f53f5a28007fbe7eb49d7ad2bfdf3f5a4a003af5a3af5a28a00e73e31cbe2287e11f8aa7f087865b5bd593c397cda5e8cb782dcdfdc8b77f2edc4a55847bdf6a6f2adb77670718afe65bfe0a91e29d23c63f177c29e24f0f5f25d58dff00c34d366b3b98cfcb2c4f25c3a30f620835fd4675eb5fccdffc16d7e1d5afc2efdbbbc43e06b0b5bf82ded92e67b58752b87964486e352bdb94019f2de56d987960f48f601c0a56f7ae3e87e7fdc44cbfda4cd16f1f6c18dc77283e63e38ecde87a63783ce2a4f3521d56316e61726e331b409f327073b14e140e9f21fa0ea6a4bab27136a8d1c71f12c85b375b0edf3b93b4fde5ce323ae7691fc552dcc4eb72a642c545c21712900721b1f2afdef69077c9ed4c45479775a2466051134ca42b6f68320e3e65ff00580f3938f703a8a05dcee1155ae0ed701962bc8e423f7e0f471f2751ebcf38c31c6c784fe1f78abc7daa4da6784b4a4babeb2d2ef7539525bf8e2716b656ef7571224ae556409045249b465f1190012869df123e1cf89be18f89cf833c67a79875bb658cea5a4cd6092cda6ccd206fb35c053f2ce10aef89be68d98c520491591403969a463340921672767c8d2acc472b8c226077fba7fdd38c552d30ef3b369cc8b08f98e73d47e3dfa71c63b1ab5200268e07490005372328e7253a22fdefc48ce39c1151f86de11a8dbfda640882784bbc8d80079872c4f4c71d7a71ed401fdbc75eb475eb475eb45001d7ad1d7ad1450029ea7eb4507a9fad14003fdf3f5a4a57fbe7eb4940075eb45145001d7ad7f3a5ff0007096b7a578a7fe0a8fe30b0b45962b8d2b45d26cafa29d402927d92395482090cad14b1b820f01f070c1947f45bd7ad7e2f7fc1c1ff00f04f6fdab3e2cfed596dfb437c28fd9e75af1e7866ff00c3fa7d879de1cd206a37167788670d135ac25ee02ec8d5ccfe5888798885f760100fc61b9b2885e5f2b00a1e5b8c921704accc73963f21c747e806e0792b55671a7c0a1ccc8bb5a12a788be63d57e6ff0052fc8f91be5ce00380d8fa826ff82717eda18207fc13a3e27f20eedbf08b5139e727fe5db9e79ae93e14ff00c1263fe0a31f12b5a9744f007ec29e36d367484c9249e20d086830b28238136a1e446cdcfdd0c58f3c706803e50f06f8960f08ebb2df69fe0dd3b5e789897b0beb4675dcb2c72a3347b9382c8a372380eacdbb2af200df8afe2ef89ff1cfc6d7bf11fc7976752d52f160825bfbf85d2468ade2b7b78136197eea4302201d36a0fe2193fa11f0f7fe0de1ff0082aa7c40f13ff617897e0f787bc176a61693fb6fc4fe35b196d8302311edd3deea6dc7248fddede0e58719f7df83dff06a07c54d66da2bff00da33f6c0d0b47993515f3f4bf04f8766d4567b4054b6dbbba7b6314ac3701982455e1be7e5695c0fc547f055f47221b9d4a1da8cadb23806d619048c607718e7767ae074af5cfd893fe09e1fb417edc1f19b45f85df003e176adad5b36af6d6daff89fec527f6668503b3c867bdba55f2a00238e66507f792797b22591caa1fe88bf66dff837a3fe098dfb3b6a10f88351f8497ff11b56b6bd927b5d43e266a43508e3578bca30b59c490d94d18cb3af9b03b876dc1be54dbf67f85bc2de18f03f86b4ff0005f82bc3961a3e8fa4d94567a5693a5d9a5bdb59dbc6a1238628a301238d540554500000000014c0bfd7ad1475eb45001d7ad1451400a7a9fad141ea7eb45000e4ee3cf7a327d4d14500193ea68c9f5345140064fa9a327d4d14500193ea68c9f5345140064fa9a327d4d14500193ea68c9f5345140064fa9a327d4d14500193ea68c9f534514009d7ad1451401fffd9, 1, '2025-10-12 16:52:02', NULL, NULL),
+(2, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 305, 1, 1, 0xffd8ffe000104a46494600010101006000600000fffe003b43524541544f523a2067642d6a7065672076312e3020287573696e6720494a47204a50454720763830292c207175616c697479203d2039350affdb0043000201010101010201010102020202020403020202020504040304060506060605060606070908060709070606080b08090a0a0a0a0a06080b0c0b0a0c090a0a0affdb004301020202020202050303050a0706070a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0affc00011080082008203012200021101031101ffc4001f0000010501010101010100000000000000000102030405060708090a0bffc400b5100002010303020403050504040000017d01020300041105122131410613516107227114328191a1082342b1c11552d1f02433627282090a161718191a25262728292a3435363738393a434445464748494a535455565758595a636465666768696a737475767778797a838485868788898a92939495969798999aa2a3a4a5a6a7a8a9aab2b3b4b5b6b7b8b9bac2c3c4c5c6c7c8c9cad2d3d4d5d6d7d8d9dae1e2e3e4e5e6e7e8e9eaf1f2f3f4f5f6f7f8f9faffc4001f0100030101010101010101010000000000000102030405060708090a0bffc400b51100020102040403040705040400010277000102031104052131061241510761711322328108144291a1b1c109233352f0156272d10a162434e125f11718191a262728292a35363738393a434445464748494a535455565758595a636465666768696a737475767778797a82838485868788898a92939495969798999aa2a3a4a5a6a7a8a9aab2b3b4b5b6b7b8b9bac2c3c4c5c6c7c8c9cad2d3d4d5d6d7d8d9dae2e3e4e5e6e7e8e9eaf2f3f4f5f6f7f8f9faffda000c03010002110311003f00fd88172093973d694cebcfcc7afafd6b396fc609dedf7b9ff39a7b6a0bcfccdd7fc7deb0bb1d997fce5248de473434b8cf27aff8d53176a32de69ebebf5f7a77dac124094f5f5fafbd2b824ee5bdf904ee3d7fc6959b19f9cf5ff1aadf6b0a08de7af6fc7de94dc8393bcf5ff1f7a68a6ae89273f7be63d7fcf7a864c924ef3d7fc6926bada1b2e783dabe49ff00828d7fc14e746fd92601f0c7e19595b6b5e3dbd804cf0dc3136ba34073b65b8c105a46fe08410700bb955d8b2add82563e93f895f163e18fc21d08789fe2afc45d1bc37a7bcde4c577adea715b2492ed6711a19186f72aac420cb10a700d7cdbe3ff00f82dbffc137bc0225866f8fc9a85dc172619f4eb2d3668ee2238cee2b72b17c8410438255860826bf21fe2efc67f88df1b3c6973e3ef8b7f11351f10eb170edbaef509cb8894bbbf95128f9218833b158e30a8b921540af48f805ff0506fda33f65fd36e6d7e19b6817da65cc63ed5a56b9a719613385445b806278e51208e358f1e66c23aae40356e0d46f604d367ea5fc26ff82bdffc13d7e32eb71f863c33fb46e976ba8c96fe7bdbea88f0c50260ff00acbac1b68ce70306504b10b8c900fd176daee8d7d1acd67a9a3a480323ab70c0f2083dc57f3e3fb527ed77f163f6c0f195978cbe2adbe8904fa6c0f069f6fa3692902c11becde9e612d348a5a30db6491c2b16da172457b3ff00c138ff00e0a33e30fd9afc4f65f0d7e27f88aeaefe1edccfb26867dd29d14bb926e211cb08c33179225ce4176552fc34ca3251ba41757b1fb58d77165b6c848cf507ebef55e699558e5cf5ae6f4ff10bb26e13f0df75b239eb5a4b7e275c9739dd818a98545229c1c4b7712a953893f8bfc7dea23202a46e2006a6b3673fbd3d7fc69ad2f042b1ebfe3ef5add325ab83326e3927ad14c62fb8fef1873d3fc9a295d05912fdb55588de7afaff00f5ea437c54126438cf1cfd7deb13ed12a312256ebfe356e1b832a1dd2375e99ae58d56e56668e1a5d1a4ba80cb0f309e7b7ffaea61a82f6720e7d7ebef594ee141cb375ff1f7a4f37938761cff008fbd6c9a641aef7c3925cf5f5fad0750c0203b0e7b1e9d7deb2c4a46edd2b0e6a2bbb923746b3b64f41fe4d3b81c27ed83fb567843f64ef80be20f8dbe2c9d248b49b626d2cda7d8d7972d911c2a402d827e662aac523477da421afc43fdbcbc1dfb6f7c19f1a41f16ff006c9f0bdc2af8eda3bdfeddb49bcfb78aea58bccfb04ccbf2c13c480c7e4fdc0206f28c91a6eafd3efda1e04fda4bfe0a29f0e3f6759ee9e5f0d7c2bd3dfc7fe2b8a2bc66867d4d1d134eb791531e55c4323dbdca6e6c490cb3ae0a920fb6fc44f87de11f8d3a2ea5f0ff00e23785b4ed7b43d482a6a1a5ead669716d30560ebb91c104abaab03d432a918201a3db2a4d697b92e0e5d4fe7c2dfc61637908b8b4bc5746190548ab5078bd5a03116c67a82d5f6efed4bff06f05ebead79e30fd8abe2aa696af2b48de0df18cd21861cb4aec96d791ab3e00f2a38e39918f059ee0e6be32f899fb01ff00c14a7e104f069fe29fd907c5f7f24d1ef493c2f60bad285ce3e76d39a758ce7b3107dabb1b84f6662b9a1b98971ae8662565c60f6addd13578a6896e12f51668db2b9700e477a83e1bff00c13fbfe0a65f18ee27b3f077ec7be2fb27b7506597c5168ba22804e3e53a8343e67d1371f6afb9bf63dff8377af34af1043e34fdb8fe3447acc514ae7fe10af035ccf15acd82850cf7ce2398a91e62b4514719076b2cc464197c915ab2949f63eb2ff825d7c4cd6fe227ec77e1ed2fc426e9353f0a48fa24cb731807ecd1aacb60723ef83a7cf64dbbab1249c926be99d3ee6ea252257270783debe4ff00f82335f7842fff0064cbdb4f0c4ab2269be20b4b39c28e22923f0fe903caebd635db11f431915f56bdc282c558f5ff001f7ae171f7db47529de291acb7d13292d29073c8fce993de9e4248719ff1acc3701b3b5d81079fd7dea48e66625779e3d3ff00d756887b969ef25dc7f7add68a88b9cfdf34516420697af27afafd6a582e36be039ebd3f3f7aca5be241fdfb75f5fafbd5886f02b1df29f4fe75cae367734359e6032c64239e3f5a8e4bb45ddfbc20e78c7ffaeabb5d294244bdfae7eb546e6f7e73b64270dc11f8fbd69491323425d4c65977b0e7fc6a38eea0432dedf5e2c514485e596570ab1a80492589c0007393e959b3dfa8cef908e7fc6bc1bfe0a81f1c751f82ff00b16f89dbc276925ff893c60a9e18f0ae910dac934ba9de5ee63fb346b1e5bcc78bcd54207fac28072c2b577765dc932bfe09c82e3e2968bf157f6dbd656713fc56f1e5c45a13cd709bbfb0f4a696ced219235c7972c539be8893cba47137a13f44f832450259a5fef93935f097fc112353f899f0a3e07fc4ff00d8fbe3ac1a9e99e37f86de3f1717be19d47544bf6d234cd52c6deeece3fb5447ca98b38bb6631e14b6e6c7ce2bed287c656fa1d8ec78e52cc09384cfad72579469e21c6e6d4e0e54ee8ddd5af6d644728ccac09f9d7d79f7ae76f759bdb618694b0ddd578f5ac8d53e215a79464632aee3920a7d6b307c40d267c8331ebfc40f1fad7546ad26b73274ea763b6d1b5b491c991d8f38e4f4fd6b94fdafbe3737ecfdfb2ff8d7e2f58ea0d6f7da568b22e9130804a13509c8b7b42ca782bf68962dd9e02e49e2b4746f1568b249b7729f98743f5f7af957fe0a8dabe9ff00b477c5df835fb01e937652dbc5fe251abf8bfcab992da64d32049b7f9530ca0736d16a4ea083896083a6e01b58f2b7a322d25b9ec7ff0004a6f85d07c2cfd81bc0d0f9568b71e23b297c493cb66922f991ea12bdd5b799e67ce654b492da272d93ba23c9ea7df26996307321073c7ebef4a35cb7ba8dc5bce18e79c75efea6aa5d386c824f5a96eec69590e1a8296601cf5edf8d4c976189dac7af3fe735492dd19ce5db19e79fad5db7b75552439e3fcfad032c1998120487f2a29ad80c46f3d7d28a00e5975c70482e7afad5a835a241cb1e0ff9ef597f639864963d6a68e368c104b75ff1af393e86cec6d26b69e591bcf5e9f9d30ea11306f99c1cff008fbd66893613963d7fc7deb8bfda3bc37f143c6df04bc45e18f837e234d2bc497566174cba92428090e19e3de3263f310347bc72a5c376ad6129292443b17fe20fed23f023e17dccb6ff00113e29e99612c33797359c7319ee636c67e68610f228c11c95c74af82ff6e7fdbcbe1c78cff691f841f183c3bf0b5bc4de1cf855a9de5fcf61a9de1b39754b99554c201559046905cdb58dda3104b496fb590001abe46b9f8e50699e31d4be1f78de29f48f10693a8cd63a9e977b85920b8898ac919c1218ab02095247bd59d6f55b2d76c5916e848bb7b735dfc9631e66cf55f0f7ede9f1875cfda07e21fed29e0bb4d37c1fa9fc41b4d2ecbc416ba3db1963be5b08a58ede793ed2d2fefd6297cade9b06d8d30a0ee2da3a5fed8ffb45697a98d621f8cbe227951cb2a5c6ad24f1139ce0c5212847b15c57cffa24a34988c118014b55c97c4ab013b65c91e952e107ba052925b9f61f81ff00e0ab1f173c3eb6da77c44f0e68de27b4491cdd4a6036579229076a8922fdd2ed247fcb139031d4e6bd8be1dffc146bf656f1b44b078c86ade12bd3106985fd97daad4c8588f2e39600cc78c1dcf1c63afb67f33ae3c5314ac4b360e7d69a9e2458c931483dff00ce6854e9f61f3cedb9fb69e02d73e19f8f2cdf52f0078c348d66dd1c2bcfa5df473aa31190a4a31dad8e70707dabe10fd88bf682f0bfed2bff00057bf8abe20b4b78aee3d3bc07347a26a3692ceb141682eeca340d1ccb92f2c0b6d282ac82366b95d8de6161f1c6a5f18aefc09632f892d7c4777612dac72486ead2e648e48a354669191a321958461c8c119200cf35d8ff00c1bf9e24d1fc4dfb7978e3569425e6a779f0e6e6fae6e2e0bbc9613fdbec966862fba891ef964da006223318dca4ba57452a717b2329ce4ba9fb59a3bac658c77271bb18cfd6ba5b345994ee933cf5ae1b4fbb789c92c7ef71f5e7debadd06f46fc331c11fe7bd652a694ae5c66da35becea99dac473fe352c4a5036491cff009ef417072439ebdbf1f7a9c63cb3f31ea3fad034f52368f2c4f98dd68a7b11b8fcc7afa514ac8b16e3c27e025dc21f8976e707f8b4eb91ebe886a9cfe17f0d48db6dbc7d66dcf7b4b903bfac62be416ff82a22a79b35c7c1ab611436fe6dc25bf8a9a4914e33b140b5c33608ea400480c549ab767ff0545f09c0d6ff00db9f07754b56b884ca517538cb602863b77aa073ce060f5eb8192393d8413dcb7293d6c7d6b1fc3ed22705d3e21e94003cf9a654f5f55153ff00c2b8d386557e23685f8de30f5f515f30dc7fc14bbe0ac1751585ff0081bc56925c46cd0fd8edadae03153864fdddc13b873db076e738e6ad4bff00050af81315c98af346f145b8fe169ec6d806e4eec62e493b7a9f4fa8602fd943b9377d8f3bff0082e4fecbbf04bc4dfb2f45addf7823c2be25f8a5e25f12e93e12f863a9d91c5f1d52e6797ecf6925cc7244c96cdbae02aceff6659a58ddd78c8f993f68ff00f837d7f6c6f815f68f12fec81f1b7c31f1574546c8f0c6b7e20b3d375a881900091caf2adb5c6172ccecf063185898e33e99f13bf6c9f84bfb46ff00c1443e1e34de1fd52e7c25f07b45bcd7351d3e1b386ee7b8d6a70b1dbc13c0b7061da9badaf6de652f2acb652ed4e37a7d369ff052ff0080566af00f0778c1eef1ba4b24b3b3f314618f3fe97b7a018e7e6dc36e4e456cdb824ae67caa6db48fc37bdf8b377e13f14dd7c3bf8b5e19d63c1de25b0318bfd0bc55a64b61756e648c489be3995597723232ee0bb95d4804106afea3e22b8b7896572eab2aee8999701c7a83dc7bd7ec07ed13fb4e7fc139bf6a3f0ac7f0fbf6a7fd9db50d774f92ca79f4d9b5dd1ecda7b642cab33da5c5bdd19ed241b14b346d1b954c825466bf357e15fecfdff04fdd7fc5bf147c11e33fda9fc7fe027d33e215dcff000f74ed06c1a4b35f0cdd471cf62253736335d4f3464dc4123194a836e36ee0dbdb44e12426a48f10b9f19c96caef2b80a80976278503a93cf14cf86d73f19ff695f88d6df04bf64cf857abf8ebc577eeab05a68f6ad2470ab48b179f2c98d90c0aeea1ee242b0c790649101cd7d4fe19ff00827fff00c11cb5bbbb2d5be277edb9f1335e96dee56496ca5b39adad6e9370cc6fe4699e6043d0b2caa403d54f35f6c7ecc3fb417fc130ff00656f0747e01fd9cf5cd27c39a2338328d33c37a897b970acc24b8b8961325c385240795d980c2e78c0de34e16bdcce529276b1f9effb33ff00c122ff00685d7bfe0a3da6fec6ff00b5798757d41bc336be22f1f699e14f1024e347d30225d4ba7ccd13878a532b6996ce632084d437c6ee85256fae3f65ff00d803e1d7ec63ff0005bbd7be107c07f87171e1fd1b53fd998ebc9a53ea17374559f5fb7b677df732492609b7031bb03b0aa1ff0004b0fda63e02eb9f1f3e387edb7f1ebc6e74bf1178f7c54b61e1db4d63c37335ce9fa34037051750a326dc7d9aca451b7e6d1236724b054f44b7fdad7f674d4bfe0ba8de3cd33e26dacda227ec90da40d444132a2de8f13b5cf9472a08fddf3b8e179c673c524da9357e80d5d1f654fe04f105ab6c362f9cf45e71d7d0d747a1f83fc4f3c98b7d0eedf9c623819bf95731a87ed09f01eeee233a6fc79d0104a3744d26bd146181ce3059c75fd69963fb4efc1eb757b883f69cf0a811e4b6cf1bdaf1ebff002dbdc1fa734b979baa0d23d0f4d87e1df8e594b0f0b6a231eb68fefed4f7f0878a205659b45bb42a79dd0b0c75ae174cfdaf7e1634425b6fda8f4078ddc2c6d1f8da02ac48c8c626e7823f315a56ff00b59fc32bbba6b2ff00869ad0ddd6428d17fc2630921864118f37f0acdd395b745c651ec6dcba0eb9e637fa24c3e63c04345528ff0068bf875711adc5bfc7ed19e370191d3c51090c0f2083e67228a3925dc7cc8fc99f0b5f1d474803c452dd68e2580491c5bde3445f20a8937328270c98f932bb6100171b58d8961d174ed627786394da9408679d0b90b26d0b1866c304ddc103183c00a028ae5351f885a4d869f7ba8c163726c82c6b6f15d6a62410a79651104c144cca4333000c4ca18f19036cb1fc568ded21d3a1d2dc08d9da7863bc763e436fdeac4c4c5e312afcc595d89f94150f96e1936e4746eceb7c537d6505cfd96c7459eed2d1d659dd583491063b401092f9e543105235f940e4ad52935bb6d0f4cb9d76fafe3874dd36dae253a8df1e6d99774d2b154daf147b32a415da3049ddb438c07f1edede696754585c882dcef11dea4892287e3291c6400373e4a10adb63dbbc0627ce3f693f8bfe288be0c6a1a75ae9b39d4fc49750c16da8c9651dc5a832dcbf922e2294e0db4ae12da47236edbbc3ab140b571bb924293b22f7ecdb7fa8de695aefc5bf195dea2baaf8a35f6169693dea5fc9616d69334715a89914acb12dcbdc3c2622774373091239515dfea3e2196e2d9354bad40c6914a232b6fa82c51ca8118893caca18db19380361ce09552c1b85f0ef8a3c11f0c7c19a578134d5b9934cd32da0b4d3ef59e19e448d13fd1d33885e54555c16608703e76dc00a9b5f6d23c4da7c497f631c97d7dcc572a916e3f7d5c02ac42ab020e4292a642372a82a072e7a8ec24b96273f2f8ce6d4b5496d6eace59ec7ed064d91c88ec5f68e1495c02f26ecee2b91b369c1c57937c6af0ff8a7c417f1789341d44c5ac593ac8268e350d35b80d20b69b729de8c5e40a483b725c7de318f4bd4fc29e25d27643279322c41ded1a158be52c138fb8be5606400bb771709cb026b0ef75747b9b7f1049a74325cbb94c4322ab3799e5cc42050a188638dc4f24ee237822b78d919caf63cbbc31f165bc21a8bd87c4ff0b2e977059cc3a85addba591c8cc4627fde05024c6d0769600fc9cf1d5fc51f89fe19f08fc08be97455b492eb558cdb3a194cdf69dcaccf1feecefdcc8a630cd85de57bb0c6b6a4fa5eb9fda0d676f008d6d645b8b6b6b05b9ca9f332a77b48143142377078f9772915e41e2af84f25bfc6b8bc01f087558b45bab629aa5da4da8a8b68a4b668ee151ad558203ba5b27565291e1243872a6b58ea436ec7af7c3df0d5bfc32f03e93a16a7ad89ef21d3771d31207559ae2404c97037121d9e5dce0f1cb93d0718ba0f8db54f0efedeba2eaba8445166f86cd69e4e9c7120896f246236b0c07c2ee61cf72771c83c7699fb45ea7e15d524bcf8a3a236857d35c3c136b968124b3b90a31e448cbb4b119423cdf98e72cb800d3bc35ab68fe2cfdabb44f117c3bf18fda0e91e1ebf6d6f515656fb144c7e469240a1497f34c6033375c11b48056b705a1f666a7ad3f89355367e50b89a59445269d6656e1d7320d8565dade50182591c12495e700eead7571746feec683ad4d0c76e50bc70fef1c2ef2af33b4670572aef8071929d061451d16cb584bc81345f0ec96915fcd342da12dae7fb36430b3191999033e5158855dc0e1075601754b5cccf3ea774a268eead25d978565444bb4647f2551480b9210299c90e0b8039cd468b434b5c57ba7bdb09ace33144eaae9f698ed8b9594b336361fbd88d030190ccae79219b1a72476024f3eeb4ab878ace6450b25cc927da16446d8010ee236ca380371ddc9538e6b3ed34bbf92d16e7487d3ed52dc3cd72cb1b3226c4e5e4c1d809570ac30eedb030dc18836acf5b6d6ef66bd688b5cdc4330b7974f89665316c71be3f2d98b310ec80e00f91782995a5cda97c96290f19488365bda9318e108b58d38edf2ee1b7e9818f4a2ba64f1178674251a25efc52bf13598f22611de232ee4f94e0b4ac48c8ea493ee7ad14b9bc87cace52f6d6d2f27bbd4efee2c67224b874b95badb0ea6c8c12719705562dd22e542f99f31dcadb9f76568cd2eb5ad4715b5c7dab51785eded6786531614ee4685046cc64814bb2955daa76fcc1738ad4d1ac24d3f5bb1bb4b3f974e6821bc10db058ecc29f27cc67b69df74b181248b83f31dccaef10abdab69612f8e949a7e8f611d9cf2c4cf6bff2cdcc8ca1c62331ab12080e1d0125c157df81cd7d6c3393d4754f10c77474eb9b2924b3890ac52c8d24d34a42b4654a8531c80159f681b587cc3e55515e49fb41ea1a4e95f1b3e1edf5ec36b753daddeb525a2c8592d668cda341bcab9dd19694db1563c9c02092b9af68d3bc337da7ea36ba644910db6f32cf756c96f2dbcaeb70c9b4a2a80f1b72e465f76d460708d5cc7c6af87fe1ff00891e08d6359f095dc565abdaeacb3e9a975ba33713f950f956e1976bb2646103230e2008aa5029a849a95d89ab96ed7e1ef87f48d5522d415d6e15fed1a8456f03226e7c249e5297dca460b86c81b72ca3691b6dddea16be11b87d38ea722586a333bcf7f6b1badbbc4b23b846520b02db410793b40de3e6c8f33f875f1ed3c35a8da7c29f8c7a6cda56ad696281274544b5bbb79080248e458f0b0fcc1f01481e6056488e56bd5af35076821d574cd5e49db5302dcbcc0242ea5e328262250c2690664057210f989c86dc265eec86b52ac8f0cb62d6734d70b7b62ede769fbfcb984ab1332aab80bc6c41ce4eecfcad862a79dbeb98f5fb0834b8ade3b6b331b08ec92d925732055daccc4eef95d554127386f55cd766935d5d49b2fedee117512a96f6171651c4ca57ce1344d3c5bcb9dc2465c055c3e4e7ab47a0785f45b1792c6eefbed11cba959c0eaafb4dbb66360646f959896f2f744a03a312724afc9519b40e2ce0357b5f0fd869d7bb74c85ac6dac9a7d4aeeeac1961861843bf9ec3014a0d9b36a9e3f7a4601db5e53f092cb5c9ef3c53f12b5cd2decae357d467d362d26ea0686e216b7732c96ea23059fecf772cf1a991b2e96b1f78b61f52fdb27c5a34ff00857168fa7c09aa6a1a9eae6dacac755d3269a4bcb78cbf970c91dac8ec52e9916c37c6c9992e54b346adb8e97c37f84d6bf09fc39a2f83e099b53b7d292e20982592453c8234657bc58dc3870271248bcf24391b89754e98cfdcbf73171bcedd8e7751d1348d5745bed3649ed5a2d334f48e54b5b789e14b93b503316dab1bc5961c80093dc75e9f43f08d96936afe11f0ff0087225b2b09ec3cc9226db35d34f0f989233ec428369562ad9c2e3ef00337b41d02ecea3a6df24534f6b6f6325e40606586f2e64f2db8fde12c40971c64872cd868d91d0fa6685a2a785cc9a6c70dd453d95f28d69fed4ae05d4e844d7123e0b46d6cbfc7c004646d1f7a5ceda14a29b13c39a6dc789acb52d61ac64bf1a85dceba825907b74d4a5b648dcc3681492ca25450d200c71210abbbaae9ba669891c77fa17f67dd8b2bb31c37361b8b194bb036b12b6e19433397c2b306c7219b9bb6d6b04b2585b5de8f7969671da411db69f6cc7cbd3d3f7df630970766cdd12bee9d1000086e4153505dc71e9d009f5fb630c10f90b0dc437f114919e02ac232b16d8963555191fbb2af105382636cb9f53451b22cdecbaed8687a794b817ba64c46e9a1b64f2d9d8e65b9211b74818c5863938f2cb1008c96687add9e9978d73a00511c361e55e49f6759510c80ef6da42492ca09e087dca4aa97daeae7534fd4aee4d420d31aee49ad6da6b71e7c76ed3168104483e59949541e648238d54190bb3ed3b40161b4b85f49863f0cdfc56573a9c33dcda7dbaecdc3ca542a432990a9dc1836f3233640664d8194190bb604cde33f04a315bff14c2938389925bdb44757ee1965b777539ce43bb30eecc72495cf695aeccfa5db3f8867b1b4bf36e86fad2d6fad1a2866da37a216524a86c80492703927ad145d0ecbb993e1b5860592eed2c63b54b2b56bb92de0904f0590f25b7994bb2011f982663100fbd115d096569076de13d2ee6fed22d5ae7c1735dbcb78d295d3759bab566b036ec0b3968f3305539672ec5a2c30462ea071bf0cf52d3f58f109d38689f6d76b16babf8eefcc8c2db48636790f9ce763a2bca4e49cc83cb50502a0e83c5ed657a349d5b51b20b7f16a199efdbc4f2999a5956e1233028dd82a30c91057c0cacdc0dab8a691a38a6622780e4f0e69f7569e2bd6d5a32970da413239770161f32de379102e1e6c862c088dd32331802a1d434cb5d2359966bfd534f8ed9e0b8b592deecb0c23d9b489080cc8a5de576f9f03687687e738cdfd46d3c3579a48d36dededa290b4d6f1eb06f2e586f3731315592592578d18abaecfbd9326dea0b55b93796d65a8789b5cd5adacf51b39a737b3ea7a5b4b70d23282903065263620b79a136994236e07cb65916a0a291c4fc5af829e18f8aba4ff00c207e35f0fd95ca982d16df52d32de5b04d36716ad991a46705761046dfdd31f9a370c4e4f935c7883e227ecaba85c5ff8d6d351f17fc3fb3582dacf538f50585a163852b36e495502f40c53c966562ad03148c7d21e1bb7b1f18ea179ae59c57dabd82dcc91c37d1dcc8145bf910ab333cee59e3f2a3540bb9760932a46edcb1ddf8334e3a55d27f60409711430cbad788b528b7c307da43480b280015656b80072e19300600716a7dc4e1d51c0787756f0af8e2caf75af0478f35b9ed60bd9ff00d2ee1e341656a9b0b249188d3eceabcb3f9809c797f32ef2adda687f0e34ed3e2bbbbd7f59b79a4c2a36a337ef5620e9202b198886902b161b37a92a80e46ef93e7ef1afecc9e38f85857e2f7c0686efec735c43713e9b6f20b80d6891f9327961641195de53743b0aa96090794048af8da27fc142b4df07e9b241adfc3dd43c43e2fb4b58e3b1d1574396d238aebce42b82aaaf6f1ab025a340c1d800cac54397c9ccef1055147e23adf1869de1cf8cbfb6769be091acd869ba2f83aca1bad4f75c4863011209fca9562582291263269b3ab4a5046fa64ebe5b9401fbcd427d6adaf9f4ff00b05c5f8b2bb96d67b38f5348cc4b24ab1b348891c8032ccc4f08a634855be5c12793fd97fc3df11bc2fe17f10f8a35dd646a1e27f164cb378b6ee1d315edf4c82595e47b509307854adc5d4cf222c6aab24f3247fbb8d661e85a67877c31e1ad01edc4897777ad6a261b196fade7589c49333f90676751b5c056557465fdc347f303b46b26e365d9192eadf51de0ed3b5986c25d362d4679e28596cefb47bd850074b58ae24852568a489449b7cd760ecc423c31ee6f9cbfa026afe1d8fc3526842fbfb422b9d5ed0086296dc2340ead7378d2b05669246f91e42aa000122018ab4b27149e209b53d32d6fec35fb0be66d5238e78ece10a245699a6469a484904cfb42e048c5cc51c63087cc3ada7c1e0d1a4c9a6c82eacecafaca58f492b790dc5ddbc73dc4b7a25f9a70a331c6021936e259959836109ca57652573a2d412c0f8a2facee43da5c97bf5d526df242239d98bc16e8c7a186dc0241ce770882920ab538f52f13dd6996d3f87ef2e63866b12babcaf33c4d7334811d62fb4aa066de5cbb2aaa6c44d84ef25aa6b78f48bdd78695e2727cb6437177733db286ff004986559e3602332c611e3688f0cdb9b9d86e2255bd73a5df697aca594be16b79e08c5b42ef25dba473ce1e3b690a0790cb2619208f9915d0b46ab92ef224dddcd2da0f8af62b4b41aaea16af34935d7dba38aded5c481a5596366e158ab3cdb9420398a160577349968acfc3d3ff006adfe81aa4d0c7a7241e53410d92c6be64288233134e87ed2aaaad03f96c41311f99091b27b3d625f17ea374da9ddc7736761a7c8f6cd35e79b045133a46e4b2330522378612bb94850ec30a43332f34bd623bc92c7499638bededa8dba5ddac41165b8790dab3da2b6162df2fd9626f30800f98d2654ac46b9ac4f2df63574687c653e91693c7e1ed72557b68d96582fae0a382a3e652d6ce483d412cc71fc47ad155354f1cebfe14d4ee7c2cdf043c317a74d9ded4de45e088a559fcb629e60773b9c363219b939c9e68a05cacc5fd8fb4bd32ebe19de6b773a74125ed8e9d6f3d95e3c2a65b797fb0aca4f311c8ca36f667c820ee627a9af41f00471daf893c1a2da358ff00b452c06a1b063ed23fb3f50b8c498fbffbe8a3979cfcf1ab7de50414564cd59e736ecc7c15757058f993785e09a57cf2f24f6f7e67727bb49b57793cb606738aa7f172e6e74af094f75a5dc3db4a3c09f68125bb94612ac51859323f8864e1ba8c9a28a16e08cff0580dabead23005ad2fe65b563d6155d62181427f7408898c63a21dbd38af48d3b4dd39bc557366d610186e7c5456e62310db285b7ba750c318601955867a1507a8a28a71dc3a1c6c9ae6b727c6616126b174d04be29d26d6485ae18a3c13cd70d3c4467052420175e8c464835e4fa56bdaeeb9e16bd4d6b5abbbc09a2cf220bab96936b958c161b89c120004f5c01e94515a7521fc26c7c2df12788ac3c1976963afdec2b0cda10844574ea1371566c60f1932c84e3a991cff0011ccdf18a492d3c65e195b573101685c08cedc32de5ebab71dc392c0f6249eb45143223b1b3adea9a9d8fc75f06d9d96a33c316a5a3cd1ea3145332add229675590038701a595806ce0cae7f88e7d656ced27f88b73a2cf6b1bd9e95a7ebbfd9768e80c567e4dcaf95e52f48f66c5dbb40dbb4631814514ba16b6391f013be97e1fd1759d358dbde5e9d0d2f2ee03b259d67d56cda70ec396121662e093b8b1273935e17a0788bc41acaea4dac6bb797665d34dc4a6e6e9e4df33cf08790ee272cc19816ea771cf5a28a4be21f43d4bc3fa96a3a9fc4ed21f52bf9ae18786d4833ca5c82ab16d3c9edb9b1e993eb5d6fc4777b68e0bbb7631cabae3c4b2a1c308e38ad628d3239dab1cd2a28e81657038620945388753c1aff00e24fc456be989f1f6b44995b24eab37a9ff6a8a28a047fffd9, 1, '2025-10-12 16:52:02', NULL, NULL),
+(3, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 307, 1, 1, NULL, 1, '2025-10-12 16:52:02', NULL, NULL),
+(4, '641caf57-b11b-4e8d-b682-2cb9a403158d', 305, 1, 2, NULL, 1, '2025-10-12 16:52:02', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_inventory_item_borrow_data`
+--
+
+CREATE TABLE `%PREFIX%_inventory_item_borrow_data` (
+  `inb_id` int UNSIGNED NOT NULL,
+  `inb_ini_id` int UNSIGNED NOT NULL,
+  `inb_last_receiver` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `inb_borrow_date` timestamp NULL DEFAULT NULL,
+  `inb_return_date` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_inventory_item_borrow_data`
+--
+
+INSERT INTO `%PREFIX%_inventory_item_borrow_data` (`inb_id`, `inb_ini_id`, `inb_last_receiver`, `inb_borrow_date`, `inb_return_date`) VALUES
+(1, 2, '206', '2025-06-28 22:00:00', '2025-07-11 22:00:00'),
+(2, 3, '202', '2025-09-13 22:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_inventory_item_data`
+--
+
+CREATE TABLE `%PREFIX%_inventory_item_data` (
+  `ind_id` int UNSIGNED NOT NULL,
+  `ind_inf_id` int UNSIGNED NOT NULL,
+  `ind_ini_id` int UNSIGNED NOT NULL,
+  `ind_value` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_inventory_item_data`
+--
+
+INSERT INTO `%PREFIX%_inventory_item_data` (`ind_id`, `ind_inf_id`, `ind_ini_id`, `ind_value`) VALUES
+(1, 1, 1, 'Portable PA Speaker'),
+(2, 4, 1, '355'),
+(3, 1, 2, 'Folding Chairs'),
+(4, 4, 2, '1'),
+(5, 1, 3, 'Adjustable Microphone Stand'),
+(6, 4, 3, '355'),
+(7, 1, 4, 'Beamer'),
+(8, 4, 4, '354');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_links`
+--
+
+CREATE TABLE `%PREFIX%_links` (
+  `lnk_id` int UNSIGNED NOT NULL,
+  `lnk_cat_id` int UNSIGNED NOT NULL,
+  `lnk_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `lnk_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `lnk_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `lnk_url` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `lnk_counter` int NOT NULL DEFAULT '0',
+  `lnk_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `lnk_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lnk_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `lnk_timestamp_change` timestamp NULL DEFAULT NULL,
+  `lnk_sequence` smallint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_links`
+--
+
+INSERT INTO `%PREFIX%_links` (`lnk_id`, `lnk_cat_id`, `lnk_uuid`, `lnk_name`, `lnk_description`, `lnk_url`, `lnk_counter`, `lnk_usr_id_create`, `lnk_timestamp_create`, `lnk_usr_id_change`, `lnk_timestamp_change`, `lnk_sequence`) VALUES
+(1, 7, '07bdb749-e925-4715-ba92-360bf3b2821d', 'Sample page', 'On this site there\'s not much news :(', 'https://www.example.com', 6, 1, '2025-09-22 22:00:00', 1, '2025-09-23 22:00:00', 1),
+(2, 9, 'ae39a20e-b5b2-4ebb-8b1a-882bd6d777d5', 'Admidio', 'The homepage of the <b>best</b> open source membership management in the net.', 'https://www.admidio.org/', 157, 1, '2025-09-22 22:00:00', NULL, NULL, 1),
+(3, 9, '476855ec-6c36-449c-a4ac-c17b27a34e11', 'Forum', 'The forum for the online membership management software. Here gets everyone support, who has encountered a problem while installing or setting up Admidio. But also suggestions and tips can be posted here.', 'https://www.admidio.org/forum/', 46, 1, '2025-09-22 22:00:00', NULL, NULL, 2),
+(4, 9, '69e19ac6-1744-495b-bd70-bf8c3baaf15c', 'Documentation', 'The documentation for Admidio with valuable help and tips.', 'https://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 12:13:23', NULL, NULL, 3),
+(5, 9, '325564f8-4630-4efe-912b-79358b6cae98', 'GitHub', '<p>Our developement area at Github. If you want to help us and add some new feature to Admidio go there and get the code.</p>', 'https://github.com/Admidio/admidio', 0, 1, '2025-10-04 08:52:40', NULL, NULL, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_lists`
+--
+
+CREATE TABLE `%PREFIX%_lists` (
+  `lst_id` int UNSIGNED NOT NULL,
+  `lst_org_id` int UNSIGNED NOT NULL,
+  `lst_usr_id` int UNSIGNED NOT NULL,
+  `lst_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `lst_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `lst_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lst_global` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_lists`
+--
+
+INSERT INTO `%PREFIX%_lists` (`lst_id`, `lst_org_id`, `lst_usr_id`, `lst_uuid`, `lst_name`, `lst_timestamp`, `lst_global`) VALUES
+(1, 1, 1, '485a11f0-e4f9-4771-a71c-1eacff12dd4c', 'Address list', '2009-02-27 20:50:57', 1),
+(2, 1, 1, '914693d9-5e08-42f9-a97f-1b1e8ed8ae2a', 'Phone list', '2009-02-27 20:50:57', 1),
+(3, 1, 1, 'c28f0e74-d95f-44d7-8e02-2ca80ee220ae', 'Contact information', '2009-02-27 20:50:57', 1),
+(4, 1, 1, '4e3d9b48-eeff-4760-98c6-a69b38221342', 'Membership', '2009-02-27 20:50:57', 1),
+(5, 1, 1, '3a28db85-bf2c-4828-82f7-f8c67a0ff692', 'Social networks', '2009-02-27 20:56:52', 0),
+(6, 1, 1, 'ca9a32ec-efd2-46da-a9ee-8cf6aa0c179e', 'Birthday', '2009-02-27 20:57:38', 0),
+(7, 1, 351, 'a4889bdb-e294-46a6-a76f-4456707012e3', 'Website', '2009-02-27 21:34:28', 0),
+(8, 1, 351, '5ebcd56b-3095-4656-82b7-70f451de07b8', NULL, '2009-02-27 21:34:47', 0),
+(9, 2, 1, '82b5af7a-d535-4383-8f0e-befbd6e8d9e8', 'Address list', '2012-02-27 20:50:57', 1),
+(10, 2, 1, 'df811fdd-89cd-49f2-9031-49a8aab71860', 'Phone list', '2012-02-27 20:50:57', 1),
+(11, 2, 1, '77afdf9a-1d25-4993-8680-6fc556c2972c', 'Contact information', '2012-02-27 20:50:57', 1),
+(12, 2, 1, 'a834cebe-3592-4f05-8c9b-73551615f570', 'Membership', '2012-02-27 20:50:57', 1),
+(13, 1, 1, 'afc87e5f-fffa-46f3-82d1-6e8c65472ae4', 'Members', '2018-04-05 19:50:57', 1),
+(14, 2, 1, 'a94a023b-56fa-4d6e-b05e-267a3d37ba09', 'Members', '2018-04-05 19:50:57', 1),
+(15, 1, 1, 'd39d0642-c367-43ca-bc73-578219febbc6', 'Contacts', '2021-11-13 14:08:45', 1),
+(16, 2, 1, '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 'Contacts', '2021-11-13 14:08:45', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_list_columns`
+--
+
+CREATE TABLE `%PREFIX%_list_columns` (
+  `lsc_id` int UNSIGNED NOT NULL,
+  `lsc_lst_id` int UNSIGNED NOT NULL,
+  `lsc_number` smallint NOT NULL,
+  `lsc_usf_id` int UNSIGNED DEFAULT NULL,
+  `lsc_special_field` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `lsc_sort` varchar(5) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `lsc_filter` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_list_columns`
+--
+
+INSERT INTO `%PREFIX%_list_columns` (`lsc_id`, `lsc_lst_id`, `lsc_number`, `lsc_usf_id`, `lsc_special_field`, `lsc_sort`, `lsc_filter`) VALUES
+(1, 1, 1, 1, NULL, 'ASC', NULL),
+(2, 1, 2, 2, NULL, 'ASC', NULL),
+(3, 1, 3, 10, NULL, NULL, NULL),
+(4, 1, 4, 3, NULL, NULL, NULL),
+(5, 1, 5, 4, NULL, NULL, NULL),
+(6, 1, 6, 5, NULL, NULL, NULL),
+(10, 2, 1, 1, NULL, 'ASC', NULL),
+(11, 2, 2, 2, NULL, 'ASC', NULL),
+(12, 2, 3, 7, NULL, NULL, NULL),
+(13, 2, 4, 8, NULL, NULL, NULL),
+(14, 2, 5, 12, NULL, NULL, NULL),
+(20, 3, 1, 1, NULL, 'ASC', NULL),
+(21, 3, 2, 2, NULL, 'ASC', NULL),
+(22, 3, 3, 10, NULL, NULL, NULL),
+(23, 3, 4, 3, NULL, NULL, NULL),
+(24, 3, 5, 4, NULL, NULL, NULL),
+(25, 3, 6, 5, NULL, NULL, NULL),
+(26, 3, 7, 7, NULL, NULL, NULL),
+(27, 3, 8, 8, NULL, NULL, NULL),
+(28, 3, 9, 12, NULL, NULL, NULL),
+(30, 4, 1, 1, NULL, NULL, NULL),
+(31, 4, 2, 2, NULL, NULL, NULL),
+(32, 4, 3, 10, NULL, NULL, NULL),
+(33, 4, 4, NULL, 'mem_begin', NULL, NULL),
+(34, 4, 5, NULL, 'mem_end', 'DESC', NULL),
+(40, 5, 1, 1, NULL, 'ASC', NULL),
+(41, 5, 2, 2, NULL, NULL, NULL),
+(43, 5, 4, 22, NULL, NULL, NULL),
+(49, 5, 7, 24, NULL, NULL, NULL),
+(60, 6, 1, 1, NULL, NULL, NULL),
+(61, 6, 2, 2, NULL, NULL, NULL),
+(62, 6, 3, 10, NULL, 'DESC', NULL),
+(70, 7, 1, 1, NULL, NULL, NULL),
+(71, 7, 2, 2, NULL, NULL, NULL),
+(72, 7, 3, 13, NULL, 'DESC', NULL),
+(73, 7, 4, 12, NULL, NULL, NULL),
+(80, 8, 1, 1, NULL, NULL, NULL),
+(81, 8, 2, 2, NULL, 'ASC', NULL),
+(82, 8, 3, 13, NULL, NULL, NULL),
+(83, 8, 4, 11, NULL, NULL, NULL),
+(101, 9, 1, 1, NULL, 'ASC', NULL),
+(102, 9, 2, 2, NULL, 'ASC', NULL),
+(103, 9, 3, 10, NULL, NULL, NULL),
+(104, 9, 4, 3, NULL, NULL, NULL),
+(105, 9, 5, 4, NULL, NULL, NULL),
+(106, 9, 6, 5, NULL, NULL, NULL),
+(107, 10, 1, 1, NULL, 'ASC', NULL),
+(108, 10, 2, 2, NULL, 'ASC', NULL),
+(109, 10, 3, 7, NULL, NULL, NULL),
+(110, 10, 4, 8, NULL, NULL, NULL),
+(111, 10, 5, 12, NULL, NULL, NULL),
+(113, 11, 1, 1, NULL, 'ASC', NULL),
+(114, 11, 2, 2, NULL, 'ASC', NULL),
+(115, 11, 3, 10, NULL, NULL, NULL),
+(116, 11, 4, 3, NULL, NULL, NULL),
+(117, 11, 5, 4, NULL, NULL, NULL),
+(118, 11, 6, 5, NULL, NULL, NULL),
+(119, 11, 7, 7, NULL, NULL, NULL),
+(120, 11, 8, 8, NULL, NULL, NULL),
+(121, 11, 9, 12, NULL, NULL, NULL),
+(122, 12, 1, 1, NULL, NULL, NULL),
+(123, 12, 2, 2, NULL, NULL, NULL),
+(124, 12, 3, 10, NULL, NULL, NULL),
+(125, 12, 4, NULL, 'mem_begin', NULL, NULL),
+(126, 12, 5, NULL, 'mem_end', 'DESC', NULL),
+(127, 13, 1, 1, NULL, 'ASC', NULL),
+(128, 13, 2, 2, NULL, NULL, NULL),
+(129, 13, 3, NULL, 'mem_approved', NULL, NULL),
+(130, 13, 4, NULL, 'mem_comment', NULL, NULL),
+(131, 13, 5, NULL, 'mem_count_guests', NULL, NULL),
+(132, 14, 1, 1, NULL, 'ASC', NULL),
+(133, 14, 2, 2, NULL, NULL, NULL),
+(134, 14, 3, NULL, 'mem_approved', NULL, NULL),
+(135, 14, 4, NULL, 'mem_comment', NULL, NULL),
+(136, 14, 5, NULL, 'mem_count_guests', NULL, NULL),
+(140, 15, 1, 1, NULL, 'ASC', NULL),
+(141, 15, 2, 2, NULL, 'ASC', NULL),
+(142, 15, 3, NULL, 'usr_login_name', NULL, NULL),
+(143, 15, 4, 11, NULL, NULL, NULL),
+(144, 15, 5, 10, NULL, NULL, NULL),
+(145, 15, 6, 5, NULL, NULL, NULL),
+(146, 15, 7, NULL, 'usr_timestamp_change', NULL, NULL),
+(150, 16, 1, 1, NULL, 'ASC', NULL),
+(151, 16, 2, 2, NULL, 'ASC', NULL),
+(152, 16, 3, NULL, 'usr_login_name', NULL, NULL),
+(153, 16, 4, 11, NULL, NULL, NULL),
+(154, 16, 5, 10, NULL, NULL, NULL),
+(155, 16, 6, 5, NULL, NULL, NULL),
+(156, 16, 7, NULL, 'usr_timestamp_change', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_log_changes`
+--
+
+CREATE TABLE `%PREFIX%_log_changes` (
+  `log_id` int NOT NULL,
+  `log_table` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `log_record_id` int UNSIGNED NOT NULL,
+  `log_record_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `log_record_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_record_linkid` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_related_id` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_related_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_field` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `log_field_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_action` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `log_value_old` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_value_new` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `log_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `log_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `log_comment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_log_changes`
+--
+
+INSERT INTO `%PREFIX%_log_changes` (`log_id`, `log_table`, `log_record_id`, `log_record_uuid`, `log_record_name`, `log_record_linkid`, `log_related_id`, `log_related_name`, `log_field`, `log_field_name`, `log_action`, `log_value_old`, `log_value_new`, `log_usr_id_create`, `log_timestamp_create`, `log_comment`) VALUES
+(1, 'user_data', 3, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '3', 'Street', 'MODIFY', 'Musterallee 25', 'Unter den Linden 45', 1, '2025-04-27 18:42:25', NULL),
+(2, 'user_data', 4, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '4', 'Postal code', 'MODIFY', '54897', '10117', 1, '2025-04-27 18:42:25', NULL),
+(3, 'user_data', 5, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '5', 'City', 'MODIFY', 'Düren', 'Berlin', 1, '2025-04-27 18:42:25', NULL),
+(4, 'user_data', 25, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '25', 'Bundesland', 'MODIFY', '10', '3', 1, '2025-04-27 18:42:25', NULL),
+(5, 'user_data', 7, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '7', 'Phone', 'MODIFY', '02456-3908903', '0211-85858585', 1, '2025-04-27 18:42:25', NULL),
+(6, 'user_data', 22, '7a854ed2-50db-49ee-9379-31d07f467d47', 'Schmidt, Paul', '1', NULL, NULL, '22', 'Facebook', 'MODIFY', NULL, 'Admidio', 1, '2025-07-10 07:42:03', NULL),
+(7, 'user_data', 8, 'de709436-a2d5-4270-999f-adb8a06bb443', 'Begunk, Damion', '213', NULL, NULL, '8', 'Mobile', 'MODIFY', '0183-342342', '0181-457412', 1, '2025-05-08 13:02:03', NULL),
+(8, 'user_data', 13, 'de709436-a2d5-4270-999f-adb8a06bb443', 'Begunk, Damion', '213', NULL, NULL, '13', 'Website', 'MODIFY', 'www.example.org', NULL, 1, '2025-06-19 02:02:35', NULL),
+(9, 'user_data', 22, 'de709436-a2d5-4270-999f-adb8a06bb443', 'Begunk, Damion', '213', NULL, NULL, '22', 'Facebook', 'MODIFY', 'begunk', NULL, 1, '2025-06-19 02:02:35', NULL),
+(16, 'user_data', 18136, '97f8346c-ca53-40de-857a-459d26d9df40', 'Schmidt, Jennifer', '355', NULL, NULL, '10', 'Birthday', 'MODIFY', NULL, '1994-02-09', 355, '2025-09-23 13:05:58', NULL),
+(17, 'user_data', 18137, '97f8346c-ca53-40de-857a-459d26d9df40', 'Schmidt, Jennifer', '355', NULL, NULL, '21', 'Favorite color', 'MODIFY', NULL, 'red', 355, '2025-09-23 13:05:58', NULL),
+(18, 'user_data', 207, 'd41b8e54-d55d-42f1-bb52-71a1286e3dc3', 'Bensien, Daniel', '218', NULL, NULL, '3', 'Street', 'MODIFY', 'Blumenwiese 39', 'Blumenwiese 58', 354, '2025-07-29 13:07:39', NULL),
+(19, 'user_data', 18138, 'd41b8e54-d55d-42f1-bb52-71a1286e3dc3', 'Bensien, Daniel', '218', NULL, NULL, '21', 'Favorite color', 'MODIFY', NULL, 'green', 354, '2025-07-29 13:07:39', NULL),
+(20, 'inventory_items', 1, 'bba7a1ed-5bea-460c-bfeb-0b48d55956f6', 'Portable PA Speaker', NULL, '1', NULL, NULL, NULL, 'CREATED', NULL, NULL, 1, '2025-10-12 16:52:02', NULL),
+(21, 'inventory_items', 1, 'bba7a1ed-5bea-460c-bfeb-0b48d55956f6', 'Portable PA Speaker', NULL, '1', NULL, 'ini_cat_id', 'ini_cat_id', 'MODIFY', NULL, '307', 1, '2025-10-12 16:52:02', NULL),
+(22, 'inventory_items', 1, 'bba7a1ed-5bea-460c-bfeb-0b48d55956f6', 'Portable PA Speaker', NULL, '1', NULL, 'ini_status', 'ini_status', 'MODIFY', NULL, 'In use', 1, '2025-10-12 16:52:02', NULL),
+(23, 'inventory_item_data', 1, 'bba7a1ed-5bea-460c-bfeb-0b48d55956f6', 'SYS_INVENTORY_ITEMNAME', '1', NULL, NULL, '1', 'ind_value', 'MODIFY', NULL, 'Portable PA Speaker', 1, '2025-10-12 16:52:02', NULL),
+(24, 'inventory_item_data', 2, 'bba7a1ed-5bea-460c-bfeb-0b48d55956f6', 'SYS_INVENTORY_KEEPER', '1', NULL, NULL, '4', 'ind_value_usr', 'MODIFY', NULL, '355', 1, '2025-10-12 16:52:02', NULL),
+(25, 'inventory_items', 2, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'Folding Chairs', NULL, '2', NULL, NULL, NULL, 'CREATED', NULL, NULL, 1, '2025-10-12 16:52:02', NULL),
+(26, 'inventory_items', 2, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'Folding Chairs', NULL, '2', NULL, 'ini_cat_id', 'ini_cat_id', 'MODIFY', NULL, '305', 1, '2025-10-12 16:52:02', NULL),
+(27, 'inventory_items', 2, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'Folding Chairs', NULL, '2', NULL, 'ini_status', 'ini_status', 'MODIFY', NULL, 'In use', 1, '2025-10-12 16:52:02', NULL),
+(28, 'inventory_item_data', 3, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'SYS_INVENTORY_ITEMNAME', '2', NULL, NULL, '1', 'ind_value', 'MODIFY', NULL, 'Folding Chairs', 1, '2025-10-12 16:52:02', NULL),
+(29, 'inventory_item_data', 4, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'SYS_INVENTORY_KEEPER', '2', NULL, NULL, '4', 'ind_value_usr', 'MODIFY', NULL, '1', 1, '2025-10-12 16:52:02', NULL),
+(30, 'inventory_item_borrow_data', 1, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'Folding Chairs', NULL, NULL, NULL, NULL, NULL, 'CREATED', NULL, NULL, 1, '2025-10-12 16:52:02', NULL),
+(31, 'inventory_item_borrow_data', 1, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'Folding Chairs', NULL, NULL, NULL, 'inb_last_receiver', 'inb_last_receiver', 'MODIFY', NULL, '206', 1, '2025-10-12 16:52:02', NULL),
+(32, 'inventory_item_borrow_data', 1, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'Folding Chairs', NULL, NULL, NULL, 'inb_borrow_date', 'inb_borrow_date', 'MODIFY', NULL, '28.06.2025', 1, '2025-10-12 16:52:02', NULL),
+(33, 'inventory_item_borrow_data', 1, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'Folding Chairs', NULL, NULL, NULL, 'inb_return_date', 'inb_return_date', 'MODIFY', NULL, '12.07.2025', 1, '2025-10-12 16:52:02', NULL),
+(34, 'inventory_items', 3, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 'Adjustable Microphone Stand', NULL, '3', NULL, NULL, NULL, 'CREATED', NULL, NULL, 1, '2025-10-12 16:52:02', NULL),
+(35, 'inventory_items', 3, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 'Adjustable Microphone Stand', NULL, '3', NULL, 'ini_cat_id', 'ini_cat_id', 'MODIFY', NULL, '307', 1, '2025-10-12 16:52:02', NULL),
+(36, 'inventory_items', 3, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 'Adjustable Microphone Stand', NULL, '3', NULL, 'ini_status', 'ini_status', 'MODIFY', NULL, 'In use', 1, '2025-10-12 16:52:02', NULL),
+(37, 'inventory_item_data', 5, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 'SYS_INVENTORY_ITEMNAME', '3', NULL, NULL, '1', 'ind_value', 'MODIFY', NULL, 'Adjustable Microphone Stand', 1, '2025-10-12 16:52:02', NULL),
+(38, 'inventory_item_data', 6, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 'SYS_INVENTORY_KEEPER', '3', NULL, NULL, '4', 'ind_value_usr', 'MODIFY', NULL, '355', 1, '2025-10-12 16:52:02', NULL),
+(39, 'inventory_item_borrow_data', 2, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 'Adjustable Microphone Stand', NULL, NULL, NULL, NULL, NULL, 'CREATED', NULL, NULL, 1, '2025-10-12 16:52:02', NULL),
+(40, 'inventory_item_borrow_data', 2, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 'Adjustable Microphone Stand', NULL, NULL, NULL, 'inb_last_receiver', 'inb_last_receiver', 'MODIFY', NULL, '202', 1, '2025-10-12 16:52:02', NULL),
+(41, 'inventory_item_borrow_data', 2, '74cbe7a4-ee3a-4097-a4cf-c76a86b85b4c', 'Adjustable Microphone Stand', NULL, NULL, NULL, 'inb_borrow_date', 'inb_borrow_date', 'MODIFY', NULL, '14.09.2025', 1, '2025-10-12 16:52:02', NULL),
+(42, 'inventory_items', 4, '641caf57-b11b-4e8d-b682-2cb9a403158d', 'Beamer', NULL, '4', NULL, NULL, NULL, 'CREATED', NULL, NULL, 1, '2025-10-12 16:52:02', NULL),
+(43, 'inventory_items', 4, '641caf57-b11b-4e8d-b682-2cb9a403158d', 'Beamer', NULL, '4', NULL, 'ini_cat_id', 'ini_cat_id', 'MODIFY', NULL, '305', 1, '2025-10-12 16:52:02', NULL),
+(44, 'inventory_items', 4, '641caf57-b11b-4e8d-b682-2cb9a403158d', 'Beamer', NULL, '4', NULL, 'ini_status', 'ini_status', 'MODIFY', NULL, 'In use', 1, '2025-10-12 16:52:02', NULL),
+(45, 'inventory_item_data', 7, '641caf57-b11b-4e8d-b682-2cb9a403158d', 'SYS_INVENTORY_ITEMNAME', '4', NULL, NULL, '1', 'ind_value', 'MODIFY', NULL, 'Beamer', 1, '2025-10-12 16:52:02', NULL),
+(46, 'inventory_items', 4, '641caf57-b11b-4e8d-b682-2cb9a403158d', 'Beamer', NULL, '4', NULL, 'ini_status', 'ini_status', 'MODIFY', 'In use', 'Retired', 1, '2025-10-12 16:52:02', NULL),
+(47, 'inventory_item_data', 8, '641caf57-b11b-4e8d-b682-2cb9a403158d', 'SYS_INVENTORY_KEEPER', '4', NULL, NULL, '4', 'ind_value_usr', 'MODIFY', NULL, '354', 1, '2025-10-12 16:52:02', NULL),
+(48, 'inventory_items', 1, 'bba7a1ed-5bea-460c-bfeb-0b48d55956f6', 'Portable PA Speaker', NULL, '1', NULL, 'ini_picture', 'ini_picture', 'MODIFY', NULL, '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', 1, '2025-10-12 16:52:25', NULL),
+(49, 'inventory_items', 2, 'db8dba31-8fb0-484d-9f3d-eef31b7e04d3', 'Folding Chairs', NULL, '2', NULL, 'ini_picture', 'ini_picture', 'MODIFY', NULL, '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', 1, '2025-10-12 16:52:41', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_members`
+--
+
+CREATE TABLE `%PREFIX%_members` (
+  `mem_id` int UNSIGNED NOT NULL,
+  `mem_rol_id` int UNSIGNED NOT NULL,
+  `mem_usr_id` int UNSIGNED NOT NULL,
+  `mem_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `mem_begin` date NOT NULL,
+  `mem_end` date NOT NULL DEFAULT '9999-12-31',
+  `mem_leader` tinyint(1) NOT NULL DEFAULT '0',
+  `mem_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `mem_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `mem_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `mem_timestamp_change` timestamp NULL DEFAULT NULL,
+  `mem_approved` int UNSIGNED DEFAULT NULL,
+  `mem_comment` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `mem_count_guests` int UNSIGNED NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_members`
+--
+
+INSERT INTO `%PREFIX%_members` (`mem_id`, `mem_rol_id`, `mem_usr_id`, `mem_uuid`, `mem_begin`, `mem_end`, `mem_leader`, `mem_usr_id_create`, `mem_timestamp_create`, `mem_usr_id_change`, `mem_timestamp_change`, `mem_approved`, `mem_comment`, `mem_count_guests`) VALUES
+(1, 1, 1, 'fd3e1942-1285-4fe0-b3c0-eb3c5cebfad0', '2008-04-20', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(2, 2, 1, '46da7d44-9209-45cb-acaa-f4b9ba7fa40b', '2008-04-20', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(3, 4, 1, '3fbe3c81-dfa4-4354-ba96-06d531ba712a', '2008-04-20', '2009-10-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(4, 6, 1, 'ca1d02ea-ff41-4a96-9484-2012d129a7b8', '2009-04-20', '9999-12-31', 0, 354, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(5, 7, 1, '1d0a3c88-f464-4f3c-8735-c2904807c82d', '2009-04-20', '9999-12-31', 0, 354, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(6, 9, 1, '91f8f88b-8e84-416d-9d6b-dbeb7a51cd83', '2008-04-20', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 0),
+(7, 11, 1, 'da316d25-8e33-410f-9d29-9926bd06f9e1', '2016-04-20', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 0),
+(10, 7, 2, '51ee7ad9-3d4a-4f19-ab9b-fe29dec88329', '2008-04-20', '9999-12-31', 0, NULL, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(11, 7, 2, '9e8f92bd-6d05-4ca1-b2e9-72abd7fff7e7', '2008-04-20', '9999-12-31', 0, NULL, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(201, 2, 202, 'b9502822-1ae7-44c1-8cf2-7f87b1d15946', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(202, 2, 203, '5b6df531-4576-455d-a7d3-6b79ba41ef09', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(203, 2, 204, '17e0ce5c-726c-485b-bb9e-c4e62cac0920', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(204, 2, 205, 'f8d5636f-c278-4188-9ba6-7ce275d20f20', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(205, 2, 206, '6a7648a4-ff84-4105-84dd-f7fd4bbebdfd', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(206, 2, 207, 'e5510b7f-ca35-434c-b744-fedcd80dd8bd', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(207, 2, 208, '8acf2c76-f9ce-4602-a1d9-8e7458260b46', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(208, 2, 209, 'f5939a65-2f67-48ac-a9f3-f62eb4881280', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(209, 2, 210, '30555d7e-d161-4ac3-af40-cc86874e1741', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(211, 2, 212, '351d96a4-2732-4a9c-9560-d652494cff99', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(212, 2, 213, '74c826ee-18be-4957-a784-fbc5c4b63b39', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(213, 2, 214, '9f26dade-f080-4119-bff5-0e6b00be9f0d', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(214, 2, 215, '2ecdfaa5-6af5-4c4e-93b6-ab6edb2c69ee', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(215, 2, 216, '9c10af84-bbfb-4748-8bff-cfafa3cd1a96', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(216, 2, 217, 'f5ec5dae-7085-41b1-8389-424c184be214', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(217, 2, 218, '563f61e5-1116-4a63-aa77-cad8b3aa41ed', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(218, 2, 219, '8db7589b-08d4-4618-980b-f115e299c641', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(219, 2, 220, '4f5d544e-e5c0-49d7-979e-77850e76f67a', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(220, 2, 221, '940bd559-8e96-423c-a6ab-b68502c05ac8', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(221, 2, 222, 'ba278734-e59f-4134-99dd-4bac886283b3', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(222, 2, 223, 'ea078cfa-9917-4d80-91f3-1bd5cd832e68', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(223, 2, 224, '6b8eedac-c5cc-4293-b1a7-371b556c5515', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(224, 2, 225, '17dea8af-9560-4006-8a38-544dae3f9ba5', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(225, 2, 226, 'b1dbdf7b-a708-4242-b9f1-73dc19c121c4', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(226, 2, 227, '41748d24-56a7-4d35-acd1-69a34c261411', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(227, 2, 228, '256c6ffb-170c-4bd8-8112-a032dfb96bd5', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(228, 2, 229, '70200655-507c-4fca-93ac-4696ef6d189f', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(229, 2, 230, 'b329e4d6-96d3-462e-b4e5-756f5fa10fae', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(230, 2, 231, '5ab2525a-9465-4ce3-8bfb-dd5d13f3f22b', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(231, 2, 232, 'df9a9dad-909c-4916-be65-07d046456a28', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(232, 2, 233, '31b9390e-3343-4397-9ea2-f82e91e570e5', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(233, 2, 234, '04e2d5ae-552e-4413-b8d0-88118d885c54', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(234, 2, 235, '94d56c24-4d92-42db-819c-dd47dbd68b4c', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(235, 2, 236, '9f29dc74-184f-4b61-91d8-5d8928bdece8', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(236, 2, 237, '276fb65e-167f-42dc-b294-9e6b49d5365f', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(237, 2, 238, 'f97acfec-7c4f-4bd1-ba14-f0f1b90449c5', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(238, 2, 239, '871a812d-767a-4588-bb91-cacb4aa0e694', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(239, 2, 240, 'c49cb6db-8096-4564-a209-de425d6ac314', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(240, 2, 241, '8caa8722-5009-46d7-b01a-d6a76fa1fb53', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(241, 2, 242, '6d8e7880-ebaf-4ab4-8532-e44f52eb0b7b', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(242, 2, 243, '9afa6fd1-cf94-40bd-8e9d-16c9f3115614', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(243, 2, 244, 'f1d47a6a-57d2-49b4-b7bc-3bcd951514dc', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(244, 2, 245, '10da187c-b11c-4f1f-ac88-b3e65dbfc060', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(245, 2, 246, '6d385e13-f457-434b-9cfd-389e7e90c947', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(246, 2, 247, 'ae1dbadf-c8aa-487f-891a-eee9587f6941', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(247, 2, 248, '0e3ecd4a-2ea0-4476-960e-6bbf3aa857d1', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(248, 2, 249, 'ad44894f-cca1-4718-95cf-13cc415febb5', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(249, 2, 250, 'b27f6a5e-fc40-4d76-92db-613316d2011a', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(250, 2, 251, 'ca26a6ac-2f2e-4167-96cc-90f48ae76e6f', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(251, 2, 252, '9a4fb40b-1408-416e-9d99-36b4b803b358', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(252, 2, 253, 'fff1962c-9957-4366-a3fb-6b00665f7559', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(253, 2, 254, '03445038-1ca0-4ccb-b2c5-43b12ecb72ff', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(254, 2, 255, '99b567a6-cbe0-4e37-96ef-64a7158ce613', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(255, 2, 256, 'd13d843c-4265-4d81-ad72-957413505628', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(256, 2, 257, 'a49a5b09-57ef-4abd-a436-81c7b55b8998', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(257, 2, 258, 'eada7eed-cabb-492e-bee8-9a7024780b10', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(258, 2, 259, '8bbca168-7a03-4ddb-939b-dfcc85dba3da', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(259, 2, 260, '016ccd02-9097-451d-86a7-d383d7d5b139', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(260, 2, 261, '0fb31975-ea21-4953-9fc4-7d7e2800a8e5', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(261, 2, 262, 'd72789c9-56f6-4a7d-9d9a-8f2c6c0078b1', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(262, 2, 263, 'd493ba22-b957-479b-bf92-065e039e95a6', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(263, 2, 264, '8d390ae5-1114-45c3-9de1-c3bc1982e044', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(264, 2, 265, '0a901e60-f4d0-4eaa-90a2-fc6bc958faac', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(265, 2, 266, '96d0e294-1198-4e51-8583-7d9972a0d59b', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(266, 2, 267, 'c2fa4f30-017c-4f1f-8fa9-87c29055d67c', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(267, 2, 268, '741c7150-bef7-417d-96d5-89f866fc09b6', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(268, 2, 269, 'e56d6cc5-89b2-4f36-932c-c5da05408823', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(269, 2, 270, 'a7d7b03d-1c18-4a6e-9e13-c44b7c03a6e9', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(270, 2, 271, '1b139734-2a57-4531-91f4-15377aea5b7e', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(271, 2, 272, '4a254300-871b-4ded-975f-605ef725dcdb', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(272, 2, 273, 'a7f6b05e-e2c7-4b7f-8c08-cead8b36a780', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(273, 2, 274, '944ef4c4-9933-4f1b-b913-3a1c6162eb5d', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(274, 2, 275, '6cf99c3c-6bd4-4d42-ad8a-5ba23d7e72d3', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(275, 2, 276, 'e36a08b4-b7bd-4565-af1a-39740b4d33c7', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(276, 2, 277, '19b6c7f5-e199-4634-a003-74efc084861f', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(277, 2, 278, 'ea0953b3-6e04-49f0-ab52-ceaaf28b2840', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(278, 2, 279, '583669b7-42dc-4183-9b70-834894660c2f', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(279, 2, 280, 'e0f728f9-7826-4052-a04e-03b69df6257e', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(280, 2, 281, 'b3e192f2-8eb2-47ac-98f2-38e677ad2f68', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(281, 2, 282, 'd3c8b3b7-6d19-4f15-9ec1-2115dcc94e88', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(282, 2, 283, '4a3c4aef-2158-4cf3-9cdb-7e4fa3f6ee7f', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(283, 2, 284, '447afc3f-c4b7-4922-9e43-76b1d13505d2', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(284, 2, 285, '402a1db3-0044-4dd9-9e03-dda83dcea96a', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(285, 2, 286, '6fcb184c-15fa-4b56-9ffe-a459d92f31df', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(286, 2, 287, 'cb89079d-20dd-41a5-9672-27acb97e2d8f', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(287, 2, 288, 'dd480354-b16b-4c16-86eb-cda37c8fc217', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(288, 2, 289, '1ebddc49-cdfb-464d-a023-edcdc5445472', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(289, 2, 290, 'cc709580-4cf0-4578-a198-cf9b0f4c78e1', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(290, 2, 291, '2c586ab9-6a52-4bc7-8fe9-9bbee2de9707', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(291, 2, 292, '4c026c78-25e5-4dd8-bdde-6a0dbac02928', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(292, 2, 293, '371f1f76-a443-45b5-9a94-e842fd7b1d16', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(293, 2, 294, '22edd590-9964-47b1-9ae4-07974582d189', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(294, 2, 295, '9ff8ff89-517f-493b-9dcb-60cbbcf1f311', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(295, 2, 296, 'd1dd57a3-280b-4fd9-b362-068f298cb37a', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(296, 2, 297, 'e69ea2a9-07a8-425a-b42b-cfb37e925aeb', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(297, 2, 298, 'cae931c1-7cb4-4646-bf02-dfb94d3c381c', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(298, 2, 299, 'e242b230-b461-4613-9607-8436abc08b37', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(299, 2, 300, '3013b8c7-5ec6-4686-ac94-b755c85397c5', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(300, 2, 301, 'c0d3a82f-27aa-4071-8f4b-32e337b75980', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(301, 2, 302, '06a4b0fd-9fc1-4206-b7d0-1fb1810eb69e', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(302, 2, 303, 'fe35b25b-bbc0-4598-a896-bc24a706fe75', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(303, 2, 304, '1db85131-4b0e-43c5-931f-7e4b748671e1', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(304, 2, 305, '5760d370-b330-4e22-9275-02591e44b1e3', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(305, 2, 306, '7d72d8c2-3393-405a-870f-b65b31057191', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(306, 2, 307, '8214f854-0530-4a23-982d-ea2199ea792a', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(307, 2, 308, '807f25f4-3362-458b-8859-d13ad0c7b218', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(308, 2, 309, '591bae19-a226-48ea-97e0-4d655dd9169b', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(309, 2, 310, '49fe5b9a-52d2-4d7b-94ca-d43b8bf6b0ed', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(310, 2, 311, '55d098bd-6884-47c7-9d13-94adb85d7f5d', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(311, 2, 312, 'cab2c557-cc83-496f-a009-78dac3d575f7', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(312, 2, 313, '46877631-60b4-4c96-bbec-1340a4d4f463', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(313, 2, 314, '8cd59b24-0cb1-4236-9c17-c4834b111116', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(314, 2, 315, '46ca35dd-3eda-46ac-8b86-36ef729a2db1', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(315, 2, 316, '99538362-bd80-4ff0-99b2-8c0969769002', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(316, 2, 317, 'c71c8925-4aa6-415b-af82-e5dd7671b360', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(317, 2, 318, 'b4e16d38-8d94-4db9-8d4c-0b5404747294', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(318, 2, 319, 'd25ec87d-08a5-4402-8fb8-9e5de2bbd7ac', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(319, 2, 320, '517986a3-60f9-448e-bf3d-2fa82b2b8dc1', '2008-04-26', '2008-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(320, 2, 321, '1ff9b34a-33b6-48e1-82c4-3cf23f9c0c17', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(321, 2, 322, '2757d517-16d5-452b-b409-10a81abb9cf6', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(322, 2, 323, 'eabcf3c6-03b9-4702-b9b4-8c12f24d34b6', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(323, 2, 324, '62e60b1f-d0bc-4f08-9dc3-0f2ff1054a3d', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(324, 2, 325, 'e7f7df15-9108-4771-9fa1-8b7fbd584f99', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(325, 2, 326, '241b8d38-284a-4e2b-9952-1c6f9879131a', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(326, 2, 327, 'bef0a4fe-50f8-4d77-9fa3-351acc044269', '2008-04-26', '2008-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(327, 2, 328, '04de04fb-5fb8-4daf-aff4-361ee3fdc86d', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(328, 2, 329, '2bb2e202-5edd-4f9a-ba18-59b45eba724c', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(329, 2, 330, '1db73c85-2d08-44f0-b715-2f3b91912eb3', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(330, 2, 331, 'ffd0ee3a-b0cb-427c-a10a-d6c6119256e4', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(331, 2, 332, '99a20f23-d3f5-4bc7-956d-abab252768eb', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(332, 2, 333, '27817601-a6dc-44e8-8ea4-f55491be0752', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(333, 2, 334, 'b256c61d-06bc-40bf-86f4-f5f703a16c28', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(334, 2, 335, '9d8435cd-e311-4d69-a508-24546d631598', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(335, 2, 336, '20e4164a-a6ac-41f8-88fd-a8e4092110c0', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(336, 2, 337, 'ee7c4f19-6bd7-435a-a259-1b985209e73e', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(337, 2, 338, 'f01dbf07-7443-455b-8517-9837782d4201', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(338, 2, 339, '53834f65-b7f7-49bc-9e99-640271a18422', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(339, 2, 340, '8f3b7e7c-1ffb-4c45-9fb7-4419e98cf5ff', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(340, 2, 341, 'd86c8207-86b3-425b-a466-d9e17966cdb2', '2008-04-26', '2008-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(341, 2, 342, 'a1f3d6b3-f290-4e36-8d9a-a563cc00f48b', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(342, 2, 343, '6c001c53-a1dc-46e2-a1a7-194c18eed7de', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(343, 2, 344, '600a3c42-7a11-4aaf-b1e2-f3a0f36eec1d', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(346, 2, 347, '9b14f1e7-3ec2-43fc-a1f6-4e087f0c8e98', '2008-04-26', '2008-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(347, 2, 348, 'a01e9318-ab1f-4af7-935e-90447b3df20e', '2008-04-26', '2008-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(348, 2, 349, 'afdfd7d4-9ee7-4af4-b97c-7ed438cefd68', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(349, 2, 350, '234bca7f-52bd-4133-9613-da4d11ce6b21', '2008-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(350, 2, 351, '136dd336-bcc0-4c0a-88e4-9c7688bfacae', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(351, 3, 351, 'ba2e7b2f-62a9-41ac-ac75-203e2101f4de', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(352, 3, 1, '9af70a15-fc26-4a3f-af48-733b3f5cde39', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(353, 4, 255, '11c4a389-56fc-4642-9ae2-c0fed697e11c', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(354, 4, 262, 'fbe556f8-c236-467e-9b7c-b1772743a850', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(355, 4, 271, '4eec44a8-ccc7-4c4c-bcb3-a1e1242331f6', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(356, 4, 273, 'e60246ed-1e9e-4456-adc2-3009fdb2f4d1', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(357, 4, 275, '1dc48b81-a306-47b3-a3ee-a1eef3424f53', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(358, 4, 289, '747ec675-1514-4b9c-8879-0e974a364e29', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(359, 4, 292, '95d90a05-22c6-4264-b926-342ed1337ecf', '2008-05-03', '2008-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(360, 4, 341, 'e44c7f2e-0104-4a0b-aebd-0e78171461f4', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(361, 4, 347, '30764e53-1fcd-440b-9302-67d965dbb20c', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(362, 4, 351, 'e7c034bf-4791-4947-b3fe-aa9d254a16bd', '2008-05-03', '9999-12-31', 1, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(363, 4, 204, 'ce570ae8-0186-4887-9905-910b989fbc85', '2008-05-03', '9999-12-31', 1, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(364, 5, 212, 'bd6193ba-410f-4c74-8b6c-208eb469d74c', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(365, 5, 214, '59fd88b3-f1bc-449b-936d-1301bb20f0f5', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(366, 5, 220, 'fdc602a7-307b-41c3-bac0-498595550dd3', '2008-05-03', '9999-12-31', 1, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(367, 5, 226, '5226d969-c670-4e51-b205-15df7d9234a3', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(368, 5, 263, '525f8181-010c-4081-ac1a-2fc521c5bc2e', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(369, 5, 269, 'b6a827cb-806b-4267-83fb-61c6287b218a', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(370, 5, 283, 'b49c1d83-9a44-449c-8cea-8ad7bb890dab', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(371, 5, 290, '2d55366f-e53f-48cd-addd-ad7397343319', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(372, 5, 294, '5f48d090-4e66-4b1d-ad0c-98dadb3249ae', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(373, 5, 325, '90dc20dc-b0fa-4e7d-af65-0f81a6289380', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(374, 5, 326, '24213712-7df1-4400-9ed0-fa7b9c0e6c0e', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(375, 5, 342, 'a7d03c99-89da-49fa-8c59-879e557922fe', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(376, 5, 350, '8d6775ba-5bba-4852-ad18-c2a6ab502885', '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(377, 3, 213, 'd43c83ae-3636-4d15-a548-5e643297f4e3', '2008-05-28', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(378, 3, 240, '16bb2a64-a46d-4d21-8585-3f32bf4138d3', '2008-05-28', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(379, 2, 354, '3c65f3a7-3677-4f50-b805-08fcdcf495a6', '2008-05-28', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(380, 3, 354, 'fdf8adf1-d06e-4fde-b14e-d503b550fa51', '2009-06-12', '9999-12-31', 1, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(381, 2, 355, '795afe4d-ffd4-471c-943b-dc13036e89c3', '2009-07-12', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(382, 5, 355, '08a28c94-935f-4f92-8d72-5e1278dc080d', '2012-11-03', '9999-12-31', 1, 2, '2014-08-25 15:13:52', NULL, NULL, NULL, NULL, 0),
+(400, 7, 205, 'b0f06fbe-3738-4a8b-ab63-de50e720c2fe', '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(401, 7, 211, 'd38b54ad-149d-498b-a628-e6cb296a63a8', '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(402, 7, 290, 'cfa20f73-976b-4006-9322-f31abf719030', '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(403, 7, 291, '69d8d75b-736a-407b-8dae-349164a4adec', '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(404, 7, 292, '7f48731f-059b-40a5-92ca-60113d3eefc1', '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(405, 7, 293, 'b0baf871-f39e-41f5-97e9-2517aee5628b', '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(406, 7, 345, '2cb9b255-e189-4c37-bddb-8f0d5a836242', '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(407, 7, 351, '531f5e42-e37c-450e-b4e7-7dcb4ce35ca3', '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(500, 8, 1, 'f5b30256-e61d-4e71-b052-44d5d08f775e', '2025-09-23', '9999-12-31', 1, 2, '2008-05-03 05:43:02', 1, '2017-01-21 08:21:02', 2, NULL, 1),
+(501, 8, 223, '5325c400-1ca7-4131-9ecc-bf35e78de7e1', '2025-09-25', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 3),
+(502, 8, 255, '586cd51a-8332-47e9-9a98-2869ae7a0824', '2025-09-25', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 3, NULL, 0),
+(503, 8, 302, '171004d5-098a-4a0f-a678-ddcdb04cb88c', '2025-09-25', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 2),
+(504, 8, 265, '130bf8b5-a83f-4e11-90c4-3540bb88f067', '2025-09-26', '9999-12-31', 0, 2, '2008-05-03 05:43:02', 328, '2017-02-01 21:04:21', 2, NULL, 0),
+(505, 8, 266, '6c51cbfd-069a-48b0-b375-a2e7a37d77b2', '2020-09-18', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 3, NULL, 0),
+(506, 8, 267, '4f671955-257b-4215-ba11-b283761d1268', '2020-09-18', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 1),
+(507, 8, 268, 'fd793b02-0d97-462e-8670-a02cf07ab043', '2020-09-18', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 1, NULL, 0),
+(508, 8, 270, 'bd258607-f940-4a08-8ff6-5cbc837c5a10', '2020-09-19', '9999-12-31', 0, 2, '2008-05-03 05:43:02', 328, '2017-02-01 21:04:21', 2, NULL, 0),
+(509, 2, 356, 'bf789f06-8f99-4ef3-a34c-4f4106571c72', '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(510, 2, 357, '1cec63b0-33ac-4076-8e29-518caca63728', '2015-07-12', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, NULL, NULL, 0),
+(520, 12, 355, '3151a59a-4697-478c-90c7-0cf06b5ee860', '2018-06-03', '9999-12-31', 1, 2, '2014-08-25 15:13:52', NULL, NULL, 2, NULL, 0),
+(521, 12, 263, '0babe98c-24ac-4bd4-9b53-4855439261c0', '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 3, NULL, 0),
+(522, 12, 269, '9b87c9a3-e25a-4b54-b9ab-441692045fdb', '2018-06-04', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 0),
+(523, 12, 283, '9b95ad01-c45a-4e78-a00b-092add02624e', '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 1, NULL, 0),
+(524, 12, 300, 'b0445844-049e-41d8-969f-d3c76018226a', '2018-06-03', '9999-12-31', 1, 2, '2014-08-25 15:13:52', NULL, NULL, 1, NULL, 0),
+(525, 12, 301, '38d8a478-8f1d-4483-a59c-944166c36ed4', '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 0),
+(526, 12, 310, 'd03a900b-4ac6-4ab8-963b-27a079b36303', '2018-06-04', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 0),
+(540, 11, 351, 'fd47c224-6f9e-4689-8c9c-d36e6c0257c7', '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 0),
+(541, 11, 354, '34dd8ad2-3d96-465c-b7d0-2071fa79c9fb', '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 2, NULL, 0),
+(542, 11, 240, '58cde084-6aa8-49c9-88ab-8238ca510bbf', '2018-06-05', '9999-12-31', 0, 2, '2008-05-03 05:43:02', NULL, NULL, 3, NULL, 0),
+(543, 7, 358, 'bae36fe4-161b-438e-a99d-0a8df95ee29b', '2018-11-15', '9999-12-31', 0, 2, '2022-05-03 05:43:02', NULL, NULL, NULL, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_menu`
+--
+
+CREATE TABLE `%PREFIX%_menu` (
+  `men_id` int UNSIGNED NOT NULL,
+  `men_men_id_parent` int UNSIGNED DEFAULT NULL,
+  `men_com_id` int UNSIGNED DEFAULT NULL,
+  `men_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `men_name_intern` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `men_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `men_description` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `men_node` tinyint(1) NOT NULL DEFAULT '0',
+  `men_order` int UNSIGNED DEFAULT NULL,
+  `men_standard` tinyint(1) NOT NULL DEFAULT '0',
+  `men_url` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `men_icon` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_menu`
+--
+
+INSERT INTO `%PREFIX%_menu` (`men_id`, `men_men_id_parent`, `men_com_id`, `men_uuid`, `men_name_intern`, `men_name`, `men_description`, `men_node`, `men_order`, `men_standard`, `men_url`, `men_icon`) VALUES
+(1, NULL, NULL, 'fbc2b774-8666-4d3d-996c-4c86e137d189', 'modules', 'SYS_MODULES', '', 1, 1, 1, NULL, ''),
+(2, NULL, NULL, '9f27b3da-805c-4b1a-adfd-9ac7cc9d4c82', 'administration', 'SYS_ADMINISTRATION', '', 1, 2, 1, NULL, ''),
+(3, NULL, NULL, '4317f28b-ce43-4ac1-a8eb-7e583d16add4', 'extensions', 'SYS_EXTENSIONS', '', 1, 3, 1, NULL, ''),
+(4, 1, NULL, 'f037c6b0-e71e-4961-80d7-9ea5e42ddb7a', 'overview', 'SYS_OVERVIEW', '', 0, 1, 1, '/modules/overview.php', 'house-door-fill'),
+(5, 1, 20, 'd96ba837-9b02-4c4e-afa5-c12167cd01db', 'announcements', 'SYS_ANNOUNCEMENTS', 'SYS_ANNOUNCEMENTS_DESC', 0, 2, 1, '/modules/announcements.php', 'newspaper'),
+(6, 1, 30, '446a2c54-b269-4b6c-8a1c-869901b35b01', 'events', 'SYS_EVENTS', 'SYS_EVENTS_DESC', 0, 3, 1, '/modules/events/events.php', 'calendar-week-fill'),
+(7, 1, 40, 'edb6a573-fb66-4dfb-ba90-466317572204', 'messages', 'SYS_MESSAGES', 'SYS_MESSAGES_DESC', 0, 4, 1, '/modules/messages/messages.php', 'envelope-fill'),
+(8, 1, 50, 'ebd216b3-26eb-48ec-a082-d1d9645bb051', 'groups-roles', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 0, 5, 1, '/modules/groups-roles/groups_roles.php', 'people-fill'),
+(9, 1, 60, '168ad66e-e34d-4f14-8a65-a78dd7dbd058', 'contacts', 'SYS_CONTACTS', 'SYS_CONTACTS_DESC', 0, 7, 1, '/modules/contacts/contacts.php', 'person-vcard-fill'),
+(10, 1, 70, '187c7c07-4b2a-4f3f-925c-6f40c03e740b', 'documents-files', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', 0, 8, 1, '/modules/documents-files.php', 'file-earmark-arrow-down-fill'),
+(11, 1, 80, '21db7ac5-7aae-4616-bf88-5b29507d4a02', 'photo', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', 0, 10, 1, '/modules/photos/photos.php', 'image-fill'),
+(12, 1, 90, 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b', 'category-report', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 0, 11, 1, '/modules/category-report/category_report.php', 'list-stars'),
+(13, 1, 100, '5b8b3e60-bc71-4375-bfc3-a9783a63bb72', 'weblinks', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', 0, 12, 1, '/modules/links/links.php', 'link-45deg'),
+(14, 1, 110, 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e', 'forum', 'SYS_FORUM', 'SYS_FORUM_DESC', 0, 6, 1, '/modules/forum.php', 'chat-dots-fill'),
+(15, 2, 120, '2965d083-8dd3-4a43-9b27-53018e5f22c1', 'orgprop', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', 0, 1, 1, '/modules/preferences.php', 'gear-fill'),
+(16, 2, 130, '62330cbc-4c15-4860-b841-10a35d88cd3c', 'registration', 'SYS_REGISTRATION', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', 0, 2, 1, '/modules/registration.php', 'card-checklist'),
+(17, 2, 140, 'ef4b5380-3500-4ec4-a432-a7f4099a2a92', 'menu', 'SYS_MENU', 'SYS_MENU_DESC', 0, 3, 1, '/modules/menu.php', 'menu-button-wide-fill'),
+(19, 2, 221, 'e946f478-4228-4afa-9d11-d8235f93e18c', 'organization', 'SYS_ORGANIZATION', 'SYS_ORGANIZATION_DESC', 0, 4, 1, '/modules/organizations.php', 'diagram-3-fill'),
+(20, 1, 222, 'ffe47320-d4d0-4893-9914-148bbbfd8237', 'inventory', 'SYS_INVENTORY', 'SYS_INVENTORY_DESC', 0, 9, 1, '/modules/inventory.php', 'box-seam-fill');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_messages`
+--
+
+CREATE TABLE `%PREFIX%_messages` (
+  `msg_id` int UNSIGNED NOT NULL,
+  `msg_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msg_type` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msg_subject` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msg_usr_id_sender` int UNSIGNED NOT NULL,
+  `msg_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `msg_read` smallint NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_messages`
+--
+
+INSERT INTO `%PREFIX%_messages` (`msg_id`, `msg_uuid`, `msg_type`, `msg_subject`, `msg_usr_id_sender`, `msg_timestamp`, `msg_read`) VALUES
+(1, '39a0e3e2-8163-4cbf-bb9b-ac87dbf8ab77', 'EMAIL', 'Events on the website', 1, '2021-01-20 13:58:16', 0),
+(2, 'd12a108d-0bc7-468c-86a5-b05626a21f15', 'EMAIL', 'New module unlocked', 1, '2021-02-01 15:07:01', 0),
+(3, '479fb7ae-52eb-401e-aba7-a3ca74f69c32', 'EMAIL', 'New training times', 1, '2021-02-03 11:08:02', 0),
+(4, '42fb2917-a25b-4d1f-92ae-2cc837aae4a6', 'EMAIL', 'Invitation to members meeting', 354, '2021-02-03 04:11:37', 0),
+(5, '9be7e4cc-4cf9-4945-84e8-0cb387063501', 'PM', 'Reserve room', 354, '2021-02-02 08:12:35', 1),
+(6, '62d38fd3-b392-43f5-983a-bf563e780c07', 'PM', 'Membership fee missing', 354, '2021-02-03 04:14:22', 1),
+(7, '693a032a-fee7-4a03-8e21-05647b6b6848', 'EMAIL', 'Training', 355, '2021-02-03 04:16:19', 0),
+(8, 'c727b421-e303-4381-b097-9f6eeb56ca39', 'PM', 'No access to documents', 1, '2021-02-03 04:18:18', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_messages_attachments`
+--
+
+CREATE TABLE `%PREFIX%_messages_attachments` (
+  `msa_id` int UNSIGNED NOT NULL,
+  `msa_msg_id` int UNSIGNED NOT NULL,
+  `msa_file_name` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msa_original_file_name` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msa_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_messages_content`
+--
+
+CREATE TABLE `%PREFIX%_messages_content` (
+  `msc_id` int UNSIGNED NOT NULL,
+  `msc_msg_id` int UNSIGNED NOT NULL,
+  `msc_usr_id` int UNSIGNED DEFAULT NULL,
+  `msc_message` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `msc_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_messages_content`
+--
+
+INSERT INTO `%PREFIX%_messages_content` (`msc_id`, `msc_msg_id`, `msc_usr_id`, `msc_message`, `msc_timestamp`) VALUES
+(1, 1, 1, '<p>Hi all,</p><br /><p>please maintain your schedules on the website so that all members have the opportunity to view and participate.</p><br /><p>Regards</p><br /><p>Paul</p><br />', '2021-02-03 03:58:16'),
+(2, 2, 1, '<p>Hello Board,</p><br /><p>I have now unlocked the <strong>Documents and Files</strong> module. Please log in and have a look at this module</p><br /><p>The module has among others. following functions:</p><br /><ul><br /> <li>Files and documents can be uploaded by the board</li><br /> <li>Files and documents can be downloaded by all members</li><br /> <li>Files and documents can be displayed directly on the web</li><br /><br /ul><br /><p>You can send feedback directly to me. </p><br /><p>Best regards</p><br /><p>Paul</p><br />', '2021-02-03 04:07:01'),
+(3, 3, 1, '<p>Hello everyone,</p><br /><p>I have put the new training times on the website.</p><br /><p>Many greetings</p><br /><p>Paul</p><br />', '2021-02-03 04:08:02'),
+(4, 4, 354, '<p>Dear Ladies and Gentlemen,</p><br /><p>the board of directors hereby invites you to the annual members meeting in our clubhouse.</p><br /><p>Yours sincerely</p><br /><p>Paul Schmidt</p><br />', '2021-02-03 04:11:37'),
+(5, 5, 354, 'Hi Paul,<br />can you reserve the room for the general meeting?<br />Greetings<br />Eric', '2021-02-03 04:12:35'),
+(6, 6, 354, 'Hi Jennifer,<br />you haven\'t transferred your membership fee yet. <br />Can you please do it yet.<br />Regards<br />Eric', '2021-02-03 04:14:22'),
+(7, 7, 355, '<p>Hi Dana and Daria,</p><br /><p>are you coming for training next week?</p><br /><p>Please write me a short answer</p><br /><p>Many greetings</p><br /><p>Jennifer</p><br />', '2021-02-03 04:16:19'),
+(8, 8, 355, 'Hi Paul,<br />unfortunately I don\'t have access to the documents.<br />Can you check it out.<br />Regards<br />Jennifer', '2021-02-03 04:17:23'),
+(9, 8, 1, 'Hi Jennifer,<br />I have redeposited the rights. Please check this again.<br />Greetings<br />Paul', '2021-02-03 04:18:18');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_messages_recipients`
+--
+
+CREATE TABLE `%PREFIX%_messages_recipients` (
+  `msr_id` int UNSIGNED NOT NULL,
+  `msr_msg_id` int UNSIGNED NOT NULL,
+  `msr_rol_id` int UNSIGNED DEFAULT NULL,
+  `msr_usr_id` int UNSIGNED DEFAULT NULL,
+  `msr_role_mode` smallint NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_messages_recipients`
+--
+
+INSERT INTO `%PREFIX%_messages_recipients` (`msr_id`, `msr_msg_id`, `msr_rol_id`, `msr_usr_id`, `msr_role_mode`) VALUES
+(1, 1, NULL, 313, 0),
+(2, 1, NULL, 332, 0),
+(3, 1, NULL, 355, 0),
+(4, 1, NULL, 354, 0),
+(5, 2, 3, NULL, 0),
+(6, 3, 4, NULL, 0),
+(7, 3, 5, NULL, 0),
+(8, 3, NULL, 354, 0),
+(9, 4, 2, NULL, 2),
+(10, 4, NULL, 1, 0),
+(11, 5, NULL, 1, 0),
+(12, 6, NULL, 355, 0),
+(13, 7, NULL, 216, 0),
+(14, 7, NULL, 227, 0),
+(15, 8, NULL, 355, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_oidc_access_tokens`
+--
+
+CREATE TABLE `%PREFIX%_oidc_access_tokens` (
+  `oat_id` int UNSIGNED NOT NULL,
+  `oat_usr_id` int UNSIGNED NOT NULL,
+  `oat_ocl_id` int UNSIGNED NOT NULL,
+  `oat_token` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `oat_scope` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `oat_expires_at` timestamp NOT NULL,
+  `oat_revoked` tinyint(1) DEFAULT '0',
+  `oat_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `oat_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_oidc_auth_codes`
+--
+
+CREATE TABLE `%PREFIX%_oidc_auth_codes` (
+  `oac_id` int UNSIGNED NOT NULL,
+  `oac_usr_id` int UNSIGNED NOT NULL,
+  `oac_ocl_id` int UNSIGNED NOT NULL,
+  `oac_token` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `oac_scope` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `oac_nonce` varchar(2550) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `oac_expires_at` timestamp NOT NULL,
+  `oac_revoked` tinyint(1) DEFAULT '0',
+  `oac_redirect_uri` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `oac_used` tinyint(1) DEFAULT '0',
+  `oac_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `oac_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_oidc_clients`
+--
+
+CREATE TABLE `%PREFIX%_oidc_clients` (
+  `ocl_id` int UNSIGNED NOT NULL,
+  `ocl_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_client_id` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_client_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_enabled` tinyint(1) DEFAULT '1',
+  `ocl_client_secret` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_redirect_uri` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_grant_types` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ocl_scope` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `ocl_userid_field` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'usr_id',
+  `ocl_field_mapping` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `ocl_role_mapping` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `ocl_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `ocl_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ocl_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `ocl_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_oidc_refresh_tokens`
+--
+
+CREATE TABLE `%PREFIX%_oidc_refresh_tokens` (
+  `ort_id` int UNSIGNED NOT NULL,
+  `ort_usr_id` int UNSIGNED NOT NULL,
+  `ort_ocl_id` int UNSIGNED NOT NULL,
+  `ort_token` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `ort_scope` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `ort_expires_at` timestamp NOT NULL,
+  `ort_revoked` tinyint(1) DEFAULT '0',
+  `ort_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `ort_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_organizations`
+--
+
+CREATE TABLE `%PREFIX%_organizations` (
+  `org_id` int UNSIGNED NOT NULL,
+  `org_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `org_shortname` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `org_longname` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `org_org_id_parent` int UNSIGNED DEFAULT NULL,
+  `org_homepage` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `org_email_administrator` varchar(254) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `org_show_org_select` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_organizations`
+--
+
+INSERT INTO `%PREFIX%_organizations` (`org_id`, `org_uuid`, `org_shortname`, `org_longname`, `org_org_id_parent`, `org_homepage`, `org_email_administrator`, `org_show_org_select`) VALUES
+(1, 'f04eef83-91ad-40bf-8267-09cd40ce0799', 'DEMO', 'Demo-Organisation', NULL, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1),
+(2, '8418cd76-3ac9-455f-bfb4-ed6561abdb7b', 'TEST', 'Test-Organisation', 1, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_photos`
+--
+
+CREATE TABLE `%PREFIX%_photos` (
+  `pho_id` int UNSIGNED NOT NULL,
+  `pho_org_id` int UNSIGNED NOT NULL,
+  `pho_pho_id_parent` int UNSIGNED DEFAULT NULL,
+  `pho_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pho_quantity` int UNSIGNED NOT NULL DEFAULT '0',
+  `pho_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pho_begin` date NOT NULL,
+  `pho_end` date NOT NULL,
+  `pho_description` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `pho_photographers` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `pho_locked` tinyint(1) NOT NULL DEFAULT '0',
+  `pho_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `pho_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `pho_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `pho_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_photos`
+--
+
+INSERT INTO `%PREFIX%_photos` (`pho_id`, `pho_org_id`, `pho_pho_id_parent`, `pho_uuid`, `pho_quantity`, `pho_name`, `pho_begin`, `pho_end`, `pho_description`, `pho_photographers`, `pho_locked`, `pho_usr_id_create`, `pho_timestamp_create`, `pho_usr_id_change`, `pho_timestamp_change`) VALUES
+(1, 1, NULL, 'b4aaf3eb-8735-45b3-a2f0-f2a7e9d289eb', 0, 'Croatia', '2022-10-05', '2022-10-11', 'An unforgettable vacation in Croatia with most beautiful sunshine and much nature.', 'Steven Smith and others', 0, 1, '2022-10-23 16:15:37', NULL, NULL),
+(2, 1, 1, '3d45f9cf-957e-41be-bb48-f452429fcd05', 5, 'Plitvice lakes', '2022-10-05', '2022-10-07', NULL, 'Steven Smith and others', 0, 1, '2022-10-23 16:17:44', NULL, NULL),
+(3, 1, 1, 'bf174cf8-f190-4898-bb3e-af881ad68780', 4, 'Krka', '2022-10-08', '2022-10-11', NULL, 'Steven Smith and others', 0, 1, '2022-10-23 16:18:44', NULL, NULL),
+(4, 1, NULL, 'f6af3421-f80c-4145-89f2-75bec24640b8', 6, 'Machu Picchu', '2022-09-14', '2022-09-17', 'A trip to the legendary Inca city of Machu Picchu in the mountains of Peru.', 'Admin', 0, 1, '2022-10-23 16:20:50', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_preferences`
+--
+
+CREATE TABLE `%PREFIX%_preferences` (
+  `prf_id` int UNSIGNED NOT NULL,
+  `prf_org_id` int UNSIGNED NOT NULL,
+  `prf_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `prf_value` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_preferences`
+--
+
+INSERT INTO `%PREFIX%_preferences` (`prf_id`, `prf_org_id`, `prf_name`, `prf_value`) VALUES
+(1000, 1, 'announcements_per_page', '10'),
+(1100, 1, 'photo_ecard_scale', '500'),
+(2000, 1, 'photo_ecard_template', 'postcard.tpl'),
+(2200, 1, 'announcements_module_enabled', '1'),
+(2300, 1, 'enable_auto_login', '1'),
+(2305, 1, 'security_login_email_address_enabled', '0'),
+(2400, 1, 'events_ical_export_enabled', '1'),
+(2500, 1, 'events_module_enabled', '1'),
+(2600, 1, 'documents_files_module_enabled', '1'),
+(2700, 1, 'photo_ecard_enabled', '1'),
+(2950, 1, 'system_notifications_new_entries', '0'),
+(2955, 1, 'system_notifications_role', 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16'),
+(2960, 1, 'system_notifications_profile_changes', '0'),
+(3700, 1, 'enable_password_recovery', '1'),
+(3710, 1, 'two_factor_authentication_enabled', '0'),
+(3800, 1, 'photo_module_enabled', '1'),
+(3900, 1, 'registration_enable_captcha', '1'),
+(4000, 1, 'registration_send_notification_email', '0'),
+(4100, 1, 'enable_rss', '1'),
+(4200, 1, 'system_notifications_enabled', '0'),
+(4305, 1, 'category_report_default_configuration', '1'),
+(4330, 1, 'events_view', 'detail'),
+(4400, 1, 'events_per_page', '10'),
+(4600, 1, 'events_show_map_link', '1'),
+(4700, 1, 'events_rooms_enabled', '0'),
+(4705, 1, 'events_list_configuration', '13'),
+(4710, 1, 'events_save_cancellations', '1'),
+(4720, 1, 'events_may_take_part', '1'),
+(4900, 1, 'default_country', 'DEU'),
+(6300, 1, 'homepage_logout', 'modules/announcements.php'),
+(6400, 1, 'homepage_login', 'modules/overview.php'),
+(6455, 1, 'groups_roles_export', '1'),
+(6600, 1, 'groups_roles_members_per_page', '25'),
+(6705, 1, 'groups_roles_default_configuration', '1'),
+(6710, 1, 'groups_roles_show_former_members', '2'),
+(6720, 1, 'groups_roles_edit_lists', '1'),
+(6800, 1, 'logout_minutes', '20'),
+(6900, 1, 'mail_number_recipients', '50'),
+(6910, 1, 'mail_character_encoding', 'utf-8'),
+(6915, 1, 'mail_delivery_confirmation', '0'),
+(6920, 1, 'mail_html_registered_users', '1'),
+(6925, 1, 'mail_into_to', '0'),
+(6927, 1, 'mail_show_former', '1'),
+(6930, 1, 'mail_max_receiver', '4'),
+(6940, 1, 'mail_save_attachments', '0'),
+(7000, 1, 'mail_sendmail_address', 'demo@admidio.org'),
+(7010, 1, 'mail_sendmail_name', 'Demo-User'),
+(7020, 1, 'mail_send_method', 'phpmail'),
+(7025, 1, 'mail_sending_mode', '1'),
+(7030, 1, 'mail_smtp_host', ''),
+(7040, 1, 'mail_smtp_auth', '1'),
+(7050, 1, 'mail_smtp_port', '587'),
+(7060, 1, 'mail_smtp_secure', 'tls'),
+(7070, 1, 'mail_smtp_authentication_type', ''),
+(7080, 1, 'mail_smtp_user', ''),
+(7090, 1, 'mail_smtp_password', ''),
+(7095, 1, 'mail_send_to_all_addresses', '1'),
+(7098, 1, 'mail_template', 'default.html'),
+(7100, 1, 'max_email_attachment_size', '1'),
+(7200, 1, 'documents_files_max_upload_size', '3'),
+(7250, 1, 'contacts_per_page', '25'),
+(7251, 1, 'contacts_field_history_days', '365'),
+(7252, 1, 'contacts_list_configuration', '15'),
+(7253, 1, 'contacts_show_all', '1'),
+(7300, 1, 'photo_image_text', '© demo.admidio.org'),
+(7305, 1, 'photo_image_text_size', '40'),
+(7350, 1, 'photo_albums_per_page', '24'),
+(7500, 1, 'photo_show_width', '1200'),
+(7600, 1, 'photo_show_height', '1200'),
+(7700, 1, 'photo_show_mode', '1'),
+(7800, 1, 'photo_thumbs_scale', '500'),
+(7900, 1, 'photo_thumbs_page', '24'),
+(8000, 1, 'photo_keep_original', '0'),
+(8100, 1, 'photo_download_enabled', '1'),
+(8300, 1, 'profile_photo_storage', '0'),
+(8400, 1, 'profile_show_map_link', '1'),
+(8500, 1, 'profile_show_roles', '1'),
+(8600, 1, 'profile_show_former_roles', '1'),
+(8700, 1, 'profile_show_extern_roles', '1'),
+(8810, 1, 'registration_adopt_all_data', '0'),
+(8900, 1, 'theme', 'simple'),
+(9000, 1, 'weblinks_per_page', '0'),
+(9100, 1, 'weblinks_redirect_seconds', '10'),
+(9200, 1, 'weblinks_target', '_blank'),
+(9300, 1, 'system_currency', '€'),
+(9305, 1, 'system_cookie_note', '1'),
+(9310, 1, 'system_date', 'd.m.Y'),
+(9320, 1, 'system_js_editor_enabled', '1'),
+(9340, 1, 'system_language', 'en'),
+(9360, 1, 'system_search_similar', '1'),
+(9365, 1, 'system_show_create_edit', '1'),
+(9370, 1, 'system_time', 'H:i'),
+(9375, 1, 'system_url_imprint', 'https://www.admidio.org/imprint.php'),
+(9380, 1, 'system_url_data_protection', 'https://www.admidio.org/data_protection.php'),
+(9400, 1, 'captcha_background_color', '#FFEFC4'),
+(9420, 1, 'captcha_fonts', 'AHGBold.ttf'),
+(9430, 1, 'captcha_width', '250'),
+(9460, 1, 'captcha_signature', 'Powered by Admidio.org'),
+(9480, 1, 'captcha_type', 'pic'),
+(10001, 2, 'announcements_per_page', '10'),
+(11001, 2, 'photo_ecard_scale', '500'),
+(20001, 2, 'photo_ecard_template', 'postcard.tpl'),
+(22001, 2, 'announcements_module_enabled', '1'),
+(23001, 2, 'enable_auto_login', '1'),
+(23005, 2, 'security_login_email_address_enabled', '0'),
+(24001, 2, 'events_ical_export_enabled', '1'),
+(25001, 2, 'events_module_enabled', '1'),
+(26001, 2, 'documents_files_module_enabled', '1'),
+(27001, 2, 'photo_ecard_enabled', '1'),
+(29501, 2, 'system_notifications_new_entries', '0'),
+(29510, 2, 'system_notifications_profile_changes', '0'),
+(29550, 2, 'system_notifications_role', '7a9e3ff4-197a-48db-9abc-c32c4cc79567'),
+(37001, 2, 'enable_password_recovery', '1'),
+(37010, 2, 'two_factor_authentication_enabled', '0'),
+(38001, 2, 'photo_module_enabled', '1'),
+(39001, 2, 'registration_enable_captcha', '1'),
+(40001, 2, 'registration_send_notification_email', '0'),
+(41001, 2, 'enable_rss', '1'),
+(42001, 2, 'system_notifications_enabled', '0'),
+(43055, 2, 'category_report_default_configuration', '2'),
+(43300, 2, 'events_view', 'detail'),
+(44001, 2, 'events_per_page', '10'),
+(46001, 2, 'events_show_map_link', '1'),
+(47001, 2, 'events_rooms_enabled', '0'),
+(47005, 2, 'events_list_configuration', '14'),
+(47010, 2, 'events_save_cancellations', '1'),
+(47020, 2, 'events_may_take_part', '1'),
+(49001, 2, 'default_country', 'DEU'),
+(63001, 2, 'homepage_logout', 'modules/announcements.php'),
+(64001, 2, 'homepage_login', 'modules/overview.php'),
+(64055, 2, 'groups_roles_export', '1'),
+(66001, 2, 'groups_roles_members_per_page', '25'),
+(67005, 2, 'groups_roles_default_configuration', '9'),
+(67010, 2, 'groups_roles_show_former_members', '2'),
+(67020, 2, 'groups_roles_edit_lists', '1'),
+(68001, 2, 'logout_minutes', '20'),
+(69001, 2, 'mail_number_recipients', '50'),
+(69100, 2, 'mail_character_encoding', 'utf-8'),
+(69150, 2, 'mail_delivery_confirmation', '0'),
+(69200, 2, 'mail_html_registered_users', '1'),
+(69250, 2, 'mail_into_to', '0'),
+(69270, 2, 'mail_show_former', '1'),
+(69300, 2, 'mail_max_receiver', '1'),
+(69400, 2, 'mail_save_attachments', '0'),
+(70001, 2, 'mail_sendmail_address', 'demo@admidio.org'),
+(70010, 2, 'mail_sendmail_name', 'Demo-User'),
+(70020, 2, 'mail_send_method', 'phpmail'),
+(70025, 2, 'mail_sending_mode', '1'),
+(70030, 2, 'mail_smtp_host', ''),
+(70040, 2, 'mail_smtp_auth', '1'),
+(70050, 2, 'mail_smtp_port', '587'),
+(70060, 2, 'mail_smtp_secure', 'tls'),
+(70070, 2, 'mail_smtp_authentication_type', ''),
+(70080, 2, 'mail_smtp_user', ''),
+(70090, 2, 'mail_smtp_password', ''),
+(70095, 2, 'mail_send_to_all_addresses', '1'),
+(70098, 2, 'mail_template', 'default.html'),
+(71001, 2, 'max_email_attachment_size', '1'),
+(72001, 2, 'documents_files_max_upload_size', '3'),
+(72500, 2, 'contacts_per_page', '25'),
+(72510, 2, 'contacts_field_history_days', '365'),
+(72515, 2, 'contacts_list_configuration', '16'),
+(72520, 2, 'contacts_show_all', '0'),
+(73000, 2, 'photo_albums_per_page', '24'),
+(73025, 2, 'photo_image_text', '© demo.admidio.org'),
+(73050, 2, 'photo_image_text_size', '40'),
+(75001, 2, 'photo_show_width', '1200'),
+(76001, 2, 'photo_show_height', '1200'),
+(77001, 2, 'photo_show_mode', '1'),
+(78001, 2, 'photo_thumbs_scale', '500'),
+(79001, 2, 'photo_thumbs_page', '24'),
+(80001, 2, 'photo_keep_original', '0'),
+(81001, 2, 'photo_download_enabled', '0'),
+(83001, 2, 'profile_photo_storage', '0'),
+(84001, 2, 'profile_show_map_link', '1'),
+(85001, 2, 'profile_show_roles', '1'),
+(86001, 2, 'profile_show_former_roles', '1'),
+(87001, 2, 'profile_show_extern_roles', '1'),
+(88010, 2, 'registration_adopt_all_data', '0'),
+(89001, 2, 'theme', 'simple'),
+(90001, 2, 'weblinks_per_page', '0'),
+(91001, 2, 'weblinks_redirect_seconds', '10'),
+(92001, 2, 'weblinks_target', '_blank'),
+(93010, 2, 'system_currency', '€'),
+(93015, 2, 'system_cookie_note', '1'),
+(93020, 2, 'system_date', 'd.m.Y'),
+(93030, 2, 'system_js_editor_enabled', '1'),
+(93050, 2, 'system_language', 'en'),
+(93070, 2, 'system_search_similar', '1'),
+(93080, 2, 'system_time', 'H:i'),
+(93650, 2, 'system_show_create_edit', '2'),
+(93750, 2, 'system_url_imprint', 'https://www.admidio.org/imprint.php'),
+(93800, 2, 'system_url_data_protection', 'https://www.admidio.org/data_protection.php'),
+(94000, 2, 'captcha_background_color', '#FFEFC4'),
+(94020, 2, 'captcha_fonts', 'AHGBold.ttf'),
+(94030, 2, 'captcha_width', '250'),
+(94060, 2, 'captcha_signature', 'Powered by Admidio.org'),
+(94080, 2, 'captcha_type', 'pic'),
+(94081, 1, 'password_min_strength', '1'),
+(94082, 1, 'system_browser_update_check', '0'),
+(94083, 1, 'system_hashing_cost', '10'),
+(94084, 1, 'mail_recipients_with_roles', '1'),
+(94085, 1, 'captcha_lines_numbers', '5'),
+(94086, 1, 'captcha_perturbation', '0.75'),
+(94087, 1, 'captcha_background_image', ''),
+(94088, 1, 'captcha_text_color', '#707070'),
+(94089, 1, 'captcha_line_color', '#707070'),
+(94090, 1, 'captcha_charset', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy'),
+(94091, 1, 'contacts_user_relations_enabled', '1'),
+(94181, 2, 'password_min_strength', '1'),
+(94182, 2, 'system_browser_update_check', '0'),
+(94183, 2, 'system_hashing_cost', '10'),
+(94184, 2, 'mail_recipients_with_roles', '1'),
+(94185, 2, 'captcha_lines_numbers', '5'),
+(94186, 2, 'captcha_perturbation', '0.75'),
+(94187, 2, 'captcha_background_image', ''),
+(94188, 2, 'captcha_text_color', '#707070'),
+(94189, 2, 'captcha_line_color', '#707070'),
+(94190, 2, 'captcha_charset', '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy'),
+(94191, 2, 'contacts_user_relations_enabled', '1'),
+(94192, 1, 'theme_fallback', 'simple'),
+(94193, 1, 'color_primary', '#349aaa'),
+(94194, 1, 'color_secondary', '#263340'),
+(94195, 1, 'logo_file', ''),
+(94196, 1, 'logo_file_max_height', '60'),
+(94197, 1, 'admidio_headline', 'SYS_ONLINE_MEMBERSHIP_ADMINISTRATION'),
+(94198, 1, 'favicon_file', ''),
+(94199, 1, 'additional_styles_file', ''),
+(94200, 1, 'registration_module_enabled', '1'),
+(94201, 1, 'registration_manual_approval', '1'),
+(94202, 1, 'changelog_module_enabled', '1'),
+(94203, 1, 'changelog_table_user_data', '1'),
+(94204, 1, 'changelog_table_users', '1'),
+(94205, 1, 'changelog_table_members', '1'),
+(94206, 1, 'changelog_table_user_fields', '0'),
+(94207, 1, 'changelog_table_user_field_select_options', '0'),
+(94208, 1, 'changelog_table_announcements', '0'),
+(94209, 1, 'changelog_table_events', '0'),
+(94210, 1, 'changelog_table_rooms', '0'),
+(94211, 1, 'changelog_table_roles', '0'),
+(94212, 1, 'changelog_table_role_dependencies', '0'),
+(94213, 1, 'changelog_table_roles_rights', '0'),
+(94214, 1, 'changelog_table_roles_rights_data', '0'),
+(94215, 1, 'changelog_table_categories', '0'),
+(94216, 1, 'changelog_table_category_report', '0'),
+(94217, 1, 'changelog_table_links', '0'),
+(94218, 1, 'changelog_table_folders', '0'),
+(94219, 1, 'changelog_table_files', '0'),
+(94220, 1, 'changelog_table_organizations', '0'),
+(94221, 1, 'changelog_table_menu', '0'),
+(94222, 1, 'changelog_table_user_relation_types', '0'),
+(94223, 1, 'changelog_table_user_relations', '1'),
+(94224, 1, 'changelog_table_photos', '0'),
+(94225, 1, 'changelog_table_lists', '0'),
+(94226, 1, 'changelog_table_list_columns', '0'),
+(94227, 1, 'changelog_table_preferences', '0'),
+(94228, 1, 'changelog_table_texts', '0'),
+(94229, 1, 'changelog_table_forum_topics', '0'),
+(94230, 1, 'changelog_table_forum_posts', '0'),
+(94231, 1, 'changelog_table_inventory_fields', '1'),
+(94232, 1, 'changelog_table_inventory_field_select_options', '1'),
+(94233, 1, 'changelog_table_inventory_items', '1'),
+(94234, 1, 'changelog_table_inventory_item_data', '1'),
+(94235, 1, 'changelog_table_inventory_item_borrow_data', '1'),
+(94236, 1, 'changelog_table_saml_clients', '0'),
+(94237, 1, 'changelog_table_oidc_clients', '0'),
+(94238, 1, 'changelog_table_others', '0'),
+(94239, 1, 'announcements_clamp_text_lines', '0'),
+(94240, 1, 'category_report_module_enabled', '1'),
+(94241, 1, 'inventory_module_enabled', '1'),
+(94242, 1, 'inventory_visible_for', ''),
+(94243, 1, 'inventory_items_per_page', '25'),
+(94244, 1, 'inventory_field_history_days', '365'),
+(94245, 1, 'inventory_item_picture_enabled', '1'),
+(94246, 1, 'inventory_item_picture_storage', '0'),
+(94247, 1, 'inventory_item_picture_width', '130'),
+(94248, 1, 'inventory_item_picture_height', '170'),
+(94249, 1, 'inventory_show_obsolete_select_field_options', '1'),
+(94250, 1, 'inventory_system_field_names_editable', '0'),
+(94251, 1, 'inventory_allow_keeper_edit', '0'),
+(94252, 1, 'inventory_allowed_keeper_edit_fields', 'LAST_RECEIVER,BORROW_DATE,RETURN_DATE'),
+(94253, 1, 'inventory_current_user_default_keeper', '0'),
+(94254, 1, 'inventory_allow_negative_numbers', '1'),
+(94255, 1, 'inventory_decimal_places', '1'),
+(94256, 1, 'inventory_field_date_time_format', 'date'),
+(94257, 1, 'inventory_items_disable_borrowing', '0'),
+(94258, 1, 'inventory_profile_view_enabled', '1'),
+(94259, 1, 'inventory_profile_view', 'LAST_RECEIVER'),
+(94260, 1, 'inventory_export_filename', 'SYS_INVENTORY'),
+(94261, 1, 'inventory_add_date', '0'),
+(94262, 1, 'events_clamp_text_lines', '0'),
+(94263, 1, 'forum_module_enabled', '1'),
+(94264, 1, 'forum_posts_per_page', '15'),
+(94265, 1, 'forum_topics_per_page', '25'),
+(94266, 1, 'forum_view', 'cards'),
+(94267, 1, 'groups_roles_module_enabled', '1'),
+(94268, 1, 'mail_module_enabled', '1'),
+(94269, 1, 'pm_module_enabled', '1'),
+(94270, 1, 'mail_captcha_enabled', '1'),
+(94271, 1, 'profile_show_obsolete_select_field_options', '1'),
+(94272, 1, 'profile_show_empty_fields', '1'),
+(94273, 1, 'sso_saml_enabled', '0'),
+(94274, 1, 'sso_saml_entity_id', 'http://localhost/GitHub/admidio'),
+(94275, 1, 'sso_saml_want_requests_signed', '1'),
+(94276, 1, 'sso_saml_signing_key', '0'),
+(94277, 1, 'sso_saml_encryption_key', '0'),
+(94278, 1, 'sso_oidc_enabled', '0'),
+(94279, 1, 'sso_oidc_issuer_url', 'http://localhost/GitHub/admidio/modules/sso/index.php'),
+(94280, 1, 'sso_oidc_signing_key', '0'),
+(94281, 1, 'sso_oidc_encryption_key', ''),
+(94282, 1, 'weblinks_module_enabled', '1'),
+(94283, 2, 'theme_fallback', 'simple'),
+(94284, 2, 'color_primary', '#349aaa'),
+(94285, 2, 'color_secondary', '#263340'),
+(94286, 2, 'logo_file', ''),
+(94287, 2, 'logo_file_max_height', '60'),
+(94288, 2, 'admidio_headline', 'SYS_ONLINE_MEMBERSHIP_ADMINISTRATION'),
+(94289, 2, 'favicon_file', ''),
+(94290, 2, 'additional_styles_file', ''),
+(94291, 2, 'registration_module_enabled', '1'),
+(94292, 2, 'registration_manual_approval', '1'),
+(94293, 2, 'changelog_module_enabled', '1'),
+(94294, 2, 'changelog_table_user_data', '1'),
+(94295, 2, 'changelog_table_users', '1'),
+(94296, 2, 'changelog_table_members', '1'),
+(94297, 2, 'changelog_table_user_fields', '0'),
+(94298, 2, 'changelog_table_user_field_select_options', '0'),
+(94299, 2, 'changelog_table_announcements', '0'),
+(94300, 2, 'changelog_table_events', '0'),
+(94301, 2, 'changelog_table_rooms', '0'),
+(94302, 2, 'changelog_table_roles', '0'),
+(94303, 2, 'changelog_table_role_dependencies', '0'),
+(94304, 2, 'changelog_table_roles_rights', '0'),
+(94305, 2, 'changelog_table_roles_rights_data', '0'),
+(94306, 2, 'changelog_table_categories', '0'),
+(94307, 2, 'changelog_table_category_report', '0'),
+(94308, 2, 'changelog_table_links', '0'),
+(94309, 2, 'changelog_table_folders', '0'),
+(94310, 2, 'changelog_table_files', '0'),
+(94311, 2, 'changelog_table_organizations', '0'),
+(94312, 2, 'changelog_table_menu', '0'),
+(94313, 2, 'changelog_table_user_relation_types', '0'),
+(94314, 2, 'changelog_table_user_relations', '1'),
+(94315, 2, 'changelog_table_photos', '0'),
+(94316, 2, 'changelog_table_lists', '0'),
+(94317, 2, 'changelog_table_list_columns', '0'),
+(94318, 2, 'changelog_table_preferences', '0'),
+(94319, 2, 'changelog_table_texts', '0'),
+(94320, 2, 'changelog_table_forum_topics', '0'),
+(94321, 2, 'changelog_table_forum_posts', '0'),
+(94322, 2, 'changelog_table_inventory_fields', '0'),
+(94323, 2, 'changelog_table_inventory_field_select_options', '0'),
+(94324, 2, 'changelog_table_inventory_items', '0'),
+(94325, 2, 'changelog_table_inventory_item_data', '0'),
+(94326, 2, 'changelog_table_inventory_item_borrow_data', '0'),
+(94327, 2, 'changelog_table_saml_clients', '0'),
+(94328, 2, 'changelog_table_oidc_clients', '0'),
+(94329, 2, 'changelog_table_others', '0'),
+(94330, 2, 'announcements_clamp_text_lines', '0'),
+(94331, 2, 'category_report_module_enabled', '1'),
+(94332, 2, 'inventory_module_enabled', '0'),
+(94333, 2, 'inventory_visible_for', ''),
+(94334, 2, 'inventory_items_per_page', '25'),
+(94335, 2, 'inventory_field_history_days', '365'),
+(94336, 2, 'inventory_item_picture_enabled', '1'),
+(94337, 2, 'inventory_item_picture_storage', '0'),
+(94338, 2, 'inventory_item_picture_width', '130'),
+(94339, 2, 'inventory_item_picture_height', '170'),
+(94340, 2, 'inventory_show_obsolete_select_field_options', '1'),
+(94341, 2, 'inventory_system_field_names_editable', '0'),
+(94342, 2, 'inventory_allow_keeper_edit', '0'),
+(94343, 2, 'inventory_allowed_keeper_edit_fields', 'LAST_RECEIVER,BORROW_DATE,RETURN_DATE'),
+(94344, 2, 'inventory_current_user_default_keeper', '0'),
+(94345, 2, 'inventory_allow_negative_numbers', '1'),
+(94346, 2, 'inventory_decimal_places', '1'),
+(94347, 2, 'inventory_field_date_time_format', 'date'),
+(94348, 2, 'inventory_items_disable_borrowing', '0'),
+(94349, 2, 'inventory_profile_view_enabled', '1'),
+(94350, 2, 'inventory_profile_view', 'LAST_RECEIVER'),
+(94351, 2, 'inventory_export_filename', 'SYS_INVENTORY'),
+(94352, 2, 'inventory_add_date', '0'),
+(94353, 2, 'events_clamp_text_lines', '0'),
+(94354, 2, 'forum_module_enabled', '0'),
+(94355, 2, 'forum_posts_per_page', '15'),
+(94356, 2, 'forum_topics_per_page', '25'),
+(94357, 2, 'forum_view', 'cards'),
+(94358, 2, 'groups_roles_module_enabled', '1'),
+(94359, 2, 'mail_module_enabled', '1'),
+(94360, 2, 'pm_module_enabled', '1'),
+(94361, 2, 'mail_captcha_enabled', '1'),
+(94362, 2, 'profile_show_obsolete_select_field_options', '1'),
+(94363, 2, 'profile_show_empty_fields', '1'),
+(94364, 2, 'sso_saml_enabled', '0'),
+(94365, 2, 'sso_saml_entity_id', 'http://localhost/GitHub/admidio'),
+(94366, 2, 'sso_saml_want_requests_signed', '1'),
+(94367, 2, 'sso_saml_signing_key', '0'),
+(94368, 2, 'sso_saml_encryption_key', '0'),
+(94369, 2, 'sso_oidc_enabled', '0'),
+(94370, 2, 'sso_oidc_issuer_url', 'http://localhost/GitHub/admidio/modules/sso/index.php'),
+(94371, 2, 'sso_oidc_signing_key', '0'),
+(94372, 2, 'sso_oidc_encryption_key', ''),
+(94373, 2, 'weblinks_module_enabled', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_registrations`
+--
+
+CREATE TABLE `%PREFIX%_registrations` (
+  `reg_id` int UNSIGNED NOT NULL,
+  `reg_org_id` int UNSIGNED NOT NULL,
+  `reg_usr_id` int UNSIGNED NOT NULL,
+  `reg_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reg_validation_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_registrations`
+--
+
+INSERT INTO `%PREFIX%_registrations` (`reg_id`, `reg_org_id`, `reg_usr_id`, `reg_timestamp`, `reg_validation_id`) VALUES
+(1, 1, 352, '2025-10-01 11:45:23', 'sdovijoi2342lfvsdnmvoi32n5249090fewklfn342klnklf9'),
+(2, 1, 353, '2025-10-01 18:54:12', NULL),
+(3, 2, 360, '2025-10-01 11:45:23', NULL),
+(4, 1, 359, '2025-10-03 03:03:52', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_roles`
+--
+
+CREATE TABLE `%PREFIX%_roles` (
+  `rol_id` int UNSIGNED NOT NULL,
+  `rol_cat_id` int UNSIGNED NOT NULL,
+  `rol_lst_id` int UNSIGNED DEFAULT NULL,
+  `rol_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `rol_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `rol_description` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `rol_assign_roles` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_approve_users` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_announcements` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_events` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_documents_files` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_edit_user` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_mail_to_all` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_mail_this_role` smallint NOT NULL DEFAULT '0',
+  `rol_photo` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_profile` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_weblinks` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_all_lists_view` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_default_registration` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_leader_rights` smallint NOT NULL DEFAULT '0',
+  `rol_view_memberships` smallint NOT NULL DEFAULT '0',
+  `rol_view_members_profiles` smallint NOT NULL DEFAULT '0',
+  `rol_start_date` date DEFAULT NULL,
+  `rol_start_time` time DEFAULT NULL,
+  `rol_end_date` date DEFAULT NULL,
+  `rol_end_time` time DEFAULT NULL,
+  `rol_weekday` smallint DEFAULT NULL,
+  `rol_location` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `rol_max_members` int DEFAULT NULL,
+  `rol_cost` float DEFAULT NULL,
+  `rol_cost_period` smallint DEFAULT NULL,
+  `rol_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `rol_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `rol_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `rol_timestamp_change` timestamp NULL DEFAULT NULL,
+  `rol_valid` tinyint(1) NOT NULL DEFAULT '1',
+  `rol_system` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_administrator` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_forum_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `rol_inventory_admin` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_roles`
+--
+
+INSERT INTO `%PREFIX%_roles` (`rol_id`, `rol_cat_id`, `rol_lst_id`, `rol_uuid`, `rol_name`, `rol_description`, `rol_assign_roles`, `rol_approve_users`, `rol_announcements`, `rol_events`, `rol_documents_files`, `rol_edit_user`, `rol_mail_to_all`, `rol_mail_this_role`, `rol_photo`, `rol_profile`, `rol_weblinks`, `rol_all_lists_view`, `rol_default_registration`, `rol_leader_rights`, `rol_view_memberships`, `rol_view_members_profiles`, `rol_start_date`, `rol_start_time`, `rol_end_date`, `rol_end_time`, `rol_weekday`, `rol_location`, `rol_max_members`, `rol_cost`, `rol_cost_period`, `rol_usr_id_create`, `rol_timestamp_create`, `rol_usr_id_change`, `rol_timestamp_change`, `rol_valid`, `rol_system`, `rol_administrator`, `rol_forum_admin`, `rol_inventory_admin`) VALUES
+(1, 3, NULL, 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 'Administrator', 'Group of system administrators', 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 20:35:08', 1, '2008-04-20 20:35:08', 1, 0, 1, 1, 1),
+(2, 3, NULL, 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 'Member', 'All organization members', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 14:26:36', 1, '2008-05-03 14:26:36', 1, 0, 0, 0, 0),
+(3, 3, NULL, '621fa25f-2fac-4310-af52-af939041cb66', 'Association\'s board', 'Administrative board of association', 0, 0, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 2, 2, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 14:26:12', 1, '2008-05-03 14:26:12', 1, 0, 0, 0, 0),
+(4, 6, NULL, '685c8a84-e58c-4d40-8297-8d2671e1fb89', '1. youth team', 'Young people between 12 and 15 years', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 3, 1, 1, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 14:24:41', 1, '2008-05-03 14:24:41', 1, 0, 0, 0, 0),
+(5, 6, NULL, '5f4fb933-806c-4161-a333-212cba85ae6c', '2. youth team', 'Young people between 16 and 18 years', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 3, 1, 1, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 14:25:58', 1, '2008-05-03 14:25:58', 1, 0, 0, 0, 0),
+(6, 100, NULL, '7a9e3ff4-197a-48db-9abc-c32c4cc79567', 'Administrator', 'Group of system administrators', 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 20:35:08', 1, '2010-01-21 19:35:08', 1, 0, 1, 1, 1),
+(7, 100, NULL, '77b0c6cc-cc66-4384-a34e-3277cdf081c6', 'Member', 'All organization members', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 14:26:36', 1, '2010-12-22 05:34:06', 1, 0, 0, 0, 0),
+(8, 200, NULL, '515c99a1-28d6-4395-b966-4b04cd512f12', '2026-03-01 17:00 Barbecue', 'Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
+(9, 200, NULL, '1b3d4123-2898-40e5-b9c4-b4db65207133', '2025-12-16 11:00 Yoga for beginners', 'This course teaches the basics of yoga.<br /><br />A registration for this course is required.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 11:08:23', NULL, NULL, 1, 0, 0, 0, 0),
+(10, 200, NULL, '040b4f49-2e45-460a-a354-1004d8bef27e', '2026-02-07 18:00 Board meeting', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
+(11, 200, NULL, '7450a81b-5b69-43c6-906b-47e343ecb55f', '2026-01-03 19:00 Board meeting', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
+(12, 200, NULL, '3c16c9da-9425-4ee3-9b53-8aed1c19bc34', '2025-12-03 17:00 Team evening', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 17:38:18', NULL, NULL, 1, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_roles_rights`
+--
+
+CREATE TABLE `%PREFIX%_roles_rights` (
+  `ror_id` int UNSIGNED NOT NULL,
+  `ror_name_intern` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ror_table` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ror_ror_id_parent` int UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_roles_rights`
+--
+
+INSERT INTO `%PREFIX%_roles_rights` (`ror_id`, `ror_name_intern`, `ror_table`, `ror_ror_id_parent`) VALUES
+(1, 'folder_view', '%PREFIX%_folders', NULL),
+(2, 'folder_upload', '%PREFIX%_folders', NULL),
+(3, 'category_view', '%PREFIX%_categories', NULL),
+(4, 'category_edit', '%PREFIX%_categories', 3),
+(5, 'event_participation', '%PREFIX%_events', NULL),
+(6, 'menu_view', '%PREFIX%_menu', NULL),
+(7, 'sso_saml_access', '%PREFIX%_saml_clients', NULL),
+(8, 'sso_oidc_access', '%PREFIX%_oidc_clients', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_roles_rights_data`
+--
+
+CREATE TABLE `%PREFIX%_roles_rights_data` (
+  `rrd_id` int UNSIGNED NOT NULL,
+  `rrd_ror_id` int UNSIGNED NOT NULL,
+  `rrd_rol_id` int UNSIGNED NOT NULL,
+  `rrd_object_id` int UNSIGNED NOT NULL,
+  `rrd_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `rrd_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_roles_rights_data`
+--
+
+INSERT INTO `%PREFIX%_roles_rights_data` (`rrd_id`, `rrd_ror_id`, `rrd_rol_id`, `rrd_object_id`, `rrd_usr_id_create`, `rrd_timestamp_create`) VALUES
+(1, 1, 3, 3, 1, '2015-01-08 12:12:05'),
+(2, 2, 3, 1, 1, '2015-03-08 14:56:35'),
+(3, 2, 1, 2, 1, '2016-10-07 23:45:05'),
+(4, 2, 3, 3, 1, '2016-10-08 09:23:05'),
+(5, 5, 3, 15, 1, '2016-10-08 09:23:05'),
+(6, 5, 3, 16, 1, '2016-10-08 09:23:05'),
+(7, 5, 7, 14, 1, '2016-10-08 09:23:05'),
+(8, 5, 3, 4, 1, '2016-10-08 09:23:05'),
+(9, 5, 5, 17, 355, '2018-02-14 17:38:18'),
+(10, 4, 2, 303, 1, '2025-10-05 12:56:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_role_dependencies`
+--
+
+CREATE TABLE `%PREFIX%_role_dependencies` (
+  `rld_rol_id_parent` int UNSIGNED NOT NULL,
+  `rld_rol_id_child` int UNSIGNED NOT NULL,
+  `rld_comment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `rld_usr_id` int UNSIGNED DEFAULT NULL,
+  `rld_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_rooms`
+--
+
+CREATE TABLE `%PREFIX%_rooms` (
+  `room_id` int UNSIGNED NOT NULL,
+  `room_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `room_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `room_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `room_capacity` int NOT NULL,
+  `room_overhang` int DEFAULT NULL,
+  `room_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `room_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `room_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `room_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_rooms`
+--
+
+INSERT INTO `%PREFIX%_rooms` (`room_id`, `room_uuid`, `room_name`, `room_description`, `room_capacity`, `room_overhang`, `room_usr_id_create`, `room_timestamp_create`, `room_usr_id_change`, `room_timestamp_change`) VALUES
+(1, 'fcc15de8-0c3c-4e2a-a3a5-df20f0fee1c3', 'Meeting room', 'In this room meetings can take place. The room must be reserved in advance. A projector is available.', 15, NULL, 1, '2011-04-07 17:15:08', NULL, NULL),
+(2, '0faef968-2a2d-41bd-a668-911e322b4e50', 'Function room', 'The function room can be used for birthday parties, annual meetings or party\'s. Advance booking is desirable.', 65, 15, 1, '2012-01-15 09:03:38', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_saml_clients`
+--
+
+CREATE TABLE `%PREFIX%_saml_clients` (
+  `smc_id` int UNSIGNED NOT NULL,
+  `smc_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_org_id` int UNSIGNED NOT NULL,
+  `smc_client_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_client_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_enabled` tinyint(1) DEFAULT '1',
+  `smc_metadata_url` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `smc_acs_url` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_slo_url` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `smc_x509_certificate` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `smc_userid_field` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'usr_id',
+  `smc_field_mapping` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `smc_role_mapping` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `smc_allowed_clock_skew` int UNSIGNED DEFAULT NULL,
+  `smc_assertion_lifetime` int UNSIGNED DEFAULT NULL,
+  `smc_sign_assertions` tinyint(1) DEFAULT '1',
+  `smc_encrypt_assertions` tinyint(1) DEFAULT '0',
+  `smc_require_auth_signed` tinyint(1) DEFAULT '0',
+  `smc_validate_signatures` tinyint(1) DEFAULT '1',
+  `smc_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `smc_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `smc_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `smc_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_sessions`
+--
+
+CREATE TABLE `%PREFIX%_sessions` (
+  `ses_id` int UNSIGNED NOT NULL,
+  `ses_usr_id` int UNSIGNED DEFAULT NULL,
+  `ses_org_id` int UNSIGNED NOT NULL,
+  `ses_session_id` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ses_begin` timestamp NULL DEFAULT NULL,
+  `ses_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ses_ip_address` varchar(39) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ses_binary` blob,
+  `ses_reload` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_sessions`
+--
+
+INSERT INTO `%PREFIX%_sessions` (`ses_id`, `ses_usr_id`, `ses_org_id`, `ses_session_id`, `ses_begin`, `ses_timestamp`, `ses_ip_address`, `ses_binary`, `ses_reload`) VALUES
+(5, 1, 1, '5fe746dc4d50e41478b6bdb4b91b63c3', '2025-10-12 16:47:19', '2025-10-12 16:52:57', ':XXXX:XXXX', NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_sso_keys`
+--
+
+CREATE TABLE `%PREFIX%_sso_keys` (
+  `key_id` int UNSIGNED NOT NULL,
+  `key_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `key_org_id` int UNSIGNED NOT NULL,
+  `key_name` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `key_algorithm` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'RSA',
+  `key_private` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `key_public` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `key_certificate` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `key_expires_at` date DEFAULT NULL,
+  `key_is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `key_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `key_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `key_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `key_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_texts`
+--
+
+CREATE TABLE `%PREFIX%_texts` (
+  `txt_id` int UNSIGNED NOT NULL,
+  `txt_org_id` int UNSIGNED NOT NULL,
+  `txt_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `txt_text` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_texts`
+--
+
+INSERT INTO `%PREFIX%_texts` (`txt_id`, `txt_org_id`, `txt_name`, `txt_text`) VALUES
+(1, 1, 'SYSMAIL_REGISTRATION_APPROVED', '#subject# Registration at #organization_long_name# confirmed\r\n#content# Hello #user_first_name#,\r\n\r\nyour registration on #organization_homepage# has been confirmed.\r\n\r\nYou can now log in to the homepage with your username #user_login_name# and your password.\r\n\r\nIf you have any questions, write an email to #administrator_email#.\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
+(2, 1, 'SYSMAIL_REGISTRATION_NEW', '#subject# New registration at #organization_long_name# website\r\n#content# A new user has registered on #organization_homepage#.\r\n\r\nSurname: #user_last_name#\r\nFirst Name: #user_first_name#\r\nE-Mail: #user_email#\r\n\r\n\r\nThis message was generated automatically.'),
+(3, 1, 'SYSMAIL_LOGIN_INFORMATION', '#subject# Login data for #organization_long_name#\r\n#content# Hello #user_first_name#,\r\n\r\nYou receive your login data for the website #organization_homepage#.\r\nUsername: #user_login_name#\r\nPassword: #variable1#\r\n\r\nThe password was generated automatically,\r\nYou should change it after logging in to #organization_homepage# in your profile.\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
+(4, 1, 'SYSMAIL_PASSWORD_RESET', '#subject# Reset password for #organization_long_name#\r\n#content# Hello #user_first_name#,\r\n\r\nWe have received a request to reset your password on #organization_homepage#.\r\n\r\nIf the request came from you, you can use the following link to reset your password and set a new one: \r\n#variable1#\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
+(5, 1, 'SYSMAIL_REGISTRATION_REFUSED', '#subject# in registration at #organization_long_name# rejected.\r\n#content#Hello #user_first_name#,\r\n\r\nyour registration at #organization_homepage# was rejected.\r\n\r\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\r\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
+(6, 1, 'SYSMAIL_REGISTRATION_CONFIRMATION', '#subject# Your registration at #organization_long_name#\r\n#content# Hello #user_first_name#,\r\nwe are very glad that you have registered on our website #organization_homepage#.\r\n\r\nTo complete your registration, please click on the following link: #variable1#. By clicking on the link you will be automatically redirected to our website and your registration will be confirmed.\r\n\r\nOnce you have confirmed your registration, we will check it. You will receive a reply within a few hours whether your registration has been accepted and you can log in with your credentials or whether your registration has been rejected.\r\n\r\nBest regards\r\nThe team of #organization_long_name#'),
+(101, 2, 'SYSMAIL_REGISTRATION_APPROVED', '#subject# Registration at #organization_long_name# confirmed\r\n#content# Hello #user_first_name#,\r\n\r\nyour registration on #organization_homepage# has been confirmed.\r\n\r\nYou can now log in to the homepage with your username #user_login_name# and your password.\r\n\r\nIf you have any questions, write an email to #administrator_email#.\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
+(102, 2, 'SYSMAIL_REGISTRATION_NEW', '#subject# New registration at #organization_long_name# website\r\n#content# A new user has registered on #organization_homepage#.\r\n\r\nSurname: #user_last_name#\r\nFirst Name: #user_first_name#\r\nE-Mail: #user_email#\r\n\r\n\r\nThis message was generated automatically.'),
+(103, 2, 'SYSMAIL_LOGIN_INFORMATION', '#subject# Login data for #organization_long_name#\r\n#content# Hello #user_first_name#,\r\n\r\nYou receive your login data for the website #organization_homepage#.\r\nUsername: #user_login_name#\r\nPassword: #variable1#\r\n\r\nThe password was generated automatically,\r\nYou should change it after logging in to #organization_homepage# in your profile.\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
+(104, 2, 'SYSMAIL_PASSWORD_RESET', '#subject# Reset password for #organization_long_name#\r\n#content# Hello #user_first_name#,\r\n\r\nWe have received a request to reset your password on #organization_homepage#.\r\n\r\nIf the request came from you, you can use the following link to reset your password and set a new one: \r\n#variable1#\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
+(105, 2, 'SYSMAIL_REGISTRATION_REFUSED', '#subject# in registration at #organization_long_name# rejected.\r\n#content#Hello #user_first_name#,\r\n\r\nyour registration at #organization_homepage# was rejected.\r\n\r\nRegistrations are accepted in general by our users. If you are a member and your registration was still rejected, it may be because you were not identified as member.\r\nTo clarify the reasons for the rejection please contact the administrator #administrator_email# from #organization_homepage#.\r\n\r\nRegards,\r\nThe team of #organization_long_name#'),
+(106, 2, 'SYSMAIL_REGISTRATION_CONFIRMATION', '#subject# Your registration at #organization_long_name#\r\n#content# Hello #user_first_name#,\r\nwe are very glad that you have registered on our website #organization_homepage#.\r\n\r\nTo complete your registration, please click on the following link: #variable1#. By clicking on the link you will be automatically redirected to our website and your registration will be confirmed.\r\n\r\nOnce you have confirmed your registration, we will check it. You will receive a reply within a few hours whether your registration has been accepted and you can log in with your credentials or whether your registration has been rejected.\r\n\r\nBest regards\r\nThe team of #organization_long_name#');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_users`
+--
+
+CREATE TABLE `%PREFIX%_users` (
+  `usr_id` int UNSIGNED NOT NULL,
+  `usr_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usr_login_name` varchar(254) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usr_password` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usr_photo` blob,
+  `usr_text` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `usr_pw_reset_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usr_pw_reset_timestamp` timestamp NULL DEFAULT NULL,
+  `usr_last_login` timestamp NULL DEFAULT NULL,
+  `usr_actual_login` timestamp NULL DEFAULT NULL,
+  `usr_number_login` int NOT NULL DEFAULT '0',
+  `usr_date_invalid` timestamp NULL DEFAULT NULL,
+  `usr_number_invalid` smallint NOT NULL DEFAULT '0',
+  `usr_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `usr_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `usr_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `usr_timestamp_change` timestamp NULL DEFAULT NULL,
+  `usr_valid` tinyint(1) NOT NULL DEFAULT '0',
+  `usr_tfa_secret` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_users`
+--
+
+INSERT INTO `%PREFIX%_users` (`usr_id`, `usr_uuid`, `usr_login_name`, `usr_password`, `usr_photo`, `usr_text`, `usr_pw_reset_id`, `usr_pw_reset_timestamp`, `usr_last_login`, `usr_actual_login`, `usr_number_login`, `usr_date_invalid`, `usr_number_invalid`, `usr_usr_id_create`, `usr_timestamp_create`, `usr_usr_id_change`, `usr_timestamp_change`, `usr_valid`, `usr_tfa_secret`) VALUES
+(1, '7a854ed2-50db-49ee-9379-31d07f467d47', 'admin', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, '2025-10-05 13:27:49', '2025-10-05 13:28:17', 41, NULL, 0, 2, '2008-05-03 07:43:02', 354, '2009-02-24 08:43:02', 1, NULL),
+(2, '5b84e9c8-b9b9-44d1-acf2-29fbb1015d01', 'System', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, '2008-05-03 07:40:43', NULL, NULL, 0, NULL),
+(202, '93ce816e-7cfd-45e1-b025-a3644828c47c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:44:59', NULL, NULL, 1, NULL),
+(203, 'f4361cf5-0b58-4602-b6f9-9ce4535b111f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:44:59', 1, '2009-02-14 14:24:39', 1, NULL),
+(204, 'df18391b-e9a0-454a-ba0d-c589ade80b17', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:00', 1, '2009-02-14 19:45:00', 1, NULL),
+(205, 'd5843761-d0c2-4a17-a196-cb0795abbc27', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:00', 1, '2009-02-14 19:45:00', 1, NULL),
+(206, 'cd3c047a-a7cc-4b1e-aa18-8cf83408fd08', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:01', 1, '2009-02-14 19:45:01', 1, NULL),
+(207, 'cd60260c-646a-495a-bc9e-d675554c7962', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:03', NULL, NULL, 1, NULL),
+(208, 'e3d76810-5c64-4ca7-9219-b6bb2113c6b7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:05', NULL, NULL, 1, NULL),
+(209, '1b5b1b29-0c7b-4ec1-ad42-0eeb8e0af891', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:06', NULL, NULL, 1, NULL),
+(210, '4574b93d-22e0-4e18-93c1-1e6c93869ee9', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:07', NULL, NULL, 1, NULL),
+(211, '2d5c235d-3e97-4c31-baf9-01664b449800', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:09', 1, '2009-02-14 19:45:09', 1, NULL),
+(212, 'c67a424f-9f89-46f9-8554-165582168d42', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:11', 1, '2009-02-14 19:45:11', 1, NULL),
+(213, 'de709436-a2d5-4270-999f-adb8a06bb443', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:13', 1, '2009-02-14 19:45:13', 1, NULL),
+(214, 'ffffba2e-a41b-4fa3-9074-f02ac7271ef8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:15', 1, '2009-02-14 19:45:15', 1, NULL),
+(215, '6ad567f4-68aa-4add-a01f-64787cee2f09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:18', 1, '2009-02-14 19:45:18', 1, NULL),
+(216, '7703951f-2658-48fc-b301-4ea1f30c1d93', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:19', 1, '2009-02-14 19:45:19', 1, NULL),
+(217, '9fa45677-54e0-4bea-b86b-4e6ee6e894f2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:21', 1, '2009-02-14 19:45:21', 1, NULL),
+(218, 'd41b8e54-d55d-42f1-bb52-71a1286e3dc3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:26', 354, '2025-10-05 13:07:39', 1, NULL),
+(219, 'befe86bf-7479-4cd1-919c-783f41a6cb53', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:30', 1, '2009-02-14 19:45:30', 1, NULL),
+(220, 'e841a425-4707-4489-9d9e-a2348ef78a40', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:33', 1, '2009-02-14 19:45:33', 1, NULL),
+(221, '446b790c-7276-454e-873f-eddecd212b2d', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:35', 1, '2009-02-14 19:45:35', 1, NULL),
+(222, '81b68c73-ca8e-473d-b93c-d255bda67787', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:36', 1, '2009-02-14 19:45:36', 1, NULL),
+(223, 'fcf95aa0-04b9-4251-b6d3-3e738d97fbd0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:37', 1, '2009-02-14 19:45:37', 1, NULL),
+(224, '649bc587-131c-40f0-82ab-17a84e925883', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:40', 1, '2009-02-14 19:45:40', 1, NULL),
+(225, 'ed93b673-dee0-4c9a-beeb-5bea86df1d33', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:41', 1, '2009-02-14 19:45:41', 1, NULL),
+(226, '1e05d4df-68f1-46da-97cd-f8106a2448b3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:44', 1, '2009-02-14 19:45:44', 1, NULL),
+(227, '68bb8c2a-d50c-4d1b-bf15-fcee832c8b3f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:46', 1, '2009-02-14 19:45:46', 1, NULL),
+(228, '7da8b421-5933-4c0c-b7c1-a5a74743284f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:47', 1, '2009-02-14 19:45:47', 1, NULL),
+(229, '120fe91e-706e-433c-a69d-e750a3958da3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:49', 1, '2009-02-14 19:45:49', 1, NULL),
+(230, 'fb8568ea-0e62-4019-bdc5-366cb89ccfed', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:51', 1, '2009-02-14 19:45:51', 1, NULL),
+(231, '20302356-314b-4752-a967-2bbe4d06e2ba', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:53', 1, '2009-02-14 19:45:53', 1, NULL),
+(232, 'b0648307-3763-4e11-9814-c8f629eb0e87', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:54', 1, '2009-02-14 19:45:54', 1, NULL),
+(233, '6111bc37-2a05-4804-ac1b-20957eadaa73', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:55', 1, '2009-02-14 19:45:55', 1, NULL),
+(234, 'c08a6a65-86ce-4307-b7e9-cde87d3d6ebb', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:56', NULL, NULL, 1, NULL),
+(235, '8b3c611b-a524-4134-8f4d-dde8eae13242', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:45:58', 1, '2009-02-14 19:45:58', 1, NULL),
+(236, 'c2694fd6-e158-4de2-90ce-83b7eccae532', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:00', NULL, NULL, 1, NULL),
+(237, '44171fc4-4039-4502-9072-5dccb3a36349', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:01', 1, '2009-02-14 19:46:01', 1, NULL),
+(238, '735544e3-374b-4967-bacc-a467c3dd4b4d', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:03', 1, '2009-02-14 19:46:03', 1, NULL),
+(239, 'eb1c4b06-85b5-4e00-a311-a4c1c5108be6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:06', NULL, NULL, 1, NULL),
+(240, '1525af50-1b2b-45ce-8a07-35b0b1eb5a5e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:08', 1, '2009-02-14 19:46:08', 1, NULL),
+(241, 'f829ff81-2950-4bad-a8ef-ed437fdafce1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:10', 1, '2009-02-14 19:46:10', 1, NULL),
+(242, '310c655b-f85f-419b-a33c-4dad98ea924c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:11', 1, '2009-02-14 19:46:11', 1, NULL),
+(243, 'c2670498-5018-4549-b1e0-a448c71de399', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:12', 1, '2009-02-14 19:46:12', 1, NULL),
+(244, '355ba9cd-c8af-4777-a00b-267183a25f3f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:13', 1, '2009-02-14 19:46:13', 1, NULL),
+(245, '1cafa7e1-166b-4f79-b760-f03100dd94f1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:15', 1, '2009-02-14 19:46:15', 1, NULL),
+(246, '4b9dd602-1c30-4441-83e7-a81babe57008', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:16', 1, '2009-02-14 19:46:16', 1, NULL),
+(247, '8f70e5fa-d525-48be-ada6-3c6a694faf91', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:16', 1, '2009-02-14 19:46:16', 1, NULL),
+(248, '4d6fabea-e2e9-48ec-9e24-c458dd3bf51a', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:17', 1, '2009-02-14 19:46:17', 1, NULL),
+(249, 'f1ad561c-fb7b-4c49-81e5-b4f4e60bf04d', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:18', 1, '2009-02-14 19:46:18', 1, NULL),
+(250, '587f587a-3618-411a-b3e2-ae9fc3becdb9', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:18', 1, '2009-02-14 19:46:18', 1, NULL),
+(251, '03f4c5cf-b2ab-4868-b951-c0dff196d21f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:19', 1, '2009-02-14 19:46:19', 1, NULL),
+(252, 'd222cb1b-4b7c-4354-be02-67168160e2d6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:20', 1, '2009-02-14 19:46:20', 1, NULL),
+(253, '1424bee6-5a45-43b2-9bba-37fae9060fe9', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:21', 1, '2009-02-14 19:46:21', 1, NULL),
+(254, '8f4523b8-10bd-4dc7-9d24-1ad85375d188', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:22', 1, '2009-02-14 19:46:22', 1, NULL),
+(255, '8cfad614-cd2f-4fb2-9e82-e7e43bb61353', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:22', 1, '2009-02-14 19:46:22', 1, NULL),
+(256, 'eac653cf-5265-4161-9bc7-0a1e1808075e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:23', 1, '2009-02-14 19:46:23', 1, NULL),
+(257, 'f8691a52-a207-4c32-9953-eda4f20a0f00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:23', 1, '2009-02-14 19:46:23', 1, NULL),
+(258, 'd0e9bd42-930f-4096-b8cc-cdcaa9d63088', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:24', 1, '2009-02-14 19:46:24', 1, NULL),
+(259, 'b94fdf67-8a68-411c-8048-527539a35894', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:25', 1, '2009-02-14 19:46:25', 1, NULL),
+(260, '79b14a0a-3f6e-43d0-9543-28fb1a0a7acc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:25', 1, '2009-02-14 19:46:25', 1, NULL),
+(261, 'de94811a-efc4-4df7-9d97-05fa249f7543', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:26', 1, '2009-02-14 19:46:26', 1, NULL),
+(262, 'ebbc0fe3-23e3-43a3-b75a-9100d50429e6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:26', 1, '2009-02-14 19:46:26', 1, NULL),
+(263, '749891b6-6b9c-4e8d-a0ed-f24413565950', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:27', 1, '2009-02-14 19:46:27', 1, NULL),
+(264, 'a0c48e53-e935-4209-b108-b05ca4b58293', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:28', 1, '2009-02-14 19:46:28', 1, NULL),
+(265, 'be8b0107-2364-4d25-a6e4-5599e6c94df0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:28', 1, '2009-02-14 19:46:28', 1, NULL),
+(266, 'f793f3d1-ff21-411f-bd69-eb6483123647', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:29', NULL, NULL, 1, NULL),
+(267, '59b7dd7f-77b0-43f5-9145-bc41757847df', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:29', 1, '2009-02-14 19:46:29', 1, NULL),
+(268, '253d65b6-b0cf-48c3-a0f5-aebe2021e849', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:30', NULL, NULL, 1, NULL),
+(269, '9bff3c81-5c94-4e69-9291-d2469de0f973', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:30', NULL, NULL, 1, NULL),
+(270, 'e7483706-9591-41eb-9df2-69ad470cad45', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:31', 1, '2009-02-14 19:46:31', 1, NULL),
+(271, '7fd5cdc9-801d-4373-9f15-40d131ed6c57', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:31', 1, '2009-02-14 19:46:31', 1, NULL),
+(272, '327eda38-525a-4ab1-9b2b-eb732019365b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:32', 1, '2009-02-14 19:46:32', 1, NULL),
+(273, '406ef1ec-a666-4f51-a309-098fe1d99a1f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:33', 1, '2009-02-14 19:46:33', 1, NULL),
+(274, '6f7bde18-8bcc-4176-81d9-3f04eeb8ff8e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:33', 1, '2009-02-14 19:46:33', 1, NULL),
+(275, 'c07b940a-7282-4dec-8446-3c82c6ebd784', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:34', 1, '2009-02-14 19:46:34', 1, NULL),
+(276, 'b969e22c-7db6-4133-be28-6acf30ba6d89', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:35', 1, '2009-02-14 19:46:35', 1, NULL),
+(277, '11929404-1bd6-4e67-87eb-180e47d3c6b7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:35', 1, '2009-02-14 19:46:35', 1, NULL),
+(278, '6aaebdc7-4b59-414f-817f-d4845014d7c1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:36', 1, '2009-02-14 19:46:36', 1, NULL),
+(279, 'e806b13e-0c39-4f06-97ee-c389ecdb1df5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:37', 1, '2009-02-14 19:46:37', 1, NULL),
+(280, 'f787f83b-1a4a-411f-b447-4308c2f529d5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:37', 1, '2009-02-14 19:46:37', 1, NULL),
+(281, '68689ffa-49d5-4b93-bd56-209ee07a028a', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:38', 1, '2009-02-14 19:46:38', 1, NULL),
+(282, 'd985a4ed-3be1-4e98-9f12-2d04664996e0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:38', 1, '2009-02-14 19:46:38', 1, NULL),
+(283, '4758a63e-a5f3-4d58-a25b-2c8bb323b30c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:39', 1, '2009-02-14 19:46:39', 1, NULL),
+(284, '3d28e30b-7c29-456d-afc3-64019fcddb30', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:40', 1, '2009-02-14 19:46:40', 1, NULL),
+(285, '9a27b1ed-3cee-48a2-b886-d9e768fa2973', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:41', 1, '2009-02-14 19:46:41', 1, NULL),
+(286, '2e433f1a-50da-4ab5-abb8-d0ad2f14ac58', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:41', 1, '2009-02-14 19:46:41', 1, NULL),
+(287, '5cb7ae95-63b4-47ce-955a-5e318d4484db', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:42', 1, '2009-02-14 19:46:42', 1, NULL),
+(288, '3a5f0186-bbb5-4c00-831b-5b909fc924f0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:43', 1, '2009-02-14 19:46:43', 1, NULL),
+(289, '537d8d74-882b-466d-b14b-aba396f951c7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:43', 1, '2009-02-14 19:46:43', 1, NULL),
+(290, '348d9d0b-0d63-44a8-a797-7e0c21d7c7cb', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:44', 1, '2009-02-14 19:46:44', 1, NULL),
+(291, '7f02a06a-22f8-4020-aa01-c7e51fb3b1d2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:45', 1, '2009-02-14 19:46:45', 1, NULL),
+(292, '20e9aca7-e84a-4829-8d32-6e254e607488', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:45', 1, '2009-02-14 19:46:45', 1, NULL),
+(293, '90e280ed-1d37-4fd7-ad91-9af60b806f8f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:46', 1, '2009-02-14 19:46:46', 1, NULL),
+(294, '3d61ba92-56f3-480b-b3cc-c37b19ac04d7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:47', 1, '2009-02-14 19:46:47', 1, NULL),
+(295, 'd427e53b-a2cd-4b7d-81b7-904d9fb636dc', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:47', 1, '2009-02-14 19:46:47', 1, NULL),
+(296, 'c11dab58-c20a-407b-8357-f6b869af0714', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:47', 1, '2009-02-14 19:46:47', 1, NULL),
+(297, 'ceba0dd2-8e9c-4204-84a7-523c5a491cbd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:48', 1, '2009-02-14 19:46:48', 1, NULL),
+(298, 'b95d1942-88d0-4b08-9857-0314a0f6b995', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:48', 1, '2009-02-14 19:46:48', 1, NULL),
+(299, '37a00f5a-b9e6-4095-891a-ab7b860e9918', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:49', 1, '2009-02-14 19:46:49', 1, NULL),
+(300, '4564365c-0931-4a53-b35f-ab35d6229809', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:50', 1, '2009-02-14 19:46:50', 1, NULL),
+(301, '73ad9e68-0715-4f34-aa79-6eb6de3f3cf0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:50', 1, '2009-02-14 19:46:50', 1, NULL),
+(302, '2c7ff257-7bfd-40ba-afab-8e55794eedcf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:51', 1, '2009-02-14 19:46:51', 1, NULL),
+(303, '370e6a8d-a341-45c7-9be9-49e9af23e7ba', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:52', 1, '2009-02-14 19:46:52', 1, NULL),
+(304, '37a01c8c-fa7b-42d2-832c-ec0589f1fee3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:52', 1, '2009-02-14 19:46:52', 1, NULL),
+(305, 'c932f06e-4f9c-41db-a15d-baf4546d673f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:53', 1, '2009-02-14 19:46:53', 1, NULL),
+(306, 'f1413fb4-02d7-4d8b-ac5c-64b808b8e714', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:53', 1, '2009-02-14 19:46:53', 1, NULL),
+(307, '3400a119-ec6f-4ba5-b4ae-80f3078c9398', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:54', 1, '2009-02-14 19:46:54', 1, NULL),
+(308, '7ab5d98f-4c1c-480f-9fc8-c5fe10f7c794', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:54', NULL, NULL, 1, NULL),
+(309, 'fca89818-fa9b-4e75-94d0-7e19819299bb', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:55', NULL, NULL, 1, NULL),
+(310, '15694740-b06c-4fbd-9a79-10543c9232bd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:55', NULL, NULL, 1, NULL),
+(311, '1a9e0ad6-172e-4438-a54b-3cb76da32af2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:56', 1, '2009-02-14 19:46:56', 1, NULL),
+(312, '98c0074d-8c01-4857-a46b-820696a444c6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:56', 1, '2009-02-14 19:46:56', 1, NULL),
+(313, '753bd2c6-a8ab-4f08-af96-7c8998831b96', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:57', 1, '2009-02-14 19:46:57', 1, NULL),
+(314, 'fc76d351-8985-41c8-9766-d20c790efe70', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:58', 1, '2009-02-14 19:46:58', 1, NULL),
+(315, '018eba8d-e7a6-4c55-9f73-b48881975aa3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:58', 1, '2009-02-14 19:46:58', 1, NULL),
+(316, '3c54fc5f-06ea-430a-8f9c-0eae5477ddee', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:46:59', 1, '2009-02-14 19:46:59', 1, NULL),
+(317, '602cce9e-0670-4716-9532-e0e294b15dcf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:00', 1, '2009-02-14 19:47:00', 1, NULL),
+(318, '24b5221b-247b-4225-8d40-47b625a6ba16', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:00', 1, '2009-02-14 19:47:00', 1, NULL),
+(319, '6f8e487b-12aa-43e2-b26b-ef04c6c3eb7c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:01', 1, '2009-02-14 19:47:01', 1, NULL),
+(320, '9605a4bf-3e87-4b77-aa49-195ebcc2afc6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:01', 1, '2009-02-14 19:47:01', 1, NULL),
+(321, 'a277890c-b2f9-4c6a-bf63-75e225ba152e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:02', 1, '2009-02-14 19:47:02', 1, NULL),
+(322, '0bd8cb99-50a8-4cf8-91e6-78cd5fc883b3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:03', 1, '2009-02-14 19:47:03', 1, NULL),
+(323, '15073e01-2532-4240-9a5c-b672c4cce8b6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:03', 1, '2009-02-14 19:47:03', 1, NULL),
+(324, '1baea179-91c6-4167-8ad5-58c474f62311', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:04', 1, '2009-02-14 19:47:04', 1, NULL),
+(325, 'e8cfa1dd-11bb-41ec-bab6-41b8b508affe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:04', 1, '2009-02-14 19:47:04', 1, NULL),
+(326, 'b522f5d5-4163-4dc5-ae03-3cf2f983931e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:05', 1, '2009-02-14 19:47:05', 1, NULL),
+(327, '960f7456-238f-42fa-a234-59968dc4b009', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:05', 1, '2009-02-14 19:47:05', 1, NULL),
+(328, 'b85d7a1f-d784-4aef-84c6-30441d38625c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:06', 1, '2009-02-14 19:47:06', 1, NULL),
+(329, 'ae29aa7c-579c-4f2f-8e70-bedf02027717', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:07', 1, '2009-02-14 19:47:07', 1, NULL),
+(330, '0cf04db2-2484-4eb6-bb28-98a55cb459c6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:07', 1, '2009-02-14 19:47:07', 1, NULL),
+(331, '8935e4c1-56a8-4678-8977-680402f22757', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:08', 1, '2009-02-14 19:47:08', 1, NULL),
+(332, '8a869d19-fa79-4c90-9ef9-5ff5d9fa62f0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:09', 1, '2009-02-14 19:47:09', 1, NULL),
+(333, 'dee5bb3e-60ee-4bed-88d0-afaaffacadd3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:09', 1, '2009-02-14 19:47:09', 1, NULL),
+(334, '2409f3a1-6a08-4edc-b8ba-95f3ea1e2025', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:10', 1, '2009-02-14 19:47:10', 1, NULL),
+(335, 'fdfb7e6f-329e-4e56-b851-39d8cf7c7af0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:10', 1, '2009-02-14 19:47:10', 1, NULL),
+(336, 'eeb1275c-6c65-463a-9d16-04be64e2f7c5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:11', 1, '2009-02-14 19:47:11', 1, NULL),
+(337, '6da0b876-2faf-4668-8bdc-ed0ec9607b56', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:12', 1, '2009-02-14 19:47:12', 1, NULL),
+(338, '8c4f43de-c226-44a6-a76e-6fd530b34d36', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:12', 1, '2009-02-14 19:47:12', 1, NULL),
+(339, '7ebcfa5c-7552-45ef-8199-a3655ab3510e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:13', 1, '2009-02-14 19:47:13', 1, NULL),
+(340, '413a7e7d-1fb9-4224-bc31-21350e9257eb', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:14', 1, '2009-02-14 19:47:14', 1, NULL),
+(341, '8d058857-3174-455e-844f-6c909f43e55f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:14', 1, '2009-02-14 19:47:14', 1, NULL),
+(342, 'e73da122-b961-4c7f-92a3-c7224a2960c1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:15', NULL, NULL, 1, NULL),
+(343, '6afff462-2c5d-465e-8120-ec43f579c7d9', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:16', 1, '2009-02-14 19:47:16', 1, NULL),
+(344, 'c5a78a84-9d19-4f16-81a9-eae94530d17c', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:16', NULL, NULL, 1, NULL),
+(345, '91c2e034-f671-467c-ab5b-8268e0505fb0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:18', 1, '2009-02-14 19:47:18', 1, NULL),
+(346, '9ca4bc75-15ca-416d-abf3-d07f0799ba95', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:18', 1, '2009-02-14 19:47:18', 1, NULL),
+(347, 'b2e88992-59f2-4f15-97a8-b4b028bae598', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:19', 1, '2009-02-14 19:47:19', 1, NULL),
+(348, 'd00f7e21-53a4-41bd-8324-52cfd7a01e99', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:20', NULL, NULL, 1, NULL),
+(349, 'b50d8ea6-2afe-44ae-9721-dea54413724d', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:21', 1, '2009-02-14 19:47:21', 1, NULL),
+(350, 'eace5159-f088-4af0-afa0-5e691f3d5cc8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:22', 1, '2009-02-14 19:47:22', 1, NULL),
+(351, '56920e00-761c-495a-b43d-082eda94a145', 'Demo', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, '2008-05-12 18:29:15', '2009-02-27 21:34:06', 2, NULL, 0, 351, '2008-05-12 18:29:33', 354, '2011-02-03 13:19:13', 1, NULL),
+(352, '4cae66ed-6c2f-4eac-be07-2635ddc1ceda', 'Mustermann01', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 21:31:26', NULL, NULL, 0, NULL),
+(353, '386e8531-deb7-40ed-a06b-df4366d9bba6', 'Dina', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 21:33:38', NULL, NULL, 0, NULL),
+(354, '006bd130-34d4-4b86-9e82-b1464ad60a0b', 'Chairman', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, '2009-02-27 01:04:16', '2025-10-05 12:56:59', 3, NULL, 0, 1, '2009-06-12 18:29:33', 354, '2010-05-12 18:29:33', 1, NULL),
+(355, '97f8346c-ca53-40de-857a-459d26d9df40', 'Member', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, '2010-02-27 11:34:09', '2025-10-05 12:55:01', 3, NULL, 0, 1, '2009-07-12 18:29:33', 355, '2025-10-05 13:05:58', 1, NULL),
+(356, '232a5ee7-4ed9-41de-b081-0b5090b00462', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:22', 1, '2009-02-14 19:47:22', 1, NULL),
+(357, 'd1ba8d2b-ad8f-43bc-a22d-cbd71eed09a4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 18:47:22', 1, '2009-02-14 19:47:22', 1, NULL),
+(358, 'fc793b70-16c7-4ff7-b245-6df94d5d6057', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2019-04-26 18:47:22', NULL, NULL, 1, NULL),
+(359, 'ac793b70-16c7-4ff8-b245-6df94d5d6123', 'bakers', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-26 18:47:22', NULL, NULL, 0, NULL),
+(360, 'reg93b70-76c7-4fdf-b344-6df94re64343', 'smith', '$2y$10$4t2PfiywA9CVkp5Tn3D1iOc5WpG5QWkq84zM1vZrfeGBpROMXvVie', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2023-04-15 16:06:22', NULL, NULL, 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_user_data`
+--
+
+CREATE TABLE `%PREFIX%_user_data` (
+  `usd_id` int UNSIGNED NOT NULL,
+  `usd_usr_id` int UNSIGNED NOT NULL,
+  `usd_usf_id` int UNSIGNED NOT NULL,
+  `usd_value` varchar(4000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_user_data`
+--
+
+INSERT INTO `%PREFIX%_user_data` (`usd_id`, `usd_usr_id`, `usd_usf_id`, `usd_value`) VALUES
+(1, 1, 1, 'Schmidt'),
+(2, 1, 2, 'Paul'),
+(3, 1, 3, 'Unter den Linden 45'),
+(4, 1, 4, '10117'),
+(5, 1, 5, 'Berlin'),
+(6, 1, 6, 'DEU'),
+(7, 1, 7, '0211-85858585'),
+(8, 1, 10, '1999-01-03'),
+(9, 1, 11, '1'),
+(10, 1, 12, 'administrator@admidio.org'),
+(11, 1, 13, 'https://www.admidio.org/'),
+(12, 1, 20, '001'),
+(13, 1, 21, 'blau'),
+(14, 202, 1, 'Ahrends'),
+(15, 202, 2, 'Dagmar'),
+(16, 202, 3, 'Blumenwiese 23'),
+(17, 202, 4, '12345'),
+(18, 202, 5, 'Müllerhausen'),
+(19, 202, 6, 'DEU'),
+(20, 202, 7, '0875-2255773'),
+(21, 202, 8, '0170-457412'),
+(22, 202, 10, '2007-01-05'),
+(23, 202, 11, '2'),
+(24, 202, 12, 'ahrends.dagmar@example.com'),
+(26, 203, 1, 'Allegre'),
+(27, 203, 2, 'Dagobert'),
+(28, 203, 3, 'Blumenwiese 24'),
+(29, 203, 4, '12345'),
+(30, 203, 5, 'Müllerhausen'),
+(31, 203, 6, 'DEU'),
+(32, 203, 7, '0876-2255773'),
+(33, 203, 8, '0171-457412'),
+(34, 203, 10, '2002-01-07'),
+(35, 203, 11, '1'),
+(36, 203, 12, 'allegre.dagobert@example.com'),
+(38, 204, 1, 'Appel'),
+(39, 204, 2, 'Daisy'),
+(40, 204, 3, 'Blumenwiese 25'),
+(41, 204, 4, '12345'),
+(42, 204, 5, 'Müllerhausen'),
+(43, 204, 6, 'DEU'),
+(44, 204, 7, '0877-2255773'),
+(45, 204, 8, '0172-457412'),
+(46, 204, 10, '1975-01-09'),
+(47, 204, 11, '2'),
+(48, 204, 12, 'appel.daisy@example.com'),
+(50, 205, 1, 'Arndt'),
+(51, 205, 2, 'Dakota'),
+(52, 205, 3, 'Blumenwiese 26'),
+(53, 205, 4, '12345'),
+(54, 205, 5, 'Müllerhausen'),
+(55, 205, 6, 'DEU'),
+(56, 205, 7, '0878-2255773'),
+(57, 205, 8, '0173-457412'),
+(58, 205, 10, '1979-01-11'),
+(59, 205, 11, '2'),
+(60, 205, 12, 'arndt.dakota@example.com'),
+(62, 206, 1, 'Baade'),
+(63, 206, 2, 'Dale'),
+(64, 206, 3, 'Blumenwiese 27'),
+(65, 206, 4, '12345'),
+(66, 206, 5, 'Müllerhausen'),
+(67, 206, 6, 'DEU'),
+(68, 206, 7, '0879-2255773'),
+(69, 206, 8, '0174-457412'),
+(70, 206, 10, '1960-01-13'),
+(71, 206, 11, '1'),
+(72, 206, 12, 'baade.dale@example.com'),
+(74, 207, 1, 'Bachmann'),
+(75, 207, 2, 'Dallas'),
+(76, 207, 3, 'Blumenwiese 28'),
+(77, 207, 4, '12345'),
+(78, 207, 5, 'Müllerhausen'),
+(79, 207, 6, 'DEU'),
+(80, 207, 7, '0880-2255773'),
+(81, 207, 8, '0175-457412'),
+(82, 207, 10, '1983-01-15'),
+(83, 207, 11, '1'),
+(84, 207, 12, 'bachmann.dallas@example.com'),
+(86, 208, 1, 'Barbosa'),
+(87, 208, 2, 'Daltin'),
+(88, 208, 3, 'Blumenwiese 29'),
+(89, 208, 4, '12345'),
+(90, 208, 5, 'Müllerhausen'),
+(91, 208, 6, 'DEU'),
+(92, 208, 7, '0881-2255773'),
+(93, 208, 8, '0176-457412'),
+(94, 208, 10, '1961-01-17'),
+(95, 208, 11, '1'),
+(96, 208, 12, 'barbosa.daltin@example.com'),
+(98, 209, 1, 'Baumgarten'),
+(99, 209, 2, 'Dalton'),
+(100, 209, 3, 'Blumenwiese 30'),
+(101, 209, 4, '4711'),
+(102, 209, 5, 'Bergdorf'),
+(103, 209, 6, 'CHE'),
+(104, 209, 7, '0882-2255773'),
+(105, 209, 8, '0177-457412'),
+(106, 209, 10, '2013-01-19'),
+(107, 209, 11, '1'),
+(108, 209, 12, 'baumgarten.dalton@example.com'),
+(110, 210, 1, 'Báierle'),
+(111, 210, 2, 'Damasus'),
+(112, 210, 3, 'Blumenwiese 31'),
+(113, 210, 4, '4711'),
+(114, 210, 5, 'Bergdorf'),
+(115, 210, 6, 'CHE'),
+(116, 210, 7, '0883-2255773'),
+(117, 210, 8, '0178-457412'),
+(118, 210, 10, '1988-01-21'),
+(119, 210, 11, '1'),
+(121, 211, 1, 'Beck'),
+(122, 211, 2, 'Damian'),
+(123, 211, 3, 'Blumenwiese 32'),
+(124, 211, 4, '12345'),
+(125, 211, 5, 'Müllerhausen'),
+(126, 211, 6, 'DEU'),
+(127, 211, 7, '0884-2255773'),
+(128, 211, 8, '0179-457412'),
+(129, 211, 10, '1971-01-23'),
+(130, 211, 11, '1'),
+(131, 211, 12, 'beck.damian@example.com'),
+(133, 212, 1, 'Becker'),
+(134, 212, 2, 'Damien'),
+(135, 212, 3, 'Blumenwiese 33'),
+(136, 212, 4, '12345'),
+(137, 212, 5, 'Müllerhausen'),
+(138, 212, 6, 'DEU'),
+(139, 212, 7, '0885-2255773'),
+(140, 212, 8, '0180-457412'),
+(141, 212, 10, '1984-01-25'),
+(142, 212, 11, '1'),
+(143, 212, 12, 'becker.damien@example.com'),
+(145, 213, 1, 'Begunk'),
+(146, 213, 2, 'Damion'),
+(147, 213, 3, 'Blumenwiese 34'),
+(148, 213, 4, '12345'),
+(149, 213, 5, 'Müllerhausen'),
+(150, 213, 6, 'DEU'),
+(151, 213, 7, '0886-2255773'),
+(152, 213, 8, '0181-457412'),
+(153, 213, 10, '1975-01-27'),
+(154, 213, 11, '1'),
+(155, 213, 12, 'begunk.damion@example.com'),
+(157, 214, 1, 'Behnke'),
+(158, 214, 2, 'Damon'),
+(159, 214, 3, 'Blumenwiese 35'),
+(160, 214, 4, '12345'),
+(161, 214, 5, 'Müllerhausen'),
+(162, 214, 6, 'DEU'),
+(163, 214, 7, '0887-2255773'),
+(164, 214, 8, '0182-457412'),
+(165, 214, 10, '1993-01-29'),
+(166, 214, 11, '1'),
+(167, 214, 12, 'behnke.damon@example.com'),
+(169, 215, 1, 'Behrend'),
+(170, 215, 2, 'Dan'),
+(171, 215, 3, 'Blumenwiese 36'),
+(172, 215, 4, '12345'),
+(173, 215, 5, 'Müllerhausen'),
+(174, 215, 6, 'DEU'),
+(175, 215, 7, '0888-2255773'),
+(176, 215, 8, '0183-457412'),
+(177, 215, 10, '1980-01-31'),
+(178, 215, 11, '1'),
+(179, 215, 12, 'behrend.dan@example.com'),
+(181, 216, 1, 'Bender'),
+(182, 216, 2, 'Dana'),
+(183, 216, 3, 'Blumenwiese 37'),
+(184, 216, 4, '12345'),
+(185, 216, 5, 'Müllerhausen'),
+(186, 216, 6, 'DEU'),
+(187, 216, 7, '0889-2255773'),
+(188, 216, 8, '0184-457412'),
+(189, 216, 10, '1996-02-02'),
+(190, 216, 11, '2'),
+(191, 216, 12, 'bender.dana@example.com'),
+(193, 217, 1, 'Benn'),
+(194, 217, 2, 'Dania'),
+(195, 217, 3, 'Blumenwiese 38'),
+(196, 217, 4, '12345'),
+(197, 217, 5, 'Müllerhausen'),
+(198, 217, 6, 'DEU'),
+(199, 217, 7, '0890-2255773'),
+(200, 217, 8, '0185-457412'),
+(201, 217, 10, '1967-02-04'),
+(202, 217, 11, '2'),
+(203, 217, 12, 'benn.dania@example.com'),
+(205, 218, 1, 'Bensien'),
+(206, 218, 2, 'Daniel'),
+(207, 218, 3, 'Blumenwiese 58'),
+(208, 218, 4, '12345'),
+(209, 218, 5, 'Müllerhausen'),
+(210, 218, 6, 'DEU'),
+(211, 218, 7, '0891-2255773'),
+(212, 218, 8, '0186-457412'),
+(213, 218, 10, '1974-02-06'),
+(214, 218, 11, '1'),
+(215, 218, 12, 'bensien.daniel@example.com'),
+(217, 219, 1, 'Berodt'),
+(218, 219, 2, 'Daniela'),
+(219, 219, 3, 'Blumenwiese 40'),
+(220, 219, 4, '12345'),
+(221, 219, 5, 'Müllerhausen'),
+(222, 219, 6, 'DEU'),
+(223, 219, 7, '0892-2255773'),
+(224, 219, 8, '0187-457412'),
+(225, 219, 10, '2010-02-08'),
+(226, 219, 11, '2'),
+(227, 219, 12, 'berodt.daniela@example.com'),
+(229, 220, 1, 'Besemann'),
+(230, 220, 2, 'Daniella'),
+(231, 220, 3, 'Blumenwiese 41'),
+(232, 220, 4, '12345'),
+(233, 220, 5, 'Müllerhausen'),
+(234, 220, 6, 'DEU'),
+(235, 220, 7, '0893-2255773'),
+(236, 220, 8, '0188-457412'),
+(237, 220, 10, '1979-02-10'),
+(238, 220, 11, '2'),
+(239, 220, 12, 'besemann.daniella@example.com'),
+(241, 221, 1, 'Bicalho'),
+(242, 221, 2, 'Danielle'),
+(243, 221, 3, 'Blumenwiese 42'),
+(244, 221, 4, '12345'),
+(245, 221, 5, 'Müllerhausen'),
+(246, 221, 6, 'DEU'),
+(247, 221, 7, '0894-2255773'),
+(248, 221, 8, '0189-457412'),
+(249, 221, 10, '1998-02-12'),
+(250, 221, 11, '2'),
+(251, 221, 12, 'bicalho.danielle@example.com'),
+(253, 222, 1, 'Bielfeld'),
+(254, 222, 2, 'Danika'),
+(255, 222, 3, 'Blumenwiese 43'),
+(256, 222, 4, '12345'),
+(257, 222, 5, 'Müllerhausen'),
+(258, 222, 6, 'DEU'),
+(259, 222, 7, '0895-2255773'),
+(260, 222, 8, '0190-457412'),
+(261, 222, 10, '1962-02-14'),
+(262, 222, 11, '2'),
+(263, 222, 12, 'bielfeld.danika@example.com'),
+(265, 223, 1, 'Blar'),
+(266, 223, 2, 'Dannika'),
+(267, 223, 3, 'Blumenwiese 44'),
+(268, 223, 4, '12345'),
+(269, 223, 5, 'Müllerhausen'),
+(270, 223, 6, 'DEU'),
+(271, 223, 7, '0896-2255773'),
+(272, 223, 8, '0191-457412'),
+(273, 223, 10, '2006-02-16'),
+(274, 223, 11, '2'),
+(275, 223, 12, 'blar.dannika@example.com'),
+(277, 224, 1, 'Bleidorn'),
+(278, 224, 2, 'Danny'),
+(279, 224, 3, 'Blumenwiese 45'),
+(280, 224, 4, '12345'),
+(281, 224, 5, 'Müllerhausen'),
+(282, 224, 6, 'DEU'),
+(283, 224, 7, '0897-2255773'),
+(284, 224, 8, '0192-457412'),
+(285, 224, 10, '1980-02-18'),
+(286, 224, 11, '2'),
+(287, 224, 12, 'bleidorn.danny@example.com'),
+(289, 225, 1, 'Blöcker'),
+(290, 225, 2, 'Dante'),
+(291, 225, 3, 'Blumenwiese 46'),
+(292, 225, 4, '12345'),
+(293, 225, 5, 'Müllerhausen'),
+(294, 225, 6, 'DEU'),
+(295, 225, 7, '0898-2255773'),
+(296, 225, 8, '0193-457412'),
+(297, 225, 10, '2000-02-20'),
+(298, 225, 11, '1'),
+(300, 226, 1, 'Blunck'),
+(301, 226, 2, 'Daphne'),
+(302, 226, 3, 'Blumenwiese 47'),
+(303, 226, 4, '12345'),
+(304, 226, 5, 'Müllerhausen'),
+(305, 226, 6, 'DEU'),
+(306, 226, 7, '0899-2255773'),
+(307, 226, 8, '0194-457412'),
+(308, 226, 10, '2014-02-22'),
+(309, 226, 11, '2'),
+(310, 226, 12, 'blunck.daphne@example.com'),
+(312, 227, 1, 'Bobsien'),
+(313, 227, 2, 'Daria'),
+(314, 227, 3, 'Blumenwiese 48'),
+(315, 227, 4, '12345'),
+(316, 227, 5, 'Müllerhausen'),
+(317, 227, 6, 'DEU'),
+(318, 227, 7, '0900-2255773'),
+(319, 227, 8, '0195-457412'),
+(320, 227, 10, '1971-02-24'),
+(321, 227, 11, '2'),
+(322, 227, 12, 'bobsien.daria@example.com'),
+(324, 228, 1, 'Boddin'),
+(325, 228, 2, 'Darin'),
+(326, 228, 3, 'Blumenwiese 49'),
+(327, 228, 4, '12345'),
+(328, 228, 5, 'Müllerhausen'),
+(329, 228, 6, 'DEU'),
+(330, 228, 7, '0901-2255773'),
+(331, 228, 8, '0196-457412'),
+(332, 228, 10, '2014-02-26'),
+(333, 228, 11, '1'),
+(334, 228, 12, 'boddin.darin@example.com'),
+(336, 229, 1, 'Bohlen'),
+(337, 229, 2, 'Dario'),
+(338, 229, 3, 'Blumenwiese 50'),
+(339, 229, 4, 'B5563'),
+(340, 229, 5, 'Brüssel'),
+(341, 229, 6, 'BEL'),
+(342, 229, 7, '0902-2255773'),
+(343, 229, 8, '0197-457412'),
+(344, 229, 10, '1989-02-28'),
+(345, 229, 11, '1'),
+(346, 229, 12, 'bohlen.dario@example.com'),
+(348, 230, 1, 'Bohmgohren'),
+(349, 230, 2, 'Darius'),
+(350, 230, 3, 'Blumenwiese 51'),
+(351, 230, 4, '12345'),
+(352, 230, 5, 'Müllerhausen'),
+(353, 230, 6, 'DEU'),
+(354, 230, 7, '0903-2255773'),
+(355, 230, 8, '0198-457412'),
+(356, 230, 10, '2009-03-02'),
+(357, 230, 11, '1'),
+(358, 230, 12, 'bohmgohren.darius@example.com'),
+(360, 231, 1, 'Borchers'),
+(361, 231, 2, 'Darla'),
+(362, 231, 3, 'Blumenwiese 52'),
+(363, 231, 4, 'B5563'),
+(364, 231, 5, 'Brüssel'),
+(365, 231, 6, 'BEL'),
+(366, 231, 7, '0904-2255773'),
+(367, 231, 8, '0199-457412'),
+(368, 231, 10, '1961-03-04'),
+(369, 231, 11, '2'),
+(370, 231, 12, 'borchers.darla@example.com'),
+(372, 232, 1, 'Bornholdt'),
+(373, 232, 2, 'Darleen'),
+(374, 232, 3, 'Blumenwiese 53'),
+(375, 232, 4, '12345'),
+(376, 232, 5, 'Müllerhausen'),
+(377, 232, 6, 'DEU'),
+(378, 232, 7, '0905-2255773'),
+(379, 232, 8, '0200-457412'),
+(380, 232, 10, '2009-03-06'),
+(381, 232, 11, '2'),
+(382, 232, 12, 'bornholdt.darleen@example.com'),
+(384, 233, 1, 'Borstelmann'),
+(385, 233, 2, 'Darlene'),
+(386, 233, 3, 'Blumenwiese 54'),
+(387, 233, 4, '12345'),
+(388, 233, 5, 'Müllerhausen'),
+(389, 233, 6, 'DEU'),
+(390, 233, 7, '0906-2255773'),
+(391, 233, 8, '0201-457412'),
+(392, 233, 10, '1968-03-07'),
+(393, 233, 11, '2'),
+(394, 233, 12, 'borstelmann.darlene@example.com'),
+(396, 234, 1, 'Böckler'),
+(397, 234, 2, 'Darnell'),
+(398, 234, 3, 'Blumenwiese 55'),
+(399, 234, 4, '12345'),
+(400, 234, 5, 'Müllerhausen'),
+(401, 234, 6, 'DEU'),
+(402, 234, 7, '0907-2255773'),
+(403, 234, 8, '0202-457412'),
+(404, 234, 10, '1965-03-10'),
+(405, 234, 11, '1'),
+(407, 235, 1, 'Böttger'),
+(408, 235, 2, 'Darrell'),
+(409, 235, 3, 'Blumenwiese 56'),
+(410, 235, 4, '12345'),
+(411, 235, 5, 'Müllerhausen'),
+(412, 235, 6, 'DEU'),
+(413, 235, 7, '0908-2255773'),
+(414, 235, 8, '0203-457412'),
+(415, 235, 10, '1960-03-11'),
+(416, 235, 11, '1'),
+(418, 236, 1, 'Brandão'),
+(419, 236, 2, 'Darren'),
+(420, 236, 3, 'Blumenwiese 57'),
+(421, 236, 4, '12345'),
+(422, 236, 5, 'Müllerhausen'),
+(423, 236, 6, 'DEU'),
+(424, 236, 7, '0909-2255773'),
+(425, 236, 8, '0204-457412'),
+(426, 236, 10, '1995-03-14'),
+(427, 236, 11, '1'),
+(429, 237, 1, 'Brandt'),
+(430, 237, 2, 'Darrin'),
+(431, 237, 3, 'Blumenwiese 58'),
+(432, 237, 4, '12345'),
+(433, 237, 5, 'Müllerhausen'),
+(434, 237, 6, 'DEU'),
+(435, 237, 7, '0910-2255773'),
+(436, 237, 8, '0205-457412'),
+(437, 237, 10, '2005-03-16'),
+(438, 237, 11, '1'),
+(439, 237, 12, 'brandt.darrin@example.com'),
+(441, 238, 1, 'Brill'),
+(442, 238, 2, 'Darrlyn'),
+(443, 238, 3, 'Blumenwiese 59'),
+(444, 238, 4, '12345'),
+(445, 238, 5, 'Müllerhausen'),
+(446, 238, 6, 'DEU'),
+(447, 238, 7, '0911-2255773'),
+(448, 238, 8, '0206-457412'),
+(449, 238, 10, '1984-03-17'),
+(450, 238, 11, '2'),
+(451, 238, 12, 'brill.darrlyn@example.com'),
+(453, 239, 1, 'Broska'),
+(454, 239, 2, 'Darryl'),
+(455, 239, 3, 'Blumenwiese 60'),
+(456, 239, 4, '12345'),
+(457, 239, 5, 'Müllerhausen'),
+(458, 239, 6, 'DEU'),
+(459, 239, 7, '0912-2255773'),
+(460, 239, 8, '0207-457412'),
+(461, 239, 10, '2008-03-19'),
+(462, 239, 11, '1'),
+(463, 239, 12, 'broska.darryl@example.com'),
+(465, 240, 1, 'Brufau'),
+(466, 240, 2, 'Darwin'),
+(467, 240, 3, 'Blumenwiese 61'),
+(468, 240, 4, '12345'),
+(469, 240, 5, 'Müllerhausen'),
+(470, 240, 6, 'DEU'),
+(471, 240, 7, '0913-2255773'),
+(472, 240, 8, '0208-457412'),
+(473, 240, 10, '1998-03-22'),
+(474, 240, 11, '1'),
+(475, 240, 12, 'brufau.darwin@example.com'),
+(477, 241, 1, 'Bruhns'),
+(478, 241, 2, 'Daryl'),
+(479, 241, 3, 'Blumenwiese 62'),
+(480, 241, 4, '25487'),
+(481, 241, 5, 'Senfblumendorf'),
+(482, 241, 6, 'DEU'),
+(483, 241, 7, '0914-2255773'),
+(484, 241, 8, '0209-457412'),
+(485, 241, 10, '1962-03-24'),
+(486, 241, 11, '2'),
+(487, 241, 12, 'bruhns.daryl@example.com'),
+(489, 242, 1, 'Brügmann'),
+(490, 242, 2, 'Dave'),
+(491, 242, 3, 'Blumenwiese 63'),
+(492, 242, 4, '25487'),
+(493, 242, 5, 'Senfblumendorf'),
+(494, 242, 6, 'DEU'),
+(495, 242, 7, '0915-2255773'),
+(496, 242, 8, '0210-457412'),
+(497, 242, 10, '1983-03-26'),
+(498, 242, 11, '1'),
+(500, 243, 1, 'Bubert'),
+(501, 243, 2, 'David'),
+(502, 243, 3, 'Blumenwiese 64'),
+(503, 243, 4, '25487'),
+(504, 243, 5, 'Senfblumendorf'),
+(505, 243, 6, 'DEU'),
+(506, 243, 7, '0916-2255773'),
+(507, 243, 8, '0211-457412'),
+(508, 243, 10, '1964-03-27'),
+(509, 243, 11, '1'),
+(510, 243, 12, 'bubert.david@example.com'),
+(512, 244, 1, 'Buck'),
+(513, 244, 2, 'Davis'),
+(514, 244, 3, 'Blumenwiese 65'),
+(515, 244, 4, '25487'),
+(516, 244, 5, 'Senfblumendorf'),
+(517, 244, 6, 'DEU'),
+(518, 244, 7, '0917-2255773'),
+(519, 244, 8, '0212-457412'),
+(520, 244, 10, '2015-03-30'),
+(521, 244, 11, '1'),
+(522, 244, 12, 'buck.davis@example.com'),
+(524, 245, 1, 'Buddenbohm'),
+(525, 245, 2, 'Dawn'),
+(526, 245, 3, 'Blumenwiese 66'),
+(527, 245, 4, '25487'),
+(528, 245, 5, 'Senfblumendorf'),
+(529, 245, 6, 'DEU'),
+(530, 245, 7, '0918-2255773'),
+(531, 245, 8, '0213-457412'),
+(532, 245, 10, '1996-03-31'),
+(533, 245, 11, '1'),
+(534, 245, 12, 'buddenbohm.dawn@example.com'),
+(536, 246, 1, 'Burmeister'),
+(537, 246, 2, 'Dawson'),
+(538, 246, 3, 'Blumenwiese 67'),
+(539, 246, 4, '25487'),
+(540, 246, 5, 'Senfblumendorf'),
+(541, 246, 6, 'DEU'),
+(542, 246, 7, '0919-2255773'),
+(543, 246, 8, '0214-457412'),
+(544, 246, 10, '1979-04-03'),
+(545, 246, 11, '1'),
+(546, 246, 12, 'burmeister.dawson@example.com'),
+(548, 247, 1, 'Busch'),
+(549, 247, 2, 'Dayana'),
+(550, 247, 3, 'Blumenwiese 68'),
+(551, 247, 4, '25487'),
+(552, 247, 5, 'Senfblumendorf'),
+(553, 247, 6, 'DEU'),
+(554, 247, 7, '0920-2255773'),
+(555, 247, 8, '0215-457412'),
+(556, 247, 10, '1989-04-05'),
+(557, 247, 11, '2'),
+(558, 247, 12, 'busch.dayana@example.com'),
+(560, 248, 1, 'Cardoso'),
+(561, 248, 2, 'Dean'),
+(562, 248, 3, 'Blumenwiese 69'),
+(563, 248, 4, '25487'),
+(564, 248, 5, 'Senfblumendorf'),
+(565, 248, 6, 'DEU'),
+(566, 248, 7, '0921-2255773'),
+(567, 248, 8, '0216-457412'),
+(568, 248, 10, '1973-04-07'),
+(569, 248, 11, '1'),
+(570, 248, 12, 'cardoso.dean@example.com'),
+(572, 249, 1, 'Carstens'),
+(573, 249, 2, 'Deana'),
+(574, 249, 3, 'Blumenwiese 70'),
+(575, 249, 4, '25487'),
+(576, 249, 5, 'Senfblumendorf'),
+(577, 249, 6, 'DEU'),
+(578, 249, 7, '0922-2255773'),
+(579, 249, 8, '0217-457412'),
+(580, 249, 10, '2006-04-09'),
+(581, 249, 11, '2'),
+(582, 249, 12, 'carstens.deana@example.com'),
+(584, 250, 1, 'Christier'),
+(585, 250, 2, 'Deandre'),
+(586, 250, 3, 'Blumenwiese 71'),
+(587, 250, 4, '25487'),
+(588, 250, 5, 'Senfblumendorf'),
+(589, 250, 6, 'DEU'),
+(590, 250, 7, '0923-2255773'),
+(591, 250, 8, '0218-457412'),
+(592, 250, 10, '2015-04-11'),
+(593, 250, 11, '1'),
+(594, 250, 12, 'christier.deandre@example.com'),
+(596, 251, 1, 'Cölle'),
+(597, 251, 2, 'Deanna'),
+(598, 251, 3, 'Blumenwiese 72'),
+(599, 251, 4, '25487'),
+(600, 251, 5, 'Senfblumendorf'),
+(601, 251, 6, 'DEU'),
+(602, 251, 7, '0924-2255773'),
+(603, 251, 8, '0219-457412'),
+(604, 251, 10, '2002-04-13'),
+(605, 251, 11, '2'),
+(607, 252, 1, 'Cornelsen'),
+(608, 252, 2, 'Debbie'),
+(609, 252, 3, 'Blumenwiese 73'),
+(610, 252, 4, '25487'),
+(611, 252, 5, 'Senfblumendorf'),
+(612, 252, 6, 'DEU'),
+(613, 252, 7, '0925-2255773'),
+(614, 252, 8, '0220-457412'),
+(615, 252, 10, '1987-04-15'),
+(616, 252, 11, '2'),
+(617, 252, 12, 'cornelsen.debbie@example.com'),
+(619, 253, 1, 'Dabelstein'),
+(620, 253, 2, 'Debora'),
+(621, 253, 3, 'Blumenwiese 74'),
+(622, 253, 4, '25487'),
+(623, 253, 5, 'Senfblumendorf'),
+(624, 253, 6, 'DEU'),
+(625, 253, 7, '0926-2255773'),
+(626, 253, 8, '0221-457412'),
+(627, 253, 10, '1985-04-17'),
+(628, 253, 11, '2'),
+(629, 253, 12, 'dabelstein.debora@example.com'),
+(631, 254, 1, 'Danielsen'),
+(632, 254, 2, 'Deborah'),
+(633, 254, 3, 'Blumenwiese 75'),
+(634, 254, 4, '25487'),
+(635, 254, 5, 'Senfblumendorf'),
+(636, 254, 6, 'DEU'),
+(637, 254, 7, '0927-2255773'),
+(638, 254, 8, '0222-457412'),
+(639, 254, 10, '1962-04-19'),
+(640, 254, 11, '2'),
+(641, 254, 12, 'danielsen.deborah@example.com'),
+(643, 255, 1, 'Danisch'),
+(644, 255, 2, 'Debra'),
+(645, 255, 3, 'Blumenwiese 76'),
+(646, 255, 4, '25487'),
+(647, 255, 5, 'Senfblumendorf'),
+(648, 255, 6, 'DEU'),
+(649, 255, 7, '0928-2255773'),
+(650, 255, 8, '0223-457412'),
+(651, 255, 10, '2009-04-21'),
+(652, 255, 11, '2'),
+(653, 255, 12, 'danisch.debra@example.com'),
+(655, 256, 1, 'Dassau'),
+(656, 256, 2, 'Dee'),
+(657, 256, 3, 'Blumenwiese 77'),
+(658, 256, 4, '25487'),
+(659, 256, 5, 'Senfblumendorf'),
+(660, 256, 6, 'DEU'),
+(661, 256, 7, '0929-2255773'),
+(662, 256, 8, '0224-457412'),
+(663, 256, 10, '1995-04-23'),
+(664, 256, 11, '1'),
+(665, 256, 12, 'dassau.dee@example.com'),
+(667, 257, 1, 'Dautert'),
+(668, 257, 2, 'Degenhard'),
+(669, 257, 3, 'Blumenwiese 78'),
+(670, 257, 4, '25487'),
+(671, 257, 5, 'Senfblumendorf'),
+(672, 257, 6, 'DEU'),
+(673, 257, 7, '0930-2255773'),
+(674, 257, 8, '0225-457412'),
+(675, 257, 10, '1988-04-24'),
+(676, 257, 11, '1'),
+(677, 257, 12, 'dautert.degenhard@example.com'),
+(679, 258, 1, 'Pode'),
+(680, 258, 2, 'Freitas'),
+(681, 258, 3, 'Blumenwiese 79'),
+(682, 258, 4, '25487'),
+(683, 258, 5, 'Senfblumendorf'),
+(684, 258, 6, 'DEU'),
+(685, 258, 7, '0931-2255773'),
+(686, 258, 8, '0226-457412'),
+(687, 258, 10, '1997-04-27'),
+(688, 258, 11, '1'),
+(689, 258, 12, 'pode.freitas@example.com'),
+(691, 259, 1, 'Pode'),
+(692, 259, 2, 'Paulo'),
+(693, 259, 3, 'Blumenwiese 80'),
+(694, 259, 4, '25487'),
+(695, 259, 5, 'Senfblumendorf'),
+(696, 259, 6, 'DEU'),
+(697, 259, 7, '0932-2255773'),
+(698, 259, 8, '0227-457412'),
+(699, 259, 10, '1963-04-29'),
+(700, 259, 11, '1'),
+(701, 259, 12, 'pode.paulo@example.com'),
+(703, 260, 1, 'Derwaldt'),
+(704, 260, 2, 'Delia'),
+(705, 260, 3, 'Blumenwiese 81'),
+(706, 260, 4, '25487'),
+(707, 260, 5, 'Senfblumendorf'),
+(708, 260, 6, 'DEU'),
+(709, 260, 7, '0933-2255773'),
+(710, 260, 8, '0228-457412'),
+(711, 260, 10, '2015-05-01'),
+(712, 260, 11, '2'),
+(713, 260, 12, 'derwaldt.delia@example.com'),
+(715, 261, 1, 'Dettenborn'),
+(716, 261, 2, 'Della'),
+(717, 261, 3, 'Blumenwiese 82'),
+(718, 261, 4, '25487'),
+(719, 261, 5, 'Senfblumendorf'),
+(720, 261, 6, 'DEU'),
+(721, 261, 7, '0934-2255773'),
+(722, 261, 8, '0229-457412'),
+(723, 261, 10, '1995-05-03'),
+(724, 261, 11, '2'),
+(725, 261, 12, 'dettenborn.della@example.com'),
+(727, 262, 1, 'Dibbern'),
+(728, 262, 2, 'Delores'),
+(729, 262, 3, 'Blumenwiese 83'),
+(730, 262, 4, '25487'),
+(731, 262, 5, 'Senfblumendorf'),
+(732, 262, 6, 'DEU'),
+(733, 262, 7, '0935-2255773'),
+(734, 262, 8, '0230-457412'),
+(735, 262, 10, '1973-05-05'),
+(736, 262, 11, '2'),
+(737, 262, 12, 'dibbern.delores@example.com'),
+(739, 263, 1, 'Dieckvoß'),
+(740, 263, 2, 'Deloris'),
+(741, 263, 3, 'Blumenwiese 84'),
+(742, 263, 4, '25487'),
+(743, 263, 5, 'Senfblumendorf'),
+(744, 263, 6, 'DEU'),
+(745, 263, 7, '0936-2255773'),
+(746, 263, 8, '0231-457412'),
+(747, 263, 10, '2008-05-06'),
+(748, 263, 11, '2'),
+(750, 264, 1, 'Diestel'),
+(751, 264, 2, 'Demetrius'),
+(752, 264, 3, 'Blumenwiese 85'),
+(753, 264, 4, '25487'),
+(754, 264, 5, 'Senfblumendorf'),
+(755, 264, 6, 'DEU'),
+(756, 264, 7, '0937-2255773'),
+(757, 264, 8, '0232-457412'),
+(758, 264, 10, '2006-05-09'),
+(759, 264, 11, '1'),
+(760, 264, 12, 'diestel.demetrius@example.com'),
+(762, 265, 1, 'Dittmer'),
+(763, 265, 2, 'Dena'),
+(764, 265, 3, 'Blumenwiese 86'),
+(765, 265, 4, '25487'),
+(766, 265, 5, 'Senfblumendorf'),
+(767, 265, 6, 'DEU'),
+(768, 265, 7, '0938-2255773'),
+(769, 265, 8, '0233-457412'),
+(770, 265, 10, '1971-05-11'),
+(771, 265, 11, '2'),
+(772, 265, 12, 'dittmer.dena@example.com'),
+(774, 266, 1, 'Donamore'),
+(775, 266, 2, 'Denise'),
+(776, 266, 3, 'Blumenwiese 87'),
+(777, 266, 4, '25487'),
+(778, 266, 5, 'Senfblumendorf'),
+(779, 266, 6, 'DEU'),
+(780, 266, 7, '0939-2255773'),
+(781, 266, 8, '0234-457412'),
+(782, 266, 10, '1969-05-13'),
+(783, 266, 11, '2'),
+(784, 266, 12, 'donamore.denise@example.com'),
+(786, 267, 1, 'Dorka'),
+(787, 267, 2, 'Dennis'),
+(788, 267, 3, 'Blumenwiese 88'),
+(789, 267, 4, '25487'),
+(790, 267, 5, 'Senfblumendorf'),
+(791, 267, 6, 'DEU'),
+(792, 267, 7, '0940-2255773'),
+(793, 267, 8, '0235-457412'),
+(794, 267, 10, '2000-05-14'),
+(795, 267, 11, '1'),
+(796, 267, 12, 'dorka.dennis@example.com'),
+(798, 268, 1, 'Drews'),
+(799, 268, 2, 'Désiré'),
+(800, 268, 3, 'Blumenwiese 89'),
+(801, 268, 4, '25487'),
+(802, 268, 5, 'Senfblumendorf'),
+(803, 268, 6, 'DEU'),
+(804, 268, 7, '0941-2255773'),
+(805, 268, 8, '0236-457412'),
+(806, 268, 10, '1962-05-17'),
+(807, 268, 11, '2'),
+(809, 269, 1, 'Dümon'),
+(810, 269, 2, 'Desiree'),
+(811, 269, 3, 'Blumenwiese 90'),
+(812, 269, 4, '25487'),
+(813, 269, 5, 'Senfblumendorf'),
+(814, 269, 6, 'DEU'),
+(815, 269, 7, '0942-2255773'),
+(816, 269, 8, '0237-457412'),
+(817, 269, 10, '1991-05-19'),
+(818, 269, 11, '2'),
+(820, 270, 1, 'Düren'),
+(821, 270, 2, 'Destiny'),
+(822, 270, 3, 'Blumenwiese 91'),
+(823, 270, 4, '25487'),
+(824, 270, 5, 'Senfblumendorf'),
+(825, 270, 6, 'DEU'),
+(826, 270, 7, '0943-2255773'),
+(827, 270, 8, '0238-457412'),
+(828, 270, 10, '1975-05-21'),
+(829, 270, 11, '2'),
+(831, 271, 1, 'Dwenger'),
+(832, 271, 2, 'Detlev'),
+(833, 271, 3, 'Blumenwiese 92'),
+(834, 271, 4, '25487'),
+(835, 271, 5, 'Senfblumendorf'),
+(836, 271, 6, 'DEU'),
+(837, 271, 7, '0944-2255773'),
+(838, 271, 8, '0239-457412'),
+(839, 271, 10, '1983-05-23'),
+(840, 271, 11, '1'),
+(841, 271, 12, 'dwenger.detlev@example.com'),
+(843, 272, 1, 'Eckholt'),
+(844, 272, 2, 'Devan'),
+(845, 272, 3, 'Blumenwiese 93'),
+(846, 272, 4, '25487'),
+(847, 272, 5, 'Senfblumendorf'),
+(848, 272, 6, 'DEU'),
+(849, 272, 7, '0945-2255773'),
+(850, 272, 8, '0240-457412'),
+(851, 272, 10, '2000-05-24'),
+(852, 272, 11, '1'),
+(853, 272, 12, 'eckholt.devan@example.com'),
+(855, 273, 1, 'Eckmann'),
+(856, 273, 2, 'Deven'),
+(857, 273, 3, 'Blumenwiese 94'),
+(858, 273, 4, '25487'),
+(859, 273, 5, 'Senfblumendorf'),
+(860, 273, 6, 'DEU'),
+(861, 273, 7, '0946-2255773'),
+(862, 273, 8, '0241-457412'),
+(863, 273, 10, '1960-05-26'),
+(864, 273, 11, '1'),
+(865, 273, 12, 'eckmann.deven@example.com'),
+(867, 274, 1, 'Eggers'),
+(868, 274, 2, 'Devin'),
+(869, 274, 3, 'Blumenwiese 95'),
+(870, 274, 4, '25487'),
+(871, 274, 5, 'Senfblumendorf'),
+(872, 274, 6, 'DEU'),
+(873, 274, 7, '0947-2255773'),
+(874, 274, 8, '0242-457412'),
+(875, 274, 10, '1971-05-29'),
+(876, 274, 11, '1'),
+(877, 274, 12, 'eggers.devin@example.com'),
+(879, 275, 1, 'Eggerstedt'),
+(880, 275, 2, 'Devon'),
+(881, 275, 3, 'Blumenwiese 96'),
+(882, 275, 4, '25487'),
+(883, 275, 5, 'Senfblumendorf'),
+(884, 275, 6, 'DEU'),
+(885, 275, 7, '0948-2255773'),
+(886, 275, 8, '0243-457412'),
+(887, 275, 10, '1983-05-31'),
+(888, 275, 11, '1'),
+(889, 275, 12, 'eggerstedt.devon@example.com'),
+(891, 276, 1, 'Ehlers'),
+(892, 276, 2, 'Dewayne'),
+(893, 276, 3, 'Blumenwiese 97'),
+(894, 276, 4, '25487'),
+(895, 276, 5, 'Senfblumendorf'),
+(896, 276, 6, 'DEU'),
+(897, 276, 7, '0949-2255773'),
+(898, 276, 8, '0244-457412'),
+(899, 276, 10, '1969-06-02'),
+(900, 276, 11, '1'),
+(901, 276, 12, 'ehlers.dewayne@example.com'),
+(903, 277, 1, 'Ehmling'),
+(904, 277, 2, 'Dewey'),
+(905, 277, 3, 'Blumenwiese 98'),
+(906, 277, 4, '25487'),
+(907, 277, 5, 'Senfblumendorf'),
+(908, 277, 6, 'DEU'),
+(909, 277, 7, '0950-2255773'),
+(910, 277, 8, '0245-457412'),
+(911, 277, 10, '2006-06-04'),
+(912, 277, 11, '1'),
+(913, 277, 12, 'ehmling.dewey@example.com'),
+(915, 278, 1, 'Engel'),
+(916, 278, 2, 'Dewitt'),
+(917, 278, 3, 'Blumenwiese 99'),
+(918, 278, 4, '25487'),
+(919, 278, 5, 'Senfblumendorf'),
+(920, 278, 6, 'DEU'),
+(921, 278, 7, '0951-2255773'),
+(922, 278, 8, '0246-457412'),
+(923, 278, 10, '2002-06-06'),
+(924, 278, 11, '1'),
+(925, 278, 12, 'engel.dewitt@example.com'),
+(927, 279, 1, 'Feldhusen'),
+(928, 279, 2, 'Dexter'),
+(929, 279, 3, 'Blumenwiese 100'),
+(930, 279, 4, '25487'),
+(931, 279, 5, 'Senfblumendorf'),
+(932, 279, 6, 'DEU'),
+(933, 279, 7, '0952-2255773'),
+(934, 279, 8, '0247-457412'),
+(935, 279, 10, '2004-06-07'),
+(936, 279, 11, '1'),
+(937, 279, 12, 'feldhusen.dexter@example.com'),
+(939, 280, 1, 'Fischeder'),
+(940, 280, 2, 'Dharma'),
+(941, 280, 3, 'Blumenwiese 101'),
+(942, 280, 4, '25487'),
+(943, 280, 5, 'Senfblumendorf'),
+(944, 280, 6, 'DEU'),
+(945, 280, 7, '0953-2255773'),
+(946, 280, 8, '0248-457412'),
+(947, 280, 10, '1965-06-10'),
+(948, 280, 11, '2'),
+(949, 280, 12, 'fischeder.dharma@example.com'),
+(951, 281, 1, 'Fischer'),
+(952, 281, 2, 'Diamond'),
+(953, 281, 3, 'Blumenwiese 102'),
+(954, 281, 4, '25487'),
+(955, 281, 5, 'Senfblumendorf'),
+(956, 281, 6, 'DEU'),
+(957, 281, 7, '0954-2255773'),
+(958, 281, 8, '0249-457412'),
+(959, 281, 10, '2006-06-12'),
+(960, 281, 11, '2'),
+(961, 281, 12, 'fischer.diamond@example.com'),
+(963, 282, 1, 'Flint'),
+(964, 282, 2, 'Diana'),
+(965, 282, 3, 'Blumenwiese 103'),
+(966, 282, 4, '25487'),
+(967, 282, 5, 'Senfblumendorf'),
+(968, 282, 6, 'DEU'),
+(969, 282, 7, '0955-2255773'),
+(970, 282, 8, '0250-457412'),
+(971, 282, 10, '1973-06-14'),
+(972, 282, 11, '2'),
+(973, 282, 12, 'flint.diana@example.com'),
+(975, 283, 1, 'Fuhrmann'),
+(976, 283, 2, 'Diane'),
+(977, 283, 3, 'Blumenwiese 104'),
+(978, 283, 4, '25487'),
+(979, 283, 5, 'Senfblumendorf'),
+(980, 283, 6, 'DEU'),
+(981, 283, 7, '0956-2255773'),
+(982, 283, 8, '0251-457412'),
+(983, 283, 10, '1970-06-16'),
+(984, 283, 11, '2'),
+(985, 283, 12, 'fuhrmann.diane@example.com'),
+(987, 284, 1, 'Furtado'),
+(988, 284, 2, 'Dianna'),
+(989, 284, 3, 'Blumenwiese 105'),
+(990, 284, 4, '25487'),
+(991, 284, 5, 'Senfblumendorf'),
+(992, 284, 6, 'DEU'),
+(993, 284, 7, '0957-2255773'),
+(994, 284, 8, '0252-457412'),
+(995, 284, 10, '1982-06-18'),
+(996, 284, 11, '2'),
+(997, 284, 12, 'furtado.dianna@example.com'),
+(999, 285, 1, 'Galle'),
+(1000, 285, 2, 'Dianne'),
+(1001, 285, 3, 'Blumenwiese 106'),
+(1002, 285, 4, '25487'),
+(1003, 285, 5, 'Senfblumendorf'),
+(1004, 285, 6, 'DEU'),
+(1005, 285, 7, '0958-2255773'),
+(1006, 285, 8, '0253-457412'),
+(1007, 285, 10, '1985-06-20'),
+(1008, 285, 11, '2'),
+(1009, 285, 12, 'galle.dianne@example.com'),
+(1011, 286, 1, 'Gardeleben'),
+(1012, 286, 2, 'Dick'),
+(1013, 286, 3, 'Blumenwiese 107'),
+(1014, 286, 4, '25487'),
+(1015, 286, 5, 'Senfblumendorf'),
+(1016, 286, 6, 'DEU'),
+(1017, 286, 7, '0959-2255773'),
+(1018, 286, 8, '0254-457412'),
+(1019, 286, 10, '2013-06-22'),
+(1020, 286, 11, '1'),
+(1021, 286, 12, 'gardeleben.dick@example.com'),
+(1023, 287, 1, 'Östermann'),
+(1024, 287, 2, 'Diego'),
+(1025, 287, 3, 'Blumenwiese 108'),
+(1026, 287, 4, '25487'),
+(1027, 287, 5, 'Senfblumendorf'),
+(1028, 287, 6, 'DEU'),
+(1029, 287, 7, '0960-2255773'),
+(1030, 287, 8, '0255-457412'),
+(1031, 287, 10, '1976-06-23'),
+(1032, 287, 11, '1'),
+(1033, 287, 12, 'oestermann.diego@example.com'),
+(1035, 288, 1, 'Geertzen'),
+(1036, 288, 2, 'Diégo'),
+(1037, 288, 3, 'Blumenwiese 109'),
+(1038, 288, 4, '98956'),
+(1039, 288, 5, 'Berghaintal'),
+(1040, 288, 6, 'DEU'),
+(1041, 288, 7, '0961-2255773'),
+(1042, 288, 8, '0256-457412'),
+(1043, 288, 10, '2004-06-25'),
+(1044, 288, 11, '1'),
+(1046, 289, 1, 'Gerdau'),
+(1047, 289, 2, 'Dietbert'),
+(1048, 289, 3, 'Blumenwiese 110'),
+(1049, 289, 4, '98956'),
+(1050, 289, 5, 'Berghaintal'),
+(1051, 289, 6, 'DEU'),
+(1052, 289, 7, '0962-2255773'),
+(1053, 289, 8, '0257-457412'),
+(1054, 289, 10, '1982-06-28'),
+(1055, 289, 11, '1'),
+(1056, 289, 12, 'gerdau.dietbert@example.com'),
+(1058, 290, 1, 'Gerken'),
+(1059, 290, 2, 'Dieter'),
+(1060, 290, 3, 'Blumenwiese 111'),
+(1061, 290, 4, '98956'),
+(1062, 290, 5, 'Berghaintal'),
+(1063, 290, 6, 'DEU'),
+(1064, 290, 7, '0963-2255773'),
+(1065, 290, 8, '0258-457412'),
+(1066, 290, 10, '1997-06-30'),
+(1067, 290, 11, '1'),
+(1068, 290, 12, 'gerken.dieter@example.com'),
+(1070, 291, 1, 'Gerstenkorn'),
+(1071, 291, 2, 'Dietger'),
+(1072, 291, 3, 'Blumenwiese 112'),
+(1073, 291, 4, '98956'),
+(1074, 291, 5, 'Berghaintal'),
+(1075, 291, 6, 'DEU'),
+(1076, 291, 7, '0964-2255773'),
+(1077, 291, 8, '0259-457412'),
+(1078, 291, 10, '1969-07-02'),
+(1079, 291, 11, '1'),
+(1080, 291, 12, 'gerstenkorn.dietger@example.com'),
+(1082, 292, 1, 'Giesemann'),
+(1083, 292, 2, 'Diethard'),
+(1084, 292, 3, 'Blumenwiese 113'),
+(1085, 292, 4, '98956'),
+(1086, 292, 5, 'Berghaintal'),
+(1087, 292, 6, 'DEU'),
+(1088, 292, 7, '0965-2255773'),
+(1089, 292, 8, '0260-457412'),
+(1090, 292, 10, '1963-07-04'),
+(1091, 292, 11, '1'),
+(1092, 292, 12, 'giesemann.diethard@example.com'),
+(1094, 293, 1, 'Göben'),
+(1095, 293, 2, 'Diethild'),
+(1096, 293, 3, 'Blumenwiese 114'),
+(1097, 293, 4, '98956'),
+(1098, 293, 5, 'Berghaintal'),
+(1099, 293, 6, 'DEU'),
+(1100, 293, 7, '0966-2255773'),
+(1101, 293, 8, '0261-457412'),
+(1102, 293, 10, '1971-07-06'),
+(1103, 293, 11, '2'),
+(1105, 294, 1, 'Gollmann'),
+(1106, 294, 2, 'Dietlinde'),
+(1107, 294, 3, 'Blumenwiese 115'),
+(1108, 294, 4, '98956'),
+(1109, 294, 5, 'Berghaintal'),
+(1110, 294, 6, 'DEU'),
+(1111, 294, 7, '0967-2255773'),
+(1112, 294, 8, '0262-457412'),
+(1113, 294, 10, '2015-07-08'),
+(1114, 294, 11, '2'),
+(1115, 294, 12, 'gollmann.dietlinde@example.com'),
+(1117, 295, 1, 'Griem'),
+(1118, 295, 2, 'Dietmar'),
+(1119, 295, 3, 'Blumenwiese 116'),
+(1120, 295, 4, '98956'),
+(1121, 295, 5, 'Berghaintal'),
+(1122, 295, 6, 'DEU'),
+(1123, 295, 7, '0968-2255773'),
+(1124, 295, 8, '0263-457412'),
+(1125, 295, 10, '1980-07-09'),
+(1126, 295, 11, '1'),
+(1127, 295, 12, 'griem.dietmar@example.com'),
+(1129, 296, 1, 'Grivot'),
+(1130, 296, 2, 'Dietrich'),
+(1131, 296, 3, 'Blumenwiese 117'),
+(1132, 296, 4, '98956'),
+(1133, 296, 5, 'Berghaintal'),
+(1134, 296, 6, 'DEU'),
+(1135, 296, 7, '0969-2255773'),
+(1136, 296, 8, '0264-457412'),
+(1137, 296, 10, '2011-07-12'),
+(1138, 296, 11, '1'),
+(1139, 296, 12, 'grivot.dietrich@example.com'),
+(1141, 297, 1, 'Groskopf'),
+(1142, 297, 2, 'Dillon'),
+(1143, 297, 3, 'Blumenwiese 118'),
+(1144, 297, 4, '98956'),
+(1145, 297, 5, 'Berghaintal'),
+(1146, 297, 6, 'DEU'),
+(1147, 297, 7, '0970-2255773'),
+(1148, 297, 8, '0265-457412'),
+(1149, 297, 10, '1987-07-14'),
+(1150, 297, 11, '1'),
+(1151, 297, 12, 'groskopf.dillon@example.com'),
+(1153, 298, 1, 'Groth'),
+(1154, 298, 2, 'Dina'),
+(1155, 298, 3, 'Blumenwiese 119'),
+(1156, 298, 4, '98956'),
+(1157, 298, 5, 'Berghaintal'),
+(1158, 298, 6, 'DEU'),
+(1159, 298, 7, '0971-2255773'),
+(1160, 298, 8, '0266-457412'),
+(1161, 298, 10, '1987-07-16'),
+(1162, 298, 11, '2'),
+(1163, 298, 12, 'groth.dina@example.com'),
+(1165, 299, 1, 'Grube'),
+(1166, 299, 2, 'Dinoysius'),
+(1167, 299, 3, 'Blumenwiese 120'),
+(1168, 299, 4, '98956'),
+(1169, 299, 5, 'Berghaintal'),
+(1170, 299, 6, 'DEU'),
+(1171, 299, 7, '0972-2255773'),
+(1172, 299, 8, '0267-457412'),
+(1173, 299, 10, '1984-07-17'),
+(1174, 299, 11, '1'),
+(1175, 299, 12, 'grube.dinoysius@example.com'),
+(1177, 300, 1, 'Grunwald'),
+(1178, 300, 2, 'Dion'),
+(1179, 300, 3, 'Blumenwiese 121'),
+(1180, 300, 4, '98956'),
+(1181, 300, 5, 'Berghaintal'),
+(1182, 300, 6, 'DEU'),
+(1183, 300, 7, '0973-2255773'),
+(1184, 300, 8, '0268-457412'),
+(1185, 300, 10, '1983-07-20'),
+(1186, 300, 11, '1'),
+(1187, 300, 12, 'grunwald.dion@example.com'),
+(1189, 301, 1, 'Grutschus'),
+(1190, 301, 2, 'Diona'),
+(1191, 301, 3, 'Blumenwiese 122'),
+(1192, 301, 4, '98956'),
+(1193, 301, 5, 'Berghaintal'),
+(1194, 301, 6, 'DEU'),
+(1195, 301, 7, '0974-2255773'),
+(1196, 301, 8, '0269-457412'),
+(1197, 301, 10, '1978-07-22'),
+(1198, 301, 11, '2'),
+(1199, 301, 12, 'grutschus.diona@example.com'),
+(1201, 302, 1, 'Hack'),
+(1202, 302, 2, 'Dione'),
+(1203, 302, 3, 'Blumenwiese 123'),
+(1204, 302, 4, '98956'),
+(1205, 302, 5, 'Berghaintal'),
+(1206, 302, 6, 'DEU'),
+(1207, 302, 7, '0975-2255773'),
+(1208, 302, 8, '0270-457412'),
+(1209, 302, 10, '1962-07-24'),
+(1210, 302, 11, '2'),
+(1211, 302, 12, 'hack.dione@example.com'),
+(1213, 303, 1, 'Hacker'),
+(1214, 303, 2, 'Dionysia'),
+(1215, 303, 3, 'Blumenwiese 124'),
+(1216, 303, 4, '98956'),
+(1217, 303, 5, 'Berghaintal'),
+(1218, 303, 6, 'DEU'),
+(1219, 303, 7, '0976-2255773'),
+(1220, 303, 8, '0271-457412'),
+(1221, 303, 10, '2004-07-25'),
+(1222, 303, 11, '2'),
+(1223, 303, 12, 'hacker.dionysia@example.com'),
+(1225, 304, 1, 'Häfner'),
+(1226, 304, 2, 'Dionysius'),
+(1227, 304, 3, 'Blumenwiese 125'),
+(1228, 304, 4, '98956'),
+(1229, 304, 5, 'Berghaintal'),
+(1230, 304, 6, 'DEU'),
+(1231, 304, 7, '0977-2255773'),
+(1232, 304, 8, '0272-457412'),
+(1233, 304, 10, '1978-07-28'),
+(1234, 304, 11, '1'),
+(1236, 305, 1, 'Hamann'),
+(1237, 305, 2, 'Dixie'),
+(1238, 305, 3, 'Blumenwiese 126'),
+(1239, 305, 4, '98956'),
+(1240, 305, 5, 'Berghaintal'),
+(1241, 305, 6, 'DEU'),
+(1242, 305, 7, '0978-2255773'),
+(1243, 305, 8, '0273-457412'),
+(1244, 305, 10, '1976-07-29'),
+(1245, 305, 11, '2'),
+(1246, 305, 12, 'hamann.dixie@example.com'),
+(1248, 306, 1, 'Hamdorf'),
+(1249, 306, 2, 'Dolly'),
+(1250, 306, 3, 'Blumenwiese 127'),
+(1251, 306, 4, '98956'),
+(1252, 306, 5, 'Berghaintal'),
+(1253, 306, 6, 'DEU'),
+(1254, 306, 7, '0979-2255773'),
+(1255, 306, 8, '0274-457412'),
+(1256, 306, 10, '1976-07-31'),
+(1257, 306, 11, '2'),
+(1258, 306, 12, 'hamdorf.dolly@example.com'),
+(1260, 307, 1, 'Hansel'),
+(1261, 307, 2, 'Dolores'),
+(1262, 307, 3, 'Blumenwiese 128'),
+(1263, 307, 4, '98956'),
+(1264, 307, 5, 'Berghaintal'),
+(1265, 307, 6, 'DEU'),
+(1266, 307, 7, '0980-2255773'),
+(1267, 307, 8, '0275-457412'),
+(1268, 307, 10, '1970-08-03'),
+(1269, 307, 11, '2'),
+(1270, 307, 12, 'hansel.dolores@example.com'),
+(1272, 308, 1, 'Harder'),
+(1273, 308, 2, 'Domingo'),
+(1274, 308, 3, 'Blumenwiese 129'),
+(1275, 308, 4, '75357'),
+(1276, 308, 5, 'Traumort'),
+(1277, 308, 6, 'DEU'),
+(1278, 308, 7, '0981-2255773'),
+(1279, 308, 8, '0276-457412'),
+(1280, 308, 10, '2012-08-04'),
+(1281, 308, 11, '1'),
+(1282, 308, 12, 'harder.domingo@example.com'),
+(1284, 309, 1, 'Harms'),
+(1285, 309, 2, 'Dominic'),
+(1286, 309, 3, 'Blumenwiese 130'),
+(1287, 309, 4, '75357'),
+(1288, 309, 5, 'Traumort'),
+(1289, 309, 6, 'DEU'),
+(1290, 309, 7, '0982-2255773'),
+(1291, 309, 8, '0277-457412'),
+(1292, 309, 10, '1981-08-07'),
+(1293, 309, 11, '1'),
+(1294, 309, 12, 'harms.dominic@example.com'),
+(1296, 310, 1, 'Harten'),
+(1297, 310, 2, 'Dominick'),
+(1298, 310, 3, 'Blumenwiese 131'),
+(1299, 310, 4, '75357'),
+(1300, 310, 5, 'Traumort'),
+(1301, 310, 6, 'DEU'),
+(1302, 310, 7, '0983-2255773'),
+(1303, 310, 8, '0278-457412'),
+(1304, 310, 10, '1989-08-09'),
+(1305, 310, 11, '1'),
+(1306, 310, 12, 'harten.dominick@example.com'),
+(1308, 311, 1, 'Hartkop'),
+(1309, 311, 2, 'Dominika'),
+(1310, 311, 3, 'Blumenwiese 132'),
+(1311, 311, 4, '75357'),
+(1312, 311, 5, 'Traumort'),
+(1313, 311, 6, 'DEU'),
+(1314, 311, 7, '0984-2255773'),
+(1315, 311, 8, '0279-457412'),
+(1316, 311, 10, '1968-08-10'),
+(1317, 311, 11, '2'),
+(1318, 311, 12, 'hartkop.dominika@example.com'),
+(1320, 312, 1, 'Hasenkämper'),
+(1321, 312, 2, 'Dominikus'),
+(1322, 312, 3, 'Blumenwiese 133'),
+(1323, 312, 4, '75357'),
+(1324, 312, 5, 'Traumort'),
+(1325, 312, 6, 'DEU'),
+(1326, 312, 7, '0985-2255773'),
+(1327, 312, 8, '0280-457412'),
+(1328, 312, 10, '1961-08-13'),
+(1329, 312, 11, '1'),
+(1331, 313, 1, 'Heerde'),
+(1332, 313, 2, 'Dominique'),
+(1333, 313, 3, 'Blumenwiese 134'),
+(1334, 313, 4, '75357'),
+(1335, 313, 5, 'Traumort'),
+(1336, 313, 6, 'DEU'),
+(1337, 313, 7, '0986-2255773'),
+(1338, 313, 8, '0281-457412'),
+(1339, 313, 10, '1979-08-15'),
+(1340, 313, 11, '1'),
+(1341, 313, 12, 'heerde.dominique@example.com'),
+(1343, 314, 1, 'Heinrich'),
+(1344, 314, 2, 'Domitian'),
+(1345, 314, 3, 'Blumenwiese 135'),
+(1346, 314, 4, '75357'),
+(1347, 314, 5, 'Traumort'),
+(1348, 314, 6, 'DEU'),
+(1349, 314, 7, '0987-2255773'),
+(1350, 314, 8, '0282-457412'),
+(1351, 314, 10, '1971-08-17'),
+(1352, 314, 11, '1'),
+(1353, 314, 12, 'heinrich.domitian@example.com'),
+(1355, 315, 1, 'Heitmann'),
+(1356, 315, 2, 'Don'),
+(1357, 315, 3, 'Blumenwiese 136'),
+(1358, 315, 4, '75357'),
+(1359, 315, 5, 'Traumort'),
+(1360, 315, 6, 'DEU'),
+(1361, 315, 7, '0988-2255773'),
+(1362, 315, 8, '0283-457412'),
+(1363, 315, 10, '1976-08-18'),
+(1364, 315, 11, '1'),
+(1365, 315, 12, 'heitmann.don@example.com'),
+(1367, 316, 1, 'Helmke'),
+(1368, 316, 2, 'Donald'),
+(1369, 316, 3, 'Blumenwiese 137'),
+(1370, 316, 4, '75357'),
+(1371, 316, 5, 'Traumort'),
+(1372, 316, 6, 'DEU'),
+(1373, 316, 7, '0989-2255773'),
+(1374, 316, 8, '0284-457412'),
+(1375, 316, 10, '1964-08-20'),
+(1376, 316, 11, '1'),
+(1377, 316, 12, 'helmke.donald@example.com'),
+(1379, 317, 1, 'Hemsath'),
+(1380, 317, 2, 'Donatus'),
+(1381, 317, 3, 'Blumenwiese 138'),
+(1382, 317, 4, '75357'),
+(1383, 317, 5, 'Traumort'),
+(1384, 317, 6, 'DEU'),
+(1385, 317, 7, '0990-2255773'),
+(1386, 317, 8, '0285-457412'),
+(1387, 317, 10, '2009-08-23'),
+(1388, 317, 11, '1'),
+(1389, 317, 12, 'hemsath.donatus@example.com'),
+(1391, 318, 1, 'Henning'),
+(1392, 318, 2, 'Donna'),
+(1393, 318, 3, 'Blumenwiese 139'),
+(1394, 318, 4, '75357'),
+(1395, 318, 5, 'Traumort'),
+(1396, 318, 6, 'DEU'),
+(1397, 318, 7, '0991-2255773'),
+(1398, 318, 8, '0286-457412'),
+(1399, 318, 10, '1985-08-25'),
+(1400, 318, 11, '2'),
+(1401, 318, 12, 'henning.donna@example.com'),
+(1403, 319, 1, 'Heruth'),
+(1404, 319, 2, 'Donnie'),
+(1405, 319, 3, 'Blumenwiese 140'),
+(1406, 319, 4, '75357'),
+(1407, 319, 5, 'Traumort'),
+(1408, 319, 6, 'DEU'),
+(1409, 319, 7, '0992-2255773'),
+(1410, 319, 8, '0287-457412'),
+(1411, 319, 10, '1973-08-27'),
+(1412, 319, 11, '2'),
+(1413, 319, 12, 'heruth.donnie@example.com'),
+(1415, 320, 1, 'Heuck'),
+(1416, 320, 2, 'Donovan'),
+(1417, 320, 3, 'Blumenwiese 141'),
+(1418, 320, 4, '75357'),
+(1419, 320, 5, 'Traumort'),
+(1420, 320, 6, 'DEU'),
+(1421, 320, 7, '0993-2255773'),
+(1422, 320, 8, '0288-457412'),
+(1423, 320, 10, '2005-08-29'),
+(1424, 320, 11, '1'),
+(1425, 320, 12, 'heuck.donovan@example.com'),
+(1427, 321, 1, 'Heuer'),
+(1428, 321, 2, 'Dora'),
+(1429, 321, 3, 'Blumenwiese 142'),
+(1430, 321, 4, '75357'),
+(1431, 321, 5, 'Traumort'),
+(1432, 321, 6, 'DEU'),
+(1433, 321, 7, '0994-2255773'),
+(1434, 321, 8, '0289-457412'),
+(1435, 321, 10, '1975-08-31'),
+(1436, 321, 11, '2'),
+(1437, 321, 12, 'heuer.dora@example.com'),
+(1439, 322, 1, 'Heyn'),
+(1440, 322, 2, 'Doreen'),
+(1441, 322, 3, 'Blumenwiese 143'),
+(1442, 322, 4, '75357'),
+(1443, 322, 5, 'Traumort'),
+(1444, 322, 6, 'DEU'),
+(1445, 322, 7, '0995-2255773'),
+(1446, 322, 8, '0290-457412'),
+(1447, 322, 10, '1964-09-01'),
+(1448, 322, 11, '2'),
+(1449, 322, 12, 'heyn.doreen@example.com'),
+(1451, 323, 1, 'Hildenbrandt'),
+(1452, 323, 2, 'Doris'),
+(1453, 323, 3, 'Blumenwiese 144'),
+(1454, 323, 4, '75357'),
+(1455, 323, 5, 'Traumort'),
+(1456, 323, 6, 'DEU'),
+(1457, 323, 7, '0996-2255773'),
+(1458, 323, 8, '0291-457412'),
+(1459, 323, 10, '1960-09-03'),
+(1460, 323, 11, '2'),
+(1461, 323, 12, 'hildenbrandt.doris@example.com'),
+(1463, 324, 1, 'Hinsch'),
+(1464, 324, 2, 'Dorothea'),
+(1465, 324, 3, 'Blumenwiese 145'),
+(1466, 324, 4, '75357'),
+(1467, 324, 5, 'Traumort'),
+(1468, 324, 6, 'DEU'),
+(1469, 324, 7, '0997-2255773'),
+(1470, 324, 8, '0292-457412'),
+(1471, 324, 10, '1960-09-05'),
+(1472, 324, 11, '2'),
+(1473, 324, 12, 'hinsch.dorothea@example.com'),
+(1475, 325, 1, 'Hochbruck'),
+(1476, 325, 2, 'Dorothy'),
+(1477, 325, 3, 'Blumenwiese 146'),
+(1478, 325, 4, '75357'),
+(1479, 325, 5, 'Traumort'),
+(1480, 325, 6, 'DEU'),
+(1481, 325, 7, '0998-2255773'),
+(1482, 325, 8, '0293-457412'),
+(1483, 325, 10, '1968-09-07'),
+(1484, 325, 11, '2'),
+(1485, 325, 12, 'hochbruck.dorothy@example.com'),
+(1487, 326, 1, 'Hoff'),
+(1488, 326, 2, 'Dorthy'),
+(1489, 326, 3, 'Blumenwiese 147'),
+(1490, 326, 4, '75357'),
+(1491, 326, 5, 'Traumort'),
+(1492, 326, 6, 'DEU'),
+(1493, 326, 7, '0999-2255773'),
+(1494, 326, 8, '0294-457412'),
+(1495, 326, 10, '2010-09-10'),
+(1496, 326, 11, '2'),
+(1497, 326, 12, 'hoff.dorthy@example.com'),
+(1499, 327, 1, 'Holst'),
+(1500, 327, 2, 'Doug'),
+(1501, 327, 3, 'Blumenwiese 148'),
+(1502, 327, 4, '75357'),
+(1503, 327, 5, 'Traumort'),
+(1504, 327, 6, 'DEU'),
+(1505, 327, 7, '1000-2255773'),
+(1506, 327, 8, '0295-457412'),
+(1507, 327, 10, '1981-09-12'),
+(1508, 327, 11, '1'),
+(1509, 327, 12, 'holstholz.doug@example.com'),
+(1511, 328, 1, 'Homann'),
+(1512, 328, 2, 'Douglas'),
+(1513, 328, 3, 'Blumenwiese 149'),
+(1514, 328, 4, '75357'),
+(1515, 328, 5, 'Traumort'),
+(1516, 328, 6, 'DEU'),
+(1517, 328, 7, '1001-2255773'),
+(1518, 328, 8, '0296-457412'),
+(1519, 328, 10, '1992-09-13'),
+(1520, 328, 11, '1'),
+(1521, 328, 12, 'hohmann.douglas@example.com'),
+(1523, 329, 1, 'Hoopt'),
+(1524, 329, 2, 'Doyle'),
+(1525, 329, 3, 'Blumenwiese 150'),
+(1526, 329, 4, '75357'),
+(1527, 329, 5, 'Traumort'),
+(1528, 329, 6, 'DEU'),
+(1529, 329, 7, '1002-2255773'),
+(1530, 329, 8, '0297-457412'),
+(1531, 329, 10, '2014-09-16'),
+(1532, 329, 11, '2'),
+(1533, 329, 12, 'hoopt.doyle@example.com'),
+(1535, 330, 1, 'Hübenbecker'),
+(1536, 330, 2, 'Drake'),
+(1537, 330, 3, 'Blumenwiese 151'),
+(1538, 330, 4, '75357'),
+(1539, 330, 5, 'Traumort'),
+(1540, 330, 6, 'DEU'),
+(1541, 330, 7, '1003-2255773'),
+(1542, 330, 8, '0298-457412'),
+(1543, 330, 10, '2001-09-18'),
+(1544, 330, 11, '1'),
+(1546, 331, 1, 'Hüttmann'),
+(1547, 331, 2, 'Drew'),
+(1548, 331, 3, 'Blumenwiese 152'),
+(1549, 331, 4, '75357'),
+(1550, 331, 5, 'Traumort'),
+(1551, 331, 6, 'DEU'),
+(1552, 331, 7, '1004-2255773'),
+(1553, 331, 8, '0299-457412'),
+(1554, 331, 10, '2002-09-20'),
+(1555, 331, 11, '1'),
+(1557, 332, 1, 'Ilse'),
+(1558, 332, 2, 'Drutmar'),
+(1559, 332, 3, 'Blumenwiese 153'),
+(1560, 332, 4, '75357'),
+(1561, 332, 5, 'Traumort'),
+(1562, 332, 6, 'DEU'),
+(1563, 332, 7, '1005-2255773'),
+(1564, 332, 8, '0300-457412'),
+(1565, 332, 10, '1980-09-21'),
+(1566, 332, 11, '2'),
+(1567, 332, 12, 'ilse.drutmar@example.com'),
+(1569, 333, 1, 'Jachs'),
+(1570, 333, 2, 'Duane'),
+(1571, 333, 3, 'Blumenwiese 154'),
+(1572, 333, 4, '75357'),
+(1573, 333, 5, 'Traumort'),
+(1574, 333, 6, 'DEU'),
+(1575, 333, 7, '1006-2255773'),
+(1576, 333, 8, '0301-457412'),
+(1577, 333, 10, '1989-09-24'),
+(1578, 333, 11, '2'),
+(1579, 333, 12, 'jachs.duane@example.com'),
+(1581, 334, 1, 'Jacobsen'),
+(1582, 334, 2, 'Dustin'),
+(1583, 334, 3, 'Blumenwiese 155'),
+(1584, 334, 4, '75357'),
+(1585, 334, 5, 'Traumort'),
+(1586, 334, 6, 'DEU'),
+(1587, 334, 7, '1007-2255773'),
+(1588, 334, 8, '0302-457412'),
+(1589, 334, 10, '1986-09-26'),
+(1590, 334, 11, '1'),
+(1591, 334, 12, 'jacobsen.dustin@example.com'),
+(1593, 335, 1, 'Jagelowicz'),
+(1594, 335, 2, 'Dwayne'),
+(1595, 335, 3, 'Blumenwiese 156'),
+(1596, 335, 4, '75357'),
+(1597, 335, 5, 'Traumort'),
+(1598, 335, 6, 'DEU'),
+(1599, 335, 7, '1008-2255773'),
+(1600, 335, 8, '0303-457412'),
+(1601, 335, 10, '1992-09-27'),
+(1602, 335, 11, '1'),
+(1603, 335, 12, 'jagelowicz.dwayne@example.com'),
+(1605, 336, 1, 'Jens'),
+(1606, 336, 2, 'Dwight'),
+(1607, 336, 3, 'Blumenwiese 157'),
+(1608, 336, 4, '75357'),
+(1609, 336, 5, 'Traumort'),
+(1610, 336, 6, 'DEU'),
+(1611, 336, 7, '1009-2255773'),
+(1612, 336, 8, '0304-457412'),
+(1613, 336, 10, '1996-09-29'),
+(1614, 336, 11, '1'),
+(1615, 336, 12, 'jens.dwight@example.com'),
+(1617, 337, 1, 'Jenschke'),
+(1618, 337, 2, 'Dylan'),
+(1619, 337, 3, 'Blumenwiese 158'),
+(1620, 337, 4, '75357'),
+(1621, 337, 5, 'Traumort'),
+(1622, 337, 6, 'DEU'),
+(1623, 337, 7, '1010-2255773'),
+(1624, 337, 8, '0305-457412'),
+(1625, 337, 10, '1982-10-02'),
+(1626, 337, 11, '1'),
+(1628, 338, 1, 'Jensen'),
+(1629, 338, 2, 'Reba'),
+(1630, 338, 3, 'Blumenwiese 159'),
+(1631, 338, 4, '75357'),
+(1632, 338, 5, 'Traumort'),
+(1633, 338, 6, 'DEU'),
+(1634, 338, 7, '1011-2255773'),
+(1635, 338, 8, '0306-457412'),
+(1636, 338, 10, '1973-10-04'),
+(1637, 338, 11, '2'),
+(1638, 338, 12, 'jensen.reba@example.com'),
+(1640, 339, 1, 'Jessulat'),
+(1641, 339, 2, 'Rebeca'),
+(1642, 339, 3, 'Blumenwiese 160'),
+(1643, 339, 4, '75357'),
+(1644, 339, 5, 'Traumort'),
+(1645, 339, 6, 'DEU'),
+(1646, 339, 7, '1012-2255773'),
+(1647, 339, 8, '0307-457412'),
+(1648, 339, 10, '1989-10-06'),
+(1649, 339, 11, '2'),
+(1650, 339, 12, 'jessulat.rebeca@example.com'),
+(1652, 340, 1, 'Jürs'),
+(1653, 340, 2, 'Rebecca'),
+(1654, 340, 3, 'Blumenwiese 161'),
+(1655, 340, 4, '75357'),
+(1656, 340, 5, 'Traumort'),
+(1657, 340, 6, 'DEU'),
+(1658, 340, 7, '1013-2255773'),
+(1659, 340, 8, '0308-457412'),
+(1660, 340, 10, '2006-10-08'),
+(1661, 340, 11, '2'),
+(1663, 341, 1, 'Juret'),
+(1664, 341, 2, 'Rebekah'),
+(1665, 341, 3, 'Blumenwiese 162'),
+(1666, 341, 4, '75357'),
+(1667, 341, 5, 'Traumort'),
+(1668, 341, 6, 'DEU'),
+(1669, 341, 7, '1014-2255773'),
+(1670, 341, 8, '0309-457412'),
+(1671, 341, 10, '2002-10-10'),
+(1672, 341, 11, '2'),
+(1673, 341, 12, 'juret.rebekah@example.com'),
+(1675, 342, 1, 'Kähler'),
+(1676, 342, 2, 'Rebekka'),
+(1677, 342, 3, 'Blumenwiese 163'),
+(1678, 342, 4, '75357'),
+(1679, 342, 5, 'Traumort'),
+(1680, 342, 6, 'DEU'),
+(1681, 342, 7, '1015-2255773'),
+(1682, 342, 8, '0310-457412'),
+(1683, 342, 10, '1978-10-12'),
+(1684, 342, 11, '2'),
+(1686, 343, 1, 'Kälberer'),
+(1687, 343, 2, 'Regan'),
+(1688, 343, 3, 'Blumenwiese 164'),
+(1689, 343, 4, '75357'),
+(1690, 343, 5, 'Traumort'),
+(1691, 343, 6, 'DEU'),
+(1692, 343, 7, '1016-2255773'),
+(1693, 343, 8, '0311-457412'),
+(1694, 343, 10, '1997-10-14'),
+(1695, 343, 11, '1'),
+(1697, 344, 1, 'Kahns'),
+(1698, 344, 2, 'Regina'),
+(1699, 344, 3, 'Blumenwiese 165'),
+(1700, 344, 4, '75357'),
+(1701, 344, 5, 'Traumort'),
+(1702, 344, 6, 'DEU'),
+(1703, 344, 7, '1017-2255773'),
+(1704, 344, 8, '0312-457412'),
+(1705, 344, 10, '2001-10-16'),
+(1706, 344, 11, '2'),
+(1707, 344, 12, 'kahns.regina@example.com'),
+(1709, 345, 1, 'Kamm'),
+(1710, 345, 2, 'Reginald'),
+(1711, 345, 3, 'Blumenwiese 166'),
+(1712, 345, 4, '75357'),
+(1713, 345, 5, 'Traumort'),
+(1714, 345, 6, 'DEU'),
+(1715, 345, 7, '1018-2255773'),
+(1716, 345, 8, '0313-457412'),
+(1717, 345, 10, '1980-10-17'),
+(1718, 345, 11, '1'),
+(1719, 345, 12, 'kamm.reginald@example.com'),
+(1721, 346, 1, 'Kassebaum'),
+(1722, 346, 2, 'Reginbald'),
+(1723, 346, 3, 'Blumenwiese 167'),
+(1724, 346, 4, '75357'),
+(1725, 346, 5, 'Traumort'),
+(1726, 346, 6, 'DEU'),
+(1727, 346, 7, '1019-2255773'),
+(1728, 346, 8, '0314-457412'),
+(1729, 346, 10, '1989-10-20'),
+(1730, 346, 11, '1'),
+(1731, 346, 12, 'kassebaum.reginbald@example.com'),
+(1733, 347, 1, 'Kaths'),
+(1734, 347, 2, 'Regine'),
+(1735, 347, 3, 'Blumenwiese 168'),
+(1736, 347, 4, '75357'),
+(1737, 347, 5, 'Traumort'),
+(1738, 347, 6, 'DEU'),
+(1739, 347, 7, '1020-2255773'),
+(1740, 347, 8, '0315-457412'),
+(1741, 347, 10, '2000-10-21'),
+(1742, 347, 11, '2'),
+(1743, 347, 12, 'kaths.regine@example.com'),
+(1745, 348, 1, 'Kauffmann'),
+(1746, 348, 2, 'Reginhard'),
+(1747, 348, 3, 'Blumenwiese 169'),
+(1748, 348, 4, '75357'),
+(1749, 348, 5, 'Traumort'),
+(1750, 348, 6, 'DEU'),
+(1751, 348, 7, '1021-2255773'),
+(1752, 348, 8, '0316-457412'),
+(1753, 348, 10, '1969-10-24'),
+(1754, 348, 11, '1'),
+(1755, 348, 12, 'kauffmann.reginhard@example.com'),
+(1757, 349, 1, 'Kerl'),
+(1758, 349, 2, 'Reginlind'),
+(1759, 349, 3, 'Blumenwiese 170'),
+(1760, 349, 4, '75357'),
+(1761, 349, 5, 'Traumort'),
+(1762, 349, 6, 'DEU'),
+(1763, 349, 7, '1022-2255773'),
+(1764, 349, 8, '0317-457412'),
+(1765, 349, 10, '1991-10-26'),
+(1766, 349, 11, '2'),
+(1767, 349, 12, 'kerl.reginlind@example.com'),
+(1769, 350, 1, 'Keßler'),
+(1770, 350, 2, 'Reilly'),
+(1771, 350, 3, 'Blumenwiese 171'),
+(1772, 350, 4, '44665'),
+(1773, 350, 5, 'Möllerhausen'),
+(1774, 350, 6, 'DEU'),
+(1775, 350, 7, '1023-2255773'),
+(1776, 350, 8, '0318-457412'),
+(1777, 350, 10, '1985-10-28'),
+(1778, 350, 11, '2'),
+(1780, 351, 1, 'Demo'),
+(1781, 351, 2, 'User'),
+(1782, 351, 3, 'Unter den Linden 12'),
+(1783, 351, 4, '10117'),
+(1784, 351, 5, 'Berlin'),
+(1785, 351, 6, 'DEU'),
+(1786, 351, 7, '030-85858585'),
+(1787, 351, 10, '1995-10-30'),
+(1788, 351, 11, '1'),
+(1789, 351, 12, 'demo@admidio.org'),
+(1790, 351, 13, 'https://www.admidio.org/demo'),
+(1792, 351, 20, '4711'),
+(1793, 352, 1, 'Suppenkasper'),
+(1794, 352, 2, 'Walther'),
+(1795, 352, 3, 'Kurfürstendamm 21'),
+(1796, 352, 4, '10707'),
+(1797, 352, 5, 'Berlin'),
+(1798, 352, 6, 'DEU'),
+(1799, 352, 10, '1968-10-31'),
+(1800, 352, 11, '1'),
+(1801, 352, 12, 'kasper@example.com'),
+(1802, 352, 20, '025789'),
+(1803, 352, 21, 'grün'),
+(1804, 353, 1, 'Groth'),
+(1805, 353, 2, 'Dina'),
+(1806, 353, 6, 'DEU'),
+(1807, 353, 11, '2'),
+(1808, 353, 12, 'dina@example.com'),
+(1809, 354, 1, 'Chairman'),
+(1810, 354, 2, 'Eric'),
+(1811, 354, 6, 'DEU'),
+(1812, 354, 11, '1'),
+(1813, 354, 12, 'Chairman@example.com'),
+(1814, 355, 1, 'Schmidt'),
+(1815, 355, 2, 'Jennifer'),
+(1816, 355, 3, 'Unter den Linden 45'),
+(1817, 355, 4, '10117'),
+(1818, 355, 5, 'Berlin'),
+(1819, 355, 6, 'DEU'),
+(1820, 355, 11, '2'),
+(1821, 355, 12, 'Member@example.com'),
+(1824, 355, 14, '1'),
+(1900, 356, 1, 'Schmidt'),
+(1901, 356, 2, 'Silke'),
+(1902, 356, 3, 'Unter den Linden 45'),
+(1903, 356, 4, '10117'),
+(1904, 356, 5, 'Berlin'),
+(1905, 356, 6, 'DEU'),
+(1906, 356, 10, '2015-11-03'),
+(1907, 356, 11, '2'),
+(1910, 357, 1, 'Schmidt'),
+(1911, 357, 2, 'Stefan'),
+(1912, 357, 3, 'Unter den Linden 45'),
+(1913, 357, 4, '10117'),
+(1914, 357, 5, 'Berlin'),
+(1915, 357, 6, 'DEU'),
+(1916, 357, 10, '2004-11-04'),
+(1917, 357, 11, '1'),
+(2000, 358, 1, 'Suppenkasper'),
+(2001, 358, 2, 'Walter'),
+(2002, 358, 3, 'Heinrichsallee 254'),
+(2003, 358, 4, '10118'),
+(2004, 358, 5, 'Berlin'),
+(2005, 358, 6, 'DEU'),
+(2100, 359, 1, 'Bakers'),
+(2101, 359, 2, 'Colin'),
+(2102, 359, 3, 'Wallingtonstreet 73'),
+(2103, 359, 4, '3845'),
+(2104, 359, 5, 'Birmingham'),
+(2105, 359, 6, 'GBR'),
+(2106, 359, 12, 'c.bakers@example.com'),
+(2107, 359, 14, '1'),
+(2200, 360, 1, 'Smith'),
+(2201, 360, 2, 'Barbara'),
+(2202, 360, 3, 'Mainstreet 876'),
+(2203, 360, 4, '573545'),
+(2204, 360, 5, 'Boston'),
+(2205, 360, 6, 'USA'),
+(2206, 360, 12, 'bab.smith@example.com'),
+(2207, 360, 14, '1'),
+(13000, 1, 22, 'Admidio'),
+(13001, 1, 26, 'AdmidioApp'),
+(13002, 1, 28, '@admidio'),
+(13004, 1, 14, '1'),
+(13100, 2, 1, 'System'),
+(18011, 352, 14, '1'),
+(18081, 353, 14, '1'),
+(18131, 354, 22, 'Admidio'),
+(18133, 354, 14, '1'),
+(18134, 354, 26, 'AdmidioApp'),
+(18135, 354, 28, '@admidio'),
+(18136, 355, 10, '1980-11-06'),
+(18137, 355, 21, 'red'),
+(18138, 218, 21, 'green');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_user_fields`
+--
+
+CREATE TABLE `%PREFIX%_user_fields` (
+  `usf_id` int UNSIGNED NOT NULL,
+  `usf_cat_id` int UNSIGNED NOT NULL,
+  `usf_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usf_type` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usf_name_intern` varchar(110) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usf_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `usf_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `usf_default_value` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usf_regex` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usf_icon` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usf_url` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `usf_system` tinyint(1) NOT NULL DEFAULT '0',
+  `usf_disabled` tinyint(1) NOT NULL DEFAULT '0',
+  `usf_hidden` tinyint(1) NOT NULL DEFAULT '0',
+  `usf_registration` tinyint(1) NOT NULL DEFAULT '0',
+  `usf_required_input` smallint NOT NULL DEFAULT '0',
+  `usf_sequence` smallint NOT NULL,
+  `usf_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `usf_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `usf_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `usf_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_user_fields`
+--
+
+INSERT INTO `%PREFIX%_user_fields` (`usf_id`, `usf_cat_id`, `usf_uuid`, `usf_type`, `usf_name_intern`, `usf_name`, `usf_description`, `usf_default_value`, `usf_regex`, `usf_icon`, `usf_url`, `usf_system`, `usf_disabled`, `usf_hidden`, `usf_registration`, `usf_required_input`, `usf_sequence`, `usf_usr_id_create`, `usf_timestamp_create`, `usf_usr_id_change`, `usf_timestamp_change`) VALUES
+(1, 1, '8bd39525-1bb0-4306-85b0-a08c7c71faad', 'TEXT', 'LAST_NAME', 'SYS_LASTNAME', NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 1, 1, 1, 1, '2012-01-08 10:12:05', NULL, NULL),
+(2, 1, '424592e0-5abc-4abe-ab18-c4088cfb17fa', 'TEXT', 'FIRST_NAME', 'SYS_FIRSTNAME', NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 1, 1, 2, 1, '2012-01-08 10:12:05', NULL, NULL),
+(3, 1, '34c57527-f0e6-426f-9ff7-4cf51c5b0238', 'TEXT', 'STREET', 'SYS_STREET', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
+(4, 1, '4d07edd9-44c0-4c85-9f66-1a521447fb74', 'TEXT', 'POSTCODE', 'SYS_POSTCODE', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
+(5, 1, '9b0b5f84-7d18-4df0-91ea-7eaca46cbfc4', 'TEXT', 'CITY', 'SYS_CITY', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 5, 1, '2012-01-08 10:12:05', NULL, NULL),
+(6, 1, '75dcb582-231f-4b24-81fc-5cdce79a3069', 'TEXT', 'COUNTRY', 'SYS_COUNTRY', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 6, 1, '2012-01-08 10:12:05', NULL, NULL),
+(7, 1, '88c73af3-dea9-4d5c-b8d3-b2c743da5b14', 'PHONE', 'PHONE', 'SYS_PHONE', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 7, 1, '2012-01-08 10:12:05', NULL, NULL),
+(8, 1, '6d85e436-4edd-4d7d-b9d7-df17ea4de1fb', 'PHONE', 'MOBILE', 'SYS_MOBILE', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 8, 1, '2012-01-08 10:12:05', NULL, NULL),
+(10, 1, 'f3dca1e4-d439-4501-967e-e87545060b03', 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 10, 1, '2012-01-08 10:12:05', NULL, NULL),
+(11, 1, '944252e6-7275-42bd-9d7a-03ff294080fb', 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 11, 1, '2012-01-08 10:12:05', NULL, NULL),
+(12, 1, '09556bd3-0bc5-4e97-800a-4ed347f6327e', 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 1, 2, 12, 1, '2012-01-08 10:12:05', NULL, NULL),
+(13, 1, '627c57a6-f17b-44df-9d31-3d668634eb97', 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 13, 1, '2012-01-08 10:12:05', NULL, NULL),
+(14, 1, 'd1b9314d-953c-4198-8250-d10f4661abe7', 'CHECKBOX', 'DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION_DESC', NULL, NULL, NULL, NULL, 0, 0, 0, 1, 2, 14, 1, '2012-01-08 10:12:05', NULL, NULL),
+(20, 8, '89b33bc0-913a-404c-9899-e53ad5080fec', 'NUMBER', 'MEMBERSHIP_NUMBER', 'Membership number', NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 0, 1, 1, '2011-04-06 20:05:20', NULL, NULL),
+(21, 8, '15b324bc-29d8-4b79-bee9-10072b8d7489', 'TEXT', 'FAVORITE_COLOR', 'Favorite color', 'Any member may enter his favorite color', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 2, 1, '2011-04-06 20:05:20', NULL, NULL),
+(22, 2, '041f1bb5-4305-47d7-8538-c1e7163339a6', 'TEXT', 'FACEBOOK', 'SYS_FACEBOOK', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', NULL, NULL, 'facebook', 'https://www.facebook.com/#user_content#', 0, 0, 0, 0, 0, 1, 1, '2012-01-08 10:11:40', NULL, NULL),
+(24, 2, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 'TEXT', 'XING', 'SYS_XING', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', NULL, NULL, NULL, 'https://www.xing.com/profile/#user_content#', 0, 0, 0, 0, 0, 6, 1, '2012-01-08 10:11:40', NULL, NULL),
+(26, 2, '1b204526-bae3-4948-91fa-f0e669c48826', 'TEXT', 'INSTAGRAM', 'SYS_INSTAGRAM', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', NULL, NULL, 'instagram', 'https://www.instagram.com/#user_content#', 0, 0, 0, 0, 0, 2, 1, '2012-01-08 10:11:40', NULL, NULL),
+(27, 2, '1b204527-bae3-4948-91fa-f0e669c48827', 'TEXT', 'LINKEDIN', 'SYS_LINKEDIN', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', NULL, NULL, 'linkedin', 'https://www.linkedin.com/in/#user_content#', 0, 0, 0, 0, 0, 3, 1, '2012-01-08 10:11:40', NULL, NULL),
+(28, 2, '1b204528-bae3-4948-91fa-f0e669c48828', 'TEXT', 'MASTODON', 'SYS_MASTODON', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', NULL, NULL, 'mastodon', 'https://mastodon.social/#user_content#', 0, 0, 0, 0, 0, 4, 1, '2012-01-08 10:11:40', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_user_field_select_options`
+--
+
+CREATE TABLE `%PREFIX%_user_field_select_options` (
+  `ufo_id` int UNSIGNED NOT NULL,
+  `ufo_usf_id` int UNSIGNED NOT NULL,
+  `ufo_value` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ufo_system` tinyint(1) NOT NULL DEFAULT '0',
+  `ufo_sequence` smallint NOT NULL,
+  `ufo_obsolete` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_user_field_select_options`
+--
+
+INSERT INTO `%PREFIX%_user_field_select_options` (`ufo_id`, `ufo_usf_id`, `ufo_value`, `ufo_system`, `ufo_sequence`, `ufo_obsolete`) VALUES
+(1, 11, 'gender-male|SYS_MALE', 0, 1, 0),
+(2, 11, 'gender-female|SYS_FEMALE', 0, 2, 0),
+(3, 11, 'gender-trans|SYS_DIVERSE', 0, 3, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_user_relations`
+--
+
+CREATE TABLE `%PREFIX%_user_relations` (
+  `ure_id` int UNSIGNED NOT NULL,
+  `ure_urt_id` int UNSIGNED NOT NULL,
+  `ure_usr_id1` int UNSIGNED NOT NULL,
+  `ure_usr_id2` int UNSIGNED NOT NULL,
+  `ure_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `ure_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ure_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `ure_timestamp_change` timestamp NULL DEFAULT NULL,
+  `ure_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_user_relations`
+--
+
+INSERT INTO `%PREFIX%_user_relations` (`ure_id`, `ure_urt_id`, `ure_usr_id1`, `ure_usr_id2`, `ure_usr_id_create`, `ure_timestamp_create`, `ure_usr_id_change`, `ure_timestamp_change`, `ure_uuid`) VALUES
+(1, 4, 1, 355, 1, '2016-12-06 19:02:09', NULL, NULL, 'a88952e5-77d8-4503-87b2-5f5251aca5b2'),
+(2, 4, 355, 1, 1, '2016-12-06 19:02:09', NULL, NULL, 'e4aa38fa-ba34-4bf6-aec1-cc5daa4d1cef'),
+(3, 2, 1, 356, 1, '2016-12-06 19:02:23', NULL, NULL, 'f08fc1a9-27e2-4f21-a3f7-099d566d2503'),
+(4, 1, 356, 1, 1, '2016-12-06 19:02:23', NULL, NULL, 'b951c1db-4057-44ff-887b-8f31e33e24d9'),
+(5, 2, 1, 357, 1, '2016-12-06 19:02:35', NULL, NULL, '01613e4d-3863-4c50-ab77-88da663ed4f4'),
+(6, 1, 357, 1, 1, '2016-12-06 19:02:35', NULL, NULL, 'a02e52c8-68e4-4a73-ad86-37c54de89715'),
+(7, 1, 357, 355, 1, '2016-12-06 19:02:58', NULL, NULL, '7b3649e4-2424-4467-ad55-1653d7f6e828'),
+(8, 2, 355, 357, 1, '2016-12-06 19:02:58', NULL, NULL, '39a5005d-231b-42c4-ad5c-8b1cf511c112'),
+(9, 3, 357, 356, 1, '2016-12-06 19:03:15', NULL, NULL, '0e6157a2-d591-484d-8de4-2cd22c60030d'),
+(10, 3, 356, 357, 1, '2016-12-06 19:03:15', NULL, NULL, '0fb5ea2f-9d3a-425c-8f8e-da6be8e45073'),
+(11, 2, 355, 356, 1, '2016-12-06 19:04:32', NULL, NULL, 'fa04f9d2-3af1-43bc-8b43-01da6c95b486'),
+(12, 1, 356, 355, 1, '2016-12-06 19:04:32', NULL, NULL, 'bf1a4557-b0a7-414b-bfa7-89f1ab00bea8');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%_user_relation_types`
+--
+
+CREATE TABLE `%PREFIX%_user_relation_types` (
+  `urt_id` int UNSIGNED NOT NULL,
+  `urt_uuid` varchar(36) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urt_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urt_name_male` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urt_name_female` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `urt_edit_user` tinyint(1) NOT NULL DEFAULT '0',
+  `urt_id_inverse` int UNSIGNED DEFAULT NULL,
+  `urt_usr_id_create` int UNSIGNED DEFAULT NULL,
+  `urt_timestamp_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `urt_usr_id_change` int UNSIGNED DEFAULT NULL,
+  `urt_timestamp_change` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+--
+-- Dumping data for table `%PREFIX%_user_relation_types`
+--
+
+INSERT INTO `%PREFIX%_user_relation_types` (`urt_id`, `urt_uuid`, `urt_name`, `urt_name_male`, `urt_name_female`, `urt_edit_user`, `urt_id_inverse`, `urt_usr_id_create`, `urt_timestamp_create`, `urt_usr_id_change`, `urt_timestamp_change`) VALUES
+(1, '3f716ce8-f05e-4eb9-a89e-20a8a277aa18', 'SYS_PARENT', 'SYS_FATHER', 'SYS_MOTHER', 0, 2, 2, '2016-11-22 04:29:56', NULL, NULL),
+(2, 'e728bdd5-cc1f-46a3-aef3-a3a12cc8aad6', 'SYS_CHILD', 'SYS_SON', 'SYS_DAUGHTER', 0, 1, 2, '2016-11-22 04:29:56', NULL, NULL),
+(3, '7d31dd74-77a4-461d-9402-37ae8fe2cfcf', 'SYS_SIBLING', 'SYS_BROTHER', 'SYS_SISTER', 0, 3, 2, '2016-11-22 04:29:56', NULL, NULL),
+(4, '91b3c6a0-2559-4e7a-bfcc-4f47e56efd35', 'SYS_SPOUSE', 'SYS_HUSBAND', 'SYS_WIFE', 0, 4, 2, '2016-11-22 04:29:56', NULL, NULL),
+(5, 'be687ee3-bd7d-499e-b388-b0387fb89389', 'SYS_COHABITANT', 'SYS_COHABITANT_MALE', 'SYS_COHABITANT_FEMALE', 0, 5, 2, '2016-11-22 04:29:56', NULL, NULL),
+(6, '7a7acc74-7c9f-404f-bd74-abe7482c4126', 'SYS_COMPANION', 'SYS_BOYFRIEND', 'SYS_GIRLFRIEND', 0, 6, 2, '2016-11-22 04:29:56', NULL, NULL),
+(7, '7169f73a-49a9-4ce3-981a-102c6eb2c3c9', 'SYS_SUPERIOR', 'SYS_SUPERIOR_MALE', 'SYS_SUPERIOR_FEMALE', 0, 8, 2, '2016-11-22 04:29:56', NULL, NULL),
+(8, 'a7ab66fb-67c1-4828-aeda-dc31d09050dc', 'SYS_SUBORDINATE', 'SYS_SUBORDINATE_MALE', 'SYS_SUBORDINATE_FEMALE', 0, 7, 2, '2016-11-22 04:29:56', NULL, NULL);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `%PREFIX%_announcements`
+--
+ALTER TABLE `%PREFIX%_announcements`
+  ADD PRIMARY KEY (`ann_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_ann_uuid` (`ann_uuid`),
+  ADD KEY `%PREFIX%_fk_ann_cat` (`ann_cat_id`),
+  ADD KEY `%PREFIX%_fk_ann_usr_create` (`ann_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_ann_usr_change` (`ann_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_auto_login`
+--
+ALTER TABLE `%PREFIX%_auto_login`
+  ADD PRIMARY KEY (`atl_id`),
+  ADD KEY `%PREFIX%_fk_atl_usr` (`atl_usr_id`),
+  ADD KEY `%PREFIX%_fk_atl_org` (`atl_org_id`);
+
+--
+-- Indexes for table `%PREFIX%_categories`
+--
+ALTER TABLE `%PREFIX%_categories`
+  ADD PRIMARY KEY (`cat_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_cat_uuid` (`cat_uuid`),
+  ADD KEY `%PREFIX%_fk_cat_org` (`cat_org_id`),
+  ADD KEY `%PREFIX%_fk_cat_usr_create` (`cat_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_cat_usr_change` (`cat_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_category_report`
+--
+ALTER TABLE `%PREFIX%_category_report`
+  ADD PRIMARY KEY (`crt_id`),
+  ADD KEY `%PREFIX%_fk_crt_org` (`crt_org_id`);
+
+--
+-- Indexes for table `%PREFIX%_components`
+--
+ALTER TABLE `%PREFIX%_components`
+  ADD PRIMARY KEY (`com_id`);
+
+--
+-- Indexes for table `%PREFIX%_events`
+--
+ALTER TABLE `%PREFIX%_events`
+  ADD PRIMARY KEY (`dat_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_dat_uuid` (`dat_uuid`),
+  ADD KEY `%PREFIX%_fk_dat_cat` (`dat_cat_id`),
+  ADD KEY `%PREFIX%_fk_dat_rol` (`dat_rol_id`),
+  ADD KEY `%PREFIX%_fk_dat_room` (`dat_room_id`),
+  ADD KEY `%PREFIX%_fk_dat_usr_create` (`dat_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_dat_usr_change` (`dat_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_files`
+--
+ALTER TABLE `%PREFIX%_files`
+  ADD PRIMARY KEY (`fil_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_fil_uuid` (`fil_uuid`),
+  ADD KEY `%PREFIX%_fk_fil_fol` (`fil_fol_id`),
+  ADD KEY `%PREFIX%_fk_fil_usr` (`fil_usr_id`);
+
+--
+-- Indexes for table `%PREFIX%_folders`
+--
+ALTER TABLE `%PREFIX%_folders`
+  ADD PRIMARY KEY (`fol_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_fol_uuid` (`fol_uuid`),
+  ADD KEY `%PREFIX%_fk_fol_org` (`fol_org_id`),
+  ADD KEY `%PREFIX%_fk_fol_fol_parent` (`fol_fol_id_parent`),
+  ADD KEY `%PREFIX%_fk_fol_usr` (`fol_usr_id`);
+
+--
+-- Indexes for table `%PREFIX%_forum_posts`
+--
+ALTER TABLE `%PREFIX%_forum_posts`
+  ADD PRIMARY KEY (`fop_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_fop_uuid` (`fop_uuid`),
+  ADD KEY `%PREFIX%_fk_fop_fot` (`fop_fot_id`),
+  ADD KEY `%PREFIX%_fk_fop_usr_create` (`fop_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_fop_usr_change` (`fop_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_forum_topics`
+--
+ALTER TABLE `%PREFIX%_forum_topics`
+  ADD PRIMARY KEY (`fot_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_fot_uuid` (`fot_uuid`),
+  ADD KEY `%PREFIX%_fk_fot_cat` (`fot_cat_id`),
+  ADD KEY `%PREFIX%_fk_fot_first_fop` (`fot_fop_id_first_post`),
+  ADD KEY `%PREFIX%_fk_fot_usr_create` (`fot_usr_id_create`);
+
+--
+-- Indexes for table `%PREFIX%_ids`
+--
+ALTER TABLE `%PREFIX%_ids`
+  ADD KEY `%PREFIX%_fk_ids_usr_id` (`ids_usr_id`);
+
+--
+-- Indexes for table `%PREFIX%_inventory_fields`
+--
+ALTER TABLE `%PREFIX%_inventory_fields`
+  ADD PRIMARY KEY (`inf_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_inf_name_intern` (`inf_org_id`,`inf_name_intern`),
+  ADD UNIQUE KEY `%PREFIX%_idx_inf_uuid` (`inf_uuid`),
+  ADD KEY `%PREFIX%_fk_inf_usr_create` (`inf_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_inf_usr_change` (`inf_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_inventory_field_select_options`
+--
+ALTER TABLE `%PREFIX%_inventory_field_select_options`
+  ADD PRIMARY KEY (`ifo_id`),
+  ADD KEY `%PREFIX%_fk_ifo_inf` (`ifo_inf_id`);
+
+--
+-- Indexes for table `%PREFIX%_inventory_items`
+--
+ALTER TABLE `%PREFIX%_inventory_items`
+  ADD PRIMARY KEY (`ini_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_ini_uuid` (`ini_uuid`),
+  ADD KEY `%PREFIX%_fk_ini_cat` (`ini_cat_id`),
+  ADD KEY `%PREFIX%_fk_ini_status` (`ini_status`),
+  ADD KEY `%PREFIX%_fk_ini_usr_create` (`ini_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_ini_usr_change` (`ini_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_inventory_item_borrow_data`
+--
+ALTER TABLE `%PREFIX%_inventory_item_borrow_data`
+  ADD PRIMARY KEY (`inb_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_inb_ini_id` (`inb_ini_id`);
+
+--
+-- Indexes for table `%PREFIX%_inventory_item_data`
+--
+ALTER TABLE `%PREFIX%_inventory_item_data`
+  ADD PRIMARY KEY (`ind_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_ind_inf_ini_id` (`ind_inf_id`,`ind_ini_id`),
+  ADD KEY `%PREFIX%_fk_ind_ini` (`ind_ini_id`);
+
+--
+-- Indexes for table `%PREFIX%_links`
+--
+ALTER TABLE `%PREFIX%_links`
+  ADD PRIMARY KEY (`lnk_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_lnk_uuid` (`lnk_uuid`),
+  ADD KEY `%PREFIX%_fk_lnk_cat` (`lnk_cat_id`),
+  ADD KEY `%PREFIX%_fk_lnk_usr_create` (`lnk_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_lnk_usr_change` (`lnk_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_lists`
+--
+ALTER TABLE `%PREFIX%_lists`
+  ADD PRIMARY KEY (`lst_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_lst_uuid` (`lst_uuid`),
+  ADD KEY `%PREFIX%_fk_lst_usr` (`lst_usr_id`),
+  ADD KEY `%PREFIX%_fk_lst_org` (`lst_org_id`);
+
+--
+-- Indexes for table `%PREFIX%_list_columns`
+--
+ALTER TABLE `%PREFIX%_list_columns`
+  ADD PRIMARY KEY (`lsc_id`),
+  ADD KEY `%PREFIX%_fk_lsc_lst` (`lsc_lst_id`),
+  ADD KEY `%PREFIX%_fk_lsc_usf` (`lsc_usf_id`);
+
+--
+-- Indexes for table `%PREFIX%_log_changes`
+--
+ALTER TABLE `%PREFIX%_log_changes`
+  ADD PRIMARY KEY (`log_id`);
+
+--
+-- Indexes for table `%PREFIX%_members`
+--
+ALTER TABLE `%PREFIX%_members`
+  ADD PRIMARY KEY (`mem_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_mem_uuid` (`mem_uuid`),
+  ADD KEY `%PREFIX%_idx_mem_rol_usr_id` (`mem_rol_id`,`mem_usr_id`),
+  ADD KEY `%PREFIX%_fk_mem_usr` (`mem_usr_id`),
+  ADD KEY `%PREFIX%_fk_mem_usr_create` (`mem_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_mem_usr_change` (`mem_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_menu`
+--
+ALTER TABLE `%PREFIX%_menu`
+  ADD PRIMARY KEY (`men_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_men_uuid` (`men_uuid`),
+  ADD KEY `%PREFIX%_idx_men_men_id_parent` (`men_men_id_parent`),
+  ADD KEY `%PREFIX%_fk_men_com_id` (`men_com_id`);
+
+--
+-- Indexes for table `%PREFIX%_messages`
+--
+ALTER TABLE `%PREFIX%_messages`
+  ADD PRIMARY KEY (`msg_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_msg_uuid` (`msg_uuid`),
+  ADD KEY `%PREFIX%_fk_msg_usr_sender` (`msg_usr_id_sender`);
+
+--
+-- Indexes for table `%PREFIX%_messages_attachments`
+--
+ALTER TABLE `%PREFIX%_messages_attachments`
+  ADD PRIMARY KEY (`msa_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_msa_uuid` (`msa_uuid`),
+  ADD KEY `%PREFIX%_fk_msa_msg_id` (`msa_msg_id`);
+
+--
+-- Indexes for table `%PREFIX%_messages_content`
+--
+ALTER TABLE `%PREFIX%_messages_content`
+  ADD PRIMARY KEY (`msc_id`),
+  ADD KEY `%PREFIX%_fk_msc_msg_id` (`msc_msg_id`),
+  ADD KEY `%PREFIX%_fk_msc_usr_id` (`msc_usr_id`);
+
+--
+-- Indexes for table `%PREFIX%_messages_recipients`
+--
+ALTER TABLE `%PREFIX%_messages_recipients`
+  ADD PRIMARY KEY (`msr_id`),
+  ADD KEY `%PREFIX%_fk_msr_msg_id` (`msr_msg_id`),
+  ADD KEY `%PREFIX%_fk_msr_rol_id` (`msr_rol_id`),
+  ADD KEY `%PREFIX%_fk_msr_usr_id` (`msr_usr_id`);
+
+--
+-- Indexes for table `%PREFIX%_oidc_access_tokens`
+--
+ALTER TABLE `%PREFIX%_oidc_access_tokens`
+  ADD PRIMARY KEY (`oat_id`),
+  ADD KEY `%PREFIX%_fk_oat_usr_id` (`oat_usr_id`),
+  ADD KEY `%PREFIX%_fk_oat_ocl_id` (`oat_ocl_id`),
+  ADD KEY `%PREFIX%_fk_oat_usr_create` (`oat_usr_id_create`);
+
+--
+-- Indexes for table `%PREFIX%_oidc_auth_codes`
+--
+ALTER TABLE `%PREFIX%_oidc_auth_codes`
+  ADD PRIMARY KEY (`oac_id`),
+  ADD KEY `%PREFIX%_fk_oac_usr_id` (`oac_usr_id`),
+  ADD KEY `%PREFIX%_fk_oac_ocl_id` (`oac_ocl_id`),
+  ADD KEY `%PREFIX%_fk_oac_usr_create` (`oac_usr_id_create`);
+
+--
+-- Indexes for table `%PREFIX%_oidc_clients`
+--
+ALTER TABLE `%PREFIX%_oidc_clients`
+  ADD PRIMARY KEY (`ocl_id`),
+  ADD KEY `%PREFIX%_fk_ocl_usr_create` (`ocl_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_ocl_usr_change` (`ocl_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_oidc_refresh_tokens`
+--
+ALTER TABLE `%PREFIX%_oidc_refresh_tokens`
+  ADD PRIMARY KEY (`ort_id`),
+  ADD KEY `%PREFIX%_fk_ort_usr_id` (`ort_usr_id`),
+  ADD KEY `%PREFIX%_fk_ort_ocl_id` (`ort_ocl_id`),
+  ADD KEY `%PREFIX%_fk_ort_usr_create` (`ort_usr_id_create`);
+
+--
+-- Indexes for table `%PREFIX%_organizations`
+--
+ALTER TABLE `%PREFIX%_organizations`
+  ADD PRIMARY KEY (`org_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_org_shortname` (`org_shortname`),
+  ADD UNIQUE KEY `%PREFIX%_idx_org_uuid` (`org_uuid`),
+  ADD KEY `%PREFIX%_fk_org_org_parent` (`org_org_id_parent`);
+
+--
+-- Indexes for table `%PREFIX%_photos`
+--
+ALTER TABLE `%PREFIX%_photos`
+  ADD PRIMARY KEY (`pho_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_pho_uuid` (`pho_uuid`),
+  ADD KEY `%PREFIX%_fk_pho_pho_parent` (`pho_pho_id_parent`),
+  ADD KEY `%PREFIX%_fk_pho_org` (`pho_org_id`),
+  ADD KEY `%PREFIX%_fk_pho_usr_create` (`pho_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_pho_usr_change` (`pho_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_preferences`
+--
+ALTER TABLE `%PREFIX%_preferences`
+  ADD PRIMARY KEY (`prf_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_prf_org_id_name` (`prf_org_id`,`prf_name`);
+
+--
+-- Indexes for table `%PREFIX%_registrations`
+--
+ALTER TABLE `%PREFIX%_registrations`
+  ADD PRIMARY KEY (`reg_id`),
+  ADD KEY `%PREFIX%_fk_reg_org` (`reg_org_id`),
+  ADD KEY `%PREFIX%_fk_reg_usr` (`reg_usr_id`);
+
+--
+-- Indexes for table `%PREFIX%_roles`
+--
+ALTER TABLE `%PREFIX%_roles`
+  ADD PRIMARY KEY (`rol_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_rol_uuid` (`rol_uuid`),
+  ADD KEY `%PREFIX%_fk_rol_cat` (`rol_cat_id`),
+  ADD KEY `%PREFIX%_fk_rol_lst_id` (`rol_lst_id`),
+  ADD KEY `%PREFIX%_fk_rol_usr_create` (`rol_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_rol_usr_change` (`rol_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_roles_rights`
+--
+ALTER TABLE `%PREFIX%_roles_rights`
+  ADD PRIMARY KEY (`ror_id`),
+  ADD KEY `%PREFIX%_fk_ror_ror_parent` (`ror_ror_id_parent`);
+
+--
+-- Indexes for table `%PREFIX%_roles_rights_data`
+--
+ALTER TABLE `%PREFIX%_roles_rights_data`
+  ADD PRIMARY KEY (`rrd_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_rrd_ror_rol_object_id` (`rrd_ror_id`,`rrd_rol_id`,`rrd_object_id`),
+  ADD KEY `%PREFIX%_fk_rrd_rol` (`rrd_rol_id`),
+  ADD KEY `%PREFIX%_fk_rrd_usr_create` (`rrd_usr_id_create`);
+
+--
+-- Indexes for table `%PREFIX%_role_dependencies`
+--
+ALTER TABLE `%PREFIX%_role_dependencies`
+  ADD PRIMARY KEY (`rld_rol_id_parent`,`rld_rol_id_child`),
+  ADD KEY `%PREFIX%_fk_rld_rol_child` (`rld_rol_id_child`),
+  ADD KEY `%PREFIX%_fk_rld_usr` (`rld_usr_id`);
+
+--
+-- Indexes for table `%PREFIX%_rooms`
+--
+ALTER TABLE `%PREFIX%_rooms`
+  ADD PRIMARY KEY (`room_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_room_uuid` (`room_uuid`),
+  ADD KEY `%PREFIX%_fk_room_usr_create` (`room_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_room_usr_change` (`room_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_saml_clients`
+--
+ALTER TABLE `%PREFIX%_saml_clients`
+  ADD PRIMARY KEY (`smc_id`),
+  ADD UNIQUE KEY `smc_client_id` (`smc_client_id`),
+  ADD KEY `%PREFIX%_fk_smc_usr_create` (`smc_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_smc_usr_change` (`smc_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_sessions`
+--
+ALTER TABLE `%PREFIX%_sessions`
+  ADD PRIMARY KEY (`ses_id`),
+  ADD KEY `%PREFIX%_idx_session_id` (`ses_session_id`),
+  ADD KEY `%PREFIX%_fk_ses_org` (`ses_org_id`),
+  ADD KEY `%PREFIX%_fk_ses_usr` (`ses_usr_id`);
+
+--
+-- Indexes for table `%PREFIX%_sso_keys`
+--
+ALTER TABLE `%PREFIX%_sso_keys`
+  ADD PRIMARY KEY (`key_id`),
+  ADD KEY `%PREFIX%_fk_key_org` (`key_org_id`),
+  ADD KEY `%PREFIX%_fk_key_usr_change` (`key_usr_id_change`),
+  ADD KEY `%PREFIX%_fk_key_usr_create` (`key_usr_id_create`);
+
+--
+-- Indexes for table `%PREFIX%_texts`
+--
+ALTER TABLE `%PREFIX%_texts`
+  ADD PRIMARY KEY (`txt_id`),
+  ADD KEY `%PREFIX%_fk_txt_org` (`txt_org_id`);
+
+--
+-- Indexes for table `%PREFIX%_users`
+--
+ALTER TABLE `%PREFIX%_users`
+  ADD PRIMARY KEY (`usr_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_usr_uuid` (`usr_uuid`),
+  ADD UNIQUE KEY `%PREFIX%_idx_usr_login_name` (`usr_login_name`),
+  ADD KEY `%PREFIX%_fk_usr_usr_create` (`usr_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_usr_usr_change` (`usr_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_user_data`
+--
+ALTER TABLE `%PREFIX%_user_data`
+  ADD PRIMARY KEY (`usd_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_usd_usr_usf_id` (`usd_usr_id`,`usd_usf_id`),
+  ADD KEY `%PREFIX%_fk_usd_usf` (`usd_usf_id`);
+
+--
+-- Indexes for table `%PREFIX%_user_fields`
+--
+ALTER TABLE `%PREFIX%_user_fields`
+  ADD PRIMARY KEY (`usf_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_usf_name_intern` (`usf_name_intern`),
+  ADD UNIQUE KEY `%PREFIX%_idx_usf_uuid` (`usf_uuid`),
+  ADD KEY `%PREFIX%_fk_usf_cat` (`usf_cat_id`),
+  ADD KEY `%PREFIX%_fk_usf_usr_create` (`usf_usr_id_create`),
+  ADD KEY `%PREFIX%_fk_usf_usr_change` (`usf_usr_id_change`);
+
+--
+-- Indexes for table `%PREFIX%_user_field_select_options`
+--
+ALTER TABLE `%PREFIX%_user_field_select_options`
+  ADD PRIMARY KEY (`ufo_id`),
+  ADD KEY `%PREFIX%_fk_ufo_usf` (`ufo_usf_id`);
+
+--
+-- Indexes for table `%PREFIX%_user_relations`
+--
+ALTER TABLE `%PREFIX%_user_relations`
+  ADD PRIMARY KEY (`ure_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_ure_urt_usr` (`ure_urt_id`,`ure_usr_id1`,`ure_usr_id2`),
+  ADD UNIQUE KEY `%PREFIX%_idx_ure_uuid` (`ure_uuid`),
+  ADD KEY `%PREFIX%_fk_ure_usr1` (`ure_usr_id1`),
+  ADD KEY `%PREFIX%_fk_ure_usr2` (`ure_usr_id2`),
+  ADD KEY `%PREFIX%_fk_ure_usr_change` (`ure_usr_id_change`),
+  ADD KEY `%PREFIX%_fk_ure_usr_create` (`ure_usr_id_create`);
+
+--
+-- Indexes for table `%PREFIX%_user_relation_types`
+--
+ALTER TABLE `%PREFIX%_user_relation_types`
+  ADD PRIMARY KEY (`urt_id`),
+  ADD UNIQUE KEY `%PREFIX%_idx_ure_urt_name` (`urt_name`),
+  ADD UNIQUE KEY `%PREFIX%_idx_urt_uuid` (`urt_uuid`),
+  ADD KEY `%PREFIX%_fk_urt_id_inverse` (`urt_id_inverse`),
+  ADD KEY `%PREFIX%_fk_urt_usr_change` (`urt_usr_id_change`),
+  ADD KEY `%PREFIX%_fk_urt_usr_create` (`urt_usr_id_create`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_announcements`
+--
+ALTER TABLE `%PREFIX%_announcements`
+  MODIFY `ann_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_auto_login`
+--
+ALTER TABLE `%PREFIX%_auto_login`
+  MODIFY `atl_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_categories`
+--
+ALTER TABLE `%PREFIX%_categories`
+  MODIFY `cat_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=308;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_category_report`
+--
+ALTER TABLE `%PREFIX%_category_report`
+  MODIFY `crt_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_components`
+--
+ALTER TABLE `%PREFIX%_components`
+  MODIFY `com_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_events`
+--
+ALTER TABLE `%PREFIX%_events`
+  MODIFY `dat_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_files`
+--
+ALTER TABLE `%PREFIX%_files`
+  MODIFY `fil_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_folders`
+--
+ALTER TABLE `%PREFIX%_folders`
+  MODIFY `fol_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_forum_posts`
+--
+ALTER TABLE `%PREFIX%_forum_posts`
+  MODIFY `fop_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_forum_topics`
+--
+ALTER TABLE `%PREFIX%_forum_topics`
+  MODIFY `fot_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_inventory_fields`
+--
+ALTER TABLE `%PREFIX%_inventory_fields`
+  MODIFY `inf_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_inventory_field_select_options`
+--
+ALTER TABLE `%PREFIX%_inventory_field_select_options`
+  MODIFY `ifo_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_inventory_items`
+--
+ALTER TABLE `%PREFIX%_inventory_items`
+  MODIFY `ini_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_inventory_item_borrow_data`
+--
+ALTER TABLE `%PREFIX%_inventory_item_borrow_data`
+  MODIFY `inb_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_inventory_item_data`
+--
+ALTER TABLE `%PREFIX%_inventory_item_data`
+  MODIFY `ind_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_links`
+--
+ALTER TABLE `%PREFIX%_links`
+  MODIFY `lnk_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_lists`
+--
+ALTER TABLE `%PREFIX%_lists`
+  MODIFY `lst_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_list_columns`
+--
+ALTER TABLE `%PREFIX%_list_columns`
+  MODIFY `lsc_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_log_changes`
+--
+ALTER TABLE `%PREFIX%_log_changes`
+  MODIFY `log_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_members`
+--
+ALTER TABLE `%PREFIX%_members`
+  MODIFY `mem_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=544;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_menu`
+--
+ALTER TABLE `%PREFIX%_menu`
+  MODIFY `men_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_messages`
+--
+ALTER TABLE `%PREFIX%_messages`
+  MODIFY `msg_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_messages_attachments`
+--
+ALTER TABLE `%PREFIX%_messages_attachments`
+  MODIFY `msa_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_messages_content`
+--
+ALTER TABLE `%PREFIX%_messages_content`
+  MODIFY `msc_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_messages_recipients`
+--
+ALTER TABLE `%PREFIX%_messages_recipients`
+  MODIFY `msr_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_oidc_access_tokens`
+--
+ALTER TABLE `%PREFIX%_oidc_access_tokens`
+  MODIFY `oat_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_oidc_auth_codes`
+--
+ALTER TABLE `%PREFIX%_oidc_auth_codes`
+  MODIFY `oac_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_oidc_clients`
+--
+ALTER TABLE `%PREFIX%_oidc_clients`
+  MODIFY `ocl_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_oidc_refresh_tokens`
+--
+ALTER TABLE `%PREFIX%_oidc_refresh_tokens`
+  MODIFY `ort_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_organizations`
+--
+ALTER TABLE `%PREFIX%_organizations`
+  MODIFY `org_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_photos`
+--
+ALTER TABLE `%PREFIX%_photos`
+  MODIFY `pho_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_preferences`
+--
+ALTER TABLE `%PREFIX%_preferences`
+  MODIFY `prf_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94377;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_registrations`
+--
+ALTER TABLE `%PREFIX%_registrations`
+  MODIFY `reg_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_roles`
+--
+ALTER TABLE `%PREFIX%_roles`
+  MODIFY `rol_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_roles_rights`
+--
+ALTER TABLE `%PREFIX%_roles_rights`
+  MODIFY `ror_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_roles_rights_data`
+--
+ALTER TABLE `%PREFIX%_roles_rights_data`
+  MODIFY `rrd_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_rooms`
+--
+ALTER TABLE `%PREFIX%_rooms`
+  MODIFY `room_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_saml_clients`
+--
+ALTER TABLE `%PREFIX%_saml_clients`
+  MODIFY `smc_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_sessions`
+--
+ALTER TABLE `%PREFIX%_sessions`
+  MODIFY `ses_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_sso_keys`
+--
+ALTER TABLE `%PREFIX%_sso_keys`
+  MODIFY `key_id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_texts`
+--
+ALTER TABLE `%PREFIX%_texts`
+  MODIFY `txt_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_users`
+--
+ALTER TABLE `%PREFIX%_users`
+  MODIFY `usr_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=361;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_user_data`
+--
+ALTER TABLE `%PREFIX%_user_data`
+  MODIFY `usd_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18139;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_user_fields`
+--
+ALTER TABLE `%PREFIX%_user_fields`
+  MODIFY `usf_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_user_field_select_options`
+--
+ALTER TABLE `%PREFIX%_user_field_select_options`
+  MODIFY `ufo_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_user_relations`
+--
+ALTER TABLE `%PREFIX%_user_relations`
+  MODIFY `ure_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `%PREFIX%_user_relation_types`
+--
+ALTER TABLE `%PREFIX%_user_relation_types`
+  MODIFY `urt_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `%PREFIX%_announcements`
+--
+ALTER TABLE `%PREFIX%_announcements`
+  ADD CONSTRAINT `%PREFIX%_fk_ann_cat` FOREIGN KEY (`ann_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ann_usr_change` FOREIGN KEY (`ann_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ann_usr_create` FOREIGN KEY (`ann_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_auto_login`
+--
+ALTER TABLE `%PREFIX%_auto_login`
+  ADD CONSTRAINT `%PREFIX%_fk_atl_org` FOREIGN KEY (`atl_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_atl_usr` FOREIGN KEY (`atl_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_categories`
+--
+ALTER TABLE `%PREFIX%_categories`
+  ADD CONSTRAINT `%PREFIX%_fk_cat_org` FOREIGN KEY (`cat_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_cat_usr_change` FOREIGN KEY (`cat_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_cat_usr_create` FOREIGN KEY (`cat_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_category_report`
+--
+ALTER TABLE `%PREFIX%_category_report`
+  ADD CONSTRAINT `%PREFIX%_fk_crt_org` FOREIGN KEY (`crt_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_events`
+--
+ALTER TABLE `%PREFIX%_events`
+  ADD CONSTRAINT `%PREFIX%_fk_dat_cat` FOREIGN KEY (`dat_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_dat_rol` FOREIGN KEY (`dat_rol_id`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_dat_room` FOREIGN KEY (`dat_room_id`) REFERENCES `%PREFIX%_rooms` (`room_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_dat_usr_change` FOREIGN KEY (`dat_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_dat_usr_create` FOREIGN KEY (`dat_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_files`
+--
+ALTER TABLE `%PREFIX%_files`
+  ADD CONSTRAINT `%PREFIX%_fk_fil_fol` FOREIGN KEY (`fil_fol_id`) REFERENCES `%PREFIX%_folders` (`fol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fil_usr` FOREIGN KEY (`fil_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_folders`
+--
+ALTER TABLE `%PREFIX%_folders`
+  ADD CONSTRAINT `%PREFIX%_fk_fol_fol_parent` FOREIGN KEY (`fol_fol_id_parent`) REFERENCES `%PREFIX%_folders` (`fol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fol_org` FOREIGN KEY (`fol_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fol_usr` FOREIGN KEY (`fol_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_forum_posts`
+--
+ALTER TABLE `%PREFIX%_forum_posts`
+  ADD CONSTRAINT `%PREFIX%_fk_fop_fot` FOREIGN KEY (`fop_fot_id`) REFERENCES `%PREFIX%_forum_topics` (`fot_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fop_usr_change` FOREIGN KEY (`fop_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fop_usr_create` FOREIGN KEY (`fop_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_forum_topics`
+--
+ALTER TABLE `%PREFIX%_forum_topics`
+  ADD CONSTRAINT `%PREFIX%_fk_fot_cat` FOREIGN KEY (`fot_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fot_first_fop` FOREIGN KEY (`fot_fop_id_first_post`) REFERENCES `%PREFIX%_forum_posts` (`fop_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_fot_usr_create` FOREIGN KEY (`fot_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_ids`
+--
+ALTER TABLE `%PREFIX%_ids`
+  ADD CONSTRAINT `%PREFIX%_fk_ids_usr_id` FOREIGN KEY (`ids_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_inventory_fields`
+--
+ALTER TABLE `%PREFIX%_inventory_fields`
+  ADD CONSTRAINT `%PREFIX%_fk_inf_org` FOREIGN KEY (`inf_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_inf_usr_change` FOREIGN KEY (`inf_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_inf_usr_create` FOREIGN KEY (`inf_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_inventory_field_select_options`
+--
+ALTER TABLE `%PREFIX%_inventory_field_select_options`
+  ADD CONSTRAINT `%PREFIX%_fk_ifo_inf` FOREIGN KEY (`ifo_inf_id`) REFERENCES `%PREFIX%_inventory_fields` (`inf_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_inventory_items`
+--
+ALTER TABLE `%PREFIX%_inventory_items`
+  ADD CONSTRAINT `%PREFIX%_fk_ini_cat` FOREIGN KEY (`ini_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ini_status` FOREIGN KEY (`ini_status`) REFERENCES `%PREFIX%_inventory_field_select_options` (`ifo_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ini_usr_change` FOREIGN KEY (`ini_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ini_usr_create` FOREIGN KEY (`ini_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_inventory_item_borrow_data`
+--
+ALTER TABLE `%PREFIX%_inventory_item_borrow_data`
+  ADD CONSTRAINT `%PREFIX%_fk_inb_ini` FOREIGN KEY (`inb_ini_id`) REFERENCES `%PREFIX%_inventory_items` (`ini_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_inventory_item_data`
+--
+ALTER TABLE `%PREFIX%_inventory_item_data`
+  ADD CONSTRAINT `%PREFIX%_fk_ind_inf` FOREIGN KEY (`ind_inf_id`) REFERENCES `%PREFIX%_inventory_fields` (`inf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ind_ini` FOREIGN KEY (`ind_ini_id`) REFERENCES `%PREFIX%_inventory_items` (`ini_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_links`
+--
+ALTER TABLE `%PREFIX%_links`
+  ADD CONSTRAINT `%PREFIX%_fk_lnk_cat` FOREIGN KEY (`lnk_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_lnk_usr_change` FOREIGN KEY (`lnk_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_lnk_usr_create` FOREIGN KEY (`lnk_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_lists`
+--
+ALTER TABLE `%PREFIX%_lists`
+  ADD CONSTRAINT `%PREFIX%_fk_lst_org` FOREIGN KEY (`lst_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_lst_usr` FOREIGN KEY (`lst_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_list_columns`
+--
+ALTER TABLE `%PREFIX%_list_columns`
+  ADD CONSTRAINT `%PREFIX%_fk_lsc_lst` FOREIGN KEY (`lsc_lst_id`) REFERENCES `%PREFIX%_lists` (`lst_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_lsc_usf` FOREIGN KEY (`lsc_usf_id`) REFERENCES `%PREFIX%_user_fields` (`usf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_members`
+--
+ALTER TABLE `%PREFIX%_members`
+  ADD CONSTRAINT `%PREFIX%_fk_mem_rol` FOREIGN KEY (`mem_rol_id`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_mem_usr` FOREIGN KEY (`mem_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_mem_usr_change` FOREIGN KEY (`mem_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_mem_usr_create` FOREIGN KEY (`mem_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_menu`
+--
+ALTER TABLE `%PREFIX%_menu`
+  ADD CONSTRAINT `%PREFIX%_fk_men_com_id` FOREIGN KEY (`men_com_id`) REFERENCES `%PREFIX%_components` (`com_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_men_men_parent` FOREIGN KEY (`men_men_id_parent`) REFERENCES `%PREFIX%_menu` (`men_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_messages`
+--
+ALTER TABLE `%PREFIX%_messages`
+  ADD CONSTRAINT `%PREFIX%_fk_msg_usr_sender` FOREIGN KEY (`msg_usr_id_sender`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_messages_attachments`
+--
+ALTER TABLE `%PREFIX%_messages_attachments`
+  ADD CONSTRAINT `%PREFIX%_fk_msa_msg_id` FOREIGN KEY (`msa_msg_id`) REFERENCES `%PREFIX%_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_messages_content`
+--
+ALTER TABLE `%PREFIX%_messages_content`
+  ADD CONSTRAINT `%PREFIX%_fk_msc_msg_id` FOREIGN KEY (`msc_msg_id`) REFERENCES `%PREFIX%_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_msc_usr_id` FOREIGN KEY (`msc_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_messages_recipients`
+--
+ALTER TABLE `%PREFIX%_messages_recipients`
+  ADD CONSTRAINT `%PREFIX%_fk_msr_msg_id` FOREIGN KEY (`msr_msg_id`) REFERENCES `%PREFIX%_messages` (`msg_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_msr_rol_id` FOREIGN KEY (`msr_rol_id`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_msr_usr_id` FOREIGN KEY (`msr_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_oidc_access_tokens`
+--
+ALTER TABLE `%PREFIX%_oidc_access_tokens`
+  ADD CONSTRAINT `%PREFIX%_fk_oat_ocl_id` FOREIGN KEY (`oat_ocl_id`) REFERENCES `%PREFIX%_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `%PREFIX%_fk_oat_usr_create` FOREIGN KEY (`oat_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_oat_usr_id` FOREIGN KEY (`oat_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `%PREFIX%_oidc_auth_codes`
+--
+ALTER TABLE `%PREFIX%_oidc_auth_codes`
+  ADD CONSTRAINT `%PREFIX%_fk_oac_ocl_id` FOREIGN KEY (`oac_ocl_id`) REFERENCES `%PREFIX%_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `%PREFIX%_fk_oac_usr_create` FOREIGN KEY (`oac_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_oac_usr_id` FOREIGN KEY (`oac_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `%PREFIX%_oidc_clients`
+--
+ALTER TABLE `%PREFIX%_oidc_clients`
+  ADD CONSTRAINT `%PREFIX%_fk_ocl_usr_change` FOREIGN KEY (`ocl_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ocl_usr_create` FOREIGN KEY (`ocl_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_oidc_refresh_tokens`
+--
+ALTER TABLE `%PREFIX%_oidc_refresh_tokens`
+  ADD CONSTRAINT `%PREFIX%_fk_ort_ocl_id` FOREIGN KEY (`ort_ocl_id`) REFERENCES `%PREFIX%_oidc_clients` (`ocl_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `%PREFIX%_fk_ort_usr_create` FOREIGN KEY (`ort_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ort_usr_id` FOREIGN KEY (`ort_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `%PREFIX%_organizations`
+--
+ALTER TABLE `%PREFIX%_organizations`
+  ADD CONSTRAINT `%PREFIX%_fk_org_org_parent` FOREIGN KEY (`org_org_id_parent`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_photos`
+--
+ALTER TABLE `%PREFIX%_photos`
+  ADD CONSTRAINT `%PREFIX%_fk_pho_org` FOREIGN KEY (`pho_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_pho_pho_parent` FOREIGN KEY (`pho_pho_id_parent`) REFERENCES `%PREFIX%_photos` (`pho_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_pho_usr_change` FOREIGN KEY (`pho_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_pho_usr_create` FOREIGN KEY (`pho_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_preferences`
+--
+ALTER TABLE `%PREFIX%_preferences`
+  ADD CONSTRAINT `%PREFIX%_fk_prf_org` FOREIGN KEY (`prf_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_registrations`
+--
+ALTER TABLE `%PREFIX%_registrations`
+  ADD CONSTRAINT `%PREFIX%_fk_reg_org` FOREIGN KEY (`reg_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_reg_usr` FOREIGN KEY (`reg_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_roles`
+--
+ALTER TABLE `%PREFIX%_roles`
+  ADD CONSTRAINT `%PREFIX%_fk_rol_cat` FOREIGN KEY (`rol_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rol_lst_id` FOREIGN KEY (`rol_lst_id`) REFERENCES `%PREFIX%_lists` (`lst_id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `%PREFIX%_fk_rol_usr_change` FOREIGN KEY (`rol_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rol_usr_create` FOREIGN KEY (`rol_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_roles_rights`
+--
+ALTER TABLE `%PREFIX%_roles_rights`
+  ADD CONSTRAINT `%PREFIX%_fk_ror_ror_parent` FOREIGN KEY (`ror_ror_id_parent`) REFERENCES `%PREFIX%_roles_rights` (`ror_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_roles_rights_data`
+--
+ALTER TABLE `%PREFIX%_roles_rights_data`
+  ADD CONSTRAINT `%PREFIX%_fk_rrd_rol` FOREIGN KEY (`rrd_rol_id`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rrd_ror` FOREIGN KEY (`rrd_ror_id`) REFERENCES `%PREFIX%_roles_rights` (`ror_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rrd_usr_create` FOREIGN KEY (`rrd_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_role_dependencies`
+--
+ALTER TABLE `%PREFIX%_role_dependencies`
+  ADD CONSTRAINT `%PREFIX%_fk_rld_rol_child` FOREIGN KEY (`rld_rol_id_child`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rld_rol_parent` FOREIGN KEY (`rld_rol_id_parent`) REFERENCES `%PREFIX%_roles` (`rol_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_rld_usr` FOREIGN KEY (`rld_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_rooms`
+--
+ALTER TABLE `%PREFIX%_rooms`
+  ADD CONSTRAINT `%PREFIX%_fk_room_usr_change` FOREIGN KEY (`room_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_room_usr_create` FOREIGN KEY (`room_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_saml_clients`
+--
+ALTER TABLE `%PREFIX%_saml_clients`
+  ADD CONSTRAINT `%PREFIX%_fk_smc_usr_change` FOREIGN KEY (`smc_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_smc_usr_create` FOREIGN KEY (`smc_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_sessions`
+--
+ALTER TABLE `%PREFIX%_sessions`
+  ADD CONSTRAINT `%PREFIX%_fk_ses_org` FOREIGN KEY (`ses_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ses_usr` FOREIGN KEY (`ses_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_sso_keys`
+--
+ALTER TABLE `%PREFIX%_sso_keys`
+  ADD CONSTRAINT `%PREFIX%_fk_key_org` FOREIGN KEY (`key_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_key_usr_change` FOREIGN KEY (`key_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_key_usr_create` FOREIGN KEY (`key_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_texts`
+--
+ALTER TABLE `%PREFIX%_texts`
+  ADD CONSTRAINT `%PREFIX%_fk_txt_org` FOREIGN KEY (`txt_org_id`) REFERENCES `%PREFIX%_organizations` (`org_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_users`
+--
+ALTER TABLE `%PREFIX%_users`
+  ADD CONSTRAINT `%PREFIX%_fk_usr_usr_change` FOREIGN KEY (`usr_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_usr_usr_create` FOREIGN KEY (`usr_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_user_data`
+--
+ALTER TABLE `%PREFIX%_user_data`
+  ADD CONSTRAINT `%PREFIX%_fk_usd_usf` FOREIGN KEY (`usd_usf_id`) REFERENCES `%PREFIX%_user_fields` (`usf_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_usd_usr` FOREIGN KEY (`usd_usr_id`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_user_fields`
+--
+ALTER TABLE `%PREFIX%_user_fields`
+  ADD CONSTRAINT `%PREFIX%_fk_usf_cat` FOREIGN KEY (`usf_cat_id`) REFERENCES `%PREFIX%_categories` (`cat_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_usf_usr_change` FOREIGN KEY (`usf_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_usf_usr_create` FOREIGN KEY (`usf_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_user_field_select_options`
+--
+ALTER TABLE `%PREFIX%_user_field_select_options`
+  ADD CONSTRAINT `%PREFIX%_fk_ufo_usf` FOREIGN KEY (`ufo_usf_id`) REFERENCES `%PREFIX%_user_fields` (`usf_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_user_relations`
+--
+ALTER TABLE `%PREFIX%_user_relations`
+  ADD CONSTRAINT `%PREFIX%_fk_ure_urt` FOREIGN KEY (`ure_urt_id`) REFERENCES `%PREFIX%_user_relation_types` (`urt_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ure_usr1` FOREIGN KEY (`ure_usr_id1`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ure_usr2` FOREIGN KEY (`ure_usr_id2`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ure_usr_change` FOREIGN KEY (`ure_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_ure_usr_create` FOREIGN KEY (`ure_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `%PREFIX%_user_relation_types`
+--
+ALTER TABLE `%PREFIX%_user_relation_types`
+  ADD CONSTRAINT `%PREFIX%_fk_urt_id_inverse` FOREIGN KEY (`urt_id_inverse`) REFERENCES `%PREFIX%_user_relation_types` (`urt_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_urt_usr_change` FOREIGN KEY (`urt_usr_id_change`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+  ADD CONSTRAINT `%PREFIX%_fk_urt_usr_create` FOREIGN KEY (`urt_usr_id_create`) REFERENCES `%PREFIX%_users` (`usr_id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+SET FOREIGN_KEY_CHECKS=1;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

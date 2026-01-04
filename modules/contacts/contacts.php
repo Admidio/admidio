@@ -18,6 +18,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
@@ -123,7 +124,7 @@ try {
         );
     }
     $orgName = $gCurrentOrganization->getValue('org_longname');// Create table object
-    $contactsTable = new HtmlTable('adm_contacts_table', $page, true, true, 'table table-condensed');// create array with all column heading values
+    $contactsTable = new DataTables($page, 'adm_contacts_table');
     $columnHeading = $contactsListConfig->getColumnNames();
 
     if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
@@ -133,7 +134,7 @@ try {
             $gL10n->get('SYS_ABR_NO'),
             '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ORGANIZATION_AFFILIATION') . '"></i>'
         );
-    } else {    
+    } else {
         array_unshift(
             $columnHeading,
             $gL10n->get('SYS_ABR_NO'),
@@ -144,25 +145,31 @@ try {
     $columnHeading[] = '&nbsp;';
     $columnAlignment = $contactsListConfig->getColumnAlignments();
     if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
-        array_unshift($columnAlignment, 'center', 'left', 'left');
+        array_unshift($columnAlignment, 'center', 'start', 'start');
     } else {
-        array_unshift($columnAlignment, 'left', 'left');
+        array_unshift($columnAlignment, 'start', 'start');
     }
-    
-    $columnAlignment[] = 'right';
+
+    $columnAlignment[] = 'end';
     $contactsTable->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_data.php', array('mem_show_filter' => $getMembersShowFilter)));
     $contactsTable->setColumnAlignByArray($columnAlignment);
     if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
-        $contactsTable->disableDatatablesColumnsSort(array(1, 2, count($columnHeading)));// disable sort in last column
+        $contactsTable->disableColumnsSort(array(1, 2, count($columnHeading)));// disable sort in last column
     } else {
-        $contactsTable->disableDatatablesColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+        $contactsTable->disableColumnsSort(array(1, count($columnHeading)));// disable sort in last column
     }
-    $contactsTable->setDatatablesColumnsNotHideResponsive(array(count($columnHeading)));
-    $contactsTable->addRowHeadingByArray($columnHeading);
+    $contactsTable->setColumnsNotHideResponsive(array(count($columnHeading)));
     $contactsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
-    $contactsTable->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
+    $contactsTable->setRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
 
     if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        // callback function to update the table after member members where deleted
+        $page->addJavascript('
+                function refreshContactsTable() {
+                    var table = $("#adm_contacts_table").DataTable();
+                    table.ajax.reload(null, false); // user paging is not reset on reload
+                }
+            ');
         // add the checkbox for selecting items and action buttons
         $page->addJavascript('
             var table = $("#adm_contacts_table");
@@ -173,7 +180,7 @@ try {
 
                 // base URLs
                 var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('mode' => 'html_selection')) . '";
-                var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg', 'show_former_button' => ($getMembersShowFilter !== 1))) . '";
+                var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete_explain_msg', 'show_former_button' => ($getMembersShowFilter !== 1), 'custom_callback' => ($getMembersShowFilter === 2))) . '";
 
                 // cache jQuery objects
                 var editButton = $("#edit-selected");
@@ -245,7 +252,7 @@ try {
 
                         updateHeaderState();
                         refreshActions();
-                        
+
                         // reset the page length to the initial value
                         tableApi.page.len(initialPageLength).draw();
                     }
@@ -303,7 +310,7 @@ try {
                         selectedIds = [];
                         headChk.prop({ checked: false, indeterminate: false });
                         rowChks().prop("checked", false);
-                        
+
                         // initialize button states
                         updateHeaderState();
                         refreshActions();
@@ -325,7 +332,7 @@ try {
 
                     // open the editUrl directly in the current window
                     window.location.href = editUrl;
-                    
+
                     // initialize button states
                     updateHeaderState();
                     refreshActions();
@@ -336,27 +343,14 @@ try {
             });',
             true
         );
-
-        $page->addHtml('
-            <div id="adm_contacts_table_select_actions" class="mb-3">
-                <ul class="nav admidio-menu-function-node">
-                    <li class="nav-item">
-                        <button id="edit-selected" class="btn nav-link btn-primary" disabled="disabled">
-                            <i class="bi bi-pencil-square me-1"></i>' . $gL10n->get('SYS_EDIT_SELECTION') . '
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button id="delete-selected" class="btn nav-link btn-primary" disabled="disabled">
-                            <i class="bi bi-trash me-1"></i>' . $gL10n->get('SYS_DELETE_SELECTION') . '
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        ');
+        $page->assignSmartyVariable('showSelectActions', true);
     }
 
-    $page->addHtml($contactsTable->show());// show html of complete page
+    $contactsTable->createJavascript(0, count($columnHeading));
+    $page->assignSmartyVariable('headers', $columnHeading);
+    $page->addHtml('<div class="alert alert-danger form-alert" id="DT_notice" style="display: none;"></div>');
+    $page->addHtmlByTemplate('modules/contacts.list.tpl');
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

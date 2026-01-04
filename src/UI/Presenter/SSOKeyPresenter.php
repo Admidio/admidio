@@ -7,6 +7,7 @@ use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Service\KeyService;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 
 /**
@@ -279,10 +280,10 @@ class SSOKeyPresenter extends PagePresenter
             $gL10n->get('SYS_SAVE'),
             array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3'));
 
-        $this->smarty->assign('nameUserCreated', $key->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $key->getValue('key_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $key->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $key->getValue('key_timestamp_change'));
+        $this->smarty->assign('userCreatedName', $key->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $key->getValue('key_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $key->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $key->getValue('key_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -316,7 +317,7 @@ class SSOKeyPresenter extends PagePresenter
             array('icon' => 'bi-box-arrow-down')
         );
 
-        $smarty = \HtmlPage::createSmartyObject();
+        $smarty = $this->createSmartyObject();
         $form->addToSmarty($smarty);
         $gCurrentSession->addFormObject($form);
         echo $smarty->fetch('modules/sso_key.password.tpl');
@@ -354,23 +355,23 @@ class SSOKeyPresenter extends PagePresenter
         ChangelogService::displayHistoryButton($this, 'sso-keys', array('sso_keys'));
 
 
-        $table = new \HtmlTable('adm_sso_keys_table', $this, true, false);
+        $table = new DataTables($this, 'adm_sso_keys_table');
 
-        $table->addRowHeadingByArray(array(
+        $columnHeading = array(
             $gL10n->get('SYS_NAME'),
             $gL10n->get('SYS_SSO_KEY_ALGORITHM'),
             $gL10n->get('SYS_SSO_KEY_EXPIRES'),
             $gL10n->get('SYS_SSO_KEY_ACTIVE'),
             ''
-        ));
+        );
 
         $table->setMessageIfNoRowsFound('SYS_SSO_NO_KEYS_FOUND');
 
         // $table->disableDatatablesColumnsSort(array(3, 6));
-        $table->setDatatablesColumnsNotHideResponsive(array(6));
+        $table->setColumnsNotHideResponsive(array(5));
         // special settings for the table
 
-
+        $columnValues = array();
         $keyService = new KeyService($gDb);
         foreach ($keyService->getKeysData() as $keyData) {
             $templateKey = array();
@@ -419,10 +420,15 @@ class SSOKeyPresenter extends PagePresenter
 
             $templateKey[] = implode(' ', $actions);
 
-            $table->addRowByArray($templateKey, 'adm_sso_key_' . $keyData['key_uuid'], array('nobr' => 'true'));
+            $columnValues[] = array('id' => 'adm_sso_key_' . $keyData['key_uuid'], 'data' => $templateKey);
         }
 
-        // add table to the form
-        $this->addHtml(html: $table->show());
+
+        $table->createJavascript(count($columnValues), count($columnHeading));
+
+        $this->assignSmartyVariable('headers', $columnHeading);
+        $this->assignSmartyVariable('rows', $columnValues);
+        // add table to the page
+        $this->addHtmlByTemplate('modules/sso_keys.list.tpl');
     }
 }

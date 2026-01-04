@@ -10,6 +10,7 @@ use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use RuntimeException;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -28,14 +29,17 @@ class ItemService
     protected string $itemUUID;
     protected int $postCopyField;
     protected int $postCopyNumber;
-    protected int $postImported;
+    protected bool $postImported;
 
     /**
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string $profileFieldUUID UUID if the profile field that should be managed within this class
+     * @param string $itemUUID UUID if the item that should be managed within this class
+     * @param int $postCopyField Field ID which should be used for numbering when copying items
+     * @param int $postCopyNumber Number of items to be created when copying
+     * @param bool $postImported Indicates whether the item is being imported
      * @throws Exception
      */
-    public function __construct(Database $database, string $itemUUID = '', int $postCopyField = 0, int $postCopyNumber = 1, int $postImported = 0)
+    public function __construct(Database $database, string $itemUUID = '', int $postCopyField = 0, int $postCopyNumber = 1, bool $postImported = false)
     {
         global $gCurrentOrgId;
 
@@ -76,7 +80,7 @@ class ItemService
 
     /**
      * Delete the current profile field form into the database.
-     * 
+     *
      * @throws Exception
      */
     public function delete(): void
@@ -97,13 +101,10 @@ class ItemService
         global $gCurrentSession, $gL10n, $gSettingsManager;
 
         // check form field input and sanitized it from malicious content
-        if (!$this->postImported)
-        {
+        if (!$this->postImported) {
             $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $itemFieldsEditForm->validate($_POST, $multiEdit);
-        }
-        else
-        {
+        } else {
             $formValues = $_POST;
         }
 
@@ -113,10 +114,10 @@ class ItemService
                 if ($itemField->getValue('inf_id') == $this->postCopyField) {
                     $itemCopyFieldName = $itemField->getValue('inf_name_intern');
                     break;
-                }      
+                }
             }
 
-            if (isset($itemCopyField)) {
+            if (isset($itemCopyFieldName)) {
                 $startIdx = (int)$formValues['INF-' . $itemCopyFieldName] + 1;
             }
         }
@@ -166,7 +167,7 @@ class ItemService
         }
 
         //mark item as imported to prevent notification
-        if ($this->postImported == 1) {
+        if ($this->postImported) {
             $this->itemRessource->setImportedItem();
         }
 
@@ -179,14 +180,13 @@ class ItemService
      *
      * @throws Exception
      */
-    public function showItemPicture($getNewPicture = false) : void
+    public function showItemPicture($getNewPicture = false): void
     {
         global $gCurrentSession, $gSettingsManager;
         $item = new Item($this->db, $this->itemRessource, $this->itemRessource->getItemId());
 
         // Initialize default picture path
         $picturePath = getThemedFile('/images/inventory-item-picture.png');
-        $image = null;
 
         if ($item->getValue('ini_id') !== 0) {
             if ($getNewPicture) {
@@ -279,7 +279,7 @@ class ItemService
             $itemImage->scale(130, 170);
             $itemImage->copyToFile(null, $_FILES['userfile']['tmp_name'][0]);
             $itemImageData = fread(fopen($_FILES['userfile']['tmp_name'][0], 'rb'), $_FILES['userfile']['size'][0]);
-            
+
             $gCurrentSession->setValue('ses_binary', $itemImageData);
             $gCurrentSession->save();
         }
@@ -309,11 +309,11 @@ class ItemService
 
                     try {
                         FileSystemUtils::moveFile($fileOld, $fileNew);
-                    } catch (\RuntimeException $exception) {
+                    } catch (RuntimeException $exception) {
                         $gLogger->error('Could not move file!', array('from' => $fileOld, 'to' => $fileNew));
                         // TODO
                     }
-                } catch (\RuntimeException $exception) {
+                } catch (RuntimeException $exception) {
                     $gLogger->error('Could not delete file!', array('filePath' => $fileNew));
                     // TODO
                 }
@@ -350,7 +350,7 @@ class ItemService
             $filePath = ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/' . $this->itemRessource->getItemId() . '.jpg';
             try {
                 FileSystemUtils::deleteFileIfExists($filePath);
-            } catch (\RuntimeException $exception) {
+            } catch (RuntimeException $exception) {
                 $gLogger->error('Could not delete file!', array('filePath' => $filePath));
                 // TODO
             }

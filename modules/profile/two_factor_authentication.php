@@ -18,6 +18,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\QRServerProvider;
@@ -147,17 +148,12 @@ try {
             $form->addButton('tfa_reset_button', $gL10n->get('SYS_REMOVE'), array('icon' => 'bi bi-trash', 'class' => 'btn-danger', 'type' => 'submit'));
         }
 
-        $smarty = HtmlPage::createSmartyObject();
+        $smarty = PagePresenter::createSmartyObject();
         $form->addToSmarty($smarty);
         $gCurrentSession->addFormObject($form);
         echo $smarty->fetch($template);
     }
-
 } catch (Throwable $e) {
-    if ($getMode === 'setup') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->showInModalWindow();
-        $gMessage->show($e->getMessage());
-    }
+    $gMessage->showInModalWindow();
+    handleException($e, $getMode == 'setup');
 }

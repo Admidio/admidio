@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Users\Entity\User;
+use DateTime;
 
 /**
  * @brief Object to collect change notifications and optionally send a message to the administrator
@@ -252,7 +253,8 @@ class ChangeNotification
         // Store the change to send out one change notification mail (after all modifications are done)
         $this->prepareUserChanges($userID);
         if (!$ignore) {
-            $roleName = $membership->getValue('rol_name'); // TODO_RK: Check if this really works. First attempts indicate, it does not!
+            // if the format is not set to database, SecurityUtils::encodeHTML is used
+            $roleName = $membership->getValue('rol_name', 'database'); // TODO_RK: Check if this really works. First attempts indicate, it does not!
             $this->changes[$userID]['role_changes'][] = array($roleName, $fieldLabel, $old_value, $new_value);
         }
     }
@@ -369,9 +371,20 @@ class ChangeNotification
 
         while ($row = $query->fetch()) {
             $membership = new Membership($gDb, $row['mem_id']);
-            $this->logRoleChange($membership, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $row['mem_begin'], '', "DELETE", $user);
-            if ($row['mem_end']) {
-                $this->logRoleChange($membership, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $row['mem_end'], '', "DELETE", $user);
+            $memBegin = $row['mem_begin'];
+            $memEnd = $row['mem_end'];
+
+            $date =  new DateTime($memBegin);
+            if ($date !== false) {
+                $memBegin = $date->format($gSettingsManager->getString('system_date'));
+            }
+            $this->logRoleChange($membership, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_START'), $memBegin, '', "DELETE", $user);
+            if ($memEnd) {
+                $date = new DateTime($memEnd);
+                if ($date !== false) {
+                    $memEnd = $date->format($gSettingsManager->getString('system_date'));
+                }
+                $this->logRoleChange($membership, $row['rol_name'], $gL10n->get('SYS_MEMBERSHIP_END'), $memEnd, '', "DELETE", $user);
             }
             if ($row['mem_leader']) {
                 $this->logRoleChange($membership, $row['rol_name'], $gL10n->get('SYS_LEADER'), $row['mem_leader'], '', "DELETE", $user);

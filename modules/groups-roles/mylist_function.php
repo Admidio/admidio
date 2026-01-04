@@ -38,8 +38,14 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    // At least one field should be assigned
-    if (!isset($_POST['column1']) || strlen($_POST['column1']) === 0) {
+    // At least one field should be assigned (has a non-empty value)
+    if (
+        empty($_POST['column']) ||
+        !is_array($_POST['column']) ||
+        count(array_filter($_POST['column'], static function ($v) {
+            return trim((string)$v) !== '';
+        })) === 0
+    ) {
         throw new Exception('SYS_FIELD_EMPTY', array('1. ' . $gL10n->get('SYS_COLUMN')));
     }
 
@@ -80,18 +86,36 @@ try {
         $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
 
         // go through all existing columns
-        for ($columnNumber = 1; isset($_POST['column' . $columnNumber]); ++$columnNumber) {
-            if (strlen($_POST['column' . $columnNumber]) > 0) {
-                // add column to list and check if it's a profile field or another column
-                if (StringUtils::strStartsWith($_POST['column' . $columnNumber], 'usr_') || StringUtils::strStartsWith($_POST['column' . $columnNumber], 'mem_')) {
-                    $list->addColumn($_POST['column' . $columnNumber], $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
-                } else {
-                    $list->addColumn($gProfileFields->getProperty($_POST['column' . $columnNumber], 'usf_id'), $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
+        $columns    = array_values($_POST['column']    ?? []);
+        $sorts      = array_values($_POST['sort']      ?? []);
+        $conditions = array_values($_POST['condition'] ?? []);
+
+        $columnNumber = 1;
+        array_map(
+            function ($col, $sort = null, $cond = null) use ($list, $gProfileFields, &$columnNumber) {
+                // if column is empty, delete that position
+                if (empty($col)) {
+                    $list->deleteColumn($columnNumber, false);
+                    return null;
                 }
-            } else {
-                $list->deleteColumn($columnNumber, true);
-            }
-        }
+            
+                // Add column (profile fields usr_/mem_ stay as-is, others map to usf_id)
+                if (StringUtils::strStartsWith($col, 'usr_') || StringUtils::strStartsWith($col, 'mem_')) {
+                    $list->addColumn($col, $columnNumber, $sort ?? '', $cond ?? '');
+                } else {
+                    $list->addColumn($gProfileFields->getProperty($col, 'usf_id'), $columnNumber, $sort ?? '', $cond ?? '');
+                }
+            
+                $columnNumber++;
+                return null; // return value unused
+            },
+            $columns,
+            $sorts,
+            $conditions
+        );
+        
+        // Remove potentially deleted columns at the end
+        $list->deleteColumn($columnNumber, true);
 
         if ($getName !== '') {
             $list->setValue('lst_name', $getName);
@@ -140,6 +164,6 @@ try {
         echo json_encode(array('status' => 'success', 'url' => ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php'));
         exit();
     }
-} catch (Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

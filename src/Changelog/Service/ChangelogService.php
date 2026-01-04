@@ -2,6 +2,7 @@
 namespace Admidio\Changelog\Service;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -417,7 +418,6 @@ class ChangelogService {
             'usf_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'usf_type' =>                  array('name' => 'SYS_TYPE', 'type' => 'CUSTOM_LIST', 'entries' => $userFieldText),
             'usf_description' =>           'SYS_DESCRIPTION',
-            'usf_description_inline' =>    array('name' => 'SYS_DESCRIPTION_INLINE_DESC', 'type' => 'BOOL'),
             'usf_default_value' =>         'SYS_DEFAULT_VALUE',
             'usf_regex' =>                 'SYS_REGULAR_EXPRESSION',
             'usf_disabled' =>              array('name' => 'SYS_DISABLED', 'type' => 'BOOL'),
@@ -524,7 +524,7 @@ class ChangelogService {
             'inf_sequence' =>              'SYS_ORDER',
             'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
             'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS'),
-            'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE'),
+            'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE', 'type' => 'PICTURE'),
             'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
             'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
             'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
@@ -607,7 +607,7 @@ class ChangelogService {
             'crt_number_col' =>            array('name' => $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', 'type' => 'BOOL'),
 
             'lst_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
-            'lst_usr_id' =>                array('name' => 'SYS_USER', 'type' => 'USER'),
+            'lst_usr_id' =>                array('name' => 'SYS_MEMBER', 'type' => 'USER'),
             'lst_name' =>                  'SYS_NAME',
             'lst_global' =>                array('name' => 'SYS_CONFIGURATION_ALL_USERS', 'type' => 'BOOL'),
             'lsc_number' =>                'SYS_NUMBER',
@@ -888,32 +888,32 @@ class ChangelogService {
                     break;
                 case 'ORG':
                     $obj = new Organization($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'organizations', $obj->getValue('org_id'), $obj->getValue('org_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'organizations', $obj->getValue('org_id'), $obj->getValue('org_uuid'));
                     break;
                 case 'RELATION_TYPE':
                     $obj = new UserRelationType($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'user_relation_types', $obj->getValue('urt_id'), $obj->getValue('urt_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'user_relation_types', $obj->getValue('urt_id'), $obj->getValue('urt_uuid'));
                     break;
                 case 'ALBUM':
                     $obj = new Album($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'photos', $obj->getValue('pho_id'), $obj->getValue('pho_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'photos', $obj->getValue('pho_id'), $obj->getValue('pho_uuid'));
                     break;
                 case 'FOLDER':
                     $obj = new Folder($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'folders', $obj->getValue('fol_id'), $obj->getValue('fol_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'folders', $obj->getValue('fol_id'), $obj->getValue('fol_uuid'));
                     break;
                 case 'ROLE':
                     $obj = new Role($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'roles', $obj->getValue('rol_id'), $obj->getValue('rol_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'roles', $obj->getValue('rol_id'), $obj->getValue('rol_uuid'));
                     break;
                 case 'CATEGORY':
                     $obj = new Category($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'categories', $obj->getValue('cat_id'), $obj->getValue('cat_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId(Language::translateIfTranslationStrId($obj->readableName())), 'categories', $obj->getValue('cat_id'), $obj->getValue('cat_uuid'));
                     break;
                 case 'USER':
                     if ($value > 0) {
                         $obj = new User($gDb, $gProfileFields, $value);
-                        $htmlValue = self::createLink($obj->readableName(), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
+                        $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'users', $obj->getValue('usr_id'), $obj->getValue('usr_uuid'));
                     } else {
                         $orgName = '"' . $gCurrentOrganization->getValue('org_longname'). '"';
                         $htmlValue = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION',array($orgName)))) . '</i>';
@@ -921,7 +921,7 @@ class ChangelogService {
                     break;
                 case 'ROOM':
                     $obj = new Room($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'rooms', $obj->getValue('room_id'), $obj->getValue('room_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'rooms', $obj->getValue('room_id'), $obj->getValue('room_uuid'));
                     break;
                 case 'COUNTRY':
                     $htmlValue = $gL10n->getCountryName($value);
@@ -935,23 +935,23 @@ class ChangelogService {
                     break;
                 case 'LIST':
                     $obj = new ListConfiguration($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'lists', $obj->getValue('lst_id'), $obj->getValue('lst_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'lists', $obj->getValue('lst_id'), $obj->getValue('lst_uuid'));
                     break;
                 case 'MENU':
                     $obj = new MenuEntry($gDb, $value);
-                    $htmlValue = $obj->readableName(); //createLink($obj->readableName(), 'lists', $obj->getValue('men_id'), $obj->getValue('men_uuid'));
+                    $htmlValue = Language::translateIfTranslationStrId($obj->readableName()); //createLink(Language::translateIfTranslationStrId($obj->readableName()), 'lists', $obj->getValue('men_id'), $obj->getValue('men_uuid'));
                     break;
                 case 'COMPONENT':
                     $obj = new Component($gDb, $value);
-                    $htmlValue = $obj->readableName();
+                    $htmlValue = Language::translateIfTranslationStrId($obj->readableName());
                     break;
                 case 'TOPIC':
                     $obj = new Topic($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'forum_topics', $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'forum_topics', $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
                     break;
                 case 'POST':
                     $obj = new POST($gDb, $value);
-                    $htmlValue = self::createLink($obj->readableName(), 'forum_posts', $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
+                    $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'forum_posts', $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
                     break;
                 case 'CUSTOM_LIST':
                     $value = $entries[$value]??$value;
@@ -980,6 +980,18 @@ class ChangelogService {
                     $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_ROLES_ALLOTHER')]);
                     break;
 
+                case 'PICTURE':
+                    // The value is the base64-encoded image data so decode it and display the image
+                    $image = new Image();
+                    $data = base64_decode($value);
+                    try {
+                        $image->setImageFromData($data);
+                        $mime = $image->getMimeType(); // z\.B\. 'image/png'
+                        $htmlValue = '<img id="picture" class="rounded" style="max-height: 24px; max-width: 24px;" src="data:' . $mime . ';base64,' . $value . '" alt="Picture">';
+                    } catch (\Throwable $e) {
+                        $htmlValue = '&nbsp;'; // If the image cannot be created, return a non-breaking space
+                    }
+                    break;
             }
             $value = $htmlValue;
         }
@@ -1218,7 +1230,7 @@ class ChangelogService {
             $table = explode(',', $table);
 
         $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-        // Admin always has acces. Other users can have permissions per table.
+        // Admin always has access. Other users can have permissions per table.
         $hasAccess = $gCurrentUser->isAdministrator() ||
             (!empty($table) && empty(array_diff($table, $tablesPermitted)));
 
@@ -1276,7 +1288,7 @@ class ChangelogService {
             $table = explode(',', $table);
 
         $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-        // Admin always has acces. Other users can have permissions per table.
+        // Admin always has access. Other users can have permissions per table.
         $hasAccess = $gCurrentUser->isAdministrator() ||
             (!empty($table) && empty(array_diff($table, $tablesPermitted)));
 
@@ -1329,14 +1341,14 @@ ChangelogService::registerCallback('formatValue', 'TOPIC', function($value, $typ
     global $gDb;
     if (empty($value)) return '';
     $obj = new Topic($gDb, $value??0);
-    return ChangelogService::createLink($obj->readableName(), 'forum_topics',
+    return ChangelogService::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'forum_topics',
             $obj->getValue('fot_id'), $obj->getValue('fot_uuid'));
 });
 ChangelogService::registerCallback('formatValue', 'POST', function($value, $type, $entries = []) {
     global $gDb;
     if (empty($value)) return '';
     $obj = new POST($gDb, $value??0);
-    return ChangelogService::createLink($obj->readableName(), 'forum_posts',
+    return ChangelogService::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'forum_posts',
             $obj->getValue('fop_id'), $obj->getValue('fop_uuid'));
 });
 

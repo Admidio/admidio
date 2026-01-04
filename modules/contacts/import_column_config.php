@@ -58,9 +58,10 @@ try {
             });
             var outstr = $(available).not(used).get().join(", ");
             if (outstr == "") {
-                outstr = "-";
+                $("#admidio-import-unused").hide();
+            } else {
+                $("#admidio-import-unused #admidio-import-unused-fields").html(outstr);
             }
-            $("#admidio-import-unused #admidio-import-unused-fields").html(outstr);
         });
         $(".admidio-import-field").trigger("change");',
         true
@@ -69,6 +70,13 @@ try {
     $arrayCsvColumns = $_SESSION['import_data'][0];
     $categoryId = null;
     $arrayImportableFields = array();
+
+    // Cleanup CSV columns: If a column does not have a header (null value), use its position instead
+    foreach ($arrayCsvColumns as $pos => $column) {
+        if (empty($column)) {
+          $arrayCsvColumns[$pos] =  $gL10n->get('SYS_COLUMN_POS', array($pos));
+        }
+    }
 
     $arrayImportableFields[] = array(
         'cat_name' => $gL10n->get('SYS_BASIC_DATA'),
@@ -138,7 +146,7 @@ try {
             array(
                 'category' => $column['cat_name'],
                 'property' => $fieldProperty,
-                'defaultValue' => $fieldDefaultValue,
+                'defaultValue' => (in_array($fieldDefaultValue, $arrayCsvColumns) ? array_search($fieldDefaultValue, $arrayCsvColumns) : ''),
                 'firstEntry' => $gL10n->get('SYS_ASSIGN_FILE_COLUMN'),
                 'class' => 'admidio-import-field'
             )
@@ -150,6 +158,6 @@ try {
     $form->addToHtmlPage();
     $gCurrentSession->addFormObject($form);
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

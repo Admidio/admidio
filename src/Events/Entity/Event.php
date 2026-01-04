@@ -92,7 +92,7 @@ class Event extends Entity
      * Calls clear() Method of parent class and initialize child class specific parameters
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -217,11 +217,11 @@ class Event extends Entity
      *                           the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return
      *                           the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -458,7 +458,7 @@ class Event extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 

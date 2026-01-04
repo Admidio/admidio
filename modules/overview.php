@@ -47,9 +47,5 @@ try {
 
     $page->show();
 } catch (Throwable $e) {
-    if (isset($gMessage)) {
-        $gMessage->show($e->getMessage());
-    } else {
-        echo $e->getMessage();
-    }
+    handleException($e);
 }

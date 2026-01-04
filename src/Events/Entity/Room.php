@@ -33,11 +33,11 @@ class Room extends Entity
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         if ($columnName === 'room_description') {
             if (!isset($this->dbColumns['room_description'])) {
@@ -63,7 +63,7 @@ class Room extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($columnName === 'room_description') {
             return parent::setValue($columnName, $newValue, false);

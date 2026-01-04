@@ -18,6 +18,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 try {
@@ -151,17 +152,13 @@ try {
             array('icon' => 'bi-check-lg')
         );
 
-        $smarty = HtmlPage::createSmartyObject();
+        $smarty = PagePresenter::createSmartyObject();
         $smarty->assign('zxcvbnUserInputs', $zxcvbnUserInputs);
         $form->addToSmarty($smarty);
         $gCurrentSession->addFormObject($form);
         echo $smarty->fetch('modules/profile.password.edit.tpl');
     }
 } catch (Throwable $e) {
-    if ($getMode === 'change') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->showInModalWindow();
-        $gMessage->show($e->getMessage());
-    }
+    $gMessage->showInModalWindow();
+    handleException($e, $getMode == 'change');
 }
