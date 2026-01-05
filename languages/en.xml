@@ -921,8 +921,8 @@
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio is displayed in the language set in the browser for websites. If the language stored there is not available, the language set here will be used.\nIs your language missing or would you like to translate more texts or improve existing translations? Then take a look at the #VAR1#Admidio wiki page#VAR2# to find out how you can help with the translation.</string>
   <string name="SYS_LAST_EDITED_AT">Last edited at #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# at #VAR2#</string>
-  <string name="SYS_LAST_LOGIN_ON">Last login on #VAR1# at #VAR2#</string>
   <string name="SYS_LAST_LOGIN">Last login</string>
+  <string name="SYS_LAST_LOGIN_ON">Last login on #VAR1# at #VAR2#</string>
   <string name="SYS_LAST_POST">Last post</string>
   <string name="SYS_LAST_REPLY_BY_AT">#VAR1#Last reply#VAR2# by #VAR3# at #VAR4#</string>
   <string name="SYS_LASTNAME">Surname</string>
