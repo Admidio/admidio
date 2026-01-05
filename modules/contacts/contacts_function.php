@@ -169,7 +169,7 @@ try {
             }
             // Delete user from database
             $user->delete();
-            
+
             $statusMsg = $gL10n->get('SYS_DELETE_DATA');
             $statusData[$userUuid] = 'success';
         } elseif ($getMode === 'send_login') {
@@ -194,6 +194,6 @@ try {
         $gMessage->showInModalWindow();
         $gMessage->show($e->getMessage());
     } else {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+        handleException($e, true);
     }
 }

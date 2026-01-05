@@ -277,11 +277,10 @@ try {
 
         $page->show();
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
         // ajax mode then only show text if error occurs
-        echo $e->getMessage();
-    } else {
-        $gMessage->show($e->getMessage());
+        $gMessage->showTextOnly();
     }
+    handleException($e);
 }

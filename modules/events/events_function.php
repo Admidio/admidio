@@ -44,7 +44,7 @@ try {
     // Initialize and check the parameters
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'participate', 'participate_cancel', 'participate_maybe', 'export')));
-    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
+    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', $gValidLogin ? array('defaultValue' => $gCurrentUser->getValue('usr_uuid')) : []);
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
@@ -300,14 +300,14 @@ try {
                              WHERE cat_name_intern = \'EVENTS\'
                                AND cat_org_id = ?';
                     $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
-                    if(!$row = $pdoStatement->fetch()) {
+                    if (!$row = $pdoStatement->fetch()) {
                         throw new Exception('No category found for event participation!');
                     }
                     $role = new Role($gDb);
                     $role->setType(Role::ROLE_EVENT);
 
-                    // these are the default settings for a event role
-                    $role->setValue('rol_cat_id', (int) $row['cat_id']);
+                    // these are the default settings for an event role
+                    $role->setValue('rol_cat_id', (int)$row['cat_id']);
                     // role members are allowed to view lists
                     $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
                     // role members are allowed to send mail to this role
@@ -342,7 +342,7 @@ try {
             }
         } else {
             if ($event->getValue('dat_rol_id') > 0) {
-                // event participation was deselected -> delete flag in event and than delete role
+                // event participation was deselected -> delete flag in event and then delete role
                 $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
                 $event->setValue('dat_rol_id', '');
                 $event->save();
@@ -387,7 +387,7 @@ try {
                 $calendar = new Category($gDb);
                 $events->setParameter('cat_uuid', $getCatUuid);
                 $calendar->readDataByUuid($getCatUuid);
-                $filename .= '-'.$calendar->getValue('cat_name');
+                $filename .= '-' . $calendar->getValue('cat_name');
             }
         }
 
@@ -433,7 +433,7 @@ try {
             if ($event->getValue('dat_max_members') > 0) {
                 $totalMembers = $participants->getCount();
 
-                if ($totalMembers + ($formValues['additional_guests'] - (int)$member->getValue('mem_count_guests')) < $event->getValue('dat_max_members')) {
+                if ($totalMembers + ((int)$formValues['additional_guests'] - (int)$member->getValue('mem_count_guests')) < (int)$event->getValue('dat_max_members')) {
                     $member->setValue('mem_count_guests', $formValues['additional_guests']);
                 } else {
                     $participationPossible = false;
@@ -494,9 +494,5 @@ try {
         exit();
     }
 } catch (Throwable $e) {
-    if ($getMode === 'export') {
-        $gMessage->show($e->getMessage());
-    } else {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    }
+    handleException($e, !($getMode === 'export'));
 }

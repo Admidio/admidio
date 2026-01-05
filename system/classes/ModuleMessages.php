@@ -1,4 +1,7 @@
 <?php
+
+use Admidio\Infrastructure\Email;
+
 /**
  * @brief Some functions for the messages module
  *
@@ -10,11 +13,11 @@
  * // check the given Array for character and split it.
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  *
- * // show a message and set a link to a page that should be shown after user click ok
+ * // show a message and set a link to a page that should be shown after the user clicks ok
  * $gMessage->setForwardUrl('https://www.example.com/mypage.php');
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  *
- * // show a message with yes and no button and set a link to a page that should be shown after user click yes
+ * // show a message with yes and no button and set a link to a page that should be shown after the user clicks yes
  * $gMessage->setForwardYesNo('https://www.example.com/mypage.php');
  * $gMessage->show($gL10n->get('SYS_MESSAGE_TEXT_ID'));
  * ```
@@ -25,16 +28,16 @@
 class ModuleMessages
 {
     /**
-     * Constructor that initialize the class member parameters
+     * Constructor that initializes the class member parameters
      */
     public function __construct()
     {
     }
 
     /**
-     * Check for roles and give back a string with role name. If former members or active and former
-     * members were selected than an additional string will be shown after the role name.
-     * @param string $roleIdsString A string with several role ids. (e.g: "groupID: 4-2")
+     * Check for roles and give back a string with the role name. If former members or active and former
+     * members were selected, then an additional string will be shown after the role name.
+     * @param string $roleIdsString A string with several role ids. (e.g.: "groupID: 4-2")
      * @return string Returns the role name and the status if former members were selected.
      * @throws Exception
      */
@@ -54,16 +57,11 @@ class ModuleMessages
         $statement = $gDb->queryPrepared($sql, array($groupInfo['id'], $GLOBALS['gCurrentOrgId']));
         $roleName = $statement->fetchColumn();
 
-        switch ($groupInfo['status']) {
-//            case 'active':
-//                return $roleName . ' (' . $gL10n->get('SYS_ACTIVE_MEMBERS') . ')';
-            case 'former':
-                return $roleName . ' (' . $gL10n->get('SYS_FORMER_MEMBERS') . ')';
-            case 'active_former':
-                return $roleName . ' (' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')';
-            default:
-                return $roleName;
-        }
+        return match ($groupInfo['status']) {
+            'former' => $roleName . ' (' . $gL10n->get('SYS_FORMER_MEMBERS') . ')',
+            'active_former' => $roleName . ' (' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')',
+            default => $roleName,
+        };
     }
 
     /**

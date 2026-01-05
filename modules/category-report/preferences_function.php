@@ -45,6 +45,7 @@ try {
                 if (empty($_POST['columns' . $conf])) {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
                 }
+<<<<<<< CategoryReportImprovement
                 
                 // role selection and role property selection is split into two select boxes.
                 // Role selection in the first select box uses only the rNN (with NN the ID of 
@@ -59,6 +60,10 @@ try {
                     }
                 }, $_POST['columns' . $conf], $_POST['columnsRoleProp' . $conf]);
                 $values['col_fields'] = implode(',', $columns);
+=======
+
+                $values['col_fields'] = implode(',', $_POST['columns' . $conf]);
+>>>>>>> master
                 $config[] = $values;
             }
 
@@ -70,6 +75,6 @@ try {
         default:
             throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
-} catch (Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

@@ -30,10 +30,10 @@ try {
 
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    // create html page object
+    // create an HTML page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-rooms', $headline);
 
-    // show link to create new room
+    // show a link to create new room
     $page->addPageFunctionsMenuItem(
         'menu_item_new_room',
         $gL10n->get('SYS_CREATE_VAR', array($textRoom)),
@@ -41,10 +41,10 @@ try {
         'bi-plus-circle-fill'
     );
 
-    // show link to view profile field change history
+    // show a link to view profile field change history
     ChangelogService::displayHistoryButton($page, 'rooms', 'rooms');
 
-    if ((int) $gSettingsManager->get('system_show_create_edit') === 1) {
+    if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
         // show firstname and lastname of create and last change user
         $additionalFields = '
         cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
@@ -74,7 +74,7 @@ try {
             $gProfileFields->getProperty('FIRST_NAME', 'usf_id')
         );
     } else {
-        // show username of create and last change user
+        // show username of creation and last change user
         $additionalFields = '
         cre_user.usr_login_name AS create_name,
         cha_user.usr_login_name AS change_name,
@@ -87,7 +87,7 @@ try {
         $queryParams = array();
     }
 
-    // read rooms from database
+    // read rooms from a database
     $sql = 'SELECT room.*, ' . $additionalFields . '
           FROM ' . TBL_ROOMS . ' AS room
                ' . $additionalTables . '
@@ -95,13 +95,12 @@ try {
     $roomsStatement = $gDb->queryPrepared($sql, $queryParams);
 
     if ($roomsStatement->rowCount() === 0) {
-        // Keine Räume gefunden
+        // No rooms found
         $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
     } else {
         $room = new Room($gDb);
-        // Räume auflisten
+        // create a list of rooms
         while ($row = $roomsStatement->fetch()) {
-            // GB-Objekt initialisieren und neuen DS uebergeben
             $room->clear();
             $room->setArray($row);
 
@@ -143,23 +142,21 @@ try {
                 $page->addHtml($room->getValue('room_description'));
             }
             $page->addHtml('</div>
-            <div class="card-footer">' .
-                // show information about user who creates the recordset and changed it
-                admFuncShowCreateChangeInfoByName(
-                    $row['create_name'],
-                    $room->getValue('room_timestamp_create'),
-                    (string)$row['change_name'],
-                    $room->getValue('room_timestamp_change'),
-                    $room->getValue('create_uuid'),
-                    (string)$room->getValue('change_uuid')
-                ) . '
+            <div class="card-footer">
+                <div class="admidio-info-created-edited">
+                    <span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY_AND_AT', array($room->getNameOfCreatingUser(), $room->getValue('room_timestamp_create'))) . '</span>');
+
+                    if ($room->getNameOfLastEditingUser() !== '') {
+                        $page->addHtml('<span class="admidio-info-created">' . $gL10n->get('SYS_LAST_EDITED_BY', array($room->getNameOfLastEditingUser(), $room->getValue('room_timestamp_change'))) . '</span>');
+                    }
+                $page->addHtml('</div>
             </div>
         </div>');
         }
     }
 
-    // show html of complete page
+    // show HTML of complete page
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

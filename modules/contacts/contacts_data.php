@@ -48,7 +48,6 @@
  */
 
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 
@@ -66,9 +65,6 @@ try {
     $jsonArray = array('draw' => $getDraw);
 
     header('Content-Type: application/json');
-
-    // show all members of all organizations
-    $getMembersAllOrgs = $gSettingsManager->getBool('contacts_show_all');
 
     if (isset($_SESSION['contacts_list_configuration'])) {
         $contactsListConfig = $_SESSION['contacts_list_configuration'];
@@ -118,7 +114,7 @@ try {
         }
 
         foreach ($searchString as $searchWord) {
-            $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ') LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
+            $searchCondition .= ' AND LOWER(CONCAT(' . implode(', \' \', ', $searchColumns) . ')) LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
             $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
         }
 
@@ -271,7 +267,7 @@ try {
                         ON cat_org.cat_id = rol_org.rol_cat_id
                     WHERE mem_org.mem_usr_id = usr_id
                 ) AS member_org_ids,
-                usr_login_name as loginname,
+                usr_login_name as login_name,
                 (SELECT email.usd_value FROM ' . TBL_USER_DATA . ' email
                   WHERE  email.usd_usr_id = usr_id
                     AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
@@ -386,7 +382,7 @@ try {
 
         // Administrators can change or send password if login is configured and user is member of current organization
         if ($contactsOfThisOrganization && $gCurrentUser->isAdministrator()
-            && !empty($row['loginname']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
+            && !empty($row['login_name']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
             if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
                 // if email is set and systemmails are activated then administrators can send a new password to user
                 $userAdministration = '
@@ -476,7 +472,8 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (Exception $e) {
+} catch (Throwable $e) {
+    // NOTE: DataTables expects the form {'error' => 'message'}, so we can't use the default handleException($e, true); call!
     $jsonArray['error'] = $e->getMessage();
     echo json_encode($jsonArray);
     exit();

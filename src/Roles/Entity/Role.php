@@ -124,7 +124,7 @@ class Role extends Entity
      * Calls clear() Method of parent class and initialize child class specific parameters
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -714,7 +714,7 @@ class Role extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n, $gCurrentUser;
 

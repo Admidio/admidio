@@ -9,9 +9,12 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Entity\SelectOptions;
+use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Component\DataTables;
 use Admidio\Users\Entity\User;
+
+use DateInterval;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -53,7 +56,7 @@ class InventoryPresenter extends PagePresenter
      */
     protected int $getFilterKeeper = 0;
     /**
-     * @var bool true if the current user is the keeper of an item
+     * @var string filter string for the last receiver selection
      */
     protected string $getFilterLastReceiver = '';
     /**
@@ -84,7 +87,7 @@ class InventoryPresenter extends PagePresenter
         $this->itemsData = new ItemsData($gDb, $gCurrentOrgId);
 
         // check if the user has selected to show retired items
-        $this->showRetiredItems = ($this->getFilterStatus === 0 || $this->getFilterStatus === 2) ? true : false;
+        $this->showRetiredItems = ($this->getFilterStatus === 0 || $this->getFilterStatus === 2);
         $this->itemsData->showRetiredItems($this->showRetiredItems);
         $this->itemsData->readItems();
 
@@ -274,7 +277,7 @@ class InventoryPresenter extends PagePresenter
             WHERE (inf_org_id  = ' . $gCurrentOrgId . '
                 OR inf_org_id IS NULL)
             AND inf_name_intern = \'KEEPER\'
-            ORDER BY keeper_name ASC;';
+            ORDER BY keeper_name;';
 
         // filter keeper
         $form->addSelectBoxFromSql(
@@ -309,7 +312,7 @@ class InventoryPresenter extends PagePresenter
                 ON first_name.usd_usr_id  = borrowData.inb_last_receiver
             AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
             WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
-            ORDER BY receiver_name ASC;';
+            ORDER BY receiver_name;';
 
         // filter last receiver
         $form->addSelectBoxFromSql(
@@ -479,6 +482,7 @@ class InventoryPresenter extends PagePresenter
      *
      * @return void
      * @throws Exception
+     * @throws \Smarty\Exception
      */
     public function createList(): void
     {
@@ -692,10 +696,11 @@ class InventoryPresenter extends PagePresenter
     }
 
     /**
-     * Check if the keeper is authorized to edit spezific item data
+     * Check if the keeper is authorized to edit specific item data
      *
      * @param int|null $keeper The user ID of the keeper
-     * @return bool                    true if the keeper is authorized
+     * @return bool            true if the keeper is authorized
+     * @throws Exception
      */
     public static function isKeeperAuthorizedToEdit(?int $keeper = null): bool
     {
@@ -713,7 +718,9 @@ class InventoryPresenter extends PagePresenter
      * Check if the current user is the keeper of an item.
      * This method checks if the current user is listed as a keeper in the inventory item data.
      *
+     * @param int $itemId Optional item ID to check for a specific item. If 0, checks for any item.
      * @return bool Returns true if the current user is a keeper, false otherwise.
+     * @throws Exception
      */
     public static function isCurrentUserKeeper(int $itemId = 0): bool
     {
@@ -776,15 +783,13 @@ class InventoryPresenter extends PagePresenter
         $headers = ($mode === 'html') ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>') : array();
         $exportHeaders = array();
         $columnNumber = 1;
-        //array with the internal field names of the borrowing fields
-        $borrowingFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // Build headers and column alignment for each item field
         foreach ($this->itemsData->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
             $columnHeader = $this->itemsData->getProperty($infNameIntern, 'inf_name');
 
-            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $this->itemsData->borrowFieldNames)) {
                 continue; // skip borrowing fields if borrowing is disabled
             }
 
@@ -843,7 +848,7 @@ class InventoryPresenter extends PagePresenter
             foreach ($this->itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
 
-                if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowingFieldNames)) {
+                if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $this->itemsData->borrowFieldNames)) {
                     continue; // skip borrowing fields if borrowing is disabled
                 }
 
@@ -947,8 +952,78 @@ class InventoryPresenter extends PagePresenter
                     $content = in_array($mode, ['csv', 'pdf', 'xlsx', 'ods'])
                         ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
                         : $this->itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, ['DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'])) {
+                } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
                     $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif ($infType ===  'DROPDOWN_DATE_INTERVAL') {
+                    $content = $this->itemsData->getValue($infNameIntern, 'database');
+                    if (isset($content) && is_numeric($content)) {
+                        $selectedOption = $content;
+                        $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+                        $selectOptions = $option->getAllOptions();
+
+                        // Calculate days remaining based on selected date field value and selected interval
+                        $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
+                        $connectedField = new ItemField($gDb);
+                        $connectedField->readDataByUuid($connectedFieldUuid);
+                        $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
+                        $filteredSelectOptions = array();
+
+                        foreach ($selectOptions as $option) {
+                            $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
+                        }
+
+                        if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
+                            try {
+                                $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
+                                $compDate2 = date_create();
+
+                                //Calculate future test date
+                                $dateAdditionSplit = array();
+                                preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$selectedOption], $dateAdditionSplit);
+
+                                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                                    switch ($dateAdditionSplit[2]) {
+                                        case 'w':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
+                                            break;
+                                        case 'm':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
+                                            break;
+                                        case 'y':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
+                                            break;
+                                        case 'd':
+                                        default:
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
+                                            break;
+                                    }
+                                }
+
+                                //Compare last test date with future date and output days
+                                $dateDiff = date_diff($compDate2, $compDate1);
+                                $daysRemaining = $dateDiff->format('%R%a');
+
+                                // check if days remaining is only one day
+                                if ($daysRemaining === '1' || $daysRemaining === '-1') {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
+                                } elseif ($daysRemaining === '-0') {
+                                    $content = '0 ' . $gL10n->get('SYS_DAYS');
+                                }  else {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
+                                }
+                            } catch (\Exception $e) {
+                                // in case of error set content to empty
+                                $content = '';
+                            }
+                        } else {
+                            $content = '';
+                        }
+
+                        // in export modes append the stored value for possible later import
+                        if (!empty($content) && in_array($mode, ['csv', 'xlsx', 'ods'])) {
+                            $content .= " [" . $this->itemsData->getHtmlValue($infNameIntern, $selectedOption) . "]";
+                        }
+                    }
                 } elseif ($infType === 'RADIO_BUTTON') {
                     $content = $mode === 'html'
                         ? $this->itemsData->getHtmlValue($infNameIntern, $content)
@@ -1065,7 +1140,7 @@ class InventoryPresenter extends PagePresenter
                     }, $rowValues);
 
                     foreach ($filterArray as $filterString) {
-                        if (strpos($filterString, '-') === 0) {
+                        if (str_contains($filterString, '-')) {
                             $cleanFilter = substr($filterString, 1);
                             if (stripos(implode('', $filterColumnValues), $cleanFilter) !== false) {
                                 $showRowException = true;
@@ -1089,7 +1164,7 @@ class InventoryPresenter extends PagePresenter
             }
         }
 
-        // check if actionHeader was set, if so, make shure every row has an actions column
+        // check if actionHeader was set, if so, make sure every row has an actions column
         if ($mode === 'html') {
             if ($actionsHeaderAdded) {
                 foreach ($rows as &$row) {
@@ -1117,7 +1192,8 @@ class InventoryPresenter extends PagePresenter
      * Populate the inventory table with the data of the inventory items in HTML mode.
      * This method uses a predefined ItemsData element and always returns the HTML version
      * of the table.
-     *
+     * @param ItemsData $itemsData The ItemsData object containing item data
+     * @param string $itemFieldFilter The item field to filter out (default is 'KEEPER')
      * @return array Returns an array with the following keys:
      *               - headers: array of header labels for the table
      *               - column_align: array indicating the alignment for each column
@@ -1143,9 +1219,6 @@ class InventoryPresenter extends PagePresenter
         // Build headers and set column alignment (only for HTML mode)
         $columnAlign = array();
         $headers = array();
-        $columnNumber = 1;
-        //array with the internal field names of the borrow fields
-        $borrowFieldNames = array('LAST_RECEIVER', 'BORROW_DATE', 'RETURN_DATE');
 
         // create array with all column heading values
         $profileItemFields = array('ITEMNAME');
@@ -1160,7 +1233,7 @@ class InventoryPresenter extends PagePresenter
         foreach ($itemsData->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
 
-            if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowFieldNames))) {
+            if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $itemsData->borrowFieldNames))) {
                 continue;
             }
 
@@ -1183,7 +1256,6 @@ class InventoryPresenter extends PagePresenter
             }
 
             $headers[] = $columnHeader;
-            $columnNumber++;
         }
 
         $preparedData['headers'] = $headers;
@@ -1199,12 +1271,11 @@ class InventoryPresenter extends PagePresenter
             $rowValues = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
             $strikethrough = $itemsData->isRetired();
-            $columnNumber = 1;
 
             foreach ($itemsData->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
 
-                if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $borrowFieldNames))) {
+                if (!in_array($infNameIntern, $profileItemFields, true) || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $itemsData->borrowFieldNames))) {
                     continue;
                 }
 
@@ -1244,8 +1315,72 @@ class InventoryPresenter extends PagePresenter
                 if ($infType === 'CHECKBOX') {
                     $content = ($content != 1) ? 0 : 1;
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, ['DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'])) {
+                } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif ($infType ===  'DROPDOWN_DATE_INTERVAL') {
+                    if (isset($content) && is_numeric($content)) {
+                        try {
+                            // Load item data to get connected field value
+                            $this->itemsData->readItemData($item['ini_uuid']);
+                            $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+                            $selectOptions = $option->getAllOptions();
+
+                            $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
+                            $connectedField = new ItemField($gDb);
+                            $connectedField->readDataByUuid($connectedFieldUuid);
+                            $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
+                            $filteredSelectOptions = array();
+
+                            foreach ($selectOptions as $option) {
+                                $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
+                            }
+                            //use part after # as internal_name for last test date
+                            if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
+                                $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
+                                $compDate2 = date_create();
+
+                                //Calculate future test date
+                                $dateAdditionSplit = array();
+                                preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$content], $dateAdditionSplit);
+
+                                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                                    switch ($dateAdditionSplit[2]) {
+                                        case 'w':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
+                                            break;
+                                        case 'm':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
+                                            break;
+                                        case 'y':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
+                                            break;
+                                        case 'd':
+                                        default:
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
+                                            break;
+                                    }
+                                }
+
+                                //Compare last test date with future date and output days
+                                $dateDiff = date_diff($compDate2, $compDate1);
+                                $daysRemaining = $dateDiff->format('%R%a');
+
+                                // check if days remaining is only one day
+                                if ($daysRemaining === '1' || $daysRemaining === '-1') {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
+                                } elseif ($daysRemaining === '-0') {
+                                    $content = '0 ' . $gL10n->get('SYS_DAYS');
+                                } else {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
+                                }
+                            } else {
+                                $content = '';
+                            }
+                        } catch (\Exception $e) {
+                            // in case of error set content to empty
+                            $content = '';
+                        }
+                    }
                 } elseif ($infType === 'RADIO_BUTTON') {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif ($infType === 'CATEGORY') {
@@ -1253,7 +1388,6 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 $rowValues['data'][] = ($strikethrough) ? '<s>' . $content . '</s>' : $content;
-                $columnNumber++;
             }
 
             // Append admin action column
@@ -1344,7 +1478,7 @@ class InventoryPresenter extends PagePresenter
             $strikethroughs[] = $strikethrough;
         }
 
-        // check if actionHeader was set, if so, make shure every row has an actions column
+        // check if actionHeader was set, if so, make sure every row has an actions column
         if ($actionsHeaderAdded) {
             foreach ($rows as &$row) {
                 if (!isset($row['actions'])) {

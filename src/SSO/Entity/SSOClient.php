@@ -18,8 +18,8 @@ class SSOClient extends Entity
     protected ?RolesRights $rolesAccess;
     protected string $ssoType = '';
 
-    public function __construct(Database $database, ?string $tableName, string $columnPrefix, $client_id = null) {
-        $this->ssoType = 'saml';
+    public function __construct(Database $database, string $type, ?string $tableName, string $columnPrefix, $client_id = null) {
+        $this->ssoType = $type;
         if (is_numeric($client_id)) {
             parent::__construct($database, $tableName, $columnPrefix, $client_id);
         } else {

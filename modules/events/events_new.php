@@ -352,6 +352,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

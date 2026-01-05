@@ -168,10 +168,6 @@ try {
 
         echo 'success';
     }
-} catch (Exception $e) {
-    if (in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership'))) {
-        echo $e->getMessage();
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership')));
 }

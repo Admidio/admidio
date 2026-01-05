@@ -55,7 +55,7 @@ class ProfileField extends Entity
      * Additional to the parent method visible roles array and flag will be initialized.
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -192,7 +192,7 @@ class ProfileField extends Entity
             $value = parent::getValue($columnName, $format);
         }
 
-        if ((is_array($value) && empty($value)) || (!is_array($value) && (strlen((string)$value) === 0 || $value === null))) {
+        if ((is_array($value) && empty($value)) || (!is_array($value) && $value === null)) {
             return '';
         }
 
@@ -274,7 +274,7 @@ class ProfileField extends Entity
     {
         global $gCurrentUserId;
 
-        $requiredInput = $this->getValue('usf_required_input');
+        $requiredInput = (int)$this->getValue('usf_required_input');
 
         if ($requiredInput === ProfileField::USER_FIELD_REQUIRED_INPUT_YES) {
             return true;
@@ -419,7 +419,7 @@ class ProfileField extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 

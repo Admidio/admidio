@@ -1,8 +1,8 @@
 <?php
+
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
-use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Components\Entity\Component;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -48,7 +48,7 @@ class CategoriesPresenter extends PagePresenter
         if ($categoryUUID !== '') {
             $category->readDataByUuid($categoryUUID);
         }
-        // If no type was passed as param, try to read it from the DB. If unsuccessfull, thrown an error.
+        // If no type was passed as param, try to read it from the DB. If unsuccessfully, thrown an error.
         if (empty($type)) {
             $type = $category->getValue('cat_type');
         }
@@ -153,7 +153,8 @@ class CategoriesPresenter extends PagePresenter
             $categoryEditRolesObject = new RolesRights($gDb, 'category_edit', $catId);
             $roleEditSet = $categoryEditRolesObject->getRolesIds();
         } else {
-            // profile fields should be organization independent all other categories should be organization dependent as default
+            // profile fields should be organization independent all other categories should be
+            // organization dependent as default
             if ($type !== 'USF') {
                 $category->setValue('cat_org_id', $gCurrentOrgId);
             }
@@ -189,14 +190,18 @@ class CategoriesPresenter extends PagePresenter
             );
         }
 
-        ChangelogService::displayHistoryButton($this, 'categories', 'categories,roles_rights_data', !empty($categoryUUID), array('uuid' => $categoryUUID));
+        ChangelogService::displayHistoryButton($this, 'categories', 'categories,roles_rights_data',
+            !empty($categoryUUID), array('uuid' => $categoryUUID));
 
 
         // show form
         $form = new FormPresenter(
             'adm_categories_edit_form',
             'modules/categories.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('uuid' => $categoryUUID, 'mode' => 'save', 'type' => $type)),
+            SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/categories.php',
+                array('uuid' => $categoryUUID, 'mode' => 'save', 'type' => $type)
+            ),
             $this
         );
 
@@ -209,14 +214,15 @@ class CategoriesPresenter extends PagePresenter
         $form->addInput(
             'cat_name',
             $gL10n->get('SYS_NAME'),
-            htmlentities($category->getValue('cat_name', 'database'), ENT_QUOTES),
+            htmlentities((string)$category->getValue('cat_name', 'database'), ENT_QUOTES),
             array('maxLength' => 100, 'property' => $fieldPropertyCatName)
         );
 
         // Roles have their own preferences for visibility, so only allow this for other types.
         // Until now, we do not support visibility for categories that belong to several organizations,
         // roles could be assigned if only 1 organization exists.
-        if ($type !== 'ROL' && ((bool)$category->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)) {
+        if ($type !== 'ROL' && ((bool)$category->getValue('cat_system') === false
+                || $gCurrentOrganization->countAllRecords() === 1)) {
             // read all roles of the current organization
             $sqlViewRoles = 'SELECT rol_id, rol_name, cat_name
                        FROM ' . TBL_ROLES . '
@@ -243,20 +249,20 @@ class CategoriesPresenter extends PagePresenter
             }
 
             if ($gCurrentOrganization->countAllRecords() > 1) {
-                if ((int) $category->getValue('cat_org_id') === 0) {
+                if ((int)$category->getValue('cat_org_id') === 0) {
                     $firstEntryName = $gL10n->get('SYS_ALL_ORGANIZATIONS');
                 } else {
                     $firstEntryName = $gL10n->get('SYS_ALL_THIS_ORGANIZATION');
                 }
 
                 if ($type !== 'USF') {
-                    $firstEntryName .= ' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                    $firstEntryName .= ' (' . $gL10n->get('SYS_ALSO_VISITORS') . ')';
                 }
             } else {
                 if ($type === 'USF') {
                     $firstEntryName = $gL10n->get('SYS_ALL_THIS_ORGANIZATION');
                 } else {
-                    $firstEntryName = $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')';
+                    $firstEntryName = $gL10n->get('SYS_ALL') . ' (' . $gL10n->get('SYS_ALSO_VISITORS') . ')';
                 }
             }
 
@@ -292,8 +298,10 @@ class CategoriesPresenter extends PagePresenter
             }
         }
 
-        // if current organization has a parent organization or is child organizations then show option to set this category to global
-        if ($type !== 'ROL' && (bool)$category->getValue('cat_system') === false && $gCurrentOrganization->countAllRecords() > 1) {
+        // if current organization has a parent organization or is child organizations
+        // then show option to set this category to global
+        if ($type !== 'ROL' && (bool)$category->getValue('cat_system') === false
+            && $gCurrentOrganization->countAllRecords() > 1) {
             if ($gCurrentOrganization->isChildOrganization()) {
                 $fieldProperty = FormPresenter::FIELD_DISABLED;
                 $helpTextId = 'SYS_ONLY_SET_BY_MOTHER_ORGANIZATION';
@@ -330,7 +338,8 @@ class CategoriesPresenter extends PagePresenter
                 'adm_administrators',
                 $gL10n->get('SYS_ADMINISTRATORS'),
                 implode(', ', $adminRoles),
-                array('property' => FormPresenter::FIELD_DISABLED, 'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
+                array('property' => FormPresenter::FIELD_DISABLED,
+                    'helpTextId' => $gL10n->get('SYS_CATEGORIES_ADMINISTRATORS_DESC', array($rolesRightsName)))
             );
 
             $checked = false;
@@ -523,7 +532,7 @@ class CategoriesPresenter extends PagePresenter
             $category->clear();
             $category->setArray($catRow);
 
-            if($categoryOrganizationID !== (int) $category->getValue('cat_org_id')) {
+            if ($categoryOrganizationID !== (int)$category->getValue('cat_org_id')) {
                 if (count($templateCategories) > 0) {
                     $templateCategoryNodes[] = $templateCategories;
                     $templateCategories = array();

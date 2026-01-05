@@ -118,7 +118,6 @@ try {
 
     $gCurrentUser->setOrganization($gCurrentOrgId);
     $rss->getRssFeed();
-} catch (Exception $e) {
-    $gMessage->setForwardUrl($gHomepage);
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

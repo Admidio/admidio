@@ -111,9 +111,12 @@ class SAMLService extends SSOService {
         global $gSettingsManager, $gL10n;
 
         // Load Certificate PEM
+        $idpCertPem = '';
         $signatureKeyID = $gSettingsManager->get('sso_saml_signing_key');
-        $signatureKey = new Key($this->db, $signatureKeyID);
-        $idpCertPem = $signatureKey->getValue('key_certificate');
+        if (!empty($signatureKeyID)) {
+            $signatureKey = new Key($this->db, $signatureKeyID);
+            $idpCertPem = $signatureKey->getValue('key_certificate');
+        }
 
         $metaURL = $this->getMetadataUrl();
         $staticSettings = array(

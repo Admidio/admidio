@@ -1,6 +1,6 @@
 <?php
 
-use Laminas\Diactoros\Response\JsonResponse;    
+use Laminas\Diactoros\Response\JsonResponse;
 
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\SAMLService;
@@ -76,12 +76,12 @@ try {
                 exit;
             }
 
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             echo json_encode(['error' => 'OIDC Error in Admidio: ' . $e->getMessage()]);
             exit;
         }
 
-     
+
     } elseif ($type === 'saml') {
 
         $samlService = new SAMLService($gDb, $gCurrentUser);
@@ -98,7 +98,7 @@ try {
             header('HTTP/1.1 404 Not Found');
             echo json_encode(['error' => 'Endpoint not found']);
         }
-        
+
     } else {
         header('HTTP/1.1 404 Not Found');
         echo json_encode(['error' => 'URL or authorization protocol not available']);

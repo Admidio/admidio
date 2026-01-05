@@ -32,5 +32,5 @@ try {
     $announcementsService = new AnnouncementsService($gDb);
     $announcementsService->rssFeed($getOrganization);
 } catch (Throwable $e) {
-    echo $e->getMessage();
+    handleException($e);
 }

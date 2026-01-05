@@ -21,7 +21,7 @@ use Admidio\UI\Presenter\InventoryPresenter;
  *     $systemComponent = new Component($gDb);
  *     $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
  *     $systemComponent->checkDatabaseVersion(true, 'administrator@example.com');
- * } catch(Exception $e) {
+ * } catch(Throwable $e) {
  *     $e->showHtml();
  * }
  * ```
@@ -148,7 +148,7 @@ class Component extends Entity
                         return true;
                     }
                     break;
-    
+
                 case 'FORUM':
                     if ($gCurrentUser->isAdministratorForum()) {
                         return true;
@@ -270,7 +270,7 @@ class Component extends Entity
                     return true;
                 }
                 break;
-    
+
             case 'FORUM':
                 if ($gSettingsManager->getInt('forum_module_enabled') === 1
                 || ($gSettingsManager->getInt('forum_module_enabled') === 2 && $gValidLogin)) {

@@ -95,7 +95,7 @@ try {
         }
     }
 
-    // create html page object
+    // create an HTML page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
 
     // data array
@@ -139,8 +139,8 @@ try {
                         var returnData = JSON.parse(data);
                         if (returnData.status === "success") {
                             ' . ($getView === 'detail' ?
-                            '$(".admidio-event-approval button").html($approvalStateElement.html());' :
-                            '$(".admidio-event-approval button").html($approvalStateElement.children("i").clone());') . '
+                '$(".admidio-event-approval button").html($approvalStateElement.html());' :
+                '$(".admidio-event-approval button").html($approvalStateElement.children("i").clone());') . '
                             messageBox(returnData.message);
                         } else {
                             messageBox(returnData.message, "' . $gL10n->get('SYS_ERROR') . '", "error");
@@ -151,9 +151,9 @@ try {
             });
         ', true);
 
-        // If default view mode is set to compact we need a back navigation if one date is selected for detail view
+        // If the default view mode is set to compact, we need a back navigation if one date is selected for detail view
         if ($getEventUuid !== '') {
-            // add back link to module menu
+            // add backlink to module menu
             $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
         }
 
@@ -189,7 +189,7 @@ try {
             }
 
             if ($gCurrentUser->isAdministratorEvents()) {
-                // if no calendar select box is shown, then show link to edit calendars
+                // if no calendar select box is shown, then show a link to edit calendars
                 $page->addPageFunctionsMenuItem(
                     'menu_item_event_categories',
                     $gL10n->get('SYS_EDIT_CALENDARS'),
@@ -198,7 +198,7 @@ try {
                 );
             }
 
-            // create filter menu with elements for calendar and start/end date
+            // create a filter menu with elements for calendar and start/end date
             $form = new FormPresenter(
                 'adm_navbar_filter_form',
                 'sys-template-parts/form.filter.tpl',
@@ -255,7 +255,7 @@ try {
     } else { // $getViewMode = 'print'
         $page->assignSmartyVariable('classTable', 'table table-condensed table-striped');
 
-        // create html page object without the custom theme files
+        // create an HTML page object without the custom theme files
         $page->setPrintMode();
 
         if ($getEventUuid === '') {
@@ -319,11 +319,11 @@ try {
             $data['column_align'] = $columnAlign;
         }
 
-        // create dummy date object
+        // create a fake event object
         $event = new Event($gDb);
 
         foreach ($eventsResult['recordset'] as $row) {
-            // write of current event data to date object
+            // write of current event data to an event object
             $event->clear();
             $event->setArray($row);
 
@@ -352,12 +352,12 @@ try {
             $participantsArray = array();
             $participateModalForm = false;
 
-            // If extended options for participation are allowed then use a modal form instead the dropdown button
+            // If extended options for participation are allowed, then use a modal form instead the dropdown button
             if ((int)$event->getValue('dat_allow_comments') === 1 || (int)$event->getValue('dat_additional_guests') === 1) {
                 $participateModalForm = true;
             }
 
-            // set end date of event
+            // set the end date of event
             if ($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $event->getValue('dat_end', $gSettingsManager->getString('system_date'))) {
                 $outputEndDate = ' - ' . $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
             }
@@ -387,7 +387,7 @@ try {
 
             $eventLocation = (string)$event->getValue('dat_location', 'database');
             if ($eventLocation !== '') {
-                // Show map link, when at least 2 words available
+                // Show a map link, when at least 2 words available
                 // having more than 3 characters each
                 $countLocationWords = 0;
                 foreach (preg_split('/[,; ]/', $eventLocation) as $value) {
@@ -462,7 +462,7 @@ try {
                     $participantsArray = $participants->getParticipantsArray();
                 }
 
-                // If user is invited to the event then the approval state is not initialized and has value "null" in data table
+                // If a user is invited to the event, then the approval state is not initialized and has value "null" in the data table
                 if ($row['member_date_role'] > 0 && $row['member_approval_state'] == null) {
                     $row['member_approval_state'] = ModuleEvents::MEMBER_APPROVAL_STATE_INVITED;
                 }
@@ -498,7 +498,7 @@ try {
                 // show notice that no new participation could be assigned to the event because the deadline exceeded or
                 // the max number of participants is reached.
                 if ($event->deadlineExceeded() || $event->participantLimitReached()) {
-                    // Show warning for member of the date role if deadline is exceeded and now no changes are possible anymore
+                    // Show warning for member of the date role if the deadline is exceeded and now no changes are possible anymore
                     if ($participants->isMemberOfEvent($gCurrentUserId)) {
                         if ($getView !== 'detail') {
                             $outputButtonParticipation = $iconParticipationStatus;
@@ -516,13 +516,13 @@ try {
                     }
                 }
 
-                // if current user is allowed to participate or user could edit this event then show buttons for participation
+                // if the current user is allowed to participate or user could edit this event, then show buttons for participation
                 if ($event->possibleToParticipate() || $gCurrentUser->isAdministratorEvents() || $participants->isLeader($gCurrentUserId)) {
                     if ($event->getValue('dat_deadline') !== null) {
                         $outputDeadline = $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                     }
 
-                    // Links for the participation only in html mode
+                    // Links for the participation only in HTML mode
                     if ($getViewMode === 'html') {
                         if ($event->possibleToParticipate()) {
 
@@ -530,9 +530,9 @@ try {
                             $disableStatusAttend = '';
                             $disableStatusTentative = '';
 
-                            // Check limit of participants
+                            // Check the limit of participants
                             if ($event->participantLimitReached()) {
-                                // Check current user. If user is member of the event role then get his current approval status and set the options
+                                // Check current user. If a user is a member of the event role, then get their current approval status and set the options
                                 if (array_key_exists($gCurrentUserId, $participantsArray)) {
                                     switch ($participantsArray[$gCurrentUserId]['approved']) {
                                         case Participants::PARTICIPATION_MAYBE:
@@ -582,7 +582,7 @@ try {
                             }
                         }
 
-                        // Link to participants list
+                        // Link to a participant list
                         if ($gCurrentUser->hasRightViewRole($eventRolId)) {
                             if ($outputNumberMembers > 0 || $outputNumberLeaders > 0) {
                                 $buttonURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $eventRoleUUID));
@@ -636,9 +636,9 @@ try {
 
             if ($getView === 'detail') {
                 if (!$event->getValue('dat_all_day')) {
-                    // Write start in array
+                    // Write start in an array
                     $eventElements[] = array($gL10n->get('SYS_START'), '<strong>' . $event->getValue('dat_begin', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
-                    // Write end in array
+                    // Write the end in an array
                     $eventElements[] = array($gL10n->get('SYS_END'), '<strong>' . $event->getValue('dat_end', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
                 }
 
@@ -738,7 +738,7 @@ try {
                     if ($gSettingsManager->getInt('events_clamp_text_lines') > 0) {
                         $page->addHtml('
                             <div id="event_description_' . $eventUUID . '" class="clamp-text" style="--admidio-clamp-text-lines: ' . $gSettingsManager->getInt('events_clamp_text_lines') . ';">' .
-                                $event->getValue('dat_description') .
+                            $event->getValue('dat_description') .
                             '</div>
                             <div class="clamp-button">
                                 <a id="event_caret_description_' . $eventUUID . '" onclick="showHideMoreText($(this), [\'' . $gL10n->get('SYS_SHOW_MORE') . '\', \'' . $gL10n->get('SYS_SHOW_LESS') . '\']);" role="button" class="admidio-more-less-button" data-target="event_description_' . $eventUUID . '">
@@ -761,22 +761,21 @@ try {
                 }
                 $page->addHtml('
                 </div>
-                <div class="card-footer">' .
-                    // show information about user who created the recordset and changed it
-                    admFuncShowCreateChangeInfoByName(
-                        $row['create_name'],
-                        $event->getValue('dat_timestamp_create'),
-                        (string)$row['change_name'],
-                        $event->getValue('dat_timestamp_change'),
-                        $row['create_uuid'],
-                        (string)$row['change_uuid']
-                    ) . '
+                <div class="card-footer">
+                    <div class="admidio-info-created-edited">
+                        <span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY_AND_AT', array($event->getNameOfCreatingUser(), $event->getValue('dat_timestamp_create'))) . '</span>');
+
+                        if ($event->getNameOfLastEditingUser() !== '') {
+                            $page->addHtml('<span class="admidio-info-created">' . $gL10n->get('SYS_LAST_EDITED_BY', array($event->getNameOfLastEditingUser(), $event->getValue('dat_timestamp_change'))) . '</span>');
+                        }
+                $page->addHtml('
+                        </div>
                     </div>
                 </div>');
             } else { // $getView = 'compact' or 'room' or 'participants' or 'description'
                 // show table view of events
 
-                // Change css class if date is highlighted
+                // Change CSS class if event is highlighted
                 $cssClass = '';
                 if ($row['dat_highlight']) {
                     $cssClass = 'admidio-event-highlight';
@@ -835,7 +834,7 @@ try {
                         $columnValue = array();
 
                         if (is_array($participantsArray)) {
-                            // Only show participants if user has right to view the list, is leader or has permission to create/edit events
+                            // Only show participants if user has the right to view the list, is leader or has permission to create/edit events
                             if ($gCurrentUser->hasRightViewRole((int)$event->getValue('dat_rol_id'))
                                 || $row['mem_leader'] == 1
                                 || $gCurrentUser->isAdministratorEvents()) {
@@ -854,7 +853,7 @@ try {
                         if ($gSettingsManager->getInt('events_clamp_text_lines') > 0) {
                             $descContent = '
                                 <div id="event_description_' . $eventUUID . '" class="clamp-text" style="--admidio-clamp-text-lines: ' . $gSettingsManager->getInt('events_clamp_text_lines') . ';">' .
-                                    $event->getValue('dat_description') .
+                                $event->getValue('dat_description') .
                                 '</div>
                                 <div class="clamp-button">
                                     <a id=event_caret_description_' . $eventUUID . '"" onclick="showHideMoreText($(this), ["' . $gL10n->get('SYS_SHOW_MORE') . '", "' . $gL10n->get('SYS_SHOW_LESS') . '"]);" role="button" class="admidio-more-less-button" data-target="event_description_' . $eventUUID . '">
@@ -899,11 +898,11 @@ try {
     }
 
     if ($getView === 'detail') {
-        // If necessary show links to navigate to next and previous recordset of the query
+        // If necessary, show links to navigate to the next and previous recordset of the query
         $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('view' => $getView, 'mode' => $getMode, 'cat_uuid' => $getCatUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'), 'view_mode' => $getViewMode));
         $page->addHtml(admFuncGeneratePagination($baseUrl, $eventsResult['totalCount'], $eventsResult['limit'], $getStart));
     }
     $page->show();
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

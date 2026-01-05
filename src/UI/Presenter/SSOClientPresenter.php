@@ -502,10 +502,10 @@ class SSOClientPresenter extends PagePresenter
     }
         ', true);
 
-        $this->smarty->assign('nameUserCreated', $client->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $client->getValue('smc_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $client->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $client->getValue('smc_timestamp_change'));
+        $this->smarty->assign('userCreatedName', $client->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $client->getValue('smc_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $client->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $client->getValue('smc_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -555,7 +555,7 @@ class SSOClientPresenter extends PagePresenter
         $form->addCheckbox(
             'ocl_enabled',
             $gL10n->get('SYS_ENABLED'),
-            $client->getValue('ocl_enabled'),
+            $client->getValue('ocl_enabled') ?? false,
             array()
         );
         $form->addInput(
@@ -762,11 +762,12 @@ class SSOClientPresenter extends PagePresenter
 
 
 
-        $this->smarty->assign('nameUserCreated', $client->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $client->getValue('ocl_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $client->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $client->getValue('ocl_timestamp_change'));
-        $form->addToHtmlPage();
+        $this->smarty->assign('userCreatedName', $client->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $client->getValue('ocl_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $client->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $client->getValue('ocl_timestamp_change'));
+
+    $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
 

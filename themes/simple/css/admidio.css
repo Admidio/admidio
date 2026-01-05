@@ -242,7 +242,7 @@ a {
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .bi, .btn .bi, .alert .bi,
 .admidio-profile-user-right .bi, .checkbox .bi, input[type="radio"],
-.accordion .bi, .form-control-static > .bi, .icon-link .bi  {
+.accordion .bi, .form-control-static > .bi {
     margin-right: 0.5rem;
 }
 
@@ -378,6 +378,11 @@ label {
             padding: 0 !important;
             margin: 0 !important;
     }
+}
+
+.admidio-form-custom-content > div {
+    padding-top: calc(0.375rem + 1px);
+    padding-bottom: calc(0.375rem + 1px);
 }
 
 /***********************************/

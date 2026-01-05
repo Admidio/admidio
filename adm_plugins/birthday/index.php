@@ -85,10 +85,10 @@ try {
     }
 
     // Check if the role condition has been set
-    if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0) {
-        $sqlRol = 'IN (' . implode(',', $plg_rolle_sql) . ')';
+    if (empty($plg_rolle_sql)) {
+        $sqlRoleIds = 'IS NOT NULL';
     } else {
-        $sqlRol = 'IS NOT NULL';
+        $sqlRoleIds = 'IN (' . implode(',', $plg_rolle_sql) . ')';
     }
 
     // Check if the sort condition has been set
@@ -159,7 +159,7 @@ try {
             ON rol_cat_id = cat_id
            AND cat_org_id = ? -- $gCurrentOrgId
          WHERE usr_valid = true
-           AND mem_rol_id ' . $sqlRol . '
+           AND mem_rol_id ' . $sqlRoleIds . '
       ORDER BY days_to_bdate ' . $sqlSort . ', last_name, first_name';
     } else {
         $sql = 'SELECT DISTINCT usr_id, usr_uuid, usr_login_name,
@@ -214,7 +214,7 @@ try {
             ON rol_cat_id = cat_id
            AND cat_org_id = ? -- $gCurrentOrgId
          WHERE usr_valid = true
-           AND mem_rol_id ' . $sqlRol . '
+           AND mem_rol_id ' . $sqlRoleIds . '
       ORDER BY days_to_bdate ' . $sqlSort . ', last_name, first_name';
     }
 

@@ -32,5 +32,5 @@ try {
     $forumService = new ForumService($gDb);
     $forumService->rssFeed($getOrganization);
 } catch (Throwable $e) {
-    echo $e->getMessage();
+    handleException($e);
 }

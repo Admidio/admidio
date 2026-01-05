@@ -30,19 +30,16 @@ You can try out the [demo system](https://www.admidio.org/demo_en) to have a loo
 
 ## Installation
 
-To install Admidio on your web server, ensure you have PHP 7.2 or higher and either a MySQL (version 5.0 or higher) or PostgreSQL (version 9.0 or higher) database available. Follow our [online installation instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation) for a successful setup.
+To install Admidio on your web server, ensure you have PHP 8.2 or higher and either a MariaDB (version 10 or higher), MySQL (version 5.0 or higher) or PostgreSQL (version 11.0 or higher) database available. Follow our [online installation instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation) for a successful setup.
 
 ## Update
 
-Keep your Admidio installation up to date by following our [online update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update). Here's a brief update overview:
+Keep your Admidio installation up to date by following our [online update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update). Here's a brief update overview if you don't have custom themes installed:
 
-1. Delete the folder "adm_program" and the "index.php" of the previous version.
-2. Copy the folder "adm_program" and the "index.php" from the new version.
+1. Delete all folders and files except "adm_my_files" and "adm_plugins" of the previous version.
+2. Copy all folders except "adm_my_files" from the new version.
 3. Update the "adm_plugins" folder with the newly delivered plugins.
 4. Access the "index.php" in your Admidio folder to initiate the update.
-5. Update or replace the theme in the "adm_theme" folder.
-
-If you're updating from version 2.x or 3.x to version 4.x, please review our [special update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update_to_version_4).
 
 ## Docker
 

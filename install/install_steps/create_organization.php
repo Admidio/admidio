@@ -41,7 +41,7 @@ if ($mode === 'html') {
     }
 
     // create a page to enter the organization names
-    $page = new InstallationPresenter('adm_installation_create_organization', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_create_organization', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
     $page->assignSmartyVariable('text', $gL10n->get('SYS_NEW_ORGANIZATION_DESC'));

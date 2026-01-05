@@ -9,9 +9,9 @@
  *
  * Parameters:
  *
- * mode     : dialog - (Default) show the login dialog
- *            check  - Check the data to the login dialog
- * organization_short_name : short name of the organization that should be preselected at the select box
+ * mode: dialog - (Default) show the login dialog
+ *       check - Check the data to the login dialog
+ * organization_short_name: short name of the organization that should be preselected at the select box
  *
  * **********************************************************************************************
  */
@@ -30,7 +30,7 @@ try {
         // remember url (will be removed in login_check)
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
-        // create html page object
+        // create an HTML page object
         $page = PagePresenter::withHtmlIDAndHeadline('admidio-login', $headline);
         $loginModule = new ModuleLogin();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
@@ -75,10 +75,6 @@ try {
         echo json_encode($payload);
         exit();
     }
-} catch (Exception $e) {
-    if($getMode === 'check') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, $getMode == 'check');
 }

@@ -1,0 +1,43 @@
+name: Docker Multi-Arch Build on Manual Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      git_tag:
+        description: 'Git Tag (z. B. v5.0.3)'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source at tag
+        uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ inputs.git_tag }}
+          fetch-depth: 0
+
+      - name: Set release tag
+        run: echo "RELEASE_TAG=${{ inputs.git_tag }}" >> $GITHUB_ENV
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            admidio/admidio:${{ env.RELEASE_TAG }}

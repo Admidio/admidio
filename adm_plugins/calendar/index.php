@@ -78,10 +78,10 @@ try {
     }
 
     // check if role conditions where set
-    if (isset($plg_rolle_sql) && is_array($plg_rolle_sql) && count($plg_rolle_sql) > 0) {
-        $sqlRoleIds = 'IN (' . implode(',', $plg_rolle_sql) . ')';
-    } else {
+    if (empty($plg_rolle_sql)) {
         $sqlRoleIds = 'IS NOT NULL';
+    } else {
+        $sqlRoleIds = 'IN (' . implode(',', $plg_rolle_sql) . ')';
     }
 
     header('Content-Type: text/html; charset=utf-8');

@@ -37,7 +37,7 @@ if ($mode === 'html') {
     $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
     // create a page to enter all necessary data to create a administrator user
-    $page = new InstallationPresenter('adm_installation_create_administrator', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_create_administrator', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'));
