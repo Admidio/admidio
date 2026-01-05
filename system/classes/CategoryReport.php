@@ -13,7 +13,7 @@ use Admidio\Users\Entity\User;
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- * 
+ *
  * The column definitions use a shorthand code of the form Xnn, where X describes the type of object/relation and nn is the ID of the object (profile field, role, etc.)
  * Possible values for "X" are:
  *   p# ... Profile field with ID #
@@ -29,7 +29,7 @@ use Admidio\Users\Entity\User;
  *   ndummy ...  Number (running counter)
  *   adummy ...  All roles
  *   ddummy ... Duration of membership
- * 
+ *
  */
 class CategoryReport
 {
@@ -184,7 +184,7 @@ class CategoryReport
 
                     while ($row = $statement->fetch()) {
                         $workArray[$key + 1]['usr_id'][] = $row['mem_usr_id'];
-                        // NOTE: By default, all current members as of the given date are included. However, if 
+                        // NOTE: By default, all current members as of the given date are included. However, if
                         // a column has the "former members" type, then we need to include all former members
                         // of that role, too (it will be marked as former members, so no risk of confusion)
                             $this->listData[$row['mem_usr_id']] = array();
@@ -258,7 +258,7 @@ class CategoryReport
         $number_col[1] = $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')';
 
         // Read in all current members of the current organisation
-        // Then add all former members of the groups, where former memberships should be displayed. 
+        // Then add all former members of the groups, where former memberships should be displayed.
         // They will be marked as former members, so the confusion risk is minimized.
         $sql = ' SELECT mem_usr_id
                    FROM ' . TBL_CATEGORIES . '
@@ -302,7 +302,7 @@ class CategoryReport
                     }
                 }
             }
-            
+
             $categoryMarker = true;
             if ($catSel !== '') {
                 $categoryMarker = false;
@@ -362,15 +362,15 @@ class CategoryReport
                     // Get membership durations for all roles
                     $this->listData[$member][$key] = '';
                     $membership = new Membership($gDb);
-                    
+
                     foreach ($memberShips as $rol_id) {
                         $role = new Role($gDb);
                         $role->readDataById($rol_id);
-                        
+
                         // Get membership data for this role
                         // TODO_RK: readDataByColumns returns false for multiple DB entries!!!
                         $membershipData = $membership->readDataByColumns(array('mem_rol_id' => $rol_id, 'mem_usr_id' => $member));
-                        
+
                         if ($membershipData) {
                               $duration = $membership->calculateDuration();
                             $this->listData[$member][$key] .= $role->getValue('rol_name') . ': ' . $duration['formatted'] . '; ';
@@ -452,7 +452,7 @@ class CategoryReport
         // User fields (uuid, login_name, number_login, last_login)
         $this->headerSelection[$i]['id'] = 'uuuid';       // u wie User profile
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_PROFILE_DATA');
-        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_UUID');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_UNIQUE_ID');
         $i++;
 
         $this->headerSelection[$i]['id'] = 'ulogin_name';       // u wie User profile
@@ -551,7 +551,7 @@ class CategoryReport
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
         $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_MEMBERSHIPS');
         $i++;
-        
+
         //Custom column for membership duration
         $this->headerSelection[$i]['id'] = 'ddummy';          //d wie duration
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');

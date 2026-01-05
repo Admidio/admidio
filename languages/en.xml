@@ -1713,7 +1713,6 @@
   <string name="SYS_UTF32BE">UTF-32BE</string>
   <string name="SYS_UTF32LE">UTF-32LE</string>
   <string name="SYS_UTF8">UTF-8</string>
-  <string name="SYS_UUID">Unique user ID</string>
   <string name="SYS_VALID_FROM" description="Date valid from">Valid from</string>
   <string name="SYS_VALID_TO" description="Date valid to">Valid until</string>
   <string name="SYS_VALUE">Value</string>
