@@ -45,8 +45,25 @@ try {
                 if (empty($_POST['columns' . $conf])) {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
                 }
+<<<<<<< CategoryReportImprovement
+                
+                // role selection and role property selection is split into two select boxes.
+                // Role selection in the first select box uses only the rNN (with NN the ID of 
+                // the role) id, while the second select box allows the user to select the 
+                // property (r, l, w, f, b, e, d)
+                // Here we need to merge the two arrays to one. 
+                $columns = array_map(function($r, $rprop) {
+                    if ($r[0]=='r') {
+                        return $rprop . substr($r, 1);
+                    } else {
+                        return $r;
+                    }
+                }, $_POST['columns' . $conf], $_POST['columnsRoleProp' . $conf]);
+                $values['col_fields'] = implode(',', $columns);
+=======
 
                 $values['col_fields'] = implode(',', $_POST['columns' . $conf]);
+>>>>>>> master
                 $config[] = $values;
             }
 
