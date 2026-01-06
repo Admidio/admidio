@@ -37,6 +37,12 @@ class ProfileFieldsPresenter extends PagePresenter
     {
         global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb, $gSettingsManager;
 
+        // add select2 files for the default value select box
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
+
         // Create user-defined field object
         $userField = new ProfileField($gDb);
 
@@ -61,23 +67,66 @@ class ProfileFieldsPresenter extends PagePresenter
             $userField->setValue('usf_registration', 1);
         }
 
+        // add a javascript code to select an empty entry when no entry is selected
+        $this->addJavascript('
+            // if the user unselects all entries then we add an empty entry to the select box and select it.
+            $("#usf_default_value").on("select2:unselect", function(e) {
+                var $sel = $(this);
+                var current = $sel.val(); // Array oder null
+                if (current === null || current.length === 0) {
+                    if ($sel.find("option[value=\'\']").length === 0) {
+                        $sel.append(\'<option value="" selected></option>\');
+                        $sel.trigger("change.select2");
+                    } else {
+                        $sel.val("").trigger("change.select2");
+                    }
+                }
+            });
+
+            // if the user selects an entry and the empty entry is selected then remove the empty entry
+            $("#usf_default_value").on("select2:select", function(e) {
+                var $sel = $(this);
+                var current = $sel.val() || [];
+                if (Array.isArray(current) && current.length > 1 && current.indexOf("") !== -1) {
+                    $sel.find(\'option[value=""]\').remove();
+                    var newVals = current.filter(function(v) {
+                        return v !== "";
+                    });
+                    $sel.val(newVals).trigger("change.select2");
+                }
+            });', true
+        );
+
         $this->addJavascript('
             function updateDefaultValueField() {
                 // get the default value to set the correct selected option
-                let defaultValue = $("#usf_default_value").val();
+                
+
+                // spli the default values into an array (separated by comma)
+                let defaultValues = $("#usf_default_value").val().split(",");
+                
                 // replace the default option value input field with a selectbox containing the options                    
                 $("#usf_default_value").replaceWith(function() {
                     let selectBox = $("<select></select>")
                         .attr("id", "usf_default_value")
-                        .attr("name", "usf_default_value")
-                        .addClass("form-select focus-ring");
-                    // add an empty option only when usf_required_input is false
-                    if ($("#usf_required_input").val() === "0") {
-                        selectBox.append($("<option></option>").attr("value", "").text(""));
+                        .addClass("form-select focus-ring ");
+                        
+                    if ($("#usf_type").val() === "DROPDOWN_MULTISELECT") {
+                        selectBox.attr("name", "usf_default_value[]")
+                        selectBox.attr("multiple", "multiple")
+                    }
+                    else {
+                        selectBox.attr("name", "usf_default_value")
+                    }
+                    
+                    // add a placeholder option
+                    if ($("#usf_type").val() === "DROPDOWN_MULTISELECT") {
+                        selectBox.append($("<option></option>")
+                            .attr("value", "placeholder")
+                            .attr("hidden", "hidden")
+                            .attr("disabled", "disabled")
+                            .text("' . $gL10n->get('SYS_DEFAULT_VALUE') . '"));
                     } else {
-                        // set required attribute when no empty option is available
-                        selectBox.attr("required", "required");
-                        // add a placeholder option
                         selectBox.append($("<option></option>")
                             .attr("value", "placeholder")
                             .attr("hidden", "hidden")
@@ -86,12 +135,14 @@ class ProfileFieldsPresenter extends PagePresenter
                         selectBox.append($("<option></option>")
                             .attr("value", "")
                             .text("-' . $gL10n->get('SYS_PLEASE_CHOOSE') . '-"));
-                    }
+                   }
+                        
                     // add all options from the options table
                     $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
                         let optionValue = $(this).val();
                         let optionID = $(this).parent().parent().attr("data-uuid");
-                        if (optionID === defaultValue) {
+                        // check if this option is in the default values array
+                        if (defaultValues.includes(optionID.toString())) {
                             let option = $("<option></option>")
                                 .attr("value", optionID)
                                 .text(optionValue)
@@ -103,10 +154,20 @@ class ProfileFieldsPresenter extends PagePresenter
                     });
                     return selectBox;
                 });
-                
+
                 // update the displaye help text
                 var helpTextContainer = document.getElementById("usf_default_value_group").getElementsByTagName("div")[0].getElementsByClassName("form-text")[0];
                 helpTextContainer.innerHTML = "' . $gL10n->get('SYS_DEFAULT_VALUE_SELECT_OPTIONS_DESC') . '";
+                
+                // make the selectbox a multiselect if necessary
+                if ($("#usf_type").val() === "DROPDOWN_MULTISELECT") {
+                    $("#usf_default_value").select2({
+                        theme: "bootstrap-5",
+                        allowClear: true,
+                        placeholder: "",
+                        language: "' . $gL10n->getLanguageLibs() . '",
+                    });
+                }
             }
 
             $("#usf_type").change(function() {
@@ -136,7 +197,7 @@ class ProfileFieldsPresenter extends PagePresenter
                             .attr("name", "usf_default_value")
                             .addClass("form-control focus-ring")
                             .val("");
-                    });s
+                    });
                     // update the displaye help text
                     var helpTextContainer = document.getElementById("usf_default_value_group").getElementsByTagName("div")[0].getElementsByClassName("form-text")[0];
                     helpTextContainer.innerHTML = "' . $gL10n->get('SYS_DEFAULT_VALUE_DESC') . '";
@@ -467,16 +528,24 @@ class ProfileFieldsPresenter extends PagePresenter
                 3 => 'SYS_NOT_AT_REGISTRATION');
 
             // if the field is a dropdown, multiselect dropdown or radio button, we have to get the option values to show the valid default value
-            $defaultValue = $userField->getValue('usf_default_value');
+            $defaultValue = "";
             if (in_array($userField->getValue('usf_type'), array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'RADIO_BUTTON'))) {
                 $options = new SelectOptions($gDb, $userField->getValue('usf_id'));
                 $optionValueList = $options->getAllOptions($gSettingsManager->getBool('profile_show_obsolete_select_field_options'));
-                foreach ($optionValueList as $option) {
-                    if ($option['id'] == $userField->getValue('usf_default_value')) {
-                        $defaultValue = $option['value'];
-                        break;
+                $values = explode(',', $userField->getValue('usf_default_value'));
+                foreach ($values as $value) {
+                    foreach ($optionValueList as $option) {
+                        if ($option['id'] == $value) {
+                            $defaultValue .= $option['value'] . ', ';
+                        }
                     }
                 }
+            }
+
+            $defaultValue = rtrim($defaultValue, ', ');
+
+            if ($defaultValue === '') {
+                $defaultValue = $userField->getValue('usf_default_value');
             }
 
             $templateRowProfileField = array(
