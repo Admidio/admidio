@@ -33,7 +33,7 @@ class ProfileFieldsPresenter extends PagePresenter
      * @param string $profileFieldUUID UUID of the profile field that should be edited.
      * @throws Exception
      */
-    public function createEditForm(string $profileFieldUUID = '')
+    public function createEditForm(string $profileFieldUUID = ''): void
     {
         global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb, $gSettingsManager;
 
@@ -62,26 +62,97 @@ class ProfileFieldsPresenter extends PagePresenter
         }
 
         $this->addJavascript('
+            function updateDefaultValueField() {
+                // get the default value to set the correct selected option
+                let defaultValue = $("#usf_default_value").val();
+                // replace the default option value input field with a selectbox containing the options                    
+                $("#usf_default_value").replaceWith(function() {
+                    let selectBox = $("<select></select>")
+                        .attr("id", "usf_default_value")
+                        .attr("name", "usf_default_value")
+                        .addClass("form-select focus-ring");
+                    // add an empty option only when usf_required_input is false
+                    if ($("#usf_required_input").val() === "0") {
+                        selectBox.append($("<option></option>").attr("value", "").text(""));
+                    } else {
+                        // set required attribute when no empty option is available
+                        selectBox.attr("required", "required");
+                        // add a placeholder option
+                        selectBox.append($("<option></option>")
+                            .attr("value", "placeholder")
+                            .attr("hidden", "hidden")
+                            .attr("disabled", "disabled")
+                            .text("' . $gL10n->get('SYS_REQUIRED_INPUT') . '"));
+                        selectBox.append($("<option></option>")
+                            .attr("value", "")
+                            .text("-' . $gL10n->get('SYS_PLEASE_CHOOSE') . '-"));
+                    }
+                    // add all options from the options table
+                    $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
+                        let optionValue = $(this).val();
+                        let optionID = $(this).parent().parent().attr("data-uuid");
+                        if (optionID === defaultValue) {
+                            let option = $("<option></option>")
+                                .attr("value", optionID)
+                                .text(optionValue)
+                                .attr("selected", "selected");
+                            selectBox.append(option);
+                        } else {
+                            selectBox.append($("<option></option>").attr("value", optionID).text(optionValue));
+                        }
+                    });
+                    return selectBox;
+                });
+                
+                // update the displaye help text
+                var helpTextContainer = document.getElementById("usf_default_value_group").getElementsByTagName("div")[0].getElementsByClassName("form-text")[0];
+                helpTextContainer.innerHTML = "' . $gL10n->get('SYS_DEFAULT_VALUE_SELECT_OPTIONS_DESC') . '";
+            }
+
             $("#usf_type").change(function() {
                 if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "DROPDOWN_MULTISELECT" || $("#usf_type").val() === "RADIO_BUTTON") {
                     $("#ufo_usf_options_table").attr("required", "required");
                     $("#ufo_usf_options_group").addClass("admidio-form-group-required");
                     $("#ufo_usf_options_group").show("slow");
-                    // find all option input fields in the table and set the required atribute
+                    // find all option input fields in the table and set the required attribute
                     $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
                         $(this).attr("required", "required");
                     });
+                    // rebuild the default value select box with the options
+                    updateDefaultValueField()
                 } else {
                     $("#ufo_usf_options_table").removeAttr("required");
                     $("#ufo_usf_options_group").removeClass("admidio-form-group-required");
                     $("#ufo_usf_options_group").hide();
-                    // find all options and remove the required atribute from the input field
+                    // find all options and remove the required attribute from the input field
                     $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
                         $(this).removeAttr("required");
                     });
-                    }
+                    // replace the default value selectbox with a normal input field
+                    $("#usf_default_value").replaceWith(function() {
+                        return $("<input>")
+                            .attr("type", "text")
+                            .attr("id", "usf_default_value")
+                            .attr("name", "usf_default_value")
+                            .addClass("form-control focus-ring")
+                            .val("");
+                    });s
+                    // update the displaye help text
+                    var helpTextContainer = document.getElementById("usf_default_value_group").getElementsByTagName("div")[0].getElementsByClassName("form-text")[0];
+                    helpTextContainer.innerHTML = "' . $gL10n->get('SYS_DEFAULT_VALUE_DESC') . '";
+                }
             });
-            $("#usf_type").trigger("change");', true
+            $("#usf_type").trigger("change");
+            
+            // when a new option is added or the value of an option is changed we have to update the default value select box
+            $("#ufo_usf_options_table").on("input", "input[name$=\'[value]\']", function() {
+                if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "DROPDOWN_MULTISELECT" || $("#usf_type").val() === "RADIO_BUTTON") {
+                    // rebuild the default value select box with the options
+                    updateDefaultValueField()
+                }
+            });
+            
+            ', true
         );
 
         ChangelogService::displayHistoryButton($this, 'profilefields', 'user_fields,user_field_select_options', !empty($profileFieldUUID), array('uuid' => $profileFieldUUID));
@@ -280,9 +351,9 @@ class ProfileFieldsPresenter extends PagePresenter
      * @throws Exception
      * @throws \Smarty\Exception
      */
-    public function createList()
+    public function createList(): void
     {
-        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession;
+        global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gSettingsManager;
 
         $this->setHtmlID('adm_profile_fields');
         $this->setHeadline($gL10n->get('ORG_PROFILE_FIELDS'));
@@ -395,6 +466,19 @@ class ProfileFieldsPresenter extends PagePresenter
                 2 => 'SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE',
                 3 => 'SYS_NOT_AT_REGISTRATION');
 
+            // if the field is a dropdown, multiselect dropdown or radio button, we have to get the option values to show the valid default value
+            $defaultValue = $userField->getValue('usf_default_value');
+            if (in_array($userField->getValue('usf_type'), array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'RADIO_BUTTON'))) {
+                $options = new SelectOptions($gDb, $userField->getValue('usf_id'));
+                $optionValueList = $options->getAllOptions($gSettingsManager->getBool('profile_show_obsolete_select_field_options'));
+                foreach ($optionValueList as $option) {
+                    if ($option['id'] == $userField->getValue('usf_default_value')) {
+                        $defaultValue = $option['value'];
+                        break;
+                    }
+                }
+            }
+
             $templateRowProfileField = array(
                 'categoryUUID' => $userField->getValue('cat_uuid'),
                 'categoryName' => $userField->getValue('cat_name'),
@@ -407,7 +491,7 @@ class ProfileFieldsPresenter extends PagePresenter
                 'disabled' => $userField->getValue('usf_disabled'),
                 'registration' => $userField->getValue('usf_registration'),
                 'mandatory' => $gL10n->get($mandatoryFieldValues[$userField->getValue('usf_required_input')]),
-                'defaultValue' => $userField->getValue('usf_default_value'),
+                'defaultValue' => $defaultValue,
                 'regex' => $userField->getValue('usf_regex')
             );
 
