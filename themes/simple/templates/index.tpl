@@ -118,7 +118,7 @@
             </span>
         {else}
             <div id="adm_navbar_nav" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto flex-wrap">
                     <li class="nav-item">
                         <a class="nav-link" href="{$urlAdmidio}/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
                     </li>
