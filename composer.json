@@ -50,7 +50,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Admidio\\": "src/"
+            "Admidio\\": "src/",
+            "Plugins\\": "plugins/"
         },
         "classmap": [
           "system/classes/",
