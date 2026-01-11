@@ -1819,7 +1819,7 @@ class FormPresenter
             // add label that this category is visible to all organizations
             if ($row['cat_org_id'] === null) {
                 if ($row['cat_name'] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
-                    $row['cat_name'] .= ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
+                    $row['cat_name'] = Language::translateIfTranslationStrId($row['cat_name']) . ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
                 }
                 $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 1);
             } else {

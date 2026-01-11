@@ -15,12 +15,16 @@
  */
 namespace Admidio\Infrastructure\Plugins;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\PagePresenter;
 use Smarty\Smarty;
-use Admidio\Infrastructure\Exception;
 
 class Overview
 {
+    /**
+     * @var PagePresenter An object of the PagePresenter class to create the complete html page.
+     */
+    protected PagePresenter $page;
     /**
      * @var string The name of the overview plugin. This should be the name of the folder.
      */
@@ -89,6 +93,15 @@ class Overview
         }
     }
 
+    public function getPage(): PagePresenter
+    {
+        if (!isset($this->page)) {
+            $this->page = new PagePresenter('adm_overview_plugin');
+            $this->page->setInlineMode();
+        }
+
+        return $this->page;
+    }
 
     /**
      * Creates the html page of the given template. In addition to the html method, this method

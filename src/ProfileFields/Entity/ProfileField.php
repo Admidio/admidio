@@ -428,6 +428,9 @@ class ProfileField extends Entity
                 if ($columnName === 'usf_description') {
                     // don't check value because it contains expected html tags
                     $checkValue = false;
+                } elseif ($columnName === 'usf_default_value' && is_array($newValue)) {
+                    // if default value is an array (for multiselect) then convert it to a string for database storage
+                    $newValue = implode(',', $newValue);
                 } elseif ($columnName === 'usf_cat_id') {
                     $category = new Category($this->db);
                     if (is_int($newValue)) {

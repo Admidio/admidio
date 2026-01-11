@@ -12,6 +12,11 @@
  * add     : add a configuration
  * delete  : delete a configuration
  * copy    : copy a configuration
+ * 
+ * Each column will have a select box for profile fields and roles. Internally, role properties are stored as rNN, lNN, wNN, etc. 
+ * For the select box, all these are transformed to rNN (so the select box allows selecting the desired role), and the actual first 
+ * letter is passed on to the second select box to determine the role property!
+ * When saving, the values from both select boxes are merged together again!
  *
  ***********************************************************************************************
  */
@@ -75,11 +80,24 @@ try {
     $javascriptCode = 'var arr_user_fields = createProfileFieldsArray();
         function createUserFieldSelect(config, val = null)
         {
-        	var category = "";
-            var htmlCboFields = "<select class=\"form-control\"  size=\"1\" name=\"columns" + config + "[]\" class=\"ListProfileField\" >" +
+            // first letters that indicate membership property -> second select box to be displayed!
+            const rolePropIds = new Set(arr_role_props.map(o => String(o.id).toLowerCase()));
+            const raw     = (val ?? "").toString().trim();
+            const first   = raw.charAt(0).toLowerCase();
+            if (rolePropIds.has(first) && raw != "ddummy") {
+              val = "r" + raw.slice(1);
+            }
+
+            var category = "";
+            var htmlCboFields = "<select class=\"form-control ListProfileField\"  size=\"1\" name=\"columns" + config + "[]\"  >" +
                 "<option value=\"\"></option>";
         	for (const field of arr_user_fields) {
-            	if (category != field.cat_name) {
+                var fieldtype = String(field.id).charAt(0).toLowerCase();
+                if (rolePropIds.has(fieldtype) && (fieldtype !== "r") && (field.id !== "ddummy")) {
+                    continue;
+                }
+
+            	if (category !== field.cat_name) {
                 	if (category.length > 0) {
                     	htmlCboFields += "</optgroup>";
                 	}
@@ -95,6 +113,59 @@ try {
         	htmlCboFields += "</select>";
             return htmlCboFields;
         };
+        var arr_role_props = createRolePropertiesArray();
+        function createUserRoleSelect(config, val = null) {
+            // allowed first letters
+            const allowedIds = new Set(arr_role_props.map(o => String(o.id)));
+
+            // parse value
+            const raw   = (val ?? "").toString().trim();
+            const first = raw.charAt(0);
+            const rest  = raw.slice(1);
+
+            // valid only if first in set AND rest is numeric
+            const isValid = allowedIds.has(first) && /^\\d+$/.test(rest);
+
+            // hide (do NOT disable) when invalid
+            const hideAttr = isValid ? "" : " style=\\"display:none\\"";
+
+            // build select with template literals
+            let html = `<select class="form-control ListProfileField" size="1" name="columnsRoleProp${config}[]"${hideAttr}>`;
+            //html += `<option value=""${isValid ? " selected=\\"selected\\"" : ""}></option>`;
+            for (const field of arr_role_props) {
+                const selected = (isValid && String(field.id).toLowerCase() === first) ? " selected=\\"selected\\"" : "";
+                html += `<option value="${field.id}"${selected}>${field.data}</option>`;
+            }
+            html += "</select>";
+            return html;
+        };
+
+        // Call this once per config *after* you render the selects for that config
+        function setupRolePropToggles(config) {
+          const selField = `select[name="columns${config}[]"]`;
+          const selRole  = `select[name="columnsRoleProp${config}[]"]`;
+
+          function applyToPair($field, $role) {
+            const v = ($field.val() || \'\').toString().trim();
+            const isRnn = /^r\d+$/.test(v);        // r + digits
+            $role.toggle(isRnn);
+          }
+
+          // Initial pass for existing rows
+          $(selField).each(function(i){
+            const $field = $(this);
+            const $role  = $(selRole).eq(i);
+            if ($role.length) applyToPair($field, $role);
+          });
+
+          // Live updates for changes (works for dynamically added rows too)
+          $(document).on(\'change input\', selField, function() {
+            const i      = $(selField).index(this);
+            const $field = $(this);
+            const $role  = $(selRole).eq(i);
+            if ($role.length) applyToPair($field, $role);
+          });
+        }
     ';
     $javascriptCode .= '
         function addColumnToConfiguration(config, val = null)
@@ -105,7 +176,7 @@ try {
         	var newCellCount = newTableRow.insertCell();
             newCellCount.setAttribute("class", "CategoryReportColumnNumber");
         	var newCellField = newTableRow.insertCell(-1);
-        	newCellField.innerHTML = createUserFieldSelect(config, val);
+        	newCellField.innerHTML = createUserFieldSelect(config, val) + createUserRoleSelect(config, val);
             var newCellButtons = newTableRow.insertCell(-1);
             newCellButtons.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
                         "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
@@ -139,6 +210,7 @@ try {
             items: \"tr\",
             update: updateNumbering
         });
+        setupRolePropToggles($key);
     	";
     }
 
@@ -148,6 +220,10 @@ try {
     function createProfileFieldsArray()
     {
         return ' . json_encode(array_values($report->headerSelection), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ';
+    };
+    function createRolePropertiesArray()
+    {
+        return ' . json_encode(array_values($report->headerRolePropSelection), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ';
     };
     function updateNumbering() {
         $(".catreport-columns-table").each(function() {
