@@ -16,9 +16,11 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Text;
 use DateTime;
+use PDOException;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
 use RuntimeException;
+use UnexpectedValueException;
 
 // this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
 const TBL_DATES = TABLE_PREFIX . '_dates';
@@ -44,7 +46,82 @@ final class UpdateStepsCode
         self::$db = $database;
     }
 
-    public static function updateStep51InstallOverviewPlugins()
+    public static function updateStep51CheckFor3rdPartyPlugins(): void
+    {
+        global $gLogger, $gL10n;
+
+        $arrayOldOverviewPlugins = array('announcement-list', 'birthday', 'calendar', 'event-list', 'latest-documents-files', 'login_form', 'random_photo', 'who-is-online');
+        $oldFolderPluginPath = ADMIDIO_PATH . '/adm_plugins';
+        $gWarnOldPlugins = false;
+        $gWarn3rdPartyPlugins = false;
+        $gInfo3rdPartyPlugins = false;
+        $gWarnOldPluginsFolder = false;
+
+        // get all folders inside the adm_plugins folder
+        $pluginFolders = FileSystemUtils::getDirectoryContent($oldFolderPluginPath, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
+        foreach ($pluginFolders as $oldPluginPath => $type) {
+            $folderName = basename($oldPluginPath);
+            if (in_array($folderName, $arrayOldOverviewPlugins)) {
+                // the old plugin is no longer supported, so we remove it
+                try {
+                    FileSystemUtils::deleteDirectoryIfExists($oldPluginPath, true);
+                } catch (Exception|RuntimeException|UnexpectedValueException $exception) {
+                    // no rights to delete the old folder, then continue the update process
+                    $gWarnOldPlugins = true;
+                    continue;
+                }
+            } else {
+                // there is a 3rd party plugin installed, so we try to move it to the new plugin folder
+                $newPluginPath = ADMIDIO_PATH . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $folderName;
+                try {
+                    FileSystemUtils::moveDirectory($oldPluginPath, $newPluginPath);
+                    // now we need to check if there is a menu entry for this plugin and if yes we need to update the path by replacing adm_plugins with plugins
+                    $sql = 'UPDATE ' . TBL_MENU . ' SET men_url = REPLACE(men_url, \'adm_plugins/' . $folderName . '\', \'' . DIRECTORY_SEPARATOR . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $folderName . '\') WHERE men_url LIKE \'%adm_plugins/' . $folderName . '%\' ';
+                    self::$db->queryPrepared($sql);
+                    $gInfo3rdPartyPlugins = true;
+                } catch (Exception|PDOException|RuntimeException|UnexpectedValueException $exception) {
+                    // no rights to move the old folder, then continue the update process
+                    $gWarn3rdPartyPlugins = true;
+                    continue;
+                }
+            }
+        }
+
+        if ($gWarnOldPlugins) {
+            $gLogger->warning($gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins')));
+        }
+        if ($gWarn3rdPartyPlugins) {
+            $gLogger->warning($gL10n->get('INS_WARNING_3RD_PARRTY_PLUGINS_COULD_NOT_BE_MOVED', array('plugins', 'adm_plugins')));
+        }
+        if ($gInfo3rdPartyPlugins) {
+            $gLogger->info($gL10n->get('INS_INFO_3RD_PARRTY_PLUGINS_HAVE_BEEN_MOVED', array('plugins')));
+        }
+
+        if (!$gWarnOldPlugins && !$gWarn3rdPartyPlugins) {
+            // if nothing happened we can delete the old adm_plugins folder
+            try {
+                FileSystemUtils::deleteDirectoryIfExists($oldFolderPluginPath, false);
+            } catch (Exception|RuntimeException|UnexpectedValueException $exception) {
+                // no rights to delete the old folder, then continue the update process
+                // but warn the user that the folder could not be deleted
+                $gWarnOldPluginsFolder = true;
+                $gLogger->warning($gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins')));
+            }
+        }
+
+        // set a cookie to show the warnings/information after the update process
+        if ($gWarnOldPlugins || $gWarn3rdPartyPlugins || $gWarnOldPluginsFolder || $gInfo3rdPartyPlugins) {
+            $cookieValue = array(
+                'warn_old_plugins' => $gWarnOldPlugins,
+                'warn_3rd_party_plugins' => $gWarn3rdPartyPlugins,
+                'warn_old_plugins_folder' => $gWarnOldPluginsFolder,
+                'info_3rd_party_plugins' => $gInfo3rdPartyPlugins
+            );
+            setcookie('adm_update_plugins_warnings', json_encode($cookieValue), time() + 3600, '/');
+        }
+    }
+
+    public static function updateStep51InstallOverviewPlugins(): void
     {
         $pluginManager = new PluginManager();
         $plugins = $pluginManager->getAvailablePlugins();
