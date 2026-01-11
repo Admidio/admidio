@@ -27,10 +27,10 @@ function showHideBlock(element) {
 }
 
 /**
- * This function can be used to consistently show or hide a message block with the given message. 
+ * This function can be used to consistently show or hide a message block with the given message.
  * The HTML element must exist and will not be created.
  * @param {string} id The HTML id of the message block
- * @param {string} message The message to show (optionally with HTML markup), or empty string to 
+ * @param {string} message The message to show (optionally with HTML markup), or empty string to
  *                       hide the message block.
  */
 function showMessageDiv(id, message) {
@@ -549,7 +549,8 @@ function messageBox(message, title, type, buttons, href) {
 
 /**
  * This function will redirect the user's browser to the given URL. If post data is provided,
- * a hidden form is submitted to achieve a html POST, otherwise self.location.href is set to load the URL.
+ * a hidden form is submitted to achieve a html POST. Also, the target is set to top to load the target
+ * url within the complete browser window. Otherwise, self.location.href is set to load the URL.
  */
 function redirectToURL(url, args = null) {
     if (!args) {
@@ -558,6 +559,7 @@ function redirectToURL(url, args = null) {
         // Simulate a POST redirect
         const form = document.createElement("form");
         form.method = "POST";
+        form.target = "_top";
         form.action = url;
         form.style.display = "none";
 
