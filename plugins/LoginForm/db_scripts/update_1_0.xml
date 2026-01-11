@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
     <step id="10">UPDATE %PREFIX%_components SET com_type = 'ADM_PLUGIN' WHERE com_type = 'PLUGIN' AND com_name_intern = 'LoginForm'</step>
+    <step id="20">UpdateStepsCode::updateStep10RetrievePreviousSettings</step>
     <step>stop</step>
 </update>
