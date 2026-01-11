@@ -82,7 +82,7 @@ function prepareAdmidioDataFolder(): void
     }
     closedir($dh);
 
-    FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/demo/adm_my_files', ADMIDIO_PATH . FOLDER_DATA, array('overwriteContent' => true));
+    FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/demo_data/adm_my_files', ADMIDIO_PATH . FOLDER_DATA, array('overwriteContent' => true));
 }
 
 /**
