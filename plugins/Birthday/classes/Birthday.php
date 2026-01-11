@@ -115,7 +115,7 @@ class Birthday extends PluginAbstract
         }
 
         // Check if the role condition has been set
-        if (isset($config['birthday_roles_sql']) && is_array($config['birthday_roles_sql']) && count($config['birthday_roles_sql']) > 0) {
+        if (!empty($config['birthday_roles_sql'])) {
             $sqlRol = 'IN (' . implode(',', $config['birthday_roles_sql']) . ')';
         } else {
             $sqlRol = 'IS NOT NULL';

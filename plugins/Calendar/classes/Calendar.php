@@ -311,7 +311,7 @@ class Calendar extends PluginAbstract
         }
 
         // Check if the role condition has been set
-        if (isset(self::$pluginConfig['calendar_roles_sql']) && is_array(self::$pluginConfig['calendar_roles_sql']) && count(self::$pluginConfig['calendar_roles_sql']) > 0) {
+        if (!empty(self::$pluginConfig['calendar_roles_sql'])) {
             $sqlRoleIds = 'IN (' . implode(',', self::$pluginConfig['calendar_roles_sql']) . ')';
         } else {
             $sqlRoleIds = 'IS NOT NULL';

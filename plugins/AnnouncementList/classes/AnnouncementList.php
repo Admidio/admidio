@@ -119,7 +119,7 @@ class AnnouncementList extends PluginAbstract
                 }
 
                 // show preview text
-                if ($config['announcement_list_show_full_description'] === 1) {
+                if ($config['announcement_list_show_full_description'] === true) {
                     $plgNewDescription = $plgAnnouncement->getValue('ann_description');
                 } elseif ($config['announcement_list_show_preview_chars'] > 0) {
                     // remove all html tags except some format tags

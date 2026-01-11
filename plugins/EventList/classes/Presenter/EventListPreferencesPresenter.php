@@ -87,11 +87,10 @@ class EventListPreferencesPresenter
                 FROM ' . TBL_EVENTS . ' AS evt
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     WHERE cat_id IN (' . $gDb->getQmForValues($catIdParams) . ')
-                    AND dat_begin >= ? -- DATETIME_NOW
             ORDER BY dat_timestamp_create DESC';
         $sqlData = array(
             'query' => $sql,
-            'params' => array_merge($catIdParams, array(DATETIME_NOW))
+            'params' => array_merge($catIdParams)
         );
 
         $formEventList->addSelectBoxFromSql(
