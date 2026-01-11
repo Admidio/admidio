@@ -44,11 +44,11 @@ final class UpdateStepsCode
         self::$db = $database;
     }
 
-    public static function updateStep50InstallOverviewPlugins()
+    public static function updateStep51InstallOverviewPlugins()
     {
         $pluginManager = new PluginManager();
         $plugins = $pluginManager->getAvailablePlugins();
-        $arrayOverviewPlugins = array(/* 'AnnouncementList', 'Birthday', 'Calendar', 'EventList', 'LatestDocumentsFiles', */ 'LoginForm'/* , 'RandomPhoto', 'WhoIsOnline' */);
+        $arrayOverviewPlugins = array('AnnouncementList', 'Birthday', 'Calendar', 'EventList', 'LatestDocumentsFiles', 'LoginForm', 'RandomPhoto', 'WhoIsOnline');
 
         foreach ($plugins as $pluginName => $plugin) {
             if (in_array($pluginName, $arrayOverviewPlugins)) {
