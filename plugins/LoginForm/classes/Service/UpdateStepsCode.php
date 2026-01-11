@@ -2,7 +2,9 @@
 namespace Plugins\LoginForm\classes\Service;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Exception;
 use Plugins\LoginForm\classes\LoginForm;
+use ReflectionException;
 
 /**
  * @copyright The Admidio Team
@@ -26,8 +28,8 @@ final class UpdateStepsCode
     }
 
     /**
-     * Add default fields for the inventory module.
-     * @throws Exception
+     * Retrieve previous settings from config file and update the database settings accordingly.
+     * @throws Exception|ReflectionException
      */
     public static function updateStep10RetrievePreviousSettings()
     {

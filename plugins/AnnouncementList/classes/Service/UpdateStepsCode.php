@@ -2,7 +2,9 @@
 namespace Plugins\AnnouncementList\classes\Service;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Exception;
 use Plugins\AnnouncementList\classes\AnnouncementList;
+use ReflectionException;
 
 /**
  * @copyright The Admidio Team
@@ -26,12 +28,12 @@ final class UpdateStepsCode
     }
 
     /**
-     * Add default fields for the inventory module.
-     * @throws Exception
+     * Retrieve previous settings from config file and update the database settings accordingly.
+     * @throws Exception|ReflectionException
      */
     public static function updateStep10RetrievePreviousSettings()
     {
-        global  $gSettingsManager;
+        global $gSettingsManager;
 
         $pluginAnnouncementList = AnnouncementList::getInstance();
         $configValues = $pluginAnnouncementList::getPluginConfig();
@@ -70,7 +72,7 @@ final class UpdateStepsCode
                                       FROM ' . TBL_CATEGORIES . '
                                      WHERE cat_name = ?
                                        AND cat_type = \'ANN\'';
-                            $pdoStatement = $gDb->queryPrepared($sql, array($category));
+                            $pdoStatement = self::$db->queryPrepared($sql, array($category));
                             $row = $pdoStatement->fetch();
                             if ($row !== false) {
                                 $categoryIds[] = (int)$row['cat_id'];
