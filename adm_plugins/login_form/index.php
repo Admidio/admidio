@@ -128,11 +128,13 @@ try {
             $forgotPasswordLink = '';
         }
 
+        $formPage = $loginFormPlugin->getPage();
+
         $form = new FormPresenter(
             'adm_plugin_login_form',
-            'plugin.login-form.edit.tpl',
+            ADMIDIO_PATH . FOLDER_PLUGINS . '/login_form/templates/plugin.login-form.edit.tpl',
             ADMIDIO_URL . FOLDER_SYSTEM . '/login.php?mode=check',
-            null,
+            $formPage,
             array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
         );
         $form->addInput(
@@ -180,12 +182,21 @@ try {
         }
         $form->addSubmitButton('plg_btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right'));
 
-        $smarty = $loginFormPlugin->createSmartyObject();
-        $smarty->assign('settings', $gSettingsManager);
-        $smarty->assign('showRegisterLink', $plg_show_register_link);
-        $form->addToSmarty($smarty);
-        $gCurrentSession->addFormObject($form);
-        echo $smarty->fetch('plugin.login-form.edit.tpl');
+        if (isset($page)) {
+            $smarty = $loginFormPlugin->createSmartyObject();
+            $smarty->assign('settings', $gSettingsManager);
+            $smarty->assign('showRegisterLink', $plg_show_register_link);
+            $form->addToSmarty($smarty);
+            $gCurrentSession->addFormObject($form);
+            echo $smarty->fetch('plugin.login-form.edit.tpl');
+        } else {
+            $_SESSION['login_forward_url_post'] = '1'; // Force a reload of the entire page, especially if it was loaded from an iframe.
+            $form->addToHtmlPage();
+            $gCurrentSession->addFormObject($form);
+            $formPage->assignSmartyVariable('settings', $gSettingsManager);
+            $formPage->assignSmartyVariable('showRegisterLink', $plg_show_register_link);
+            $formPage->show();
+        }
     }
 } catch (Throwable $e) {
     echo $e->getMessage();
