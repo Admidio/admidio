@@ -8,7 +8,7 @@ use Admidio\Infrastructure\Plugins\PluginAbstract;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
-
+use Admidio\UI\Presenter\PagePresenter;
 use InvalidArgumentException;
 use Exception;
 use Throwable;
@@ -68,7 +68,7 @@ class LoginForm extends PluginAbstract
      * @brief Creates the login form
      * @return FormPresenter Returns the login form presenter
      */
-    private static function createLoginForm() : FormPresenter
+    private static function createLoginForm(PagePresenter $formPage) : FormPresenter
     {
         global $gL10n, $gDb, $gCurrentOrgId, $gSettingsManager, $gCurrentOrganization;
         
@@ -113,9 +113,9 @@ class LoginForm extends PluginAbstract
 
         $form = new FormPresenter(
             'adm_plugin_login_form',
-            'plugin.login-form.edit.tpl',
+            ADMIDIO_PATH . FOLDER_PLUGINS . '/LoginForm/templates/plugin.login-form.edit.tpl',
             ADMIDIO_URL . FOLDER_SYSTEM . '/login.php?mode=check',
-            null,
+            $formPage,
             array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
         );
         $form->addInput(
@@ -203,13 +203,23 @@ class LoginForm extends PluginAbstract
                         $loginFormPlugin->showHtmlPage('plugin.login-form.view.tpl');
                     }
                 } else {
-                    $form = self::createLoginForm();
-                    $smarty = $loginFormPlugin->createSmartyObject();
-                    $smarty->assign('settings', $gSettingsManager);
-                    $smarty->assign('showRegisterLink', self::$pluginConfig['login_form_show_register_link']);
-                    $form->addToSmarty($smarty);
-                    $gCurrentSession->addFormObject($form);
-                    echo $smarty->fetch('plugin.login-form.edit.tpl');
+                    $formPage = $loginFormPlugin->getPage();
+                    $form = self::createLoginForm($formPage);
+                    if (isset($page)) {
+                        $smarty = $loginFormPlugin->createSmartyObject();
+                        $smarty->assign('settings', $gSettingsManager);
+                        $smarty->assign('showRegisterLink', self::$pluginConfig['login_form_show_register_link']);
+                        $form->addToSmarty($smarty);
+                        $gCurrentSession->addFormObject($form);
+                        echo $smarty->fetch('plugin.login-form.edit.tpl');
+                    } else {
+                        $_SESSION['login_forward_url_post'] = '1'; // Force a reload of the entire page, especially if it was loaded from an iframe.
+                        $form->addToHtmlPage();
+                        $gCurrentSession->addFormObject($form);
+                        $formPage->assignSmartyVariable('settings', $gSettingsManager);
+                        $formPage->assignSmartyVariable('showRegisterLink', self::$pluginConfig['login_form_show_register_link']);
+                        $formPage->show();
+                    }
                 }
             } else {
                 throw new InvalidArgumentException($gL10n->get('SYS_INVALID_PAGE_VIEW'));
