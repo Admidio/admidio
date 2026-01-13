@@ -76,13 +76,17 @@ try {
 }
 
 if (array_key_exists('gCurrentSession', $_SESSION)) {
-    // read a session object from PHP session
+    // read a session object from PHP session, but only if the Admidio version of the session is the same as the current one
     /**
      * @var Session $gCurrentSession The global session object that will store the other global objects and
      *                               validates the session against the stored session in the database
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
-    $gCurrentSession->refresh();
+    if (version_compare(ADMIDIO_VERSION, $gCurrentSession->getAdmidioVersion()) === 0) {
+        $gCurrentSession->refresh();
+    } else {
+        unset($_SESSION['gCurrentSession']);
+    }
 }
 
 // Session handling
