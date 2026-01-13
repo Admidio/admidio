@@ -42,6 +42,9 @@ class AutoLogin extends Entity
     {
         parent::__construct($database, TBL_AUTO_LOGIN, 'atl');
 
+        // disable logging of changes for auto login entries
+        self::$loggingEnabled = false;
+
         // if not integer than the auto-login-id is committed
         if (is_int($session)) {
             $this->readDataById($session);

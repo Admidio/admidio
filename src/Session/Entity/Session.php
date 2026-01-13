@@ -56,10 +56,7 @@ class Session extends Entity
      * @var string a 30 character long CSRF token
      */
     protected string $csrfToken = '';
-    /**
-     * @var string Stores the Admidio version with which the session was created.
-     */
-    protected string $admidioVersion = '';
+
     /**
      * Constructor that will create an object of a recordset of the table adm_sessions.
      * If the id is set than the specific session will be loaded.
@@ -70,6 +67,9 @@ class Session extends Entity
     public function __construct(Database $database, string $cookiePrefix = '')
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
+
+        // disable logging of changes for auto login entries
+        self::$loggingEnabled = false;
 
         // determine session id
         if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
@@ -83,7 +83,6 @@ class Session extends Entity
             $sessionId = session_id();
         }
 
-        $this->admidioVersion = ADMIDIO_VERSION;
         $this->cookieAutoLoginId = $cookiePrefix . '_AUTO_LOGIN_ID';
 
         if (is_int($sessionId)) {
@@ -147,15 +146,6 @@ class Session extends Entity
             $gCurrentUser->clear();
         }
         $this->setValue('ses_usr_id', '');
-    }
-
-    /**
-     * Returns the Admidio version with which the session was created.
-     * @return string Admidio version with which the session was created.
-     */
-    public function getAdmidioVersion(): string
-    {
-        return $this->admidioVersion;
     }
 
     /**

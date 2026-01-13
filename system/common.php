@@ -82,7 +82,6 @@ if (array_key_exists('gCurrentSession', $_SESSION)) {
      *                               validates the session against the stored session in the database
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
-    //if (version_compare(ADMIDIO_VERSION, $gCurrentSession->getAdmidioVersion()) === 0) {
     if ($gCurrentSession instanceof __PHP_Incomplete_Class) {
         unset($_SESSION['gCurrentSession']);
     } else {
