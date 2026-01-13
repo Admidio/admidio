@@ -76,7 +76,7 @@ try {
 }
 
 if (array_key_exists('gCurrentSession', $_SESSION)) {
-    // read a session object from PHP session, but only if the Admidio version of the session is the same as the current one
+    // read a session object from PHP session, after update of Admidio it could be an incomplete class
     /**
      * @var Session $gCurrentSession The global session object that will store the other global objects and
      *                               validates the session against the stored session in the database
