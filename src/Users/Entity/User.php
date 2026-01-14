@@ -713,6 +713,11 @@ class User extends Entity
                                                  FROM ' . TBL_IDS . '
                                                 WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
 
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_ATTACHMENTS . '
+                          WHERE msa_msg_id IN (SELECT ids_reference_id
+                                                 FROM ' . TBL_IDS . '
+                                                WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
+
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
                           WHERE msg_id IN (SELECT ids_reference_id
                                              FROM ' . TBL_IDS . '
