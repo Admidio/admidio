@@ -503,6 +503,7 @@
   <string name="SYS_DELETED">Deleted</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
+  <string name="SYS_DELETED_USER_OR_ROLE">Deleted user or role</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Request delivery confirmation</string>
   <string name="SYS_DELIVERY_CONFIRMATION_DESC">When enabled, the author of an e-mail has the opportunity to request a delivery confirmation. However, it depends on the settings of the recipients email program, whether a delivery confirmation is sent. The recipient may suppress its transmission.</string>
   <string name="SYS_DEPENDENCIES">Dependencies</string>

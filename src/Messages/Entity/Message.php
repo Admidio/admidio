@@ -417,15 +417,19 @@ class Message extends Entity
             }
         } else {
             // email receivers are all stored in the recipients array
-            foreach ($recipients as $recipient) {
-                if ($recipient['type'] === 'user' && !$showFullUserNames) {
-                    $singleRecipientsCount++;
-                } else {
-                    if (strlen($recipientsString) > 0) {
-                        $recipientsString .= '; ';
-                    }
+            if (count($recipients) === 0) {
+                $recipientsString = '<i>' . $gL10n->get('SYS_DELETED_USER_OR_ROLE') . '</i>';
+            } else {
+                foreach ($recipients as $recipient) {
+                    if ($recipient['type'] === 'user' && !$showFullUserNames) {
+                        $singleRecipientsCount++;
+                    } else {
+                        if (strlen($recipientsString) > 0) {
+                            $recipientsString .= '; ';
+                        }
 
-                    $recipientsString .= $recipient['name'];
+                        $recipientsString .= $recipient['name'];
+                    }
                 }
             }
 

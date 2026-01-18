@@ -502,6 +502,7 @@
   <string name="SYS_DELETED">Gelöscht</string>
   <string name="SYS_DELETED_ENTRY">Gelöschter Eintrag</string>
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
+  <string name="SYS_DELETED_USER_OR_ROLE">Gelöschte Person oder Rolle</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
   <string name="SYS_DELIVERY_CONFIRMATION_DESC">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfangenden ab, ob eine Lesebestätigung versendet wird. Der Empfangende kann dies auf seinen Wunsch unterdrücken.</string>
   <string name="SYS_DEPENDENCIES">Abhängigkeiten</string>
