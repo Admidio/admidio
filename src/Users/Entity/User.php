@@ -742,10 +742,6 @@ class User extends Entity
                                                  FROM ' . TBL_MESSAGES . '
                                                 WHERE msg_usr_id_sender = ' . $usrId . ')';
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_ATTACHMENTS . '
-                          WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                          WHERE msr_msg_id = msa_msg_id)';
-
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
                           WHERE msg_usr_id_sender = ' . $usrId;
 
