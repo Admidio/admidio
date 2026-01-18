@@ -281,6 +281,10 @@ class Role extends Entity
                  WHERE rrd_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
 
+        $sql = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                 WHERE msr_rol_id = ? -- $rolId';
+        $this->db->queryPrepared($sql, array($rolId));
+
         $return = parent::delete();
 
         if (isset($gCurrentSession)) {
