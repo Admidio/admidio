@@ -686,35 +686,35 @@ class User extends Entity
                           WHERE lst_global = false
                           AND lst_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_GUESTBOOK_COMMENTS . '
-        WHERE gbc_usr_id_create = ' . $usrId;
-
         $sqlQueries[] = 'DELETE FROM ' . TBL_MEMBERS . '
                           WHERE mem_usr_id = ' . $usrId;
 
-        // MySQL couldn't create delete statement with same table in a sub query.
-        // Therefore, we fill a temporary table with all ids that should be deleted and reference on this table
         $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
                           WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'];
 
+        // delete all PM messages where the user is sender or recipient
         $sqlQueries[] = 'INSERT INTO ' . TBL_IDS . '
                                 (ids_usr_id, ids_reference_id)
-                         SELECT ' . $GLOBALS['gCurrentUserId'] . ', msc_msg_id
-                           FROM ' . TBL_MESSAGES_CONTENT . '
-                          WHERE msc_usr_id = ' . $usrId;
+                         SELECT ' . $GLOBALS['gCurrentUserId'] . ', msr_msg_id
+                           FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                          INNER JOIN ' . TBL_MESSAGES . ' ON msg_id = msr_msg_id
+                          WHERE msr_usr_id = ' . $usrId . '
+                            AND msg_type = \'PM\'';
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
-                          WHERE msc_msg_id IN (SELECT ids_reference_id
-                                                 FROM ' . TBL_IDS . '
-                                                WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
+        $sqlQueries[] = 'INSERT INTO ' . TBL_IDS . '
+                                (ids_usr_id, ids_reference_id)
+                         SELECT ' . $GLOBALS['gCurrentUserId'] . ', msg_id
+                           FROM ' . TBL_MESSAGES . '
+                          WHERE msg_usr_id_sender = ' . $usrId . '
+                            AND msg_type = \'PM\' ';
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
                           WHERE msr_msg_id IN (SELECT ids_reference_id
                                                  FROM ' . TBL_IDS . '
                                                 WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_ATTACHMENTS . '
-                          WHERE msa_msg_id IN (SELECT ids_reference_id
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
+                          WHERE msc_msg_id IN (SELECT ids_reference_id
                                                  FROM ' . TBL_IDS . '
                                                 WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
 
@@ -726,20 +726,27 @@ class User extends Entity
         $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
                           WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'];
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                          WHERE msr_usr_id = ' . $usrId;
-
+        // delete all messages that were sent by the user
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
-                          WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                          WHERE msr_msg_id = msc_msg_id)';
+                          WHERE msc_msg_id IN (SELECT msg_id
+                                                 FROM ' . TBL_MESSAGES . '
+                                                WHERE msg_usr_id_sender = ' . $usrId . ')';
+
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                          WHERE msr_msg_id IN (SELECT msg_id
+                                                 FROM ' . TBL_MESSAGES . '
+                                                WHERE msg_usr_id_sender = ' . $usrId . ')';
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_ATTACHMENTS . '
-                          WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                          WHERE msr_msg_id = msa_msg_id)';
+                          WHERE msa_msg_id IN (SELECT msg_id
+                                                 FROM ' . TBL_MESSAGES . '
+                                                WHERE msg_usr_id_sender = ' . $usrId . ')';
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
-                          WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                          WHERE msr_msg_id = msg_id)';
+                          WHERE msg_usr_id_sender = ' . $usrId;
+
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                          WHERE msr_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_REGISTRATIONS . '
                           WHERE reg_usr_id = ' . $usrId;
