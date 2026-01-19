@@ -478,7 +478,8 @@
   <string name="SYS_DEFAULT_LIST_DESC">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Es wurde keine Standardliste eingerichtet!\n\nWende dich bitte an eine:n Administrator:in, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</string>
   <string name="SYS_DEFAULT_VALUE">Standardwert</string>
-  <string name="SYS_DEFAULT_VALUE_DESC">Du kannst einen Standardwert für dieses Profilfeld hinterlegen. Dieser Wert wird bei einem neuen Mitglied in dem Profilfeld direkt vorbelegt. Trage dazu den Wert in das Feld ein, den du auch im Profil selber bei dem Feld hinterlegen würdest.\n\nBei dem Datentyp Checkbox kannst du 1 für aktiviert und 0 für deaktiviert hinterlegen. Bei den Datentypen Dropdown-Listenfeld und Optionsfeld hinterlegst du die Nummer der Zeile aus der Werteliste in der der gewünschte Wert steht.</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">Du kannst einen Standardwert für dieses Profilfeld hinterlegen. Dieser Wert wird bei einem neuen Mitglied in dem Profilfeld direkt vorbelegt. Trage dazu den Wert in das Feld ein, den du auch im Profil selber bei dem Feld hinterlegen würdest.\n\nBei dem Datentyp Checkbox kannst du 1 für aktiviert und 0 für deaktiviert hinterlegen.</string>
+  <string name="SYS_DEFAULT_VALUE_SELECT_OPTIONS_DESC">Du kannst einen Standardwert für dieses Profilfeld festlegen. Dieser Wert wird für einen neuen Benutzer direkt im Feld voreingestellt. Wähle dazu den Wert im Feld aus, denv du auch im Profil selbst auswählen würdest.</string>
   <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Standard-Darstellung</string>
   <string name="SYS_DEFAULT_VIEW_DESC">Es kann ein Anzeigemodus für die Veranstaltungen vorausgewählt werden. Im Modus #VAR1_BOLD# werden alle Informationen zu einer Veranstaltung in einem Kasten angezeigt. Im Anzeigemodus #VAR2_BOLD# werden die wichtigsten Veranstaltungsinformationen in einer kompakten Liste angezeigt. (Standardeinstellung: #VAR1#)</string>
@@ -502,7 +503,7 @@
   <string name="SYS_DELETED">Gelöscht</string>
   <string name="SYS_DELETED_ENTRY">Gelöschter Eintrag</string>
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
-  <string name="SYS_DELETED_USER_OR_ROLE">Gelöschte Person oder Rolle</string>
+  <string name="SYS_DELETED_USER_OR_ROLE">Gelöschter Benutzer oder Rolle</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
   <string name="SYS_DELIVERY_CONFIRMATION_DESC">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfangenden ab, ob eine Lesebestätigung versendet wird. Der Empfangende kann dies auf seinen Wunsch unterdrücken.</string>
   <string name="SYS_DEPENDENCIES">Abhängigkeiten</string>
@@ -922,6 +923,7 @@
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio wird in der Sprache angezeigt, die im Browser für Webseiten eingestellt ist. Wenn die dort hinterlegte Sprache nicht verfügbar ist, wird die hier eingestellte Sprache verwendet.\nIst deine Sprache nicht vorhanden oder möchtest du weitere Texte übersetzen oder bestehende Übersetzungen verbessern? Dann wirf einen Blick auf die #VAR1#Admidio-Wiki-Seite#VAR2#, um herauszufinden, wie du bei der Übersetzung helfen kannst.</string>
   <string name="SYS_LAST_EDITED_AT">Zuletzt bearbeitet am #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Zuletzt bearbeitet von #VAR1# am #VAR2#</string>
+  <string name="SYS_LAST_LOGIN">Letzter Login</string>
   <string name="SYS_LAST_LOGIN_ON">Letzte Anmeldung am #VAR1# um #VAR2# Uhr</string>
   <string name="SYS_LAST_POST">Letzter Beitrag</string>
   <string name="SYS_LAST_REPLY_BY_AT">#VAR1#Letzter Beitrag#VAR2# von #VAR3# am #VAR4#</string>
@@ -1130,6 +1132,7 @@
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert 0 ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert \"Alle\" ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_LOGINS">Anzahl Logins</string>
   <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Anzahl der Beiträge pro Seite</string>
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Anzahl der Themen pro Seite</string>
   <string name="SYS_NUMBER_RECIPIENTS">Anzahl der Empfänger:innen</string>
@@ -1329,6 +1332,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Rollenmitgliedschaften</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Rollenmitgliedschaften ändern</string>
   <string name="SYS_ROLE_NAME_EXISTS">Es existiert bereits eine Rolle in dieser Kategorie mit demselben Namen.</string>
+  <string name="SYS_ROLE_PAST">Frühere Rolle</string>
   <string name="SYS_ROLE_RIGHTS">Rollenrechte</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Du hast keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wähle eine andere Rolle aus.</string>
   <string name="SYS_ROLE_SELECTION">Rollenauswahl</string>
