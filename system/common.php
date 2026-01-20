@@ -292,3 +292,24 @@ if ($gValidLogin) {
 } else {
     $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
 }
+
+use Admidio\Hooks\Hooks;
+// Register in your plugin bootstrap
+Hooks::add_action('user_created', function ($user, $actorId) {
+    global $gLogger;
+    $gLogger->warning('User Created: ', array('user' => $user, 'actorID' => $actorId));
+    // log, sync, enqueue job, etc.
+}, priority: 20, accepted_args: 2);
+
+Hooks::add_filter('changelog_headline', function ($value) {
+    return "HOOKED: {" . $value . "}";
+}, priority: 5, accepted_args: 2);
+Hooks::add_filter('user_readable_name', function ($value, $user) {
+    return "HOOKED: {" . $value . "}";
+}, priority: 5, accepted_args: 2);
+
+
+// Later in core:
+// Hooks::do_action('user_created', $user, $actorId);
+
+/// $name = Hooks::apply_filters('display_name', $user->fullname, $user);
