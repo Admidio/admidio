@@ -144,7 +144,7 @@ class ModuleContacts extends PagePresenter
                         $button['description'] = $gL10n->get('SYS_USER_NO_MEMBERSHIP_NO_LOGIN', array($gCurrentOrganization->getValue('org_longname')));
                     }
                 } else {
-                    $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $userUuid, 'new_user' => true));
+                    $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $similarUser->getValue('usr_uuid'), 'new_user' => false));
                     $button['description'] = $gL10n->get('SYS_USER_NO_MEMBERSHIP', array($gCurrentOrganization->getValue('org_shortname')));
                 }
             }
