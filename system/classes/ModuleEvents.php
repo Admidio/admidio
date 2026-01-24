@@ -167,8 +167,9 @@ class ModuleEvents extends Modules
         $sqlConditions = $this->getSqlConditions();
 
         // read events from database
-        $sql = 'SELECT DISTINCT cat.*, dat.*, rol_uuid, mem.mem_usr_id AS member_date_role, mem.mem_approved AS member_approval_state,
-                       mem.mem_leader, mem.mem_comment AS comment, mem.mem_count_guests AS additional_guests,' . $additional['fields'] . '
+        $sql = 'SELECT DISTINCT cat.*, dat.*, rol_uuid, mem.mem_usr_id AS member_date_role,
+                       mem.mem_approved AS member_approval_state, mem.mem_leader, mem.mem_comment AS comment,
+                       mem.mem_count_guests AS additional_guests,' . $additional['fields'] . ', cat_name AS category_name
                   FROM ' . TBL_EVENTS . ' AS dat
             INNER JOIN ' . TBL_CATEGORIES . ' AS cat
                     ON cat_id = dat_cat_id
