@@ -124,7 +124,7 @@ interface PluginInterface
      * @return bool
      * @throws Exception
      */
-    public static function doInstall(): bool;
+    public static function doInstall(bool $addMenuEntry = true): bool;
 
     /**
      * @param array $options
@@ -132,7 +132,7 @@ interface PluginInterface
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public static function doUninstall(array $options = array()): bool;
+    public static function doUninstall(bool $removeMenuEntry = true, array $options = array()): bool;
 
     /**
      * @return bool

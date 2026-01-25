@@ -622,7 +622,7 @@ abstract class PluginAbstract implements PluginInterface
      * @return bool
      * @throws Exception
      */
-    public static function doInstall(): bool
+    public static function doInstall(bool $addMenuEntry = true): bool
     {
         global $gDb, $gSettingsManager;
 
@@ -704,7 +704,7 @@ abstract class PluginAbstract implements PluginInterface
         self::$version = self::$metadata['version'];
 
         // add the plugin menu entry to the database
-        if (!self::isOverviewPlugin()) {
+        if (!self::isOverviewPlugin() && $addMenuEntry) {
             self::addMenuEntry();
         }
 
@@ -721,7 +721,7 @@ abstract class PluginAbstract implements PluginInterface
      * @throws Exception
      * @throws InvalidArgumentException
      */
-    public static function doUninstall(array $options = array()): bool
+    public static function doUninstall(bool $removeMenuEntry = true, array $options = array()): bool
     {
         if (!is_array($options)) {
             throw new InvalidArgumentException('Options must be an "array".');
@@ -783,7 +783,9 @@ abstract class PluginAbstract implements PluginInterface
         $gSettingsManager->resetAll();
 
         // remove the plugin menu entry
-        self::removeMenuEntry();
+        if ($removeMenuEntry) {
+            self::removeMenuEntry();
+        }
 
         // delete the plugin from the components table
         $plugin = new Component($gDb, self::$pluginComId);
