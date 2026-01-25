@@ -117,11 +117,28 @@ class PluginsPresenter extends PagePresenter
                 // add actions for the plugin
                 if ($interface->isInstalled()) {
                     // add showPreferences action
-                    $templateRow['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($interface->getName())))))),
-                        'icon' => 'bi bi-gear',
-                        'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
-                    );
+                    // if there is a custom defined preferences file in the metadata then use this file
+                    if (isset($interface->getMetadata()['preferencesFile']) && !empty($interface->getMetadata()['preferencesFile'])) {
+                        // check, if the file starts with a / or \\ indicating an absolute path, if so we don't need to add a directory separator
+                        if (str_starts_with($interface->getMetadata()['preferencesFile'], '/') || str_starts_with($interface->getMetadata()['preferencesFile'], '\\')) {
+                            $url = ADMIDIO_URL . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $interface->getComponentName() . $interface->getMetadata()['preferencesFile'];
+                        } else {
+                            $url = ADMIDIO_URL . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $interface->getComponentName() . DIRECTORY_SEPARATOR . $interface->getMetadata()['preferencesFile'];
+                        }
+                        $templateRow['actions'][] = array(
+                            'url' => $url,
+                            'icon' => 'bi bi-gear',
+                            'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
+                        );
+                    } else {
+                        // else use the preferences panel based on the plugin name
+                        $templateRow['actions'][] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($interface->getName())))))),
+                            'icon' => 'bi bi-gear',
+                            'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
+                        );
+                    }
+
                     // add update action if an update is available
                     if ($interface->isUpdateAvailable()) {
                         $templateRow['actions'][] = array(

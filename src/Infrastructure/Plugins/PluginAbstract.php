@@ -60,7 +60,7 @@ abstract class PluginAbstract implements PluginInterface
      * This method is called during the installation of the plugin.
      * @throws Exception
      */
-    private static function addMenuEntry(): void
+    public static function addMenuEntry(): void
     {
         global $gDb;
 
@@ -86,7 +86,7 @@ abstract class PluginAbstract implements PluginInterface
      * This method is called during the uninstallation of the plugin.
      * @throws Exception
      */
-    private static function removeMenuEntry(): void
+    public static function removeMenuEntry(): void
     {
         global $gDb;
 
@@ -97,7 +97,6 @@ abstract class PluginAbstract implements PluginInterface
         if ($pluginMenuEntry->readDataByColumns(array('men_name_intern' => $className))) {
             $pluginMenuEntry->delete();
         }
-
     }
 
     /**
@@ -174,7 +173,7 @@ abstract class PluginAbstract implements PluginInterface
         }
         $configData = json_decode(file_get_contents($configFile), true);
         if ($configData === null) {
-            throw new Exception('Plugin configuration file is not valid JSON.');
+            throw new Exception('Plugin configuration file ' . $configFile . ' is not valid JSON.');
         } else {
             self::$name = $configData['name'] ?? '';
             self::$dependencies = $configData['dependencies'] ?? array();
@@ -650,40 +649,43 @@ abstract class PluginAbstract implements PluginInterface
             }
         }
 
-        // check if the plugin has a .sql file to create the database tables
-        $sqlFiles = self::getStaticFiles('sql', self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts');
-        if (isset($sqlFiles) && count($sqlFiles) > 0) {
-            $sqlFile = null;
-            if (count($sqlFiles) === 1) {
-                // if there is only one sql file, take it
-                $sqlFile = $sqlFiles[0];
-            } else {
-                // if there are multiple sql files, we need to find the installation file
-                // the installation file needs to be named *install.sql
-                foreach ($sqlFiles as $file) {
-                    if (str_contains($file, 'install')) {
-                        $sqlFile = $file;
-                        break;
+        // check if the db_scripts folder exists
+        if (is_dir(self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts')) {
+            // check if the plugin has a .sql file to create the database tables
+            $sqlFiles = self::getStaticFiles('sql', self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts');
+            if (isset($sqlFiles) && count($sqlFiles) > 0) {
+                $sqlFile = null;
+                if (count($sqlFiles) === 1) {
+                    // if there is only one sql file, take it
+                    $sqlFile = $sqlFiles[0];
+                } else {
+                    // if there are multiple sql files, we need to find the installation file
+                    // the installation file needs to be named *install.sql
+                    foreach ($sqlFiles as $file) {
+                        if (str_contains($file, 'install')) {
+                            $sqlFile = $file;
+                            break;
+                        }
                     }
                 }
-            }
-            if ($sqlFile !== null) {
-                // read data from sql install script and execute all statements to the current database
-                if (!is_file($sqlFile)) {
-                    throw new Exception('INS_DATABASE_FILE_NOT_FOUND', array(basename($sqlFile), dirname($sqlFile)));
-                }
+                if ($sqlFile !== null) {
+                    // read data from sql install script and execute all statements to the current database
+                    if (!is_file($sqlFile)) {
+                        throw new Exception('INS_DATABASE_FILE_NOT_FOUND', array(basename($sqlFile), dirname($sqlFile)));
+                    }
 
-                try {
-                    $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFile);
-                } catch (RuntimeException) {
-                    throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
-                }
+                    try {
+                        $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFile);
+                    } catch (RuntimeException) {
+                        throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
+                    }
 
-                self::toggleForeignKeyChecks(false);
-                foreach ($sqlStatements as $sqlStatement) {
-                    $gDb->queryPrepared($sqlStatement);
+                    self::toggleForeignKeyChecks(false);
+                    foreach ($sqlStatements as $sqlStatement) {
+                        $gDb->queryPrepared($sqlStatement);
+                    }
+                    self::toggleForeignKeyChecks(true);
                 }
-                self::toggleForeignKeyChecks(true);
             }
         }
 
@@ -732,38 +734,41 @@ abstract class PluginAbstract implements PluginInterface
 
         global $gDb, $gSettingsManager;
 
-        // check if the plugin has a .sql file to delete the database tables
-        $sqlFiles = self::getStaticFiles('sql', self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts');
-        if (isset($sqlFiles) && count($sqlFiles) > 0) {
-            $sqlFile = null;
-            // if there is only a db.sql file, no uninstall script is needed
-            if (count($sqlFiles) > 1) {
-                // if there are multiple sql files, we need to find the uninstall file
-                // the file needs to be named *uninstall.sql
-                foreach ($sqlFiles as $file) {
-                    if (str_contains($file, 'uninstall')) {
-                        $sqlFile = $file;
-                        break;
+        // check if the db_scripts folder exists
+        if (is_dir(self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts')) {
+            // check if the plugin has a .sql file to delete the database tables
+            $sqlFiles = self::getStaticFiles('sql', self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts');
+            if (isset($sqlFiles) && count($sqlFiles) > 0) {
+                $sqlFile = null;
+                // if there is only a db.sql file, no uninstall script is needed
+                if (count($sqlFiles) > 1) {
+                    // if there are multiple sql files, we need to find the uninstallation file
+                    // the file needs to be named *uninstall.sql
+                    foreach ($sqlFiles as $file) {
+                        if (str_contains($file, 'uninstall')) {
+                            $sqlFile = $file;
+                            break;
+                        }
                     }
                 }
-            }
-            if ($sqlFile !== null) {
-                // read data from sql install script and execute all statements to the current database
-                if (!is_file($sqlFile)) {
-                    throw new Exception('INS_DATABASE_FILE_NOT_FOUND', array(basename($sqlFile), dirname($sqlFile)));
-                }
+                if ($sqlFile !== null) {
+                    // read data from sql install script and execute all statements to the current database
+                    if (!is_file($sqlFile)) {
+                        throw new Exception('INS_DATABASE_FILE_NOT_FOUND', array(basename($sqlFile), dirname($sqlFile)));
+                    }
 
-                try {
-                    $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFile);
-                } catch (RuntimeException) {
-                    throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
-                }
+                    try {
+                        $sqlStatements = Database::getSqlStatementsFromSqlFile($sqlFile);
+                    } catch (RuntimeException) {
+                        throw new Exception('INS_ERROR_OPEN_FILE', array($sqlFile));
+                    }
 
-                self::toggleForeignKeyChecks(false);
-                foreach ($sqlStatements as $sqlStatement) {
-                    $gDb->queryPrepared($sqlStatement);
+                    self::toggleForeignKeyChecks(false);
+                    foreach ($sqlStatements as $sqlStatement) {
+                        $gDb->queryPrepared($sqlStatement);
+                    }
+                    self::toggleForeignKeyChecks(true);
                 }
-                self::toggleForeignKeyChecks(true);
             }
         }
 
