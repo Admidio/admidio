@@ -5,10 +5,11 @@
     <step id="20">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'PLUGINS'), 2, %UUID%, false, 5, true, 'plugins', '/modules/plugins.php', 'puzzle', 'SYS_PLUGIN_MANAGER', 'SYS_PLUGIN_MANAGER_DESC')</step>
     <step id="30">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_plugins', 'plugins') WHERE men_url LIKE '%/adm_plugins%'</step>
-    <step id="40">UpdateStepsCode::updateStep51InstallOverviewPlugins</step>
-    <step id="50">UpdateStepsCode::updateStep51CheckFor3rdPartyPlugins</step>
-    <step id="60" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(100) NOT NULL</step>
-    <step id="70" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(100)</step>
-    <step id="80" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name SET NOT NULL</step>
+    <step id="40">ALTER TABLE %PREFIX%_components ADD COLUMN com_overview_plugin boolean not null default false</step>
+    <step id="50">UpdateStepsCode::updateStep51InstallOverviewPlugins</step>
+    <step id="60">UpdateStepsCode::updateStep51CheckFor3rdPartyPlugins</step>
+    <step id="70" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(100) NOT NULL</step>
+    <step id="80" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(100)</step>
+    <step id="90" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name SET NOT NULL</step>
     <step>stop</step>
 </update>

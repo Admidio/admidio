@@ -57,6 +57,11 @@ final class UpdateStepsCode
         $gInfo3rdPartyPlugins = false;
         $gWarnOldPluginsFolder = false;
 
+        // check if the old adm_plugins folder exists
+        if (!is_dir($oldFolderPluginPath)) {
+            return;
+        }
+
         // get all folders inside the adm_plugins folder
         $pluginFolders = FileSystemUtils::getDirectoryContent($oldFolderPluginPath, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
         foreach ($pluginFolders as $oldPluginPath => $type) {
