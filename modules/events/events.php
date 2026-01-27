@@ -138,10 +138,11 @@ try {
                     {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"},
                     function(data) {
                         var returnData = JSON.parse(data);
+                        var groupID = "btn_group_" + $approvalStateElement.data("id");
                         if (returnData.status === "success") {
                             ' . ($getView === 'detail' ?
-                '$(".admidio-event-approval button").html($approvalStateElement.html());' :
-                '$(".admidio-event-approval button").html($approvalStateElement.children("i").clone());') . '
+                '$("#" + groupID + " .dropdown-toggle").html($approvalStateElement.html());' :
+                '$("#" + groupID + " .dropdown-toggle").html($approvalStateElement.children("i").clone());') . '
                             messageBox(returnData.message);
                         } else {
                             messageBox(returnData.message, "' . $gL10n->get('SYS_ERROR') . '", "error");
@@ -758,7 +759,7 @@ try {
 
                 if ($outputButtonParticipation !== '' || $outputButtonParticipants !== ''
                     || $outputButtonParticipantsEmail !== '' || $outputButtonParticipantsAssign !== '') {
-                    $page->addHtml('<div class="btn-group">' . $outputButtonParticipation . $outputButtonParticipants . $outputButtonParticipantsEmail . $outputButtonParticipantsAssign . '</div>');
+                    $page->addHtml('<div id="btn_group_' . $eventUUID . '" class="btn-group">' . $outputButtonParticipation . $outputButtonParticipants . $outputButtonParticipantsEmail . $outputButtonParticipantsAssign . '</div>');
                 }
                 $page->addHtml('
                 </div>
