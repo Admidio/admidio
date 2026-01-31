@@ -43,6 +43,37 @@ final class UpdateStepsCode
         self::$db = $database;
     }
 
+
+    /**
+     * This method will add a new profile field BlueSky to the database,
+     * but only if the category social networks exists
+     * @throws Exception
+     */
+    public static function updateStep51AddSocialNetworkProfileFields()
+    {
+        global $gProfileFields;
+
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name_intern = \'SOCIAL_NETWORKS\' ';
+        $categoriesStatement = self::$db->queryPrepared($sql);
+
+        if ($row = $categoriesStatement->fetch()) {
+            $profileFields = $gProfileFields->getProfileFields();
+
+            if (!array_key_exists('BLUESKY', $profileFields)) {
+                $profileFieldLinkedIn = new ProfileField(self::$db);
+                $profileFieldLinkedIn->saveChangesWithoutRights();
+                $profileFieldLinkedIn->setValue('usf_cat_id', (int)$row['cat_id']);
+                $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
+                $profileFieldLinkedIn->setValue('usf_name_intern', 'BLUESKY');
+                $profileFieldLinkedIn->setValue('usf_name', 'SYS_BLUESKY');
+                $profileFieldLinkedIn->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC');
+                $profileFieldLinkedIn->setValue('usf_icon', 'bluesky');
+                $profileFieldLinkedIn->setValue('usf_url', 'https://bsky.app/profile/#user_content#');
+                $profileFieldLinkedIn->save();
+            }
+        }
+    }
+
     public static function updateStep50MoveFieldListValues()
     {
         global $gDbType;
