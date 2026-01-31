@@ -151,7 +151,7 @@ class Email extends PHPMailer
         $this->sendingMode = $gSettingsManager->getInt('mail_sending_mode');
         // set language for error reporting
         $this->setLanguage($gL10n->getLanguageIsoCode());
-        $this->CharSet = $gSettingsManager->getString('mail_character_encoding');
+        $this->CharSet = PHPMailer::CHARSET_UTF8;
     }
 
     /**

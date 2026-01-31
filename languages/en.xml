@@ -327,8 +327,6 @@
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last modified</string>
   <string name="SYS_CHANGED_BY">Changed by</string>
-  <string name="SYS_CHARACTER_ENCODING">Character encoding</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">Character encoding used in e-mails sent by Admidio. Not all e-mail clients are able to process UTF-8. Therefore ISO-8859-1 can be set here alternatively.</string>
   <string name="SYS_CHARACTERS">Characters</string>
   <string name="SYS_CHECK_FOR_UPDATE">Check for update</string>
   <string name="SYS_CHECKBOX">Checkbox</string>

@@ -100,7 +100,6 @@ $defaultOrgPreferences = array(
     'mail_recipients_with_roles' => '1',
     'mail_number_recipients' => '50',
     'mail_into_to' => '0',
-    'mail_character_encoding' => 'utf-8',
     'mail_smtp_host' => '',
     'mail_smtp_auth' => '1',
     'mail_smtp_port' => '587',

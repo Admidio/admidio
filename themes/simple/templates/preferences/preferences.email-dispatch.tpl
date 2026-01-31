@@ -26,7 +26,6 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_recipients_with_roles']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_into_to']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_number_recipients']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['mail_character_encoding']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_host']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_smtp_auth']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_port']}

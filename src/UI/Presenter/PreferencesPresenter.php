@@ -1106,14 +1106,6 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_number_recipients'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC')
         );
-
-        $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-        $formEmailDispatch->addSelectBox(
-            'mail_character_encoding',
-            $gL10n->get('SYS_CHARACTER_ENCODING'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['mail_character_encoding'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_CHARACTER_ENCODING_DESC')
-        );
         $formEmailDispatch->addInput(
             'mail_smtp_host',
             $gL10n->get('SYS_SMTP_HOST'),
