@@ -359,7 +359,7 @@ final class UpdateStepsCode
                 $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
                 $profileFieldLinkedIn->setValue('usf_name_intern', 'LINKEDIN');
                 $profileFieldLinkedIn->setValue('usf_name', 'SYS_LINKEDIN');
-                $profileFieldLinkedIn->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
+                $profileFieldLinkedIn->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC');
                 $profileFieldLinkedIn->setValue('usf_icon', 'linkedin');
                 $profileFieldLinkedIn->setValue('usf_url', 'https://www.linkedin.com/in/#user_content#');
                 $profileFieldLinkedIn->save();
@@ -372,7 +372,7 @@ final class UpdateStepsCode
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'INSTAGRAM');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_INSTAGRAM');
-                $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
+                $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC');
                 $profileFieldInstagram->setValue('usf_icon', 'instagram');
                 $profileFieldInstagram->setValue('usf_url', 'https://www.instagram.com/#user_content#');
                 $profileFieldInstagram->save();
@@ -385,7 +385,7 @@ final class UpdateStepsCode
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'MASTODON');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_MASTODON');
-                $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
+                $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC');
                 $profileFieldInstagram->setValue('usf_icon', 'mastodon');
                 $profileFieldInstagram->setValue('usf_url', 'https://mastodon.social/#user_content#');
                 $profileFieldInstagram->save();
