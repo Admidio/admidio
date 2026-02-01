@@ -1,5 +1,5 @@
 <?php
-use Plugins\Calendar\classes\Calendar;
+use Calendar\classes\Calendar;
 
 /**
  ***********************************************************************************************

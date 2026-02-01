@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\Calendar\classes;
+namespace Calendar\classes;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Plugins\Overview;

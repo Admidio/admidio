@@ -1,12 +1,12 @@
 <?php
 
-namespace Plugins\Calendar\classes\Presenter;
+namespace Calendar\classes\Presenter;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
 
-use Plugins\Calendar\classes\Calendar;
+use Calendar\classes\Calendar;
 use Smarty\Smarty;
 
 /**

@@ -1,9 +1,9 @@
 <?php
-namespace Plugins\Calendar\classes\Service;
+namespace Calendar\classes\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Plugins\Calendar\classes\Calendar;
+use Calendar\classes\Calendar;
 use ReflectionException;
 
 /**

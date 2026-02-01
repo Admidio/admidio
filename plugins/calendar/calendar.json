@@ -6,6 +6,12 @@
     "url": "https://www.admidio.org",
     "icon": "bi-calendar-week-fill",
     "mainFile": "index.php",
+    "overviewPlugin": true,
+    "autoload": {
+        "psr-4": {
+            "Calendar\\classes\\": "classes/"
+        }
+    },
     "dependencies": [
         "Admidio\\Infrastructure\\Database",
         "Admidio\\Infrastructure\\Plugins\\Overview",
