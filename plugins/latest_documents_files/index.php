@@ -1,5 +1,5 @@
 <?php
-use Plugins\LatestDocumentsFiles\classes\LatestDocumentsFiles;
+use LatestDocumentsFiles\classes\LatestDocumentsFiles;
 
 /**
  ***********************************************************************************************

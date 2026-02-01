@@ -1,9 +1,9 @@
 <?php
-namespace Plugins\LatestDocumentsFiles\classes\Service;
+namespace LatestDocumentsFiles\classes\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Plugins\LatestDocumentsFiles\classes\LatestDocumentsFiles;
+use LatestDocumentsFiles\classes\LatestDocumentsFiles;
 use ReflectionException;
 
 /**

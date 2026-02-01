@@ -1,12 +1,12 @@
 <?php
 
-namespace Plugins\LatestDocumentsFiles\classes\Presenter;
+namespace LatestDocumentsFiles\classes\Presenter;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
 
-use Plugins\LatestDocumentsFiles\classes\LatestDocumentsFiles;
+use LatestDocumentsFiles\classes\LatestDocumentsFiles;
 use Smarty\Smarty;
 
 /**

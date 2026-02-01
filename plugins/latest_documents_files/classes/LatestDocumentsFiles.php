@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\LatestDocumentsFiles\classes;
+namespace LatestDocumentsFiles\classes;
 
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;

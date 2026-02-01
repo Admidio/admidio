@@ -6,6 +6,12 @@
     "url": "https://www.admidio.org",
     "icon": "bi-file-earmark-arrow-down-fill",
     "mainFile": "index.php",
+    "overviewPlugin": true,
+    "autoload": {
+        "psr-4": {
+            "LatestDocumentsFiles\\classes\\": "classes/"
+        }
+    },
     "dependencies": [
         "Admidio\\Documents\\Entity\\File",
         "Admidio\\Documents\\Entity\\Folder",
