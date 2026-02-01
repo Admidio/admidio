@@ -108,8 +108,10 @@ abstract class PluginAbstract implements PluginInterface
      */
     public static function initPreferencePanelCallback(): void
     {
-        $callingPlugin = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => ''));
+        // get the calling plugin name in lowercase and without underscores, hyphens, spaces or other special characters
+        $callingPlugin = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', self::getComponentName()));
 
+        // get psr4 autoload mappings and preferences file from metadata
         $psr4 = self::$metadata['autoload']['psr-4'] ?? null;
         $preferencesFile = self::$metadata['preferencesFile'] ?? null;
 
@@ -143,8 +145,10 @@ abstract class PluginAbstract implements PluginInterface
         }
 
         if (isset($preferencesClass) && class_exists($preferencesClass)) {
-            // get the function name for the preferences panel
-            $functionName = 'create' . basename(self::getPluginPath()) . 'Form';
+
+            // get the function name for the preferences panel form
+            $className = str_replace('PreferencesPresenter', '', (new ReflectionClass($preferencesClass))->getShortName());
+            $functionName = 'create' . $className . 'Form';
             if (!method_exists($preferencesClass, $functionName)) {
                 throw new Exception('The preferences class ' . $preferencesClass . ' does not have a method ' . $functionName . '().');
             }
