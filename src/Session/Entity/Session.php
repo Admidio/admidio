@@ -68,6 +68,9 @@ class Session extends Entity
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
+        // disable logging of changes for auto login entries
+        self::$loggingEnabled = false;
+
         // determine session id
         if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
             $sessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];

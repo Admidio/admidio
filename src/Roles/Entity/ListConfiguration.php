@@ -664,6 +664,23 @@ class ListConfiguration extends Entity
     {
         global $gL10n, $gProfileFields, $gCurrentOrgId;
 
+        $arrSqlColumns = array();
+        $arrSqlColumnNames = array('usr_uuid');
+        $arrOrderByColumns = array();
+        $sqlColumnNames = '';
+        $sqlIdColumns = '';
+        $sqlMemLeader = '';
+        $sqlRoleUUIDs = '';
+        $sqlOrderBys = '';
+        $sqlJoin = '';
+        $sqlWhere = '';
+        $columnNumber = 0;
+
+        // if showRolesMembers is set but empty, then no members should be shown
+        if (isset($options['showRolesMembers']) && count($options['showRolesMembers']) === 0) {
+            $sqlRoleUUIDs = '(\'\')';
+        }
+
         // create an array with all options
         $optionsDefault = array(
             'showAllMembersThisOrga' => false,
@@ -680,33 +697,25 @@ class ListConfiguration extends Entity
         );
         $optionsAll = array_replace($optionsDefault, $options);
 
-        $arrSqlColumns = array();
-        $arrSqlColumnNames = array('usr_uuid');
-        $arrOrderByColumns = array();
-        $sqlColumnNames = '';
-        $sqlIdColumns = '';
-        $sqlMemLeader = '';
-        $sqlOrderBys = '';
-        $sqlJoin = '';
-        $sqlWhere = '';
-        $columnNumber = 0;
         $this->showLeaders = $optionsAll['showLeaderFlag'];
-
         // if there is more than 1 role, don't show the leaders
         if (count($optionsAll['showRolesMembers']) > 1) {
             $this->showLeaders = false;
         }
 
-        if (count($optionsAll['showRolesMembers']) > 0) {
-            $sqlRoleUUIDs = '(\'' . implode('\', \'', $optionsAll['showRolesMembers']) . '\')';
-        } else {
-            $sqlRoleUUIDs = '(SELECT rol_uuid
+        if ($sqlRoleUUIDs === '') {
+            // create the role UUIDs part of the sql
+            if (count($optionsAll['showRolesMembers']) > 0) {
+                $sqlRoleUUIDs = '(\'' . implode('\', \'', $optionsAll['showRolesMembers']) . '\')';
+            } else {
+                $sqlRoleUUIDs = '(SELECT rol_uuid
                               FROM ' . TBL_CATEGORIES . '
                              INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
                              WHERE (  cat_org_id = ' . $gCurrentOrgId . '
                                    OR cat_org_id IS NULL )
                                AND cat_name_intern <> \'EVENTS\'
                             )';
+            }
         }
 
         foreach ($this->columns as $listColumn) {

@@ -32,6 +32,7 @@ use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
@@ -137,10 +138,11 @@ try {
                     {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"},
                     function(data) {
                         var returnData = JSON.parse(data);
+                        var groupID = "btn_group_" + $approvalStateElement.data("id");
                         if (returnData.status === "success") {
                             ' . ($getView === 'detail' ?
-                '$(".admidio-event-approval button").html($approvalStateElement.html());' :
-                '$(".admidio-event-approval button").html($approvalStateElement.children("i").clone());') . '
+                '$("#" + groupID + " .dropdown-toggle").html($approvalStateElement.html());' :
+                '$("#" + groupID + " .dropdown-toggle").html($approvalStateElement.children("i").clone());') . '
                             messageBox(returnData.message);
                         } else {
                             messageBox(returnData.message, "' . $gL10n->get('SYS_ERROR') . '", "error");
@@ -282,27 +284,27 @@ try {
 
             switch ($getView) {
                 case 'compact':
-                    $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_VENUE'));
-                    $columnAlign = array('center', 'left', 'left', 'left', 'left');
+                    $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_VENUE'), $gL10n->get('SYS_CALENDAR'));
+                    $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left');
                     $compactTable->disableColumnsSort(array(6));
                     $compactTable->setColumnsNotHideResponsive(array(6));
                     break;
                 case 'room':
-                    $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'));
-                    $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left');
+                    $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
+                    $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left', 'left');
                     $compactTable->disableColumnsSort(array(7));
                     $compactTable->setColumnsNotHideResponsive(array(7));
                     break;
                 case 'participants':
-                    $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'));
-                    $columnAlign = array('center', 'left', 'left', 'left');
+                    $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
+                    $columnAlign = array('center', 'left', 'left', 'left', 'left');
                     $compactTable->disableColumnsSort(array(5));
                     $compactTable->setColumnsNotHideResponsive(array(5));
                     $data['column_width'] = array('', '', '', '35%');
                     break;
                 case 'description':
-                    $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_DESCRIPTION'));
-                    $columnAlign = array('center', 'left', 'left', 'left');
+                    $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_CALENDAR'));
+                    $columnAlign = array('center', 'left', 'left', 'left', 'left');
                     $compactTable->disableColumnsSort(array(5));
                     $compactTable->setColumnsNotHideResponsive(array(5));
                     $data['column_width'] = array('', '', '', '35%');
@@ -757,7 +759,7 @@ try {
 
                 if ($outputButtonParticipation !== '' || $outputButtonParticipants !== ''
                     || $outputButtonParticipantsEmail !== '' || $outputButtonParticipantsAssign !== '') {
-                    $page->addHtml('<div class="btn-group">' . $outputButtonParticipation . $outputButtonParticipants . $outputButtonParticipantsEmail . $outputButtonParticipantsAssign . '</div>');
+                    $page->addHtml('<div id="btn_group_' . $eventUUID . '" class="btn-group">' . $outputButtonParticipation . $outputButtonParticipants . $outputButtonParticipantsEmail . $outputButtonParticipantsAssign . '</div>');
                 }
                 $page->addHtml('
                 </div>
@@ -874,6 +876,8 @@ try {
                         $columnValues[] = '';
                     }
                 }
+
+                $columnValues[] = Language::translateIfTranslationStrId($row['category_name']);
 
                 if ($getViewMode === 'html') {
                     $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;

@@ -530,5 +530,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1850">UPDATE %PREFIX%_user_fields SET usf_name = 'ICQ' WHERE usf_name = 'SYS_ICQ'</step>
     <step id="1860">UPDATE %PREFIX%_user_fields SET usf_name = 'X' WHERE usf_name = 'SYS_TWITTER'</step>
     <step id="1870">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC' WHERE usf_description = 'SYS_SOCIAL_NETWORK_FIELD_DESC'</step>
+    <step id="1880">DELETE FROM %PREFIX%_messages_recipients WHERE msr_usr_id IS NULL AND msr_rol_id IS NULL</step>
+    <step id="1890">UPDATE %PREFIX%_user_fields SET usf_name = 'Fax' WHERE usf_name = 'SYS_FAX'</step>
     <step>stop</step>
 </update>

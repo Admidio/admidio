@@ -76,13 +76,17 @@ try {
 }
 
 if (array_key_exists('gCurrentSession', $_SESSION)) {
-    // read a session object from PHP session
+    // read a session object from PHP session, after update of Admidio it could be an incomplete class
     /**
      * @var Session $gCurrentSession The global session object that will store the other global objects and
      *                               validates the session against the stored session in the database
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
-    $gCurrentSession->refresh();
+    if ($gCurrentSession instanceof __PHP_Incomplete_Class) {
+        unset($_SESSION['gCurrentSession']);
+    } else {
+        $gCurrentSession->refresh();
+    }
 }
 
 // Session handling

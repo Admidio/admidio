@@ -249,6 +249,8 @@ class Message extends Entity
      */
     public function delete(): bool
     {
+        global $gSettingsManager;
+
         $this->db->startTransaction();
 
         $msgId = (int) $this->getValue('msg_id');
@@ -257,9 +259,11 @@ class Message extends Entity
             // first delete attachments files and the database entry
             $attachments   = $this->getAttachmentsInformation();
 
-            foreach ($attachments as $attachment) {
-                // delete attachment in file system
-                FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']);
+            if ($gSettingsManager->getBool('mail_save_attachments')) {
+                foreach ($attachments as $attachment) {
+                    // delete attachment in file system
+                    FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']);
+                }
             }
 
             $sql = 'DELETE FROM '.TBL_MESSAGES_ATTACHMENTS.'
@@ -413,15 +417,19 @@ class Message extends Entity
             }
         } else {
             // email receivers are all stored in the recipients array
-            foreach ($recipients as $recipient) {
-                if ($recipient['type'] === 'user' && !$showFullUserNames) {
-                    $singleRecipientsCount++;
-                } else {
-                    if (strlen($recipientsString) > 0) {
-                        $recipientsString .= '; ';
-                    }
+            if (count($recipients) === 0) {
+                $recipientsString = '<i>' . $gL10n->get('SYS_DELETED_USER_OR_ROLE') . '</i>';
+            } else {
+                foreach ($recipients as $recipient) {
+                    if ($recipient['type'] === 'user' && !$showFullUserNames) {
+                        $singleRecipientsCount++;
+                    } else {
+                        if (strlen($recipientsString) > 0) {
+                            $recipientsString .= '; ';
+                        }
 
-                    $recipientsString .= $recipient['name'];
+                        $recipientsString .= $recipient['name'];
+                    }
                 }
             }
 

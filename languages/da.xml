@@ -478,7 +478,8 @@
   <string name="SYS_DEFAULT_LIST_DESC">I tilfælde af at der er en medlemsliste for denne rolle som skal vises og ingen liste konfiguration er specificeret, så vises listen i system standard konfigurationen. Ved at bruge dette felt til en individuel rolle, kan du vælge en anden liste konfiguration som kan bruges når der ikke ellers er en liste konfiguration til rådighed.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">Der er ikke defineret et standard liste indstillings sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</string>
   <string name="SYS_DEFAULT_VALUE">Standard værdi</string>
-  <string name="SYS_DEFAULT_VALUE_DESC">Du kan indstille en standardværdi for dette profilfelt. Denne værdi vil blive forudindstillet direkte for en ny bruger i feltet. For at gøre dette skal du indtaste værdien i feltet, som du også ville indtaste i selve profilen.\n\nFor afkrydsningsfeltets datatype kan du indtaste 1 for aktiveret og 0 for deaktiveret. For datatypers rullelistefelt og alternativknap indtaster du nummeret på linjen fra værdilisten, hvori den ønskede værdi er placeret.</string>
+  <string name="SYS_DEFAULT_VALUE_DESC">Du kan sætte en standardværdi for dette profilfelt. Denne værdi vil blive forudindstillet direkte til en ny bruger i feltet. For at gøre dette skal du indtaste værdien i feltet, som du også ville indtaste i selve profilen.\n\nFor datatypen i afkrydsningsfeltet kan du indtaste 1 for aktiveret og 0 for deaktiveret.</string>
+  <string name="SYS_DEFAULT_VALUE_SELECT_OPTIONS_DESC">Du kan sætte en standardværdi for dette profilfelt. Denne værdi vil blive forudindstillet direkte til en ny bruger i feltet. For at gøre dette skal du vælge værdien i feltet, som du også ville vælge i selve profilen.</string>
   <string name="SYS_DEFAULT_VAR">Standard #VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Standard Visning</string>
   <string name="SYS_DEFAULT_VIEW_DESC">En visningsfunktion for begivenheder kan forud vælges. I #VAR1_BOLD# tilstand vises alle oplysninger om en begivenhed i en boks. I #VAR2_BOLD# visningsfunktion vises de vigtigste begivenheds oplysninger i en kompakt liste. (Standardindstilling: #VAR1#)</string>
@@ -502,6 +503,7 @@
   <string name="SYS_DELETED">Slettet</string>
   <string name="SYS_DELETED_ENTRY">Slettet opslag</string>
   <string name="SYS_DELETED_USER">Slettet bruger</string>
+  <string name="SYS_DELETED_USER_OR_ROLE">Slettet bruger eller rolle</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Bed om bekræftelse på levering</string>
   <string name="SYS_DELIVERY_CONFIRMATION_DESC">Hvis denne er aktiv, har afsenderen af en e-mail mulighed for at få bekræftet levering af en e-mail. Dog afhænger et eventuelt svar af hvordan modtagerens e-mail program er konfigureret. Modtageren kan vælge at undertrykke afsendelse af en sådan bekræftelse.</string>
   <string name="SYS_DEPENDENCIES">Afhængigheder</string>
@@ -921,6 +923,7 @@
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio vises på det sprog, der er indstillet i browseren til websteder. Hvis det sprog, der er gemt der, ikke er tilgængeligt, vil det sprog, der er angivet her, blive brugt.\nMangler dit sprog, eller vil du gerne oversætte flere tekster eller forbedre eksisterende oversættelser? Så tag et kig på den #VAR1#Admidio wiki-side#VAR2# for at finde ud af, hvordan du kan hjælpe med oversættelsen.</string>
   <string name="SYS_LAST_EDITED_AT">Sidst redigeret kl #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Sidst redigeret af #VAR1# den #VAR2#</string>
+  <string name="SYS_LAST_LOGIN">Sidste login</string>
   <string name="SYS_LAST_LOGIN_ON">Sidste login den #VAR1# klokken #VAR2#</string>
   <string name="SYS_LAST_POST">Sidste indlæg</string>
   <string name="SYS_LAST_REPLY_BY_AT">#VAR1#Sidste svar#VAR2# af #VAR3# den #VAR4#</string>
@@ -1129,6 +1132,7 @@
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster, der vises på en side. Hvis der er flere poster, tilføjes en paginering på siden. Hvis værdien er 0, vises alle poster på en side, og pagineringen deaktiveres. (Standardindstilling: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Antal poster, der vises på en side. Hvis der er flere poster, tilføjes en paginering til siden. Hvis værdien er \"Alle\", vises alle poster på en side, og pagineringen deaktiveres. (Standardindstilling: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_LOGINS">Antal logins</string>
   <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Antal indlæg pr. side</string>
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Antal emner pr. side</string>
   <string name="SYS_NUMBER_RECIPIENTS">Antal modtagere</string>
@@ -1328,6 +1332,7 @@
   <string name="SYS_ROLE_MEMBERSHIPS">Rolle medlemskab</string>
   <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Rediger rolle medlemskab</string>
   <string name="SYS_ROLE_NAME_EXISTS">Rolle med samme navn findes allerede i denne kategori.</string>
+  <string name="SYS_ROLE_PAST">Tidligere rolle</string>
   <string name="SYS_ROLE_RIGHTS">Rollerettigheder</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Du har ikke rettighed til at vælge rollen #VAR1#.\nVælg venligst en anden rolle.</string>
   <string name="SYS_ROLE_SELECTION">Rolle valg</string>
