@@ -31,15 +31,29 @@ class PluginManager
             }
 
             $pluginFolder = $this->pluginsPath . DIRECTORY_SEPARATOR . $entry;
-            if (is_dir($pluginFolder)) {
-                $pluginClassFile = $pluginFolder . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $entry . '.php';
-                $className = is_file($pluginClassFile) ? $this->getClassNameFromFile($pluginClassFile) : null;
+            $className = null;
+            $pluginClassFile = null;
 
-                // The classname only contains the namespace of the plugin itself, so we need a way to find the class to get an instance of it.
-                // The problem is, that if the plugin isn't installed yet, we cannot use autoloading to find the class.
-                // Therefore, we check if the class exists first. If not, we include the file manually.
-                if ($className !== null && !class_exists($className)) {
-                    include_once $pluginClassFile;
+            if (is_dir($pluginFolder)) {
+                // loop over all class files to find the main plugin class file in the classes folder
+                foreach (scandir($pluginFolder . DIRECTORY_SEPARATOR . 'classes') as $classFileEntry) {
+                    if ($classFileEntry === '.' || $classFileEntry === '..' || !is_file($pluginFolder . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $classFileEntry)) {
+                        continue;
+                    }
+
+                    $pluginClassFile = $pluginFolder . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $classFileEntry;
+                    $className = is_file($pluginClassFile) ? $this->getClassNameFromFile($pluginClassFile) : null;
+
+                    // The classname only contains the namespace of the plugin itself, so we need a way to find the class to get an instance of it.
+                    // The problem is, that if the plugin isn't installed yet, we cannot use autoloading to find the class.
+                    // Therefore, we check if the class exists first. If not, we include the file manually.
+                    if ($className !== null && !class_exists($className)) {
+                        include_once $pluginClassFile;
+
+                        if (is_subclass_of($className, PluginAbstract::class)) {
+                            break;
+                        }
+                    }
                 }
 
                 $instance = $className != null ? $className::getInstance() : null;
