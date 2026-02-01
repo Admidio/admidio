@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\LoginForm\classes;
+namespace LoginForm\classes;
 
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Overview;

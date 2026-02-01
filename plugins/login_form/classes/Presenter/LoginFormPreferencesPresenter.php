@@ -1,12 +1,12 @@
 <?php
 
-namespace Plugins\LoginForm\classes\Presenter;
+namespace LoginForm\classes\Presenter;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
 
-use Plugins\LoginForm\classes\LoginForm;
+use LoginForm\classes\LoginForm;
 use Smarty\Smarty;
 
 /**

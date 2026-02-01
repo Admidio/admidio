@@ -6,6 +6,12 @@
     "url": "https://www.admidio.org",
     "icon": "bi-box-arrow-in-right",
     "mainFile": "index.php",
+    "overviewPlugin": true,
+    "autoload": {
+        "psr-4": {
+            "LoginForm\\classes\\": "classes/"
+        }
+    },
     "dependencies": [
         "Admidio\\Infrastructure\\Language",
         "Admidio\\Infrastructure\\Plugins\\Overview",

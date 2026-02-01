@@ -1,9 +1,9 @@
 <?php
-namespace Plugins\LoginForm\classes\Service;
+namespace LoginForm\classes\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Plugins\LoginForm\classes\LoginForm;
+use LoginForm\classes\LoginForm;
 use ReflectionException;
 
 /**

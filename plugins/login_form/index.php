@@ -1,5 +1,5 @@
 <?php
-use Plugins\LoginForm\classes\LoginForm;
+use LoginForm\classes\LoginForm;
 
 /**
  ***********************************************************************************************
