@@ -780,7 +780,7 @@ abstract class PluginAbstract implements PluginInterface
             array(
                 'com_type' => 'PLUGIN',
                 'com_name' => self::getName(),
-                'com_name_intern' => basename(self::$pluginPath),
+                'com_name_intern' => strtoupper(basename(self::$pluginPath)),
                 'com_overview_plugin' => self::$metadata['overviewPlugin']
             )
         );
