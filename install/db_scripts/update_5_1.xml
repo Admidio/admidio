@@ -2,5 +2,17 @@
 <update>
     <step id="10">UpdateStepsCode::updateStep51AddSocialNetworkProfileFields</step>
     <step id="20">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_character_encoding'</step>
+    <step id="30" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_sendmail_address' AND pr2.prf_org_id = pr1.prf_org_id AND COALESCE(LENGTH(pr2.prf_value), 0) = 0 SET pr1.prf_value = '3' WHERE pr1.prf_name = 'mail_sender_mode'</step>
+    <step id="40" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = '3' FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sendmail_address' AND pr2.prf_org_id = pr1.prf_org_id AND COALESCE(LENGTH(pr2.prf_value), 0) = 0 AND pr1.prf_name = 'mail_sender_mode'</step>
+    <step id="50" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_sendmail_name' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_sender_name'</step>
+    <step id="60" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sendmail_name' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'mail_sender_name'</step>
+    <step id="70">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sendmail_name'</step>
+    <step id="80" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_sendmail_address' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_sender_email'</step>
+    <step id="90" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sendmail_address' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'mail_sender_email'</step>
+    <step id="100">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sendmail_address'</step>
+    <step id="110" database="mysql">UPDATE %PREFIX%_preferences prf INNER JOIN %PREFIX%_organizations org ON org.org_id = prf.prf_org_id SET prf.prf_value = org.org_longname WHERE prf.prf_name = 'mail_sender_name' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
+    <step id="120" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = org.org_longname FROM %PREFIX%_organizations org WHERE org.org_id = prf.prf_org_id AND prf.prf_name = 'mail_sender_name' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
+    <step id="130" database="mysql">UPDATE %PREFIX%_preferences prf INNER JOIN %PREFIX%_organizations org ON org.org_id = prf.prf_org_id SET prf.prf_value = org.org_email_administrator WHERE prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
+    <step id="140" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = org.org_email_administrator FROM %PREFIX%_organizations org WHERE org.org_id = prf.prf_org_id AND prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
     <step>stop</step>
 </update>

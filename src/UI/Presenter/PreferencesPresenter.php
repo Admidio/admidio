@@ -1067,15 +1067,15 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SEND_METHOD_DESC')
         );
         $formEmailDispatch->addInput(
-            'mail_sendmail_address',
+            'mail_sender_email',
             $gL10n->get('SYS_SENDER_EMAIL'),
-            $formValues['mail_sendmail_address'],
+            $formValues['mail_sender_email'],
             array('type' => 'email', 'maxLength' => 50, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
         );
         $formEmailDispatch->addInput(
-            'mail_sendmail_name',
+            'mail_sender_name',
             $gL10n->get('SYS_SENDER_NAME'),
-            $formValues['mail_sendmail_name'],
+            $formValues['mail_sender_name'],
             array('maxLength' => 50, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
         );
 

@@ -468,9 +468,9 @@ class Email extends PHPMailer
         $this->emSender = array('address' => $address, 'name' => $name);
 
         // If set, the mail should be sent from a specific address
-        if (strlen($gSettingsManager->getString('mail_sendmail_address')) > 0) {
-            $fromName    = $gSettingsManager->getString('mail_sendmail_name');
-            $fromAddress = $gSettingsManager->getString('mail_sendmail_address');
+        if (strlen($gSettingsManager->getString('mail_sender_email')) > 0) {
+            $fromName    = $gSettingsManager->getString('mail_sender_name');
+            $fromAddress = $gSettingsManager->getString('mail_sender_email');
         }
         else {
             // Normally, however, an attempt is made to send from the address of the writing party
