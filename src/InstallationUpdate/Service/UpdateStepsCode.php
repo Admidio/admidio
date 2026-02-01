@@ -128,6 +128,11 @@ final class UpdateStepsCode
 
     public static function updateStep51InstallOverviewPlugins(): void
     {
+        global $gDb;
+
+        // because we added the new column com_overview_plugin to the components table before, we need to reload the database columns
+        $gDb->initializeTableColumnProperties();
+
         $pluginManager = new PluginManager();
         $plugins = $pluginManager->getAvailablePlugins();
 

@@ -34,6 +34,14 @@ class PluginManager
             if (is_dir($pluginFolder)) {
                 $pluginClassFile = $pluginFolder . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $entry . '.php';
                 $className = is_file($pluginClassFile) ? $this->getClassNameFromFile($pluginClassFile) : null;
+
+                // The classname only contains the namespace of the plugin itself, so we need a way to find the class to get an instance of it.
+                // The problem is, that if the plugin isn't installed yet, we cannot use autoloading to find the class.
+                // Therefore, we check if the class exists first. If not, we include the file manually.
+                if ($className !== null && !class_exists($className)) {
+                    include_once $pluginClassFile;
+                }
+
                 $instance = $className != null ? $className::getInstance() : null;
 
                 // find the main plugin file

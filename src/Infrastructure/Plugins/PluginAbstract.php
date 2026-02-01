@@ -772,11 +772,31 @@ abstract class PluginAbstract implements PluginInterface
 
         // install the plugin
         $componentUpdateHandle = new ComponentUpdate($gDb);
-        $componentUpdateHandle->readDataByColumns(array('com_type' => 'PLUGIN', 'com_name' => self::getName(), 'com_name_intern' => basename(self::$pluginPath)));
-        // define the update class name for the plugin
-        // if the class does not exist, it will be ignored when performing updatePlugin()
-        $updateStepCodeNamespace = 'Plugins\\' . basename(self::$pluginPath) . '\\classes\\Service\\';
-        $componentUpdateHandle->updatePlugin(self::$metadata['version'], $updateStepCodeNamespace);
+        $componentUpdateHandle->readDataByColumns(
+            array(
+                'com_type' => 'PLUGIN',
+                'com_name' => self::getName(),
+                'com_name_intern' => basename(self::$pluginPath),
+                'com_overview_plugin' => self::$metadata['overviewPlugin']
+            )
+        );
+
+        // after we have the plugin path and metadata, we can do the class autoload
+        self::doClassAutoload(get_called_class());
+        // check if psr4 autoload mappings are defined
+        $psr4 = self::$metadata['autoload']['psr-4'] ?? null;
+        if (is_array($psr4) && count($psr4) > 0) {
+            // define the update class namespace for the plugin
+            foreach ($psr4 as $prefix => $relativePath) {
+                if (!is_string($prefix) || !is_string($relativePath)) {
+                    continue;
+                }
+
+                // if the class does not exist, it will be ignored when performing updatePlugin()
+                $updateStepCodeNamespace = $prefix . 'Service\\';
+                $componentUpdateHandle->updatePlugin(self::$metadata['version'], $updateStepCodeNamespace);
+            }
+        }
 
         // set the new component id of the plugin
         self::$pluginComId = $componentUpdateHandle->getValue('com_id');
