@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\EventList\classes;
+namespace EventList\classes;
 
 use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Database;

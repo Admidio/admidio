@@ -1,5 +1,5 @@
 <?php
-use Plugins\EventList\classes\EventList;
+use EventList\classes\EventList;
 
 /**
  ***********************************************************************************************

@@ -1,9 +1,9 @@
 <?php
-namespace Plugins\EventList\classes\Service;
+namespace EventList\classes\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Plugins\EventList\classes\EventList;
+use EventList\classes\EventList;
 use ReflectionException;
 
 /**

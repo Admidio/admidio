@@ -1,12 +1,12 @@
 <?php
 
-namespace Plugins\EventList\classes\Presenter;
+namespace EventList\classes\Presenter;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
 
-use Plugins\EventList\classes\EventList;
+use EventList\classes\EventList;
 use Smarty\Smarty;
 
 /**
