@@ -6,6 +6,12 @@
     "url": "https://www.admidio.org",
     "icon": "bi-cake2",
     "mainFile": "index.php",
+    "overviewPlugin": true,
+    "autoload": {
+        "psr-4": {
+            "Birthday\\classes\\": "classes/"
+        }
+    },
     "dependencies": [
         "Admidio\\Infrastructure\\Plugins\\Overview",
         "Admidio\\Infrastructure\\Plugins\\PluginAbstract",

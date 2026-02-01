@@ -1,12 +1,12 @@
 <?php
 
-namespace Plugins\Birthday\classes\Presenter;
+namespace Birthday\classes\Presenter;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
 
-use Plugins\Birthday\classes\Birthday;
+use Birthday\classes\Birthday;
 use Smarty\Smarty;
 
 /**

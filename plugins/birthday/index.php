@@ -1,5 +1,5 @@
 <?php
-use Plugins\Birthday\classes\Birthday;
+use Birthday\classes\Birthday;
 
 /**
  ***********************************************************************************************

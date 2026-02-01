@@ -1,9 +1,9 @@
 <?php
-namespace Plugins\Birthday\classes\Service;
+namespace Birthday\classes\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Plugins\Birthday\classes\Birthday;
+use Birthday\classes\Birthday;
 use ReflectionException;
 
 /**

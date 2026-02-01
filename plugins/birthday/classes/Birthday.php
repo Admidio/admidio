@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\Birthday\classes;
+namespace Birthday\classes;
 
 use Admidio\Infrastructure\Plugins\Overview;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
