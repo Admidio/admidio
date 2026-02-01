@@ -147,7 +147,7 @@ class PluginsPresenter extends PagePresenter
                             'tooltip' => $gL10n->get('SYS_PLUGIN_UPDATE')
                         );
                     }
-                    if (!$interface->isOverviewPlugin()) {
+                    if (!$interface->isAdmidioPlugin()) {
                         // add uninstall action
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'uninstall', 'name' => $pluginName)),

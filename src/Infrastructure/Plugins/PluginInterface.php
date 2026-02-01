@@ -112,6 +112,12 @@ interface PluginInterface
      * @return bool
      * @throws Exception
      */
+    public static function isAdmidioPlugin(): bool;
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
     public static function isUpdateAvailable(): bool;
 
     /**

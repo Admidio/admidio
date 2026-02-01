@@ -135,11 +135,10 @@ final class UpdateStepsCode
 
         $pluginManager = new PluginManager();
         $plugins = $pluginManager->getAvailablePlugins();
-        $admidioOverviewPlugins = array('announcement_list', 'birthday', 'calendar', 'event_list', 'latest_documents_files', 'login_form', 'random_photo', 'who_is_online');
 
-        foreach ($plugins as $pluginName => $plugin) {
-            if (in_array($pluginName, $admidioOverviewPlugins)) {
-                $instance = $plugin['interface']::getInstance();
+        foreach ($plugins as $plugin) {
+            $instance = $plugin['interface']::getInstance();
+            if ($instance->isAdmidioPlugin()) {
                 // Install the overview plugin
                 $instance->doInstall();
             }
