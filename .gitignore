@@ -10,6 +10,15 @@
 !/adm_my_files/index.html
 
 # Only allow commit of official plugins
+/plugins/*
+!/plugins/birthday/
+!/plugins/calendar/
+!/plugins/login_form/
+!/plugins/random_photo/
+!/plugins/announcement_list/
+!/plugins/event_list/
+!/plugins/latest_documents_files/
+!/plugins/who_is_online/
 
 
 # Only allow commit of official themes
