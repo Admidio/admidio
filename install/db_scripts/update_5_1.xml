@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
+    <step id="10">UpdateStepsCode::updateStep51AddSocialNetworkProfileFields</step>
     <step id="20">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_character_encoding'</step>
     <step>stop</step>
 </update>
