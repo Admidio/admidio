@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\RandomPhoto\classes;
+namespace RandomPhoto\classes;
 
 use Admidio\Infrastructure\Plugins\Overview;
 use Admidio\Infrastructure\Plugins\PluginAbstract;

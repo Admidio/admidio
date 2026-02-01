@@ -1,9 +1,9 @@
 <?php
-namespace Plugins\RandomPhoto\classes\Service;
+namespace RandomPhoto\classes\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Plugins\RandomPhoto\classes\RandomPhoto;
+use RandomPhoto\classes\RandomPhoto;
 use ReflectionException;
 
 /**

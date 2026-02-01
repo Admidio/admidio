@@ -1,5 +1,5 @@
 <?php
-use Plugins\RandomPhoto\classes\RandomPhoto;
+use RandomPhoto\classes\RandomPhoto;
 
 /**
  ***********************************************************************************************

@@ -1,12 +1,12 @@
 <?php
 
-namespace Plugins\RandomPhoto\classes\Presenter;
+namespace RandomPhoto\classes\Presenter;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
 
-use Plugins\RandomPhoto\classes\RandomPhoto;
+use RandomPhoto\classes\RandomPhoto;
 use Smarty\Smarty;
 
 /**
