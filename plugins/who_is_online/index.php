@@ -1,5 +1,5 @@
 <?php
-use Plugins\WhoIsOnline\classes\WhoIsOnline;
+use WhoIsOnline\classes\WhoIsOnline;
 
 /**
  ***********************************************************************************************

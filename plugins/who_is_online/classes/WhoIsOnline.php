@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\WhoIsOnline\classes;
+namespace WhoIsOnline\classes;
 
 use Admidio\Infrastructure\Plugins\Overview;
 use Admidio\Infrastructure\Plugins\PluginAbstract;

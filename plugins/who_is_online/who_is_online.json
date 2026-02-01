@@ -6,6 +6,12 @@
     "url": "https://www.admidio.org",
     "icon": "bi-building-fill-check",
     "mainFile": "index.php",
+    "overviewPlugin": true,
+    "autoload": {
+        "psr-4": {
+            "WhoIsOnline\\classes\\": "classes/"
+        }
+    },
     "dependencies": [
         "Admidio\\Infrastructure\\Plugins\\Overview",
         "Admidio\\Infrastructure\\Plugins\\PluginAbstract",

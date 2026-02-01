@@ -1,12 +1,12 @@
 <?php
 
-namespace Plugins\WhoIsOnline\classes\Presenter;
+namespace WhoIsOnline\classes\Presenter;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
 
-use Plugins\WhoIsOnline\classes\WhoIsOnline;
+use WhoIsOnline\classes\WhoIsOnline;
 use Smarty\Smarty;
 
 /**

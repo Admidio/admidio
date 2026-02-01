@@ -1,9 +1,9 @@
 <?php
-namespace Plugins\WhoIsOnline\classes\Service;
+namespace WhoIsOnline\classes\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Plugins\WhoIsOnline\classes\WhoIsOnline;
+use WhoIsOnline\classes\WhoIsOnline;
 use ReflectionException;
 
 /**
