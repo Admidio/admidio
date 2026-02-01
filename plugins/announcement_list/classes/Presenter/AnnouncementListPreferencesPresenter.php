@@ -1,12 +1,12 @@
 <?php
 
-namespace Plugins\AnnouncementList\classes\Presenter;
+namespace AnnouncementList\classes\Presenter;
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
 
-use Plugins\AnnouncementList\classes\AnnouncementList;
+use AnnouncementList\classes\AnnouncementList;
 use Smarty\Smarty;
 
 /**

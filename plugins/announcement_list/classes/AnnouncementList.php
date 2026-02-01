@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugins\AnnouncementList\classes;
+namespace AnnouncementList\classes;
 
 use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Database;

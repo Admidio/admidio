@@ -1,9 +1,9 @@
 <?php
-namespace Plugins\AnnouncementList\classes\Service;
+namespace AnnouncementList\classes\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Plugins\AnnouncementList\classes\AnnouncementList;
+use AnnouncementList\classes\AnnouncementList;
 use ReflectionException;
 
 /**

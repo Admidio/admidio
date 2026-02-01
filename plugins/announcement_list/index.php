@@ -1,5 +1,5 @@
 <?php
-use Plugins\AnnouncementList\classes\AnnouncementList;
+use AnnouncementList\classes\AnnouncementList;
 
 /**
  ***********************************************************************************************

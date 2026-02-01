@@ -6,6 +6,12 @@
     "url": "https://www.admidio.org",
     "icon": "bi-newspaper",
     "mainFile": "index.php",
+    "overviewPlugin": true,
+    "autoload": {
+        "psr-4": {
+            "AnnouncementList\\classes\\": "classes/"
+        }
+    },
     "dependencies": [
         "Admidio\\Announcements\\Entity\\Announcement",
         "Admidio\\Infrastructure\\Database",
