@@ -9,6 +9,8 @@ use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 
+use Composer\Autoload\ClassLoader;
+
 use InvalidArgumentException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -106,9 +108,40 @@ abstract class PluginAbstract implements PluginInterface
      */
     public static function initPreferencePanelCallback(): void
     {
-        // find a preference panel for this plugin
-        $preferencesFile = self::getPluginPath() . '/classes/Presenter/' . basename(self::getPluginPath()) . 'PreferencesPresenter.php';
-        $preferencesClass = is_file($preferencesFile) ? self::getClassNameFromFile($preferencesFile) : null;
+        $callingPlugin = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => ''));
+
+        $psr4 = self::$metadata['autoload']['psr-4'] ?? null;
+        $preferencesFile = self::$metadata['preferencesFile'] ?? null;
+
+        // if a preferences file is defined in the metadata, the plugin handles the preferences itself
+        if (isset($preferencesFile)) {
+            return;
+        }
+
+        // check if psr4 autoload mappings are defined, otherwise we cannot find the presenter class
+        if (!is_array($psr4)) {
+            return;
+        }
+
+        // look for presenter class path in the psr4 autoload mappings
+        $preferencesClass = null;
+
+        foreach ($psr4 as $prefix => $relativePath) {
+            if (str_contains(strtolower($prefix), $callingPlugin)) {
+                $presenterBasePath = self::getPluginPath() . DIRECTORY_SEPARATOR . $relativePath;
+                // now loop over all files in the presenter path to find a preferences presenter
+                $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($presenterBasePath));
+                foreach ($it as $file) {
+                    if (!$file->isFile() || !str_contains($file->getFilename(), 'PreferencesPresenter.php')) {
+                        continue;
+                    }
+                    $preferencesFile = $file->getPathname();
+                    $preferencesClass = self::getClassNameFromFile($preferencesFile);
+                    break;
+                }
+            }
+        }
+
         if (isset($preferencesClass) && class_exists($preferencesClass)) {
             // get the function name for the preferences panel
             $functionName = 'create' . basename(self::getPluginPath()) . 'Form';
@@ -202,7 +235,6 @@ abstract class PluginAbstract implements PluginInterface
         $class = get_called_class();
         if (!array_key_exists($class, self::$instances)) {
             self::$instances[$class] = new $class();
-            self::$instances[$class]->doClassAutoload();
         }
 
         // set the plugin path to the folder of this class
@@ -211,6 +243,9 @@ abstract class PluginAbstract implements PluginInterface
 
         // read the plugin metadata
         self::$instances[$class]->readPluginMetadata();
+
+        // after we have the plugin path and metadata, we can do the class autoload
+        self::$instances[$class]->doClassAutoload($class);
 
         // check if the plugin is installed
         if (self::$instances[$class]->isInstalled()) {
@@ -448,10 +483,6 @@ abstract class PluginAbstract implements PluginInterface
             return true;
         }
 
-        // ensure Composer’s PSR‑4 autoloader is registered
-        if (!self::doClassAutoload()) {
-            throw new RuntimeException('Could not load Composer autoloader at ' . ADMIDIO_PATH . '/vendor/autoload.php');
-        }
         $missing = array();
 
         // loop over all dependencies and check if they are available
@@ -590,17 +621,67 @@ abstract class PluginAbstract implements PluginInterface
      * @return bool
      * @throws Exception
      */
-    public static function doClassAutoload(): bool
+    public static function doClassAutoload(string $class): bool
     {
-        $autoloadPath = ADMIDIO_PATH . '/vendor/autoload.php';
+        // Register plugin PSR-4 autoload mappings from plugin metadata (no DB required).
+        // Each plugin can define in its JSON:
+        //   {
+        //     "autoload": { "psr-4": { "Vendor\\Plugin\\": "classes/" } }
+        //   }
+        try {
+            if (class_exists(ClassLoader::class)) {
+                $loaders = ClassLoader::getRegisteredLoaders();
+                $composerLoader = reset($loaders);
 
-        if (is_file($autoloadPath)) {
-            require_once($autoloadPath);
+                if ($composerLoader) {
+                    $existingPrefixes = $composerLoader->getPrefixesPsr4();
 
-            return true;
+                    $instance = self::$instances[$class];
+
+                    // check if the instance is valid
+                    if (!$instance instanceof PluginAbstract) {
+                        return false;
+                    }
+
+                    // read the plugin metadata if not already done
+                    if (empty($instance::$metadata)) {
+                        $instance->readPluginMetadata();
+                    }
+
+                    // check if psr4 autoload mappings are defined
+                    $psr4 = $instance::$metadata['autoload']['psr-4'] ?? null;
+                    if (!is_array($psr4)) {
+                        return false;
+                    }
+
+                    // register each PSR-4 mapping for this plugin
+                    foreach ($psr4 as $prefix => $relativePath) {
+                        if (!is_string($prefix) || !is_string($relativePath)) {
+                            continue;
+                        }
+
+                        $prefix = rtrim($prefix, '\\') . '\\';
+                        $absolutePath = $instance::$pluginPath . DIRECTORY_SEPARATOR . trim($relativePath, "/\\");
+
+                        if (!is_dir($absolutePath)) {
+                            continue;
+                        }
+
+                        // already registered?
+                        if (isset($existingPrefixes[$prefix]) && in_array($absolutePath, $existingPrefixes[$prefix], true)) {
+                            continue;
+                        }
+
+                        // register the PSR-4 mapping for this plugin
+                        $composerLoader->addPsr4($prefix, $absolutePath, true);
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            throw new Exception('Error during plugin class autoload registration: ' . $e->getMessage());
         }
 
-        return false;
+        return true;
     }
 
     /**

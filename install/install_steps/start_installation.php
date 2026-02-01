@@ -288,12 +288,12 @@ $db->query($sql);
 // install all overview plugins
 $pluginManager = new PluginManager();
 $plugins = $pluginManager->getAvailablePlugins();
-$arrayOverviewPlugins = array('AnnouncementList', 'Birthday', 'Calendar', 'EventList', 'LatestDocumentsFiles', 'LoginForm', 'RandomPhoto', 'WhoIsOnline');
 
-foreach ($plugins as $pluginName => $plugin) {
-    if (in_array($pluginName, $arrayOverviewPlugins)) {
+foreach ($plugins as $plugin) {
+    $instance = $plugin['interface']::getInstance();
+    if (isset($instance->getMetadata()['overviewPlugin']) && $instance->getMetadata()['overviewPlugin'] === true) {
         // Install the overview plugin
-        $plugin['interface']::getInstance()->doInstall();
+        $instance->doInstall();
     }
 }
 

@@ -118,7 +118,7 @@ interface PluginInterface
      * @return bool
      * @throws Exception
      */
-    public static function doClassAutoload(): bool;
+    public static function doClassAutoload(string $class): bool;
 
     /**
      * @return bool
