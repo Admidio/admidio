@@ -82,7 +82,6 @@ try {
 
                 $values['col_conditions'] = implode(',', $conditions);
 
-
                 $config[] = $values;
             }
 
