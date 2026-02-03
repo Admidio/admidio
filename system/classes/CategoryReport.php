@@ -119,7 +119,7 @@ class CategoryReport
             $workArray[$key + 1]['field'] = $field;
 
             // store the optional condition for this column
-            $workArray[$key + 1]['condition'] = $conditions[$key];
+            $workArray[$key + 1]['condition'] = $conditions[$key] ?? '';
 
             $this->headerData[$key + 1]['id'] = 0;
             $this->headerData[$key + 1]['data'] = $this->headerSelection[$found]['data'];
@@ -526,32 +526,60 @@ class CategoryReport
                     // two meanings:
                     //   d#     -> membership duration of role with ID # (in days, as of report date)
                     //   ddummy -> overall membership duration (as of report date)
+
+                    // If condition uses a unit suffix (d/w/m/y) we switch to DATE mode:
+                    // We then compare membership START DATE against a threshold date (reportDate - X).
+                    $useDateMode = (bool) preg_match('/^\s*([<>]=?|=|[{}]=?)\s*(\d+)\s*[dwmy]\s*$/i', (string) $rawCond);
                     if ($colDef['field'] === 'dummy' || (int) $id === 0) {
-                        // ddummy: compute duration (days) since first membership start in this organisation
-                        if (preg_match('/^\s*([<>]=?|=|<>)\s*(\d+)\s*y\s*$/i', (string) $rawCond, $m)) {
-                            $rawCond = $m[1] . ' ' . ((int)$m[2] * 365);
+                        if ($useDateMode) {
+                            // ddummy as DATE: earliest membership start in org
+                            $typeHint = 'date';
+                            $expr = '(SELECT MIN(m2.mem_begin)
+                        FROM ' . TBL_CATEGORIES . ' c2
+                       INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_cat_id = c2.cat_id
+                       INNER JOIN ' . TBL_MEMBERS . ' m2 ON m2.mem_rol_id = r2.rol_id
+                       WHERE c2.cat_type = \'ROL\'
+                         AND ( c2.cat_org_id = ' . (int) $gCurrentOrgId . ' OR c2.cat_org_id IS NULL )
+                         AND r2.rol_valid  = true
+                         AND m2.mem_usr_id = usr_id)';
+                        } else {
+                            // ddummy as INT: duration in days since earliest membership start in org
+                            if (preg_match('/^\s*([<>]=?|=|[{}]=?)\s*(\d+)\s*y\s*$/i', (string) $rawCond, $m)) {
+                                $rawCond = $m[1] . ' ' . ((int) $m[2] * 365);
+                            }
+                            $typeHint = 'int';
+                            $expr = '(SELECT DATEDIFF(\'' . $date . '\', MIN(m2.mem_begin))
+                        FROM ' . TBL_CATEGORIES . ' c2
+                       INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_cat_id = c2.cat_id
+                       INNER JOIN ' . TBL_MEMBERS . ' m2 ON m2.mem_rol_id = r2.rol_id
+                       WHERE c2.cat_type = \'ROL\'
+                         AND ( c2.cat_org_id = ' . (int) $gCurrentOrgId . ' OR c2.cat_org_id IS NULL )
+                         AND r2.rol_valid  = true
+                         AND m2.mem_usr_id = usr_id)';
                         }
-                        $typeHint = 'int';
-                        $expr = '(SELECT DATEDIFF(\'' . $date . '\', MIN(m2.mem_begin))
-                                    FROM ' . TBL_CATEGORIES . ' c2
-                                   INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_cat_id = c2.cat_id
-                                   INNER JOIN ' . TBL_MEMBERS . ' m2 ON m2.mem_rol_id = r2.rol_id
-                                   WHERE c2.cat_type = \'ROL\'
-                                     AND ( c2.cat_org_id = ' . (int) $gCurrentOrgId . ' OR c2.cat_org_id IS NULL )
-                                     AND r2.rol_valid  = true
-                                     AND m2.mem_usr_id = usr_id)';
                     } else {
-                        // d#: duration for a specific role membership (current as of report date)
-                        if (preg_match('/^\s*([<>]=?|=|<>)\s*(\d+)\s*y\s*$/i', (string) $rawCond, $m)) {
-                            $rawCond = $m[1] . ' ' . ((int)$m[2] * 365);
+                        if ($useDateMode) {
+                            // d# as DATE: membership start (current membership as of report date)
+                            $typeHint = 'date';
+                            $expr = '(SELECT MIN(m2.mem_begin)
+                        FROM ' . TBL_MEMBERS . ' m2
+                       WHERE m2.mem_usr_id = usr_id
+                         AND m2.mem_rol_id = ' . (int) $id . '
+                         AND m2.mem_begin <= \'' . $date . '\'
+                         AND m2.mem_end    > \'' . $date . '\')';
+                        } else {
+                            // d# as INT: duration in days since membership start (current membership as of report date)
+                            if (preg_match('/^\s*([<>]=?|=|[{}]=?)\s*(\d+)\s*y\s*$/i', (string) $rawCond, $m)) {
+                                $rawCond = $m[1] . ' ' . ((int) $m[2] * 365);
+                            }
+                            $typeHint = 'int';
+                            $expr = '(SELECT DATEDIFF(\'' . $date . '\', MIN(m2.mem_begin))
+                        FROM ' . TBL_MEMBERS . ' m2
+                       WHERE m2.mem_usr_id = usr_id
+                         AND m2.mem_rol_id = ' . (int) $id . '
+                         AND m2.mem_begin <= \'' . $date . '\'
+                         AND m2.mem_end    > \'' . $date . '\')';
                         }
-                        $typeHint = 'int';
-                        $expr = '(SELECT DATEDIFF(\'' . $date . '\', MIN(m2.mem_begin))
-                                    FROM ' . TBL_MEMBERS . ' m2
-                                   WHERE m2.mem_usr_id = usr_id
-                                     AND m2.mem_rol_id = ' . (int) $id . '
-                                     AND m2.mem_begin <= \'' . $date . '\'
-                                     AND m2.mem_end    > \'' . $date . '\')';
                     }
                     break;
 
@@ -576,18 +604,6 @@ class CategoryReport
             if ($expr !== '') {
                 // for any condition we rely on usr_id in the SQL, therefore we must join the user table in the main query
                 $conditionUsesUserTable = true;
-
-                // special handling for age-like syntax on date columns (e.g. "> 18y")
-                if ($typeHint === 'date' && preg_match('/^\\s*([<>]=?|=|<>)\\s*(\\d+)\\s*y\\s*$/i', (string) $rawCond, $m)) {
-                    $op = $m[1];
-                    $years = (int) $m[2];
-                    $dt = new \DateTimeImmutable(substr((string)$date, 0, 10));
-                    $threshold = $dt->sub(new \DateInterval('P' . $years . 'Y'))->format('Y-m-d');
-                    // "older than Xy" means the underlying date must be BEFORE today-Xy
-                    $opMap = array('>' => '<', '>=' => '<=', '<' => '>', '<=' => '>=', '=' => '=', '<>' => '<>');
-                    $rawCond = ($opMap[$op] ?? $op) . ' ' . $threshold;
-                }
-
                 $conditionSqlWhere .= $parser->makeSqlStatement((string)$rawCond, $expr, $typeHint, $this->headerData[$colKey]['data']);
             }
 
