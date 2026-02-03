@@ -532,6 +532,8 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1870">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC' WHERE usf_description = 'SYS_SOCIAL_NETWORK_FIELD_DESC'</step>
     <step id="1880">DELETE FROM %PREFIX%_messages_recipients WHERE msr_usr_id IS NULL AND msr_rol_id IS NULL</step>
     <step id="1890">UPDATE %PREFIX%_user_fields SET usf_name = 'Fax' WHERE usf_name = 'SYS_FAX'</step>
-    <step id="1900">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_col_conditions text</step>
+    <step id="1900" database="mysql">ALTER TABLE %PREFIX%_category_report MODIFY COLUMN crt_col_conditions varchar(255)</step>
+    <step id="1910" database="pgsql">ALTER TABLE %PREFIX%_category_report ALTER COLUMN crt_col_conditions TYPE varchar(255)</step>
+    <step id="1920">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_col_conditions varchar(255)</step>
     <step>stop</step>
 </update>
