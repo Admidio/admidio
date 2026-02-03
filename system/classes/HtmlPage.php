@@ -1,6 +1,7 @@
 <?php
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\MenuNode;
 use Smarty\Smarty;
 
@@ -301,6 +302,28 @@ class HtmlPage
         $this->smarty->assign('debug', $gDebug);
         $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_module_enabled'));
 
+       // Design variables
+        $this->smarty->assign('additionalStylesFile', $gSettingsManager->getString('additional_styles_file'));
+        $this->smarty->assign('logoFile', $gSettingsManager->getString('logo_file'));
+        $this->smarty->assign('logoFileMaxHeight', $gSettingsManager->getString('logo_file_max_height'));
+        $this->smarty->assign('faviconFile', $gSettingsManager->getString('favicon_file'));
+        $this->smarty->assign('admidioHeadline', Language::translateIfTranslationStrId($gSettingsManager->getString('admidio_headline')));
+
+        $styles = '';
+        $color_primary = $gSettingsManager->getString('color_primary');
+        if ($color_primary && $this->isValidHexColor($color_primary)) {
+            $styles .= '    --bs-primary: ' . $color_primary . ";\n";
+            $styles .= '    --bs-primary-rgb: ' . hexdec(substr($color_primary, 1, 2)) . ', ' . hexdec(substr($color_primary, 3, 2)) . ', ' . hexdec(substr($color_primary, 5, 2)) . ";\n";
+        }
+        $color_secondary = $gSettingsManager->getString('color_secondary');
+        if ($color_secondary && $this->isValidHexColor($color_secondary)) {
+            $styles .= '    --bs-secondary: ' . $color_secondary . ";\n";
+            $styles .= '    --bs-secondary-rgb: ' . hexdec(substr($color_secondary, 1, 2)) . ', ' . hexdec(substr($color_secondary, 3, 2)) . ', ' . hexdec(substr($color_secondary, 5, 2)) . ";\n";
+        }
+        if (!empty($styles)) {
+            $this->smarty->assign('additionalStyles', ":root {\n$styles};");
+        }
+		
         // add imprint and data protection
         if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {
             $urlImprint = $gSettingsManager->getString('system_url_imprint');
@@ -644,5 +667,15 @@ class HtmlPage
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+	
+	/**
+     * Checks if the provided color string is a valid hex color format.
+     * @param string $color Color string to check.
+     * @return bool True if valid hex color, false otherwise.
+     */
+    private static function isValidHexColor(string $color): bool
+    {
+        return (bool) preg_match('/^#([a-fA-F0-9]{6})$/', $color);
     }
 }
