@@ -123,5 +123,10 @@ $gSupportedLanguages = array(
         'name'    => 'Ukrainian - український',
         'isocode' => 'uk',
         'libs'    => 'uk'
-    )
+    ),
+    'ta-IN' => array(
+    'name'    => 'Tamil - தமிழ்',
+    'isocode' => 'ta-IN',
+    'libs'    => 'ta-IN'
+    ),
 );
