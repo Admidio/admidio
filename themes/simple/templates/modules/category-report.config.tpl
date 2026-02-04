@@ -25,12 +25,7 @@
                                 <thead>
                                 <tr>
                                     <th style="width: 30%;">{$l10n->get('SYS_ABR_NO')}</th>
-                                    <th style="width: 40%;">{$l10n->get('SYS_CONTENT')}</th>
-                                    <th style="width: 50%;">{$l10n->get('SYS_CONDITION')}
-                                        <a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg" data-href="{$urlConditionHelpText}">
-                                            <i class="bi bi-info-circle-fill admidio-info-icon"></i>
-                                        </a>
-                                    </th>
+                                    <th style="width: 60%;">{$l10n->get('SYS_CONTENT')}</th>
                                     <th style="width: !60px;"></th>
                                 </tr>
                                 </thead>
@@ -38,7 +33,7 @@
                                 </tbody>
                                 <tfoot>
                                 <tr id="table_row_button">
-                                    <td colspan="4">
+                                    <td colspan="3">
                                         <a class="icon-text-link" href="javascript:addColumnToConfiguration({$categoryReport.key})"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_COLUMN')}</a>
                                     </td>
                                 </tr>

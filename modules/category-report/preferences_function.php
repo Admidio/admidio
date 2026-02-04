@@ -46,42 +46,7 @@ try {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
                 }
 
-                // role selection and role property selection is split into two select boxes.
-                // Role selection in the first select box uses only the rNN (with NN the ID of 
-                // the role) id, while the second select box allows the user to select the 
-                // property (r, l, w, f, b, e, d)
-                // Here we need to merge the two arrays to one. 
-                $columns = array_map(function($r, $rprop) {
-                    if ($r[0]=='r') {
-                        return $rprop . substr($r, 1);
-                    } else {
-                        return $r;
-                    }
-                }, $_POST['columns' . $conf], $_POST['columnsRoleProp' . $conf]);
-                $values['col_fields'] = implode(',', $columns);
-
-                // store conditions aligned with selected columns (use {} instead of <> to avoid HTML issues)
-                $conditions = $_POST['conditions' . $conf] ?? array();
-                if (!is_array($conditions)) {
-                    $conditions = array();
-                }
-                // normalize and replace < > with { } similar to MyList handling
-                $conditions = array_map(function ($c) {
-                    $c = (string) $c;
-                    $c = str_replace(array('<', '>'), array('{', '}'), $c);
-                    // remove line breaks to keep CSV stable
-                    $c = str_replace(array("\r", "\n"), ' ', $c);
-                    return trim($c);
-                }, $conditions);
-
-                // make sure array length matches columns length
-                $conditions = array_slice($conditions, 0, count($columns));
-                while (count($conditions) < count($columns)) {
-                    $conditions[] = '';
-                }
-
-                $values['col_conditions'] = implode(',', $conditions);
-
+                $values['col_fields'] = implode(',', $_POST['columns' . $conf]);
                 $config[] = $values;
             }
 
