@@ -60,6 +60,28 @@ try {
                 }, $_POST['columns' . $conf], $_POST['columnsRoleProp' . $conf]);
                 $values['col_fields'] = implode(',', $columns);
 
+                // store conditions aligned with selected columns (use {} instead of <> to avoid HTML issues)
+                $conditions = $_POST['conditions' . $conf] ?? array();
+                if (!is_array($conditions)) {
+                    $conditions = array();
+                }
+                // normalize and replace < > with { } similar to MyList handling
+                $conditions = array_map(function ($c) {
+                    $c = (string) $c;
+                    $c = str_replace(array('<', '>'), array('{', '}'), $c);
+                    // remove line breaks to keep CSV stable
+                    $c = str_replace(array("\r", "\n"), ' ', $c);
+                    return trim($c);
+                }, $conditions);
+
+                // make sure array length matches columns length
+                $conditions = array_slice($conditions, 0, count($columns));
+                while (count($conditions) < count($columns)) {
+                    $conditions[] = '';
+                }
+
+                $values['col_conditions'] = implode(',', $conditions);
+
                 $config[] = $values;
             }
 
