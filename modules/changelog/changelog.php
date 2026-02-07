@@ -29,6 +29,7 @@ use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Roles\Entity\Role;
+use Admidio\Hooks\Hooks;
 
 
 
@@ -144,6 +145,7 @@ try {
             $headline = $gL10n->get('SYS_CHANGE_HISTORY_GENERIC2', [$objName, implode(', ', $tableTitles)]);
         }
     }
+    $headline =  Hooks::apply_filters('changelog_headline', $headline);
 
     // add page to navigation history
     $gNavigation->addUrl(CURRENT_URL, $headline);
