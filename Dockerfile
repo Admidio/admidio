@@ -82,7 +82,7 @@ WORKDIR ${APACHE_DOCUMENT_ROOT}
 RUN mkdir ${APACHE_DOCUMENT_ROOT}/provisioning && \
     \
     cp -a ${APACHE_DOCUMENT_ROOT}/adm_my_files ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
-    cp -a ${APACHE_DOCUMENT_ROOT}/adm_plugins ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
+    cp -a ${APACHE_DOCUMENT_ROOT}/plugins ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
     cp -a ${APACHE_DOCUMENT_ROOT}/install ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
     cp -a ${APACHE_DOCUMENT_ROOT}/languages ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
     cp -a ${APACHE_DOCUMENT_ROOT}/libs ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
@@ -93,12 +93,12 @@ RUN mkdir ${APACHE_DOCUMENT_ROOT}/provisioning && \
     cp -a ${APACHE_DOCUMENT_ROOT}/themes ${APACHE_DOCUMENT_ROOT}/provisioning/ && \
     \
     rm -rf ${APACHE_DOCUMENT_ROOT}/adm_my_files && \
-    rm -rf ${APACHE_DOCUMENT_ROOT}/adm_plugins && \
+    rm -rf ${APACHE_DOCUMENT_ROOT}/plugins && \
     rm -rf ${APACHE_DOCUMENT_ROOT}/themes && \
     \
     echo -n ${ADMIDIO_VERSION} > /opt/app-root/src/.admidio_image_version
 
-VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/adm_plugins", "/opt/app-root/src/themes"]
+VOLUME ["/opt/app-root/src/adm_my_files", "/opt/app-root/src/plugins", "/opt/app-root/src/themes"]
 
 # Latest release
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer

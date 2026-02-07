@@ -13,7 +13,7 @@ service cron start
 
 
 # check for existing admidio directories in docker volumes
-for dir in "adm_my_files" "adm_plugins" "install" "languages" "libs" "modules" "rss" "src" "system" "themes" ; do
+for dir in "adm_my_files" "plugins" "install" "languages" "libs" "modules" "rss" "src" "system" "themes" ; do
     if [ ! -d "${dir}" -o "$(find "${dir}" -maxdepth 0 -type d -empty 2>/dev/null)" != "" ]; then
         echo "[INFO ] provisioning missing directory ${dir}"
         cp -a "provisioning/${dir}" .
@@ -154,8 +154,8 @@ if [ "$(cat ${ADMIDIO_INSTALLED_VERSION} 2>/dev/null)" != "$(cat ${ADMIDIO_IMAGE
     echo "[DEBUG] rsync -a --exclude=/config.php --exclude=/.admidio_installed --exclude=/.admidio_installed_version provisioning/adm_my_files/ adm_my_files/"
     rsync -a --exclude="/config.php" --exclude="/.admidio_installed" --exclude="/.admidio_installed_version" provisioning/adm_my_files/ adm_my_files/
 
-    echo "[DEBUG] rsync -a provisioning/adm_plugins/ adm_plugins/"
-    rsync -a provisioning/adm_plugins/ adm_plugins/
+    echo "[DEBUG] rsync -a provisioning/plugins/ plugins/"
+    rsync -a provisioning/plugins/ plugins/
 
     echo "[DEBUG] rsync -a --delete provisioning/install/ install/"
     rsync -a --delete provisioning/install/ install/
