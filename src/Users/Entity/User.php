@@ -19,6 +19,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Hooks\Hooks;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\QRServerProvider;
 
@@ -1954,6 +1955,10 @@ class User extends Entity
             // Register all non-empty fields for the notification
             $gChangeNotification->logUserCreation($usrId, $this);
         }
+        if ($newRecord) {
+            Hooks::do_action('user_created', $this, $gCurrentUser);
+
+        }
 
         LogChanges::endChangeSet($previousChangeSet);
         $this->db->endTransaction();
@@ -2371,7 +2376,8 @@ class User extends Entity
      */
     public function readableName(): string
     {
-        return $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME');
+        return Hooks::apply_filters('user_readable_name', $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME'), $this);
+        //return $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME');
     }
 
     /**
