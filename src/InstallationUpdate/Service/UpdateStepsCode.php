@@ -137,6 +137,11 @@ final class UpdateStepsCode
         $plugins = $pluginManager->getAvailablePlugins();
 
         foreach ($plugins as $plugin) {
+            // check, if the plugin has an interface, if not, scip it
+            if (!isset($plugin['interface']) || $plugin['interface'] == null) {
+                continue;
+            }
+            // check if the plugin is an overview plugin, if so, install it
             $instance = $plugin['interface']::getInstance();
             if ($instance->isAdmidioPlugin()) {
                 // Install the overview plugin
