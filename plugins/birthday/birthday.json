@@ -1,0 +1,105 @@
+{
+    "name": "PLG_BIRTHDAY_PLUGIN_NAME",
+    "description": "PLG_BIRTHDAY_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-cake2",
+    "mainFile": "index.php",
+    "overviewPlugin": true,
+    "autoload": {
+        "psr-4": {
+            "Birthday\\classes\\": "classes/"
+        }
+    },
+    "dependencies": [
+        "Admidio\\Infrastructure\\Plugins\\Overview",
+        "Admidio\\Infrastructure\\Plugins\\PluginAbstract",
+        "Admidio\\Infrastructure\\Utils\\SecurityUtils",
+        "Admidio\\Roles\\Service\\RolesService"
+    ],
+    "defaultConfig": {
+        "birthday_plugin_enabled": {
+            "name": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC",
+            "type": "integer",
+            "value" : 1
+        },
+        "birthday_overview_sequence": {
+            "type": "integer",
+            "value" : 2
+        },
+        "birthday_show_names_extern": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC",
+            "type": "boolean",
+            "value" : false
+        },
+        "birthday_show_names": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC",
+            "type": "integer",
+            "value" : 0
+        },
+        "birthday_show_age": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_AGE",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC",
+            "type": "boolean",
+            "value" : false
+        },
+        "birthday_show_age_salutation": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC",
+            "type": "integer",
+            "value" : 18
+        },
+        "birthday_show_notice_none": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC",
+            "type": "boolean",
+            "value" : true
+        },
+        "birthday_show_past": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_PAST",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC",
+            "type": "integer",
+            "value" : 1
+        },
+        "birthday_show_future": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC",
+            "type": "integer",
+            "value" : 2
+        },
+        "birthday_show_display_limit": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC",
+            "type": "integer",
+            "value" : 200
+        },
+        "birthday_show_email_extern": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC",
+            "type": "integer",
+            "value" : 0
+        },
+        "birthday_roles_view_plugin": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN",
+            "description": "PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC",
+            "type": "array",
+            "value" : ["All"]
+        },
+        "birthday_roles_sql": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_ROLES_SQL",
+            "description": "PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC",
+            "type": "array",
+            "value" : ["All"]
+        },
+        "birthday_sort_sql": {
+            "name": "PLG_BIRTHDAY_PREFERENCES_SORT_SQL",
+            "description": "PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC",
+            "type": "string",
+            "value" : "DESC"
+        }
+    }
+}

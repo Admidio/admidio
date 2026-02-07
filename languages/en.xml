@@ -35,6 +35,7 @@
   <string name="INS_ERROR_OPEN_FILE">File #VAR1_BOLD# could not be opened.</string>
   <string name="INS_GROUPS">Groups</string>
   <string name="INS_HOST_INVALID">Hostname is not valid. Enter a valid host name or IP address.</string>
+  <string name="INS_INFO_3RD_PARRTY_PLUGINS_HAVE_BEEN_MOVED">Some 3rd party plugins have been moved to the new plugin folder #VAR1_BOLD#. Please check the functionality of these plugins after the update.</string>
   <string name="INS_INSTALL_ADMIDIO">Install Admidio</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">The database already contains an Admidio installation. An additional installation is not possible.</string>
@@ -60,6 +61,9 @@
   <string name="INS_UPDATE_VERSION">Update to version #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Update process successful</string>
   <string name="INS_WARNING_BETA_VERSION">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</string>
+  <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Some old admidio plugin folders could not be deleted from the old plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and delete the old plugin folders manually and delete the old adm_plugins folder afterward.</string>
+  <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">The old plugin folder #VAR1_BOLD# could not be deleted.\nPlease check the folder  #VAR2_BOLD# within your Admidio installation and delete the old adm_plugins folder manually.</string>
+  <string name="INS_WARNING_3RD_PARRTY_PLUGINS_COULD_NOT_BE_MOVED">Some 3rd party plugin folders could not be moved to the new plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and move the 3rd party plugin folders manually and delete the old adm_plugins folder afterward.</string>
   <string name="INS_WELCOME_TEXT">This assistant helps you to set up the Admidio member management. All necessary data will be requested so that the system can be fully set up and you can log in as an administrator.\n\nIf you have questions or problems with the installation, please check #VAR1#our installation instructions#VAR2# or contact us at #VAR3#our support forum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">You have already updated the directories of Admidio with a new version. Now the database has to be updated from the current version #VAR2# to the version #VAR1#, so that Admidio can run with the new version.\n\nIf you have questions or problems with the update, please check #VAR3#our update instruction#VAR4# or contact #VAR5#our support forum#VAR6#.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welcome to the installation of Admidio</string>
@@ -90,6 +94,8 @@
   <string name="SYS_SUPERIOR_MALE">Male superior</string>
   <string name="SYS_WIFE">Wife</string>
   <!--Phrases only in organization administration-->
+  <string name="ORG_ACCESS_TO_PLUGIN">Plugin access</string>
+  <string name="ORG_ACCESS_TO_PLUGIN_DESC">Plugin can be disabled or enabled for logged in users only. If plugin is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Additional variables</string>
@@ -282,6 +288,7 @@
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# attachments</string>
   <string name="SYS_ATTEND_EVENT">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">You signed up tentative for the event #VAR1_BOLD# on #VAR2#.</string>
+  <string name="SYS_AUTHOR">Author</string>
   <string name="SYS_AUTO_DETECT">Auto-detect</string>
   <string name="SYS_AVAILABLE">Available</string>
   <string name="SYS_AVAILABLE_BETA">Available Beta</string>
@@ -655,7 +662,9 @@
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Lists of groups and roles can be exported by users, provided that you have the right to view these lists. This setting can be used to restrict the export function. (Default: All)</string>
   <string name="SYS_EXPORT_VCARD">Export vCard</string>
+  <string name="SYS_EXTENSION">Extension</string>
   <string name="SYS_EXTENSIONS">Extensions</string>
+  <string name="SYS_EXTENSIONS_AVAILABLE">Available extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FAVICON_FILE">Favicon File</string>
   <string name="SYS_FAVICON_FILE_DESC">The path to the favicon file for your installation. The path should be relative to your installation's root directory. If left empty, the default favicon of the theme will be used. (default: empty)</string>
@@ -773,6 +782,7 @@
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">The installation and setup of the database was successfully completed.</string>
   <string name="SYS_INSTALLED">Installed</string>
+  <string name="SYS_INSTALLED_VERSION">Installed version</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
   <string name="SYS_INTO_TO">Recipients need to be listed in the TO field instead of the BCC field</string>
@@ -1109,6 +1119,7 @@
   <string name="SYS_NONE">None</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
+  <string name="SYS_NOT_INSTALLED">Not installed</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not member of any organization</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Not member of organization #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Please use a valid number as condition for field #VAR1_BOLD#.</string>
@@ -1155,6 +1166,8 @@
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
   <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overview</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS">Overview extensions</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">The appearance of the overview extensions on the overview page can be changed here. The sequence of the extensions can be changed by drag &amp; drop (big screens) or by clicking the move buttons (small screens).\n\n The new sequence only takes effect after saving the settings!</string>
   <string name="SYS_PAGE_NEXT">Next</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
@@ -1216,6 +1229,17 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
+  <string name="SYS_PLUGIN_DISABLED">This plugin is disabled.</string>
+  <string name="SYS_PLUGIN_INSTALL">Install plugin</string>
+  <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
+  <string name="SYS_PLUGIN_MANAGER_DESC">Here you can manage the plugins of Admidio. Plugins are additional modules that can be installed to extend the functionality of Admidio. You can install, update or remove plugins.</string>
+  <string name="SYS_PLUGIN_NAME_MISSING">No plugin name specified.</string>
+  <string name="SYS_PLUGIN_NO_INTERFACE">The plugin has no interface.</string>
+  <string name="SYS_PLUGIN_NOT_INSTALLED">The plugin is not installed.</string>
+  <string name="SYS_PLUGIN_PREFERENCES">Plugin preferences</string>
+  <string name="SYS_PLUGIN_UNINSTALL">Uninstall plugin</string>
+  <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
+  <string name="SYS_PLUGIN_VERSION">Plugin version</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
@@ -1687,7 +1711,9 @@
   <string name="SYS_UNKNOWN">Unknown</string>
   <string name="SYS_UNLOCK_ALBUM">Unlock album</string>
   <string name="SYS_UNMANAGED_FILES">Unmanaged files</string>
+  <string name="SYS_UP_TO_DATE">Up to date</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
+  <string name="SYS_UPDATE_AVAILABLE">Update available</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_PHOTOS">Upload photos</string>

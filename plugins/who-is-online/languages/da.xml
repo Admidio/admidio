@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">On-line</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">Lige nu er der ikke nogen besøgende på hjemmesiden</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# Gæster</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# Medlem</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# Medlemmer</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online er #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online er #VAR1#</string>
+</resources>

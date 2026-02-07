@@ -5,6 +5,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -12,6 +13,9 @@ use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
+
+use Admidio\Infrastructure\Plugins\PluginManager;
+
 use RuntimeException;
 
 /**
@@ -67,12 +71,47 @@ class PreferencesPresenter extends PagePresenter
         parent::__construct();
     }
 
+    public function __call(string $name, array $arguments)
+    {
+        // check if the method exists in the PreferencePresanter class
+        if (method_exists($this, $name)) {
+            return call_user_func_array([$this, $name], $arguments);
+        } else {
+            // Look through every plugin you registered during init()
+            foreach (PreferencesService::getPluginPresenters() as $comId => $callbacks) {
+                foreach ($callbacks as $callback) {
+                    // We only stored array callbacks for static methods
+                    if (is_array($callback)
+                        && isset($callback[1])
+                        && $callback[1] === $name
+                        && is_callable($callback)
+                    ) {
+                        // forward all args (usually none) to the real presenter
+                        $arguments = array_merge(array($this->getSmartyTemplate()), $arguments);
+                        return call_user_func_array($callback, $arguments);
+                    }
+                }
+            }
+        }
+
+        // If we get here, there was no presenter registered under that name:
+        throw new \BadMethodCallException(
+            "Call to undefined method " . static::class . "::$name()"
+        );
+    }
+
     /**
      * @throws Exception
      */
     private function initialize(): void
     {
         global $gL10n;
+        $pluginManager = new PluginManager();
+        foreach ($pluginManager->getInstalledPlugins() as $pluginClass) {
+            $pluginClass::getInstance();
+            $pluginClass::initPreferencePanelCallback();
+        }
+
         $this->preferenceTabs = array(
             // === 1) System ===
             array(
@@ -81,6 +120,7 @@ class PreferencesPresenter extends PagePresenter
                 'panels' => array(
                     array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
                     array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false),
+                    array('id'=>'overview',             'title'=>$gL10n->get('SYS_OVERVIEW'),               'icon'=>'bi-house-door-fill',               'subcards'=>false),
                     array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
                     array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
                     array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
@@ -96,7 +136,7 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'registration',         'title'=>$gL10n->get('SYS_REGISTRATION'),           'icon'=>'bi-card-checklist',                'subcards'=>false),
                     array('id'=>'captcha',              'title'=>$gL10n->get('SYS_CAPTCHA'),                'icon'=>'bi-fonts',                         'subcards'=>false),
                     array('id'=>'sso',                  'title'=>$gL10n->get('SYS_SSO'),                    'icon'=>'bi-key',                           'subcards'=>false),
-                ),
+                )
             ),
 
             // === 3) User Management ===
@@ -108,7 +148,7 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
                     array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
                     array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
-                ),
+                )
             ),
 
             // === 4) Communication ===
@@ -121,7 +161,7 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),               'icon'=>'bi-envelope-fill',                 'subcards'=>false),
                     array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),          'icon'=>'bi-newspaper',                     'subcards'=>false),
                     array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                  'icon'=>'bi-chat-dots-fill',                'subcards'=>false),
-                ),
+                )
             ),
 
             // === 5) Contents ===
@@ -134,8 +174,40 @@ class PreferencesPresenter extends PagePresenter
                     array('id'=>'inventory',            'title'=>$gL10n->get('SYS_INVENTORY'),              'icon'=>'bi-box-seam-fill',                 'subcards'=>false),
                     array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
                     array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
-                ),
+                )
             ),
+
+            // === 6) Overview Extensions ===
+            array(
+                'key'    => 'overview_extensions',
+                'label'  => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'),
+                // load in all plugin panels that are registered in the PreferencesService
+                'panels' => array_map(
+                    fn(array $entry) => [
+                        'id'       => $entry['id'],
+                        'title'    => $entry['title'],
+                        'icon'     => $entry['icon']    ?? 'bi-puzzle',
+                        'subcards' => $entry['subcards'] ?? false,
+                    ],
+                    \Admidio\Preferences\Service\PreferencesService::getOverviewPluginPanels()
+                )
+            ),
+
+            // === 7) Extensions ===
+            array(
+                'key'    => 'extensions',
+                'label'  => $gL10n->get('SYS_EXTENSIONS'),
+                // load in all plugin panels that are registered in the PreferencesService
+                'panels' => array_map(
+                    fn(array $entry) => [
+                        'id'       => $entry['id'],
+                        'title'    => $entry['title'],
+                        'icon'     => $entry['icon']    ?? 'bi-puzzle',
+                        'subcards' => $entry['subcards'] ?? false,
+                    ],
+                    \Admidio\Preferences\Service\PreferencesService::getPluginPanels()
+                )
+            )
         );
     }
 
@@ -556,6 +628,80 @@ class PreferencesPresenter extends PagePresenter
         $formCommon->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formCommon);
         return $smarty->fetch('preferences/preferences.common.tpl');
+    }
+
+    /**
+     * Generates the HTML of the form from the plugin overview preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the contact preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createOverviewForm(): string
+    {
+        global $gL10n, $gCurrentSession;
+
+        // get all overview plugins and add them to the template
+        $pluginManager = new PluginManager();
+        $plugins = $pluginManager->getOverviewPlugins();
+
+        $overviewPlugins = array();
+        foreach ($plugins as $sequence => $plugin) {
+            $pluginInstance = $plugin['interface']::getInstance();
+            $pluginConfig = $pluginInstance->getPluginConfig();
+
+            // find the plugin sequence key
+            $sequenceKey = '';
+            $enabled = false;
+            foreach ($pluginConfig as $pluginConfigKey => $pluginConfigValue) {
+                if (str_ends_with($pluginConfigKey, '_overview_sequence')) {
+                    $sequenceKey = $pluginConfigKey;
+                } elseif (str_ends_with($pluginConfigKey, '_enabled')) {
+                    $enabled = !(($pluginConfigValue['value'] === 0));
+                }
+            }
+            $overviewPlugins[] =  array(
+                'id' => $plugin['id'],
+                'name' => Language::translateIfTranslationStrId($pluginInstance->getName()),
+                'icon' => $pluginInstance->getIcon(),
+                'enabled' => $enabled,
+                'sequence' => array('key' => $sequenceKey, 'value' => $sequence)
+            );
+        }
+
+        $formOverview = new FormPresenter(
+            'adm_preferences_form_overview',
+            'preferences/preferences.overview.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'overview')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        $formOverview->addDescription(
+            'adm_overview_description',
+            $gL10n->get('SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC')
+        );
+
+        // add hidden inputs for the plugin sequence
+        foreach ($overviewPlugins as $overviewPlugin) {
+            $formOverview->addInput(
+                $overviewPlugin['sequence']['key'],
+                '',
+                $overviewPlugin['sequence']['value'],
+                array('type' => 'number', 'property' => FormPresenter::FIELD_HIDDEN)
+            );
+        }
+
+        $formOverview->addSubmitButton(
+            'adm_button_save_overview',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $smarty->assign('overviewPlugins', $overviewPlugins);
+        $formOverview->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formOverview);
+        return $smarty->fetch('preferences/preferences.overview.tpl');
     }
 
     /**
@@ -2723,8 +2869,8 @@ class PreferencesPresenter extends PagePresenter
 
                 // define additional ids that should also be considered for visibility toggling
                 var additionalIds = [\'#system_notifications_enabled\'];
-                // Look for any input whose id ends with "_module_enabled"
-                var selectors = ["[id$=\'_module_enabled\']"].concat(additionalIds);
+                // Look for any input whose id ends with "_module_enabled" or "_plugin_enabled"
+                var selectors = ["[id$=\'_module_enabled\']", "[id$=\'_plugin_enabled\']"].concat(additionalIds);
 
                 var moduleEnabledField = panelContainer.find(selectors.join(", ")).filter(":visible");
                 if (moduleEnabledField.length > 0) {
@@ -2823,6 +2969,11 @@ class PreferencesPresenter extends PagePresenter
 
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/js/bootstrap-tabs-x-admidio.js');
+
+        // remove the plugins array from preferenceTabs if there are no panels defined
+        $this->preferenceTabs = array_filter($this->preferenceTabs, function ($tab) {
+            return !empty($tab['panels']);
+        });
 
         $this->assignSmartyVariable('preferenceTabs', $this->preferenceTabs);
         $this->addTemplateFile('preferences/preferences.tpl');

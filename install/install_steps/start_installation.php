@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
@@ -72,24 +73,25 @@ $gCurrentUserId = $gCurrentUser->getValue('usr_id');
 // create all modules components
 $sql = 'INSERT INTO ' . TBL_COMPONENTS . '
                (com_type, com_name, com_name_intern, com_version, com_beta)
-        VALUES (\'MODULE\', \'SYS_ANNOUNCEMENTS\',   \'ANNOUNCEMENTS\',  \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_CATEGORIES\',      \'CATEGORIES\',     \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_CATEGORY_REPORT\', \'CATEGORY-REPORT\',\'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_EVENTS\',          \'EVENTS\',         \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_DOCUMENTS_FILES\', \'DOCUMENTS-FILES\',\'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_INVENTORY\',        \'INVENTORY\',     \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_FORUM\',           \'FORUM\',          \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_WEBLINKS\',        \'LINKS\',          \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_GROUPS_ROLES\',    \'GROUPS-ROLES\',   \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_CONTACTS\',        \'CONTACTS\',       \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_MESSAGES\',        \'MESSAGES\',       \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_MENU\',            \'MENU\',           \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_ORGANIZATION\',    \'ORGANIZATIONS\',  \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_PHOTOS\',          \'PHOTOS\',         \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_SETTINGS\',        \'PREFERENCES\',    \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_PROFILE\',         \'PROFILE\',        \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_REGISTRATION\',    \'REGISTRATION\',   \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')
-             , (\'MODULE\', \'SYS_ROOM_MANAGEMENT\', \'ROOMS\',          \'' . ADMIDIO_VERSION . '\', ' . ADMIDIO_VERSION_BETA . ')';
+        VALUES (\'MODULE\', \'SYS_ANNOUNCEMENTS\',   \'ANNOUNCEMENTS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_CATEGORIES\',      \'CATEGORIES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_CATEGORY_REPORT\', \'CATEGORY-REPORT\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_EVENTS\',          \'EVENTS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_DOCUMENTS_FILES\', \'DOCUMENTS-FILES\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_INVENTORY\',        \'INVENTORY\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_FORUM\',           \'FORUM\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_WEBLINKS\',        \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_GROUPS_ROLES\',    \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_CONTACTS\',        \'CONTACTS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_MESSAGES\',        \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_MENU\',            \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_ORGANIZATION\',    \'ORGANIZATIONS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_PHOTOS\',          \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_SETTINGS\',        \'PREFERENCES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_PROFILE\',         \'PROFILE\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_REGISTRATION\',    \'REGISTRATION\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_ROOM_MANAGEMENT\', \'ROOMS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+             , (\'MODULE\', \'SYS_PLUGIN_MANAGER\',  \'PLUGINS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
 $db->query($sql); // TODO add more params
 
 // create organization independent categories
@@ -265,23 +267,41 @@ $sql = 'INSERT INTO ' . TBL_MENU . '
         VALUES (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 1, true, \'modules\', NULL, \'\', \'SYS_MODULES\', \'\')
              , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 2, true, \'administration\', NULL, \'\', \'SYS_ADMINISTRATION\', \'\')
              , (NULL, NULL, \'' . Uuid::uuid4() . '\', true, 3, true, \'extensions\', NULL, \'\', \'SYS_EXTENSIONS\', \'\')
-             , (NULL, 1, \'' . Uuid::uuid4() . '\', false, 1, true, \'overview\', \'' . FOLDER_MODULES . '/overview.php\', \'bi-house-door-fill\', \'SYS_OVERVIEW\', \'\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 2, true, \'announcements\', \'' . FOLDER_MODULES . '/announcements.php\', \'newspaper\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'EVENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 3, true, \'events\', \'' . FOLDER_MODULES . '/events/events.php\', \'calendar-week-fill\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'MESSAGES\'), 1, \'' . Uuid::uuid4() . '\', false, 4, true, \'messages\', \'' . FOLDER_MODULES . '/messages/messages.php\', \'envelope-fill\', \'SYS_MESSAGES\', \'SYS_MESSAGES_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, \'' . Uuid::uuid4() . '\', false, 5, true, \'groups-roles\', \'' . FOLDER_MODULES . '/groups-roles/groups_roles.php\', \'people-fill\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'CONTACTS\'), 1, \'' . Uuid::uuid4() . '\', false, 6, true, \'contacts\', \'' . FOLDER_MODULES . '/contacts/contacts.php\', \'person-vcard-fill\', \'SYS_CONTACTS\', \'SYS_CONTACTS_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, \'' . Uuid::uuid4() . '\', false, 7, true, \'documents-files\', \'' . FOLDER_MODULES . '/documents-files.php\', \'file-earmark-arrow-down-fill\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'INVENTORY\'), 1, \'' . Uuid::uuid4() . '\', false, 8, true, \'inventory\', \'' . FOLDER_MODULES . '/inventory.php\', \'box-seam-fill\', \'SYS_INVENTORY\', \'SYS_INVENTORY_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'PHOTOS\'), 1, \'' . Uuid::uuid4() . '\', false, 9, true, \'photo\', \'' . FOLDER_MODULES . '/photos/photos.php\', \'image-fill\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'CATEGORY-REPORT\'), 1, \'' . Uuid::uuid4() . '\', false, 10, true, \'category-report\', \'' . FOLDER_MODULES . '/category-report/category_report.php\', \'list-stars\', \'SYS_CATEGORY_REPORT\', \'SYS_CATEGORY_REPORT_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'LINKS\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'weblinks\', \'' . FOLDER_MODULES . '/links/links.php\', \'link-45deg\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'FORUM\'), 1, \'' . Uuid::uuid4() . '\', false, 12, true, \'forum\', \'' . FOLDER_MODULES . '/forum.php\', \'chat-dots-fill\', \'SYS_FORUM\', \'SYS_FORUM_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \'' . FOLDER_MODULES . '/preferences.php\', \'gear-fill\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \'' . FOLDER_MODULES . '/registration.php\', \'card-checklist\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \'' . FOLDER_MODULES . '/menu.php\', \'menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')
-             , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'ORGANIZATIONS\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'organization\', \'' . FOLDER_MODULES . '/organizations.php\', \'diagram-3-fill\', \'SYS_ORGANIZATION\', \'SYS_ORGANIZATION_DESC\')';
+             , (NULL, 1, \'' . Uuid::uuid4() . '\', false, 1, true, \'overview\', \''.FOLDER_MODULES.'/overview.php\', \'bi-house-door-fill\', \'SYS_OVERVIEW\', \'\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 2, true, \'announcements\', \''.FOLDER_MODULES.'/announcements.php\', \'newspaper\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'EVENTS\'), 1, \'' . Uuid::uuid4() . '\', false, 3, true, \'events\', \''.FOLDER_MODULES.'/events/events.php\', \'calendar-week-fill\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MESSAGES\'), 1, \'' . Uuid::uuid4() . '\', false, 4, true, \'messages\', \''.FOLDER_MODULES.'/messages/messages.php\', \'envelope-fill\', \'SYS_MESSAGES\', \'SYS_MESSAGES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, \'' . Uuid::uuid4() . '\', false, 5, true, \'groups-roles\', \''.FOLDER_MODULES.'/groups-roles/groups_roles.php\', \'people-fill\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CONTACTS\'), 1, \'' . Uuid::uuid4() . '\', false, 6, true, \'contacts\', \''.FOLDER_MODULES.'/contacts/contacts.php\', \'person-vcard-fill\', \'SYS_CONTACTS\', \'SYS_CONTACTS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, \'' . Uuid::uuid4() . '\', false, 7, true, \'documents-files\', \''.FOLDER_MODULES.'/documents-files.php\', \'file-earmark-arrow-down-fill\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'INVENTORY\'), 1, \'' . Uuid::uuid4() . '\', false, 8, true, \'inventory\', \''.FOLDER_MODULES.'/inventory.php\', \'box-seam-fill\', \'SYS_INVENTORY\', \'SYS_INVENTORY_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, \'' . Uuid::uuid4() . '\', false, 9, true, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'image-fill\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CATEGORY-REPORT\'), 1, \'' . Uuid::uuid4() . '\', false, 10, true, \'category-report\', \''.FOLDER_MODULES.'/category-report/category_report.php\', \'list-stars\', \'SYS_CATEGORY_REPORT\', \'SYS_CATEGORY_REPORT_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'link-45deg\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'FORUM\'), 1, \'' . Uuid::uuid4() . '\', false, 12, true, \'forum\', \''.FOLDER_MODULES.'/forum.php\', \'chat-dots-fill\', \'SYS_FORUM\', \'SYS_FORUM_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences.php\', \'gear-fill\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration.php\', \'card-checklist\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'MENU\'), 2, \'' . Uuid::uuid4() . '\', false, 3, true, \'menu\', \''.FOLDER_MODULES.'/menu.php\', \'menu-button-wide-fill\', \'SYS_MENU\', \'SYS_MENU_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'ORGANIZATIONS\'), 2, \'' . Uuid::uuid4() . '\', false, 4, true, \'organization\', \''.FOLDER_MODULES.'/organizations.php\', \'diagram-3-fill\', \'SYS_ORGANIZATION\', \'SYS_ORGANIZATION_DESC\')
+             , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PLUGINS\'), 2, \'' . Uuid::uuid4() . '\', false, 5, true, \'plugins\', \''.FOLDER_MODULES.'/plugins.php\', \'puzzle\', \'SYS_PLUGIN_MANAGER\', \'SYS_PLUGIN_MANAGER_DESC\')';
 $db->query($sql);
+
+// install all overview plugins
+$pluginManager = new PluginManager();
+$plugins = $pluginManager->getAvailablePlugins();
+
+foreach ($plugins as $plugin) {
+    // check, if the plugin has an interface, if not, scip it
+    if (!isset($plugin['interface']) || $plugin['interface'] == null) {
+        continue;
+    }
+    // check if the plugin is an overview plugin, if so, install it
+    $instance = $plugin['interface']::getInstance();
+    if ($instance->isAdmidioPlugin()) {
+        // Install the overview plugin
+        $instance->doInstall();
+    }
+}
 
 // delete session data
 session_unset();

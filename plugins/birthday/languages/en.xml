@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# will be #VAR3# years old in #VAR2# days, on the #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# has their birthday in #VAR2# days</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Birthdays</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Mr. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Today #VAR1# members have birthday.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">There are no member's birthdays available for visitors. Log in to see the member's birthdays.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Today is not a member's birthday.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Today is a member's birthday.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# became #VAR3# years old #VAR2# days before, on the #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# had their birthday #VAR2# days ago</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">This plugin displays a preview of the latest birthdays on the Overview page.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">Birthday</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# will be today #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# has their birthday today</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# will be tomorrow #VAR3# years old, on the #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# has their birthday tomorrow</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Mrs. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# became #VAR3# years old yesterday on the #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# had their birthday yesterday</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">Show names for visitors</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">If this setting is enabled visitors will see all names (not the age) of birthday persons today, in the future and in the past. Otherwise visitors will only see the number of persons who have birthday today, nothing more. (default: false)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">Display style for birthday person name</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">This setting allows you to choose how the names of birthday persons are displayed. (default: First name Surname)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">Show age</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">If this setting is enabled logged in users will see the ages of birthday persons. (default: false)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">Show name with salutation</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">Defines the age from which the first name of a birthday person will be replaced by the salutation for visitors. (disable: -1, default: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">Show no birthday persons notice</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">If this setting is enabled a notice will be shown if no member has birthday in the selected time span. (default: true)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">Show past birthday days</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">With this setting you can define how many days in the past birthdays should be shown. (default: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">Show future birthday days</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">With this setting you can define how many days in the future birthdays should be shown. (default: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">Limit the number of birthday persons</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">With this setting you can define the maximum number of birthday persons to be displayed. (default: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">Show email address for visitors</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">This setting allows you to choose if the email address of birthday persons should be displayed. (default: only name (visitors))</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">Allowed roles for content</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Here you can select the roles that are allowed to see the content of this plugin. If a user is not part of any selected role only the number of birthdays are shown. (default: all roles)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">Allowed roles for birthdays</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Here you can select the roles which users must have whose birthdays should be shown. (default: all roles)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">Sort order of birthday persons</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">This setting allows you to choose the sort order of birthday persons. (default: DESC)</string>
+</resources>

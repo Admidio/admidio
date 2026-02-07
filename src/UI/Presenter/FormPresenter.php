@@ -1924,6 +1924,101 @@ class FormPresenter
     }
 
     /**
+     * This method appends the form attributes and all form elements to the Smarty object.
+     * It also assigns the template file of the form to the Smarty object.
+     * After this method is called the whole form could be rendered through the Smarty object.
+     *
+     * Important: This method creates an array of the form type, elements, attributes, javascript code and hasRequiredFields variables if they already exist in the Smarty object.
+     * If the variables do not exist, they will be assigned as normal.
+     * The variables urlAdmidio, l10n, and settings are only one time assigned to the Smarty object.
+     * This results in the following structure for the zero-based array variables:
+     * [variableName] => [
+     *      0 => first form element values,
+     *      1 => second form element values,
+     *      2 => ...,
+     * ]
+     *
+     *
+     * @param Smarty $smarty The Smarty object where the form data should be appended.
+     * @return void
+     */
+    public function appendToSmarty(Smarty $smarty): void
+    {
+        global $gL10n, $gSettingsManager;
+
+        if (!isset($smarty->tpl_vars['urlAdmidio'])) {
+            $smarty->assign('urlAdmidio', ADMIDIO_URL);
+        }
+        if (!isset($smarty->tpl_vars['l10n'])) {
+            $smarty->assign('l10n', $gL10n);
+        }
+        if (!isset($smarty->tpl_vars['settings'])) {
+            $smarty->assign('settings', $gSettingsManager);
+        }
+        if (!isset($smarty->tpl_vars['formType'])) {
+            $smarty->assign('formType', $this->type);
+        } else {
+            $curType = $smarty->getTemplateVars('formType');
+            if (is_array($curType) && array_key_first($curType) === 0) {
+                // if type is already an array then append the new type to the existing ones
+                $smarty->assign('formType', array_merge($curType, array($this->type)));
+            } else {
+                // if type is not an array then create a new array with the current and new type
+                $smarty->assign('formType', array($curType, $this->type));
+            }
+        }
+        if (!isset($smarty->tpl_vars['attributes'])) {
+            $smarty->assign('attributes', $this->attributes);
+        } else {
+            $curAttributes = $smarty->getTemplateVars('attributes');
+            if (is_array($curAttributes) && count(array_filter($curAttributes, 'is_array')) > 0 && array_key_first($curAttributes) === 0) {
+                // if attributes are already an array then append the new attributes to the existing ones
+                $smarty->assign('attributes', array_merge($curAttributes, array($this->attributes)));
+            } else {
+                // if attributes are not an array then create a new array with the current and new attributes
+                $smarty->assign('attributes', array($curAttributes, $this->attributes));
+            }
+        }
+        if (!isset($smarty->tpl_vars['elements'])) {
+            $smarty->assign('elements', $this->elements);
+        } else {
+            $curElements = $smarty->getTemplateVars('elements');
+            if (is_array($curElements) && count(array_filter($curElements, 'is_array')) > 0 && array_key_first($curElements) === 0) {
+                // if elements are already an array then append the new elements to the existing ones
+                $smarty->assign('elements', array_merge($curElements, array($this->elements)));
+            } else {
+                // if elements are not an array then create a new array with the current and new elements
+                $smarty->assign('elements', array($curElements, $this->elements));
+            }
+        }
+        if (!isset($smarty->tpl_vars['javascript'])) {
+            $smarty->assign('javascript', $this->javascript);
+        } else {
+            $curJavascript = $smarty->getTemplateVars('javascript');
+            if (is_array($curJavascript) && array_key_first($curJavascript) === 0) {
+                // if javascript is already an array then append the new javascript to the existing ones
+                $smarty->assign('javascript', array_merge($curJavascript, array($this->javascript)));
+            } else {
+                // if javascript is not an array then create a new array with the current and new javascript
+                $smarty->assign('javascript', array($curJavascript, $this->javascript));
+            }
+        }
+        if (!isset($smarty->tpl_vars['hasRequiredFields'])) {
+            $smarty->assign('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
+        } else {
+            $curRequiredFields = $smarty->getTemplateVars('hasRequiredFields');
+            $newRequiredFields = ($this->flagRequiredFields && $this->showRequiredFields ? true : false);
+            if (is_array($curRequiredFields) && array_key_first($curRequiredFields) === 0) {
+                // if hasRequiredFields is already an array then append the new hasRequiredFields to the existing ones
+                $smarty->assign('hasRequiredFields', array_merge($curRequiredFields, array($newRequiredFields)));
+            } else {
+                // if hasRequiredFields is not an array then create a new array with the current and new hasRequiredFields
+                $smarty->assign('hasRequiredFields', array($curRequiredFields, $newRequiredFields));
+            }
+        }
+    }
+
+    /**
      * This method returns the attributes array.
      * @return array Returns all attributes of the form.
      */

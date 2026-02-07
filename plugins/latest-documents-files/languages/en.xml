@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_HEADLINE">Documents &amp; files</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">More documents &amp; files</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">There are no documents or files available.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Uploaded by #VAR1# on #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">This plugin lists the latest documents and files uploaded by users on the Overview page.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Latest Documents &amp; Files</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Number of files</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Number of files to be displayed. (default: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Show upload timestamp</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">If this setting is enabled the upload timestamp of the file will be shown. Otherwise it will be hidden. (default: true)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Maximum characters in filename</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Maximum number of characters in a filename before it is truncated. (0: deactivates truncation, default: 0)</string>
+</resources>

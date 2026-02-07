@@ -161,6 +161,7 @@ CREATE TABLE %PREFIX%_components
     com_update_step             integer             NOT NULL    DEFAULT 0,
     com_update_completed        boolean             NOT NULL    DEFAULT true,
     com_timestamp_installed     timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    com_overview_plugin         boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (com_id)
 )
 ENGINE = InnoDB
