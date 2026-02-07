@@ -330,6 +330,9 @@ try {
             }
         }
 
+        // reset the cookie after reading the values so that the warnings are only shown once
+        setcookie('adm_update_plugins_warnings', '', time() - 3600, '/');
+
         if ($gWarnOldPlugins) {
             $updateWarnings[] = array(
                 'id' => 'warn_old_plugins',
