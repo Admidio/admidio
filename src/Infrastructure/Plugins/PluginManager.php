@@ -179,7 +179,7 @@ class PluginManager
                 $configValues = $plugin['interface']->getPluginConfigValues();
                 $enabled = false;
                 foreach ($configValues as $key => $value) {
-                    if (preg_match('/_enabled$/', $key) && $value === 1 || ($value === 2 && $gValidLogin)) {
+                    if (str_ends_with($key, '_plugin_enabled') && ($value === 1 || ($value === 2 && $gValidLogin))) {
                         $enabled = true;
                         break;
                     }
