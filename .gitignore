@@ -13,12 +13,12 @@
 /plugins/*
 !/plugins/birthday/
 !/plugins/calendar/
-!/plugins/login_form/
-!/plugins/random_photo/
-!/plugins/announcement_list/
-!/plugins/event_list/
-!/plugins/latest_documents_files/
-!/plugins/who_is_online/
+!/plugins/login-form/
+!/plugins/random-photo/
+!/plugins/announcement-list/
+!/plugins/event-list/
+!/plugins/latest-documents-files/
+!/plugins/who-is-online/
 
 
 # Only allow commit of official themes

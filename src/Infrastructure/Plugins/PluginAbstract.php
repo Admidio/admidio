@@ -618,7 +618,7 @@ abstract class PluginAbstract implements PluginInterface
      */
     public static function isAdmidioPlugin(): bool
     {
-        $admidioOverviewPlugins = array('announcement_list', 'birthday', 'calendar', 'event_list', 'latest_documents_files', 'login_form', 'random_photo', 'who_is_online');
+        $admidioOverviewPlugins = array('announcement-list', 'birthday', 'calendar', 'event-list', 'latest-documents-files', 'login-form', 'random-photo', 'who-is-online');
 
             if (in_array(strtolower(self::getComponentName()), $admidioOverviewPlugins)) {
                 return true;
