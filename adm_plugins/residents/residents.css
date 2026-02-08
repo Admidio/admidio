@@ -1,0 +1,36 @@
+.text-end {
+    text-align: right;
+}
+
+form.re-editor, form {
+    max-width: 90%;
+}
+input[type="date"] {
+    max-width: 160px;
+}
+
+select {
+    min-width: 160px;
+}
+
+div.admidio-content-header {
+    margin-bottom: 0px;
+}
+
+.amount {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+body#residents-charge-edit .form-dialog .form-control {
+    max-width: 24rem;
+}
+
+body#residents-charge-edit input#charge_amount {
+    max-width: 12rem;
+}
+
+body#residents-charge-edit select#charge_roles {
+    max-width: 26rem;
+}
