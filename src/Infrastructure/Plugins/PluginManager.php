@@ -35,6 +35,19 @@ class PluginManager
             $pluginClassFile = null;
 
             if (is_dir($pluginFolder)) {
+                // check if there is a classes folder in the plugin folder
+                if (!is_dir($pluginFolder . DIRECTORY_SEPARATOR . 'classes')) {
+                    // find the main plugin file
+                    $this->getMainPluginFile($pluginFolder, $entry, null);
+
+                    $plugins[$entry] = array(
+                        'fullPath' => $this->pluginMainFile,
+                        'relativePath' => str_replace(realpath(ADMIDIO_PATH), '', $this->pluginMainFile),
+                        'interface' => null
+                    );
+                    continue;
+                }
+
                 // loop over all class files to find the main plugin class file in the classes folder
                 foreach (scandir($pluginFolder . DIRECTORY_SEPARATOR . 'classes') as $classFileEntry) {
                     if ($classFileEntry === '.' || $classFileEntry === '..' || !is_file($pluginFolder . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . $classFileEntry)) {
@@ -112,6 +125,8 @@ class PluginManager
             $pluginFile = $pluginFolder . DIRECTORY_SEPARATOR . $pluginFileName;
             if (is_file($pluginFile)) {
             $this->pluginMainFile = $pluginFile;
+            } else {
+                $this->pluginMainFile = '';
             }
         }
     }
