@@ -132,8 +132,8 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     </step>
     <step id="580">DROP TABLE %PREFIX%_user_log</step>
        <!-- rename preference 'profile_log_edit_fields' to 'changelog_module_enabled' -->
-    <step id="590" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'profile_log_edit_fields' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_module_enabled'</step>
-    <step id="600" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'profile_log_edit_fields' AND pr1.prf_name = 'changelog_module_enabled'</step>
+    <step id="590" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'profile_log_edit_fields' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_module_enabled'</step>
+    <step id="600" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'profile_log_edit_fields' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'changelog_module_enabled'</step>
     <step id="610">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'profile_log_edit_fields'</step>
     <step id="620">CREATE TABLE %PREFIX%_forum_topics
         (
@@ -178,11 +178,11 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="680">UpdateStepsCode::updateStep50ForumCategories</step>
     <step id="690">UPDATE %PREFIX%_components SET com_name = 'SYS_FORUM', com_name_intern = 'FORUM' WHERE com_name_intern = 'GUESTBOOK'</step>
     <step id="700">UPDATE %PREFIX%_menu SET men_name = 'SYS_FORUM', men_name_intern = 'forum', men_icon='chat-dots-fill', men_url='/adm_program/modules/forum.php', men_description='SYS_FORUM_DESC', men_men_id_parent = 1 WHERE men_name_intern = 'guestbook'</step>
-    <step id="710" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_guestbook_module' SET pr1.prf_value = 0 WHERE pr1.prf_name = 'forum_module_enabled'</step>
-    <step id="720" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_guestbook_module' AND pr1.prf_name = 'forum_module_enabled'</step>
+    <step id="710" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_guestbook_module' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = 0 WHERE pr1.prf_name = 'forum_module_enabled'</step>
+    <step id="720" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_guestbook_module' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'forum_module_enabled'</step>
     <step id="730">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_module'</step>
-    <step id="740" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'guestbook_entries_per_page' SET pr1.prf_value = 25 WHERE pr1.prf_name = 'forum_topics_per_page'</step>
-    <step id="750" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 25 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'guestbook_entries_per_page' AND pr1.prf_name = 'forum_topics_per_page'</step>
+    <step id="740" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'guestbook_entries_per_page' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = 25 WHERE pr1.prf_name = 'forum_topics_per_page'</step>
+    <step id="750" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 25 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'guestbook_entries_per_page' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'forum_topics_per_page'</step>
     <step id="760">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'guestbook_entries_per_page'</step>
     <step id="770">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_guestbook_captcha'</step>
     <step id="780">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'flooding_protection_time'</step>
@@ -359,32 +359,32 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
             ADD CONSTRAINT %PREFIX%_fk_oac_ocl_id      FOREIGN KEY (oac_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
             ADD CONSTRAINT %PREFIX%_fk_oac_usr_create  FOREIGN KEY (oac_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;</step>
     <!-- rename enable_mail_module to mail_module_enabled -->
-    <step id="1180" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_mail_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_module_enabled'</step>
-    <step id="1190" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_mail_module' AND pr1.prf_name = 'mail_module_enabled'</step>
+    <step id="1180" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_mail_module' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_module_enabled'</step>
+    <step id="1190" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_mail_module' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'mail_module_enabled'</step>
     <step id="1200">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_mail_module'</step>
     <!-- rename enable_pm_module to pm_module_enabled -->
-    <step id="1210" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_pm_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'pm_module_enabled'</step>
-    <step id="1220" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_pm_module' AND pr1.prf_name = 'pm_module_enabled'</step>
+    <step id="1210" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_pm_module' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'pm_module_enabled'</step>
+    <step id="1220" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_pm_module' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'pm_module_enabled'</step>
     <step id="1230">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_pm_module'</step>
     <!-- rename enable_mail_captcha to mail_captcha_enabled -->
-    <step id="1240" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_mail_captcha' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_captcha_enabled'</step>
-    <step id="1250" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_mail_captcha' AND pr1.prf_name = 'mail_captcha_enabled'</step>
+    <step id="1240" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_mail_captcha' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_captcha_enabled'</step>
+    <step id="1250" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_mail_captcha' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'mail_captcha_enabled'</step>
     <step id="1260">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_mail_captcha'</step>
     <!-- rename enable_weblinks_module to weblinks_module_enabled -->
-    <step id="1270" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_weblinks_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'weblinks_module_enabled'</step>
-    <step id="1280" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_weblinks_module' AND pr1.prf_name = 'weblinks_module_enabled'</step>
+    <step id="1270" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'enable_weblinks_module' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'weblinks_module_enabled'</step>
+    <step id="1280" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'enable_weblinks_module' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'weblinks_module_enabled'</step>
     <step id="1290">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'enable_weblinks_module'</step>
     <!-- rename registration_enable_module to registration_module_enabled -->
-    <step id="1300" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'registration_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_module_enabled'</step>
-    <step id="1310" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'registration_enable_module' AND pr1.prf_name = 'registration_module_enabled'</step>
+    <step id="1300" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'registration_enable_module' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'registration_module_enabled'</step>
+    <step id="1310" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'registration_enable_module' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'registration_module_enabled'</step>
     <step id="1320">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_enable_module'</step>
     <!-- rename category_report_enable_module to category_report_module_enabled -->
-    <step id="1330" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'category_report_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'category_report_module_enabled'</step>
-    <step id="1340" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'category_report_enable_module' AND pr1.prf_name = 'category_report_module_enabled'</step>
+    <step id="1330" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'category_report_enable_module' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'category_report_module_enabled'</step>
+    <step id="1340" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'category_report_enable_module' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'category_report_module_enabled'</step>
     <step id="1350">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'category_report_enable_module'</step>
     <!-- rename groups_roles_enable_module to groups_roles_module_enabled -->
-    <step id="1360" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'groups_roles_enable_module' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'groups_roles_module_enabled'</step>
-    <step id="1370" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'groups_roles_enable_module' AND pr1.prf_name = 'groups_roles_module_enabled'</step>
+    <step id="1360" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'groups_roles_enable_module' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'groups_roles_module_enabled'</step>
+    <step id="1370" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'groups_roles_enable_module' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'groups_roles_module_enabled'</step>
     <step id="1380">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'groups_roles_enable_module'</step>
     <step id="1390">ALTER TABLE %PREFIX%_links ADD COLUMN lnk_sequence smallint</step>
     <step id="1400">UpdateStepsCode::updateStep50AddLinkSequence</step>
@@ -532,5 +532,8 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1870">UPDATE %PREFIX%_user_fields SET usf_description = 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC' WHERE usf_description = 'SYS_SOCIAL_NETWORK_FIELD_DESC'</step>
     <step id="1880">DELETE FROM %PREFIX%_messages_recipients WHERE msr_usr_id IS NULL AND msr_rol_id IS NULL</step>
     <step id="1890">UPDATE %PREFIX%_user_fields SET usf_name = 'Fax' WHERE usf_name = 'SYS_FAX'</step>
+    <step id="1900" database="mysql">ALTER TABLE %PREFIX%_category_report MODIFY COLUMN crt_col_fields varchar(255)</step>
+    <step id="1910" database="pgsql">ALTER TABLE %PREFIX%_category_report ALTER COLUMN crt_col_fields TYPE varchar(255)</step>
+    <step id="1920">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_col_conditions varchar(255)</step>
     <step>stop</step>
 </update>

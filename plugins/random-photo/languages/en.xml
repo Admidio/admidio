@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">There are no photos available for visitors. Log in to see the photos.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">This plugin displays a randomly selected photo from the photo module.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Random Photo</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Number of characters per word</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maximum number of characters in a word before a line break should be performed. If it's set to 0 then no line break will be performed. (default: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Maximum photo width</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Maximum width of the photo in pixels. If it's set to 0 then the image will be dynamically scaled by the html container in which this plugin is placed. (default: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Maximum photo height</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Maximum height of the photo in pixels. If it's set to 0 then the image will be dynamically scaled by the html container in which this plugin is placed. (default: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Considered albums</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Number of albums the photo may come from. Counts from the most recent album in descending order. If it's set to 0 then all albums will be considered. (default: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Photo number</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Number of the photo from the album to be displayed. If it's set to 0 then a random photo from the album will be displayed, if it's set to a specific number then that photo will be displayed. (default: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Show album link</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">If this setting is enabled a link to the album with the album name below the photo will be displayed. (default: true)</string>
+</resources>

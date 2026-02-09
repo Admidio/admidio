@@ -33,7 +33,7 @@ use UnexpectedValueException;
 class ComponentUpdate extends Component
 {
     public const UPDATE_STEP_STOP = 'stop';
-
+    private static $database = null;
     /**
      * Constructor that will create an object for component updating.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -42,8 +42,8 @@ class ComponentUpdate extends Component
     public function __construct(Database $database)
     {
         parent::__construct($database);
-
-        UpdateStepsCode::setDatabase($database);
+        
+        self::$database = $database;
     }
 
     /**
@@ -84,9 +84,24 @@ class ComponentUpdate extends Component
             $gLogger->warning($message, array('filePath' => $updateFile));
 
             throw new UnexpectedValueException($message);
+        } elseif ($this->getValue('com_type') === 'PLUGIN') {
+            $updateFile = ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->getValue('com_name_intern') . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
+
+            if (is_file($updateFile)) {
+                try {
+                    return new SimpleXMLElement($updateFile, 0, true);
+                } catch (\Exception $e) {
+                    throw new Exception($e->getMessage());
+                }
+            }
+
+            $message = 'XML-Update file not found!';
+            $gLogger->warning($message, array('filePath' => $updateFile));
+
+            throw new UnexpectedValueException($message);
         }
 
-        throw new UnexpectedValueException('No System update!');
+        throw new UnexpectedValueException('No System or Plugin update!');
     }
 
     /**
@@ -127,12 +142,22 @@ class ComponentUpdate extends Component
      * Get method name and execute this method
      * @param string $updateStepContent
      */
-    private static function executeUpdateMethod(string $updateStepContent)
+    private static function executeUpdateMethod(string $updateStepContent, string $namespace)
     {
         // get the method name (remove "UpdateStepsCode::")
+        $className = substr($updateStepContent, 0, strpos($updateStepContent, '::'));
         $methodName = substr($updateStepContent, strrpos($updateStepContent, '::') + 2);
+
+        // add namespace to class name
+        $className = $namespace . $className;
+
+        // check if the class exists and the method is defined in this class
+        if (!class_exists($className) || !method_exists($className, $methodName)) {
+            throw new Exception('Update class ' . $className . ' not found!');
+        }
         // now call the method
-        UpdateStepsCode::{$methodName}();
+        $className::setDatabase(self::$database);
+        $className::{$methodName}();
     }
 
     /**
@@ -160,7 +185,7 @@ class ComponentUpdate extends Component
      * @param string $version A version string of the version corresponding to the $xmlNode
      * @throws Exception
      */
-    private function executeStep(SimpleXMLElement $xmlNode, string $version = '')
+    private function executeStep(SimpleXMLElement $xmlNode, string $version = '', $namespace = 'Admidio\\InstallationUpdate\\Service\\')
     {
         global $gLogger;
 
@@ -180,7 +205,7 @@ class ComponentUpdate extends Component
             // then call this function and don't execute a SQL statement
             if (str_starts_with($updateStepContent, 'UpdateStepsCode::')) {
                 try {
-                    self::executeUpdateMethod($updateStepContent);
+                    self::executeUpdateMethod($updateStepContent, $namespace);
                 } catch (Throwable $e) {
                     throw new Exception('
                         <div style="font-family: monospace;">
@@ -298,5 +323,94 @@ class ComponentUpdate extends Component
                              , com_update_completed = true
                          WHERE com_type IN (\'SYSTEM\', \'MODULE\')';
         $this->db->queryPrepared($sql, array(ADMIDIO_VERSION, ADMIDIO_VERSION_BETA));
+    }
+
+    /**
+     * Do a loop through all versions start with the last installed version and end with the current version of the
+     * file system (**$targetVersion**). Within every subversion the method will search for an update xml file and
+     * execute all steps in this file until the end of file is reached. If an error occurred then the update will
+     * be stopped and the system will be marked with update not completed so that it's possible to continue the
+     * update later if the problem was fixed.
+     * @param string $targetVersion The target version to update.
+     * @throws Exception
+     */
+    public function updatePlugin(string $targetVersion, string $namespace)
+    {
+        global $gLogger;
+
+        if (empty($this->getValue('com_version'))) {
+            $currentVersionArray = array(0, 0, 0);
+        } else {
+            $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+        }
+        $targetVersionArray  = self::getVersionArrayFromVersion($targetVersion);
+        $initialMinorVersion = $currentVersionArray[1];
+
+        // if the update is from a version lower than 4.2.0 than the field com_update_complete doesn't exist
+        // otherwise set the status to incomplete update
+        if(version_compare($this->getValue('com_update_version'), '4.2.0', '>')) {
+            $this->setValue('com_update_completed', false);
+            $this->save();
+        }
+
+        for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $targetVersionArray[0]; ++$mainVersion) {
+            // Set max subversion for iteration. If we are in the loop of the target main version
+            // then set target minor-version to the max version
+            $maxMinorVersion = 20;
+            if ($mainVersion === $targetVersionArray[0]) {
+                $maxMinorVersion = $targetVersionArray[1];
+            }
+
+            for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion) {
+                // if version is not equal to current version then start update step with 0
+                if ($mainVersion !== $currentVersionArray[0] || $minorVersion !== $currentVersionArray[1]) {
+                    $this->setValue('com_update_step', 0);
+                    $this->save();
+                }
+
+                // save current version to system component
+                $this->setValue('com_version', $mainVersion . '.' . $minorVersion . '.0');
+                $this->save();
+
+                // output of the version number for better debugging
+                $gLogger->notice('UPDATE: Start executing update steps to version ' . $mainVersion . '.' . $minorVersion);
+
+                // open xml file for this version
+                try {
+                    $xmlObject = $this->getXmlObject($mainVersion, $minorVersion);
+
+                    // go step by step through the SQL statements and execute them
+                    foreach ($xmlObject->children() as $updateStep) {
+                        if ((string)$updateStep === self::UPDATE_STEP_STOP) {
+                            break;
+                        }
+                        if ((int)$updateStep['id'] > (int)$this->getValue('com_update_step')) {
+                            if ($namespace === '') {
+                                $namespace = 'Admidio\\InstallationUpdate\\Service\\';
+                            }
+                            $this->executeStep($updateStep, $mainVersion . '.' . $minorVersion . '.0', $namespace);
+                        } else {
+                            $gLogger->info('UPDATE: Skip update step Nr: ' . (int)$updateStep['id']);
+                        }
+                    }
+                } catch (Exception $exception) {
+                    throw new Exception($exception->getMessage());
+                } catch (UnexpectedValueException|\Exception $exception) {
+                    // TODO
+                }
+
+                $gLogger->notice('UPDATE: Finish executing update steps to version '.$mainVersion.'.'.$minorVersion);
+            }
+
+            // reset subversion because we want to start update for next main version with subversion 0
+            $initialMinorVersion = 0;
+        }
+
+        // save current version of plugin
+        $sql = 'UPDATE '.TBL_COMPONENTS.'
+                           SET com_version = ? -- $targetVersion
+                         WHERE com_id = ? -- :com_id';
+        $this->db->queryPrepared($sql, array($targetVersion, $this->getValue('com_id')));
+
     }
 }

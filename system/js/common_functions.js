@@ -423,7 +423,7 @@ function updateMoveActions($scope, rowIdPrefix, moveActionClass) {
     $($scope).each(function() {
         // If the scope is ".card-body", we search for divs with IDs starting with rowIdPrefix.
         // Otherwise, we search for table rows with IDs starting with rowIdPrefix.
-        if ($scope === ".card-body") {
+        if ($scope === ".card-body" || $scope === ".accordion") {
             var $rows = $(this).find("div[id^=" + rowIdPrefix + "]").has("." + moveActionClass).filter(function() {
                 return $(this).css("display") !== "none";
             });

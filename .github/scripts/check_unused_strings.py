@@ -18,7 +18,7 @@ for dp, _, fs in os.walk('.'):
     if any(part in excl for part in dp.split(os.sep)):
         continue
     for f in fs:
-        if f.endswith(('.php', '.js', '.html', '.tpl')):
+        if f.endswith(('.php', '.js', '.html', '.tpl', '.json')):
             file_path = os.path.join(dp, f)
             with open(file_path, 'r', errors='ignore') as f:
                 file_content = f.read()

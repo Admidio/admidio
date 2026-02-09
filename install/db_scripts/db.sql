@@ -136,7 +136,8 @@ CREATE TABLE %PREFIX%_category_report
     crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     crt_org_id                  integer unsigned,
     crt_name                    varchar(100)        NOT NULL,
-    crt_col_fields              text,
+    crt_col_fields              varchar(255),
+    crt_col_conditions          varchar(255),
     crt_selection_role          varchar(100),
     crt_selection_cat           varchar(100),
     crt_number_col              boolean             NOT NULL    DEFAULT false,
@@ -160,6 +161,7 @@ CREATE TABLE %PREFIX%_components
     com_update_step             integer             NOT NULL    DEFAULT 0,
     com_update_completed        boolean             NOT NULL    DEFAULT true,
     com_timestamp_installed     timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    com_overview_plugin         boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (com_id)
 )
 ENGINE = InnoDB

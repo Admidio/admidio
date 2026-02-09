@@ -5,6 +5,8 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\UI\Presenter\InventoryPresenter;
 
 /**
@@ -197,6 +199,7 @@ class Component extends Entity
                 case 'MESSAGES': // fallthrough
                 case 'ORGANIZATIONS': // fallthrough
                 case 'PREFERENCES': // fallthrough
+                case 'PLUGINS': // fallthrough
                 case 'ROOMS':
                     if ($gCurrentUser->isAdministrator()) {
                         return true;
@@ -321,9 +324,19 @@ class Component extends Entity
             case 'MENU': // fallthrough
             case 'ORGANIZATIONS': // fallthrough
             case 'PREFERENCES': // fallthrough
+            case 'PLUGINS': // fallthrough
             case 'ROOMS':
                 if ($gCurrentUser->isAdministrator()) {
                     return true;
+                }
+                break;
+
+            default:
+                // check if the component is a plugin and it is visible
+                $pluginManager = new PluginManager();
+                $plugin = $pluginManager->getPluginByName($componentName);
+                if ($plugin) {
+                    return ($plugin instanceof PluginAbstract) ? $plugin::getInstance()->isVisible() : false;
                 }
                 break;
         }

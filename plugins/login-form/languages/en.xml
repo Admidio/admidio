@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LOGIN_FORM_ACTIVE_SINCE">Active since</string>
+  <string name="PLG_LOGIN_FORM_HONORARY_MEMBER">Honorary member</string>
+  <string name="PLG_LOGIN_FORM_LAST_LOGIN">Last login</string>
+  <string name="PLG_LOGIN_FORM_NEW_ONLINE_MEMBER">New online member</string>
+  <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Number of logins</string>
+  <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Online member</string>
+  <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior online member</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">This plugin displays a login form for a user to log in on the Overview page. If the user is logged in, useful information of the user is now displayed in the place of the fields.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Login Form</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Member rank</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Show registration link</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">If this option is enabled, a link to the registration form will be displayed in the login form. (default: false)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Show email link</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">If this option is enabled, a link to send an email to the administrator if you have login problems will be displayed in the login form. (default: true)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Show logout link</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">If this option is enabled, a link to log out will be displayed after login. (default: false)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Show ranks</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">If this option is enabled, a rank depending on the number of logins will be displayed after the username. (default: true)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Ranks</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Here you can define the ranks that will be displayed after the username if \'Show ranks\' is enabled. The key is the number of logins and the value is the name of the rank.\n To delete a rank just clear the \'Number of logins\' and \'Member rank\' inputs in the table.</string>
+</resources>

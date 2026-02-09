@@ -47,7 +47,7 @@ try {
     $headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
 
     if ($getAdd) {
-        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf' => false);
+        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf' => false);
         // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
     }
 
@@ -60,6 +60,7 @@ try {
         $config[] = array('id' => '',
             'name' => $report->createName($config[$getCopy - 1]['name']),
             'col_fields' => $config[$getCopy - 1]['col_fields'],
+            'col_conditions' => $config[$getCopy - 1]['col_conditions'] ?? '',
             'selection_role' => $config[$getCopy - 1]['selection_role'],
             'selection_cat' => $config[$getCopy - 1]['selection_cat'],
             'number_col' => $config[$getCopy - 1]['number_col'],
@@ -140,6 +141,23 @@ try {
             return html;
         };
 
+        function escapeHtml(str) {
+            return String(str ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/"/g, "&#39;");
+        }
+
+        function createConditionInput(config, cond = "") {
+            let c = String(cond ?? "");
+            // allow comparison operators in UI; they might be stored as { } to avoid HTML issues
+            c = c.replace(/{/g, "<").replace(/}/g, ">");
+            return `<input type="text" class="form-control" name="conditions${config}[]" maxlength="50" value="${escapeHtml(c)}" />`;
+        }
+
+
         // Call this once per config *after* you render the selects for that config
         function setupRolePropToggles(config) {
           const selField = `select[name="columns${config}[]"]`;
@@ -168,7 +186,7 @@ try {
         }
     ';
     $javascriptCode .= '
-        function addColumnToConfiguration(config, val = null)
+        function addColumnToConfiguration(config, val = null, cond = "")
         {
         	var table = document.getElementById("mylist_fields_tbody" + config);
         	var newTableRow = table.insertRow();
@@ -177,6 +195,8 @@ try {
             newCellCount.setAttribute("class", "CategoryReportColumnNumber");
         	var newCellField = newTableRow.insertCell(-1);
         	newCellField.innerHTML = createUserFieldSelect(config, val) + createUserRoleSelect(config, val);
+            var newCellCondition = newTableRow.insertCell(-1);
+            newCellCondition.innerHTML = createConditionInput(config, cond);
             var newCellButtons = newTableRow.insertCell(-1);
             newCellButtons.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
                         "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
@@ -192,19 +212,28 @@ try {
     foreach ($config as $key => $value) {
         $catReportConfigs[$key] = $value['name'];
 
-        // Function to generate the list of selected fields
-        $fields = explode(',', $value['col_fields']);
-        $validFieldIds = array_filter($fields, function ($fieldId) use ($report) {
-                return $report->isInHeaderSelection($fieldId) > 0;
-            });
-        $jsArray = json_encode(array_values($validFieldIds));
+        // Function to generate the list of selected fields incl. conditions
+        $fields = array_values(array_filter(explode(',', (string) ($value['col_fields'] ?? '')), 'strlen'));
+        $conds  = array_values(explode(',', (string) ($value['col_conditions'] ?? '')));
+
+        $columns = array();
+        foreach ($fields as $idx => $fieldId) {
+            if ($report->isInHeaderSelection($fieldId) > 0) {
+                $columns[] = array(
+                    'id' => $fieldId,
+                    'cond' => $conds[$idx] ?? ''
+                );
+            }
+        }
+
+        $jsArray = json_encode($columns);
         $javascriptCode .= "
         function createColumnsArray{$key}() {
             return {$jsArray};
         }";
 
         $javascriptCodeExecute .= "
-        createColumnsArray{$key}().forEach(item => addColumnToConfiguration({$key}, item));
+        createColumnsArray{$key}().forEach(item => addColumnToConfiguration({$key}, item.id, item.cond));
         $(\"#mylist_fields_tbody{$key}\").sortable({
             handle: \".admidio-move-row\",
             items: \"tr\",
@@ -303,6 +332,13 @@ try {
         }
         $categoryReports[] = $categoryReport;
     }
+    $page->assignSmartyVariable('urlConditionHelpText',
+        SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_SYSTEM . '/msg_window.php',
+            array('message_id' => 'mylist_condition', 'inline' => 'true')
+        )
+    );
+
     $page->assignSmartyVariable('categoryReports', $categoryReports);
     $page->assignSmartyVariable('urlConfigNew', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)));
     $formConfigurations->addSubmitButton('adm_button_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));

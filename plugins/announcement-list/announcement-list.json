@@ -1,0 +1,64 @@
+{
+    "name": "PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME",
+    "description": "PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-newspaper",
+    "mainFile": "index.php",
+    "overviewPlugin": true,
+    "autoload": {
+        "psr-4": {
+            "AnnouncementList\\classes\\": "classes/"
+        }
+    },
+    "dependencies": [
+        "Admidio\\Announcements\\Entity\\Announcement",
+        "Admidio\\Infrastructure\\Database",
+        "Admidio\\Infrastructure\\Plugins\\Overview",
+        "Admidio\\Infrastructure\\Utils\\SecurityUtils",
+        "Admidio\\Infrastructure\\Plugins\\PluginAbstract"
+    ],
+    "defaultConfig": {
+        "announcement_list_plugin_enabled": {
+            "name": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC",
+            "type": "integer",
+            "value" : 1
+        },
+        "announcement_list_overview_sequence": {
+            "type": "integer",
+            "value" : 6
+        },
+        "announcement_list_announcements_count": {
+            "name": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT",
+            "description": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC",
+            "type": "integer",
+            "value" : 2
+        },
+        "announcement_list_show_preview_chars": {
+            "name": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS",
+            "description": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC",
+            "type": "integer",
+            "value" : 70
+        },
+        "announcement_list_show_full_description": {
+            "name": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION",
+            "description": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC",
+            "type": "boolean",
+            "value" : false
+        },
+        "announcement_list_chars_before_linebreak": {
+            "name": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK",
+            "description": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC",
+            "type": "integer",
+            "value" : 0
+        },
+        "announcement_list_displayed_categories": {
+            "name": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES",
+            "description": "PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC",
+            "type": "array",
+            "value" : ["All"]
+        }
+    }
+}

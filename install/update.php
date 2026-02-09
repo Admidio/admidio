@@ -305,9 +305,64 @@ try {
         ));
         exit();
     } elseif ($getMode === 'result') {
+        // check if there are warnings about the plugins
+        $updateWarnings = array();
+        $updateInfos = array();
+        // the variables are stored in a cookie so that they survive the redirect after the update
+        $cookie = isset($_COOKIE['adm_update_plugins_warnings']) ? json_decode($_COOKIE['adm_update_plugins_warnings'], true) : [];
+        $gWarnOldPlugins = false;
+        $gWarn3rdPartyPlugins = false;
+        $gWarnOldPluginsFolder = false;
+        $gInfo3rdPartyPlugins = false;
+
+        if (!empty($cookie)) {
+            if (isset($cookie['warn_old_plugins'])) {
+                $gWarnOldPlugins = $cookie['warn_old_plugins'];
+            }
+            if (isset($cookie['warn_3rd_party_plugins'])) {
+                $gWarn3rdPartyPlugins = $cookie['warn_3rd_party_plugins'];
+            }
+            if (isset($cookie['warn_old_plugins_folder'])) {
+                $gWarnOldPluginsFolder = $cookie['warn_old_plugins_folder'];
+            }
+            if (isset($cookie['info_3rd_party_plugins'])) {
+                $gInfo3rdPartyPlugins = $cookie['info_3rd_party_plugins'];
+            }
+        }
+
+        // reset the cookie after reading the values so that the warnings are only shown once
+        setcookie('adm_update_plugins_warnings', '', time() - 3600, '/');
+
+        if ($gWarnOldPlugins) {
+            $updateWarnings[] = array(
+                'id' => 'warn_old_plugins',
+                'alertWarning' => $gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins'))
+            );
+        }
+        if ($gWarn3rdPartyPlugins) {
+            $updateWarnings[] = array(
+                'id' => 'warn_3rd_party_plugins',
+                'alertWarning' => $gL10n->get('INS_WARNING_3RD_PARRTY_PLUGINS_COULD_NOT_BE_MOVED', array('plugins', 'adm_plugins'))
+            );
+        }
+        if ($gWarnOldPluginsFolder) {
+            $updateWarnings[] = array(
+                'id' => 'warn_old_plugins_folder',
+                'alertWarning' => $gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins'))
+            );
+        }
+        if ($gInfo3rdPartyPlugins) {
+            $updateInfos[] = array(
+                'id' => 'info_3rd_party_plugins',
+                'alertInfo' => $gL10n->get('INS_INFO_3RD_PARRTY_PLUGINS_HAVE_BEEN_MOVED', array('plugins'))
+            );
+        }
+
         // show notice that update was successful
         $page = new InstallationPresenter('admidio-update-successful', $gL10n->get('INS_UPDATE'));
         $page->addTemplateFile('update.successful.tpl');
+        $page->assignSmartyVariable('updateWarnings', $updateWarnings);
+        $page->assignSmartyVariable('updateInfos', $updateInfos);
         $page->setUpdateModus();
         $page->addJavascript('$("#buttonDonate").focus();', true);
         $page->show();

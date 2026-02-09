@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">All events</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Events</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">There are no events available for visitors. Log in to see the events.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">This plugin displays a preview list of the latest events on the Overview page.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Event List</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Number of events</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Number of events to be displayed. (default: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Show end date</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">If this setting is enabled the end date and end time of the event will be shown. Otherwise only the start date and start time will be displayed. (default: true)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Characters before line break</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximum number of characters in a word before a line break should be performed. (0: deactivates line break, default: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Displayed categories</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">If you only want to show events of a special category you can select the categories here. (default: all categories)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Show full description</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">If this setting is enabled the full content of the description will be shown. Otherwise only a text preview will be displayed. (default: false)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Preview text</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Number of characters of the preview text. (0: no short preview, default: 70)</string>
+</resources>
