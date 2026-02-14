@@ -20,6 +20,7 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_send_method']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['mail_sender_mode']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_sender_email']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_sender_name']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_sending_mode']}

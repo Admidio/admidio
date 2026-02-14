@@ -1212,6 +1212,13 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SEND_METHOD_DESC')
         );
+        $selectBoxEntries = array('1' => $gL10n->get('SYS_SYSTEM_EMAIL_WITH_REPLY_TO'), '2' => $gL10n->get('SYS_SYSTEM_EMAIL'), '3' => $gL10n->get('SYS_USER_EMAIL'));
+        $formEmailDispatch->addSelectBox(
+            'mail_sender_mode',
+            $gL10n->get('SYS_SENDER'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_sender_mode'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SENDER_MODE_DESC', array('SYS_SYSTEM_EMAIL_WITH_REPLY_TO')))
+        );
         $formEmailDispatch->addInput(
             'mail_sender_email',
             $gL10n->get('SYS_SENDER_EMAIL'),
