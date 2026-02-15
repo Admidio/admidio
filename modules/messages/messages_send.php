@@ -250,11 +250,6 @@ try {
             $email->setHtmlMail();
         }
 
-        // set flag if copy should be sent to sender
-        if (isset($formValues['carbon_copy']) && $formValues['carbon_copy'] && $gValidLogin) {
-            $email->addRecipientOfCopyToSender($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
-        }
-
         // add confirmation mail to the sender
         if ($formValues['delivery_confirmation']) {
             $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
@@ -276,6 +271,11 @@ try {
 
         // finally send the mail
         $sendResult = $email->sendEmail();
+
+        // set flag if copy should be sent to sender
+        if (isset($formValues['carbon_copy']) && $formValues['carbon_copy'] && $gValidLogin) {
+            $email->sendCopyEmail();
+        }
 
         // within this mode a smtp protocol will be shown and the header was still send to browser
         if ($gDebug && headers_sent()) {

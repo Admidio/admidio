@@ -187,16 +187,6 @@ class Email extends PHPMailer
     }
 
     /**
-     * Set a copy of the email to the sender. The email address and name of the sender will be added as a
-     * recipient of the copy email.
-     */
-    public function addRecipientOfCopyToSender(string $email, string $name = ''): void
-    {
-        $this->emCopyToSender = true;
-        $this->emRecipientCopyToSender = array('address' => $email, 'name' => $name);
-    }
-
-    /**
      * Add the name and email address of all users of the role to the email as a normal recipient. If the system setting
      **mail_send_to_all_addresses** is set than all email addresses of the given users will be added.
      * @param string $roleUuid UUID of a role whose users should be the recipients of the email.
@@ -445,16 +435,6 @@ class Email extends PHPMailer
     }
 
     /**
-     * Set a flag that a copy of the email will be sent to the sender
-     * @deprecated 5.0.1:5.2.0 Method "setCopyToSenderFlag" is deprecated, use method "addRecipientOfCopyToSender" instead.
-     */
-    public function setCopyToSenderFlag(): void
-    {
-        global $gCurrentUser;
-        $this->addRecipientOfCopyToSender($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
-    }
-
-    /**
      * The mail will be sent as HTML email
      */
     public function setHtmlMail(): void
@@ -620,39 +600,41 @@ class Email extends PHPMailer
     }
 
     /**
-     * Sends a copy of the mail back to the sender. If the flag emListRecipients it set than all
-     * recipients will be listed in the mail.
-     * @throws \Admidio\Infrastructure\Exception
+     * Sends a copy of the mail back to the current user. The subject of the copy mail will be extended by the text
+     * "Carbon Copy". If the flag emListRecipients is set than all recipients of the mail will be listed in the copy
+     * mail. Also, a separate header with info of the copy mail will be added to the mail text. The text of this
+     * header depends on if the mail will be sent as HTML or as plain text.
+     * @throws \Admidio\Infrastructure\Exception|Exception
      */
-    private function sendCopyMail(): void
+    public function sendCopyEmail(): void
     {
-        global $gL10n;
+        global $gL10n, $gCurrentUser, $gValidLogin;
 
-        // remove all recipients
-        $this->clearAllRecipients();
+        if ($gValidLogin) {
+            // remove all recipients
+            $this->clearAllRecipients();
 
-        $this->Subject = $gL10n->get('SYS_CARBON_COPY') . ': ' . $this->Subject;
+            $this->Subject = $gL10n->get('SYS_CARBON_COPY') . ': ' . $this->Subject;
 
-        // add a separate header with info of the copy mail
-        if ($this->emSendAsHTML) {
-            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
-                static::$LE . static::$LE;
-        } else {
-            $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
-                '*****************************************************************************************************************************' .
-                static::$LE . static::$LE;
-        }
+            // add a separate header with info of the copy mail
+            if ($this->emSendAsHTML) {
+                $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE . '<hr style="border: 1px solid;" />' .
+                    static::$LE . static::$LE;
+            } else {
+                $copyHeader = $gL10n->get('SYS_COPY_OF_YOUR_EMAIL') . ':' . static::$LE .
+                    '*****************************************************************************************************************************' .
+                    static::$LE . static::$LE;
+            }
 
-        // if the flag emListRecipients is set than list all recipients of the mail
-        if ($this->emListRecipients) {
-            $copyHeader = $gL10n->get('SYS_MESSAGE_WENT_TO') . ':' . static::$LE . static::$LE .
-                implode(static::$LE, $this->emRecipientsNames) . static::$LE . static::$LE . $copyHeader;
-        }
+            // if the flag emListRecipients is set than list all recipients of the mail
+            if ($this->emListRecipients) {
+                $copyHeader = $gL10n->get('SYS_MESSAGE_WENT_TO') . ':' . static::$LE . static::$LE .
+                    implode(static::$LE, $this->emRecipientsNames) . static::$LE . static::$LE . $copyHeader;
+            }
 
-        $this->emText = $copyHeader . $this->emText;
-        $this->emHtmlText = nl2br($copyHeader) . $this->emHtmlText;
+            $this->emText = $copyHeader . $this->emText;
+            $this->emHtmlText = nl2br($copyHeader) . $this->emHtmlText;
 
-        try {
             // add the text of the message
             if ($this->emSendAsHTML) {
                 $this->msgHTML($this->emHtmlText);
@@ -660,12 +642,10 @@ class Email extends PHPMailer
                 $this->Body = $this->emText;
             }
 
-            // now set the sender of the original mail as the recipients of the copy mail
-            $this->addAddress($this->emRecipientCopyToSender['address'], $this->emRecipientCopyToSender['name']);
+            // now set the current user as the recipients of the copy mail
+            $this->addAddress($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
 
             $this->send();
-        } catch (Exception $e) {
-            throw new \Admidio\Infrastructure\Exception($e->errorMessage());
         }
     }
 
