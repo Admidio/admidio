@@ -245,14 +245,14 @@ try {
             throw new Exception('SYS_EMAIL_INVALID', array('SYS_EMAIL'));
         }
 
-        // if possible send html mail
+        // if possible send HTML mail
         if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
             $email->setHtmlMail();
         }
 
         // set flag if copy should be sent to sender
-        if (isset($formValues['carbon_copy']) && $formValues['carbon_copy']) {
-            $email->setCopyToSenderFlag();
+        if (isset($formValues['carbon_copy']) && $formValues['carbon_copy'] && $gValidLogin) {
+            $email->addRecipientOfCopyToSender($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
         }
 
         // add confirmation mail to the sender

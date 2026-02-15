@@ -1223,13 +1223,13 @@ class PreferencesPresenter extends PagePresenter
             'mail_sender_email',
             $gL10n->get('SYS_SENDER_EMAIL'),
             $formValues['mail_sender_email'],
-            array('type' => 'email', 'maxLength' => 50, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
+            array('type' => 'email', 'maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
         );
         $formEmailDispatch->addInput(
             'mail_sender_name',
             $gL10n->get('SYS_SENDER_NAME'),
             $formValues['mail_sender_name'],
-            array('maxLength' => 50, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
+            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
         );
 
         $selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
