@@ -463,7 +463,18 @@ try {
         );
 
         if ($gCurrentUserId > 0) {
-            $sql = 'SELECT COUNT(*) AS count
+            if ($gSettingsManager->getInt('mail_sender_mode') === 1 || $gSettingsManager->getInt('mail_sender_mode') === 2) {
+                $email = new Email();
+                $senderInfo = $email->getSender();
+
+                $form->addInput(
+                    'sender_name',
+                    $gL10n->get('SYS_FROM'),
+                    $senderInfo['name'] . ' <' . $senderInfo['address'] . '>',
+                    array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
+                );
+            } else {
+                $sql = 'SELECT COUNT(*) AS count
                   FROM ' . TBL_USER_FIELDS . '
             INNER JOIN ' . TBL_USER_DATA . '
                     ON usd_usf_id = usf_id
@@ -471,19 +482,19 @@ try {
                    AND usd_usr_id = ? -- $gCurrentUserId
                    AND usd_value IS NOT NULL';
 
-            $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentUserId));
-            $possibleEmails = $pdoStatement->fetchColumn();
+                $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentUserId));
+                $possibleEmails = $pdoStatement->fetchColumn();
 
-            $form->addInput(
-                'namefrom',
-                $gL10n->get('SYS_YOUR_NAME'),
-                $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
-                array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
-            );
+                $form->addInput(
+                    'sender_name',
+                    $gL10n->get('SYS_YOUR_NAME'),
+                    $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
+                    array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
+                );
 
-            if ($possibleEmails > 1) {
-                $sqlData = array();
-                $sqlData['query'] = 'SELECT email.usd_value AS ID, email.usd_value AS email
+                if ($possibleEmails > 1) {
+                    $sqlData = array();
+                    $sqlData['query'] = 'SELECT email.usd_value AS ID, email.usd_value AS email
                                    FROM ' . TBL_USERS . '
                              INNER JOIN ' . TBL_USER_DATA . ' AS email
                                      ON email.usd_usr_id = usr_id
@@ -494,32 +505,33 @@ try {
                                   WHERE usr_id = ? -- $gCurrentUserId
                                     AND usr_valid = true
                                GROUP BY email.usd_value, email.usd_value';
-                $sqlData['params'] = array($gCurrentUserId);
+                    $sqlData['params'] = array($gCurrentUserId);
 
-                $form->addSelectBoxFromSql(
-                    'mailfrom',
-                    $gL10n->get('SYS_YOUR_EMAIL'),
-                    $gDb,
-                    $sqlData,
-                    array('maxLength' => 100, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
-                );
-            } else {
-                $form->addInput(
-                    'mailfrom',
-                    $gL10n->get('SYS_YOUR_EMAIL'),
-                    $gCurrentUser->getValue('EMAIL'),
-                    array('type' => 'email', 'maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
-                );
+                    $form->addSelectBoxFromSql(
+                        'sender_email',
+                        $gL10n->get('SYS_YOUR_EMAIL'),
+                        $gDb,
+                        $sqlData,
+                        array('maxLength' => 100, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
+                    );
+                } else {
+                    $form->addInput(
+                        'sender_email',
+                        $gL10n->get('SYS_YOUR_EMAIL'),
+                        $gCurrentUser->getValue('EMAIL'),
+                        array('type' => 'email', 'maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
+                    );
+                }
             }
         } else {
             $form->addInput(
-                'namefrom',
+                'sender_name',
                 $gL10n->get('SYS_YOUR_NAME'),
                 '',
                 array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)
             );
             $form->addInput(
-                'mailfrom',
+                'sender_email',
                 $gL10n->get('SYS_YOUR_EMAIL'),
                 '',
                 array('type' => 'email', 'maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)

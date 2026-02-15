@@ -94,14 +94,6 @@ class Email extends PHPMailer
      */
     private array $emSender = array();
     /**
-     * @var array<string,string> E-Mail address and Name of the sender for the copy mail
-     */
-    private array $emRecipientCopyToSender = array();
-    /**
-     * @var bool
-     */
-    private bool $emCopyToSender = false;
-    /**
      * @var bool
      */
     private bool $emListRecipients = false;
@@ -121,6 +113,7 @@ class Email extends PHPMailer
     /**
      * Email constructor.
      * @throws \Admidio\Infrastructure\Exception
+     * @throws Exception
      */
     public function __construct()
     {
@@ -156,6 +149,7 @@ class Email extends PHPMailer
         // set language for error reporting
         $this->setLanguage($gL10n->getLanguageIsoCode());
         $this->CharSet = PHPMailer::CHARSET_UTF8;
+        $this->setSender();
     }
 
     /**
@@ -175,8 +169,8 @@ class Email extends PHPMailer
 
         // check if valid email address and if email not in the recipients array
         if (StringUtils::strValidCharacters($address, 'email')
-            && !in_array($address, array_column($this->emRecipientsArray, 'address'))) {
-            $recipient = array('name' => $asciiName, 'address' => $address, 'firstname' => $firstName, 'surname' => $lastName);
+            && !in_array($address, array_column($this->emRecipientsArray,  'email'))) {
+            $recipient = array('name' => $asciiName,  'email' => $address, 'firstname' => $firstName, 'surname' => $lastName);
             $recipient = array_merge($recipient, $additionalFields);
             $this->emRecipientsArray[] = $recipient;
             $this->emRecipientsNames[] = $firstName . ' ' . $lastName;
@@ -463,30 +457,35 @@ class Email extends PHPMailer
      */
     public function setSender(string $email = '', string $name = ''): void
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gValidLogin;
 
-        switch ($gSettingsManager->getInt('mail_sender_mode')) {
-            case 1:
-                // mail will be sent from the domain email address, but if someone wants to reply to this mail then this should go to the users email, so add a separate reply-to address
-                $this->addReplyTo($email, $name);
-                $senderName = $gSettingsManager->getString('mail_sender_name');
-                $senderAddress = $gSettingsManager->getString('mail_sender_email');
-                break;
+        // if no email address is given and the user is logged in, then use the email address of the current user
+        if ($email === '' && $gValidLogin) {
+            global $gCurrentUser;
 
-            case 3:
-                // mail will be sent from the email address set in this function
-                $senderName = $email;
-                $senderAddress = $name;
-                break;
-
-            default:
-                // mail will be sent from the domain email address
-                $senderName = $gSettingsManager->getString('mail_sender_name');
-                $senderAddress = $gSettingsManager->getString('mail_sender_email');
-                break;
+            $email = $gCurrentUser->getValue('EMAIL');
+            $name = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
         }
 
-        $this->emSender = array('address' => $senderAddress, 'name' => $senderName);
+        if ($gSettingsManager->getInt('mail_sender_mode') === 2) {
+            // mail will be sent from the domain email address
+            $senderName = $gSettingsManager->getString('mail_sender_name');
+            $senderAddress = $gSettingsManager->getString('mail_sender_email');
+        } elseif ($gSettingsManager->getInt('mail_sender_mode') === 1 || !$gValidLogin) {
+            // mail will be sent from the domain email address, but if someone wants to reply to this mail then
+            // this should go to the users email, so add a separate reply-to address
+            if ($email !== '' && StringUtils::strValidCharacters($email, 'email')) {
+                $this->addReplyTo($email, $name);
+            }
+            $senderName = $gSettingsManager->getString('mail_sender_name');
+            $senderAddress = $gSettingsManager->getString('mail_sender_email');
+        } else {
+            // mail will be sent from the email address set in this function
+            $senderName = $email;
+            $senderAddress = $name;
+        }
+
+        $this->emSender = array('email' => $senderAddress, 'name' => $senderName);
 
         $this->setFrom($senderAddress, $senderName);
     }
@@ -604,9 +603,10 @@ class Email extends PHPMailer
      * "Carbon Copy". If the flag emListRecipients is set than all recipients of the mail will be listed in the copy
      * mail. Also, a separate header with info of the copy mail will be added to the mail text. The text of this
      * header depends on if the mail will be sent as HTML or as plain text.
+     * @return bool Returns **true** if the copy mail was sent successfully.
      * @throws \Admidio\Infrastructure\Exception|Exception
      */
-    public function sendCopyEmail(): void
+    public function sendCopyEmail(): bool
     {
         global $gL10n, $gCurrentUser, $gValidLogin;
 
@@ -645,7 +645,9 @@ class Email extends PHPMailer
             // now set the current user as the recipients of the copy mail
             $this->addAddress($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
 
-            $this->send();
+            return $this->send();
+        } else {
+            return false;
         }
     }
 
@@ -654,10 +656,12 @@ class Email extends PHPMailer
      * If it's necessary all recipients will be added to BCC and also smaller packages of recipients will be
      * created. So maybe several emails will be sent. Also, a copy to the sender will be sent if the preferences are set.
      * If the Sending Mode is set to "SINGLE" every e-mail will be sent on its own, so there will be sent out a lot of emails.
-     * @return true|string
+     * @return bool Returns **true** if the email was sent successfully to all recipients.
+     *              If at least one email could not be sent, the method will return **false** and an exception
+     *              will be thrown with more details about the error.
      * @throws Exception|\Admidio\Infrastructure\Exception
      */
-    public function sendEmail(): true|string
+    public function sendEmail(): bool
     {
         global $gSettingsManager, $gCurrentOrganization, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n, $gDisableEmailSending;
 
@@ -674,18 +678,18 @@ class Email extends PHPMailer
             foreach ($this->emRecipientsArray as $recipient) {
                 try {
                     $this->clearAllRecipients();
-                    $this->addAddress($recipient['address'], $recipient['name']);
+                    $this->addAddress($recipient[ 'email'], $recipient['name']);
                     if ($gDebug) {
-                        $gLogger->notice('Email send as TO to ' . $recipient['name'] . ' (' . $recipient['address'] . ')');
+                        $gLogger->notice('Email send as TO to ' . $recipient['name'] . ' (' . $recipient[ 'email'] . ')');
                     }
 
                     // add body to the email
                     if ($gValidLogin) {
                         if ($this->emSendAsHTML) {
-                            $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
+                            $html = $this->setUserSpecificTemplateText($this->emHtmlText, $recipient['firstname'], $recipient['surname'], $recipient[ 'email'], $recipient['name']);
                             $this->msgHTML($html);
                         } else {
-                            $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient['address'], $recipient['name']);
+                            $txt = $this->setUserSpecificTemplateText($this->emText, $recipient['firstname'], $recipient['surname'], $recipient[ 'email'], $recipient['name']);
                             $this->Body = $txt;
                         }
                     } else {
@@ -700,7 +704,7 @@ class Email extends PHPMailer
                     $this->send();
                 } catch (Exception $e) {
                     $errorMessage = $e->getMessage();
-                    $errorRecipients[] = $recipient['name'] . ' (' . $recipient['address'] . ')';
+                    $errorRecipients[] = $recipient['name'] . ' (' . $recipient[ 'email'] . ')';
                 }
             }
 
@@ -728,9 +732,9 @@ class Email extends PHPMailer
                     // remove all current recipients from mail
                     $this->clearAllRecipients();
 
-                    $this->addAddress($recipientsArray[0]['address'], $recipientsArray[0]['name']);
+                    $this->addAddress($recipientsArray[0][ 'email'], $recipientsArray[0]['name']);
                     if ($gDebug) {
-                        $gLogger->notice('Email send as TO to ' . $recipientsArray[0]['name'] . ' (' . $recipientsArray[0]['address'] . ')');
+                        $gLogger->notice('Email send as TO to ' . $recipientsArray[0]['name'] . ' (' . $recipientsArray[0][ 'email'] . ')');
                     }
                 } elseif ($gSettingsManager->getBool('mail_into_to')) {
                     // remove all current recipients from mail
@@ -738,9 +742,9 @@ class Email extends PHPMailer
 
                     // add all recipients as bcc to the mail
                     foreach ($recipientsArray as $recipientTO) {
-                        $this->addAddress($recipientTO['address'], $recipientTO['name']);
+                        $this->addAddress($recipientTO[ 'email'], $recipientTO['name']);
                         if ($gDebug) {
-                            $gLogger->notice('Email send as TO to ' . $recipientTO['name'] . ' (' . $recipientTO['address'] . ')');
+                            $gLogger->notice('Email send as TO to ' . $recipientTO['name'] . ' (' . $recipientTO[ 'email'] . ')');
                         }
                     }
                 } else {
@@ -760,9 +764,9 @@ class Email extends PHPMailer
 
                     // add all recipients as bcc to the mail
                     foreach ($recipientsArray as $recipientBCC) {
-                        $this->addBCC($recipientBCC['address'], $recipientBCC['name']);
+                        $this->addBCC($recipientBCC[ 'email'], $recipientBCC['name']);
                         if ($gDebug) {
-                            $gLogger->notice('Email send as BCC to ' . $recipientBCC['name'] . ' (' . $recipientBCC['address'] . ')');
+                            $gLogger->notice('Email send as BCC to ' . $recipientBCC['name'] . ' (' . $recipientBCC[ 'email'] . ')');
                         }
                     }
                 }
@@ -770,10 +774,6 @@ class Email extends PHPMailer
                 // now send mail
                 $this->send();
             }
-        }
-        // now send the email as a copy to the sender
-        if ($this->emCopyToSender) {
-            $this->sendCopyMail();
         }
 
         // initialize recipient addresses so same email could be sent to other recipients

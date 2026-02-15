@@ -730,7 +730,8 @@
   <string name="SYS_FORUM_TOPIC_CREATED_TITLE">New forum topic was created at #VAR1#</string>
   <string name="SYS_FORWARD">Forward</string>
   <string name="SYS_FRIDAY">Friday</string>
-  <string name="SYS_FROM">from #VAR1#</string>
+  <string name="SYS_FROM">From</string>
+  <string name="SYS_FROM_VAR">from #VAR1#</string>
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Further information</string>
   <string name="SYS_FUTURE_ROLE_MEMBERSHIP">Future role memberships</string>
@@ -1490,7 +1491,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Similar contacts found</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Contacts with a similar name as #VAR1_BOLD# were found.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Contacts with a similar name were found for the registration of #VAR1_BOLD# with the e-mail address #VAR2_BOLD#. Please check the registration and assign it to a found contact or create a new contact.</string>
-  <string name="SYS_SINCE">since #VAR1#</string>
+  <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SIZE">Size</string>
   <string name="SYS_SMTP">SMTP</string>

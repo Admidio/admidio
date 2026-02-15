@@ -178,9 +178,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             if ($showRoleEndDate) {
                 $membership['period'] = $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));
             } elseif ($futureMembership) {
-                $membership['period'] = $gL10n->get('SYS_FROM', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
+                $membership['period'] = $gL10n->get('SYS_FROM_VAR', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
             } else {
-                $membership['period'] = $gL10n->get('SYS_SINCE', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
+                $membership['period'] = $gL10n->get('SYS_SINCE_VAR', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
             }
 
             if ($role->allowedToAssignMembers($gCurrentUser)) {
