@@ -250,7 +250,11 @@ try {
         }
 
         // load mail template and replace text
-        $email->setTemplateText($formValues['msg_body'], $formValues['sender_name'], $formValues['sender_email'], $gCurrentUser->getValue('usr_uuid'), $receiverName);
+        if (isset($formValues['sender_email'])) {
+            $email->setTemplateText($formValues['msg_body'], $formValues['sender_name'], $formValues['sender_email'], $gCurrentUser->getValue('usr_uuid'), $receiverName);
+        } else {
+            $email->setTemplateText($formValues['msg_body'], $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('usr_uuid'), $receiverName);
+        }
 
         // finally send the mail
         $sendResult = $email->sendEmail();

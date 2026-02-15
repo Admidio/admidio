@@ -470,7 +470,7 @@ try {
                 $form->addInput(
                     'sender_name',
                     $gL10n->get('SYS_FROM'),
-                    $senderInfo['name'] . ' <' . $senderInfo['address'] . '>',
+                    $senderInfo['name'] . ' <' . $senderInfo['email'] . '>',
                     array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
                 );
             } else {
