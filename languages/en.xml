@@ -1318,6 +1318,7 @@
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPLACE">Replace</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
+  <string name="SYS_REPLY_TO">Reply to</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>

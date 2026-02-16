@@ -470,7 +470,7 @@ class Email extends PHPMailer
         if ($gSettingsManager->getInt('mail_sender_mode') === 2) {
             // mail will be sent from the domain email address
             $senderName = $gSettingsManager->getString('mail_sender_name');
-            $senderAddress = $gSettingsManager->getString('mail_sender_email');
+            $senderEmail = $gSettingsManager->getString('mail_sender_email');
         } elseif ($gSettingsManager->getInt('mail_sender_mode') === 1 || !$gValidLogin) {
             // mail will be sent from the domain email address, but if someone wants to reply to this mail then
             // this should go to the users email, so add a separate reply-to address
@@ -478,16 +478,16 @@ class Email extends PHPMailer
                 $this->addReplyTo($email, $name);
             }
             $senderName = $gSettingsManager->getString('mail_sender_name');
-            $senderAddress = $gSettingsManager->getString('mail_sender_email');
+            $senderEmail = $gSettingsManager->getString('mail_sender_email');
         } else {
             // mail will be sent from the email address set in this function
-            $senderName = $email;
-            $senderAddress = $name;
+            $senderName = $name;
+            $senderEmail = $email;
         }
 
-        $this->emSender = array('email' => $senderAddress, 'name' => $senderName);
+        $this->emSender = array('email' => $senderEmail, 'name' => $senderName);
 
-        $this->setFrom($senderAddress, $senderName);
+        $this->setFrom($senderEmail, $senderName);
     }
 
     /**

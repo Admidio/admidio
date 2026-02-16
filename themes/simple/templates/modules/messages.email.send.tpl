@@ -18,7 +18,7 @@
             {include 'sys-template-parts/form.select.tpl' data=$elements['msg_to']}
             <hr />
             {include 'sys-template-parts/form.input.tpl' data=$elements['sender_name']}
-            {if !$validLogin || $settings->getInt('mail_sender_mode') == 3}
+            {if !$validLogin || $settings->getInt('mail_sender_mode') != 2}
                 {if $possibleEmails > 1}
                     {include 'sys-template-parts/form.select.tpl' data=$elements['sender_email']}
                 {else}

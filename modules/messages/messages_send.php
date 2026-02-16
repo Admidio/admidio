@@ -172,8 +172,27 @@ try {
             throw new Exception('SYS_NO_VALID_RECIPIENTS');
         }
 
-        if (!$gValidLogin || $gSettingsManager->getInt('mail_sender_mode') === 3) {
+        if (!$gValidLogin) {
             $email->setSender($formValues['sender_email'], $formValues['sender_name']);
+            $senderName = $formValues['sender_name'];
+            $senderEmail = $formValues['sender_email'];
+        } elseif (Uuid::isValid($formValues['sender_email'])) {
+            // check if sender email is a valid UUID and then read email from database
+            $sql = 'SELECT usd_value
+                  FROM ' . TBL_USER_FIELDS . '
+            INNER JOIN ' . TBL_USER_DATA . '
+                    ON usd_usf_id = usf_id
+                 WHERE usf_uuid = ? -- $formValues[\'sender_email\']
+                   AND usd_usr_id = ? -- $gCurrentUserId
+                   AND usd_value IS NOT NULL';
+
+            $pdoStatement = $gDb->queryPrepared($sql, array($formValues['sender_email'], $gCurrentUserId));
+            $senderName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
+            $senderEmail = $pdoStatement->fetchColumn();
+            $email->setSender($senderEmail, $senderName);
+        } else {
+            $senderName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
+            $senderEmail = $gCurrentUser->getValue('EMAIL');
         }
 
         $email->setSubject($formValues['msg_subject']);
@@ -250,11 +269,7 @@ try {
         }
 
         // load mail template and replace text
-        if (isset($formValues['sender_email'])) {
-            $email->setTemplateText($formValues['msg_body'], $formValues['sender_name'], $formValues['sender_email'], $gCurrentUser->getValue('usr_uuid'), $receiverName);
-        } else {
-            $email->setTemplateText($formValues['msg_body'], $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('usr_uuid'), $receiverName);
-        }
+        $email->setTemplateText($formValues['msg_body'], $senderName, $senderEmail, $gCurrentUser->getValue('usr_uuid'), $receiverName);
 
         // finally send the mail
         $sendResult = $email->sendEmail();
