@@ -42,7 +42,7 @@ class SystemMail extends Email
     /**
      * Constructor that will create an object of a SystemMail to handle all system notifications.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @throws Exception
+     * @throws Exception|\PHPMailer\PHPMailer\Exception
      */
     public function __construct(Database $database)
     {
@@ -124,7 +124,7 @@ class SystemMail extends Email
      * @param int $number
      * @param string $value
      */
-    public function setVariable(int $number, string $value)
+    public function setVariable(int $number, string $value): void
     {
         $this->smVariables[$number] = $value;
     }
@@ -136,8 +136,7 @@ class SystemMail extends Email
      * @param string $systemMailId Unique name of the corresponding system mail, corresponds to adm_texts.txt_name
      * @param User $user User object for which the data is then read and placed in the appropriate placeholders.
      * @return true Return **true** if the mail was sent and false if it should not be sent because of preferences.
-     * @throws Exception SYS_EMAIL_NOT_SEND
-     * @throws Exception
+     * @throws Exception|\PHPMailer\PHPMailer\Exception
      */
     public function sendSystemMail(string $systemMailId, User $user): bool
     {
@@ -146,7 +145,7 @@ class SystemMail extends Email
         if ($gSettingsManager->getBool('system_notifications_enabled')) {
             // only send system mail if there is a mail text available
             if ($this->getMailText($systemMailId, $user) !== '') {
-                $this->setSender($this->smOrganization->getValue('org_email_administrator'));
+                $this->setSender($gSettingsManager->getString('mail_sender_email'), $gSettingsManager->getString('mail_sender_name'));
                 $this->setSubject($this->smMailHeader);
                 $this->setText($this->smMailText);
 
@@ -156,7 +155,7 @@ class SystemMail extends Email
                     return true;
                 } else {
                     // if something went wrong then throw an exception with the error message
-                    throw new Exception('SYS_EMAIL_NOT_SEND', array($user->getValue('EMAIL'), $returnMessage));
+                    throw new Exception('SYS_EMAIL_NOT_SEND', array($user->getValue('EMAIL'), false));
                 }
             }
         }

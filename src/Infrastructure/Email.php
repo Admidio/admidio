@@ -798,14 +798,6 @@ class Email extends PHPMailer
         if ($gSettingsManager->getBool('system_notifications_enabled')) {
             // Send notification to configured role
             $this->addRecipientsByRole($gSettingsManager->getString('system_notifications_role'));
-
-            // Set Sender
-            if ($gCurrentUser->getValue('EMAIL') === '') {
-                $this->setSender($gCurrentOrganization->getValue('org_email_administrator'));
-            } else {
-                $this->setSender($gCurrentUser->getValue('EMAIL'), $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
-            }
-
             $this->setSubject($gCurrentOrganization->getValue('org_shortname') . ': ' . $subject);
 
             // send HTML if preference is set
