@@ -110,7 +110,7 @@ try {
             }
 
             $dump = new DatabaseDump($gDb);
-            $dump->create('admidio_dump_' . $g_adm_db . '.sql.gzip');
+            $dump->create('admidio_dump_' . $g_adm_db . '.sql.gz');
             $dump->export();
             $dump->deleteDumpFile();
             break;
