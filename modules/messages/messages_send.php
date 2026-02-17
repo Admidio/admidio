@@ -176,7 +176,7 @@ try {
             $email->setSender($formValues['sender_email'], $formValues['sender_name']);
             $senderName = $formValues['sender_name'];
             $senderEmail = $formValues['sender_email'];
-        } elseif (Uuid::isValid($formValues['sender_email'])) {
+        } elseif (isset($formValues['sender_email']) && Uuid::isValid($formValues['sender_email'])) {
             // check if sender email is a valid UUID and then read email from database
             $sql = 'SELECT usd_value
                   FROM ' . TBL_USER_FIELDS . '
