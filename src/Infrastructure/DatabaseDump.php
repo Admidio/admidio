@@ -41,7 +41,7 @@ class DatabaseDump
      */
     public function create(string $filename)
     {
-        global $gDbType, $g_adm_srv, $g_adm_db, $g_adm_usr, $g_adm_pw;
+        global $gDbType, $g_adm_srv, $g_adm_db, $g_adm_port, $g_adm_usr, $g_adm_pw;
 
         $dumpSettings = array(
             'include-tables' => $this->getAdmidioTables(),
@@ -50,7 +50,7 @@ class DatabaseDump
 
         $this->dumpFilename = $filename;
 
-        $this->mysqldump = new IMysqldump\Mysqldump($gDbType . ':host=' . $g_adm_srv . ';dbname=' . $g_adm_db, $g_adm_usr, $g_adm_pw, $dumpSettings);
+        $this->mysqldump = new IMysqldump\Mysqldump($gDbType . ':host=' . $g_adm_srv . ';port=' . $g_adm_port . ';dbname=' . $g_adm_db, $g_adm_usr, $g_adm_pw, $dumpSettings);
         $this->mysqldump->start(ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $this->dumpFilename);
 
     }
