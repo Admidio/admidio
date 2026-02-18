@@ -91,14 +91,6 @@ try {
         $sqlConditions = '';
         $sqlEmailField = '';
 
-        // if user is logged in then show sender name and email
-        if ($gCurrentUserId > 0) {
-            $formValues['namefrom'] = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
-            if (!isset($formValues['mailfrom']) || !StringUtils::strValidCharacters((string)$formValues['mailfrom'], 'email')) {
-                $formValues['mailfrom'] = $gCurrentUser->getValue('EMAIL');
-            }
-        }
-
         // if no User is set, he is not able to ask for delivery confirmation
         if (!($gCurrentUserId > 0 && (int)$gSettingsManager->get('mail_delivery_confirmation') === 2)
             && (int)$gSettingsManager->get('mail_delivery_confirmation') !== 1) {
@@ -180,79 +172,84 @@ try {
             throw new Exception('SYS_NO_VALID_RECIPIENTS');
         }
 
-        // check if name is given
-        if ($formValues['namefrom'] === '') {
-            throw new Exception('SYS_FIELD_EMPTY', array('SYS_NAME'));
+        if (!$gValidLogin) {
+            $email->setSender($formValues['sender_email'], $formValues['sender_name']);
+            $senderName = $formValues['sender_name'];
+            $senderEmail = $formValues['sender_email'];
+        } elseif (isset($formValues['sender_email']) && Uuid::isValid($formValues['sender_email'])) {
+            // check if sender email is a valid UUID and then read email from database
+            $sql = 'SELECT usd_value
+                  FROM ' . TBL_USER_FIELDS . '
+            INNER JOIN ' . TBL_USER_DATA . '
+                    ON usd_usf_id = usf_id
+                 WHERE usf_uuid = ? -- $formValues[\'sender_email\']
+                   AND usd_usr_id = ? -- $gCurrentUserId
+                   AND usd_value IS NOT NULL';
+
+            $pdoStatement = $gDb->queryPrepared($sql, array($formValues['sender_email'], $gCurrentUserId));
+            $senderName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
+            $senderEmail = $pdoStatement->fetchColumn();
+            $email->setSender($senderEmail, $senderName);
+        } else {
+            $senderName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
+            $senderEmail = $gCurrentUser->getValue('EMAIL');
         }
 
-        // set sending address
-        if ($email->setSender($formValues['mailfrom'], $formValues['namefrom'])) {
-            // set subject
-            if ($email->setSubject($formValues['msg_subject'])) {
-                // check for attachment
-                if (isset($_FILES['userfile'])) {
-                    // final check if user is logged in
-                    if (!$gValidLogin) {
-                        throw new Exception('SYS_INVALID_PAGE_VIEW');
+        $email->setSubject($formValues['msg_subject']);
+
+        // check for attachment
+        if (isset($_FILES['userfile'])) {
+            // final check if user is logged in
+            if (!$gValidLogin) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            $attachmentSize = 0;
+            // add now every attachment
+            for ($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); ++$currentAttachmentNo) {
+                // check if Upload was OK
+                if (($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_OK)
+                    && ($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_NO_FILE)) {
+                    throw new Exception('SYS_ATTACHMENT_TO_LARGE');
+                }
+
+                // only check attachment if there was already a file added
+                if (strlen($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) > 0) {
+                    // check if a file was really uploaded
+                    if (!file_exists($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][$currentAttachmentNo])) {
+                        throw new Exception('SYS_FILE_NOT_EXIST');
                     }
-                    $attachmentSize = 0;
-                    // add now every attachment
-                    for ($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); ++$currentAttachmentNo) {
-                        // check if Upload was OK
-                        if (($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_OK)
-                            && ($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_NO_FILE)) {
+
+                    if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK) {
+                        // check filename and throw exception if something is wrong
+                        StringUtils::strIsValidFileName($_FILES['userfile']['name'][$currentAttachmentNo], false);
+
+                        // check for valid file extension of attachment
+                        if (!FileSystemUtils::allowedFileExtension($_FILES['userfile']['name'][$currentAttachmentNo])) {
+                            throw new Exception('SYS_FILE_EXTENSION_INVALID');
+                        }
+
+                        // check the size of the attachment
+                        $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
+                        if ($attachmentSize > Email::getMaxAttachmentSize()) {
                             throw new Exception('SYS_ATTACHMENT_TO_LARGE');
                         }
 
-                        // only check attachment if there was already a file added
-                        if (strlen($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) > 0) {
-                            // check if a file was really uploaded
-                            if (!file_exists($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][$currentAttachmentNo])) {
-                                throw new Exception('SYS_FILE_NOT_EXIST');
-                            }
-
-                            if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK) {
-                                // check filename and throw exception if something is wrong
-                                StringUtils::strIsValidFileName($_FILES['userfile']['name'][$currentAttachmentNo], false);
-
-                                // check for valid file extension of attachment
-                                if (!FileSystemUtils::allowedFileExtension($_FILES['userfile']['name'][$currentAttachmentNo])) {
-                                    throw new Exception('SYS_FILE_EXTENSION_INVALID');
-                                }
-
-                                // check the size of the attachment
-                                $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
-                                if ($attachmentSize > Email::getMaxAttachmentSize()) {
-                                    throw new Exception('SYS_ATTACHMENT_TO_LARGE');
-                                }
-
-                                // set file type to standard if not given
-                                if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0) {
-                                    $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
-                                }
-
-                                // add the attachment to the email and message object
-                                $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
-                                $message->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo]);
-                            }
+                        // set file type to standard if not given
+                        if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0) {
+                            $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
                         }
+
+                        // add the attachment to the email and message object
+                        $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
+                        $message->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo]);
                     }
                 }
-            } else {
-                throw new Exception('SYS_FIELD_EMPTY', array('SYS_SUBJECT'));
             }
-        } else {
-            throw new Exception('SYS_EMAIL_INVALID', array('SYS_EMAIL'));
         }
 
-        // if possible send html mail
+        // if possible send HTML mail
         if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
             $email->setHtmlMail();
-        }
-
-        // set flag if copy should be sent to sender
-        if (isset($formValues['carbon_copy']) && $formValues['carbon_copy']) {
-            $email->setCopyToSenderFlag();
         }
 
         // add confirmation mail to the sender
@@ -272,10 +269,15 @@ try {
         }
 
         // load mail template and replace text
-        $email->setTemplateText($formValues['msg_body'], $formValues['namefrom'], $formValues['mailfrom'], $gCurrentUser->getValue('usr_uuid'), $receiverName);
+        $email->setTemplateText($formValues['msg_body'], $senderName, $senderEmail, $gCurrentUser->getValue('usr_uuid'), $receiverName);
 
         // finally send the mail
         $sendResult = $email->sendEmail();
+
+        // set flag if copy should be sent to sender
+        if (isset($formValues['carbon_copy']) && $formValues['carbon_copy'] && $gValidLogin) {
+            $email->sendCopyEmail();
+        }
 
         // within this mode a smtp protocol will be shown and the header was still send to browser
         if ($gDebug && headers_sent()) {

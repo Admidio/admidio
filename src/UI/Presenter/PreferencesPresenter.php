@@ -1212,17 +1212,24 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SEND_METHOD_DESC')
         );
-        $formEmailDispatch->addInput(
-            'mail_sendmail_address',
-            $gL10n->get('SYS_SENDER_EMAIL'),
-            $formValues['mail_sendmail_address'],
-            array('type' => 'email', 'maxLength' => 50, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
+        $selectBoxEntries = array('1' => $gL10n->get('SYS_SYSTEM_EMAIL_WITH_REPLY_TO'), '2' => $gL10n->get('SYS_SYSTEM_EMAIL'), '3' => $gL10n->get('SYS_USER_EMAIL'));
+        $formEmailDispatch->addSelectBox(
+            'mail_sender_mode',
+            $gL10n->get('SYS_SENDER'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_sender_mode'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SENDER_MODE_DESC', array('SYS_SYSTEM_EMAIL_WITH_REPLY_TO')))
         );
         $formEmailDispatch->addInput(
-            'mail_sendmail_name',
+            'mail_sender_email',
+            $gL10n->get('SYS_SENDER_EMAIL'),
+            $formValues['mail_sender_email'],
+            array('type' => 'email', 'maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
+        );
+        $formEmailDispatch->addInput(
+            'mail_sender_name',
             $gL10n->get('SYS_SENDER_NAME'),
-            $formValues['mail_sendmail_name'],
-            array('maxLength' => 50, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
+            $formValues['mail_sender_name'],
+            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
         );
 
         $selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
@@ -1251,14 +1258,6 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_NUMBER_RECIPIENTS'),
             $formValues['mail_number_recipients'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC')
-        );
-
-        $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-        $formEmailDispatch->addSelectBox(
-            'mail_character_encoding',
-            $gL10n->get('SYS_CHARACTER_ENCODING'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['mail_character_encoding'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_CHARACTER_ENCODING_DESC')
         );
         $formEmailDispatch->addInput(
             'mail_smtp_host',

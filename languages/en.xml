@@ -335,8 +335,6 @@
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last modified</string>
   <string name="SYS_CHANGED_BY">Changed by</string>
-  <string name="SYS_CHARACTER_ENCODING">Character encoding</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">Character encoding used in e-mails sent by Admidio. Not all e-mail clients are able to process UTF-8. Therefore ISO-8859-1 can be set here alternatively.</string>
   <string name="SYS_CHARACTERS">Characters</string>
   <string name="SYS_CHECK_FOR_UPDATE">Check for update</string>
   <string name="SYS_CHECKBOX">Checkbox</string>
@@ -732,7 +730,8 @@
   <string name="SYS_FORUM_TOPIC_CREATED_TITLE">New forum topic was created at #VAR1#</string>
   <string name="SYS_FORWARD">Forward</string>
   <string name="SYS_FRIDAY">Friday</string>
-  <string name="SYS_FROM">from #VAR1#</string>
+  <string name="SYS_FROM">From</string>
+  <string name="SYS_FROM_VAR">from #VAR1#</string>
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Further information</string>
   <string name="SYS_FUTURE_ROLE_MEMBERSHIP">Future role memberships</string>
@@ -1319,6 +1318,7 @@
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPLACE">Replace</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
+  <string name="SYS_REPLY_TO">Reply to</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>
@@ -1445,10 +1445,11 @@
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Send e-mail with username and password.</string>
   <string name="SYS_SENDER">Sender</string>
+  <string name="SYS_SENDER_MODE_DESC">Specify how the sender of an email is verified. Many providers do not allow the sender of an email to use an email address from another domain. In this case, one of the two options with the system email should be selected. The corresponding email address and name can be stored in the following two settings. (Default: #VAR1#) </string>
   <string name="SYS_SENDER_EMAIL">Sender email</string>
-  <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Using an unknown mail address as a sender address is not allowed by some providers. In this case you can add an email address which will be used as sender address within the mail module (e.g. noreply@#VAR1#).\nIf the field remains empty the sender\'s mail address will be used (default: empty).</string>
+  <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Sender email address for sending system notifications and emails to roles and users. The email address should include the domain of the site on which Admidio is installed.</string>
   <string name="SYS_SENDER_NAME">Sender name</string>
-  <string name="SYS_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty (default: empty).</string>
+  <string name="SYS_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">The sender was not logged in. The sender information may therefore be incorrect.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Separator for CSV-file</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
@@ -1491,7 +1492,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Similar contacts found</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Contacts with a similar name as #VAR1_BOLD# were found.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Contacts with a similar name were found for the registration of #VAR1_BOLD# with the e-mail address #VAR2_BOLD#. Please check the registration and assign it to a found contact or create a new contact.</string>
-  <string name="SYS_SINCE">since #VAR1#</string>
+  <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SIZE">Size</string>
   <string name="SYS_SMTP">SMTP</string>
@@ -1666,6 +1667,8 @@
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nRegards,\nThe team of #organization_long_name#</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System-wide default list</string>
+  <string name="SYS_SYSTEM_EMAIL_WITH_REPLY_TO">System email with user's reply address</string>
+  <string name="SYS_SYSTEM_EMAIL">System email</string>
   <string name="SYS_SYSTEM_INFORMATION">System information</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it. If you do not want to send any of these notifications, leave the text field empty.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime.</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
@@ -1722,6 +1725,7 @@
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
   <string name="SYS_USER_COULD_BE_CREATED">The Person could be created.</string>
   <string name="SYS_USER_DELETE_DESC">Would you like to delete #VAR1_BOLD#?\n\nUser is going to be physically deleted in the database which makes later access impossible.</string>
+  <string name="SYS_USER_EMAIL">User email</string>
   <string name="SYS_USER_ID_NOT_FOUND">No user could be found with this ID!</string>
   <string name="SYS_USER_NO_EMAIL">User #VAR1_BOLD# has no valid e-mail address in personal information!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">This user is not a member of organization #VAR1# yet.</string>

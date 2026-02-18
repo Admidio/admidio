@@ -17,11 +17,13 @@
 
             {include 'sys-template-parts/form.select.tpl' data=$elements['msg_to']}
             <hr />
-            {include 'sys-template-parts/form.input.tpl' data=$elements['namefrom']}
-            {if $possibleEmails > 1}
-                {include 'sys-template-parts/form.select.tpl' data=$elements['mailfrom']}
-            {else}
-                {include 'sys-template-parts/form.input.tpl' data=$elements['mailfrom']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['sender_name']}
+            {if !$validLogin || $settings->getInt('mail_sender_mode') != 2}
+                {if $possibleEmails > 1}
+                    {include 'sys-template-parts/form.select.tpl' data=$elements['sender_email']}
+                {else}
+                    {include 'sys-template-parts/form.input.tpl' data=$elements['sender_email']}
+                {/if}
             {/if}
             {if {array_key_exists array=$elements key='carbon_copy'}}
                 {include 'sys-template-parts/form.checkbox.tpl' data=$elements['carbon_copy']}

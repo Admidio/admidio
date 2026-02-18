@@ -65,6 +65,7 @@ class PreferencesService
      * the structure used by the PreferencesPresenter to render the accordion.
      *
      * @return array<int, array{id:string, title:string, icon?:string, subcards?:bool}>
+     * @throws Exception
      */
     public static function getPluginPanels(): array
     {
@@ -107,6 +108,7 @@ class PreferencesService
      * the structure used by the PreferencesPresenter to render the accordion.
      *
      * @return array<int, array{id:string, title:string, icon?:string, subcards?:bool}>
+     * @throws Exception
      */
     public static function getOverviewPluginPanels(): array
     {
@@ -226,7 +228,7 @@ class PreferencesService
     /**
      * check availability of update information and if connected
      * read available Admidio versions from server (text file)
-     * @return string Returns the html of the update check
+     * @return string Returns the HTML of the update check
      * @throws Exception
      */
     function showUpdateInfo(): string
@@ -320,7 +322,7 @@ class PreferencesService
      * @return void
      * @throws Exception
      */
-    public function save(string $panel, array $formData)
+    public function save(string $panel, array $formData): void
     {
         global $gL10n, $gSettingsManager, $gCurrentSession, $gDb, $gCurrentOrgId;
 
@@ -419,7 +421,7 @@ class PreferencesService
     /**
      * Sends a test email to the email address of the organization.
      * @return bool Returns **true** if the email could be sent successfully otherwise **false**.
-     * @throws Exception
+     * @throws Exception|\PHPMailer\PHPMailer\Exception
      */
     public function sendTestEmail(): bool
     {
@@ -433,7 +435,7 @@ class PreferencesService
         }
 
         // set email data
-        $email->setSender($gCurrentOrganization->getValue('org_email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+        $email->setSender($gSettingsManager->getString('mail_sender_email'), $gSettingsManager->getString('mail_sender_name'));
         $email->addRecipientsByUser($gCurrentUser->getValue('usr_uuid'));
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname', 'database'))));
         $email->setTemplateText(
