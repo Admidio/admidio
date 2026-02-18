@@ -731,8 +731,8 @@
   <string name="SYS_FORWARD">Forward</string>
   <string name="SYS_FRIDAY">Friday</string>
   <string name="SYS_FROM">From</string>
-  <string name="SYS_FROM_VAR">from #VAR1#</string>
   <string name="SYS_FROM_TO">from #VAR1# to #VAR2#</string>
+  <string name="SYS_FROM_VAR">from #VAR1#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Further information</string>
   <string name="SYS_FUTURE_ROLE_MEMBERSHIP">Future role memberships</string>
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
@@ -1445,9 +1445,9 @@
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Send e-mail with username and password.</string>
   <string name="SYS_SENDER">Sender</string>
-  <string name="SYS_SENDER_MODE_DESC">Specify how the sender of an email is verified. Many providers do not allow the sender of an email to use an email address from another domain. In this case, one of the two options with the system email should be selected. The corresponding email address and name can be stored in the following two settings. (Default: #VAR1#) </string>
   <string name="SYS_SENDER_EMAIL">Sender email</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Sender email address for sending system notifications and emails to roles and users. The email address should include the domain of the site on which Admidio is installed.</string>
+  <string name="SYS_SENDER_MODE_DESC">Specify how the sender of an email is verified. Many providers do not allow the sender of an email to use an email address from another domain. In this case, one of the two options with the system email should be selected. The corresponding email address and name can be stored in the following two settings. (Default: #VAR1#) </string>
   <string name="SYS_SENDER_NAME">Sender name</string>
   <string name="SYS_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">The sender was not logged in. The sender information may therefore be incorrect.</string>
@@ -1492,8 +1492,8 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Similar contacts found</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Contacts with a similar name as #VAR1_BOLD# were found.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Contacts with a similar name were found for the registration of #VAR1_BOLD# with the e-mail address #VAR2_BOLD#. Please check the registration and assign it to a found contact or create a new contact.</string>
-  <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
+  <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SIZE">Size</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP authentication</string>
@@ -1667,8 +1667,8 @@
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registration at #organization_long_name# confirmed\n#content# Hello #user_first_name#,\n\nyour registration on #organization_homepage# has been confirmed.\n\nYou can now log in to the homepage with your username #user_login_name# and your password.\n\nIf you have any questions, write an email to #administrator_email#.\n\nRegards,\nThe team of #organization_long_name#</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System-wide default list</string>
-  <string name="SYS_SYSTEM_EMAIL_WITH_REPLY_TO">System email with user's reply address</string>
   <string name="SYS_SYSTEM_EMAIL">System email</string>
+  <string name="SYS_SYSTEM_EMAIL_WITH_REPLY_TO">System email with user's reply address</string>
   <string name="SYS_SYSTEM_INFORMATION">System information</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Here you can justify the text of each system notification. The texts are divided into two parts (subject and content) and are identified by #subject# and #content#. The content for each section follows it. If you do not want to send any of these notifications, leave the text field empty.\n\nIn each mail the following wildcards can be used. They will be replaced with the corresponding content at runtime.</string>
   <string name="SYS_SYSTEM_MAILS">System notifications</string>
