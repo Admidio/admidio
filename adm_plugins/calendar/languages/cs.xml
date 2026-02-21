@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Aktuální měsíc</string>
+  <string name="PLG_CALENDAR_MONTH">Leden,Únor,Březen,Duben,Květen,Červen,Červenec,Srpen,Září,Říjen,Listopad,Prosinec</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Po</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Út</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">St</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Čt</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Pá</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">So</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Ne</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Poslední dny</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalendář</string>
+  </resources>

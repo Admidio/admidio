@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Kdo je online?</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# Návštěvníci </string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# člen</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# členové </string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online jsou #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online je #VAR1#</string>
+  </resources>

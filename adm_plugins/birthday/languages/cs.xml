@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# bude mít za #VAR2# dní #VAR3# let, dne #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# má narozeniny za #VAR2# dní</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Narozeniny</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Pan #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Dnes má narozeniny #VAR1# členů.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">Pro návštěvníky nejsou k dispozici žádné informace o narozeninách. Pro jejich zobrazení se prosím přihlaste.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Dnes nemá žádný člen narozeniny.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Dnes má některý ze členů narozeniny.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# měl před #VAR2# dny #VAR3# let, dne #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# měl narozeniny před #VAR2# dny</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje na přehledové stránce náhled nejbližších narozenin.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">Narozeniny</string>
+  </resources>

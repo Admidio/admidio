@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Všechny události </string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Události </string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Pro návštěvníky nejsou k dispozici žádné události. Pro jejich zobrazení se prosím přihlaste.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje na přehledové stránce seznam nejnovějších událostí.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Seznam událostí</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Počet událostí</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Počet událostí, které se mají zobrazit. (výchozí: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Zobrazit datum ukončení</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Je-li toto nastavení povoleno, zobrazí se datum a čas ukončení události. V opačném případě se zobrazí pouze datum a čas zahájení. (výchozí: ano)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Počet znaků před zalomením</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximální počet znaků ve slově, než dojde k zalomení řádku. (0: deaktivuje zalomení, výchozí: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Zobrazené kategorie</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Pokud chcete zobrazovat pouze události z určité kategorie, můžete kategorie vybrat zde. (výchozí: všechny kategorie)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Zobrazit celý popis</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Je-li toto nastavení povoleno, zobrazí se celý obsah popisu. V opačném případě se zobrazí pouze náhled textu. (výchozí: ne)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Náhled textu</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Počet znaků náhledového textu. (0: bez krátkého náhledu, výchozí: 70)</string>
+</resources>

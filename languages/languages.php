@@ -14,6 +14,11 @@ $gSupportedLanguages = array(
         'isocode' => 'zh',
         'libs' => 'zh'
     ),
+    'cs' => array(
+        'name' => 'Czech - Český',
+        'isocode' => 'cs',
+        'libs' => 'cs'
+    ),
     'da' => array(
         'name' => 'Danish - Dansk',
         'isocode' => 'da',

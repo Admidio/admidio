@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Všechny záznamy</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Oznámení</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Pro návštěvníky nejsou k dispozici žádná oznámení. Pro jejich zobrazení se prosím přihlaste.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje na přehledové stránce seznam nejnovějších oznámení.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Seznam oznámení</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Počet oznámení</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Počet oznámení, která se mají zobrazit. (výchozí: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Počet znaků před zalomením</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximální počet znaků ve slově, než dojde k zalomení řádku. (0: deaktivuje zalomení, výchozí: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Zobrazené kategorie</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Pokud chcete zobrazovat pouze oznámení z určité kategorie, můžete kategorie vybrat zde. (výchozí: všechny kategorie)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Zobrazit celý popis</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Je-li toto nastavení povoleno, zobrazí se celý obsah popisu. V opačném případě se zobrazí pouze náhled textu. (výchozí: ne)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Náhled textu</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Počet znaků náhledového textu. (0: bez krátkého náhledu, výchozí: 70)</string>
+</resources>

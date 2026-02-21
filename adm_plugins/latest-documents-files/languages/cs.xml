@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_HEADLINE">Dokumenty a soubory</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Více dokumentů a souborů</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Nejsou k dispozici žádné dokumenty.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Nahrál #VAR1# na #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje na přehledové stránce seznam posledních dokumentů a souborů nahraných uživateli.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Nejnovější dokumenty a soubory</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Počet souborů</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Počet souborů, které se mají zobrazit. (výchozí: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Zobrazit čas nahrání</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Je-li toto nastavení povoleno, zobrazí se čas nahrání souboru. V opačném případě bude skryt. (výchozí: ano)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Maximální počet znaků v názvu</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Maximální počet znaků v názvu souboru, než dojde k jeho zkrácení. (0: deaktivuje zkracování, výchozí: 0)</string>
+</resources>
