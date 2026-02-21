@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Pro návštěvníky nejsou k dispozici žádné fotografie. Pro jejich zobrazení se prosím přihlaste.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje na přehledové stránce náhodně vybranou fotografii z modulu fotogalerie.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Náhodná fotografie</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Počet znaků na slovo</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maximální počet znaků ve slově, než dojde k zalomení řádku. Pokud je nastaveno na 0, zalomení se neprovede. (výchozí: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Maximální šířka fotografie</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Maximální šířka fotografie v pixelech. Pokud je nastaveno na 0, obrázek se dynamicky přizpůsobí kontejneru HTML, ve kterém je tento doplněk umístěn. (výchozí: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Maximální výška fotografie</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Maximální výška fotografie v pixelech. Pokud je nastaveno na 0, obrázek se dynamicky přizpůsobí kontejneru HTML, ve kterém je tento doplněk umístěn. (výchozí: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Zohledněná alba</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Počet alb, ze kterých může fotografie pocházet. Počítá se od nejnovějšího alba sestupně. Pokud je nastaveno na 0, budou zohledněna všechna alba. (výchozí: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Číslo fotografie</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Pořadové číslo fotografie z alba, která se má zobrazit. Pokud je nastaveno na 0, zobrazí se náhodná fotografie z alba. Pokud je nastaveno konkrétní číslo, zobrazí se daná fotografie. (výchozí: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Zobrazit odkaz na album</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Je-li toto nastavení povoleno, pod fotografií se zobrazí název alba s odkazem. (výchozí: ano)</string>
+</resources>
