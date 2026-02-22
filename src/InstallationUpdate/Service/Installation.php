@@ -26,7 +26,7 @@ class Installation
         global $gL10n;
 
         // check database version
-        if (version_compare($database->getVersion(), $database->getMinimumRequiredVersion(), '<')) {
+        if (!$database->checkMinimumRequiredVersion()) {
             return $gL10n->get('SYS_DATABASE_VERSION') . ': <strong>' . $database->getVersion() . '</strong><br /><br />' .
                 $gL10n->get('INS_WRONG_MYSQL_VERSION', array(ADMIDIO_VERSION_TEXT, $database->getMinimumRequiredVersion(),
                     '<a href="' . ADMIDIO_HOMEPAGE . 'download.php">', '</a>'));

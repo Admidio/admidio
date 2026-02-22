@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databases>
+    <database id="mariadb">
+        <identifier>mariadb</identifier>
+        <name>MariaDB</name>
+        <minversion>10.0.0</minversion>
+    </database>
     <database id="mysql">
         <identifier>mysql</identifier>
         <name>MariaDB / MySQL</name>
@@ -8,6 +13,6 @@
     <database id="pgsql">
         <identifier>pgsql</identifier>
         <name>PostgreSQL</name>
-        <minversion>9.0.0</minversion>
+        <minversion>11.0.0</minversion>
     </database>
 </databases>
