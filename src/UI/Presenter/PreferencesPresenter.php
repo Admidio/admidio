@@ -2458,7 +2458,7 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('admidioVersion', ADMIDIO_VERSION_TEXT);
         $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
         $this->assignSmartyVariable('updateStepText', $updateStepText);
-        $this->assignSmartyVariable('databaseEngine', DB_ENGINE);
+        $this->assignSmartyVariable('databaseType', DB_TYPE);
         $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
         $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
 

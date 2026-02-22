@@ -82,7 +82,7 @@ class Installation
      */
     public static function disableSoundexSearchIfPgSql(Database $db)
     {
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             // soundex is not a default function in PostgresSQL
             $sql = 'UPDATE ' . TBL_PREFERENCES . '
                    SET prf_value = false

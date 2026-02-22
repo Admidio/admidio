@@ -811,7 +811,7 @@ class Entity
         foreach ($this->dbColumns as $key => $value) {
             // fields of other tables must not appear in insert/update
             if (str_starts_with($key, $this->columnPrefix . '_')) {
-                if ($this->columnsInfos[$key]['type'] === 'boolean' && DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+                if ($this->columnsInfos[$key]['type'] === 'boolean' && DB_TYPE === Database::PDO_ENGINE_PGSQL) {
                     if ($value || $value === '1') {
                         $value = 'true';
                     } else {

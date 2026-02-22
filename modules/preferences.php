@@ -105,7 +105,7 @@ try {
         // create backup of Admidio database
         case 'backup':
             // function not available for other databases except MySQL
-            if (DB_ENGINE !== Database::PDO_ENGINE_MYSQL) {
+            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
                 throw new Exception('SYS_MODULE_DISABLED');
             }
 

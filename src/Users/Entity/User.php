@@ -1947,8 +1947,8 @@ class User extends Entity
         $lastName = $this->db->escapeString($this->getValue('LAST_NAME', 'database'));
         $firstName = $this->db->escapeString($this->getValue('FIRST_NAME', 'database'));
 
-        // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar')) {
+        // search for users with similar names (SQL function SOUNDEX only available in MySQL or MariaDB)
+        if (DB_TYPE !== Database::PDO_ENGINE_PGSQL && $gSettingsManager->getBool('system_search_similar')) {
             $sqlSimilarName =
                 '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(' . $lastName . '), 1, 4)
                 AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(' . $firstName . '), 1, 4) )

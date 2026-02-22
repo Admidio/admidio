@@ -37,7 +37,7 @@ if ($_SESSION['db_port']) {
 
 // replace placeholders in configuration file structure with data of installation wizard
 $replaces = array(
-    '%DB_ENGINE%'    => $_SESSION['db_engine'],
+    '%DB_TYPE%'    => $_SESSION['db_engine'],
     '%DB_HOST%'      => $_SESSION['db_host'],
     '\'%DB_PORT%\''  => $port, // String -> Int
     '%DB_NAME%'      => $_SESSION['db_name'],

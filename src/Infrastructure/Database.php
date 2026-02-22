@@ -26,7 +26,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * // create object and open connection to database
  * try
  * {
- *     $gDb = new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
+ *     $gDb = new Database(DB_TYPE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
  * }
  * catch (Throwable $e)
  * {
@@ -140,20 +140,28 @@ class Database
     /**
      * Simple way to create a database object with the default Admidio globals
      * @return self Returns a Database instance
+     * @throws Exception
      */
     public static function createDatabaseInstance(): Database
     {
         global $gLogger;
 
+        $engine = DB_TYPE;
+
+        // PDO does not support mariadb as engine, but since mariadb is compatible to mysql we can use the mysql driver for it.
+        if ($engine === self::PDO_ENGINE_MARIADB) {
+            $engine = self::PDO_ENGINE_MYSQL;
+        }
+
         $gLogger->debug(
             'DATABASE: Create DB-Instance with default params!',
             array(
-                'engine' => DB_ENGINE, 'host' => DB_HOST, 'port' => DB_PORT,
+                'engine' => $engine, 'host' => DB_HOST, 'port' => DB_PORT,
                 'name' => DB_NAME, 'username' => DB_USERNAME, 'password' => '******'
             )
         );
 
-        return new self(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
+        return new self($engine, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
     }
 
     /**

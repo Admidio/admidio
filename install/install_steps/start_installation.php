@@ -33,7 +33,7 @@ if (!is_file($configPath)) {
 // first check if session is filled (if installation was aborted then this is not filled)
 // if previous dialogs were filled then check if the settings are equal to config file
 if (isset($_SESSION['table_prefix'])
-    && ($_SESSION['db_engine'] !== DB_ENGINE
+    && ($_SESSION['db_engine'] !== DB_TYPE
         || $_SESSION['db_host'] !== DB_HOST
         || $_SESSION['db_port'] !== DB_PORT
         || $_SESSION['db_name'] !== DB_NAME
