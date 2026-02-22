@@ -9,7 +9,7 @@
  ***********************************************************************************************
  */
 
-// Select your database system for example 'mysql' or 'pgsql'
+// Select your database system between 'mariadb', 'mysql' or 'pgsql'
 $gDbType = '%DB_ENGINE%';
 
 // Access to the database of the SQL-Server
