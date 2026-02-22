@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-{if $databaseEngine == 'mysql'}
+{if $databaseType == 'mysql' || $databaseType == 'mariadb'}
     <div class="admidio-form-group admidio-form-custom-content row mb-3">
         <label class="col-sm-3 col-form-label">
             {$l10n->get('SYS_DATABASE_BACKUP')}

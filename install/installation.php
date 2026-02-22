@@ -150,7 +150,7 @@ try {
         // if config exists then take parameters out of this file
         if ($step === 'welcome') {
             // save database parameters of config.php in session variables
-            $_SESSION['db_engine'] = DB_ENGINE;
+            $_SESSION['db_type'] = DB_TYPE;
             $_SESSION['db_host'] = DB_HOST;
             $_SESSION['db_port'] = DB_PORT;
             $_SESSION['db_name'] = DB_NAME;

@@ -234,7 +234,7 @@ try {
 
     // if room selection is activated then show a select box with all rooms
     if ($gSettingsManager->getBool('events_rooms_enabled')) {
-        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
+        if (DB_TYPE === Database::PDO_ENGINE_MYSQL) {
             $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
                   FROM ' . TBL_ROOMS . '
               ORDER BY room_name';

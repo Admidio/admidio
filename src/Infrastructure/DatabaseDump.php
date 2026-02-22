@@ -25,9 +25,6 @@ class DatabaseDump
      */
     protected string $dumpFilename;
 
-    /**
-     * @throws Exception
-     */
     public function __construct(Database $dbHandler)
     {
         $this->dbHandler = $dbHandler;
@@ -38,8 +35,9 @@ class DatabaseDump
      * the prefix. The dump file will be stored in the temp folder of adm_my_files
      * @param string $filename Filename of the dump file.
      * @throws Exception
+     * @throws \Exception
      */
-    public function create(string $filename)
+    public function create(string $filename): void
     {
         global $gDbType, $g_adm_srv, $g_adm_db, $g_adm_port, $g_adm_usr, $g_adm_pw;
 
@@ -50,7 +48,7 @@ class DatabaseDump
 
         $this->dumpFilename = $filename;
 
-        $this->mysqldump = new IMysqldump\Mysqldump($gDbType . ':host=' . $g_adm_srv . ';port=' . $g_adm_port . ';dbname=' . $g_adm_db, $g_adm_usr, $g_adm_pw, $dumpSettings);
+        $this->mysqldump = new IMysqldump\Mysqldump($this->dbHandler->getEngine() . ':host=' . $g_adm_srv . ';port=' . $g_adm_port . ';dbname=' . $g_adm_db, $g_adm_usr, $g_adm_pw, $dumpSettings);
         $this->mysqldump->start(ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $this->dumpFilename);
 
     }
@@ -59,7 +57,7 @@ class DatabaseDump
      * Export the created dump file as octet-stream to the browser.
      * @return void
      */
-    public function export()
+    public function export(): void
     {
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="' . $this->dumpFilename . '"');
@@ -73,7 +71,7 @@ class DatabaseDump
      * Deletes the dump file in the temp folder of adm_my_files.
      * @return void
      */
-    public function deleteDumpFile()
+    public function deleteDumpFile(): void
     {
         unlink(ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $this->dumpFilename);
     }
