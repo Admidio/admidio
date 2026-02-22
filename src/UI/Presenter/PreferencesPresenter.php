@@ -2487,7 +2487,7 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('pathSeparator', SystemInfoUtils::getPathSeparator());
         $this->assignSmartyVariable('maxPathLength', SystemInfoUtils::getMaxPathLength());
 
-        if (version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<')) {
+        if (!$gDb->checkMinimumRequiredVersion()) {
             $databaseVersionColorClass = 'text-danger';
             $databaseVersionText = $gDb->getVersion();
             $databaseVersionInfo = ' &rarr; ' . $gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion()));

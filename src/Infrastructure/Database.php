@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -65,13 +66,22 @@ use Admidio\Infrastructure\Utils\StringUtils;
  */
 class Database
 {
+    public const PDO_ENGINE_MARIADB = 'mariadb';
     public const PDO_ENGINE_MYSQL = 'mysql';
     public const PDO_ENGINE_PGSQL = 'pgsql';
 
     /**
-     * @var string The database engine ("mysql", "pgsql")
+     * @var string The database engine that will be used for db access with DBO ("mysql", "pgsql")
      */
     protected string $engine;
+    /**
+     * @var string The database type that will describe all supported databases ("mysql", "pgsql", "mariadb")
+     */
+    protected string $type;
+    /**
+     * @var string The version of the database
+     */
+    protected string $version;
     /**
      * @var string The host of the database server ("localhost", "127.0.0.1")
      */
@@ -149,28 +159,29 @@ class Database
     /**
      * The constructor will check if a valid engine was set and try to connect to the database.
      * If the engine is invalid or the connection not possible an exception will be thrown.
-     * @param string $engine   The database type that is supported from Admidio. **mysql** and **pgsql** are valid values.
-     * @param string $host     The hostname or server where the database is running. e.g. localhost or 127.0.0.1
-     * @param int|null $port        If you don't use the default port of the database then set your port here.
-     * @param string $dbName   Name of the database you want to connect.
+     * @param string $engine The database type that is supported from Admidio. **mysql** and **pgsql** are valid values.
+     * @param string $host The hostname or server where the database is running. e.g. localhost or 127.0.0.1
+     * @param int|null $port If you don't use the default port of the database then set your port here.
+     * @param string $dbName Name of the database you want to connect.
      * @param string|null $username Username to connect to database
      * @param string|null $password Password to connect to database
-     * @param array  $options
+     * @param array $options
      * @throws Exception
      */
     public function __construct(string $engine, string $host, ?int $port, string $dbName, ?string $username = null, ?string $password = null, array $options = array())
     {
         global $gLogger;
 
-        $this->engine   = $engine;
-        $this->host     = $host;
-        $this->port     = $port;
-        $this->dbName   = $dbName;
+        $this->engine = $engine;
+        $this->host = $host;
+        $this->port = $port;
+        $this->dbName = $dbName;
         $this->username = $username;
         $this->password = $password;
-        $this->options  = $options;
+        $this->options = $options;
 
         $this->connect();
+        $this->getInformation();
 
         $gLogger->debug('DATABASE: connected!');
     }
@@ -210,9 +221,22 @@ class Database
     }
 
     /**
+     * Method will check if the database version is at least the minimum required version.
+     * @return bool Return true if the database version is at least the minimum required version. Otherwise, false will be returned.
      * @throws Exception
      */
-    protected function connect()
+    public function checkMinimumRequiredVersion(): bool
+    {
+        if (version_compare($this->version, $this->getMinimumRequiredVersion(), '<')) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function connect(): void
     {
         global $gLogger;
 
@@ -225,13 +249,13 @@ class Database
             $this->setConnectionOptions();
         } catch (PDOException $e) {
             $logContext = array(
-                'engine'   => $this->engine,
-                'host'     => $this->host,
-                'port'     => $this->port,
-                'dbName'   => $this->dbName,
+                'engine' => $this->engine,
+                'host' => $this->host,
+                'port' => $this->port,
+                'dbName' => $this->dbName,
                 'username' => $this->username,
                 'password' => '******',
-                'options'  => $this->options
+                'options' => $this->options
             );
             $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
 
@@ -305,7 +329,7 @@ class Database
     public function getArrayFromSql(string $sql, array $queryParameters = array()): array
     {
         $arrayResults = array();
-        $statement    = $this->queryPrepared($sql, $queryParameters);
+        $statement = $this->queryPrepared($sql, $queryParameters);
 
         while ($row = $statement->fetch()) {
             $arrayResults[] = $row;
@@ -353,18 +377,48 @@ class Database
             }
 
             $trace['class'] = array_key_exists('class', $trace) ? $trace['class'] : '';
-            $trace['type']  = array_key_exists('type', $trace) ? $trace['type'] : '';
+            $trace['type'] = array_key_exists('type', $trace) ? $trace['type'] : '';
 
             $output .= '<br />';
             $output .= '<strong>FILE:</strong> ' . SecurityUtils::encodeHTML($trace['file']) . '<br />';
             $output .= '<strong>LINE:</strong> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
 
             $output .= '<strong>CALL:</strong> ' . SecurityUtils::encodeHTML($trace['class'] . $trace['type'] . $trace['function']) .
-                       '(' . (count($args) ? implode(', ', $args) : '') . ')<br />';
+                '(' . (count($args) ? implode(', ', $args) : '') . ')<br />';
         }
         $output .= '</div>';
 
         return $output;
+    }
+
+    /**
+     * Get the version of the connected database. The method will also determine the database type
+     * (mysql, mariadb, pgsql) and save it in the class variable $type.
+     * @return array Returns a string with the database version e.g. '5.5.8' and the database type e.g. 'mysql' or 'pgsql' as array.
+     * @throws Exception
+     */
+    public function getInformation(): array
+    {
+        $versionStatement = $this->queryPrepared('SELECT version()');
+        $version = $versionStatement->fetchColumn();
+
+        if ($this->engine === self::PDO_ENGINE_PGSQL) {
+            // the string (Postgres 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
+            $versionArray = explode(',', $version);
+            $versionArray2 = explode(' ', $versionArray[0]);
+            $this->type = $this::PDO_ENGINE_PGSQL;
+            $this->version = $versionArray2[1];
+        } else {
+            // Since Admidio did not differentiate between MySQL and MariaDB in the past, this must be determined here.
+            $versionArray = explode('-', $version);
+            if (isset($versionArray[1]) && $versionArray[1] === 'MariaDB') {
+                $this->type = $this::PDO_ENGINE_MARIADB;
+            } else {
+                $this->type = $this::PDO_ENGINE_MYSQL;
+            }
+            $this->version = $versionArray[0];
+        }
+        return array($this->type, $this->version);
     }
 
     /**
@@ -375,7 +429,7 @@ class Database
     public function getMinimumRequiredVersion(): string
     {
         if ($this->minRequiredVersion === '') {
-            $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig('minversion');
+            $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig($this->type, 'minversion');
         }
 
         return $this->minRequiredVersion;
@@ -389,22 +443,23 @@ class Database
     public function getName(): string
     {
         if ($this->databaseName === '') {
-            $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
+            $this->databaseName = $this->getPropertyFromDatabaseConfig($this->type, 'name');
         }
 
         return $this->databaseName;
     }
 
     /**
+     * @param string $engine Database engine for which the property should be read
      * @param string $property Property name of the in use database config
      * @return string Returns the value of the chosen property
      * @throws Exception
      */
-    protected function getPropertyFromDatabaseConfig(string $property): string
+    protected function getPropertyFromDatabaseConfig(string $engine, string $property): string
     {
         try {
             $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . FOLDER_SYSTEM . '/databases.xml', 0, true);
-            $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
+            $node = $xmlDatabases->xpath('/databases/database[@id="' . $engine . '"]/' . $property);
             return (string)$node[0];
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage());
@@ -470,21 +525,10 @@ class Database
     /**
      * Get the version of the connected database.
      * @return string Returns a string with the database version e.g. '5.5.8'
-     * @throws Exception
      */
     public function getVersion(): string
     {
-        $versionStatement = $this->queryPrepared('SELECT version()');
-        $version = $versionStatement->fetchColumn();
-
-        if ($this->engine === self::PDO_ENGINE_PGSQL) {
-            // the string (Postgres 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
-            $versionArray  = explode(',', $version);
-            $versionArray2 = explode(' ', $versionArray[0]);
-            return $versionArray2[1];
-        }
-
-        return $version;
+        return $this->version;
     }
 
     /**
@@ -539,14 +583,14 @@ class Database
         if ($this->engine === self::PDO_ENGINE_MYSQL) {
             $sql = 'SHOW COLUMNS FROM ' . $table;
             $columnsStatement = $this->query($sql); // TODO add more params
-            $columnsList      = $columnsStatement->fetchAll();
+            $columnsList = $columnsStatement->fetchAll();
 
             foreach ($columnsList as $properties) {
                 $props = array(
-                    'serial'   => $properties['Extra'] === 'auto_increment',
-                    'null'     => $properties['Null'] === 'YES',
-                    'key'      => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
-                    'default'  => $properties['Default'],
+                    'serial' => $properties['Extra'] === 'auto_increment',
+                    'null' => $properties['Null'] === 'YES',
+                    'key' => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
+                    'default' => $properties['Default'],
                     'unsigned' => str_contains($properties['Type'], 'unsigned')
                 );
 
@@ -576,10 +620,10 @@ class Database
 
             foreach ($columnsList as $properties) {
                 $props = array(
-                    'serial'   => str_contains((string) $properties['column_default'], 'nextval'),
-                    'null'     => $properties['is_nullable'] === 'YES',
-                    'key'      => $properties['key'] === 'YES',
-                    'default'  => $properties['column_default'],
+                    'serial' => str_contains((string)$properties['column_default'], 'nextval'),
+                    'null' => $properties['is_nullable'] === 'YES',
+                    'key' => $properties['key'] === 'YES',
+                    'default' => $properties['column_default'],
                     'unsigned' => null
                 );
 
@@ -625,10 +669,10 @@ class Database
         if ($this->engine === self::PDO_ENGINE_PGSQL) {
             $lastValStatement = $this->queryPrepared('SELECT lastval()');
 
-            return (int) $lastValStatement->fetchColumn();
+            return (int)$lastValStatement->fetchColumn();
         }
 
-        return (int) $this->pdo->lastInsertId();
+        return (int)$this->pdo->lastInsertId();
     }
 
     /**
@@ -640,7 +684,7 @@ class Database
      */
     private function preparePgParamsQuery(array $params): array
     {
-        foreach($params as $key => $value) {
+        foreach ($params as $key => $value) {
             if (is_bool($value)) {
                 if ($value) {
                     $params[$key] = 'true';
@@ -674,7 +718,7 @@ class Database
                 // since version 4.1 we don't replace boolean with smallint
                 //'boolean'  => 'smallint',
                 // A blob is in Postgres a bytea datatype
-                'blob'     => 'bytea'
+                'blob' => 'bytea'
             );
             $sql = StringUtils::strMultiReplace($sql, $replaces);
 
@@ -757,8 +801,7 @@ class Database
             }
 
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
-        }
-        // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
+        } // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
         catch (PDOException $exception) {
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
 
@@ -821,8 +864,7 @@ class Database
             }
 
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
-        }
-        // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
+        } // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
         catch (PDOException $exception) {
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
 
