@@ -30,7 +30,7 @@ if ($mode === 'html') {
 
     // initialize form data
     if (isset($_SESSION['db_host'])) {
-        $dbEngine = $_SESSION['db_engine'];
+        $dbEngine = $_SESSION['db_type'];
         $dbHost = $_SESSION['db_host'];
         $dbPort = $_SESSION['db_port'];
         $dbName = $_SESSION['db_name'];
@@ -58,7 +58,7 @@ if ($mode === 'html') {
         $page
     );
     $form->addSelectBoxFromXml(
-        'adm_db_engine',
+        'adm_db_type',
         $gL10n->get('INS_DATABASE_SYSTEM'),
         ADMIDIO_PATH . FOLDER_SYSTEM . '/databases.xml',
         'identifier',
@@ -124,7 +124,7 @@ if ($mode === 'html') {
     $sqlIdentifiersRegex = '/^[a-zA-Z0-9_$@-]+$/';
 
     // Store database access data filtered in session variables
-    $_SESSION['db_engine']    = $formValues['adm_db_engine'];
+    $_SESSION['db_type']      = $formValues['adm_db_type'];
     $_SESSION['db_host']      = $formValues['adm_db_host'];
     $_SESSION['db_port']      = $formValues['adm_db_port'];
     $_SESSION['db_name']      = $formValues['adm_db_name'];
@@ -133,7 +133,7 @@ if ($mode === 'html') {
     $_SESSION['table_prefix'] = $formValues['adm_table_prefix'];
 
     // Check DB-type
-    if (!in_array($_SESSION['db_engine'], array(Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL), true)) {
+    if (!in_array($_SESSION['db_type'], array(Database::DB_TYPE_MARIADB, Database::DB_TYPE_MYSQL, Database::DB_TYPE_PGSQL), true)) {
         throw new Exception('INS_DATABASE_TYPE_INVALID');
     }
 
@@ -178,7 +178,7 @@ if ($mode === 'html') {
         // check database connections
         try {
             $gDebug = true;
-            $db = new Database($_SESSION['db_engine'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_name'], $_SESSION['db_username'], $_SESSION['db_password']);
+            $db = new Database($_SESSION['db_type'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_name'], $_SESSION['db_username'], $_SESSION['db_password']);
             $db->checkWriteAccess();
             $gDebug = false;
         } catch (Exception $e) {

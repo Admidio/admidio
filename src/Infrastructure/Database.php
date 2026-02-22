@@ -66,7 +66,10 @@ use Admidio\Infrastructure\Utils\StringUtils;
  */
 class Database
 {
-    public const PDO_ENGINE_MARIADB = 'mariadb';
+    public const DB_TYPE_MARIADB = 'mariadb';
+    public const DB_TYPE_MYSQL = 'mysql';
+    public const DB_TYPE_PGSQL = 'pgsql';
+
     public const PDO_ENGINE_MYSQL = 'mysql';
     public const PDO_ENGINE_PGSQL = 'pgsql';
 
@@ -116,10 +119,9 @@ class Database
      */
     protected PDO $pdo;
     /**
-     * @var PDOStatement $pdoStatement The PDOStatement object which is needed to handle the return of a query.
-     * #todo# add union datatype PDOStatement|boolean when minimum requirement is PHP8
+     * @var PDOStatement|bool $pdoStatement The PDOStatement object which is needed to handle the return of a query.
      */
-    protected PDOStatement $pdoStatement;
+    protected PDOStatement|bool $pdoStatement;
     /**
      * @var int The transaction marker. If this is > 0 than a transaction is open.
      */
@@ -149,7 +151,7 @@ class Database
         $engine = DB_TYPE;
 
         // PDO does not support mariadb as engine, but since mariadb is compatible to mysql we can use the mysql driver for it.
-        if ($engine === self::PDO_ENGINE_MARIADB) {
+        if ($engine === self::DB_TYPE_MARIADB) {
             $engine = self::PDO_ENGINE_MYSQL;
         }
 
@@ -181,7 +183,7 @@ class Database
         global $gLogger;
 
         // PDO does not support mariadb as engine, but since mariadb is compatible to mysql we can use the mysql driver for it.
-        if ($engine === self::PDO_ENGINE_MARIADB) {
+        if ($engine === self::DB_TYPE_MARIADB) {
             $this->engine = self::PDO_ENGINE_MYSQL;
         } else {
             $this->engine = $engine;
@@ -432,15 +434,15 @@ class Database
             // the string (Postgres 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
             $versionArray = explode(',', $version);
             $versionArray2 = explode(' ', $versionArray[0]);
-            $this->type = $this::PDO_ENGINE_PGSQL;
+            $this->type = $this::DB_TYPE_PGSQL;
             $this->version = $versionArray2[1];
         } else {
             // Since Admidio did not differentiate between MySQL and MariaDB in the past, this must be determined here.
             $versionArray = explode('-', $version);
             if (isset($versionArray[1]) && $versionArray[1] === 'MariaDB') {
-                $this->type = $this::PDO_ENGINE_MARIADB;
+                $this->type = $this::DB_TYPE_MARIADB;
             } else {
-                $this->type = $this::PDO_ENGINE_MYSQL;
+                $this->type = $this::DB_TYPE_MYSQL;
             }
             $this->version = $versionArray[0];
         }
