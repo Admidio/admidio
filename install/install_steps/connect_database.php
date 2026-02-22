@@ -123,8 +123,8 @@ if ($mode === 'html') {
     // PHP-Check Regex-Patterns
     $sqlIdentifiersRegex = '/^[a-zA-Z0-9_$@-]+$/';
 
-    // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-    $_SESSION['db_engine']    = $formValues['adm_db_engine'];
+    // Store database access data filtered in session variables
+    $_SESSION['db_engine']    = ($formValues['adm_db_engine'] === Database::PDO_ENGINE_MARIADB ? Database::PDO_ENGINE_MYSQL : $formValues['adm_db_engine']);
     $_SESSION['db_host']      = $formValues['adm_db_host'];
     $_SESSION['db_port']      = $formValues['adm_db_port'];
     $_SESSION['db_name']      = $formValues['adm_db_name'];
