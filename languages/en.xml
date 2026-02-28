@@ -35,7 +35,7 @@
   <string name="INS_ERROR_OPEN_FILE">File #VAR1_BOLD# could not be opened.</string>
   <string name="INS_GROUPS">Groups</string>
   <string name="INS_HOST_INVALID">Hostname is not valid. Enter a valid host name or IP address.</string>
-  <string name="INS_INFO_3RD_PARRTY_PLUGINS_HAVE_BEEN_MOVED">Some 3rd party plugins have been moved to the new plugin folder #VAR1_BOLD#. Please check the functionality of these plugins after the update.</string>
+  <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Some 3rd party plugins have been moved to the new plugin folder #VAR1_BOLD#. Please check the functionality of these plugins after the update.</string>
   <string name="INS_INSTALL_ADMIDIO">Install Admidio</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">The database already contains an Admidio installation. An additional installation is not possible.</string>
@@ -60,7 +60,7 @@
   <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Admidio database has been successfully updated to version #VAR1#.\nYou are free to log in and use Admidio again.</string>
   <string name="INS_UPDATE_VERSION">Update to version #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Update process successful</string>
-  <string name="INS_WARNING_3RD_PARRTY_PLUGINS_COULD_NOT_BE_MOVED">Some 3rd party plugin folders could not be moved to the new plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and move the 3rd party plugin folders manually and delete the old adm_plugins folder afterward.</string>
+  <string name="INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED">Some 3rd party plugin folders could not be moved to the new plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and move the 3rd party plugin folders manually and delete the old adm_plugins folder afterward.</string>
   <string name="INS_WARNING_BETA_VERSION">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Some old admidio plugin folders could not be deleted from the old plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and delete the old plugin folders manually and delete the old adm_plugins folder afterward.</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">The old plugin folder #VAR1_BOLD# could not be deleted.\nPlease check the folder  #VAR2_BOLD# within your Admidio installation and delete the old adm_plugins folder manually.</string>
