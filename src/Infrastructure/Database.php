@@ -718,7 +718,9 @@ class Database
                 // since version 4.1 we don't replace boolean with smallint
                 //'boolean'  => 'smallint',
                 // A blob is in Postgres a bytea datatype
-                'blob' => 'bytea'
+                'blob' => 'bytea',
+                'DEFAULT CHARSET = utf8mb4' => 'ENCODING \'UTF8\'',
+                'COLLATE = utf8mb4_unicode_ci' => ''
             );
             $sql = StringUtils::strMultiReplace($sql, $replaces);
 

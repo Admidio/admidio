@@ -46,6 +46,36 @@ final class UpdateStepsCode
         self::$db = $database;
     }
 
+    /**
+     * This method will convert the charset of the database tables to utf8mb4 if not already done.
+     * This is necessary to support emojis and other special characters in the future.
+     * @throws Exception
+     */
+    public static function updateStep51ConvertCharsetToUtf8mb4(): void
+    {
+        global $g_adm_db, $g_tbl_praefix;
+
+        $sql = 'SELECT table_name
+                  FROM information_schema.tables
+                 WHERE table_schema = ? -- $g_adm_db
+                   AND table_name LIKE ? -- $g_tbl_praefix
+                   AND table_type = \'BASE TABLE\'
+                   AND (table_collation NOT LIKE \'utf8mb4%\' OR table_collation IS NULL)';
+
+        $admidioTables = self::$db->queryPrepared($sql, array($g_adm_db, $g_tbl_praefix . '_%'));
+        while ($row = $admidioTables->fetch()) {
+            $sql = 'ALTER TABLE ' . $row['TABLE_NAME'] . ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+            self::$db->queryPrepared($sql);
+        }
+    }
+
+    /**
+     * This method will check if there are still plugins in the old adm_plugins folder. If yes, it will try to move
+     * them to the new plugins' folder. If there are old overview plugins, it will try to delete them because they
+     * are no longer supported. If there are 3rd party plugins, it will try to move them to the new plugins folder
+     * and update the menu entries if necessary. If there are problems with the file system operations, it will set
+     * a cookie to show a warning after the update process.
+     */
     public static function updateStep51CheckFor3rdPartyPlugins(): void
     {
         global $gLogger, $gL10n;
@@ -126,6 +156,13 @@ final class UpdateStepsCode
         }
     }
 
+    /**
+     * This method will check if there are overview plugins available and if yes, it will try to install them.
+     * Because we added the new column com_overview_plugin to the components table before, we need to reload the
+     * database columns before we can check if the plugin is an overview plugin or not.
+     * @return void
+     * @throws Exception
+     */
     public static function updateStep51InstallOverviewPlugins(): void
     {
         global $gDb;

@@ -3,12 +3,12 @@
     <database id="mariadb">
         <identifier>mariadb</identifier>
         <name>MariaDB</name>
-        <minversion>10.0.0</minversion>
+        <minversion>5.5.0</minversion>
     </database>
     <database id="mysql">
         <identifier>mysql</identifier>
         <name>MySQL</name>
-        <minversion>5.0.3</minversion>
+        <minversion>5.5.3</minversion>
     </database>
     <database id="pgsql">
         <identifier>pgsql</identifier>
