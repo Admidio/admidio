@@ -50,11 +50,8 @@
                                     {$masterData.STREET.value}<br />
                                 {/if}
 
-                                {assign var="postcode" value=$masterData.POSTCODE.value}
-                                {assign var="city" value=$masterData.CITY.value}
-
-                                {if $postcode || $city}
-                                    {$postcode}{if $postcode && $city} {/if}{$city}<br />
+                                {if $masterData.POSTCODE.value !== '' || $masterData.CITY.value !== ''}
+                                    {$masterData.postcodeCity.value}<br />
                                 {/if}
 
                                 {if $masterData.COUNTRY.value !== ''}

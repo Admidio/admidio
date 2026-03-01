@@ -223,6 +223,7 @@ try {
     $masterData = array();
     $profileData = array();
     $categoryData = array();
+    $postcodeCityData = array();
     $category = '';
 
     // Loop over all fields of the master data
@@ -282,6 +283,8 @@ try {
                     ) {
                         $masterData['usr_actual_login'] = array('id' => 'usr_actual_login', 'label' => '', 'value' => $user->getValue('usr_actual_login'));
                     }
+                } elseif ($field->getValue('usf_name_intern') === 'POSTCODE' || $field->getValue('usf_name_intern') === 'CITY') {
+                    $postcodeCityData[] = $user->getValue($field->getValue('usf_name_intern'), 'html');
                 }
             } else {
                 if ($category !== $field->getValue('cat_name')) {
@@ -343,6 +346,9 @@ try {
             }
         }
     }
+
+    // combine postcode and city to display them in one line and the correct order depending on the country
+    $masterData['postcodeCity'] = array('id' => 'postcodeCity', 'label' => '', 'value' => $postcodeCityData[0] . ($postcodeCityData[1] !== '' ? ' ' : '') . $postcodeCityData[1]);
 
     $page->assignSmartyVariable('showCurrentRoles', $gSettingsManager->getBool('profile_show_roles'));
     $page->assignSmartyVariable('showFormerRoles', $gSettingsManager->getBool('profile_show_former_roles'));
