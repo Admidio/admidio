@@ -781,7 +781,7 @@ class ListConfiguration extends Entity
                 if ($userFieldType === 'NUMBER' || $userFieldType === 'DECIMAL') {
                     // If a field has numeric values, then there must be a cast because the database
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
-                    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+                    if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
                         $columnType = 'numeric';
                     } else {
                         // mysql

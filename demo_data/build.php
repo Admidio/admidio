@@ -93,7 +93,7 @@ function toggleForeignKeyChecks(bool $enable): void
 {
     global $gDb;
 
-    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
+    if (DB_TYPE === Database::PDO_ENGINE_MYSQL) {
         // disable foreign key checks for mysql, so tables can easily be deleted
         $sql = 'SET foreign_key_checks = ' . (int) $enable;
         $gDb->queryPrepared($sql);
@@ -145,7 +145,7 @@ function resetPostgresSequences(): void
 {
     global $gDb;
 
-    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+    if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
         $sql = 'SELECT relname
                   FROM pg_class
                  WHERE relkind = \'S\'';

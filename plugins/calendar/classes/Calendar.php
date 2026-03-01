@@ -38,7 +38,7 @@ class Calendar extends PluginAbstract
 
     private static array $pluginConfig = array();
 
-    /** 
+    /**
      * Get the plugin configuration
      * @return array Returns the plugin configuration
      */
@@ -57,14 +57,14 @@ class Calendar extends PluginAbstract
         // if the key equals 'calendar_roles_view_plugin' and the value is still the default value, retrieve the roles from the database
         if (array_key_exists('calendar_roles_view_plugin', $config) && $config['calendar_roles_view_plugin']['value'] === self::$defaultConfig['calendar_roles_view_plugin']['value']) {
             $config['calendar_roles_view_plugin']['value'] = self::getAvailableRoles(1, true);
-        } 
+        }
         // if the key equals 'calendar_roles_sql' and the value is still the default value, retrieve the roles from the database
         if (array_key_exists('calendar_roles_sql', $config) && $config['calendar_roles_sql']['value'] === self::$defaultConfig['calendar_roles_sql']['value']) {
             $config['calendar_roles_sql']['value'] = self::getAvailableRoles(1, true);
         }
         return $config;
     }
-    
+
     /**
      * Get the plugin configuration values
      * @return array Returns the plugin configuration values
@@ -112,7 +112,7 @@ class Calendar extends PluginAbstract
             } else {
                 // Each role is now added to this array
                 $allRolesSet[] = array(
-                    $rowViewRoles['rol_id'], // ID 
+                    $rowViewRoles['rol_id'], // ID
                     $rowViewRoles['rol_name']
                 );
             }
@@ -410,7 +410,7 @@ class Calendar extends PluginAbstract
 
         // query of all birthdays
         if (self::$pluginConfig['calendar_show_birthdays']) {
-            if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
                 $sqlYearOfBirthday = ' EXTRACT(YEAR FROM TO_TIMESTAMP(birthday.usd_value, \'YYYY-MM-DD\')) ';
                 $sqlMonthOfBirthday = ' EXTRACT(MONTH FROM TO_TIMESTAMP(birthday.usd_value, \'YYYY-MM-DD\')) ';
                 $sqlDayOfBirthday = ' EXTRACT(DAY FROM TO_TIMESTAMP(birthday.usd_value, \'YYYY-MM-DD\')) ';
@@ -508,7 +508,7 @@ class Calendar extends PluginAbstract
 
         // reset get date id flag before init
         self::$getDatId = false;
-        
+
         // init parameters
         if (isset($params['date_id']) && $params['date_id'] !== '') {
             self::$getDatId = true;

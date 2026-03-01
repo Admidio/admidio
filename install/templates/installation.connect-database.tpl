@@ -5,7 +5,7 @@
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('INS_DATABASE_LOGIN')}</div>
         <div class="card-body">
-            {include 'sys-template-parts/form.select.tpl' data=$elements['adm_db_engine']}
+            {include 'sys-template-parts/form.select.tpl' data=$elements['adm_db_type']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['adm_db_host']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['adm_db_port']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['adm_db_name']}

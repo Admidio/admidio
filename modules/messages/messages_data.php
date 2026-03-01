@@ -94,7 +94,7 @@ try {
     if ($getSearch !== '' && count($searchColumns) > 0) {
         $searchString = explode(' ', $getSearch);
 
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $searchValue = ' ?::text ';
         } else {
             // mysql

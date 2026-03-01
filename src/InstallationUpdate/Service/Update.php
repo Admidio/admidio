@@ -164,7 +164,7 @@ class Update
 
     /**
      * The Method will activate / deactivate the foreign key check in the database. This
-     * will only work for a MySQL database.
+     * will only work for a MySQL or MariaDB database.
      * @param bool $enable If set to **true **, the foreign key check will be activated.
      * @throws Exception
      */
@@ -172,7 +172,7 @@ class Update
     {
         global $gDb;
 
-        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
+        if (DB_TYPE !== Database::PDO_ENGINE_PGSQL) {
             // disable foreign key checks for mysql, so tables can easily be deleted
             $sql = 'SET foreign_key_checks = ' . (int) $enable;
             $gDb->queryPrepared($sql);

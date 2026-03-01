@@ -91,12 +91,12 @@ try {
 
     // within MySql it's only possible to join 61 tables therefore show a message if user
     // want's to join more than 57 columns
-    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
+    if (DB_TYPE !== Database::PDO_ENGINE_PGSQL) {
         $mySqlMaxColumnAlert = '
-    if (fieldNumberIntern >= 57) {
-        messageBox("' . $gL10n->get('SYS_NO_MORE_COLUMN') . '");
-        return;
-    }';
+        if (fieldNumberIntern >= 57) {
+            messageBox("' . $gL10n->get('SYS_NO_MORE_COLUMN') . '");
+            return;
+        }';
     }
 
     $javascriptCode = '
@@ -196,9 +196,9 @@ try {
         newCellConditions.innerHTML = htmlFormCondition;
 
         var newCellHandle = newTableRow.insertCell(-1);
-        newCellHandle.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+        newCellHandle.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
             "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
-            "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" + 
+            "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
             "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
 
         $(newTableRow).fadeIn("slow");
@@ -478,7 +478,7 @@ try {
         $("#btn_delete").click(function() { send("delete"); });
         $("#btn_copy").click(function() { send("save_as"); });
         $("#mylist_fields_tbody").sortable({
-            handle: ".admidio-move-row", 
+            handle: ".admidio-move-row",
             items: "tr",
             update: updateNumbering
         });

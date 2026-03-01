@@ -42,7 +42,7 @@ class ComponentUpdate extends Component
     public function __construct(Database $database)
     {
         parent::__construct($database);
-        
+
         self::$database = $database;
     }
 
@@ -177,15 +177,15 @@ class ComponentUpdate extends Component
      * Will execute the specific update step that is set through the parameter $xmlNode.
      * If the step was successfully done the id will be stored in the component recordset
      * so if the whole update crashs later we know that this step was successfully executed.
-     * When the node has an attribute **database** than this sql statement will only be executed
-     * if the value of the attribute is equal to your current **DB_ENGINE**. If the node has
-     * an attribute **error** and this is set to **ignore** than a sql error will not stop
+     * When the node has an attribute **database** than this SQL statement will only be executed
+     * if the value of the attribute is equal to your current database engine. If the node has
+     * an attribute **error** and this is set to **ignore** than a SQL error will not stop
      * the update script.
      * @param SimpleXMLElement $xmlNode A SimpleXML node of the current update step.
      * @param string $version A version string of the version corresponding to the $xmlNode
      * @throws Exception
      */
-    private function executeStep(SimpleXMLElement $xmlNode, string $version = '', $namespace = 'Admidio\\InstallationUpdate\\Service\\')
+    private function executeStep(SimpleXMLElement $xmlNode, string $version = '', $namespace = 'Admidio\\InstallationUpdate\\Service\\'): void
     {
         global $gLogger;
 
@@ -194,7 +194,7 @@ class ComponentUpdate extends Component
         $startTime = microtime(true);
 
         // only execute if sql statement is for all databases or for the used database
-        if (!isset($xmlNode['database']) || (string) $xmlNode['database'] === DB_ENGINE) {
+        if (!isset($xmlNode['database']) || (string) $xmlNode['database'] === $this->db->getEngine()) {
             $errorMessage = '<p>An error occured within the update script. Please visit our
                 support forum <a href="https://www.admidio.org/forum">https://www.admidio.org/forum</a> and
                 provide the following information.</p>
@@ -218,7 +218,7 @@ class ComponentUpdate extends Component
                 }
             } else {
                 $showError = true;
-                // if the attribute error was set to "ignore" then don't show errors that occurs on sql execution
+                // if the attribute error was set to "ignore" then don't show errors that occurs on SQL execution
                 if (isset($xmlNode['error']) && (string) $xmlNode['error'] === 'ignore') {
                     $showError = false;
                 }

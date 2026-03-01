@@ -97,7 +97,7 @@ const DATE_MAX = '9999-12-31';
 // ###  DB-CONFIG  ###
 // ###################
 
-define('DB_ENGINE', $gDbType);
+define('DB_TYPE', $gDbType);
 define('DB_HOST', $g_adm_srv);
 define('DB_PORT', $g_adm_port);
 define('DB_NAME', $g_adm_db);
