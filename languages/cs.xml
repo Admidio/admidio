@@ -35,7 +35,7 @@
   <string name="INS_ERROR_OPEN_FILE">Soubor #VAR1_BOLD# nelze otevřít.</string>
   <string name="INS_GROUPS">Skupiny</string>
   <string name="INS_HOST_INVALID">Název hostitele není platný. Zadejte platný název hostitele nebo IP adresu.</string>
-  <string name="INS_INFO_3RD_PARRTY_PLUGINS_HAVE_BEEN_MOVED">Některé doplňky třetích stran byly přesunuty do nové složky doplňků #VAR1_BOLD#. Po aktualizaci prosím zkontrolujte funkčnost těchto doplňků.</string>
+  <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Některé doplňky třetích stran byly přesunuty do nové složky doplňků #VAR1_BOLD#. Po aktualizaci prosím zkontrolujte funkčnost těchto doplňků.</string>
   <string name="INS_INSTALL_ADMIDIO">Instalovat Admidio</string>
   <string name="INS_INSTALLATION">Instalace</string>
   <string name="INS_INSTALLATION_EXISTS">Databáze již instalaci Admidio obsahuje. Další instalace není možná.</string>
@@ -60,7 +60,7 @@
   <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Databáze Admidio byla úspěšně aktualizována na verzi #VAR1#.\nMůžete se znovu přihlásit a používat Admidio.</string>
   <string name="INS_UPDATE_VERSION">Aktualizovat na verzi #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Proces aktualizace byl úspěšný</string>
-  <string name="INS_WARNING_3RD_PARRTY_PLUGINS_COULD_NOT_BE_MOVED">Některé složky doplňků třetích stran se nepodařilo přesunout do nové složky doplňků #VAR1_BOLD#.\nZkontrolujte prosím složku #VAR2_BOLD# ve vaší instalaci Admidio, přesuňte složky doplňků třetích stran ručně a poté odstraňte starou složku adm_plugins.</string>
+  <string name="INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED">Některé složky doplňků třetích stran se nepodařilo přesunout do nové složky doplňků #VAR1_BOLD#.\nZkontrolujte prosím složku #VAR2_BOLD# ve vaší instalaci Admidio, přesuňte složky doplňků třetích stran ručně a poté odstraňte starou složku adm_plugins.</string>
   <string name="INS_WARNING_BETA_VERSION">Toto je beta verze Admidio.\n\nPoužívání může být riskantní kvůli možné nestabilitě a ztrátě dat. Používejte prosím pouze jako testovací prostředí!</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Některé složky starých doplňků Admidio se nepodařilo odstranit ze staré složky doplňků #VAR1_BOLD#.\nZkontrolujte prosím složku #VAR2_BOLD# ve vaší instalaci Admidio, odstraňte staré složky doplňků ručně a poté smažte i samotnou starou složku adm_plugins.</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">Starou složku doplňků #VAR1_BOLD# se nepodařilo odstranit.\nZkontrolujte prosím složku #VAR2_BOLD# ve vaší instalaci Admidio a odstraňte starou složku adm_plugins ručně.</string>

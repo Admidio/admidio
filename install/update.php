@@ -342,7 +342,7 @@ try {
         if ($gWarn3rdPartyPlugins) {
             $updateWarnings[] = array(
                 'id' => 'warn_3rd_party_plugins',
-                'alertWarning' => $gL10n->get('INS_WARNING_3RD_PARRTY_PLUGINS_COULD_NOT_BE_MOVED', array('plugins', 'adm_plugins'))
+                'alertWarning' => $gL10n->get('INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED', array('plugins', 'adm_plugins'))
             );
         }
         if ($gWarnOldPluginsFolder) {
@@ -354,7 +354,7 @@ try {
         if ($gInfo3rdPartyPlugins) {
             $updateInfos[] = array(
                 'id' => 'info_3rd_party_plugins',
-                'alertInfo' => $gL10n->get('INS_INFO_3RD_PARRTY_PLUGINS_HAVE_BEEN_MOVED', array('plugins'))
+                'alertInfo' => $gL10n->get('INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED', array('plugins'))
             );
         }
 
