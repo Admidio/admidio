@@ -1,4 +1,4 @@
-/*! jQuery UI - v1.14.1 - 2024-11-30
+/*! jQuery UI - v1.14.2 - 2026-03-06
 * https://jqueryui.com
 * Includes: widget.js, data.js, scroll-parent.js, widgets/sortable.js, widgets/mouse.js
 * Copyright OpenJS Foundation and other contributors; Licensed MIT */
@@ -20,11 +20,11 @@
 
 $.ui = $.ui || {};
 
-var version = $.ui.version = "1.14.1";
+var version = $.ui.version = "1.14.2";
 
 
 /*!
- * jQuery UI Widget 1.14.1
+ * jQuery UI Widget 1.14.2
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
@@ -769,7 +769,7 @@ var widget = $.widget;
 
 
 /*!
- * jQuery UI :data 1.14.1
+ * jQuery UI :data 1.14.2
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
@@ -792,7 +792,7 @@ var data = $.extend( $.expr.pseudos, {
 } );
 
 /*!
- * jQuery UI Scroll Parent 1.14.1
+ * jQuery UI Scroll Parent 1.14.2
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
@@ -826,7 +826,7 @@ var scrollParent = $.fn.scrollParent = function( includeHidden ) {
 
 
 /*!
- * jQuery UI Mouse 1.14.1
+ * jQuery UI Mouse 1.14.2
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
@@ -846,7 +846,7 @@ $( document ).on( "mouseup", function() {
 } );
 
 var widgetsMouse = $.widget( "ui.mouse", {
-	version: "1.14.1",
+	version: "1.14.2",
 	options: {
 		cancel: "input, textarea, button, select, option",
 		distance: 1,
@@ -1031,7 +1031,7 @@ var widgetsMouse = $.widget( "ui.mouse", {
 
 
 /*!
- * jQuery UI Sortable 1.14.1
+ * jQuery UI Sortable 1.14.2
  * https://jqueryui.com
  *
  * Copyright OpenJS Foundation and other contributors
@@ -1048,7 +1048,7 @@ var widgetsMouse = $.widget( "ui.mouse", {
 
 
 var widgetsSortable = $.widget( "ui.sortable", $.ui.mouse, {
-	version: "1.14.1",
+	version: "1.14.2",
 	widgetEventPrefix: "sort",
 	ready: false,
 	options: {
