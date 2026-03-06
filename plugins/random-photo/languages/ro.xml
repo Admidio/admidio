@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Nu există fotografii disponibile pentru vizitatori. Conectați-vă pentru a vedea fotografiile.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Acest plugin afișează o fotografie selectată aleatoriu din modulul foto</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Fotografie aleatorie</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Numărul de caractere pe cuvânt</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Numărul maxim de caractere dintr-un cuvânt înainte de a se efectua o întrerupere de linie. Dacă este setat la 0, nu se va efectua nicio întrerupere de linie. (implicit: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Lățimea maximă a fotografiei</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Lățimea maximă a fotografiei în pixeli. Dacă este setată la 0, imaginea va fi redimensionată dinamic de containerul html în care este plasat acest plugin. (implicit: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Înălțimea maximă a fotografiei</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Înălțimea maximă a fotografiei în pixeli. Dacă este setată la 0, imaginea va fi redimensionată dinamic de containerul html în care este plasat acest plugin. (implicit: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Albume luate în considerare</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Numărul de albume din care poate proveni fotografia. Se numără începând cu cel mai recent album, în ordine descrescătoare. Dacă este setat la 0, atunci vor fi luate în considerare toate albumele. (implicit: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Numărul fotografiei</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Numărul fotografiei din album care va fi afișată. Dacă este setat la 0, va fi afișată o fotografie aleatorie din album, dacă este setat la un număr specific, va fi afișată fotografia respectivă. (implicit: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Afișează linkul albumului</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Dacă această setare este activată, sub fotografie va fi afișat un link către album cu numele albumului. (implicit: adevărat)</string>
+</resources>

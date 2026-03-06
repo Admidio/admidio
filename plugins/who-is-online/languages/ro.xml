@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Cine este online?</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Nu există date disponibile pentru vizitatori. Conectați-vă pentru a vedea cine este online.</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">Nu sunt vizitatori pe site.</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# Vizitatori</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# membru</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# membrii</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online sunt #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online este #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Acest plugin afișează vizitatorii și membrii înregistrați pe pagina Prezentare generală.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Cine este online</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Timpul încă activ</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Timpul (în minute) în care un utilizator este considerat încă online după ultima sa acțiune. (implicit: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Arată vizitatorii</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Dacă această setare este activată, va fi afișat numărul de vizitatori. În caz contrar, vor fi afișați numai utilizatorii conectați. (implicit: true)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Afișează membrii vizitatorilor</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Aici puteți selecta modul în care membrii sunt afișați vizitatorilor. (implicit: numărul de membri conectați)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Nu afișa membrii conectați</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Afișează membrii conectați</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Numărul membrilor conectați</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Afișează sinele</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Dacă această setare este activată, se va afișa starea proprie (conectat sau deconectat). (implicit: adevărat)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Afișează utilizatorii unul lângă altul</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Dacă această setare este activată, utilizatorii vor fi afișați unul lângă altul. În caz contrar, vor fi afișați unul sub altul. (implicit: fals)</string>
+</resources>

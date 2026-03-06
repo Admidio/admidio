@@ -104,6 +104,11 @@ $gSupportedLanguages = array(
         'isocode' => 'pt',
         'libs' => 'pt-BR'
     ),
+    'ro' => array(
+        'name' => 'Romanian - Română',
+        'isocode' => 'ro',
+        'libs' => 'ro'
+    ),
     'ru' => array(
         'name' => 'Russian - Русский',
         'isocode' => 'ru',
