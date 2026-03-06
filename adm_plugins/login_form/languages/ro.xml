@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LOGIN_FORM_ACTIVE_SINCE">Activ din</string>
+  <string name="PLG_LOGIN_FORM_HONORARY_MEMBER">Membru onorific</string>
+  <string name="PLG_LOGIN_FORM_LAST_LOGIN">Ultima conectare</string>
+  <string name="PLG_LOGIN_FORM_NEW_ONLINE_MEMBER">Membru online nou</string>
+  <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Număr de autentificări</string>
+  <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Membru online</string>
+  <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Membru senior online</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Acest plugin afișează un formular de autentificare pentru ca utilizatorul să se autentifice pe pagina Prezentare generală. Dacă utilizatorul este autentificat, informațiile utile despre utilizator sunt afișate acum în locul câmpurilor.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Formular de autentificare</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Rangul membrului</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Afișează linkul de înregistrare</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Dacă această opțiune este activată, în formularul de autentificare va fi afișat un link către formularul de înregistrare. (implicit: fals)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Afișează linkul de e-mail</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Dacă această opțiune este activată, în formularul de autentificare va fi afișat un link pentru a trimite un e-mail administratorului în cazul în care aveți probleme de autentificare. (implicit: adevărat) </string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Afișează linkul de logout</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Dacă această opțiune este activată, după conectare va fi afișat un link pentru deconectare. (implicit: fals)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Afișează clasamentul</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Dacă această opțiune este activată, după numele de utilizator va fi afișat un rang în funcție de numărul de conectări. (implicit: adevărat)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Clasament</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Aici puteți defini rangurile care vor fi afișate după numele de utilizator dacă opțiunea „Afișare ranguri” este activată. Cheia este numărul de conectări, iar valoarea este numele rangului.â\n Pentru a șterge un rang, ștergeți câmpurile „Număr de conectări” și „Rang membru” din tabel.</string>
+</resources>

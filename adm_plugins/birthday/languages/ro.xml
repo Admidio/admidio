@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# va împlini #VAR3# ani în #VAR2# zile, pe data de #VAR4#.</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# își serbează ziua de naștere peste #VAR2# zile.</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Zile de naștere</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Dl. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Astăzi membrii #VAR1# au ziua de naștere.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">Nu există zile de naștere ale membrilor disponibile pentru vizitatori. Conectați-vă pentru a vedea zilele de naștere ale membrilor.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Astăzi nu este ziua de naștere a niciunui membru.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Astăzi este ziua de naștere a unui membru.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# a împlinit #VAR3# ani cu #VAR2# zile în urmă, pe #VAR4#.</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# a împlinit ani #VAR2# zile în urmă.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">Acest plugin afișează o previzualizare a celor mai recente zile de naștere pe pagina Prezentare generală.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">Zi de naștere</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# va fi astăzi #VAR2#</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# își serbează astăzi ziua de naștere.</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# va împlini mâine #VAR3# ani, pe #VAR4#.</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# împlinește mâine ani.</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">D-na. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# a împlinit ieri #VAR3# ani pe #VAR4#.</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# a avut ieri ziua de naștere.</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">Afișează numele vizitatorilor</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">Dacă această setare este activată, vizitatorii vor vedea toate numele (nu vârsta) persoanelor care își serbează ziua de naștere astăzi, în viitor și în trecut. În caz contrar, vizitatorii vor vedea doar numărul de persoane care își serbează ziua de naștere astăzi, nimic mai mult. (implicit: fals)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">Stilul de afișare pentru numele persoanei care își serbează ziua de naștere</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">Această setare vă permite să alegeți modul în care sunt afișate numele persoanelor care își serbează ziua de naștere. (implicit: prenume, nume de familie)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">Arată vârsta</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">Dacă această setare este activată, utilizatorii conectați vor vedea vârsta persoanelor care își serbează ziua de naștere. (implicit: fals)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">Afișează numele cu titlul</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">Definește vârsta de la care prenumele persoanei care își serbează ziua de naștere va fi înlocuit cu salutul pentru vizitatori. (dezactivare: -1, implicit: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">Nu afișați anunțurile persoanelor care își serbează ziua de naștere</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">Dacă această setare este activată, va fi afișat un mesaj dacă niciun membru nu are ziua de naștere în perioada selectată. (implicit: adevărat)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">Afișează zilele de naștere trecute</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">Cu această setare puteți defini câte zile în trecut trebuie afișate zilele de naștere. (implicit: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">Afișează zilele de naștere viitoare</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">Cu această setare puteți defini câte zile în viitor trebuie afișate zilele de naștere. (implicit: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">Limitați numărul persoanelor care își serbează ziua de naștere</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">Cu această setare puteți defini numărul maxim de persoane cu ziua de naștere care vor fi afișate. (implicit: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">Afișează adresa de e-mail pentru vizitatori</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">Această setare vă permite să alegeți dacă adresa de e-mail a persoanelor care își serbează ziua de naștere trebuie afișată. (implicit: numai numele (vizitatori))</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">Roluri permise pentru conținut</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Aici puteți selecta rolurile care au permisiunea de a vedea conținutul acestui plugin. Dacă un utilizator nu face parte din niciun rol selectat, se afișează doar numărul de zile de naștere. (implicit: toate rolurile)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">Roluri permise pentru zile de naștere</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Aici puteți selecta rolurile pe care trebuie să le aibă utilizatorii ale căror zile de naștere trebuie afișate. (implicit: toate rolurile)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">Ordinea de sortare a persoanelor cu ziua de naștere</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">Această setare vă permite să alegeți ordinea de sortare a persoanelor care își serbează ziua de naștere. (implicit: DESC)</string>
+</resources>

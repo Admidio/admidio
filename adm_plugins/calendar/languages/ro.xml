@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Luna curentă</string>
+  <string name="PLG_CALENDAR_MONTH">Ianuarie, februarie, martie, aprilie, mai, iunie, iulie, august, septembrie, octombrie, noiembrie, decembrie</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Lu</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Ma</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Mie</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Jo</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Vi</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Sâ</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Du</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Câteva zile</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Acest plugin afișează un calendar cu toate evenimentele lunii curente pe pagina Prezentare generală.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Calendar</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Arată evenimentele</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Dacă această setare este activată, evenimentele vor fi afișate în calendar. (implicit: adevărat)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Afișează zilele de naștere</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Dacă această setare este activată, zilele de naștere ale membrilor vor fi afișate în calendar. (implicit: adevărat)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Afișează zilele de naștere ale vizitatorilor</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Dacă această setare este activată, vizitatorii vor putea vedea datele de naștere ale membrilor. (implicit: fals)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Afișează pictograma de ziua de naștere</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Dacă această setare este activată, în calendar va fi afișată o pictogramă de ziua de naștere. (implicit: adevărat)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Stilul de afișare pentru numele persoanei care își serbează ziua de naștere</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Această setare vă permite să alegeți modul în care sunt afișate numele persoanelor care își serbează ziua de naștere. (implicit: prenume)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Categorii luate în considerare</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Această setare vă permite să alegeți categoriile care trebuie luate în considerare pentru evenimentele din calendar. (implicit: toate categoriile)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Afișare nume calendar</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Dacă această setare este activată, numele calendarelor vor fi afișate pentru fiecare eveniment. (implicit: fals)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Roluri permise pentru conținut</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Aici puteți selecta rolurile care au permisiunea de a vedea conținutul acestui plugin. Dacă un utilizator nu face parte din niciun rol selectat, se afișează doar numărul de evenimente și zile de naștere. (implicit: toate rolurile)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Roluri permise pentru zile de naștere</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Aici puteți selecta rolurile pe care trebuie să le aibă utilizatorii ale căror zile de naștere trebuie afișate. (implicit: toate rolurile)</string>
+</resources>
