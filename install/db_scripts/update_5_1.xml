@@ -26,5 +26,6 @@
     <step id="230" database="mysql">UPDATE %PREFIX%_preferences prf INNER JOIN %PREFIX%_organizations org ON org.org_id = prf.prf_org_id SET prf.prf_value = org.org_email_administrator WHERE prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
     <step id="240" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = org.org_email_administrator FROM %PREFIX%_organizations org WHERE org.org_id = prf.prf_org_id AND prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
     <step id="250" database="mysql">UpdateStepsCode::updateStep51ConvertCharsetToUtf8mb4</step>
+    <step id="260">UPDATE %PREFIX%_preferences SET prf_value = '#A7D9E0' WHERE prf_name = 'color_secondary' AND prf_value = '#263340'</step>
     <step>stop</step>
 </update>
