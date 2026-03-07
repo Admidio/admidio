@@ -609,7 +609,7 @@ label {
 /***********************************/
 
 .table td, .table th {
-    color: var(--bs-secondary);
+    color: var(--bs-body-color);
 }
 
 .table-hover tbody tr td .admidio-functions {
