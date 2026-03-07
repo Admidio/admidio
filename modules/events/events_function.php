@@ -413,6 +413,11 @@ try {
             $formValues['additional_guests'] = '';
         }
 
+        // if user is no leader of the event then only allow to handle their own participation
+        if (!$participants->isLeader($gCurrentUserId)) {
+            $getUserUuid = $gCurrentUser->getValue('usr_uuid');
+        }
+
         if (isset($eventsParticipationEditForm)) {
             $formValues = $eventsParticipationEditForm->validate($_POST);
         }
