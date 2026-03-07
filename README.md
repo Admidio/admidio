@@ -4,7 +4,7 @@ Admidio empowers organizations and groups by providing a versatile and open-sour
 
 In addition to these core features, Admidio boasts a rich array of modules, including member lists, an event manager, messaging capabilities, photo albums, and a document and file repository.
 
-You can try out the [demo system](https://www.admidio.org/demo_en) to have a look to all the features Admidio offers.
+You can try out the [demo system](https://www.admidio.org/demo) to have a look to all the features Admidio offers.
 
 ![Admidio Logo](https://www.admidio.org/images/mainpage_flying_icons.png)
 
