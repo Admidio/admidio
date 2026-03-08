@@ -1234,7 +1234,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
-  <string name="SYS_PLUGIN_DISABLED">This plugin is disabled.</string>
   <string name="SYS_PLUGIN_INSTALL">Install plugin</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Here you can manage the plugins of Admidio. Plugins are additional modules that can be installed to extend the functionality of Admidio. You can install, update or remove plugins.</string>
