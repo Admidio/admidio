@@ -12,14 +12,11 @@
 :root {
     --admidio-header-font-color: #ffffff;
     --admidio-header-link-color: #263340;
-    --admidio-header-link-color-hover: #000000;
-    --admidio-menu-bg-color-hover: #3d5266;
-    --admidio-menu-font-color-hover: #ffffff;
     --admidio-clamp-text-lines: 0;
     --bs-primary: #349aaa;
     --bs-primary-rgb: 52, 154, 170;
-    --bs-secondary: #263340;
-    --bs-secondary-rgb: 38, 51, 64;
+    --bs-secondary: #A7D9E0;
+    --bs-secondary-rgb: 167, 217, 224;
     --bs-tertiary: #e9ecef;
     --bs-tertiary-rgb: 233, 236, 269;
     --bs-success: #04e01a;
@@ -29,7 +26,7 @@
     --bs-link-color-rgb: var(--bs-primary-rgb);
     --bs-link-hover-color: color-mix(in srgb, var(--bs-link-color) 80%, white);
     --bs-link-hover-color-rgb: color-mix(in srgb, rgb(var(--bs-link-color-rgb)) 80%, white);
-    --bs-focus-ring-color: #c4e9ef;
+    --bs-focus-ring-color: color-mix(in srgb, var(--bs-primary) 20%, white);
 }
 
 #adm_main_navbar {
@@ -54,7 +51,7 @@
 }
 
 #adm_navbar_nav a:hover, #adm_main_navbar .dropdown-toggle {
-    color: var(--admidio-header-link-color-hover);
+    color: color-mix(in srgb, var(--admidio-header-link-color) 10%, black);
 }
 
 @media (max-width: 767px)
@@ -123,12 +120,12 @@
 }
 
 .admidio-menu-list a {
-    color: var(--bs-tertiary);
+    color: var(--bs-body-color);
 }
 
 .admidio-menu-list a:hover {
-    color: var(--admidio-menu-font-color-hover);
-    background-color: var(--admidio-menu-bg-color-hover);
+    color: var(--admidio-header-font-color);
+    background-color: var(--bs-primary);
 }
 
 @media (min-width: 768px)
@@ -151,7 +148,7 @@
     text-transform: uppercase;
     padding: 0.5rem 1rem;
     margin: 0;
-    color: rgba(222, 222, 222, 0.65);
+    color: var(--bs-primary);
 }
 
 /***********************************/
@@ -270,6 +267,7 @@ a {
 .alert-info {
     background-color: color-mix(in srgb, var(--bs-primary) 40%, white);
     border-color: color-mix(in srgb, var(--bs-primary) 70%, white);
+    color: color-mix(in srgb, var(--bs-primary) 80%, black);
 }
 
 /* show vertical btn group in mobile view */
