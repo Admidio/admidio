@@ -19,7 +19,7 @@ use Smarty\Smarty;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
-class LatestDocumentsFilesPreferencesPresenter
+class LatestDocumentsFilesSettingsPresenter
 {
     /**
      * Generates the HTML of the form from the latest documents & files preferences and will return the complete HTML.
@@ -32,13 +32,13 @@ class LatestDocumentsFilesPreferencesPresenter
 
         $pluginLatestDocumentsFiles = LatestDocumentsFiles::getInstance();
         $formValues = $pluginLatestDocumentsFiles::getPluginConfig();
-        
+
         $formLatestDocumentsFiles = new FormPresenter(
-            'adm_preferences_form_latest_documents_files',
-            $pluginLatestDocumentsFiles::getPluginPath() . '/templates/preferences.plugin.latest-documents-files.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'latest_documents_files')),
+            'adm_settings_form_latest_documents_files',
+            $pluginLatestDocumentsFiles::getPluginPath() . '/templates/settings.plugin.latest-documents-files.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'latest_documents_files')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),

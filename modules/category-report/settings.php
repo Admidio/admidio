@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Modul Preferences of the admidio module CategoryReport
+ * Modul settings of the admidio module CategoryReport
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -12,9 +12,9 @@
  * add     : add a configuration
  * delete  : delete a configuration
  * copy    : copy a configuration
- * 
- * Each column will have a select box for profile fields and roles. Internally, role properties are stored as rNN, lNN, wNN, etc. 
- * For the select box, all these are transformed to rNN (so the select box allows selecting the desired role), and the actual first 
+ *
+ * Each column will have a select box for profile fields and roles. Internally, role properties are stored as rNN, lNN, wNN, etc.
+ * For the select box, all these are transformed to rNN (so the select box allows selecting the desired role), and the actual first
  * letter is passed on to the second select box to determine the role property!
  * When saving, the values from both select boxes are merged together again!
  *
@@ -325,10 +325,10 @@ try {
         $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => FormPresenter::FIELD_HIDDEN));
 
         if (count($config) > 1 && $value['default_conf'] == false) {
-            $categoryReport['urlConfigDelete'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('delete' => $key + 1));
+            $categoryReport['urlConfigDelete'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/settings.php', array('delete' => $key + 1));
         }
         if (!empty($value['name'])) {
-            $categoryReport['urlConfigCopy'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('copy' => $key + 1));
+            $categoryReport['urlConfigCopy'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/settings.php', array('copy' => $key + 1));
         }
         $categoryReports[] = $categoryReport;
     }
@@ -340,7 +340,7 @@ try {
     );
 
     $page->assignSmartyVariable('categoryReports', $categoryReports);
-    $page->assignSmartyVariable('urlConfigNew', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php', array('add' => 1)));
+    $page->assignSmartyVariable('urlConfigNew', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/settings.php', array('add' => 1)));
     $formConfigurations->addSubmitButton('adm_button_save_configurations', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $formConfigurations->addToHtmlPage();

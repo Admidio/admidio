@@ -1071,7 +1071,7 @@ INSERT INTO `%PREFIX%_menu` (`men_id`, `men_men_id_parent`, `men_com_id`, `men_u
 (12, 1, 90, 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b', 'category-report', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 0, 11, 1, '/modules/category-report/category_report.php', 'list-stars'),
 (13, 1, 100, '5b8b3e60-bc71-4375-bfc3-a9783a63bb72', 'weblinks', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', 0, 12, 1, '/modules/links/links.php', 'link-45deg'),
 (14, 1, 110, 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e', 'forum', 'SYS_FORUM', 'SYS_FORUM_DESC', 0, 6, 1, '/modules/forum.php', 'chat-dots-fill'),
-(15, 2, 120, '2965d083-8dd3-4a43-9b27-53018e5f22c1', 'orgprop', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', 0, 1, 1, '/modules/preferences.php', 'gear-fill'),
+(15, 2, 120, '2965d083-8dd3-4a43-9b27-53018e5f22c1', 'orgprop', 'SYS_SETTINGS', 'SYS_SETTINGS_DESC', 0, 1, 1, '/modules/preferences.php', 'gear-fill'),
 (16, 2, 130, '62330cbc-4c15-4860-b841-10a35d88cd3c', 'registration', 'SYS_REGISTRATION', 'SYS_MANAGE_NEW_REGISTRATIONS_DESC', 0, 2, 1, '/modules/registration.php', 'card-checklist'),
 (17, 2, 140, 'ef4b5380-3500-4ec4-a432-a7f4099a2a92', 'menu', 'SYS_MENU', 'SYS_MENU_DESC', 0, 3, 1, '/modules/menu.php', 'menu-button-wide-fill'),
 (19, 2, 221, 'e946f478-4228-4afa-9d11-d8235f93e18c', 'organization', 'SYS_ORGANIZATION', 'SYS_ORGANIZATION_DESC', 0, 4, 1, '/modules/organizations.php', 'diagram-3-fill'),

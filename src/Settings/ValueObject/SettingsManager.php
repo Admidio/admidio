@@ -1,11 +1,11 @@
 <?php
 
-namespace Admidio\Preferences\ValueObject;
+namespace Admidio\Settings\ValueObject;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
-use Admidio\Preferences\Entity\Preferences;
+use Admidio\Settings\Entity\Settings;
 
 /**
  * @brief Class the manage the settings of an organization
@@ -316,7 +316,7 @@ class SettingsManager
      */
     private function insert(string $name, string $value)
     {
-        $prf = new Preferences($this->db);
+        $prf = new Settings($this->db);
         $prf->setValue('prf_org_id', $this->orgId);
         $prf->setValue('prf_name', $name);
         $prf->setValue('prf_value', $value);
@@ -410,7 +410,7 @@ class SettingsManager
      */
     private function update(string $name, string $value)
     {
-        $prf = new Preferences($this->db);
+        $prf = new Settings($this->db);
         $found = $prf->readDataByColumns(array('prf_org_id' => $this->orgId, 'prf_name' => $name));
 
         if ($found) {

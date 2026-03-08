@@ -1,7 +1,7 @@
 <?php
 namespace Admidio\SSO\Service;
 
-use Admidio\Preferences\Entity\Preferences;
+use Admidio\Settings\Entity\Settings;
 use Admidio\SSO\Entity\SSOClient;
 use LightSaml\Builder\Profile\Metadata\MetadataProfileBuilder;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -37,7 +37,7 @@ use Exception;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
-use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\Settings\ValueObject\SettingsManager;
 use Admidio\Users\Entity\User;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -101,7 +101,7 @@ class SAMLService extends SSOService {
     }
 
     /**
-     * Returns an associative array with labels and links for the static IdP configuration data 
+     * Returns an associative array with labels and links for the static IdP configuration data
      * (metadata/discovery URL, SSO/SLO endpoints, etc.).
      * @return array Associative arry, the keys will be the displayed labels, each entry has the form
      *     ['value' => 'linkHTML', 'id' => 'uniqueIDinForm', 'style' => 'additionalCSSstyles']
@@ -130,7 +130,7 @@ class SAMLService extends SSOService {
         return $staticSettings;
     }
 
-    
+
 
 
 

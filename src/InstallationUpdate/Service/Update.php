@@ -74,7 +74,7 @@ class Update
 
         $this->checkLogin();
 
-        $this->updateOrgPreferences();
+        $this->updateSettings();
 
         // disable foreign key checks for mysql, so tables can easily be deleted
         $this->toggleForeignKeyChecks(false);
@@ -133,7 +133,7 @@ class Update
     /**
      * @throws Exception
      */
-    public function updateOrgPreferences(): void
+    public function updateSettings(): void
     {
         global $gDb, $gPasswordHashAlgorithm;
 
@@ -141,14 +141,14 @@ class Update
         PhpIniUtils::startNewExecutionTimeLimit(120);
 
         // first write the possible new Orga settings in DB
-        require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
+        require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/settings.php');
 
         // calculate the best cost value for your server performance
         $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
-        $updateOrgPreferences = array();
+        $updateSettings = array();
 
         if (is_int($benchmarkResults['options']['cost'])) {
-            $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['options']['cost']);
+            $updateSettings = array('system_hashing_cost' => $benchmarkResults['options']['cost']);
         }
 
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
@@ -157,8 +157,8 @@ class Update
         while ($orgId = $organizationStatement->fetchColumn()) {
             $organization = new Organization($gDb, $orgId);
             $settingsManager =& $organization->getSettingsManager();
-            $settingsManager->setMulti($defaultOrgPreferences, false);
-            $settingsManager->setMulti($updateOrgPreferences);
+            $settingsManager->setMulti($defaultSettings, false);
+            $settingsManager->setMulti($updateSettings);
         }
     }
 

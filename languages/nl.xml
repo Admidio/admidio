@@ -208,7 +208,7 @@
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Aantal berichten per pagina</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Bepaal het aantal items die per pagina getoond wordt. Er ontstaat paginering wanneer er meer geplaatst wordt. Als aantal 0 is, zal alles getoond worden en is paginering gedeactiveerd. (Standaard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Alleen voor ingelogde gebruikers</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</string>
+  <string name="SYS_SETTINGS_DESC">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">De organisatie #VAR1_BOLD# is toegevoegd. Bij de aanmelding kunt u deze nu kiezen.\n\nAls u voor deze organisatie een afzonderlijke homepage hebt gemaakt, moet u de nieuwe organisatie aan de config.php van deze pagina toevoegen.</string>
   <string name="SYS_PARENT_ORGANIZATION">Hoofdorganisatie</string>
   <string name="SYS_PARENT_ORGANIZATION_DESC">Bepaal hier de hoofdorganisatie. Hoofdorganisaties kunnen bijvoorbeeld evenementen en mededelingen aanmaken, die ook worden getoond in de geselecteerde (onderliggende) organisatie.</string>

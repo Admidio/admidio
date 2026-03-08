@@ -19,7 +19,7 @@ use Smarty\Smarty;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
-class CalendarPreferencesPresenter
+class CalendarSettingsPresenter
 {
     /**
      * Generates the HTML of the form from the announcement preferences and will return the complete HTML.
@@ -34,11 +34,11 @@ class CalendarPreferencesPresenter
         $formValues = $pluginCalendar::getPluginConfig();
 
         $formCalendar = new FormPresenter(
-            'adm_preferences_form_calendar',
-            $pluginCalendar::getPluginPath() . '/templates/preferences.plugin.calendar.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'calendar')),
+            'adm_settings_form_calendar',
+            $pluginCalendar::getPluginPath() . '/templates/settings.plugin.calendar.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'calendar')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),

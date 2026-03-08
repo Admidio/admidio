@@ -3,7 +3,7 @@
     <div class="tabs-x tabs-left tab-bordered" data-max-title-length="-1">
         <!-- variable set the first tab active -->
         {assign var="globalFirst" value=true}
-        <ul id="adm_preferences_tabs" class="nav nav-tabs flex-column list-group admidio-preferences-group" role="tablist">
+        <ul id="adm_preferences_tabs" class="nav nav-tabs flex-column list-group admidio-settings-group" role="tablist">
             {foreach $preferenceTabs as $tab}
                 <li class="list-group-item group-heading" role="presentation">
                     <h5 class="mb-0">{$tab.label}</h5>
@@ -27,12 +27,12 @@
                 {foreach $tab.panels as $panel}
                     <div class="tab-pane fade{if $globalFirst} active show{/if}" id="adm_tab_{$panel.id}_content" role="tabpanel" aria-labelledby="tab-{$panel.id}">
                         <!-- heading for each tab group -->
-                        {if !$panel.subcards}                                              
+                        {if !$panel.subcards}
                             <div class="card admidio-tabbed-field-group">
                                 <div class="card-header">{$panel.title}</div>
                                 <div class="card-body">
-                        {/if} 
-                                    <div id="adm_panel_preferences_{$panel.id}" data-preferences-panel="{$panel.id}">
+                        {/if}
+                                    <div id="adm_panel_preferences_{$panel.id}" data-settings-panel="{$panel.id}">
                                         <!-- AJAX-Container for panel content -->
                                     </div>
                         {if !$panel.subcards}
@@ -64,7 +64,7 @@
                             </h2>
                             <div class="accordion-collapse collapse{if $smarty.foreach.outer.first && $smarty.foreach.inner.first} show{/if}" id="collapse_{$panel.id}" aria-labelledby="heading_{$panel.id}" data-bs-parent="#adm_preferences_accordion">
                                 <div class="accordion-body">
-                                    <div id="adm_panel_preferences_{$panel.id}" data-preferences-panel="{$panel.id}" >
+                                    <div id="adm_panel_preferences_{$panel.id}" data-settings-panel="{$panel.id}" >
                                         <!-- AJAX-Container for panel content -->
                                     </div>
                                 </div>

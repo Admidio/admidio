@@ -73,7 +73,7 @@ class PluginsPresenter extends PagePresenter
 
         $this->setHtmlID('adm_plugins');
         $this->setHeadline($gL10n->get('SYS_PLUGIN_MANAGER'));
-        
+
         $this->prepareData();
 
         $this->smarty->assign('cards', $this->templateData);
@@ -116,26 +116,26 @@ class PluginsPresenter extends PagePresenter
 
                 // add actions for the plugin
                 if ($interface->isInstalled()) {
-                    // add showPreferences action
-                    // if there is a custom defined preferences file in the metadata then use this file
-                    if (isset($interface->getMetadata()['preferencesFile']) && !empty($interface->getMetadata()['preferencesFile'])) {
+                    // add showSettings action
+                    // if there is a custom defined settings file in the metadata then use this file
+                    if (isset($interface->getMetadata()['settingsFile']) && !empty($interface->getMetadata()['settingsFile'])) {
                         // check, if the file starts with a / or \\ indicating an absolute path, if so we don't need to add a directory separator
-                        if (str_starts_with($interface->getMetadata()['preferencesFile'], '/') || str_starts_with($interface->getMetadata()['preferencesFile'], '\\')) {
-                            $url = ADMIDIO_URL . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $interface->getComponentName() . $interface->getMetadata()['preferencesFile'];
+                        if (str_starts_with($interface->getMetadata()['settingsFile'], '/') || str_starts_with($interface->getMetadata()['settingsFile'], '\\')) {
+                            $url = ADMIDIO_URL . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $interface->getComponentName() . $interface->getMetadata()['settingsFile'];
                         } else {
-                            $url = ADMIDIO_URL . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $interface->getComponentName() . DIRECTORY_SEPARATOR . $interface->getMetadata()['preferencesFile'];
+                            $url = ADMIDIO_URL . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $interface->getComponentName() . DIRECTORY_SEPARATOR . $interface->getMetadata()['settingsFile'];
                         }
                         $templateRow['actions'][] = array(
                             'url' => $url,
                             'icon' => 'bi bi-gear',
-                            'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
+                            'tooltip' => $gL10n->get('SYS_PLUGIN_SETTINGS')
                         );
                     } else {
-                        // else use the preferences panel based on the plugin name
+                        // else use the settings panel based on the plugin name
                         $templateRow['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($interface->getName())))))),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('panel' => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($interface->getName())))))),
                             'icon' => 'bi bi-gear',
-                            'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
+                            'tooltip' => $gL10n->get('SYS_PLUGIN_SETTINGS')
                         );
                     }
 
@@ -196,7 +196,7 @@ class PluginsPresenter extends PagePresenter
                 $templateRowPluginParent['available']['entries'][] = $templateRow;
             }
         }
-        
+
         // remove empty categories
         foreach ($templateRowPluginParent as $key => $value) {
             if (empty($value['entries'])) {

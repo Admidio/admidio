@@ -19,7 +19,7 @@ use Smarty\Smarty;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
-class BirthdayPreferencesPresenter
+class BirthdaySettingsPresenter
 {
     /**
      * Generates the HTML of the form from the announcement preferences and will return the complete HTML.
@@ -34,11 +34,11 @@ class BirthdayPreferencesPresenter
         $formValues = $pluginBirthday::getPluginConfig();
 
         $formBirthday = new FormPresenter(
-            'adm_preferences_form_birthday',
-            $pluginBirthday::getPluginPath() . '/templates/preferences.plugin.birthday.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'birthday')),
+            'adm_settings_form_birthday',
+            $pluginBirthday::getPluginPath() . '/templates/settings.plugin.birthday.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'birthday')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),

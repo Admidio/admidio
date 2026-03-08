@@ -1,6 +1,6 @@
 <script type="text/javascript">
-    /* function to initialize the visibility of dependent fields in the inventory preferences form */
-    function initializeInventoryPreferencesVisibility(direct=false, directModule=false) {
+    /* function to initialize the visibility of dependent fields in the inventory settings form */
+    function initializeInventorySettingsVisibility(direct=false, directModule=false) {
         // special case:
         if($("#inventory_module_enabled").val() == 5) {
             directModule ? $("#inventory_visible_for_group").show() : $("#inventory_visible_for_group").slideDown("slow");
@@ -85,7 +85,7 @@
             if (!$("#inventory_item_picture_enabled").is(":hidden") && !$("#inventory_profile_view_group").is(":hidden") && !$("#inventory_allowed_keeper_edit_fields_group").is(":hidden")) {
                 clearInterval(interval);
                 // now we can initialize the visibility of the fields
-                initializeInventoryPreferencesVisibility();
+                initializeInventorySettingsVisibility();
             }
         }, 100);
 
@@ -98,7 +98,7 @@
                 // direct animation for "inventory_visible_for" field only if the value did not change to/from "5 - For module administrators and role members"
                 directModule = true;
             }
-            initializeInventoryPreferencesVisibility(true, directModule);
+            initializeInventorySettingsVisibility(true, directModule);
             prevInventoryModuleEnabled = currentVal;
         });
     });

@@ -168,7 +168,7 @@
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Povoleno, ale viditelné pouze pro administrátory</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">Pouze pro administrátory modulu</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Pouze pro přihlášené uživatele</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Zde můžete spravovat obecné předvolby organizace nebo předvolby modulů.</string>
+  <string name="SYS_SETTINGS_DESC">Zde můžete spravovat obecné předvolby organizace nebo předvolby modulů.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organizace #VAR1_BOLD# byla úspěšně přidána. Nyní je k dispozici při přihlašování.\n\nPokud máte pro tuto organizaci samostatnou domovskou stránku, přidejte ji prosím do souboru config.php dané stránky.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Síla hesla</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">>Zde můžete určit, jak bezpečná a složitá musí být hesla minimálně.\nHodnota v závorkách udává, kolik pokusů je v průměru potřeba k určení hesla.\n\n Žádná: riskantní heslo (&lt;10^3)\n Nízká: Ochrana proti omezeným online útokům. (&lt;10^6)\n Střední: ochrana proti neomezeným online útokům. (&lt;10^8)\n Vysoká: mírná ochrana proti offline hashování. (&lt;10^10)\n Velmi vysoká: Silná ochrana proti offline hashování. (&gt;= 10^10)</string>
@@ -747,7 +747,7 @@
   <string name="SYS_HALF_YEARLY">Pololetně</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP hlavička již byla odeslána!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Obsahové moduly (dokumenty, události, oznámení atd.)</string>
-  <string name="SYS_HEADER_PREFERENCES">Obecné předvolby</string>
+  <string name="SYS_GENERAL_SETTINGS">Obecné předvolby</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">Profilová data uživatele a role</string>
   <string name="SYS_HEADER_USER_ROLE_SETTINGS">Nastavení pro uživatele a skupiny/role</string>
   <string name="SYS_HEADLINE">Nadpis</string>
@@ -803,7 +803,7 @@
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">Datum zapůjčení položky musí být před datem vrácení!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">Kategorie položky</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Propojené pole</string>
-  <string name="SYS_INVENTORY_COPY_PREFERENCES">Nastavení pro kopírování položky:</string>
+  <string name="SYS_INVENTORY_COPY_SETTINGS">Nastavení pro kopírování položky:</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Do této tabulky můžete zadat záznamy pro časové intervaly. Pro každý další záznam v rozbalovacím seznamu zde lze přidat řádek tabulky.\nZáznam v seznamu se později neukládá jako text, ale jako vybraná pozice ze seznamu. Pokud změníte text v řádku, všichni uživatelé okamžitě uvidí nový text.\nČasový interval musí být napsán ve stejném řádku oddělený symbolem | za názvem. např. Ročně | 1y \nPokud není uvedena žádná jednotka, předpokládají se dny. \nMožné jednotky: d: dny, w: týdny, m: měsíce, y: roky</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Zobrazení data</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Výběr formátu data, který se použije pro zobrazení informací o datu a čase ve správci inventáře. (Výchozí: Datum (DD.MM.RRRR))</string>
@@ -1235,7 +1235,7 @@
   <string name="SYS_PLUGIN_NAME_MISSING">No plugin name specified.</string>
   <string name="SYS_PLUGIN_NO_INTERFACE">Doplněk nemá žádné uživatelské rozhraní.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Doplněk není nainstalován.</string>
-  <string name="SYS_PLUGIN_PREFERENCES">Předvolby doplňku</string>
+  <string name="SYS_PLUGIN_SETTINGS">Předvolby doplňku</string>
   <string name="SYS_PLUGIN_UNINSTALL">Odinstalovat doplněk</string>
   <string name="SYS_PLUGIN_UPDATE">Aktualizovat doplněk</string>
   <string name="SYS_PLUGIN_VERSION">Verze doplňku</string>

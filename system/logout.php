@@ -9,7 +9,7 @@
  ***********************************************************************************************
  */
 
-use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\Settings\ValueObject\SettingsManager;
 
 try {
     require_once(__DIR__ . '/common.php');

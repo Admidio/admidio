@@ -11,7 +11,7 @@ use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
-use Admidio\Preferences\Service\PreferencesService;
+use Admidio\Settings\Service\SettingsService;
 use Admidio\SSO\Service\KeyService;
 
 use Admidio\Infrastructure\Plugins\PluginManager;
@@ -35,24 +35,24 @@ use RuntimeException;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class PreferencesPresenter extends PagePresenter
+class SettingsPresenter extends PagePresenter
 {
     /**
-     * @var array Array with all possible entries for the preferences.
+     * @var array Array with all possible entries for the settings.
      *            Each entry consists of an array that has the following structure:
      *            array ('key' => 'xzy', 'label' => 'xyz', 'panels' => array('id' => 'xyz', 'title' => 'xyz', 'icon' => 'xyz'))
      *
-     *            There are thwo different visualizations of the preferences:
+     *            There are thwo different visualizations of the settings:
      *              1) a nested tab structure (main tabs created by 'key' and 'label' and sub tabs created by 'panels')
      *              2) a accordion structure when the @media query (max-width: 768px) is active ('key' and 'label' are used for card header
      *                 and 'panels' for accordions inside the card)
      */
-    protected array $preferenceTabs = array();
+    protected array $settingTabs = array();
     /**
-     * @var string Name of the preference panel that should be shown after page loading.
-     *             If this parameter is empty, then show the common preferences.
+     * @var string Name of the setting panel that should be shown after page loading.
+     *             If this parameter is empty, then show the common settings.
      */
-    protected string $preferencesPanelToShow = '';
+    protected string $settingsPanelToShow = '';
 
     /**
      * Constructor that initializes the class member parameters
@@ -65,7 +65,7 @@ class PreferencesPresenter extends PagePresenter
         $this->initialize();
         $this->setPanelToShow($panel);
 
-        $this->setHtmlID('adm_preferences');
+        $this->setHtmlID('adm_settings');
         $this->setHeadline($gL10n->get('SYS_SETTINGS'));
 
         parent::__construct();
@@ -73,12 +73,12 @@ class PreferencesPresenter extends PagePresenter
 
     public function __call(string $name, array $arguments)
     {
-        // check if the method exists in the PreferencePresanter class
+        // check if the method exists in the SettingsPresenter class
         if (method_exists($this, $name)) {
             return call_user_func_array([$this, $name], $arguments);
         } else {
             // Look through every plugin you registered during init()
-            foreach (PreferencesService::getPluginPresenters() as $comId => $callbacks) {
+            foreach (SettingsService::getPluginPresenters() as $comId => $callbacks) {
                 foreach ($callbacks as $callback) {
                     // We only stored array callbacks for static methods
                     if (is_array($callback)
@@ -109,10 +109,10 @@ class PreferencesPresenter extends PagePresenter
         $pluginManager = new PluginManager();
         foreach ($pluginManager->getInstalledPlugins() as $pluginClass) {
             $pluginClass::getInstance();
-            $pluginClass::initPreferencePanelCallback();
+            $pluginClass::initSettingsPanelCallback();
         }
 
-        $this->preferenceTabs = array(
+        $this->settingTabs = array(
             // === 1) System ===
             array(
                 'key'    => 'system',
@@ -181,7 +181,7 @@ class PreferencesPresenter extends PagePresenter
             array(
                 'key'    => 'overview_extensions',
                 'label'  => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'),
-                // load in all plugin panels that are registered in the PreferencesService
+                // load in all plugin panels that are registered in the SettingsService
                 'panels' => array_map(
                     fn(array $entry) => [
                         'id'       => $entry['id'],
@@ -189,7 +189,7 @@ class PreferencesPresenter extends PagePresenter
                         'icon'     => $entry['icon']    ?? 'bi-puzzle',
                         'subcards' => $entry['subcards'] ?? false,
                     ],
-                    \Admidio\Preferences\Service\PreferencesService::getOverviewPluginPanels()
+                    \Admidio\Settings\Service\SettingsService::getOverviewPluginPanels()
                 )
             ),
 
@@ -197,7 +197,7 @@ class PreferencesPresenter extends PagePresenter
             array(
                 'key'    => 'extensions',
                 'label'  => $gL10n->get('SYS_EXTENSIONS'),
-                // load in all plugin panels that are registered in the PreferencesService
+                // load in all plugin panels that are registered in the SettingsService
                 'panels' => array_map(
                     fn(array $entry) => [
                         'id'       => $entry['id'],
@@ -205,15 +205,15 @@ class PreferencesPresenter extends PagePresenter
                         'icon'     => $entry['icon']    ?? 'bi-puzzle',
                         'subcards' => $entry['subcards'] ?? false,
                     ],
-                    \Admidio\Preferences\Service\PreferencesService::getPluginPanels()
+                    \Admidio\Settings\Service\SettingsService::getPluginPanels()
                 )
             )
         );
     }
 
     /**
-     * Generates the HTML of the form from the announcement preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the announcement preferences.
+     * Generates the HTML of the form from the announcement settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the announcement settings.
      * @throws Exception|\Smarty\Exception
      */
     public function createAnnouncementsForm(): string
@@ -223,11 +223,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formAnnouncements = new FormPresenter(
-            'adm_preferences_form_announcements',
-            'preferences/preferences.announcements.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'announcements')),
+            'adm_settings_form_announcements',
+            'settings/settings.announcements.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'announcements')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -269,12 +269,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formAnnouncements->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formAnnouncements);
-        return $smarty->fetch('preferences/preferences.announcements.tpl');
+        return $smarty->fetch('settings/settings.announcements.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the captcha preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the captcha preferences.
+     * Generates the HTML of the form from the captcha settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the captcha settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -285,11 +285,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formCaptcha = new FormPresenter(
-            'adm_preferences_form_captcha',
-            'preferences/preferences.captcha.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'captcha')),
+            'adm_settings_form_captcha',
+            'settings/settings.captcha.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'captcha')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
 
         // search all available themes in the theme folder
@@ -391,12 +391,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formCaptcha->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formCaptcha);
-        return $smarty->fetch('preferences/preferences.captcha.tpl');
+        return $smarty->fetch('settings/settings.captcha.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the category report preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the category report preferences.
+     * Generates the HTML of the form from the category report settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the category report settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -407,11 +407,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formCategoryReport = new FormPresenter(
-            'adm_preferences_form_category_report',
-            'preferences/preferences.category-report.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'category_report')),
+            'adm_settings_form_category_report',
+            'settings/settings.category-report.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'category_report')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $formCategoryReport->addCheckbox(
             'category_report_module_enabled',
@@ -443,12 +443,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formCategoryReport->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formCategoryReport);
-        return $smarty->fetch('preferences/preferences.category-report.tpl');
+        return $smarty->fetch('settings/settings.category-report.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the changelog preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the changelog report preferences.
+     * Generates the HTML of the form from the changelog settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the changelog report settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -459,11 +459,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formChangelog = new FormPresenter(
-            'adm_preferences_form_changelog',
-            'preferences/preferences.changelog.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'changelog')),
+            'adm_settings_form_changelog',
+            'settings/settings.changelog.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'changelog')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
 
         $selectBoxEntries = array(
@@ -502,9 +502,9 @@ class PreferencesPresenter extends PagePresenter
                         'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'links', 'others')
                     ),
                     array(
-                        'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
-                        'id' => 'preferences',
-                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories', 'saml_clients', 'oidc_clients', 'sso_keys')
+                        'title' => $gL10n->get('SYS_GENERAL_SETTINGS'),
+                        'id' => 'settings',
+                        'tables' => array('organizations', 'menu', 'settings', 'texts', 'lists', 'list_columns', 'categories', 'saml_clients', 'oidc_clients', 'sso_keys')
                     )
                 )
             )
@@ -534,12 +534,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formChangelog->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formChangelog);
-        return $smarty->fetch('preferences/preferences.changelog.tpl');
+        return $smarty->fetch('settings/settings.changelog.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the common preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the common preferences.
+     * Generates the HTML of the form from the common settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the common settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -550,11 +550,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formCommon = new FormPresenter(
-            'adm_preferences_form_common',
-            'preferences/preferences.common.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'common')),
+            'adm_settings_form_common',
+            'settings/settings.common.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'common')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
 
         $formCommon->addInput(
@@ -627,12 +627,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formCommon->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formCommon);
-        return $smarty->fetch('preferences/preferences.common.tpl');
+        return $smarty->fetch('settings/settings.common.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the plugin overview preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the contact preferences.
+     * Generates the HTML of the form from the plugin overview settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the contact settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -669,11 +669,11 @@ class PreferencesPresenter extends PagePresenter
         }
 
         $formOverview = new FormPresenter(
-            'adm_preferences_form_overview',
-            'preferences/preferences.overview.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'overview')),
+            'adm_settings_form_overview',
+            'settings/settings.overview.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'overview')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
 
         $formOverview->addDescription(
@@ -701,12 +701,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty->assign('overviewPlugins', $overviewPlugins);
         $formOverview->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formOverview);
-        return $smarty->fetch('preferences/preferences.overview.tpl');
+        return $smarty->fetch('settings/settings.overview.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the contact preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the contact preferences.
+     * Generates the HTML of the form from the contact settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the contact settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -717,11 +717,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formContacts = new FormPresenter(
-            'adm_preferences_form_contacts',
-            'preferences/preferences.contacts.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'contacts')),
+            'adm_settings_form_contacts',
+            'settings/settings.contacts.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'contacts')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
 
         // read all global lists
@@ -787,12 +787,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formContacts->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formContacts);
-        return $smarty->fetch('preferences/preferences.contacts.tpl');
+        return $smarty->fetch('settings/settings.contacts.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the design preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the design preferences.
+     * Generates the HTML of the form from the design settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the design settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -803,11 +803,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formDesign = new FormPresenter(
-            'adm_preferences_form_design',
-            'preferences/preferences.design.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'design')),
+            'adm_settings_form_design',
+            'settings/settings.design.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'design')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
 
         // search all available themes in the theme folder
@@ -879,12 +879,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formDesign->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formDesign);
-        return $smarty->fetch('preferences/preferences.design.tpl');
+        return $smarty->fetch('settings/settings.design.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the documents & files preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the documents & files preferences.
+     * Generates the HTML of the form from the documents & files settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the documents & files settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -895,11 +895,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formDocumentsFiles = new FormPresenter(
-            'adm_preferences_form_documents_files',
-            'preferences/preferences.documents-files.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'documents_files')),
+            'adm_settings_form_documents_files',
+            'settings/settings.documents-files.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'documents_files')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -927,12 +927,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formDocumentsFiles->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formDocumentsFiles);
-        return $smarty->fetch('preferences/preferences.documents-files.tpl');
+        return $smarty->fetch('settings/settings.documents-files.tpl');
     }
 
     /**
-     * Generates the html of the form from the inventory preferences and will return the complete html.
-     * @return string Returns the complete html of the form from the inventory preferences.
+     * Generates the html of the form from the inventory settings and will return the complete html.
+     * @return string Returns the complete html of the form from the inventory settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -943,11 +943,11 @@ class PreferencesPresenter extends PagePresenter
         $items = new ItemsData($gDb, $gCurrentOrgId);
 
         $formInventory = new FormPresenter(
-            'adm_preferences_form_inventory',
-            'preferences/preferences.inventory.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'Inventory')),
+            'adm_settings_form_inventory',
+            'settings/settings.inventory.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'Inventory')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
 
         // standard module settings
@@ -1183,12 +1183,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formInventory->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formInventory);
-        return $smarty->fetch('preferences/preferences.inventory.tpl');
+        return $smarty->fetch('settings/settings.inventory.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the email dispatch preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the email dispatch preferences.
+     * Generates the HTML of the form from the email dispatch settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the email dispatch settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1199,11 +1199,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formEmailDispatch = new FormPresenter(
-            'adm_preferences_form_email_dispatch',
-            'preferences/preferences.email-dispatch.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'email_dispatch')),
+            'adm_settings_form_email_dispatch',
+            'settings/settings.email-dispatch.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'email_dispatch')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'));
         $formEmailDispatch->addSelectBox(
@@ -1312,7 +1312,7 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_smtp_password'],
             array('type' => 'password', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
         );
-        $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '">
+        $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'test_email')) . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
         $formEmailDispatch->addSubmitButton(
@@ -1324,12 +1324,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formEmailDispatch->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formEmailDispatch);
-        return $smarty->fetch('preferences/preferences.email-dispatch.tpl');
+        return $smarty->fetch('settings/settings.email-dispatch.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the events preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the events preferences.
+     * Generates the HTML of the form from the events settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the events settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1340,11 +1340,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formEvents = new FormPresenter(
-            'adm_preferences_form_events',
-            'preferences/preferences.events.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'events')),
+            'adm_settings_form_events',
+            'settings/settings.events.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'events')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -1461,12 +1461,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formEvents->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formEvents);
-        return $smarty->fetch('preferences/preferences.events.tpl');
+        return $smarty->fetch('settings/settings.events.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the group and roles preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the group and roles preferences.
+     * Generates the HTML of the form from the group and roles settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the group and roles settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1477,11 +1477,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formGroupsRoles = new FormPresenter(
-            'adm_preferences_form_groups_roles',
-            'preferences/preferences.groups-roles.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'groups_roles')),
+            'adm_settings_form_groups_roles',
+            'settings/settings.groups-roles.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'groups_roles')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $formGroupsRoles->addCheckbox(
             'groups_roles_module_enabled',
@@ -1561,12 +1561,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formGroupsRoles->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formGroupsRoles);
-        return $smarty->fetch('preferences/preferences.groups-roles.tpl');
+        return $smarty->fetch('settings/settings.groups-roles.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the forum preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the forum preferences.
+     * Generates the HTML of the form from the forum settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the forum settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1577,11 +1577,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formForum = new FormPresenter(
-            'adm_preferences_form_forum',
-            'preferences/preferences.forum.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'forum')),
+            'adm_settings_form_forum',
+            'settings/settings.forum.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'forum')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -1625,12 +1625,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formForum->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formForum);
-        return $smarty->fetch('preferences/preferences.forum.tpl');
+        return $smarty->fetch('settings/settings.forum.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the link preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the link preferences.
+     * Generates the HTML of the form from the link settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the link settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1641,11 +1641,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formWeblinks = new FormPresenter(
-            'adm_preferences_form_links',
-            'preferences/preferences.links.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'links')),
+            'adm_settings_form_links',
+            'settings/settings.links.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'links')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -1694,12 +1694,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formWeblinks->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formWeblinks);
-        return $smarty->fetch('preferences/preferences.links.tpl');
+        return $smarty->fetch('settings/settings.links.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the message preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the message preferences.
+     * Generates the HTML of the form from the message settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the message settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1710,11 +1710,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formMessages = new FormPresenter(
-            'adm_preferences_form_messages',
-            'preferences/preferences.messages.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'messages')),
+            'adm_settings_form_messages',
+            'settings/settings.messages.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'messages')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -1743,7 +1743,7 @@ class PreferencesPresenter extends PagePresenter
         $formMessages->addSelectBox(
             'mail_template',
             $gL10n->get('SYS_EMAIL_TEMPLATE'),
-            PreferencesService::getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
+            SettingsService::getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates'),
             array(
                 'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.html', '', $formValues['mail_template']))),
                 'showContextDependentFirstEntry' => true,
@@ -1808,12 +1808,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formMessages->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formMessages);
-        return $smarty->fetch('preferences/preferences.messages.tpl');
+        return $smarty->fetch('settings/settings.messages.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the photo preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the photo preferences.
+     * Generates the HTML of the form from the photo settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the photo settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1824,11 +1824,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formPhotos = new FormPresenter(
-            'adm_preferences_form_photos',
-            'preferences/preferences.photos.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'photos')),
+            'adm_settings_form_photos',
+            'settings/settings.photos.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'photos')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -1920,7 +1920,7 @@ class PreferencesPresenter extends PagePresenter
         $formPhotos->addSelectBox(
             'photo_ecard_template',
             $gL10n->get('SYS_TEMPLATE'),
-            PreferencesService::getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
+            SettingsService::getArrayFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates'),
             array(
                 'defaultValue' => ucfirst(preg_replace('/[_-]/', ' ', str_replace('.tpl', '', $formValues['photo_ecard_template']))),
                 'showContextDependentFirstEntry' => false,
@@ -1938,12 +1938,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formPhotos->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formPhotos);
-        return $smarty->fetch('preferences/preferences.photos.tpl');
+        return $smarty->fetch('settings/settings.photos.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the profile preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the profile preferences.
+     * Generates the HTML of the form from the profile settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the profile settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -1954,11 +1954,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formProfile = new FormPresenter(
-            'adm_preferences_form_profile',
-            'preferences/preferences.profile.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'profile')),
+            'adm_settings_form_profile',
+            'settings/settings.profile.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'profile')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $html = '<a class="btn btn-secondary" href="' . ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php">
             <i class="bi bi-ui-radios"></i>' . $gL10n->get('SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION') . '</a>';
@@ -2024,12 +2024,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formProfile->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formProfile);
-        return $smarty->fetch('preferences/preferences.profile.tpl');
+        return $smarty->fetch('settings/settings.profile.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the regional settings preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the regional settings preferences.
+     * Generates the HTML of the form from the regional settings settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the regional settings settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -2040,11 +2040,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formRegionalSettings = new FormPresenter(
-            'adm_preferences_form_regional_settings',
-            'preferences/preferences.regional-settings.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'regional_settings')),
+            'adm_settings_form_regional_settings',
+            'settings/settings.regional-settings.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'regional_settings')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $formRegionalSettings->addInput(
             'system_timezone',
@@ -2091,12 +2091,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formRegionalSettings->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formRegionalSettings);
-        return $smarty->fetch('preferences/preferences.regional-settings.tpl');
+        return $smarty->fetch('settings/settings.regional-settings.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the registration preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the registration preferences.
+     * Generates the HTML of the form from the registration settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the registration settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -2107,11 +2107,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formRegistration = new FormPresenter(
-            'adm_preferences_form_registration',
-            'preferences/preferences.registration.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'registration')),
+            'adm_settings_form_registration',
+            'settings/settings.registration.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'registration')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $formRegistration->addCheckbox(
             'registration_module_enabled',
@@ -2152,12 +2152,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formRegistration->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formRegistration);
-        return $smarty->fetch('preferences/preferences.registration.tpl');
+        return $smarty->fetch('settings/settings.registration.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the security preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the security preferences.
+     * Generates the HTML of the form from the security settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the security settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -2168,11 +2168,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formSecurity = new FormPresenter(
-            'adm_preferences_form_security',
-            'preferences/preferences.security.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'security')),
+            'adm_settings_form_security',
+            'settings/settings.security.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'security')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $formSecurity->addInput(
             'logout_minutes',
@@ -2226,12 +2226,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formSecurity->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formSecurity);
-        return $smarty->fetch('preferences/preferences.security.tpl');
+        return $smarty->fetch('settings/settings.security.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the sso preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the sso preferences.
+     * Generates the HTML of the form from the sso settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the sso settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -2242,11 +2242,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formSSO = new FormPresenter(
-            'adm_preferences_form_sso',
-            'preferences/preferences.sso.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'sso')),
+            'adm_settings_form_sso',
+            'settings/settings.sso.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'sso')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
 
 
@@ -2428,12 +2428,12 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formSSO->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formSSO);
-        return $smarty->fetch('preferences/preferences.sso.tpl');
+        return $smarty->fetch('settings/settings.sso.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the Admidio update preferences, system information preferences and PHP preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the  Admidio update preferences, system information preferences and PHP preferences.
+     * Generates the HTML of the form from the Admidio update settings, system information settings and PHP settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the  Admidio update settings, system information settings and PHP settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -2459,7 +2459,7 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
         $this->assignSmartyVariable('updateStepText', $updateStepText);
         $this->assignSmartyVariable('databaseType', DB_TYPE);
-        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
+        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'backup')));
         $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
 
         // Admidio System Information
@@ -2634,19 +2634,19 @@ class PreferencesPresenter extends PagePresenter
 
         //assign card titles and corresponding template files
         $cards = array(
-            array('title'=>$gL10n->get('SYS_ADMIDIO'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
-            array('title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),        'icon'=>'bi-info-circle-fill', 'templateFile'=>'preferences/preferences.system-information.tpl'),
-            array('title'=>$gL10n->get('SYS_PHP'),                 'icon'=>'bi-filetype-php', 'templateFile'=>'preferences/preferences.php.tpl'),
+            array('title'=>$gL10n->get('SYS_ADMIDIO'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'settings/settings.admidio-update.tpl'),
+            array('title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),        'icon'=>'bi-info-circle-fill', 'templateFile'=>'settings/settings.system-information.tpl'),
+            array('title'=>$gL10n->get('SYS_PHP'),                 'icon'=>'bi-filetype-php', 'templateFile'=>'settings/settings.php.tpl'),
         );
 
         $this->assignSmartyVariable('cards', $cards);
         $smarty = $this->getSmartyTemplate();
-        return $smarty->fetch('preferences/preferences.system-informations.tpl');
+        return $smarty->fetch('settings/settings.system-informations.tpl');
     }
 
     /**
-     * Generates the HTML of the form from the system notifications preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the system notifications preferences.
+     * Generates the HTML of the form from the system notifications settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the system notifications settings.
      * @throws Exception
      * @throws \Smarty\Exception
      */
@@ -2657,11 +2657,11 @@ class PreferencesPresenter extends PagePresenter
         $formValues = $gSettingsManager->getAll();
 
         $formSystemNotifications = new FormPresenter(
-            'adm_preferences_form_system_notifications',
-            'preferences/preferences.system-notifications.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'system_notifications')),
+            'adm_settings_form_system_notifications',
+            'settings/settings.system-notifications.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'system_notifications')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $formSystemNotifications->addCheckbox(
             'system_notifications_enabled',
@@ -2747,7 +2747,7 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formSystemNotifications->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formSystemNotifications);
-        return $smarty->fetch('preferences/preferences.system-notifications.tpl');
+        return $smarty->fetch('settings/settings.system-notifications.tpl');
     }
 
     /**
@@ -2757,7 +2757,7 @@ class PreferencesPresenter extends PagePresenter
      */
     public function setPanelToShow(string $panelName): void
     {
-        $this->preferencesPanelToShow = $panelName;
+        $this->settingsPanelToShow = $panelName;
     }
 
     /**
@@ -2769,38 +2769,38 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n;
 
-        if ($this->preferencesPanelToShow !== '') {
+        if ($this->settingsPanelToShow !== '') {
             // open the selected panel
-            if ($this->preferencesPanelToShow !== '') {
+            if ($this->settingsPanelToShow !== '') {
                 $this->addJavascript('
                     // --- Reset Tab active states for large screens
-                    $("#adm_preferences_tabs .nav-link").removeClass("active");
-                    $("#adm_preferences_tab_content .tab-pane").removeClass("active show");
+                    $("#adm_settings_tabs .nav-link").removeClass("active");
+                    $("#adm_settings_tab_content .tab-pane").removeClass("active show");
 
                     // --- Reset Accordion active states for small screens
-                    $("#adm_preferences_accordion [aria-expanded=\'true\']").attr("aria-expanded", "false");
-                    $("#adm_preferences_accordion .accordion-button").addClass("collapsed");
-                    $("#adm_preferences_accordion .accordion-item").removeClass("show");
-                    $("#adm_preferences_accordion .accordion-collapse").removeClass("show");
+                    $("#adm_settings_accordion [aria-expanded=\'true\']").attr("aria-expanded", "false");
+                    $("#adm_settings_accordion .accordion-button").addClass("collapsed");
+                    $("#adm_settings_accordion .accordion-item").removeClass("show");
+                    $("#adm_settings_accordion .accordion-collapse").removeClass("show");
 
                     // --- Activate the selected Tab and its content
-                    $("#adm_tab_' . $this->preferencesPanelToShow . '").addClass("active");
-                    $("#adm_tab_' . $this->preferencesPanelToShow . '_content").addClass("active show");
+                    $("#adm_tab_' . $this->settingsPanelToShow . '").addClass("active");
+                    $("#adm_tab_' . $this->settingsPanelToShow . '_content").addClass("active show");
 
                     // --- For Mobile Accordion: open the desired accordion panel
-                    $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show");
+                    $("#collapse_' . $this->settingsPanelToShow . '").addClass("show");
 
                     // --- Desktop vs. Mobile via jQuery visibility
                     if ($(".d-none.d-md-block").is(":visible")) {
                         // Desktop mode
-                        $("#adm_preferences_tabs .nav-link[data-bs-target=\'#adm_tab_' . $this->preferencesPanelToShow . '_content\']").addClass("active");
-                        $("#adm_preferences_tab_content .tab-pane#adm_tab_' . $this->preferencesPanelToShow . '_content").addClass("active show");
+                        $("#adm_settings_tabs .nav-link[data-bs-target=\'#adm_tab_' . $this->settingsPanelToShow . '_content\']").addClass("active");
+                        $("#adm_settings_tab_content .tab-pane#adm_tab_' . $this->settingsPanelToShow . '_content").addClass("active show");
                     } else {
                         // Mobile mode
-                        $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show").attr("aria-expanded", "true");
-                        $("#heading_' . $this->preferencesPanelToShow . ' .accordion-button").removeClass("collapsed").attr("aria-expanded", "true");
+                        $("#collapse_' . $this->settingsPanelToShow . '").addClass("show").attr("aria-expanded", "true");
+                        $("#heading_' . $this->settingsPanelToShow . ' .accordion-button").removeClass("collapsed").attr("aria-expanded", "true");
                         // --- Hash setzen, damit Bookmark/Scroll stimmt und zum Element scrollen
-                        location.hash = "#heading_' . $this->preferencesPanelToShow . '";
+                        location.hash = "#heading_' . $this->settingsPanelToShow . '";
                     }
                 ', true);
             }
@@ -2808,8 +2808,8 @@ class PreferencesPresenter extends PagePresenter
 
         $this->addJavascript('
             // === 1) Panel laden und Events binden ===
-            function loadPreferencesPanel(panelId) {
-                var panelContainers = $("[data-preferences-panel=\"" + panelId + "\"]");
+            function loadSettingsPanel(panelId) {
+                var panelContainers = $("[data-settings-panel=\"" + panelId + "\"]");
                 // only load the panel to the container that is currently visible
                 var panelContainer = panelContainers.filter(":visible").first();
 
@@ -2818,7 +2818,7 @@ class PreferencesPresenter extends PagePresenter
                 // Schritt 1: Spinner einfügen
                 panelContainer.html("<div class=\"d-flex justify-content-center align-items-center\" style=\"height: 200px;\"><div class=\"spinner-border text-primary\" role=\"status\"><span class=\"visually-hidden\">Lade...</span></div></div>");
 
-                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", {
+                $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/settings.php", {
                     mode: "html_form",
                     panel: panelId
                 }, function(htmlContent) {
@@ -2831,7 +2831,7 @@ class PreferencesPresenter extends PagePresenter
 
             // === 2) Innerhalb eines Panels die Klick-Handler anmelden ===
             function initializePanelInteractions(panelId) {
-                var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+                var panelContainer = $("[data-settings-panel=\"" + panelId + "\"]");
 
                 // Captcha-Refresh
                 panelContainer.off("click", "#adm_captcha_refresh").on("click", "#adm_captcha_refresh", function(event) {
@@ -2847,7 +2847,7 @@ class PreferencesPresenter extends PagePresenter
                     event.preventDefault();
                     var versionInfoContainer = panelContainer.find("#adm_version_content");
                     versionInfoContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "update_check" }, function(htmlVersion) {
+                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/settings.php", { mode: "update_check" }, function(htmlVersion) {
                         versionInfoContainer.html(htmlVersion);
                     });
                 });
@@ -2857,7 +2857,7 @@ class PreferencesPresenter extends PagePresenter
                     event.preventDefault();
                     var statusContainer = panelContainer.find("#directory_protection_status");
                     statusContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "htaccess" }, function(statusText) {
+                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/settings.php", { mode: "htaccess" }, function(statusText) {
                         var directoryProtection = panelContainer.find("#directoryProtection");
                         directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
                     });
@@ -2910,11 +2910,11 @@ class PreferencesPresenter extends PagePresenter
             }
 
             // === 3) Hooks für Desktop-Tabs ===
-            $(document).on("shown.bs.tab", "ul#adm_preferences_tabs button.nav-link", function(e) {
+            $(document).on("shown.bs.tab", "ul#adm_settings_tabs button.nav-link", function(e) {
                 var target = e.target.getAttribute("data-bs-target");
                 var match = target && target.match(/^#adm_tab_(.+)_content$/);
                 if (match) {
-                    loadPreferencesPanel(match[1]);
+                    loadSettingsPanel(match[1]);
                 }
                 // scroll to the top of the page
                 $("html, body").animate({
@@ -2922,18 +2922,18 @@ class PreferencesPresenter extends PagePresenter
                 }, 500);
             });
             // initial: load the active tab panel
-            $("ul#adm_preferences_tabs button.nav-link.active").each(function() {
+            $("ul#adm_settings_tabs button.nav-link.active").each(function() {
                 var target = this.getAttribute("data-bs-target");
                 var match = target && target.match(/^#adm_tab_(.+)_content$/);
                 if (match) {
-                    loadPreferencesPanel(match[1]);
+                    loadSettingsPanel(match[1]);
                 }
             });
 
             // === 4) Hooks für Mobile-Accordion ===
-            $(document).on("shown.bs.collapse", "#adm_preferences_accordion .accordion-collapse", function() {
+            $(document).on("shown.bs.collapse", "#adm_settings_accordion .accordion-collapse", function() {
                 var panelId = this.id.replace(/^collapse_/, "");
-                loadPreferencesPanel(panelId);
+                loadSettingsPanel(panelId);
 
                 // scroll to the top of the accordion panel header
                 var checkLoaded = setInterval(function(){
@@ -2946,17 +2946,17 @@ class PreferencesPresenter extends PagePresenter
                 }, 100);
             });
             // initial: geöffnetes Accordion-Panel laden
-            $("#adm_preferences_accordion .accordion-collapse.show").each(function() {
+            $("#adm_settings_accordion .accordion-collapse.show").each(function() {
                 var panelId = this.id.replace(/^collapse_/, "");
-                loadPreferencesPanel(panelId);
+                loadSettingsPanel(panelId);
             });
 
             // === 5) Formular-Submit per AJAX ===
-            $(document).on("submit", "form[id^=\"adm_preferences_form_\"]", formSubmit);
+            $(document).on("submit", "form[id^=\"adm_settings_form_\"]", formSubmit);
       ', true);
 
 
-        ChangelogService::displayHistoryButton($this, 'preferences', 'preferences,texts');
+        ChangelogService::displayHistoryButton($this, 'settings', 'settings,texts');
 
         // Load the select2 in case any of the form uses a select box. Unfortunately, each section
         // is loaded on-demand, when there is no HTML page anymore to insert the css/JS file loading,
@@ -2969,13 +2969,13 @@ class PreferencesPresenter extends PagePresenter
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/js/bootstrap-tabs-x-admidio.js');
 
-        // remove the plugins array from preferenceTabs if there are no panels defined
-        $this->preferenceTabs = array_filter($this->preferenceTabs, function ($tab) {
+        // remove the plugins array from settingTabs if there are no panels defined
+        $this->settingTabs = array_filter($this->settingTabs, function ($tab) {
             return !empty($tab['panels']);
         });
 
-        $this->assignSmartyVariable('preferenceTabs', $this->preferenceTabs);
-        $this->addTemplateFile('preferences/preferences.tpl');
+        $this->assignSmartyVariable('settingTabs', $this->settingTabs);
+        $this->addTemplateFile('settings/settings.tpl');
 
         parent::show();
     }

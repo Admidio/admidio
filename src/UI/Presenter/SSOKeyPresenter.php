@@ -336,11 +336,11 @@ class SSOKeyPresenter extends PagePresenter
         $this->setHeadline($gL10n->get('SYS_SSO_KEY_ADMIN'));
 
 
-        // link to preferences
+        // link to settings
         $this->addPageFunctionsMenuItem(
-            'menu_item_sso_preferences',
+            'menu_item_sso_settings',
             $gL10n->get('SYS_SETTINGS'),
-            ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?panel=sso',
+            ADMIDIO_URL . FOLDER_MODULES . '/settings.php?panel=sso',
             'bi-gear-fill'
         );
 

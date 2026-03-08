@@ -19,7 +19,7 @@ use Smarty\Smarty;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
-class LoginFormPreferencesPresenter
+class LoginFormSettingsPresenter
 {
     /**
      * Generates the HTML of the form from the login form preferences and will return the complete HTML.
@@ -34,11 +34,11 @@ class LoginFormPreferencesPresenter
         $formValues = $pluginLoginForm::getPluginConfig();
 
         $formLoginForm = new FormPresenter(
-            'adm_preferences_form_login_form',
-            $pluginLoginForm::getPluginPath() . '/templates/preferences.plugin.login-form.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'login_form')),
+            'adm_settings_form_login_form',
+            $pluginLoginForm::getPluginPath() . '/templates/settings.plugin.login-form.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'login_form')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),

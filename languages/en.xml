@@ -168,7 +168,6 @@
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Enabled, but only visible to administrators</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">For module administrators only</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged in users only</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Manage general organization preferences or module preferences here.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organization #VAR1_BOLD# has been added successfully. It is now selectable when logging in.\n\nIf you have a separate homepage for this organization please add it within the config.php of the separate homepage.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Password strength</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Here you can specify how safe and complex passwords must be at least.\nThe value in brackets indicates how many attempts are required on average until the password is determined.\n\n No: risky password (&lt;10^3)\n Low: Protection against throttled online attacks. (&lt;10^6)\n Middle: protection against unrestricted online attacks.(&lt;10^8)\n High: Moderate protection against offline hashing. (&lt;10 ^10)\n Very high: Strong protection against offline hashing. (&gt;= 10^10)</string>
@@ -348,7 +347,7 @@
   <string name="SYS_COLOR_PRIMARY">Primary Color</string>
   <string name="SYS_COLOR_PRIMARY_DESC">The main color used for Admidio. The title bar will use this color, as well as headlines.</string>
   <string name="SYS_COLOR_SECONDARY">Secondary Color</string>
-  <string name="SYS_COLOR_SECONDARY_DESC">The secondary color used for Admidio. The side bar will use this color, as well as the preferences sections.</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">The secondary color used for Admidio. The sidebar will use this color, as well as the settings sections.</string>
   <string name="SYS_COLUMN">Column</string>
   <string name="SYS_COLUMN_POS">Column #VAR1#</string>
   <string name="SYS_COLUMN_SELECTION">Column selection</string>
@@ -747,7 +746,7 @@
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules (documents, events, announcements, etc.)</string>
-  <string name="SYS_HEADER_PREFERENCES">General Preferences</string>
+  <string name="SYS_GENERAL_SETTINGS">General settings</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
   <string name="SYS_HEADER_USER_ROLE_SETTINGS">Settings for users and groups/roles</string>
   <string name="SYS_HEADLINE">Headline</string>
@@ -803,7 +802,7 @@
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">The borrowing date of the item must be before the return date!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">The category of an item</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Connected field</string>
-  <string name="SYS_INVENTORY_COPY_PREFERENCES">Settings for copying an item:</string>
+  <string name="SYS_INVENTORY_COPY_SETTINGS">Settings for copying an item</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">In this table, you can enter the entries for the date intervals. A table row can be added here for each subsequent entry in the drop-down list box.\nThe list entry is not stored as text later, but the selected position from the list. If you change the text in a row, all users will immediately see the new text.\nThe date interval must be written in the same row separated by the |-symbol after the title. e.g. Yearly | 1y \nIf no unit is specified, days are assumed. \nPossible units: d: days, w: weeks, m: months, y: years</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
@@ -1155,7 +1154,7 @@
   <string name="SYS_ONE_TIME">One time</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Membership management</string>
   <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Only at registration and own profile</string>
-  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">This preference can only be set by the parent organization.</string>
+  <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">This setting can only be set by the parent organization.</string>
   <string name="SYS_OPERATING_SYSTEM">Operating system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
@@ -1235,7 +1234,7 @@
   <string name="SYS_PLUGIN_NAME_MISSING">No plugin name specified.</string>
   <string name="SYS_PLUGIN_NO_INTERFACE">The plugin has no interface.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">The plugin is not installed.</string>
-  <string name="SYS_PLUGIN_PREFERENCES">Plugin preferences</string>
+  <string name="SYS_PLUGIN_SETTINGS">Plugin settings</string>
   <string name="SYS_PLUGIN_UNINSTALL">Uninstall plugin</string>
   <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
   <string name="SYS_PLUGIN_VERSION">Plugin version</string>
@@ -1454,7 +1453,8 @@
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Separator for CSV-file</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
-  <string name="SYS_SETTINGS">Preferences</string>
+  <string name="SYS_SETTINGS">Settings</string>
+  <string name="SYS_SETTINGS_DESC">Manage general settings and module specific settings here.</string>
   <string name="SYS_SHOW_ALL">Show all</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional show all contacts</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>
@@ -1695,7 +1695,7 @@
   <string name="SYS_TFA_SETUP_SUCCESSFUL">Two Factor Authentication setup successfully.</string>
   <string name="SYS_TFA_TOTP_CODE_MISSING">You have activated two factor authentication for your account. Please enter the authentication code from your authenticator app.</string>
   <string name="SYS_THUMBNAIL_SCALING">Thumbnail scaling</string>
-  <string name="SYS_THUMBNAIL_SCALING_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (Default: #VAR1# pixels)</string>
+  <string name="SYS_THUMBNAIL_SCALING_DESC">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column setting. Otherwise, try adjustment of thumbnail row and column settings. (Default: #VAR1# pixels)</string>
   <string name="SYS_THUMBNAILS_PER_PAGE">Thumbnails per page</string>
   <string name="SYS_THUMBNAILS_PER_PAGE_DESC">This option defines how many thumbnail previews will be displayed on each page. If there are more images in this album a page navigation will be added automatically. (Default: #VAR1#)</string>
   <string name="SYS_THURSDAY">Thursday</string>

@@ -1,7 +1,7 @@
 <?php
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\Settings\ValueObject\SettingsManager;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;

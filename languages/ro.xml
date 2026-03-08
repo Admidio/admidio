@@ -168,7 +168,7 @@
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Activat, dar vizibil numai pentru administratori</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">Numai pentru administratorii modulului</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Numai pentru utilizatorii conectați</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Gestionați aici preferințele generale ale organizației sau preferințele modulului.</string>
+  <string name="SYS_SETTINGS_DESC">Gestionați aici preferințele generale ale organizației sau preferințele modulului.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organizația #VAR1_BOLD# a fost adăugată cu succes. Acum poate fi selectată la conectare.\n\nDacă aveți o pagină de pornire separată pentru această organizație, vă rugăm să o adăugați în fișierul config.php al paginii de pornire separate.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Puterea parolei</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Aici puteți specifica cât de sigure și complexe trebuie să fie parolele. Valoarea dintre paranteze indică numărul mediu de încercări necesare până la determinarea parolei. Nu: parolă riscantă (&lt;10^3) Scăzut: protecție împotriva atacurilor online limitate. (&lt;10^6) Mediu: protecție împotriva atacurilor online nelimitate. (&lt;10^8)\n Ridicat: protecție moderată împotriva hash-urilor offline. (&lt;10 ^10)\n Foarte ridicat: protecție puternică împotriva hash-urilor offline. (&gt;= 10^10)</string>
@@ -747,7 +747,7 @@
   <string name="SYS_HALF_YEARLY">Pe șase luni</string>
   <string name="SYS_HEADER_ALREADY_SENT">Antetul HTTP a fost deja trimis!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Module de conținut (documente, evenimente, anunțuri etc.)</string>
-  <string name="SYS_HEADER_PREFERENCES">Preferințe generale</string>
+  <string name="SYS_GENERAL_SETTINGS">Preferințe generale</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">Datele profilului utilizatorului și rolurile</string>
   <string name="SYS_HEADER_USER_ROLE_SETTINGS">Setări pentru utilizatori și grupuri/roluri</string>
   <string name="SYS_HEADLINE">Antet</string>
@@ -803,7 +803,7 @@
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">Data împrumutului articolului trebuie să fie anterioară datei de returnare!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">Categoria unui articol</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Câmp conectat</string>
-  <string name="SYS_INVENTORY_COPY_PREFERENCES">Setări pentru copierea unui element:</string>
+  <string name="SYS_INVENTORY_COPY_SETTINGS">Setări pentru copierea unui element:</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">În acest tabel, puteți introduce intrările pentru intervalele de date. Aici se poate adăuga un rând de tabel pentru fiecare intrare ulterioară din caseta listă derulantă. Intrarea din listă nu este stocată ulterior ca text, ci poziția selectată din listă. Dacă modificați textul dintr-un rând, toți utilizatorii vor vedea imediat noul text. Intervalul de date trebuie scris în același rând, separat de simbolul | după titlu. De exemplu: Anual | 1 an. Dacă nu este specificată nicio unitate, se presupune că este vorba de zile. Unități posibile: d: zile, w: săptămâni, m: luni, y: ani.</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Formatul datei</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selectarea formatului de dată care va fi utilizat pentru afișarea informațiilor privind data și ora în managerul de inventar. (Implicit: Data (ZZ.LL.AAAA))</string>
@@ -1235,7 +1235,7 @@
   <string name="SYS_PLUGIN_NAME_MISSING">Nu a fost specificat niciun nume de plugin.</string>
   <string name="SYS_PLUGIN_NO_INTERFACE">Pluginul nu are interfață.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Acest plugin nu este instalat</string>
-  <string name="SYS_PLUGIN_PREFERENCES">Preferințe plugin</string>
+  <string name="SYS_PLUGIN_SETTINGS">Preferințe plugin</string>
   <string name="SYS_PLUGIN_UNINSTALL">Dezinstalare plugin</string>
   <string name="SYS_PLUGIN_UPDATE">Actualizare plugin</string>
   <string name="SYS_PLUGIN_VERSION">Versiune plugin</string>

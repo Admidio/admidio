@@ -242,18 +242,18 @@ try {
             }
 
             if ($gCurrentUser->isAdministrator()) {
-                // show link to pluginpreferences
+                // show link to settings
                 $page->addPageFunctionsMenuItem(
-                    'admMenuItemPreferencesLists',
+                    'admMenuItemSettingsLists',
                     $gL10n->get('SYS_CONFIGURATIONS'),
-                    ADMIDIO_URL . FOLDER_MODULES . '/category-report/preferences.php',
+                    ADMIDIO_URL . FOLDER_MODULES . '/category-report/settings.php',
                     'bi-gear-fill'
                 );
             }
 
             ChangelogService::displayHistoryButton($page, 'categoryreport', 'category_report');
 
-            // process changes in the navbar form with javascript submit
+            // process changes in the navbar form with JavaScript submit
             $page->addJavascript(
                 '
                 $("#export_and_filter").change(function() {

@@ -22,7 +22,7 @@ use Admidio\Inventory\Entity\Item;
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
-use Admidio\Preferences\Entity\Preferences;
+use Admidio\Settings\Entity\Settings;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesDependencies;
 use Admidio\Roles\Entity\RolesRightsData;
@@ -204,7 +204,7 @@ class ChangelogService {
             'lists' => 'SYS_LIST',
             'list_columns' => 'SYS_LIST_COLUMNS', // Changes to the list column are handled as changes to the list -> list_columns is never displayed as affected table
 
-            'preferences' => 'SYS_SETTINGS',
+            'settings' => 'SYS_SETTINGS',
             'texts' => 'SYS_SETTINGS',
             'saml_clients' => 'SYS_SSO_CLIENTS_SAML',
             'oidc_clients' => 'SYS_SSO_CLIENTS_OIDC',
@@ -289,8 +289,8 @@ class ChangelogService {
                 return new Organization($gDb);
             case 'photos':
                 return new Album($gDb);
-            case 'preferences':
-                return new Preferences($gDb);
+            case 'settings':
+                return new Settings($gDb);
             case 'registrations':
                 return new UserRegistration($gDb, $gProfileFields);
             case 'roles':
@@ -526,12 +526,12 @@ class ChangelogService {
             'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS'),
             'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE', 'type' => 'PICTURE'),
             'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
-            'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
-            'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
+            'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),
+            'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),
             'ind_value_url' =>             array('name' => 'SYS_VALUE', 'type' => 'URL'),
             'ind_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
             'ind_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
-            'ind_value' =>                 'SYS_VALUE',  
+            'ind_value' =>                 'SYS_VALUE',
             'inb_last_receiver' =>         array('name' => 'SYS_INVENTORY_LAST_RECEIVER', 'type' => 'USER'),
             'inb_borrow_date' =>             array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATE'),
             'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATE'),
@@ -637,7 +637,7 @@ class ChangelogService {
             'smc_encrypt_assertions' =>     array('name' => 'SYS_SSO_ENCRYPT_ASSERTIONS', 'type' => 'BOOL'),
             'smc_assertion_lifetime' =>     'SYS_SSO_SAML_ASSERTION_LIFETIME',
             'smc_allowed_clock_skew' =>     'SYS_SSO_SAML_ALLOWED_CLOCK_SKEW',
-            
+
             'ocl_client_id' =>              'SYS_SSO_CLIENT_ID',
             'ocl_client_name' =>            'SYS_SSO_CLIENT_NAME',
             'ocl_client_secret' =>          'SYS_SSO_CLIENT_SECRET',
@@ -646,7 +646,7 @@ class ChangelogService {
             'ocl_field_mapping' =>          array('name' => 'SYS_SSO_ATTRIBUTES', 'type' => 'OIDC_field_mapping'),
             'ocl_role_mapping' =>           array('name' => 'SYS_SSO_ROLESMAP', 'type' => 'SSO_roles_mapping'),
             // 'ocl_grant_types' =>            'TODO',
-            // 'ocl_scope' =>                  'TODO',        
+            // 'ocl_scope' =>                  'TODO',
 
             'key_org_id' =>                 array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'key_name' =>                   'SYS_NAME',
@@ -710,7 +710,7 @@ class ChangelogService {
                 case 'categories' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/categories.php', array('mode' => 'edit', 'uuid' => $uuid)); break; // Note: the type is no longer needed (only recommended, but we don't have it in the changelog DB)
                 case 'category_report' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php'); break;
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category-report/settings.php'); break;
                 case 'events' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $uuid)); break;
                 case 'files' :
@@ -743,7 +743,7 @@ class ChangelogService {
                 //     $url = SecurityUtils::encodeUrl(); break;
                 case 'photos':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $uuid)); break;
-                // case 'preferences': // There is just one preferences page, but no way to link to individual sections or preference items!
+                // case 'settings': // There is just one settings page, but no way to link to individual sections or preference items!
                 //     $url = SecurityUtils::encodeUrl(); break;
                 // case 'registrations':
                 //     $url = SecurityUtils::encodeUrl(); break;
@@ -764,7 +764,7 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $uuid)); break;
                 case 'rooms':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/rooms/rooms_new.php', array('room_uuid' => $uuid)); break;
-                // case 'texts': // Texts can be modified in the preferences, but there is no direct link to the notifications sections, where the texts are located at the end!
+                // case 'texts': // Texts can be modified in the settings, but there is no direct link to the notifications sections, where the texts are located at the end!
                 //     $url = SecurityUtils::encodeUrl(); break;
                 case 'user_field_select_options':
                 case 'user_fields':
@@ -1150,7 +1150,7 @@ class ChangelogService {
 
         if ($gSettingsManager->getInt('changelog_module_enabled') > 0) { // Changelog enabled at all
             // show link to view profile field change history if change history is enabled for at least one of the tables.
-            // Unknown tables are handled by the changelog_table_others preferences key!
+            // Unknown tables are handled by the changelog_table_others settings key!
             if (is_array($table)) {
                 $tables = $table;
             } else {

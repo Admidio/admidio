@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Preferences functions for the admidio module CategoryReport
+ * Setting functions for the admidio module CategoryReport
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -9,7 +9,7 @@
  *
  * Parameters:
  *
- * form     - The name of the form preferences that were submitted.
+ * form     - The name of the form settings that were submitted.
  *
  ***********************************************************************************************
  */
@@ -47,10 +47,10 @@ try {
                 }
 
                 // role selection and role property selection is split into two select boxes.
-                // Role selection in the first select box uses only the rNN (with NN the ID of 
-                // the role) id, while the second select box allows the user to select the 
+                // Role selection in the first select box uses only the rNN (with NN the ID of
+                // the role) id, while the second select box allows the user to select the
                 // property (r, l, w, f, b, e, d)
-                // Here we need to merge the two arrays to one. 
+                // Here we need to merge the two arrays to one.
                 $columns = array_map(function($r, $rprop) {
                     if ($r[0]=='r') {
                         return $rprop . substr($r, 1);

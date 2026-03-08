@@ -162,7 +162,7 @@
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Aktiveret, men kun synlig for administratorer</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">Kun for moduladministratorer</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Kun for brugere der er logget ind</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Administrer generelle organisations indstillinger og modul indstillinger.</string>
+  <string name="SYS_SETTINGS_DESC">Administrer generelle organisations indstillinger og modul indstillinger.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisation #VAR1_BOLD# er tilføjet med succes. Det kan nu vælges, når du logger ind.\n\nHvis du har en separat hjemmeside til denne organisation skal du tilføje den inden for config.php på den separate hjemmeside.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Kodeords styrke</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Her kan du specificere hvor sikre og komplekse kodeord som minimum skal være.\nVærdien i parentes indikerer hvor mange forsøg der skal til for at knække koden.\n\n No: risikabelt kodeord (&lt;10^3)\n Lav: Beskyttelse imod automatiserede online angreb. (&lt;10^6)\n Middel: Beskyttelse imod ubegrænsede online angreb.(&lt;10^8)\n Høj: Moderat beskyttelse imod offline hashing angreb. (&lt;10 ^10)\n Meget høj: Stærk beskyttelse imod offline hashing angreb. (&gt;= 10^10)</string>
@@ -738,7 +738,7 @@
   <string name="SYS_HALF_YEARLY">Halvårligt</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP Header er allerede sendt!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Indholdsmoduler (dokumenter, begivenheder, meddelelser osv.)</string>
-  <string name="SYS_HEADER_PREFERENCES">Generelle indstillinger</string>
+  <string name="SYS_GENERAL_SETTINGS">Generelle indstillinger</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">Brugerprofildata og -roller</string>
   <string name="SYS_HEADER_USER_ROLE_SETTINGS">Indstillinger for brugere og grupper/roller</string>
   <string name="SYS_HEADLINE">Overskrift</string>
@@ -793,7 +793,7 @@
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">Lånedatoen for genstanden skal være før returdatoen!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">Kategorien for en genstand</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Sammenhængende felt</string>
-  <string name="SYS_INVENTORY_COPY_PREFERENCES">Indstillinger for kopiering af en genstand:</string>
+  <string name="SYS_INVENTORY_COPY_SETTINGS">Indstillinger for kopiering af en genstand:</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">I denne tabel kan du indtaste posterne for datointervallerne. En tabelrække kan tilføjes her for hver efterfølgende post i dropdown-listeboksen.\nListeposten gemmes ikke som tekst senere, men den valgte position fra listen. Hvis du ændrer teksten i en række, vil alle brugere straks se den nye tekst.\nDatointervallet skal skrives i samme række, adskilt af |-symbolet efter titlen. f.eks. årligt | 1y \nHvis ingen enhed er angivet, antages dage. \nMulige enheder: d: dage, w: uger, m: måneder, y: år</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Dato repræsentation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Valg af det datoformat, der skal bruges til visning af dato- og klokkeslætsoplysninger i lagerstyringen. (Standard: Dato (DD.MM.ÅÅÅÅ))</string>

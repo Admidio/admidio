@@ -19,7 +19,7 @@ use Smarty\Smarty;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
-class RandomPhotoPreferencesPresenter
+class RandomPhotoSettingsPresenter
 {
     /**
      * Generates the HTML of the form from the random photo plugin preferences and will return the complete HTML.
@@ -34,11 +34,11 @@ class RandomPhotoPreferencesPresenter
         $formValues = $pluginRandomPhoto::getPluginConfig();
 
         $formRandomPhoto = new FormPresenter(
-            'adm_preferences_form_random_photo',
-            $pluginRandomPhoto::getPluginPath() . '/templates/preferences.plugin.random-photo.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'random_photo')),
+            'adm_settings_form_random_photo',
+            $pluginRandomPhoto::getPluginPath() . '/templates/settings.plugin.random-photo.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'random_photo')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),

@@ -2,6 +2,7 @@
 
 namespace AnnouncementList\classes\Presenter;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Language;
@@ -10,20 +11,20 @@ use AnnouncementList\classes\AnnouncementList;
 use Smarty\Smarty;
 
 /**
- * @brief Class with methods to present the preferences for the announcement list plugin
- * 
- * This class is used to present the preferences for the announcement list plugin.
- * 
+ * @brief Class with methods to present the settings for the announcement list plugin
+ *
+ * This class is used to present the settings for the announcement list plugin.
+ *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
-class AnnouncementListPreferencesPresenter
+class AnnouncementListSettingsPresenter
 {
     /**
-     * Generates the HTML of the form from the announcement preferences and will return the complete HTML.
-     * @return string Returns the complete HTML of the form from the announcement preferences.
+     * Generates the HTML of the form from the announcement settings and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the announcement settings.
      * @throws Exception|\Smarty\Exception
      */
     public static function createAnnouncementListForm(Smarty $smarty): string
@@ -32,13 +33,13 @@ class AnnouncementListPreferencesPresenter
 
         $pluginAnnouncementList = AnnouncementList::getInstance();
         $formValues = $pluginAnnouncementList::getPluginConfig();
-        
+
         $formAnnouncementList = new FormPresenter(
-            'adm_preferences_form_announcement_list',
-            $pluginAnnouncementList::getPluginPath() . '/templates/preferences.plugin.announcement-list.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'announcement_list')),
+            'adm_settings_form_announcement_list',
+            $pluginAnnouncementList::getPluginPath() . '/templates/settings.plugin.announcement-list.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'announcement_list')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -75,7 +76,7 @@ class AnnouncementListPreferencesPresenter
             $formValues['announcement_list_chars_before_linebreak']['value'],
             array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['announcement_list_chars_before_linebreak']['description'])
         );
-        
+
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
         $sql = 'SELECT cat.cat_id, cat.cat_name
                 FROM ' . TBL_ANNOUNCEMENTS . ' AS ann

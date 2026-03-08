@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Organization preferences
+ * Organization settings
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -9,14 +9,14 @@
  *
  * Parameters:
  *
- * mode     : html           - (default) Show page with all preferences panels
- *            html_form      - Returns the html of the requested form
- *            save           - Save organization preferences
+ * mode     : html           - (default) Show page with all settings panels
+ *            html_form      - Returns the HTML of the requested form
+ *            save           - Save organization settings
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
  *            backup         - create backup of Admidio database
  *            update_check   - Check for a new version of Admidio
- * panel    : The name of the preferences panel that should be shown or saved.
+ * panel    : The name of the settings panel that should be shown or saved.
  ***********************************************************************************************
  */
 
@@ -24,8 +24,8 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Preferences\Service\PreferencesService;
-use Admidio\UI\Presenter\PreferencesPresenter;
+use Admidio\Settings\Service\SettingsService;
+use Admidio\UI\Presenter\SettingsPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -39,15 +39,15 @@ try {
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
 
-    // only administrators are allowed to view, edit organization preferences or create new organizations
+    // only administrators are allowed to view, edit organization settings or create new organizations
     if (!$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
     switch ($getMode) {
         case 'html':
-            // create html page object
-            $page = new PreferencesPresenter($getPanel);
+            // create HTML page object
+            $page = new SettingsPresenter($getPanel);
 
             if ($getPanel === '') {
                 $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-gear-fill');
@@ -58,23 +58,23 @@ try {
             $page->show();
             break;
         case 'save':
-            $preferences = new PreferencesService();
-            $preferences->save($getPanel, $_POST);
+            $settings = new SettingsService();
+            $settings->save($getPanel, $_POST);
 
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA'), 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => strtolower($getPanel)))));
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA'), 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('panel' => strtolower($getPanel)))));
             break;
 
-        // Returns the html of the requested form
+        // Returns the HTML of the requested form
         case 'html_form':
-            $preferencesUI = new PreferencesPresenter('adm_preferences_form');
+            $settingsUI = new SettingsPresenter('adm_settings_form');
             $methodName = 'create' . str_replace('_', '', ucwords($getPanel, '_')) . 'Form';
-            echo $preferencesUI->{$methodName}();
+            echo $settingsUI->{$methodName}();
             break;
 
         // set directory protection, write htaccess
         case 'htaccess':
-            $preferences = new PreferencesService();
-            if ($preferences->setHtaccessProtection()) {
+            $settings = new SettingsService();
+            if ($settings->setHtaccessProtection()) {
                 echo $gL10n->get('SYS_ON');
             } else {
                 echo $gL10n->get('SYS_OFF');
@@ -84,8 +84,8 @@ try {
         // send test email
         case 'test_email':
             $debugOutput = '';
-            $preferences = new PreferencesService();
-            $sendResult = $preferences->sendTestEmail();
+            $settings = new SettingsService();
+            $sendResult = $settings->sendTestEmail();
 
             if (isset($GLOBALS['phpmailer_output_debug'])) {
                 $debugOutput .= '<br /><br /><h3>' . $gL10n->get('SYS_DEBUG_OUTPUT') . '</h3>' . $GLOBALS['phpmailer_output_debug'];
@@ -93,7 +93,7 @@ try {
 
             // message if send/save is OK
             if ($sendResult === true) { // don't remove check === true. ($sendResult) won't work
-                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('show_option' => 'email_dispatch')));
+                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('show_option' => 'email_dispatch')));
                 $gMessage->show($gL10n->get('SYS_EMAIL_SEND') . $debugOutput);
                 // => EXIT
             } else {
@@ -116,8 +116,8 @@ try {
             break;
 
         case 'update_check':
-            $preferences = new PreferencesService();
-            echo $preferences->showUpdateInfo();
+            $settings = new SettingsService();
+            echo $settings->showUpdateInfo();
             break;
     }
 } catch (Throwable $e) {

@@ -26,5 +26,10 @@
     <step id="230" database="mysql">UPDATE %PREFIX%_preferences prf INNER JOIN %PREFIX%_organizations org ON org.org_id = prf.prf_org_id SET prf.prf_value = org.org_email_administrator WHERE prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
     <step id="240" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = org.org_email_administrator FROM %PREFIX%_organizations org WHERE org.org_id = prf.prf_org_id AND prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
     <step id="250" database="mysql">UpdateStepsCode::updateStep51ConvertCharsetToUtf8mb4</step>
+    <step id="500">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/settings.php', men_name_intern = 'settings', men_name= 'SYS_SETTINGS', men_description = 'SYS_SETTINGS_DESC' WHERE men_name_intern = 'orgprop'</step>
+    <step id="510">UPDATE %PREFIX%_components SET com_name = 'SYS_SETTINGS', com_name_intern = 'SETTINGS' WHERE com_name_intern = 'PREFERENCES'</step>
+    <step id="520" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'changelog_table_preferences' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = 0 WHERE pr1.prf_name = 'changelog_table_settings'</step>
+    <step id="530" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'changelog_table_preferences' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'changelog_table_settings'</step>
+    <step id="540">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'changelog_table_preferences'</step>
     <step>stop</step>
 </update>

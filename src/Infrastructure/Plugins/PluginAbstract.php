@@ -2,7 +2,7 @@
 
 namespace Admidio\Infrastructure\Plugins;
 
-use Admidio\Preferences\Service\PreferencesService;
+use Admidio\Settings\Service\SettingsService;
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Menu\Entity\MenuEntry;
@@ -102,21 +102,21 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
-     * Initialize the preferences panel for this plugin.
+     * Initialize the settings panel for this plugin.
      * This method will be called automatically when the plugin is activated.
-     * It will register the preferences panel for this plugin in the PreferencesService.
+     * It will register the settings panel for this plugin in the SettingsService.
      */
-    public static function initPreferencePanelCallback(): void
+    public static function initSettingsPanelCallback(): void
     {
         // get the calling plugin name in lowercase and without underscores, hyphens, spaces or other special characters
         $callingPlugin = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', self::getComponentName()));
 
-        // get psr4 autoload mappings and preferences file from metadata
+        // get psr4 autoload mappings and settings file from metadata
         $psr4 = self::$metadata['autoload']['psr-4'] ?? null;
-        $preferencesFile = self::$metadata['preferencesFile'] ?? null;
+        $settingsFile = self::$metadata['settingsFile'] ?? null;
 
-        // if a preferences file is defined in the metadata, the plugin handles the preferences itself
-        if (isset($preferencesFile)) {
+        // if a settings file is defined in the metadata, the plugin handles the settings itself
+        if (isset($settingsFile)) {
             return;
         }
 
@@ -126,38 +126,38 @@ abstract class PluginAbstract implements PluginInterface
         }
 
         // look for presenter class path in the psr4 autoload mappings
-        $preferencesClass = null;
+        $settingsClass = null;
 
         foreach ($psr4 as $prefix => $relativePath) {
             if (str_contains(strtolower($prefix), $callingPlugin)) {
                 $presenterBasePath = self::getPluginPath() . DIRECTORY_SEPARATOR . $relativePath;
-                // now loop over all files in the presenter path to find a preferences presenter
+                // now loop over all files in the presenter path to find a settings presenter
                 $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($presenterBasePath));
                 foreach ($it as $file) {
-                    if (!$file->isFile() || !str_contains($file->getFilename(), 'PreferencesPresenter.php')) {
+                    if (!$file->isFile() || !str_contains($file->getFilename(), 'SettingsPresenter.php')) {
                         continue;
                     }
-                    $preferencesFile = $file->getPathname();
-                    $preferencesClass = self::getClassNameFromFile($preferencesFile);
+                    $settingsFile = $file->getPathname();
+                    $settingsClass = self::getClassNameFromFile($settingsFile);
                     break;
                 }
             }
         }
 
-        if (isset($preferencesClass) && class_exists($preferencesClass)) {
+        if (isset($settingsClass) && class_exists($settingsClass)) {
 
-            // get the function name for the preferences panel form
-            $className = str_replace('PreferencesPresenter', '', (new ReflectionClass($preferencesClass))->getShortName());
+            // get the function name for the settings panel form
+            $className = str_replace('SettingsPresenter', '', (new ReflectionClass($settingsClass))->getShortName());
             $functionName = 'create' . $className . 'Form';
-            if (!method_exists($preferencesClass, $functionName)) {
-                throw new Exception('The preferences class ' . $preferencesClass . ' does not have a method ' . $functionName . '().');
+            if (!method_exists($settingsClass, $functionName)) {
+                throw new Exception('The settings class ' . $settingsClass . ' does not have a method ' . $functionName . '().');
             }
             if (self::isOverviewPlugin()) {
-                // register the overview preferences presenter for this plugin
-                PreferencesService::addOverviewPluginPreferencesPresenter(self::getComponentId(), [$preferencesClass, $functionName]);
+                // register the overview settings presenter for this plugin
+                SettingsService::addOverviewPluginSettingsPresenter(self::getComponentId(), [$settingsClass, $functionName]);
             } else {
-                // register the preferences presenter for this plugin
-                PreferencesService::addPluginPreferencesPresenter(self::getComponentId(), [$preferencesClass, $functionName]);
+                // register the settings presenter for this plugin
+                SettingsService::addPluginSettingsPresenter(self::getComponentId(), [$settingsClass, $functionName]);
             }
         }
     }

@@ -208,7 +208,7 @@
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Nombre d\'entrées par page</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Nombre d\'éléments affichés sur une page. Une pagination est activée si le nombre d\'éléments dépasse la valeur définie. L\'aperçu avant impression et l\'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront affichés sur une page et la pagination est désactivée. (Par défaut: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Uniquement pour les utilisateurs connectés</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Les paramètres généraux Admidio, ainsi que les paramètres des différents modules, peuvent être définis ici.</string>
+  <string name="SYS_SETTINGS_DESC">Les paramètres généraux Admidio, ainsi que les paramètres des différents modules, peuvent être définis ici.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">L\'organisation #VAR1_BOLD# a été ajoutée avec succès. Elle est maintenant disponible lors de la connexion.\n\nSi vous avez une page d\'accueil séparée pour cette organisation, veuillez l\'ajouter dans le fichier config.php de la page d\'accueil séparée.</string>
   <string name="ORG_PARENT_ORGANIZATION">Organisation mère</string>
   <string name="ORG_PARENT_ORGANIZATION_DESC">Définissez ici l\'organisation mère. Les organisations parentes peuvent créer des événements et des annonces, par exemple, qui seront affichés dans l\'organisation sélectionnée (enfant).</string>

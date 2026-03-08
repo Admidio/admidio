@@ -162,7 +162,7 @@
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Aktiviert, aber nur für Administratoren sichtbar</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">Nur für Modul-Administrator:innen</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Benutzer:innen</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</string>
+  <string name="SYS_SETTINGS_DESC">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Sie können diese nun bei der Anmeldung auswählen.\n\nFalls Sie für diese Organisation eine separate Homepage erstellt haben, müssen Sie auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit </string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier können Sie festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nSehr hoch: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
@@ -738,7 +738,7 @@
   <string name="SYS_HALF_YEARLY">Halbjährlich</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-Header wurden bereits gesendet!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Inhaltsmodule (Dokumente, Veranstaltungen, Ankündigungen usw.)</string>
-  <string name="SYS_HEADER_PREFERENCES">Allgemeine Einstellungen</string>
+  <string name="SYS_GENERAL_SETTINGS">Allgemeine Einstellungen</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">Benutzerprofildaten und Rollen</string>
   <string name="SYS_HEADER_USER_ROLE_SETTINGS">Einstellungen für Benutzer und Gruppen/Rollen</string>
   <string name="SYS_HEADLINE">Überschrift</string>
@@ -793,7 +793,7 @@
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">Das Ausleihdatum des Gegenstandes muss vor dem Rückgabedatum liegen!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">Die Kategorie des Gegenstandes</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Verbundenes Feld</string>
-  <string name="SYS_INVENTORY_COPY_PREFERENCES">Einstellungen für das Kopieren eines Gegenstandes:</string>
+  <string name="SYS_INVENTORY_COPY_SETTINGS">Einstellungen für das Kopieren eines Gegenstandes:</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">In dieser Tabelle können Sie die Einträge für die Datumsintervalle eingeben. Für jeden weiteren Eintrag im Dropdown-Listenfeld kann hier eine Tabellenzeile hinzugefügt werden. Der Listeneintrag wird später nicht als Text gespeichert, sondern die ausgewählte Position aus der Liste. Wenn Sie den Text in einer Zeile ändern, sehen alle Benutzer sofort den neuen Text. Das Datumsintervall muss in derselben Zeile nach dem Titel durch das Symbol | getrennt geschrieben werden. z. B. Jährlich | 1y Wenn keine Einheit angegeben ist, werden Tage angenommen. Mögliche Einheiten: d: Tage, w: Wochen, m: Monate, y: Jahre</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Datumsdarstellung</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Auswahl des Datumsformats, das für die Anzeige von Datums- und Zeitangaben in der Inventarverwaltung verwendet werden soll. (Voreinstellung: Datum (TT.MM.JJJJ))</string>

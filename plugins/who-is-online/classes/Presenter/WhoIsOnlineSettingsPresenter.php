@@ -19,7 +19,7 @@ use Smarty\Smarty;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
-class WhoIsOnlinePreferencesPresenter
+class WhoIsOnlineSettingsPresenter
 {
     /**
      * Generates the HTML of the form from the who is online preferences and will return the complete HTML.
@@ -34,11 +34,11 @@ class WhoIsOnlinePreferencesPresenter
         $formValues = $pluginWhoIsOnline::getPluginConfig();
 
         $formWhoIsOnline = new FormPresenter(
-            'adm_preferences_form_who_is_online',
-            $pluginWhoIsOnline::getPluginPath() . '/templates/preferences.plugin.who-is-online.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'who_is_online')),
+            'adm_settings_form_who_is_online',
+            $pluginWhoIsOnline::getPluginPath() . '/templates/settings.plugin.who-is-online.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'who_is_online')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),

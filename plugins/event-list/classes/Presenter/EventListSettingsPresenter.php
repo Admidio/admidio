@@ -19,7 +19,7 @@ use Smarty\Smarty;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
-class EventListPreferencesPresenter
+class EventListSettingsPresenter
 {
     /**
      * Generates the HTML of the form from the event preferences and will return the complete HTML.
@@ -32,13 +32,13 @@ class EventListPreferencesPresenter
 
         $pluginEventList = EventList::getInstance();
         $formValues = $pluginEventList::getPluginConfig();
-        
+
         $formEventList = new FormPresenter(
-            'adm_preferences_form_event_list',
-            $pluginEventList::getPluginPath() . '/templates/preferences.plugin.event-list.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'event_list')),
+            'adm_settings_form_event_list',
+            $pluginEventList::getPluginPath() . '/templates/settings.plugin.event-list.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/settings.php', array('mode' => 'save', 'panel' => 'event_list')),
             null,
-            array('class' => 'form-preferences')
+            array('class' => 'form-settings')
         );
         $selectBoxEntries = array(
             '0' => $gL10n->get('SYS_DISABLED'),
@@ -81,7 +81,7 @@ class EventListPreferencesPresenter
             $formValues['event_list_chars_before_linebreak']['value'],
             array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => $formValues['event_list_chars_before_linebreak']['description'])
         );
-        
+
         $catIdParams = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('EVT'));
         $sql = 'SELECT cat.cat_id, cat.cat_name
                 FROM ' . TBL_EVENTS . ' AS evt

@@ -208,7 +208,7 @@
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Kirjete arv lehel</string>
   <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Määratlege lehel kuvatavate üksuste arv. Leheküljed esitatakse, kui üksuste arv ületab määratud väärtuse. Prindi eelvaadet ja ekspordifunktsiooni see ei mõjuta. Kui väärtus on 0, loetletakse kõik üksused ja lehekülgede otsimine on deaktiveeritud. (vaikimisi: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Ainult sisseloginud kasutajatele</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Siin saate hallata organisatsiooni üldisi eelistusi või moodulite eelistusi.</string>
+  <string name="SYS_SETTINGS_DESC">Siin saate hallata organisatsiooni üldisi eelistusi või moodulite eelistusi.</string>
   <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Organisatsioon #VAR1_BOLD# on edukalt lisatud. See on nüüd sisselogimisel valitav.\n\nKui teil on selle organisatsiooni jaoks eraldi koduleht, lisage see eraldi avalehe config.php-sse.</string>
   <string name="SYS_PARENT_ORGANIZATION">Peaorganisatsioon</string>
   <string name="SYS_PARENT_ORGANIZATION_DESC">Siin määratlege peaorganisatsioon. Peaorganisatsioonid saavad luua näiteks sündmusi ja teadaandeid, mida kuvatakse valitud (alam)organisatsioonis.</string>

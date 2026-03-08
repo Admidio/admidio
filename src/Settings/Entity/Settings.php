@@ -1,5 +1,5 @@
 <?php
-namespace Admidio\Preferences\Entity;
+namespace Admidio\Settings\Entity;
 
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
@@ -12,7 +12,7 @@ use Admidio\Infrastructure\Exception;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class Preferences extends Entity
+class Settings extends Entity
 {
     /**
      * Constructor that will create an object of a recordset of the table adm_preferences.
@@ -29,7 +29,7 @@ class Preferences extends Entity
      * Logs creation of the DB record -> For preferences, no need to log anything as
      * the actual value change from NULL to something will be logged as a modification
      * immediately after creation, anyway.
-     * 
+     *
      * @return true Returns **true** if no error occurred
      * @throws Exception
      */

@@ -1,9 +1,9 @@
 <?php
 /**
  ***********************************************************************************************
- * System preferences for an organization
+ * System settings for an organization
  *
- * IMPORTANT: If preferences should get other values with an update,
+ * IMPORTANT: If settings should get other values with an update,
  *            then you must set these values for every organization
  *            in the update scripts
  *
@@ -12,7 +12,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-$defaultOrgPreferences = array(
+$defaultSettings = array(
     // System
     'enable_rss' => '1',
     'enable_auto_login' => '1',
@@ -81,7 +81,7 @@ $defaultOrgPreferences = array(
     'changelog_table_photos' => '0',
     'changelog_table_lists' => '0',
     'changelog_table_list_columns' => '0',
-    'changelog_table_preferences' => '0',
+    'changelog_table_settings' => '0',
     'changelog_table_texts' => '0',
     'changelog_table_forum_topics' => '0',
     'changelog_table_forum_posts' => '0',

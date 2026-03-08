@@ -1,6 +1,6 @@
 <?php
 
-namespace Admidio\Preferences\Service;
+namespace Admidio\Settings\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
@@ -14,14 +14,14 @@ use Admidio\Infrastructure\Language;
 /**
  * @brief Class with methods to display the module pages.
  *
- * This class adds some functions that are used in the preferences module to keep the
+ * This class adds some functions that are used in the settings module to keep the
  * code easy to read and short
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class PreferencesService
+class SettingsService
 {
     /**
      * Registered presenter callbacks by component ID.
@@ -35,12 +35,12 @@ class PreferencesService
     private static array $overviewPluginPresenters = array();
 
     /**
-     * Register a preferences presenter for a plugin.
+     * Register a settings presenter for a plugin.
      *
      * @param int $componentId   The component ID of the plugin.
-     * @param callable $presenterCallback  A callable that renders the plugin's preferences panel.
+     * @param callable $presenterCallback  A callable that renders the plugin's settings panel.
      */
-    public static function addPluginPreferencesPresenter(int $componentId, callable $presenterCallback): void
+    public static function addPluginSettingsPresenter(int $componentId, callable $presenterCallback): void
     {
         if (!isset(self::$pluginPresenters[$componentId])) {
             self::$pluginPresenters[$componentId] = array();
@@ -62,7 +62,7 @@ class PreferencesService
      * Build the panel definitions for the "Plugins" tab.
      *
      * This method gathers metadata from each plugin and prepares
-     * the structure used by the PreferencesPresenter to render the accordion.
+     * the structure used by the SettingsPresenter to render the accordion.
      *
      * @return array<int, array{id:string, title:string, icon?:string, subcards?:bool}>
      * @throws Exception
@@ -88,12 +88,12 @@ class PreferencesService
     }
 
     /**
-     * Register a preferences presenter for a plugin.
+     * Register a settings presenter for a plugin.
      *
      * @param int $componentId   The component ID of the plugin.
-     * @param callable $presenterCallback  A callable that renders the plugin's preferences panel.
+     * @param callable $presenterCallback  A callable that renders the plugin's settings panel.
      */
-    public static function addOverviewPluginPreferencesPresenter(int $componentId, callable $presenterCallback): void
+    public static function addOverviewPluginSettingsPresenter(int $componentId, callable $presenterCallback): void
     {
         if (!isset(self::$overviewPluginPresenters[$componentId])) {
             self::$overviewPluginPresenters[$componentId] = array();
@@ -105,7 +105,7 @@ class PreferencesService
      * Build the panel definitions for the "Plugins" tab.
      *
      * This method gathers metadata from each plugin and prepares
-     * the structure used by the PreferencesPresenter to render the accordion.
+     * the structure used by the SettingsPresenter to render the accordion.
      *
      * @return array<int, array{id:string, title:string, icon?:string, subcards?:bool}>
      * @throws Exception
@@ -327,8 +327,8 @@ class PreferencesService
         global $gL10n, $gSettingsManager, $gCurrentSession, $gDb, $gCurrentOrgId;
 
         // check form field input and sanitized it from malicious content
-        $preferencesForm = $gCurrentSession->getFormObject($formData['adm_csrf_token']);
-        $formValues = $preferencesForm->validate($formData);
+        $settingsForm = $gCurrentSession->getFormObject($formData['adm_csrf_token']);
+        $formValues = $settingsForm->validate($formData);
 
         // first check the fields of the submitted form
         switch ($panel) {
@@ -387,7 +387,7 @@ class PreferencesService
         // then update the database with the new values
 
         foreach ($formValues as $key => $value) {
-            // Sort out elements that are not stored in adm_preferences here
+            // Sort out elements that are not stored in adm_settings here
             if (!in_array($key, array('save', 'adm_csrf_token'))) {
                 if (str_starts_with($key, 'SYSMAIL_')) {
                     $text = new Text($gDb);
