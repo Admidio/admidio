@@ -84,7 +84,7 @@ class Installation
     {
         if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             // soundex is not a default function in PostgresSQL
-            $sql = 'UPDATE ' . TBL_PREFERENCES . '
+            $sql = 'UPDATE ' . TBL_SETTINGS . '
                    SET prf_value = false
                  WHERE prf_name = \'system_search_similar\'';
             $db->queryPrepared($sql);

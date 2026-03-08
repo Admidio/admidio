@@ -4,6 +4,7 @@ namespace Admidio\Settings\Entity;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Throwable;
 
 /**
  * @brief Class manages access to database table adm_preferences
@@ -17,13 +18,15 @@ class Settings extends Entity
     /**
      * Constructor that will create an object of a recordset of the table adm_preferences.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string $name The recordset of the text with this name will be loaded.
-     *                           If name isn't set than an empty object of the table is created.
      * @throws Exception
      */
     public function __construct(Database $database)
     {
-        parent::__construct($database, TBL_PREFERENCES, 'prf');
+        try {
+            parent::__construct($database, TBL_SETTINGS, 'prf');
+        } catch (Throwable ) {
+            parent::__construct($database, TBL_PREFERENCES, 'prf');
+        }
     }
     /**
      * Logs creation of the DB record -> For preferences, no need to log anything as
@@ -31,7 +34,6 @@ class Settings extends Entity
      * immediately after creation, anyway.
      *
      * @return true Returns **true** if no error occurred
-     * @throws Exception
      */
     public function logCreation(): bool { return true; }
     /**

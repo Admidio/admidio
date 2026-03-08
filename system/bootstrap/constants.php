@@ -140,6 +140,7 @@ const TBL_OIDC_AUTH_CODES = TABLE_PREFIX . '_oidc_auth_codes';
 const TBL_ORGANIZATIONS = TABLE_PREFIX . '_organizations';
 const TBL_PHOTOS = TABLE_PREFIX . '_photos';
 const TBL_PREFERENCES = TABLE_PREFIX . '_preferences';
+const TBL_SETTINGS = TABLE_PREFIX . '_settings';
 const TBL_REGISTRATIONS = TABLE_PREFIX . '_registrations';
 const TBL_ROLE_DEPENDENCIES = TABLE_PREFIX . '_role_dependencies';
 const TBL_ROLES = TABLE_PREFIX . '_roles';

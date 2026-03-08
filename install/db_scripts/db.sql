@@ -18,10 +18,13 @@ DROP TABLE IF EXISTS %PREFIX%_components                        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_events                            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_files                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_folders                           CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook_comments                CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_guestbook                         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_forum_topics                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_forum_posts                       CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_fields                  CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_links                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_members                           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages                          CASCADE;
@@ -29,7 +32,6 @@ DROP TABLE IF EXISTS %PREFIX%_messages_attachments              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages_content                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_messages_recipients               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_photos                            CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_preferences                       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_registrations                     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_role_dependencies                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_roles                             CASCADE;
@@ -40,6 +42,8 @@ DROP TABLE IF EXISTS %PREFIX%_lists                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_log_changes                       CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_rooms                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sessions                          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_settings                          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_settings_data                     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_texts                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relations                    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relation_types               CASCADE;
@@ -51,11 +55,6 @@ DROP TABLE IF EXISTS %PREFIX%_users                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_organizations                     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_ids                               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_menu                              CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_fields                  CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
 
@@ -302,6 +301,110 @@ CREATE TABLE %PREFIX%_ids
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
+
+/*==============================================================*/
+/* Table: adm_inventory_fields                                  */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_fields
+(
+    inf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inf_uuid                    varchar(36)         NOT NULL,
+    inf_org_id                  integer unsigned    NOT NULL,
+    inf_type                    varchar(30)         NOT NULL,
+    inf_name_intern             varchar(110)        NOT NULL,
+    inf_name                    varchar(100)        NOT NULL,
+    inf_description             text,
+    inf_system                  boolean             NOT NULL    DEFAULT false,
+    inf_required_input          smallint            NOT NULL    DEFAULT 0,
+    inf_sequence                smallint            NOT NULL,
+    inf_inf_uuid_connected      varchar(36)         NULL        DEFAULT NULL,
+    inf_usr_id_create           integer unsigned,
+    inf_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    inf_usr_id_change           integer unsigned,
+    inf_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (inf_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (inf_org_id, inf_name_intern);
+CREATE UNIQUE INDEX %PREFIX%_idx_inf_uuid ON %PREFIX%_inventory_fields (inf_uuid);
+
+/*==============================================================*/
+/* Table: adm_inventory_field_select_options                    */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_field_select_options
+(
+    ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ifo_inf_id      integer unsigned    NOT NULL,                   -- Connected inventory field id
+    ifo_value       varchar(255)        NOT NULL,                   -- option value
+    ifo_system      boolean             NOT NULL DEFAULT false,     -- If true, the option is a system option an not editable
+    ifo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ifo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ifo_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+/*==============================================================*/
+/* Table: adm_inventory_item_data                               */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_item_data
+(
+    ind_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ind_inf_id                  integer unsigned    NOT NULL,
+    ind_ini_id                  integer unsigned    NOT NULL,
+    ind_value                   varchar(4000),
+    PRIMARY KEY (ind_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
+
+/*==============================================================*/
+/* Table: adm_inventory_item_borrow_data                          */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_item_borrow_data
+(
+    inb_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inb_ini_id                  integer unsigned    NOT NULL,
+    inb_last_receiver           varchar(255)        NULL        DEFAULT NULL,
+    inb_borrow_date             timestamp           NULL        DEFAULT NULL,
+    inb_return_date             timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (inb_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);
+
+/*==============================================================*/
+/* Table: adm_inventory_items                                   */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_items
+(
+    ini_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ini_uuid                    varchar(36)         NOT NULL,
+    ini_cat_id                  integer unsigned    NOT NULL,
+    ini_org_id                  integer unsigned    NOT NULL,
+    ini_status                  integer unsigned    NOT NULL,
+    ini_picture                 blob                NULL        DEFAULT NULL,
+    ini_usr_id_create           integer unsigned,
+    ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    ini_usr_id_change           integer unsigned,
+    ini_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (ini_id)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);
 
 /*==============================================================*/
 /* Table: adm_links                                             */
@@ -688,23 +791,6 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_pho_uuid ON %PREFIX%_photos (pho_uuid);
 
 /*==============================================================*/
-/* Table: adm_preferences                                       */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_preferences
-(
-    prf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    prf_org_id                  integer unsigned    NOT NULL,
-    prf_name                    varchar(50)         NOT NULL,
-    prf_value                   varchar(255)        NOT NULL,
-    PRIMARY KEY (prf_id)
-)
-ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_prf_org_id_name ON %PREFIX%_preferences (prf_org_id, prf_name);
-
-/*==============================================================*/
 /* Table: adm_registrations                                     */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_registrations
@@ -867,6 +953,41 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_session_id ON %PREFIX%_sessions (ses_session_id);
+
+/*==============================================================*/
+/* Table: adm_settings                                       */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_settings
+(
+    set_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    set_name                    varchar(50)         NOT NULL,
+    set_datatype                varchar(10)         NOT NULL,
+    set_user_defined            boolean             NOT NULL    DEFAULT false,
+    PRIMARY KEY (set_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_set_name ON %PREFIX%_settings (set_name);
+
+/*==============================================================*/
+/* Table: adm_settings_data                                       */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_settings_data
+(
+    sed_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    sed_set_id                  integer unsigned    NOT NULL,
+    sed_org_id                  integer unsigned    NOT NULL,
+    sed_usr_id                  integer unsigned    NOT NULL,
+    sed_value                   varchar(255)        NOT NULL,
+    PRIMARY KEY (sed_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_sed_set_org_usr_id ON %PREFIX%_settings_data (sed_set_id, sed_org_id, sed_usr_id);
 
 /*==============================================================*/
 /* Table: adm_texts                                             */
@@ -1034,110 +1155,6 @@ CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_uuid ON %PREFIX%_user_relations (ure_uuid);
 
 /*==============================================================*/
-/* Table: adm_inventory_fields                                  */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_fields
-(
-    inf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    inf_uuid                    varchar(36)         NOT NULL,
-    inf_org_id                  integer unsigned    NOT NULL,
-    inf_type                    varchar(30)         NOT NULL,
-    inf_name_intern             varchar(110)        NOT NULL,
-    inf_name                    varchar(100)        NOT NULL,
-    inf_description             text,
-    inf_system                  boolean             NOT NULL    DEFAULT false,
-    inf_required_input          smallint            NOT NULL    DEFAULT 0,
-    inf_sequence                smallint            NOT NULL,
-    inf_inf_uuid_connected      varchar(36)         NULL        DEFAULT NULL,
-    inf_usr_id_create           integer unsigned,
-    inf_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    inf_usr_id_change           integer unsigned,
-    inf_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (inf_id)
-)
-ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (inf_org_id, inf_name_intern);
-CREATE UNIQUE INDEX %PREFIX%_idx_inf_uuid ON %PREFIX%_inventory_fields (inf_uuid);
-
-/*==============================================================*/
-/* Table: adm_inventory_field_select_options                    */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_field_select_options
-(
-    ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
-    ifo_inf_id      integer unsigned    NOT NULL,                   -- Connected inventory field id
-    ifo_value       varchar(255)        NOT NULL,                   -- option value
-    ifo_system      boolean             NOT NULL DEFAULT false,     -- If true, the option is a system option an not editable
-    ifo_sequence    smallint            NOT NULL,                   -- Position in the list
-    ifo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
-    PRIMARY KEY (ifo_id)
-)
-ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
-
-/*==============================================================*/
-/* Table: adm_inventory_item_data                               */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_item_data
-(
-    ind_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    ind_inf_id                  integer unsigned    NOT NULL,
-    ind_ini_id                  integer unsigned    NOT NULL,
-    ind_value                   varchar(4000),
-    PRIMARY KEY (ind_id)
-)
-ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
-
-/*==============================================================*/
-/* Table: adm_inventory_item_borrow_data                          */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_item_borrow_data
-(
-    inb_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    inb_ini_id                  integer unsigned    NOT NULL,
-    inb_last_receiver           varchar(255)        NULL        DEFAULT NULL,
-    inb_borrow_date             timestamp           NULL        DEFAULT NULL,
-    inb_return_date             timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (inb_id)
-)
-ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);
-
-/*==============================================================*/
-/* Table: adm_inventory_items                                   */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_items
-(
-    ini_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    ini_uuid                    varchar(36)         NOT NULL,
-    ini_cat_id                  integer unsigned    NOT NULL,
-    ini_org_id                  integer unsigned    NOT NULL,
-    ini_status                  integer unsigned    NOT NULL,
-    ini_picture                 blob                NULL        DEFAULT NULL,
-    ini_usr_id_create           integer unsigned,
-    ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    ini_usr_id_change           integer unsigned,
-    ini_timestamp_change        timestamp           NULL        DEFAULT NULL,
-    PRIMARY KEY (ini_id)
-)
-ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_unicode_ci;
-
-CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);
-
-/*==============================================================*/
 /* Table: adm_log_changes                                       */
 /*    Generic table for logging changes to various other tables */
 /*    The meaning of the subsequent columns depend heavily on   */
@@ -1296,9 +1313,6 @@ ALTER TABLE %PREFIX%_photos
     ADD CONSTRAINT %PREFIX%_fk_pho_usr_create  FOREIGN KEY (pho_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_pho_usr_change  FOREIGN KEY (pho_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_preferences
-    ADD CONSTRAINT %PREFIX%_fk_prf_org         FOREIGN KEY (prf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
-
 ALTER TABLE %PREFIX%_registrations
     ADD CONSTRAINT %PREFIX%_fk_reg_org         FOREIGN KEY (reg_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_reg_usr         FOREIGN KEY (reg_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -1338,6 +1352,11 @@ ALTER TABLE %PREFIX%_sso_keys
 ALTER TABLE %PREFIX%_sessions
     ADD CONSTRAINT %PREFIX%_fk_ses_org         FOREIGN KEY (ses_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ses_usr         FOREIGN KEY (ses_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_settings_data
+    ADD CONSTRAINT %PREFIX%_fk_sed_set         FOREIGN KEY (sed_set_id)         REFERENCES %PREFIX%_settings (set_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_sed_org         FOREIGN KEY (sed_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_sed_usr         FOREIGN KEY (sed_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_texts
     ADD CONSTRAINT %PREFIX%_fk_txt_org         FOREIGN KEY (txt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;

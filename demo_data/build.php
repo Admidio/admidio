@@ -102,10 +102,9 @@ function toggleForeignKeyChecks(bool $enable): void
 
 /**
  * @param array<int,string> $sqlStatements
- * @param string $filename
  * @throws \Admidio\Infrastructure\Exception
  */
-function executeSqlStatements(array $sqlStatements, string $filename): void
+function executeSqlStatements(array $sqlStatements): void
 {
     global $gDb;
 
@@ -133,7 +132,7 @@ function readAndExecuteSQLFromFile(string $filename): void
     echo 'Read file "'.$filename.'" finished!<br />';
     echo 'Executing "'.$filename.'" SQL-Statements ...<br />';
 
-    executeSqlStatements($sqlStatements, $filename);
+    executeSqlStatements($sqlStatements);
 
     echo 'Executing "'.$filename.'" SQL-Statements finished!<br />';
 }
@@ -189,7 +188,7 @@ function getInstalledDbVersion(): string
 /**
  * @throws RuntimeException|\Admidio\Infrastructure\Exception
  */
-function doInstallation()
+function doInstallation(): void
 {
     global $gDb, $gDbType, $gL10n; // necessary for "data_edit.php"
 

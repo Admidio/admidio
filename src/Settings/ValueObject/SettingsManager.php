@@ -3,9 +3,9 @@
 namespace Admidio\Settings\ValueObject;
 
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Settings\Entity\Settings;
+use UnexpectedValueException;
 
 /**
  * @brief Class the manage the settings of an organization
@@ -72,7 +72,7 @@ class SettingsManager
     /**
      * Clears the loaded settings
      */
-    public function clearAll()
+    public function clearAll(): void
     {
         $this->settings = array();
     }
@@ -82,9 +82,9 @@ class SettingsManager
      * @param string $name The chosen setting name
      * @throws Exception
      */
-    private function delete(string $name)
+    private function delete(string $name): void
     {
-        $sql = 'DELETE FROM ' . TBL_PREFERENCES . '
+        $sql = 'DELETE FROM ' . TBL_SETTINGS . '
                  WHERE prf_org_id = ? -- $orgId
                    AND prf_name   = ? -- $name';
         $this->db->queryPrepared($sql, array($this->orgId, $name));
@@ -95,7 +95,7 @@ class SettingsManager
      * @param string $name The chosen setting name
      * @throws Exception
      */
-    public function del(string $name)
+    public function del(string $name): void
     {
         if (!self::isValidName($name) && $this->throwExceptions) {
             throw new Exception('Settings name "' . $name . '" is an invalid string!');
@@ -112,7 +112,7 @@ class SettingsManager
      * useful before an Admidio update started because not all settings are available before update.
      * When writing a setting to the database exceptions will still be thrown.
      */
-    public function disableExceptions()
+    public function disableExceptions(): void
     {
         $this->throwExceptions = false;
     }
@@ -148,7 +148,7 @@ class SettingsManager
             throw new Exception('Settings name "' . $name . '" does not exist!');
         }
 
-        return (string)$this->settings[$name];
+        return $this->settings[$name];
     }
 
     /**
@@ -230,7 +230,7 @@ class SettingsManager
     public function has(string $name, bool $update = false): bool
     {
         if (!self::isValidName($name) && $this->throwExceptions) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
 
         if ($update || !array_key_exists($name, $this->settings)) {
@@ -238,7 +238,7 @@ class SettingsManager
                 $this->settings[$name] = $this->load($name);
 
                 return true;
-            } catch (\UnexpectedValueException $e) {
+            } catch (UnexpectedValueException) {
                 return false;
             }
         }
@@ -261,7 +261,7 @@ class SettingsManager
      * @param mixed $value The settings value
      * @return bool Returns true if the settings value is true
      */
-    private static function isValidValue($value): bool
+    private static function isValidValue(mixed $value): bool
     {
         return is_scalar($value);
     }
@@ -274,9 +274,16 @@ class SettingsManager
     private function loadAll(): array
     {
         $sql = 'SELECT prf_name, prf_value
-                  FROM ' . TBL_PREFERENCES . '
-                 WHERE prf_org_id = ? -- $this->orgId';
-        $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId));
+              FROM ' . TBL_SETTINGS . '
+             WHERE prf_org_id = ? -- $this->orgId';
+        $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId), false);
+
+        if ($pdoStatement === false) {
+            $sql = 'SELECT prf_name, prf_value
+                      FROM ' . TBL_PREFERENCES . '
+                     WHERE prf_org_id = ? -- $this->orgId';
+            $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId));
+        }
 
         $settings = array();
 
@@ -291,18 +298,26 @@ class SettingsManager
      * Loads a specific setting from the database
      * @param string $name The setting name from the wanted value
      * @return string|null Returns the setting value
-     * @throws \UnexpectedValueException|Exception Throws if there is no setting to the given name found
+     * @throws UnexpectedValueException|Exception Throws if there is no setting to the given name found
      */
     private function load(string $name): string|null
     {
         $sql = 'SELECT prf_value
-                  FROM ' . TBL_PREFERENCES . '
+                  FROM ' . TBL_SETTINGS . '
                  WHERE prf_org_id = ? -- $this->orgId
                    AND prf_name   = ? -- $name';
-        $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
+        $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name), false);
+
+        if ($pdoStatement === false) {
+            $sql = 'SELECT prf_value
+                      FROM ' . TBL_PREFERENCES . '
+                     WHERE prf_org_id = ? -- $this->orgId
+                       AND prf_name   = ? -- $name';
+            $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
+        }
 
         if ($pdoStatement->rowCount() === 0 && $this->throwExceptions) {
-            throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
+            throw new UnexpectedValueException('Settings name "' . $name . '" does not exist!');
         }
 
         return $pdoStatement->fetchColumn();
@@ -314,7 +329,7 @@ class SettingsManager
      * @param string $value The chosen setting value
      * @throws Exception
      */
-    private function insert(string $name, string $value)
+    private function insert(string $name, string $value): void
     {
         $prf = new Settings($this->db);
         $prf->setValue('prf_org_id', $this->orgId);
@@ -327,7 +342,7 @@ class SettingsManager
      * Clears and reload all settings
      * @throws Exception
      */
-    public function resetAll()
+    public function resetAll(): void
     {
         $this->settings = $this->loadAll();
         $this->initFullLoad = true;
@@ -340,7 +355,7 @@ class SettingsManager
      * @param bool $update Set true to make a force reload of this setting from the database
      * @throws Exception
      */
-    public function setMulti(array $settings, bool $update = true)
+    public function setMulti(array $settings, bool $update = true): void
     {
         foreach ($settings as $name => $value) {
             if (!self::isValidName($name)) {
@@ -376,7 +391,7 @@ class SettingsManager
      * @param bool $update Set true to make a force reload of this setting from the database
      * @throws Exception
      */
-    public function set(string $name, $value, bool $update = true): bool
+    public function set(string $name, mixed $value, bool $update = true): bool
     {
         if (!self::isValidName($name)) {
             throw new Exception('Settings name "' . $name . '" is an invalid string!');
@@ -397,7 +412,7 @@ class SettingsManager
             $this->settings[$name] = $this->load($name);
 
             return true;
-        } catch (\UnexpectedValueException $e) {
+        } catch (UnexpectedValueException) {
             return false;
         }
     }
@@ -408,7 +423,7 @@ class SettingsManager
      * @param string $value The chosen new setting value
      * @throws Exception
      */
-    private function update(string $name, string $value)
+    private function update(string $name, string $value): void
     {
         $prf = new Settings($this->db);
         $found = $prf->readDataByColumns(array('prf_org_id' => $this->orgId, 'prf_name' => $name));
@@ -426,7 +441,7 @@ class SettingsManager
      * @param bool $update Set true to make a force reload of this setting from the database
      * @throws Exception
      */
-    private function updateOrInsertSetting(string $name, string $value, bool $update = true)
+    private function updateOrInsertSetting(string $name, string $value, bool $update = true): void
     {
         if ($this->has($name, true)) {
             if ($update && $this->settings[$name] !== $value) {

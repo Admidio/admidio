@@ -122,7 +122,7 @@ class Organization extends Entity
      *                    This will be the first valid user of the new organization.
      * @throws Exception
      */
-    public function createBasicData(int $userId)
+    public function createBasicData(int $userId): void
     {
         global $gL10n, $gProfileFields;
 
@@ -579,8 +579,8 @@ class Organization extends Entity
                  WHERE atl_org_id = ? -- $this->getValue(\'org_id\') ';
         $this->db->queryPrepared($sql, array($this->getValue('org_id')));
 
-        // delete all preferences
-        $sql = 'DELETE FROM ' . TBL_PREFERENCES . '
+        // delete all settings
+        $sql = 'DELETE FROM ' . TBL_SETTINGS . '
                  WHERE prf_org_id = ? -- $this->getValue(\'org_id\') ';
         $this->db->queryPrepared($sql, array($this->getValue('org_id')));
 
@@ -884,12 +884,12 @@ class Organization extends Entity
 
     /**
      * Adjust the changelog entry for this db record: Add the parent fold as a related object
-     *
      * @param LogChanges $logEntry The log entry to adjust
-     *
      * @return void
+     * @throws Exception
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
+    protected function adjustLogEntry(LogChanges $logEntry): void
+    {
         $orgParentId = (int) $this->getValue('org_org_id_parent');
         if ($orgParentId > 0) {
             $sql = 'SELECT org_id, org_longname, org_shortname
@@ -905,7 +905,6 @@ class Organization extends Entity
     /**
      * Return a human-readable representation of this record.
      * For organizations, simply use the longname
-     *
      * @return string The readable representation of the record (can also be a translatable identifier)
      */
     public function readableName(): string
