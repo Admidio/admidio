@@ -270,6 +270,7 @@ a {
 .alert-info {
     background-color: color-mix(in srgb, var(--bs-primary) 40%, white);
     border-color: color-mix(in srgb, var(--bs-primary) 70%, white);
+    color: color-mix(in srgb, var(--bs-primary) 80%, black);
 }
 
 /* show vertical btn group in mobile view */
