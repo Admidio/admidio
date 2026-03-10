@@ -1,0 +1,1214 @@
+[
+    {
+        "name": "enable_rss",
+        "value": true,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "enable_auto_login",
+        "value": true,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "security_login_email_address_enabled",
+        "value": false,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "default_country",
+        "value": "DEU",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "logout_minutes",
+        "value": 20,
+        "datatype": "integer",
+        "user-defined": false
+    },
+    {
+        "name": "homepage_logout",
+        "value": "modules\/overview.php",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "homepage_login",
+        "value": "modules\/overview.php",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "enable_password_recovery",
+        "value": true,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "two_factor_authentication_enabled",
+        "value": false,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "system_browser_update_check",
+        "value": false,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "system_cookie_note",
+        "value": true,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "system_currency",
+        "value": "€",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "system_date",
+        "value": "d.m.Y",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "system_hashing_cost",
+        "value": 10,
+        "datatype": "integer",
+        "user-defined": false
+    },
+    {
+        "name": "system_js_editor_enabled",
+        "value": true,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "system_language",
+        "value": "de",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "system_search_similar",
+        "value": true,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "system_show_create_edit",
+        "value": 1,
+        "datatype": "integer",
+        "user-defined": false
+    },
+    {
+        "name": "system_time",
+        "value": "H:i",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "system_url_imprint",
+        "value": "",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "system_url_data_protection",
+        "value": "",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "password_min_strength",
+        "value": 1,
+        "datatype": "integer",
+        "user-defined": false
+    },
+    {
+        "name": "theme",
+        "value": "simple",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "theme_fallback",
+        "value": "simple",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "color_primary",
+        "value": "#349aaa",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "color_secondary",
+        "value": "#263340",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "logo_file",
+        "value": "",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "logo_file_max_height",
+        "value": 60,
+        "datatype": "integer",
+        "user-defined": false
+    },
+    {
+        "name": "admidio_headline",
+        "value": "SYS_ONLINE_MEMBERSHIP_ADMINISTRATION",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "favicon_file",
+        "value": "",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "additional_styles_file",
+        "value": "",
+        "datatype": "string",
+        "user-defined": false
+    },
+    {
+        "name": "registration_adopt_all_data",
+        "value": true,
+        "datatype": "boolean",
+        "user-defined": false
+    },
+    {
+        "name": "registration_enable_captcha",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "registration_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "registration_manual_approval",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "registration_send_notification_email",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_user_data",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_users",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_members",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_user_fields",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_user_field_select_options",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_announcements",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_events",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_rooms",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_roles",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_role_dependencies",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_roles_rights",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_roles_rights_data",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_categories",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_category_report",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_links",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_folders",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_files",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_organizations",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_menu",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_user_relation_types",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_user_relations",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_photos",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_lists",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_list_columns",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_settings",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_texts",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_forum_topics",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_forum_posts",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_inventory_fields",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_inventory_field_select_options",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_inventory_items",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_inventory_item_data",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_inventory_item_borrow_data",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_saml_clients",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_oidc_clients",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "changelog_table_others",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_send_method",
+        "value": "phpmail",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_sending_mode",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_recipients_with_roles",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_number_recipients",
+        "value": "50",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_into_to",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_sender_mode",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_sender_email",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_sender_name",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_smtp_host",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_smtp_auth",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_smtp_port",
+        "value": "587",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_smtp_secure",
+        "value": "tls",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_smtp_authentication_type",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_smtp_user",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_smtp_password",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "system_notifications_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "system_notifications_role",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "system_notifications_new_entries",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "system_notifications_profile_changes",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "system_notifications_inventory_changes",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_type",
+        "value": "pic",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_fonts",
+        "value": "AHGBold.ttf",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_width",
+        "value": "215",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_lines_numbers",
+        "value": "5",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_perturbation",
+        "value": "0.75",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_background_image",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_background_color",
+        "value": "#B6D6DB",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_text_color",
+        "value": "#707070",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_line_color",
+        "value": "#707070",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_charset",
+        "value": "23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxy",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "captcha_signature",
+        "value": "Powered by Admidio.org",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "announcements_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "announcements_per_page",
+        "value": "10",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "announcements_clamp_text_lines",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "category_report_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "category_report_default_configuration",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "contacts_field_history_days",
+        "value": "365",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "contacts_list_configuration",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "contacts_per_page",
+        "value": "25",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "contacts_show_all",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "contacts_user_relations_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "documents_files_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "documents_files_max_upload_size",
+        "value": "3",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_module_enabled",
+        "value": "2",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_visible_for",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_items_per_page",
+        "value": "25",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_field_history_days",
+        "value": "365",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_item_picture_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_item_picture_storage",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_item_picture_width",
+        "value": "130",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_item_picture_height",
+        "value": "170",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_show_obsolete_select_field_options",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_system_field_names_editable",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_allow_keeper_edit",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_allowed_keeper_edit_fields",
+        "value": "LAST_RECEIVER,BORROW_DATE,RETURN_DATE",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_current_user_default_keeper",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_allow_negative_numbers",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_decimal_places",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_field_date_time_format",
+        "value": "date",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_items_disable_borrowing",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_profile_view_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_profile_view",
+        "value": "LAST_RECEIVER",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_export_filename",
+        "value": "SYS_INVENTORY",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "inventory_add_date",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_list_configuration",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_ical_export_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_may_take_part",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_per_page",
+        "value": "10",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_clamp_text_lines",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_rooms_enabled",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_save_cancellations",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_show_map_link",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "events_view",
+        "value": "detail",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "forum_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "forum_posts_per_page",
+        "value": "15",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "forum_topics_per_page",
+        "value": "10",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "forum_view",
+        "value": "cards",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "groups_roles_default_configuration",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "groups_roles_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "groups_roles_export",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "groups_roles_edit_lists",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "groups_roles_members_per_page",
+        "value": "25",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "groups_roles_show_former_members",
+        "value": "2",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "pm_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_captcha_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_delivery_confirmation",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_html_registered_users",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_max_receiver",
+        "value": "10",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_save_attachments",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_send_to_all_addresses",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_show_former",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "mail_template",
+        "value": "default.html",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "max_email_attachment_size",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_albums_per_page",
+        "value": "24",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_download_enabled",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_ecard_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_ecard_scale",
+        "value": "500",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_ecard_template",
+        "value": "postcard.tpl",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_image_text",
+        "value": "© ",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_image_text_size",
+        "value": "40",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_keep_original",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_show_width",
+        "value": "1200",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_show_height",
+        "value": "1200",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_show_mode",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_thumbs_page",
+        "value": "24",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "photo_thumbs_scale",
+        "value": "500",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "profile_show_obsolete_select_field_options",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "profile_show_map_link",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "profile_show_empty_fields",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "profile_show_roles",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "profile_show_former_roles",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "profile_show_extern_roles",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "profile_photo_storage",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_saml_enabled",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_saml_entity_id",
+        "value": "#ADMIDIO_URL#",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_saml_want_requests_signed",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_saml_signing_key",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_saml_encryption_key",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_oidc_enabled",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_oidc_issuer_url",
+        "value": "#ADMIDIO_URL#\/modules\/sso\/index.php",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_oidc_signing_key",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "sso_oidc_encryption_key",
+        "value": "",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "weblinks_module_enabled",
+        "value": "1",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "weblinks_per_page",
+        "value": "0",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "weblinks_redirect_seconds",
+        "value": "10",
+        "datatype": "",
+        "user-defined": false
+    },
+    {
+        "name": "weblinks_target",
+        "value": "_blank",
+        "datatype": "",
+        "user-defined": false
+    }
+]
