@@ -40,13 +40,16 @@ $defaultSettings = array(
     // Theme
     'theme' => 'simple',
     'theme_fallback' => 'simple',
-    'color_primary' => '#349aaa',
-    'color_secondary' => '#263340',
-    'logo_file' => '',
-    'logo_file_max_height' => '60',
-    'admidio_headline' => 'SYS_ONLINE_MEMBERSHIP_ADMINISTRATION',
-    'favicon_file' => '',
-    'additional_styles_file' => '',
+    'theme_color_primary' => '#349aaa',
+    'theme_color_secondary' => '#a7d9e0',
+    'theme_color_tertiary' => '#e9ecef',
+    'theme_color_text' => '#263340',
+    'theme_color_background' => '#ffffff',
+    'theme_logo_file' => '',
+    'theme_logo_file_max_height' => '60',
+    'theme_admidio_headline' => 'SYS_ONLINE_MEMBERSHIP_ADMINISTRATION',
+    'theme_favicon_file' => '',
+    'theme_additional_styles_file' => '',
 
     // Registration
     'registration_adopt_all_data' => '1',

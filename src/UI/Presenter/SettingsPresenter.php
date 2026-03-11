@@ -828,46 +828,63 @@ class SettingsPresenter extends PagePresenter
             array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC')
         );
         $formDesign->addInput(
-            'color_primary',
+            'theme_color_primary',
             $gL10n->get('SYS_COLOR_PRIMARY'),
-            $formValues['color_primary']??'#349aaa',
+            $formValues['theme_color_primary']??'#349aaa',
             array('type' => 'color', 'helpTextId' => 'SYS_COLOR_PRIMARY_DESC')
         );
         $formDesign->addInput(
-            'color_secondary',
+            'theme_color_secondary',
             $gL10n->get('SYS_COLOR_SECONDARY'),
-            $formValues['color_secondary']??'#263340',
+            $formValues['theme_color_secondary']??'#263340',
             array('type' => 'color', 'helpTextId' => 'SYS_COLOR_SECONDARY_DESC')
         );
-
         $formDesign->addInput(
-            'additional_styles_file',
+            'theme_color_tertiary',
+            $gL10n->get('SYS_COLOR_TERTIARY'),
+            $formValues['theme_color_tertiary']??'#e9ecef',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_TERTIARY_DESC')
+        );
+        $formDesign->addInput(
+            'theme_color_background',
+            $gL10n->get('SYS_COLOR_BACKGROUND'),
+            $formValues['theme_color_background']??'#ffffff',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_BACKGROUND_DESC')
+        );
+        $formDesign->addInput(
+            'theme_color_text',
+            $gL10n->get('SYS_COLOR_TEXT'),
+            $formValues['theme_color_text']??'#263340',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_TEXT_DESC')
+        );
+        $formDesign->addInput(
+            'theme_additional_styles_file',
             $gL10n->get('SYS_ADDITIONAL_CSS_FILE'),
-            $formValues['additional_styles_file']??'',
+            $formValues['theme_additional_styles_file']??'',
             array('helpTextId' => 'SYS_ADDITIONAL_CSS_FILE_DESC')
         );
         $formDesign->addInput(
-            'logo_file',
+            'theme_logo_file',
             $gL10n->get('SYS_LOGO_FILE'),
-            $formValues['logo_file']??'',
+            $formValues['theme_logo_file']??'',
             array('helpTextId' => 'SYS_LOGO_FILE_DESC')
         );
         $formDesign->addInput(
-            'logo_file_max_height',
+            'theme_logo_file_max_height',
             $gL10n->get('SYS_LOGO_FILE_MAX_HEIGHT'),
-            $formValues['logo_file_max_height']??'',
+            $formValues['theme_logo_file_max_height']??'',
             array('property' => FormPresenter::FIELD_REQUIRED, 'type' => 'number', 'minNumber' => 40, 'maxNumber' => 200, 'step' => 1,'helpTextId' => 'SYS_LOGO_FILE_MAX_HEIGHT_DESC')
         );
         $formDesign->addInput(
-            'admidio_headline',
+            'theme_admidio_headline',
             $gL10n->get('SYS_HEADLINE'),
-            $formValues['admidio_headline']??'',
+            $formValues['theme_admidio_headline']??'',
             array('helpTextId' => 'SYS_ADMIDIO_HEADLINE_DESC')
         );
         $formDesign->addInput(
-            'favicon_file',
+            'theme_favicon_file',
             $gL10n->get('SYS_FAVICON_FILE'),
-            $formValues['favicon_file']??'',
+            $formValues['theme_favicon_file']??'',
             array('helpTextId' => 'SYS_FAVICON_FILE_DESC')
         );
         $formDesign->addSubmitButton(

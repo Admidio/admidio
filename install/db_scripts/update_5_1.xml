@@ -26,12 +26,34 @@
     <step id="230" database="mysql">UPDATE %PREFIX%_preferences prf INNER JOIN %PREFIX%_organizations org ON org.org_id = prf.prf_org_id SET prf.prf_value = org.org_email_administrator WHERE prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
     <step id="240" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = org.org_email_administrator FROM %PREFIX%_organizations org WHERE org.org_id = prf.prf_org_id AND prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
     <step id="250" database="mysql">UpdateStepsCode::updateStep51ConvertCharsetToUtf8mb4</step>
-    <step id="260">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/settings.php', men_name_intern = 'settings', men_name= 'SYS_SETTINGS', men_description = 'SYS_SETTINGS_DESC' WHERE men_name_intern = 'orgprop'</step>
-    <step id="270">UPDATE %PREFIX%_components SET com_name = 'SYS_SETTINGS', com_name_intern = 'SETTINGS' WHERE com_name_intern = 'PREFERENCES'</step>
-    <step id="280" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'changelog_table_preferences' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = 0 WHERE pr1.prf_name = 'changelog_table_settings'</step>
-    <step id="290" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'changelog_table_preferences' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'changelog_table_settings'</step>
-    <step id="300">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'changelog_table_preferences'</step>
-    <step id="310">CREATE TABLE %PREFIX%_settings
+    <step id="260">UPDATE %PREFIX%_preferences SET prf_value = '#a7d9e0' WHERE prf_name = 'color_secondary' AND prf_value = '#263340'</step>
+    <step id="270" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'color_primary' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_color_primary'</step>
+    <step id="280" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'color_primary' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_color_primary'</step>
+    <step id="290">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'color_primary'</step>
+    <step id="280" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'color_secondary' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_color_secondary'</step>
+    <step id="290" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'color_secondary' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_color_secondary'</step>
+    <step id="300">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'color_secondary'</step>
+    <step id="310" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'logo_file' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_logo_file'</step>
+    <step id="320" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'logo_file' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_logo_file'</step>
+    <step id="330">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'logo_file'</step>
+    <step id="340" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'logo_file_max_height' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_logo_file_max_height'</step>
+    <step id="350" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'logo_file_max_height' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_logo_file_max_height'</step>
+    <step id="360">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'logo_file_max_height'</step>
+    <step id="370" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'admidio_headline' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_admidio_headline'</step>
+    <step id="380" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'admidio_headline' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_admidio_headline'</step>
+    <step id="390">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'admidio_headline'</step>
+    <step id="400" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'favicon_file' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_favicon_file'</step>
+    <step id="410" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'favicon_file' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_favicon_file'</step>
+    <step id="420">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'favicon_file'</step>
+    <step id="430" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'additional_styles_file' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_additional_styles_file'</step>
+    <step id="440" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'additional_styles_file' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_additional_styles_file'</step>
+    <step id="450">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'additional_styles_file'</step>
+    <step id="460">UPDATE %PREFIX%_menu SET men_url = '/adm_program/modules/settings.php', men_name_intern = 'settings', men_name= 'SYS_SETTINGS', men_description = 'SYS_SETTINGS_DESC' WHERE men_name_intern = 'orgprop'</step>
+    <step id="470">UPDATE %PREFIX%_components SET com_name = 'SYS_SETTINGS', com_name_intern = 'SETTINGS' WHERE com_name_intern = 'PREFERENCES'</step>
+    <step id="480" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'changelog_table_preferences' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = 0 WHERE pr1.prf_name = 'changelog_table_settings'</step>
+    <step id="490" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = 0 FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'changelog_table_preferences' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'changelog_table_settings'</step>
+    <step id="500">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'changelog_table_preferences'</step>
+    <step id="510">CREATE TABLE %PREFIX%_settings
     (
     set_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     set_name                    varchar(50)         NOT NULL,
@@ -42,8 +64,8 @@
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci</step>
-    <step id="320">CREATE UNIQUE INDEX %PREFIX%_idx_set_name ON %PREFIX%_settings (set_name)</step>
-    <step id="330">CREATE TABLE %PREFIX%_settings_data
+    <step id="520">CREATE UNIQUE INDEX %PREFIX%_idx_set_name ON %PREFIX%_settings (set_name)</step>
+    <step id="530">CREATE TABLE %PREFIX%_settings_data
     (
     sed_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     sed_set_id                  integer unsigned    NOT NULL,
@@ -55,8 +77,8 @@
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci</step>
-    <step id="340">CREATE UNIQUE INDEX %PREFIX%_idx_sed_set_org_usr_id ON %PREFIX%_settings_data (sed_set_id, sed_org_id, sed_usr_id)</step>
-    <step id="350">ALTER TABLE %PREFIX%_settings_data
+    <step id="540">CREATE UNIQUE INDEX %PREFIX%_idx_sed_set_org_usr_id ON %PREFIX%_settings_data (sed_set_id, sed_org_id, sed_usr_id)</step>
+    <step id="550">ALTER TABLE %PREFIX%_settings_data
     ADD CONSTRAINT %PREFIX%_fk_sed_set         FOREIGN KEY (sed_set_id)         REFERENCES %PREFIX%_settings (set_id)            ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_sed_org         FOREIGN KEY (sed_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_sed_usr         FOREIGN KEY (sed_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT</step>

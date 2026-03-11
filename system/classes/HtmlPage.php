@@ -303,27 +303,40 @@ class HtmlPage
         $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_module_enabled'));
 
        // Design variables
-        $this->smarty->assign('additionalStylesFile', $gSettingsManager->getString('additional_styles_file'));
-        $this->smarty->assign('logoFile', $gSettingsManager->getString('logo_file'));
-        $this->smarty->assign('logoFileMaxHeight', $gSettingsManager->getString('logo_file_max_height'));
-        $this->smarty->assign('faviconFile', $gSettingsManager->getString('favicon_file'));
-        $this->smarty->assign('admidioHeadline', Language::translateIfTranslationStrId($gSettingsManager->getString('admidio_headline')));
+        $this->smarty->assign('additionalStylesFile', $gSettingsManager->getString('theme_additional_styles_file'));
+        $this->smarty->assign('logoFile', $gSettingsManager->getString('theme_logo_file'));
+        $this->smarty->assign('logoFileMaxHeight', $gSettingsManager->getString('theme_logo_file_max_height'));
+        $this->smarty->assign('faviconFile', $gSettingsManager->getString('theme_favicon_file'));
+        $this->smarty->assign('admidioHeadline', Language::translateIfTranslationStrId($gSettingsManager->getString('theme_admidio_headline')));
 
         $styles = '';
-        $color_primary = $gSettingsManager->getString('color_primary');
+        $color_primary = $gSettingsManager->getString('theme_color_primary');
         if ($color_primary && $this->isValidHexColor($color_primary)) {
             $styles .= '    --bs-primary: ' . $color_primary . ";\n";
             $styles .= '    --bs-primary-rgb: ' . hexdec(substr($color_primary, 1, 2)) . ', ' . hexdec(substr($color_primary, 3, 2)) . ', ' . hexdec(substr($color_primary, 5, 2)) . ";\n";
         }
-        $color_secondary = $gSettingsManager->getString('color_secondary');
+        $color_secondary = $gSettingsManager->getString('theme_color_secondary');
         if ($color_secondary && $this->isValidHexColor($color_secondary)) {
             $styles .= '    --bs-secondary: ' . $color_secondary . ";\n";
             $styles .= '    --bs-secondary-rgb: ' . hexdec(substr($color_secondary, 1, 2)) . ', ' . hexdec(substr($color_secondary, 3, 2)) . ', ' . hexdec(substr($color_secondary, 5, 2)) . ";\n";
         }
+        $color_tertiary = $gSettingsManager->getString('theme_color_tertiary');
+        if ($color_tertiary && $this->isValidHexColor($color_tertiary)) {
+            $styles .= '    --bs-tertiary: ' . $color_tertiary . ";\n";
+            $styles .= '    --bs-tertiary-rgb: ' . hexdec(substr($color_tertiary, 1, 2)) . ', ' . hexdec(substr($color_tertiary, 3, 2)) . ', ' . hexdec(substr($color_tertiary, 5, 2)) . ";\n";
+        }
+        $color_text = $gSettingsManager->getString('theme_color_text');
+        if ($color_text && $this->isValidHexColor($color_text)) {
+            $styles .= '    --bs-body-color: ' . $color_text . ";\n";
+        }
+        $color_background = $gSettingsManager->getString('theme_color_background');
+        if ($color_background && $this->isValidHexColor($color_background)) {
+            $styles .= '    --bs-body-bg: ' . $color_background . ";\n";
+        }
         if (!empty($styles)) {
             $this->smarty->assign('additionalStyles', ":root {\n$styles};");
         }
-		
+
         // add imprint and data protection
         if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {
             $urlImprint = $gSettingsManager->getString('system_url_imprint');
@@ -668,7 +681,7 @@ class HtmlPage
             echo $e->getMessage();
         }
     }
-	
+
 	/**
      * Checks if the provided color string is a valid hex color format.
      * @param string $color Color string to check.
