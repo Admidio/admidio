@@ -649,6 +649,7 @@ label {
 }
 
 .tooltip {
+    --bs-tooltip-color: var(--bs-body-color);
     --bs-tooltip-bg: var(--bs-secondary);
 }
 
@@ -669,6 +670,7 @@ label {
 }
 
 .page-item.active .page-link {
+    color: var(--bs-body-color);
     background-color: var(--bs-secondary);
     border-color: var(--bs-secondary);
 }
