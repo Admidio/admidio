@@ -64,7 +64,8 @@ final class UpdateStepsCode
 
         $admidioTables = self::$db->queryPrepared($sql, array($g_adm_db, $g_tbl_praefix . '_%'));
         while ($row = $admidioTables->fetch()) {
-            $sql = 'ALTER TABLE ' . $row['TABLE_NAME'] . ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+            $tableName = isset($row['table_name']) ? $row['table_name'] : (isset($row['TABLE_NAME']) ? $row['TABLE_NAME'] : null);
+            $sql = 'ALTER TABLE ' . $tableName . ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
             self::$db->queryPrepared($sql);
         }
     }

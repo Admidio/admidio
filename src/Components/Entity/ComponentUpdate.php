@@ -283,6 +283,9 @@ class ComponentUpdate extends Component
 
                 // save current version to system component
                 $this->setValue('com_version', $mainVersion . '.' . $minorVersion . '.0');
+                if ($mainVersion === ADMIDIO_VERSION_MAIN && $minorVersion === ADMIDIO_VERSION_MINOR) {
+                    $this->setValue('com_beta', ADMIDIO_VERSION_BETA);
+                }
                 $this->save();
 
                 // output of the version number for better debugging
