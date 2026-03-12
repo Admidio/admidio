@@ -639,18 +639,24 @@ label {
 }
 
 .dropdown-item {
-    color: var(--bs-secondary);
+    color: var(--bs-body-color);
     background: var(--bs-body-bg);
+}
+
+.dropdown-item:hover {
+    color: var(--bs-body-bg);
+    background: var(--bs-primary);
 }
 
 .popover {
     --bs-popover-bg: var(--bs-body-bg);
-    --bs-popover-header-bg: var(--bs-tertiary);
+    --bs-popover-header-bg: var(--bs-secondary);
 }
 
 .tooltip {
     --bs-tooltip-color: var(--bs-body-color);
     --bs-tooltip-bg: var(--bs-secondary);
+    --bs-tooltip-opacity: unset;
 }
 
 .breadcrumb {
