@@ -1172,7 +1172,7 @@
   <string name="SYS_OVERHANG">Überhang</string>
   <string name="SYS_OVERVIEW">Übersicht</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Übersicht Erweiterungen</string>
-  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Das Erscheinungsbild der Übersichts-Erweiterungen auf der Übersichtsseite kann hier geändert werden. Die Reihenfolge der Erweiterungen kann per Drag & Drop (große Bildschirme) oder durch Klicken auf die Verschieben-Schaltflächen (kleine Bildschirme) geändert werden. Die neue Reihenfolge wird erst nach dem Speichern der Einstellungen wirksam!</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Das Erscheinungsbild der Übersichts-Erweiterungen auf der Übersichtsseite kann hier geändert werden. Die Reihenfolge der Erweiterungen kann per Drag &amp; Drop (große Bildschirme) oder durch Klicken auf die Verschieben-Schaltflächen (kleine Bildschirme) geändert werden. Die neue Reihenfolge wird erst nach dem Speichern der Einstellungen wirksam!</string>
   <string name="SYS_PAGE_NEXT">Nächste</string>
   <string name="SYS_PAGE_PREVIOUS">Vorherige</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
