@@ -35,6 +35,7 @@
   <string name="INS_ERROR_OPEN_FILE">Filen #VAR1_BOLD# kunne ikke åbnes.</string>
   <string name="INS_GROUPS">Grupper</string>
   <string name="INS_HOST_INVALID">Hostnavnet er ikke gyldigt. Indtast et gyldigt hostnavn eller IP adresse.</string>
+  <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Nogle tredjeparts-plugins er blevet flyttet til den nye plugin-mappe #VAR1_BOLD#. Tjek venligst funktionaliteten af disse plugins efter opdateringen.</string>
   <string name="INS_INSTALL_ADMIDIO">Installer Admidio</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">Databasen indeholder allerede en Admidio installation. Endnu en installation er ikke mulig.</string>
@@ -59,7 +60,10 @@
   <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Admidio databasen er blevet succesfuldt opdateret til version #VAR1#.\nDu kan nu logge ind og bruge Admidio igen.</string>
   <string name="INS_UPDATE_VERSION">Opdater til version #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Opdaterings proces afsluttet succesfuldt</string>
+  <string name="INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED">Nogle tredjeparts plugin-mapper kunne ikke flyttes til den nye plugin-mappe #VAR1_BOLD#.\nTjek venligst mappen #VAR2_BOLD# i din Admidio-installation og flyt tredjeparts plugin-mapperne manuelt og slet den gamle adm_plugins-mappe bagefter.</string>
   <string name="INS_WARNING_BETA_VERSION">Dette er en beta version af Admidio.\n\nProduktions brug kan være forbundet med risiko på grund af mulig instabilit og kan resultere i datatab. Bør kun bruges som testmiljø!</string>
+  <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Nogle gamle Admidio-pluginmapper kunne ikke slettes fra den gamle plugin-mappe #VAR1_BOLD#.\nTjek venligst mappen #VAR2_BOLD# i din Admidio-installation og slet de gamle plugin-mapper manuelt og slet den gamle adm_plugins-mappe bagefter.</string>
+  <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">Den gamle plugin-mappe #VAR1_BOLD# kunne ikke slettes.\nTjek venligst mappen #VAR2_BOLD# i din Admidio-installation og slet den gamle adm_plugins-mappe manuelt.</string>
   <string name="INS_WELCOME_TEXT">Denne assistent hjælper dig med at konfigurere Admidio-medlemsadministrationen. Alle nødvendige data vil blive anmodet om, så systemet kan konfigureres fuldt ud, og du kan logge ind som administrator. \n\nHvis du har spørgsmål eller problemer med installationen, skal du kontrollere #VAR1# vores installationsvejledning #VAR2# eller kontakte os på #VAR3# vores supportforum #VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Du har allerede opdateret Admidios kataloger med en ny version. Nu skal databasen opdateres fra den aktuelle version #VAR2# til versionen #VAR1#, så Admidio kan køre med den nye version.\n\nHvis du har spørgsmål eller problemer med opdateringen, skal du kontrollere #VAR3# vores opdater instruktion #VAR4# eller kontakt #VAR5# vores supportforum #VAR6#.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Velkommen til installationen af Admidio</string>
@@ -92,6 +96,8 @@
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Modul adgang</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Modulet kan kun deaktiveres eller aktiveres for brugere der er logget ind. Hvis modulet kun er tilgængeligt for brugere der er logget ind, vil det være skjult for brugere der ikke er logget ind, og webfeed vil være fuldstændigt deaktiveret for begge brugergrupper. (standard: aktiv)</string>
+  <string name="ORG_ACCESS_TO_PLUGIN">Plugin-adgang</string>
+  <string name="ORG_ACCESS_TO_PLUGIN_DESC">Plugin\'et kan deaktiveres eller aktiveres kun for indloggede brugere. Hvis pluginet kun er tilgængeligt for indloggede brugere, vil det være skjult for udloggede brugere, og webfeedet vil være fuldstændigt deaktiveret for begge brugergrupper. (standard: aktiv)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Yderligere variabler</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Tema</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Det aktuelle Admidio-tema kan vælges her. Alle layout fra temamappen vises. (standard: enkel)</string>
@@ -282,6 +288,7 @@
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# vedhæftede</string>
   <string name="SYS_ATTEND_EVENT">Du tilmeldte dig aktiviteten #VAR1_BOLD# den #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Du har lavet en midlertidig tilmelding til aktiviteten #VAR1_BOLD# den #VAR2#.</string>
+  <string name="SYS_AUTHOR">Forfatter</string>
   <string name="SYS_AUTO_DETECT">Find pr. automatik</string>
   <string name="SYS_AVAILABLE">Tilgængelig</string>
   <string name="SYS_AVAILABLE_BETA">Tilgængelig Beta</string>
@@ -290,6 +297,7 @@
   <string name="SYS_BACK_TO_FOLDER">Tilbage til folder</string>
   <string name="SYS_BASIC_DATA">Stamdata</string>
   <string name="SYS_BIRTHDAY">Fødselsdag</string>
+  <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_CALENDAR">Kalender</string>
   <string name="SYS_CALENDARS">Kalendere</string>
   <string name="SYS_CANCEL">Afbryd</string>
@@ -327,8 +335,6 @@
   <string name="SYS_CHANGE_PASSWORD">Skift kodeord</string>
   <string name="SYS_CHANGED_AT">Sidst ændret</string>
   <string name="SYS_CHANGED_BY">Ændret af</string>
-  <string name="SYS_CHARACTER_ENCODING">Karakter kodning</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">Karakter kodningen brugt i e-mails sendt af Admidio. Ikke alle e-mail klienter kan håndtere UTF-8. Derfor kan du sætte den til ISO-8859-1 som alternativ.</string>
   <string name="SYS_CHARACTERS">Karakterer</string>
   <string name="SYS_CHECK_FOR_UPDATE">Kig efter opdatering</string>
   <string name="SYS_CHECKBOX">Check-boks</string>
@@ -339,10 +345,7 @@
   <string name="SYS_CLAMP_TEXT_LINES_DESC">Denne indstilling giver dig mulighed for at angive det maksimale antal linjer, der skal vises som en #VAR1#. Hvis 0 er valgt, vises hele teksten. (Standard: 0)</string>
   <string name="SYS_CLOCK">idag</string>
   <string name="SYS_CODING">Tegnsæt</string>
-  <string name="SYS_COLOR_PRIMARY">Primær farve</string>
-  <string name="SYS_COLOR_PRIMARY_DESC">Hovedfarven brugt til Admidio. Titellinjen vil bruge denne farve såvel som overskrifter.</string>
-  <string name="SYS_COLOR_SECONDARY">Sekundær farve</string>
-  <string name="SYS_COLOR_SECONDARY_DESC">Den sekundære farve, der bruges til Admidio. Sidebjælken bruger denne farve såvel som præferencesektionerne.</string>
+  <string name="SYS_COLOR_BACKGROUND">Baggrunds farve</string>
   <string name="SYS_COLUMN">Kolonne</string>
   <string name="SYS_COLUMN_POS">Kolonne #VAR1#</string>
   <string name="SYS_COLUMN_SELECTION">Kolonne vælger</string>
@@ -654,7 +657,9 @@
   <string name="SYS_EXPORT_LISTS">‎Eksportere lister‎</string>
   <string name="SYS_EXPORT_LISTS_DESC">‎Lister over grupper og roller kan eksporteres af brugere, forudsat at du har ret til at få vist disse lister. Denne indstilling kan bruges til at begrænse eksportfunktionen. (Standard: Alle)‎</string>
   <string name="SYS_EXPORT_VCARD">Eksporter vCard</string>
+  <string name="SYS_EXTENSION">Udvidelse</string>
   <string name="SYS_EXTENSIONS">Udvidelser</string>
+  <string name="SYS_EXTENSIONS_AVAILABLE">Tilgængelige udvidelser</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FAVICON_FILE">Favicon-fil</string>
   <string name="SYS_FAVICON_FILE_DESC">Stien til favicon-filen til din installation. Stien skal være relativ til din installations rodmappe. Hvis det efterlades tomt, vil temaets standardfavicon blive brugt. (standard: tom)</string>
@@ -692,7 +697,7 @@
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_EXISTS">Folderen #VAR1# eksisterer allerede!\n\nVenligst vælg et andet navn til folderen.</string>
   <string name="SYS_FOLDER_NAME_EMPTY">Mappenavnet mangler!</string>
-  <string name="SYS_FOLDER_NAME_INVALID">Det valgte mappenavn #VAR1_BOLD# indeholder ugyldige tegn. Tjek venligst mappenavnet.\n\nFølgende specialtegn er ikke tilladt: ? * ~ ; : \" | &gt; &lt; / \ </string>
+  <string name="SYS_FOLDER_NAME_INVALID">Det valgte mappenavn #VAR1_BOLD# indeholder ugyldige tegn. Tjek venligst mappenavnet.\n\nFølgende specialtegn er ikke tilladt: ? * ~ ; : \" | &lt; &gt; / \ </string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Der er ikke nogen dokumenter eller filer tilgængelige for gæster.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du har ikke ret til at se den valgte folder.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes.\n\nVenligst snak med en #VAR2#administrator#VAR3# for at få hjælp til at undersøge skrive rettigheder på forældre folderen.</string>
@@ -722,8 +727,9 @@
   <string name="SYS_FORUM_TOPIC_CREATED_TITLE">Nyt forumemne blev oprettet på #VAR1#</string>
   <string name="SYS_FORWARD">‎Fremad‎</string>
   <string name="SYS_FRIDAY">fredag</string>
-  <string name="SYS_FROM">fra #VAR1#</string>
+  <string name="SYS_FROM">Fra</string>
   <string name="SYS_FROM_TO">fra #VAR1# til #VAR2#</string>
+  <string name="SYS_FROM_VAR">fra #VAR1#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Yderligere information</string>
   <string name="SYS_FUTURE_ROLE_MEMBERSHIP">Fremtidige rolle medlemskaber</string>
   <string name="SYS_GEN_RANDOM_ERROR">En uventet fejl opstod under genereringen af et tilfældigt nummer.\nFejl Kode: #VAR1#\nFejl Besked: #VAR2#</string>
@@ -772,6 +778,7 @@
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Admidio databasen er nu installeret og fuldstændigt konfigureret. Konfigurations filen med adgangsdata til databasen er oprettet og gemt. Du kan nu arbejde med Admidio og logge på med dine administrator oplysninger.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Installationen og opsætningen af databasen blev sucessfuldt afsluttet.</string>
   <string name="SYS_INSTALLED">Installeret</string>
+  <string name="SYS_INSTALLED_VERSION">Installeret version</string>
   <string name="SYS_INTERNAL_NAME">Internt navn</string>
   <string name="SYS_INTERNAL_NAME_DESC">Det interne navn bruges til unik adgang til dette dataobjekt. Dette er ikke relevant til programbrug. Under udvikling skal dette navn dog altid bruges til at identificere feltet, f.eks. at adressere med getValue (). Det interne navn udfyldes automatisk, når du opretter en datapost.</string>
   <string name="SYS_INTO_TO">Modtagere skal placeres i TIL feltet istedet for i BCC feltet</string>
@@ -1108,6 +1115,7 @@
   <string name="SYS_NONE">Ingen</string>
   <string name="SYS_NOT_AT_REGISTRATION">Ikke ved registrering</string>
   <string name="SYS_NOT_EMPTY">Ikke tom</string>
+  <string name="SYS_NOT_INSTALLED">Ikke installeret</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Ikke medlem af nogen organisation</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Ikke medlem af organisationen #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Venligst anvend et validt nummer som grundlag for feltet #VAR1_BOLD#.</string>
@@ -1154,6 +1162,8 @@
   <string name="SYS_ORGANIZATION_DESC">Navn og kontaktoplysninger på den aktuelle organisation med mulighed for at oprette og vise underorganisationer.</string>
   <string name="SYS_OVERHANG">Overbooking</string>
   <string name="SYS_OVERVIEW">Oversigt</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS">Oversigt over udvidelser</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække & Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
   <string name="SYS_PAGE_NEXT">Næste</string>
   <string name="SYS_PAGE_PREVIOUS">Forrige</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# og #VAR2#</string>
@@ -1215,6 +1225,16 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio kræver #VAR1# eller højere</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Vælg</string>
+  <string name="SYS_PLUGIN_INSTALL">Installer plugin</string>
+  <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
+  <string name="SYS_PLUGIN_MANAGER_DESC">Her kan du administrere Admidios plugins. Plugins er yderligere moduler, der kan installeres for at udvide funktionaliteten af Admidio. Du kan installere, opdatere eller fjerne plugins.</string>
+  <string name="SYS_PLUGIN_NAME_MISSING">Intet plugin-navn specificeret.</string>
+  <string name="SYS_PLUGIN_NO_INTERFACE">Plugin\'et har ingen grænseflade.</string>
+  <string name="SYS_PLUGIN_NOT_INSTALLED">Plugin\'et er ikke installeret.</string>
+  <string name="SYS_PLUGIN_PREFERENCES">Plugin-præferencer</string>
+  <string name="SYS_PLUGIN_UNINSTALL">Afinstaller pluginet</string>
+  <string name="SYS_PLUGIN_UPDATE">Opdaterings-plugin</string>
+  <string name="SYS_PLUGIN_VERSION">Plugin-version</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portræt</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Kolonnenavne til automatisk registrering: #VAR1#</string>
@@ -1294,6 +1314,7 @@
   <string name="SYS_REPEAT">Gentag</string>
   <string name="SYS_REPLACE">Udskift</string>
   <string name="SYS_REPLIES_VAR">#VAR1# svar</string>
+  <string name="SYS_REPLY_TO">Reply to</string>
   <string name="SYS_REQUIRED_INPUT">Påkrævet indtastning</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">‎Du er allerede logget på systemet. Det er ikke nødvendigt at anmode om en ny adgangskode.‎</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Billedet kunne ikke behandles, fordi opløsningen er større end #VAR1# Megapixel.</string>
@@ -1421,9 +1442,10 @@
   <string name="SYS_SEND_USERNAME_PASSWORD">Send e-mail med brugerid og kodeord.</string>
   <string name="SYS_SENDER">Afsender</string>
   <string name="SYS_SENDER_EMAIL">Afsender e-mail</string>
-  <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Brug af en ukendt mail-adresse som afsenderadresse er ikke tilladt af nogle udbydere. I dette tilfælde kan du tilføje en e-mail-adresse, der vil blive brugt som afsenderadresse i postmodulet (f.eks. Noreply@#VAR1#).\nHvis feltet forbliver tomt, vil afsenderens e-mail-adresse blive brugt (standard: Tom).</string>
+  <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Afsender e-mail-adresse til at sende systemmeddelelser og e-mails til roller og brugere. E-mail-adressen skal omfatte domænet på det sted, hvor Admidio er installeret på.</string>
+  <string name="SYS_SENDER_MODE_DESC">Angiv, hvordan afsenderen af ​​en e-mail verificeres. Mange udbydere tillader ikke, at afsenderen af ​​en e-mail bruger en e-mailadresse fra et andet domæne. I dette tilfælde skal en af ​​de to muligheder med system-e-mailen vælges. Den tilsvarende e-mailadresse og navn kan gemmes i følgende to indstillinger. (Standard: #VAR1#) </string>
   <string name="SYS_SENDER_NAME">Afsender navn</string>
-  <string name="SYS_SENDER_NAME_DESC">Navn på afsenderens mail-adresse. Dette felt skal vedligeholdes, hvis feltet for afsenders mail-adresse ikke er tomt (standard: tomt).</string>
+  <string name="SYS_SENDER_NAME_DESC">Navn på afsenderens e-mailadresse. Dette felt skal udfyldes, hvis feltet for afsenderens e-mailadresse ikke er tomt.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">Afsenderen var ikke logget ind. Afsenderoplysningerne kan derfor være forkerte.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">‎Separator til CSV-fil‎</string>
   <string name="SYS_SERVER_NO_UPLOAD">Server indstillinger tillader ikke fil overførsler.</string>
@@ -1466,8 +1488,8 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Lignende kontakter fundet</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med et lignende navn som #VAR1_BOLD# blev fundet.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med et lignende navn blev fundet til registrering af #VAR1_BOLD# med e-mailadressen #VAR2_BOLD#. Venligst kontroller registreringen og tildel den til en fundet kontakt eller opret en ny kontakt.</string>
-  <string name="SYS_SINCE">siden #VAR1#</string>
   <string name="SYS_SINCE_TO">fra #VAR1# til #VAR2#</string>
+  <string name="SYS_SINCE_VAR">siden #VAR1#</string>
   <string name="SYS_SIZE">Størrelse</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP godkendelse</string>
@@ -1641,6 +1663,8 @@
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registrering på #organization_long_name# bekræftet\n#content# Hej #user_first_name#,\n\din registrering på #organisation_homepage# er blevet bekræftet.\n\nDu kan nu logge ind på hjemmesiden med dit brugernavn #user_login_name# og din adgangskode.\n\nHvis du har spørgsmål, så skriv en e-mail til #administrator_email#.\n\nMed venlig hilsen\nteamet i #organization_long_name#</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System Standard liste</string>
+  <string name="SYS_SYSTEM_EMAIL">System e-mail</string>
+  <string name="SYS_SYSTEM_EMAIL_WITH_REPLY_TO">System e-mail med brugerens svaradresse</string>
   <string name="SYS_SYSTEM_INFORMATION">Oplysninger om systemet</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Her kan du begrunde teksten i hver systemmeddelelse. Teksterne er opdelt i to dele (emne og indhold) og identificeres med #emne# og #indhold#. Indholdet for hvert afsnit følger det. Hvis du ikke ønsker at sende nogen af disse meddelelser, skal du lade tekstfeltet stå tomt.\n\nI hver mail kan følgende jokertegn bruges. De vil blive erstattet med det tilsvarende indhold under kørsel.</string>
   <string name="SYS_SYSTEM_MAILS">System beskeder</string>
@@ -1686,6 +1710,8 @@
   <string name="SYS_UNKNOWN">Ukendt</string>
   <string name="SYS_UNLOCK_ALBUM">Lås album op</string>
   <string name="SYS_UNMANAGED_FILES">Filer uden ejer</string>
+  <string name="SYS_UP_TO_DATE">Opdateret</string>
+  <string name="SYS_UPDATE_AVAILABLE">Opdatering tilgængelig</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Opdatering udført sucessfuldt</string>
   <string name="SYS_UPLOAD_FILES">Overfør filer</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. overførsels filstørrelse</string>
@@ -1695,6 +1721,7 @@
   <string name="SYS_URL_INVALID_CHAR">URL\'en i feltet #VAR1_BOLD# indeholder ulovlige karakterer.\n\nTilladte karakterer er bogstaver fra \'a\' til \'z\' og \'A\' til \'Z\', cifre fra 0-9 og specielle karakterer som .+-_:/#?= Undlad ÆØÅæøå</string>
   <string name="SYS_USER_COULD_BE_CREATED">Personen kunne oprettes.</string>
   <string name="SYS_USER_DELETE_DESC">Vil du virkelig slette #VAR1_BOLD#?\n\nBrugeren bliver slettet helt fra databasen, så adgang til vedkommendes informationer bliver helt slettet.</string>
+  <string name="SYS_USER_EMAIL">Brugerens e-mail</string>
   <string name="SYS_USER_ID_NOT_FOUND">Der kunne ikke findes nogen bruger med dette ID!</string>
   <string name="SYS_USER_NO_EMAIL">Brugeren #VAR1_BOLD# har ikke nogen gyldig e-mail adresse i sin personlige information!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Denne bruger er ikke medlem af organisationen #VAR1# endnu.</string>

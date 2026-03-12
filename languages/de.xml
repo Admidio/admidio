@@ -35,6 +35,7 @@
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
   <string name="INS_GROUPS">Gruppen</string>
   <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Gib einen gültigen Hostnamen oder IP-Adresse ein.</string>
+  <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Einige Plugins von Drittanbietern wurden in den neuen Plugin-Ordner #VAR1_BOLD# verschoben. Bitte überprüfe nach dem Update die Funktionalität dieser Plugins.</string>
   <string name="INS_INSTALL_ADMIDIO">Admidio installieren</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</string>
@@ -59,7 +60,10 @@
   <string name="INS_UPDATE_TO_VERSION_SUCCESSFUL">Die Admidio-Datenbank ist jetzt auf die Version #VAR1# aktualisiert worden.\nDu kannst nun wieder mit Admidio arbeiten.</string>
   <string name="INS_UPDATE_VERSION">Update auf Version #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Die Aktualisierung war erfolgreich</string>
+  <string name="INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED">Einige Plugin-Ordner von Drittanbietern konnten nicht in den neuen Plugin-Ordner #VAR1_BOLD# verschoben werden. Bitte überprüfe den Ordner #VAR2_BOLD# in deiner Admidio-Installation, verschiebe die Plugin-Ordner von Drittanbietern manuell und lösche anschließend den alten Ordner „adm_plugins“.</string>
   <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
+  <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Einige alte Admidio-Plugin-Ordner konnten nicht aus dem alten Plugin-Ordner #VAR1_BOLD# gelöscht werden. Bitte überprüfe den Ordner #VAR2_BOLD# in deiner Admidio-Installation und lösche die alten Plugin-Ordner manuell. Lösche anschließend den alten Ordner adm_plugins.</string>
+  <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">Der alte Plugin-Ordner #VAR1_BOLD# konnte nicht gelöscht werden.\nBitte überprüfe den Ordner #VAR2_BOLD# in deiner Admidio-Installation und lösche den alten Ordner „adm_plugins” manuell.</string>
   <string name="INS_WELCOME_TEXT">Dieser Assistent hilft dir die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und du dich als Administrator:in anmelden kannst.\n\nHast du Fragen oder Probleme mit der Installation, schau dir bitte #VAR1#unsere Installationsanleitung#VAR2# an oder wende dich an #VAR3#unser Supportforum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Du hast bereits die Verzeichnisse von Admidio mit einer neuen Version aktualisiert. Nun muss noch die Datenbank von der aktuellen Version #VAR2# auf die Version #VAR1# aktualisiert werden, damit Admidio mit der neuen Version laufen kann.\n\nHast du Fragen oder Probleme mit dem Update, schau dir bitte #VAR3#unsere Update-Anleitung#VAR4# an oder wende dich an #VAR5#unser Supportforum#VAR6#.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Willkommen zur Installation von Admidio</string>
@@ -92,6 +96,8 @@
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
+  <string name="ORG_ACCESS_TO_PLUGIN">Plugin-Zugriff</string>
+  <string name="ORG_ACCESS_TO_PLUGIN_DESC">Das Plugin kann nur für angemeldete Benutzer deaktiviert oder aktiviert werden. Wenn das Plugin nur für angemeldete Benutzer zugänglich ist, wird es für abgemeldete Benutzer ausgeblendet und der Web-Feed wird für beide Benutzergruppen vollständig deaktiviert. (Standard: aktiv)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Zusätzliche Variablen</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-Theme</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner themes angezeigt. (Voreinstellung: simple)</string>
@@ -282,6 +288,7 @@
   <string name="SYS_ATTACHMENTS_VAR">#VAR1# Anhänge</string>
   <string name="SYS_ATTEND_EVENT">Du hast die Teilnahme für die Veranstaltung #VAR1_BOLD# am #VAR2# zugesagt.</string>
   <string name="SYS_ATTEND_POSSIBLY">Du hast die Teilnahme für die Veranstaltung #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt.</string>
+  <string name="SYS_AUTHOR">Autor</string>
   <string name="SYS_AUTO_DETECT">Automatische Erkennung</string>
   <string name="SYS_AVAILABLE">Verfügbar</string>
   <string name="SYS_AVAILABLE_BETA">Verfügbare Beta</string>
@@ -290,6 +297,7 @@
   <string name="SYS_BACK_TO_FOLDER">Zurück zum Ordner</string>
   <string name="SYS_BASIC_DATA">Basisdaten</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
+  <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_CALENDAR">Kalender</string>
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANCEL">Absagen</string>
@@ -327,8 +335,6 @@
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>
   <string name="SYS_CHANGED_AT">Geändert am</string>
   <string name="SYS_CHANGED_BY">Geändert von</string>
-  <string name="SYS_CHARACTER_ENCODING">Zeichenkodierung</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">Angabe der Zeichenkodierung in der eine E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</string>
   <string name="SYS_CHARACTERS">Zeichen</string>
   <string name="SYS_CHECK_FOR_UPDATE">nach Update suchen</string>
   <string name="SYS_CHECKBOX">Checkbox</string>
@@ -339,10 +345,16 @@
   <string name="SYS_CLAMP_TEXT_LINES_DESC">Mit dieser Einstellung kann die Anzahl der Zeilen festgelegt werden, die maximal als #VAR1# angezeigt werden sollen. Wenn 0 ausgewählt ist, wird der komplette Text dargestellt. (Voreinstellung: 0)</string>
   <string name="SYS_CLOCK">Uhr</string>
   <string name="SYS_CODING">Kodierung</string>
+  <string name="SYS_COLOR_BACKGROUND">Hintergrundfarbe</string>
+  <string name="SYS_COLOR_BACKGROUND_DESC">Die Farbe des Hintergrunds, der auf allen Seiten für Admidio verwendet wird.</string>
   <string name="SYS_COLOR_PRIMARY">Primärfarbe</string>
-  <string name="SYS_COLOR_PRIMARY_DESC">Die verwendete Hauptfarbe für Admidio. Diese Farbe wird für die Titelleiste und die Überschriften verwendet.</string>
+  <string name="SYS_COLOR_PRIMARY_DESC">Die Hauptfarbe für Admidio. Diese Farbe wird für die Titelleiste sowie für Überschriften, Links und Schaltflächen verwendet.</string>
   <string name="SYS_COLOR_SECONDARY">Sekundärfarbe</string>
-  <string name="SYS_COLOR_SECONDARY_DESC">Die verwendete Sekundärfarbe für Admidio. Die Seitenleiste und die Einstellungsbereiche verwenden diese Farbe.</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">Die für Admidio verwendete Sekundärfarbe. Der Hintergrund der Seitenleiste sowie die Tooltips oder Benachrichtigungen verwenden diese Farbe.</string>
+  <string name="SYS_COLOR_TERTIARY">Tertiärfarbe</string>
+  <string name="SYS_COLOR_TERTIARY_DESC">Die für Admidio verwendete Tertiärfarbe. Der Hintergrund von Bereichen wie der Gruppen- und Rollenübersicht, den Einstellungen oder dem Navigationspfad verwendet diese Farbe.</string>
+  <string name="SYS_COLOR_TEXT">Textfarbe</string>
+  <string name="SYS_COLOR_TEXT_DESC">Die Farbe des für Admidio verwendeten Textes.</string>
   <string name="SYS_COLUMN">Spalte</string>
   <string name="SYS_COLUMN_POS">Spalte #VAR1#</string>
   <string name="SYS_COLUMN_SELECTION">Spaltenauswahl</string>
@@ -654,7 +666,9 @@
   <string name="SYS_EXPORT_LISTS">Listen exportieren</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listen von Gruppen und Rollen können von Benutzerinnen und Benutzern exportiert werden, sofern sie das Recht haben diese Listen zu sehen. Mit dieser Einstellung kann die Exportfunktion eingeschränkt werden. (Voreinstellung: Alle)</string>
   <string name="SYS_EXPORT_VCARD">vCard exportieren</string>
+  <string name="SYS_EXTENSION">Erweiterung</string>
   <string name="SYS_EXTENSIONS">Erweiterungen</string>
+  <string name="SYS_EXTENSIONS_AVAILABLE">Verfügbare Erweiterungen</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FAVICON_FILE">Favicon-Datei</string>
   <string name="SYS_FAVICON_FILE_DESC">Der Pfad zur Favicon-Datei für deine Installation. Der Pfad sollte relativ zum Stammverzeichnis deiner Installation sein. Wenn er leer gelassen wird, wird das Standard-Favicon des Themes verwendet. (Standard: leer)</string>
@@ -722,8 +736,9 @@
   <string name="SYS_FORUM_TOPIC_CREATED_TITLE">Ein neues Forum-Thema wurde am #VAR1# erstellt.</string>
   <string name="SYS_FORWARD">Weiterleiten</string>
   <string name="SYS_FRIDAY">Freitag</string>
-  <string name="SYS_FROM">ab #VAR1#</string>
+  <string name="SYS_FROM">Von</string>
   <string name="SYS_FROM_TO">von #VAR1# bis #VAR2#</string>
+  <string name="SYS_FROM_VAR">ab #VAR1#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Weitere Informationen</string>
   <string name="SYS_FUTURE_ROLE_MEMBERSHIP">Zukünftige Rollenmitgliedschaften</string>
   <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zahl aufgetreten.\nError Code: #VAR1#\nError Message: #VAR2#</string>
@@ -772,6 +787,7 @@
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten eines Administrienden anmelden.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Die Installation und Einrichtung der Datenbank wurde erfolgreich durchgeführt.</string>
   <string name="SYS_INSTALLED">Installiert</string>
+  <string name="SYS_INSTALLED_VERSION">Installierte Version</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
   <string name="SYS_INTO_TO">Empfänger:innen im TO-Feld und nicht im BCC-Feld auflisten</string>
@@ -1108,6 +1124,7 @@
   <string name="SYS_NONE">Keiner</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nicht bei Registrierung</string>
   <string name="SYS_NOT_EMPTY">Nicht leer</string>
+  <string name="SYS_NOT_INSTALLED">Nicht installiert</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Kein Mitglied einer Organisation</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Nicht Mitglied der Organisation #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
@@ -1154,6 +1171,8 @@
   <string name="SYS_ORGANIZATION_DESC">Name und Kontaktangaben der aktuellen Organisation mit der Möglichkeit, Unterorganisationen zu erstellen und anzuzeigen.</string>
   <string name="SYS_OVERHANG">Überhang</string>
   <string name="SYS_OVERVIEW">Übersicht</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS">Übersicht Erweiterungen</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Das Erscheinungsbild der Übersichts-Erweiterungen auf der Übersichtsseite kann hier geändert werden. Die Reihenfolge der Erweiterungen kann per Drag & Drop (große Bildschirme) oder durch Klicken auf die Verschieben-Schaltflächen (kleine Bildschirme) geändert werden. Die neue Reihenfolge wird erst nach dem Speichern der Einstellungen wirksam!</string>
   <string name="SYS_PAGE_NEXT">Nächste</string>
   <string name="SYS_PAGE_PREVIOUS">Vorherige</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
@@ -1215,6 +1234,16 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
+  <string name="SYS_PLUGIN_INSTALL">Plugin installieren</string>
+  <string name="SYS_PLUGIN_MANAGER">Plugin-Manager</string>
+  <string name="SYS_PLUGIN_MANAGER_DESC">Hier kannst du die Plugins von Admidio verwalten. Plugins sind zusätzliche Module, die installiert werden können, um die Funktionalität von Admidio zu erweitern. Du kannst Plugins installieren, aktualisieren oder entfernen.</string>
+  <string name="SYS_PLUGIN_NAME_MISSING">Kein Plugin-Name angegeben.</string>
+  <string name="SYS_PLUGIN_NO_INTERFACE">Das Plugin hat keine Schnittstelle.</string>
+  <string name="SYS_PLUGIN_NOT_INSTALLED">Das Plugin ist nicht installiert.</string>
+  <string name="SYS_PLUGIN_PREFERENCES">Plugin-Einstellungen</string>
+  <string name="SYS_PLUGIN_UNINSTALL">Plugin deinstallieren</string>
+  <string name="SYS_PLUGIN_UPDATE">Plugin aktualisieren</string>
+  <string name="SYS_PLUGIN_VERSION">Plugin-Version</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Hochformat</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Spaltennamen für automatische Erkennung: #VAR1#</string>
@@ -1294,6 +1323,7 @@
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPLACE">Ersetzen</string>
   <string name="SYS_REPLIES_VAR">#VAR1# Antworten</string>
+  <string name="SYS_REPLY_TO">Antwort an</string>
   <string name="SYS_REQUIRED_INPUT">Erforderliche Eingabe</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du bist bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Das Bild konnte nicht verarbeitet werden, weil die Auflösung größer als #VAR1# Megapixel ist.</string>
@@ -1421,9 +1451,10 @@
   <string name="SYS_SEND_USERNAME_PASSWORD">E-Mail mit Anmeldenamen und neuem Passwort zuschicken</string>
   <string name="SYS_SENDER">Absender:in</string>
   <string name="SYS_SENDER_EMAIL">Absender:in E-Mail</string>
-  <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Manche Provider erlauben die Nutzung unbekannter E-Mail-Adressen als Absender:in nicht. In diesem Fall kann hier eine Adresse eingetragen werden, von der aus dann alle E-Mails aus dem E-Mailmodul verschickt werden, (z.B. mailversand@#VAR1#).\nBleibt das Feld leer wird die Adresse der Absenderin bzw. des Absenders genutzt. (Voreinstellung: leer)</string>
+  <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Absender-E-Mail-Adresse für das Versenden von Systembenachrichtigungen und E-Mails an Rollen und Benutzer. Die E-Mail-Adresse sollte die Domain der Website enthalten, auf der Admidio installiert ist.</string>
+  <string name="SYS_SENDER_MODE_DESC">Gib an, wie der Absender einer E-Mail überprüft wird. Viele Anbieter erlauben es dem Absender einer E-Mail nicht, eine E-Mail-Adresse aus einer anderen Domain zu verwenden. In diesem Fall sollte eine der beiden Optionen mit der System-E-Mail ausgewählt werden. Die entsprechende E-Mail-Adresse und der Name können in den folgenden beiden Einstellungen gespeichert werden. (Standard: #VAR1#) </string>
   <string name="SYS_SENDER_NAME">Absendername</string>
-  <string name="SYS_SENDER_NAME_DESC">Name der Absenderin bzw. des Absenders zur verwendeten E-Mail-Adresse. Dieses Feld muss nur gefüllt werden, wenn auch eine Absender:in E-Mail-Adresse gepflegt ist. (Voreinstellung: leer)</string>
+  <string name="SYS_SENDER_NAME_DESC">Name der E-Mail-Adresse des Absenders. Dieses Feld muss gepflegt werden, wenn das Feld für die E-Mail-Adresse des Absenders nicht leer ist.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">Die absendende Person war nicht angemeldet. Daher sind die Absenderinformationen möglicherweise falsch.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Trennzeichen für CSV-Datei</string>
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
@@ -1466,8 +1497,8 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Ähnliche Kontakte gefunden</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Es wurden Kontakte mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Zu der Registrierung von #VAR1_BOLD# mit der E-Mail-Adresse #VAR2_BOLD# wurden Kontakte mit einem ähnlichen Namen gefunden. Bitte prüfe die Registrierung und ordne diese einem gefundenen Kontakt zu oder lege einen neuen Kontakt an.</string>
-  <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
+  <string name="SYS_SINCE_VAR">seit #VAR1#</string>
   <string name="SYS_SIZE">Größe</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP Authentifizierung</string>
@@ -1641,6 +1672,8 @@
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name# bestätigt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Anmeldenamen #user_login_name# und deinem Passwort auf der Homepage anmelden.\n\nSolltest du noch Fragen haben, schreib eine E-Mail an #administrator_email#.\n\nViele Grüße\nDas Team von #organization_long_name#</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">Systemweite Standardliste</string>
+  <string name="SYS_SYSTEM_EMAIL">System-E-Mail</string>
+  <string name="SYS_SYSTEM_EMAIL_WITH_REPLY_TO">System-E-Mail mit Antwortadresse des Benutzers</string>
   <string name="SYS_SYSTEM_INFORMATION">Systeminformationen</string>
   <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Hier können die Texte aller Systembenachrichtigungen angepasst werden. Die Texte sind in zwei Teile unterteilt (Betreff und Inhalt) und werden durch #subject# und #content# gekennzeichnet. Der Inhalt für jeden Abschnitt folgt. Wenn du keine dieser Benachrichtigungen senden möchtest, lass das Textfeld leer.\n\nIn jeder Mail können die folgenden Platzhalter verwendet werden. Sie werden zur Laufzeit durch den entsprechenden Inhalt ersetzt.</string>
   <string name="SYS_SYSTEM_MAILS">Systembenachrichtigungen</string>
@@ -1686,6 +1719,8 @@
   <string name="SYS_UNKNOWN">Unbekannt</string>
   <string name="SYS_UNLOCK_ALBUM">Album entsperren</string>
   <string name="SYS_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
+  <string name="SYS_UP_TO_DATE">Auf dem neuesten Stand</string>
+  <string name="SYS_UPDATE_AVAILABLE">Update verfügbar</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
   <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
@@ -1695,6 +1730,7 @@
   <string name="SYS_URL_INVALID_CHAR">Die URL im Feld #VAR1_BOLD# enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-+_:/#?= .</string>
   <string name="SYS_USER_COULD_BE_CREATED">Die Person kann angelegt werden.</string>
   <string name="SYS_USER_DELETE_DESC">Willst du #VAR1_BOLD# wirklich löschen?\n\nDie Benutzerin bzw. der Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</string>
+  <string name="SYS_USER_EMAIL">Benutzer-E-Mail</string>
   <string name="SYS_USER_ID_NOT_FOUND">Es konnte kein:e Benutzer:in zu der übergebenen ID gefunden werden!</string>
   <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Diese:r Benutzer:in ist noch kein Mitglied der Organisation #VAR1#.</string>

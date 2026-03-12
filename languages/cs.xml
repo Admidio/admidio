@@ -345,10 +345,7 @@
   <string name="SYS_CLAMP_TEXT_LINES_DESC">Toto nastavení umožňuje určit maximální počet řádků, které se mají zobrazit jako #VAR1#. Pokud je vybrána hodnota 0, zobrazí se celý text. (Výchozí: 0) </string>
   <string name="SYS_CLOCK">hodin</string>
   <string name="SYS_CODING">Kódování</string>
-  <string name="SYS_COLOR_PRIMARY">Primární barva</string>
-  <string name="SYS_COLOR_PRIMARY_DESC">Hlavní barva použitá pro Admidio. Tuto barvu bude používat záhlaví a nadpisy.</string>
-  <string name="SYS_COLOR_SECONDARY">Sekundární barva</string>
-  <string name="SYS_COLOR_SECONDARY_DESC">Sekundární barva použitá pro Admidio. Tuto barvu bude používat postranní panel a sekce předvoleb.</string>
+  <string name="SYS_COLOR_BACKGROUND">Barva pozadí</string>
   <string name="SYS_COLUMN">Sloupec</string>
   <string name="SYS_COLUMN_POS">Sloupec #VAR1#</string>
   <string name="SYS_COLUMN_SELECTION">Výběr sloupců</string>
@@ -1228,7 +1225,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio vyžaduje verzi #VAR1# nebo vyšší</string>
   <string name="SYS_PIPE">Svislítko (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Vyberte možnost</string>
-  <string name="SYS_PLUGIN_DISABLED">Toto rozšíření je vypnuté</string>
   <string name="SYS_PLUGIN_INSTALL">Instalovat rozříření</string>
   <string name="SYS_PLUGIN_MANAGER">Správce rozšíření</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Zde můžete spravovat doplňky systému Admidio. Doplňky jsou přídavné moduly, které lze nainstalovat pro rozšíření funkcí systému. Doplňky můžete instalovat, aktualizovat nebo odebírat.</string>

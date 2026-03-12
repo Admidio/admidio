@@ -345,10 +345,7 @@
   <string name="SYS_CLAMP_TEXT_LINES_DESC">Această setare vă permite să specificați numărul maxim de linii care vor fi afișate ca #VAR1#. Dacă selectați 0, va fi afișat textul complet. (Implicit: 0)</string>
   <string name="SYS_CLOCK">ora</string>
   <string name="SYS_CODING">Codificare</string>
-  <string name="SYS_COLOR_PRIMARY">Culoarea primară</string>
-  <string name="SYS_COLOR_PRIMARY_DESC">Culoarea principală utilizată pentru Admidio. Bara de titlu va utiliza această culoare, precum și titlurile.</string>
-  <string name="SYS_COLOR_SECONDARY">Culoare secundară</string>
-  <string name="SYS_COLOR_SECONDARY_DESC">Culoarea secundară utilizată pentru Admidio. Bara laterală va utiliza această culoare, precum și secțiunile de preferințe.</string>
+  <string name="SYS_COLOR_BACKGROUND">Culoare fundal</string>
   <string name="SYS_COLUMN">Coloană</string>
   <string name="SYS_COLUMN_POS">Coloana #VAR1#</string>
   <string name="SYS_COLUMN_SELECTION">Selecție de coloane</string>
@@ -1228,7 +1225,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio necesită #VAR1# sau o versiune superioară</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Selectați opțiunea</string>
-  <string name="SYS_PLUGIN_DISABLED">Acest plugin este dezactivat</string>
   <string name="SYS_PLUGIN_INSTALL">Instalați pluginul</string>
   <string name="SYS_PLUGIN_MANAGER">Manager de plugin</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Aici puteți gestiona pluginurile Admidio. Pluginurile sunt module suplimentare care pot fi instalate pentru a extinde funcționalitatea Admidio. Puteți instala, actualiza sau elimina pluginuri.</string>
