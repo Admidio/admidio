@@ -103,8 +103,12 @@ try {
 
             $topic = new Topic($gDb);
             $topic->readDataByUuid($getTopicUUID);
-            $topic->delete();
-            echo json_encode(array('status' => 'success'));
+            if ($topic->isEditable()) {
+                $topic->delete();
+                echo json_encode(array('status' => 'success'));
+            } else {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             break;
 
         case 'post_edit':
@@ -130,8 +134,12 @@ try {
 
             $post = new Post($gDb);
             $post->readDataByUuid($getPostUUID);
-            $post->delete();
-            echo json_encode(array('status' => 'success'));
+            if ($post->) {
+                $post->delete();
+                echo json_encode(array('status' => 'success'));
+            } else {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             break;
     }
 } catch (Throwable $e) {
