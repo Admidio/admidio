@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Infrastructure\Exception;
@@ -51,116 +52,117 @@ class UploadHandlerPhoto extends UploadHandler
     {
         global $photoAlbum, $gSettingsManager, $gL10n, $gLogger;
 
-        $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
+        try {
+            $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
+            if (isset($file->error)) {
+                throw new Exception($file->error);
+            }
 
-        if (!isset($file->error)) {
-            try {
-                $fileLocation = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/' . $file->name;
-                $albumFolder  = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int) $photoAlbum->getValue('pho_id');
+            $fileLocation = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/' . $file->name;
+            $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id');
 
-                // check filename and throw exception if something is wrong
-                StringUtils::strIsValidFileName($file->name, false);
+            // check filename and throw exception if something is wrong
+            StringUtils::strIsValidFileName($file->name, false);
 
-                // replace invalid characters in filename
-                $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
+            // replace invalid characters in filename
+            $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
 
-                // create folder if not exists
-                if (!is_dir($albumFolder)) {
-                    $error = $photoAlbum->createFolder();
+            $newPhotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
 
-                    if (is_array($error)) {
-                        $file->error = $gL10n->get($error['text'], array($error['path']));
-                        return $file;
-                    }
-                }
+            // check if the file contains a valid image and read image properties
+            $imageProperties = getimagesize($fileLocation);
+            if ($imageProperties === false) {
+                throw new Exception('SYS_PHOTO_FORMAT_INVALID');
+            }
 
-                $newPhotoFileNumber = $photoAlbum->getValue('pho_quantity') + 1;
-
-                // check if the file contains a valid image and read image properties
-                $imageProperties = getimagesize($fileLocation);
-                if ($imageProperties === false) {
+            // check mime type and set file extension
+            switch ($imageProperties['mime']) {
+                case 'image/jpeg':
+                    $fileExtension = 'jpg';
+                    break;
+                case 'image/png':
+                    $fileExtension = 'png';
+                    break;
+                default:
                     throw new Exception('SYS_PHOTO_FORMAT_INVALID');
+            }
+
+            // create folder if not exists
+            if (!is_dir($albumFolder)) {
+                $error = $photoAlbum->createFolder();
+
+                if (is_array($error)) {
+                    $file->error = $gL10n->get($error['text'], array($error['path']));
+                    return $file;
                 }
+            }
 
-                // check mime type and set file extension
-                switch ($imageProperties['mime']) {
-                    case 'image/jpeg':
-                        $fileExtension = 'jpg';
-                        break;
-                    case 'image/png':
-                        $fileExtension = 'png';
-                        break;
-                    default:
-                        throw new Exception('SYS_PHOTO_FORMAT_INVALID');
-                }
+            $imageDimensions = $imageProperties[0] * $imageProperties[1];
+            $processableImageSize = SystemInfoUtils::getProcessableImageSize();
+            if ($imageDimensions > $processableImageSize) {
+                throw new Exception('SYS_RESOLUTION_TOO_LARGE', array(round($processableImageSize / 1000000, 2)));
+            }
 
-                $imageDimensions = $imageProperties[0] * $imageProperties[1];
-                $processableImageSize = SystemInfoUtils::getProcessableImageSize();
-                if ($imageDimensions > $processableImageSize) {
-                    throw new Exception('SYS_RESOLUTION_TOO_LARGE', array(round($processableImageSize / 1000000, 2)));
-                }
+            // create image object and scale image to defined size of preferences
+            $image = new Image($fileLocation);
+            $image->setImageType('jpeg');
+            $image->scale($gSettingsManager->getInt('photo_show_width'), $gSettingsManager->getInt('photo_show_height'));
+            $image->copyToFile(null, $albumFolder . '/' . $newPhotoFileNumber . '.jpg');
+            $image->delete();
 
-                // create image object and scale image to defined size of preferences
-                $image = new Image($fileLocation);
-                $image->setImageType('jpeg');
-                $image->scale($gSettingsManager->getInt('photo_show_width'), $gSettingsManager->getInt('photo_show_height'));
-                $image->copyToFile(null, $albumFolder.'/'.$newPhotoFileNumber.'.jpg');
-                $image->delete();
+            // if enabled then save original image
+            if ($gSettingsManager->getBool('photo_keep_original')) {
+                try {
+                    FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/originals');
 
-                // if enabled then save original image
-                if ($gSettingsManager->getBool('photo_keep_original')) {
                     try {
-                        FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/originals');
-
-                        try {
-                            FileSystemUtils::moveFile($fileLocation, $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension);
-                        } catch (RuntimeException $exception) {
-                            $gLogger->error('Could not move file!', array('from' => $fileLocation, 'to' => $albumFolder.'/originals/'.$newPhotoFileNumber.'.'.$fileExtension));
-                            // TODO
-                        }
+                        FileSystemUtils::moveFile($fileLocation, $albumFolder . '/originals/' . $newPhotoFileNumber . '.' . $fileExtension);
                     } catch (RuntimeException $exception) {
-                        $gLogger->error('Could not create directory!', array('directoryPath' => $albumFolder . '/originals'));
+                        $gLogger->error('Could not move file!', array('from' => $fileLocation, 'to' => $albumFolder . '/originals/' . $newPhotoFileNumber . '.' . $fileExtension));
                         // TODO
                     }
-                }
-
-                // save thumbnail
-                try {
-                    FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/thumbnails');
                 } catch (RuntimeException $exception) {
-                }
-
-                $image = new Image($fileLocation);
-                $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
-                $image->copyToFile(null, $albumFolder.'/thumbnails/'.$newPhotoFileNumber.'.jpg');
-                $image->delete();
-
-                // delete image from upload folder
-                try {
-                    FileSystemUtils::deleteFileIfExists($fileLocation);
-                } catch (RuntimeException $exception) {
-                }
-
-                // if image was successfully saved in filesystem then update image count of album
-                if (is_file($albumFolder.'/'.$newPhotoFileNumber.'.jpg')) {
-                    $photoAlbum->setValue('pho_quantity', (int) $photoAlbum->getValue('pho_quantity') + 1);
-                    $photoAlbum->save();
-                } else {
-                    throw new Exception('SYS_PHOTO_PROCESSING_ERROR');
-                }
-            } catch (Exception $e) {
-                try {
-                    FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
-                } catch (RuntimeException $exception) {
-                    $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'].$file->name));
+                    $gLogger->error('Could not create directory!', array('directoryPath' => $albumFolder . '/originals'));
                     // TODO
                 }
-                // remove XSS from filename before the name will be shown in the error message
-                $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
-                $file->error = $e->getMessage();
-
-                return $file;
             }
+
+            // save thumbnail
+            try {
+                FileSystemUtils::createDirectoryIfNotExists($albumFolder . '/thumbnails');
+            } catch (RuntimeException $exception) {
+            }
+
+            $image = new Image($fileLocation);
+            $image->scaleLargerSide($gSettingsManager->getInt('photo_thumbs_scale'));
+            $image->copyToFile(null, $albumFolder . '/thumbnails/' . $newPhotoFileNumber . '.jpg');
+            $image->delete();
+
+            // delete image from upload folder
+            try {
+                FileSystemUtils::deleteFileIfExists($fileLocation);
+            } catch (RuntimeException $exception) {
+            }
+
+            // if image was successfully saved in filesystem then update image count of album
+            if (is_file($albumFolder . '/' . $newPhotoFileNumber . '.jpg')) {
+                $photoAlbum->setValue('pho_quantity', (int)$photoAlbum->getValue('pho_quantity') + 1);
+                $photoAlbum->save();
+            } else {
+                throw new Exception('SYS_PHOTO_PROCESSING_ERROR');
+            }
+        } catch (Exception $e) {
+            try {
+                FileSystemUtils::deleteFileIfExists($this->options['upload_dir'] . $file->name);
+            } catch (RuntimeException $exception) {
+                $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'] . $file->name));
+                // TODO
+            }
+            // remove XSS from filename before the name will be shown in the error message
+            $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
+            $file->error = $e->getMessage();
+
+            return $file;
         }
 
         return $file;
@@ -171,7 +173,7 @@ class UploadHandlerPhoto extends UploadHandler
      * file upload object. Here we validate the CSRF token that will be set. If the check failed an error will
      * be set and the file upload will be canceled.
      * @param string $file
-     * @param int    $index
+     * @param int $index
      */
     protected function handle_form_data($file, $index)
     {
