@@ -413,17 +413,17 @@ try {
             $formValues['additional_guests'] = '';
         }
 
-        // if user is no leader of the event then only allow to handle their own participation
-        if (!$participants->isLeader($gCurrentUserId)) {
-            $getUserUuid = $gCurrentUser->getValue('usr_uuid');
-        }
-
         if (isset($eventsParticipationEditForm)) {
             $formValues = $eventsParticipationEditForm->validate($_POST);
         }
 
         $member = new Membership($gDb);
         $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
+
+        // if user is no leader of the event then only allow to handle their own participation
+        if (!$participants->isLeader($gCurrentUserId)) {
+            $getUserUuid = $gCurrentUser->getValue('usr_uuid');
+        }
 
         // if current user is allowed to participate or user could edit this event then update user inputs
         if ($event->possibleToParticipate() || $participants->isLeader($gCurrentUserId)) {
