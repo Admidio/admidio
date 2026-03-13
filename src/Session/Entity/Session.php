@@ -107,12 +107,12 @@ class Session extends Entity
      * The key of the array will be the csrf-token of the form.
      * @param FormPresenter $form The form that should be stored in this class.
      * @return bool Return false if object isn't type object or objectName already exists
-     * @throws Exception
+     * @throws Exception|\Exception
      */
-    public function addFormObject(FormPresenter &$form): bool
+    public function addFormObject(FormPresenter $form): bool
     {
         if (!array_key_exists($form->getCsrfToken(), $this->mFormObjects)) {
-            $this->mFormObjects[$form->getCsrfToken()] = &$form;
+            $this->mFormObjects[$form->getCsrfToken()] = $form;
             return true;
         }
         return false;
