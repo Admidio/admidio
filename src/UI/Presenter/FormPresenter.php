@@ -468,9 +468,9 @@ class FormPresenter
     public function addSeparator(string $id, string $label = '', array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'separator',
-            'id'       => $id,
-            'label'    => $label
+            'type' => 'separator',
+            'id' => $id,
+            'label' => $label
         ), $options));
 
         $this->elements[$id] = $optionsAll;
@@ -2120,6 +2120,8 @@ class FormPresenter
      */
     public function validate(array $fieldValues, bool $editSelection = false): array
     {
+        global $gSettingsManager;
+
         $validFieldValues = array();
         $selectedFields = array();
 
@@ -2133,10 +2135,10 @@ class FormPresenter
             throw new Exception('No CSRF token provided.');
         }
 
+        // if edit selection is active then check the toggle fields in the field values and
+        // add the selected fields to the selected fields array and remove the toggle fields from the field values array
         foreach ($fieldValues as $key => $value) {
-            // remove all fieldValues that have the prefix toggle_ (used for toggling field usage when editing a selection of fields)
             if ($editSelection && strpos($key, 'toggle_') === 0) {
-                // add the field to the selected fields array
                 $selectedFields[] = substr($key, 7);
                 unset($fieldValues[$key]);
                 continue;
@@ -2149,7 +2151,7 @@ class FormPresenter
         }
 
         foreach ($this->elements as $element) {
-            if(!(($editSelection && in_array($element['id'], $selectedFields)) || !$editSelection)) {
+            if (!(($editSelection && in_array($element['id'], $selectedFields)) || !$editSelection)) {
                 // if the field is not selected in edit selection mode or edit selection is not active, continue with validation
                 continue;
             }
@@ -2192,6 +2194,18 @@ class FormPresenter
                         case 'captcha':
                             $this->validateCaptcha($fieldValues[$element['id']]);
                             break;
+                        case 'date':
+                            // check if date is a valid Admidio date format
+                            $objAdmidioDate = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $fieldValues[$element['id']]);
+
+                            if (!$objAdmidioDate) {
+                                // check if date has english format
+                                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $fieldValues[$element['id']]);
+
+                                if (!$objEnglishDate) {
+                                    throw new Exception('The date "' . $element['label'] . '" has an invalid date format!');
+                                }
+                            }
                         case 'editor':
                             // check html string vor invalid tags and scripts
                             $config = HTMLPurifier_Config::createDefault();

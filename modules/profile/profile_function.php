@@ -138,9 +138,6 @@ try {
         $membershipForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $membershipForm->validate($_POST);
 
-        $postMembershipStart = admFuncVariableIsValid($_POST, 'adm_membership_start_date', 'date', array('requireValue' => true));
-        $postMembershipEnd = admFuncVariableIsValid($_POST, 'adm_membership_end_date', 'date', array('requireValue' => true));
-
         $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);
         $role = new Role($gDb, (int)$member->getValue('mem_rol_id'));
@@ -151,14 +148,14 @@ try {
         }
 
         // Check the start date
-        $startDate = DateTime::createFromFormat('Y-m-d', $postMembershipStart);
+        $startDate = DateTime::createFromFormat('Y-m-d', $formValues['adm_membership_start_date']);
         if ($startDate === false) {
             throw new Exception('SYS_DATE_INVALID', array('SYS_START', $gSettingsManager->getString('system_date')));
         }
 
         // If set, the end date is checked
-        if ($postMembershipEnd !== '') {
-            $endDate = DateTime::createFromFormat('Y-m-d', $postMembershipEnd);
+        if ($formValues['adm_membership_end_date'] !== '') {
+            $endDate = DateTime::createFromFormat('Y-m-d', $formValues['adm_membership_end_date']);
             if ($endDate === false) {
                 throw new Exception('SYS_DATE_INVALID', array('SYS_END', $gSettingsManager->getString('system_date')));
             }
@@ -168,11 +165,11 @@ try {
                 throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
             }
         } else {
-            $postMembershipEnd = DATE_MAX;
+            $formValues['adm_membership_end_date'] = DATE_MAX;
         }
 
         // save role membership
-        $role->setMembership($user->getValue('usr_id'), $postMembershipStart, $postMembershipEnd, $member->getValue('mem_leader'), true);
+        $role->setMembership($user->getValue('usr_id'), $formValues['adm_membership_start_date'], $formValues['adm_membership_end_date'], $member->getValue('mem_leader'), true);
 
         echo 'success';
     }
