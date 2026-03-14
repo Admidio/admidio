@@ -33,15 +33,16 @@ try {
 
     // Initialize and check the parameters
     $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
-    $postPhotoUuid = admFuncVariableIsValid($_POST, 'photo_uuid', 'uuid', array('requireValue' => true));
-    $postPhotoNr = admFuncVariableIsValid($_POST, 'photo_nr', 'int', array('requireValue' => true));
-    $postMessage = $_POST['ecard_message'];
+
+    // check form field input and sanitized it from malicious content
+    $photosEcardSendForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+    $formValues = $photosEcardSendForm->validate($_POST);
 
     $funcClass = new ECard($gL10n);
     $photoAlbum = new Album($gDb);
-    $photoAlbum->readDataByUuid($postPhotoUuid);
-    $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $postPhotoUuid, 'photo_nr' => $postPhotoNr, 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
-    $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id') . '/' . $postPhotoNr . '.jpg';
+    $photoAlbum->readDataByUuid($formValues['photo_uuid']);
+    $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $formValues['photo_uuid'], 'photo_nr' => $formValues['photo_nr'], 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'), 'max_height' => $gSettingsManager->getInt('photo_ecard_scale')));
+    $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . $photoAlbum->getValue('pho_id') . '/' . $formValues['photo_nr'] . '.jpg';
 
     // check if user has right to view the album
     if (!$photoAlbum->isVisible()) {
@@ -55,10 +56,6 @@ try {
 
     $senderName  = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
     $senderEmail = $gCurrentUser->getValue('EMAIL');
-
-    // check form field input and sanitized it from malicious content
-    $photosEcardSendForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-    $formValues = $photosEcardSendForm->validate($_POST);
 
     // read template from file system
     $ecardDataToParse = $funcClass->getEcardTemplate($postTemplateName);
@@ -156,7 +153,7 @@ try {
         while ($row = $usersStatement->fetch()) {
             if ($ecardSendResult) {
                 // create and send ecard
-                $ecardHtmlData = $funcClass->parseEcardTemplate($imageUrl, $postMessage, $ecardDataToParse, $row['first_name'] . ' ' . $row['last_name'], $row['email']);
+                $ecardHtmlData = $funcClass->parseEcardTemplate($imageUrl, $formValues['ecard_message'], $ecardDataToParse, $row['first_name'] . ' ' . $row['last_name'], $row['email']);
                 $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $row['first_name'], $row['last_name'], $row['email'], $imageServerPath);
             }
         }
@@ -198,7 +195,7 @@ try {
         while ($row = $usersStatement->fetch()) {
             if ($ecardSendResult) {
                 // create and send ecard
-                $ecardHtmlData = $funcClass->parseEcardTemplate($imageUrl, $postMessage, $ecardDataToParse, $row['first_name'] . ' ' . $row['last_name'], $row['email']);
+                $ecardHtmlData = $funcClass->parseEcardTemplate($imageUrl, $formValues['ecard_message'], $ecardDataToParse, $row['first_name'] . ' ' . $row['last_name'], $row['email']);
                 $ecardSendResult = $funcClass->sendEcard($senderName, $senderEmail, $ecardHtmlData, $row['first_name'], $row['last_name'], $row['email'], $imageServerPath);
             }
         }
