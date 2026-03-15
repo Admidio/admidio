@@ -49,6 +49,26 @@ class ListConfiguration extends Entity
      */
     protected bool $showLeaders = false;
 
+    /**
+     * @var array<string> Array with all allowed special fields.
+     */
+    protected array $allowedSpecialColumns = [
+        'usr_login_name',
+        'usr_photo',
+        'usr_timestamp_change',
+        'usr_timestamp_create',
+        'usr_usr_id_change',
+        'usr_usr_id_create',
+        'usr_uuid',
+        'mem_approved',
+        'mem_begin',
+        'mem_comment',
+        'mem_count_guests',
+        'mem_duration',
+        'mem_end',
+        'mem_timestamp_change',
+        'mem_usr_id_change'
+    ];
 
     /**
      * Constructor that will create an object to handle the configuration of lists.
@@ -67,7 +87,8 @@ class ListConfiguration extends Entity
 
     /**
      * Add new column to a column array. The number of the column will be the maximum number of the current
-     * array plus one. The special field usr_uuid could only be added by users with the right to edit all users.
+     * array plus one. The special fields must be part from the list of allowed columns. Also, the special field
+     * usr_uuid could only be added by users with the right to edit all users.
      * @param int|string $field Usf-Id of a profile field or the name of a special field.
      * @param int $number Optional the number of the column. This is useful if the list already exists
      *                           and maybe the profile field changed the position within the list.
@@ -85,6 +106,11 @@ class ListConfiguration extends Entity
             $number = count($this->columns) + 1;
         }
 
+        // check if field is a number or a string and if the field is allowed
+        if (is_string($field) && !in_array($field, $this->allowedSpecialColumns, true)) {
+            return false;
+        }
+
         // can join max. 61 tables
         // Passed parameters must be set carefully
         if (strlen($field) === 0 || $field === 0 || count($this->columns) >= 57) {
@@ -94,6 +120,10 @@ class ListConfiguration extends Entity
         // uuid could only be added by an administrator
         if ($field === 'usr_uuid' && !$gCurrentUser->isAdministratorUsers()) {
             return false;
+        }
+
+        if ($sort !== '' && strtoupper($sort) !== 'ASC' && strtoupper($sort) !== 'DESC') {
+            $sort = '';
         }
 
         // If column doesn't exist create an object
@@ -644,7 +674,7 @@ class ListConfiguration extends Entity
      *                                   This setting could be combined with **showFormerMembers** or **showRelationTypes**.
      *                                 - **showFormerMembers**: Set to true if role members or members of the organization
      *                                   should be shown and also former members should be listed
-     *                                 - **showRelationTypes**: An array with relation types. The sql will be expanded with
+     *                                 - **showRelationTypes**: An array with relation types. The SQL will be expanded with
      *                                   all users who are in such a relationship to the selected role users.
      *                                 - **showUserUUID** : If set to true the first column of the SQL will be the usr_uuid.
      *                                 - **showLeaderFlag** : If set to true, the first columns of the SQL will be
@@ -704,7 +734,7 @@ class ListConfiguration extends Entity
         }
 
         if ($sqlRoleUUIDs === '') {
-            // create the role UUIDs part of the sql
+            // create the role UUIDs part of the SQL
             if (count($optionsAll['showRolesMembers']) > 0) {
                 $sqlRoleUUIDs = '(\'' . implode('\', \'', $optionsAll['showRolesMembers']) . '\')';
             } else {
@@ -739,6 +769,12 @@ class ListConfiguration extends Entity
             } else {
                 // Special fields like usr_photo, mem_begin ...
                 $sqlColumnName = $listColumn->getValue('lsc_special_field');
+
+                // if the special field isn't allowed, then continue with the next column
+                if (!in_array($sqlColumnName, $this->allowedSpecialColumns, true)) {
+                    continue;
+                }
+
                 // Handle a special case for membership fields
                 switch ($sqlColumnName) {
                     case 'mem_duration':
@@ -795,7 +831,7 @@ class ListConfiguration extends Entity
 
             // Handle the conditions for the columns
             if ($optionsAll['useConditions'] && (string)$listColumn->getValue('lsc_filter') !== '') {
-                $value = $listColumn->getValue('lsc_filter');
+                $value = $listColumn->getValue('lsc_filter', 'database');
 
                 // custom profile field
                 if ($lscUsfId > 0) {
@@ -862,7 +898,7 @@ class ListConfiguration extends Entity
                 } else {
                     $columnName = $dbColumnName;
                 }
-                $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name')); // TODO Exception handling
+                $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name'), $this->db); // TODO Exception handling
             }
         }
 

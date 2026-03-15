@@ -354,7 +354,8 @@ class CategoryReport
                     (string)$rawCond,
                     $alias . '.usd_value',
                     $typeHint,
-                    $gProfileFields->getPropertyById($usfId, 'usf_name')
+                    $gProfileFields->getPropertyById($usfId, 'usf_name'),
+                    $gDb
                 );
                 continue;
             }
@@ -400,7 +401,7 @@ class CategoryReport
                 }
 
                 $conditionUsesUserTable = true;
-                $conditionSqlWhere .= $parser->makeSqlStatement((string)$rawCond, $dbCol, $typeHint, $dbCol);
+                $conditionSqlWhere .= $parser->makeSqlStatement((string)$rawCond, $dbCol, $typeHint, $dbCol, $gDb);
             }
             // handle all other column types (role/category/membership related and dummy columns)
             // For these types we build an SQL expression (often via EXISTS-subqueries) that can be filtered by ConditionParser.
@@ -604,7 +605,7 @@ class CategoryReport
             if ($expr !== '') {
                 // for any condition we rely on usr_id in the SQL, therefore we must join the user table in the main query
                 $conditionUsesUserTable = true;
-                $conditionSqlWhere .= $parser->makeSqlStatement((string)$rawCond, $expr, $typeHint, $this->headerData[$colKey]['data']);
+                $conditionSqlWhere .= $parser->makeSqlStatement((string)$rawCond, $expr, $typeHint, $this->headerData[$colKey]['data'], $gDb);
             }
 
         }
@@ -624,7 +625,7 @@ class CategoryReport
                		 OR cat_org_id IS NULL )
              	    AND rol_valid  = true
              	    AND mem_begin <= ? -- $date
-           		    AND mem_end    > ? -- $date 
+           		    AND mem_end    > ? -- $date
            		    ' . $conditionSqlWhere;
         $queryParams = array(
             $gCurrentOrgId,
