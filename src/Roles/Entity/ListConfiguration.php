@@ -831,7 +831,7 @@ class ListConfiguration extends Entity
 
             // Handle the conditions for the columns
             if ($optionsAll['useConditions'] && (string)$listColumn->getValue('lsc_filter') !== '') {
-                $value = $listColumn->getValue('lsc_filter');
+                $value = $listColumn->getValue('lsc_filter', 'database');
 
                 // custom profile field
                 if ($lscUsfId > 0) {

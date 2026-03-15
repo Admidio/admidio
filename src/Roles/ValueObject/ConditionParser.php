@@ -8,7 +8,7 @@ use DateInterval;
 use DateTime;
 
 /**
- * @brief Creates from a custom condition syntax a sql condition
+ * @brief Creates from a custom condition syntax a SQL condition
  *
  * The user can write a condition in a special syntax. This class will parse
  * that condition and creates a valid SQL statement which can be used in
@@ -34,37 +34,19 @@ class ConditionParser
      */
     private string $srcCond = '';
     /**
-     * @var string The destination string with the valid sql statement
+     * @var string The destination string with the valid SQL statement
      */
     private string $destCond = '';
     /**
-     * @var string Stores the sql statement if a record should not exist when user wants to exclude a column
+     * @var string Stores the SQL statement if a record should not exist when user wants to exclude a column
      */
     private string $notExistsSql = '';
-    /**
-     * @var bool Flag if there is an open quote in this condition that must be closed before the next condition will be parsed
-     */
-    private bool $openQuotes = false;
 
     /**
      * constructor that will initialize variables
      */
     public function __construct()
     {
-    }
-
-    /**
-     * Ends the "DestCondition"
-     */
-    private function endDestCond()
-    {
-        /*if ($this->openQuotes) {
-            // always set quote marks for a value because some fields are a varchar in db
-            // but should only be filled with integer
-            $this->destCond .= '\' ';
-        }*/
-
-        $this->destCond .= ' ) ';
     }
 
     /**
@@ -102,7 +84,6 @@ class ConditionParser
                     $dateFrom = $dateObj->format('Y-m-d');
 
                     $ageCondition = ' BETWEEN \'' . $dateFrom . '\' AND \'' . $dateTo . '\'';
-                    $this->openQuotes = false;
                     break;
                 case '}':
                     // search for dates that are older than the age
@@ -153,7 +134,7 @@ class ConditionParser
     }
 
     /**
-     * Stores a sql statement that checks if a record in a table does exist or not exist.
+     * Stores a SQL statement that checks if a record in a table does exist or not exist.
      * This must bei a full subselect that starts with SELECT. The statement is used if
      * a condition with EMPTY or NOT EMPTY is used.
      * @param string $sqlStatement String with the full subselect
@@ -162,7 +143,7 @@ class ConditionParser
      * $parser->setNotExistsStatement('SELECT 1 FROM adm_user_data WHERE usd_usr_id = 1 AND usd_usf_id = 9');
      * ```
      */
-    public function setNotExistsStatement(string $sqlStatement)
+    public function setNotExistsStatement(string $sqlStatement): void
     {
         $this->notExistsSql = $sqlStatement;
     }
@@ -184,7 +165,6 @@ class ConditionParser
             return $this->destCond;
         }
 
-        $this->openQuotes = false;    // set to true if quotes for conditions are open
         $startCondition   = true;     // Indicates that a new condition has been started
         $newCondition     = true;     // a new word is searched for in text fields -> new condition
         $startOperand     = false;    // Indicates whether <>= has already been specified for numeric or date fields
@@ -298,10 +278,6 @@ class ConditionParser
                 }
 
                 if ($character !== '_' && $character !== '#') {
-                    // always set quote marks for a value because some fields are a varchar in db
-                    // but should only be filled with integer
-                    //$this->destCond  .= ' \'';
-                    //$this->openQuotes = true;
                     $startOperand     = true;
                 }
             } elseif ($character === ' ') {
@@ -312,20 +288,13 @@ class ConditionParser
                     if ($columnType === 'date' && $date !== '') {
                         $formatDate = $this->getFormatDate($date, $operator);
                         if ($formatDate !== '') {
-                            $this->destCond .= $formatDate;
+                            $this->destCond .= $db->escapeString($formatDate);
                         } else {
                             throw new Exception('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
                         }
                         $date = '';
                     }
-/*
-                    if ($this->openQuotes) {
-                        // always set quote marks for a value because some fields are a varchar in db
-                        // but should only be filled with integer
-                        $this->destCond  .= '\' ';
-                        $this->openQuotes = false;
-                    }
-*/
+
                     $newCondition = true;
                     if ($conditionValue !== '') {
                         $this->destCond .= $db->escapeString($conditionValue);
@@ -341,17 +310,13 @@ class ConditionParser
                     } else {
                         $this->destCond .= ' AND ' . $columnName . ' = ';
                     }
-                    //this->openQuotes = false;
                 } elseif ($newCondition && !$startOperand) {
                     // first condition of this column
                     if ($columnType === 'string') {
-                        //$this->destCond .= ' LIKE \'';
                         $this->destCond .= ' LIKE ';
                     } else {
-                        //$this->destCond .= ' = \'';
                         $this->destCond .= ' = ';
                     }
-                    //$this->openQuotes = true;
                 }
 
                 // Append character to target string
@@ -361,7 +326,6 @@ class ConditionParser
                     // if numeric field than only numeric characters are allowed
                     throw new Exception('SYS_NOT_NUMERIC', array($fieldName));
                 } else {
-                    //$this->destCond .= $character;
                     $conditionValue .= $character;
                 }
 
@@ -375,7 +339,7 @@ class ConditionParser
         if ($columnType === 'date' && $date !== '') {
             $formatDate = $this->getFormatDate($date, $operator);
             if ($formatDate !== '') {
-                $this->destCond .= $formatDate;
+                $this->destCond .= $db->escapeString($formatDate);
             } else {
                 throw new Exception('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
             }
@@ -385,7 +349,6 @@ class ConditionParser
             $this->destCond .= $db->escapeString($conditionValue);
         }
         $this->destCond .= ' ) ';
-        //$this->endDestCond();
 
         return $this->destCond;
     }
