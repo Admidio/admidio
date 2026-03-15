@@ -210,13 +210,6 @@ try {
 
     // create a multidimensional array for all columns with the necessary data
     $i = 0;
-    $arrParticipantsInformation = array(
-        'mem_approved' => $gL10n->get('SYS_PARTICIPATION_STATUS'),
-        'mem_usr_id_change' => $gL10n->get('SYS_CHANGED_BY'),
-        'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
-        'mem_comment' => $gL10n->get('SYS_COMMENT'),
-        'mem_count_guests' => $gL10n->get('SYS_SEAT_AMOUNT')
-    );
 
     foreach ($gProfileFields->getProfileFields() as $field) {
         // add profile field to user field array
@@ -242,81 +235,33 @@ try {
             }
         }
     }
+    
+    $arrAdditionalColumns = array(
+        array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_photo', 'usf_name' => $gL10n->get('SYS_PHOTO')),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_login_name', 'usf_name' => $gL10n->get('SYS_USERNAME')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_usr_id_create', 'usf_name' => $gL10n->get('SYS_CREATED_BY')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_timestamp_create', 'usf_name' => $gL10n->get('SYS_CREATED_AT')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_usr_id_change', 'usf_name' => $gL10n->get('SYS_CHANGED_BY')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_timestamp_change', 'usf_name' => $gL10n->get('SYS_CHANGED_AT')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_uuid', 'usf_name' => $gL10n->get('SYS_UNIQUE_ID')) : []),
+        array('cat_name' => $gL10n->get('SYS_ROLE_INFORMATION'), 'usf_name_intern' => 'mem_begin', 'usf_name' => $gL10n->get('SYS_MEMBERSHIP_START')),
+        array('cat_name' => $gL10n->get('SYS_ROLE_INFORMATION'), 'usf_name_intern' => 'mem_end', 'usf_name' => $gL10n->get('SYS_MEMBERSHIP_END')),
+        array('cat_name' => $gL10n->get('SYS_ROLE_INFORMATION'), 'usf_name_intern' => 'mem_duration', 'usf_name' => $gL10n->get('SYS_MEMBERSHIP_DURATION')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_approved', 'usf_name' => $gL10n->get('SYS_PARTICIPATION_STATUS')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_usr_id_change', 'usf_name' => $gL10n->get('SYS_CHANGED_BY')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_timestamp_change', 'usf_name' => $gL10n->get('SYS_CHANGED_AT')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_comment', 'usf_name' => $gL10n->get('SYS_COMMENT')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_count_guests', 'usf_name' => $gL10n->get('SYS_SEAT_AMOUNT'))
+    );
+
 
     // after the profile fields add some special profile information e.g. username, photo, created at ...
-    $javascriptCode .= '
-        userFields[' . ++$i . '] = {
-            "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-            "usf_name": "' . $gL10n->get('SYS_PHOTO') . '",
-            "usf_name_intern": "usr_photo"
-        };';
-
-    // administrator could export the uuid of each user to identify the user later at the import
-    if ($gCurrentUser->isAdministratorUsers()) {
+    foreach ($arrAdditionalColumns as $column) {
         $javascriptCode .= '
             userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_USERNAME') . '",
-                "usf_name_intern": "usr_login_name"
-            };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_CREATED_BY') . '",
-                "usf_name_intern": "usr_usr_id_create"
-                };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_CREATED_AT') . '",
-                "usf_name_intern": "usr_timestamp_create"
-                };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_CHANGED_BY') . '",
-                "usf_name_intern": "usr_usr_id_change"
-                };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_CHANGED_AT') . '",
-                "usf_name_intern": "usr_timestamp_change"
-                };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_UNIQUE_ID') . '",
-                "usf_name_intern": "usr_uuid"
-                };';
-    }
-
-    $javascriptCode .= '
-        userFields[' . ++$i . '] = {
-            "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
-            "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_START') . '",
-            "usf_name_intern": "mem_begin"
-        };
-
-        userFields[' . ++$i . '] = {
-            "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
-            "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_END') . '",
-            "usf_name_intern": "mem_end"
-        };
-
-        userFields[' . ++$i . '] = {
-            "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
-            "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_DURATION') . '",
-            "usf_name_intern": "mem_duration"
-        };';
-
-    // add new category with participant information of events
-    foreach ($arrParticipantsInformation as $memberStatus => $columnName) {
-        $javascriptCode .= '
-            userFields[' . ++$i . '] = {
-                "cat_name" : "' . $gL10n->get('SYS_PARTICIPATION_INFORMATION') . '",
-                "usf_name" : "' . $columnName . '",
-                "usf_name_intern" : "' . $memberStatus . '",
+                "cat_name" : "' . $column['cat_name'] . '",
+                "usf_name" : "' . $column['usf_name'] . '",
+                "usf_name_intern" : "' . $column['usf_name_intern'] . '",
             };';
     }
 
