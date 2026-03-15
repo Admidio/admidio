@@ -37,11 +37,6 @@ try {
     $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('export', 'stop_membership', 'remove_former_membership', 'reload_current_memberships', 'reload_former_memberships', 'reload_future_memberships', 'save_membership')));
 
-    if (in_array($getMode, array('stop_membership', 'remove_former_membership'))) {
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
-    }
-
     // create user object
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
@@ -68,6 +63,10 @@ try {
         echo $user->getVCard();
     } elseif ($getMode === 'stop_membership') {
         // Cancel membership of role
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
         $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);
         $role = new Role($gDb, (int)$member->getValue('mem_rol_id'));
@@ -82,6 +81,10 @@ try {
         }
     } elseif ($getMode === 'remove_former_membership') {
         // Remove former membership of role
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
         if ($gCurrentUser->isAdministrator()) {
             $member = new Membership($gDb);
             $member->readDataByUuid($getMemberUuid);
@@ -130,8 +133,10 @@ try {
         }
     } elseif ($getMode === 'save_membership') {
         // save membership date changes
-        $postMembershipStart = admFuncVariableIsValid($_POST, 'adm_membership_start_date', 'date', array('requireValue' => true));
-        $postMembershipEnd = admFuncVariableIsValid($_POST, 'adm_membership_end_date', 'date', array('requireValue' => true));
+
+        // Validate CSRF via form object
+        $membershipForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+        $formValues = $membershipForm->validate($_POST);
 
         $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);
@@ -143,14 +148,14 @@ try {
         }
 
         // Check the start date
-        $startDate = DateTime::createFromFormat('Y-m-d', $postMembershipStart);
+        $startDate = DateTime::createFromFormat('Y-m-d', $formValues['adm_membership_start_date']);
         if ($startDate === false) {
             throw new Exception('SYS_DATE_INVALID', array('SYS_START', $gSettingsManager->getString('system_date')));
         }
 
         // If set, the end date is checked
-        if ($postMembershipEnd !== '') {
-            $endDate = DateTime::createFromFormat('Y-m-d', $postMembershipEnd);
+        if ($formValues['adm_membership_end_date'] !== '') {
+            $endDate = DateTime::createFromFormat('Y-m-d', $formValues['adm_membership_end_date']);
             if ($endDate === false) {
                 throw new Exception('SYS_DATE_INVALID', array('SYS_END', $gSettingsManager->getString('system_date')));
             }
@@ -160,11 +165,11 @@ try {
                 throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
             }
         } else {
-            $postMembershipEnd = DATE_MAX;
+            $formValues['adm_membership_end_date'] = DATE_MAX;
         }
 
         // save role membership
-        $role->setMembership($user->getValue('usr_id'), $postMembershipStart, $postMembershipEnd, $member->getValue('mem_leader'), true);
+        $role->setMembership($user->getValue('usr_id'), $formValues['adm_membership_start_date'], $formValues['adm_membership_end_date'], $member->getValue('mem_leader'), true);
 
         echo 'success';
     }

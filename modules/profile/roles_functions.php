@@ -251,6 +251,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 $membership['lastUserEditedName'] = $member->getNameOfLastEditingUser();
                 $membership['lastUserEditedTimestamp'] = $member->getValue('mem_timestamp_change');
             }
+            $gCurrentSession->addFormObject($form);
 
             ++$countShowRoles;
             $memberships[] = $membership;
