@@ -28,6 +28,7 @@
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Service\RolesService;
 use Admidio\UI\Presenter\GroupsRolesPresenter;
@@ -149,6 +150,10 @@ try {
 
         case 'delete':
             // delete role from database
+
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             if ($role->delete()) {
@@ -158,6 +163,10 @@ try {
 
         case 'activate':
             // set role active
+
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             $role->activate();
@@ -166,6 +175,10 @@ try {
 
         case 'deactivate':
             // set role inactive
+
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
             $role->deactivate();
