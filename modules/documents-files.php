@@ -34,6 +34,7 @@ use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Documents\Service\DocumentsService;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\DocumentsPresenter;
 
 try {
@@ -73,6 +74,18 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     } elseif ($gSettingsManager->getInt('documents_files_module_enabled') === 2 && !$gValidLogin) {
         throw new Exception('SYS_NO_RIGHTS');
+    }
+
+    if ($getMode != 'list') {
+        // check the rights of the current folder
+        // user must be administrator or must have the right to upload files
+        $folder = new Folder($gDb);
+        $folder->getFolderForDownload($getFolderUUID);
+
+        if (!$folder->hasUploadRight()) {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
     }
 
     switch ($getMode) {
@@ -124,6 +137,8 @@ try {
                 // the uuid of the current folder must be set
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             } else {
+                SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
                 $folder = new Folder($gDb);
                 $folder->getFolderForDownload($getFolderUUID);
 
@@ -152,6 +167,8 @@ try {
                 // if no file id was set then show error
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             } else {
+                SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
                 $file = new File($gDb);
                 $file->getFileForDownload($getFileUUID);
 
@@ -228,5 +245,9 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    handleException($e, in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save')));
+    if ($e->getMessage() === 'LOGIN') {
+        require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
+    } else {
+        handleException($e, in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save')));
+    }
 }
