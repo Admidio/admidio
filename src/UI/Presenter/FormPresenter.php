@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use DateTime;
 use PDO;
+use Ramsey\Uuid\Uuid;
 use Securimage;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use SimpleXMLElement;
@@ -661,7 +662,7 @@ class FormPresenter
      * @param string $value A value for the text field. The field will be created with this value.
      * @param array $options (optional) An array with the following possible entries:
      *                        - **type** : Set the type if the field. Default will be **text**. Possible values are **text**,
-     *                          **number**, **date**, **datetime** or **birthday**. If **date**, **datetime** or **birthday** are set
+     *                          **number**, **date**, **datetime** or **uuid**. If **date** or **datetime** are set
      *                          than a small calendar will be shown if the date field will be selected.
      *                        - **maxLength** : The maximum number of characters that are allowed in a text field.
      *                        - **minNumber** : The minimum number that is allowed in a number field.
@@ -787,6 +788,8 @@ class FormPresenter
             $datetime = DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);
             if (!empty($value) && is_object($datetime))
                 $value = $datetime->format('H:i');
+        } elseif ($optionsAll['type'] === 'uuid') {
+            $attributes['pattern'] = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
         }
 
         // set field properties
@@ -2120,6 +2123,11 @@ class FormPresenter
                         case 'url':
                             if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
                                 throw new Exception('SYS_URL_INVALID_CHAR', array($element['label']));
+                            }
+                            break;
+                        case 'uuid':
+                            if (!Uuid::isValid($fieldValues[$element['id']])) {
+                                throw new Exception('The parameter "' . $element['label'] . '" is not a valid UUID!');
                             }
                             break;
                     }
