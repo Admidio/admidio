@@ -112,6 +112,13 @@ class ForumTopicService
         $postEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $postEditForm->validate($_POST);
 
+        // check if topic exists and is visible for the current user
+        $topic = new Topic($gDb);
+        $topic->readDataByUuid($topicUUID);
+        if (!$topic->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $post = new Post($gDb);
         if ($postUUID !== '') {
             $post->readDataByUuid($postUUID);
@@ -120,8 +127,6 @@ class ForumTopicService
                 throw new Exception('You are not allowed to edit this post.');
             }
         } else {
-            $topic = new Topic($gDb);
-            $topic->readDataByUuid($topicUUID);
             $post->setValue('fop_fot_id', $topic->getValue('fot_id'));
 
             if (!in_array($topic->getValue('cat_uuid'), $gCurrentUser->getAllEditableCategories('FOT', 'uuid'))) {

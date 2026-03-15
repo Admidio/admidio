@@ -210,6 +210,9 @@ class ForumService
         $topic = new Topic($gDb);
         if ($topicUUID !== '') {
             $topic->readDataByUuid($topicUUID);
+            if (!$topic->isEditable()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
         }
 
         // write form values in topic object

@@ -3,6 +3,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Forum\Entity\Post;
+use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
@@ -50,6 +51,13 @@ class ForumPostPresenter extends PagePresenter
     public function createEditForm(string $topicUUID = ''): void
     {
         global $gDb, $gL10n, $gCurrentSession;
+
+        // check if topic is editable for the current user
+        $topic = new Topic($gDb);
+        $topic->readDataByUuid($topicUUID);
+        if (!$topic->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         // create post object
         $post = new Post($gDb);
