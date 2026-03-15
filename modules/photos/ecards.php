@@ -126,8 +126,8 @@ try {
         $page
     );
     $form->addInput('submit_action', '', '', array('property' => FormPresenter::FIELD_HIDDEN));
-    $form->addInput('photo_uuid', '', $getPhotoUuid, array('property' => FormPresenter::FIELD_HIDDEN));
-    $form->addInput('photo_nr', '', $getPhotoNr, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('photo_uuid', '', $getPhotoUuid, array('type' => 'uuid', 'property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('photo_nr', '', $getPhotoNr, array('type' => 'number', 'property' => FormPresenter::FIELD_HIDDEN));
 
     $templates = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', false, false, array(FileSystemUtils::CONTENT_TYPE_FILE)));
 
