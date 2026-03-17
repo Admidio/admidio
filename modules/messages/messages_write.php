@@ -119,7 +119,7 @@ try {
     $list = array();
 
     if ($gValidLogin && $getMsgType === Message::MESSAGE_TYPE_PM && count($gCurrentUser->getRolesWriteMails()) > 0) {
-        $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
+        $sql = 'SELECT usr_uuid, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
                 ON rol_id = mem_rol_id
@@ -160,7 +160,7 @@ try {
         $dropStatement = $gDb->queryPrepared($sql, array_merge($queryParamsArr[0], $queryParamsArr[1], $queryParamsArr[2]));
 
         while ($row = $dropStatement->fetch()) {
-            $list[] = array($row['usr_id'], $row['last_name'] . ' ' . $row['first_name'] . ' (' . $row['usr_login_name'] . ')', '');
+            $list[] = array($row['usr_uuid'], $row['last_name'] . ' ' . $row['first_name'] . ' (' . $row['usr_login_name'] . ')', '');
         }
 
         // no roles or users found then show message
@@ -217,15 +217,13 @@ try {
                     'helpTextId' => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
                 )
             );
-            $sendTo = '';
         } else {
             $form->addInput(
                 'msg_to',
                 '',
-                $user->getValue('usr_id'),
+                $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' (' . $user->getValue('usr_login_name') . ')',
                 array('property' => FormPresenter::FIELD_HIDDEN)
             );
-            $sendTo = ' ' . $gL10n->get('SYS_TO') . ' ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' (' . $user->getValue('usr_login_name') . ')';
         }
 
         if ($getSubject === '') {

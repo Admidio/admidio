@@ -286,18 +286,27 @@ try {
         }
     } else {
         // ***** PM *****
-        // if $postTo is not an Array, it is sent from the hidden field.
-        if (!is_array($postTo)) {
-            $postTo = array($postTo);
-        }
 
         // check if user is allowed to view message
         if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
-        // get user data from Database
-        $user = new User($gDb, $gProfileFields, $postTo[0]);
+        // create user object for conversation partner
+        if ($getMsgUuid !== '') {
+            if ($message->getValue('msg_usr_id_sender') !== $gCurrentUserId) {
+                $user = new User($gDb, $gProfileFields, $message->getValue('msg_usr_id_sender'));
+            } else {
+                $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
+            }
+        } else {
+            $user = new User($gDb, $gProfileFields);
+            if (UUID::isValid($postTo[0])) {
+                $user->readDataByUuid($postTo[0]);
+            } else {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+        }
 
         // add user to the message object
         $message->addUser($user->getValue('usr_id'));
