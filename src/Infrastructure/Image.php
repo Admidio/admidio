@@ -138,9 +138,6 @@ class Image
      */
     public function delete()
     {
-        if(is_object($this->imageResource)) {
-            imagedestroy($this->imageResource);
-        }
         $this->imageResource = null;
         $this->imagePath = '';
     }
@@ -254,9 +251,6 @@ class Image
         // save
         $this->copyToFile($imageRotated);
 
-        // Delete image from ram
-        imagedestroy($imageRotated);
-
         return true;
     }
 
@@ -299,8 +293,6 @@ class Image
 
         // create new resized image
         $resizedImageResource = imagescale($this->imageResource, $newXSize, $newYSize);
-
-        imagedestroy($this->imageResource);
 
         // update the class parameters to new image data
         $this->imageResource = $resizedImageResource;
