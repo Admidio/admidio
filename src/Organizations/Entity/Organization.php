@@ -245,21 +245,26 @@ class Organization extends Entity
         );
         $this->db->queryPrepared($sql, $queryParams);
 
-        // insert default values for inventory field 'status'
-        $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
-                       (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
-                VALUES ((SELECT inf_id
-                          FROM ' . TBL_INVENTORY_FIELDS . '
-                         WHERE inf_org_id = ? -- $orgId
-                           AND inf_name_intern = \'STATUS\'),
-                        ?, ?, ?)';
+        // insert default options for the status field
+        $sql = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . '
+                 WHERE inf_name_intern = \'STATUS\'
+                AND inf_org_id = ? -- $orgId';
+        $statusFieldId =  $this->db->queryPrepared($sql, array($orgId))->fetchColumn();
 
-        // status in use
-        $queryParams = array($orgId, 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', true, 1);
-        $this->db->queryPrepared($sql, $queryParams);
-        // status retired
-        $queryParams = array($orgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', true, 2);
-        $this->db->queryPrepared($sql, $queryParams);
+        if ($statusFieldId !== false) {
+            $arrStatusOptions = array(
+                array('inf_name' => 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 'ifo_sequence' => 1),
+                array('inf_name' => 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 'ifo_sequence' => 2),
+            );
+
+            foreach ($arrStatusOptions as $statusOption) {
+                $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                         (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
+                         VALUES (?, ?, ?, ?)';
+                $this->db->queryPrepared($sql, array($statusFieldId, $statusOption['inf_name'], true, $statusOption['ifo_sequence']));
+            }
+        }
+
 
         // now create default roles
 
