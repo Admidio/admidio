@@ -669,7 +669,7 @@ try {
                         'category' => $role->getValue('cat_name'),
                         'role' => $role->getValue('rol_name'),
                         'leader' => $row['mem_leader'],
-                        'timestamp' => $gL10n->get('SYS_SINCE', array($startDate->format($gSettingsManager->getString('system_date'))))
+                        'timestamp' => $gL10n->get('SYS_SINCE_VAR', array($startDate->format($gSettingsManager->getString('system_date'))))
                     );
                 }
             }
