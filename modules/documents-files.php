@@ -76,7 +76,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    if ($getMode != 'list') {
+    if ($getMode != 'list' && $getMode != 'download') {
         // check the rights of the current folder
         // user must be administrator or must have the right to upload files
         $folder = new Folder($gDb);
