@@ -449,7 +449,9 @@ CREATE TABLE `%PREFIX%_inventory_field_select_options` (
 
 INSERT INTO `%PREFIX%_inventory_field_select_options` (`ifo_id`, `ifo_inf_id`, `ifo_value`, `ifo_system`, `ifo_sequence`, `ifo_obsolete`) VALUES
 (1, 3, 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 1, 1, 0),
-(2, 3, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 1, 2, 0);
+(2, 3, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 1, 2, 0),
+(3, 10, 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 1, 1, 0),
+(4, 10, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 1, 2, 0);
 
 -- --------------------------------------------------------
 
