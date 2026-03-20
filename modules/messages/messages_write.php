@@ -13,7 +13,7 @@
  * Parameters:
  *
  * msg_type  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
- * user_uuid - send message to the given user UUID
+ * user_uuid - Send message to the given user UUID
  * subject   - subject of the message
  * msg_uuid  - UUID of the message -> just for answers
  * role_uuid - UUID of a role to which an email should be sent
@@ -41,9 +41,9 @@ try {
 
     // Initialize and check the parameters
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => Message::MESSAGE_TYPE_EMAIL));
-    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
+    $getUserUUID = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
     $getSubject = admFuncVariableIsValid($_GET, 'subject', 'string');
-    $getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
+    $getMsgUUID = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
     $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
     $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
@@ -58,9 +58,9 @@ try {
     }
 
     $message = new Message($gDb);
-    $message->readDataByUuid($getMsgUuid);
+    $message->readDataByUuid($getMsgUUID);
 
-    if ($getMsgUuid !== '') {
+    if ($getMsgUUID !== '') {
         $getMsgType = $message->getValue('msg_type');
     }
 
@@ -82,7 +82,7 @@ try {
     }
 
     // Update the read status of the message
-    if ($getMsgUuid !== '') {
+    if ($getMsgUUID !== '') {
         // check if user is allowed to view message
         if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
@@ -92,7 +92,7 @@ try {
         $message->setReadValue();
 
         if ($getForward === true) {
-            $getMsgUuid = '';
+            $getMsgUUID = '';
         } else {
             $messageStatement = $message->getConversation($message->getValue('msg_id'));
             $message->addContent('');
@@ -104,11 +104,11 @@ try {
         } else {
             $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
         }
-        $getUserUuid = $user->getValue('usr_uuid');
-    } elseif ($getUserUuid !== '') {
+        $getUserUUID = $user->getValue('usr_uuid');
+    } elseif ($getUserUUID !== '') {
         $message->setValue('msg_subject', $getSubject);
         $user = new User($gDb, $gProfileFields);
-        $user->readDataByUuid($getUserUuid);
+        $user->readDataByUuid($getUserUUID);
     }
 
     $maxNumberRecipients = 1;
@@ -119,7 +119,7 @@ try {
     $list = array();
 
     if ($gValidLogin && $getMsgType === Message::MESSAGE_TYPE_PM && count($gCurrentUser->getRolesWriteMails()) > 0) {
-        $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
+        $sql = 'SELECT usr_uuid, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
                 ON rol_id = mem_rol_id
@@ -160,7 +160,7 @@ try {
         $dropStatement = $gDb->queryPrepared($sql, array_merge($queryParamsArr[0], $queryParamsArr[1], $queryParamsArr[2]));
 
         while ($row = $dropStatement->fetch()) {
-            $list[] = array($row['usr_id'], $row['last_name'] . ' ' . $row['first_name'] . ' (' . $row['usr_login_name'] . ')', '');
+            $list[] = array($row['usr_uuid'], $row['last_name'] . ' ' . $row['first_name'] . ' (' . $row['usr_login_name'] . ')', '');
         }
 
         // no roles or users found then show message
@@ -169,7 +169,7 @@ try {
         }
     }
 
-    if ($getUserUuid !== '') {
+    if ($getUserUUID !== '') {
         // if a user ID is given, we need to check if the actual user is allowed to contact this user
         if ((!$gCurrentUser->isAdministratorUsers() && !isMember((int)$user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
             throw new Exception('SYS_USER_ID_NOT_FOUND');
@@ -185,7 +185,7 @@ try {
         }
     }
 
-    if (!$gValidLogin && $getUserUuid === '' && $getRoleUuid === '') {
+    if (!$gValidLogin && $getUserUUID === '' && $getRoleUuid === '') {
         // visitors have no message modul and start the navigation here
         $gNavigation->addStartUrl(CURRENT_URL, $headline);
     } else {
@@ -200,12 +200,12 @@ try {
         $form = new FormPresenter(
             'adm_pm_send_form',
             'modules/messages.pm.send.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUuid)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUUID, 'user_uuid' => $getUserUUID)),
             $page,
             array('enableFileUpload' => true)
         );
 
-        if ($getUserUuid === '') {
+        if ($getMsgUUID === '' && $getUserUUID === '') {
             $form->addSelectBox(
                 'msg_to',
                 $gL10n->get('SYS_TO'),
@@ -217,15 +217,13 @@ try {
                     'helpTextId' => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
                 )
             );
-            $sendTo = '';
         } else {
             $form->addInput(
                 'msg_to',
-                '',
-                $user->getValue('usr_id'),
-                array('property' => FormPresenter::FIELD_HIDDEN)
+                $gL10n->get('SYS_TO'),
+                $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' (' . $user->getValue('usr_login_name') . ')',
+                array('property' => FormPresenter::FIELD_DISABLED)
             );
-            $sendTo = ' ' . $gL10n->get('SYS_TO') . ' ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' (' . $user->getValue('usr_login_name') . ')';
         }
 
         if ($getSubject === '') {
@@ -258,11 +256,12 @@ try {
         );
 
         // add form to html page
-        $page->assignSmartyVariable('userUuid', $getUserUuid);
+        $page->assignSmartyVariable('userUUID', $getUserUUID);
+        $page->assignSmartyVariable('messageUUID', $getMsgUUID);
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
-    } elseif ($getMsgType === Message::MESSAGE_TYPE_EMAIL && $getMsgUuid === '') {
-        if ($getUserUuid !== '') {
+    } elseif ($getMsgType === Message::MESSAGE_TYPE_EMAIL && $getMsgUUID === '') {
+        if ($getUserUUID !== '') {
             // check if the user has email address for receiving an email
             if (!$user->hasEmail()) {
                 throw new Exception('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
@@ -298,9 +297,9 @@ try {
         $sqlParticipationRoles = '';
         $possibleEmails = 0;
 
-        if ($getUserUuid !== '') {
+        if ($getUserUUID !== '') {
             // usr_id was committed then write email to this user
-            $preloadData = $getUserUuid;
+            $preloadData = $getUserUUID;
             $sqlUserIds = ' AND usr_id = ? -- $user->getValue(\'usr_id\')';
         } elseif ($getRoleUuid !== '') {
             // role id was committed then write email to this role
