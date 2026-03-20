@@ -9,7 +9,8 @@
  *
  * Parameters:
  *
- * msg_id    - set message id for conversation
+ * msg_uuid  - Message UUID for conversations
+ * user_uuid - Send message to the given user UUID
  * msg_type  - set message type
  ***********************************************************************************************
  */
@@ -27,7 +28,8 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
-    $getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
+    $getMsgUUID = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
+    $getUsrUUID = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
     // Check form values
@@ -46,12 +48,15 @@ try {
 
     if (isset($_POST['msg_to'])) {
         $postTo = $_POST['msg_to'];
+        if ($getMsgType === Message::MESSAGE_TYPE_PM && $getUsrUUID === '' && UUID::isValid($postTo[0])) {
+            $getUsrUUID = $postTo[0];
+        }
     }
 
     $message = new Message($gDb);
-    $message->readDataByUuid($getMsgUuid);
+    $message->readDataByUuid($getMsgUUID);
 
-    if ($getMsgUuid !== '') {
+    if ($getMsgUUID !== '') {
         $getMsgType = $message->getValue('msg_type');
     }
 
@@ -284,22 +289,28 @@ try {
         }
     } else {
         // ***** PM *****
-        // if $postTo is not an Array, it is sent from the hidden field.
-        if (!is_array($postTo)) {
-            $postTo = array($postTo);
-        }
 
         // check if user is allowed to view message
         if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
-        // get user data from Database
-        $user = new User($gDb, $gProfileFields, $postTo[0]);
+        // create user object for conversation partner
+        if ($getMsgUUID !== '') {
+            if ($message->getValue('msg_usr_id_sender') !== $gCurrentUserId) {
+                $user = new User($gDb, $gProfileFields, $message->getValue('msg_usr_id_sender'));
+            } else {
+                $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
+            }
+        } elseif ($getUsrUUID !== '') {
+            $user = new User($gDb, $gProfileFields);
+            $user->readDataByUuid($getUsrUUID);
+        }
 
         // add user to the message object
         $message->addUser($user->getValue('usr_id'));
         $message->setValue('msg_read', 1);
+        $message->setValue('msg_timestamp', DATETIME_NOW);
 
         // check if it is allowed to send to this user
         if ((!$gCurrentUser->isAdministratorUsers() && !isMember((int)$user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
