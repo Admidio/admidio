@@ -50,14 +50,15 @@ class ConditionParser
     }
 
     /**
-     * Creates a valid date format **YYYY-MM-DD** for the SQL statement
+     * Creates a valid escaped date format **YYYY-MM-DD** for the SQL statement
      * @param string $date The not formatted date from user input e.g. **12.04.2012**
      * @param string $operator The actual operator for the **date** parameter
+     * @param Database $db Database connection for correct escaping of the date value
      * @return string String with a SQL valid date format **YYYY-MM-DD** or empty string
      * @throws Exception
      * @throws \Exception
      */
-    private function getFormatDate(string $date, string $operator): string
+    private function getFormatDate(string $date, string $operator, Database $db): string
     {
         global $gSettingsManager;
 
@@ -83,29 +84,29 @@ class ConditionParser
                     $dateObj->sub($oneYear)->add($oneDay);
                     $dateFrom = $dateObj->format('Y-m-d');
 
-                    $ageCondition = ' BETWEEN \'' . $dateFrom . '\' AND \'' . $dateTo . '\'';
+                    $ageCondition = ' BETWEEN ' . $db->escapeString($dateFrom) . ' AND ' . $db->escapeString($dateTo);
                     break;
                 case '}':
                     // search for dates that are older than the age
                     // because the age itself takes 1 year we must subtract 1 year to age
                     $dateObj->sub($oneYear)->add($oneDay);
-                    $ageCondition = $dateObj->format('Y-m-d');
+                    $ageCondition = $db->escapeString($dateObj->format('Y-m-d'));
                     break;
                 case '{':
                     // search for dates that are younger than the age
                     // we must add 1 day to the date because the day itself belongs to the age
                     $dateObj->add($oneDay);
-                    $ageCondition = $dateObj->format('Y-m-d');
+                    $ageCondition = $db->escapeString($dateObj->format('Y-m-d'));
                     break;
                 case ']':
                     // search for dates that are older or equal than the age
-                    $ageCondition = $dateObj->format('Y-m-d');
+                    $ageCondition = $db->escapeString($dateObj->format('Y-m-d'));
                     break;
                 case '[':
                     // search for dates that are younger or equal than the age
                     // because the age itself takes 1 year we must subtract another 1 year but the day itself must be ignored to age
                     $dateObj->sub($oneYear)->add($oneDay);
-                    $ageCondition = $dateObj->format('Y-m-d');
+                    $ageCondition = $db->escapeString($dateObj->format('Y-m-d'));
                     break;
             }
 
@@ -286,9 +287,9 @@ class ConditionParser
                     // if date column than the date will be saved in $date.
                     // This variable must then be parsed and changed in a valid database format
                     if ($columnType === 'date' && $date !== '') {
-                        $formatDate = $this->getFormatDate($date, $operator);
+                        $formatDate = $this->getFormatDate($date, $operator, $db);
                         if ($formatDate !== '') {
-                            $this->destCond .= $db->escapeString($formatDate);
+                            $this->destCond .= $formatDate;
                         } else {
                             throw new Exception('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
                         }
@@ -337,9 +338,9 @@ class ConditionParser
         // if date column than the date will be saved in $date.
         // This variable must then be parsed and changed in a valid database format
         if ($columnType === 'date' && $date !== '') {
-            $formatDate = $this->getFormatDate($date, $operator);
+            $formatDate = $this->getFormatDate($date, $operator, $db);
             if ($formatDate !== '') {
-                $this->destCond .= $db->escapeString($formatDate);
+                $this->destCond .= $formatDate;
             } else {
                 throw new Exception('SYS_NOT_VALID_DATE_FORMAT', array($fieldName));
             }
