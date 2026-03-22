@@ -618,6 +618,12 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['system_browser_update_check'],
             array('helpTextId' => 'ORG_BROWSER_UPDATE_CHECK_DESC')
         );
+        $formCommon->addInput(
+            'path_for_calculating_disk_usage',
+            $gL10n->get('ORG_PATH_FOR_CALCULATING_DISK_USAGE'),
+            $formValues['path_for_calculating_disk_usage'],
+            array('maxLength' => 250, 'helpTextId' => 'ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC')
+        );
         $formCommon->addSubmitButton(
             'adm_button_save_common',
             $gL10n->get('SYS_SAVE'),
@@ -2456,7 +2462,7 @@ class PreferencesPresenter extends PagePresenter
      */
     public function createSystemInformationForm(): string
     {
-        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData, $gSystemComponent;
+        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData, $gSystemComponent, $gSettingsManager;
 
         // Admidio Version and Update
         $component = new ComponentUpdate($gDb);
@@ -2554,7 +2560,18 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('importModeText', $importModeText);
 
         try {
-            $diskSpace = FileSystemUtils::getDiskSpace();
+            if ($gSettingsManager->has('path_for_calculating_disk_usage') && !empty($gSettingsManager->get('path_for_calculating_disk_usage'))) {
+                $pathForCalculatingDiskUsage = $gSettingsManager->get('path_for_calculating_disk_usage');
+                // if it's a relative path, we have to add the Admidio base path, otherwise we would calculate the disk usage for the whole system root if the relative path is empty or just the wrong path if its not empty
+                if (!str_starts_with($pathForCalculatingDiskUsage, '/') && !str_starts_with($pathForCalculatingDiskUsage, '\\')) {
+                    $pathForCalculatingDiskUsage = ADMIDIO_PATH . DIRECTORY_SEPARATOR . $pathForCalculatingDiskUsage;
+                }
+                if (is_dir($pathForCalculatingDiskUsage)) {
+                    $diskSpace = FileSystemUtils::getDiskSpace($pathForCalculatingDiskUsage);
+                }
+            } else {
+                $diskSpace = FileSystemUtils::getDiskSpace();
+            }
             $progressBarClass = '';
 
             $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
