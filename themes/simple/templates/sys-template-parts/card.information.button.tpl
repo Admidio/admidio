@@ -22,7 +22,11 @@
             </ul>
             {if {array_key_exists array=$card key="buttons"} && count($card.buttons) > 0}
                 {foreach $card.buttons as $buttonItem}
-                    <a class="btn btn-primary mt-auto" href="{$buttonItem.url}">{$buttonItem.name}</a>
+                    {if isset($buttonItem.csrfToken)}
+                        <a class="btn btn-primary mt-auto" onclick="redirectPost('{$buttonItem.url}', { adm_csrf_token: '{$buttonItem.csrfToken}' });">{$buttonItem.name}</a>
+                    {else}
+                        <a class="btn btn-primary mt-auto" href="{$buttonItem.url}">{$buttonItem.name}</a>
+                    {/if}
                 {/foreach}
             {/if}
         </div>

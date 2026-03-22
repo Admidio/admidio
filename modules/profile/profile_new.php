@@ -52,6 +52,11 @@ try {
     foreach ($getUserUuids as $userUuid) {
         // read user data
         if (!$gValidLogin || $getAcceptRegistration) {
+            if ($getAcceptRegistration) {
+                // check the CSRF token of the form against the session token
+                SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            }
+
             // create a user registration object and set requested organization
             $user = new UserRegistration($gDb, $gProfileFields);
             $user->readDataByUuid($userUuid);

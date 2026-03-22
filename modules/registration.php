@@ -88,6 +88,9 @@ try {
         $page->createContentAssignUser($registrationUser, true);
         $page->show();
     } elseif (in_array($getMode, array('assign_member', 'assign_user'))) {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
         $registrationService = new RegistrationService($gDb, $getUserUUID);
         $message = $registrationService->assignRegistration($getUserUUIDAssigned, $getMode === 'assign_member');
 
@@ -104,6 +107,10 @@ try {
         exit();
     } elseif ($getMode === 'create_user') {
         // accept a registration, assign necessary roles and send a notification email
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
         $registrationUser->acceptRegistration();
 
         // if current user has the right to assign roles then show roles dialog
