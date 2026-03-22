@@ -41,3 +41,4 @@ jobs:
           push: true
           tags: |
             admidio/admidio:${{ env.RELEASE_TAG }}
+            admidio/admidio:latest
