@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 {/if}
-            {elseif {$profileField.id} == 'STREET' || {$profileField.id} == 'POSTCODE' || {$profileField.id} == 'CITY' || {$profileField.id} == 'COUNTRY'}
+            {elseif {$profileField.id} == 'STREET' || {$profileField.id} == 'postcodeCity' || {$profileField.id} == 'COUNTRY'}
                     {if $showAddress}
                         {$showAddress = false}
                         <div class="admidio-form-group row mb-3">
@@ -50,7 +50,7 @@
                                     {$masterData.STREET.value}<br />
                                 {/if}
 
-                                {if $masterData.POSTCODE.value !== '' || $masterData.CITY.value !== ''}
+                                {if $masterData.postcodeCity.value !== ''}
                                     {$masterData.postcodeCity.value}<br />
                                 {/if}
 
