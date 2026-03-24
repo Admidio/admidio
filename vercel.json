@@ -18,10 +18,10 @@
     }
   ],
   "env": {
-    "DB_HOST": "REPLACE_WITH_DEMO_DB_HOST",
-    "DB_PORT": "3306",
-    "DB_NAME": "gcm_demo",
-    "DB_USER": "gcm_demo",
-    "DB_PASS": "GcmDemo@2024"
+    "DB_HOST": "REPLACE_WITH_SUPABASE_HOST",
+    "DB_PORT": "5432",
+    "DB_NAME": "postgres",
+    "DB_USER": "postgres",
+    "DB_PASS": "REPLACE_WITH_SUPABASE_PASSWORD"
   }
 }
