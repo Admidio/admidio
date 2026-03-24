@@ -18,10 +18,10 @@
     }
   ],
   "env": {
-    "DB_HOST": "@db_host",
-    "DB_PORT": "@db_port",
-    "DB_NAME": "@db_name",
-    "DB_USER": "@db_user",
-    "DB_PASS": "@db_pass"
+    "DB_HOST": "REPLACE_WITH_DEMO_DB_HOST",
+    "DB_PORT": "3306",
+    "DB_NAME": "gcm_demo",
+    "DB_USER": "gcm_demo",
+    "DB_PASS": "GcmDemo@2024"
   }
 }
