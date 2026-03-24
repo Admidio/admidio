@@ -46,7 +46,7 @@ $config = <<<PHP
 \$gTimezone   = 'Europe/Berlin';
 PHP;
 
-$configDir  = __DIR__ . '/../adm_my_files';
+$configDir  = __DIR__ . '/../../adm_my_files';
 $configPath = $configDir . '/config.php';
 
 if (!is_dir($configDir)) {

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "composer install --no-dev --optimize-autoloader && php scripts/vercel-build.php",
+  "buildCommand": "composer install --no-dev --optimize-autoloader && php vercel/build.php",
   "functions": {
     "**/*.php": {
       "runtime": "vercel-php@0.7.2"
