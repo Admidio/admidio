@@ -18,7 +18,7 @@
     }
   ],
   "env": {
-    "DB_HOST": "REPLACE_WITH_SUPABASE_HOST",
+    "DB_HOST": "db.ubjlwpytufhcrnrjbfme.supabase.co",
     "DB_PORT": "5432",
     "DB_NAME": "postgres",
     "DB_USER": "postgres",
