@@ -2,8 +2,9 @@
   "version": 2,
   "buildCommand": "composer install --no-dev --optimize-autoloader && php vercel/build.php",
   "functions": {
-    "**/*.php": {
-      "runtime": "vercel-php@0.7.2"
+    "api/index.php": {
+      "runtime": "vercel-php@0.7.2",
+      "maxDuration": 10
     }
   },
   "routes": [
@@ -13,7 +14,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/index.php"
+      "dest": "/api/index.php"
     }
   ],
   "env": {
