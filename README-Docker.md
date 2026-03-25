@@ -287,6 +287,4 @@ services:
       - ADMIDIO_PASSWORD_HASH_ALGORITHM=DEFAULT
       - TZ=Europe/Vienna
       - ADMIDIO_ROOT_PATH=http://localhost:3100
-    security_opt:
-      - "seccomp:unconfined"
 ```
