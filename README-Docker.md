@@ -261,8 +261,6 @@ services:
     #   interval: 10s
     #   timeout: 10s
     #   retries: 5
-    security_opt:
-      - "seccomp:unconfined"
 
   admidio:
     restart: unless-stopped
