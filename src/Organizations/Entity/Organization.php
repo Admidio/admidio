@@ -604,8 +604,8 @@ class Organization extends Entity
         $sqlAdminRoles = 'SELECT fol_uuid
                         FROM ' . TBL_FOLDERS . '
                        WHERE fol_type = \'DOCUMENTS\'
-                         AND fol_name = \'documents_' . $this->getValue('org_shortname') . '\' ';
-        $statementFolder = $this->db->queryPrepared($sqlAdminRoles);
+                         AND fol_org_id = ? /* $this->getValue(\'org_id\') */ ';
+        $statementFolder = $this->db->queryPrepared($sqlAdminRoles, array($this->getValue('org_id')));
         $folder_uuid = $statementFolder->fetchColumn();
 
         $documentsFilesRootFolder = new Folder($this->db);
