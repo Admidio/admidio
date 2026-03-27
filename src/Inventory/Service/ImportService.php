@@ -451,9 +451,11 @@ class ImportService
                 $itemModule->save();
 
                 $importSuccess = true;
-                unset($_POST);
             }
         }
+
+        // cleanup the post data after the import
+        unset($_POST);
 
         // Send notification to all users
         $items->sendNotification($importedItemData);
@@ -463,7 +465,6 @@ class ImportService
             $returnMessage['message'] = $gL10n->get('SYS_SAVE_DATA');
         } else {
             $returnMessage['message'] = $gL10n->get('SYS_INVENTORY_NO_NEW_IMPORT_DATA');
-
         }
 
         return $returnMessage;

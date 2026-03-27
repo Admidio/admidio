@@ -311,6 +311,14 @@ class InventoryImportPresenter extends PagePresenter
                     'class' => 'admidio-import-field'
                 )
             );
+
+            // hidden input field for import validation (security check if the form payload includes unexpected fields)
+            $form->addInput(
+                'INF-' . $itemField->GetValue('inf_name_intern'),
+                $itemField->GetValue('inf_name'),
+                '',
+                array('hidden' => true, 'property' => FormPresenter::FIELD_HIDDEN)
+            );
         }
 
         $form->addSubmitButton('btn_forward', $gL10n->get('SYS_IMPORT'), array('icon' => 'fa-upload'));
