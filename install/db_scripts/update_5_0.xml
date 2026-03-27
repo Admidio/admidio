@@ -537,5 +537,6 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1900" database="mysql">ALTER TABLE %PREFIX%_category_report MODIFY COLUMN crt_col_fields varchar(255)</step>
     <step id="1910" database="pgsql">ALTER TABLE %PREFIX%_category_report ALTER COLUMN crt_col_fields TYPE varchar(255)</step>
     <step id="1920">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_col_conditions varchar(255)</step>
+    <step id="1930">UpdateStepsCode::updateStep50FixInventorySelectOptions</step>
     <step>stop</step>
 </update>
