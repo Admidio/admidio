@@ -89,8 +89,14 @@ class RegistrationPresenter extends PagePresenter
                     'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION')
                 );
             } else {
+                if ($gCurrentUser->isAdministratorUsers()) {
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('accept_registration' => true, 'user_uuid' => $row['usr_uuid']));
+                } else {
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration.php', array('mode' => 'create_user', 'user_uuid' => $row['usr_uuid']));
+                }
                 $templateRow['buttons'][] = array(
-                    'url' => ($gCurrentUser->isAdministratorUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('accept_registration' => true, 'user_uuid' => $row['usr_uuid'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration.php', array('mode' => 'create_user', 'user_uuid' => $row['usr_uuid']))),
+                    'csrfToken' => $gCurrentSession->getCsrfToken(),
+                    'url' => $url,
                     'name' => $gL10n->get('SYS_CONFIRM_REGISTRATION')
                 );
             }
