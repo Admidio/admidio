@@ -42,7 +42,7 @@ final class UpdateStepsCode
     {
         self::$db = $database;
     }
-
+    
     public static function updateStep50MoveFieldListValues()
     {
         global $gDbType;
@@ -121,24 +121,25 @@ final class UpdateStepsCode
                 $itemField->setValue('inf_sequence', (int)$itemFieldData['inf_sequence']);
                 $itemField->save();
             }
-        }
 
-        // add default options for the status field
-        $sql = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . '
-                 WHERE inf_name_intern = \'STATUS\'';
-        $statusFieldId = self::$db->queryPrepared($sql)->fetchColumn();
+            // add default options for the status field
+            $sql = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . '
+                 WHERE inf_name_intern = \'STATUS\'
+                 and inf_org_id = ? -- $row[org_id] ';
+            $statusFieldId = self::$db->queryPrepared($sql, array((int)$row['org_id']))->fetchColumn();
 
-        if ($statusFieldId !== false) {
-            $arrStatusOptions = array(
-                array('inf_name' => 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 'ifo_sequence' => 1),
-                array('inf_name' => 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 'ifo_sequence' => 2),
-            );
+            if ($statusFieldId !== false) {
+                $arrStatusOptions = array(
+                    array('ifo_value' => 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 'ifo_sequence' => 1),
+                    array('ifo_value' => 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 'ifo_sequence' => 2),
+                );
 
-            foreach ($arrStatusOptions as $statusOption) {
-                $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                foreach ($arrStatusOptions as $statusOption) {
+                    $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
                          (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
                          VALUES (?, ?, ?, ?)';
-                self::$db->queryPrepared($sql, array($statusFieldId, $statusOption['inf_name'], true, $statusOption['ifo_sequence']));
+                    self::$db->queryPrepared($sql, array($statusFieldId, $statusOption['ifo_value'], true, $statusOption['ifo_sequence']));
+                }
             }
         }
     }
