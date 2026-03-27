@@ -83,7 +83,7 @@ class InventoryFieldsPresenter extends PagePresenter
                 if ($("#inf_type").val() === "DROPDOWN_DATE_INTERVAL") {
                     // if the field type is dropdown date interval, then the connected field must be a date field
                     $("#inf_inf_uuid_connected").attr("required", "required");
-                    $("#infinf_inf_uuid_connected_group").addClass("admidio-form-group-required");
+                    $("#inf_inf_uuid_connected_group").addClass("admidio-form-group-required");
                     $("#inf_inf_uuid_connected_group").show();
                     
                     valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_INVENTORY_DATE_INTERVAL_LIST_DESC') . '";
