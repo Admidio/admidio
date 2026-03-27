@@ -42,8 +42,54 @@ final class UpdateStepsCode
     {
         self::$db = $database;
     }
-    
-    public static function updateStep50MoveFieldListValues()
+
+    /**
+     * This method updates wrongly assigned select options for the inventory status field.
+     * In previous new Admidio 5.0 installations and additional added organizations, the options were wrongly assigned
+     * to the organization id instead of the field id. Therefore, we check whether options exist whose assigned id
+     * matches the organization id of a STATUS field and update them to the corresponding field id.
+     * @throws Exception
+     */
+    public static function updateStep50FixInventorySelectOptions(): void
+    {
+        $statusFields = array();
+        $statusFieldOptions = array();
+
+        // Select all item fields with internal name STATUS
+        $sql = 'SELECT inf_id, inf_org_id FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_name_intern = ?';
+        $inventoryStatement = self::$db->queryPrepared($sql, array('STATUS'));
+
+        while ($row = $inventoryStatement->fetch()) {
+            $statusFields[] = array( 'id' => (int) $row['inf_id'], 'org_id' => (int) $row['inf_org_id']);
+        }
+
+        // Select all status field options present for this installation
+        $sql = 'SELECT ifo_id, ifo_inf_id FROM ' . TBL_INVENTORY_FIELD_OPTIONS . ' WHERE ifo_value IN (?, ?)';
+        $inventoryOptionStatement = self::$db->queryPrepared( $sql, array('SYS_INVENTORY_FILTER_IN_USE_ITEMS', 'SYS_INVENTORY_FILTER_RETIRED_ITEMS') );
+
+        while ($row = $inventoryOptionStatement->fetch()) {
+            $statusFieldOptions[] = array( 'id' => (int) $row['ifo_id'], 'inf_id' => (int) $row['ifo_inf_id']);
+        }
+
+        // check if there are options wrongly assigned to the organization id of a status field instead of the corresponding field id and update them
+        foreach ($statusFieldOptions as $statusFieldOption) {
+            foreach ($statusFields as $statusField) {
+                if ($statusField['id'] === $statusFieldOption['inf_id']) {
+                    // The option is already assigned to the field
+                    continue 2;
+                }
+
+                if ($statusField['org_id'] === $statusFieldOption['inf_id']) {
+                    // The option is wrongly assigned to the organization id
+                    $sql = 'UPDATE ' . TBL_INVENTORY_FIELD_OPTIONS . ' SET ifo_inf_id = ? WHERE ifo_id = ?';
+                    self::$db->queryPrepared($sql, array($statusField['id'], $statusFieldOption['id']));
+                    continue 2;
+                }
+            }
+        }
+    }
+
+    public static function updateStep50MoveFieldListValues(): void
     {
         global $gDbType;
 
@@ -92,7 +138,7 @@ final class UpdateStepsCode
      * Add default fields for the inventory module.
      * @throws Exception
      */
-    public static function updateStep50AddInventoryFields()
+    public static function updateStep50AddInventoryFields(): void
     {
         $arrItemFields = array(
             array('inf_type' => 'TEXT', 'inf_name_intern' => 'ITEMNAME', 'inf_name' => 'SYS_INVENTORY_ITEMNAME', 'inf_description' => 'SYS_INVENTORY_ITEMNAME_DESC', 'inf_required_input' => 1, 'inf_sequence' => 0),
@@ -148,7 +194,7 @@ final class UpdateStepsCode
      * Create categories for the inventory for each organization.
      * @throws Exception
      */
-    public static function updateStep50InventoryCategories()
+    public static function updateStep50InventoryCategories(): void
     {
         global $gL10n;
 
