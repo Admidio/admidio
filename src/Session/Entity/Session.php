@@ -150,12 +150,12 @@ class Session extends Entity
 
     /**
      * Returns a CSRF token from the session. If no CSRF token exists a new one will be
-     * generated and stored within the session. The next call of the method will than
+     * generated and stored within the session. The next call of the method will then
      * return the existing token. The CSRF token has 30 characters. A new token could
      * be forced by the parameter **$newToken**
      * @param bool $newToken If set to true, always a new token will be generated.
      * @return string Returns the CSRF token
-     * @throws Exception
+     * @throws \Exception
      */
     public function getCsrfToken(bool $newToken = false): string
     {

@@ -45,7 +45,7 @@ class ModuleContacts extends PagePresenter
      */
     public function createContentAssignUser(User $user, bool $assignRegistration = false)
     {
-        global $gL10n, $gSettingsManager, $gCurrentUser, $gDb, $gProfileFields, $gCurrentOrganization;
+        global $gL10n, $gSettingsManager, $gCurrentUser, $gDb, $gProfileFields, $gCurrentOrganization, $gCurrentSession;
 
         $templateData = array();
         $userUuid = $user->getValue('usr_uuid');
@@ -127,11 +127,13 @@ class ModuleContacts extends PagePresenter
                         $button['icon'] = 'bi-person-check-fill';
                         $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration.php', array('user_uuid' => $userUuid, 'user_uuid_assigned' => $similarUser->getValue('usr_uuid'), 'mode' => 'assign_member'));
                     }
+                    $button['csrfToken'] = $gCurrentSession->getCsrfToken();
                 }
             } else {
                 // found user is NOT a member of this organization yet
                 $button['label'] = $gL10n->get('SYS_ASSIGN_MEMBERSHIP');
                 $button['icon'] = 'bi-person-check-fill';
+                $button['csrfToken'] = $gCurrentSession->getCsrfToken();
 
                 if($assignRegistration) {
                     $button['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration.php', array('user_uuid' => $userUuid, 'user_uuid_assigned' => $similarUser->getValue('usr_uuid'), 'mode' => 'assign_user'));
@@ -156,6 +158,7 @@ class ModuleContacts extends PagePresenter
             $templateData[] = $templateRow;
         }
 
+        $this->smarty->assign('csrfToken', $gCurrentSession->getCsrfToken());
         $this->smarty->assign('similarUsers', $templateData);
         $this->smarty->assign('l10n', $gL10n);
         $this->pageContent .= $this->smarty->fetch('modules/contacts.assign.tpl');

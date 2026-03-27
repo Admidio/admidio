@@ -19,7 +19,7 @@
                     {if {array_key_exists array=$similarUser key='button'}}
                         <br />
                         <p>{$similarUser.button.description}</p>
-                        <button class="btn btn-primary" onclick="window.location.href='{$similarUser.button.url}'">
+                        <button class="btn btn-primary" onclick="redirectPost('{$similarUser.button.url}',{ adm_csrf_token: '{$similarUser.button.csrfToken}' });">
                             <i class="bi {$similarUser.button.icon}"></i>{$similarUser.button.label}</button>
                     {/if}
                 </li>
@@ -32,7 +32,7 @@
     <div class="card-body">
         <p>{$l10n->get('SYS_CONTACT_NOT_FOUND_CREATE_NEW')}</p>
 
-        <button class="btn btn-primary" onclick="window.location.href='{$createNewUserUrl}'">
+        <button class="btn btn-primary" onclick="redirectPost('{$createNewUserUrl}', { adm_csrf_token: '{$csrfToken}' });">
             <i class="bi bi-plus-circle-fill"></i>{$l10n->get('SYS_CREATE_CONTACT')}</button>
     </div>
 </div>
