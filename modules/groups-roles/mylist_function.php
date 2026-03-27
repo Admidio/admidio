@@ -38,6 +38,12 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
+    // check the CSRF token of the form against the session token
+    $myListForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+    if ($_POST['adm_csrf_token'] !== $myListForm->getCsrfToken()) {
+        throw new Exception('Invalid or missing CSRF token!');
+    }
+
     // At least one field should be assigned (has a non-empty value)
     if (
         empty($_POST['column']) ||
@@ -77,12 +83,6 @@ try {
 
     // save list
     if (in_array($getMode, array('save', 'save_as', 'save_temporary'))) {
-        // check the CSRF token of the form against the session token
-        $categoryReportConfigForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        if ($_POST['adm_csrf_token'] !== $categoryReportConfigForm->getCsrfToken()) {
-            throw new Exception('Invalid or missing CSRF token!');
-        }
-
         $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
 
         // go through all existing columns
@@ -98,14 +98,14 @@ try {
                     $list->deleteColumn($columnNumber, false);
                     return null;
                 }
-            
+
                 // Add column (profile fields usr_/mem_ stay as-is, others map to usf_id)
                 if (StringUtils::strStartsWith($col, 'usr_') || StringUtils::strStartsWith($col, 'mem_')) {
                     $list->addColumn($col, $columnNumber, $sort ?? '', $cond ?? '');
                 } else {
                     $list->addColumn($gProfileFields->getProperty($col, 'usf_id'), $columnNumber, $sort ?? '', $cond ?? '');
                 }
-            
+
                 $columnNumber++;
                 return null; // return value unused
             },
@@ -113,7 +113,7 @@ try {
             $sorts,
             $conditions
         );
-        
+
         // Remove potentially deleted columns at the end
         $list->deleteColumn($columnNumber, true);
 
