@@ -187,6 +187,16 @@ if [ "$(cat ${ADMIDIO_INSTALLED_VERSION} 2>/dev/null)" != "$(cat ${ADMIDIO_IMAGE
     rm -f "${ADMIDIO_INSTALLED_VERSION}"
 fi
 
+# allow .htaccess overrides for admidio custom directory
+echo "[INFO ] add custom Apache directory config"
+cat <<EOF > /etc/apache2/conf-available/admidio-custom.conf
+<Directory /opt/app-root/src/adm_my_files>
+    AllowOverride All
+</Directory>
+EOF
+
+a2enconf admidio-custom
+
 # run apache with php enabled as user default
 echo "[INFO ] run apache config test (apachectl configtest)"
 apachectl configtest
