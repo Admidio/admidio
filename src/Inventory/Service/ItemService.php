@@ -101,12 +101,8 @@ class ItemService
         global $gCurrentSession, $gL10n, $gSettingsManager;
 
         // check form field input and sanitized it from malicious content
-        if (!$this->postImported) {
-            $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-            $formValues = $itemFieldsEditForm->validate($_POST, $multiEdit);
-        } else {
-            $formValues = $_POST;
-        }
+        $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+        $formValues = $itemFieldsEditForm->validate($_POST, $multiEdit);
 
         $startIdx = 1;
         if ($this->postCopyField > 0) {
