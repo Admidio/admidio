@@ -177,6 +177,8 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middle</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">None</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Very high</string>
+  <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Path for calculating disk usage</string>
+  <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">The path to the folder for calculating the disk usage. This is used in the system information to calculate the disk usage of the Admidio installation. The path can be defined as an absolute path or as a relative path to the Admidio main directory. If the path is left blank, the disk usage will be calculated for the server\'s root directory. (default: empty)</string>
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Profile fields</string>
   <string name="ORG_REFUSE_REGISTRATION">Notification on refusal of registration</string>
