@@ -423,6 +423,7 @@ try {
         // if user is no leader of the event then only allow to handle their own participation
         if (!$participants->isLeader($gCurrentUserId)) {
             $getUserUuid = $gCurrentUser->getValue('usr_uuid');
+            $user->readDataByUuid($getUserUuid);
         }
 
         // if current user is allowed to participate or user could edit this event then update user inputs
