@@ -36,6 +36,7 @@ $defaultOrgPreferences = array(
     'system_url_imprint' => '',
     'system_url_data_protection' => '',
     'password_min_strength' => '1',
+    'path_for_calculating_disk_usage' => '',
 
     // Theme
     'theme' => 'simple',
