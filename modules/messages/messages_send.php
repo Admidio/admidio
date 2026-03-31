@@ -53,13 +53,6 @@ try {
         }
     }
 
-    $message = new Message($gDb);
-    $message->readDataByUuid($getMsgUUID);
-
-    if ($getMsgUUID !== '') {
-        $getMsgType = $message->getValue('msg_type');
-    }
-
     // if message not PM it must be Email and then directly check the parameters
     if ($getMsgType !== Message::MESSAGE_TYPE_PM) {
         $getMsgType = Message::MESSAGE_TYPE_EMAIL;
@@ -84,11 +77,16 @@ try {
     }
 
     // object to handle the current message in the database
-    if ($message->isNewRecord()) {
+    $message = new Message($gDb);
+    $message->readDataByUuid($getMsgUUID);
+
+    if ($getMsgUUID !== '') {
+        $getMsgType = $message->getValue('msg_type');
+    } else {
+        $message->setValue('msg_type', $getMsgType);
+        $message->setValue('msg_usr_id_sender', $gCurrentUserId);
         $message->setValue('msg_subject', $formValues['msg_subject']);
     }
-    $message->setValue('msg_type', $getMsgType);
-    $message->setValue('msg_usr_id_sender', $gCurrentUserId);
     $message->addContent($formValues['msg_body']);
 
     // check if PM or Email and to steps:
@@ -308,7 +306,9 @@ try {
         }
 
         // add user to the message object
-        $message->addUser($user->getValue('usr_id'));
+        if ($message->isNewRecord()) {
+            $message->addUser($user->getValue('usr_id'));
+        }
         $message->setValue('msg_read', 1);
         $message->setValue('msg_timestamp', DATETIME_NOW);
 
