@@ -2134,6 +2134,11 @@ class FormPresenter
                                 throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
                             }
                             break;
+                        case 'select':
+                            if (!in_array($fieldValues[$element['id']], array_column($element['values'], 'id'))) {
+                                throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
+                            }
+                            break;
                         case 'url':
                             if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
                                 throw new Exception('SYS_URL_INVALID_CHAR', array($element['label']));
