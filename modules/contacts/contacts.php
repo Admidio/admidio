@@ -17,6 +17,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Organizations\Entity\Organization;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
@@ -77,19 +78,29 @@ try {
         );
 
 
-        if ($gCurrentUser->isAdministrator() && $gSettingsManager->getBool('contacts_show_all')) {
-            $selectBoxValues = array(
-                '0' => array('0', $gL10n->get('SYS_ACTIVE_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
-                '1' => array('1', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
-                '2' => array('2', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
-                '3' => array('3', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS'))
-            );
+        $selectBoxValues = array(
+            '0' => array('0', $gL10n->get('SYS_ACTIVE_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
+            '1' => array('1', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
+            '2' => array('2', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION'))
+        );
+
+        $parentOrganizationId = (int)$gCurrentOrganization->getValue('org_org_id_parent');
+        if ($parentOrganizationId > 0) {
+            $parentOrganization = new Organization($gDb, $parentOrganizationId);
+            $parentSettingsManager = $parentOrganization->getSettingsManager();
+            $useParentOrganizationMembers = $parentSettingsManager->has('contacts_suborganization_use_same_members')
+                && $parentSettingsManager->getBool('contacts_suborganization_use_same_members');
         } else {
-            $selectBoxValues = array(
-                '0' => $gL10n->get('SYS_ACTIVE_CONTACTS'),
-                '1' => $gL10n->get('SYS_FORMER_CONTACTS'),
-                '2' => $gL10n->get('SYS_ALL_CONTACTS')
-            );
+            $useParentOrganizationMembers = $gSettingsManager->has('contacts_suborganization_use_same_members')
+                && $gSettingsManager->getBool('contacts_suborganization_use_same_members');
+        }
+
+        $showAllOrganizationsFilter = $gCurrentUser->isAdministrator()
+            && $gSettingsManager->getBool('contacts_show_all')
+            && $useParentOrganizationMembers;
+
+        if ($showAllOrganizationsFilter) {
+            $selectBoxValues['3'] = array('3', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS'));
         }
 
         // filter all items

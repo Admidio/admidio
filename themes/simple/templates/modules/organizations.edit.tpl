@@ -13,6 +13,9 @@
     {if {array_key_exists array=$elements key='org_show_org_select'}}
         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['org_show_org_select']}
     {/if}
+    {if {array_key_exists array=$elements key='contacts_suborganization_use_same_members'}}
+        {include 'sys-template-parts/form.checkbox.tpl' data=$elements['contacts_suborganization_use_same_members']}
+    {/if}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

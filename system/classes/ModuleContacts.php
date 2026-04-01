@@ -1,6 +1,8 @@
 <?php
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Organizations\Entity\Organization;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
@@ -51,6 +53,50 @@ class ModuleContacts extends PagePresenter
         $userUuid = $user->getValue('usr_uuid');
 
         $similarUserIDs = $user->searchSimilarUsers();
+        $parentOrganizationId = (int)$gCurrentOrganization->getValue('org_org_id_parent');
+        $useParentOrganizationMembers = false;
+
+        if ($parentOrganizationId > 0) {
+            $parentOrganization = new Organization($gDb, $parentOrganizationId);
+            $parentSettingsManager = $parentOrganization->getSettingsManager();
+            $useParentOrganizationMembers = $parentSettingsManager->has('contacts_suborganization_use_same_members')
+                && $parentSettingsManager->getBool('contacts_suborganization_use_same_members');
+        } else {
+            $useParentOrganizationMembers = $gSettingsManager->has('contacts_suborganization_use_same_members')
+                && $gSettingsManager->getBool('contacts_suborganization_use_same_members');
+        }
+
+        $searchInOrganizationId = $useParentOrganizationMembers
+            ? $parentOrganizationId
+            : (int)$gCurrentOrganization->getValue('org_id');
+
+        if (count($similarUserIDs) > 0) {
+            // Limit similar contacts to either parent or current organization memberships.
+            if ($searchInOrganizationId <= 0) {
+                $similarUserIDs = array();
+            } else {
+                $sql = 'SELECT DISTINCT mem_usr_id
+                      FROM ' . TBL_MEMBERS . '
+                INNER JOIN ' . TBL_ROLES . '
+                        ON rol_id = mem_rol_id
+                INNER JOIN ' . TBL_CATEGORIES . '
+                        ON cat_id = rol_cat_id
+                     WHERE rol_valid = true
+                       AND mem_usr_id IN (' . Database::getQmForValues($similarUserIDs) . ')
+                      AND cat_org_id = ? -- $searchInOrganizationId';
+                  $queryParams = array_merge($similarUserIDs, array($searchInOrganizationId));
+                $membershipsStatement = $gDb->queryPrepared($sql, $queryParams);
+
+                $parentMembers = array();
+                while ($row = $membershipsStatement->fetch()) {
+                    $parentMembers[(int)$row['mem_usr_id']] = true;
+                }
+
+                $similarUserIDs = array_values(array_filter($similarUserIDs, function (int $similarUserId) use ($parentMembers): bool {
+                    return array_key_exists($similarUserId, $parentMembers);
+                }));
+            }
+        }
 
         if (count($similarUserIDs) === 0) {
             throw new Exception('No similar users found.');
