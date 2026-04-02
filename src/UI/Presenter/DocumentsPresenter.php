@@ -633,6 +633,7 @@ class DocumentsPresenter extends PagePresenter
 
         foreach($unregisteredFoldersFiles as $row) {
             $templateRow = array();
+            $templateRow['csrfToken'] = $gCurrentSession->getCSRFToken();
 
             if ($row['folder']) {
                 $templateRow['icon'] = 'bi bi-folder-fill';

@@ -124,6 +124,13 @@ class Folder extends Entity
         $newObjectPath = $this->getFullFolderPath() . '/' . $newFolderFileName;
         $folderId = (int)$this->getValue('fol_id');
 
+        // Ensure the resolved path is within the folder directory
+        $realPath = realpath($newObjectPath);
+        $folderPath = realpath($this->getFullFolderPath());
+        if ($realPath === false || !str_starts_with($realPath, $folderPath . '/')) {
+            throw new Exception('SYS_FILENAME_INVALID');
+        }
+
         // check if a file or folder should be created
         if (is_file($newObjectPath)) {
             // add the file to the database
@@ -193,7 +200,7 @@ class Folder extends Entity
 
         try {
             FileSystemUtils::createDirectoryIfNotExists($baseFolder . '/' . $folderName);
-        } catch (\RuntimeException $exception) {
+        } catch (\RuntimeException) {
             return array(
                 'text' => 'SYS_FOLDER_NOT_CREATED',
                 'path' => $baseFolder . '/' . $folderName
