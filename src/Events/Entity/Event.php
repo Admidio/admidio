@@ -432,7 +432,7 @@ class Event extends Entity
                 $messageDateText = 'SYS_CHANGED_AT';
             }
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
-                . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '<br />'
+                . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('dat_headline') . '<br />'
                 . $gL10n->get('SYS_DATE') . ': ' . $this->getDateTimePeriod() . '<br />'
                 . $gL10n->get('SYS_CALENDAR') . ': ' . $calendar . '<br />'
                 . $gL10n->get('SYS_VENUE') . ': ' . $location . '<br />'
