@@ -118,12 +118,23 @@ try {
     $searchColumns = array(
         'COALESCE(last_name, \' \')',
         'COALESCE(first_name, \' \')',
-        'COALESCE(birthday, \' \')',
-        'COALESCE(street, \' \')',
-        'COALESCE(city, \' \')',
-        'COALESCE(zip_code, \' \')',
-        'COALESCE(country, \' \')'
     );
+
+    if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(birthday, \' \')';
+    }
+    if ($gProfileFields->isVisible('STREET', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(street, \' \')';
+    }
+    if ($gProfileFields->isVisible('CITY', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(city, \' \')';
+    }
+    if ($gProfileFields->isVisible('POSTCODE', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(zip_code, \' \')';
+    }
+    if ($gProfileFields->isVisible('COUNTRY', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(country, \' \')';
+    }
 
     if ($getSearch !== '' && count($searchColumns) > 0) {
         $searchString = explode(' ', $getSearch);
