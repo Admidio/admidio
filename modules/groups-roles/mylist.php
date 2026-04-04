@@ -84,7 +84,7 @@ try {
         }
     }
 
-    // create html page object
+    // create HTML page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-mylist', $headline);
 
     ChangelogService::displayHistoryButton($page, 'lists', 'lists,list_columns', true, array('uuid' => $getListUuid));
@@ -235,7 +235,7 @@ try {
             }
         }
     }
-    
+
     $arrAdditionalColumns = array(
         array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_photo', 'usf_name' => $gL10n->get('SYS_PHOTO')),
         ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_login_name', 'usf_name' => $gL10n->get('SYS_USERNAME')) : []),
@@ -257,12 +257,14 @@ try {
 
     // after the profile fields add some special profile information e.g. username, photo, created at ...
     foreach ($arrAdditionalColumns as $column) {
-        $javascriptCode .= '
+        if (is_array($column) && count($column) > 0) {
+            $javascriptCode .= '
             userFields[' . ++$i . '] = {
                 "cat_name" : "' . $column['cat_name'] . '",
                 "usf_name" : "' . $column['usf_name'] . '",
                 "usf_name_intern" : "' . $column['usf_name_intern'] . '",
             };';
+        }
     }
 
     $javascriptCode .= '
@@ -273,7 +275,7 @@ try {
     {
         var defaultFields = [];';
 
-    // now add all columns to the javascript row objects
+    // now add all columns to the JavaScript row objects
     $actualColumnNumber = 1;
     array_map(
         function ($col, $sort = null, $cond = null) use (&$javascriptCode, &$actualColumnNumber) {
