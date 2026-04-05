@@ -108,7 +108,11 @@ class OrganizationService
         // write category into database
         $gCurrentOrganization->save();
 
-        if (array_key_exists('contacts_suborganization_use_same_members', $validatedFormValues)) {
+        if (
+            array_key_exists('contacts_suborganization_use_same_members', $validatedFormValues)
+            && !$gCurrentOrganization->isChildOrganization()
+            && $gCurrentOrganization->isParentOrganization()
+        ) {
             $gSettingsManager->set(
                 'contacts_suborganization_use_same_members',
                 (int)(bool)$validatedFormValues['contacts_suborganization_use_same_members']

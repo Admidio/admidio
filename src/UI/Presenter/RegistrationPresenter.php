@@ -1,10 +1,8 @@
 <?php
 namespace Admidio\UI\Presenter;
 
-use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Service\RegistrationService;
-use Admidio\Organizations\Entity\Organization;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -36,7 +34,7 @@ class RegistrationPresenter extends PagePresenter
      */
     public function createRegistrationList(): void
     {
-        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields, $gCurrentUser, $gCurrentSession, $gCurrentOrganization;
+        global $gL10n, $gSettingsManager, $gMessage, $gHomepage, $gDb, $gProfileFields, $gCurrentUser, $gCurrentSession;
 
         $this->setHtmlID('adm_registration');
         $this->setHeadline($gL10n->get('SYS_REGISTRATIONS'));
@@ -54,49 +52,6 @@ class RegistrationPresenter extends PagePresenter
         foreach($registrations as $row) {
             $user = new UserRegistration($gDb, $gProfileFields, $row['usr_id']);
             $similarUserIDs = $user->searchSimilarUsers();
-            $parentOrganizationId = (int)$gCurrentOrganization->getValue('org_org_id_parent');
-            $useParentOrganizationMembers = false;
-
-            if ($parentOrganizationId > 0) {
-                $parentOrganization = new Organization($gDb, $parentOrganizationId);
-                $parentSettingsManager = $parentOrganization->getSettingsManager();
-                $useParentOrganizationMembers = $parentSettingsManager->has('contacts_suborganization_use_same_members')
-                    && $parentSettingsManager->getBool('contacts_suborganization_use_same_members');
-            } else {
-                $useParentOrganizationMembers = $gSettingsManager->has('contacts_suborganization_use_same_members')
-                    && $gSettingsManager->getBool('contacts_suborganization_use_same_members');
-            }
-
-            $searchInOrganizationId = $useParentOrganizationMembers
-                ? $parentOrganizationId
-                : (int)$gCurrentOrganization->getValue('org_id');
-
-            if (count($similarUserIDs) > 0) {
-                if ($searchInOrganizationId <= 0) {
-                    $similarUserIDs = array();
-                } else {
-                    $sql = 'SELECT DISTINCT mem_usr_id
-                              FROM ' . TBL_MEMBERS . '
-                        INNER JOIN ' . TBL_ROLES . '
-                                ON rol_id = mem_rol_id
-                        INNER JOIN ' . TBL_CATEGORIES . '
-                                ON cat_id = rol_cat_id
-                             WHERE rol_valid = true
-                               AND mem_usr_id IN (' . Database::getQmForValues($similarUserIDs) . ')
-                               AND cat_org_id = ? -- $searchInOrganizationId';
-                    $queryParams = array_merge($similarUserIDs, array($searchInOrganizationId));
-                    $membershipsStatement = $gDb->queryPrepared($sql, $queryParams);
-
-                    $organizationMembers = array();
-                    while ($memberRow = $membershipsStatement->fetch()) {
-                        $organizationMembers[(int)$memberRow['mem_usr_id']] = true;
-                    }
-
-                    $similarUserIDs = array_values(array_filter($similarUserIDs, function (int $similarUserId) use ($organizationMembers): bool {
-                        return array_key_exists($similarUserId, $organizationMembers);
-                    }));
-                }
-            }
 
             $templateRow = array();
             $templateRow['id'] = 'user_'.$row['usr_uuid'];

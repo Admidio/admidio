@@ -17,7 +17,6 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Organizations\Entity\Organization;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
@@ -84,20 +83,15 @@ try {
             '2' => array('2', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION'))
         );
 
-        $parentOrganizationId = (int)$gCurrentOrganization->getValue('org_org_id_parent');
-        if ($parentOrganizationId > 0) {
-            $parentOrganization = new Organization($gDb, $parentOrganizationId);
-            $parentSettingsManager = $parentOrganization->getSettingsManager();
-            $useParentOrganizationMembers = $parentSettingsManager->has('contacts_suborganization_use_same_members')
-                && $parentSettingsManager->getBool('contacts_suborganization_use_same_members');
-        } else {
-            $useParentOrganizationMembers = $gSettingsManager->has('contacts_suborganization_use_same_members')
-                && $gSettingsManager->getBool('contacts_suborganization_use_same_members');
-        }
+        $sharedOrganizationIds = $gCurrentOrganization->getSharedUsersOrganizationIds();
 
         $showAllOrganizationsFilter = $gCurrentUser->isAdministrator()
             && $gSettingsManager->getBool('contacts_show_all')
-            && $useParentOrganizationMembers;
+            && count($sharedOrganizationIds) > 1;
+
+        if (!$showAllOrganizationsFilter && $getMembersShowFilter === 3) {
+            $getMembersShowFilter = 2;
+        }
 
         if ($showAllOrganizationsFilter) {
             $selectBoxValues['3'] = array('3', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS'));

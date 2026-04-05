@@ -115,7 +115,7 @@ class OrganizationPresenter extends PagePresenter
                 $gCurrentOrganization->getValue('org_show_org_select'),
                 array('helpTextId' => 'SYS_SHOW_ORGANIZATION_SELECT_DESC')
             );
-            if ($gCurrentOrganization->isParentOrganization()) {
+            if (!$gCurrentOrganization->isChildOrganization() && $gCurrentOrganization->isParentOrganization()) {
                 $formOrganization->addCheckbox(
                     'contacts_suborganization_use_same_members',
                     $gL10n->get('ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS'),
