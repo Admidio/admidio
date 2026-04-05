@@ -219,7 +219,8 @@ try {
             break;
 
         case 'add':
-            $getName = admFuncVariableIsValid($_GET, 'name', 'string');
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $getName = admFuncVariableIsValid($_GET, 'name', 'file');
 
             // only users with download administration rights should set new roles rights
             if (!$gCurrentUser->isAdministratorDocumentsFiles()) {

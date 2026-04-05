@@ -215,7 +215,7 @@ try {
         $formerContactsOfOtherOrganizationSelect = ' 0 ';
     }
 
-    // create main sql statement
+    // create main SQL statement
     if (($getMembersShowFilter === 0) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
@@ -244,7 +244,7 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif (($getMembersShowFilter === 3) && $gCurrentUser->isAdministratorUsers()) {
+    } elseif (($getMembersShowFilter === 3) && $gCurrentUser->isAdministrator() && $gSettingsManager->getBool('contacts_show_all')) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersDatabase' => true,

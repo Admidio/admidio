@@ -42,8 +42,6 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
 /**
  * includes WITHOUT database connections
  */
-// Add polyfills for backwards compatibility with older PHP versions
-require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/bootstrap/polyfill.php');
 // Add Class autoloader
 require_once(ADMIDIO_PATH . '/vendor/autoload.php');
 // Enable Logging
