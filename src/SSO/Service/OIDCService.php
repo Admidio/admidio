@@ -44,24 +44,24 @@ use Admidio\SSO\Grants\OIDCAuthCodeGrant;
  * Properly handle scopes and claims
  *    OIDC Scopes: https://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims
  *    OIDC Claims: https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
- * 
+ *
  * Relevant Scopes:
  *   - openid
  *   - profile: name, family_name, given_name, middle_name, nickname, preferred_username, profile, picture, website, gender, birthdate, zoneinfo, locale, updated_at
  *   - email: email, email_verified
- *   - address: 
+ *   - address:
  *   - phone: phone_number, phone_number_verified Claims.
  *   - groups
  *   - roles
- * 
+ *
  * Relevant Claims:
- *   - sub, 
- *   - name, given_name, family_name, middle_name, nickname, 
+ *   - sub,
+ *   - name, given_name, family_name, middle_name, nickname,
  *   - preferred_username, profile, picture,
- *   - website, email, email_verified, 
- *   - gender, birthdate, 
- *   - zoneinfo, locale, 
- *   - phone_number, phone_number_verified, 
+ *   - website, email, email_verified,
+ *   - gender, birthdate,
+ *   - zoneinfo, locale,
+ *   - phone_number, phone_number_verified,
  *   - address [JSON: formatted, street_address, locality, region, postal_code, country]
  *   - updated_at
  */
@@ -85,7 +85,7 @@ class OIDCService extends SSOService {
     public static ?OIDCClient $client = null;
 
     private bool $isServiceSetup = false;
-    
+
     public function __construct($db, $currentUser) {//, ResourceServer $resourceServer) {
         global $gSettingsManager;
 
@@ -115,7 +115,7 @@ class OIDCService extends SSOService {
         if (array_key_exists('new_ocl_client_secret', $formValues)) {
             // A new client secret -> store the hashed value in the database!
             $client->setValue(
-                $client->getColumnPrefix().'_client_secret', 
+                $client->getColumnPrefix().'_client_secret',
                 password_hash($formValues['new_ocl_client_secret'], PASSWORD_DEFAULT)
             );
         }
@@ -189,7 +189,7 @@ class OIDCService extends SSOService {
 
 
     /**
-     * Returns an associative array with labels and links for the static IdP configuration data 
+     * Returns an associative array with labels and links for the static IdP configuration data
      * (metadata/discovery URL, SSO/SLO endpoints, etc.).
      * @return array Associative arry, the keys will be the displayed labels, each entry has the form
      *     ['value' => 'linkHTML', 'id' => 'uniqueIDinForm', 'style' => 'additionalCSSstyles']
@@ -285,7 +285,7 @@ class OIDCService extends SSOService {
              $refreshTokenRepository,
              new \DateInterval('PT10M') // authorization codes will expire after 10 minutes
         );
-     
+
         $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
         // Enable the authentication code grant on the server
         $server->enableGrantType(
@@ -301,7 +301,7 @@ class OIDCService extends SSOService {
             new ClientCredentialsGrant(),
             new \DateInterval('PT1H') // access tokens will expire after 1 hour
         );
-        
+
 
         /* ***********************************************************************
         * Resource owner Password Grant
@@ -314,8 +314,8 @@ class OIDCService extends SSOService {
         $server->enableGrantType(
             $grant,
             new \DateInterval('PT1H') // access tokens will expire after 1 hour
-        );        
-        
+        );
+
 
         /* ***********************************************************************
         * Implicit Grant
@@ -325,14 +325,14 @@ class OIDCService extends SSOService {
             new ImplicitGrant(new \DateInterval('PT1H')),
             new \DateInterval('PT1H') // access tokens will expire after 1 hour
         );
-        
+
 
         /* ***********************************************************************
         * RefreshToken Grant
         */
         $grant = new RefreshTokenGrant($refreshTokenRepository);
         $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // new refresh tokens will expire after 1 month
-        
+
         // Enable the refresh token grant on the server
         $server->enableGrantType(
             $grant,
@@ -388,14 +388,14 @@ class OIDCService extends SSOService {
             if (!$this->isServiceSetup) {
                 $this->setupService();
             }
-    
+
             // Validate the HTTP request and return an AuthorizationRequest object.
             $authRequest = $this->authServer->validateAuthorizationRequest($request);
             self::$client = $authRequest->getClient();
             if (!self::$client->isEnabled()) {
                 throw OAuthServerException::invalidClient($request, 'Client "' . self::$client->getIdentifier() . '" is valid, but disabled. Login is not allowed.');
             }
-            
+
             // Redirect the user to a login endpoint if not logged in yet.
             if (!$gValidLogin) {
                 $this->showSSOLoginForm(self::$client);
@@ -404,41 +404,41 @@ class OIDCService extends SSOService {
 
             // Check whether the current user has access permissions to the SP client:
             if (!self::$client->hasAccessRight()) {
-                $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' . 
-                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array(self::$client->readableName())) . 
+                $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' .
+                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array(self::$client->readableName())) .
                     '</div>';
                 $this->showSSOLoginForm(self::$client, $message);
                 // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
                 exit;
             }
-            
+
             // Once the user has logged in set the user on the AuthorizationRequest
             $authRequest->setUser(new UserEntity($this->db, $gProfileFields, self::$client, $gCurrentUserId));
-            
+
             // At this point you should redirect the user to an authorization page.
             // This form will ask the user to approve the client and the scopes requested.
             // TODO_RK: Implement the authorization page and redirect to it.
             // For now we will just approve the request automatically.
-            
+
             // Once the user has approved or denied the client update the status
             // (true = approved, false = denied)
             $authRequest->setAuthorizationApproved(true);
-            
+
             // Return the HTTP redirect response
             return $this->authServer->completeAuthorizationRequest($authRequest, $response);
-            
+
         } catch (OAuthServerException $exception) {
             $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
-            
+
         } catch (\Exception $exception) {
-        
+
             // Unknown exception
             $body = new Stream(fopen('php://temp', 'r+'));
             $body->write($exception->getMessage());
             return $response->withStatus(500)->withBody($body);
-            
+
         }
     }
 
@@ -518,13 +518,13 @@ class OIDCService extends SSOService {
             }
             $scopes = array_intersect($scopes, $clientScopes);
 
-            // The openid scope with the mandatory sub claim is not added by default, and 
-            // it cannot be added globally, because then the JWT library will throw an error 
+            // The openid scope with the mandatory sub claim is not added by default, and
+            // it cannot be added globally, because then the JWT library will throw an error
             // due to mandatory claims being redefined. So, as a workaround, add the claim
             //  set here.
             $this->claimExtractor->addClaimSet(new ClaimSetEntity('openid', ['sub']));
             $this->claimExtractor->addClaimSet(new ClaimSetEntity('custom', array_keys($client->getFieldMapping())));
-            
+
 
             // Extract claims
             $claims = $this->claimExtractor->extract($scopes, $user->getClaims());
@@ -548,11 +548,11 @@ class OIDCService extends SSOService {
         if (!$this->isServiceSetup) {
             $this->setupService();
         }
-    
+
         // Private key and Certificate for signatures
         $signatureKeyID = $gSettingsManager->get('sso_oidc_signing_key');
         $signatureKey = new Key($this->db, $signatureKeyID);
-        
+
         $idpPublicKeyPem = $signatureKey->getValue('key_public');
         $keyDetails = openssl_pkey_get_details(openssl_pkey_get_public($idpPublicKeyPem));
 
@@ -582,7 +582,8 @@ class OIDCService extends SSOService {
         return new JsonResponse($jwks);
     }
 
-    public function handleDiscoveryRequest() {
+    public function handleDiscoveryRequest(): JsonResponse
+    {
         $issuer = $this->issuerURL;
 
         $config = [
@@ -601,21 +602,99 @@ class OIDCService extends SSOService {
         return new JsonResponse($config);
     }
 
-    public function handleIntrospectionRequest() {
-        // TODO_RK
+    /**
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function handleIntrospectionRequest(): JsonResponse
+    {
         if (!$this->isServiceSetup) {
             $this->setupService();
         }
-        return new JsonResponse(["active" => true]);
+
+        $request = $this->getRequest();
+
+        // 1. Authenticate the resource server (RFC 7662 Section 2.1)
+        // The resource server MUST authenticate using client credentials
+        $clientId = $request->getParsedBody()['client_id'] ?? null;
+        $clientSecret = $request->getParsedBody()['client_secret'] ?? null;
+
+        if (!$clientId || !$this->clientRepository->validateClient($clientId, $clientSecret, null)) {
+            return new JsonResponse(['error' => 'invalid_client'], 401);
+        }
+
+        // 2. Get and validate the token
+        $tokenValue = $request->getParsedBody()['token'] ?? '';
+        if (empty($tokenValue)) {
+            return new JsonResponse(['active' => false]);
+        }
+
+        try {
+            // Validate the token using the resource server
+            $validatedRequest = $this->resourceServer->validateAuthenticatedRequest(
+                $request->withHeader('Authorization', 'Bearer ' . $tokenValue)
+            );
+
+            $tokenId = $validatedRequest->getAttribute('oauth_access_token_id');
+
+            // Check if token is revoked
+            if ($this->accessTokenRepository->isAccessTokenRevoked($tokenId)) {
+                return new JsonResponse(['active' => false]);
+            }
+
+            $token = $this->accessTokenRepository->getToken($tokenId);
+
+            // Check expiry
+            if ($token->getExpiryDateTime() < new \DateTimeImmutable()) {
+                return new JsonResponse(['active' => false]);
+            }
+
+            return new JsonResponse([
+                'active' => true,
+                'sub' => $token->getUserIdentifier(),
+                'client_id' => $token->getClient()->getIdentifier(),
+                'exp' => $token->getExpiryDateTime()->getTimestamp(),
+                'scope' => implode(' ', array_map(fn($s) => $s->getIdentifier(), $token->getScopes())),
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['active' => false]);
+        }
     }
 
-    public function handleRevocationRequest() {
-        // TODO_RK
+    /**
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function handleRevocationRequest(): JsonResponse
+    {
         if (!$this->isServiceSetup) {
             $this->setupService();
         }
 
-        return new JsonResponse(["revoked" => true]);
+        $request = $this->getRequest();
+
+        // Authenticate the client
+        $clientId = $request->getParsedBody()['client_id'] ?? null;
+        $clientSecret = $request->getParsedBody()['client_secret'] ?? null;
+
+        if (!$clientId || !$this->clientRepository->validateClient($clientId, $clientSecret, null)) {
+            return new JsonResponse(['error' => 'invalid_client'], 401);
+        }
+
+        $tokenValue = $request->getParsedBody()['token'] ?? '';
+        if (!empty($tokenValue)) {
+            try {
+                $validatedRequest = $this->resourceServer->validateAuthenticatedRequest(
+                    $request->withHeader('Authorization', 'Bearer ' . $tokenValue)
+                );
+                $tokenId = $validatedRequest->getAttribute('oauth_access_token_id');
+                $this->accessTokenRepository->revokeAccessToken($tokenId);
+            } catch (\Exception $e) {
+                // RFC 7009: The server responds with HTTP 200 even for invalid tokens
+            }
+        }
+
+        return new JsonResponse([], 200);
     }
 
     public function handleLogoutRequest() {

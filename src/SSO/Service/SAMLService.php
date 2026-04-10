@@ -101,7 +101,7 @@ class SAMLService extends SSOService {
     }
 
     /**
-     * Returns an associative array with labels and links for the static IdP configuration data 
+     * Returns an associative array with labels and links for the static IdP configuration data
      * (metadata/discovery URL, SSO/SLO endpoints, etc.).
      * @return array Associative arry, the keys will be the displayed labels, each entry has the form
      *     ['value' => 'linkHTML', 'id' => 'uniqueIDinForm', 'style' => 'additionalCSSstyles']
@@ -130,7 +130,7 @@ class SAMLService extends SSOService {
         return $staticSettings;
     }
 
-    
+
 
 
 
@@ -320,9 +320,8 @@ class SAMLService extends SSOService {
         $response->setIssueInstant(new \DateTime());
         if ($request instanceof LogoutRequest) {
             $response->setDestination($client->getValue('smc_slo_url'));
-        } elseif (method_exists($request, 'getAssertionConsumerServiceURL')) {
-            $response->setDestination($request->getAssertionConsumerServiceURL());
         } else {
+            // Always use the registered ACS URL, never the request's ACS URL
             $response->setDestination($client->getValue('smc_acs_url'));
         }
         $response->setRelayState($request->getRelayState());
@@ -348,18 +347,23 @@ class SAMLService extends SSOService {
      * Validate the SAML signature of the message coming from the client.
      * The client's x509 certificate needs to be configured in the client
      * configuration, otherwise validation will fail
-     * @param \Admidio\SSO\Entity\SAMLClient $client The SAML client configuration
+     * @param SAMLClient $client The SAML client configuration
      * @param SamlMessage $message The SAML message (or assertion) that should be validated
-     * @return mixed true upon success, error message otherwise
+     * @param bool $required Whether a signature is required. If set to false, the function will return false if no
+     *                       signature is present, otherwise it will return an error message.
+     * @return bool true upon success, error message otherwise
+     * @throws \Admidio\Infrastructure\Exception
+     * @throws Exception
      */
-    public function validateSignature(SAMLClient $client, SamlMessage $message, bool $required = false): bool|string {
+    public function validateSignature(SAMLClient $client, SamlMessage $message, bool $required = false): bool
+    {
         global $gL10n;
         $certPem = $client->getValue('smc_x509_certificate');
         if (!$certPem) {
             // Client has no cert configured...
             $SPcert = null;
             if ($required) {
-                return $gL10n->get('SYS_SSO_SAML_SIGNATURE_KEY_MISSING');
+                throw new Exception($gL10n->get('SYS_SSO_SAML_SIGNATURE_KEY_MISSING'));
             } else {
                 return false;
             }
@@ -373,7 +377,7 @@ class SAMLService extends SSOService {
         $signatureReader = $message->getSignature();
         if (is_null($signatureReader)) {
             if ($required) {
-                return $gL10n->get('SYS_SSO_SAML_SIGNATURE_MISSING');
+                throw new Exception($gL10n->get('SYS_SSO_SAML_SIGNATURE_MISSING'));
             } else {
                 return false;
             }
@@ -384,17 +388,17 @@ class SAMLService extends SSOService {
             if ($ok) {
                 return true;
             } else {
-                return $gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED');
+                throw new Exception($gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED'));
             }
-        } catch (Exception $ex) {
-            return $gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED');
+        } catch (Exception) {
+            throw new Exception($gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED'));
         }
     }
 
 
-    public function handleSSORequest() {
-        global $gCurrentUser, $gCurrentUserId, $rootPath, $gSettingsManager, $gL10n, $gProfileFields, $gValidLogin, $gLogger;
-        global $gNavigation;
+    public function handleSSORequest(): void
+    {
+        global $gCurrentUser, $gSettingsManager, $gL10n, $gProfileFields, $gValidLogin, $gLogger;
 
         if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
             throw new Exception("SSO SAML is not enabled");
@@ -433,10 +437,24 @@ class SAMLService extends SSOService {
                 exit;
             }
 
-
-
             $requestId = $request->getID(); // Extract from incoming AuthnRequest
             $clientACS = $request->getAssertionConsumerServiceURL();
+
+            // Validate ACS URL against registered client configuration
+            $registeredACS = $client->getValue('smc_acs_url');
+            if (!empty($clientACS) && $clientACS !== $registeredACS) {
+                throw new Exception(
+                    'The AssertionConsumerServiceURL in the AuthnRequest ("' . $clientACS . '") ' .
+                    'does not match the registered ACS URL for this client. ' .
+                    'Possible assertion theft attempt.'
+                );
+            }
+
+            // If no ACS URL in request, fall back to the registered one
+            if (empty($clientACS)) {
+                $clientACS = $registeredACS;
+            }
+
             $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
             $login = $this->currentUser->getValue($client->getValue('smc_userid_field'))??'';
 
