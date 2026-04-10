@@ -494,8 +494,7 @@ class Language
             $text = StringUtils::strMultiReplace($text, $replaces);
         }
 
-        // replace square brackets with html tags
-        return strtr($text, '[]', '<>');
+        return $text;
     }
 
     /**
@@ -504,7 +503,7 @@ class Language
      */
     private static function prepareXmlText(string $text): string
     {
-        // set line break with html
+        // set line break with HTML
         // Within Android string resource all apostrophe are escaped, so we must remove the escape char
         // replace highly comma, so there are no problems in the code later
         $replaces = array(
@@ -541,18 +540,17 @@ class Language
             }
         }
 
-        // text not in cache -> read from xml file in "Android Resource String" format
+        // text not in cache -> read from XML file in "Android Resource String" format
         $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
         if ($xmlNodes === false || count($xmlNodes) === 0) {
             throw new \OutOfBoundsException('Could not found text-id!');
         }
 
-        $text = self::prepareXmlText((string) $xmlNodes[0]);
+        // replace square brackets with HTML tags
+        $this->textCache[$textId] = strtr(self::prepareXmlText((string) $xmlNodes[0]), '[]', '<>');
 
-        $this->textCache[$textId] = $text;
-
-        return $text;
+        return $this->textCache[$textId];
     }
 
     /**
