@@ -1335,7 +1335,7 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_smtp_password'],
             array('type' => 'password', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
         );
-        $html = '<a class="btn btn-secondary" id="send_test_mail" onclick="redirectPost(\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '\', {adm_csrf_token: \'' . $gCurrentSession->getCsrfToken() . '\'})">
+        $html = '<a class="btn btn-secondary admidio-send-csrf-token" id="send_test_mail" href="javascript:void(0);" data-url="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '" data-csrf-token="' . $gCurrentSession->getCsrfToken() . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
         $formEmailDispatch->addSubmitButton(
@@ -2859,6 +2859,7 @@ class PreferencesPresenter extends PagePresenter
                 }, function(htmlContent) {
                     panelContainer.html(htmlContent);
                     initializePanelInteractions(panelId);
+                    initializeEvents();
                 }).fail(function() {
                     panelContainer.html("<div class=\"text-danger\">Fehler beim Laden</div>");
                 });
@@ -2998,6 +2999,7 @@ class PreferencesPresenter extends PagePresenter
         // so we need to do it here, even when no selectbox will be used...
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/page-load.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
