@@ -27,7 +27,7 @@
         </label>
         <div class="col-sm-9">
             <div>
-                <a class="btn btn-secondary" id="add_another_organization" onclick="redirectPost('{$backupUrl}', { adm_csrf_token: '{$csrfToken}' });">
+                <a class="btn btn-secondary admidio-send-csrf-token" id="add_another_organization" data-url="{$backupUrl}" data-csrf-token="{$csrfToken}">
                     <i class="bi bi-download"></i>{$l10n->get('SYS_DOWNLOAD_DATABASE_BACKUP')}</a>
                 <div class="form-text">{$l10n->get('SYS_DATABASE_BACKUP_DESC')}</div>
             </div>

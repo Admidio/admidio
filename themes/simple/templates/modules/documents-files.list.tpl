@@ -62,7 +62,7 @@
                     <td>{$row.name}</td>
                     <td class="text-end">{$row.size}</td>
                     <td class="text-end">
-                        <a class="admidio-icon-link" onclick="redirectPost('{$row.url}',{ adm_csrf_token: '{$row.csrfToken}' });">
+                        <a class="admidio-icon-link admidio-send-csrf-token" data-url="{$row.url}" data-csrf-token="{$row.csrfToken}">
                             <i class="bi bi-plus-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ADD_TO_DATABASE')}"></i>
                         </a>
                     </td>

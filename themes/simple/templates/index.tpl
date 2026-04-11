@@ -47,30 +47,12 @@
 
         {$javascriptContent}
 
-        // add javascript code to page that will be executed after page is fully loaded
+        // add JavaScript code to page that will be executed after page is fully loaded
         $(function() {
             $("[data-bs-toggle=popover]").popover();
             $("[data-bs-toggle=tooltip]").tooltip();
 
             {$javascriptContentExecuteAtPageLoad}
-
-            // function to handle modal window and load data from url
-            $(document).on('click', '.openPopup', function (){
-                $('#adm_modal .modal-dialog').attr('class', 'modal-dialog ' + $(this).attr('data-class'));
-                $('#adm_modal .modal-content').load($(this).attr('data-href'),function(){
-                    const myModal = new bootstrap.Modal($('#adm_modal'));
-                    myModal.show();
-                });
-            });
-            // function to handle modal messagebox window
-            $(document).on('click', '.admidio-messagebox', function (){
-                messageBox($(this).data('message'), $(this).data('title'), $(this).data('type'), $(this).data('buttons'), $(this).data('href'));
-            });
-
-            // remove data from modal if modal is closed
-            $("body").on("hidden.bs.modal", ".modal", function() {
-                $(this).removeData("bs.modal");
-            });
         });
     </script>
 

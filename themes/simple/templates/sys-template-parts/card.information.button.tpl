@@ -23,7 +23,7 @@
             {if {array_key_exists array=$card key="buttons"} && count($card.buttons) > 0}
                 {foreach $card.buttons as $buttonItem}
                     {if isset($buttonItem.csrfToken)}
-                        <a class="btn btn-primary mt-auto" onclick="redirectPost('{$buttonItem.url}', { adm_csrf_token: '{$buttonItem.csrfToken}' });">{$buttonItem.name}</a>
+                        <a class="btn btn-primary mt-auto admidio-send-csrf-token" data-url="{$buttonItem.url}" data-csrf-token="{$buttonItem.csrfToken}">{$buttonItem.name}</a>
                     {else}
                         <a class="btn btn-primary mt-auto" href="{$buttonItem.url}">{$buttonItem.name}</a>
                     {/if}
