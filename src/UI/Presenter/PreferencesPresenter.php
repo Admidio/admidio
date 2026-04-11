@@ -1335,7 +1335,7 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_smtp_password'],
             array('type' => 'password', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
         );
-        $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '">
+        $html = '<a class="btn btn-secondary" id="send_test_mail" onclick="redirectPost(\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '\', {adm_csrf_token: \'' . $gCurrentSession->getCsrfToken() . '\'})">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
         $formEmailDispatch->addSubmitButton(
@@ -2798,10 +2798,11 @@ class PreferencesPresenter extends PagePresenter
      * Read all available registrations from the database and create the HTML content of this
      * page with the Smarty template engine and write the HTML output to the internal
      * parameter **$pageContent**. If no registration is found, then show a message to the user.
+     * @throws Exception
      */
     public function show(): void
     {
-        global $gL10n;
+        global $gL10n, $gCurrentSession;
 
         if ($this->preferencesPanelToShow !== '') {
             // open the selected panel
@@ -2881,7 +2882,7 @@ class PreferencesPresenter extends PagePresenter
                     event.preventDefault();
                     var versionInfoContainer = panelContainer.find("#adm_version_content");
                     versionInfoContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "update_check" }, function(htmlVersion) {
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_check", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(htmlVersion) {
                         versionInfoContainer.html(htmlVersion);
                     });
                 });
@@ -2891,7 +2892,7 @@ class PreferencesPresenter extends PagePresenter
                     event.preventDefault();
                     var statusContainer = panelContainer.find("#directory_protection_status");
                     statusContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "htaccess" }, function(statusText) {
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=htaccess", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(statusText) {
                         var directoryProtection = panelContainer.find("#directoryProtection");
                         directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
                     });
@@ -3009,6 +3010,7 @@ class PreferencesPresenter extends PagePresenter
         });
 
         $this->assignSmartyVariable('preferenceTabs', $this->preferenceTabs);
+        $this->assignSmartyVariable('csrfToken ', $gCurrentSession->getCsrfToken());
         $this->addTemplateFile('preferences/preferences.tpl');
 
         parent::show();
