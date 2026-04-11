@@ -10,7 +10,7 @@
  * Parameters:
  *
  * mode     : html           - (default) Show page with all preferences panels
- *            html_form      - Returns the html of the requested form
+ *            html_form      - Returns the HTML of the requested form
  *            save           - Save organization preferences
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
@@ -46,7 +46,7 @@ try {
 
     switch ($getMode) {
         case 'html':
-            // create html page object
+            // create HTML page object
             $page = new PreferencesPresenter($getPanel);
 
             if ($getPanel === '') {
@@ -64,7 +64,7 @@ try {
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA'), 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => strtolower($getPanel)))));
             break;
 
-        // Returns the html of the requested form
+        // Returns the HTML of the requested form
         case 'html_form':
             $preferencesUI = new PreferencesPresenter('adm_preferences_form');
             $methodName = 'create' . str_replace('_', '', ucwords($getPanel, '_')) . 'Form';
@@ -73,6 +73,8 @@ try {
 
         // set directory protection, write htaccess
         case 'htaccess':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $preferences = new PreferencesService();
             if ($preferences->setHtaccessProtection()) {
                 echo $gL10n->get('SYS_ON');
@@ -83,6 +85,8 @@ try {
 
         // send test email
         case 'test_email':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $debugOutput = '';
             $preferences = new PreferencesService();
             $sendResult = $preferences->sendTestEmail();
@@ -93,7 +97,7 @@ try {
 
             // message if send/save is OK
             if ($sendResult === true) { // don't remove check === true. ($sendResult) won't work
-                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('show_option' => 'email_dispatch')));
+                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'email_dispatch')));
                 $gMessage->show($gL10n->get('SYS_EMAIL_SEND') . $debugOutput);
                 // => EXIT
             } else {
@@ -108,6 +112,7 @@ try {
             if (DB_ENGINE !== Database::PDO_ENGINE_MYSQL) {
                 throw new Exception('SYS_MODULE_DISABLED');
             }
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
             $dump = new DatabaseDump($gDb);
             $dump->create('admidio_dump_' . $g_adm_db . '.sql.gz');
@@ -116,10 +121,12 @@ try {
             break;
 
         case 'update_check':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $preferences = new PreferencesService();
             echo $preferences->showUpdateInfo();
             break;
     }
 } catch (Throwable $e) {
-    handleException($e, $getMode == 'save');
+    handleException($e, in_array($getMode, array('save', 'update_check')));
 }
