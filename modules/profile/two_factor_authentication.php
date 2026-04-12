@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Change two factor authentication settings of a user
+ * Change two-factor authentication settings of a user
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -9,10 +9,10 @@
  *
  * Parameters:
  *
- * user_uuid        : Uuid of the user whose two factor authentication settings should be changed
- * mode    - html   : Default mode to show a html form to change the two factor authentication settings
- *           setup  : Setup two factor authentication settings in database
- *           reset  : Reset two factor authentication settings in database
+ * user_uuid        : Uuid of the user whose two-factor authentication settings should be changed
+ * mode    - html   : Default mode to show an HTML form to change the two-factor authentication settings
+ *           setup  : Setup two-factor authentication settings in database
+ *           reset  : Reset two-factor authentication settings in database
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
@@ -81,11 +81,12 @@ try {
         $profilePasswordEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $profilePasswordEditForm->validate($_POST);
 
-        if (!($gCurrentUser->isAdministrator() || $gCurrentUserId !== $userId)) {
+        // only administrators could reset 2FA of other users
+        if (!($gCurrentUser->isAdministrator() || $gCurrentUserId === $userId)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        // Reset two factor authentication settings
+        // Reset two-factor authentication settings
         $user->setSecondFactorSecret(null);
         $user->save();
 
@@ -97,10 +98,10 @@ try {
         exit();
 
     } elseif ($getMode === 'html') {
-        // Show two factor authentication setup form if user does not have two factor authentication enabled
+        // Show two-factor authentication setup form if user does not have two-factor authentication enabled
         if (!$user->hasSetupTfa()) {
 
-            // Admins can only set up two factor authentication for themselves
+            // Admins can only set up two-factor authentication for themselves
             if ($gCurrentUserId !== $userId) {
                 throw new Exception($gL10n->get('SYS_TFA_NOT_SETUP_FOR_USER'));
             }
@@ -117,7 +118,7 @@ try {
             $gCurrentUser->setValue('usr_tfa_secret', $secret);
 
             // Prepare setup form
-            $qrImageUri = $tfa->getQRCodeImageAsDataUri($orgName, $secret, 200);
+            $qrImageUri = $tfa->getQRCodeImageAsDataUri($orgName, $secret);
             $html = '<img id="qr_code" src="' . $qrImageUri . '" alt="Secret: ' . $secret . '" />';
             $form->addCustomContent('qr_code', $gL10n->get('SYS_QR_CODE'), $html);
             $form->addInput(
@@ -137,7 +138,7 @@ try {
                 array('icon' => 'bi-check-lg')
             );
 
-            // Show two factor authentication reset form if user has two factor authentication enabled
+            // Show two-factor authentication reset form if user has two-factor authentication enabled
         } else {
             $template = 'modules/profile.two-factor-authentication.reset.tpl';
             $form = new FormPresenter(
