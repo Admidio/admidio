@@ -49,7 +49,7 @@ class Role extends Entity
      */
     protected int $countMembers;
     /**
-     * @var int|null Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
+     * @var int Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
      */
     protected int $type = Role::ROLE_GROUP;
 
@@ -188,7 +188,7 @@ class Role extends Entity
      * @return int|float
      * @throws Exception
      */
-    public function countVacancies(bool $countLeaders = false)
+    public function countVacancies(bool $countLeaders = false): float|int
     {
         $rolMaxMembers = $this->getValue('rol_max_members');
 
@@ -305,7 +305,7 @@ class Role extends Entity
      * @return array<int,string>|string Array with all cost or if param costPeriod is set than the full name of that cost period
      * @throws Exception
      */
-    public static function getCostPeriods(int $costPeriod = 0)
+    public static function getCostPeriods(int $costPeriod = 0): array|string
     {
         global $gL10n;
 
@@ -348,7 +348,7 @@ class Role extends Entity
             try {
                 // read system default list configuration
                 $defaultListConfiguration = $gSettingsManager->getInt('groups_roles_default_configuration');
-            } catch (\InvalidArgumentException $exception) {
+            } catch (\InvalidArgumentException) {
                 // if no default list was set than load another global list of this organization
                 $sql = 'SELECT MIN(lst_id) as lst_id
                           FROM ' . TBL_LISTS . '
@@ -448,7 +448,7 @@ class Role extends Entity
 
     /**
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
-     * If the sql find more than one record the method returns **false**.
+     * If the SQL find more than one record the method returns **false**.
      * Per default all columns of the default table will be read and stored in the object.
      * If one record is found than the type of the role (ROLE_GROUP or ROLE_EVENT) is set.
      * @param string $sqlWhereCondition Conditions for the table to select one record
@@ -523,9 +523,9 @@ class Role extends Entity
      * @param bool $forcePeriod If set, the period of the allocation is shortened if the new period starts later
      *                          than it is already allocated.
      * @return void
-     * @throws Exception
+     * @throws Exception|\DateInvalidOperationException
      */
-    public function setMembership(int $userId, string $startDate, string $endDate, ?bool $leader = null, bool $forcePeriod = false)
+    public function setMembership(int $userId, string $startDate, string $endDate, ?bool $leader = null, bool $forcePeriod = false): void
     {
         global $gCurrentUser, $gCurrentUserId, $gCurrentSession;
 
@@ -702,7 +702,7 @@ class Role extends Entity
      * @param int $type Represents the type of the role that could be ROLE_GROUP (default) or ROLE_EVENT
      * @return void
      */
-    public function setType(int $type)
+    public function setType(int $type): void
     {
         if ($type === Role::ROLE_GROUP || $type === Role::ROLE_EVENT) {
             $this->type = $type;
@@ -782,9 +782,9 @@ class Role extends Entity
      * *                          If set to null than the leader flag will not be changed if a membership already exists
      * *                          and set to false if it doesn't exist.
      * @return void
-     * @throws Exception
+     * @throws Exception|\DateInvalidOperationException
      */
-    public function startMembership(int $userId, ?bool $leader = null)
+    public function startMembership(int $userId, ?bool $leader = null): void
     {
         if ($this->getValue('rol_max_members') > $this->countMembers()
             || (int)$this->getValue('rol_max_members') === 0) {
@@ -806,13 +806,18 @@ class Role extends Entity
 
     /**
      * Stops a current membership of the given user to the role of this class. The membership will stop
-     * yesterday.
+     * yesterday. The administrator role must have at least one member.
      * @param int $userId ID if the user who should get the membership to this role.
      * @return void
-     * @throws Exception
+     * @throws Exception|\DateInvalidOperationException
      */
-    public function stopMembership(int $userId)
+    public function stopMembership(int $userId): void
     {
+        // Administrator role must have at least 1 member
+        if ($this->getValue('rol_administrator') && ($this->countMembers() + $this->countLeaders()) <= 1) {
+            throw new Exception('SYS_MUST_HAVE_ADMINISTRATOR');
+        }
+
         // search for existing periods of membership and adjust them
         $sql = 'SELECT mem_id, mem_uuid, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
                   FROM ' . TBL_MEMBERS . '
