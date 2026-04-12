@@ -382,6 +382,11 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
+            // check if user has admin rights for inventory
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             if (count($getItemUUIDs) > 0) {
                 foreach ($getItemUUIDs as $itemUuid) {
                     $itemService = new ItemService($gDb, $itemUuid);
