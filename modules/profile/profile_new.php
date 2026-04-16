@@ -52,8 +52,8 @@ try {
     foreach ($getUserUuids as $userUuid) {
         // read user data
         if (!$gValidLogin || $getAcceptRegistration) {
-            if ($getAcceptRegistration) {
-                // check the CSRF token of the form against the session token
+            if ($getAcceptRegistration && $getMode === 'html') {
+                // check the CSRF token of "confirm registration" button
                 SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
             }
 
