@@ -39,6 +39,8 @@ try {
 
     // Fetch metadata from external server
     $ch = curl_init($url);
+    $resolve = ["$host:443:$ip"];
+    curl_setopt($ch, CURLOPT_RESOLVE, $resolve);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS);
     curl_setopt($ch, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTPS);
