@@ -1,19 +1,47 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_BIRTHDAY_FUTURE">#VAR1# #VAR3# éves lesz #VAR2# nap múlva, #VAR4# napon</string>
-  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# születésnapja #VAR2# nap múlva lesz</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1#-nek #VAR2# nap múlva lesz a születésnapja</string>
   <string name="PLG_BIRTHDAY_HEADLINE">Születésnapok</string>
-  <string name="PLG_BIRTHDAY_MAN_VAR">Mr. #VAR1#</string>
-  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Ma #VAR1# tagnak születésnapja van.</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">#VAR1# Úr</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Ma #VAR1# tagnak van születésnapja.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">A látogatók számára nem láthatók a tagok születésnapjai. Jelentkezz be, hogy megtekintsd a tagok születésnapjait.</string>
   <string name="PLG_BIRTHDAY_NO_MEMBERS">Ma nincs egy tagnak sem születésnapja.</string>
   <string name="PLG_BIRTHDAY_ONE_MEMBER">Ma egy tag születésnapja van.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# #VAR3# éves lett #VAR2# napja, #VAR4# napon</string>
-  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1#-nak/nek #VAR2# nappal ezelőtt volt a születésnapja</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# #VAR2# napja ünnepelte a születésnapját</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">Ez a bővítmény az Áttekintés oldalon megjeleníti a legközelebbi születésnapok előnézetét.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">Születésnap</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# ma lesz #VAR2#</string>
-  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1#-nak/nek ma van a születésnapja</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1#-nek ma van a születésnapja</string>
   <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# holnap lesz #VAR3# éves, #VAR4# napon</string>
-  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1#-nak/nek holnap van a születésnapja</string>
-  <string name="PLG_BIRTHDAY_WOMAN_VAR">Mrs. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# holnap ünnepli a születésnapját</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">#VAR1# Úrhölgy</string>
   <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# tegnap lett #VAR3# éves #VAR4# napon</string>
-  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1#-nak/nek tegnap volt a születésnapja</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# tegnap volt a születésnapja</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">Névkijelzés a látogatók számára</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">Ha ez a beállítás engedélyezve van, a látogatók láthatják az összes születésnapos személy nevét (az életkorukat nem) – mind a mai, mind a jövőbeli, mind a múltbeli születésnaposokét. Ellenkező esetben a látogatók csak a mai születésnaposok számát láthatják, semmi mást. (alapértelmezett: nem engedélyezett)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">A születésnapos nevének megjelenítési stílusa</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">Ezzel a beállítással kiválaszthatod, hogyan jelenjenek meg a születésnaposok nevei. (alapértelmezett: Keresztnév Vezetéknév)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">Kor megjelenítése</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">Ha ez a beállítás engedélyezve van, a bejelentkezett felhasználók láthatják a születésnaposok életkorát. (alapértelmezett: nem engedélyezett)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">Név és megszólítás megjelenítése</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">Meghatározza azt a korhatárt, amelytől kezdve a születésnapos személy keresztneve a látogatók számára megjelenő megszólításra cserélődik. (letiltás: -1, alapértelmezett: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">Ne jelenítsd meg a születésnapjukat ünneplő személyekről szóló értesítést</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">Ha ez a beállítás engedélyezve van, akkor értesítés jelenik meg, ha a kiválasztott időszakban egyetlen tagnak sincs születésnapja. (alapértelmezett: engedélyezve)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">A korábbi születésnapok megjelenítése</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">Ezzel a beállítással megadhatod, hogy a rendszer hány nappal korábbi születésnapokat jelenítse meg. (alapértelmezett: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">A jövőbeli születésnapok megjelenítése</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">Ezzel a beállítással megadhatod, hogy a jövőben hány napra előre jelenjenek meg a születésnapok. (alapértelmezett: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">A születésnaposok számának korlátozása</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">Ezzel a beállítással megadhatja, hogy hány születésnapos személy jelenjen meg legfeljebb. (alapértelmezett: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">Az e-mail-cím megjelenítése a látogatók számára</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">Ezzel a beállítással kiválaszthatja, hogy megjelenjen-e a születésnaposok e-mail címe. (alapértelmezett: csak a név (látogatók))</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">A tartalomhoz engedélyezett szerepkörök</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Itt kiválaszthatod azokat a szerepköröket, amelyek számára láthatóvá válik a bővítmény tartalma. Ha egy felhasználó nem tartozik a kiválasztott szerepkörök egyikéhez sem, akkor csak a születésnapok száma jelenik meg. (alapértelmezett: minden szerepkör)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">A születésnapokhoz engedélyezett szerepkörök</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Itt kiválaszthatja azokat a szerepköröket, amelyekhez tartozó felhasználók születésnapját szeretné megjeleníteni. (alapértelmezés: minden szerepkör)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">A születésnaposok sorrendje</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">Ezzel a beállítással kiválaszthatja a születésnaposok sorrendjét. (alapértelmezett: CSÖKKENŐ)</string>
 </resources>
