@@ -2,6 +2,15 @@
 <resources>
   <string name="PLG_LATEST_DOCUMENTS_FILES_HEADLINE">Dokumentumok és fájlok</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">További dokumentumok és fájlok</string>
-  <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Nincsenek dokumentumok vagy fájlok.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Nincsenek elérhető dokumentumok vagy fájlok.</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Feltöltötte #VAR1# a #VAR2# időpontban</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Ez a bővítmény az Áttekintés oldalon felsorolja a felhasználók által feltöltött legújabb dokumentumokat és fájlokat.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Legújabb Dokumentumok és Fájlok</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Fájlok száma</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Megjelenítendő fájlok száma. (alapértelmezett: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">A feltöltés időbélyegének megjelenítése</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Ha ez a beállítás engedélyezve van, a fájl feltöltési időbélyege megjelenik. Ellenkező esetben el lesz rejtve. (alapértelmezett: engedélyezett)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">A fájlnév maximális karakter száma</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">A fájlnév maximális karakter száma, amelynél a név megcsonkításra kerül. (0: kikapcsolja a megcsonkítást, alapértelmezett: 0)</string>
 </resources>

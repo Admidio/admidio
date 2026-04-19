@@ -1,4 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">A látogatók számára nem érhetők el fényképek. Jelentkezzen be a fényképek megtekintéséhez.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Ez a bővítmény véletlenszerűen kiválasztott fotót jelenít meg a fotómodulból.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Véletlenszerű fotó</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Karakterek száma szónként</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">A sorváltás előtt egy szóban megengedett karakterek maximális száma. Ha az érték 0, akkor nem történik sorváltás. (alapértelmezett: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">A fénykép maximális szélessége</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">A fénykép maximális szélessége pixelben. Ha az értéke 0, akkor a képet dinamikusan méretezi az a HTML-tartály, amelybe a bővítményt beágyazták. (alapértelmezett: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">A fénykép maximális magassága</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">A fotó maximális magassága pixelben. Ha az értéke 0, akkor a képet dinamikusan méretezi az a HTML-tartály, amelybe a bővítményt beágyazták. (alapértelmezett: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Figyelembe vett albumok</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Az albumok száma, amelyekből a fénykép származhat. A legújabb albumtól kezdve csökkenő sorrendben számol. Ha a beállítás értéke 0, akkor az összes albumot figyelembe veszi. (alapértelmezett: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Fotószám</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">A megjelenítendő fotó sorszáma az albumban. Ha a beállítás 0, akkor az albumból véletlenszerűen kiválasztott fotó jelenik meg; ha egy konkrét számot ad meg, akkor az a fotó jelenik meg. (alapértelmezett: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Az album linkjének megjelenítése</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Ha ez a beállítás engedélyezve van, a fotó alatt megjelenik az albumra mutató link az album nevével. (alapértelmezett: engedélyezve)</string>
 </resources>

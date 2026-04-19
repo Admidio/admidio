@@ -1,10 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Kik vannak online?</string>
-  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">A honlapon nincsenek látogatók..</string>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Kik vannak bejelentkezve?</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">A látogatókra vonatkozóan nincsenek elérhető adatok. Jelentkezz be, hogy megnézd, ki van éppen online.</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">Jelenleg nincs látogató a weboldalon.</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# Látogató</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# tag</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# tag</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online van #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online van #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Ez a bővítmény a látogatókat és a regisztrált tagokat jeleníti meg az Áttekintés oldalon.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Ki van éppen online</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">A hatály még érvényben van</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Az az idő (percekben kifejezve), ameddig a felhasználó az utolsó művelete után még online állapotúnak minősül. (alapértelmezett: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Látogatók megjelenítése</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Ha ez a beállítás engedélyezve van, a látogatók száma is megjelenik. Ellenkező esetben csak a bejelentkezett felhasználók jelennek meg. (alapértelmezett: engedélyezve)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">A tagok megjelenítése a látogatók számára</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Itt beállíthatod, hogy a látogatók számára hogyan jelenjenek meg a tagok. (alapértelmezés: a bejelentkezett tagok száma)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Ne mutasd a bejelentkezett tagokat</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Bejelentkezett tagok megjelenítése</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">A bejelentkezett tagok száma</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Saját profil megjelenítése</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Ha ez a beállítás engedélyezve van, akkor a felhasználó saját állapota (bejelentkezett vagy kijelentkezett) megjelenik. (alapértelmezett: engedélyezve)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">A felhasználók egymás melletti megjelenítése</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Ha ez a beállítás engedélyezve van, a felhasználók egymás mellett jelennek meg. Ellenkező esetben egymás alatt jelennek meg. (alapértelmezett: nincs engedélyezve)</string>
 </resources>

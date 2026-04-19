@@ -3,4 +3,19 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Minden esemény</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Események</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">A látogatók számára nincsenek elérhető események. Jelentkezzen be az események megtekintéséhez.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Ez a bővítmény az Áttekintés oldalon megjeleníti a legfrissebb események előnézeti listáját.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Eseménylista</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Események száma</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">A megjelenítendő események száma. (alapértelmezett: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END"> Végdátum megjelenítése</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Ha ez a beállítás engedélyezve van, az esemény végdátuma és végideje látható lesz. Egyéb esetben csak a kezdődátum és a kezdőidő jelenik meg. (alapértelmezett: igaz)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Karakterek sortörés előtt</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">A sorváltás előtt egy szóban megengedett karakterek maximális száma. (0: a sorváltás kikapcsolása, alapértelmezett: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Megjelenített kategóriák</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Ha csak egy bizonyos kategóriába tartozó eseményeket szeretnél megjeleníteni, itt kiválaszthatod a kategóriákat. (alapértelmezés: minden kategória)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Teljes leírás mutatása</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Ha ez a beállítás engedélyezve van, a leírás teljes tartalma megjelenik. Ellenkező esetben csak a szöveg előnézete látható. (alapértelmezett: nem engedelyezett)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Előnézeti szöveg</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Előnézeti szöveg karaktereinek száma. (0: nincs rövid előnézet, alapértelmezett: 70)</string>
 </resources>

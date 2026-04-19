@@ -7,4 +7,18 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Bejelentkezések száma</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Online tag</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Rangidős online tag</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Ez a bővítmény a „Áttekintés” oldalon megjelenít egy bejelentkezési űrlapot, amelyen a felhasználó bejelentkezhet. Ha a felhasználó már be van jelentkezve, a mezők helyén a felhasználóval kapcsolatos hasznos információk jelennek meg.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Bejelentkezési űrlap</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Tagszint</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Regisztrációs link megjelenítése</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Ha ez az opció engedélyezve van, a bejelentkezési űrlapon megjelenik a regisztrációs űrlapra mutató link. (alapértelmezett: nincs engedélyezve)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">E-mail-link megjelenítése</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Ha ez az opció engedélyezve van, a bejelentkezési űrlapon megjelenik egy link, amelyen keresztül e-mailt küldhet a rendszergazdának, ha bejelentkezési problémái adódnak. (alapértelmezett: engedélyezve)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">A kijelentkezés link megjelenítése</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Ha ez az opció engedélyezve van, a bejelentkezés után megjelenik egy link a kijelentkezéshez. (alapértelmezett: nincs engedélyezve)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Rangok megjelenítése</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Ha ez az opció engedélyezve van, a felhasználónév után megjelenik a bejelentkezések számától függő rang. (alapértelmezett: engedélyezve)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Rangok</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Itt állíthatod be azokat a rangokat, amelyek a felhasználónév után jelennek meg, ha a „Rangok megjelenítése” opció be van kapcsolva. A kulcs a bejelentkezések száma, az érték pedig a rang neve.\n Ha egy rangot törölni szeretnél, egyszerűen töröld a táblázat „Bejelentkezések száma” és „Tag rangja” mezőit.</string>
 </resources>

@@ -2,7 +2,6 @@
 <resources>
   <string name="PLG_CALENDAR_CURRENT_MONTH">Aktuális hónap</string>
   <string name="PLG_CALENDAR_MONTH">Január,Február,Március,Április,Május,Június,Július,Augusztus,Szeptember,Október,November,December</string>
-  <string name="PLG_CALENDAR_MORE">(... tovább)</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">Hé</string>
   <string name="PLG_CALENDAR_TUESDAY_SHORT">Ke</string>
   <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Sze</string>
@@ -11,4 +10,25 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">Szo</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Vas</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Több nap</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Ez a bővítmény az Áttekintés oldalon megjeleníti a naptárat, amely tartalmazza az aktuális hónap összes eseményét.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Naptár</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Események mutatása</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Ha ez a beállítás engedélyezve van, az események megjelennek a naptárban. (alapértelmezett: engedélyezve)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Születésnapok mutatása</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Ha ez a beállítás engedélyezve van, a tagok születésnapjai megjelennek a naptárban. (alapértelmezett: engedélyezve)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Születésnapok mutatása látogatók számára</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Ha ez a beállítás engedélyezve van, a látogatók számára megjelennek a tagok születésnapjai. (alapértelmezett: nincs engedélyezve)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Születésnapi ikon megjelenítése</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Ha ez a beállítás engedélyezve van, a naptárban megjelenik egy születésnapi ikon. (alapértelmezett: engedélyezve)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">A születésnapos nevének megjelenítési stílusa</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Ezzel a beállítással kiválaszthatod, hogyan jelenjenek meg a születésnaposok nevei. (alapértelmezett: keresztnév)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Figyelembe vett kategóriák</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Ezzel a beállítással kiválaszthatja, hogy a naptárban mely kategóriákba tartozó eseményeket vegye figyelembe a rendszer. (alapértelmezés: minden kategória)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Naptárnevek megjelenítése</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Ha ez a beállítás engedélyezve van, az egyes eseményeknél megjelennek a naptárak nevei. (alapértelmezett: nincs engedélyezve)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">A tartalomhoz engedélyezett szerepkörök</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Itt kiválaszthatja azokat a szerepköröket, amelyek számára engedélyezett a bővítmény tartalmának megtekintése. Ha egy felhasználó nem tartozik a kiválasztott szerepkörök egyikéhez sem, akkor csak az események száma és a születésnapok jelennek meg. (alapértelmezés: minden szerepkör)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">A születésnapokhoz engedélyezett szerepkörök</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Itt kiválaszthatja azokat a szerepköröket, amelyekhez tartozó felhasználók születésnapját szeretné megjeleníteni. (alapértelmezés: minden szerepkör)</string>
 </resources>
