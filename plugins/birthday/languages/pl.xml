@@ -1,19 +1,47 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# będzie miał/a #VAR3# lat za #VAR2# dni, w #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# będzie miał/a #VAR3# lat za #VAR2# dni, #VAR4#</string>
   <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# ma urodziny za #VAR2# dni</string>
   <string name="PLG_BIRTHDAY_HEADLINE">Urodziny</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">Pan #VAR1#</string>
-  <string name="PLG_BIRTHDAY_MORE_MEMBERS">#VAR1# użytkowników ma dziś urodziny.</string>
-  <string name="PLG_BIRTHDAY_NO_MEMBERS">Dziś żaden użytkownik nie ma urodzin.</string>
-  <string name="PLG_BIRTHDAY_ONE_MEMBER">Dziś użytkownik ma urodziny.</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Dziś #VAR1# członków ma urodziny.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">Urodziny członków nie są dostępne dla odwiedzających. Zaloguj się, aby zobaczyć urodziny członków.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Dziś żaden członek nie ma urodzin.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Dziś jeden członek ma urodziny.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# skończył/a #VAR3# lat #VAR2# dni temu, #VAR4#</string>
-  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# miał urodziny #VAR2# dni temu</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# miał/a urodziny #VAR2# dni temu</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">Ta wtyczka wyświetla na stronie przeglądu podgląd najnowszych urodzin.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">Urodziny</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# kończy dziś #VAR2# lat</string>
   <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# ma dziś urodziny</string>
-  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# jutro,  #VAR4#, kończy #VAR3# lat</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# jutro, #VAR4#, skończy #VAR3# lat</string>
   <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# ma jutro urodziny</string>
   <string name="PLG_BIRTHDAY_WOMAN_VAR">Pani #VAR1#</string>
-  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# skończył #VAR3# lat wczoraj #VAR4#</string>
-  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# miał wczoraj urodziny</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# skończył/a #VAR3# lat wczoraj, #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# miał/a wczoraj urodziny</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">Pokaż imiona i nazwiska odwiedzającym</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">Jeśli to ustawienie jest włączone, odwiedzający będą widzieć wszystkie imiona i nazwiska osób obchodzących urodziny dziś, w przyszłości i w przeszłości, ale bez wieku. W przeciwnym razie odwiedzający zobaczą tylko liczbę osób mających dziś urodziny i nic więcej. (domyślnie: nie)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">Sposób wyświetlania imienia i nazwiska jubilata</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">To ustawienie pozwala wybrać sposób wyświetlania imienia i nazwiska osób obchodzących urodziny. (domyślnie: imię nazwisko)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">Pokaż wiek</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">Jeśli to ustawienie jest włączone, zalogowani użytkownicy będą widzieć wiek osób obchodzących urodziny. (domyślnie: nie)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">Pokaż nazwisko ze zwrotem grzecznościowym</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">Określa wiek, od którego dla odwiedzających imię osoby obchodzącej urodziny będzie zastępowane zwrotem grzecznościowym. (wyłączenie: -1, domyślnie: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">Pokaż komunikat o braku jubilatów</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">Jeśli to ustawienie jest włączone, zostanie pokazany komunikat, gdy żaden członek nie ma urodzin w wybranym przedziale czasu. (domyślnie: tak)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">Pokaż minione urodziny</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">To ustawienie pozwala określić, ile dni wstecz mają być wyświetlane urodziny. (domyślnie: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">Pokaż nadchodzące urodziny</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">To ustawienie pozwala określić, ile dni naprzód mają być wyświetlane urodziny. (domyślnie: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">Ogranicz liczbę wyświetlanych jubilatów</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">To ustawienie pozwala określić maksymalną liczbę osób obchodzących urodziny do wyświetlenia. (domyślnie: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">Pokaż adres e-mail odwiedzającym</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">To ustawienie pozwala wybrać, czy adres e-mail osób obchodzących urodziny ma być wyświetlany. (domyślnie: tylko imię (goście))</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">Role uprawnione do treści</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Tutaj możesz wybrać role, które mogą widzieć treść tej wtyczki. Jeśli użytkownik nie należy do żadnej z wybranych ról, zobaczy tylko liczbę urodzin. (domyślnie: wszystkie role)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">Role uprawnione do urodzin</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Tutaj możesz wybrać role, które muszą mieć użytkownicy, aby ich urodziny były wyświetlane. (domyślnie: wszystkie role)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">Kolejność sortowania jubilatów</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">To ustawienie pozwala wybrać kolejność sortowania osób obchodzących urodziny. (domyślnie: DESC)</string>
 </resources>

@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_CALENDAR_CURRENT_MONTH">Ten miesiąc</string>
-  <string name="PLG_CALENDAR_MONTH">styczeń,luty,marzec,kwiecień,maj,lipiec,sierpień,wrzesień,październik,listopad,grudzień</string>
-  <string name="PLG_CALENDAR_MORE">(... więcej)</string>
+  <string name="PLG_CALENDAR_MONTH">styczeń,luty,marzec,kwiecień,maj,czerwiec,lipiec,sierpień,wrzesień,październik,listopad,grudzień</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">pon</string>
   <string name="PLG_CALENDAR_TUESDAY_SHORT">wt</string>
   <string name="PLG_CALENDAR_WEDNESDAY_SHORT">śr</string>
@@ -11,4 +10,25 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">sob</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">nd</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Kilka dni</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Ta wtyczka wyświetla kalendarz ze wszystkimi wydarzeniami bieżącego miesiąca na stronie przeglądu.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalendarz</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Pokaż wydarzenia</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Jeśli to ustawienie jest włączone, wydarzenia będą wyświetlane w kalendarzu. (domyślnie: tak)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Pokaż urodziny</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Jeśli to ustawienie jest włączone, urodziny członków będą wyświetlane w kalendarzu. (domyślnie: tak)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Pokaż urodziny odwiedzającym</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Jeśli to ustawienie jest włączone, urodziny członków będą widoczne dla odwiedzających. (domyślnie: nie)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Pokaż ikonę urodzin</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Jeśli to ustawienie jest włączone, w kalendarzu będzie wyświetlana ikona urodzin. (domyślnie: tak)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Sposób wyświetlania imienia i nazwiska solenizanta</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">To ustawienie pozwala wybrać sposób wyświetlania imion i nazwisk osób obchodzących urodziny. (domyślnie: imię)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Uwzględniane kategorie</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">To ustawienie pozwala wybrać, które kategorie mają być uwzględniane dla wydarzeń w kalendarzu. (domyślnie: wszystkie kategorie)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Pokaż nazwy kalendarzy</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Jeśli to ustawienie jest włączone, przy każdym wydarzeniu będą wyświetlane nazwy kalendarzy. (domyślnie: nie)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Role uprawnione do treści</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Tutaj możesz wybrać role, które mogą widzieć treść tej wtyczki. Jeśli użytkownik nie należy do żadnej z wybranych ról, zobaczy tylko liczbę wydarzeń i urodzin. (domyślnie: wszystkie role)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Role uprawnione do urodzin</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Tutaj możesz wybrać role, które muszą mieć użytkownicy, aby ich urodziny były wyświetlane. (domyślnie: wszystkie role)</string>
 </resources>

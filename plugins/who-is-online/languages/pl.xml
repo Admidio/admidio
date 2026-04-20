@@ -1,10 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Kto jest on-line?</string>
-  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">Nie ma odwiedzających na stronie.</string>
-  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# Odwiedzających</string>
-  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# Członek</string>
-  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# Członków</string>
-  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">#VAR1# jest On-line</string>
-  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">#VAR1# są On-line</string>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Kto jest online?</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Brak danych dostępnych dla odwiedzających. Zaloguj się, aby zobaczyć, kto jest online.</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">Na stronie nie ma odwiedzających.</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# odwiedzających</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# członek</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# członków</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">#VAR1# są online</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">#VAR1# jest online</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Ta wtyczka wyświetla na stronie przeglądu odwiedzających i zalogowanych członków.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Kto jest online</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Czas pozostawania aktywnym</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Czas w minutach, przez jaki użytkownik po ostatniej akcji jest nadal uznawany za będącego online. (domyślnie: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Pokaż odwiedzających</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Jeśli to ustawienie jest włączone, wyświetlana będzie liczba odwiedzających. W przeciwnym razie pokazywani będą tylko zalogowani użytkownicy. (domyślnie: tak)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Pokaż członków odwiedzającym</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Tutaj możesz wybrać, w jaki sposób członkowie mają być wyświetlani odwiedzającym. (domyślnie: liczba zalogowanych członków)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Nie pokazuj zalogowanych członków</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Pokaż zalogowanych członków</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Liczba zalogowanych członków</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Pokaż siebie</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Jeśli to ustawienie jest włączone, będzie wyświetlany własny status, zarówno po zalogowaniu, jak i po wylogowaniu. (domyślnie: tak)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Pokaż użytkowników obok siebie</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Jeśli to ustawienie jest włączone, użytkownicy będą wyświetlani obok siebie. W przeciwnym razie będą pokazywani jeden pod drugim. (domyślnie: nie)</string>
 </resources>

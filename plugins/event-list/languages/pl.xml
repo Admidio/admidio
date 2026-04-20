@@ -1,6 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_EVENT_LIST_ALL_EVENTS">Wszystkie zdarzenia</string>
-  <string name="PLG_EVENT_LIST_HEADLINE">Zdarzenia</string>
-  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Nie ma zdarzeń dostępnych dla odwiedzających , zaloguj się aby zobaczyć zdarzenia.</string>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Wszystkie wydarzenia</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Wydarzenia</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Nie ma wydarzeń dostępnych dla odwiedzających. Zaloguj się, aby zobaczyć wydarzenia.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Ta wtyczka wyświetla na stronie przeglądu listę podglądu najnowszych wydarzeń.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Lista wydarzeń</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Liczba wydarzeń</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Liczba wydarzeń do wyświetlenia. (domyślnie: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Pokaż datę zakończenia</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Jeśli to ustawienie jest włączone, wyświetlana będzie data i godzina zakończenia wydarzenia. W przeciwnym razie pokazana zostanie tylko data i godzina rozpoczęcia. (domyślnie: tak)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Znaki przed podziałem wiersza</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maksymalna liczba znaków w słowie, po której powinno nastąpić przełamanie wiersza. (0: wyłącza podział wiersza, domyślnie: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Wyświetlane kategorie</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Jeśli chcesz wyświetlać tylko wydarzenia z wybranej kategorii, możesz zaznaczyć tutaj odpowiednie kategorie. (domyślnie: wszystkie kategorie)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Pokaż pełny opis</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Jeśli to ustawienie jest włączone, wyświetlana będzie pełna treść opisu. W przeciwnym razie pokazany zostanie tylko podgląd tekstu. (domyślnie: nie)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Tekst podglądu</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Liczba znaków tekstu podglądu. (0: bez krótkiego podglądu, domyślnie: 70)</string>
 </resources>

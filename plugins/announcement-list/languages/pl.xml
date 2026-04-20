@@ -2,5 +2,18 @@
 <resources>
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Wszystkie wpisy</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Ogłoszenia</string>
-  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Brak ogłoszeń dostępnych dla gości. Zaloguj się aby zobaczyć ogłoszenia.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Brak ogłoszeń dostępnych dla gości. Zaloguj się, aby zobaczyć ogłoszenia.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Ta wtyczka wyświetla na stronie przeglądu listę podglądu najnowszych ogłoszeń.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Lista ogłoszeń</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Liczba ogłoszeń</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Liczba ogłoszeń do wyświetlenia. (domyślnie: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Znaki przed podziałem wiersza</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maksymalna liczba znaków w słowie, po której powinno nastąpić przełamanie wiersza. (0: wyłącza podział wiersza, domyślnie: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Wyświetlane kategorie</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Jeśli chcesz wyświetlać tylko ogłoszenia z wybranej kategorii, możesz zaznaczyć tutaj odpowiednie kategorie. (domyślnie: wszystkie kategorie)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Pokaż pełny opis</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Jeśli to ustawienie jest włączone, wyświetlana będzie pełna treść opisu. W przeciwnym razie pokazany zostanie tylko podgląd tekstu. (domyślnie: nie)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Tekst podglądu</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Liczba znaków tekstu podglądu. (0: bez krótkiego podglądu, domyślnie: 70)</string>
 </resources>

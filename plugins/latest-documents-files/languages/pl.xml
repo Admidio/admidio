@@ -3,5 +3,14 @@
   <string name="PLG_LATEST_DOCUMENTS_FILES_HEADLINE">Dokumenty i pliki</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Więcej dokumentów i plików</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Brak dostępnych dokumentów i plików.</string>
-  <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Przesłane przez #VAR1# w dniu #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Przesłano przez #VAR1# dnia #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Ta wtyczka wyświetla na stronie przeglądu listę najnowszych dokumentów i plików przesłanych przez użytkowników.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Najnowsze dokumenty i pliki</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Liczba plików</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Liczba plików do wyświetlenia. (domyślnie: 5)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Pokaż znacznik czasu przesłania</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Jeśli to ustawienie jest włączone, wyświetlany będzie znacznik czasu przesłania pliku. W przeciwnym razie zostanie ukryty. (domyślnie: tak)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Maksymalna liczba znaków w nazwie pliku</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Maksymalna liczba znaków w nazwie pliku, po której zostanie ona skrócona. (0: wyłącza skracanie, domyślnie: 0)</string>
 </resources>

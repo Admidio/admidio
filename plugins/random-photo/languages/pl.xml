@@ -1,4 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Brak obrazków dostępnych dla gości. Zaloguj się, żeby zobaczyć obrazki.</string>
+  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Brak zdjęć dostępnych dla gości. Zaloguj się, aby zobaczyć zdjęcia.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Ta wtyczka wyświetla losowo wybrane zdjęcie z modułu zdjęć.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Losowe zdjęcie</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Liczba znaków w słowie</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maksymalna liczba znaków w słowie, po której powinno nastąpić przełamanie wiersza. Jeśli ustawiono 0, podział wiersza nie będzie wykonywany. (domyślnie: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Maksymalna szerokość zdjęcia</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Maksymalna szerokość zdjęcia w pikselach. Jeśli ustawiono 0, obraz będzie skalowany dynamicznie przez kontener HTML, w którym umieszczono tę wtyczkę. (domyślnie: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Maksymalna wysokość zdjęcia</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Maksymalna wysokość zdjęcia w pikselach. Jeśli ustawiono 0, obraz będzie skalowany dynamicznie przez kontener HTML, w którym umieszczono tę wtyczkę. (domyślnie: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Uwzględniane albumy</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Liczba albumów, z których może pochodzić zdjęcie. Liczenie odbywa się od najnowszego albumu w kolejności malejącej. Jeśli ustawiono 0, uwzględniane będą wszystkie albumy. (domyślnie: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Numer zdjęcia</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Numer zdjęcia z albumu, które ma zostać wyświetlone. Jeśli ustawiono 0, zostanie pokazane losowe zdjęcie z albumu. Jeśli ustawiono konkretny numer, wyświetlone zostanie właśnie to zdjęcie. (domyślnie: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Pokaż link do albumu</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Jeśli to ustawienie jest włączone, pod zdjęciem będzie wyświetlany link do albumu wraz z nazwą albumu. (domyślnie: tak)</string>
 </resources>

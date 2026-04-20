@@ -6,5 +6,19 @@
   <string name="PLG_LOGIN_FORM_NEW_ONLINE_MEMBER">Nowy członek online</string>
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Ilość logowań</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Członek online</string>
-  <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Przełożony online</string>
+  <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Starszy członek online</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Ta wtyczka wyświetla na stronie przeglądu formularz logowania dla użytkownika. Jeśli użytkownik jest zalogowany, zamiast pól formularza pokazywane są przydatne informacje o użytkowniku.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Formularz logowania</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Ranga członka</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Pokaż link do rejestracji</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Jeśli ta opcja jest włączona, w formularzu logowania będzie wyświetlany link do formularza rejestracyjnego. (domyślnie: nie)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Pokaż link e-mail</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Jeśli ta opcja jest włączona, w formularzu logowania będzie wyświetlany link do wysłania wiadomości e-mail do administratora w przypadku problemów z logowaniem. (domyślnie: tak)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Pokaż link wylogowania</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Jeśli ta opcja jest włączona, po zalogowaniu będzie wyświetlany link do wylogowania. (domyślnie: nie)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Pokaż rangi</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Jeśli ta opcja jest włączona, po nazwie użytkownika będzie wyświetlana ranga zależna od liczby logowań. (domyślnie: tak)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Rangi</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Tutaj możesz zdefiniować rangi, które będą wyświetlane po nazwie użytkownika, jeśli włączona jest opcja „Pokaż rangi”. Kluczem jest liczba logowań, a wartością nazwa rangi.\nAby usunąć rangę, wyczyść w tabeli pola „Ilość logowań” i „Ranga członka”.</string>
 </resources>
