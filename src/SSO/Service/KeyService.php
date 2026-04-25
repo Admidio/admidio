@@ -27,7 +27,7 @@ class KeyService {
         $sql = 'SELECT key_id, key_uuid, key_org_id, key_name, key_algorithm, key_certificate, key_expires_at, key_is_active
                       FROM ' . TBL_SSO_KEYS . '
                   WHERE key_org_id = ?
-                     ' . ($activeOnly ? ' and key_is_active = 1 ' : '') . '
+                     ' . ($activeOnly ? ' and key_is_active = TRUE ' : '') . '
                   ORDER BY key_name';
         $keysList = $this->db->getArrayFromSql($sql, array($gCurrentOrgId));
         return $keysList;
