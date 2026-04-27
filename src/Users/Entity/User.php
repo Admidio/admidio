@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\SystemMail;
 use Admidio\Messages\Entity\Message;
+use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Roles\Entity\Role;
 use Admidio\Session\Entity\Session;
@@ -1946,6 +1947,12 @@ class User extends Entity
         $foundUserIds = array();
         $lastName = $this->db->escapeString($this->getValue('LAST_NAME', 'database'));
         $firstName = $this->db->escapeString($this->getValue('FIRST_NAME', 'database'));
+        $organization = new Organization($this->db, $this->organizationId);
+        $sharedOrganizationIds = $organization->getSharedUsersOrganizationIds();
+
+        if (count($sharedOrganizationIds) === 0) {
+            return $foundUserIds;
+        }
 
         // search for users with similar names (SQL function SOUNDEX only available in MySQL or MariaDB)
         if (DB_TYPE !== Database::PDO_ENGINE_PGSQL && $gSettingsManager->getBool('system_search_similar')) {
@@ -1980,11 +1987,23 @@ class User extends Entity
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                  WHERE usr_valid = true
+               AND EXISTS (
+                SELECT 1
+                  FROM ' . TBL_MEMBERS . '
+                INNER JOIN ' . TBL_ROLES . '
+                    ON rol_id = mem_rol_id
+                INNER JOIN ' . TBL_CATEGORIES . '
+                    ON cat_id = rol_cat_id
+                 WHERE mem_usr_id = usr_id
+                   AND rol_valid = true
+                   AND cat_org_id IN (' . Database::getQmForValues($sharedOrganizationIds) . ')
+                   )
                    AND ' . $sqlSimilarName;
         $queryParams = array(
             $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),
             $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id')
         );
+        $queryParams = array_merge($queryParams, $sharedOrganizationIds);
         $usrStatement = $this->db->queryPrepared($sql, $queryParams);
 
         while ($row = $usrStatement->fetch()) {

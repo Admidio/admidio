@@ -92,7 +92,7 @@ class OrganizationService
      */
     public function save(array $formValues)
     {
-        global $gCurrentSession, $gCurrentOrganization;
+        global $gCurrentSession, $gCurrentOrganization, $gSettingsManager;
 
         // check form field input and sanitized it from malicious content
         $organizationEditForm = $gCurrentSession->getFormObject($formValues['adm_csrf_token']);
@@ -107,5 +107,16 @@ class OrganizationService
 
         // write category into database
         $gCurrentOrganization->save();
+
+        if (
+            array_key_exists('contacts_suborganization_use_same_members', $validatedFormValues)
+            && !$gCurrentOrganization->isChildOrganization()
+            && $gCurrentOrganization->isParentOrganization()
+        ) {
+            $gSettingsManager->set(
+                'contacts_suborganization_use_same_members',
+                (int)(bool)$validatedFormValues['contacts_suborganization_use_same_members']
+            );
+        }
     }
 }

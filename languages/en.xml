@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
@@ -63,7 +63,7 @@
   <string name="INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED">Some 3rd party plugin folders could not be moved to the new plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and move the 3rd party plugin folders manually and delete the old adm_plugins folder afterward.</string>
   <string name="INS_WARNING_BETA_VERSION">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Some old admidio plugin folders could not be deleted from the old plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and delete the old plugin folders manually and delete the old adm_plugins folder afterward.</string>
-  <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">The old plugin folder #VAR1_BOLD# could not be deleted.\nPlease check the folder  #VAR2_BOLD# within your Admidio installation and delete the old adm_plugins folder manually.</string>
+  <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">The old plugin folder #VAR1_BOLD# could not be deleted.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and delete the old adm_plugins folder manually.</string>
   <string name="INS_WELCOME_TEXT">This assistant helps you to set up the Admidio member management. All necessary data will be requested so that the system can be fully set up and you can log in as an administrator.\n\nIf you have questions or problems with the installation, please check #VAR1#our installation instructions#VAR2# or contact us at #VAR3#our support forum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">You have already updated the directories of Admidio with a new version. Now the database has to be updated from the current version #VAR2# to the version #VAR1#, so that Admidio can run with the new version.\n\nIf you have questions or problems with the update, please check #VAR3#our update instruction#VAR4# or contact #VAR5#our support forum#VAR6#.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welcome to the installation of Admidio</string>
@@ -93,7 +93,8 @@
   <string name="SYS_SUPERIOR_FEMALE">Female superior</string>
   <string name="SYS_SUPERIOR_MALE">Male superior</string>
   <string name="SYS_WIFE">Wife</string>
-  <!--Phrases only in organization administration-->
+  <!--Phrases
+  only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module can be disabled or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and web feed will be completely disabled for both user groups. (default: active)</string>
   <string name="ORG_ACCESS_TO_PLUGIN">Plugin access</string>
@@ -143,6 +144,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha activation</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Enable registration</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">The registration by visitors of the homepage can be activated or deactivated by this setting. The profile fields that are displayed during the registration process can be configured in the profile field settings for each field. (Default: yes)</string>
+  <string name="ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS">Enable suborganization to use same members</string>
+  <string name="ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS_DESC">If enabled, related organizations in this parent-child relationship can reuse existing contacts when creating contacts or assigning registrations. Child organizations inherit this setting from their parent organization and cannot configure it themselves. Similar-contact checks only consider contacts who are or were members of organizations in this relationship. Organizations without a relationship do not share members. The all organizations filter in the contacts list is available only if this setting and Show all contacts are enabled.</string>
   <string name="ORG_FIELD_DESCRIPTION">Define unlimited additional fields. Fields will be displayed and can be edited in user\'s profile. These fields will be available in own list, too.</string>
   <string name="ORG_FIELD_DISABLED">Field only editable for members with permission #VAR1_BOLD#</string>
   <string name="ORG_FIELD_DISABLED_DESC">A locked profile field can no longer be edited by a member in its own profile. It can be edited only by members who have the permission to edit all members. The Leaders of a role with the permission to edit profiles of the role members, can also edit this profile field.</string>
@@ -202,7 +205,8 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Short name of the organization</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL of the organization</string>
   <string name="ORG_VARIABLE_USERNAME">Username of the user from the respective e-mail context</string>
-  <!--System-Phrases for use in every module-->
+  <!--System-Phrases
+  for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_A_TO_Z">A to Z</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
@@ -241,7 +245,7 @@
   <string name="SYS_ALBUM_CHANGED_TITLE">A photo album was changed at #VAR1#</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Album contains no photos.</string>
   <string name="SYS_ALBUM_CREATED_TITLE">A new photo album was created at #VAR1#</string>
-  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be  inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
+  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors and members for this reason.</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
@@ -708,7 +712,7 @@
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_EXISTS">Folder #VAR1# already exists!\n\nPlease select different folder name.</string>
   <string name="SYS_FOLDER_NAME_EMPTY">Folder name is missing!</string>
-  <string name="SYS_FOLDER_NAME_INVALID">The selected folder name #VAR1_BOLD# contains invalid characters. Please check the folder name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt; / \ </string>
+  <string name="SYS_FOLDER_NAME_INVALID">The selected folder name #VAR1_BOLD# contains invalid characters. Please check the folder name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt; / \</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">You are not allowed to display selected folder.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created.\n\nPlease ask an #VAR2#administrator#VAR3# for help to check write permissions of the parent folder.</string>
@@ -1177,7 +1181,8 @@
   <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">The appearance of the overview extensions on the overview page can be changed here. The sequence of the extensions can be changed by drag &amp; drop (big screens) or by clicking the move buttons (small screens).\n\n The new sequence only takes effect after saving the settings!</string>
   <string name="SYS_PAGE_NEXT">Next</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
-  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2"
+    description="Two parameters are connected with an and">#VAR1# and #VAR2#</string>
   <string name="SYS_PARENT_ALBUM">Parent album</string>
   <string name="SYS_PARENT_ALBUM_DESC">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest level then select #VAR1_BOLD#.</string>
   <string name="SYS_PARENT_ORGANIZATION">Parent organization</string>
@@ -1310,7 +1315,7 @@
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
   <string name="SYS_RELATIONSHIP_TYPE_DELETE">Do you want to remove this type of relationship #VAR1_BOLD#? Warning: This will delete all existing relationships of this type.</string>
-  <string name="SYS_RELATIONSHIP_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however,  unidirectional relations only mark in one direction.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DESC">An asymmetrical relationship is e.g. used for parent / child while symmetrical relations e.g. can be used for siblings. These are always bidirectional, however, unidirectional relations only mark in one direction.</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">If set, then a user can edit the profile of another user to which he is related to. For an asymmetric relationship, the right is assigned separately for each relationship, and for a symmetric relationship, both users can edit the other profile, and in case of a unidirectional relationship, only the user with the relationship stored can edit the other profile.</string>
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
@@ -1454,7 +1459,7 @@
   <string name="SYS_SENDER">Sender</string>
   <string name="SYS_SENDER_EMAIL">Sender email</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Sender email address for sending system notifications and emails to roles and users. The email address should include the domain of the site on which Admidio is installed.</string>
-  <string name="SYS_SENDER_MODE_DESC">Specify how the sender of an email is verified. Many providers do not allow the sender of an email to use an email address from another domain. In this case, one of the two options with the system email should be selected. The corresponding email address and name can be stored in the following two settings. (Default: #VAR1#) </string>
+  <string name="SYS_SENDER_MODE_DESC">Specify how the sender of an email is verified. Many providers do not allow the sender of an email to use an email address from another domain. In this case, one of the two options with the system email should be selected. The corresponding email address and name can be stored in the following two settings. (Default: #VAR1#)</string>
   <string name="SYS_SENDER_NAME">Sender name</string>
   <string name="SYS_SENDER_NAME_DESC">Name of the sender\'s mail address. This field has to be maintained if the field for sender\'s mail address is not empty.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">The sender was not logged in. The sender information may therefore be incorrect.</string>
@@ -1571,7 +1576,7 @@
   <string name="SYS_SSO_KEY_ADD">New Key</string>
   <string name="SYS_SSO_KEY_ADMIN">SSO Cryptographic Keys Administration</string>
   <string name="SYS_SSO_KEY_ALGORITHM">Cryptographic Algorithm</string>
-  <string name="SYS_SSO_KEY_ALGORITHM_DESC">The underlying cryptographic algorithm of the key. </string>
+  <string name="SYS_SSO_KEY_ALGORITHM_DESC">The underlying cryptographic algorithm of the key.</string>
   <string name="SYS_SSO_KEY_CERTIFICATE">x509 certificate</string>
   <string name="SYS_SSO_KEY_DELETE">Delete Key</string>
   <string name="SYS_SSO_KEY_EDIT">Edit Key</string>

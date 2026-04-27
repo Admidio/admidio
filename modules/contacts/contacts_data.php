@@ -62,6 +62,16 @@ try {
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
     $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
+    $sharedOrganizationIds = $gCurrentOrganization->getSharedUsersOrganizationIds();
+    $sharedOrganizationIdsSql = implode(',', $sharedOrganizationIds);
+    $showAllOrganizationsFilter = $gCurrentUser->isAdministrator()
+        && $gSettingsManager->getBool('contacts_show_all')
+        && count($sharedOrganizationIds) > 1;
+
+    if ($getMembersShowFilter === 3 && !$showAllOrganizationsFilter) {
+        $getMembersShowFilter = 2;
+    }
+
     $jsonArray = array('draw' => $getDraw);
 
     header('Content-Type: application/json');
@@ -166,7 +176,7 @@ try {
     }
 
     // create a subselect to check if the user is also an active member of another organization
-    if ($gCurrentOrganization->countAllRecords() > 1 && $gCurrentUser->isAdministrator() && $getMembersShowFilter === 3) {
+    if ($showAllOrganizationsFilter && $getMembersShowFilter === 3) {
         $contactsOfOtherOrganizationSelectPlaceholder = '
             FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
@@ -178,6 +188,7 @@ try {
                 %s    -- logic placeholder for mem_end
                 AND rol_valid = true
                 AND cat_name_intern <> \'EVENTS\'
+                AND cat_org_id IN (' . $sharedOrganizationIdsSql . ')
                 AND cat_org_id <> ' . $gCurrentOrgId . ')';
 
         $placeholderCurrentOtherOrg = "AND mem_end > '" . DATE_NOW . "'";
@@ -192,6 +203,7 @@ try {
                 AND mem_end      > '" . DATE_NOW . "'
                 AND rol_valid    = true
                 AND cat_name_intern <> 'EVENTS'
+                AND cat_org_id   IN (" . $sharedOrganizationIdsSql . ")
                 AND cat_org_id   <> " . $gCurrentOrgId . ")";
 
         // show all members of other organizations
@@ -258,6 +270,11 @@ try {
         $sqlOrganizationConcat = ' GROUP_CONCAT(DISTINCT cat_org.cat_org_id ORDER BY cat_org.cat_org_id SEPARATOR \',\') ';
     }
 
+    $memberOrganizationsScopeCondition = '';
+    if ($getMembersShowFilter === 3) {
+        $memberOrganizationsScopeCondition = ' AND cat_org.cat_org_id IN (' . $sharedOrganizationIdsSql . ')';
+    }
+
     $mainSql = 'SELECT DISTINCT ' . $contactsOfThisOrganizationSelect . ' AS member_this_orga, ' . $formerContactsOfThisOrganizationSelect . ' AS former_member_this_orga, ' . $contactsOfOtherOrganizationSelect . ' AS member_other_orga, ' . $formerContactsOfOtherOrganizationSelect . ' AS former_member_other_orga,
                 (SELECT ' . $sqlOrganizationConcat . '
                     FROM ' . TBL_MEMBERS . ' AS mem_org
@@ -266,6 +283,7 @@ try {
                     INNER JOIN ' . TBL_CATEGORIES . ' AS cat_org
                         ON cat_org.cat_id = rol_org.rol_cat_id
                     WHERE mem_org.mem_usr_id = usr_id
+                      ' . $memberOrganizationsScopeCondition . '
                 ) AS member_org_ids,
                 usr_login_name as login_name,
                 (SELECT email.usd_value FROM ' . TBL_USER_DATA . ' email
@@ -273,6 +291,25 @@ try {
                     AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
                  ) AS member_email, ' .
         substr($mainSql, 15);
+
+    if ($getMembersShowFilter === 3) {
+        $mainSql = 'SELECT scope_contacts.*
+                      FROM (' . $mainSql . ') AS scope_contacts
+                     WHERE EXISTS (
+                           SELECT 1
+                             FROM ' . TBL_USERS . ' AS usr_scope
+                       INNER JOIN ' . TBL_MEMBERS . ' AS mem_scope
+                               ON mem_scope.mem_usr_id = usr_scope.usr_id
+                       INNER JOIN ' . TBL_ROLES . ' AS rol_scope
+                               ON rol_scope.rol_id = mem_scope.mem_rol_id
+                       INNER JOIN ' . TBL_CATEGORIES . ' AS cat_scope
+                               ON cat_scope.cat_id = rol_scope.rol_cat_id
+                            WHERE usr_scope.usr_uuid = scope_contacts.usr_uuid
+                              AND rol_scope.rol_valid = true
+                              AND cat_scope.cat_org_id IN (' . $sharedOrganizationIdsSql . ')
+                       )';
+    }
+
     $queryParamsEmail = array(
         $gProfileFields->getProperty('EMAIL', 'usf_id')
     ); // TODO add more params

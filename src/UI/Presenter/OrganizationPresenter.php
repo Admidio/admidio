@@ -32,7 +32,7 @@ class OrganizationPresenter extends PagePresenter
      */
     public function createEditForm()
     {
-        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession;
+        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession, $gSettingsManager;
 
         $this->setHtmlID('adm_organization_edit');
         $this->setHeadline($gL10n->get('SYS_ORGANIZATION'));
@@ -84,6 +84,9 @@ class OrganizationPresenter extends PagePresenter
         );
 
         if ($gCurrentOrganization->countAllRecords() > 1) {
+            $suborganizationUseSameMembers = $gSettingsManager->has('contacts_suborganization_use_same_members')
+                && $gSettingsManager->getBool('contacts_suborganization_use_same_members');
+
             // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
             if (!$gCurrentOrganization->isParentOrganization()) {
                 $sqlData = array();
@@ -98,7 +101,11 @@ class OrganizationPresenter extends PagePresenter
                     $gL10n->get('SYS_PARENT_ORGANIZATION'),
                     $gDb,
                     $sqlData,
-                    array('defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'), 'helpTextId' => 'SYS_PARENT_ORGANIZATION_DESC')
+                    array(
+                        'defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'),
+                        'firstEntry' => array('', $gL10n->get('ORG_NONE')),
+                        'helpTextId' => 'SYS_PARENT_ORGANIZATION_DESC'
+                    )
                 );
             }
 
@@ -108,6 +115,14 @@ class OrganizationPresenter extends PagePresenter
                 $gCurrentOrganization->getValue('org_show_org_select'),
                 array('helpTextId' => 'SYS_SHOW_ORGANIZATION_SELECT_DESC')
             );
+            if (!$gCurrentOrganization->isChildOrganization() && $gCurrentOrganization->isParentOrganization()) {
+                $formOrganization->addCheckbox(
+                    'contacts_suborganization_use_same_members',
+                    $gL10n->get('ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS'),
+                    $suborganizationUseSameMembers,
+                    array('helpTextId' => 'ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS_DESC')
+                );
+            }
         }
         $formOrganization->addSubmitButton(
             'adm_button_save',

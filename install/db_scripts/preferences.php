@@ -149,6 +149,7 @@ $defaultOrgPreferences = array(
     'contacts_list_configuration' => '',
     'contacts_per_page' => '25',
     'contacts_show_all' => '1',
+    'contacts_suborganization_use_same_members' => '0',
     'contacts_user_relations_enabled' => '1',
 
     // Documents and files

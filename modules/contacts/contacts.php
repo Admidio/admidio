@@ -77,19 +77,24 @@ try {
         );
 
 
-        if ($gCurrentUser->isAdministrator() && $gSettingsManager->getBool('contacts_show_all')) {
-            $selectBoxValues = array(
-                '0' => array('0', $gL10n->get('SYS_ACTIVE_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
-                '1' => array('1', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
-                '2' => array('2', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
-                '3' => array('3', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS'))
-            );
-        } else {
-            $selectBoxValues = array(
-                '0' => $gL10n->get('SYS_ACTIVE_CONTACTS'),
-                '1' => $gL10n->get('SYS_FORMER_CONTACTS'),
-                '2' => $gL10n->get('SYS_ALL_CONTACTS')
-            );
+        $selectBoxValues = array(
+            '0' => array('0', $gL10n->get('SYS_ACTIVE_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
+            '1' => array('1', $gL10n->get('SYS_FORMER_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION')),
+            '2' => array('2', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_CURRENT_ORGANIZATION'))
+        );
+
+        $sharedOrganizationIds = $gCurrentOrganization->getSharedUsersOrganizationIds();
+
+        $showAllOrganizationsFilter = $gCurrentUser->isAdministrator()
+            && $gSettingsManager->getBool('contacts_show_all')
+            && count($sharedOrganizationIds) > 1;
+
+        if (!$showAllOrganizationsFilter && $getMembersShowFilter === 3) {
+            $getMembersShowFilter = 2;
+        }
+
+        if ($showAllOrganizationsFilter) {
+            $selectBoxValues['3'] = array('3', $gL10n->get('SYS_ALL_CONTACTS'), $gL10n->get('SYS_ALL_ORGANIZATIONS'));
         }
 
         // filter all items
