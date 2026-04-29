@@ -177,6 +177,13 @@ try {
             );
         }
 
+        $page->addPageFunctionsMenuItem(
+            'menu_item_members_assign_import',
+            $gL10n->get('SYS_IMPORT_MEMBERS'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_import.php', array('role_uuid' => $getRoleUuid)),
+            'bi-upload'
+        );
+
         ChangelogService::displayHistoryButton($page, 'membership', 'members', true, array('uuid' => $getUserUuid, 'related_id' => $getRoleUuid));
 
         $allVisibleRoles = $gCurrentUser->getRolesViewMemberships();
