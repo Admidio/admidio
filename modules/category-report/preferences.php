@@ -43,11 +43,26 @@ try {
     $report = new CategoryReport();
     $config = $report->getConfigArray();
     $catReportConfigs = array();
+    $roleSelectionItems = array();
+
+    $sqlRolesForSelection = 'SELECT rol_id, rol_name
+                               FROM ' . TBL_ROLES . '
+                         INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                              WHERE ( cat_org_id = ? -- $gCurrentOrgId
+                                 OR cat_org_id IS NULL )
+                           ORDER BY rol_name';
+    $statementRolesForSelection = $gDb->queryPrepared($sqlRolesForSelection, array($gCurrentOrgId));
+    while ($row = $statementRolesForSelection->fetch()) {
+        $roleSelectionItems[] = array(
+            'id' => (int) $row['rol_id'],
+            'data' => $row['rol_name']
+        );
+    }
 
     $headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
 
     if ($getAdd) {
-        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf' => false);
+        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'life_membership_threshold_years' => 20, 'default_conf' => false);
         // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
     }
 
@@ -64,6 +79,7 @@ try {
             'selection_role' => $config[$getCopy - 1]['selection_role'],
             'selection_cat' => $config[$getCopy - 1]['selection_cat'],
             'number_col' => $config[$getCopy - 1]['number_col'],
+            'life_membership_threshold_years' => $config[$getCopy - 1]['life_membership_threshold_years'] ?? 20,
             'default_conf' => false);
         $config = $report->saveConfigArray($config);
     }
@@ -85,7 +101,7 @@ try {
             const rolePropIds = new Set(arr_role_props.map(o => String(o.id).toLowerCase()));
             const raw     = (val ?? "").toString().trim();
             const first   = raw.charAt(0).toLowerCase();
-            if (rolePropIds.has(first) && raw != "ddummy") {
+                                                if (rolePropIds.has(first) && raw != "ddummy" && raw != "ymulti" && raw != "zmulti") {
               val = "r" + raw.slice(1);
             }
 
@@ -94,7 +110,7 @@ try {
                 "<option value=\"\"></option>";
         	for (const field of arr_user_fields) {
                 var fieldtype = String(field.id).charAt(0).toLowerCase();
-                if (rolePropIds.has(fieldtype) && (fieldtype !== "r") && (field.id !== "ddummy")) {
+                if (rolePropIds.has(fieldtype) && (fieldtype !== "r") && (field.id !== "ddummy") && (field.id !== "ymulti") && (field.id !== "zmulti")) {
                     continue;
                 }
 
@@ -141,6 +157,22 @@ try {
             return html;
         };
 
+        var arr_roles = createRolesArray();
+        function createUserRoleMultiSelect(config, selectedValues = []) {
+            const normalized = (selectedValues || []).map(v => String(v)).filter(v => /^\d+$/.test(v));
+            const selectedSet = new Set(normalized);
+            const hasSelection = selectedSet.size > 0;
+            let html = `<select class="form-control ListProfileField" size="1" name="columnsRoleMulti${config}[]" multiple style="display:none">`;
+            html += `<option value=""${hasSelection ? "" : " selected=\"selected\""}></option>`;
+            for (const role of arr_roles) {
+                const roleId = String(role.id);
+                const selected = selectedSet.has(roleId) ? " selected=\"selected\"" : "";
+                html += `<option value="${roleId}"${selected}>${role.data}</option>`;
+            }
+            html += "</select>";
+            return html;
+        }
+
         function escapeHtml(str) {
             return String(str ?? "")
                 .replace(/&/g, "&amp;")
@@ -162,18 +194,23 @@ try {
         function setupRolePropToggles(config) {
           const selField = `select[name="columns${config}[]"]`;
           const selRole  = `select[name="columnsRoleProp${config}[]"]`;
+                    const selRoleMulti = `select[name="columnsRoleMulti${config}[]"]`;
 
-          function applyToPair($field, $role) {
+                    function applyToPair($field, $role, $roleMulti) {
             const v = ($field.val() || \'\').toString().trim();
             const isRnn = /^r\d+$/.test(v);        // r + digits
+                        const isMultiYears = (v === "ymulti");
+            const isLifeMembership = (v === "zmulti");
             $role.toggle(isRnn);
+                        $roleMulti.toggle(isMultiYears || isLifeMembership);
           }
 
           // Initial pass for existing rows
           $(selField).each(function(i){
             const $field = $(this);
             const $role  = $(selRole).eq(i);
-            if ($role.length) applyToPair($field, $role);
+                        const $roleMulti = $(selRoleMulti).eq(i);
+                        if ($role.length && $roleMulti.length) applyToPair($field, $role, $roleMulti);
           });
 
           // Live updates for changes (works for dynamically added rows too)
@@ -181,12 +218,13 @@ try {
             const i      = $(selField).index(this);
             const $field = $(this);
             const $role  = $(selRole).eq(i);
-            if ($role.length) applyToPair($field, $role);
+                        const $roleMulti = $(selRoleMulti).eq(i);
+                        if ($role.length && $roleMulti.length) applyToPair($field, $role, $roleMulti);
           });
         }
     ';
     $javascriptCode .= '
-        function addColumnToConfiguration(config, val = null, cond = "")
+                function addColumnToConfiguration(config, val = null, cond = "", roleMultiValues = [])
         {
         	var table = document.getElementById("mylist_fields_tbody" + config);
         	var newTableRow = table.insertRow();
@@ -194,7 +232,7 @@ try {
         	var newCellCount = newTableRow.insertCell();
             newCellCount.setAttribute("class", "CategoryReportColumnNumber");
         	var newCellField = newTableRow.insertCell(-1);
-        	newCellField.innerHTML = createUserFieldSelect(config, val) + createUserRoleSelect(config, val);
+	newCellField.innerHTML = createUserFieldSelect(config, val) + createUserRoleSelect(config, val) + createUserRoleMultiSelect(config, roleMultiValues);
             var newCellCondition = newTableRow.insertCell(-1);
             newCellCondition.innerHTML = createConditionInput(config, cond);
             var newCellButtons = newTableRow.insertCell(-1);
@@ -218,7 +256,19 @@ try {
 
         $columns = array();
         foreach ($fields as $idx => $fieldId) {
-            if ($report->isInHeaderSelection($fieldId) > 0) {
+            if (preg_match('/^y\[(\d+(?:\|\d+)*)\]$/', $fieldId, $matches)) {
+                $columns[] = array(
+                    'id' => 'ymulti',
+                    'roles' => array_map('intval', explode('|', $matches[1])),
+                    'cond' => $conds[$idx] ?? ''
+                );
+            } elseif (preg_match('/^z\[(\d+(?:\|\d+)*)\]$/', $fieldId, $matches)) {
+                $columns[] = array(
+                    'id' => 'zmulti',
+                    'roles' => array_map('intval', explode('|', $matches[1])),
+                    'cond' => $conds[$idx] ?? ''
+                );
+            } elseif ($report->isInHeaderSelection($fieldId) > 0) {
                 $columns[] = array(
                     'id' => $fieldId,
                     'cond' => $conds[$idx] ?? ''
@@ -233,7 +283,7 @@ try {
         }";
 
         $javascriptCodeExecute .= "
-        createColumnsArray{$key}().forEach(item => addColumnToConfiguration({$key}, item.id, item.cond));
+        createColumnsArray{$key}().forEach(item => addColumnToConfiguration({$key}, item.id, item.cond, item.roles || []));
         $(\"#mylist_fields_tbody{$key}\").sortable({
             handle: \".admidio-move-row\",
             items: \"tr\",
@@ -253,6 +303,10 @@ try {
     function createRolePropertiesArray()
     {
         return ' . json_encode(array_values($report->headerRolePropSelection), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ';
+    };
+    function createRolesArray()
+    {
+        return ' . json_encode($roleSelectionItems, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ';
     };
     function updateNumbering() {
         $(".catreport-columns-table").each(function() {
@@ -298,6 +352,7 @@ try {
             'selection_role' => 'selection_role' . $key,
             'selection_cat' => 'selection_cat' . $key,
             'number_col' => 'number_col' . $key,
+            'life_membership_threshold_years' => 'life_membership_threshold_years' . $key,
             'id' => 'id' . $key,
             'default_conf' => 'default_conf' . $key,
             'open' => ($key == $key_to_open),
@@ -321,6 +376,7 @@ try {
         $formConfigurations->addSelectBoxFromSql('selection_cat' . $key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
             array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextId' => 'SYS_CAT_SELECTION_CONF_DESC'));
         $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
+        $formConfigurations->addInput('life_membership_threshold_years' . $key, 'Life Membership Qualified Threshold (Years)', $value['life_membership_threshold_years'] ?? 20, array('type' => 'number', 'minValue' => 1, 'maxValue' => 200, 'helpTextId' => 'SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC'));
         $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => FormPresenter::FIELD_HIDDEN));
         $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => FormPresenter::FIELD_HIDDEN));
 
