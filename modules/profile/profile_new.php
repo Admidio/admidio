@@ -46,6 +46,10 @@ try {
         }
     }
 
+    if (!$gValidLogin && $getUserUuids[0] !== '') {
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
+    }
+
     $registrationOrgId = $gCurrentOrgId;
     $users = array();
 
@@ -59,7 +63,9 @@ try {
 
             // create a user registration object and set requested organization
             $user = new UserRegistration($gDb, $gProfileFields);
-            $user->readDataByUuid($userUuid);
+            if ($gValidLogin) {
+                $user->readDataByUuid($userUuid);
+            }
             if (isset($_POST['adm_org_id'])) {
                 $user->setOrganization((int)$_POST['adm_org_id']);
             }
