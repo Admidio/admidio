@@ -92,7 +92,7 @@ class DocumentsPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_documents_file_rename_form',
             'modules/documents-files.rename.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'file_rename_save', 'folder_uuid' => $this->folderUUID, 'file_uuid' => $fileUUID)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'file_rename_save', 'file_uuid' => $fileUUID)),
             $this
         );
         $form->addInput(
@@ -592,14 +592,13 @@ class DocumentsPresenter extends PagePresenter
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array(
                                     'mode' => 'file_rename',
-                                    'folder_uuid' => $this->folder->getValue('fol_uuid'),
                                     'file_uuid' => $row['uuid']
                                 )),
                             'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_EDIT')
                         );
                         $templateRow['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'move', 'folder_uuid' => $this->folder->getValue('fol_uuid'), 'file_uuid' => $row['uuid'])),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'move', 'file_uuid' => $row['uuid'])),
                             'icon' => 'bi bi-folder-symlink',
                             'tooltip' => $gL10n->get('SYS_MOVE_FILE')
                         );

@@ -62,11 +62,7 @@ try {
                 'download')
         )
     );
-    $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid',
-        array(
-            'requireValue' => !in_array($getMode, array('list', 'file_delete', 'download'))
-        )
-    );
+    $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
     $getFileUUID = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
 
     // Check if the module is activated
@@ -77,6 +73,12 @@ try {
     }
 
     if ($getMode != 'list' && $getMode != 'download') {
+        if ($getFileUUID !== '') {
+            // when file UUID is set then read the folder of that file from database and check the rights
+            $file = new File($gDb);
+            $file->readDataByUuid($getFileUUID);
+            $getFolderUUID = $file->getValue('fol_uuid');
+        }
         // check the rights of the current folder
         // user must be administrator or must have the right to upload files
         $folder = new Folder($gDb);
