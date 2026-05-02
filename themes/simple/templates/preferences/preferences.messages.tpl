@@ -8,7 +8,6 @@
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_captcha_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_template']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_max_receiver']}
-    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_send_to_all_addresses']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_show_former']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['max_email_attachment_size']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_save_attachments']}

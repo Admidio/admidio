@@ -1403,7 +1403,7 @@
   <string name="SYS_SEND_EMAIL_FORMER_DESC">If this option is set, then e-mails could be sent to individual former members, as well as to all former members of a role. (Default: Activated)</string>
   <string name="SYS_SEND_EMAIL_TO">Send e-mail to #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails to all e-mail addresses of the user</string>
-  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: enabled)</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, e-mails will be sent to all user e-mail addresses stored in the profile. If the setting is deactivated, e-mails will only be sent to the e-mail address from the profile field with the internal name EMAIL. (Default: disabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Send greeting card</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Send login information</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Your e-mail will be sent to all members of the selected role. Further roles and recipients are available for logged in users only.</string>
