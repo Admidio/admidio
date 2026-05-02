@@ -510,6 +510,7 @@ class Entity
                 case 'char': // fallthrough
                 case 'varchar': // fallthrough
                 case 'text':
+                case 'mediumtext':
                     if ($format !== 'database') {
                         // if text field and format not 'database' then convert all quotes to HTML syntax
                         $columnValue = SecurityUtils::encodeHTML((string)$columnValue);
