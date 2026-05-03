@@ -125,6 +125,10 @@ try {
         }
     } elseif ($getMode === 'send_login') {
         // User already exists and has a login than sent access data with a new password
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUUIDAssigned);
         $user->sendNewPassword();
