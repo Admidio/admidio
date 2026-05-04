@@ -1050,4 +1050,7 @@
   <string name="SYS_YOUR_LISTS">Propri elenchi</string>
   <string name="SYS_YOUR_NAME">Il tuo nome</string>
   <string name="SYS_Z_TO_A">da Z ad A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Imposta il numero minimo di anni richiesti per «Idoneo a membro a vita». (Predefinito: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Seleziona i ruoli che vengono conteggiati per «Idoneo a membro a vita».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Seleziona i ruoli che vengono conteggiati per «Anni di appartenenza».</string>
 </resources>

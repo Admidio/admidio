@@ -42,6 +42,8 @@ try {
                 $values['number_col'] = isset($_POST['number_col' . $conf]) ? 1 : 0;
                 $values['default_conf'] = (bool)$_POST['default_conf' . $conf];
                 $values['life_membership_threshold_years'] = isset($_POST['life_membership_threshold_years' . $conf]) ? max(1, min(200, (int)$_POST['life_membership_threshold_years' . $conf])) : 20;
+                $values['years_of_membership_role_ids'] = isset($_POST['years_of_membership_role_ids' . $conf]) ? trim(implode(',', $_POST['years_of_membership_role_ids' . $conf]), ',') : '';
+                $values['life_membership_role_ids'] = isset($_POST['life_membership_role_ids' . $conf]) ? trim(implode(',', $_POST['life_membership_role_ids' . $conf]), ',') : '';
 
                 if (empty($_POST['columns' . $conf])) {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
@@ -52,33 +54,13 @@ try {
                 // the role) id, while the second select box allows the user to select the 
                 // property (r, l, w, f, b, e, d)
                 // Here we need to merge the two arrays to one. 
-                $columnsRoleMulti = $_POST['columnsRoleMulti' . $conf] ?? array();
-                $columns = array_map(function($r, $rprop, $rmulti) {
+                $columns = array_map(function($r, $rprop) {
                     if (!is_string($r) || $r === '') {
                         return '';
                     }
 
                     if ($r === 'ymulti' || $r === 'zmulti') {
-                        $roleIds = array();
-                        if (is_array($rmulti)) {
-                            foreach ($rmulti as $roleId) {
-                                $roleId = (int) $roleId;
-                                if ($roleId > 0) {
-                                    $roleIds[] = $roleId;
-                                }
-                            }
-                        }
-
-                        $roleIds = array_values(array_unique($roleIds));
-                        if (count($roleIds) === 0) {
-                            return '';
-                        }
-
-                        if ($r === 'ymulti') {
-                            return 'y[' . implode('|', $roleIds) . ']';
-                        }
-
-                        return 'z[' . implode('|', $roleIds) . ']';
+                        return $r;
                     }
 
                     if ($r[0]=='r') {
@@ -86,7 +68,7 @@ try {
                     }
 
                     return $r;
-                }, $_POST['columns' . $conf], $_POST['columnsRoleProp' . $conf], $columnsRoleMulti);
+                }, $_POST['columns' . $conf], $_POST['columnsRoleProp' . $conf]);
                 $values['col_fields'] = implode(',', $columns);
 
                 // store conditions aligned with selected columns (use {} instead of <> to avoid HTML issues)

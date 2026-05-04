@@ -1367,4 +1367,7 @@
   <string name="SYS_YOUR_LISTS">Собствени списъци</string>
   <string name="SYS_YOUR_NAME">Вашето име</string>
   <string name="SYS_Z_TO_A">Я към А</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Задайте минималния брой години, необходими за „Квалифициран доживотен член“. (По подразбиране: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Изберете ролите, които се зачитат за „Квалифициран доживотен член“.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Изберете ролите, които се зачитат за „Години членство“.</string>
 </resources>

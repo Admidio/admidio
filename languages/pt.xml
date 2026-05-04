@@ -1265,4 +1265,7 @@
   <string name="SYS_YOUR_LISTS">Minhas listas</string>
   <string name="SYS_YOUR_NAME">Teu nome</string>
   <string name="SYS_Z_TO_A">Z à A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Defina o número mínimo de anos necessário para «Qualificado para membro vitalício». (Padrão: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Selecione os papéis que contam para «Qualificado para membro vitalício».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Selecione os papéis que contam para «Anos de filiação».</string>
 </resources>

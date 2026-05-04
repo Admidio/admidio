@@ -1792,4 +1792,7 @@
   <string name="SYS_YOUR_LISTS">Egne lister</string>
   <string name="SYS_YOUR_NAME">Dit navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Angiv det mindste antal år, der kræves for «Kvalificeret livsmedlem». (Standard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Vælg de roller, der tæller med til «Kvalificeret livsmedlem».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Vælg de roller, der tæller med til «Medlemsår».</string>
 </resources>

@@ -1803,4 +1803,7 @@
   <string name="SYS_YOUR_LISTS">Saját listák</string>
   <string name="SYS_YOUR_NAME">Az ön neve</string>
   <string name="SYS_Z_TO_A">Z től A -ig</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Állítsa be a minimális évek számát, amely a „Élethosszig tartó tagságra jogosult” státuszhoz szükséges. (Alapértelmezett: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Válassza ki azokat a szerepköröket, amelyek beleszámítanak az „Élethosszig tartó tagságra jogosult” státuszba.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Válassza ki azokat a szerepköröket, amelyek beleszámítanak a „Tagsági évek” értékébe.</string>
 </resources>

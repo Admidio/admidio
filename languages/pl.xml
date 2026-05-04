@@ -1803,4 +1803,7 @@
   <string name="SYS_YOUR_LISTS">Twoje listy</string>
   <string name="SYS_YOUR_NAME">Twoje imię</string>
   <string name="SYS_Z_TO_A">Od Z do A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Ustaw minimalną liczbę lat wymaganą dla „Kwalifikacja członka dożywotniego”. (Domyślnie: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Wybierz role, które są uwzględniane dla „Kwalifikacja członka dożywotniego”.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Wybierz role, które są uwzględniane dla „Lat członkostwa”.</string>
 </resources>

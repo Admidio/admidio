@@ -1761,4 +1761,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_YOUR_LISTS">Egen liste</string>
   <string name="SYS_YOUR_NAME">Ditt navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Angi minste antall år som kreves for «Kvalifisert livsmedlem». (Standard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Velg rollene som skal telle for «Kvalifisert livsmedlem».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Velg rollene som skal telle for «Medlemsår».</string>
 </resources>

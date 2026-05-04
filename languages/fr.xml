@@ -1465,4 +1465,7 @@
   <string name="SYS_YOUR_LISTS">Vos listes</string>
   <string name="SYS_YOUR_NAME">Votre nom</string>
   <string name="SYS_Z_TO_A">Z à A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Définissez le nombre minimum d’années requis pour « Éligible membre à vie ». (Par défaut : 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Sélectionnez les rôles pris en compte pour « Éligible membre à vie ».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Sélectionnez les rôles pris en compte pour les « Années d’adhésion ».</string>
 </resources>

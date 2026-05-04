@@ -1397,4 +1397,7 @@
   <string name="SYS_YOUR_LISTS">Eigen lijsten</string>
   <string name="SYS_YOUR_NAME">Uw naam</string>
   <string name="SYS_Z_TO_A">Z tot A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Stel het minimale aantal jaren in dat vereist is voor «Gekwalificeerd als levenslid». (Standaard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Selecteer de rollen die meetellen voor «Gekwalificeerd als levenslid».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Selecteer de rollen die meetellen voor «Lidmaatschapsjaren».</string>
 </resources>

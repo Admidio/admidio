@@ -51,6 +51,9 @@
                 {include 'sys-template-parts/form.select.tpl' data=$elements[$categoryReport.selection_role]}
                 {include 'sys-template-parts/form.select.tpl' data=$elements[$categoryReport.selection_cat]}
                 {include 'sys-template-parts/form.checkbox.tpl' data=$elements[$categoryReport.number_col]}
+                {include 'sys-template-parts/form.input.tpl' data=$elements[$categoryReport.life_membership_threshold_years]}
+                {include 'sys-template-parts/form.select.tpl' data=$elements[$categoryReport.life_membership_role_ids]}
+                {include 'sys-template-parts/form.select.tpl' data=$elements[$categoryReport.years_of_membership_role_ids]}
                 {include 'sys-template-parts/form.input.tpl' data=$elements[$categoryReport.id]}
                 {include 'sys-template-parts/form.input.tpl' data=$elements[$categoryReport.default_conf]}
 

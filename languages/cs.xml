@@ -1792,4 +1792,7 @@
   <string name="SYS_YOUR_LISTS">Vlastní seznamy</string>
   <string name="SYS_YOUR_NAME">Vaše jméno</string>
   <string name="SYS_Z_TO_A">Z až A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Nastavte minimální počet let požadovaných pro „Kvalifikovaný doživotní člen“. (Výchozí: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Vyberte role, které se započítávají pro „Kvalifikovaný doživotní člen“.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Vyberte role, které se započítávají pro „Roky členství“.</string>
 </resources>

@@ -29,8 +29,10 @@ use Admidio\Users\Entity\User;
  *   e# ... Membership end of role with ID #
  *   d# ... Membership duration of role with ID #
  *   y# ... Membership years (sum of all periods) of role with ID #
- *   y[#|#|#] ... Membership years (sum of all periods) over multiple role IDs
- *   z[#|#|#] ... Life membership reached (>= 20 years) over multiple role IDs
+ *   ymulti ... Membership years over configured role IDs
+ *   zmulti ... Life membership over configured role IDs
+ *   y[#|#|#] ... Legacy format: membership years over multiple role IDs
+ *   z[#|#|#] ... Legacy format: life membership over multiple role IDs
  *   ndummy ...  Number (running counter)
  *   adummy ...  All roles
  *   ddummy ... Duration of membership
@@ -94,6 +96,13 @@ class CategoryReport
         $configThreshold = (int) ($this->arrConfiguration[$this->conf]['life_membership_threshold_years'] ?? 20);
         $this->setLifeMembershipThresholdYears($configThreshold);
 
+        $configuredYearsOfMembershipRoleIds = array_values(array_filter(array_map('intval', explode(',', (string)($this->arrConfiguration[$this->conf]['years_of_membership_role_ids'] ?? ''))), static function ($roleId) {
+            return $roleId > 0;
+        }));
+        $configuredLifeMembershipRoleIds = array_values(array_filter(array_map('intval', explode(',', (string)($this->arrConfiguration[$this->conf]['life_membership_role_ids'] ?? ''))), static function ($roleId) {
+            return $roleId > 0;
+        }));
+
         $workArray = array();
         $number_row_pos = -1;
         $number_col = array();
@@ -110,8 +119,12 @@ class CategoryReport
         foreach ($columns as $key => $data) {
             // This is only to check whether this release still exists.
             // It could be that a profile field or role has been deleted since the last save
-            $isMultiRoleYears = preg_match('/^y\[(\d+(?:\|\d+)*)\]$/', $data) === 1;
-            $isLifeMembership = preg_match('/^z\[(\d+(?:\|\d+)*)\]$/', $data) === 1;
+            $isConfiguredMultiRoleYears = ($data === 'ymulti');
+            $isConfiguredLifeMembership = ($data === 'zmulti');
+            $isLegacyMultiRoleYears = preg_match('/^y\[(\d+(?:\|\d+)*)\]$/', $data) === 1;
+            $isLegacyLifeMembership = preg_match('/^z\[(\d+(?:\|\d+)*)\]$/', $data) === 1;
+            $isMultiRoleYears = $isConfiguredMultiRoleYears || $isLegacyMultiRoleYears;
+            $isLifeMembership = $isConfiguredLifeMembership || $isLegacyLifeMembership;
             if ($isMultiRoleYears) {
                 $found = $this->isInHeaderSelection('ymulti');
             } elseif ($isLifeMembership) {
@@ -135,7 +148,20 @@ class CategoryReport
             $workArray[$key + 1]['field'] = $field;
 
             if ($isMultiRoleYears || $isLifeMembership) {
-                $roleIds = array_map('intval', explode('|', trim(substr($data, 2), '[]')));
+                if ($isConfiguredMultiRoleYears) {
+                    $roleIds = $configuredYearsOfMembershipRoleIds;
+                } elseif ($isConfiguredLifeMembership) {
+                    $roleIds = $configuredLifeMembershipRoleIds;
+                } else {
+                    $legacyRoleIds = array_map('intval', explode('|', trim(substr($data, 2), '[]')));
+                    if ($isLegacyMultiRoleYears && count($configuredYearsOfMembershipRoleIds) > 0) {
+                        $roleIds = $configuredYearsOfMembershipRoleIds;
+                    } elseif ($isLegacyLifeMembership && count($configuredLifeMembershipRoleIds) > 0) {
+                        $roleIds = $configuredLifeMembershipRoleIds;
+                    } else {
+                        $roleIds = $legacyRoleIds;
+                    }
+                }
                 $roleIds = array_values(array_filter(array_unique($roleIds), static function ($roleId) {
                     return $roleId > 0;
                 }));
@@ -641,7 +667,7 @@ class CategoryReport
                     break;
 
                 case 'z':
-                    // z[#|#] -> life membership reached (>=threshold years) across selected roles
+                    // zmulti / z[#|#] -> life membership reached (>=threshold years) across selected roles
                     $typeHint = 'checkbox';
                     $rawCond  = $normalizeYesNo($rawCond);
                     $roleIds = array_values(array_filter(array_map('intval', (array) ($colDef['role_ids'] ?? array()))));
@@ -650,7 +676,7 @@ class CategoryReport
                                                     FROM ' . TBL_MEMBERS . ' m2
                                                    WHERE m2.mem_usr_id = usr_id
                                                      AND m2.mem_rol_id IN (' . implode(',', $roleIds) . ')
-                                                     AND m2.mem_begin <= \'' . $date . '\') / 365) >= 20
+                                                     AND m2.mem_begin <= \'' . $date . '\') / 365) >= ' . (int) $this->lifeMembershipThresholdYears . '
                                       THEN 1 ELSE 0 END)';
                     } else {
                         $expr = '0';
@@ -843,9 +869,9 @@ class CategoryReport
                     }
                     $this->listData[$member][$key] = (int) floor($membershipDays / 365);
 
-                } elseif ($data['type'] === 'z') {      // Life membership reached (>= 20 years)
+                } elseif ($data['type'] === 'z') {      // Life membership reached (>= configured threshold)
                     $membershipDays = $this->calculateMembershipDaysForRoles($member, (array) ($data['role_ids'] ?? array()), $date);
-                    $this->listData[$member][$key] = (int) floor($membershipDays / 365) >= 20;
+                    $this->listData[$member][$key] = (int) floor($membershipDays / 365) >= $this->lifeMembershipThresholdYears;
 
                 } elseif ($data['type'] == 'n') {              //Sonderfall: Anzahlspalte
                     $this->listData[$member][$key] = '';
@@ -862,6 +888,23 @@ class CategoryReport
             }
             if ($number_row_pos > -1) {
                 $this->listData[$member][$number_row_pos] = $number_row_count;
+            }
+        }
+
+        // Add Years of Membership column if roles are configured
+        $yearsOfMembershipRoleIds = $configuredYearsOfMembershipRoleIds;
+        if (!empty($yearsOfMembershipRoleIds)) {
+            // Add header for Years of Membership column
+            $yearsOfMembershipKey = max(array_keys($this->headerData)) + 1;
+            $this->headerData[$yearsOfMembershipKey] = array(
+                'id' => 0,
+                'data' => 'Years of Membership'
+            );
+            
+            // Calculate years for each member
+            foreach ($this->listData as $member => $dummy) {
+                $membershipDays = $this->calculateMembershipDaysForRoles($member, $yearsOfMembershipRoleIds, $date);
+                $this->listData[$member][$yearsOfMembershipKey] = (int) floor($membershipDays / 365);
             }
         }
 
@@ -1260,6 +1303,8 @@ class CategoryReport
                 $values['selection_cat'] = $row['crt_selection_cat'];
                 $values['number_col'] = $row['crt_number_col'];
                 $values['life_membership_threshold_years'] = $row['crt_life_membership_threshold_years'] ?? 20;
+                $values['years_of_membership_role_ids'] = $row['crt_years_of_membership_role_ids'] ?? '';
+                $values['life_membership_role_ids'] = $row['crt_life_membership_role_ids'] ?? '';
                 $values['default_conf'] = false;
                 if ($gSettingsManager->getInt('category_report_default_configuration') == $row['crt_id']) {
                     $values['default_conf'] = true;
@@ -1370,6 +1415,8 @@ class CategoryReport
                 $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
                 $categoryReport->setValue('crt_number_col', $values['number_col']);
                 $categoryReport->setValue('crt_life_membership_threshold_years', $values['life_membership_threshold_years'] ?? 20);
+                $categoryReport->setValue('crt_years_of_membership_role_ids', $values['years_of_membership_role_ids'] ?? '');
+                $categoryReport->setValue('crt_life_membership_role_ids', $values['life_membership_role_ids'] ?? '');
                 $categoryReport->save();
 
                 if ($values['default_conf'] === true || $defaultConfiguration === 0) {

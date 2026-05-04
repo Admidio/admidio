@@ -1801,4 +1801,7 @@
   <string name="SYS_YOUR_LISTS">Deine Listen</string>
   <string name="SYS_YOUR_NAME">Ihr Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Legen Sie die Mindestanzahl an Jahren fest, die für „Lebensmitglied qualifiziert“ erforderlich ist. (Standard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Wählen Sie die Rollen aus, die für „Lebensmitglied qualifiziert“ berücksichtigt werden.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Wählen Sie die Rollen aus, die für „Mitgliedsjahre“ berücksichtigt werden.</string>
 </resources>

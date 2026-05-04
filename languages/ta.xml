@@ -1759,4 +1759,7 @@
   <string name="SYS_YOUR_LISTS">சொந்த பட்டியல்கள்</string>
   <string name="SYS_YOUR_NAME">உங்கள் பெயர்</string>
   <string name="SYS_Z_TO_A">இசட் முதல் ஏ</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">«ஆயுள் உறுப்பினர் தகுதி» பெற தேவையான குறைந்தபட்ச ஆண்டுகளை அமைக்கவும். (இயல்புநிலை: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">«ஆயுள் உறுப்பினர் தகுதி»க்கு கணக்கிட வேண்டிய பங்குகளைத் தேர்ந்தெடுக்கவும்.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">«உறுப்பினர் ஆண்டுகள்»க்கு கணக்கிட வேண்டிய பங்குகளைத் தேர்ந்தெடுக்கவும்.</string>
 </resources>

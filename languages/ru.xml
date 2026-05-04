@@ -1462,4 +1462,7 @@
   <string name="SYS_YOUR_LISTS">Собственные списки</string>
   <string name="SYS_YOUR_NAME">Ваше имя</string>
   <string name="SYS_Z_TO_A">От Я до А</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Укажите минимальное количество лет, необходимое для статуса «Квалифицирован как пожизненный член». (По умолчанию: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Выберите роли, которые учитываются для статуса «Квалифицирован как пожизненный член».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Выберите роли, которые учитываются для «Лет членства».</string>
 </resources>

@@ -1361,4 +1361,7 @@
   <string name="SYS_YOUR_LISTS">Οι λίστες σας</string>
   <string name="SYS_YOUR_NAME">Το όνομα σας</string>
   <string name="SYS_Z_TO_A">Από το Ω στο Α</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Ορίστε τον ελάχιστο αριθμό ετών που απαιτείται για «Κατάλληλο ισόβιο μέλος». (Προεπιλογή: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Επιλέξτε τους ρόλους που υπολογίζονται για «Κατάλληλο ισόβιο μέλος».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Επιλέξτε τους ρόλους που υπολογίζονται για τα «Έτη μέλους».</string>
 </resources>
