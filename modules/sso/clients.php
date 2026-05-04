@@ -96,7 +96,11 @@ try {
             echo json_encode(array('status' => 'success'));
             break;
         case 'enable':
-            $enabled = admFuncVariableIsValid($_GET, 'enabled', 'boolean');
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $enabled = admFuncVariableIsValid($_POST, 'enabled', 'boolean');
+            $getClientUUID = admFuncVariableIsValid($_POST, 'uuid', 'uuid');
             $client = new SAMLClient($gDb);
             $client->readDataByUuid($getClientUUID);
             if ($client->isNewRecord()) {
