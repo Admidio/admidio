@@ -2118,6 +2118,7 @@ class FormPresenter
      * valid format. The method will return an array with all form input with sanitized html
      * from editor fields and html free content of all other fields.
      * @param array $fieldValues Array with field name as key and field value as array value.
+     * @param bool $editSelection Set to **true** if a selection of objects should be edited.
      * @return array Returns an array with all valid fields and their values of this form
      * @throws Exception
      */

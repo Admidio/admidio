@@ -773,11 +773,14 @@ class SSOClientPresenter extends PagePresenter
 
 
     /**
-     * Display a toggle to enable/disable a client (via a json call).
-     * @param  $name
+     * Display a toggle to enable/disable a client (via a JSON call).
+     * @param SSOClient $client
+     * @return string
+     * @throws Exception
      */
-    protected function generateEnableLink(SSOClient $client) {
-        global $gL10n;
+    protected function generateEnableLink(SSOClient $client): string
+    {
+        global $gL10n, $gCurrentSession;
         $enabled = $client->isEnabled();
         $uuid = $client->getValue($client->getColumnPrefix() . '_uuid');
 
@@ -960,9 +963,10 @@ class SSOClientPresenter extends PagePresenter
               var currentlyEnabled = \$link.data('enabled') === 1 || \$link.data('enabled') === '1';
               var newEnabled = currentlyEnabled ? 0 : 1;
 
-              $.get('clients.php?mode=enable', {
+              $.post('clients.php?mode=enable', {
                 uuid: \$link.data('uuid'),
-                enabled: newEnabled
+                enabled: newEnabled,
+                adm_csrf_token: '" . $gCurrentSession->getCSRFToken() . "'
               })
               .done(function (response) {
                 var data = typeof response === 'string' ? JSON.parse(response) : response;
