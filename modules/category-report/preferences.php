@@ -103,7 +103,7 @@ try {
             const rolePropIds = new Set(arr_role_props.map(o => String(o.id).toLowerCase()));
             const raw     = (val ?? "").toString().trim();
             const first   = raw.charAt(0).toLowerCase();
-                                                if (rolePropIds.has(first) && raw != "ddummy" && raw != "ymulti" && raw != "zmulti") {
+                                                if (rolePropIds.has(first) && raw != "ddummy" && raw != "ymulti" && raw != "ylmulti" && raw != "zmulti") {
               val = "r" + raw.slice(1);
             }
 
@@ -112,7 +112,7 @@ try {
                 "<option value=\"\"></option>";
         	for (const field of arr_user_fields) {
                 var fieldtype = String(field.id).charAt(0).toLowerCase();
-                if (rolePropIds.has(fieldtype) && (fieldtype !== "r") && (field.id !== "ddummy") && (field.id !== "ymulti") && (field.id !== "zmulti")) {
+                if (rolePropIds.has(fieldtype) && (fieldtype !== "r") && (field.id !== "ddummy") && (field.id !== "ymulti") && (field.id !== "ylmulti") && (field.id !== "zmulti")) {
                     continue;
                 }
 
