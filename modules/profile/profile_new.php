@@ -35,7 +35,9 @@ try {
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
     $getAcceptRegistration = admFuncVariableIsValid($_GET, 'accept_registration', 'bool');
     $getUserUuids = admFuncVariableIsValid($_GET, 'user_uuids', 'array', array('defaultValue' => array()));
+    $editSelection = true;
     if (empty($getUserUuids)) {
+        $editSelection = false;
         $getUserUuids = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
         $getUserUuids = array_map(function($uuid) {
             return preg_replace('/row_members_/', '', $uuid);
@@ -644,7 +646,7 @@ try {
 
             // check form field input and sanitized it from malicious content
             $profileEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-            $formValues = $profileEditForm->validate($_POST, (count($users) > 1));
+            $formValues = $profileEditForm->validate($_POST, $editSelection);
 
             // loop over all users and save the data
             foreach ($users as $user) {
