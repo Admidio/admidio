@@ -41,21 +41,40 @@ try {
     $getType = admFuncVariableIsValid($_GET, 'type', 'string', array('validValues' => array('ANN', 'AWA', 'EVT', 'FOT', 'LNK', 'ROL', 'USF', 'IVT')));
     $getCategoryUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
 
-    // check rights of the type
-    if (($getType === 'ANN' && !$gCurrentUser->isAdministratorAnnouncements())
-        || ($getType === 'AWA' && !$gCurrentUser->isAdministratorUsers())
-        || ($getType === 'EVT' && !$gCurrentUser->isAdministratorEvents())
-        || ($getType === 'FOT' && !$gCurrentUser->isAdministratorForum())
-        || ($getType === 'LNK' && !$gCurrentUser->isAdministratorWeblinks())
-        || ($getType === 'ROL' && !$gCurrentUser->isAdministratorRoles())
-        || ($getType === 'USF' && !$gCurrentUser->isAdministratorUsers())
-        || ($getType === 'IVT' && !$gCurrentUser->isAdministratorInventory())) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
+    if (in_array($getMode, array('edit', 'save', 'delete', 'sequence'), true) && $getCategoryUUID !== '') {
+        $category = new Category($gDb);
+        $category->readDataByUuid($getCategoryUUID);
 
-    if (in_array($getType, array('edit', 'save', 'delete'))) {
-        // check if this category is editable by the current user and current organization
+        if ($category->isNewRecord()) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        // re-check rights against the *record's* cat_type, not the user-supplied type
+        $recordType = $category->getValue('cat_type');
+        if (   ($recordType === 'ANN' && !$gCurrentUser->isAdministratorAnnouncements())
+            || ($recordType === 'AWA' && !$gCurrentUser->isAdministratorUsers())
+            || ($recordType === 'EVT' && !$gCurrentUser->isAdministratorEvents())
+            || ($recordType === 'FOT' && !$gCurrentUser->isAdministratorForum())
+            || ($recordType === 'LNK' && !$gCurrentUser->isAdministratorWeblinks())
+            || ($recordType === 'ROL' && !$gCurrentUser->isAdministratorRoles())
+            || ($recordType === 'USF' && !$gCurrentUser->isAdministratorUsers())
+            || ($recordType === 'IVT' && !$gCurrentUser->isAdministratorInventory())) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         if (!$category->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+    } else {
+        // check rights of the type
+        if (($getType === 'ANN' && !$gCurrentUser->isAdministratorAnnouncements())
+            || ($getType === 'AWA' && !$gCurrentUser->isAdministratorUsers())
+            || ($getType === 'EVT' && !$gCurrentUser->isAdministratorEvents())
+            || ($getType === 'FOT' && !$gCurrentUser->isAdministratorForum())
+            || ($getType === 'LNK' && !$gCurrentUser->isAdministratorWeblinks())
+            || ($getType === 'ROL' && !$gCurrentUser->isAdministratorRoles())
+            || ($getType === 'USF' && !$gCurrentUser->isAdministratorUsers())
+            || ($getType === 'IVT' && !$gCurrentUser->isAdministratorInventory())) {
             throw new Exception('SYS_NO_RIGHTS');
         }
     }

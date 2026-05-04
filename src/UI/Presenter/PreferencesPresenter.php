@@ -1254,6 +1254,12 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_sender_name'],
             array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
         );
+        $formEmailDispatch->addCheckbox(
+            'mail_send_to_all_addresses',
+            $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'),
+            (bool) $formValues['mail_send_to_all_addresses'],
+            array('helpTextId' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
+        );
 
         $selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
         $formEmailDispatch->addSelectBox(
@@ -1780,12 +1786,6 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_MAX_RECEIVER'),
             $formValues['mail_max_receiver'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_MAX_RECEIVER_DESC')
-        );
-        $formMessages->addCheckbox(
-            'mail_send_to_all_addresses',
-            $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'),
-            (bool) $formValues['mail_send_to_all_addresses'],
-            array('helpTextId' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
         );
         $formMessages->addCheckbox(
             'mail_show_former',

@@ -779,6 +779,73 @@ class Organization extends Entity
     }
 
     /**
+     * Determine all organization ids that share users with the current organization.
+     * Child organizations inherit the member-sharing preference from their direct parent and
+     * cannot define a separate scope.
+     * @return array<int,int>
+     * @throws Exception
+     */
+    public function getSharedUsersOrganizationIds(): array
+    {
+        $currentOrganizationId = (int)$this->getValue('org_id');
+        $parentOrganizationId = (int)$this->getValue('org_org_id_parent');
+        $sharingRootOrganization = $this;
+
+        if ($parentOrganizationId > 0) {
+            $sharingRootOrganization = new self($this->db, $parentOrganizationId);
+            $settingsManager = $sharingRootOrganization->getSettingsManager();
+        } else {
+            $settingsManager = $this->getSettingsManager();
+        }
+
+        $memberSharingEnabled = $settingsManager->has('contacts_suborganization_use_same_members')
+            && $settingsManager->getBool('contacts_suborganization_use_same_members');
+
+        if (!$memberSharingEnabled) {
+            return array($currentOrganizationId);
+        }
+
+        $sharedOrganizationIds = array_keys($sharingRootOrganization->getOrganizationsInRelationship(true, false));
+        $sharedOrganizationIds[] = (int)$sharingRootOrganization->getValue('org_id');
+
+        if (!in_array($currentOrganizationId, $sharedOrganizationIds, true)) {
+            $sharedOrganizationIds[] = $currentOrganizationId;
+        }
+
+        $sharedOrganizationIds = array_values(array_unique(array_map('intval', $sharedOrganizationIds)));
+        sort($sharedOrganizationIds);
+
+        return $sharedOrganizationIds;
+    }
+
+    /**
+     * Create a comma separated list with all organizations that share users prepared for SQL.
+     * @param bool $shortname If set to true then a list of all short names will be returned.
+     * @return string Returns a comma separated list of organization ids or short names.
+     * @throws Exception
+     */
+    public function getSharedUsersOrganizationsSQL(bool $shortname = false): string
+    {
+        $sharedOrganizationIds = $this->getSharedUsersOrganizationIds();
+
+        if (!$shortname) {
+            return implode(',', $sharedOrganizationIds);
+        }
+
+        $sql = 'SELECT org_shortname
+                  FROM ' . TBL_ORGANIZATIONS . '
+                 WHERE org_id IN (' . Database::getQmForValues($sharedOrganizationIds) . ')';
+        $pdoStatement = $this->db->queryPrepared($sql, $sharedOrganizationIds);
+
+        $organizationShortnames = array();
+        while ($row = $pdoStatement->fetch()) {
+            $organizationShortnames[] = '\'' . $row['org_shortname'] . '\'';
+        }
+
+        return implode(',', $organizationShortnames);
+    }
+
+    /**
      * Read all child and parent organizations of this organization and returns an array with them.
      * @param bool $child If set to **true** (default) then all child organizations will be in the array
      * @param bool $parent If set to **true** (default) then the parent organization will be in the array

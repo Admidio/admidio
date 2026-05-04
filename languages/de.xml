@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Zusätzliche Daten</string>
@@ -17,7 +17,7 @@
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Gib in diesem Formular Name, E-Mail und die Zugangsdaten einer Administratorin oder eines Administrators an. Mit diesen Daten kannst du dich nach der Installation bei Admidio anmelden.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Daten der Organisation</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# konnte nicht im Verzeichnis #VAR2_BOLD# gefunden werden.</string>
-  <string name="INS_DATABASE_HOST_INFO">Gib an dieser Stelle den Namen des Datenbankservers an. Dies kann eine URL sein oder aber auch localhost, wenn die Datenbank auf demselben Rechner läuft, wie die Webseite.  </string>
+  <string name="INS_DATABASE_HOST_INFO">Gib an dieser Stelle den Namen des Datenbankservers an. Dies kann eine URL sein oder aber auch localhost, wenn die Datenbank auf demselben Rechner läuft, wie die Webseite.</string>
   <string name="INS_DATABASE_LOGIN">Datenbank Zugangsdaten</string>
   <string name="INS_DATABASE_LOGIN_DESC">Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere Admidio-Installationen auf derselben Datenbank einrichten möchtest.</string>
   <string name="INS_DATABASE_PORT_INFO">Wird dieses Feld nicht ausgefüllt, so wird der Standardport der Datenbank (MariaDB/MySQL: 3306, PostgreSQL: 5432) verwendet. Nutzt du oder dein Webhoster einen speziellen Port, so kann dieser hier eingetragen werden.</string>
@@ -93,7 +93,8 @@
   <string name="SYS_SUPERIOR_FEMALE">Vorgesetzte</string>
   <string name="SYS_SUPERIOR_MALE">Vorgesetzter</string>
   <string name="SYS_WIFE">Ehefrau</string>
-  <!--Phrases only in organization administration-->
+  <!--Phrases
+  only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Zugriff auf Modul</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer:innen freigegeben werden. Haben nur angemeldete Benutzer:innen Zugriff, so wird das Modul für Gäste ausgeblendet. Der Web-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Voreinstellung: Aktiviert)</string>
   <string name="ORG_ACCESS_TO_PLUGIN">Plugin-Zugriff</string>
@@ -143,6 +144,8 @@
   <string name="ORG_ENABLE_CAPTCHA">Captcha aktivieren</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE">Registrierung aktivieren</string>
   <string name="ORG_ENABLE_REGISTRATION_MODULE_DESC">Die Registrierung durch Besucher:innen der Homepage kann über diese Einstellung aktiviert oder deaktiviert werden. Welche Profilfelder bei der Registrierung angezeigt werden, kann in den Profilfeld-Einstellungen je Feld konfiguriert werden. (Voreinstellung: ja)</string>
+  <string name="ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS">Unterorganisationen die Verwendung derselben Mitglieder ermöglichen</string>
+  <string name="ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS_DESC">Wenn diese Option aktiviert ist, können Organisationen innerhalb dieser Eltern-Kind-Beziehung beim Anlegen von Kontakten oder beim Zuweisen von Anmeldungen bestehende Kontakte wiederverwenden. Unterorganisationen erben diese Einstellung von ihrer übergeordneten Organisation und können sie nicht selbst festlegen. Bei der Suche nach ähnlichen Kontakten werden nur Kontakte berücksichtigt, die Mitglieder von Organisationen innerhalb dieser Beziehung sind oder waren. Organisationen ohne Beziehung teilen keine Mitglieder. Der Filter „Alle Organisationen“ in der Kontaktliste ist nur verfügbar, wenn diese Einstellung und „Alle Kontakte anzeigen“ aktiviert sind.</string>
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer:innen angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
   <string name="ORG_FIELD_DISABLED">Feld nur für Mitglieder mit dem Recht #VAR1_BOLD# editierbar</string>
   <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann von dem Mitglied im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Mitgliedern bearbeitet werden, die das Rollenrecht besitzen alle Mitglieder zu bearbeiten. Leiter:innen einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
@@ -200,7 +203,8 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Kurzbezeichnung der Organisation</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
   <string name="ORG_VARIABLE_USERNAME">Anmeldename der Benutzerin oder des Benutzers aus dem jeweiligen E-Mailkontext</string>
-  <!--System-Phrases for use in every module-->
+  <!--System-Phrases
+  for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_A_TO_Z">A bis Z</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
@@ -250,7 +254,7 @@
   <string name="SYS_ALL_OTHERS">Alle anderen</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
-  <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.  </string>
+  <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.</string>
   <string name="SYS_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Teilnehmende können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
   <string name="SYS_ALSO_VISITORS">auch Besucher:innen</string>
@@ -706,7 +710,7 @@
   <string name="SYS_FOLDER">Ordner</string>
   <string name="SYS_FOLDER_EXISTS">Der Ordner #VAR1# existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</string>
   <string name="SYS_FOLDER_NAME_EMPTY">Es wurde kein Ordnername angegeben!</string>
-  <string name="SYS_FOLDER_NAME_INVALID">Der ausgewählte Ordnername #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Ordnernamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt; / \ </string>
+  <string name="SYS_FOLDER_NAME_INVALID">Der ausgewählte Ordnername #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Ordnernamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt; / \</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Es stehen keine Dokumente oder Dateien für Gäste zur Verfügung.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du besitzt keine Rechte den gewählten Ordner zu sehen.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</string>
@@ -1175,7 +1179,8 @@
   <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Das Erscheinungsbild der Übersichts-Erweiterungen auf der Übersichtsseite kann hier geändert werden. Die Reihenfolge der Erweiterungen kann per Drag &amp; Drop (große Bildschirme) oder durch Klicken auf die Verschieben-Schaltflächen (kleine Bildschirme) geändert werden. Die neue Reihenfolge wird erst nach dem Speichern der Einstellungen wirksam!</string>
   <string name="SYS_PAGE_NEXT">Nächste</string>
   <string name="SYS_PAGE_PREVIOUS">Vorherige</string>
-  <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
+  <string name="SYS_PARAMETER1_AND_PARAMETER2"
+    description="Two parameters are connected with an and">#VAR1# und #VAR2#</string>
   <string name="SYS_PARENT_ALBUM">Elternalbum</string>
   <string name="SYS_PARENT_ALBUM_DESC">Ein Album kann einem anderen Album untergeordnet sein. Wähle dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Willst du das Album auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
   <string name="SYS_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
@@ -1436,7 +1441,7 @@
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: ja)</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">E-Mails an alle E-Mail-Adressen der Benutzerin bzw. des Benutzers senden</string>
-  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin bzw. des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: ja)</string>
+  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen der Benutzerin bzw. des Benutzers gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: nein)</string>
   <string name="SYS_SEND_GREETING_CARD">Grußkarte versenden</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Zugangsdaten versenden</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Die E-Mail wird an alle Mitglieder der ausgewählten Rolle gesendet. Weitere Rollen und Empfänger:innen sind für eingeloggte Benutzerinnen und Benutzer verfügbar.</string>
@@ -1452,7 +1457,7 @@
   <string name="SYS_SENDER">Absender:in</string>
   <string name="SYS_SENDER_EMAIL">Absender:in E-Mail</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Absender-E-Mail-Adresse für das Versenden von Systembenachrichtigungen und E-Mails an Rollen und Benutzer. Die E-Mail-Adresse sollte die Domain der Website enthalten, auf der Admidio installiert ist.</string>
-  <string name="SYS_SENDER_MODE_DESC">Gib an, wie der Absender einer E-Mail überprüft wird. Viele Anbieter erlauben es dem Absender einer E-Mail nicht, eine E-Mail-Adresse aus einer anderen Domain zu verwenden. In diesem Fall sollte eine der beiden Optionen mit der System-E-Mail ausgewählt werden. Die entsprechende E-Mail-Adresse und der Name können in den folgenden beiden Einstellungen gespeichert werden. (Standard: #VAR1#) </string>
+  <string name="SYS_SENDER_MODE_DESC">Gib an, wie der Absender einer E-Mail überprüft wird. Viele Anbieter erlauben es dem Absender einer E-Mail nicht, eine E-Mail-Adresse aus einer anderen Domain zu verwenden. In diesem Fall sollte eine der beiden Optionen mit der System-E-Mail ausgewählt werden. Die entsprechende E-Mail-Adresse und der Name können in den folgenden beiden Einstellungen gespeichert werden. (Standard: #VAR1#)</string>
   <string name="SYS_SENDER_NAME">Absendername</string>
   <string name="SYS_SENDER_NAME_DESC">Name der E-Mail-Adresse des Absenders. Dieses Feld muss gepflegt werden, wenn das Feld für die E-Mail-Adresse des Absenders nicht leer ist.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">Die absendende Person war nicht angemeldet. Daher sind die Absenderinformationen möglicherweise falsch.</string>
@@ -1503,10 +1508,10 @@
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP Authentifizierung</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
-  <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden.  (Voreinstellung: Ja)</string>
+  <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden. (Voreinstellung: Ja)</string>
   <string name="SYS_SMTP_AUTH_LOGIN">Login</string>
   <string name="SYS_SMTP_AUTH_PLAIN">Plain</string>
-  <string name="SYS_SMTP_AUTH_TYPE">SMTP-Authentifizierungstyp </string>
+  <string name="SYS_SMTP_AUTH_TYPE">SMTP-Authentifizierungstyp</string>
   <string name="SYS_SMTP_AUTH_TYPE_DESC">SMTP kennt verschiedene Authentifizierungsmethoden. Gib hier die Authentifizierungsmethode ein, die dein SMTP-Server unterstützt. Wenn du dir nicht sicher bist, welche Methode unterstützt wird, wähle #VAR1_BOLD#. Admidio wird dann nacheinander die verschiedenen Authentifizierungsmethoden ausprobieren, bis eine Anmeldung erfolgreich war. (Voreinstellung: automatisch)</string>
   <string name="SYS_SMTP_HOST">SMTP Host</string>
   <string name="SYS_SMTP_HOST_DESC">Adresse des zu verwendenden SMTP-Servers.</string>
@@ -1569,7 +1574,7 @@
   <string name="SYS_SSO_KEY_ADD">Neuer Schlüssel</string>
   <string name="SYS_SSO_KEY_ADMIN">SSO-Verwaltung von kryptografischen Schlüsseln</string>
   <string name="SYS_SSO_KEY_ALGORITHM">Kryptographischer Algorithmus</string>
-  <string name="SYS_SSO_KEY_ALGORITHM_DESC">Der dem Schlüssel zugrunde liegende kryptografische Algorithmus. </string>
+  <string name="SYS_SSO_KEY_ALGORITHM_DESC">Der dem Schlüssel zugrunde liegende kryptografische Algorithmus.</string>
   <string name="SYS_SSO_KEY_CERTIFICATE">x509-Zertifikat</string>
   <string name="SYS_SSO_KEY_DELETE">Schlüssel löschen</string>
   <string name="SYS_SSO_KEY_EDIT">Schlüssel bearbeiten</string>
@@ -1642,7 +1647,7 @@
   <string name="SYS_SSO_STATIC_SETTINGS">IdP-Metadaten für die Client-Einrichtung</string>
   <string name="SYS_SSO_USERDATA_ACCESS">Benutzerdaten und Zugangsberechtigungen</string>
   <string name="SYS_SSO_USERID_FIELD">Benutzer-ID-Feld</string>
-  <string name="SYS_SSO_USERID_FIELD_DESC"> Wähle das Admidio-Feld, das den Benutzer im Client-System (Dienstanbieter) eindeutig identifizieren soll. Einige Systeme erwarten einen Login-Namen (String), andere Systeme arbeiten mit numerischen IDs, etc. Bitte konsultiere das Handbuch der Service Provider App.</string>
+  <string name="SYS_SSO_USERID_FIELD_DESC">Wähle das Admidio-Feld, das den Benutzer im Client-System (Dienstanbieter) eindeutig identifizieren soll. Einige Systeme erwarten einen Login-Namen (String), andere Systeme arbeiten mit numerischen IDs, etc. Bitte konsultiere das Handbuch der Service Provider App.</string>
   <string name="SYS_SSO_USERID_FIELDS">Benutzer-ID-Felder</string>
   <string name="SYS_SSO_USERID_ID">Benutzer-ID (numerisch)</string>
   <string name="SYS_SSO_USERID_LOGIN">Anmeldename</string>
@@ -1667,7 +1672,7 @@
   <string name="SYS_SYSMAIL_LOGIN_INFORMATION">#subject# Zugangsdaten für #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndu erhältst deine Zugangsdaten für die Webseite #organization_homepage#.\nAnmeldename: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDas Team von #organization_long_name#</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Passwort zurücksetzen für #organization_long_name#\n#content# Hallo #user_first_name#,\n\nwir haben eine Anfrage zum Zurücksetzen deines Passwortes auf #organization_homepage# erhalten.\n\nFalls die Anfrage von dir gekommen ist, kannst du über den folgenden Link dein Passwort zurücksetzen und ein neues Passwort vergeben: \n#variable1#\n\nViele Grüße\nDas Team von #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an eine:n Administrator:in #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDas Team von #organization_long_name#</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich eine neue Benutzerin oder ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname:  #user_first_name#\nE-Mail:   #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Neue Registrierung bei #organization_long_name#\n#content# Es hat sich eine neue Benutzerin oder ein neuer Benutzer auf #organization_homepage# registriert.\n\nNachname: #user_last_name#\nVorname: #user_first_name#\nE-Mail: #user_email#\n\n\nDiese Nachricht wurde automatisch erzeugt.</string>
   <string name="SYS_SYSMAIL_REGISTRATION_CONFIRMATION">#subject# Deine Registrierung bei #organization_long_name#\n#content# Hallo #user_first_name#,\nwir freuen uns sehr, dass du dich auf unserer Website #organization_homepage# registriert hast.\n\nUm deine Registrierung abzuschließen, bitten wir dich, auf den folgenden Link zu klicken: #variable1#. Durch das Klicken auf den Link wirst du automatisch zu unserer Website weitergeleitet und deine Registrierung wird bestätigt.\n\nSobald du deine Registrierung bestätigt hast, wird diese von uns geprüft. Du erhältst innerhalb weniger Stunden eine Antwort, ob deine Registrierung angenommen und du dich mit deinen Anmeldedaten einloggen kannst oder ob deine Registrierung abgelehnt wurde.\n\nViele Grüße\nDas Team von #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Anmeldung bei #organization_long_name# bestätigt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde bestätigt.\n\nNun kannst du dich mit deinem Anmeldenamen #user_login_name# und deinem Passwort auf der Homepage anmelden.\n\nSolltest du noch Fragen haben, schreib eine E-Mail an #administrator_email#.\n\nViele Grüße\nDas Team von #organization_long_name#</string>
   <string name="SYS_SYSTEM">System</string>

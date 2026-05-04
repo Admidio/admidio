@@ -107,6 +107,7 @@ $defaultOrgPreferences = array(
     'mail_sender_mode' => '1',
     'mail_sender_email' => '',
     'mail_sender_name' => '',
+    'mail_send_to_all_addresses' => '0',
     'mail_smtp_host' => '',
     'mail_smtp_auth' => '1',
     'mail_smtp_port' => '587',
@@ -149,6 +150,7 @@ $defaultOrgPreferences = array(
     'contacts_list_configuration' => '',
     'contacts_per_page' => '25',
     'contacts_show_all' => '1',
+    'contacts_suborganization_use_same_members' => '0',
     'contacts_user_relations_enabled' => '1',
 
     // Documents and files
@@ -212,7 +214,6 @@ $defaultOrgPreferences = array(
     'mail_html_registered_users' => '1',
     'mail_max_receiver' => '10',
     'mail_save_attachments' => '1',
-    'mail_send_to_all_addresses' => '1',
     'mail_show_former' => '1',
     'mail_template' => 'default.html',
     'max_email_attachment_size' => '1',

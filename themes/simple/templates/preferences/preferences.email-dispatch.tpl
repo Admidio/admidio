@@ -23,6 +23,7 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_sender_mode']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_sender_email']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_sender_name']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_send_to_all_addresses']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_sending_mode']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_recipients_with_roles']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_into_to']}
