@@ -368,7 +368,7 @@ try {
              WHERE cat_id = rol_cat_id
                AND ( cat_org_id = ' . $gCurrentOrgId . '
                 OR cat_org_id IS NULL )';
-        $formConfigurations->addSelectBoxFromSql('years_of_membership_role_ids' . $key, 'Years of Membership - Selected Roles', $gDb, $sql,
+        $formConfigurations->addSelectBoxFromSql('years_of_membership_role_ids' . $key, $gL10n->get('SYS_YEARS_MEMBERSHIP_ROLES_DESC'), $gDb, $sql,
             array('defaultValue' => explode(',', (string)($value['years_of_membership_role_ids'] ?? '')), 'multiselect' => true, 'helpTextId' => 'SYS_YEARS_MEMBERSHIP_ROLES_DESC'));
         
         $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => FormPresenter::FIELD_HIDDEN));
