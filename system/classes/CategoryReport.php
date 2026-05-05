@@ -32,8 +32,6 @@ use Admidio\Users\Entity\User;
  *   ymulti ... Membership years over configured role IDs
  *   ylmulti ... Membership years over life-membership role IDs
  *   zmulti ... Life membership over configured role IDs
- *   y[#|#|#] ... Legacy format: membership years over multiple role IDs
- *   z[#|#|#] ... Legacy format: life membership over multiple role IDs
  *   ndummy ...  Number (running counter)
  *   adummy ...  All roles
  *   ddummy ... Duration of membership
@@ -41,13 +39,13 @@ use Admidio\Users\Entity\User;
  */
 class CategoryReport
 {
-    public array $headerData = array();          ///< Array mit allen Spaltenueberschriften
-    public array $listData = array();          ///< Array mit den Daten für den Report
-    public array $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
-    public array $headerRolePropSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
-    protected int $conf;                               ///< die gewaehlte Konfiguration
-    protected int $lifeMembershipThresholdYears = 20;  ///< threshold for life membership status columns
-    protected array $arrConfiguration = array();         ///< Array with the all configurations from the database
+    public array $headerData = array();                 ///< Array mit allen Spaltenueberschriften
+    public array $listData = array();                   ///< Array mit den Daten für den Report
+    public array $headerSelection = array();            ///< Array mit der Auswahlliste für die Spaltenauswahl
+    public array $headerRolePropSelection = array();    ///< Array mit der Auswahlliste für die Spaltenauswahl
+    protected int $conf;                                ///< die gewaehlte Konfiguration
+    protected int $lifeMembershipThresholdYears = 20;   ///< threshold for life membership status columns
+    protected array $arrConfiguration = array();        ///< Array with the all configurations from the database
 
     /**
      * CategoryReport constructor
@@ -123,10 +121,8 @@ class CategoryReport
             $isConfiguredMultiRoleYears = ($data === 'ymulti');
             $isConfiguredLifeMembershipYears = ($data === 'ylmulti');
             $isConfiguredLifeMembership = ($data === 'zmulti');
-            $isLegacyMultiRoleYears = preg_match('/^y\[(\d+(?:\|\d+)*)\]$/', $data) === 1;
-            $isLegacyLifeMembership = preg_match('/^z\[(\d+(?:\|\d+)*)\]$/', $data) === 1;
-            $isMultiRoleYears = $isConfiguredMultiRoleYears || $isConfiguredLifeMembershipYears || $isLegacyMultiRoleYears;
-            $isLifeMembership = $isConfiguredLifeMembership || $isLegacyLifeMembership;
+            $isMultiRoleYears = $isConfiguredMultiRoleYears || $isConfiguredLifeMembershipYears;
+            $isLifeMembership = $isConfiguredLifeMembership;
             if ($isMultiRoleYears) {
                 if ($isConfiguredLifeMembershipYears) {
                     $found = $this->isInHeaderSelection('ylmulti');
@@ -160,15 +156,6 @@ class CategoryReport
                     $roleIds = $configuredLifeMembershipRoleIds;
                 } elseif ($isConfiguredLifeMembership) {
                     $roleIds = $configuredLifeMembershipRoleIds;
-                } else {
-                    $legacyRoleIds = array_map('intval', explode('|', trim(substr($data, 2), '[]')));
-                    if ($isLegacyMultiRoleYears && count($configuredYearsOfMembershipRoleIds) > 0) {
-                        $roleIds = $configuredYearsOfMembershipRoleIds;
-                    } elseif ($isLegacyLifeMembership && count($configuredLifeMembershipRoleIds) > 0) {
-                        $roleIds = $configuredLifeMembershipRoleIds;
-                    } else {
-                        $roleIds = $legacyRoleIds;
-                    }
                 }
                 $roleIds = array_values(array_filter(array_unique($roleIds), static function ($roleId) {
                     return $roleId > 0;
@@ -655,7 +642,7 @@ class CategoryReport
                     break;
 
                 case 'y':
-                    // y# / y[#|#] -> cumulative membership years (sum over all periods up to report date)
+                    // y# / ymulti / ylmulti -> cumulative membership years (sum over all periods up to report date)
                     // The expression returns full years and can be used with conditions like ">= 20".
                     $typeHint = 'int';
                     if (($colDef['field'] ?? '') === 'multi') {
@@ -679,7 +666,7 @@ class CategoryReport
                     break;
 
                 case 'z':
-                    // zmulti / z[#|#] -> life membership reached (>=threshold years) across selected roles
+                    // zmulti -> life membership reached (>=threshold years) across selected roles
                     $typeHint = 'checkbox';
                     $rawCond  = $normalizeYesNo($rawCond);
                     $roleIds = array_values(array_filter(array_map('intval', (array) ($colDef['role_ids'] ?? array()))));
