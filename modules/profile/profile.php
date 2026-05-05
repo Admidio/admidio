@@ -40,6 +40,10 @@ try {
         $gCurrentSession->setValue('ses_binary', '');
     }
 
+    // Clean up stale form objects from role membership reloads that may have accumulated
+    // in existing sessions. This prevents session bloat from slowing down profile loads.
+    $gCurrentSession->clearFormObjects();
+
     // create user object
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);

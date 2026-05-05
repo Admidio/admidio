@@ -43,6 +43,10 @@ try {
         $gCurrentSession->setValue('ses_binary', '');
     }
 
+    // Clean up stale form objects from role membership reloads that may have accumulated
+    // in existing sessions. This prevents session bloat from slowing down AJAX reload calls.
+    $gCurrentSession->clearFormObjects();
+
     // create user object
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
@@ -102,7 +106,7 @@ try {
         // reload role memberships
         $roleStatement = getRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        $html = getRoleMemberships('role_list', $user, $roleStatement);
+        $html = getRoleMemberships('role_list', $user, $roleStatement, false);
         // Persist session (form objects added above) and release the write-lock before streaming.
         if (session_status() === PHP_SESSION_ACTIVE) { session_write_close(); }
         echo $html;
@@ -110,7 +114,7 @@ try {
         // reload former role memberships
         $roleStatement = getFormerRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        $html = getRoleMemberships('former_role_list', $user, $roleStatement);
+        $html = getRoleMemberships('former_role_list', $user, $roleStatement, false);
         if (session_status() === PHP_SESSION_ACTIVE) { session_write_close(); }
         echo $html;
 
@@ -129,7 +133,7 @@ try {
         // reload future role memberships
         $roleStatement = getFutureRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        $html = getRoleMemberships('future_role_list', $user, $roleStatement);
+        $html = getRoleMemberships('future_role_list', $user, $roleStatement, false);
         if (session_status() === PHP_SESSION_ACTIVE) { session_write_close(); }
         echo $html;
 
@@ -147,9 +151,12 @@ try {
     } elseif ($getMode === 'save_membership') {
         // save membership date changes
 
-        // Validate CSRF via form object
-        $membershipForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        $formValues = $membershipForm->validate($_POST);
+        // Validate CSRF token and posted dates directly to avoid persisting large form object sets in session.
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+        $formValues = array(
+            'adm_membership_start_date' => admFuncVariableIsValid($_POST, 'adm_membership_start_date', 'date', array('requireValue' => true)),
+            'adm_membership_end_date' => admFuncVariableIsValid($_POST, 'adm_membership_end_date', 'date')
+        );
 
         $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);

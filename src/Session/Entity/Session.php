@@ -149,6 +149,15 @@ class Session extends Entity
     }
 
     /**
+     * Clears all stored form objects from the session. This is useful to prevent session
+     * bloat when form objects accumulate from repeated AJAX reloads or abandoned form flows.
+     */
+    public function clearFormObjects(): void
+    {
+        $this->mFormObjects = array();
+    }
+
+    /**
      * Returns a CSRF token from the session. If no CSRF token exists a new one will be
      * generated and stored within the session. The next call of the method will then
      * return the existing token. The CSRF token has 30 characters. A new token could
