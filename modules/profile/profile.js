@@ -14,52 +14,110 @@ function ProfileJS(gRootPath) {
     this.futureRoleCount         = 0;
     this.userUuid                = "";
     this.errorID                 = 0;
+    this._reloadInFlight         = { current: false, former: false, future: false };
+    this._reloadPending          = { current: false, former: false, future: false };
+    this._reloadTimer            = null;
+    this._additionalRolesLoaded  = false;
 
-    this.reloadRoleMemberships = function () {
+    this._sectionExists = function (selector) {
+        return $(selector).length > 0;
+    };
+
+    this._reloadMembershipSection = function (mode, requestUrl, tabSelector, accordionSelector) {
+        if (!this._sectionExists(tabSelector) && !this._sectionExists(accordionSelector)) {
+            return;
+        }
+
+        if (this._reloadInFlight[mode]) {
+            this._reloadPending[mode] = true;
+            return;
+        }
+
+        var self = this;
+        this._reloadInFlight[mode] = true;
+
         $.get({
-            url: this.url + "?mode=reload_current_memberships&user_uuid=" + this.userUuid,
-            dataType: "html",
-            success: function(responseText) {
-                /* Tabs */
-                $("#adm_profile_role_memberships_current_pane_content .card-body").html(responseText);
-                formSubmitEvent('#adm_profile_role_memberships_current_pane_content .card-body');
-                /* Accordions */
-                $("#adm_profile_role_memberships_current_accordion_content .card-body").html(responseText);
-                formSubmitEvent('#adm_profile_role_memberships_current_accordion_content .card-body');
+            url: requestUrl,
+            dataType: "html"
+        }).done(function (responseText) {
+            if (self._sectionExists(tabSelector)) {
+                $(tabSelector + " .card-body").html(responseText);
+                formSubmitEvent(tabSelector + " .card-body");
+            }
+
+            if (self._sectionExists(accordionSelector)) {
+                $(accordionSelector + " .card-body").html(responseText);
+                formSubmitEvent(accordionSelector + " .card-body");
+            }
+        }).always(function () {
+            self._reloadInFlight[mode] = false;
+
+            if (self._reloadPending[mode]) {
+                self._reloadPending[mode] = false;
+                self._reloadMembershipSection(mode, requestUrl, tabSelector, accordionSelector);
             }
         });
     };
-    this.reloadFormerRoleMemberships = function () {
-        $.get(
-            {
-                url: this.url + "?mode=reload_former_memberships&user_uuid=" + this.userUuid,
-                dataType: "html",
-                success: function(responseText) {
-                    /* Tabs */
-                    $("#adm_profile_role_memberships_former_pane_content .card-body").html(responseText);
-                    formSubmitEvent('#adm_profile_role_memberships_former_pane_content .card-body');
-                    /* Accordions */
-                    $("#adm_profile_role_memberships_former_accordion_content .card-body").html(responseText);
-                    formSubmitEvent('#adm_profile_role_memberships_former_accordion_content .card-body');
-                }
-            }
+
+    this.reloadRoleMemberships = function () {
+        this._reloadMembershipSection(
+            "current",
+            this.url + "?mode=reload_current_memberships&user_uuid=" + this.userUuid,
+            "#adm_profile_role_memberships_current_pane_content",
+            "#adm_profile_role_memberships_current_accordion_content"
         );
     };
-    this.reloadFutureRoleMemberships = function () {
-        $.get(
-            {
-                url: this.url + "?mode=reload_future_memberships&user_uuid=" + this.userUuid,
-                dataType: "html",
-                success: function(responseText) {
-                    /* Tabs */
-                    $("#adm_profile_role_memberships_future_pane_content .card-body").html(responseText);
-                    formSubmitEvent('#adm_profile_role_memberships_future_pane_content .card-body');
-                    /* Accordions */
-                    $("#adm_profile_role_memberships_future_accordion_content .card-body").html(responseText);
-                    formSubmitEvent('#adm_profile_role_memberships_future_accordion_content .card-body');
-                }
-            }
+
+    this.reloadFormerRoleMemberships = function () {
+        this._reloadMembershipSection(
+            "former",
+            this.url + "?mode=reload_former_memberships&user_uuid=" + this.userUuid,
+            "#adm_profile_role_memberships_former_pane_content",
+            "#adm_profile_role_memberships_former_accordion_content"
         );
+    };
+
+    this.reloadFutureRoleMemberships = function () {
+        this._reloadMembershipSection(
+            "future",
+            this.url + "?mode=reload_future_memberships&user_uuid=" + this.userUuid,
+            "#adm_profile_role_memberships_future_pane_content",
+            "#adm_profile_role_memberships_future_accordion_content"
+        );
+    };
+
+    this.reloadAdditionalRoleMemberships = function () {
+        this.reloadFormerRoleMemberships();
+        this.reloadFutureRoleMemberships();
+    };
+
+    this.scheduleRoleMembershipReloads = function () {
+        var self = this;
+
+        if (this._reloadTimer !== null) {
+            clearTimeout(this._reloadTimer);
+        }
+
+        this._reloadTimer = setTimeout(function () {
+            self.reloadRoleMemberships();
+            self.reloadAdditionalRoleMemberships();
+            self._reloadTimer = null;
+        }, 200);
+    };
+
+    this.initializeDeferredRoleMemberships = function () {
+        var self = this;
+        var loadAdditionalMembershipsOnce = function () {
+            if (self._additionalRolesLoaded) {
+                return;
+            }
+
+            self._additionalRolesLoaded = true;
+            self.reloadAdditionalRoleMemberships();
+        };
+
+        $("#adm_profile_role_memberships_tab").on("shown.bs.tab", loadAdditionalMembershipsOnce);
+        $("#adm_profile_role_memberships_accordion").on("shown.bs.collapse", loadAdditionalMembershipsOnce);
     };
 
     this.toggleDetailsOn = function (memberUuid) {

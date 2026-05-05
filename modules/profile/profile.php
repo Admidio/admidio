@@ -131,9 +131,7 @@ try {
                             membershipPeriod.animate({opacity: 1.0}, 5000);
                             membershipPeriod.fadeOut("slow");
 
-                            profileJS.reloadRoleMemberships();
-                            profileJS.reloadFormerRoleMemberships();
-                            profileJS.reloadFutureRoleMemberships();
+                            profileJS.scheduleRoleMembershipReloads();
                             formSubmitEvent();
                         } else {
                             formAlert.attr("class", "alert alert-danger form-alert");
@@ -168,8 +166,7 @@ try {
         });
 
         profileJS.reloadRoleMemberships();
-        profileJS.reloadFormerRoleMemberships();
-        profileJS.reloadFutureRoleMemberships();
+        profileJS.initializeDeferredRoleMemberships();
 
         $("#menu_item_profile_tfa").attr("href", "javascript:void(0);");
         $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
@@ -177,9 +174,7 @@ try {
 
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
-            profileJS.reloadRoleMemberships();
-            profileJS.reloadFormerRoleMemberships();
-            profileJS.reloadFutureRoleMemberships();
+            profileJS.scheduleRoleMembershipReloads();
         });
 
         formSubmitEvent();',
