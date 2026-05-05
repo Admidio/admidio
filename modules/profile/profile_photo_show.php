@@ -24,6 +24,9 @@ try {
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
     $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
+    $getTimestamp = admFuncVariableIsValid($_GET, 'timestamp', 'string', array('defaultValue' => ''));
+
+    $isOwnUserRequest = $gValidLogin && $getUserUuid === (string)$gCurrentUser->getValue('usr_uuid');
 
     // If this request is not rendering the upload preview, clear stale binary
     // upload payloads to keep the session lean and fast.
@@ -31,12 +34,18 @@ try {
         $gCurrentSession->setValue('ses_binary', '');
     }
 
-    // read user data and show error if user doesn't exist
-    $user = new User($gDb, $gProfileFields);
-    $user->readDataByUuid($getUserUuid);
+    // For own-user requests, re-use the already loaded session user object and avoid
+    // reloading a full user entity from the database on every nav/profile image request.
+    if ($isOwnUserRequest) {
+        $user = $gCurrentUser;
+    } else {
+        // read user data and show error if user doesn't exist
+        $user = new User($gDb, $gProfileFields);
+        $user->readDataByUuid($getUserUuid);
 
-    if ((int)$user->getValue('usr_id') === 0) {
-        throw new Exception('SYS_INVALID_PAGE_VIEW');
+        if ((int)$user->getValue('usr_id') === 0) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
     }
 
     // Default photo path based on gender (no DB BLOB involved yet).
@@ -66,6 +75,12 @@ try {
     $ifNoneMatch = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim((string)$_SERVER['HTTP_IF_NONE_MATCH']) : '';
     header('ETag: ' . $etag);
     header('Last-Modified: ' . $user->getValue('usr_timestamp_changed', 'D, d M Y H:i:s') . ' GMT');
+    if (!$getNewPhoto && $getTimestamp !== '') {
+        // timestamped URLs are content-addressed and can be cached aggressively.
+        header('Cache-Control: private, max-age=31536000, immutable');
+    } else {
+        header('Cache-Control: private, max-age=86400, stale-while-revalidate=60');
+    }
     if ($ifNoneMatch === $etag) {
         http_response_code(304);
         exit;
@@ -84,9 +99,22 @@ try {
             }
         } else {
             if ((int)$gSettingsManager->get('profile_photo_storage') === 0) {
+                $photoTimestampToken = preg_replace('/[^0-9A-Za-z_-]/', '', $user->getValue('usr_timestamp_changed', 'Y-m-d-H-i-s'));
+                $profilePhotoCacheFile = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int)$user->getValue('usr_id') . '_' . $photoTimestampToken . '.jpg';
+
+                if (is_file($profilePhotoCacheFile)) {
+                    header('Content-Type: image/jpeg');
+                    header('Content-Length: ' . (int)filesize($profilePhotoCacheFile));
+                    readfile($profilePhotoCacheFile);
+                    exit;
+                }
+
                 // getValue('usr_photo') triggers a single lazy-fetch of the BLOB column.
                 $photoData = $user->getValue('usr_photo');
                 if ((string)$photoData !== '') {
+                    if (!is_file($profilePhotoCacheFile)) {
+                        @file_put_contents($profilePhotoCacheFile, $photoData);
+                    }
                     $image = new Image();
                     $image->setImageFromData($photoData);
                 } else {

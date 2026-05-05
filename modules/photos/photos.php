@@ -54,6 +54,21 @@ try {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
+        // Persist minimal album metadata in session so thumbnail requests can
+        // resolve image paths without repeated album lookups.
+        $photoAlbumMap = $gCurrentSession->getValue('ses_photo_album_map');
+        if (!is_array($photoAlbumMap)) {
+            $photoAlbumMap = array();
+        }
+        $photoAlbumMap[$getPhotoUuid] = array(
+            'id' => (int) $photoAlbum->getValue('pho_id'),
+            'begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d')
+        );
+        if (count($photoAlbumMap) > 200) {
+            $photoAlbumMap = array_slice($photoAlbumMap, -200, null, true);
+        }
+        $gCurrentSession->setValue('ses_photo_album_map', $photoAlbumMap);
+
         $headline = $photoAlbum->getValue('pho_name');
 
         // Drop URL on the navigation stack
@@ -275,12 +290,12 @@ try {
                     $photoThumbnailTable .= '
                         <a data-lightbox="admidio-gallery" data-title="' . $headline . '"
                             href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))) . '"><img
-                            class="rounded admidio-lazy-thumb" id="img_' . $actThumbnail . '" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)) . '" alt="' . $actThumbnail . '" loading="lazy" decoding="async" fetchpriority="low" /></a>';
+                            class="rounded admidio-lazy-thumb" id="img_' . $actThumbnail . '" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1, 'album_id' => (int) $photoAlbum->getValue('pho_id'), 'album_begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d'))) . '" alt="' . $actThumbnail . '" loading="lazy" decoding="async" fetchpriority="low" /></a>';
                 } // Same window
                 elseif ((int)$gSettingsManager->get('photo_show_mode') === 2) {
                     $photoThumbnailTable .= '
                         <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid)) . '"><img
-                            class="rounded admidio-lazy-thumb" id="img_' . $actThumbnail . '" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)) . '" alt="' . $actThumbnail . '" loading="lazy" decoding="async" fetchpriority="low" />
+                            class="rounded admidio-lazy-thumb" id="img_' . $actThumbnail . '" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1, 'album_id' => (int) $photoAlbum->getValue('pho_id'), 'album_begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d'))) . '" alt="' . $actThumbnail . '" loading="lazy" decoding="async" fetchpriority="low" />
                         </a>';
                 }
 
