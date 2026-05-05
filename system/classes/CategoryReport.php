@@ -399,7 +399,8 @@ class CategoryReport
                         break;
 
                     default:
-                        if ($lifeMembershipEnabled && count($roleIds) > 0) {
+                        $typeHint = 'string';
+                        break;
                 }
 
                 // if profile field then add NOT EXISTS statement (same idea as in myList)
@@ -1181,7 +1182,9 @@ class CategoryReport
      */
     private function buildMultiRoleLifeMembershipHeaderText(array $roleIds): string
     {
-        return $this->gL10n->get('SYS_LIFE_MEMBERSHIP_QUALIFIED');
+        global $gL10n;
+
+        return $gL10n->get('SYS_LIFE_MEMBERSHIP_QUALIFIED');
     }
 
     /**
@@ -1191,7 +1194,9 @@ class CategoryReport
      */
     private function buildYearsTowardsLifeMembershipHeaderText(): string
     {
-        return $this->gL10n->get('SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP');
+        global $gL10n;
+
+        return $gL10n->get('SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP');
     }
 
     /**
