@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Informații suplimentare</string>
@@ -1490,6 +1490,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Au fost găsite contacte cu un nume similar pentru înregistrarea #VAR1_BOLD# cu adresa de e-mail #VAR2_BOLD#. Vă rugăm să verificați înregistrarea și să o atribuiți unui contact găsit sau să creați un contact nou.</string>
   <string name="SYS_SINCE_TO">de la #VAR1# la #VAR2#</string>
   <string name="SYS_SINCE_VAR">din #VAR1#</string>
+  <string name="SYS_SINCE">din #VAR1#</string>
   <string name="SYS_SIZE">Mărime</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">autentificare SMTP</string>

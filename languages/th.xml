@@ -1179,6 +1179,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">เมื่อผู้ใช้เป็นสมาชิกในบทบาทขององค์กรอื่น กล่องจะแสดงบทบาททั้งหมดและวันที่ลงทะเบียน (ค่าเริ่มต้น: ใช่)</string>
   <string name="SYS_SHOW_ROUTE">แสดง เส้นทาง</string>
   <string name="SYS_SINCE_VAR">ตั้งแต่ #VAR1#</string>
+  <string name="SYS_SINCE">ตั้งแต่ #VAR1#</string>
   <string name="SYS_SINCE_TO">จาก #VAR1# ถึง #VAR2#</string>
   <string name="SYS_SIZE">ขนาด</string>
   <string name="SYS_SMTP">SMTP</string>

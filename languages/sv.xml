@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tillbaka till gästboken</string>
@@ -1306,6 +1306,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med liknande namn som #VAR1_BOLD# hittades.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med liknande namn hittades vid registrering av #VAR1_BOLD# med e-postadressen #VAR2_BOLD#. Kontrollera informationen och koppla till en befintlig kontakt eller skapa en ny kontakt.</string>
   <string name="SYS_SINCE_VAR">sedan #VAR1#</string>
+  <string name="SYS_SINCE">sedan #VAR1#</string>
   <string name="SYS_SINCE_TO">från #VAR1# till #VAR2#</string>
   <string name="SYS_SIZE">Storlek</string>
   <string name="SYS_SKYPE">Skype</string>

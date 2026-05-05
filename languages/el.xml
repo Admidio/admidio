@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Πίσω στο βιβλίο επισκεπτών</string>
@@ -1214,6 +1214,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Όταν ο χρήστης είναι μέλος σε ρόλους άλλου συλλόγου, θα εμφανιστεί ένα πλαίσιο που δείχνει όλους τους ρόλους και την ημερομηνία εγγραφής. (default: yes)</string>
   <string name="SYS_SHOW_ROUTE">Εμφάνιση διαδρομής</string>
   <string name="SYS_SINCE_VAR">από #VAR1#</string>
+  <string name="SYS_SINCE">από #VAR1#</string>
   <string name="SYS_SINCE_TO">Από #VAR1# σε #VAR2#</string>
   <string name="SYS_SIZE">Μέγεθος</string>
   <string name="SYS_SKYPE">Skype</string>

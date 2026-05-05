@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Yderligere oplysninger</string>
@@ -1490,6 +1490,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med et lignende navn blev fundet til registrering af #VAR1_BOLD# med e-mailadressen #VAR2_BOLD#. Venligst kontroller registreringen og tildel den til en fundet kontakt eller opret en ny kontakt.</string>
   <string name="SYS_SINCE_TO">fra #VAR1# til #VAR2#</string>
   <string name="SYS_SINCE_VAR">siden #VAR1#</string>
+  <string name="SYS_SINCE">siden #VAR1#</string>
   <string name="SYS_SIZE">Størrelse</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP godkendelse</string>

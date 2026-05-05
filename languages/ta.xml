@@ -1462,6 +1462,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">#VAR1_BOLD# என்ற பெயருடன் ஒத்த தொடர்புகள் கண்டறியப்பட்டன.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">#VAR1_BOLD# என்ற பெயருடனும் #VAR2_BOLD# என்ற மின்னஞ்சல் முகவரியுடனும் பதிவு செய்வதற்கு ஒத்த தொடர்புகள் கண்டறியப்பட்டன. பதிவைச் சரிபார்த்து, கண்டறியப்பட்ட ஒரு தொடர்புடன் அதை ஒதுக்கவும் அல்லது ஒரு புதிய தொடர்பை உருவாக்கவும்.</string>
   <string name="SYS_SINCE_VAR">#VAR1# முதல்</string>
+  <string name="SYS_SINCE">#VAR1# முதல்</string>
   <string name="SYS_SINCE_TO">#VAR1# முதல் #VAR2# வரை</string>
   <string name="SYS_SIZE">அளவு</string>
   <string name="SYS_SMTP">SMTP</string>

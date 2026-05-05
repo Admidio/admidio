@@ -933,6 +933,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Quando l\'utente è membro dei ruoli di un\'altra organizzazione, un box sarà visualizzato che mostra tutti i ruoli e la data di registrazione. (predefinito: sì)</string>
   <string name="SYS_SHOW_ROUTE">Visualizza percorso</string>
   <string name="SYS_SINCE_VAR">dal #VAR1#</string>
+  <string name="SYS_SINCE">dal #VAR1#</string>
   <string name="SYS_SINCE_TO">da #VAR1# a #VAR2#</string>
   <string name="SYS_SIZE">Grandezza</string>
   <string name="SYS_SKYPE">Skype</string>

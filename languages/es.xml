@@ -613,6 +613,9 @@
   <string name="SYS_SENDER_NAME">Nombre del remitente</string>
   <string name="SYS_SENDER_NAME_DESC">Nombre del remitente para la dirección de correo electrónico utilizada. Este campo solo se debe usar si el campo del nombre del remitente tampoco está vacío. (Predeterminado: vacío)</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">(El remitente no ha iniciado sesión. Por lo tanto, los datos del remitente pueden ser incorrectos).</string>
+  <string name="SYS_SINCE_TO">de #VAR1# a #VAR2#</string>
+  <string name="SYS_SINCE">desde #VAR1#</string>
+  <string name="SYS_SINCE_VAR">desde #VAR1#</string>
   <string name="SYS_SERVER">Servidor</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Eestablecer permisos de carpeta</string>
   <string name="SYS_SETTINGS">Ajustes</string>

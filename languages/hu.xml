@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">További információk</string>
@@ -1501,6 +1501,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">A #VAR1_BOLD# regisztrációhoz hasonló nevű névjegyeket találtunk a #VAR2_BOLD# e-mail-címmel. Kérjük, ellenőrizze a regisztrációt, és rendelje hozzá egy meglévő névjegyhez, vagy hozzon létre egy újat.</string>
   <string name="SYS_SINCE_TO">#VAR1#-től #VAR2#-ig</string>
   <string name="SYS_SINCE_VAR">#VAR1# óta</string>
+  <string name="SYS_SINCE">#VAR1# óta</string>
   <string name="SYS_SIZE">Méret</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP-hitelesítés</string>

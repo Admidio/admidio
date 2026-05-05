@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Назад к гостевой книге</string>
@@ -1303,6 +1303,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Найдены контакты с именем, похожим на #VAR1_BOLD#.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Для регистрации #VAR1_BOLD# с адресом электронной почты #VAR2_BOLD# были найдены контакты с похожим именем. Пожалуйста, проверьте регистрацию и назначьте ее найденному контакту или создайте новый контакт.</string>
   <string name="SYS_SINCE_VAR">с #VAR1#</string>
+  <string name="SYS_SINCE">с #VAR1#</string>
   <string name="SYS_SINCE_TO">с #VAR1# по #VAR2#</string>
   <string name="SYS_SIZE">Размер</string>
   <string name="SYS_SKYPE">Skype</string>

@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Další informace</string>
@@ -1490,6 +1490,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">U registrace #VAR1_BOLD# s e-mailovou adresou #VAR2_BOLD# byly nalezeny kontakty s podobným jménem. Zkontrolujte prosím registraci a přiřaďte ji k nalezenému kontaktu nebo vytvořte kontakt nový.</string>
   <string name="SYS_SINCE_TO">od #VAR1# do #VAR2#</string>
   <string name="SYS_SINCE_VAR">od #VAR1#</string>
+  <string name="SYS_SINCE">od #VAR1#</string>
   <string name="SYS_SIZE">Velikost</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP autentizace</string>

@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tagasi kÃ¼lalisteraamatusse</string>
@@ -1273,6 +1273,7 @@
   <string name="SYS_SIMILAR_MEMBERS_FOUND_ASSIGN">Leiti liikmeid, kelle nimi on sarnane #VAR1_BOLD#.</string>
   <string name="SYS_SIMILAR_MEMBERS_FOUND_REGISTRATION">Leiti liikmeid, kelle nimi on sarnane #VAR1_BOLD#. Kontrollige registreerimist ja mÃ¤Ã¤rake see leitud liikmele vÃµi looge uus liige.</string>
   <string name="SYS_SINCE_VAR">alates #VAR1#</string>
+  <string name="SYS_SINCE">alates #VAR1#</string>
   <string name="SYS_SINCE_TO">alates #VAR1# kuni #VAR2#</string>
   <string name="SYS_SIZE">Suurus</string>
   <string name="SYS_SKYPE">Skype</string>

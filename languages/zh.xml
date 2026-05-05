@@ -166,6 +166,9 @@
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">切换到日程表管理</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">切换到类别管理</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">切换到房间管理</string>
+  <string name="SYS_SINCE_TO">从 #VAR1# 到 #VAR2#</string>
+  <string name="SYS_SINCE">从 #VAR1#</string>
+  <string name="SYS_SINCE_VAR">从 #VAR1#</string>
   <string name="SYS_SYSTEM">系统</string>
   <string name="SYS_SYSTEM_MAILS">系统通知</string>
   <string name="SYS_TEMPLATE">模板</string>

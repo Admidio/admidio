@@ -1302,6 +1302,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Знайдено контакти з ім'ям, схожим на #VAR1_BOLD#.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Для реєстрації #VAR1_BOLD# з адресою електронної пошти #VAR2_BOLD# було знайдено контакти зі схожим ім'ям. Будь ласка, перевірте реєстрацію та призначте її знайденому контакту або створіть новий контакт.</string>
   <string name="SYS_SINCE_VAR">з #VAR1#</string>
+  <string name="SYS_SINCE">з #VAR1#</string>
   <string name="SYS_SINCE_TO">з #VAR1# за #VAR2#</string>
   <string name="SYS_SIZE">Розмір</string>
   <string name="SYS_SKYPE">Skype</string>

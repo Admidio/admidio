@@ -1499,6 +1499,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Zu der Registrierung von #VAR1_BOLD# mit der E-Mail-Adresse #VAR2_BOLD# wurden Kontakte mit einem ähnlichen Namen gefunden. Bitte prüfen Sie die Registrierung und ordnen Sie diese einem gefundenen Kontakt zu oder legen Sie einen neuen Kontakt an.</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SINCE_VAR">seit #VAR1#</string>
+  <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SIZE">Größe</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP Authentifizierung</string>

@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Terug naar gastenboek</string>
@@ -1245,6 +1245,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Als gebruiker een rol in een andere organisatie heeft, wordt een veld getoond met alle rollen en de registratie datum. (Standaard: ja)</string>
   <string name="SYS_SHOW_ROUTE">Toon route</string>
   <string name="SYS_SINCE_VAR">sinds #VAR1#</string>
+  <string name="SYS_SINCE">sinds #VAR1#</string>
   <string name="SYS_SINCE_TO">vanaf #VAR1# tot #VAR2#</string>
   <string name="SYS_SIZE">Grootte</string>
   <string name="SYS_SKYPE">Skype</string>

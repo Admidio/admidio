@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Takaisin vieraskirjaan</string>
@@ -1217,6 +1217,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Kun käyttäjä on toisen organisaation roolin jäsen, ruutu näytetään, jossa näkyvät kaikki roolit ja rekisteröintipäivämäärä. (oletus: kyllä)</string>
   <string name="SYS_SHOW_ROUTE">Näytä reitti</string>
   <string name="SYS_SINCE_VAR">lähtien #VAR1#</string>
+  <string name="SYS_SINCE">lähtien #VAR1#</string>
   <string name="SYS_SINCE_TO">#VAR1# - #VAR2#</string>
   <string name="SYS_SIZE">Koko</string>
   <string name="SYS_SKYPE">Skype</string>

@@ -1132,6 +1132,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Quando um usuário é membro de cargos de uma outra organização, uma caixa será exibida, contendo todos os cargos e datas de registo. (padrão: sim)</string>
   <string name="SYS_SHOW_ROUTE">Exibir rota</string>
   <string name="SYS_SINCE_VAR">desde #VAR1#</string>
+  <string name="SYS_SINCE">desde #VAR1#</string>
   <string name="SYS_SINCE_TO">de #VAR1# a #VAR2#</string>
   <string name="SYS_SIZE">Tamanho</string>
   <string name="SYS_SKYPE">Skype</string>
