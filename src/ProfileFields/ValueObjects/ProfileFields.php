@@ -653,7 +653,7 @@ class ProfileFields
      *                            structure should be read if necessary.
      * @throws Exception
      */
-    public function readUserData(int $userId, int $organizationId): void
+    public function readUserData(int $userId, int $organizationId, string $userUuid = ''): void
     {
         if (count($this->mProfileFields) === 0) {
             $this->readProfileFields($organizationId);
@@ -663,14 +663,20 @@ class ProfileFields
             // remember the user
             $this->mUserId = $userId;
 
-            // read all user data of user
-            $sql = 'SELECT *
-                      FROM ' . TBL_USERS . '
-                INNER JOIN ' . TBL_USER_DATA . '
-                        ON usd_usr_id = usr_id
-                INNER JOIN ' . TBL_USER_FIELDS . '
-                        ON usf_id = usd_usf_id
-                     WHERE usr_id = ? -- $userId';
+            // Set the user UUID if provided by the caller (avoids needing a users JOIN below).
+            if ($userUuid !== '') {
+                $this->mUserUuid = $userUuid;
+            }
+
+            // Read profile field values without joining adm_users.
+            // Previously the query joined adm_users via SELECT *, which transferred the
+            // usr_photo BLOB once per profile field row — potentially dozens of times per
+            // request for users whose photo is stored in the database.
+            $sql = 'SELECT usd.*, usf.*
+                      FROM ' . TBL_USER_DATA . ' usd
+                INNER JOIN ' . TBL_USER_FIELDS . ' usf
+                        ON usf.usf_id = usd.usd_usf_id
+                     WHERE usd.usd_usr_id = ? -- $userId';
             $userDataStatement = $this->db->queryPrepared($sql, array($userId));
 
             while ($row = $userDataStatement->fetch()) {
@@ -678,9 +684,6 @@ class ProfileFields
                     $this->mUserData[$row['usd_usf_id']] = new UserData($this->db);
                 }
                 $this->mUserData[$row['usd_usf_id']]->setArray($row);
-                if (isset($row['usr_uuid'])) {
-                    $this->mUserUuid = $row['usr_uuid'];
-                }
             }
         }
     }

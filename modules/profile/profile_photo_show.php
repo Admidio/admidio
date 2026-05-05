@@ -33,36 +33,60 @@ try {
         throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
-    // Initialize local variables of the transfer variables
-    $image = null;
-    $sessionPhotoData = null;
-
+    // Default photo path based on gender (no DB BLOB involved yet).
     if ((int) $user->getValue('GENDER', 'database') === 2) {
         $photoPath = getThemedFile('/images/profile-photo-female.png');
     } else {
         $photoPath = getThemedFile('/images/profile-photo-male.png');
     }
 
+    // For the new-photo preview case, we need the binary data from the session
+    // before we release the session write-lock.
+    $sessionPhotoData = null;
+    if ($getNewPhoto
+        && $gCurrentUser->hasRightViewProfile($user)
+        && (int)$gSettingsManager->get('profile_photo_storage') === 0) {
+        $sessionPhotoData = $gCurrentSession->getValue('ses_binary');
+    }
+
+    // Release the PHP session write-lock now so other concurrent requests
+    // (e.g. the nav-bar photo) are not queued behind the BLOB fetch below.
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+    }
+
+    // Fast 304 check before any expensive I/O.
+    $etag = '"' . sha1($user->getValue('usr_id') . '|' . $user->getValue('usr_timestamp_changed', 'Y-m-d H:i:s') . '|' . (int)$getNewPhoto) . '"';
+    $ifNoneMatch = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim((string)$_SERVER['HTTP_IF_NONE_MATCH']) : '';
+    header('ETag: ' . $etag);
+    header('Last-Modified: ' . $user->getValue('usr_timestamp_changed', 'D, d M Y H:i:s') . ' GMT');
+    if ($ifNoneMatch === $etag) {
+        http_response_code(304);
+        exit;
+    }
+
+    // Load the image — BLOB fetch (if DB storage) happens here, after session is released.
+    $image = null;
     if ($gCurrentUser->hasRightViewProfile($user)) {
         if ($getNewPhoto) {
-            // show temporary saved new photo from upload in database
             if ((int)$gSettingsManager->get('profile_photo_storage') === 0) {
-                $sessionPhotoData = $gCurrentSession->getValue('ses_binary');
-            } // show temporary saved new photo from upload in filesystem
-            else {
+                $image = new Image();
+                $image->setImageFromData((string)$sessionPhotoData);
+            } else {
                 $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
+                $image = new Image($photoPath);
             }
         } else {
-            // show photo from database
             if ((int)$gSettingsManager->get('profile_photo_storage') === 0) {
-                if ((string)$user->getValue('usr_photo') !== '') {
+                // getValue('usr_photo') triggers a single lazy-fetch of the BLOB column.
+                $photoData = $user->getValue('usr_photo');
+                if ((string)$photoData !== '') {
                     $image = new Image();
-                    $image->setImageFromData($user->getValue('usr_photo'));
+                    $image->setImageFromData($photoData);
                 } else {
                     $image = new Image($photoPath);
                 }
-            } // show photo from folder adm_my_files
-            else {
+            } else {
                 $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
                 if (is_file($file)) {
                     $photoPath = $file;
@@ -70,50 +94,11 @@ try {
                 $image = new Image($photoPath);
             }
         }
-    }
-
-    // Release session lock before image processing/streaming so this endpoint doesn't block behind long-running requests.
-    if (session_status() === PHP_SESSION_ACTIVE) {
-        session_write_close();
-    }
-
-    $etag = '"' . sha1($user->getValue('usr_id') . '|' . $user->getValue('usr_timestamp_changed', 'Y-m-d H:i:s') . '|' . (int)$getNewPhoto) . '"';
-    $ifNoneMatch = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim((string)$_SERVER['HTTP_IF_NONE_MATCH']) : '';
-
-    header('ETag: ' . $etag);
-    header("Last-Modified: " . $user->getValue('usr_timestamp_changed', 'D, d M Y H:i:s') . " GMT");
-    if ($ifNoneMatch === $etag) {
-        http_response_code(304);
-        exit;
-    }
-
-    if ($gCurrentUser->hasRightViewProfile($user)) {
-        if ($getNewPhoto) {
-            if ((int)$gSettingsManager->get('profile_photo_storage') === 0) {
-                $image = new Image();
-                $image->setImageFromData((string)$sessionPhotoData);
-            } else {
-                $image = new Image($photoPath);
-            }
-        } else {
-            if ((int)$gSettingsManager->get('profile_photo_storage') === 0) {
-                if ((string)$user->getValue('usr_photo') !== '') {
-                    $image = new Image();
-                    $image->setImageFromData($user->getValue('usr_photo'));
-                } else {
-                    $image = new Image($photoPath);
-                }
-            } else {
-                $image = new Image($photoPath);
-            }
-        }
     } else {
-        // if user has no right to view profile then show dummy photo
         $image = new Image($photoPath);
     }
 
     header('Content-Type: ' . $image->getMimeType());
-
     $image->copyToBrowser();
     $image->delete();
 } catch (Throwable $e) {
