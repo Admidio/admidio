@@ -220,12 +220,12 @@ try {
                     $photoThumbnailTable .= '
                         <a data-lightbox="admidio-gallery" data-title="' . $headline . '"
                             href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))) . '"><img
-                            class="rounded" id="img_' . $actThumbnail . '" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)) . '" alt="' . $actThumbnail . '" /></a>';
+                            class="rounded" id="img_' . $actThumbnail . '" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)) . '" alt="' . $actThumbnail . '" loading="lazy" decoding="async" fetchpriority="low" /></a>';
                 } // Same window
                 elseif ((int)$gSettingsManager->get('photo_show_mode') === 2) {
                     $photoThumbnailTable .= '
                         <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid)) . '"><img
-                            class="rounded" id="img_' . $actThumbnail . '" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)) . '" alt="' . $actThumbnail . '" />
+                            class="rounded" id="img_' . $actThumbnail . '" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)) . '" alt="' . $actThumbnail . '" loading="lazy" decoding="async" fetchpriority="low" />
                         </a>';
                 }
 
