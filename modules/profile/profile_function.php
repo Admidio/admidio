@@ -96,12 +96,17 @@ try {
         // reload role memberships
         $roleStatement = getRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        echo getRoleMemberships('role_list', $user, $roleStatement);
+        $html = getRoleMemberships('role_list', $user, $roleStatement);
+        // Persist session (form objects added above) and release the write-lock before streaming.
+        if (session_status() === PHP_SESSION_ACTIVE) { session_write_close(); }
+        echo $html;
     } elseif ($getMode === 'reload_former_memberships') {
         // reload former role memberships
         $roleStatement = getFormerRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        echo getRoleMemberships('former_role_list', $user, $roleStatement);
+        $html = getRoleMemberships('former_role_list', $user, $roleStatement);
+        if (session_status() === PHP_SESSION_ACTIVE) { session_write_close(); }
+        echo $html;
 
         if ($countRole === 0) {
             /* Tabs */
@@ -118,7 +123,9 @@ try {
         // reload future role memberships
         $roleStatement = getFutureRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        echo getRoleMemberships('future_role_list', $user, $roleStatement);
+        $html = getRoleMemberships('future_role_list', $user, $roleStatement);
+        if (session_status() === PHP_SESSION_ACTIVE) { session_write_close(); }
+        echo $html;
 
         if ($countRole === 0) {
             /* Tabs */

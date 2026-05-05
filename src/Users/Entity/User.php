@@ -103,6 +103,20 @@ class User extends Entity
     protected bool $photoLoaded = false;
 
     /**
+     * Strip the usr_photo BLOB from PHP session serialization.
+     * The lazy-load logic in getValue() will re-fetch it from the database on demand.
+     * This prevents large BLOBs from bloating the session file and causing slow
+     * session lock/read/write for every request from users with large profile photos.
+     * @return array<string> List of all property names to include in serialization.
+     */
+    public function __sleep(): array
+    {
+        $this->dbColumns['usr_photo'] = null;
+        $this->photoLoaded = false;
+        return array_keys(get_object_vars($this));
+    }
+
+    /**
      * @var bool Flag if relationships for this user were checked
      */
     protected bool $relationshipsChecked = false;
