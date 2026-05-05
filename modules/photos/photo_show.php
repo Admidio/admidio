@@ -46,18 +46,19 @@ try {
         require(__DIR__ . '/../../system/login_valid.php');
     }
 
-    // read album data out of session or database
-    if (isset($_SESSION['photo_album']) && (int)$_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
-        $photoAlbum =& $_SESSION['photo_album'];
-    } else {
-        $photoAlbum = new Album($gDb);
-        $photoAlbum->readDataByUuid($getPhotoUuid);
-        $_SESSION['photo_album'] = $photoAlbum;
-    }
+    // Read album data directly from database.
+    // Avoid storing album objects in PHP session to keep session payload small.
+    $photoAlbum = new Album($gDb);
+    $photoAlbum->readDataByUuid($getPhotoUuid);
 
     // check if the current user could view this photo album
     if (!$photoAlbum->isVisible()) {
         throw new Exception('SYS_NO_RIGHTS');
+    }
+
+    // This endpoint doesn't need to modify session state. Release lock before image I/O.
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
     }
 
     // compose image path
