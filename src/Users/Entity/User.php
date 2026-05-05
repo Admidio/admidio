@@ -117,6 +117,19 @@ class User extends Entity
     }
 
     /**
+     * Remove any usr_photo BLOB that may have been stored in older session files.
+     * Called automatically by PHP when this object is deserialized from the session.
+     * Combined with __sleep(), this ensures a bloated session file is cleaned up on
+     * the very first request after deployment — the BLOB is stripped from memory
+     * immediately, so the session write at the end of that request produces a lean file.
+     */
+    public function __wakeup(): void
+    {
+        $this->dbColumns['usr_photo'] = null;
+        $this->photoLoaded = false;
+    }
+
+    /**
      * @var bool Flag if relationships for this user were checked
      */
     protected bool $relationshipsChecked = false;

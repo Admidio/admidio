@@ -37,6 +37,12 @@ try {
     $getMemberUuid = admFuncVariableIsValid($_GET, 'member_uuid', 'uuid');
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('validValues' => array('export', 'stop_membership', 'remove_former_membership', 'reload_current_memberships', 'reload_former_memberships', 'reload_future_memberships', 'save_membership')));
 
+    // Clean up stale binary upload payloads from abandoned photo-edit flows.
+    // Keeping large image bytes in session can make every AJAX reload request slow.
+    if (strlen((string) $gCurrentSession->getValue('ses_binary')) > 0) {
+        $gCurrentSession->setValue('ses_binary', '');
+    }
+
     // create user object
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);

@@ -34,6 +34,12 @@ try {
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
+    // Clean up stale binary upload payloads from abandoned photo-edit flows.
+    // Keeping large image bytes in session can make every profile request slow.
+    if (strlen((string) $gCurrentSession->getValue('ses_binary')) > 0) {
+        $gCurrentSession->setValue('ses_binary', '');
+    }
+
     // create user object
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);

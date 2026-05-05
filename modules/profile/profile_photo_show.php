@@ -25,6 +25,12 @@ try {
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
     $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
 
+    // If this request is not rendering the upload preview, clear stale binary
+    // upload payloads to keep the session lean and fast.
+    if (!$getNewPhoto && strlen((string) $gCurrentSession->getValue('ses_binary')) > 0) {
+        $gCurrentSession->setValue('ses_binary', '');
+    }
+
     // read user data and show error if user doesn't exist
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
