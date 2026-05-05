@@ -1807,7 +1807,11 @@
   <string name="SYS_YOUR_LISTS">Own lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
-  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Set the minimum number of years required for Lifemember Qualified. (Default: 20)</string>
-  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Select the roles that count toward Lifemember Qualified.</string>
-  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Select the roles that count toward Years of Membership.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Set the minimum number of years required for Life Member Qualified. (Default: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Enable Life Membership Qualification</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">If enabled, the "Life Membership Qualified" column will be calculated. If disabled, it will always be false.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Select the roles that count towards qualified Life Membership.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Select the roles that count Years of Membership.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Life Membership Qualified</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Years towards Life Membership</string>
 </resources>

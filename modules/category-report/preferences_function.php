@@ -41,6 +41,7 @@ try {
                 $values['selection_cat'] = isset($_POST['selection_cat' . $conf]) ? trim(implode(',', $_POST['selection_cat' . $conf]), ',') : '';
                 $values['number_col'] = isset($_POST['number_col' . $conf]) ? 1 : 0;
                 $values['default_conf'] = (bool)$_POST['default_conf' . $conf];
+                $values['life_membership_enabled'] = isset($_POST['life_membership_enabled' . $conf]) ? 1 : 0;
                 $values['life_membership_threshold_years'] = isset($_POST['life_membership_threshold_years' . $conf]) ? max(1, min(200, (int)$_POST['life_membership_threshold_years' . $conf])) : 20;
                 $values['years_of_membership_role_ids'] = isset($_POST['years_of_membership_role_ids' . $conf]) ? trim(implode(',', $_POST['years_of_membership_role_ids' . $conf]), ',') : '';
                 $values['life_membership_role_ids'] = isset($_POST['life_membership_role_ids' . $conf]) ? trim(implode(',', $_POST['life_membership_role_ids' . $conf]), ',') : '';
@@ -59,7 +60,7 @@ try {
                         return '';
                     }
 
-                    if ($r === 'ymulti' || $r === 'zmulti') {
+                    if ($r === 'ymulti' || $r === 'ylmulti' || $r === 'zmulti') {
                         return $r;
                     }
 

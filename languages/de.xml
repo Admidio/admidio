@@ -1807,6 +1807,10 @@
   <string name="SYS_YOUR_NAME">Dein Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Legen Sie die Mindestanzahl an Jahren fest, die für „Lebensmitglied qualifiziert“ erforderlich ist. (Standard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Qualifikation für Lebensmitglied aktivieren</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Wenn aktiviert, wird die Spalte „Lebensmitglied qualifiziert“ berechnet. Wenn deaktiviert, ist sie immer falsch.</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Wählen Sie die Rollen aus, die für „Lebensmitglied qualifiziert“ berücksichtigt werden.</string>
-  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Wählen Sie die Rollen aus, die für „Mitgliedsjahre“ berücksichtigt werden.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Wählen Sie die Rollen aus, die für „Mitgliedsjahre" berücksichtigt werden.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Lebensmitglied qualifiziert</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Jahre bis zur Lebensmitgliedschaft</string>
 </resources>

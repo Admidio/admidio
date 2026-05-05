@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Informații suplimentare</string>
@@ -1793,6 +1793,10 @@
   <string name="SYS_YOUR_NAME">Numele</string>
   <string name="SYS_Z_TO_A">De la Z la A</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Setați numărul minim de ani necesar pentru „Calificat pentru membru pe viață”. (Implicit: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Activați calificarea membrului pe viață</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Dacă este activat, coloana «Calificat pentru membru pe viață» va fi calculată. Dacă este dezactivat, va fi întotdeauna fals.</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Selectați rolurile care se iau în calcul pentru „Calificat pentru membru pe viață”.</string>
   <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Selectați rolurile care se iau în calcul pentru „Ani de membru”.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Calificat pentru membru pe viață</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Ani până la calificarea pentru membru pe viață</string>
 </resources>

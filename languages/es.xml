@@ -719,6 +719,10 @@
   <string name="SYS_YOUR_NAME">Tu nombre</string>
   <string name="SYS_Z_TO_A">Z hasta A</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Establezca el número mínimo de años necesarios para «Calificado como socio vitalicio». (Predeterminado: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Habilitar calificación de socio vitalicio</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Si está habilitado, se calculará la columna «Calificado como socio vitalicio». Si está deshabilitado, siempre será falso.</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Seleccione los roles que cuentan para «Calificado como socio vitalicio».</string>
   <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Seleccione los roles que cuentan para «Años de membresía».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Calificado como socio vitalicio</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Años hacia la calificación de socio vitalicio</string>
 </resources>

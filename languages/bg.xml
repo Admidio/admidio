@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Обратно към книгата за гости</string>
@@ -1217,7 +1217,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">Показване на роли в други организации</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Когато потребителят е участник в роли на друга организации, ще се вижда поле, показващо всички роли и датата на регистрация. (По подразбиране: Да)</string>
   <string name="SYS_SHOW_ROUTE">Show route</string>
-  <string name="SYS_SINCE">от #VAR1#</string>
+  <string name="SYS_SINCE_VAR">от #VAR1#</string>
   <string name="SYS_SINCE_TO">от #VAR1# до #VAR2#</string>
   <string name="SYS_SIZE">Размер</string>
   <string name="SYS_SKYPE">Skype</string>
@@ -1368,6 +1368,10 @@
   <string name="SYS_YOUR_NAME">Вашето име</string>
   <string name="SYS_Z_TO_A">Я към А</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Задайте минималния брой години, необходими за „Квалифициран доживотен член“. (По подразбиране: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Активирай квалификация за доживотен член</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Ако е активирано, колоната „Квалифициран доживотен член" ще се изчисли. Ако е деактивирано, то винаги ще е невярно.</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Изберете ролите, които се зачитат за „Квалифициран доживотен член“.</string>
   <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Изберете ролите, които се зачитат за „Години членство“.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Квалифициран доживотен член</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Години до квалификацията за доживотен член</string>
 </resources>

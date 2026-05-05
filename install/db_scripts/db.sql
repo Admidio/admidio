@@ -141,6 +141,7 @@ CREATE TABLE %PREFIX%_category_report
     crt_selection_role          varchar(100),
     crt_selection_cat           varchar(100),
     crt_number_col              boolean             NOT NULL    DEFAULT false,
+    crt_life_membership_enabled boolean             NOT NULL    DEFAULT false,
     crt_life_membership_threshold_years integer unsigned    NOT NULL    DEFAULT 20,
     crt_life_membership_role_ids varchar(255),
     crt_years_of_membership_role_ids varchar(255),

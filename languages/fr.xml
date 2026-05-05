@@ -1305,7 +1305,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Contacts similaires trouvés</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Des contacts portant un nom similaire à #VAR1_BOLD# ont été trouvés.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Des contacts portant un nom similaire ont été trouvés pour l\'enregistrement de #VAR1_BOLD# avec l\'adresse e-mail #VAR2_BOLD#. Veuillez vérifier l\'enregistrement et l\'attribuer à un contact trouvé ou créer un nouveau contact.</string>
-  <string name="SYS_SINCE">Depuis #VAR1#</string>
+  <string name="SYS_SINCE_VAR">Depuis #VAR1#</string>
   <string name="SYS_SINCE_TO">de #VAR1# à #VAR2#</string>
   <string name="SYS_SIZE">Taille</string>
   <string name="SYS_SKYPE">Skype</string>
@@ -1466,6 +1466,10 @@
   <string name="SYS_YOUR_NAME">Votre nom</string>
   <string name="SYS_Z_TO_A">Z à A</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Définissez le nombre minimum d’années requis pour « Éligible membre à vie ». (Par défaut : 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Activer la qualification membre à vie</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Si activé, la colonne « Éligible membre à vie » sera calculée. Si désactivé, elle sera toujours fausse.</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Sélectionnez les rôles pris en compte pour « Éligible membre à vie ».</string>
-  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Sélectionnez les rôles pris en compte pour les « Années d’adhésion ».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Sélectionnez les rôles pris en compte pour les « Années d'adhésion ».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Membre à vie qualifié</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Années vers la qualification membre à vie</string>
 </resources>

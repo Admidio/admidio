@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Назад к гостевой книге</string>
@@ -1302,7 +1302,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Найдены похожие контакты</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Найдены контакты с именем, похожим на #VAR1_BOLD#.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Для регистрации #VAR1_BOLD# с адресом электронной почты #VAR2_BOLD# были найдены контакты с похожим именем. Пожалуйста, проверьте регистрацию и назначьте ее найденному контакту или создайте новый контакт.</string>
-  <string name="SYS_SINCE">с #VAR1#</string>
+  <string name="SYS_SINCE_VAR">с #VAR1#</string>
   <string name="SYS_SINCE_TO">с #VAR1# по #VAR2#</string>
   <string name="SYS_SIZE">Размер</string>
   <string name="SYS_SKYPE">Skype</string>
@@ -1463,6 +1463,10 @@
   <string name="SYS_YOUR_NAME">Ваше имя</string>
   <string name="SYS_Z_TO_A">От Я до А</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Укажите минимальное количество лет, необходимое для статуса «Квалифицирован как пожизненный член». (По умолчанию: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Включить квалификацию пожизненного члена</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Если включено, будет вычисляться столбец «Квалифицирован как пожизненный член». Если отключено, он всегда будет ложным.</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Выберите роли, которые учитываются для статуса «Квалифицирован как пожизненный член».</string>
   <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Выберите роли, которые учитываются для «Лет членства».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Квалифицированный пожизненный участник</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Годы до квалификации пожизненного участника</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Πίσω στο βιβλίο επισκεπτών</string>
@@ -1213,7 +1213,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">Προβολή ρόλων από άλλους συλλόγους</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Όταν ο χρήστης είναι μέλος σε ρόλους άλλου συλλόγου, θα εμφανιστεί ένα πλαίσιο που δείχνει όλους τους ρόλους και την ημερομηνία εγγραφής. (default: yes)</string>
   <string name="SYS_SHOW_ROUTE">Εμφάνιση διαδρομής</string>
-  <string name="SYS_SINCE">από #VAR1#</string>
+  <string name="SYS_SINCE_VAR">από #VAR1#</string>
   <string name="SYS_SINCE_TO">Από #VAR1# σε #VAR2#</string>
   <string name="SYS_SIZE">Μέγεθος</string>
   <string name="SYS_SKYPE">Skype</string>
@@ -1362,6 +1362,10 @@
   <string name="SYS_YOUR_NAME">Το όνομα σας</string>
   <string name="SYS_Z_TO_A">Από το Ω στο Α</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Ορίστε τον ελάχιστο αριθμό ετών που απαιτείται για «Κατάλληλο ισόβιο μέλος». (Προεπιλογή: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Ενεργοποιήστε την κατοχύρωση ισόβιου μέλους</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Εάν ενεργοποιηθεί, θα υπολογιστεί η στήλη «Κατάλληλο ισόβιο μέλος». Εάν είναι απενεργοποιημένη, θα είναι πάντα ψευδής.</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Επιλέξτε τους ρόλους που υπολογίζονται για «Κατάλληλο ισόβιο μέλος».</string>
   <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Επιλέξτε τους ρόλους που υπολογίζονται για τα «Έτη μέλους».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Κατάλληλο ισόβιο μέλος</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Έτη προς κατάλληλο ισόβιο μέλος</string>
 </resources>

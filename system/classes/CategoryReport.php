@@ -101,6 +101,7 @@ class CategoryReport
         $configuredLifeMembershipRoleIds = array_values(array_filter(array_map('intval', explode(',', (string)($this->arrConfiguration[$this->conf]['life_membership_role_ids'] ?? ''))), static function ($roleId) {
             return $roleId > 0;
         }));
+        $lifeMembershipEnabled = (int)($this->arrConfiguration[$this->conf]['life_membership_enabled'] ?? 0) === 1;
 
         $workArray = array();
         $number_row_pos = -1;
@@ -398,7 +399,7 @@ class CategoryReport
                         break;
 
                     default:
-                        $typeHint = 'string';
+                        if ($lifeMembershipEnabled && count($roleIds) > 0) {
                 }
 
                 // if profile field then add NOT EXISTS statement (same idea as in myList)
@@ -670,7 +671,7 @@ class CategoryReport
                     $typeHint = 'checkbox';
                     $rawCond  = $normalizeYesNo($rawCond);
                     $roleIds = array_values(array_filter(array_map('intval', (array) ($colDef['role_ids'] ?? array()))));
-                    if (count($roleIds) > 0) {
+                    if ($lifeMembershipEnabled && count($roleIds) > 0) {
                         $expr = '(CASE WHEN FLOOR((SELECT SUM(DATEDIFF(LEAST(m2.mem_end, \'' . $date . '\'), m2.mem_begin) + 1)
                                                     FROM ' . TBL_MEMBERS . ' m2
                                                    WHERE m2.mem_usr_id = usr_id
@@ -869,8 +870,12 @@ class CategoryReport
                     $this->listData[$member][$key] = (int) floor($membershipDays / 365);
 
                 } elseif ($data['type'] === 'z') {      // Life membership reached (>= configured threshold)
-                    $membershipDays = $this->calculateMembershipDaysForRoles($member, (array) ($data['role_ids'] ?? array()), $date);
-                    $this->listData[$member][$key] = (int) floor($membershipDays / 365) >= $this->lifeMembershipThresholdYears;
+                    if ($lifeMembershipEnabled) {
+                        $membershipDays = $this->calculateMembershipDaysForRoles($member, (array) ($data['role_ids'] ?? array()), $date);
+                        $this->listData[$member][$key] = (int) floor($membershipDays / 365) >= $this->lifeMembershipThresholdYears;
+                    } else {
+                        $this->listData[$member][$key] = false;
+                    }
 
                 } elseif ($data['type'] == 'n') {              //Sonderfall: Anzahlspalte
                     $this->listData[$member][$key] = '';
@@ -1176,7 +1181,7 @@ class CategoryReport
      */
     private function buildMultiRoleLifeMembershipHeaderText(array $roleIds): string
     {
-        return 'Life Membership Qualified';
+        return $this->gL10n->get('SYS_LIFE_MEMBERSHIP_QUALIFIED');
     }
 
     /**
@@ -1186,7 +1191,7 @@ class CategoryReport
      */
     private function buildYearsTowardsLifeMembershipHeaderText(): string
     {
-        return 'Years towards Life Membership';
+        return $this->gL10n->get('SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP');
     }
 
     /**
@@ -1232,6 +1237,7 @@ class CategoryReport
                 $values['selection_role'] = $row['crt_selection_role'];
                 $values['selection_cat'] = $row['crt_selection_cat'];
                 $values['number_col'] = $row['crt_number_col'];
+                $values['life_membership_enabled'] = $row['crt_life_membership_enabled'] ?? 0;
                 $values['life_membership_threshold_years'] = $row['crt_life_membership_threshold_years'] ?? 20;
                 $values['years_of_membership_role_ids'] = $row['crt_years_of_membership_role_ids'] ?? '';
                 $values['life_membership_role_ids'] = $row['crt_life_membership_role_ids'] ?? '';
@@ -1344,6 +1350,7 @@ class CategoryReport
                 $categoryReport->setValue('crt_selection_role', $values['selection_role']);
                 $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
                 $categoryReport->setValue('crt_number_col', $values['number_col']);
+                $categoryReport->setValue('crt_life_membership_enabled', $values['life_membership_enabled'] ?? 0);
                 $categoryReport->setValue('crt_life_membership_threshold_years', $values['life_membership_threshold_years'] ?? 20);
                 $categoryReport->setValue('crt_years_of_membership_role_ids', $values['years_of_membership_role_ids'] ?? '');
                 $categoryReport->setValue('crt_life_membership_role_ids', $values['life_membership_role_ids'] ?? '');

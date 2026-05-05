@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Terug naar gastenboek</string>
@@ -1244,7 +1244,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">Toon rol van andere organisaties</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Als gebruiker een rol in een andere organisatie heeft, wordt een veld getoond met alle rollen en de registratie datum. (Standaard: ja)</string>
   <string name="SYS_SHOW_ROUTE">Toon route</string>
-  <string name="SYS_SINCE">sinds #VAR1#</string>
+  <string name="SYS_SINCE_VAR">sinds #VAR1#</string>
   <string name="SYS_SINCE_TO">vanaf #VAR1# tot #VAR2#</string>
   <string name="SYS_SIZE">Grootte</string>
   <string name="SYS_SKYPE">Skype</string>
@@ -1398,6 +1398,10 @@
   <string name="SYS_YOUR_NAME">Uw naam</string>
   <string name="SYS_Z_TO_A">Z tot A</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Stel het minimale aantal jaren in dat vereist is voor «Gekwalificeerd als levenslid». (Standaard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Kwalificatie voor levenslid activeren</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Indien ingeschakeld, wordt de kolom «Gekwalificeerd als levenslid» berekend. Indien uitgeschakeld, is deze altijd onwaar.</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Selecteer de rollen die meetellen voor «Gekwalificeerd als levenslid».</string>
   <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Selecteer de rollen die meetellen voor «Lidmaatschapsjaren».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Gekwalificeerd als levenslid</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Jaren naar levenslidkwalificatie</string>
 </resources>

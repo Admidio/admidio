@@ -1178,7 +1178,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">แสดงบทบาทขององค์กรอื่นๆ</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">เมื่อผู้ใช้เป็นสมาชิกในบทบาทขององค์กรอื่น กล่องจะแสดงบทบาททั้งหมดและวันที่ลงทะเบียน (ค่าเริ่มต้น: ใช่)</string>
   <string name="SYS_SHOW_ROUTE">แสดง เส้นทาง</string>
-  <string name="SYS_SINCE">ตั้งแต่ #VAR1#</string>
+  <string name="SYS_SINCE_VAR">ตั้งแต่ #VAR1#</string>
   <string name="SYS_SINCE_TO">จาก #VAR1# ถึง #VAR2#</string>
   <string name="SYS_SIZE">ขนาด</string>
   <string name="SYS_SMTP">SMTP</string>
@@ -1322,6 +1322,10 @@
   <string name="SYS_YOUR_NAME">ชื่อของคุณ</string>
   <string name="SYS_Z_TO_A">Z ถึง A</string>
   <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">กำหนดจำนวนปีขั้นต่ำที่ต้องมีสำหรับ «ผ่านเกณฑ์สมาชิกตลอดชีพ» (ค่าเริ่มต้น: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">เปิดใช้งานคุณสมบัติสมาชิกตลอดชีพ</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">หากเปิดใช้งาน คอลัมน์ «ผ่านเกณฑ์สมาชิกตลอดชีพ» จะถูกคำนวณ หากปิดใช้งาน จะเป็นเท็จเสมอ</string>
   <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">เลือกระดับบทบาทที่จะนับสำหรับ «ผ่านเกณฑ์สมาชิกตลอดชีพ».</string>
   <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">เลือกระดับบทบาทที่จะนับสำหรับ «จำนวนปีสมาชิก».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">ผ่านเกณฑ์สมาชิกตลอดชีพ</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">ปีที่นำไปสู่คุณสมบัติสมาชิกตลอดชีพ</string>
 </resources>

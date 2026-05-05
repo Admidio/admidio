@@ -62,7 +62,7 @@ try {
     $headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
 
     if ($getAdd) {
-        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'life_membership_threshold_years' => 20, 'life_membership_role_ids' => '', 'years_of_membership_role_ids' => '', 'default_conf' => false);
+        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'life_membership_enabled' => 0, 'life_membership_threshold_years' => 20, 'life_membership_role_ids' => '', 'years_of_membership_role_ids' => '', 'default_conf' => false);
         // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
     }
 
@@ -79,6 +79,7 @@ try {
             'selection_role' => $config[$getCopy - 1]['selection_role'],
             'selection_cat' => $config[$getCopy - 1]['selection_cat'],
             'number_col' => $config[$getCopy - 1]['number_col'],
+            'life_membership_enabled' => $config[$getCopy - 1]['life_membership_enabled'] ?? 0,
             'life_membership_threshold_years' => $config[$getCopy - 1]['life_membership_threshold_years'] ?? 20,
             'life_membership_role_ids' => $config[$getCopy - 1]['life_membership_role_ids'] ?? '',
             'years_of_membership_role_ids' => $config[$getCopy - 1]['years_of_membership_role_ids'] ?? '',
@@ -326,6 +327,7 @@ try {
             'selection_role' => 'selection_role' . $key,
             'selection_cat' => 'selection_cat' . $key,
             'number_col' => 'number_col' . $key,
+            'life_membership_enabled' => 'life_membership_enabled' . $key,
             'life_membership_threshold_years' => 'life_membership_threshold_years' . $key,
             'life_membership_role_ids' => 'life_membership_role_ids' . $key,
             'years_of_membership_role_ids' => 'years_of_membership_role_ids' . $key,
@@ -352,6 +354,7 @@ try {
         $formConfigurations->addSelectBoxFromSql('selection_cat' . $key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
             array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextId' => 'SYS_CAT_SELECTION_CONF_DESC'));
         $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
+        $formConfigurations->addCheckbox('life_membership_enabled' . $key, $gL10n->get('SYS_LIFE_MEMBERSHIP_ENABLED'), (bool)($value['life_membership_enabled'] ?? 0), array('helpTextId' => 'SYS_LIFE_MEMBERSHIP_ENABLED_DESC'));
         $formConfigurations->addInput('life_membership_threshold_years' . $key, $gL10n->get('SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC'), $value['life_membership_threshold_years'] ?? 20, array('type' => 'number', 'minValue' => 1, 'maxValue' => 200, 'helpTextId' => 'SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC'));
 
         $sql = 'SELECT rol_id, rol_name, cat_name
