@@ -23,6 +23,26 @@ function ProfileJS(gRootPath) {
         return $(selector).length > 0;
     };
 
+    this._loadingIndicatorHtml = function () {
+        return '<div class="d-flex align-items-center text-muted py-2">'
+            + '<div class="spinner-border spinner-border-sm me-2" role="status">'
+            + '<span class="visually-hidden">Loading...</span>'
+            + '</div>'
+            + '<span>Loading role memberships...</span>'
+            + '</div>';
+    };
+
+    this._setMembershipSectionLoading = function (sectionSelector, isLoading) {
+        if (!this._sectionExists(sectionSelector)) {
+            return;
+        }
+
+        var cardBody = $(sectionSelector + " .card-body");
+        if (isLoading) {
+            cardBody.html(this._loadingIndicatorHtml());
+        }
+    };
+
     this._reloadMembershipSection = function (mode, requestUrl, tabSelector, accordionSelector) {
         if (!this._sectionExists(tabSelector) && !this._sectionExists(accordionSelector)) {
             return;
@@ -36,6 +56,9 @@ function ProfileJS(gRootPath) {
         var self = this;
         this._reloadInFlight[mode] = true;
 
+        self._setMembershipSectionLoading(tabSelector, true);
+        self._setMembershipSectionLoading(accordionSelector, true);
+
         $.get({
             url: requestUrl,
             dataType: "html"
@@ -48,6 +71,14 @@ function ProfileJS(gRootPath) {
             if (self._sectionExists(accordionSelector)) {
                 $(accordionSelector + " .card-body").html(responseText);
                 formSubmitEvent(accordionSelector + " .card-body");
+            }
+        }).fail(function () {
+            var errorHtml = '<div class="text-danger py-2">Failed to load role memberships. Please retry.</div>';
+            if (self._sectionExists(tabSelector)) {
+                $(tabSelector + " .card-body").html(errorHtml);
+            }
+            if (self._sectionExists(accordionSelector)) {
+                $(accordionSelector + " .card-body").html(errorHtml);
             }
         }).always(function () {
             self._reloadInFlight[mode] = false;
