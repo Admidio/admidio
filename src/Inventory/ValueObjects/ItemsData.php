@@ -120,6 +120,30 @@ class ItemsData
     }
 
     /**
+     * Check if the current user is authorized to edit specific item data
+     *
+     * @return bool            true if the user is authorized
+     * @throws Exception
+     */
+    public function isUserAuthorizedToEdit(): bool
+    {
+        global $gSettingsManager, $gCurrentUser;
+
+        $keeper = $this->getValue('KEEPER', 'database');
+        // check if the user has admin rights
+        if ($gCurrentUser->isAdministratorInventory()) {
+            return true;
+        }
+        // if user has no amin rights, check if user is keeper of the item and if keepers are allowed to edit the item
+        elseif ($gSettingsManager->getInt('inventory_module_enabled') !== 3 && $gSettingsManager->getBool('inventory_allow_keeper_edit')) {
+            if ($keeper === $gCurrentUser->getValue('usr_id')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Item data of all item fields will be initialized
      * the fields array will not be renewed
      *
@@ -926,6 +950,11 @@ class ItemsData
     {
         global $gSettingsManager;
 
+        // check if the current user is authorized to edit the item
+        if (!$this->isUserAuthorizedToEdit()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $infId = $this->mItemFields[$fieldNameIntern]->getValue('inf_id');
         $oldFieldValue = '';
         // default prefix is 'ind_' for item data
@@ -1026,6 +1055,13 @@ class ItemsData
      */
     public function createNewItem(string $catUUID): void
     {
+        global $gCurrentUser;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         // If an error occurred while generating an item, there is an ItemId but no data for that item.
         // the following routine deletes these unused ItemIds
         $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEMS . '
@@ -1077,6 +1113,11 @@ class ItemsData
      */
     public function deleteItem(): void
     {
+        // check if the current user is authorized to edit the item
+        if (!$this->isUserAuthorizedToEdit()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         // Log record deletion, then delete
         $item = new Item($this->mDb, $this, $this->mItemId);
         $item->logDeletion();
@@ -1102,6 +1143,11 @@ class ItemsData
      */
     public function retireItem(): void
     {
+        // check if the current user is authorized to edit the item
+        if (!$this->isUserAuthorizedToEdit()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         // get the option id of the retired status
         $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
         $values = $option->getAllOptions();
@@ -1129,6 +1175,11 @@ class ItemsData
      */
     public function reinstateItem(): void
     {
+        // check if the current user is authorized to edit the item
+        if (!$this->isUserAuthorizedToEdit()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         // get the option id of the in use status
         $option = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
         $values = $option->getAllOptions();
@@ -1156,6 +1207,11 @@ class ItemsData
      */
     public function saveItemData(): void
     {
+        // check if the current user is authorized to edit the item
+        if (!$this->isUserAuthorizedToEdit()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         global $gCurrentUser;
         $this->mDb->startTransaction();
         $inbId = 0; // used for item borrow data
