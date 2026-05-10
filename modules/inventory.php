@@ -89,6 +89,11 @@ try {
             break;
 #region fields
         case 'field_list':
+            // check if user has admin rights for inventory
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             $headline = $gL10n->get('SYS_INVENTORY_ITEMFIELDS');
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $itemFields = new InventoryFieldsPresenter('adm_inventory_item_fields');
@@ -98,6 +103,11 @@ try {
             break;
 
         case 'field_edit':
+            // check if user has admin rights for inventory
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             // set headline of the script
             if ($getinfUUID !== '') {
                 $headline = $gL10n->get('SYS_INVENTORY_ITEMFIELD_EDIT');
@@ -113,6 +123,11 @@ try {
             break;
 
         case 'field_save':
+            // check if user has admin rights for inventory
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             $itemFieldService = new ItemFieldService($gDb, $getinfUUID);
             $itemFieldService->save();
 
@@ -121,6 +136,11 @@ try {
             break;
 
         case 'field_delete':
+            // check if user has admin rights for inventory
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
@@ -131,6 +151,11 @@ try {
             break;
 
         case 'check_option_entry_status':
+            // check if user has admin rights for inventory
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
@@ -152,6 +177,11 @@ try {
             break;
 
         case 'delete_option_entry':
+            // check if user has admin rights for inventory
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
@@ -169,6 +199,11 @@ try {
             break;
 
         case 'sequence':
+            // check if user has admin rights for inventory
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             // Update menu entry sequence
             $postDirection = admFuncVariableIsValid($_POST, 'direction', 'string', array('validValues' => array(MenuEntry::MOVE_UP, MenuEntry::MOVE_DOWN)));
             $getOrder = admFuncVariableIsValid($_GET, 'order', 'array');
