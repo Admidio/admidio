@@ -87,7 +87,10 @@ try {
             break;
 
         case 'export':
-            // SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            // check form field input and sanitized it from malicious content
+            $passwordForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $passwordForm->validate($_POST);
+
             $keyService = new KeyService($gDb);
             $password = admFuncVariableIsValid($_POST, 'key_password', 'string');
             $keyService->exportToPkcs12($getKeyUUID, $password);
