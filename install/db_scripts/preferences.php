@@ -54,7 +54,6 @@ $defaultOrgPreferences = array(
 
     // Registration
     'registration_adopt_all_data' => '1',
-    'registration_enable_captcha' => '1',
     'registration_module_enabled' => '1',
     'registration_manual_approval' => '1',
     'registration_send_notification_email' => '1',
@@ -124,6 +123,7 @@ $defaultOrgPreferences = array(
     'system_notifications_inventory_changes' => '0',
 
     // Captcha
+    'captcha_enabled' => '1',
     'captcha_type' => 'pic',
     'captcha_fonts' => 'AHGBold.ttf',
     'captcha_width' => '215',
@@ -209,7 +209,6 @@ $defaultOrgPreferences = array(
     // Messages
     'mail_module_enabled' => '1',
     'pm_module_enabled' => '1',
-    'mail_captcha_enabled' => '1',
     'mail_delivery_confirmation' => '0',
     'mail_html_registered_users' => '1',
     'mail_max_receiver' => '10',
