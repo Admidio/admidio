@@ -374,7 +374,7 @@ class Membership extends Entity
      */
     public function calculateDuration(?string $startDate = null, ?string $endDate = null): array
     {
-        global $gL10n;
+        global $gL10n, $gSettingsManager;
 
         $startDate = $startDate ?? $this->getValue('mem_begin', 'Y-m-d');
         $endDate = $endDate ?? $this->getValue('mem_end', 'Y-m-d');
@@ -404,8 +404,24 @@ class Membership extends Entity
         $months = $interval->m;
         $days = $interval->d;
 
+        $showDetailedDuration = true;
+        if (isset($gSettingsManager) && $gSettingsManager->has('profile_membership_duration_exact')) {
+            $showDetailedDuration = $gSettingsManager->getBool('profile_membership_duration_exact');
+        }
+
         // Format a human-readable string
         $durationText = '';
+
+        if (!$showDetailedDuration) {
+            $durationText = $years . ' ' . ($years === 1 ? $gL10n->get('SYS_YEAR') : $gL10n->get('SYS_YEARS'));
+
+            return [
+                'years' => $years,
+                'months' => $months,
+                'days' => $days,
+                'formatted' => $durationText
+            ];
+        }
 
         if ($years > 0) {
             $durationText .= $years . ' ' . ($years === 1 ? $gL10n->get('SYS_YEAR') : $gL10n->get('SYS_YEARS'));
