@@ -241,6 +241,7 @@ $defaultOrgPreferences = array(
     'profile_show_roles' => '1',
     'profile_show_former_roles' => '1',
     'profile_show_extern_roles' => '1',
+    'profile_membership_duration_exact' => '1',
     'profile_photo_storage' => '0',
 
     // Single-sign-on (SAML, OIDC)

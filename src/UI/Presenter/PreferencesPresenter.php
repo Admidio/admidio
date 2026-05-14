@@ -2021,6 +2021,11 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['profile_show_former_roles'],
             array('helpTextId' => 'SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
         );
+        $formProfile->addCheckbox(
+            'profile_membership_duration_exact',
+            $gL10n->get('SYS_MEMBERSHIP_DURATION') . ' (' . $gL10n->get('SYS_DETAILED') . ')',
+            (bool) ($formValues['profile_membership_duration_exact'] ?? true)
+        );
 
         if ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization()) {
             $formProfile->addCheckbox(
