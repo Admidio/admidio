@@ -262,17 +262,17 @@ class InventoryPresenter extends PagePresenter
         // read all keeper
         $sql = 'SELECT DISTINCT ind_value,
             CASE
-                WHEN ind_value = -1 THEN \'n/a\'
+                WHEN ind_value = \'-1\' THEN \'n/a\'
                 ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
             END as keeper_name
             FROM ' . TBL_INVENTORY_ITEM_DATA . '
             INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                 ON inf_id = ind_inf_id
             LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                ON last_name.usd_usr_id = ind_value
+                ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = ind_value
                 AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
             LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                ON first_name.usd_usr_id = ind_value
+                ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = ind_value
                 AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
             WHERE (inf_org_id  = ' . $gCurrentOrgId . '
                 OR inf_org_id IS NULL)
@@ -306,10 +306,10 @@ class InventoryPresenter extends PagePresenter
                 ON fields.inf_name_intern = \'LAST_RECEIVER\'
             AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
             LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                ON last_name.usd_usr_id  = borrowData.inb_last_receiver
+                ON CAST(last_name.usd_usr_id AS VARCHAR(255))  = borrowData.inb_last_receiver
             AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
             LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                ON first_name.usd_usr_id  = borrowData.inb_last_receiver
+                ON CAST(first_name.usd_usr_id AS VARCHAR(255))  = borrowData.inb_last_receiver
             AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
             WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
             ORDER BY receiver_name;';
