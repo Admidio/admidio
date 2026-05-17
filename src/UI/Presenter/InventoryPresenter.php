@@ -4,6 +4,7 @@ namespace Admidio\UI\Presenter;
 
 // Admidio namespaces
 use Admidio\Categories\Service\CategoryService;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -260,7 +261,8 @@ class InventoryPresenter extends PagePresenter
         );
 
         // read all keeper
-        $sql = 'SELECT DISTINCT ind_value,
+        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+            $sql = 'SELECT DISTINCT ind_value,
             CASE
                 WHEN ind_value = \'-1\' THEN \'n/a\'
                 ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
@@ -278,6 +280,26 @@ class InventoryPresenter extends PagePresenter
                 OR inf_org_id IS NULL)
             AND inf_name_intern = \'KEEPER\'
             ORDER BY keeper_name;';
+        } else {
+            $sql = 'SELECT DISTINCT ind_value,
+            CASE
+                WHEN ind_value = \'-1\' THEN \'n/a\'
+                ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+            END as keeper_name
+            FROM ' . TBL_INVENTORY_ITEM_DATA . '
+            INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+                ON inf_id = ind_inf_id
+            LEFT JOIN ' . TBL_USER_DATA . ' as last_name
+                ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
+                AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
+            LEFT JOIN ' . TBL_USER_DATA . ' as first_name
+                ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
+                AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
+            WHERE (inf_org_id  = ' . $gCurrentOrgId . '
+                OR inf_org_id IS NULL)
+            AND inf_name_intern = \'KEEPER\'
+            ORDER BY keeper_name;';
+        }
 
         // filter keeper
         $form->addSelectBoxFromSql(
@@ -292,7 +314,8 @@ class InventoryPresenter extends PagePresenter
         );
 
         // get all last receivers
-        $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
+        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+            $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
             CASE
                 WHEN borrowData.inb_last_receiver = \'-1\'
                     THEN \'n/a\'
@@ -306,13 +329,36 @@ class InventoryPresenter extends PagePresenter
                 ON fields.inf_name_intern = \'LAST_RECEIVER\'
             AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
             LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                ON CAST(last_name.usd_usr_id AS VARCHAR(255))  = borrowData.inb_last_receiver
+                ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
             AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
             LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                ON CAST(first_name.usd_usr_id AS VARCHAR(255))  = borrowData.inb_last_receiver
+                ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
             AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
             WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
             ORDER BY receiver_name;';
+        } else {
+            $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
+            CASE
+                WHEN borrowData.inb_last_receiver = \'-1\'
+                    THEN \'n/a\'
+                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
+                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+                ELSE
+                    borrowData.inb_last_receiver
+            END AS receiver_name
+            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
+            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
+                ON fields.inf_name_intern = \'LAST_RECEIVER\'
+            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
+            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
+            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
+            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
+            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
+            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
+            ORDER BY receiver_name;';
+        }
 
         // filter last receiver
         $form->addSelectBoxFromSql(
@@ -795,9 +841,9 @@ class InventoryPresenter extends PagePresenter
 
             // For the first column, add item picture column when enabled and in html mode
             if ($columnNumber === 1 && ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled'))) {
-                    // photo column
-                    $headers[] = '&nbsp;';
-                    $columnAlign[] = 'center';
+                // photo column
+                $headers[] = '&nbsp;';
+                $columnAlign[] = 'center';
             }
 
             // Decide alignment based on inf_type
@@ -954,7 +1000,7 @@ class InventoryPresenter extends PagePresenter
                         : $this->itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
                     $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif ($infType ===  'DROPDOWN_DATE_INTERVAL') {
+                } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
                     $content = $this->itemsData->getValue($infNameIntern, 'database');
                     if (isset($content) && is_numeric($content)) {
                         $selectedOption = $content;
@@ -1008,7 +1054,7 @@ class InventoryPresenter extends PagePresenter
                                     $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
                                 } elseif ($daysRemaining === '-0') {
                                     $content = '0 ' . $gL10n->get('SYS_DAYS');
-                                }  else {
+                                } else {
                                     $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
                                 }
                             } catch (\Exception $e) {
@@ -1090,7 +1136,7 @@ class InventoryPresenter extends PagePresenter
                         $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                         // Add reinstate action
                         $rowValues['actions'][] = array(
-                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\''. (($this->getFilterStatus === 0) ? ', \'refreshInventoryTable\'' : '') . ');',
+                            'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . (($this->getFilterStatus === 0) ? ', \'refreshInventoryTable\'' : '') . ');',
                             'dataMessage' => $dataMessage,
                             'icon' => 'bi bi-eye',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE')
@@ -1317,7 +1363,7 @@ class InventoryPresenter extends PagePresenter
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
                 } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
                     $content = $itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif ($infType ===  'DROPDOWN_DATE_INTERVAL') {
+                } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
                     if (isset($content) && is_numeric($content)) {
                         try {
                             // Load item data to get connected field value

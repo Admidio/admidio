@@ -266,13 +266,6 @@ class ItemField extends Entity
      */
     public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
-        global $gCurrentUser;
-
-        // only administrators can edit item fields
-        if (!$gCurrentUser->isAdministratorInventory()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
         if ($newValue !== parent::getValue($columnName)) {
             if ($checkValue) {
                 if ($columnName === 'inf_description') {
