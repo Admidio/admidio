@@ -1241,6 +1241,7 @@
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLUGIN_INSTALL">Install plugin</string>
+  <string name="SYS_PLUGIN_INSTALLED">Plugin successfully installed.</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Here you can manage the plugins of Admidio. Plugins are additional modules that can be installed to extend the functionality of Admidio. You can install, update or remove plugins.</string>
   <string name="SYS_PLUGIN_NAME_MISSING">No plugin name specified.</string>
@@ -1248,7 +1249,9 @@
   <string name="SYS_PLUGIN_NOT_INSTALLED">The plugin is not installed.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin preferences</string>
   <string name="SYS_PLUGIN_UNINSTALL">Uninstall plugin</string>
+  <string name="SYS_PLUGIN_UNINSTALLED">Plugin successfully uninstalled.</string>
   <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
+  <string name="SYS_PLUGIN_UPDATED">Plugin successfully updated.</string>
   <string name="SYS_PLUGIN_VERSION">Plugin version</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
@@ -1785,6 +1788,9 @@
   <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_DELETE_ENTRY">Do you want to delete the entry #VAR1_BOLD#?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
+  <string name="SYS_WANT_INSTALL_PLUGIN">Do you want to install the plugin #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_UNINSTALL_PLUGIN">Do you want to uninstall the plugin #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>
   <string name="SYS_WARNING">Warning</string>
   <string name="SYS_WEBLINK">Web link</string>
   <string name="SYS_WEBLINKS">Web links</string>
