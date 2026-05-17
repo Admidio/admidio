@@ -59,7 +59,7 @@ class ItemService
      * @return bool            true if the user is authorized
      * @throws Exception
      */
-    public function isUserAuthorizedToEdit(): bool
+    public function isEditable(): bool
     {
         global $gSettingsManager, $gCurrentUser;
 
@@ -85,7 +85,7 @@ class ItemService
     public function retireItem(): void
     {
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -102,7 +102,7 @@ class ItemService
     public function reinstateItem(): void
     {
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -141,7 +141,7 @@ class ItemService
         global $gCurrentSession, $gL10n, $gSettingsManager;
 
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -282,7 +282,7 @@ class ItemService
         global $gCurrentSession, $gSettingsManager;
 
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -345,7 +345,7 @@ class ItemService
         global $gLogger, $gSettingsManager, $gCurrentSession;
 
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -399,7 +399,7 @@ class ItemService
         global $gLogger, $gSettingsManager;
 
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 

@@ -125,7 +125,7 @@ class ItemsData
      * @return bool            true if the user is authorized
      * @throws Exception
      */
-    public function isUserAuthorizedToEdit(): bool
+    public function isEditable(): bool
     {
         global $gSettingsManager, $gCurrentUser;
 
@@ -951,7 +951,7 @@ class ItemsData
         global $gSettingsManager;
 
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -1114,7 +1114,7 @@ class ItemsData
     public function deleteItem(): void
     {
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -1144,7 +1144,7 @@ class ItemsData
     public function retireItem(): void
     {
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -1176,7 +1176,7 @@ class ItemsData
     public function reinstateItem(): void
     {
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -1208,7 +1208,7 @@ class ItemsData
     public function saveItemData(): void
     {
         // check if the current user is authorized to edit the item
-        if (!$this->isUserAuthorizedToEdit()) {
+        if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
