@@ -53,7 +53,12 @@ class ItemField extends Entity
      */
     public function delete(): bool
     {
-        global $gCurrentOrgId;
+        global $gCurrentOrgId, $gCurrentUser;
+
+        // only administrators can edit item fields
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         if ($this->getValue('inf_system') == 1) {
             // System fields could not be deleted
@@ -261,6 +266,13 @@ class ItemField extends Entity
      */
     public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
+        global $gCurrentUser;
+
+        // only administrators can edit item fields
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         if ($newValue !== parent::getValue($columnName)) {
             if ($checkValue) {
                 if ($columnName === 'inf_description') {
@@ -289,6 +301,13 @@ class ItemField extends Entity
      */
     public function setSelectOptions(array $newValues): bool
     {
+        global $gCurrentUser;
+
+        // only administrators can edit item fields
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         return (new SelectOptions($this->db, (int)$this->getValue('inf_id')))->setOptionValues($newValues);
     }
 

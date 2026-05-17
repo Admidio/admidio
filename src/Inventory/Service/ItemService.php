@@ -54,12 +54,41 @@ class ItemService
     }
 
     /**
+     * Check if the current user is authorized to edit specific item data
+     *
+     * @return bool            true if the user is authorized
+     * @throws Exception
+     */
+    public function isEditable(): bool
+    {
+        global $gSettingsManager, $gCurrentUser;
+
+        $keeper = $this->itemRessource->getValue('KEEPER', 'database');
+        // check if the user has admin rights
+        if ($gCurrentUser->isAdministratorInventory()) {
+            return true;
+        }
+        // if user has no amin rights, check if user is keeper of the item and if keepers are allowed to edit the item
+        elseif ($gSettingsManager->getInt('inventory_module_enabled') !== 3 && $gSettingsManager->getBool('inventory_allow_keeper_edit')) {
+            if ($keeper === $gCurrentUser->getValue('usr_id')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Marks the item as retired.
      *
      * @throws Exception
      */
     public function retireItem(): void
     {
+        // check if the current user is authorized to edit the item
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $this->itemRessource->retireItem();
 
         // Send notification to all users
@@ -72,6 +101,11 @@ class ItemService
      */
     public function reinstateItem(): void
     {
+        // check if the current user is authorized to edit the item
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $this->itemRessource->reinstateItem();
 
         // Send notification to all users
@@ -85,6 +119,12 @@ class ItemService
      */
     public function delete(): void
     {
+        global $gCurrentUser;
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $this->itemRessource->deleteItem();
 
         // Send notification to all users
@@ -99,6 +139,11 @@ class ItemService
     public function save(bool $multiEdit = false): void
     {
         global $gCurrentSession, $gL10n, $gSettingsManager;
+
+        // check if the current user is authorized to edit the item
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         // check form field input and sanitized it from malicious content
         $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
@@ -235,6 +280,12 @@ class ItemService
     public function uploadItemPicture(): void
     {
         global $gCurrentSession, $gSettingsManager;
+
+        // check if the current user is authorized to edit the item
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         // Confirm cache picture
         // check form field input and sanitized it from malicious content
         $itemPictureUploadForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
@@ -293,6 +344,11 @@ class ItemService
     {
         global $gLogger, $gSettingsManager, $gCurrentSession;
 
+        // check if the current user is authorized to edit the item
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         if ($gSettingsManager->getInt('inventory_item_picture_storage') === 1) {
             // Save picture in the file system
 
@@ -341,6 +397,12 @@ class ItemService
     public function deleteItemPicture(): void
     {
         global $gLogger, $gSettingsManager;
+
+        // check if the current user is authorized to edit the item
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         if ($gSettingsManager->getInt('inventory_item_picture_storage') === 1) {
             // Folder storage, delete file
             $filePath = ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/' . $this->itemRessource->getItemId() . '.jpg';
