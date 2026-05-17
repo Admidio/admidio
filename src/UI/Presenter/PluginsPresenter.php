@@ -35,7 +35,7 @@ class PluginsPresenter extends PagePresenter
      */
     public function createList(): void
     {
-        global $gL10n, $gCurrentSession;
+        global $gL10n;
 
         $this->setHtmlID('adm_plugins');
         $this->setHeadline($gL10n->get('SYS_PLUGIN_MANAGER'));
@@ -49,6 +49,77 @@ class PluginsPresenter extends PagePresenter
             });
             ', true
         );
+
+        $this->addJavascript('
+            function callPluginAction(url, csrfToken, pluginName) {
+                $.post(url, {
+                    "adm_csrf_token": csrfToken,
+                    "name": pluginName
+                }, function(data) {
+                    const messageText = $("#adm_status_message");
+            
+                    var returnStatus = "error";
+                    var returnMessage = "";
+            
+                    try {
+                        const returnData = JSON.parse(data);
+            
+                        returnStatus = returnData.status;
+            
+                        if (typeof returnData.message !== "undefined") {
+                            returnMessage = returnData.message;
+                        }
+                    } catch (e) {
+                        // fallback for old implementation without JSON response
+                        if (data === "done") {
+                            returnStatus = "success";
+                        } else {
+                            returnMessage = data;
+                        }
+                    }
+            
+                    if (returnStatus === "success") {
+                        if (returnMessage !== "") {
+                            messageText.html(
+                                "<div class=\"alert alert-success\">" +
+                                "<i class=\"bi bi-check-lg\"></i> " +
+                                returnMessage +
+                                "</div>"
+                            );
+                        }
+                                   
+                        setTimeout(function() {
+                            $("#adm_modal").modal("hide");
+                            $("#adm_modal_messagebox").modal("hide");
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        if (returnMessage.length === 0) {
+                            returnMessage = "Error: Undefined error occurred!";
+                        }
+            
+                        messageText.html(
+                            "<div class=\"alert alert-danger\">" +
+                            "<i class=\"bi bi-exclamation-circle-fill\"></i> " +
+                            returnMessage +
+                            "</div>"
+                        );
+                    }
+                });
+            }
+            
+            function callPluginInstall(url, csrfToken, pluginName) {
+                callPluginAction(url, csrfToken, pluginName);
+            }
+            
+            function callPluginUpdate(url, csrfToken, pluginName) {
+                callPluginAction(url, csrfToken, pluginName);
+            }
+            
+            function callPluginUninstall(url, csrfToken, pluginName) {
+                callPluginAction(url, csrfToken, pluginName);
+            }
+        ');
 
         $this->smarty->assign('list', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
@@ -94,7 +165,7 @@ class PluginsPresenter extends PagePresenter
      */
     public function prepareData(): void
     {
-        global $gL10n;
+        global $gL10n, $gCurrentSession;
         $pluginManager = new PluginManager();
         $plugins = $pluginManager->getAvailablePlugins();
         $templateRowPluginParent['overview'] = array('id' => 'overview_plugins', 'name' => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'), 'entries' => array());
@@ -142,7 +213,8 @@ class PluginsPresenter extends PagePresenter
                     // add update action if an update is available
                     if ($interface->isUpdateAvailable()) {
                         $templateRow['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'update', 'name' => $pluginName)),
+                            'dataHref' => 'callPluginUpdate(\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'update')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . addslashes($pluginName) . '\')',
+                            'dataMessage' => $gL10n->get('SYS_WANT_UPDATE_PLUGIN', array($pluginName)),
                             'icon' => 'bi bi-arrow-clockwise',
                             'tooltip' => $gL10n->get('SYS_PLUGIN_UPDATE')
                         );
@@ -150,7 +222,8 @@ class PluginsPresenter extends PagePresenter
                     if (!$interface->isAdmidioPlugin()) {
                         // add uninstall action
                         $templateRow['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'uninstall', 'name' => $pluginName)),
+                            'dataHref' => 'callPluginUninstall(\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'uninstall')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . addslashes($pluginName) . '\')',
+                            'dataMessage' => $gL10n->get('SYS_WANT_UNINSTALL_PLUGIN', array($pluginName)),
                             'icon' => 'bi bi-trash',
                             'tooltip' => $gL10n->get('SYS_PLUGIN_UNINSTALL')
                         );
@@ -158,7 +231,8 @@ class PluginsPresenter extends PagePresenter
                 } else {
                     // add install action
                     $templateRow['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'install', 'name' => $pluginName)),
+                        'dataHref' => 'callPluginInstall(\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'install')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . addslashes($pluginName) . '\')',
+                        'dataMessage' => $gL10n->get('SYS_WANT_INSTALL_PLUGIN', array($pluginName)),
                         'icon' => 'bi bi-download',
                         'tooltip' => $gL10n->get('SYS_PLUGIN_INSTALL')
                     );
