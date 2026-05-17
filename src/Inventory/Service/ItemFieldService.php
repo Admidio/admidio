@@ -45,6 +45,13 @@ class ItemFieldService
      */
     public function delete(): bool
     {
+        global $gCurrentUser;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         return $this->itemFieldRessource->delete();
     }
 
@@ -56,7 +63,12 @@ class ItemFieldService
      */
     public function moveSequence(string $mode): bool
     {
-        global $gCurrentOrgId;
+        global $gCurrentOrgId, $gCurrentUser;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         $infSequence = (int)$this->itemFieldRessource->getValue('inf_sequence');
         $sql = 'UPDATE ' . TBL_INVENTORY_FIELDS . '
@@ -99,8 +111,13 @@ class ItemFieldService
      */
     public function setSequence(array $sequence): bool
     {
-        global $gCurrentOrgId;
-        //$usfCatId = $this->getValue('usf_cat_id');
+        global $gCurrentOrgId, $gCurrentUser;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $infUUID = $this->itemFieldRessource->getValue('inf_uuid');
 
         $sql = 'UPDATE ' . TBL_INVENTORY_FIELDS . '
@@ -132,7 +149,12 @@ class ItemFieldService
      */
     public function save(): bool
     {
-        global $gCurrentSession, $gCurrentOrgId, $gDb;
+        global $gCurrentSession, $gCurrentOrgId, $gDb, $gCurrentUser;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         // check form field input and sanitized it from malicious content
         $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
