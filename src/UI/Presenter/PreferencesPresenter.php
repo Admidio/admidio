@@ -292,6 +292,12 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
 
+        $formCaptcha->addCheckbox(
+            'captcha_enabled',
+            $gL10n->get('ORG_ENABLE_CAPTCHA'),
+            (bool) $formValues['captcha_enabled'],
+            array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
+        );
         // search all available themes in the theme folder
         $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
         if (count($themes) === 0) {
@@ -1762,13 +1768,6 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['pm_module_enabled'],
             array('helpTextId' => 'SYS_ENABLE_PM_MODULE_DESC')
         );
-        $formMessages->addCheckbox(
-            'mail_captcha_enabled',
-            $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool) $formValues['mail_captcha_enabled'],
-            array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
-        );
-
         $formMessages->addSelectBox(
             'mail_template',
             $gL10n->get('SYS_EMAIL_TEMPLATE'),
@@ -2152,12 +2151,6 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_MANUAL_APPROVAL'),
             (bool) $formValues['registration_manual_approval'],
             array('helpTextId' => array('SYS_MANUAL_APPROVAL_DESC', array('SYS_RIGHT_APPROVE_USERS')))
-        );
-        $formRegistration->addCheckbox(
-            'registration_enable_captcha',
-            $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool) $formValues['registration_enable_captcha'],
-            array('helpTextId' => 'ORG_CAPTCHA_REGISTRATION')
         );
         $formRegistration->addCheckbox(
             'registration_adopt_all_data',

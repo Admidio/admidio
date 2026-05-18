@@ -382,7 +382,7 @@ try {
             }
 
             // if captchas are enabled, then visitors of the website must resolve this
-            if (!$gValidLogin && $gSettingsManager->getBool('registration_enable_captcha')) {
+            if (!$gValidLogin && $gSettingsManager->getBool('captcha_enabled')) {
                 $form->addCaptcha('adm_captcha_code');
             }
 
