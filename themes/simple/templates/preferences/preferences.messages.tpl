@@ -5,7 +5,6 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_module_enabled']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['pm_module_enabled']}
-    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_captcha_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_template']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_max_receiver']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_show_former']}
