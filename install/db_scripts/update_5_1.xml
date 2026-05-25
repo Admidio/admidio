@@ -52,5 +52,6 @@
     <step id="470" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_captcha_enabled' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'captcha_enabled'</step>
     <step id="480">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_captcha_enabled'</step>
     <step id="490">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_enable_captcha'</step>
+    <step id="500">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
     <step>stop</step>
 </update>
