@@ -87,12 +87,6 @@ class PluginsPresenter extends PagePresenter
                                 "</div>"
                             );
                         }
-                                   
-                        setTimeout(function() {
-                            $("#adm_modal").modal("hide");
-                            $("#adm_modal_messagebox").modal("hide");
-                            location.reload();
-                        }, 2000);
                     } else {
                         if (returnMessage.length === 0) {
                             returnMessage = "Error: Undefined error occurred!";
@@ -105,6 +99,12 @@ class PluginsPresenter extends PagePresenter
                             "</div>"
                         );
                     }
+                    
+                    setTimeout(function() {
+                            $("#adm_modal").modal("hide");
+                            $("#adm_modal_messagebox").modal("hide");
+                            location.reload();
+                        }, 2000);
                 });
             }
             
