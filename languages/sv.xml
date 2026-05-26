@@ -1305,6 +1305,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Liknande kontakt funnen</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med liknande namn som #VAR1_BOLD# hittades.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med liknande namn hittades vid registrering av #VAR1_BOLD# med e-postadressen #VAR2_BOLD#. Kontrollera informationen och koppla till en befintlig kontakt eller skapa en ny kontakt.</string>
+  <string name="SYS_SINCE_VAR">sedan #VAR1#</string>
   <string name="SYS_SINCE">sedan #VAR1#</string>
   <string name="SYS_SINCE_TO">från #VAR1# till #VAR2#</string>
   <string name="SYS_SIZE">Storlek</string>
@@ -1465,4 +1466,11 @@
   <string name="SYS_YOUR_LISTS">Egna listor</string>
   <string name="SYS_YOUR_NAME">Ditt namn</string>
   <string name="SYS_Z_TO_A">ö till a</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Ange minsta antal år som krävs för «Kvalificerad livstidsmedlem». (Standard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Aktivera kvalificering för livstidsmedlem</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Om aktiverat beräknas kolumnen «Kvalificerad livstidsmedlem». Om inaktiverat är det alltid falskt.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Välj rollerna som ska räknas för «Kvalificerad livstidsmedlem».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Välj rollerna som ska räknas för «Medlemsår».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Kvalificerad livstidsmedlem</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">År mot livstidsmedlemskvalificering</string>
 </resources>

@@ -28,6 +28,10 @@ use Admidio\Users\Entity\User;
  *   b# ... Membership start of role with ID #
  *   e# ... Membership end of role with ID #
  *   d# ... Membership duration of role with ID #
+ *   y# ... Membership years (sum of all periods) of role with ID #
+ *   ymulti ... Membership years over configured role IDs
+ *   ylmulti ... Membership years over life-membership role IDs
+ *   zmulti ... Life membership over configured role IDs
  *   ndummy ...  Number (running counter)
  *   adummy ...  All roles
  *   ddummy ... Duration of membership
@@ -35,12 +39,13 @@ use Admidio\Users\Entity\User;
  */
 class CategoryReport
 {
-    public array $headerData = array();          ///< Array mit allen Spaltenueberschriften
-    public array $listData = array();          ///< Array mit den Daten für den Report
-    public array $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
-    public array $headerRolePropSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
-    protected int $conf;                               ///< die gewaehlte Konfiguration
-    protected array $arrConfiguration = array();         ///< Array with the all configurations from the database
+    public array $headerData = array();                 ///< Array mit allen Spaltenueberschriften
+    public array $listData = array();                   ///< Array mit den Daten für den Report
+    public array $headerSelection = array();            ///< Array mit der Auswahlliste für die Spaltenauswahl
+    public array $headerRolePropSelection = array();    ///< Array mit der Auswahlliste für die Spaltenauswahl
+    protected int $conf;                                ///< die gewaehlte Konfiguration
+    protected int $lifeMembershipThresholdYears = 20;   ///< threshold for life membership status columns
+    protected array $arrConfiguration = array();        ///< Array with the all configurations from the database
 
     /**
      * CategoryReport constructor
@@ -82,9 +87,21 @@ class CategoryReport
      * @return void
      * @throws Exception
      */
-    public function generate_listData(string $date = DATE_NOW)
+    public function generate_listData(string $date = DATE_NOW, int $lifeMembershipThresholdYears = 20)
     {
         global $gDb, $gProfileFields, $gL10n, $gCurrentOrgId;
+
+        // Load the life membership threshold from the current configuration
+        $configThreshold = (int) ($this->arrConfiguration[$this->conf]['life_membership_threshold_years'] ?? 20);
+        $this->setLifeMembershipThresholdYears($configThreshold);
+
+        $configuredYearsOfMembershipRoleIds = array_values(array_filter(array_map('intval', explode(',', (string)($this->arrConfiguration[$this->conf]['years_of_membership_role_ids'] ?? ''))), static function ($roleId) {
+            return $roleId > 0;
+        }));
+        $configuredLifeMembershipRoleIds = array_values(array_filter(array_map('intval', explode(',', (string)($this->arrConfiguration[$this->conf]['life_membership_role_ids'] ?? ''))), static function ($roleId) {
+            return $roleId > 0;
+        }));
+        $lifeMembershipEnabled = (int)($this->arrConfiguration[$this->conf]['life_membership_enabled'] ?? 0) === 1;
 
         $workArray = array();
         $number_row_pos = -1;
@@ -102,7 +119,22 @@ class CategoryReport
         foreach ($columns as $key => $data) {
             // This is only to check whether this release still exists.
             // It could be that a profile field or role has been deleted since the last save
-            $found = $this->isInHeaderSelection($data);
+            $isConfiguredMultiRoleYears = ($data === 'ymulti');
+            $isConfiguredLifeMembershipYears = ($data === 'ylmulti');
+            $isConfiguredLifeMembership = ($data === 'zmulti');
+            $isMultiRoleYears = $isConfiguredMultiRoleYears || $isConfiguredLifeMembershipYears;
+            $isLifeMembership = $isConfiguredLifeMembership;
+            if ($isMultiRoleYears) {
+                if ($isConfiguredLifeMembershipYears) {
+                    $found = $this->isInHeaderSelection('ylmulti');
+                } else {
+                    $found = $this->isInHeaderSelection('ymulti');
+                }
+            } elseif ($isLifeMembership) {
+                $found = $this->isInHeaderSelection('zmulti');
+            } else {
+                $found = $this->isInHeaderSelection($data);
+            }
             if ($found == 0) {
                 continue;
             } else {
@@ -118,11 +150,35 @@ class CategoryReport
             $workArray[$key + 1]['id'] = $id;
             $workArray[$key + 1]['field'] = $field;
 
+            if ($isMultiRoleYears || $isLifeMembership) {
+                if ($isConfiguredMultiRoleYears) {
+                    $roleIds = $configuredYearsOfMembershipRoleIds;
+                } elseif ($isConfiguredLifeMembershipYears) {
+                    $roleIds = $configuredLifeMembershipRoleIds;
+                } elseif ($isConfiguredLifeMembership) {
+                    $roleIds = $configuredLifeMembershipRoleIds;
+                }
+                $roleIds = array_values(array_filter(array_unique($roleIds), static function ($roleId) {
+                    return $roleId > 0;
+                }));
+                $workArray[$key + 1]['role_ids'] = $roleIds;
+                $workArray[$key + 1]['field'] = 'multi';
+            }
+
             // store the optional condition for this column
             $workArray[$key + 1]['condition'] = $conditions[$key] ?? '';
 
             $this->headerData[$key + 1]['id'] = 0;
             $this->headerData[$key + 1]['data'] = $this->headerSelection[$found]['data'];
+            if ($isMultiRoleYears) {
+                if ($isConfiguredLifeMembershipYears) {
+                    $this->headerData[$key + 1]['data'] = $this->buildYearsTowardsLifeMembershipHeaderText();
+                } else {
+                    $this->headerData[$key + 1]['data'] = $this->buildMultiRoleYearsHeaderText($roleIds);
+                }
+            } elseif ($isLifeMembership) {
+                $this->headerData[$key + 1]['data'] = $this->buildMultiRoleLifeMembershipHeaderText($roleIds);
+            }
 
             switch ($type) {
                 case 'p':                    //p=profileField
@@ -262,6 +318,8 @@ class CategoryReport
                 case 'e':                    //e=membership end
                 case 'd':                    //d=membership duration
                 case 'u':                    //u=user profile fields
+                case 'y':                    //y=membership years (sum)
+                case 'z':                    //z=life membership reached (>= 20 years)
                     $number_col[$key + 1] = '';
                     break;
             }
@@ -342,6 +400,7 @@ class CategoryReport
 
                     default:
                         $typeHint = 'string';
+                        break;
                 }
 
                 // if profile field then add NOT EXISTS statement (same idea as in myList)
@@ -584,6 +643,47 @@ class CategoryReport
                     }
                     break;
 
+                case 'y':
+                    // y# / ymulti / ylmulti -> cumulative membership years (sum over all periods up to report date)
+                    // The expression returns full years and can be used with conditions like ">= 20".
+                    $typeHint = 'int';
+                    if (($colDef['field'] ?? '') === 'multi') {
+                        $roleIds = array_values(array_filter(array_map('intval', (array) ($colDef['role_ids'] ?? array()))));
+                        if (count($roleIds) > 0) {
+                            $expr = '(SELECT FLOOR(SUM(DATEDIFF(LEAST(m2.mem_end, \'' . $date . '\'), m2.mem_begin) + 1) / 365)
+                                        FROM ' . TBL_MEMBERS . ' m2
+                                       WHERE m2.mem_usr_id = usr_id
+                                         AND m2.mem_rol_id IN (' . implode(',', $roleIds) . ')
+                                         AND m2.mem_begin <= \'' . $date . '\')';
+                        } else {
+                            $expr = '0';
+                        }
+                    } else {
+                        $expr = '(SELECT FLOOR(SUM(DATEDIFF(LEAST(m2.mem_end, \'' . $date . '\'), m2.mem_begin) + 1) / 365)
+                                    FROM ' . TBL_MEMBERS . ' m2
+                                   WHERE m2.mem_usr_id = usr_id
+                                     AND m2.mem_rol_id = ' . (int) $id . '
+                                     AND m2.mem_begin <= \'' . $date . '\')';
+                    }
+                    break;
+
+                case 'z':
+                    // zmulti -> life membership reached (>=threshold years) across selected roles
+                    $typeHint = 'checkbox';
+                    $rawCond  = $normalizeYesNo($rawCond);
+                    $roleIds = array_values(array_filter(array_map('intval', (array) ($colDef['role_ids'] ?? array()))));
+                    if ($lifeMembershipEnabled && count($roleIds) > 0) {
+                        $expr = '(CASE WHEN FLOOR((SELECT SUM(DATEDIFF(LEAST(m2.mem_end, \'' . $date . '\'), m2.mem_begin) + 1)
+                                                    FROM ' . TBL_MEMBERS . ' m2
+                                                   WHERE m2.mem_usr_id = usr_id
+                                                     AND m2.mem_rol_id IN (' . implode(',', $roleIds) . ')
+                                                     AND m2.mem_begin <= \'' . $date . '\') / 365) >= ' . (int) $this->lifeMembershipThresholdYears . '
+                                      THEN 1 ELSE 0 END)';
+                    } else {
+                        $expr = '0';
+                    }
+                    break;
+
                 // dummy columns -----------------------------------------------------------------
                 case 'a': // adummy - all current roles (as of report date)
                     $typeHint = 'string';
@@ -762,6 +862,22 @@ class CategoryReport
                         }
                     }
 
+                } elseif ($data['type'] === 'y') {      // Membership years (sum)
+                    if (($data['field'] ?? '') === 'multi') {
+                        $membershipDays = $this->calculateMembershipDaysForRoles($member, (array) ($data['role_ids'] ?? array()), $date);
+                    } else {
+                        $membershipDays = $this->calculateMembershipDaysForRoles($member, array((int) $data['id']), $date);
+                    }
+                    $this->listData[$member][$key] = (int) floor($membershipDays / 365);
+
+                } elseif ($data['type'] === 'z') {      // Life membership reached (>= configured threshold)
+                    if ($lifeMembershipEnabled) {
+                        $membershipDays = $this->calculateMembershipDaysForRoles($member, (array) ($data['role_ids'] ?? array()), $date);
+                        $this->listData[$member][$key] = (int) floor($membershipDays / 365) >= $this->lifeMembershipThresholdYears;
+                    } else {
+                        $this->listData[$member][$key] = false;
+                    }
+
                 } elseif ($data['type'] == 'n') {              //Sonderfall: Anzahlspalte
                     $this->listData[$member][$key] = '';
 
@@ -901,6 +1017,11 @@ class CategoryReport
                 $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION') . ': ' . $row['rol_name'] . $marker;
                 $i++;
 
+                $this->headerSelection[$i]['id'] = 'y' . $row['rol_id'];        //y wie cumulative years of membership
+                $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION') . ' (' . $gL10n->get('SYS_YEARS') . '): ' . $row['rol_name'] . $marker;
+                $i++;
+
             }
         }
         //Zusatzspalte fuer die Gesamtrollenuebersicht erzeugen
@@ -909,10 +1030,22 @@ class CategoryReport
         $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_MEMBERSHIPS');
         $i++;
 
-        //Custom column for membership duration
-        $this->headerSelection[$i]['id'] = 'ddummy';          //d wie duration
+        // Custom column for cumulative membership years over configured roles
+        $this->headerSelection[$i]['id'] = 'ymulti';
         $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
-        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION');
+        $this->headerSelection[$i]['data'] = 'Years of Membership';
+        $i++;
+
+        // Custom column for cumulative membership years over life-membership roles
+        $this->headerSelection[$i]['id'] = 'ylmulti';
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
+        $this->headerSelection[$i]['data'] = 'Years towards Life Membership';
+        $i++;
+
+        // Custom column for life-membership status over configured roles
+        $this->headerSelection[$i]['id'] = 'zmulti';
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
+        $this->headerSelection[$i]['data'] = 'Life Membership Qualified';
         $i++;
 
         //Zusatzspalte fuer die Anzahl erzeugen
@@ -929,7 +1062,159 @@ class CategoryReport
             array('id' => "b", 'data' => $gL10n->get('SYS_MEMBERSHIP_START')),
             array('id' => "e", 'data' => $gL10n->get('SYS_MEMBERSHIP_END')),
             array('id' => "d", 'data' => $gL10n->get('SYS_MEMBERSHIP_DURATION')),
+            array('id' => "y", 'data' => $gL10n->get('SYS_MEMBERSHIP_DURATION') . ' (' . $gL10n->get('SYS_YEARS') . ')'),
         );
+    }
+
+    /**
+     * Calculate cumulative membership days for one user across one or more roles.
+     * All membership periods that started up to the report date are summed up,
+     * overlapping periods are merged so days are not counted twice.
+     *
+     * @param int $userId
+     * @param array $roleIds
+     * @param string $reportDate
+     * @return int
+     * @throws Exception
+     */
+    private function calculateMembershipDaysForRoles(int $userId, array $roleIds, string $reportDate): int
+    {
+        global $gDb;
+
+        $roleIds = array_values(array_filter(array_map('intval', $roleIds), static function ($roleId) {
+            return $roleId > 0;
+        }));
+
+        if (count($roleIds) === 0) {
+            return 0;
+        }
+
+        $intervals = array();
+
+        $sql = 'SELECT mem_begin, mem_end
+                  FROM ' . TBL_MEMBERS . '
+                 WHERE mem_usr_id = ? -- $userId
+                   AND mem_rol_id IN (' . implode(',', $roleIds) . ')
+                   AND mem_begin <= ? -- $reportDate';
+        $queryParams = array(
+            $userId,
+            $reportDate
+        );
+        $statement = $gDb->queryPrepared($sql, $queryParams);
+
+        $reportDateTime = new \DateTime($reportDate);
+
+        while ($row = $statement->fetch()) {
+            $startDate = new \DateTime($row['mem_begin']);
+            $endRaw = (string) $row['mem_end'];
+            $endDate = ($endRaw === DATE_MAX) ? clone $reportDateTime : new \DateTime($endRaw);
+
+            if ($endDate > $reportDateTime) {
+                $endDate = clone $reportDateTime;
+            }
+
+            if ($endDate < $startDate) {
+                continue;
+            }
+
+            $intervals[] = array(
+                'start' => $startDate,
+                'end' => $endDate
+            );
+        }
+
+        if (count($intervals) === 0) {
+            return 0;
+        }
+
+        usort($intervals, static function (array $a, array $b) {
+            return $a['start'] <=> $b['start'];
+        });
+
+        $merged = array();
+        foreach ($intervals as $interval) {
+            if (count($merged) === 0) {
+                $merged[] = $interval;
+                continue;
+            }
+
+            $lastIndex = count($merged) - 1;
+            $lastEndPlusOne = clone $merged[$lastIndex]['end'];
+            $lastEndPlusOne->modify('+1 day');
+
+            if ($interval['start'] <= $lastEndPlusOne) {
+                if ($interval['end'] > $merged[$lastIndex]['end']) {
+                    $merged[$lastIndex]['end'] = $interval['end'];
+                }
+            } else {
+                $merged[] = $interval;
+            }
+        }
+
+        $totalDays = 0;
+        foreach ($merged as $interval) {
+            // Include the end day to stay consistent with Membership::calculateDuration.
+            $dayDiff = $interval['start']->diff($interval['end']);
+            $totalDays += (int) $dayDiff->days + 1;
+        }
+
+        return $totalDays;
+    }
+
+    /**
+     * Build a readable header for a multi-role years column.
+     *
+     * @param array $roleIds
+     * @return string
+     * @throws Exception
+     */
+    private function buildMultiRoleYearsHeaderText(array $roleIds): string
+    {
+        return 'Years of Membership';
+    }
+
+    /**
+     * Build a readable header for a multi-role life-membership column.
+     *
+     * @param array $roleIds
+     * @return string
+     * @throws Exception
+     */
+    private function buildMultiRoleLifeMembershipHeaderText(array $roleIds): string
+    {
+        global $gL10n;
+
+        return $gL10n->get('SYS_LIFE_MEMBERSHIP_QUALIFIED');
+    }
+
+    /**
+     * Build a header for the configurable years-towards-life-membership column.
+     *
+     * @return string
+     */
+    private function buildYearsTowardsLifeMembershipHeaderText(): string
+    {
+        global $gL10n;
+
+        return $gL10n->get('SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP');
+    }
+
+    /**
+     * Set threshold for life membership columns.
+     *
+     * @param int $years
+     * @return void
+     */
+    public function setLifeMembershipThresholdYears(int $years): void
+    {
+        if ($years < 1) {
+            $years = 1;
+        }
+        if ($years > 200) {
+            $years = 200;
+        }
+
+        $this->lifeMembershipThresholdYears = $years;
     }
 
     /**
@@ -957,6 +1242,10 @@ class CategoryReport
                 $values['selection_role'] = $row['crt_selection_role'];
                 $values['selection_cat'] = $row['crt_selection_cat'];
                 $values['number_col'] = $row['crt_number_col'];
+                $values['life_membership_enabled'] = $row['crt_life_membership_enabled'] ?? 0;
+                $values['life_membership_threshold_years'] = $row['crt_life_membership_threshold_years'] ?? 20;
+                $values['years_of_membership_role_ids'] = $row['crt_years_of_membership_role_ids'] ?? '';
+                $values['life_membership_role_ids'] = $row['crt_life_membership_role_ids'] ?? '';
                 $values['default_conf'] = false;
                 if ($gSettingsManager->getInt('category_report_default_configuration') == $row['crt_id']) {
                     $values['default_conf'] = true;
@@ -1066,6 +1355,10 @@ class CategoryReport
                 $categoryReport->setValue('crt_selection_role', $values['selection_role']);
                 $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
                 $categoryReport->setValue('crt_number_col', $values['number_col']);
+                $categoryReport->setValue('crt_life_membership_enabled', $values['life_membership_enabled'] ?? 0);
+                $categoryReport->setValue('crt_life_membership_threshold_years', $values['life_membership_threshold_years'] ?? 20);
+                $categoryReport->setValue('crt_years_of_membership_role_ids', $values['years_of_membership_role_ids'] ?? '');
+                $categoryReport->setValue('crt_life_membership_role_ids', $values['life_membership_role_ids'] ?? '');
                 $categoryReport->save();
 
                 if ($values['default_conf'] === true || $defaultConfiguration === 0) {

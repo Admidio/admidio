@@ -1462,6 +1462,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Lignende kontakter funnet</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med et lignende navn som #VAR1_BOLD# ble funnet.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med lignende navn ble funnet for registreringen #VAR1_BOLD# med e-postadressen #VAR2_BOLD#. Vennligst sjekk registreringen og tilordne den til en funnet kontakt eller opprett en ny kontakt.</string>
+  <string name="SYS_SINCE_VAR">siden #VAR1#</string>
   <string name="SYS_SINCE">siden #VAR1#</string>
   <string name="SYS_SINCE_TO">fra #VAR1# til #VAR2#</string>
   <string name="SYS_SIZE">Størrelse</string>
@@ -1761,4 +1762,11 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_YOUR_LISTS">Egen liste</string>
   <string name="SYS_YOUR_NAME">Ditt navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Angi minste antall år som kreves for «Kvalifisert livsmedlem». (Standard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Aktiver kvalifikasjon for livsmedlem</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Hvis aktivert, beregnes kolonnen «Kvalifisert livsmedlem». Hvis deaktivert, er den alltid usann.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Velg rollene som skal telle for «Kvalifisert livsmedlem».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Velg rollene som skal telle for «Medlemsår».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Kvalifisert livsmedlem</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">År mot livsmedlemskvalifikasjon</string>
 </resources>

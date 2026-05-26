@@ -1490,6 +1490,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Au fost găsite contacte cu un nume similar pentru înregistrarea #VAR1_BOLD# cu adresa de e-mail #VAR2_BOLD#. Vă rugăm să verificați înregistrarea și să o atribuiți unui contact găsit sau să creați un contact nou.</string>
   <string name="SYS_SINCE_TO">de la #VAR1# la #VAR2#</string>
   <string name="SYS_SINCE_VAR">din #VAR1#</string>
+  <string name="SYS_SINCE">din #VAR1#</string>
   <string name="SYS_SIZE">Mărime</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">autentificare SMTP</string>
@@ -1792,4 +1793,11 @@
   <string name="SYS_YOUR_LISTS">Liste proprii</string>
   <string name="SYS_YOUR_NAME">Numele</string>
   <string name="SYS_Z_TO_A">De la Z la A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Setați numărul minim de ani necesar pentru „Calificat pentru membru pe viață”. (Implicit: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Activați calificarea membrului pe viață</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Dacă este activat, coloana «Calificat pentru membru pe viață» va fi calculată. Dacă este dezactivat, va fi întotdeauna fals.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Selectați rolurile care se iau în calcul pentru „Calificat pentru membru pe viață”.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Selectați rolurile care se iau în calcul pentru „Ani de membru”.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Calificat pentru membru pe viață</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Ani până la calificarea pentru membru pe viață</string>
 </resources>

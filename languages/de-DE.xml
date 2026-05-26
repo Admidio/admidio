@@ -1499,6 +1499,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Zu der Registrierung von #VAR1_BOLD# mit der E-Mail-Adresse #VAR2_BOLD# wurden Kontakte mit einem ähnlichen Namen gefunden. Bitte prüfen Sie die Registrierung und ordnen Sie diese einem gefundenen Kontakt zu oder legen Sie einen neuen Kontakt an.</string>
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SINCE_VAR">seit #VAR1#</string>
+  <string name="SYS_SINCE">seit #VAR1#</string>
   <string name="SYS_SIZE">Größe</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP Authentifizierung</string>
@@ -1801,4 +1802,11 @@
   <string name="SYS_YOUR_LISTS">Deine Listen</string>
   <string name="SYS_YOUR_NAME">Ihr Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Legen Sie die Mindestanzahl an Jahren fest, die für „Lebensmitglied qualifiziert“ erforderlich ist. (Standard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Qualifikation für Lebensmitglied aktivieren</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Wenn aktiviert, wird die Spalte „Lebensmitglied qualifiziert“ berechnet. Wenn deaktiviert, ist sie immer falsch.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Wählen Sie die Rollen aus, die für „Lebensmitglied qualifiziert“ berücksichtigt werden.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Wählen Sie die Rollen aus, die für «Mitgliedsjahre» berücksichtigt werden.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Lebensmitglied qualifiziert</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Jahre bis zur Lebensmitgliedschaft</string>
 </resources>
