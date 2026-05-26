@@ -30,8 +30,6 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'install', 'uninstall', 'update', 'sequence')));
-    $getPluginName = admFuncVariableIsValid($_GET, 'name', 'string', array('defaultValue' => ''));
-    $getPluginId = admFuncVariableIsValid($_GET, 'uuid', 'int');
 
     // check rights to use this module
     if (!$gCurrentUser->isAdministrator()) {
@@ -49,22 +47,25 @@ try {
 
         case 'install':
             // install plugin
-            if (!empty($getPluginName)) {
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $pluginName =  admFuncVariableIsValid($_POST, 'name', 'string', array('requireValue' => true));
+            
+            if (!empty($pluginName)) {
                 $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByName($getPluginName);
+                $plugin = $pluginManager->getPluginByName($pluginName);
                 if ($plugin) {
                     $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
 
                     if ($interface != null) {
                         if (!$interface->checkDependencies()) {
-                            throw new RuntimeException('Missing dependencies for ' . $getPluginName . ' plugin');
+                            throw new RuntimeException('Missing dependencies for ' . $pluginName . ' plugin');
                         }
 
                         $interface->doInstall();
                     }
                 }
                 $gNavigation->deleteLastUrl();
-                admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'));
+                echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_INSTALLED')));
             } else {
                 throw new Exception('SYS_PLUGIN_NAME_MISSING');
             }
@@ -72,9 +73,12 @@ try {
 
         case 'uninstall':
             // uninstall plugin
-            if (!empty($getPluginName)) {
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $pluginName =  admFuncVariableIsValid($_POST, 'name', 'string', array('requireValue' => true));
+
+            if (!empty($pluginName)) {
                 $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByName($getPluginName);
+                $plugin = $pluginManager->getPluginByName($pluginName);
                 if ($plugin) {
                     $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
 
@@ -83,7 +87,7 @@ try {
                     }
                 }
                 $gNavigation->deleteLastUrl();
-                admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'));
+                echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UNINSTALLED')));
             } else {
                 throw new Exception('SYS_PLUGIN_NAME_MISSING');
             }
@@ -91,9 +95,12 @@ try {
 
         case 'update':
             // update plugin
-            if (!empty($getPluginName)) {
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $pluginName =  admFuncVariableIsValid($_POST, 'name', 'string', array('requireValue' => true));
+
+            if (!empty($pluginName)) {
                 $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByName($getPluginName);
+                $plugin = $pluginManager->getPluginByName($pluginName);
                 if ($plugin) {
                     $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
 
@@ -102,7 +109,7 @@ try {
                     }
                 }
                 $gNavigation->deleteLastUrl();
-                admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'));
+                echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UPDATED')));
             } else {
                 throw new Exception('SYS_PLUGIN_NAME_MISSING');
             }
