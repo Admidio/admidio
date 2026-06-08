@@ -61,8 +61,10 @@
     },
     "archive": {
         "exclude": [
-            "**./.DS_Store",
-            "**/__MACOSX",
+            ".DS_Store",
+            "**/.DS_Store",
+            "__MACOSX",
+            "**/__MACOSX/**",
             "adm_my_files/*",
             "!adm_my_files/.htaccess",
             "!adm_my_files/index.html",
