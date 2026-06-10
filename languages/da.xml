@@ -1163,7 +1163,7 @@
   <string name="SYS_OVERHANG">Overbooking</string>
   <string name="SYS_OVERVIEW">Oversigt</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Oversigt over udvidelser</string>
-  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække & Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække &amp; Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
   <string name="SYS_PAGE_NEXT">Næste</string>
   <string name="SYS_PAGE_PREVIOUS">Forrige</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# og #VAR2#</string>
@@ -1490,6 +1490,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med et lignende navn blev fundet til registrering af #VAR1_BOLD# med e-mailadressen #VAR2_BOLD#. Venligst kontroller registreringen og tildel den til en fundet kontakt eller opret en ny kontakt.</string>
   <string name="SYS_SINCE_TO">fra #VAR1# til #VAR2#</string>
   <string name="SYS_SINCE_VAR">siden #VAR1#</string>
+  <string name="SYS_SINCE">siden #VAR1#</string>
   <string name="SYS_SIZE">Størrelse</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP godkendelse</string>
@@ -1792,4 +1793,11 @@
   <string name="SYS_YOUR_LISTS">Egne lister</string>
   <string name="SYS_YOUR_NAME">Dit navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Angiv det mindste antal år, der kræves for «Kvalificeret livsmedlem». (Standard: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Aktivér kvalifikation for livsmedlem</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Hvis aktiveret, beregnes kolonnen «Kvalificeret livsmedlem». Hvis deaktiveret, er det altid falsk.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Vælg de roller, der tæller med til «Kvalificeret livsmedlem».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Vælg de roller, der tæller med til «Medlemsår».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Kvalificeret livsmedlem</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">År mod livsmedlemskvalifikation</string>
 </resources>

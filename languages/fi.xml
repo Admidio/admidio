@@ -1216,6 +1216,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">Muiden organisaatioiden rooli</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Kun käyttäjä on toisen organisaation roolin jäsen, ruutu näytetään, jossa näkyvät kaikki roolit ja rekisteröintipäivämäärä. (oletus: kyllä)</string>
   <string name="SYS_SHOW_ROUTE">Näytä reitti</string>
+  <string name="SYS_SINCE_VAR">lähtien #VAR1#</string>
   <string name="SYS_SINCE">lähtien #VAR1#</string>
   <string name="SYS_SINCE_TO">#VAR1# - #VAR2#</string>
   <string name="SYS_SIZE">Koko</string>
@@ -1364,4 +1365,11 @@
   <string name="SYS_YOUR_LISTS">Omat luettelot</string>
   <string name="SYS_YOUR_NAME">Nimesi</string>
   <string name="SYS_Z_TO_A">Ö - A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Aseta vähimmäisvuosien määrä, joka vaaditaan asetukseen «Elinkautinen jäsen -kelpoinen». (Oletus: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Ota käyttöön elinikäisen jäsenen kelpoisuus</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Jos otetaan käyttöön, sarake «Elinkautinen jäsen -kelpoinen» lasketaan. Jos poistetaan käytöstä, se on aina epätosi.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Valitse roolit, jotka lasketaan mukaan asetukseen «Elinkautinen jäsen -kelpoinen».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Valitse roolit, jotka lasketaan mukaan «Jäsenyysvuosiin».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Elinkautinen jäsen -kelpoinen</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Vuosia elinikäisen jäsenyyden kelpoisuuteen</string>
 </resources>
