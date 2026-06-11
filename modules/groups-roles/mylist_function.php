@@ -66,19 +66,17 @@ try {
     }
 
     $list = new ListConfiguration($gDb);
-    if ($getListUuid !== '') {
+    if ($getListUuid !== '' && $getMode !== 'save_temporary') {
         $list->readDataByUuid($getListUuid);
     }
 
     // check if user has the rights to edit this list
-    if ($getMode !== 'save_temporary') {
-        // global lists can only be edited by administrator
-        if ($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        } elseif ((int)$list->getValue('lst_usr_id') !== $gCurrentUserId
-            && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+    // global lists can only be edited by administrator
+    if ($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator()) {
+        throw new Exception('SYS_NO_RIGHTS');
+    } elseif ((int)$list->getValue('lst_usr_id') !== $gCurrentUserId
+        && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // save list
