@@ -97,6 +97,39 @@ class User extends Entity
      */
     protected array $relationships = array();
     /**
+     * @var bool Flag to track whether usr_photo has been fetched from the database.
+     * The photo BLOB is excluded from the initial SELECT and loaded on demand.
+     */
+    protected bool $photoLoaded = false;
+
+    /**
+     * Strip the usr_photo BLOB from PHP session serialization.
+     * The lazy-load logic in getValue() will re-fetch it from the database on demand.
+     * This prevents large BLOBs from bloating the session file and causing slow
+     * session lock/read/write for every request from users with large profile photos.
+     * @return array<string> List of all property names to include in serialization.
+     */
+    public function __sleep(): array
+    {
+        $this->dbColumns['usr_photo'] = null;
+        $this->photoLoaded = false;
+        return array_keys(get_object_vars($this));
+    }
+
+    /**
+     * Remove any usr_photo BLOB that may have been stored in older session files.
+     * Called automatically by PHP when this object is deserialized from the session.
+     * Combined with __sleep(), this ensures a bloated session file is cleaned up on
+     * the very first request after deployment — the BLOB is stripped from memory
+     * immediately, so the session write at the end of that request produces a lean file.
+     */
+    public function __wakeup(): void
+    {
+        $this->dbColumns['usr_photo'] = null;
+        $this->photoLoaded = false;
+    }
+
+    /**
      * @var bool Flag if relationships for this user were checked
      */
     protected bool $relationshipsChecked = false;
@@ -1045,10 +1078,16 @@ class User extends Entity
             return $this->mProfileFieldsData->getValue($columnName, $format);
         }
 
-        if ($columnName === 'usr_photo' && (int)$gSettingsManager->get('profile_photo_storage') === 0) {
-            $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int)$this->getValue('usr_id') . '.jpg';
-            if (is_file($file)) {
-                return file_get_contents($file);
+        if ($columnName === 'usr_photo') {
+            if ((int)$gSettingsManager->get('profile_photo_storage') === 0) {
+                // usr_photo is excluded from the initial SELECT and lazy-loaded here on first access.
+                if (!$this->photoLoaded && !$this->newRecord && (int)($this->dbColumns['usr_id'] ?? 0) > 0) {
+                    $sql  = 'SELECT usr_photo FROM ' . TBL_USERS . ' WHERE usr_id = ?';
+                    $stmt = $this->db->queryPrepared($sql, [(int)$this->dbColumns['usr_id']]);
+                    $row  = $stmt->fetch();
+                    $this->dbColumns['usr_photo'] = $row['usr_photo'] ?? null;
+                    $this->photoLoaded = true;
+                }
             }
         }
 
@@ -1752,15 +1791,71 @@ class User extends Entity
      */
     protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
-        if (parent::readData($sqlWhereCondition, $queryParams)) {
-            if (isset($this->mProfileFieldsData)) {
-                // read data of all user fields from the current user
-                $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
-            }
-            return true;
+        // Reset lazy-load flag whenever a new record is loaded.
+        $this->photoLoaded = false;
+
+        // Build a column list from the table metadata, excluding usr_photo.
+        // This prevents the potentially large BLOB from being fetched on every
+        // User load; it will be fetched on demand by getValue('usr_photo') instead.
+        if (count($this->columnsInfos) === 0) {
+            $this->setColumnsInfos();
+        }
+        $columnList = implode(', ', array_filter(
+            array_keys($this->columnsInfos),
+            static fn(string $col) => $col !== 'usr_photo'
+        ));
+
+        // Build an equivalent of parent::readData but with an explicit column list.
+        $sqlAdditionalTables = '';
+        foreach ($this->additionalTables as $arrAdditionalTable) {
+            $sqlAdditionalTables .= ', ' . $arrAdditionalTable['table'];
+            $sqlWhereCondition   .= ' AND ' . $arrAdditionalTable['columnNameAdditionalTable']
+                                  . ' = ' . $arrAdditionalTable['columnNameClassTable'] . ' ';
+        }
+        if (str_starts_with(ltrim($sqlWhereCondition), 'AND')) {
+            $sqlWhereCondition = ltrim(substr(ltrim($sqlWhereCondition), 3));
         }
 
-        return false;
+        $sql  = 'SELECT ' . $columnList
+              . ' FROM '  . $this->tableName . ' ' . $sqlAdditionalTables
+              . ' WHERE ' . $sqlWhereCondition;
+        $stmt = $this->db->queryPrepared($sql, $queryParams);
+
+        if ($stmt->rowCount() !== 1) {
+            $this->clear();
+            return false;
+        }
+
+        $row = $stmt->fetch();
+        $this->newRecord    = false;
+        $this->insertRecord = false;
+
+        foreach ($row as $key => $value) {
+            if (!isset($this->columnsInfos[$key])) {
+                continue;
+            }
+            $type = $this->columnsInfos[$key]['type'];
+            if ($type === 'boolean' || $type === 'tinyint') {
+                $this->dbColumns[$key] = (bool)$value;
+            } elseif (($type === 'integer' || $type === 'smallint') && $value !== null && $value !== '') {
+                $this->dbColumns[$key] = (int)$value;
+            } else {
+                $this->dbColumns[$key] = $value;
+            }
+        }
+        // Ensure usr_photo slot exists but is marked as not-yet-loaded.
+        $this->dbColumns['usr_photo'] = null;
+
+        if (isset($this->mProfileFieldsData)) {
+            // Pass usr_uuid so readUserData can set mUserUuid without joining adm_users.
+            $this->mProfileFieldsData->readUserData(
+                (int)($this->dbColumns['usr_id'] ?? 0),
+                $this->organizationId,
+                (string)($this->dbColumns['usr_uuid'] ?? '')
+            );
+        }
+
+        return true;
     }
 
     /**
