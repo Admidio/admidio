@@ -47,11 +47,13 @@ try {
     }
 
     if ($getDelete > 0 && isset($config[$getDelete - 1])) {
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
         $config[$getDelete - 1]['id'] = $config[$getDelete - 1]['id'] * (-1);                   // id negieren, als Kennzeichen für "Deleted"
         $config = $report->saveConfigArray($config);
     }
 
     if ($getCopy > 0) {
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
         $config[] = array('id' => '',
             'name' => $report->createName($config[$getCopy - 1]['name']),
             'col_fields' => $config[$getCopy - 1]['col_fields'],

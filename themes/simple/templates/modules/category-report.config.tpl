@@ -11,7 +11,7 @@
         <div class="card admidio-field-group">
             <div class="card-header"><a id="{$categoryReport.key}_caret" class=" admidio-open-close-caret" data-target="{$categoryReport.key}_contents">
                 <i class="bi bi-caret-{if $categoryReport.open}down{else}right{/if}-fill" style="margin-right: 0"></i>
-             
+
             {$l10n->get('SYS_CONFIGURATION')} - {$elements[$categoryReport.name].value}</a></div>
             <div class="card-body" id="{$categoryReport.key}_contents" {if $categoryReport.open}{else} style="display: none;"{/if}>
                 {include 'sys-template-parts/form.input.tpl' data=$elements[$categoryReport.name]}
@@ -50,12 +50,12 @@
                 {include 'sys-template-parts/form.input.tpl' data=$elements[$categoryReport.default_conf]}
 
                 {if isset($categoryReport.urlConfigCopy)}
-                    <a id="copy_config" class="icon-text-lin offset-sm-3" href="{$categoryReport.urlConfigCopy}">
+                    <a id="copy_config" class="icon-text-lin offset-sm-3 admidio-send-csrf-token" data-url="{$categoryReport.urlConfigCopy}" data-csrf-token="{$csrfToken}">
                         <i class="bi bi-copy"></i> {$l10n->get('SYS_COPY_CONFIGURATION')}</a>
                 {/if}
                 {if isset($categoryReport.urlConfigDelete)}
-                    &nbsp;&nbsp;&nbsp;&nbsp;<a id="delete_config" class="icon-text-link offset-sm-3" href="{$categoryReport.urlConfigDelete}">
-                    <i class="bi bi-trash"></i> {$l10n->get('SYS_DELETE_CONFIGURATION')}</a>
+                    <a id="delete_config" class="icon-text-link offset-sm-3 admidio-send-csrf-token" data-url="{$categoryReport.urlConfigDelete}" data-csrf-token="{$csrfToken}">
+                        <i class="bi bi-trash"></i> {$l10n->get('SYS_DELETE_CONFIGURATION')}</a>
                 {/if}
             </div>
         </div>
