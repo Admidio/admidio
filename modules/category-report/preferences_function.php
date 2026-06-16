@@ -52,7 +52,7 @@ try {
 
             $report = new CategoryReport();
             $config = $report->saveConfigArray($config);
-            echo json_encode(array('status' => 'success'));
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
             break;
 
         default:
