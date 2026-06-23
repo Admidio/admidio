@@ -13,7 +13,11 @@
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\UI\Presenter\InventoryPresenter;
+use Admidio\Users\Entity\User;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -261,6 +265,9 @@ try {
 
     $statement = $gDb->queryPrepared($sql, $queryParams);
 
+    // Create a user object for later use
+    $user = new User($gDb, $gProfileFields);
+
     $data = array();
     while ($row = $statement->fetch()) {
         // for each row instantiate ItemsData for formatting (readItemData)
@@ -282,12 +289,115 @@ try {
             if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $itemsData->borrowFieldNames)) {
                 continue;
             }
-            $value = $itemsData->getValue($infNameIntern, 'html');
+            
+            $content = $itemsData->getValue($infNameIntern, 'database');
+            $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
+
+            // Process ITEMNAME column
+            if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
+                if (($gCurrentUser->isAdministratorInventory() || InventoryPresenter::isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) && !$itemsData->isRetired()) {
+                    $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
+                } else {
+                    $content = SecurityUtils::encodeHTML($content);
+                }
+            }
+
+            // Process KEEPER and LAST_RECEIVER column
+            if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
+                $found = $user->readDataById($content);
+                if (!$found) {
+                    $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                    $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                } else {
+                    $content = '<a href="' . SecurityUtils::encodeUrl(
+                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                            ['user_uuid' => $user->getValue('usr_uuid')]
+                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                }
+            }
+
+            // Format content based on the field type
+            if ($infType === 'CHECKBOX') {
+                $content = ($content != 1) ? 0 : 1;
+                $content = $itemsData->getHtmlValue($infNameIntern, $content);
+            } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
+                $content = $itemsData->getHtmlValue($infNameIntern, $content);
+            } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
+                $content = $itemsData->getValue($infNameIntern, 'database');
+                if (isset($content) && is_numeric($content)) {
+                    $selectedOption = $content;
+                    $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+                    $selectOptions = $option->getAllOptions();
+
+                    // Calculate days remaining based on selected date field value and selected interval
+                    $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
+                    $connectedField = new ItemField($gDb);
+                    $connectedField->readDataByUuid($connectedFieldUuid);
+                    $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
+                    $filteredSelectOptions = array();
+
+                    foreach ($selectOptions as $option) {
+                        $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
+                    }
+
+                    if (!empty($itemsData->getValue($connectedFieldNameIntern, 'database'))) {
+                        try {
+                            $compDate1 = date_create($itemsData->getValue($connectedFieldNameIntern, 'database'));
+                            $compDate2 = date_create();
+
+                            //Calculate future test date
+                            $dateAdditionSplit = array();
+                            preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$selectedOption], $dateAdditionSplit);
+
+                            if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                                switch ($dateAdditionSplit[2]) {
+                                    case 'w':
+                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
+                                        break;
+                                    case 'm':
+                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
+                                        break;
+                                    case 'y':
+                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
+                                        break;
+                                    case 'd':
+                                    default:
+                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
+                                        break;
+                                }
+                            }
+
+                            //Compare last test date with future date and output days
+                            $dateDiff = date_diff($compDate2, $compDate1);
+                            $daysRemaining = $dateDiff->format('%R%a');
+
+                            // check if days remaining is only one day
+                            if ($daysRemaining === '1' || $daysRemaining === '-1') {
+                                $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
+                            } elseif ($daysRemaining === '-0') {
+                                $content = '0 ' . $gL10n->get('SYS_DAYS');
+                            } else {
+                                $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
+                            }
+                        } catch (\Exception $e) {
+                            // in case of error set content to empty
+                            $content = '';
+                        }
+                    } else {
+                        $content = '';
+                    }
+                }
+            } elseif ($infType === 'RADIO_BUTTON') {
+                $content = $itemsData->getHtmlValue($infNameIntern, $content);
+            } elseif ($infType === 'CATEGORY') {
+                $content = $itemsData->getHtmlValue($infNameIntern, $content);
+            }
+            
             // If the item is retired then show the field value as struck-through
             if ($itemsData->isRetired()) {
-                $value = '<s>' . $value . '</s>';
+                $content = '<s>' . $content . '</s>';
             }
-            $rowValues[] = $value;
+            $rowValues[] = $content;
         }
 
         // actions
