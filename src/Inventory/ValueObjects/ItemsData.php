@@ -19,6 +19,8 @@ use Admidio\Inventory\Entity\SelectOptions;
 
 // PHP namespaces
 use DateTime;
+use Admidio\Users\Entity\User;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Reads the user fields structure out of database and give access to it
@@ -809,6 +811,38 @@ class ItemsData
                             $value = implode(', ', $valueArray);
                         }
                         break;
+                }
+            }
+        }
+
+        // Special handling for user references (KEEPER, LAST_RECEIVER) so that IDs are
+        // displayed as user names in HTML and readable names in exports
+        if (($fieldNameIntern === 'KEEPER' || $fieldNameIntern === 'LAST_RECEIVER') && $value !== '' && is_numeric($value)) {
+            global $gProfileFields, $gCurrentOrganization, $gL10n;
+
+            $user = new User($this->mDb, $gProfileFields);
+            $found = $user->readDataById($value);
+            if (!$found) {
+                $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                if ($format === 'html') {
+                    $value = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                } else {
+                    $value = '<i>' . $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]) . '</i>';
+                }
+            } else {
+                if ($format === 'html') {
+                    $value = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                } else {
+                    // try to get a complete organization-specific name if available
+                    $sql = $this->getSqlOrganizationsUsersComplete();
+                    $result = $this->mDb->queryPrepared($sql);
+                    $value = $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME');
+                    while ($row = $result->fetch()) {
+                        if ($row['usr_id'] == $user->getValue('usr_id')) {
+                            $value = $row['name'];
+                            break;
+                        }
+                    }
                 }
             }
         }
