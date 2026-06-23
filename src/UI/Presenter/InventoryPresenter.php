@@ -898,7 +898,7 @@ class InventoryPresenter extends PagePresenter
      *               - strikethroughs: array indicating which rows should have strikethrough formatting
      * @throws Exception
      */
-    public function prepareData(string $mode = 'html', bool $skipRows = false): array
+    public function prepareData(string $mode = 'html'): array
     {
         global $gCurrentUser, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
 
@@ -911,19 +911,10 @@ class InventoryPresenter extends PagePresenter
             'strikethroughs' => array()
         );
 
-        // get table definition (headers, export headers, column align)
         $tableDef = $this->prepareTableDefinition($mode);
         $preparedData['headers'] = $tableDef['headers'];
         $preparedData['export_headers'] = $tableDef['export_headers'];
         $preparedData['column_align'] = $tableDef['column_align'];
-
-        // If caller only needs headers/column definitions (e.g. server-side processing),
-        // skip building the full rows to avoid expensive per-item processing.
-        if ($skipRows) {
-            $preparedData['rows'] = array();
-            $preparedData['strikethroughs'] = array();
-            return $preparedData;
-        }
 
         // Create a user object for later use
         $user = new User($gDb, $gProfileFields);
@@ -972,31 +963,150 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
 
-                // Use ItemsData to provide formatted values. Keep ITEMNAME link logic and checkbox logic
-                // as they depend on permissions and item state.
+                $content = $this->itemsData->getValue($infNameIntern, 'database');
                 $infType = $this->itemsData->getProperty($infNameIntern, 'inf_type');
 
-                // Decide how to read the value depending on mode. Prefer ItemsData formatting.
-                if ($mode === 'html') {
-                    $content = $this->itemsData->getValue($infNameIntern, 'html');
-                } elseif (in_array($mode, ['csv', 'xlsx', 'ods'])) {
-                    // exports: use textual representation
-                    $content = $this->itemsData->getValue($infNameIntern, 'text');
-                } else {
-                    // database or other modes
-                    $content = $this->itemsData->getValue($infNameIntern, 'database');
+                // Process ITEMNAME column
+                if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
+                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
+                    } else {
+                        $content = SecurityUtils::encodeHTML($content);
+                    }
                 }
 
-                // ITEMNAME needs special handling to wrap with edit link when editable
-                if ($infNameIntern === 'ITEMNAME' && $mode === 'html' && !empty($content)) {
-                    if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
-                        if (!$this->itemsData->isRetired()) {
-                            $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . $content . '</a>';
+                // Process KEEPER column
+                // Process ITEMNAME column
+                if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
+                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
+                    } else {
+                        $content = SecurityUtils::encodeHTML($content);
+                    }
+                }
+
+                // Process KEEPER and LAST_RECEIVER column
+                if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
+                    $found = $user->readDataById($content);
+                    if (!$found) {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        if ($mode === 'html') {
+                            $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                        } else {
+                            $content = '<i>' . $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]) . '</i>';
+                        }
+                    } else {
+                        if ($mode === 'html') {
+                            $content = '<a href="' . SecurityUtils::encodeUrl(
+                                    ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                                    ['user_uuid' => $user->getValue('usr_uuid')]
+                                ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                        } else {
+                            // try to get a complete organization-specific name if available
+                            $sql = $this->itemsData->getSqlOrganizationsUsersComplete();
+                            $result = $gDb->queryPrepared($sql);
+                            $content = $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME');
+                            while ($row = $result->fetch()) {
+                                if ($row['usr_id'] == $user->getValue('usr_id')) {
+                                    $content = $row['name'];
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
 
-                $rowValues['data'][] = ($strikethrough && !in_array($mode, ['csv', 'ods', 'xlsx'])) ? '<s>' . $content . '</s>' : $content;
+                // Format content based on the field type
+                if ($infType === 'CHECKBOX') {
+                    $content = ($content != 1) ? 0 : 1;
+                    $content = in_array($mode, ['csv', 'pdf', 'xlsx', 'ods'])
+                        ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
+                        : $this->itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
+                    $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
+                } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
+                    $content = $this->itemsData->getValue($infNameIntern, 'database');
+                    if (isset($content) && is_numeric($content)) {
+                        $selectedOption = $content;
+                        $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+                        $selectOptions = $option->getAllOptions();
+
+                        // Calculate days remaining based on selected date field value and selected interval
+                        $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
+                        $connectedField = new ItemField($gDb);
+                        $connectedField->readDataByUuid($connectedFieldUuid);
+                        $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
+                        $filteredSelectOptions = array();
+
+                        foreach ($selectOptions as $option) {
+                            $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
+                        }
+
+                        if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
+                            try {
+                                $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
+                                $compDate2 = date_create();
+
+                                //Calculate future test date
+                                $dateAdditionSplit = array();
+                                preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$selectedOption], $dateAdditionSplit);
+
+                                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                                    switch ($dateAdditionSplit[2]) {
+                                        case 'w':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
+                                            break;
+                                        case 'm':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
+                                            break;
+                                        case 'y':
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
+                                            break;
+                                        case 'd':
+                                        default:
+                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
+                                            break;
+                                    }
+                                }
+
+                                //Compare last test date with future date and output days
+                                $dateDiff = date_diff($compDate2, $compDate1);
+                                $daysRemaining = $dateDiff->format('%R%a');
+
+                                // check if days remaining is only one day
+                                if ($daysRemaining === '1' || $daysRemaining === '-1') {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
+                                } elseif ($daysRemaining === '-0') {
+                                    $content = '0 ' . $gL10n->get('SYS_DAYS');
+                                } else {
+                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
+                                }
+                            } catch (\Exception $e) {
+                                // in case of error set content to empty
+                                $content = '';
+                            }
+                        } else {
+                            $content = '';
+                        }
+
+                        // in export modes append the stored value for possible later import
+                        if (!empty($content) && in_array($mode, ['csv', 'xlsx', 'ods'])) {
+                            $content .= " [" . $this->itemsData->getHtmlValue($infNameIntern, $selectedOption) . "]";
+                        }
+                    }
+                } elseif ($infType === 'RADIO_BUTTON') {
+                    $content = $mode === 'html'
+                        ? $this->itemsData->getHtmlValue($infNameIntern, $content)
+                        : $this->itemsData->getValue($infNameIntern, 'database');
+                } elseif ($infType === 'CATEGORY') {
+                    $content = $mode === 'database'
+                        ? $this->itemsData->getValue($infNameIntern, 'database')
+                        : $this->itemsData->getHtmlValue($infNameIntern, $content);
+                }
+
+                $rowValues['data'][] = ($strikethrough && !in_array($mode, ['csv', 'ods', 'xlsx']))
+                    ? '<s>' . $content . '</s>'
+                    : $content;
                 $columnNumber++;
             }
 
@@ -1147,7 +1257,6 @@ class InventoryPresenter extends PagePresenter
 
         return $preparedData;
     }
-
     /**
      * Populate the inventory table with the data of the inventory items in HTML mode.
      * This method uses a predefined ItemsData element and always returns the HTML version
