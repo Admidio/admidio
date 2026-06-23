@@ -261,7 +261,7 @@ class InventoryPresenter extends PagePresenter
         );
 
         // read all keeper
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $sql = 'SELECT DISTINCT ind_value,
             CASE
                 WHEN ind_value = \'-1\' THEN \'n/a\'
@@ -314,7 +314,7 @@ class InventoryPresenter extends PagePresenter
         );
 
         // get all last receivers
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
             CASE
                 WHEN borrowData.inb_last_receiver = \'-1\'
