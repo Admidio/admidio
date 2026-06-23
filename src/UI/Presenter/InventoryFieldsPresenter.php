@@ -93,7 +93,7 @@ class InventoryFieldsPresenter extends PagePresenter
                     $("#inf_inf_uuid_connected_group").removeClass("admidio-form-group-required");
                     $("#inf_inf_uuid_connected_group").hide();
                     
-                    valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_VALUE_LIST_DESC', array('<a href="https://icons.getbootstrap.com/" target="_blank">', '</a>')) . '";
+                    valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_VALUE_LIST_DESC', array('<a href=\'https://icons.getbootstrap.com/\' target=\'_blank\'>', '</a>')) . '";
                 }
             });
             $("#inf_type").trigger("change");', true
