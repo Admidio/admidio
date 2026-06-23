@@ -56,6 +56,8 @@ try {
     } elseif ($gSettingsManager->getInt('forum_module_enabled') === 1
         && !in_array($getMode, array('cards', 'list', 'topic')) && !$gValidLogin) {
         throw new Exception('SYS_NO_RIGHTS');
+    } elseif ($gSettingsManager->getInt('forum_module_enabled') === 2 && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     switch ($getMode) {
