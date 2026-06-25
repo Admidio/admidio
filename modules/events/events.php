@@ -39,6 +39,42 @@ use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
+/**
+ * Return a small recurrence hint for recurring events.
+ * @throws Exception
+ */
+function getEventRecurrenceHint(Event $event): string
+{
+    global $gL10n;
+
+    $recurrenceStatus = (string)$event->getValue('dat_recurrence_status', 'database');
+
+    if ($recurrenceStatus === 'master') {
+        return $gL10n->get('SYS_RECURRENCE_REPEATS');
+    }
+
+    if ((int)$event->getValue('dat_rer_id') > 0 || in_array($recurrenceStatus, array('generated', 'modified'), true)) {
+        return $gL10n->get('SYS_RECURRENCE_PART_OF_SERIES');
+    }
+
+    return '';
+}
+
+/**
+ * Return the recurrence hint formatted as a compact badge.
+ * @throws Exception
+ */
+function getEventRecurrenceBadge(Event $event): string
+{
+    $recurrenceHint = getEventRecurrenceHint($event);
+
+    if ($recurrenceHint === '') {
+        return '';
+    }
+
+    return ' <span class="badge bg-secondary">' . $recurrenceHint . '</span>';
+}
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
@@ -323,6 +359,13 @@ try {
 
         // create a fake event object
         $event = new Event($gDb);
+        $recurrenceEventUuidsById = array();
+
+        foreach ($eventsResult['recordset'] as $row) {
+            if ((int)$row['dat_rer_id'] > 0) {
+                $recurrenceEventUuidsById[(int)$row['dat_rer_id']][] = $row['dat_uuid'];
+            }
+        }
 
         foreach ($eventsResult['recordset'] as $row) {
             // write of current event data to an event object
@@ -333,13 +376,26 @@ try {
             $eventRolId = $event->getValue('dat_rol_id');
             $eventRoleUUID = $row['rol_uuid'];
             $dateHeadline = $event->getValue('dat_headline');
+            $recurrenceBadge = getEventRecurrenceBadge($event);
+            $eventDeleteMessage = $gL10n->get('SYS_WANT_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline));
+            $eventDeleteLabel = $gL10n->get('SYS_DELETE');
+            $eventDeleteUrlParams = array('mode' => 'delete', 'dat_uuid' => $eventUUID);
+            $eventEditUrlParams = array('dat_uuid' => $eventUUID);
+            if ($recurrenceBadge !== '') {
+                $eventDeleteMessage = $gL10n->get('SYS_RECURRENCE_DELETE_THIS_CONFIRM', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline));
+                $eventDeleteLabel = $gL10n->get('SYS_RECURRENCE_DELETE_THIS');
+                $eventDeleteUrlParams['recurrence_scope'] = 'this';
+                $eventEditUrlParams['recurrence_scope'] = 'this';
+            }
 
             // initialize all output elements
             $attentionDeadline = '';
             $outputEndDate = '';
             $outputButtonICal = '';
             $outputButtonEdit = '';
+            $outputButtonEditSeries = '';
             $outputButtonDelete = '';
+            $outputButtonDeleteSeries = '';
             $outputButtonCopy = '';
             $outputButtonParticipation = '';
             $outputButtonParticipants = '';
@@ -378,12 +434,26 @@ try {
                     <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID, 'copy' => 1)) . '">
                         <i class="bi bi-copy" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
                     $outputButtonEdit = '
-                    <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID)) . '">
+                    <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', $eventEditUrlParams) . '">
                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
                     $outputButtonDelete = '
-                    <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
-                        data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
+                    <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $eventDeleteMessage . '" data-buttons="yes-no"
+                        data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', $eventDeleteUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $eventDeleteLabel . '"></i></a>';
+
+                    if ($recurrenceBadge !== '') {
+                        $eventEditSeriesUrlParams = array('dat_uuid' => $eventUUID, 'recurrence_scope' => 'series');
+                        $outputButtonEditSeries = '
+                        <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', $eventEditSeriesUrlParams) . '">
+                            <i class="bi bi-pencil-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_RECURRENCE_EDIT_SERIES') . '"></i></a>';
+                        $eventDeleteSeriesUrlParams = array('mode' => 'delete', 'dat_uuid' => $eventUUID, 'recurrence_scope' => 'series');
+                        $eventDeleteSeriesElementIds = $recurrenceEventUuidsById[(int)$event->getValue('dat_rer_id')] ?? array($eventUUID);
+                        $eventDeleteSeriesElementIds = '[\'' . implode('\',\'', $eventDeleteSeriesElementIds) . '\']';
+                        $outputButtonDeleteSeries = '
+                        <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_RECURRENCE_DELETE_SERIES_CONFIRM') . '" data-buttons="yes-no"
+                            data-href="callUrlHideElements(\'evt_\', ' . $eventDeleteSeriesElementIds . ', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', $eventDeleteSeriesUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                            <i class="bi bi-trash-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_RECURRENCE_DELETE_SERIES') . '"></i></a>';
+                    }
                 }
             }
 
@@ -695,7 +765,7 @@ try {
                 <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="evt_' . $eventUUID . '">
                     <div class="card-header">
                         <i class="bi bi-calendar-week-fill"></i>' .
-                    $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline);
+                    $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline . $recurrenceBadge);
 
                 if ($event->isEditable() || $gSettingsManager->getBool('events_ical_export_enabled')) {
                     $page->addHtml('
@@ -717,13 +787,27 @@ try {
                                             <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID, 'copy' => 1)) . '">
                                                 <i class="bi bi-copy" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_COPY') . '</a>
                                             </li>
-                                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', array('dat_uuid' => $eventUUID)) . '">
+                                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', $eventEditUrlParams) . '">
                                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                                             </li>
-                                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
-                                                data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                                                <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
+                                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $eventDeleteMessage . '" data-buttons="yes-no"
+                                                data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', $eventDeleteUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                                                <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $eventDeleteLabel . '</a>
                                             </li>');
+                        if ($recurrenceBadge !== '') {
+                            $eventEditSeriesUrlParams = array('dat_uuid' => $eventUUID, 'recurrence_scope' => 'series');
+                            $eventDeleteSeriesUrlParams = array('mode' => 'delete', 'dat_uuid' => $eventUUID, 'recurrence_scope' => 'series');
+                            $eventDeleteSeriesElementIds = $recurrenceEventUuidsById[(int)$event->getValue('dat_rer_id')] ?? array($eventUUID);
+                            $eventDeleteSeriesElementIds = '[\'' . implode('\',\'', $eventDeleteSeriesElementIds) . '\']';
+                            $page->addHtml('
+                                            <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_new.php', $eventEditSeriesUrlParams) . '">
+                                                <i class="bi bi-pencil-fill" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_RECURRENCE_EDIT_SERIES') . '</a>
+                                            </li>
+                                            <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_RECURRENCE_DELETE_SERIES_CONFIRM') . '" data-buttons="yes-no"
+                                                data-href="callUrlHideElements(\'evt_\', ' . $eventDeleteSeriesElementIds . ', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', $eventDeleteSeriesUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                                                <i class="bi bi-trash-fill" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_RECURRENCE_DELETE_SERIES') . '</a>
+                                            </li>');
+                        }
                     }
                     $page->addHtml('</ul>
                             </div>');
@@ -800,12 +884,12 @@ try {
 
                 if ($getViewMode === 'html') {
                     if ($outputDeadline !== '') {
-                        $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('dat_uuid' => $eventUUID, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '<br />' . $gL10n->get('SYS_DEADLINE') . ': ' . $outputDeadline . '</a>';
+                        $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('dat_uuid' => $eventUUID, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>' . $recurrenceBadge . '<br />' . $gL10n->get('SYS_DEADLINE') . ': ' . $outputDeadline;
                     } else {
-                        $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('dat_uuid' => $eventUUID, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>';
+                        $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('dat_uuid' => $eventUUID, 'view_mode' => 'html', 'view' => 'detail', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>' . $recurrenceBadge;
                     }
                 } else {
-                    $columnValues[] = $dateHeadline;
+                    $columnValues[] = $dateHeadline . ($recurrenceBadge !== '' ? ' ' . getEventRecurrenceHint($event) : '');
                 }
 
                 if ($getView === 'room') {
@@ -880,7 +964,7 @@ try {
                 $columnValues[] = Language::translateIfTranslationStrId($row['category_name']);
 
                 if ($getViewMode === 'html') {
-                    $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
+                    $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonEditSeries . $outputButtonDelete . $outputButtonDeleteSeries;
                 }
 
                 $data['rows'][] = array('id' => 'evt_' . $event->getValue('dat_uuid'), 'class' => $cssClass, 'data' => $columnValues);

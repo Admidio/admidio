@@ -287,6 +287,7 @@ class ModuleEvents extends Modules
         global $gTimezone, $gDb;
 
         $iCalEvents = array();
+        $iCalEventUids = array();
         $iCalMinDateTime = '';
         $iCalMaxDateTime = '';
         $timeZone = new DateTimeZone($gTimezone);
@@ -295,13 +296,21 @@ class ModuleEvents extends Modules
         foreach ($events['recordset'] as $eventRecord) {
             $event = new Event($gDb);
             $event->setArray($eventRecord);
+            $iCalUid = (string) $eventRecord['dat_uuid'];
+
+            // Recurring events are materialized as normal event rows. Therefore each visible row
+            // is exported as its own VEVENT and uses its stable dat_uuid as UID.
+            if ($iCalUid === '' || isset($iCalEventUids[$iCalUid])) {
+                continue;
+            }
+            $iCalEventUids[$iCalUid] = true;
 
             if ($iCalMinDateTime === '') {
                 $iCalMinDateTime = $event->getValue('dat_begin', 'Y-m-d H:i:s');
             }
             $iCalMaxDateTime = $event->getValue('dat_end', 'Y-m-d H:i:s');
 
-            $iCalEvent = new Eluceo\iCal\Domain\Entity\Event(new Eluceo\iCal\Domain\ValueObject\UniqueIdentifier($eventRecord['dat_uuid']));
+            $iCalEvent = new Eluceo\iCal\Domain\Entity\Event(new Eluceo\iCal\Domain\ValueObject\UniqueIdentifier($iCalUid));
             $iCalEvent->setSummary($eventRecord['dat_headline']);
             $iCalEvent->setDescription((string) $eventRecord['dat_description']);
             $iCalEvent->setLocation(new \Eluceo\iCal\Domain\ValueObject\Location((string) $eventRecord['dat_location']));
@@ -334,11 +343,13 @@ class ModuleEvents extends Modules
         }
 
         $calendar = new Eluceo\iCal\Domain\Entity\Calendar($iCalEvents);
-        $calendar->addTimeZone(Eluceo\iCal\Domain\Entity\TimeZone::createFromPhpDateTimeZone(
-            $timeZone,
-            new DateTimeImmutable($iCalMinDateTime, $timeZone),
-            new DateTimeImmutable($iCalMaxDateTime, $timeZone))
-        );
+        if (count($iCalEvents) > 0) {
+            $calendar->addTimeZone(Eluceo\iCal\Domain\Entity\TimeZone::createFromPhpDateTimeZone(
+                $timeZone,
+                new DateTimeImmutable($iCalMinDateTime, $timeZone),
+                new DateTimeImmutable($iCalMaxDateTime, $timeZone))
+            );
+        }
 
         $componentFactory = new Eluceo\iCal\Presentation\Factory\CalendarFactory();
         return $componentFactory->createCalendar($calendar);
@@ -355,6 +366,9 @@ class ModuleEvents extends Modules
 
         $sqlConditions = '';
         $params = array();
+
+        $sqlConditions .= ' AND (dat_recurrence_status IS NULL OR dat_recurrence_status <> ?) ';
+        $params[] = 'cancelled';
 
         // In case calendar UUID was permitted and user has rights
         if (!empty($this->getParameter('cat_uuid'))) {
