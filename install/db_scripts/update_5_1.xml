@@ -53,5 +53,44 @@
     <step id="480">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_captcha_enabled'</step>
     <step id="490">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_enable_captcha'</step>
     <step id="500">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
+    <step id="510">CREATE TABLE %PREFIX%_event_recurrences
+        (
+        rer_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+        rer_uuid                    varchar(36)         NOT NULL,
+        rer_dat_id_master           integer unsigned    NOT NULL,
+        rer_frequency               varchar(20)         NOT NULL,
+        rer_interval                integer             NOT NULL    DEFAULT 1,
+        rer_byday                   varchar(50),
+        rer_bymonthday              integer,
+        rer_monthly_mode            varchar(20),
+        rer_end_type                varchar(20)         NOT NULL    DEFAULT 'never',
+        rer_until                   timestamp           NULL        DEFAULT NULL,
+        rer_count                   integer,
+        rer_timezone                varchar(100),
+        rer_rrule                   text,
+        rer_generated_until         timestamp           NULL        DEFAULT NULL,
+        rer_usr_id_create           integer unsigned,
+        rer_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+        rer_usr_id_change           integer unsigned,
+        rer_timestamp_change        timestamp           NULL        DEFAULT NULL,
+        PRIMARY KEY (rer_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="520">CREATE UNIQUE INDEX %PREFIX%_idx_rer_uuid ON %PREFIX%_event_recurrences (rer_uuid)</step>
+    <step id="530">CREATE INDEX %PREFIX%_idx_rer_dat_id_master ON %PREFIX%_event_recurrences (rer_dat_id_master)</step>
+    <step id="540">CREATE INDEX %PREFIX%_idx_rer_generated_until ON %PREFIX%_event_recurrences (rer_generated_until)</step>
+    <step id="550">ALTER TABLE %PREFIX%_events ADD COLUMN dat_rer_id integer unsigned</step>
+    <step id="560">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_original_begin timestamp NULL DEFAULT NULL</step>
+    <step id="570">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_status varchar(20)</step>
+    <step id="580">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_scope varchar(20)</step>
+    <step id="590">CREATE INDEX %PREFIX%_idx_dat_rer_original_begin ON %PREFIX%_events (dat_rer_id, dat_recurrence_original_begin)</step>
+    <step id="600">CREATE INDEX %PREFIX%_idx_dat_recurrence_status ON %PREFIX%_events (dat_recurrence_status)</step>
+    <step id="610">ALTER TABLE %PREFIX%_events ADD CONSTRAINT %PREFIX%_fk_dat_rer FOREIGN KEY (dat_rer_id) REFERENCES %PREFIX%_event_recurrences (rer_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="620">ALTER TABLE %PREFIX%_event_recurrences
+        ADD CONSTRAINT %PREFIX%_fk_rer_dat_master  FOREIGN KEY (rer_dat_id_master)  REFERENCES %PREFIX%_events (dat_id)              ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_rer_usr_create  FOREIGN KEY (rer_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_rer_usr_change  FOREIGN KEY (rer_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step>stop</step>
 </update>

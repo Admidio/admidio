@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS %PREFIX%_auto_login                        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_category_report                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_components                        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_events                            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_event_recurrences                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_files                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_folders                           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook_comments                CASCADE;
@@ -177,10 +178,14 @@ CREATE TABLE %PREFIX%_events
     dat_cat_id                  integer unsigned    NOT NULL,
     dat_rol_id                  integer unsigned,
     dat_room_id                 integer unsigned,
+    dat_rer_id                  integer unsigned,
     dat_uuid                    varchar(36)         NOT NULL,
     dat_begin                   timestamp           NULL        DEFAULT NULL,
     dat_end                     timestamp           NULL        DEFAULT NULL,
+    dat_recurrence_original_begin timestamp          NULL        DEFAULT NULL,
     dat_all_day                 boolean             NOT NULL    DEFAULT false,
+    dat_recurrence_status       varchar(20),
+    dat_recurrence_scope        varchar(20),
     dat_headline                varchar(100)        NOT NULL,
     dat_description             text,
     dat_highlight               boolean             NOT NULL    DEFAULT false,
@@ -201,6 +206,41 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_dat_uuid ON %PREFIX%_events (dat_uuid);
+CREATE INDEX %PREFIX%_idx_dat_rer_original_begin ON %PREFIX%_events (dat_rer_id, dat_recurrence_original_begin);
+CREATE INDEX %PREFIX%_idx_dat_recurrence_status ON %PREFIX%_events (dat_recurrence_status);
+
+/*==============================================================*/
+/* Table: adm_event_recurrences                                 */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_event_recurrences
+(
+    rer_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    rer_uuid                    varchar(36)         NOT NULL,
+    rer_dat_id_master           integer unsigned    NOT NULL,
+    rer_frequency               varchar(20)         NOT NULL,
+    rer_interval                integer             NOT NULL    DEFAULT 1,
+    rer_byday                   varchar(50),
+    rer_bymonthday              integer,
+    rer_monthly_mode            varchar(20),
+    rer_end_type                varchar(20)         NOT NULL    DEFAULT 'never',
+    rer_until                   timestamp           NULL        DEFAULT NULL,
+    rer_count                   integer,
+    rer_timezone                varchar(100),
+    rer_rrule                   text,
+    rer_generated_until         timestamp           NULL        DEFAULT NULL,
+    rer_usr_id_create           integer unsigned,
+    rer_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    rer_usr_id_change           integer unsigned,
+    rer_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (rer_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_rer_uuid ON %PREFIX%_event_recurrences (rer_uuid);
+CREATE INDEX %PREFIX%_idx_rer_dat_id_master ON %PREFIX%_event_recurrences (rer_dat_id_master);
+CREATE INDEX %PREFIX%_idx_rer_generated_until ON %PREFIX%_event_recurrences (rer_generated_until);
 
 /*==============================================================*/
 /* Table: adm_files                                             */
@@ -1205,8 +1245,14 @@ ALTER TABLE %PREFIX%_events
     ADD CONSTRAINT %PREFIX%_fk_dat_cat         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_rol         FOREIGN KEY (dat_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_room        FOREIGN KEY (dat_room_id)        REFERENCES %PREFIX%_rooms (room_id)              ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_dat_rer         FOREIGN KEY (dat_rer_id)         REFERENCES %PREFIX%_event_recurrences (rer_id)   ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_usr_create  FOREIGN KEY (dat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_usr_change  FOREIGN KEY (dat_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_event_recurrences
+    ADD CONSTRAINT %PREFIX%_fk_rer_dat_master  FOREIGN KEY (rer_dat_id_master)  REFERENCES %PREFIX%_events (dat_id)              ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_rer_usr_create  FOREIGN KEY (rer_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_rer_usr_change  FOREIGN KEY (rer_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_files
     ADD CONSTRAINT %PREFIX%_fk_fil_fol         FOREIGN KEY (fil_fol_id)         REFERENCES %PREFIX%_folders (fol_id)             ON DELETE RESTRICT ON UPDATE RESTRICT,

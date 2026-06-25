@@ -116,6 +116,7 @@ const TBL_CATEGORIES = TABLE_PREFIX . '_categories';
 const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
 const TBL_COMPONENTS = TABLE_PREFIX . '_components';
 const TBL_EVENTS = TABLE_PREFIX . '_events';
+const TBL_EVENT_RECURRENCES = TABLE_PREFIX . '_event_recurrences';
 const TBL_FILES = TABLE_PREFIX . '_files';
 const TBL_FOLDERS = TABLE_PREFIX . '_folders';
 const TBL_FORUM_TOPICS = TABLE_PREFIX . '_forum_topics';
