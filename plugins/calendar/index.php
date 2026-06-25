@@ -1,5 +1,5 @@
 <?php
-use Calendar\classes\Calendar;
+use Admidio\Infrastructure\Plugins\PluginManager;
 
 /**
  ***********************************************************************************************
@@ -18,7 +18,16 @@ try {
     // Initialize and check the parameters
     $getDateId = admFuncVariableIsValid($_GET, 'date_id', 'string');
 
-    $pluginCalendar = Calendar::getInstance();
+    // Load the plugin at runtime via the PluginManager. This is necessary due to AJAX calls
+    $pluginName = basename(__DIR__);
+
+    $pluginManager = new PluginManager();
+    $pluginCalendar = $pluginManager->getPluginByName($pluginName);
+
+    if ($pluginCalendar === null) {
+        throw new RuntimeException('Calendar plugin could not be loaded.');
+    }
+
     $pluginCalendar->initParams(array('date_id' => $getDateId));
     $pluginCalendar->doRender(isset($page) ? $page : null);
 
