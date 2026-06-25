@@ -15,6 +15,8 @@
  */
 
 use Admidio\Events\Entity\Event;
+use Admidio\Events\Repository\EventRecurrenceRepository;
+use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -31,6 +33,7 @@ try {
     // Initialize and check the parameters
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
+    $getRecurrenceScope = admFuncVariableIsValid($_GET, 'recurrence_scope', 'string', array('defaultValue' => 'this', 'validValues' => array('this', 'series')));
 
     // check if module is active
     if ((int)$gSettingsManager->get('events_module_enabled') === 0) {
@@ -43,6 +46,13 @@ try {
     $roleViewSet = array();
     $flagDateRightListView = false;
     $flagDateRightSendMail = false;
+    $showRecurrenceFields = true;
+    $recurrenceFrequency = 'none';
+    $recurrenceInterval = 1;
+    $recurrenceWeekdays = array();
+    $recurrenceEndType = EventRecurrenceRule::END_TYPE_NEVER;
+    $recurrenceCount = 10;
+    $recurrenceUntil = '';
 
     // set headline of the script
     if ($getCopy) {
@@ -81,6 +91,26 @@ try {
 
         // check if current user is assigned to this event
         $eventCurrentUserAssigned = $gCurrentUser->isLeaderOfRole((int)$event->getValue('dat_rol_id'));
+
+        $recurrenceRepository = new EventRecurrenceRepository($gDb);
+        $recurrence = null;
+        if ((int)$event->getValue('dat_rer_id') > 0) {
+            $recurrence = $recurrenceRepository->readById((int)$event->getValue('dat_rer_id'));
+        }
+        if ($recurrence === null) {
+            $recurrence = $recurrenceRepository->readByMasterEventId((int)$event->getValue('dat_id'));
+        }
+        if ($recurrence !== null) {
+            $recurrenceRule = $recurrenceRepository->toRule($recurrence);
+            $recurrenceFrequency = $recurrenceRule->getFrequency();
+            $recurrenceInterval = $recurrenceRule->getInterval();
+            $recurrenceWeekdays = $recurrenceRule->getByDay();
+            $recurrenceEndType = $recurrenceRule->getEndType();
+            $recurrenceCount = $recurrenceRule->getCount() ?? $recurrenceCount;
+            $recurrenceUntil = $recurrenceRule->getUntil()?->format('Y-m-d') ?? '';
+        }
+
+        $showRecurrenceFields = $recurrence === null || $getRecurrenceScope === 'series';
     } else {
         // check if the user has the right to edit at least one category
         if (count($gCurrentUser->getAllEditableCategories('EVT')) === 0) {
@@ -95,6 +125,14 @@ try {
         $endDate = $now->add($twoHourOffset)->format('Y-m-d H:00:00');
         $event->setValue('dat_begin', $beginDate);
         $event->setValue('dat_end', $endDate);
+    }
+
+    if ($recurrenceUntil === '') {
+        $recurrenceUntil = (new DateTime($event->getValue('dat_begin')))->format('Y-m-d');
+    }
+    if (count($recurrenceWeekdays) === 0) {
+        $weekdays = array(1 => 'MO', 2 => 'TU', 3 => 'WE', 4 => 'TH', 5 => 'FR', 6 => 'SA', 7 => 'SU');
+        $recurrenceWeekdays = array($weekdays[(int)(new DateTime($event->getValue('dat_begin')))->format('N')]);
     }
 
     // create html page object
@@ -151,6 +189,60 @@ try {
             $("#dat_country_group").hide();
         }
     }
+
+    function setRecurrenceFieldRequired(fieldId, isRequired, useNativeRequired) {
+        $("#" + fieldId + "_group").toggleClass("admidio-form-group-required", isRequired);
+        $("#" + fieldId).prop("required", isRequired && useNativeRequired);
+        if (!isRequired || !useNativeRequired) {
+            $("#" + fieldId).removeAttr("required");
+        }
+    }
+
+    function setEventRecurrence() {
+        if ($("#event_recurrence_frequency").length === 0) {
+            return;
+        }
+
+        var recurrenceFrequency = $("#event_recurrence_frequency").val();
+        var recurrenceEndType = $("#event_recurrence_end_type").val();
+        var recurrenceSelected = recurrenceFrequency !== "none";
+
+        setRecurrenceFieldRequired("event_recurrence_interval", recurrenceSelected, true);
+        setRecurrenceFieldRequired("event_recurrence_end_type", recurrenceSelected, true);
+        setRecurrenceFieldRequired("event_recurrence_count", recurrenceSelected && recurrenceEndType === "count", true);
+        setRecurrenceFieldRequired("event_recurrence_until", recurrenceSelected && recurrenceEndType === "until", true);
+        // Select2 hides the original multiselect. The visual required marker is enough here;
+        // the actual weekly weekday requirement is validated on the server.
+        setRecurrenceFieldRequired("event_recurrence_weekdays", recurrenceSelected && recurrenceFrequency === "weekly", false);
+
+        if (recurrenceFrequency === "none") {
+            $("#event_recurrence_interval_group").hide();
+            $("#event_recurrence_weekdays_group").hide();
+            $("#event_recurrence_end_type_group").hide();
+            $("#event_recurrence_count_group").hide();
+            $("#event_recurrence_until_group").hide();
+        } else {
+            $("#event_recurrence_interval_group").show("slow");
+            $("#event_recurrence_end_type_group").show("slow");
+
+            if (recurrenceFrequency === "weekly") {
+                $("#event_recurrence_weekdays_group").show("slow");
+            } else {
+                $("#event_recurrence_weekdays_group").hide();
+            }
+
+            if (recurrenceEndType === "count") {
+                $("#event_recurrence_count_group").show("slow");
+                $("#event_recurrence_until_group").hide();
+            } else if (recurrenceEndType === "until") {
+                $("#event_recurrence_count_group").hide();
+                $("#event_recurrence_until_group").show("slow");
+            } else {
+                $("#event_recurrence_count_group").hide();
+                $("#event_recurrence_until_group").hide();
+            }
+        }
+    }
 ');
 
     $page->addJavascript(
@@ -160,6 +252,7 @@ try {
     setAllDay();
     setEventParticipation();
     setLocationCountry();
+    setEventRecurrence();
 
     $("#event_participation_possible").click(function() {
         setEventParticipation();
@@ -170,9 +263,18 @@ try {
     $("#dat_location").change(function() {
         setLocationCountry();
     });
+    $("#event_recurrence_frequency").change(function() {
+        setEventRecurrence();
+    });
+    $("#event_recurrence_end_type").change(function() {
+        setEventRecurrence();
+    });
     $("#event_from").change(function() {
         if ($("#event_from").val() > $("#event_to").val()) {
             $("#event_to").val($("#event_from").val());
+        }
+        if ($("#event_recurrence_until").length > 0 && $("#event_recurrence_until").val() < $("#event_from").val()) {
+            $("#event_recurrence_until").val($("#event_from").val());
         }
     });
 
@@ -195,7 +297,7 @@ try {
     $form = new FormPresenter(
         'adm_events_edit_form',
         'modules/events.edit.tpl',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 'edit', 'copy' => $getCopy)),
+        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $getEventUuid, 'mode' => 'edit', 'copy' => $getCopy, 'recurrence_scope' => $getRecurrenceScope)),
         $page
     );
     $form->addInput(
@@ -273,6 +375,69 @@ try {
         FormPresenter::SELECT_BOX_MODUS_EDIT,
         array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid'))
     );
+
+    if ($showRecurrenceFields) {
+        $form->addSelectBox(
+            'event_recurrence_frequency',
+            $gL10n->get('SYS_REPEAT'),
+            array(
+                'none' => 'SYS_NO_RECURRENCE',
+                EventRecurrenceRule::FREQUENCY_DAILY => 'SYS_DAILY',
+                EventRecurrenceRule::FREQUENCY_WEEKLY => 'SYS_WEEKLY',
+                EventRecurrenceRule::FREQUENCY_MONTHLY => 'SYS_MONTHLY',
+                EventRecurrenceRule::FREQUENCY_YEARLY => 'SYS_ANNUALLY'
+            ),
+            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $recurrenceFrequency, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_FREQUENCY_DESC')
+        );
+        $form->addInput(
+            'event_recurrence_interval',
+            $gL10n->get('SYS_RECURRENCE_INTERVAL'),
+            (string)$recurrenceInterval,
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_RECURRENCE_INTERVAL_DESC')
+        );
+        $form->addSelectBox(
+            'event_recurrence_weekdays',
+            $gL10n->get('SYS_WEEKDAY'),
+            array(
+                'MO' => 'SYS_MONDAY',
+                'TU' => 'SYS_TUESDAY',
+                'WE' => 'SYS_WEDNESDAY',
+                'TH' => 'SYS_THURSDAY',
+                'FR' => 'SYS_FRIDAY',
+                'SA' => 'SYS_SATURDAY',
+                'SU' => 'SYS_SUNDAY'
+            ),
+            array(
+                'defaultValue' => $recurrenceWeekdays,
+                'multiselect' => true,
+                'showContextDependentFirstEntry' => false,
+                'placeholder' => $gL10n->get('SYS_RECURRENCE_WEEKDAYS'),
+                'helpTextId' => 'SYS_RECURRENCE_WEEKDAYS_DESC'
+            )
+        );
+        $form->addSelectBox(
+            'event_recurrence_end_type',
+            $gL10n->get('SYS_RECURRENCE_END'),
+            array(
+                EventRecurrenceRule::END_TYPE_NEVER => 'SYS_RECURRENCE_END_NEVER',
+                EventRecurrenceRule::END_TYPE_COUNT => 'SYS_RECURRENCE_END_AFTER_COUNT',
+                EventRecurrenceRule::END_TYPE_UNTIL => 'SYS_RECURRENCE_END_ON_DATE'
+            ),
+            array('defaultValue' => $recurrenceEndType, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_END_DESC')
+        );
+        $form->addInput(
+            'event_recurrence_count',
+            $gL10n->get('SYS_RECURRENCE_COUNT'),
+            (string)$recurrenceCount,
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_RECURRENCE_COUNT_DESC')
+        );
+        $form->addInput(
+            'event_recurrence_until',
+            $gL10n->get('SYS_RECURRENCE_UNTIL'),
+            $recurrenceUntil,
+            array('type' => 'date', 'helpTextId' => 'SYS_RECURRENCE_UNTIL_DESC')
+        );
+    }
 
     $form->addCheckbox('dat_highlight', $gL10n->get('SYS_HIGHLIGHT_EVENT'), (bool)$event->getValue('dat_highlight'));
     $form->addCheckbox(

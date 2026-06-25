@@ -26,6 +26,19 @@
             {include 'sys-template-parts/form.select.tpl' data=$elements['cat_uuid']}
         </div>
     </div>
+    {if isset($elements['event_recurrence_frequency'])}
+        <div class="card admidio-field-group">
+            <div class="card-header">{$l10n->get('SYS_REPEAT')}</div>
+            <div class="card-body">
+                {include 'sys-template-parts/form.select.tpl' data=$elements['event_recurrence_frequency']}
+                {include 'sys-template-parts/form.input.tpl' data=$elements['event_recurrence_interval']}
+                {include 'sys-template-parts/form.select.tpl' data=$elements['event_recurrence_weekdays']}
+                {include 'sys-template-parts/form.select.tpl' data=$elements['event_recurrence_end_type']}
+                {include 'sys-template-parts/form.input.tpl' data=$elements['event_recurrence_count']}
+                {include 'sys-template-parts/form.input.tpl' data=$elements['event_recurrence_until']}
+            </div>
+        </div>
+    {/if}
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_VISIBILITY')} &amp; {$l10n->get('SYS_REGISTRATION')}</div>
         <div class="card-body">
