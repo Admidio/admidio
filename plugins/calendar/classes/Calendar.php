@@ -184,7 +184,7 @@ class Calendar extends PluginAbstract
                     }
 
                     if ($countEvents > 0) {
-                        $plgLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('date_from' => $dateObj->format('Y-m-d'), 'date_to' => $dateObj->format('Y-m-d')));
+                        $plgLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('date_from' => $dateObj->format('Y-m-d'), 'date_to' => $dateObj->format('Y-m-d')));
                     }
                 }
             }

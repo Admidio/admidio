@@ -92,5 +92,6 @@
         ADD CONSTRAINT %PREFIX%_fk_rer_dat_master  FOREIGN KEY (rer_dat_id_master)  REFERENCES %PREFIX%_events (dat_id)              ON DELETE RESTRICT ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_rer_usr_create  FOREIGN KEY (rer_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_rer_usr_change  FOREIGN KEY (rer_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="630">UPDATE %PREFIX%_menu SET men_url = '/modules/events.php' WHERE men_name_intern = 'events'</step>
     <step>stop</step>
 </update>

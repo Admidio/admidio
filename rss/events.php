@@ -101,13 +101,13 @@ try {
             $description .= '<br /><br />' . $event->getValue('dat_description');
 
             // i-cal download link
-            $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('dat_uuid' => $eventUuid, 'mode' => 'export')) . '">' . $gL10n->get('SYS_ADD_EVENT_TO_CALENDAR') . '</a>';
+            $description .= '<br /><br /><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUuid, 'mode' => 'export')) . '">' . $gL10n->get('SYS_ADD_EVENT_TO_CALENDAR') . '</a>';
 
             // add entry to RSS feed
             $rss->addItem(
                 $title,
                 $description,
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events.php', array('dat_uuid' => $eventUuid, 'view' => 'detail')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUuid, 'mode' => 'cards')),
                 $row['create_name'],
                 DateTime::createFromFormat('Y-m-d H:i:s', $event->getValue('dat_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
                 $event->getValue('cat_name'),

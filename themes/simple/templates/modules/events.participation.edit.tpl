@@ -3,16 +3,16 @@
         $("#adm_events_participation_edit_form").find("*").filter(":input:visible:first").focus()
         $("#adm_events_participation_edit_form").submit(formSubmit);
         $("button[id=adm_button_attend]").click(function() {
-            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "participate");
+            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "&mode=participate");
             $("#adm_events_participation_edit_form").submit();
 
         });
         $("button[id=adm_button_tentative]").click(function() {
-            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "participate_maybe");
+            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "&mode=participate_maybe");
             $("#adm_events_participation_edit_form").submit();
         });
         $("button[id=adm_button_refuse]").click(function() {
-            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "participate_cancel");
+            $("#adm_events_participation_edit_form").attr("action", "{$urlFormAction}" + "&mode=participate_cancel");
             $("#adm_events_participation_edit_form").submit();
         });
     });
