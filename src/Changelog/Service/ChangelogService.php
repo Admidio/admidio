@@ -459,6 +459,10 @@ class ChangelogService {
             'dat_max_members' =>           'SYS_MAX_PARTICIPANTS',
             'dat_allow_comments' =>        array('name' => 'SYS_ALLOW_USER_COMMENTS', 'type' => 'BOOL'),
             'dat_additional_guests' =>     array('name' => 'SYS_ALLOW_ADDITIONAL_GUESTS', 'type' => 'BOOL'),
+            'dat_rer_id' =>                array('name' => 'SYS_RECURRENCE_RULE', 'type' => 'RECURRENCE_RULE'),
+            'dat_recurrence_original_begin' => array('name' => 'SYS_RECURRENCE_ORIGINAL_BEGIN', 'type' => 'DATETIME'),
+            'dat_recurrence_status' =>     array('name' => 'SYS_RECURRENCE_STATUS', 'type' => 'CUSTOM_LIST', 'entries' => array('master' => $gL10n->get('SYS_RECURRENCE_STATUS_MASTER'), 'generated' => $gL10n->get('SYS_RECURRENCE_STATUS_GENERATED'), 'modified' => $gL10n->get('SYS_RECURRENCE_STATUS_MODIFIED'), 'cancelled' => $gL10n->get('SYS_RECURRENCE_STATUS_CANCELLED'))),
+            'dat_recurrence_scope' =>      array('name' => 'SYS_RECURRENCE_SCOPE', 'type' => 'CUSTOM_LIST', 'entries' => array('this' => $gL10n->get('SYS_RECURRENCE_SCOPE_THIS'), 'series' => $gL10n->get('SYS_RECURRENCE_SCOPE_SERIES'))),
 
             'rol_name' =>                  'SYS_NAME',
             'rol_description' =>           'SYS_DESCRIPTION',
@@ -790,6 +794,69 @@ class ChangelogService {
     }
 
     /**
+     * Format a recurrence rule id as a readable recurrence summary.
+     * @throws Exception
+     */
+    private static function formatRecurrenceRuleValue(string $value): string
+    {
+        global $gDb, $gL10n, $gSettingsManager;
+
+        if (!ctype_digit($value)) {
+            return $value;
+        }
+
+        $sql = 'SELECT rer_frequency, rer_interval, rer_byday, rer_end_type, rer_until, rer_count
+                  FROM ' . TBL_EVENT_RECURRENCES . '
+                 WHERE rer_id = ?';
+        $recurrenceStatement = $gDb->queryPrepared($sql, array((int)$value));
+        $recurrence = $recurrenceStatement->fetch();
+
+        if (!$recurrence) {
+            return $gL10n->get('SYS_RECURRENCE_RULE_VAR', array($value));
+        }
+
+        $frequencies = array(
+            'daily' => $gL10n->get('SYS_DAILY'),
+            'weekly' => $gL10n->get('SYS_WEEKLY'),
+            'monthly' => $gL10n->get('SYS_MONTHLY'),
+            'yearly' => $gL10n->get('SYS_ANNUALLY')
+        );
+        $weekdays = array(
+            'MO' => $gL10n->get('SYS_MONDAY'),
+            'TU' => $gL10n->get('SYS_TUESDAY'),
+            'WE' => $gL10n->get('SYS_WEDNESDAY'),
+            'TH' => $gL10n->get('SYS_THURSDAY'),
+            'FR' => $gL10n->get('SYS_FRIDAY'),
+            'SA' => $gL10n->get('SYS_SATURDAY'),
+            'SU' => $gL10n->get('SYS_SUNDAY')
+        );
+
+        $summary = array();
+        $summary[] = $frequencies[(string)$recurrence['rer_frequency']] ?? (string)$recurrence['rer_frequency'];
+        $summary[] = $gL10n->get('SYS_RECURRENCE_INTERVAL') . ': ' . (int)$recurrence['rer_interval'];
+
+        if ((string)$recurrence['rer_byday'] !== '') {
+            $byDay = array();
+            foreach (explode(',', (string)$recurrence['rer_byday']) as $day) {
+                $byDay[] = $weekdays[$day] ?? $day;
+            }
+            $summary[] = $gL10n->get('SYS_RECURRENCE_WEEKDAYS') . ': ' . implode(', ', $byDay);
+        }
+
+        if ((string)$recurrence['rer_end_type'] === 'count') {
+            $summary[] = $gL10n->get('SYS_RECURRENCE_END') . ': ' . $gL10n->get('SYS_RECURRENCE_END_AFTER_COUNT') . ' (' . (int)$recurrence['rer_count'] . ')';
+        } elseif ((string)$recurrence['rer_end_type'] === 'until') {
+            $until = DateTime::createFromFormat('Y-m-d H:i:s', (string)$recurrence['rer_until']);
+            $untilValue = $until instanceof DateTime ? $until->format($gSettingsManager->getString('system_date')) : (string)$recurrence['rer_until'];
+            $summary[] = $gL10n->get('SYS_RECURRENCE_END') . ': ' . $gL10n->get('SYS_RECURRENCE_END_ON_DATE') . ' ' . $untilValue;
+        } else {
+            $summary[] = $gL10n->get('SYS_RECURRENCE_END') . ': ' . $gL10n->get('SYS_RECURRENCE_END_NEVER');
+        }
+
+        return implode('; ', $summary);
+    }
+
+    /**
      * Format the given value for the given type. E.g. BOOL variables are displayed as a checked/unchecked checkbox,
      * ICON displays the icon graphics next to the icon name, an ORG will show the organisation name rather than the ID,
      * etc. For basic types, this function is more or less the same as the profile fields formatting. However, this method
@@ -850,6 +917,17 @@ class ChangelogService {
                         $date = DateTime::createFromFormat('Y-m-d', $value);
                         if ($date instanceof DateTime) {
                             $htmlValue = $date->format($gSettingsManager->getString('system_date'));
+                        }
+                    }
+                    break;
+                case 'DATETIME':
+                    if ($value !== '') {
+                        $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                        if (!$dateTime instanceof DateTime) {
+                            $dateTime = DateTime::createFromFormat('Y-m-d H:i', $value);
+                        }
+                        if ($dateTime instanceof DateTime) {
+                            $htmlValue = $dateTime->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                         }
                     }
                     break;
@@ -922,6 +1000,9 @@ class ChangelogService {
                 case 'ROOM':
                     $obj = new Room($gDb, $value);
                     $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'rooms', $obj->getValue('room_id'), $obj->getValue('room_uuid'));
+                    break;
+                case 'RECURRENCE_RULE':
+                    $htmlValue = self::formatRecurrenceRuleValue((string)$value);
                     break;
                 case 'COUNTRY':
                     $htmlValue = $gL10n->getCountryName($value);
