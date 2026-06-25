@@ -716,7 +716,7 @@ class ChangelogService {
                 case 'category_report' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php'); break;
                 case 'events' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events.php', array('mode' => 'edit', 'dat_uuid' => $uuid)); break;
                 case 'files' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files.php', array('mode' => 'download', 'file_uuid' => $uuid)); break;
                 case 'folders' :
