@@ -19,8 +19,6 @@ use Admidio\Inventory\Entity\SelectOptions;
 
 // PHP namespaces
 use DateTime;
-use Admidio\Users\Entity\User;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Reads the user fields structure out of database and give access to it
