@@ -65,7 +65,7 @@ try {
     $headerColumns[$colIndex++] = 'actions';
 
     // prepare DB-specific aggregator (GROUP_CONCAT or string_agg)
-    if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
+    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
         $agg = "string_agg(COALESCE(ind_value, ' '), ' ')";
     } else {
         $agg = "GROUP_CONCAT(COALESCE(ind_value, ' ') SEPARATOR ' ')";
@@ -129,7 +129,7 @@ try {
                 continue;
             }
             if ($searchConditions !== '') $searchConditions .= ' AND ';
-            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
+            if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
                 $searchConditions .= ' ' . $agg . ' ILIKE ? ';
             } else {
                 $searchConditions .= ' ' . $agg . ' LIKE ? ';
@@ -219,7 +219,7 @@ try {
                     }
                     // type-aware ordering: numbers should be cast to numeric types so DB sorts them correctly
                     if (in_array($infType, array('NUMBER', 'DECIMAL'), true)) {
-                        if (DB_TYPE === Admidio\Infrastructure\Database::PDO_ENGINE_PGSQL) {
+                        if (DB_ENGINE === Admidio\Infrastructure\Database::PDO_ENGINE_PGSQL) {
                             $orderColumns[$idx] = "(CAST(" . $subSel . " AS NUMERIC))";
                         } else {
                             $orderColumns[$idx] = "(CAST(" . $subSel . " AS DECIMAL(20,4)))";
@@ -289,7 +289,7 @@ try {
             if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $itemsData->borrowFieldNames)) {
                 continue;
             }
-            
+
             $content = $itemsData->getValue($infNameIntern, 'database');
             $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
 
@@ -392,7 +392,7 @@ try {
             } elseif ($infType === 'CATEGORY') {
                 $content = $itemsData->getHtmlValue($infNameIntern, $content);
             }
-            
+
             // If the item is retired then show the field value as struck-through
             if ($itemsData->isRetired()) {
                 $content = '<s>' . $content . '</s>';
