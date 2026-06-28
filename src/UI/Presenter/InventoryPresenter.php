@@ -975,7 +975,6 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
 
-                // Process KEEPER column
                 // Process ITEMNAME column
                 if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
                     if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
@@ -1257,6 +1256,7 @@ class InventoryPresenter extends PagePresenter
 
         return $preparedData;
     }
+
     /**
      * Populate the inventory table with the data of the inventory items in HTML mode.
      * This method uses a predefined ItemsData element and always returns the HTML version
@@ -1351,9 +1351,18 @@ class InventoryPresenter extends PagePresenter
                 $content = $itemsData->getValue($infNameIntern, 'database');
                 $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
 
-                // Let ItemsData provide formatted HTML for KEEPER and LAST_RECEIVER as well
-                if ($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') {
-                    $content = $itemsData->getValue($infNameIntern, 'html');
+                // Process KEEPER and LAST_RECEIVER column
+                if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
+                    $found = $user->readDataById($content);
+                    if (!$found) {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                    } else {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(
+                                ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                                ['user_uuid' => $user->getValue('usr_uuid')]
+                            ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                    }
                 }
 
                 // Format the content based on the field type
