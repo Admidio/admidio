@@ -444,11 +444,11 @@ try {
         if (!$gCurrentUser->isAdministratorInventory() && $isKeeperAuthorized) {
             if (!$itemsData->isRetired()) {
                 // keeper retire action (popup)
-                $actionsHtml .= '<a class="admidio-icon-link openPopup" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $row['ini_uuid'])) . '"><i class="bi bi-trash" data-bs-toggle="tooltip"></i></a>';
+                $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $row['ini_uuid'])) . '"><i class="bi bi-trash" data-bs-toggle="tooltip"></i></a>';
             }
         } elseif ($gCurrentUser->isAdministratorInventory()) {
             // admin delete/retire action
-            $actionsHtml .= '<a class="admidio-icon-link openPopup" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-trash" data-bs-toggle="tooltip"></i></a>';
+            $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-trash" data-bs-toggle="tooltip"></i></a>';
         }
 
         $rowValues[] = $actionsHtml;
