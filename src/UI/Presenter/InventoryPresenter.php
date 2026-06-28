@@ -98,6 +98,270 @@ class InventoryPresenter extends PagePresenter
     }
 
     /**
+     * Check if the current user is the keeper of an item.
+     * This method checks if the current user is listed as a keeper in the inventory item data.
+     *
+     * @param int $itemId Optional item ID to check for a specific item. If 0, checks for any item.
+     * @return bool Returns true if the current user is a keeper, false otherwise.
+     * @throws Exception
+     */
+    public static function isCurrentUserKeeper(int $itemId = 0): bool
+    {
+        global $gCurrentUser, $gDb, $gCurrentOrgId;
+
+        $sql = 'SELECT COUNT(*) as count FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_value = ? AND ind_inf_id = ?';
+        // read the field id of the keeper field
+        $sqlKeeperFieldId = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_name_intern = \'KEEPER\' AND (inf_org_id = ? OR inf_org_id IS NULL) LIMIT 1';
+        $resultKeeperFieldId = $gDb->queryPrepared($sqlKeeperFieldId, array($gCurrentOrgId));
+        $rowKeeperFieldId = $resultKeeperFieldId->fetch();
+        if ($rowKeeperFieldId === false) {
+            return false;
+        }
+        $rowKeeperFieldId = $rowKeeperFieldId['inf_id'];
+        $params = array($gCurrentUser->getValue('usr_id'), $rowKeeperFieldId);
+
+        if ($itemId > 0) {
+            $sql .= ' AND ind_ini_id = ?';
+            $params[] = $itemId;
+        }
+        $result = $gDb->queryPrepared($sql, $params);
+        $row = $result->fetch();
+        if ($row['count'] > 0) {
+            return true;
+        }
+        return false;
+
+    }
+
+    /**
+     * Create the list of all items in the inventory. This method is used to display the items in a table format.
+     * It prepares the data for the table and handles the print view if required.
+     *
+     * @return void
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createList(): void
+    {
+        global $gSettingsManager, $gCurrentUser, $gCurrentUserId, $gL10n;
+
+        if (!$this->printView) {
+            $this->createHeader();
+            // we only need the table headers/column definition for client-side DataTables init
+            // actual row data will be provided by server-side processing
+            $templateData = $this->prepareTableDefinition('html');
+
+            // initialize and set the parameter for DataTables
+            $dataTables = new DataTables($this, 'adm_inventory_table');
+            // use a dedicated server-side endpoint for DataTables similar to modules/messages/messages_data.php
+            $dataTables->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory/inventory_data.php', array(
+                'items_filter_string' => $this->getFilterString,
+                'items_filter_category' => $this->getFilterCategoryUUID,
+                'items_filter_keeper' => $this->getFilterKeeper,
+                'items_filter_last_receiver' => $this->getFilterLastReceiver,
+                'items_filter_status' => $this->getFilterStatus
+            )));
+            // callback function to update the table on deletion of an item or reinstantiation of a retired item
+            $this->addJavascript('
+                function refreshInventoryTable() {
+                    location.reload();
+                }
+            ');
+            // add the checkbox for selecting items and action buttons
+            $this->addJavascript('
+                var table = $("#adm_inventory_table");
+
+                table.one("init.dt", function() {
+                    var tableApi = table.DataTable();
+                    var initialPageLength = tableApi.page.len();
+
+                    // base URLs
+                    var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
+                    var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg", "items_filter_status" => $this->getFilterStatus)) . '";
+
+                    // cache jQuery objects
+                    var editButton = $("#edit-selected");
+                    var deleteButon = $("#delete-selected");
+                    var headChk = table.find("thead input[type=checkbox]");
+                    var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
+                    var actions = $("#adm_inventory_table_select_actions");
+
+                    // master list of selected IDs
+                    var selectedIds = [];
+
+                    function anySelected() {
+                        return selectedIds.length > 0;
+                    }
+
+                    function refreshActions() {
+                        editButton.prop("disabled", !anySelected());
+                        deleteButon.prop("disabled", !anySelected());
+                    }
+
+                    function updateHeaderState() {
+                        var total = rowChks().length;
+                        var checked = selectedIds.length;
+                        if (checked === 0) {
+                            headChk.prop({ checked: false, indeterminate: false });
+                        } else if (checked === total) {
+                            headChk.prop({ checked: true, indeterminate: false });
+                        } else {
+                            headChk.prop({ checked: false, indeterminate: true });
+                        }
+                    }
+
+                    // header-checkbox → select/unselect *all* rows
+                    headChk.on("change", function() {
+                        var checkAll = this.checked;
+
+                        if (checkAll) {
+                            // register a one-time draw event to collect all IDs
+                            tableApi.one("draw.dt", function() {
+                                // clear the selectedIds array
+                                selectedIds = [];
+
+                                // grab every row
+                                tableApi.rows().every(function() {
+                                    if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
+                                        selectedIds.push(this.node().id.replace(/^adm_inventory_item_/, ""));
+                                        $(this.node()).find("input[type=checkbox]").prop("checked", true);
+                                    }
+                                });
+
+                                updateHeaderState();
+                                refreshActions();
+                            });
+
+                            // update the initial page length and set it to -1 (all rows)
+                            initialPageLength = tableApi.page.len();
+                            tableApi.page.len(-1).draw();
+                        } else {
+                            // set the checked state of all selected rows to false
+                            selectedIds.forEach(function(id) {
+                                var row = table.find("#adm_inventory_item_" + id);
+                                if (row.length > 0) {
+                                    row.find("input[type=checkbox]").prop("checked", false);
+                                }
+                            });
+
+                            // clear the selectedIds array
+                            selectedIds = [];
+
+                            updateHeaderState();
+                            refreshActions();
+
+                            // reset the page length to the initial value
+                            tableApi.page.len(initialPageLength).draw();
+                        }
+                    });
+
+                    // individual row-checkbox → toggle just that ID
+                    table.on("change", "tbody input[type=checkbox]", function() {
+                        var id = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
+                        var idx = selectedIds.indexOf(id);
+                        if (this.checked && idx === -1) {
+                            selectedIds.push(id);
+                        } else if (!this.checked && idx !== -1) {
+                            selectedIds.splice(idx, 1);
+                        }
+
+                        updateHeaderState();
+                        refreshActions();
+                    });
+
+                    // when the order changes, recheck selected ids
+                    tableApi.on("draw.dt", function() {
+                        //recheck selected ids
+                        selectedIds.forEach(function(id) {
+                            var row = table.find("#adm_inventory_item_" + id);
+                            if (row.length > 0) {
+                                row.find("input[type=checkbox]").prop("checked", true);
+                            }
+                        });
+
+                        updateHeaderState();
+                        refreshActions();
+                    });
+
+                    // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
+                    actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
+                        // build uuids[] querystring
+                        var qs = selectedIds.map(function(id) {
+                            return "item_uuids[]=" + encodeURIComponent(id);
+                        }).join("&");
+
+                        // full URL to your explain_msg endpoint
+                        var popupUrl = explainDeleteUrlBase + "&" + qs;
+
+                        // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
+                        $("<a>", {
+                            href: "javascript:void(0);",
+                            class: "admidio-icon-link openPopup",
+                            "data-href": popupUrl
+                        }).appendTo("body")
+                        .click()    // trigger the built-in openPopup handler
+                        .remove();
+
+                        // when the popup closes, unselect all items
+                        $(document).one("hidden.bs.modal", function() {
+                            selectedIds = [];
+                            headChk.prop({ checked: false, indeterminate: false });
+                            rowChks().prop("checked", false);
+
+                            // initialize button states
+                            updateHeaderState();
+                            refreshActions();
+
+                            // redraw the table to reset the page length
+                            tableApi.page.len(initialPageLength).draw();
+                        });
+                    });
+
+                    // bulk-edit button → fire Admidio’s openPopup against item_edit URL
+                    actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
+                        // build uuids[] querystring
+                        var qs = selectedIds.map(function(id) {
+                            return "item_uuids[]=" + encodeURIComponent(id);
+                        }).join("&");
+
+                        // full URL to the edit endpoint
+                        var editUrl = editUrlBase + "&" + qs;
+
+                        // open the editUrl directly in the current window
+                        window.location.href = editUrl;
+
+                        // initialize button states
+                        updateHeaderState();
+                        refreshActions();
+                    });
+
+                    // initialize button states
+                    refreshActions();
+                });',
+                true
+            );
+
+            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId)) {
+                $dataTables->disableColumnsSort(array(1, 2, count($templateData['headers'])));
+                $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers']), count($templateData['headers'])));
+            } else {
+                $dataTables->disableColumnsSort(array(1, 2));
+                $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers'])));
+            }
+            $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
+            $dataTables->setColumnAlignByArray($templateData['column_align']);
+            $dataTables->createJavascript(0, count($templateData['headers']));
+        } else {
+            $templateData = $this->prepareData('print');
+        }
+
+        $this->smarty->assign('list', $templateData);
+        $this->smarty->assign('print', $this->printView);
+        $this->smarty->assign('editRights', $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId));
+        $this->pageContent .= $this->smarty->fetch('modules/inventory.list.tpl');
+    }
+
+    /**
      * Create a functions menu and a filter navbar.
      * @return void
      * @throws Exception
@@ -523,222 +787,81 @@ class InventoryPresenter extends PagePresenter
     }
 
     /**
-     * Create the list of all items in the inventory. This method is used to display the items in a table format.
-     * It prepares the data for the table and handles the print view if required.
+     * Prepare table definition (headers, column alignment and export headers) without building rows.
+     * This is useful for server-side processing where the server supplies the rows.
      *
-     * @return void
+     * @param string $mode
+     * @return array
      * @throws Exception
-     * @throws \Smarty\Exception
      */
-    public function createList(): void
+    public function prepareTableDefinition(string $mode = 'html'): array
     {
-        global $gSettingsManager, $gCurrentUser, $gCurrentUserId, $gL10n;
+        global $gCurrentUser, $gL10n, $gDb, $gProfileFields, $gSettingsManager, $gCurrentUserId;
 
-        if (!$this->printView) {
-            $this->createHeader();
-            $templateData = $this->prepareData('html');
+        $columnAlign = array();
+        $headers = array();
+        $exportHeaders = array();
 
-            // initialize and set the parameter for DataTables
-            $dataTables = new DataTables($this, 'adm_inventory_table');
-
-            // callback function to update the table on deletion of an item or reinstantiation of a retired item
-            $this->addJavascript('
-                function refreshInventoryTable() {
-                    location.reload();
-                }
-            ');
-            // add the checkbox for selecting items and action buttons
-            $this->addJavascript('
-                var table = $("#adm_inventory_table");
-
-                table.one("init.dt", function() {
-                    var tableApi = table.DataTable();
-                    var initialPageLength = tableApi.page.len();
-
-                    // base URLs
-                    var editUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_edit")) . '";
-                    var explainDeleteUrlBase = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . "/inventory.php", array("mode" => "item_delete_explain_msg", "items_filter_status" => $this->getFilterStatus)) . '";
-
-                    // cache jQuery objects
-                    var editButton = $("#edit-selected");
-                    var deleteButon = $("#delete-selected");
-                    var headChk = table.find("thead input[type=checkbox]");
-                    var rowChks = function() { return table.find("tbody input[type=checkbox]:enabled"); };
-                    var actions = $("#adm_inventory_table_select_actions");
-
-                    // master list of selected IDs
-                    var selectedIds = [];
-
-                    function anySelected() {
-                        return selectedIds.length > 0;
-                    }
-
-                    function refreshActions() {
-                        editButton.prop("disabled", !anySelected());
-                        deleteButon.prop("disabled", !anySelected());
-                    }
-
-                    function updateHeaderState() {
-                        var total = rowChks().length;
-                        var checked = selectedIds.length;
-                        if (checked === 0) {
-                            headChk.prop({ checked: false, indeterminate: false });
-                        } else if (checked === total) {
-                            headChk.prop({ checked: true, indeterminate: false });
-                        } else {
-                            headChk.prop({ checked: false, indeterminate: true });
-                        }
-                    }
-
-                    // header-checkbox → select/unselect *all* rows
-                    headChk.on("change", function() {
-                        var checkAll = this.checked;
-
-                        if (checkAll) {
-                            // register a one-time draw event to collect all IDs
-                            tableApi.one("draw.dt", function() {
-                                // clear the selectedIds array
-                                selectedIds = [];
-
-                                // grab every row
-                                tableApi.rows().every(function() {
-                                    if ($(this.node()).is(":visible") && $(this.node()).find("input[type=checkbox]").is(":enabled")) {
-                                        selectedIds.push(this.node().id.replace(/^adm_inventory_item_/, ""));
-                                        $(this.node()).find("input[type=checkbox]").prop("checked", true);
-                                    }
-                                });
-
-                                updateHeaderState();
-                                refreshActions();
-                            });
-
-                            // update the initial page length and set it to -1 (all rows)
-                            initialPageLength = tableApi.page.len();
-                            tableApi.page.len(-1).draw();
-                        } else {
-                            // set the checked state of all selected rows to false
-                            selectedIds.forEach(function(id) {
-                                var row = table.find("#adm_inventory_item_" + id);
-                                if (row.length > 0) {
-                                    row.find("input[type=checkbox]").prop("checked", false);
-                                }
-                            });
-
-                            // clear the selectedIds array
-                            selectedIds = [];
-
-                            updateHeaderState();
-                            refreshActions();
-
-                            // reset the page length to the initial value
-                            tableApi.page.len(initialPageLength).draw();
-                        }
-                    });
-
-                    // individual row-checkbox → toggle just that ID
-                    table.on("change", "tbody input[type=checkbox]", function() {
-                        var id = this.closest("tr").id.replace(/^adm_inventory_item_/, "");
-                        var idx = selectedIds.indexOf(id);
-                        if (this.checked && idx === -1) {
-                            selectedIds.push(id);
-                        } else if (!this.checked && idx !== -1) {
-                            selectedIds.splice(idx, 1);
-                        }
-
-                        updateHeaderState();
-                        refreshActions();
-                    });
-
-                    // when the order changes, recheck selected ids
-                    tableApi.on("draw.dt", function() {
-                        //recheck selected ids
-                        selectedIds.forEach(function(id) {
-                            var row = table.find("#adm_inventory_item_" + id);
-                            if (row.length > 0) {
-                                row.find("input[type=checkbox]").prop("checked", true);
-                            }
-                        });
-
-                        updateHeaderState();
-                        refreshActions();
-                    });
-
-                    // bulk-delete button → fire Admidio’s openPopup against explain_msg URL
-                    actions.off("click", "#delete-selected").on("click", "#delete-selected", function() {
-                        // build uuids[] querystring
-                        var qs = selectedIds.map(function(id) {
-                            return "item_uuids[]=" + encodeURIComponent(id);
-                        }).join("&");
-
-                        // full URL to your explain_msg endpoint
-                        var popupUrl = explainDeleteUrlBase + "&" + qs;
-
-                        // create a temporary <a class="openPopup"> to invoke Admidio’s AJAX popup loader
-                        $("<a>", {
-                            href: "javascript:void(0);",
-                            class: "admidio-icon-link openPopup",
-                            "data-href": popupUrl
-                        }).appendTo("body")
-                        .click()    // trigger the built-in openPopup handler
-                        .remove();
-
-                        // when the popup closes, unselect all items
-                        $(document).one("hidden.bs.modal", function() {
-                            selectedIds = [];
-                            headChk.prop({ checked: false, indeterminate: false });
-                            rowChks().prop("checked", false);
-
-                            // initialize button states
-                            updateHeaderState();
-                            refreshActions();
-
-                            // redraw the table to reset the page length
-                            tableApi.page.len(initialPageLength).draw();
-                        });
-                    });
-
-                    // bulk-edit button → fire Admidio’s openPopup against item_edit URL
-                    actions.off("click", "#edit-selected").on("click", "#edit-selected", function() {
-                        // build uuids[] querystring
-                        var qs = selectedIds.map(function(id) {
-                            return "item_uuids[]=" + encodeURIComponent(id);
-                        }).join("&");
-
-                        // full URL to the edit endpoint
-                        var editUrl = editUrlBase + "&" + qs;
-
-                        // open the editUrl directly in the current window
-                        window.location.href = editUrl;
-
-                        // initialize button states
-                        updateHeaderState();
-                        refreshActions();
-                    });
-
-                    // initialize button states
-                    refreshActions();
-                });',
-                true
-            );
-
-            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId)) {
-                $dataTables->disableColumnsSort(array(1, 2, count($templateData['headers'])));
-                $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers']), count($templateData['headers'])));
-            } else {
-                $dataTables->disableColumnsSort(array(1, 2));
-                $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers'])));
-            }
-            $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
-            $dataTables->setColumnAlignByArray($templateData['column_align']);
-            $dataTables->createJavascript(count($templateData['rows']), count($templateData['headers']));
-        } else {
-            $templateData = $this->prepareData('print');
+        // initial checkbox header for HTML mode
+        if ($mode === 'html') {
+            $columnAlign[] = 'center';
+            $headers[] = '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>';
         }
 
-        $this->smarty->assign('list', $templateData);
-        $this->smarty->assign('print', $this->printView);
-        $this->smarty->assign('editRights', $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId));
-        $this->pageContent .= $this->smarty->fetch('modules/inventory.list.tpl');
+        $columnNumber = 1;
+        foreach ($this->itemsData->getItemFields() as $itemField) {
+            $infNameIntern = $itemField->getValue('inf_name_intern');
+            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $this->itemsData->borrowFieldNames)) {
+                continue;
+            }
+
+            // photo column for first column in html mode
+            if ($columnNumber === 1 && $mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled')) {
+                $headers[] = '&nbsp;';
+                $columnAlign[] = 'center';
+            }
+
+            // alignment by inf_type
+            switch ($this->itemsData->getProperty($infNameIntern, 'inf_type')) {
+                case 'CHECKBOX':
+                case 'RADIO_BUTTON':
+                case 'GENDER':
+                    $columnAlign[] = 'center';
+                    break;
+                case 'NUMBER':
+                case 'DECIMAL':
+                    $columnAlign[] = 'end';
+                    break;
+                default:
+                    $columnAlign[] = 'start';
+                    break;
+            }
+
+            $columnHeader = $this->itemsData->getProperty($infNameIntern, 'inf_name');
+            if (in_array($mode, ['csv', 'ods', 'xlsx'])) {
+                $exportHeaders[$columnHeader] = 'string';
+            } else {
+                $headers[] = $columnHeader;
+            }
+
+            $columnNumber++;
+        }
+
+        // decide if actions column is needed for html mode
+        if ($mode === 'html') {
+            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId)) {
+                $columnAlign[] = 'end';
+                $headers[] = '&nbsp;';
+            }
+        }
+
+        return array(
+            'headers' => $headers,
+            'export_headers' => $exportHeaders,
+            'column_align' => $columnAlign,
+            'rows' => array(),
+            'strikethroughs' => array()
+        );
     }
 
     /**
@@ -758,42 +881,6 @@ class InventoryPresenter extends PagePresenter
         }
 
         return false;
-    }
-
-    /**
-     * Check if the current user is the keeper of an item.
-     * This method checks if the current user is listed as a keeper in the inventory item data.
-     *
-     * @param int $itemId Optional item ID to check for a specific item. If 0, checks for any item.
-     * @return bool Returns true if the current user is a keeper, false otherwise.
-     * @throws Exception
-     */
-    public static function isCurrentUserKeeper(int $itemId = 0): bool
-    {
-        global $gCurrentUser, $gDb, $gCurrentOrgId;
-
-        $sql = 'SELECT COUNT(*) as count FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_value = ? AND ind_inf_id = ?';
-        // read the field id of the keeper field
-        $sqlKeeperFieldId = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_name_intern = \'KEEPER\' AND (inf_org_id = ? OR inf_org_id IS NULL) LIMIT 1';
-        $resultKeeperFieldId = $gDb->queryPrepared($sqlKeeperFieldId, array($gCurrentOrgId));
-        $rowKeeperFieldId = $resultKeeperFieldId->fetch();
-        if ($rowKeeperFieldId === false) {
-            return false;
-        }
-        $rowKeeperFieldId = $rowKeeperFieldId['inf_id'];
-        $params = array($gCurrentUser->getValue('usr_id'), $rowKeeperFieldId);
-
-        if ($itemId > 0) {
-            $sql .= ' AND ind_ini_id = ?';
-            $params[] = $itemId;
-        }
-        $result = $gDb->queryPrepared($sql, $params);
-        $row = $result->fetch();
-        if ($row['count'] > 0) {
-            return true;
-        }
-        return false;
-
     }
 
     /**
@@ -824,57 +911,10 @@ class InventoryPresenter extends PagePresenter
             'strikethroughs' => array()
         );
 
-        // Set default alignment and headers for the first column (abbreviation)
-        ($mode === 'html') ? $columnAlign[] = 'center' : $columnAlign = array();
-        $headers = ($mode === 'html') ? array(0 => '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>') : array();
-        $exportHeaders = array();
-        $columnNumber = 1;
-
-        // Build headers and column alignment for each item field
-        foreach ($this->itemsData->getItemFields() as $itemField) {
-            $infNameIntern = $itemField->getValue('inf_name_intern');
-            $columnHeader = $this->itemsData->getProperty($infNameIntern, 'inf_name');
-
-            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $this->itemsData->borrowFieldNames)) {
-                continue; // skip borrowing fields if borrowing is disabled
-            }
-
-            // For the first column, add item picture column when enabled and in html mode
-            if ($columnNumber === 1 && ($mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled'))) {
-                // photo column
-                $headers[] = '&nbsp;';
-                $columnAlign[] = 'center';
-            }
-
-            // Decide alignment based on inf_type
-            switch ($this->itemsData->getProperty($infNameIntern, 'inf_type')) {
-                case 'CHECKBOX':
-                case 'RADIO_BUTTON':
-                case 'GENDER':
-                    $columnAlign[] = 'center';
-                    break;
-                case 'NUMBER':
-                case 'DECIMAL':
-                    $columnAlign[] = 'end';
-                    break;
-                default:
-                    $columnAlign[] = 'start';
-                    break;
-            }
-
-            // Add header depending on mode
-            if (in_array($mode, ['csv', 'ods', 'xlsx'])) {
-                $exportHeaders[$columnHeader] = 'string';
-            } else {
-                $headers[] = $columnHeader;
-            }
-
-            $columnNumber++;
-        }
-
-        $preparedData['headers'] = $headers;
-        $preparedData['export_headers'] = $exportHeaders;
-        $preparedData['column_align'] = $columnAlign;
+        $tableDef = $this->prepareTableDefinition($mode);
+        $preparedData['headers'] = $tableDef['headers'];
+        $preparedData['export_headers'] = $tableDef['export_headers'];
+        $preparedData['column_align'] = $tableDef['column_align'];
 
         // Create a user object for later use
         $user = new User($gDb, $gProfileFields);
@@ -935,44 +975,33 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
 
-                // Process KEEPER column
-                if ($infNameIntern === 'KEEPER' && !empty($content)) {
-                    $found = $user->readDataById($content);
-                    if (!$found) {
-                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
-                        $content = $mode === 'html'
-                            ? '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>'
-                            : '<i>' . $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]) . '</i>';
+                // Process ITEMNAME column
+                if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
+                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
                     } else {
-                        if ($mode === 'html') {
-                            $content = '<a href="' . SecurityUtils::encodeUrl(
-                                    ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-                                    ['user_uuid' => $user->getValue('usr_uuid')]
-                                ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
-                        } else {
-                            $sql = $this->itemsData->getSqlOrganizationsUsersComplete();
-                            $result = $gDb->queryPrepared($sql);
-                            $content = $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME');
-                            while ($row = $result->fetch()) {
-                                if ($row['usr_id'] == $user->getValue('usr_id')) {
-                                    $content = $row['name'];
-                                    break;
-                                }
-                            }
-                        }
+                        $content = SecurityUtils::encodeHTML($content);
                     }
                 }
 
-                // Process LAST_RECEIVER column
-                if ($infNameIntern === 'LAST_RECEIVER' && !empty($content) && is_numeric($content)) {
+                // Process KEEPER and LAST_RECEIVER column
+                if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
                     $found = $user->readDataById($content);
-                    if ($found) {
+                    if (!$found) {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        if ($mode === 'html') {
+                            $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                        } else {
+                            $content = '<i>' . $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]) . '</i>';
+                        }
+                    } else {
                         if ($mode === 'html') {
                             $content = '<a href="' . SecurityUtils::encodeUrl(
                                     ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
                                     ['user_uuid' => $user->getValue('usr_uuid')]
                                 ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
                         } else {
+                            // try to get a complete organization-specific name if available
                             $sql = $this->itemsData->getSqlOrganizationsUsersComplete();
                             $result = $gDb->queryPrepared($sql);
                             $content = $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME');
@@ -983,12 +1012,6 @@ class InventoryPresenter extends PagePresenter
                                 }
                             }
                         }
-                    } else {
-                        // user not found, but it is a numeric id -> user was deleted
-                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
-                        $content = $mode === 'html'
-                            ? '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>'
-                            : '<i>' . $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]) . '</i>';
                     }
                 }
 
@@ -1328,8 +1351,8 @@ class InventoryPresenter extends PagePresenter
                 $content = $itemsData->getValue($infNameIntern, 'database');
                 $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
 
-                // Process the KEEPER column
-                if ($infNameIntern === 'KEEPER' && !empty($content)) {
+                // Process KEEPER and LAST_RECEIVER column
+                if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
                     $found = $user->readDataById($content);
                     if (!$found) {
                         $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
@@ -1339,21 +1362,6 @@ class InventoryPresenter extends PagePresenter
                                 ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
                                 ['user_uuid' => $user->getValue('usr_uuid')]
                             ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
-                    }
-                }
-
-                // Process the LAST_RECEIVER column
-                if ($infNameIntern === 'LAST_RECEIVER' && !empty($content) && is_numeric($content)) {
-                    $found = $user->readDataById($content);
-                    if ($found) {
-                        $content = '<a href="' . SecurityUtils::encodeUrl(
-                                ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-                                ['user_uuid' => $user->getValue('usr_uuid')]
-                            ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
-                    } else {
-                        // user not found, but it is a numeric id -> user was deleted
-                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
-                        $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
                     }
                 }
 
