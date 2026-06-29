@@ -1501,6 +1501,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Dla rejestracji #VAR1_BOLD# z adresem e-mail #VAR2_BOLD# znaleziono kontakty o podobnym imieniu i nazwisku. Sprawdź rejestrację i przypisz ją do znalezionego kontaktu albo utwórz nowy kontakt.</string>
   <string name="SYS_SINCE_TO">od #VAR1# do #VAR2#</string>
   <string name="SYS_SINCE_VAR">od #VAR1#</string>
+  <string name="SYS_SINCE">od #VAR1#</string>
   <string name="SYS_SIZE">Rozmiar</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">weryfikacja SMTP</string>
@@ -1803,4 +1804,11 @@
   <string name="SYS_YOUR_LISTS">Twoje listy</string>
   <string name="SYS_YOUR_NAME">Twoje imię</string>
   <string name="SYS_Z_TO_A">Od Z do A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Ustaw minimalną liczbę lat wymaganą dla „Kwalifikacja członka dożywotniego”. (Domyślnie: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Włącz kwalifikację członka dożywotniego</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Jeśli włączone, kolumna „Kwalifikacja członka dożywotniego" będzie obliczana. Jeśli wyłączone, zawsze będzie fałsz.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Wybierz role, które są uwzględniane dla „Kwalifikacja członka dożywotniego”.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Wybierz role, które są uwzględniane dla „Lat członkostwa”.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Kwalifikacja członka dożywotniego</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Lata do kwalifikacji członka dożywotniego</string>
 </resources>

@@ -583,6 +583,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">Visualizza il ruolo di altre organizzazioni</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Quando l\'utente è membro dei ruoli di un\'altra organizzazione, un box sarà visualizzato che mostra tutti i ruoli e la data di registrazione. (predefinito: sì)</string>
   <string name="SYS_SHOW_ROUTE">Visualizza percorso</string>
+  <string name="SYS_SINCE_VAR">dal #VAR1#</string>
   <string name="SYS_SINCE">dal #VAR1#</string>
   <string name="SYS_SINCE_TO">da #VAR1# a #VAR2#</string>
   <string name="SYS_SIZE">Grandezza</string>
@@ -644,4 +645,11 @@
   <string name="SYS_XING">Xing</string>
   <string name="SYS_YEARS">Anni</string>
   <string name="SYS_YES">Sì</string>
-  </resources>
+    <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Tetapkan jumlah tahun minimum yang diperlukan untuk «Memenuhi Syarat Anggota Seumur Hidup». (Default: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Aktifkan Kualifikasi Anggota Seumur Hidup</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Jika diaktifkan, kolom «Memenuhi Syarat Anggota Seumur Hidup» akan dihitung. Jika dinonaktifkan, selalu salah.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Pilih peran yang dihitung untuk «Memenuhi Syarat Anggota Seumur Hidup».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Pilih peran yang dihitung untuk «Tahun Keanggotaan».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Memenuhi Syarat Anggota Seumur Hidup</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Tahun menuju Kualifikasi Anggota Seumur Hidup</string>
+</resources>

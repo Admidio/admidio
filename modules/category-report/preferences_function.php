@@ -41,6 +41,10 @@ try {
                 $values['selection_cat'] = isset($_POST['selection_cat' . $conf]) ? trim(implode(',', $_POST['selection_cat' . $conf]), ',') : '';
                 $values['number_col'] = isset($_POST['number_col' . $conf]) ? 1 : 0;
                 $values['default_conf'] = (bool)$_POST['default_conf' . $conf];
+                $values['life_membership_enabled'] = isset($_POST['life_membership_enabled' . $conf]) ? 1 : 0;
+                $values['life_membership_threshold_years'] = isset($_POST['life_membership_threshold_years' . $conf]) ? max(1, min(200, (int)$_POST['life_membership_threshold_years' . $conf])) : 20;
+                $values['years_of_membership_role_ids'] = isset($_POST['years_of_membership_role_ids' . $conf]) ? trim(implode(',', $_POST['years_of_membership_role_ids' . $conf]), ',') : '';
+                $values['life_membership_role_ids'] = isset($_POST['life_membership_role_ids' . $conf]) ? trim(implode(',', $_POST['life_membership_role_ids' . $conf]), ',') : '';
 
                 if (empty($_POST['columns' . $conf])) {
                     throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));
@@ -52,11 +56,19 @@ try {
                 // property (r, l, w, f, b, e, d)
                 // Here we need to merge the two arrays to one. 
                 $columns = array_map(function($r, $rprop) {
-                    if ($r[0]=='r') {
-                        return $rprop . substr($r, 1);
-                    } else {
+                    if (!is_string($r) || $r === '') {
+                        return '';
+                    }
+
+                    if ($r === 'ymulti' || $r === 'ylmulti' || $r === 'zmulti') {
                         return $r;
                     }
+
+                    if ($r[0]=='r') {
+                        return $rprop . substr($r, 1);
+                    }
+
+                    return $r;
                 }, $_POST['columns' . $conf], $_POST['columnsRoleProp' . $conf]);
                 $values['col_fields'] = implode(',', $columns);
 

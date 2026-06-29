@@ -1075,6 +1075,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">Exibir cargos de outras organizações</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Quando um usuário é membro de cargos de uma outra organização, uma caixa será exibida, contendo todos os cargos e datas de registo. (padrão: sim)</string>
   <string name="SYS_SHOW_ROUTE">Exibir rota</string>
+  <string name="SYS_SINCE_VAR">desde #VAR1#</string>
   <string name="SYS_SINCE">desde #VAR1#</string>
   <string name="SYS_SINCE_TO">de #VAR1# a #VAR2#</string>
   <string name="SYS_SIZE">Tamanho</string>
@@ -1204,4 +1205,11 @@
   <string name="SYS_YOUR_LISTS">Minhas listas</string>
   <string name="SYS_YOUR_NAME">Teu nome</string>
   <string name="SYS_Z_TO_A">Z à A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Defina o número mínimo de anos necessário para «Qualificado para membro vitalício». (Padrão: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Ativar qualificação de membro vitalício</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Se ativado, a coluna «Qualificado para membro vitalício» será calculada. Se desativado, será sempre falso.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Selecione os papéis que contam para «Qualificado para membro vitalício».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Selecione os papéis que contam para «Anos de filiação».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Qualificado para membro vitalício</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Anos para qualificação de membro vitalício</string>
 </resources>
