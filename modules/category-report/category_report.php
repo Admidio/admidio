@@ -29,23 +29,25 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Admidio\Hooks\Hooks;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // check if the module is enabled and disallow access if it's disabled
-    if (!$gSettingsManager->getBool('category_report_module_enabled')) {
+    if (!Hooks::apply_filters('category_report_enabled', $gSettingsManager->getBool('category_report_module_enabled'))) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
     // user must have the permission "rol_all_lists_view"
-    if (!$gCurrentUser->checkRolesRight('rol_all_lists_view')) {
+    if (!Hooks::apply_filters('category_report_permitted', $gCurrentUser->checkRolesRight('rol_all_lists_view'))) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
     // Read in the configuration array
     $report = new CategoryReport();
     $config = $report->getConfigArray();
+    $config = Hooks::apply_filters('category_report_config', $config);
 
     $getCrtId = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')));
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
@@ -109,8 +111,8 @@ try {
     $columnCount = count($report->headerData);
 
     // define title (html) and headline
-    $title = $gL10n->get('SYS_CATEGORY_REPORT');
-    $headline = $gL10n->get('SYS_CATEGORY_REPORT');
+    $title = Hooks::apply_filters('category_report_title', $gL10n->get('SYS_CATEGORY_REPORT'), $report);
+    $headline = Hooks::apply_filters('category_report_headline', $gL10n->get('SYS_CATEGORY_REPORT'), $report);
     $subHeadline = $config[$report->getConfiguration()]['name'];
 
     $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . $headline . '-' . $subHeadline;

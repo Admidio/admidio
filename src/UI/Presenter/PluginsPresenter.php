@@ -177,6 +177,7 @@ class PluginsPresenter extends PagePresenter
 
             if ($interface != null) {
                 $templateRow['id'] = ($interface->getComponentId() !== 0) ? $interface->getComponentId() : $pluginName;
+                $templateRow['uuid'] = $templateRow['id'];
                 $templateRow['name'] = Language::translateIfTranslationStrId($interface->getName());
                 $templateRow['description'] = Language::translateIfTranslationStrId($interface->getMetadata()['description'] ?? '');
                 $templateRow['icon'] = $interface->getMetadata()['icon'] ?? '';
