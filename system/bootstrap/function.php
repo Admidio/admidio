@@ -28,9 +28,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
  */
 function handleException(Throwable $e, bool $jsonResponse = false): void
 {
-    global $gDebug, $gMessage;
+    global $gDebug, $gMessage, $htmlPurifierFilter;
 
-    $message = $e->getMessage();
+    $message = $htmlPurifierFilter->purify($e->getMessage());
 
     if ($gDebug) {
         $message .= ' in ' . $e->getFile() . ', in line ' . $e->getLine() . '<br /><br />Stacktrace:<br />' . $e->getTraceAsString();
@@ -43,7 +43,7 @@ function handleException(Throwable $e, bool $jsonResponse = false): void
             try {
                 $gMessage->show($message);
             } catch (Throwable $exceptionMessage) {
-                echo $exceptionMessage->getMessage();
+                echo $htmlPurifierFilter->purify($exceptionMessage);
             }
         } else {
             echo $message;
@@ -310,7 +310,7 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  */
 function admFuncVariableIsValid(array $array, string $variableName, string $datatype, array $options = array()): mixed
 {
-    global $gSettingsManager;
+    global $gSettingsManager, $htmlPurifierFilter;
 
     // create an array with all options
     $optionsDefault = array('defaultValue' => null, 'requireValue' => false, 'validValues' => null, 'directOutput' => null);
@@ -417,13 +417,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
 
         case 'html':
             // check HTML string vor invalid tags and scripts
-            $config = HTMLPurifier_Config::createDefault();
-            $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
-            $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
-
-            $filter = new HTMLPurifier($config);
-            $value = $filter->purify($value);
+            $value = $htmlPurifierFilter->purify($value);
             break;
 
         case 'uuid':
