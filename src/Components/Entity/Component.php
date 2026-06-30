@@ -334,7 +334,7 @@ class Component extends Entity
             default:
                 // check if the component is a plugin and it is visible
                 $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByName($componentName);
+                $plugin = $pluginManager->getPluginByComponentName($componentName);
                 if ($plugin) {
                     return ($plugin instanceof PluginAbstract) ? $plugin::getInstance()->isVisible() : false;
                 }
