@@ -53,6 +53,10 @@ class GroupsRolesPresenter extends PagePresenter
     {
         global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gL10n, $gDb;
 
+        if (!$gCurrentUser->isAdministratorRoles()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $this->createSharedHeader($categoryUUID, $roleType);
         $rolesService = new RolesService($gDb);
         $data = $rolesService->findAll($roleType, $categoryUUID);
@@ -253,12 +257,11 @@ class GroupsRolesPresenter extends PagePresenter
 
         if ($roleUUID !== '') {
             $role->readDataByUuid($roleUUID);
-            $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
-
-            // check if the role belongs to the current organization
-            if ((int)$role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
+            if (!$role->isVisible()) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
+
+            $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
             // administrator role could only be created or edited by administrators
             if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
@@ -601,7 +604,11 @@ class GroupsRolesPresenter extends PagePresenter
      */
     public function createPermissionsList(string $categoryUUID, string $roleType): void
     {
-        global $gSettingsManager, $gL10n, $gDb, $gCurrentSession;
+        global $gSettingsManager, $gL10n, $gDb, $gCurrentSession, $gCurrentUser;
+
+        if (!$gCurrentUser->isAdministratorRoles()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         $templateData = array();
         $this->createSharedHeader($categoryUUID, $roleType, 'permissions');
