@@ -120,18 +120,18 @@ class Message
      */
     public function show(string $content, string $headline = ''): void
     {
-        global $gDb, $gL10n, $page, $htmlPurifierFilter;
+        global $gDb, $gL10n, $page, $gHtmlPurifierFilter;
 
         // first perform a rollback in database if there is an open transaction
         $gDb->rollback();
 
-        $content = $htmlPurifierFilter->purify($content);
+        $content = $gHtmlPurifierFilter->purify($content);
 
         // Set caption, if it was not set explicitly before
         if ($headline === '') {
             $headline = $gL10n->get('SYS_NOTE');
         } else {
-            $headline = $htmlPurifierFilter->purify($headline);
+            $headline = $gHtmlPurifierFilter->purify($headline);
         }
 
         if (!$this->inline) {
