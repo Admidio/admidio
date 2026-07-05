@@ -5,6 +5,7 @@ use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Service\RegistrationService;
+use Admidio\Messages\Entity\Message;
 use Admidio\Roles\Entity\RolesRights;
 
 /**
@@ -79,7 +80,7 @@ class MenuNode
      * @param string $description An optional description of the menu node that could be shown in some output cases
      * @throws Exception
      */
-    public function addItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = '')
+    public function addItem(string $id, string $name, string $url, string $icon, string $parentMenuItemId = '', int $badgeCount = 0, string $description = ''): void
     {
         $node['id'] = $id;
 
@@ -88,7 +89,7 @@ class MenuNode
         $node['description'] = Language::translateIfTranslationStrId($description);
 
         // add root path to link unless the full URL is given
-        if (preg_match('/^http(s?):\/\//', $url) === 0 && strpos($url, 'javascript:') !== 0) {
+        if (preg_match('/^http(s?):\/\//', $url) === 0 && !str_starts_with($url, 'javascript:') && !str_starts_with($url, 'webcal:')) {
             $url = ADMIDIO_URL . $url;
         }
         $node['url'] = $url;
@@ -96,9 +97,9 @@ class MenuNode
         if ($icon === '') {
             $icon = 'bi bi-trash invisible';
         }
-        if (strpos($icon, 'bi-') !== false) {
+        if (str_contains($icon, 'bi-')) {
             $node['icon'] = 'bi ' . $icon;
-        } elseif (strpos($icon, 'bi') !== false) {
+        } elseif (str_contains($icon, 'bi')) {
             $node['icon'] = $icon;
         } else {
             $node['icon'] = 'bi bi-' . $icon;
@@ -137,7 +138,7 @@ class MenuNode
      * @param int $nodeId The database id of the node menu entry
      * @throws Exception
      */
-    public function loadFromDatabase(int $nodeId)
+    public function loadFromDatabase(int $nodeId): void
     {
         global $gDb, $gValidLogin;
 
@@ -157,7 +158,7 @@ class MenuNode
 
                     if ($node['men_name_intern'] === 'messages' && $gValidLogin) {
                         // get number of unread messages for user
-                        $message = new \Admidio\Messages\Entity\Message($gDb);
+                        $message = new Message($gDb);
                         $badgeCount = $message->countUnreadMessageRecords($GLOBALS['gCurrentUserId']);
                     } elseif ($node['men_name_intern'] === 'registration') {
                         $registration = new RegistrationService($gDb);
@@ -205,7 +206,7 @@ class MenuNode
      * Sets the translated name of this node.
      * @param string $name Translated name of the node.
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
