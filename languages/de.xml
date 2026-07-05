@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
+    <string name="SYS_SUBSCRIBE">Abonnieren</string>
   <string name="INS_ADDIDIONAL_DATA">Zusätzliche Daten</string>
   <string name="INS_ADDRESS_LIST">Adressliste</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einer Administratorin oder einem Administrator durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten einer Administratorin oder eines Administrators ein.</string>

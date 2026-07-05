@@ -16,6 +16,7 @@
  *             participate - User attends to the event
  *             participate_cancel - User cancel participation of the event
  *             participate_maybe - User may participate in the event
+ *             subscribe - Subscribe to events in iCal format
  * user_uuid : UUID of the user membership to an event should be edited
  * copy      : true - The event of the dat_id will be copied and the base for this new event
  * cat_uuid  : show all events of calendar with this UUID
@@ -43,7 +44,7 @@ try {
 
     // Initialize and check the parameters
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'participate', 'participate_cancel', 'participate_maybe', 'export')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('edit', 'delete', 'participate', 'participate_cancel', 'participate_maybe', 'export', 'subscribe')));
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', $gValidLogin ? array('defaultValue' => $gCurrentUser->getValue('usr_uuid')) : []);
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
@@ -58,7 +59,7 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    if ($getMode !== 'export' || (int)$gSettingsManager->get('events_module_enabled') === 2) {
+    if (!in_array($getMode, array('export', 'subscribe'), true) || (int)$gSettingsManager->get('events_module_enabled') === 2) {
         // All functions, except export, are only available for logged-in users.
         require(__DIR__ . '/../../system/login_valid.php');
     }
@@ -364,7 +365,7 @@ try {
 
         echo json_encode(array('status' => 'success'));
         exit();
-    } elseif ($getMode === 'export') {  // export event in iCal format
+    } elseif (in_array($getMode, array('export', 'subscribe'), true)) { // export event in iCal format
         // If iCal enabled and module is public
         if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
             throw new Exception('SYS_ICAL_DISABLED');
@@ -373,6 +374,12 @@ try {
         if ($getDateFrom === '') {
             $getDateFrom = (new DateTime)->sub(new DateInterval('P6M'))->format('Y-m-d');
             $getDateTo = DATE_MAX;
+        }
+
+        if ($getMode === 'subscribe') {
+            $contentDisposition = 'inline';
+        } else {
+            $contentDisposition = 'attachment';
         }
 
         $events = new ModuleEvents();
@@ -392,8 +399,7 @@ try {
         }
 
         header('Content-Type: text/calendar; charset=utf-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-
+        header('Content-Disposition: ' . $contentDisposition . '; filename="' . $filename . '"');
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');
         header('Pragma: public');
