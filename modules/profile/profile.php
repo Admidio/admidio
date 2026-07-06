@@ -348,6 +348,8 @@ try {
                         // Administrators can change or send password if login is configured and user is member of current organization
                         if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
                             $value = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0)" data-buttons="yes-no"
+                                data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                                data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                                 data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '"
                                 data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">' .
                                 '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_SEND_LOGIN_INFORMATION') . '</a>';

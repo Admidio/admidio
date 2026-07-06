@@ -382,6 +382,8 @@ try {
                         <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
                     $outputButtonDelete = '
                     <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
+                        data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                        data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                         data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
                 }
@@ -721,6 +723,8 @@ try {
                                                 <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                                             </li>
                                             <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);"  data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline)) . '" data-buttons="yes-no"
+                                                data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                                                data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                                                 data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'delete', 'dat_uuid' => $eventUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                                             </li>');

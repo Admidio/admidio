@@ -524,9 +524,28 @@ function moveTableRow(element, updateSequenceUrl, csrfToken) {
  * @param {string} buttons Optional the setting of the buttons that should be shown.
  *                         "yes-no" - A primary "Yes" button with a secondary "No" button.
  * @param {string} href    Optional a link that will be called by a click of the "Yes" button..
+ * @param {HTMLElement} [sourceElement] Optional source element that triggered the message box.
  */
-function messageBox(message, title, type, buttons, href) {
+function messageBox(message, title, type, buttons, href, sourceElement) {
     $("#adm_status_message").html('');
+    $("#adm_messagebox_processing_notice").remove();
+
+    var yesButton = $("#adm_messagebox_button_yes");
+    var noButton = $("#adm_messagebox_button_no");
+    var source = sourceElement ? $(sourceElement) : $();
+    var pendingLabel = source.data("pending-label") || "Pending...";
+    var pendingNotice = source.data("pending-note") || "Please wait. Your request is being processed.";
+    yesButton.removeClass("disabled").removeAttr("aria-disabled");
+    noButton.removeClass("disabled").removeAttr("aria-disabled");
+    yesButton.data("processing", false);
+    yesButton.data("pending-label", pendingLabel);
+    yesButton.data("pending-note", pendingNotice);
+
+    if (!yesButton.data("default-label")) {
+        yesButton.data("default-label", yesButton.html());
+    }
+    yesButton.html(yesButton.data("default-label"));
+
     if (typeof title !== 'undefined') {
         $("#adm_modal_messagebox .modal-title").html(title);
     }
@@ -539,12 +558,55 @@ function messageBox(message, title, type, buttons, href) {
     }
     if (typeof buttons === 'undefined') {
         $("#adm_modal_messagebox .modal-footer").hide();
+        yesButton.off("click");
     } else if (buttons === 'yes-no') {
-        $("#adm_messagebox_button_yes").attr('onClick', href);
+        $("#adm_modal_messagebox .modal-footer").show();
+        yesButton.off("click").on("click", function(event) {
+            event.preventDefault();
+            executeMessageBoxAction(href, yesButton.data("pending-label"), yesButton.data("pending-note"));
+        });
     }
 
     const myModalAlternative = new bootstrap.Modal("#adm_modal_messagebox");
     myModalAlternative.show();
+}
+
+/**
+ * Execute the configured action from the confirmation message box and provide visual
+ * feedback so users can see that processing is running.
+ * @param {string} href JavaScript call expression that should be executed.
+ * @param {string} pendingLabel Text shown on the yes button while processing.
+ * @param {string} pendingNotice Text shown in the notice while processing.
+ */
+function executeMessageBoxAction(href, pendingLabel, pendingNotice) {
+    var modalBody = $("#adm_modal_messagebox .modal-body");
+    var yesButton = $("#adm_messagebox_button_yes");
+    var noButton = $("#adm_messagebox_button_no");
+
+    if (yesButton.data("processing") === true) {
+        return;
+    }
+
+    yesButton.data("processing", true);
+
+    $("#adm_messagebox_processing_notice").remove();
+
+    yesButton.addClass("disabled").attr("aria-disabled", "true");
+    noButton.addClass("disabled").attr("aria-disabled", "true");
+
+    yesButton.html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>' + pendingLabel);
+
+    modalBody.append(
+        '<div id="adm_messagebox_processing_notice" class="alert alert-info d-flex align-items-center mt-3 mb-0">'
+        + '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>'
+        + '<span>' + pendingNotice + '</span>'
+        + '</div>'
+    );
+
+    if (typeof href === "string" && href.length > 0) {
+        // Existing callers pass an executable JS expression (e.g. callUrlHideElement(...)).
+        eval(href);
+    }
 }
 
 /**

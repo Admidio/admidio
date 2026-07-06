@@ -206,6 +206,8 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                     }
                     $linkMembershipDelete = '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                        data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                        data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                         data-message="' . $gL10n->get($deleteMessage, array($role->getValue('rol_name', 'database'))) . '"
                         data-href="callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
                         <i class="' . $icon . '" data-bs-toggle="tooltip" title="'.$description.'"></i></a>';
