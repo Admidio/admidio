@@ -1052,7 +1052,7 @@
   <string name="SYS_SAVE_PENDING">Gravação pendente...</string>
   <string name="SYS_PENDING">Pendente...</string>
     <string name="SYS_SAVE_DATA">Os dados foram guardados</string>
-  A carregar...</string>
+  <string name="SYS_LOADING">A carregar...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">A carregar associações de funções...</string>
   <string name="SYS_SEARCH">Buscar</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18a</string>
@@ -1271,5 +1271,7 @@
   <string name="SYS_YOUR_NAME">Teu nome</string>
   <string name="SYS_Z_TO_A">Z à A</string>
 </resources>
+
+
 
 

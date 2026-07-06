@@ -871,7 +871,7 @@
   <string name="SYS_SAVE_PENDING">Salvataggio in attesa...</string>
   <string name="SYS_PENDING">In attesa...</string>
     <string name="SYS_SAVE_DATA">I dati sono stati salvati.</string>
-  Caricamento...</string>
+  <string name="SYS_LOADING">Caricamento...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Caricamento appartenenze ai ruoli...</string>
   <string name="SYS_SEARCH">Cerca</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 anni</string>
@@ -1056,5 +1056,7 @@
   <string name="SYS_YOUR_NAME">Il tuo nome</string>
   <string name="SYS_Z_TO_A">da Z ad A</string>
 </resources>
+
+
 
 

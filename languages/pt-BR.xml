@@ -996,7 +996,7 @@
   <string name="SYS_SAVE_PENDING">Salvamento pendente...</string>
   <string name="SYS_PENDING">Pendente...</string>
     <string name="SYS_SAVE_DATA">Os dados foram salvos</string>
-  Carregando...</string>
+  <string name="SYS_LOADING">Carregando...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Carregando associações de funções...</string>
   <string name="SYS_SEARCH">Buscar</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18a</string>
@@ -1210,5 +1210,7 @@
   <string name="SYS_YOUR_NAME">Teu nome</string>
   <string name="SYS_Z_TO_A">Z à A</string>
 </resources>
+
+
 
 

@@ -1364,7 +1364,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SAVE_PENDING">Lagring venter...</string>
   <string name="SYS_PENDING">Venter...</string>
     <string name="SYS_SAVE_DATA">Dataene ble lagret.</string>
-  Laster...</string>
+  <string name="SYS_LOADING">Laster...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Laster rollemedlemskap...</string>
   <string name="SYS_SEARCH_AGE_DESC">Søker etter alle brukere over 18 år</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
@@ -1767,5 +1767,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_YOUR_NAME">Ditt navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
 </resources>
+
+
 
 

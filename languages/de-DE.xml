@@ -1398,7 +1398,7 @@
   <string name="SYS_SAVE_PENDING">Speichern ausstehend...</string>
   <string name="SYS_PENDING">Ausstehend...</string>
     <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
-  Lädt...</string>
+  <string name="SYS_LOADING">Lädt...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Rollenmitgliedschaften werden geladen...</string>
   <string name="SYS_SEARCH_AGE_DESC">Sucht alle Benutzer:innen, die älter als 18 Jahre sind</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18j</string>
@@ -1807,5 +1807,7 @@
   <string name="SYS_YOUR_NAME">Ihr Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
 </resources>
+
+
 
 

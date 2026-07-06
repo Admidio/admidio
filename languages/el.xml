@@ -1128,7 +1128,7 @@
   <string name="SYS_SAVE_PENDING">Η αποθήκευση εκκρεμεί...</string>
   <string name="SYS_PENDING">Σε εκκρεμότητα...</string>
     <string name="SYS_SAVE_DATA">╬ñ╬▒ ╬┤╬╡╬┤╬┐╬╝╬¡╬╜╬▒ ╬¡╧ç╬┐╧à╬╜ ╬▒╧Ç╬┐╬╕╬╖╬║╬╡╧à╧ä╬╡╬».</string>
-  Φόρτωση...</string>
+  <string name="SYS_LOADING">Φόρτωση...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Φόρτωση συμμετοχών ρόλων...</string>
   <string name="SYS_SEARCH">Αναζήτηση</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 ετών</string>
@@ -1367,5 +1367,7 @@
   <string name="SYS_YOUR_NAME">Το όνομα σας</string>
   <string name="SYS_Z_TO_A">Από το Ω στο Α</string>
 </resources>
+
+
 
 

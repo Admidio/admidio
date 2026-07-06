@@ -1130,8 +1130,8 @@
   
   <string name="SYS_SAVE_PENDING">Запазването е в изчакване...</string>
   <string name="SYS_PENDING">В изчакване...</string>
-    <string name="SYS_SAVE_DATA">╨ö╨░╨╜╨╜╨╕╤é╨╡ ╨▒╤Å╤à╨░ ╨╖╨░╨┐╨░╨╖╨╡╨╜╨╕.</string>
-  Зареждане...</string>
+  <string name="SYS_SAVE_DATA">Данните бяха запазени.</string>
+  <string name="SYS_LOADING">Зареждане...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Зареждане на членствата по роли...</string>
   <string name="SYS_SEARCH">Търсене</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
@@ -1373,5 +1373,8 @@
   <string name="SYS_YOUR_NAME">Вашето име</string>
   <string name="SYS_Z_TO_A">Я към А</string>
 </resources>
+
+
+
 
 

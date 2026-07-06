@@ -1389,7 +1389,7 @@
   <string name="SYS_SAVE_PENDING">Ukládání čeká...</string>
   <string name="SYS_PENDING">Čeká se...</string>
     <string name="SYS_SAVE_DATA">Data byla ulo┼╛ena</string>
-  Načítání...</string>
+  <string name="SYS_LOADING">Načítání...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Načítání členství rolí...</string>
   <string name="SYS_SEARCH_AGE_DESC">Hledání všech uživatelů starších 18 let</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 let</string>
@@ -1798,5 +1798,7 @@
   <string name="SYS_YOUR_NAME">Vaše jméno</string>
   <string name="SYS_Z_TO_A">Z až A</string>
 </resources>
+
+
 
 

@@ -1389,7 +1389,7 @@
   <string name="SYS_SAVE_PENDING">Salvare în așteptare...</string>
   <string name="SYS_PENDING">În așteptare...</string>
     <string name="SYS_SAVE_DATA">Datele au fost salvate</string>
-  Se încarcă...</string>
+  <string name="SYS_LOADING">Se încarcă...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Se încarcă apartenențele la roluri...</string>
   <string name="SYS_SEARCH_AGE_DESC">Căutarea tuturor utilizatorilor cu vârsta peste 18 ani</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 ani</string>
@@ -1798,5 +1798,7 @@
   <string name="SYS_YOUR_NAME">Numele</string>
   <string name="SYS_Z_TO_A">De la Z la A</string>
 </resources>
+
+
 
 

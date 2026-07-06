@@ -1363,7 +1363,7 @@
   <string name="SYS_SAVE_PENDING">சேமிப்பு நிலுவையில்...</string>
   <string name="SYS_PENDING">நிலுவையில்...</string>
     <string name="SYS_SAVE_DATA">α«ñα«░α«╡α»ü α«Üα»çα««α«┐α«òα»ìα«òα«¬α»ìα«¬α«ƒα»ìα«ƒα«ñα»ü.</string>
-  ஏற்றுகிறது...</string>
+  <string name="SYS_LOADING">ஏற்றுகிறது...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">பங்கு உறுப்பினர்ப் பதிவுகள் ஏற்றப்படுகின்றன...</string>
   <string name="SYS_SEARCH_AGE_DESC">18 வயதுக்கு மேற்பட்ட அனைத்துப் பயனர்களையும் தேடுகிறது</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
@@ -1765,5 +1765,7 @@
   <string name="SYS_YOUR_NAME">உங்கள் பெயர்</string>
   <string name="SYS_Z_TO_A">இசட் முதல் ஏ</string>
 </resources>
+
+
 
 

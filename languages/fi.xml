@@ -1131,7 +1131,7 @@
   <string name="SYS_SAVE_PENDING">Tallennus odottaa...</string>
   <string name="SYS_PENDING">Odottaa...</string>
     <string name="SYS_SAVE_DATA">Tiedot on tallennettu.</string>
-  Ladataan...</string>
+  <string name="SYS_LOADING">Ladataan...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Ladataan roolijäsenyyksiä...</string>
   <string name="SYS_SEARCH">Haku</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 vuotta</string>
@@ -1370,5 +1370,7 @@
   <string name="SYS_YOUR_NAME">Nimesi</string>
   <string name="SYS_Z_TO_A">Ö - A</string>
 </resources>
+
+
 
 

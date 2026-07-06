@@ -1212,7 +1212,7 @@
   <string name="SYS_SAVE_PENDING">Sparning väntar...</string>
   <string name="SYS_PENDING">Väntar...</string>
     <string name="SYS_SAVE_DATA">Alla uppgifter har sparats</string>
-  Laddar...</string>
+  <string name="SYS_LOADING">Laddar...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Laddar rollmedlemskap...</string>
   <string name="SYS_SEARCH">Sök</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">”18y.</string>
@@ -1471,5 +1471,7 @@
   <string name="SYS_YOUR_NAME">Ditt namn</string>
   <string name="SYS_Z_TO_A">ö till a</string>
 </resources>
+
+
 
 

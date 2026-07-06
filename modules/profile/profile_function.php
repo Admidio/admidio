@@ -168,16 +168,11 @@ try {
             $formValues['adm_membership_end_date'] = DATE_MAX;
         }
 
-        // capture membership state before save to detect no-op outcomes
         $sql = 'SELECT mem_uuid, mem_begin, mem_end, mem_leader
                   FROM ' . TBL_MEMBERS . '
                  WHERE mem_rol_id = ? -- $member->getValue("mem_rol_id")
                    AND mem_usr_id = ? -- $user->getValue("usr_id")
               ORDER BY mem_begin, mem_end, mem_uuid';
-        $beforeRows = $gDb->queryPrepared(
-            $sql,
-            array((int)$member->getValue('mem_rol_id'), (int)$user->getValue('usr_id'))
-        )->fetchAll(PDO::FETCH_ASSOC);
 
         // save role membership
         $role->setMembership($user->getValue('usr_id'), $formValues['adm_membership_start_date'], $formValues['adm_membership_end_date'], $member->getValue('mem_leader'), true);
@@ -187,10 +182,26 @@ try {
             array((int)$member->getValue('mem_rol_id'), (int)$user->getValue('usr_id'))
         )->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($beforeRows === $afterRows) {
+        $requestedBegin = $formValues['adm_membership_start_date'];
+        $requestedEnd = $formValues['adm_membership_end_date'];
+        $requestedLeader = (int)(bool)$member->getValue('mem_leader');
+        $requestedPeriodCovered = false;
+
+        foreach ($afterRows as $row) {
+            if (
+                (int)$row['mem_leader'] === $requestedLeader
+                && $row['mem_begin'] <= $requestedBegin
+                && $row['mem_end'] >= $requestedEnd
+            ) {
+                $requestedPeriodCovered = true;
+                break;
+            }
+        }
+
+        if (!$requestedPeriodCovered) {
             echo json_encode(array(
                 'status' => 'error',
-                'message' => 'No membership change was persisted. Please verify role permissions and submitted dates.'
+                'message' => 'Membership period was not persisted as requested. Please verify role permissions and submitted dates.'
             ));
         } else {
             echo json_encode(array(

@@ -1400,7 +1400,7 @@
   <string name="SYS_SAVE_PENDING">Zapisywanie oczekuje...</string>
   <string name="SYS_PENDING">Oczekuje...</string>
     <string name="SYS_SAVE_DATA">Dane zosta┼éy zapisane.</string>
-  Ładowanie...</string>
+  <string name="SYS_LOADING">Ładowanie...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Ładowanie członkostw ról...</string>
   <string name="SYS_SEARCH_AGE_DESC">Szukanie wszystkich użytkowników starszych niż 18 lat</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
@@ -1809,5 +1809,7 @@
   <string name="SYS_YOUR_NAME">Twoje imię</string>
   <string name="SYS_Z_TO_A">Od Z do A</string>
 </resources>
+
+
 
 

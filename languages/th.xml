@@ -1097,7 +1097,7 @@
   <string name="SYS_SAVE_PENDING">กำลังรอบันทึก...</string>
   <string name="SYS_PENDING">รอดำเนินการ...</string>
     <string name="SYS_SAVE_DATA">α╕Üα╕▒α╕Öα╕ùα╕╢α╕üα╕éα╣ëα╕¡α╕íα╕╣α╕Ñα╣üα╕Ñα╣ëα╕º</string>
-  กำลังโหลด...</string>
+  <string name="SYS_LOADING">กำลังโหลด...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">กำลังโหลดการเป็นสมาชิกบทบาท...</string>
   <string name="SYS_SEARCH">ค้นหา</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18ปี</string>
@@ -1327,5 +1327,7 @@
   <string name="SYS_YOUR_NAME">ชื่อของคุณ</string>
   <string name="SYS_Z_TO_A">Z ถึง A</string>
 </resources>
+
+
 
 

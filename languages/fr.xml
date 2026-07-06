@@ -1212,7 +1212,7 @@
   <string name="SYS_SAVE_PENDING">Enregistrement en attente...</string>
   <string name="SYS_PENDING">En attente...</string>
     <string name="SYS_SAVE_DATA">Les donn├⌐es ont ├⌐t├⌐ enregistr├⌐es.</string>
-  Chargement...</string>
+  <string name="SYS_LOADING">Chargement...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Chargement des adhésions aux rôles...</string>
   <string name="SYS_SEARCH">Recherche</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 ans</string>
@@ -1471,5 +1471,7 @@
   <string name="SYS_YOUR_NAME">Votre nom</string>
   <string name="SYS_Z_TO_A">Z à A</string>
 </resources>
+
+
 
 

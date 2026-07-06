@@ -558,7 +558,7 @@
   <string name="SYS_SAVE_PENDING">Penyimpanan tertunda...</string>
   <string name="SYS_PENDING">Menunggu...</string>
     <string name="SYS_SAVE_DATA">I dati sono stati salvati.</string>
-  Memuat...</string>
+  <string name="SYS_LOADING">Memuat...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Memuat keanggotaan peran...</string>
   <string name="SYS_SEARCH">Cerca</string>
   <string name="SYS_SEATING">posti a sedere</string>
@@ -650,5 +650,7 @@
   <string name="SYS_YEARS">Anni</string>
   <string name="SYS_YES">Sì</string>
   </resources>
+
+
 
 

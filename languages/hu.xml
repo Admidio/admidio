@@ -1400,7 +1400,7 @@
   <string name="SYS_SAVE_PENDING">Mentés folyamatban...</string>
   <string name="SYS_PENDING">Függőben...</string>
     <string name="SYS_SAVE_DATA">Az adatok ment├⌐se megt├╢rt├⌐nt.</string>
-  Betöltés...</string>
+  <string name="SYS_LOADING">Betöltés...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Szerepkör-tagságok betöltése...</string>
   <string name="SYS_SEARCH_AGE_DESC">A 18 évnél idősebb felhasználók keresése</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18év</string>
@@ -1809,5 +1809,7 @@
   <string name="SYS_YOUR_NAME">Az ön neve</string>
   <string name="SYS_Z_TO_A">Z től A -ig</string>
 </resources>
+
+
 
 

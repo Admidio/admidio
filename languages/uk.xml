@@ -1207,8 +1207,8 @@
   
   <string name="SYS_SAVE_PENDING">Збереження очікується...</string>
   <string name="SYS_PENDING">Очікується...</string>
-    <string name="SYS_SAVE_DATA">╨ö╨░╨╜╤û ╨▒╤â╨╗╨╕ ╨╖╨▒╨╡╤Ç╨╡╨╢╨╡╨╜╤û.</string>
-  Завантаження...</string>
+  <string name="SYS_SAVE_DATA">Дані були збережені.</string>
+  <string name="SYS_LOADING">Завантаження...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Завантаження членств ролей...</string>
   <string name="SYS_SEARCH">Пошук</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18л</string>
@@ -1467,5 +1467,8 @@
   <string name="SYS_YOUR_NAME">Ваше ім'я</string>
   <string name="SYS_Z_TO_A">Від Я до А</string>
 </resources>
+
+
+
 
 

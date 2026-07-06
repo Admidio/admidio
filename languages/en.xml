@@ -1404,8 +1404,8 @@
   <string name="SYS_SAVE_CHANGES">Save changes</string>
   <string name="SYS_SAVE_CONFIGURATION">Save configuration</string>
   
-    <string name="SYS_SAVE_DATA">Data has been saved.</string>
-  Loading...</string>
+  <string name="SYS_SAVE_DATA">Data has been saved.</string>
+  <string name="SYS_LOADING">Loading...</string>
   <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Loading role memberships...</string>
   <string name="SYS_SAVE_PENDING">Pending save...</string>
   <string name="SYS_PENDING">Pending...</string>
@@ -1819,5 +1819,3 @@
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
 </resources>
-
-
