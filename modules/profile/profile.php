@@ -68,6 +68,7 @@ try {
     $page->addJavascript('
         var profileJS = new ProfileJS(gRootPath);
         profileJS.userUuid                = "' . $getUserUuid . '";
+        profileJS.csrfToken               = "' . $gCurrentSession->getCsrfToken() . '";
         profileJS.labelLoading            = "' . $gL10n->get('SYS_LOADING') . '";
         profileJS.labelLoadingMemberships = "' . $gL10n->get('SYS_LOADING_ROLE_MEMBERSHIPS') . '";
 
@@ -117,11 +118,87 @@ try {
         }
 
         function formSubmitEvent(rolesAreaId = "") {
-            $(rolesAreaId + " .admidio-form-membership-period").submit(function(event) {
+            var membershipForms = $(rolesAreaId + " .admidio-form-membership-period");
+
+            function detectMembershipSection(formElement) {
+                var container = formElement.closest(
+                    "#adm_profile_role_memberships_current_pane_content, " +
+                    "#adm_profile_role_memberships_current_accordion_content, " +
+                    "#adm_profile_role_memberships_former_pane_content, " +
+                    "#adm_profile_role_memberships_former_accordion_content, " +
+                    "#adm_profile_role_memberships_future_pane_content, " +
+                    "#adm_profile_role_memberships_future_accordion_content"
+                );
+                var containerId = container.attr("id") || "";
+
+                if (containerId.indexOf("current") !== -1) {
+                    return "current";
+                }
+                if (containerId.indexOf("former") !== -1) {
+                    return "former";
+                }
+                if (containerId.indexOf("future") !== -1) {
+                    return "future";
+                }
+
+                return "current";
+            }
+
+            function classifyMembershipSectionByDates(startDateValue, endDateValue) {
+                // HTML date inputs submit YYYY-MM-DD. If format is unexpected, keep source section.
+                var isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                if (!isoDateRegex.test(startDateValue || "")) {
+                    return null;
+                }
+
+                var today = new Date().toISOString().slice(0, 10);
+                var effectiveEndDate = isoDateRegex.test(endDateValue || "") ? endDateValue : "9999-12-31";
+
+                if (effectiveEndDate < today) {
+                    return "former";
+                }
+                if (startDateValue > today) {
+                    return "future";
+                }
+
+                return "current";
+            }
+
+            function reloadMembershipSectionsAfterSave(formElement) {
+                var sourceSection = detectMembershipSection(formElement);
+                var startDateValue = formElement.find("[name=\'adm_membership_start_date\']").val() || "";
+                var endDateValue = formElement.find("[name=\'adm_membership_end_date\']").val() || "";
+                var targetSection = classifyMembershipSectionByDates(startDateValue, endDateValue) || sourceSection;
+
+                if (sourceSection === "former") {
+                    profileJS.reloadFormerRoleMemberships();
+                } else if (sourceSection === "future") {
+                    profileJS.reloadFutureRoleMemberships();
+                } else {
+                    profileJS.reloadRoleMemberships();
+                }
+
+                if (targetSection !== sourceSection) {
+                    if (targetSection === "former") {
+                        profileJS.reloadFormerRoleMemberships();
+                    } else if (targetSection === "future") {
+                        profileJS.reloadFutureRoleMemberships();
+                    } else {
+                        profileJS.reloadRoleMemberships();
+                    }
+                }
+            }
+
+            // Rebinding happens after each memberships reload. Remove previous handlers first
+            // to avoid duplicate submissions and inconsistent status messages.
+            membershipForms.off("submit.admMembershipPeriod").on("submit.admMembershipPeriod", function(event) {
                 var formElement = $(this);
-                var memberUuid = $(this).attr("data-admidio");
-                var formAlert  = $("#adm_membership_period_form_" + memberUuid + " .form-alert");
                 var submitButton = formElement.find(".button-membership-period-form").first();
+                var memberUuid = submitButton.attr("data-admidio") || formElement.attr("data-admidio") || "";
+                var formAlert = formElement.find(".form-alert").first();
+                if (formAlert.length === 0 && memberUuid.length > 0) {
+                    formAlert = $("#adm_membership_period_form_" + memberUuid + " .form-alert").first();
+                }
                 var buttonIsInput = submitButton.is("input");
                 var originalButtonText = buttonIsInput ? submitButton.val() : submitButton.html();
                 var pendingLabel = "' . $gL10n->get('SYS_PENDING') . '";
@@ -150,13 +227,34 @@ try {
                 formAlert.html("<i class=\"bi bi-hourglass-split\"></i><strong>" + pendingSaveLabel + "</strong>");
                 formAlert.fadeIn();
 
+                var extractTextFromHtml = function(html) {
+                    if (typeof html !== "string" || html.length === 0) {
+                        return "";
+                    }
+
+                    var textContent = $("<div>").html(html).text();
+                    return $.trim(textContent.replace(/\s+/g, " "));
+                };
+
                 $.post({
                     url: formElement.attr("action"),
-                    data: formElement.serialize(),
+                    data: (function() {
+                        var formData = formElement.serializeArray();
+                        if (profileJS && profileJS.csrfToken) {
+                            formData.push({ name: "adm_csrf_token_fallback", value: profileJS.csrfToken });
+                        }
+                        return $.param(formData);
+                    })(),
+                    timeout: 60000,
                     success: function(data)
                     {
                         var responseText = data;
                         var responseStatus = "";
+                        var rawResponseText = "";
+
+                        if (typeof data === "string") {
+                            rawResponseText = $.trim(data);
+                        }
 
                         if (typeof responseText === "string") {
                             responseText = $.trim(responseText);
@@ -178,6 +276,16 @@ try {
                             responseText = responseText.message || JSON.stringify(responseText);
                         }
 
+                        if (typeof responseText === "string" && responseText.length > 0) {
+                            var lowerResponse = responseText.toLowerCase();
+                            if (lowerResponse.indexOf("<!doctype") === 0 || lowerResponse.indexOf("<html") === 0) {
+                                // Avoid rendering raw HTML inside alerts; show plain text extracted from response.
+                                console.error("Unexpected HTML response while saving membership period:", rawResponseText || responseText);
+                                var extractedHtmlMessage = extractTextFromHtml(rawResponseText || responseText);
+                                responseText = extractedHtmlMessage.length > 0 ? extractedHtmlMessage : "' . $gL10n->get('SYS_PROCESSING_ERROR_DESC') . '";
+                            }
+                        }
+
                         if (responseText === "success" || responseStatus === "success") {
                             formAlert.attr("class", "alert alert-success form-alert");
                             formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
@@ -185,17 +293,26 @@ try {
                             formAlert.animate({opacity: 1.0}, 5000);
                             formAlert.fadeOut("slow");
 
-                            var membershipPeriod = $("#adm_membership_period_" + memberUuid);
-                            membershipPeriod.animate({opacity: 1.0}, 5000);
-                            membershipPeriod.fadeOut("slow");
+                            if (memberUuid.length > 0) {
+                                var membershipPeriod = $("#adm_membership_period_" + memberUuid);
+                                membershipPeriod.animate({opacity: 1.0}, 5000);
+                                membershipPeriod.fadeOut("slow");
+                            }
 
-                            profileJS.reloadRoleMemberships();
-                            profileJS.reloadFormerRoleMemberships();
-                            profileJS.reloadFutureRoleMemberships();
-                            formSubmitEvent();
+                            reloadMembershipSectionsAfterSave(formElement);
                         } else {
                             if (typeof responseText !== "string" || responseText.length === 0) {
-                                responseText = "Unexpected server response. Please check server logs.";
+                                responseText = "' . $gL10n->get('SYS_PROCESSING_ERROR_DESC') . '";
+                            }
+
+                            // Do not auto-reload memberships on error responses.
+                            // A forced refresh hides the actual error and looks like a silent no-op.
+                            var canceledMessage = "' . $gL10n->get('SYS_PROCESS_CANCELED') . '".toLowerCase();
+                            var reloadMessage = "' . $gL10n->get('SYS_RELOAD') . '".toLowerCase();
+                            if (typeof responseText === "string"
+                                && responseText.toLowerCase().indexOf(canceledMessage) !== -1
+                                && responseText.toLowerCase().indexOf(reloadMessage) === -1) {
+                                responseText += " <br><small>' . $gL10n->get('SYS_RELOAD') . '.</small>";
                             }
 
                             formAlert.attr("class", "alert alert-danger form-alert");
@@ -206,7 +323,12 @@ try {
                  }).fail(function(jqXHR, textStatus, errorThrown) {
                     var errorMessage = "Request failed";
                     if (jqXHR && jqXHR.responseText) {
-                        errorMessage = jqXHR.responseText;
+                        errorMessage = extractTextFromHtml(jqXHR.responseText);
+                        if (errorMessage.length === 0) {
+                            errorMessage = jqXHR.responseText;
+                        }
+                    } else if (textStatus === "timeout") {
+                        errorMessage = "' . $gL10n->get('SYS_PROCESSING_ERROR_DESC') . ' ' . $gL10n->get('SYS_RELOAD') . '.";
                     } else if (errorThrown) {
                         errorMessage = errorThrown;
                     } else if (textStatus) {
@@ -261,6 +383,13 @@ try {
 
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
+
+            // Membership remove/edit flows already update specific sections.
+            // Avoid full three-section refresh after closing confirmation dialogs.
+            if ($(this).attr("id") === "adm_modal_messagebox") {
+                return;
+            }
+
             profileJS.reloadRoleMemberships();
             profileJS.reloadFormerRoleMemberships();
             profileJS.reloadFutureRoleMemberships();

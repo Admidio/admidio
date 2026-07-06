@@ -104,27 +104,60 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
         entryDeleted = document.getElementById("row_" + elementId);
     }
 
+    var csrfFallbackToken = "";
+    if (typeof profileJS !== "undefined" && profileJS && typeof profileJS.csrfToken === "string") {
+        csrfFallbackToken = profileJS.csrfToken;
+    }
+
     // send RequestObject and delete entry
     $.post(url, {
         "adm_csrf_token": csrfToken,
+        "adm_csrf_token_fallback": csrfFallbackToken,
         "uuid": elementId
         }, function(data) {
         const messageText = $("#adm_status_message");
         var returnStatus = "error";
         var returnMessage = "";
+        var rawResponse = typeof data === "string" ? data : "";
 
         try {
-            const returnData = JSON.parse(data);
+            const returnData = typeof data === "object" ? data : JSON.parse(data);
             returnStatus = returnData.status;
             if (typeof returnData.message !== 'undefined') {
                 returnMessage = returnData.message;
             }
         } catch (e) {
+            // Try to recover if a warning/notice was prepended before a JSON response.
+            if (typeof rawResponse === "string") {
+                var firstBrace = rawResponse.indexOf("{");
+                var lastBrace = rawResponse.lastIndexOf("}");
+
+                if (firstBrace >= 0 && lastBrace > firstBrace) {
+                    try {
+                        var recoveredJson = JSON.parse(rawResponse.substring(firstBrace, lastBrace + 1));
+                        returnStatus = recoveredJson.status || returnStatus;
+                        returnMessage = recoveredJson.message || returnMessage;
+                    } catch (ignore) {
+                        // Keep fallback handling below.
+                    }
+                }
+            }
+
             // fallback for old implementation without JSON response
             if (data === "done") {
                 returnStatus = "success";
-            } else {
+            } else if (returnMessage === "") {
                 returnMessage = data;
+            }
+        }
+
+        if (typeof returnMessage === "string") {
+            returnMessage = returnMessage.trim();
+
+            if (returnMessage.toLowerCase().indexOf("warning:") === 0 || returnMessage.toLowerCase().indexOf("notice:") === 0) {
+                // Avoid exposing raw PHP warning output in UI.
+                console.error("Unexpected warning response in callUrlHideElement:", rawResponse || returnMessage);
+                returnMessage = "Process canceled. Reload";
             }
         }
 
@@ -234,8 +267,14 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken, callback
     }
 
     // send AJAX
+    var csrfFallbackToken = "";
+    if (typeof profileJS !== "undefined" && profileJS && typeof profileJS.csrfToken === "string") {
+        csrfFallbackToken = profileJS.csrfToken;
+    }
+
     $.post(url, {
         "adm_csrf_token": csrfToken,
+        "adm_csrf_token_fallback": csrfFallbackToken,
         "uuids[]": ids   // PHP will see $_POST['uuids'] as an array
     }, function(responseData) {
         var status = "error", msg = "";

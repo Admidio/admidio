@@ -603,8 +603,37 @@ class Session extends Entity
             $gLogger->notice('Session is already started!');
         }
 
-        // Start session
-        session_start();
+        // Start session and gracefully recover from corrupted session payloads.
+        $sessionStartWarning = '';
+        set_error_handler(static function (int $severity, string $message) use (&$sessionStartWarning): bool {
+            if ($severity === E_WARNING && strpos($message, 'session_start():') === 0) {
+                $sessionStartWarning = $message;
+                return true;
+            }
+
+            return false;
+        });
+
+        $sessionStarted = session_start();
+        restore_error_handler();
+
+        if (!$sessionStarted || $sessionStartWarning !== '') {
+            $gLogger->warning('Session start warning detected. Reinitializing session.', array('warning' => $sessionStartWarning));
+
+            if (session_status() === PHP_SESSION_ACTIVE) {
+                session_unset();
+                session_destroy();
+            }
+
+            session_id('');
+            self::setCookie($sessionName, '', time() - 3600, $path, $domain, $secure, $httpOnly);
+
+            if (!session_start()) {
+                throw new \RuntimeException('Session could not be started.');
+            }
+
+            session_regenerate_id(true);
+        }
 
         $gLogger->info('Session Started!', array('name' => $sessionName, 'limit' => $limit, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sameSite' => 'lax'));
     }

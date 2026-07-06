@@ -63,6 +63,8 @@ function ProfileJS(gRootPath) {
 
         $.get({
             url: requestUrl,
+            data: { _ts: Date.now() },
+            cache: false,
             dataType: "html"
         }).done(function (responseText) {
             if (self._sectionExists(tabSelector)) {
