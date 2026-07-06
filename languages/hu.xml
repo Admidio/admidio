@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">További információk</string>
@@ -1396,7 +1396,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Az e-mail mellékleteket a webtárhelyen tároljuk, és azok az elküldés után is elérhetők maradnak a mentett e-mailben. (Alapértelmezés: engedélyezve)</string>
   <string name="SYS_SAVE_CHANGES">Vátozások mentése</string>
   <string name="SYS_SAVE_CONFIGURATION">Konfiguráció mentése</string>
-  <string name="SYS_SAVE_DATA">Az adatok mentése megtörtént.</string>
+  
+  <string name="SYS_SAVE_PENDING">Mentés folyamatban...</string>
+  <string name="SYS_PENDING">Függőben...</string>
+    <string name="SYS_SAVE_DATA">Az adatok ment├⌐se megt├╢rt├⌐nt.</string>
+  Betöltés...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Szerepkör-tagságok betöltése...</string>
   <string name="SYS_SEARCH_AGE_DESC">A 18 évnél idősebb felhasználók keresése</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18év</string>
   <string name="SYS_SEARCH_DATE_DESC">Az 1986. március 1. után született összes felhasználó keresése</string>
@@ -1804,3 +1809,5 @@
   <string name="SYS_YOUR_NAME">Az ön neve</string>
   <string name="SYS_Z_TO_A">Z től A -ig</string>
 </resources>
+
+

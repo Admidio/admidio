@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Назад до гостьової книги</string>
@@ -1204,7 +1204,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Вкладення електронної пошти зберігаються у веб-просторі і після надсилання можуть бути доступні у збереженому листі. (За замовчуванням: увімкнено)</string>
   <string name="SYS_SAVE_CHANGES">Зберегти зміни</string>
   <string name="SYS_SAVE_CONFIGURATION">Зберегти конфігурацію</string>
-  <string name="SYS_SAVE_DATA">Дані були збережені.</string>
+  
+  <string name="SYS_SAVE_PENDING">Збереження очікується...</string>
+  <string name="SYS_PENDING">Очікується...</string>
+    <string name="SYS_SAVE_DATA">╨ö╨░╨╜╤û ╨▒╤â╨╗╨╕ ╨╖╨▒╨╡╤Ç╨╡╨╢╨╡╨╜╤û.</string>
+  Завантаження...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Завантаження членств ролей...</string>
   <string name="SYS_SEARCH">Пошук</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18л</string>
   <string name="SYS_SEARCH_AGE_DESC">Пошук усіх користувачів віком від 18 років</string>
@@ -1462,3 +1467,5 @@
   <string name="SYS_YOUR_NAME">Ваше ім'я</string>
   <string name="SYS_Z_TO_A">Від Я до А</string>
 </resources>
+
+

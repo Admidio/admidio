@@ -68,6 +68,15 @@ try {
     $page->addJavascript('
         var profileJS = new ProfileJS(gRootPath);
         profileJS.userUuid                = "' . $getUserUuid . '";
+        profileJS.labelLoading            = "' . $gL10n->get('SYS_LOADING') . '";
+        profileJS.labelLoadingMemberships = "' . $gL10n->get('SYS_LOADING_ROLE_MEMBERSHIPS') . '";
+
+        if (profileJS.labelLoading.indexOf("#") === 0) {
+            profileJS.labelLoading = "Loading...";
+        }
+        if (profileJS.labelLoadingMemberships.indexOf("#") === 0) {
+            profileJS.labelLoadingMemberships = "Loading role memberships...";
+        }
 
         function callbackProfilePhoto() {
             var imgSrc = $("#adm_profile_photo").attr("src");
@@ -109,18 +118,67 @@ try {
 
         function formSubmitEvent(rolesAreaId = "") {
             $(rolesAreaId + " .admidio-form-membership-period").submit(function(event) {
+                var formElement = $(this);
                 var memberUuid = $(this).attr("data-admidio");
                 var formAlert  = $("#adm_membership_period_form_" + memberUuid + " .form-alert");
+                var submitButton = formElement.find(".button-membership-period-form").first();
+                var buttonIsInput = submitButton.is("input");
+                var originalButtonText = buttonIsInput ? submitButton.val() : submitButton.html();
+                var pendingLabel = "' . $gL10n->get('SYS_PENDING') . '";
+                var pendingSaveLabel = "' . $gL10n->get('SYS_SAVE_PENDING') . '";
+
+                if (pendingLabel.indexOf("#") === 0) {
+                    pendingLabel = "Pending...";
+                }
+                if (pendingSaveLabel.indexOf("#") === 0) {
+                    pendingSaveLabel = "Pending save...";
+                }
 
                 event.preventDefault(); // avoid to execute the actual submit of the form.
                 formAlert.hide();
 
+                if (submitButton.length > 0) {
+                    submitButton.prop("disabled", true);
+                    if (buttonIsInput) {
+                        submitButton.val(pendingLabel);
+                    } else {
+                        submitButton.html("<span class=\"spinner-border spinner-border-sm me-1\" role=\"status\" aria-hidden=\"true\"></span>" + pendingLabel);
+                    }
+                }
+
+                formAlert.attr("class", "alert alert-info form-alert");
+                formAlert.html("<i class=\"bi bi-hourglass-split\"></i><strong>" + pendingSaveLabel + "</strong>");
+                formAlert.fadeIn();
+
                 $.post({
-                    url: $(this).attr("action"),
-                    data: $(this).serialize(),
+                    url: formElement.attr("action"),
+                    data: formElement.serialize(),
                     success: function(data)
                     {
-                        if (data === "success") {
+                        var responseText = data;
+                        var responseStatus = "";
+
+                        if (typeof responseText === "string") {
+                            responseText = $.trim(responseText);
+
+                            // Some endpoints return JSON encoded errors, parse when possible.
+                            if (responseText.length > 0 && responseText.charAt(0) === "{") {
+                                try {
+                                    var parsedResponse = JSON.parse(responseText);
+                                    if (parsedResponse && typeof parsedResponse === "object") {
+                                        responseStatus = parsedResponse.status || "";
+                                        responseText = parsedResponse.message || responseText;
+                                    }
+                                } catch (ignore) {
+                                    // Keep plain text response if parsing fails.
+                                }
+                            }
+                        } else if (responseText && typeof responseText === "object") {
+                            responseStatus = responseText.status || "";
+                            responseText = responseText.message || JSON.stringify(responseText);
+                        }
+
+                        if (responseText === "success" || responseStatus === "success") {
                             formAlert.attr("class", "alert alert-success form-alert");
                             formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
                             formAlert.fadeIn("slow");
@@ -136,9 +194,35 @@ try {
                             profileJS.reloadFutureRoleMemberships();
                             formSubmitEvent();
                         } else {
+                            if (typeof responseText !== "string" || responseText.length === 0) {
+                                responseText = "Unexpected server response. Please check server logs.";
+                            }
+
                             formAlert.attr("class", "alert alert-danger form-alert");
                             formAlert.fadeIn();
-                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
+                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + responseText);
+                        }
+                    }
+                 }).fail(function(jqXHR, textStatus, errorThrown) {
+                    var errorMessage = "Request failed";
+                    if (jqXHR && jqXHR.responseText) {
+                        errorMessage = jqXHR.responseText;
+                    } else if (errorThrown) {
+                        errorMessage = errorThrown;
+                    } else if (textStatus) {
+                        errorMessage = textStatus;
+                    }
+
+                    formAlert.attr("class", "alert alert-danger form-alert");
+                    formAlert.fadeIn();
+                    formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + errorMessage);
+                 }).always(function() {
+                    if (submitButton.length > 0) {
+                        submitButton.prop("disabled", false);
+                        if (buttonIsInput) {
+                            submitButton.val(originalButtonText);
+                        } else {
+                            submitButton.html(originalButtonText);
                         }
                     }
                  });

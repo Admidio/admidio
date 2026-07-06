@@ -10,6 +10,8 @@
 
 function ProfileJS(gRootPath) {
     this.url                     = gRootPath + "/modules/profile/profile_function.php";
+    this.labelLoading            = "Loading...";
+    this.labelLoadingMemberships = "Loading role memberships...";
     this.formerRoleCount         = 0;
     this.futureRoleCount         = 0;
     this.userUuid                = "";
@@ -26,9 +28,9 @@ function ProfileJS(gRootPath) {
     this._loadingIndicatorHtml = function () {
         return '<div class="d-flex align-items-center text-muted py-2">'
             + '<div class="spinner-border spinner-border-sm me-2" role="status">'
-            + '<span class="visually-hidden">Loading...</span>'
+            + '<span class="visually-hidden">' + this.labelLoading + '</span>'
             + '</div>'
-            + '<span>Loading role memberships...</span>'
+            + '<span>' + this.labelLoadingMemberships + '</span>'
             + '</div>';
     };
 

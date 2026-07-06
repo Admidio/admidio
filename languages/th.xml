@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">กลับไปที่สมุดเยี่ยม</string>
@@ -1093,7 +1093,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">ไฟล์แนบอีเมลจะถูกบันทึกไว้ในพื้นที่เว็บและยังคงสามารถเข้าถึงได้ในอีเมลที่บันทึกไว้หลังจากส่งแล้ว (ค่าเริ่มต้น: เปิดใช้งาน)</string>
   <string name="SYS_SAVE_CHANGES">บันทึก การเปลี่ยนแปลง</string>
   <string name="SYS_SAVE_CONFIGURATION">บันทึก การกำหนดค่า</string>
-  <string name="SYS_SAVE_DATA">บันทึกข้อมูลแล้ว</string>
+  
+  <string name="SYS_SAVE_PENDING">กำลังรอบันทึก...</string>
+  <string name="SYS_PENDING">รอดำเนินการ...</string>
+    <string name="SYS_SAVE_DATA">α╕Üα╕▒α╕Öα╕ùα╕╢α╕üα╕éα╣ëα╕¡α╕íα╕╣α╕Ñα╣üα╕Ñα╣ëα╕º</string>
+  กำลังโหลด...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">กำลังโหลดการเป็นสมาชิกบทบาท...</string>
   <string name="SYS_SEARCH">ค้นหา</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18ปี</string>
   <string name="SYS_SEARCH_AGE_DESC">ค้นหาผู้ใช้ทั้งหมดที่มีอายุมากกว่า 18 ปี</string>
@@ -1322,3 +1327,5 @@
   <string name="SYS_YOUR_NAME">ชื่อของคุณ</string>
   <string name="SYS_Z_TO_A">Z ถึง A</string>
 </resources>
+
+

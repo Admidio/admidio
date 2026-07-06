@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Indietro al libro degli ospiti</string>
@@ -554,7 +554,12 @@
   <string name="SYS_SAVE">Salva</string>
   <string name="SYS_SAVE_ALL_CANCELLATIONS">Menyimpan pembatalan ke penunjukan</string>
   <string name="SYS_SAVE_ALL_CANCELLATIONS_DESC">Pembatalan peserta ke acara dapat disimpan. Pembatalan tersebut kemudian juga ditampilkan dalam daftar peserta. Jika opsi ini dinonaktif, pembatalan tidak disimpan dan tidak dapat dilihat dalam daftar peserta. Pilihan ini berlaku sejak saat pengaturan dan tidak dapat diterapkan secara retrospektif! (Standar: Ya)</string>
-  <string name="SYS_SAVE_DATA">I dati sono stati salvati.</string>
+  
+  <string name="SYS_SAVE_PENDING">Penyimpanan tertunda...</string>
+  <string name="SYS_PENDING">Menunggu...</string>
+    <string name="SYS_SAVE_DATA">I dati sono stati salvati.</string>
+  Memuat...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Memuat keanggotaan peran...</string>
   <string name="SYS_SEARCH">Cerca</string>
   <string name="SYS_SEATING">posti a sedere</string>
   <string name="SYS_SECONDS_VAR">#VAR1# detik</string>
@@ -645,3 +650,5 @@
   <string name="SYS_YEARS">Anni</string>
   <string name="SYS_YES">Sì</string>
   </resources>
+
+

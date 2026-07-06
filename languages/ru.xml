@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Назад к гостевой книге</string>
@@ -1205,7 +1205,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Вложения электронной почты сохраняются в веб-пространстве и после отправки могут быть доступны в сохраненном письме. (По умолчанию: включено)</string>
   <string name="SYS_SAVE_CHANGES">Сохранить изменения</string>
   <string name="SYS_SAVE_CONFIGURATION">Сохранить конфигурацию</string>
-  <string name="SYS_SAVE_DATA">Данные были сохранены.</string>
+  
+  <string name="SYS_SAVE_PENDING">Сохранение в ожидании...</string>
+  <string name="SYS_PENDING">В ожидании...</string>
+    <string name="SYS_SAVE_DATA">╨ö╨░╨╜╨╜╤ï╨╡ ╨▒╤ï╨╗╨╕ ╤ü╨╛╤à╤Ç╨░╨╜╨╡╨╜╤ï.</string>
+  Загрузка...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Загрузка членств в ролях...</string>
   <string name="SYS_SEARCH">Поиск</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18л</string>
   <string name="SYS_SEARCH_AGE_DESC">Поиск всех пользователей старше 18 лет</string>
@@ -1463,3 +1468,5 @@
   <string name="SYS_YOUR_NAME">Ваше имя</string>
   <string name="SYS_Z_TO_A">От Я до А</string>
 </resources>
+
+

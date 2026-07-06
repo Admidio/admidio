@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Takaisin vieraskirjaan</string>
@@ -1127,7 +1127,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Sähköpostin liitteet tallennetaan verkkotilaan, ja niitä voi edelleen käyttää tallennetussa sähköpostissa lähettämisen jälkeen. (Oletus: käytössä)</string>
   <string name="SYS_SAVE_CHANGES">Tallenna muutokset</string>
   <string name="SYS_SAVE_CONFIGURATION">Tallenna kokoonpano</string>
-  <string name="SYS_SAVE_DATA">Tiedot on tallennettu.</string>
+  
+  <string name="SYS_SAVE_PENDING">Tallennus odottaa...</string>
+  <string name="SYS_PENDING">Odottaa...</string>
+    <string name="SYS_SAVE_DATA">Tiedot on tallennettu.</string>
+  Ladataan...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Ladataan roolijäsenyyksiä...</string>
   <string name="SYS_SEARCH">Haku</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 vuotta</string>
   <string name="SYS_SEARCH_AGE_DESC">Etsitään kaikkia yli 18 -vuotiaita käyttäjiä</string>
@@ -1365,3 +1370,5 @@
   <string name="SYS_YOUR_NAME">Nimesi</string>
   <string name="SYS_Z_TO_A">Ö - A</string>
 </resources>
+
+

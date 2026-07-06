@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Yderligere oplysninger</string>
@@ -1385,7 +1385,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">‎Vedhæftede filer i e-mails gemmes på webhotellet og kan stadig åbnes i den gemte mail efter afsendelse. (Standard: aktiveret)‎</string>
   <string name="SYS_SAVE_CHANGES">Gem ændringerne</string>
   <string name="SYS_SAVE_CONFIGURATION">Gem indstilling</string>
-  <string name="SYS_SAVE_DATA">Data er blevet gemt.</string>
+  
+  <string name="SYS_SAVE_PENDING">Gemning afventer...</string>
+  <string name="SYS_PENDING">Afventer...</string>
+    <string name="SYS_SAVE_DATA">Data er blevet gemt.</string>
+  Indlæser...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Indlæser rollemedlemskaber...</string>
   <string name="SYS_SEARCH_AGE_DESC">Søgning efter alle brugere ældre end 18 år</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_DATE_DESC">Søgning efter alle brugere født efter 1st Januar 1986</string>
@@ -1793,3 +1798,5 @@
   <string name="SYS_YOUR_NAME">Dit navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
 </resources>
+
+

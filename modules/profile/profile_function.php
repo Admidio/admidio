@@ -168,10 +168,36 @@ try {
             $formValues['adm_membership_end_date'] = DATE_MAX;
         }
 
+        // capture membership state before save to detect no-op outcomes
+        $sql = 'SELECT mem_uuid, mem_begin, mem_end, mem_leader
+                  FROM ' . TBL_MEMBERS . '
+                 WHERE mem_rol_id = ? -- $member->getValue("mem_rol_id")
+                   AND mem_usr_id = ? -- $user->getValue("usr_id")
+              ORDER BY mem_begin, mem_end, mem_uuid';
+        $beforeRows = $gDb->queryPrepared(
+            $sql,
+            array((int)$member->getValue('mem_rol_id'), (int)$user->getValue('usr_id'))
+        )->fetchAll(PDO::FETCH_ASSOC);
+
         // save role membership
         $role->setMembership($user->getValue('usr_id'), $formValues['adm_membership_start_date'], $formValues['adm_membership_end_date'], $member->getValue('mem_leader'), true);
 
-        echo 'success';
+        $afterRows = $gDb->queryPrepared(
+            $sql,
+            array((int)$member->getValue('mem_rol_id'), (int)$user->getValue('usr_id'))
+        )->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($beforeRows === $afterRows) {
+            echo json_encode(array(
+                'status' => 'error',
+                'message' => 'No membership change was persisted. Please verify role permissions and submitted dates.'
+            ));
+        } else {
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $gL10n->get('SYS_SAVE_DATA')
+            ));
+        }
     }
 } catch (Throwable $e) {
     handleException($e, in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership')));

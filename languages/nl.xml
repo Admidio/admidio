@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Terug naar gastenboek</string>
@@ -1154,7 +1154,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">E-mailbijlagen worden opgeslagen op de webruimte en zijn na verzending nog steeds toegankelijk in de opgeslagen e-mail. (Standaard: ingeschakeld)</string>
   <string name="SYS_SAVE_CHANGES">Wijzigingen opslaan</string>
   <string name="SYS_SAVE_CONFIGURATION">Configuratie opslaan</string>
-  <string name="SYS_SAVE_DATA">Gegevens opgeslagen.</string>
+  
+  <string name="SYS_SAVE_PENDING">Opslaan in behandeling...</string>
+  <string name="SYS_PENDING">In behandeling...</string>
+    <string name="SYS_SAVE_DATA">Gegevens opgeslagen.</string>
+  Laden...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Rol-lidmaatschappen laden...</string>
   <string name="SYS_SEARCH">Zoek</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18j</string>
   <string name="SYS_SEARCH_AGE_DESC">Leden zoeken die ouder zijn dan 18 jaar</string>
@@ -1398,3 +1403,5 @@
   <string name="SYS_YOUR_NAME">Uw naam</string>
   <string name="SYS_Z_TO_A">Z tot A</string>
 </resources>
+
+

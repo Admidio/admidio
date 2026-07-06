@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">返回留言板</string>
@@ -213,4 +213,10 @@
   <string name="SYS_WHAT_TO_DO">该怎么办？</string>
   <string name="SYS_WIDTH">宽度</string>
   <string name="SYS_YES">是</string>
-  </resources>
+  <string name="SYS_SAVE_DATA">数据已保存。</string>
+    <string name="SYS_SAVE_PENDING">正在等待保存...</string>
+  <string name="SYS_PENDING">待处理...</string>
+  <string name="SYS_LOADING">加载中...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">正在加载角色成员关系...</string>
+</resources>
+

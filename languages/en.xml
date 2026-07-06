@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
@@ -1403,7 +1403,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Email attachments are saved on the web space and can still be accessed in the saved email after sending. (Default: enabled)</string>
   <string name="SYS_SAVE_CHANGES">Save changes</string>
   <string name="SYS_SAVE_CONFIGURATION">Save configuration</string>
-  <string name="SYS_SAVE_DATA">Data has been saved.</string>
+  
+    <string name="SYS_SAVE_DATA">Data has been saved.</string>
+  Loading...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Loading role memberships...</string>
+  <string name="SYS_SAVE_PENDING">Pending save...</string>
+  <string name="SYS_PENDING">Pending...</string>
   <string name="SYS_SEARCH_AGE_DESC">Searching for all users older than 18 years</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_DATE_DESC">Searching for all users born after 01.03.1986</string>
@@ -1814,3 +1819,5 @@
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
 </resources>
+
+

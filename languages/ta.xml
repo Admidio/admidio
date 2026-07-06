@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">கூடுதல் தகவல்</string>
@@ -1359,7 +1359,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">மின்னஞ்சல் இணைப்புகள் இணையதள இடத்தில் சேமிக்கப்படும், மேலும் அனுப்பிய பிறகும் சேமிக்கப்பட்ட மின்னஞ்சலில் அவற்றை அணுகலாம். (இயல்புநிலை: இயக்கப்பட்டது)</string>
   <string name="SYS_SAVE_CHANGES">மாற்றங்களைச் சேமிக்கவும்</string>
   <string name="SYS_SAVE_CONFIGURATION">அமைப்புகளைச் சேமிக்கவும்</string>
-  <string name="SYS_SAVE_DATA">தரவு சேமிக்கப்பட்டது.</string>
+  
+  <string name="SYS_SAVE_PENDING">சேமிப்பு நிலுவையில்...</string>
+  <string name="SYS_PENDING">நிலுவையில்...</string>
+    <string name="SYS_SAVE_DATA">α«ñα«░α«╡α»ü α«Üα»çα««α«┐α«òα»ìα«òα«¬α»ìα«¬α«ƒα»ìα«ƒα«ñα»ü.</string>
+  ஏற்றுகிறது...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">பங்கு உறுப்பினர்ப் பதிவுகள் ஏற்றப்படுகின்றன...</string>
   <string name="SYS_SEARCH_AGE_DESC">18 வயதுக்கு மேற்பட்ட அனைத்துப் பயனர்களையும் தேடுகிறது</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_DATE_DESC">01.03.1986க்குப் பிறகு பிறந்த அனைத்துப் பயனர்களையும் தேடுகிறது</string>
@@ -1760,3 +1765,5 @@
   <string name="SYS_YOUR_NAME">உங்கள் பெயர்</string>
   <string name="SYS_Z_TO_A">இசட் முதல் ஏ</string>
 </resources>
+
+

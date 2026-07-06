@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tagasi külalisteraamatusse</string>
@@ -1179,7 +1179,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Meilimanused salvestatakse veebiruumi ja neid näeb ka pärast saatmist. (Vaikimisi: lubatud)</string>
   <string name="SYS_SAVE_CHANGES">Salvesta muudatused</string>
   <string name="SYS_SAVE_CONFIGURATION">Salvesta konfiguratsioon</string>
-  <string name="SYS_SAVE_DATA">Andmed on salvestatud.</string>
+  
+  <string name="SYS_SAVE_PENDING">Salvestamine on ootel...</string>
+  <string name="SYS_PENDING">Ootel...</string>
+    <string name="SYS_SAVE_DATA">Andmed on salvestatud.</string>
+  Laadimine...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Rolliliikmete andmete laadimine...</string>
   <string name="SYS_SEARCH">Otsi</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18a</string>
   <string name="SYS_SEARCH_AGE_DESC">Otsitakse kõiki kasutajaid, kes on vanemad kui 18 aastat</string>
@@ -1429,3 +1434,5 @@
   <string name="SYS_YOUR_NAME">Sinu nimi</string>
   <string name="SYS_Z_TO_A">Z kuni A</string>
 </resources>
+
+
