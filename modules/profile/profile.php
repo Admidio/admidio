@@ -383,13 +383,6 @@ try {
 
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
-
-            // Membership remove/edit flows already update specific sections.
-            // Avoid full three-section refresh after closing confirmation dialogs.
-            if ($(this).attr("id") === "adm_modal_messagebox") {
-                return;
-            }
-
             profileJS.reloadRoleMemberships();
             profileJS.reloadFormerRoleMemberships();
             profileJS.reloadFutureRoleMemberships();
