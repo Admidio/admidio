@@ -381,11 +381,12 @@ try {
         $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
         $("#menu_item_profile_tfa").attr("class", "nav-link btn btn-primary openPopup");
 
-        $("body").on("hidden.bs.modal", ".modal", function() {
+        $("body").on("hidden.bs.modal", ".modal", function(event) {
+            if (event.target !== this) {
+                return;
+            }
+
             $(this).removeData("bs.modal");
-            profileJS.reloadRoleMemberships();
-            profileJS.reloadFormerRoleMemberships();
-            profileJS.reloadFutureRoleMemberships();
         });
 
         formSubmitEvent();',
