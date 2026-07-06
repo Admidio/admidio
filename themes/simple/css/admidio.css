@@ -708,7 +708,6 @@ label {
 
 .admidio-event-highlight .card-header {
     background-color: var(--bs-secondary);
-    color: var(--bs-tertiary);
 }
 
 tr.admidio-event-highlight {
