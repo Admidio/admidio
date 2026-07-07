@@ -209,7 +209,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                         data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
                         data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                         data-message="' . $gL10n->get($deleteMessage, array($role->getValue('rol_name', 'database'))) . '"
-                        data-href="callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
+                        data-href="callUrlHideElement(\'membership_' . $memberUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
                         <i class="' . $icon . '" data-bs-toggle="tooltip" title="'.$description.'"></i></a>';
                 } else {
                     $linkMembershipDelete = '<a style="padding: 3px;"><i class="bi bi-trash invisible"></i></a>';

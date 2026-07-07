@@ -109,7 +109,10 @@ try {
         if ($role->allowedToAssignMembers($gCurrentUser)) {
             $role->stopMembership($member->getValue('mem_usr_id'));
 
-            echo 'done';
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => ''
+            ));
         } else {
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -129,7 +132,10 @@ try {
             $member->readDataByUuid($getMemberUuid);
             $member->delete();
 
-            echo 'done';
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => ''
+            ));
         }
     } elseif ($getMode === 'reload_current_memberships') {
         // reload role memberships
@@ -175,8 +181,8 @@ try {
 
         if (!$isPostedCsrfTokenValid()) {
             echo json_encode(array(
-                'status' => 'error',
-                'message' => $gL10n->get('SYS_PROCESS_CANCELED') . ' ' . $gL10n->get('SYS_RELOAD')
+            'status' => 'csrf_invalid',
+            'message' => $gL10n->get('SYS_PROCESS_CANCELED') . ' ' . $gL10n->get('SYS_RELOAD')
             ));
             exit();
         }
@@ -188,7 +194,7 @@ try {
         $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);
         $role = new Role($gDb, (int)$member->getValue('mem_rol_id'));
-    $userId = (int)$user->getValue('usr_id');
+        $userId = (int)$user->getValue('usr_id');
 
         // check if user has the right to edit this membership
         if (!$role->allowedToAssignMembers($gCurrentUser)) {

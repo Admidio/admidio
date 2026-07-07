@@ -43,6 +43,12 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
+    // Avoid browser serving stale profile pages (e.g. directly after sign-in),
+    // because stale pages can carry outdated CSRF/form tokens.
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+
     $userId = $user->getValue('usr_id');
 
     // set headline
@@ -71,6 +77,16 @@ try {
         profileJS.csrfToken               = "' . $gCurrentSession->getCsrfToken() . '";
         profileJS.labelLoading            = "' . $gL10n->get('SYS_LOADING') . '";
         profileJS.labelLoadingMemberships = "' . $gL10n->get('SYS_LOADING_ROLE_MEMBERSHIPS') . '";
+            profileJS.labelMembershipTo       = "' . $gL10n->get('SYS_ROLE_MEMBERSHIP_TO') . '";
+        profileJS.labelMembershipDuration = "' . $gL10n->get('SYS_MEMBERSHIP_DURATION') . '";
+        profileJS.labelYear               = "' . $gL10n->get('SYS_YEAR') . '";
+        profileJS.labelYears              = "' . $gL10n->get('SYS_YEARS') . '";
+        profileJS.labelMonth              = "' . $gL10n->get('SYS_MONTH') . '";
+        profileJS.labelMonths             = "' . $gL10n->get('SYS_MONTHS') . '";
+        profileJS.labelDay                = "' . $gL10n->get('SYS_DAY') . '";
+        profileJS.labelDays               = "' . $gL10n->get('SYS_DAYS') . '";
+        profileJS.systemDateFormat        = "' . addslashes($gSettingsManager->getString('system_date')) . '";
+        profileJS.membershipDurationExact = ' . ($gSettingsManager->has('profile_membership_duration_exact') && !$gSettingsManager->getBool('profile_membership_duration_exact') ? 'false' : 'true') . ';
 
         if (profileJS.labelLoading.indexOf("#") === 0) {
             profileJS.labelLoading = "Loading...";
@@ -87,38 +103,131 @@ try {
         }
 
         function callbackRoles() {
+            // Keep delete UX lightweight and update membership counters/visibility locally.
             if (profileJS) {
-                profileJS.formerRoleCount++;
-                profileJS.reloadFormerRoleMemberships();
+                profileJS.refreshMembershipUiState();
             }
         }
 
         function callbackFormerRoles() {
+            // Keep delete UX lightweight and update membership counters/visibility locally.
             if (profileJS) {
-                profileJS.formerRoleCount--;
-                if (profileJS.formerRoleCount === 0) {
-                    /* Tabs */
-                    $("#adm_profile_role_memberships_former_pane_content").fadeOut("slow");
-                    /* Accordions */
-                    $("#adm_profile_role_memberships_former_accordion_content").fadeOut("slow");
-                }
+                profileJS.refreshMembershipUiState();
             }
         }
 
         function callbackFutureRoles() {
+            // Keep delete UX lightweight and update membership counters/visibility locally.
             if (profileJS) {
-                profileJS.futureRoleCount--;
-                if (profileJS.futureRoleCount === 0) {
-                    /* Tabs */
-                    $("#adm_profile_role_memberships_future_pane_content").fadeOut("slow");
-                    /* Accordions */
-                    $("#adm_profile_role_memberships_future_accordion_content").fadeOut("slow");
-                }
+                profileJS.refreshMembershipUiState();
             }
         }
 
         function formSubmitEvent(rolesAreaId = "") {
             var membershipForms = $(rolesAreaId + " .admidio-form-membership-period");
+            var membershipDraftStorageKey = "adm_profile_membership_period_drafts_" + profileJS.userUuid;
+
+            function readMembershipDrafts() {
+                try {
+                    var rawDrafts = sessionStorage.getItem(membershipDraftStorageKey);
+
+                    if (!rawDrafts) {
+                        return {};
+                    }
+
+                    var parsedDrafts = JSON.parse(rawDrafts);
+                    if (parsedDrafts && typeof parsedDrafts === "object") {
+                        return parsedDrafts;
+                    }
+                } catch (ignoreDraftReadError) {
+                    // Ignore broken browser storage and continue without drafts.
+                }
+
+                return {};
+            }
+
+            function writeMembershipDrafts(drafts) {
+                try {
+                    sessionStorage.setItem(membershipDraftStorageKey, JSON.stringify(drafts || {}));
+                } catch (ignoreDraftWriteError) {
+                    // Ignore storage quota or unavailable storage.
+                }
+            }
+
+            function storeMembershipDraft(formElement, memberUuid) {
+                if (!memberUuid) {
+                    return;
+                }
+
+                var startDateValue = formElement.find("[name=\'adm_membership_start_date\']").val() || "";
+                var endDateValue = formElement.find("[name=\'adm_membership_end_date\']").val() || "";
+                var drafts = readMembershipDrafts();
+
+                drafts[memberUuid] = {
+                    startDate: startDateValue,
+                    endDate: endDateValue,
+                    ts: Date.now()
+                };
+
+                writeMembershipDrafts(drafts);
+            }
+
+            function storeAllMembershipDrafts(excludeMemberUuid) {
+                membershipForms.each(function() {
+                    var draftFormElement = $(this);
+                    var draftSubmitButton = draftFormElement.find(".button-membership-period-form").first();
+                    var draftMemberUuid = draftSubmitButton.attr("data-admidio") || draftFormElement.attr("data-admidio") || "";
+
+                    if (!draftMemberUuid || draftMemberUuid === excludeMemberUuid) {
+                        return;
+                    }
+
+                    storeMembershipDraft(draftFormElement, draftMemberUuid);
+                });
+            }
+
+            function clearMembershipDraft(memberUuid) {
+                if (!memberUuid) {
+                    return;
+                }
+
+                var drafts = readMembershipDrafts();
+                if (drafts[memberUuid]) {
+                    delete drafts[memberUuid];
+                    writeMembershipDrafts(drafts);
+                }
+            }
+
+            function applyMembershipDrafts() {
+                var drafts = readMembershipDrafts();
+                var hasChanges = false;
+
+                if (!drafts || typeof drafts !== "object") {
+                    return;
+                }
+
+                membershipForms.each(function() {
+                    var formElement = $(this);
+                    var submitButton = formElement.find(".button-membership-period-form").first();
+                    var memberUuid = submitButton.attr("data-admidio") || formElement.attr("data-admidio") || "";
+
+                    if (!memberUuid || !drafts[memberUuid]) {
+                        return;
+                    }
+
+                    var draft = drafts[memberUuid];
+                    formElement.find("[name=\'adm_membership_start_date\']").val(draft.startDate || "");
+                    formElement.find("[name=\'adm_membership_end_date\']").val(draft.endDate || "");
+                    delete drafts[memberUuid];
+                    hasChanges = true;
+                });
+
+                if (hasChanges) {
+                    writeMembershipDrafts(drafts);
+                }
+            }
+
+            applyMembershipDrafts();
 
             function detectMembershipSection(formElement) {
                 var container = formElement.closest(
@@ -164,11 +273,291 @@ try {
                 return "current";
             }
 
-            function reloadMembershipSectionsAfterSave(formElement) {
+            function updateMembershipRowPeriod(memberUuid, startDateValue, endDateValue) {
+                if (!memberUuid) {
+                    return false;
+                }
+
+                var startDate = $.trim(startDateValue || "");
+                var endDate = $.trim(endDateValue || "");
+                if (startDate.length === 0) {
+                    return false;
+                }
+
+                function parseIsoDate(dateString) {
+                    var match = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/.exec(dateString || "");
+                    if (!match) {
+                        return null;
+                    }
+
+                    var year = parseInt(match[1], 10);
+                    var month = parseInt(match[2], 10) - 1;
+                    var day = parseInt(match[3], 10);
+                    return new Date(year, month, day, 0, 0, 0, 0);
+                }
+
+                function padNumber(value, length) {
+                    var text = String(value);
+                    while (text.length < length) {
+                        text = "0" + text;
+                    }
+                    return text;
+                }
+
+                function formatIsoDateForDisplay(dateString) {
+                    var parsedDate = parseIsoDate(dateString);
+                    if (!parsedDate) {
+                        return dateString;
+                    }
+
+                    var formatPattern = profileJS.systemDateFormat || "Y-m-d";
+                    var formatResult = "";
+                    var escapeNext = false;
+
+                    for (var i = 0; i < formatPattern.length; i++) {
+                        var token = formatPattern.charAt(i);
+
+                        if (escapeNext) {
+                            formatResult += token;
+                            escapeNext = false;
+                            continue;
+                        }
+
+                        if (token === "\\") {
+                            escapeNext = true;
+                            continue;
+                        }
+
+                        if (token === "Y") {
+                            formatResult += String(parsedDate.getFullYear());
+                        } else if (token === "y") {
+                            formatResult += padNumber(parsedDate.getFullYear() % 100, 2);
+                        } else if (token === "m") {
+                            formatResult += padNumber(parsedDate.getMonth() + 1, 2);
+                        } else if (token === "n") {
+                            formatResult += String(parsedDate.getMonth() + 1);
+                        } else if (token === "d") {
+                            formatResult += padNumber(parsedDate.getDate(), 2);
+                        } else if (token === "j") {
+                            formatResult += String(parsedDate.getDate());
+                        } else {
+                            formatResult += token;
+                        }
+                    }
+
+                    return formatResult;
+                }
+
+                var startDateDisplay = formatIsoDateForDisplay(startDate);
+                var endDateDisplay = formatIsoDateForDisplay(endDate);
+                var periodText = startDateDisplay;
+                if (endDate.length > 0 && endDate !== "9999-12-31") {
+                    periodText = startDateDisplay + " " + (profileJS.labelMembershipTo || "to") + " " + endDateDisplay;
+                }
+
+                function calculateDurationParts(startIsoDate, endIsoDate) {
+                    var start = parseIsoDate(startIsoDate);
+                    if (!start) {
+                        return null;
+                    }
+
+                    var now = new Date();
+                    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+                    var effectiveEnd = null;
+
+                    if (!endIsoDate || endIsoDate === "9999-12-31") {
+                        effectiveEnd = new Date(today.getTime());
+                    } else {
+                        effectiveEnd = parseIsoDate(endIsoDate);
+                        if (!effectiveEnd) {
+                            effectiveEnd = new Date(today.getTime());
+                        } else if (effectiveEnd.getTime() > today.getTime()) {
+                            effectiveEnd = new Date(today.getTime());
+                        }
+                    }
+
+                    // Include end date as backend does.
+                    effectiveEnd.setDate(effectiveEnd.getDate() + 1);
+
+                    var from = start;
+                    var to = effectiveEnd;
+                    if (from.getTime() > to.getTime()) {
+                        var temp = from;
+                        from = to;
+                        to = temp;
+                    }
+
+                    var years = to.getFullYear() - from.getFullYear();
+                    var months = to.getMonth() - from.getMonth();
+                    var days = to.getDate() - from.getDate();
+
+                    if (days < 0) {
+                        months -= 1;
+                        var daysInPreviousMonth = new Date(to.getFullYear(), to.getMonth(), 0).getDate();
+                        days += daysInPreviousMonth;
+                    }
+
+                    if (months < 0) {
+                        years -= 1;
+                        months += 12;
+                    }
+
+                    return {
+                        years: years,
+                        months: months,
+                        days: days
+                    };
+                }
+
+                function formatDuration(parts) {
+                    if (!parts) {
+                        return "";
+                    }
+
+                    if (!profileJS.membershipDurationExact) {
+                        var roundedYears = parts.years;
+                        return roundedYears + " " + (roundedYears === 1 ? (profileJS.labelYear || "Year") : (profileJS.labelYears || "Years"));
+                    }
+
+                    var durationParts = [];
+
+                    if (parts.years > 0) {
+                        durationParts.push(parts.years + " " + (parts.years === 1 ? (profileJS.labelYear || "Year") : (profileJS.labelYears || "Years")));
+                    }
+
+                    if (parts.months > 0) {
+                        durationParts.push(parts.months + " " + (parts.months === 1 ? (profileJS.labelMonth || "Month") : (profileJS.labelMonths || "Months")));
+                    }
+
+                    if (parts.days > 0 || (parts.years === 0 && parts.months === 0)) {
+                        durationParts.push(parts.days + " " + (parts.days === 1 ? (profileJS.labelDay || "Day") : (profileJS.labelDays || "Days")));
+                    }
+
+                    return durationParts.join(", ");
+                }
+
+                var durationParts = calculateDurationParts(startDate, endDate);
+                var durationText = formatDuration(durationParts);
+
+                var updatedAny = false;
+                $("li#membership_" + memberUuid + " span.me-2").each(function() {
+                    var periodContainer = $(this);
+                    var durationBadge = periodContainer.children(".badge").first().detach();
+
+                    periodContainer.text(periodText + " ");
+                    if (durationText.length > 0) {
+                        if (durationBadge.length === 0) {
+                            durationBadge = $("<span class=\'badge bg-info ms-1\'></span>");
+                            durationBadge.attr("data-bs-toggle", "tooltip");
+                            durationBadge.attr("title", profileJS.labelMembershipDuration || "Membership duration");
+                        }
+                        durationBadge.text(durationText);
+                    }
+
+                    if (durationBadge.length > 0 && durationText.length > 0) {
+                        periodContainer.append(durationBadge);
+                    }
+
+                    updatedAny = true;
+                });
+
+                return updatedAny;
+            }
+
+            function setAdditionalSectionVisibility(sectionName) {
+                if (!profileJS || (sectionName !== "former" && sectionName !== "future")) {
+                    return;
+                }
+
+                var sectionMap = profileJS._membershipSectionMap && profileJS._membershipSectionMap[sectionName];
+                if (!sectionMap) {
+                    return;
+                }
+
+                var tabSelector = sectionMap.tab;
+                var accordionSelector = sectionMap.accordion;
+                var tabCount = profileJS._countMembershipRows(tabSelector);
+                var accordionCount = profileJS._countMembershipRows(accordionSelector);
+                var hasRows = Math.max(tabCount, accordionCount) > 0;
+
+                if (profileJS._sectionExists(tabSelector)) {
+                    $(tabSelector).css({ display: hasRows ? "block" : "none" });
+                }
+                if (profileJS._sectionExists(accordionSelector)) {
+                    $(accordionSelector).css({ display: hasRows ? "block" : "none" });
+                }
+            }
+
+            function moveMembershipRow(memberUuid, sourceSection, targetSection) {
+                if (!memberUuid || !profileJS || sourceSection === targetSection) {
+                    return false;
+                }
+
+                var map = profileJS._membershipSectionMap || {};
+                var sourceMap = map[sourceSection] || null;
+                var targetMap = map[targetSection] || null;
+
+                if (!sourceMap || !targetMap) {
+                    return false;
+                }
+
+                var movedAny = false;
+                ["tab", "accordion"].forEach(function(layoutKey) {
+                    var sourceSelector = sourceMap[layoutKey];
+                    var targetSelector = targetMap[layoutKey];
+
+                    if (!sourceSelector || !targetSelector || !profileJS._sectionExists(targetSelector)) {
+                        return;
+                    }
+
+                    var sourceRow = $(sourceSelector + " li#membership_" + memberUuid).first();
+                    if (sourceRow.length === 0) {
+                        return;
+                    }
+
+                    var targetCardBody = $(targetSelector + " .card-body").first();
+                    if (targetCardBody.length === 0) {
+                        return;
+                    }
+
+                    var targetList = targetCardBody.children("ul.list-group.admidio-list-roles-assign").first();
+                    if (targetList.length === 0) {
+                        targetList = $("<ul class=\'list-group admidio-list-roles-assign\'></ul>");
+                        targetCardBody.empty().append(targetList);
+                    }
+
+                    sourceRow.detach();
+                    targetList.append(sourceRow);
+                    movedAny = true;
+
+                    formSubmitEvent(sourceSelector + " .card-body");
+                    formSubmitEvent(targetSelector + " .card-body");
+                });
+
+                if (movedAny) {
+                    setAdditionalSectionVisibility(sourceSection);
+                    setAdditionalSectionVisibility(targetSection);
+                    profileJS.refreshMembershipUiState();
+                }
+
+                return movedAny;
+            }
+
+            function reloadMembershipSectionsAfterSave(formElement, memberUuid) {
                 var sourceSection = detectMembershipSection(formElement);
                 var startDateValue = formElement.find("[name=\'adm_membership_start_date\']").val() || "";
                 var endDateValue = formElement.find("[name=\'adm_membership_end_date\']").val() || "";
                 var targetSection = classifyMembershipSectionByDates(startDateValue, endDateValue) || sourceSection;
+
+                    if (sourceSection === targetSection && updateMembershipRowPeriod(memberUuid, startDateValue, endDateValue)) {
+                        profileJS.refreshMembershipUiState();
+                        return;
+                    }
+
+                if (sourceSection !== targetSection && moveMembershipRow(memberUuid, sourceSection, targetSection)) {
+                        updateMembershipRowPeriod(memberUuid, startDateValue, endDateValue);
+                    return;
+                }
 
                 if (sourceSection === "former") {
                     profileJS.reloadFormerRoleMemberships();
@@ -201,6 +590,7 @@ try {
                 }
                 var buttonIsInput = submitButton.is("input");
                 var originalButtonText = buttonIsInput ? submitButton.val() : submitButton.html();
+                var saveWasSuccessful = false;
                 var pendingLabel = "' . $gL10n->get('SYS_PENDING') . '";
                 var pendingSaveLabel = "' . $gL10n->get('SYS_SAVE_PENDING') . '";
 
@@ -248,6 +638,25 @@ try {
                     timeout: 60000,
                     success: function(data)
                     {
+                        var responseLooksSuccessful = function(text) {
+                            if (typeof text !== "string") {
+                                return false;
+                            }
+
+                            var compactText = $.trim(text).toLowerCase();
+                            if (compactText === "success" || compactText === "\"success\"") {
+                                return true;
+                            }
+
+                            var plainText = extractTextFromHtml(text).toLowerCase();
+                            if (plainText === "success") {
+                                return true;
+                            }
+
+                            var tokens = plainText.split(/\s+/);
+                            return tokens.length > 0 && tokens[tokens.length - 1] === "success";
+                        };
+
                         var responseText = data;
                         var responseStatus = "";
                         var rawResponseText = "";
@@ -270,10 +679,52 @@ try {
                                 } catch (ignore) {
                                     // Keep plain text response if parsing fails.
                                 }
+                            } else if (responseText.length > 0) {
+                                // Some servers prepend warnings before a JSON payload.
+                                var firstBrace = responseText.indexOf("{");
+                                var lastBrace = responseText.lastIndexOf("}");
+                                if (firstBrace >= 0 && lastBrace > firstBrace) {
+                                    try {
+                                        var recoveredResponse = JSON.parse(responseText.substring(firstBrace, lastBrace + 1));
+                                        if (recoveredResponse && typeof recoveredResponse === "object") {
+                                            responseStatus = recoveredResponse.status || responseStatus;
+                                            responseText = recoveredResponse.message || responseText;
+                                        }
+                                    } catch (ignoreRecoveredJson) {
+                                        // Keep plain text response if parsing fails.
+                                    }
+                                }
                             }
                         } else if (responseText && typeof responseText === "object") {
                             responseStatus = responseText.status || "";
                             responseText = responseText.message || JSON.stringify(responseText);
+                        }
+
+                        if (responseStatus !== "success" && responseLooksSuccessful(rawResponseText || responseText)) {
+                            responseStatus = "success";
+                            responseText = "success";
+                        }
+
+                        if (responseStatus === "csrf_invalid") {
+                            var reloadText = "' . $gL10n->get('SYS_RELOAD') . '";
+                            var canceledText = "' . $gL10n->get('SYS_PROCESS_CANCELED') . '";
+                            var reloadWithRestoreLabel = "' . $gL10n->get('SYS_RELOAD') . '";
+                            var csrfMessage = (typeof responseText === "string" && responseText.length > 0)
+                                ? responseText
+                                : canceledText + " " + reloadText;
+
+                            formAlert.attr("class", "alert alert-danger form-alert");
+                            formAlert.fadeIn();
+                            formAlert.html(
+                                "<i class=\"bi bi-exclamation-circle-fill\"></i>" + csrfMessage +
+                                "<br><small>" + reloadText + ".</small>" +
+                                "<br><button type=\"button\" class=\"btn btn-sm btn-outline-danger mt-2 js-membership-reload-with-restore\">" + reloadWithRestoreLabel + "</button>"
+                            );
+                            formAlert.off("click.admMembershipReloadRestore").on("click.admMembershipReloadRestore", ".js-membership-reload-with-restore", function() {
+                                storeMembershipDraft(formElement, memberUuid);
+                                window.location.reload();
+                            });
+                            return;
                         }
 
                         if (typeof responseText === "string" && responseText.length > 0) {
@@ -287,19 +738,23 @@ try {
                         }
 
                         if (responseText === "success" || responseStatus === "success") {
+                            // Keep unsaved edits of other membership forms when this save reloads sections.
+                            saveWasSuccessful = true;
+                            storeAllMembershipDrafts(memberUuid);
+                            clearMembershipDraft(memberUuid);
                             formAlert.attr("class", "alert alert-success form-alert");
                             formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
                             formAlert.fadeIn("slow");
-                            formAlert.animate({opacity: 1.0}, 5000);
+                            formAlert.animate({opacity: 1.0}, 1200);
                             formAlert.fadeOut("slow");
 
                             if (memberUuid.length > 0) {
                                 var membershipPeriod = $("#adm_membership_period_" + memberUuid);
-                                membershipPeriod.animate({opacity: 1.0}, 5000);
+                                membershipPeriod.animate({opacity: 1.0}, 1200);
                                 membershipPeriod.fadeOut("slow");
                             }
 
-                            reloadMembershipSectionsAfterSave(formElement);
+                            reloadMembershipSectionsAfterSave(formElement, memberUuid);
                         } else {
                             if (typeof responseText !== "string" || responseText.length === 0) {
                                 responseText = "' . $gL10n->get('SYS_PROCESSING_ERROR_DESC') . '";
@@ -340,11 +795,24 @@ try {
                     formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + errorMessage);
                  }).always(function() {
                     if (submitButton.length > 0) {
-                        submitButton.prop("disabled", false);
-                        if (buttonIsInput) {
-                            submitButton.val(originalButtonText);
+                        if (!saveWasSuccessful) {
+                            submitButton.prop("disabled", false);
+                            if (buttonIsInput) {
+                                submitButton.val(originalButtonText);
+                            } else {
+                                submitButton.html(originalButtonText);
+                            }
                         } else {
-                            submitButton.html(originalButtonText);
+                            // Keep the button disabled while the success message is shown
+                            // and restore it for a future edit after the form row closes.
+                            window.setTimeout(function() {
+                                submitButton.prop("disabled", false);
+                                if (buttonIsInput) {
+                                    submitButton.val(originalButtonText);
+                                } else {
+                                    submitButton.html(originalButtonText);
+                                }
+                            }, 1600);
                         }
                     }
                  });
@@ -381,12 +849,56 @@ try {
         $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
         $("#menu_item_profile_tfa").attr("class", "nav-link btn btn-primary openPopup");
 
+        var roleMembershipsModalNeedsReload = false;
+        var roleMembershipsModalHasChanges = false;
+
+        $(document).on("click", ".openPopup", function() {
+            var popupUrl = $(this).attr("data-href") || $(this).attr("href") || "";
+            if (popupUrl.indexOf("/modules/profile/roles.php") !== -1) {
+                roleMembershipsModalNeedsReload = true;
+                roleMembershipsModalHasChanges = false;
+            }
+        });
+
+        $(document).ajaxSuccess(function(event, xhr, settings, data) {
+            if (!roleMembershipsModalNeedsReload) {
+                return;
+            }
+
+            var requestUrl = (settings && settings.url) ? settings.url : "";
+            if (requestUrl.indexOf("/modules/groups-roles/members_assignment.php") === -1) {
+                return;
+            }
+
+            if (typeof data === "string") {
+                if ($.trim(data) === "success") {
+                    roleMembershipsModalHasChanges = true;
+                }
+                return;
+            }
+
+            if (data && typeof data === "object" && data.status === "success") {
+                roleMembershipsModalHasChanges = true;
+            }
+        });
+
         $("body").on("hidden.bs.modal", ".modal", function(event) {
             if (event.target !== this) {
                 return;
             }
 
             $(this).removeData("bs.modal");
+
+            if (this.id === "adm_modal" && roleMembershipsModalNeedsReload && roleMembershipsModalHasChanges && profileJS) {
+                profileJS.reloadRoleMemberships();
+                profileJS.reloadFormerRoleMemberships();
+                profileJS.reloadFutureRoleMemberships();
+            }
+
+            if (this.id === "adm_modal") {
+                roleMembershipsModalNeedsReload = false;
+                roleMembershipsModalHasChanges = false;
+            }
         });
 
         formSubmitEvent();',

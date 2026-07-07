@@ -20,6 +20,20 @@ function ProfileJS(gRootPath) {
     this._reloadPending          = { current: false, former: false, future: false };
     this._reloadTimer            = null;
     this._additionalRolesLoaded  = false;
+    this._membershipSectionMap   = {
+        current: {
+            tab: "#adm_profile_role_memberships_current_pane_content",
+            accordion: "#adm_profile_role_memberships_current_accordion_content"
+        },
+        former: {
+            tab: "#adm_profile_role_memberships_former_pane_content",
+            accordion: "#adm_profile_role_memberships_former_accordion_content"
+        },
+        future: {
+            tab: "#adm_profile_role_memberships_future_pane_content",
+            accordion: "#adm_profile_role_memberships_future_accordion_content"
+        }
+    };
 
     this._sectionExists = function (selector) {
         return $(selector).length > 0;
@@ -43,6 +57,37 @@ function ProfileJS(gRootPath) {
         if (isLoading) {
             cardBody.html(this._loadingIndicatorHtml());
         }
+    };
+
+    this._countMembershipRows = function (sectionSelector) {
+        if (!this._sectionExists(sectionSelector)) {
+            return 0;
+        }
+
+        // Count rows independent of current display state, otherwise hidden sections
+        // never become visible again after inline moves.
+        return $(sectionSelector + " .card-body > ul > li[id^='membership_']").length;
+    };
+
+    this.refreshMembershipUiState = function () {
+        var formerCount = Math.max(
+            this._countMembershipRows(this._membershipSectionMap.former.tab),
+            this._countMembershipRows(this._membershipSectionMap.former.accordion)
+        );
+        var futureCount = Math.max(
+            this._countMembershipRows(this._membershipSectionMap.future.tab),
+            this._countMembershipRows(this._membershipSectionMap.future.accordion)
+        );
+        var currentCount = Math.max(
+            this._countMembershipRows(this._membershipSectionMap.current.tab),
+            this._countMembershipRows(this._membershipSectionMap.current.accordion)
+        );
+
+        this.formerRoleCount = formerCount;
+        this.futureRoleCount = futureCount;
+
+        // Ensure legacy/dynamic badges are removed so membership headers keep their original look.
+        $(".adm-membership-count-badge").remove();
     };
 
     this._reloadMembershipSection = function (mode, requestUrl, tabSelector, accordionSelector) {
@@ -76,6 +121,8 @@ function ProfileJS(gRootPath) {
                 $(accordionSelector + " .card-body").html(responseText);
                 formSubmitEvent(accordionSelector + " .card-body");
             }
+
+            self.refreshMembershipUiState();
         }).fail(function () {
             var errorHtml = '<div class="text-danger py-2">Failed to load role memberships. Please retry.</div>';
             if (self._sectionExists(tabSelector)) {
