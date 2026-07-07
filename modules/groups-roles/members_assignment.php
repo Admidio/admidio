@@ -150,7 +150,7 @@ try {
             }
 
             // change data in database
-            $.post(gRootPath + "/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=' . $getRoleUuid . '&user_uuid=" + userUuid,
+            $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment.php?mode=assign&role_uuid=' . $getRoleUuid . '&user_uuid=" + userUuid,
                 "memberFlag=" + memberChecked + "&leaderFlag=" + leaderChecked + "&adm_csrf_token=' . $gCurrentSession->getCsrfToken() . '"
                     + "&adm_csrf_token_fallback=" + encodeURIComponent((typeof profileJS !== "undefined" && profileJS && profileJS.csrfToken) ? profileJS.csrfToken : ""),
                 function(data) {

@@ -323,7 +323,7 @@ try {
                             continue;
                         }
 
-                        if (token === "\\") {
+                        if (token === "\\\\") {
                             escapeNext = true;
                             continue;
                         }
@@ -854,7 +854,11 @@ try {
 
         $(document).on("click", ".openPopup", function() {
             var popupUrl = $(this).attr("data-href") || $(this).attr("href") || "";
-            if (popupUrl.indexOf("/modules/profile/roles.php") !== -1) {
+            if (
+                $(this).attr("id") === "adm_profile_role_memberships_change"
+                || popupUrl.indexOf("/modules/profile/roles.php") !== -1
+                || popupUrl.indexOf("/modules/groups-roles/members_assignment.php") !== -1
+            ) {
                 roleMembershipsModalNeedsReload = true;
                 roleMembershipsModalHasChanges = false;
             }

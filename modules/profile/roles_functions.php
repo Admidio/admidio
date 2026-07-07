@@ -225,6 +225,12 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 array('type' => 'navbar', 'method' => 'post', 'setFocus' => false, 'class' => 'admidio-form-membership-period')
             );
             $form->addInput(
+                'adm_csrf_token_fallback',
+                '',
+                $gCurrentSession->getCsrfToken(),
+                array('type' => 'hidden')
+            );
+            $form->addInput(
                 'adm_membership_start_date',
                 $gL10n->get('SYS_START'),
                 $member->getValue('mem_begin', $gSettingsManager->getString('system_date')),

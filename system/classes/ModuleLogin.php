@@ -137,8 +137,42 @@ class ModuleLogin
         global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gLogger;
 
         // check form field input and sanitized it from malicious content
-        $loginForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        $formValues = $loginForm->validate($_POST);
+        try {
+            $loginForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $formValues = $loginForm->validate($_POST);
+        } catch (Throwable $formException) {
+            // A stale cached login form can outlive the server-side session form object.
+            // Fall back to direct validation of the standard login fields so the user
+            // can still sign in after being redirected to the login screen.
+            $formValues = array();
+
+            if (isset($_POST['usr_login_name'])) {
+                $formValues['usr_login_name'] = admFuncVariableIsValid($_POST, 'usr_login_name', 'string', array('requireValue' => true));
+            } elseif (isset($_POST['plg_usr_login_name'])) {
+                $formValues['plg_usr_login_name'] = admFuncVariableIsValid($_POST, 'plg_usr_login_name', 'string', array('requireValue' => true));
+            }
+
+            if (isset($_POST['usr_password'])) {
+                $formValues['usr_password'] = admFuncVariableIsValid($_POST, 'usr_password', 'string', array('requireValue' => true));
+            } elseif (isset($_POST['plg_usr_password'])) {
+                $formValues['plg_usr_password'] = admFuncVariableIsValid($_POST, 'plg_usr_password', 'string', array('requireValue' => true));
+            }
+
+            if (isset($_POST['usr_totp_code'])) {
+                $formValues['usr_totp_code'] = admFuncVariableIsValid($_POST, 'usr_totp_code', 'string');
+            } elseif (isset($_POST['plg_usr_totp_code'])) {
+                $formValues['plg_usr_totp_code'] = admFuncVariableIsValid($_POST, 'plg_usr_totp_code', 'string');
+            }
+
+            if (isset($_POST['org_shortname'])) {
+                $formValues['org_shortname'] = admFuncVariableIsValid($_POST, 'org_shortname', 'string');
+            } elseif (isset($_POST['plg_org_shortname'])) {
+                $formValues['plg_org_shortname'] = admFuncVariableIsValid($_POST, 'plg_org_shortname', 'string');
+            }
+
+            $formValues['auto_login'] = isset($_POST['auto_login']);
+            $formValues['plg_auto_login'] = isset($_POST['plg_auto_login']);
+        }
 
         $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);
         $postPassword = ($formValues['usr_password'] ?? $formValues['plg_usr_password']);
