@@ -139,8 +139,11 @@ class ModuleLogin
         // check form field input and sanitized it from malicious content
         try {
             $loginForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-            $formValues = $loginForm->validate($_POST);
-        } catch (Throwable $formException) {
+        } catch (Exception $formException) {
+            if ($formException->getMessage() !== 'Requested form not found in session.') {
+                throw $formException;
+            }
+
             // A stale cached login form can outlive the server-side session form object.
             // Fall back to direct validation of the standard login fields so the user
             // can still sign in after being redirected to the login screen.
@@ -172,6 +175,10 @@ class ModuleLogin
 
             $formValues['auto_login'] = isset($_POST['auto_login']);
             $formValues['plg_auto_login'] = isset($_POST['plg_auto_login']);
+        }
+
+        if (isset($loginForm)) {
+            $formValues = $loginForm->validate($_POST);
         }
 
         $postLoginName = ($formValues['usr_login_name'] ?? $formValues['plg_usr_login_name']);

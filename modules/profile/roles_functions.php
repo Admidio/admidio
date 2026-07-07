@@ -160,7 +160,13 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             $membership = array(
                 'memberUUID' => $memberUuid,
                 'category' => $role->getValue('cat_name'),
-                'showRelationsCreateEdit' => $gSettingsManager->get('system_show_create_edit') > 0
+                'showRelationsCreateEdit' => $gSettingsManager->get('system_show_create_edit') > 0,
+                'sort' => array(
+                    'catSequence' => (int) $row['cat_sequence'],
+                    'roleName' => (string) $role->getValue('rol_name'),
+                    'beginDate' => $member->getValue('mem_begin', 'Y-m-d'),
+                    'memberUuid' => $memberUuid
+                )
             );
 
             if ($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id'))) {
