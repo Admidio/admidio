@@ -53,10 +53,6 @@ class GroupsRolesPresenter extends PagePresenter
     {
         global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gL10n, $gDb;
 
-        if (!$gCurrentUser->isAdministratorRoles()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
         $this->createSharedHeader($categoryUUID, $roleType);
         $rolesService = new RolesService($gDb);
         $data = $rolesService->findAll($roleType, $categoryUUID);
