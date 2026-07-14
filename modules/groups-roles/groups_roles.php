@@ -169,6 +169,9 @@ try {
 
             $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
+            if (!$role->isVisible()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $role->activate();
             echo 'done';
             break;
@@ -181,6 +184,9 @@ try {
 
             $role = new Role($gDb);
             $role->readDataByUuid($getRoleUUID);
+            if (!$role->isVisible()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $role->deactivate();
             echo 'done';
             break;

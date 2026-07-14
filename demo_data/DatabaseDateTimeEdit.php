@@ -88,7 +88,7 @@ class DatabaseDateTimeEdit
         $statement = $this->db->queryPrepared($sql);
         while ($row = $statement->fetch()) {
             $days = random_int($minDaysLimit, $maxDaysLimit);
-            $newDateTime = $this->addDaysToDateTime($row[$columnName], $days, $pastPeriod);
+            $newDateTime = $this->addDaysToDateTime(DATETIME_NOW, $days, $pastPeriod);
 
             $sqlUpdate = 'UPDATE ' . $tableName . '
                              SET ' . $columnName . ' = ?
@@ -117,8 +117,8 @@ class DatabaseDateTimeEdit
             $days = random_int($minDaysLimit, $maxDaysLimit);
             $daysRelative = $days + $diff->days;
 
-            $newDateTime = $this->addDaysToDateTime($row[$columnName], $days, $pastPeriod);
-            $newDateTimeRelative = $this->addDaysToDateTime($row[$columnNameRelative], $daysRelative, $pastPeriod);
+            $newDateTime = $this->addDaysToDateTime(DATETIME_NOW, $days, $pastPeriod);
+            $newDateTimeRelative = $this->addDaysToDateTime(DATETIME_NOW, $daysRelative, $pastPeriod);
 
             $sqlUpdate = 'UPDATE ' . $tableName . '
                              SET ' . $columnName . ' = ?

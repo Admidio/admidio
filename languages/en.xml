@@ -1665,6 +1665,7 @@
   <string name="SYS_SUBJECT">Subject</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS">Sub-organizations</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Sub-organizations can share profile data of contacts. In some modules (announcements, events) it is possible to display entries from the main organization in the sub-organizations. The administration of a sub-organization is completely independent and can be provided with its own rights concept. You can find more information in the #VAR1#Admidio Wiki#VAR2#.</string>
+  <string name="SYS_SUBSCRIBE">Subscribe</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Switch to calendar management</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>

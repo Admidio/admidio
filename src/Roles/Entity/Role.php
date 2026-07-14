@@ -415,18 +415,24 @@ class Role extends Entity
      * This method checks if the current user is allowed to view this role. Therefore,
      * the view properties of the role will be checked. If it's an event role than
      * we also check if the user is a member of the roles that could participate at the event.
+     * Roles of other organizations are not visible if the category is organization dependent.
      * @return bool Return true if the current user is allowed to view this role
      * @throws Exception
      */
     public function isVisible(): bool
     {
-        global $gCurrentUser, $gValidLogin;
+        global $gCurrentUser, $gValidLogin, $gCurrentOrgId;
 
         if (!$gValidLogin) {
             return false;
         }
 
         $rolId = (int)$this->getValue('rol_id');
+
+        // check if the role belongs to the current organization
+        if ((int)$this->getValue('cat_org_id') !== $gCurrentOrgId && $this->getValue('cat_org_id') > 0) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         if ($this->type !== Role::ROLE_EVENT) {
             return $gCurrentUser->hasRightViewRole($rolId);
