@@ -733,7 +733,12 @@ function formSubmit(event) {
                         }, 2500);
                     }
                 } else {
-                    redirectToURL(forwardUrl, forwardPost);
+                    if (forwardUrl !== "") {
+                        redirectToURL(forwardUrl, forwardPost);
+                    } else {
+                        $("#" + submitButtonID).attr("disabled", false);
+                        submitButtonIcon.attr("class", iconClass);
+                    }
                 }
             } else {
                 if ($("#adm_captcha").length > 0) {

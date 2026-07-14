@@ -172,11 +172,16 @@ try {
         ChangelogService::displayHistoryButton($page, 'events', 'events');
 
         if ($getEventUuid === '') {
-            // show print button
-            $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
-
-            // iCal Download
+            // Download / Subscribe iCal
             if ($gSettingsManager->getBool('events_ical_export_enabled')) {
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events/events_function.php', array('mode' => 'subscribe'));
+                $page->addPageFunctionsMenuItem(
+                    'menu_item_event_subscribe',
+                    $gL10n->get('SYS_SUBSCRIBE'),
+                    str_replace(["http://", "https://"], "webcal://", $url),
+                    'bi-calendar-check'
+                );
+
                 $param = array('mode' => 'export');
                 ($getCatUuid !== '' ? $param['cat_uuid'] = $getCatUuid : '');
                 ($getDateFrom !== '' ? $param['date_from'] = $getDateFrom : '');
@@ -189,6 +194,9 @@ try {
                     'bi-download'
                 );
             }
+
+            // show print button
+            $page->addPageFunctionsMenuItem('menu_item_event_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
 
             if ($gCurrentUser->isAdministratorEvents()) {
                 // if no calendar select box is shown, then show a link to edit calendars

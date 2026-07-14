@@ -121,7 +121,6 @@
   <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">With lines on a Captcha it is harder for scripts and bots to solve it. The more lines will be drawn the harder it will be to solve it. Unfortunately it is the same for humans. (default: 5)</string>
   <string name="ORG_CAPTCHA_PREVIEW">Captcha preview</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">The Captcha preview only considers options which already have been saved.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">After activation a picture with a captcha code or a simple calculation will be displayed to new users. It\'s necessary to fill in the correct code or result to save presently edited entry. The captcha is part of anti-spam solution in Admidio. (default: yes)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha subtitle</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Fill in your preferred subtitle for the captcha. Default font type of the current theme will be used.</string>
   <string name="ORG_CAPTCHA_SIGNS">Valid characters</string>
@@ -1670,6 +1669,7 @@
   <string name="SYS_SUBJECT">Subject</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS">Sub-organizations</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Sub-organizations can share profile data of contacts. In some modules (announcements, events) it is possible to display entries from the main organization in the sub-organizations. The administration of a sub-organization is completely independent and can be provided with its own rights concept. You can find more information in the #VAR1#Admidio Wiki#VAR2#.</string>
+  <string name="SYS_SUBSCRIBE">Subscribe</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Switch to calendar management</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>

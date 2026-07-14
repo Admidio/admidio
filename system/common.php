@@ -63,6 +63,13 @@ try {
     exit();
 }
 
+// check HTML string vor invalid tags and scripts
+$gHtmlPurifierConfig = HTMLPurifier_Config::createDefault();
+$gHtmlPurifierConfig->set('HTML.Doctype', 'HTML 4.01 Transitional');
+$gHtmlPurifierConfig->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+$gHtmlPurifierConfig->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+
+$gHtmlPurifierFilter = new HTMLPurifier($gHtmlPurifierConfig);
 
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables

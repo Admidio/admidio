@@ -117,7 +117,7 @@ class ConditionParser
         if ($date !== '') {
             $dateObject = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $date);
             if ($dateObject !== false) {
-                return $dateObject->format('Y-m-d');
+                return $db->escapeString($dateObject->format('Y-m-d'));
             }
         }
 
