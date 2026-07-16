@@ -817,7 +817,7 @@ class InventoryPresenter extends PagePresenter
 
             // photo column for first column in html mode
             if ($columnNumber === 1 && $mode === 'html' && $gSettingsManager->GetBool('inventory_item_picture_enabled')) {
-                $headers[] = '&nbsp;';
+                $headers[] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
                 $columnAlign[] = 'center';
             }
 
@@ -851,7 +851,7 @@ class InventoryPresenter extends PagePresenter
         if ($mode === 'html') {
             if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId)) {
                 $columnAlign[] = 'end';
-                $headers[] = '&nbsp;';
+                $headers[] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
             }
         }
 
@@ -1190,7 +1190,7 @@ class InventoryPresenter extends PagePresenter
                     if (!$actionsHeaderAdded) {
                         $actionsHeaderAdded = true;
                         $preparedData['column_align'][] = 'end';
-                        $preparedData['headers'][] = '&nbsp;';
+                        $preparedData['headers'][] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
                     }
                 }
             }
@@ -1524,7 +1524,7 @@ class InventoryPresenter extends PagePresenter
                 if (!$actionsHeaderAdded) {
                     $actionsHeaderAdded = true;
                     $preparedData['column_align'][] = 'end';
-                    $preparedData['headers'][] = '&nbsp;';
+                    $preparedData['headers'][] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
                 }
             }
 
