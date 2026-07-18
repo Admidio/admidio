@@ -1555,11 +1555,12 @@ class User extends Entity
         return $this->checkRolesRight('rol_inventory_admin');
     }
 
-    /* This method checks if the current user is allowed to see the inventory.
+    /**
+     * This method checks if the current user is allowed to see the inventory.
      * @return bool Return **true** if the user is admin of the module otherwise **false**
      * @throws Exception
      */
-    public function isAllowedToSeeInventory() : bool
+    public function isAllowedToViewInventory() : bool
     {
         global $gSettingsManager;
         $allowedRoles = explode(',', $gSettingsManager->get('inventory_visible_for'));
@@ -1675,6 +1676,16 @@ class User extends Entity
         }
 
         return false;
+    }
+
+    /**
+     * This method checks if the current user is allowed to view all user profile.
+     * @return bool Return **true** if the user is allowed to view all user profile otherwise **false**
+     * @throws Exception
+     */
+    public function isAllowedToViewUsers() : bool
+    {
+        return $this->checkRolesRight('rol_all_lists_view');
     }
 
     /**

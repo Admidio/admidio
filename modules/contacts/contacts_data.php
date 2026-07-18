@@ -55,8 +55,16 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
     require_once(__DIR__ . '/../../system/login_valid.php');
 
+    enum ShowMembers: int
+    {
+        case ActiveContacts = 0;
+        case FormerContacts = 1;
+        case AllContactsThisOrganization = 2;
+        case AllContactsAllOrganizations = 3;
+    }
+
     // Initialize and check the parameters
-    $getMembersShowFilter = admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0));
+    $getMembersShowFilter = ShowMembers::from(admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0)));
     $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
@@ -74,7 +82,7 @@ try {
     $useOrderBy = false;
     $orderCondition = '';
     $orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
-    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter < ShowMembers::AllContactsAllOrganizations) && $gCurrentUser->isAdministratorUsers()) {
         array_unshift($orderColumns, 'checkbox');
     }
 
@@ -151,22 +159,22 @@ try {
                 AND (  cat_org_id   = ' . $gCurrentOrgId . '
                          OR cat_org_id IS NULL ))';
 
-    if ($getMembersShowFilter === 0) {
+    if ($getMembersShowFilter === ShowMembers::ActiveContacts) {
         // show only active members of the current organization
         $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
         $formerContactsOfThisOrganizationSelect = ' 0 '; // no former members of the current organization should be shown
-    } elseif ($getMembersShowFilter === 1) {
+    } elseif ($getMembersShowFilter === ShowMembers::FormerContacts) {
         // show only former members of the current organization
         $contactsOfThisOrganizationSelect = ' 0 '; // no current members of the current organization should be shown
         $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
-    } elseif ($getMembersShowFilter === 2 || $getMembersShowFilter === 3) {
+    } elseif ($getMembersShowFilter === ShowMembers::AllContactsThisOrganization || $getMembersShowFilter === ShowMembers::AllContactsAllOrganizations) {
         // show all members of current organization
         $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
         $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
     }
 
     // create a subselect to check if the user is also an active member of another organization
-    if ($gCurrentOrganization->countAllRecords() > 1 && $gCurrentUser->isAdministrator() && $getMembersShowFilter === 3) {
+    if ($gCurrentOrganization->countAllRecords() > 1 && $gCurrentUser->isAdministrator() && $getMembersShowFilter === ShowMembers::AllContactsAllOrganizations) {
         $contactsOfOtherOrganizationSelectPlaceholder = '
             FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
@@ -204,7 +212,8 @@ try {
     }
 
     // create main SQL statement
-    if (($getMembersShowFilter === 0) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter === ShowMembers::ActiveContacts) &&
+        ($gCurrentUser->isAdministratorUsers() || $gCurrentUser->isAllowedToViewUsers())) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersThisOrga' => true,
@@ -213,7 +222,7 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif (($getMembersShowFilter === 1) && $gCurrentUser->isAdministratorUsers()) {
+    } elseif (($getMembersShowFilter === ShowMembers::FormerContacts) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showFormerMembers' => true,
@@ -222,7 +231,7 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+    } elseif (($getMembersShowFilter === ShowMembers::AllContactsThisOrganization) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersThisOrga' => true,
@@ -232,7 +241,7 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif (($getMembersShowFilter === 3) && $gCurrentUser->isAdministrator() && $gSettingsManager->getBool('contacts_show_all')) {
+    } elseif (($getMembersShowFilter === ShowMembers::AllContactsAllOrganizations) && $gCurrentUser->isAdministrator() && $gSettingsManager->getBool('contacts_show_all')) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersDatabase' => true,
@@ -273,6 +282,7 @@ try {
                     AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
                  ) AS member_email, ' .
         substr($mainSql, 15);
+
     $queryParamsEmail = array(
         $gProfileFields->getProperty('EMAIL', 'usf_id')
     ); // TODO add more params
@@ -307,7 +317,7 @@ try {
 
     while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
-        if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter < ShowMembers::AllContactsAllOrganizations) && $gCurrentUser->isAdministratorUsers()) {
             $columnNumberJson = 3;
         } else {
             $columnNumberJson = 2;
@@ -334,7 +344,7 @@ try {
         }
 
         // Create row and add first column
-        if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter < ShowMembers::AllContactsAllOrganizations) && $gCurrentUser->isAdministratorUsers()) {
             $columnNumberValues = '2';
             $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => '<input type="checkbox"/>', '1' => $rowNumber);
         } else {
@@ -425,7 +435,7 @@ try {
                     // User is ONLY member of this organization -> ask if user should make to former member or delete completely
                     $userAdministration .= '
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg', 'custom_callback' => ($getMembersShowFilter >= 2 ))) . '">
+                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg', 'custom_callback' => ($getMembersShowFilter >= ShowMembers::AllContactsThisOrganization ))) . '">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                         </a>';
                 } else {
