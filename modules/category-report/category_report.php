@@ -15,6 +15,7 @@
  * export_features  : 0 - (Default) No export menu
  *                    1 - Export menu is enabled
  * config            : the selected configuration
+ * reference_date    : date used for membership calculations (default: today)
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
@@ -51,6 +52,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
     $getFilter = admFuncVariableIsValid($_GET, 'filter', 'string');
     $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
+    $getReferenceDate = admFuncVariableIsValid($_GET, 'reference_date', 'date', array('defaultValue' => DATE_NOW));
 
     // initialize some special mode parameters
     $separator = '';
@@ -97,7 +99,7 @@ try {
 
     // generate the display list
     $report->setConfiguration($getCrtId);
-    $report->generate_listData();
+    $report->generate_listData($getReferenceDate);
 
     $numMembers = count($report->listData);
 
@@ -180,7 +182,8 @@ try {
                     'mode' => 'print',
                     'filter' => $getFilter,
                     'export_and_filter' => $getExportAndFilter,
-                    'crt_id' => $getCrtId
+                    'crt_id' => $getCrtId,
+                    'reference_date' => $getReferenceDate
                 )) . '", "_blank");
             });',
                 true
@@ -199,6 +202,7 @@ try {
                         'crt_id' => $getCrtId,
                         'filter' => $getFilter,
                         'export_and_filter' => $getExportAndFilter,
+                        'reference_date' => $getReferenceDate,
                         'mode' => 'xlsx')),
                     'bi-file-earmark-excel',
                     'menu_item_lists_export'
@@ -210,6 +214,7 @@ try {
                         'crt_id' => $getCrtId,
                         'filter' => $getFilter,
                         'export_and_filter' => $getExportAndFilter,
+                        'reference_date' => $getReferenceDate,
                         'mode' => 'pdf')),
                     'bi-file-earmark-pdf',
                     'menu_item_lists_export'
@@ -221,6 +226,7 @@ try {
                         'crt_id' => $getCrtId,
                         'filter' => $getFilter,
                         'export_and_filter' => $getExportAndFilter,
+                        'reference_date' => $getReferenceDate,
                         'mode' => 'pdfl')),
                     'bi-file-earmark-pdf',
                     'menu_item_lists_export'
@@ -232,6 +238,7 @@ try {
                         'crt_id' => $getCrtId,
                         'filter' => $getFilter,
                         'export_and_filter' => $getExportAndFilter,
+                        'reference_date' => $getReferenceDate,
                         'mode' => 'csv-oo')),
                     'bi-filetype-csv',
                     'menu_item_lists_export'
@@ -261,6 +268,9 @@ try {
                 });
                 $("#crt_id").change(function() {
                     $("#adm_navbar_filter_form_category_report").submit();
+                });
+                $("#reference_date").change(function() {
+                    $("#adm_navbar_filter_form_category_report").submit();
                 });',
                 true
             );
@@ -286,6 +296,7 @@ try {
             if ($getExportAndFilter) {
                 $form->addInput('filter', $gL10n->get('SYS_FILTER'), $getFilter);
             }
+            $form->addInput('reference_date', $gL10n->get('SYS_DATE'), $getReferenceDate, array('type' => 'date', 'maxLength' => 10));
             $form->addCheckbox('export_and_filter', $gL10n->get('SYS_FILTER_TO_EXPORT'), $getExportAndFilter);
             $form->addToHtmlPage();
 

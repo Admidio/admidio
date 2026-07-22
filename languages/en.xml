@@ -1507,6 +1507,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Contacts with a similar name were found for the registration of #VAR1_BOLD# with the e-mail address #VAR2_BOLD#. Please check the registration and assign it to a found contact or create a new contact.</string>
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
+  <string name="SYS_SINCE">since #VAR1#</string>
   <string name="SYS_SIZE">Size</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP authentication</string>
@@ -1813,4 +1814,11 @@
   <string name="SYS_YOUR_LISTS">Own lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Set the minimum number of years required for Life Member Qualified. (Default: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Enable Life Membership Qualification</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">If enabled, the "Life Membership Qualified" column will be calculated. If disabled, it will always be false.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Select the roles that count towards qualified Life Membership.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Select the roles that count Years of Membership.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Life Membership Qualified</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Years towards Life Membership</string>
 </resources>

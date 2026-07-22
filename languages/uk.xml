@@ -1301,6 +1301,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Знайдено схожі контакти</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Знайдено контакти з ім'ям, схожим на #VAR1_BOLD#.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Для реєстрації #VAR1_BOLD# з адресою електронної пошти #VAR2_BOLD# було знайдено контакти зі схожим ім'ям. Будь ласка, перевірте реєстрацію та призначте її знайденому контакту або створіть новий контакт.</string>
+  <string name="SYS_SINCE_VAR">з #VAR1#</string>
   <string name="SYS_SINCE">з #VAR1#</string>
   <string name="SYS_SINCE_TO">з #VAR1# за #VAR2#</string>
   <string name="SYS_SIZE">Розмір</string>
@@ -1461,4 +1462,11 @@
   <string name="SYS_YOUR_LISTS">Власні списки</string>
   <string name="SYS_YOUR_NAME">Ваше ім'я</string>
   <string name="SYS_Z_TO_A">Від Я до А</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Вкажіть мінімальну кількість років, необхідну для статусу «Кваліфікований довічний член». (Типово: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Увімкнути кваліфікацію довічного члена</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Якщо ввімкнено, буде обчислено стовпець «Кваліфікований довічний член». Якщо вимкнено, це завжди буде хибним.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Виберіть ролі, які враховуються для статусу «Кваліфікований довічний член».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Виберіть ролі, які враховуються для «Років членства».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Кваліфікований довічний член</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Роки до кваліфікації довічного члена</string>
 </resources>

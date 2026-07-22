@@ -932,6 +932,7 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">Visualizza il ruolo di altre organizzazioni</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Quando l\'utente è membro dei ruoli di un\'altra organizzazione, un box sarà visualizzato che mostra tutti i ruoli e la data di registrazione. (predefinito: sì)</string>
   <string name="SYS_SHOW_ROUTE">Visualizza percorso</string>
+  <string name="SYS_SINCE_VAR">dal #VAR1#</string>
   <string name="SYS_SINCE">dal #VAR1#</string>
   <string name="SYS_SINCE_TO">da #VAR1# a #VAR2#</string>
   <string name="SYS_SIZE">Grandezza</string>
@@ -1050,4 +1051,11 @@
   <string name="SYS_YOUR_LISTS">Propri elenchi</string>
   <string name="SYS_YOUR_NAME">Il tuo nome</string>
   <string name="SYS_Z_TO_A">da Z ad A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Imposta il numero minimo di anni richiesti per «Idoneo a membro a vita». (Predefinito: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Abilita qualificazione membro a vita</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Se abilitata, la colonna «Idoneo a membro a vita» verrà calcolata. Se disabilitata, sarà sempre falsa.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Seleziona i ruoli che vengono conteggiati per «Idoneo a membro a vita».</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Seleziona i ruoli che vengono conteggiati per «Anni di appartenenza».</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Idoneo a membro a vita</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Anni verso la qualificazione di membro a vita</string>
 </resources>

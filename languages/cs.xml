@@ -1490,6 +1490,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">U registrace #VAR1_BOLD# s e-mailovou adresou #VAR2_BOLD# byly nalezeny kontakty s podobným jménem. Zkontrolujte prosím registraci a přiřaďte ji k nalezenému kontaktu nebo vytvořte kontakt nový.</string>
   <string name="SYS_SINCE_TO">od #VAR1# do #VAR2#</string>
   <string name="SYS_SINCE_VAR">od #VAR1#</string>
+  <string name="SYS_SINCE">od #VAR1#</string>
   <string name="SYS_SIZE">Velikost</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP autentizace</string>
@@ -1792,4 +1793,11 @@
   <string name="SYS_YOUR_LISTS">Vlastní seznamy</string>
   <string name="SYS_YOUR_NAME">Vaše jméno</string>
   <string name="SYS_Z_TO_A">Z až A</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">Nastavte minimální počet let požadovaných pro „Kvalifikovaný doživotní člen“. (Výchozí: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">Aktivovat kvalifikaci doživotního člena</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">Pokud je povoleno, bude sloupec „Kvalifikovaný doživotní člen" vypočítán. Pokud je zakázáno, bude vždy nepravda.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">Vyberte role, které se započítávají pro „Kvalifikovaný doživotní člen“.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">Vyberte role, které se započítávají pro „Roky členství“.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">Kvalifikovaný doživotní člen</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">Roky k doživotnímu členství</string>
 </resources>

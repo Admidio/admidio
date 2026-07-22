@@ -1461,6 +1461,7 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">ஒத்த தொடர்புகள் கண்டறியப்பட்டன</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">#VAR1_BOLD# என்ற பெயருடன் ஒத்த தொடர்புகள் கண்டறியப்பட்டன.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">#VAR1_BOLD# என்ற பெயருடனும் #VAR2_BOLD# என்ற மின்னஞ்சல் முகவரியுடனும் பதிவு செய்வதற்கு ஒத்த தொடர்புகள் கண்டறியப்பட்டன. பதிவைச் சரிபார்த்து, கண்டறியப்பட்ட ஒரு தொடர்புடன் அதை ஒதுக்கவும் அல்லது ஒரு புதிய தொடர்பை உருவாக்கவும்.</string>
+  <string name="SYS_SINCE_VAR">#VAR1# முதல்</string>
   <string name="SYS_SINCE">#VAR1# முதல்</string>
   <string name="SYS_SINCE_TO">#VAR1# முதல் #VAR2# வரை</string>
   <string name="SYS_SIZE">அளவு</string>
@@ -1759,4 +1760,11 @@
   <string name="SYS_YOUR_LISTS">சொந்த பட்டியல்கள்</string>
   <string name="SYS_YOUR_NAME">உங்கள் பெயர்</string>
   <string name="SYS_Z_TO_A">இசட் முதல் ஏ</string>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">«ஆயுள் உறுப்பினர் தகுதி» பெற தேவையான குறைந்தபட்ச ஆண்டுகளை அமைக்கவும். (இயல்புநிலை: 20)</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">ஆயுள் உறுப்பினர் தகுதி செயல்படுத்தல்</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">இயக்கப்பட்டால், «ஆயுள் உறுப்பினர் தகுதி» நெடுவரிசை கணக்கிடப்படும். முடக்கப்பட்டால், அது எப்போதும் பொய்யாக இருக்கும்.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">«ஆயுள் உறுப்பினர் தகுதி»க்கு கணக்கிட வேண்டிய பங்குகளைத் தேர்ந்தெடுக்கவும்.</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">«உறுப்பினர் ஆண்டுகள்»க்கு கணக்கிட வேண்டிய பங்குகளைத் தேர்ந்தெடுக்கவும்.</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">ஆயுள் உறுப்பினர் தகுதி</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">ஆயுள் உறுப்பினர் தகுதிக்கான ஆண்டுகள்</string>
 </resources>

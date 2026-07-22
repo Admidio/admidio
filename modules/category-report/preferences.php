@@ -43,11 +43,26 @@ try {
     $report = new CategoryReport();
     $config = $report->getConfigArray();
     $catReportConfigs = array();
+    $roleSelectionItems = array();
+
+    $sqlRolesForSelection = 'SELECT rol_id, rol_name
+                               FROM ' . TBL_ROLES . '
+                         INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                              WHERE ( cat_org_id = ? -- $gCurrentOrgId
+                                 OR cat_org_id IS NULL )
+                           ORDER BY rol_name';
+    $statementRolesForSelection = $gDb->queryPrepared($sqlRolesForSelection, array($gCurrentOrgId));
+    while ($row = $statementRolesForSelection->fetch()) {
+        $roleSelectionItems[] = array(
+            'id' => (int) $row['rol_id'],
+            'data' => $row['rol_name']
+        );
+    }
 
     $headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
 
     if ($getAdd) {
-        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf' => false);
+        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'life_membership_enabled' => 0, 'life_membership_threshold_years' => 20, 'life_membership_role_ids' => '', 'years_of_membership_role_ids' => '', 'default_conf' => false);
         // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
     }
 
@@ -66,6 +81,10 @@ try {
             'selection_role' => $config[$getCopy - 1]['selection_role'],
             'selection_cat' => $config[$getCopy - 1]['selection_cat'],
             'number_col' => $config[$getCopy - 1]['number_col'],
+            'life_membership_enabled' => $config[$getCopy - 1]['life_membership_enabled'] ?? 0,
+            'life_membership_threshold_years' => $config[$getCopy - 1]['life_membership_threshold_years'] ?? 20,
+            'life_membership_role_ids' => $config[$getCopy - 1]['life_membership_role_ids'] ?? '',
+            'years_of_membership_role_ids' => $config[$getCopy - 1]['years_of_membership_role_ids'] ?? '',
             'default_conf' => false);
         $config = $report->saveConfigArray($config);
     }
@@ -87,7 +106,7 @@ try {
             const rolePropIds = new Set(arr_role_props.map(o => String(o.id).toLowerCase()));
             const raw     = (val ?? "").toString().trim();
             const first   = raw.charAt(0).toLowerCase();
-            if (rolePropIds.has(first) && raw != "ddummy") {
+                                                if (rolePropIds.has(first) && raw != "ddummy" && raw != "ymulti" && raw != "ylmulti" && raw != "zmulti") {
               val = "r" + raw.slice(1);
             }
 
@@ -96,7 +115,7 @@ try {
                 "<option value=\"\"></option>";
         	for (const field of arr_user_fields) {
                 var fieldtype = String(field.id).charAt(0).toLowerCase();
-                if (rolePropIds.has(fieldtype) && (fieldtype !== "r") && (field.id !== "ddummy")) {
+                if (rolePropIds.has(fieldtype) && (fieldtype !== "r") && (field.id !== "ddummy") && (field.id !== "ymulti") && (field.id !== "ylmulti") && (field.id !== "zmulti")) {
                     continue;
                 }
 
@@ -165,7 +184,7 @@ try {
           const selField = `select[name="columns${config}[]"]`;
           const selRole  = `select[name="columnsRoleProp${config}[]"]`;
 
-          function applyToPair($field, $role) {
+                                        function applyToPair($field, $role) {
             const v = ($field.val() || \'\').toString().trim();
             const isRnn = /^r\d+$/.test(v);        // r + digits
             $role.toggle(isRnn);
@@ -175,7 +194,7 @@ try {
           $(selField).each(function(i){
             const $field = $(this);
             const $role  = $(selRole).eq(i);
-            if ($role.length) applyToPair($field, $role);
+                                                if ($role.length) applyToPair($field, $role);
           });
 
           // Live updates for changes (works for dynamically added rows too)
@@ -183,12 +202,12 @@ try {
             const i      = $(selField).index(this);
             const $field = $(this);
             const $role  = $(selRole).eq(i);
-            if ($role.length) applyToPair($field, $role);
+                                                if ($role.length) applyToPair($field, $role);
           });
         }
     ';
     $javascriptCode .= '
-        function addColumnToConfiguration(config, val = null, cond = "")
+                                function addColumnToConfiguration(config, val = null, cond = "")
         {
         	var table = document.getElementById("mylist_fields_tbody" + config);
         	var newTableRow = table.insertRow();
@@ -196,7 +215,7 @@ try {
         	var newCellCount = newTableRow.insertCell();
             newCellCount.setAttribute("class", "CategoryReportColumnNumber");
         	var newCellField = newTableRow.insertCell(-1);
-        	newCellField.innerHTML = createUserFieldSelect(config, val) + createUserRoleSelect(config, val);
+	newCellField.innerHTML = createUserFieldSelect(config, val) + createUserRoleSelect(config, val);
             var newCellCondition = newTableRow.insertCell(-1);
             newCellCondition.innerHTML = createConditionInput(config, cond);
             var newCellButtons = newTableRow.insertCell(-1);
@@ -220,7 +239,17 @@ try {
 
         $columns = array();
         foreach ($fields as $idx => $fieldId) {
-            if ($report->isInHeaderSelection($fieldId) > 0) {
+            if (preg_match('/^y\[(\d+(?:\|\d+)*)\]$/', $fieldId, $matches)) {
+                $columns[] = array(
+                    'id' => 'ymulti',
+                    'cond' => $conds[$idx] ?? ''
+                );
+            } elseif (preg_match('/^z\[(\d+(?:\|\d+)*)\]$/', $fieldId, $matches)) {
+                $columns[] = array(
+                    'id' => 'zmulti',
+                    'cond' => $conds[$idx] ?? ''
+                );
+            } elseif ($report->isInHeaderSelection($fieldId) > 0) {
                 $columns[] = array(
                     'id' => $fieldId,
                     'cond' => $conds[$idx] ?? ''
@@ -300,6 +329,10 @@ try {
             'selection_role' => 'selection_role' . $key,
             'selection_cat' => 'selection_cat' . $key,
             'number_col' => 'number_col' . $key,
+            'life_membership_enabled' => 'life_membership_enabled' . $key,
+            'life_membership_threshold_years' => 'life_membership_threshold_years' . $key,
+            'life_membership_role_ids' => 'life_membership_role_ids' . $key,
+            'years_of_membership_role_ids' => 'years_of_membership_role_ids' . $key,
             'id' => 'id' . $key,
             'default_conf' => 'default_conf' . $key,
             'open' => ($key == $key_to_open),
@@ -323,6 +356,26 @@ try {
         $formConfigurations->addSelectBoxFromSql('selection_cat' . $key, $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
             array('defaultValue' => explode(',', (string)$value['selection_cat']), 'multiselect' => true, 'helpTextId' => 'SYS_CAT_SELECTION_CONF_DESC'));
         $formConfigurations->addCheckbox('number_col' . $key, $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', $value['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
+        $formConfigurations->addCheckbox('life_membership_enabled' . $key, $gL10n->get('SYS_LIFE_MEMBERSHIP_ENABLED'), (bool)($value['life_membership_enabled'] ?? 0), array('helpTextId' => 'SYS_LIFE_MEMBERSHIP_ENABLED_DESC'));
+        $formConfigurations->addInput('life_membership_threshold_years' . $key, $gL10n->get('SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC'), $value['life_membership_threshold_years'] ?? 20, array('type' => 'number', 'minValue' => 1, 'maxValue' => 200, 'helpTextId' => 'SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC'));
+
+        $sql = 'SELECT rol_id, rol_name, cat_name
+              FROM ' . TBL_CATEGORIES . ' , ' . TBL_ROLES . '
+             WHERE cat_id = rol_cat_id
+               AND ( cat_org_id = ' . $gCurrentOrgId . '
+                OR cat_org_id IS NULL )';
+        $formConfigurations->addSelectBoxFromSql('life_membership_role_ids' . $key, $gL10n->get('SYS_LIFE_MEMBERSHIP_ROLES_DESC'), $gDb, $sql,
+            array('defaultValue' => explode(',', (string)($value['life_membership_role_ids'] ?? '')), 'multiselect' => true, 'helpTextId' => 'SYS_LIFE_MEMBERSHIP_ROLES_DESC'));
+        
+        // Add role selection for Years of Membership column
+        $sql = 'SELECT rol_id, rol_name, cat_name
+              FROM ' . TBL_CATEGORIES . ' , ' . TBL_ROLES . '
+             WHERE cat_id = rol_cat_id
+               AND ( cat_org_id = ' . $gCurrentOrgId . '
+                OR cat_org_id IS NULL )';
+        $formConfigurations->addSelectBoxFromSql('years_of_membership_role_ids' . $key, $gL10n->get('SYS_YEARS_MEMBERSHIP_ROLES_DESC'), $gDb, $sql,
+            array('defaultValue' => explode(',', (string)($value['years_of_membership_role_ids'] ?? '')), 'multiselect' => true, 'helpTextId' => 'SYS_YEARS_MEMBERSHIP_ROLES_DESC'));
+        
         $formConfigurations->addInput('id' . $key, '', $value['id'], array('property' => FormPresenter::FIELD_HIDDEN));
         $formConfigurations->addInput('default_conf' . $key, '', $value['default_conf'], array('property' => FormPresenter::FIELD_HIDDEN));
 

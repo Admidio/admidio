@@ -166,6 +166,9 @@
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">切换到日程表管理</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">切换到类别管理</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">切换到房间管理</string>
+  <string name="SYS_SINCE_TO">从 #VAR1# 到 #VAR2#</string>
+  <string name="SYS_SINCE">从 #VAR1#</string>
+  <string name="SYS_SINCE_VAR">从 #VAR1#</string>
   <string name="SYS_SYSTEM">系统</string>
   <string name="SYS_SYSTEM_MAILS">系统通知</string>
   <string name="SYS_TEMPLATE">模板</string>
@@ -213,4 +216,11 @@
   <string name="SYS_WHAT_TO_DO">该怎么办？</string>
   <string name="SYS_WIDTH">宽度</string>
   <string name="SYS_YES">是</string>
-  </resources>
+  <string name="SYS_LIFE_MEMBERSHIP_THRESHOLD_DESC">设置“终身会员资格”所需的最少年限。（默认：20）</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED">启用终身会员资格判定</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ENABLED_DESC">启用后，将计算“终身会员资格”列。禁用后，该列始终为否。</string>
+  <string name="SYS_LIFE_MEMBERSHIP_ROLES_DESC">选择计入“终身会员资格”的角色。</string>
+  <string name="SYS_YEARS_MEMBERSHIP_ROLES_DESC">选择计入“会员年限”的角色。</string>
+  <string name="SYS_LIFE_MEMBERSHIP_QUALIFIED">终身会员资格</string>
+  <string name="SYS_YEARS_TOWARDS_LIFE_MEMBERSHIP">终身会员资格年数</string>
+</resources>
