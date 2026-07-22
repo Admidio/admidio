@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "buildCommand": "composer install --no-dev --optimize-autoloader && php vercel/build.php",
+  "functions": {
+    "api/index.php": {
+      "runtime": "vercel-php@0.7.2",
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    {
+      "src": "^/(.+\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|map|txt|xml|pdf|zip)$)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
+    }
+  ],
+  "env": {
+    "DB_HOST": "db.ubjlwpytufhcrnrjbfme.supabase.co",
+    "DB_PORT": "5432",
+    "DB_NAME": "postgres",
+    "DB_USER": "postgres",
+    "DB_PASS": "REPLACE_WITH_SUPABASE_PASSWORD"
+  }
+}

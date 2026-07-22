@@ -1,0 +1,11 @@
+# Exclude development and build tooling
+.github/
+.travis.yml
+.codeclimate.yml
+Dockerfile
+README*.md
+demo_data/
+
+# Exclude test/dev files
+*.test.php
+*.spec.php
