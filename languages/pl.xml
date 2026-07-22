@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Dodatkowe informacje</string>
@@ -1396,7 +1396,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Załączniki wiadomości e-mail są zapisywane w przestrzeni internetowej i nadal można uzyskać do nich dostęp w zapisanej wiadomości e-mail po wysłaniu. (domyślnie: włączone)</string>
   <string name="SYS_SAVE_CHANGES">Zapisz zmiany</string>
   <string name="SYS_SAVE_CONFIGURATION">Zapisz konfigurację</string>
-  <string name="SYS_SAVE_DATA">Dane zostały zapisane.</string>
+  
+  <string name="SYS_SAVE_PENDING">Zapisywanie oczekuje...</string>
+  <string name="SYS_PENDING">Oczekuje...</string>
+    <string name="SYS_SAVE_DATA">Dane zosta┼éy zapisane.</string>
+  <string name="SYS_LOADING">Ładowanie...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Ładowanie członkostw ról...</string>
   <string name="SYS_SEARCH_AGE_DESC">Szukanie wszystkich użytkowników starszych niż 18 lat</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_DATE_DESC">Szukanie wszystkich użytkowników urodzonych po 01.03.1986</string>
@@ -1804,3 +1809,7 @@
   <string name="SYS_YOUR_NAME">Twoje imię</string>
   <string name="SYS_Z_TO_A">Od Z do A</string>
 </resources>
+
+
+
+

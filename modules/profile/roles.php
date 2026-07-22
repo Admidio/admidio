@@ -64,6 +64,68 @@ try {
     $smarty = $page->createSmartyObject();
 
     $javascript = '
+    function normalizeAssignmentResponse(data) {
+        var result = {
+            status: "error",
+            message: ""
+        };
+
+        if (data && typeof data === "object") {
+            result.status = data.status || result.status;
+            result.message = data.message || "";
+            return result;
+        }
+
+        var rawText = $.trim(typeof data === "string" ? data : "");
+        if (rawText.length === 0) {
+            result.message = "Undefined response";
+            return result;
+        }
+
+        if (rawText === "success" || rawText === "\"success\"") {
+            result.status = "success";
+            return result;
+        }
+
+        try {
+            var parsedData = JSON.parse(rawText);
+            if (parsedData && typeof parsedData === "object") {
+                result.status = parsedData.status || result.status;
+                result.message = parsedData.message || result.message;
+                return result;
+            }
+        } catch (ignore) {
+            // Continue with fallback handling.
+        }
+
+        var firstBrace = rawText.indexOf("{");
+        var lastBrace = rawText.lastIndexOf("}");
+        if (firstBrace >= 0 && lastBrace > firstBrace) {
+            try {
+                var recoveredData = JSON.parse(rawText.substring(firstBrace, lastBrace + 1));
+                if (recoveredData && typeof recoveredData === "object") {
+                    result.status = recoveredData.status || result.status;
+                    result.message = recoveredData.message || result.message;
+                    if (result.status === "success") {
+                        return result;
+                    }
+                }
+            } catch (ignoreRecoveredJson) {
+                // Continue with token fallback.
+            }
+        }
+
+        var plainText = $.trim($("<div>").html(rawText).text());
+        var tokens = plainText.toLowerCase().split(/\s+/);
+        if (tokens.length > 0 && tokens[tokens.length - 1] === "success") {
+            result.status = "success";
+            return result;
+        }
+
+        result.message = plainText.length > 0 ? plainText : rawText;
+        return result;
+    }
+
     // if checkbox of role is clicked then change membership
     $("#adm_role_assignment_table input[type=checkbox]").click(function() {
         var checkbox = $(this);
@@ -88,8 +150,10 @@ try {
         $.post(gRootPath + "/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=" + roleUuid + "&user_uuid=' . $getUserUuid . '",
             "memberFlag=" + roleChecked + "&leaderFlag=" + leaderChecked + "&adm_csrf_token=' . $gCurrentSession->getCsrfToken() . '",
             function(data) {
+                var response = normalizeAssignmentResponse(data);
+
                 // check if error occurs
-                if (data === "success") {
+                if (response.status === "success") {
                     $("#admidio-profile-roles-alert").fadeOut();
                 } else {
                     // reset checkbox status
@@ -103,7 +167,7 @@ try {
                     }
 
                     $("#admidio-profile-roles-alert").fadeIn();
-                    $("#admidio-profile-roles-alert").html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
+                    $("#admidio-profile-roles-alert").html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + response.message);
                     return false;
                 }
                 return true;

@@ -1,6 +1,11 @@
 <ul class="list-group admidio-list-roles-assign" id="{$listID}">
     {foreach $memberships as $membership}
-        <li class="list-group-item" id="membership_{$membership.memberUUID}">
+        <li class="list-group-item"
+            id="membership_{$membership.memberUUID}"
+            data-sort-cat-seq="{$membership.sort.catSequence}"
+            data-sort-role-name="{$membership.sort.roleName|escape}"
+            data-sort-begin="{$membership.sort.beginDate}"
+            data-sort-member-uuid="{$membership.sort.memberUuid}">
             <ul class="list-group admidio-list-roles-assign-pos">
                 <li class="list-group-item">
                     <span>{$membership.category}&nbsp;-&nbsp;{$membership.role}
@@ -32,6 +37,9 @@
                             {$attribute@key}="{$attribute}"
                         {/foreach}>
                         {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_csrf_token']}
+                        {if isset($membership.form.elements['adm_csrf_token_fallback'])}
+                            {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_csrf_token_fallback']}
+                        {/if}
                         {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_membership_start_date']}
                         {include 'sys-template-parts/form.input.tpl' data=$membership.form.elements['adm_membership_end_date']}
                         {include 'sys-template-parts/form.button.tpl' data=$membership.form.elements['adm_button_send']}

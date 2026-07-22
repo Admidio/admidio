@@ -41,6 +41,35 @@ try {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
+    // Validate CSRF token against current session token or known form token.
+    // Dynamic profile fragments can contain older form tokens after partial reloads.
+    // Some callers submit token in GET and others in POST, therefore both are checked.
+    $isPostedCsrfTokenValid = static function () use ($gCurrentSession): bool {
+        $csrfCandidates = array(
+            $_POST['adm_csrf_token'] ?? '',
+            $_POST['adm_csrf_token_fallback'] ?? '',
+            $_GET['adm_csrf_token'] ?? ''
+        );
+
+        $csrfCandidates = array_values(array_unique(array_filter($csrfCandidates, static fn ($token) => $token !== '')));
+
+        foreach ($csrfCandidates as $postedCsrfToken) {
+            try {
+                SecurityUtils::validateCsrfToken($postedCsrfToken);
+                return true;
+            } catch (Throwable $csrfException) {
+                try {
+                    $gCurrentSession->getFormObject($postedCsrfToken);
+                    return true;
+                } catch (Throwable $formTokenException) {
+                    // try next token candidate
+                }
+            }
+        }
+
+        return false;
+    };
+
     if ($getMode === 'export') {
         // Export vCard of user
 
@@ -64,8 +93,13 @@ try {
     } elseif ($getMode === 'stop_membership') {
         // Cancel membership of role
 
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+        if (!$isPostedCsrfTokenValid()) {
+            echo json_encode(array(
+                'status' => 'error',
+                'message' => $gL10n->get('SYS_PROCESS_CANCELED') . ' ' . $gL10n->get('SYS_RELOAD')
+            ));
+            exit();
+        }
 
         $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);
@@ -75,22 +109,33 @@ try {
         if ($role->allowedToAssignMembers($gCurrentUser)) {
             $role->stopMembership($member->getValue('mem_usr_id'));
 
-            echo 'done';
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => ''
+            ));
         } else {
             throw new Exception('SYS_NO_RIGHTS');
         }
     } elseif ($getMode === 'remove_former_membership') {
         // Remove former membership of role
 
-        // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+        if (!$isPostedCsrfTokenValid()) {
+            echo json_encode(array(
+                'status' => 'error',
+                'message' => $gL10n->get('SYS_PROCESS_CANCELED') . ' ' . $gL10n->get('SYS_RELOAD')
+            ));
+            exit();
+        }
 
         if ($gCurrentUser->isAdministrator()) {
             $member = new Membership($gDb);
             $member->readDataByUuid($getMemberUuid);
             $member->delete();
 
-            echo 'done';
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => ''
+            ));
         }
     } elseif ($getMode === 'reload_current_memberships') {
         // reload role memberships
@@ -134,13 +179,22 @@ try {
     } elseif ($getMode === 'save_membership') {
         // save membership date changes
 
-        // Validate CSRF via form object
-        $membershipForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        $formValues = $membershipForm->validate($_POST);
+        if (!$isPostedCsrfTokenValid()) {
+            echo json_encode(array(
+            'status' => 'csrf_invalid',
+            'message' => $gL10n->get('SYS_PROCESS_CANCELED') . ' ' . $gL10n->get('SYS_RELOAD')
+            ));
+            exit();
+        }
+        $formValues = array(
+            'adm_membership_start_date' => admFuncVariableIsValid($_POST, 'adm_membership_start_date', 'date', array('requireValue' => true)),
+            'adm_membership_end_date' => admFuncVariableIsValid($_POST, 'adm_membership_end_date', 'date')
+        );
 
         $member = new Membership($gDb);
         $member->readDataByUuid($getMemberUuid);
         $role = new Role($gDb, (int)$member->getValue('mem_rol_id'));
+        $userId = (int)$user->getValue('usr_id');
 
         // check if user has the right to edit this membership
         if (!$role->allowedToAssignMembers($gCurrentUser)) {
@@ -150,12 +204,19 @@ try {
         // Check the start date
         $startDate = DateTime::createFromFormat('Y-m-d', $formValues['adm_membership_start_date']);
         if ($startDate === false) {
+            $startDate = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $formValues['adm_membership_start_date']);
+        }
+        if ($startDate === false) {
             throw new Exception('SYS_DATE_INVALID', array('SYS_START', $gSettingsManager->getString('system_date')));
         }
+        $formValues['adm_membership_start_date'] = $startDate->format('Y-m-d');
 
         // If set, the end date is checked
         if ($formValues['adm_membership_end_date'] !== '') {
             $endDate = DateTime::createFromFormat('Y-m-d', $formValues['adm_membership_end_date']);
+            if ($endDate === false) {
+                $endDate = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $formValues['adm_membership_end_date']);
+            }
             if ($endDate === false) {
                 throw new Exception('SYS_DATE_INVALID', array('SYS_END', $gSettingsManager->getString('system_date')));
             }
@@ -164,14 +225,19 @@ try {
             if ($startDate > $endDate) {
                 throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
             }
+
+            $formValues['adm_membership_end_date'] = $endDate->format('Y-m-d');
         } else {
             $formValues['adm_membership_end_date'] = DATE_MAX;
         }
 
         // save role membership
-        $role->setMembership($user->getValue('usr_id'), $formValues['adm_membership_start_date'], $formValues['adm_membership_end_date'], $member->getValue('mem_leader'), true);
+        $role->setMembership($userId, $formValues['adm_membership_start_date'], $formValues['adm_membership_end_date'], $member->getValue('mem_leader'), true);
 
-        echo 'success';
+        echo json_encode(array(
+            'status' => 'success',
+            'message' => 'success'
+        ));
     }
 } catch (Throwable $e) {
     handleException($e, in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership')));

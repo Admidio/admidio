@@ -43,6 +43,12 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
+    // Avoid browser serving stale profile pages (e.g. directly after sign-in),
+    // because stale pages can carry outdated CSRF/form tokens.
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+
     $userId = $user->getValue('usr_id');
 
     // set headline
@@ -68,6 +74,26 @@ try {
     $page->addJavascript('
         var profileJS = new ProfileJS(gRootPath);
         profileJS.userUuid                = "' . $getUserUuid . '";
+        profileJS.csrfToken               = "' . $gCurrentSession->getCsrfToken() . '";
+        profileJS.labelLoading            = "' . $gL10n->get('SYS_LOADING') . '";
+        profileJS.labelLoadingMemberships = "' . $gL10n->get('SYS_LOADING_ROLE_MEMBERSHIPS') . '";
+            profileJS.labelMembershipTo       = "' . $gL10n->get('SYS_ROLE_MEMBERSHIP_TO') . '";
+        profileJS.labelMembershipDuration = "' . $gL10n->get('SYS_MEMBERSHIP_DURATION') . '";
+        profileJS.labelYear               = "' . $gL10n->get('SYS_YEAR') . '";
+        profileJS.labelYears              = "' . $gL10n->get('SYS_YEARS') . '";
+        profileJS.labelMonth              = "' . $gL10n->get('SYS_MONTH') . '";
+        profileJS.labelMonths             = "' . $gL10n->get('SYS_MONTHS') . '";
+        profileJS.labelDay                = "' . $gL10n->get('SYS_DAY') . '";
+        profileJS.labelDays               = "' . $gL10n->get('SYS_DAYS') . '";
+        profileJS.systemDateFormat        = "' . addslashes($gSettingsManager->getString('system_date')) . '";
+        profileJS.membershipDurationExact = ' . ($gSettingsManager->has('profile_membership_duration_exact') && !$gSettingsManager->getBool('profile_membership_duration_exact') ? 'false' : 'true') . ';
+
+        if (profileJS.labelLoading.indexOf("#") === 0) {
+            profileJS.labelLoading = "Loading...";
+        }
+        if (profileJS.labelLoadingMemberships.indexOf("#") === 0) {
+            profileJS.labelLoadingMemberships = "Loading role memberships...";
+        }
 
         function callbackProfilePhoto() {
             var imgSrc = $("#adm_profile_photo").attr("src");
@@ -77,68 +103,265 @@ try {
         }
 
         function callbackRoles() {
+            // Keep delete UX lightweight and update membership counters/visibility locally.
             if (profileJS) {
-                profileJS.formerRoleCount++;
-                profileJS.reloadFormerRoleMemberships();
+                profileJS.refreshMembershipUiState();
             }
         }
 
         function callbackFormerRoles() {
+            // Keep delete UX lightweight and update membership counters/visibility locally.
             if (profileJS) {
-                profileJS.formerRoleCount--;
-                if (profileJS.formerRoleCount === 0) {
-                    /* Tabs */
-                    $("#adm_profile_role_memberships_former_pane_content").fadeOut("slow");
-                    /* Accordions */
-                    $("#adm_profile_role_memberships_former_accordion_content").fadeOut("slow");
-                }
+                profileJS.refreshMembershipUiState();
             }
         }
 
         function callbackFutureRoles() {
+            // Keep delete UX lightweight and update membership counters/visibility locally.
             if (profileJS) {
-                profileJS.futureRoleCount--;
-                if (profileJS.futureRoleCount === 0) {
-                    /* Tabs */
-                    $("#adm_profile_role_memberships_future_pane_content").fadeOut("slow");
-                    /* Accordions */
-                    $("#adm_profile_role_memberships_future_accordion_content").fadeOut("slow");
-                }
+                profileJS.refreshMembershipUiState();
             }
         }
 
         function formSubmitEvent(rolesAreaId = "") {
-            $(rolesAreaId + " .admidio-form-membership-period").submit(function(event) {
-                var memberUuid = $(this).attr("data-admidio");
-                var formAlert  = $("#adm_membership_period_form_" + memberUuid + " .form-alert");
+            var membershipForms = $(rolesAreaId + " .admidio-form-membership-period");
+            profileJS.applyMembershipDrafts(membershipForms);
+
+            // Rebinding happens after each memberships reload. Remove previous handlers first
+            // to avoid duplicate submissions and inconsistent status messages.
+            membershipForms.off("submit.admMembershipPeriod").on("submit.admMembershipPeriod", function(event) {
+                var formElement = $(this);
+                var submitButton = formElement.find(".button-membership-period-form").first();
+                var memberUuid = submitButton.attr("data-admidio") || formElement.attr("data-admidio") || "";
+                var formAlert = formElement.find(".form-alert").first();
+                if (formAlert.length === 0 && memberUuid.length > 0) {
+                    formAlert = $("#adm_membership_period_form_" + memberUuid + " .form-alert").first();
+                }
+                var buttonIsInput = submitButton.is("input");
+                var originalButtonText = buttonIsInput ? submitButton.val() : submitButton.html();
+                var saveWasSuccessful = false;
+                var pendingLabel = "' . $gL10n->get('SYS_PENDING') . '";
+                var pendingSaveLabel = "' . $gL10n->get('SYS_SAVE_PENDING') . '";
+
+                if (pendingLabel.indexOf("#") === 0) {
+                    pendingLabel = "Pending...";
+                }
+                if (pendingSaveLabel.indexOf("#") === 0) {
+                    pendingSaveLabel = "Pending save...";
+                }
 
                 event.preventDefault(); // avoid to execute the actual submit of the form.
                 formAlert.hide();
 
+                if (submitButton.length > 0) {
+                    submitButton.prop("disabled", true);
+                    if (buttonIsInput) {
+                        submitButton.val(pendingLabel);
+                    } else {
+                        submitButton.html("<span class=\"spinner-border spinner-border-sm me-1\" role=\"status\" aria-hidden=\"true\"></span>" + pendingLabel);
+                    }
+                }
+
+                formAlert.attr("class", "alert alert-info form-alert");
+                formAlert.html("<i class=\"bi bi-hourglass-split\"></i><strong>" + pendingSaveLabel + "</strong>");
+                formAlert.fadeIn();
+
+                var extractTextFromHtml = function(html) {
+                    if (typeof html !== "string" || html.length === 0) {
+                        return "";
+                    }
+
+                    var textContent = $("<div>").html(html).text();
+                    return $.trim(textContent.replace(/\s+/g, " "));
+                };
+
                 $.post({
-                    url: $(this).attr("action"),
-                    data: $(this).serialize(),
+                    url: formElement.attr("action"),
+                    data: (function() {
+                        var formData = formElement.serializeArray();
+                        if (profileJS && profileJS.csrfToken) {
+                            formData.push({ name: "adm_csrf_token_fallback", value: profileJS.csrfToken });
+                        }
+                        return $.param(formData);
+                    })(),
+                    timeout: 60000,
                     success: function(data)
                     {
-                        if (data === "success") {
+                        var responseLooksSuccessful = function(text) {
+                            if (typeof text !== "string") {
+                                return false;
+                            }
+
+                            var compactText = $.trim(text).toLowerCase();
+                            if (compactText === "success" || compactText === "\"success\"") {
+                                return true;
+                            }
+
+                            var plainText = extractTextFromHtml(text).toLowerCase();
+                            if (plainText === "success") {
+                                return true;
+                            }
+
+                            var tokens = plainText.split(/\s+/);
+                            return tokens.length > 0 && tokens[tokens.length - 1] === "success";
+                        };
+
+                        var responseText = data;
+                        var responseStatus = "";
+                        var rawResponseText = "";
+
+                        if (typeof data === "string") {
+                            rawResponseText = $.trim(data);
+                        }
+
+                        if (typeof responseText === "string") {
+                            responseText = $.trim(responseText);
+
+                            // Some endpoints return JSON encoded errors, parse when possible.
+                            if (responseText.length > 0 && responseText.charAt(0) === "{") {
+                                try {
+                                    var parsedResponse = JSON.parse(responseText);
+                                    if (parsedResponse && typeof parsedResponse === "object") {
+                                        responseStatus = parsedResponse.status || "";
+                                        responseText = parsedResponse.message || responseText;
+                                    }
+                                } catch (ignore) {
+                                    // Keep plain text response if parsing fails.
+                                }
+                            } else if (responseText.length > 0) {
+                                // Some servers prepend warnings before a JSON payload.
+                                var firstBrace = responseText.indexOf("{");
+                                var lastBrace = responseText.lastIndexOf("}");
+                                if (firstBrace >= 0 && lastBrace > firstBrace) {
+                                    try {
+                                        var recoveredResponse = JSON.parse(responseText.substring(firstBrace, lastBrace + 1));
+                                        if (recoveredResponse && typeof recoveredResponse === "object") {
+                                            responseStatus = recoveredResponse.status || responseStatus;
+                                            responseText = recoveredResponse.message || responseText;
+                                        }
+                                    } catch (ignoreRecoveredJson) {
+                                        // Keep plain text response if parsing fails.
+                                    }
+                                }
+                            }
+                        } else if (responseText && typeof responseText === "object") {
+                            responseStatus = responseText.status || "";
+                            responseText = responseText.message || JSON.stringify(responseText);
+                        }
+
+                        if (responseStatus !== "success" && responseLooksSuccessful(rawResponseText || responseText)) {
+                            responseStatus = "success";
+                            responseText = "success";
+                        }
+
+                        if (responseStatus === "csrf_invalid") {
+                            var reloadText = "' . $gL10n->get('SYS_RELOAD') . '";
+                            var canceledText = "' . $gL10n->get('SYS_PROCESS_CANCELED') . '";
+                            var reloadWithRestoreLabel = "' . $gL10n->get('SYS_RELOAD') . '";
+                            var csrfMessage = (typeof responseText === "string" && responseText.length > 0)
+                                ? responseText
+                                : canceledText + " " + reloadText;
+
+                            formAlert.attr("class", "alert alert-danger form-alert");
+                            formAlert.fadeIn();
+                            formAlert.html(
+                                "<i class=\"bi bi-exclamation-circle-fill\"></i>" + csrfMessage +
+                                "<br><small>" + reloadText + ".</small>" +
+                                "<br><button type=\"button\" class=\"btn btn-sm btn-outline-danger mt-2 js-membership-reload-with-restore\">" + reloadWithRestoreLabel + "</button>"
+                            );
+                            formAlert.off("click.admMembershipReloadRestore").on("click.admMembershipReloadRestore", ".js-membership-reload-with-restore", function() {
+                                profileJS.storeMembershipDraft(formElement, memberUuid);
+                                window.location.reload();
+                            });
+                            return;
+                        }
+
+                        if (typeof responseText === "string" && responseText.length > 0) {
+                            var lowerResponse = responseText.toLowerCase();
+                            if (lowerResponse.indexOf("<!doctype") === 0 || lowerResponse.indexOf("<html") === 0) {
+                                // Avoid rendering raw HTML inside alerts; show plain text extracted from response.
+                                console.error("Unexpected HTML response while saving membership period:", rawResponseText || responseText);
+                                var extractedHtmlMessage = extractTextFromHtml(rawResponseText || responseText);
+                                responseText = extractedHtmlMessage.length > 0 ? extractedHtmlMessage : "' . $gL10n->get('SYS_PROCESSING_ERROR_DESC') . '";
+                            }
+                        }
+
+                        if (responseText === "success" || responseStatus === "success") {
+                            // Keep unsaved edits of other membership forms when this save reloads sections.
+                            saveWasSuccessful = true;
+                            profileJS.storeAllMembershipDrafts(membershipForms, memberUuid);
+                            profileJS.clearMembershipDraft(memberUuid);
                             formAlert.attr("class", "alert alert-success form-alert");
                             formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
                             formAlert.fadeIn("slow");
-                            formAlert.animate({opacity: 1.0}, 5000);
+                            formAlert.animate({opacity: 1.0}, 1200);
                             formAlert.fadeOut("slow");
 
-                            var membershipPeriod = $("#adm_membership_period_" + memberUuid);
-                            membershipPeriod.animate({opacity: 1.0}, 5000);
-                            membershipPeriod.fadeOut("slow");
+                            if (memberUuid.length > 0) {
+                                var membershipPeriod = $("#adm_membership_period_" + memberUuid);
+                                membershipPeriod.animate({opacity: 1.0}, 1200);
+                                membershipPeriod.fadeOut("slow");
+                            }
 
-                            profileJS.reloadRoleMemberships();
-                            profileJS.reloadFormerRoleMemberships();
-                            profileJS.reloadFutureRoleMemberships();
-                            formSubmitEvent();
+                            profileJS.reloadMembershipSectionsAfterSave(formElement, memberUuid);
                         } else {
+                            if (typeof responseText !== "string" || responseText.length === 0) {
+                                responseText = "' . $gL10n->get('SYS_PROCESSING_ERROR_DESC') . '";
+                            }
+
+                            // Do not auto-reload memberships on error responses.
+                            // A forced refresh hides the actual error and looks like a silent no-op.
+                            var canceledMessage = "' . $gL10n->get('SYS_PROCESS_CANCELED') . '".toLowerCase();
+                            var reloadMessage = "' . $gL10n->get('SYS_RELOAD') . '".toLowerCase();
+                            if (typeof responseText === "string"
+                                && responseText.toLowerCase().indexOf(canceledMessage) !== -1
+                                && responseText.toLowerCase().indexOf(reloadMessage) === -1) {
+                                responseText += " <br><small>' . $gL10n->get('SYS_RELOAD') . '.</small>";
+                            }
+
                             formAlert.attr("class", "alert alert-danger form-alert");
                             formAlert.fadeIn();
-                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
+                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + responseText);
+                        }
+                    }
+                 }).fail(function(jqXHR, textStatus, errorThrown) {
+                    var errorMessage = "Request failed";
+                    if (jqXHR && jqXHR.responseText) {
+                        errorMessage = extractTextFromHtml(jqXHR.responseText);
+                        if (errorMessage.length === 0) {
+                            errorMessage = jqXHR.responseText;
+                        }
+                    } else if (textStatus === "timeout") {
+                        errorMessage = "' . $gL10n->get('SYS_PROCESSING_ERROR_DESC') . ' ' . $gL10n->get('SYS_RELOAD') . '.";
+                    } else if (errorThrown) {
+                        errorMessage = errorThrown;
+                    } else if (textStatus) {
+                        errorMessage = textStatus;
+                    }
+
+                    formAlert.attr("class", "alert alert-danger form-alert");
+                    formAlert.fadeIn();
+                    formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + errorMessage);
+                 }).always(function() {
+                    if (submitButton.length > 0) {
+                        if (!saveWasSuccessful) {
+                            submitButton.prop("disabled", false);
+                            if (buttonIsInput) {
+                                submitButton.val(originalButtonText);
+                            } else {
+                                submitButton.html(originalButtonText);
+                            }
+                        } else {
+                            // Keep the button disabled while the success message is shown
+                            // and restore it for a future edit after the form row closes.
+                            window.setTimeout(function() {
+                                submitButton.prop("disabled", false);
+                                if (buttonIsInput) {
+                                    submitButton.val(originalButtonText);
+                                } else {
+                                    submitButton.html(originalButtonText);
+                                }
+                            }, 1600);
                         }
                     }
                  });
@@ -168,18 +391,66 @@ try {
         });
 
         profileJS.reloadRoleMemberships();
-        profileJS.reloadFormerRoleMemberships();
-        profileJS.reloadFutureRoleMemberships();
+        profileJS.initializeDeferredRoleMemberships();
 
         $("#menu_item_profile_tfa").attr("href", "javascript:void(0);");
         $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
         $("#menu_item_profile_tfa").attr("class", "nav-link btn btn-primary openPopup");
 
-        $("body").on("hidden.bs.modal", ".modal", function() {
+        var roleMembershipsModalNeedsReload = false;
+        var roleMembershipsModalHasChanges = false;
+
+        $(document).on("click", ".openPopup", function() {
+            var popupUrl = $(this).attr("data-href") || $(this).attr("href") || "";
+            if (
+                $(this).attr("id") === "adm_profile_role_memberships_change"
+                || popupUrl.indexOf("/modules/profile/roles.php") !== -1
+                || popupUrl.indexOf("/modules/groups-roles/members_assignment.php") !== -1
+            ) {
+                roleMembershipsModalNeedsReload = true;
+                roleMembershipsModalHasChanges = false;
+            }
+        });
+
+        $(document).ajaxSuccess(function(event, xhr, settings, data) {
+            if (!roleMembershipsModalNeedsReload) {
+                return;
+            }
+
+            var requestUrl = (settings && settings.url) ? settings.url : "";
+            if (requestUrl.indexOf("/modules/groups-roles/members_assignment.php") === -1) {
+                return;
+            }
+
+            if (typeof data === "string") {
+                if ($.trim(data) === "success") {
+                    roleMembershipsModalHasChanges = true;
+                }
+                return;
+            }
+
+            if (data && typeof data === "object" && data.status === "success") {
+                roleMembershipsModalHasChanges = true;
+            }
+        });
+
+        $("body").on("hidden.bs.modal", ".modal", function(event) {
+            if (event.target !== this) {
+                return;
+            }
+
             $(this).removeData("bs.modal");
-            profileJS.reloadRoleMemberships();
-            profileJS.reloadFormerRoleMemberships();
-            profileJS.reloadFutureRoleMemberships();
+
+            if (this.id === "adm_modal" && roleMembershipsModalNeedsReload && roleMembershipsModalHasChanges && profileJS) {
+                profileJS.reloadRoleMemberships();
+                profileJS.reloadFormerRoleMemberships();
+                profileJS.reloadFutureRoleMemberships();
+            }
+
+            if (this.id === "adm_modal") {
+                roleMembershipsModalNeedsReload = false;
+                roleMembershipsModalHasChanges = false;
+            }
         });
 
         formSubmitEvent();',
@@ -264,6 +535,8 @@ try {
                         // Administrators can change or send password if login is configured and user is member of current organization
                         if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
                             $value = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0)" data-buttons="yes-no"
+                                data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                                data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                                 data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '"
                                 data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">' .
                                 '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_SEND_LOGIN_INFORMATION') . '</a>';

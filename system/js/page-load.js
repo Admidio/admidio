@@ -21,7 +21,7 @@ function initializeEvents() {
     });
     // function to handle modal messagebox window
     $(document).on('click', '.admidio-messagebox', function (){
-        messageBox($(this).data('message'), $(this).data('title'), $(this).data('type'), $(this).data('buttons'), $(this).data('href'));
+        messageBox($(this).data('message'), $(this).data('title'), $(this).data('type'), $(this).data('buttons'), $(this).data('href'), this);
     });
 
     // remove data from modal if modal is closed

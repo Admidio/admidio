@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Yderligere oplysninger</string>
@@ -1163,7 +1163,7 @@
   <string name="SYS_OVERHANG">Overbooking</string>
   <string name="SYS_OVERVIEW">Oversigt</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Oversigt over udvidelser</string>
-  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække & Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække &amp; Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
   <string name="SYS_PAGE_NEXT">Næste</string>
   <string name="SYS_PAGE_PREVIOUS">Forrige</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# og #VAR2#</string>
@@ -1385,7 +1385,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">‎Vedhæftede filer i e-mails gemmes på webhotellet og kan stadig åbnes i den gemte mail efter afsendelse. (Standard: aktiveret)‎</string>
   <string name="SYS_SAVE_CHANGES">Gem ændringerne</string>
   <string name="SYS_SAVE_CONFIGURATION">Gem indstilling</string>
-  <string name="SYS_SAVE_DATA">Data er blevet gemt.</string>
+  
+  <string name="SYS_SAVE_PENDING">Gemning afventer...</string>
+  <string name="SYS_PENDING">Afventer...</string>
+    <string name="SYS_SAVE_DATA">Data er blevet gemt.</string>
+  <string name="SYS_LOADING">Indlæser...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Indlæser rollemedlemskaber...</string>
   <string name="SYS_SEARCH_AGE_DESC">Søgning efter alle brugere ældre end 18 år</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_DATE_DESC">Søgning efter alle brugere født efter 1st Januar 1986</string>

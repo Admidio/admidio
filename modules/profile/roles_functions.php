@@ -160,7 +160,13 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             $membership = array(
                 'memberUUID' => $memberUuid,
                 'category' => $role->getValue('cat_name'),
-                'showRelationsCreateEdit' => $gSettingsManager->get('system_show_create_edit') > 0
+                'showRelationsCreateEdit' => $gSettingsManager->get('system_show_create_edit') > 0,
+                'sort' => array(
+                    'catSequence' => (int) $row['cat_sequence'],
+                    'roleName' => (string) $role->getValue('rol_name'),
+                    'beginDate' => $member->getValue('mem_begin', 'Y-m-d'),
+                    'memberUuid' => $memberUuid
+                )
             );
 
             if ($gCurrentUser->hasRightViewRole((int) $member->getValue('mem_rol_id'))) {
@@ -206,8 +212,10 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                     }
                     $linkMembershipDelete = '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                        data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                        data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                         data-message="' . $gL10n->get($deleteMessage, array($role->getValue('rol_name', 'database'))) . '"
-                        data-href="callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
+                        data-href="callUrlHideElement(\'membership_' . $memberUuid . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
                         <i class="' . $icon . '" data-bs-toggle="tooltip" title="'.$description.'"></i></a>';
                 } else {
                     $linkMembershipDelete = '<a style="padding: 3px;"><i class="bi bi-trash invisible"></i></a>';
@@ -221,6 +229,12 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile_function.php', array('mode' => 'save_membership', 'user_uuid' => $user->getValue('usr_uuid'), 'member_uuid' => $row['mem_uuid'])),
                 null,
                 array('type' => 'navbar', 'method' => 'post', 'setFocus' => false, 'class' => 'admidio-form-membership-period')
+            );
+            $form->addInput(
+                'adm_csrf_token_fallback',
+                '',
+                $gCurrentSession->getCsrfToken(),
+                array('type' => 'hidden')
             );
             $form->addInput(
                 'adm_membership_start_date',

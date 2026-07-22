@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
     <string name="SYS_SUBSCRIBE">Abonnieren</string>
@@ -1395,7 +1395,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">E-Mail-Anhänge werden auf dem Webspace gespeichert und können nach dem Versand weiterhin in der gespeicherten E-Mail aufgerufen werden. (Voreinstellung: ja)</string>
   <string name="SYS_SAVE_CHANGES">Änderungen speichern</string>
   <string name="SYS_SAVE_CONFIGURATION">Konfiguration speichern</string>
-  <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
+  
+  <string name="SYS_SAVE_PENDING">Speichern ausstehend...</string>
+  <string name="SYS_PENDING">Ausstehend...</string>
+    <string name="SYS_SAVE_DATA">Die Daten wurden gespeichert.</string>
+  <string name="SYS_LOADING">Lädt...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Rollenmitgliedschaften werden geladen...</string>
   <string name="SYS_SEARCH_AGE_DESC">Sucht alle Benutzer:innen, die älter als 18 Jahre sind</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18j</string>
   <string name="SYS_SEARCH_DATE_DESC">Sucht alle Benutzer:innen, die nach dem 01.03.1986 geboren wurden</string>
@@ -1803,3 +1808,7 @@
   <string name="SYS_YOUR_NAME">Ihr Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
 </resources>
+
+
+
+

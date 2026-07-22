@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Tillbaka till gästboken</string>
@@ -1208,7 +1208,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">E-postbilagor sparas på webbutrymmet och kan fortfarande nås i det sparade e -postmeddelandet efter att de har skickats. (Standard: aktiverat)</string>
   <string name="SYS_SAVE_CHANGES">Spara ändringarna</string>
   <string name="SYS_SAVE_CONFIGURATION">Spara konfiguration</string>
-  <string name="SYS_SAVE_DATA">Alla uppgifter har sparats</string>
+  
+  <string name="SYS_SAVE_PENDING">Sparning väntar...</string>
+  <string name="SYS_PENDING">Väntar...</string>
+    <string name="SYS_SAVE_DATA">Alla uppgifter har sparats</string>
+  <string name="SYS_LOADING">Laddar...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Laddar rollmedlemskap...</string>
   <string name="SYS_SEARCH">Sök</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">”18y.</string>
   <string name="SYS_SEARCH_AGE_DESC">Söker efter alla användare är äldre än 18 år</string>
@@ -1466,3 +1471,7 @@
   <string name="SYS_YOUR_NAME">Ditt namn</string>
   <string name="SYS_Z_TO_A">ö till a</string>
 </resources>
+
+
+
+
