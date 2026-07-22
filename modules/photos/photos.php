@@ -38,17 +38,13 @@ try {
     $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
     $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 
-    // Fotoalbums-Objekt erzeugen oder aus Session lesen
-    if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
-        $photoAlbum =& $_SESSION['photo_album'];
-    } else {
-        // einlesen des Albums falls noch nicht in Session gespeichert
-        $photoAlbum = new Album($gDb);
-        if ($getPhotoUuid !== '') {
-            $photoAlbum->readDataByUuid($getPhotoUuid);
-        }
+    // Cache CSRF token once before releasing the PHP session lock.
+    $csrfToken = $gCurrentSession->getCsrfToken();
 
-        $_SESSION['photo_album'] = $photoAlbum;
+    // Always read album directly from the database to keep session payload small.
+    $photoAlbum = new Album($gDb);
+    if ($getPhotoUuid !== '') {
+        $photoAlbum->readDataByUuid($getPhotoUuid);
     }
 
     // set headline of module
@@ -57,6 +53,21 @@ try {
         if (!$photoAlbum->isVisible()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
+
+        // Persist minimal album metadata in session so thumbnail requests can
+        // resolve image paths without repeated album lookups.
+        $photoAlbumMap = $gCurrentSession->getValue('ses_photo_album_map');
+        if (!is_array($photoAlbumMap)) {
+            $photoAlbumMap = array();
+        }
+        $photoAlbumMap[$getPhotoUuid] = array(
+            'id' => (int) $photoAlbum->getValue('pho_id'),
+            'begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d')
+        );
+        if (count($photoAlbumMap) > 200) {
+            $photoAlbumMap = array_slice($photoAlbumMap, -200, null, true);
+        }
+        $gCurrentSession->setValue('ses_photo_album_map', $photoAlbumMap);
 
         $headline = $photoAlbum->getValue('pho_name');
 
@@ -90,7 +101,7 @@ try {
         $(".admidio-image-rotate").click(function() {
             imageNr = $(this).data("image");
             $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php?photo_uuid=' . $getPhotoUuid . '&photo_nr=" + $(this).data("image") + "&mode=rotate&direction=" + $(this).data("direction"),
-                {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"},
+                {"adm_csrf_token": "' . $csrfToken . '"},
                 function(data) {
                     if (data === "done") {
                         // Appending the random number is necessary to trick the browser cache
@@ -104,7 +115,7 @@ try {
 
         $(".admidio-album-lock").click(function() {
             $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php?mode=" + $(this).data("mode") + "&photo_uuid=" + $(this).data("id"),
-                {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"},
+                {"adm_csrf_token": "' . $csrfToken . '"},
                 function(data) {
                     if (data === "done") {
                         location.reload();
@@ -170,6 +181,11 @@ try {
 
     ChangelogService::displayHistoryButton($page, 'photos', 'photos', !empty($getPhotoUuid), array('uuid' => $getPhotoUuid));
 
+    // No further session writes are required below; release lock before heavy rendering.
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+    }
+
     if ($getPhotoUuid !== '') {
         // show additional album information
         $datePeriod = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
@@ -186,7 +202,7 @@ try {
         $page->addHtml('
     <p class="lead">
         <p class="fw-bold">' . $datePeriod . '</p class="fw-bold">
-        <p>' . $photoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($photoAlbum->getPhotographer())) . '</p>');
+        <p>' . $photoAlbum->getValue('pho_quantity') . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($photoAlbum->getPhotographer())) . '</p>');
 
         if (strlen($photoAlbum->getValue('pho_description')) > 0) {
             $page->addHtml('<p>' . $photoAlbum->getValue('pho_description', 'html') . '</p>');
@@ -208,6 +224,60 @@ try {
             $lastPhotoNr = $firstPhotoNr + $gSettingsManager->getInt('photo_thumbs_page') - 1;
         }
 
+        // Limit concurrent thumbnail loads to avoid exhausting database max_user_connections.
+        // Each image is loaded exactly once (no preload + second fetch).
+        $page->addJavascript('
+            (function () {
+                var maxConcurrentLoads = 2;
+                var activeLoads = 0;
+                var queue = [];
+
+                function pumpQueue() {
+                    while (activeLoads < maxConcurrentLoads && queue.length > 0) {
+                        var img = queue.shift();
+                        if (!img || !img.dataset || !img.dataset.src || img.dataset.loading === "1") {
+                            continue;
+                        }
+
+                        activeLoads++;
+                        img.dataset.loading = "1";
+
+                        img.onload = img.onerror = function () {
+                            this.removeAttribute("data-src");
+                            this.dataset.loading = "0";
+                            activeLoads--;
+                            pumpQueue();
+                        };
+
+                        img.src = img.dataset.src;
+                    }
+                }
+
+                function enqueueVisibleThumbs() {
+                    var thumbs = document.querySelectorAll("img.admidio-lazy-thumb[data-src]");
+                    for (var i = 0; i < thumbs.length; i++) {
+                        var thumb = thumbs[i];
+                        if (thumb.dataset.queued === "1") {
+                            continue;
+                        }
+
+                        var rect = thumb.getBoundingClientRect();
+                        if (rect.top < window.innerHeight + 300) {
+                            thumb.dataset.queued = "1";
+                            queue.push(thumb);
+                        }
+                    }
+
+                    pumpQueue();
+                }
+
+                document.addEventListener("DOMContentLoaded", enqueueVisibleThumbs);
+                window.addEventListener("scroll", enqueueVisibleThumbs, { passive: true });
+                window.addEventListener("resize", enqueueVisibleThumbs);
+            })();',
+            true
+        );
+
         // create a thumbnail container
         $page->addHtml('<div class="row">');
 
@@ -220,12 +290,12 @@ try {
                     $photoThumbnailTable .= '
                         <a data-lightbox="admidio-gallery" data-title="' . $headline . '"
                             href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'max_width' => $gSettingsManager->getInt('photo_show_width'), 'max_height' => $gSettingsManager->getInt('photo_show_height'))) . '"><img
-                            class="rounded" id="img_' . $actThumbnail . '" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)) . '" alt="' . $actThumbnail . '" /></a>';
+                            class="rounded admidio-lazy-thumb" id="img_' . $actThumbnail . '" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1, 'album_id' => (int) $photoAlbum->getValue('pho_id'), 'album_begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d'))) . '" alt="' . $actThumbnail . '" loading="lazy" decoding="async" fetchpriority="low" /></a>';
                 } // Same window
                 elseif ((int)$gSettingsManager->get('photo_show_mode') === 2) {
                     $photoThumbnailTable .= '
                         <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_presenter.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid)) . '"><img
-                            class="rounded" id="img_' . $actThumbnail . '" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1)) . '" alt="' . $actThumbnail . '" />
+                            class="rounded admidio-lazy-thumb" id="img_' . $actThumbnail . '" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail, 'thumb' => 1, 'album_id' => (int) $photoAlbum->getValue('pho_id'), 'album_begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d'))) . '" alt="' . $actThumbnail . '" loading="lazy" decoding="async" fetchpriority="low" />
                         </a>';
                 }
 
@@ -249,14 +319,18 @@ try {
 
                 // buttons for moderation
                 if ($gCurrentUser->isAdministratorPhotos()) {
+                    $deletePhotoUrl = SecurityUtils::encodeUrl(
+                        ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php',
+                        array('mode' => 'delete', 'photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)
+                    );
                     $photoThumbnailTable .= '
                         <a class="admidio-icon-link admidio-image-rotate" href="javascript:void(0)" data-image="' . $actThumbnail . '" data-direction="right">
                             <i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ROTATE_PHOTO_RIGHT') . '"></i></a>
                         <a class="admidio-icon-link admidio-image-rotate"  href="javascript:void(0)"  data-image="' . $actThumbnail . '" data-direction="left"">
                             <i class="bi bi-arrow-counterclockwise" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ROTATE_PHOTO_LEFT') . '"></i></a>
                         <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                            data-message="' . $gL10n->get('SYS_WANT_DELETE_PHOTO') . '"
-                            data-href="callUrlHideElement(\'div_image_' . $actThumbnail . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('mode' => 'delete', 'photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                                   data-message="' . $gL10n->get('SYS_WANT_DELETE_PHOTO') . '"
+                                data-href="callUrlHideElement(\'div_image_' . $actThumbnail . '\', \'" . $deletePhotoUrl . "\', \'" . $csrfToken . "\')">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
                 }
 
@@ -271,8 +345,19 @@ try {
         // integrate links to the photos of the album pages to this page and container but hidden
         if ((int)$gSettingsManager->get('photo_show_mode') === 1) {
             $photoThumbnailTableShown = false;
+            $maxHiddenLightboxLinks = 120;
 
             for ($hiddenPhotoNr = 1; $hiddenPhotoNr <= $photoAlbum->getValue('pho_quantity'); ++$hiddenPhotoNr) {
+                if ($photoAlbum->getValue('pho_quantity') > $maxHiddenLightboxLinks) {
+                    // For very large albums we skip cross-page hidden links to keep initial
+                    // page render fast and avoid generating huge HTML payloads.
+                    if (!$photoThumbnailTableShown) {
+                        $page->addHtml($photoThumbnailTable);
+                        $photoThumbnailTableShown = true;
+                    }
+                    break;
+                }
+
                 if ($hiddenPhotoNr >= $firstPhotoNr && $hiddenPhotoNr < $actThumbnail) {
                     if (!$photoThumbnailTableShown) {
                         $page->addHtml($photoThumbnailTable);
@@ -384,6 +469,10 @@ try {
                             <h5 class="card-title">' . $albumTitle);
                 // if the user has admin rights for photo module, then show some functions
                 if ($gCurrentUser->isAdministratorPhotos()) {
+                    $deleteAlbumUrl = SecurityUtils::encodeUrl(
+                        ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php',
+                        array('mode' => 'delete', 'photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'))
+                    );
                     if ((bool)$childPhotoAlbum->getValue('pho_locked') === false) {
                         $htmlLock = '<li><a class="dropdown-item admidio-album-lock" href="javascript:void(0)" data-id="' . $childPhotoAlbum->getValue('pho_uuid') . '" data-mode="lock">
                                             <i class="bi bi-lock" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_LOCK_ALBUM') . '</a>
@@ -401,7 +490,7 @@ try {
                                             ' . $htmlLock . '
                                             <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                                                 data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($childPhotoAlbum->getValue('pho_name', 'database'))) . '"
-                                                data-href="callUrlHideElement(\'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                                                data-href="callUrlHideElement(\'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid') . '\', \'" . $deleteAlbumUrl . "\', \'" . $csrfToken . "\')">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE_ALBUM') . '</a>
                                             </li>
                                         </ul>
@@ -426,7 +515,7 @@ try {
                     $page->addHtml('<p class="card-text">' . $albumDescription . '</p>');
                 }
 
-                $page->addHtml('<p class="card-text">' . $childPhotoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($childPhotoAlbum->getPhotographer())) . '</p>');
+                $page->addHtml('<p class="card-text">' . $childPhotoAlbum->getValue('pho_quantity') . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($childPhotoAlbum->getPhotographer())) . '</p>');
 
                 // Notice for users with photo edit rights that the folder of the album doesn't exist
                 if (!is_dir($albumFolder) && !$childPhotoAlbum->hasChildAlbums() && $gCurrentUser->isAdministratorPhotos()) {

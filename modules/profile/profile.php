@@ -34,6 +34,16 @@ try {
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => $gCurrentUser->getValue('usr_uuid')));
 
+    // Clean up stale binary upload payloads from abandoned photo-edit flows.
+    // Keeping large image bytes in session can make every profile request slow.
+    if (strlen((string) $gCurrentSession->getValue('ses_binary')) > 0) {
+        $gCurrentSession->setValue('ses_binary', '');
+    }
+
+    // Clean up stale form objects from role membership reloads that may have accumulated
+    // in existing sessions. This prevents session bloat from slowing down profile loads.
+    $gCurrentSession->clearFormObjects();
+
     // create user object
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
@@ -131,9 +141,7 @@ try {
                             membershipPeriod.animate({opacity: 1.0}, 5000);
                             membershipPeriod.fadeOut("slow");
 
-                            profileJS.reloadRoleMemberships();
-                            profileJS.reloadFormerRoleMemberships();
-                            profileJS.reloadFutureRoleMemberships();
+                            profileJS.scheduleRoleMembershipReloads();
                             formSubmitEvent();
                         } else {
                             formAlert.attr("class", "alert alert-danger form-alert");
@@ -168,8 +176,7 @@ try {
         });
 
         profileJS.reloadRoleMemberships();
-        profileJS.reloadFormerRoleMemberships();
-        profileJS.reloadFutureRoleMemberships();
+        profileJS.initializeDeferredRoleMemberships();
 
         $("#menu_item_profile_tfa").attr("href", "javascript:void(0);");
         $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
@@ -177,9 +184,7 @@ try {
 
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
-            profileJS.reloadRoleMemberships();
-            profileJS.reloadFormerRoleMemberships();
-            profileJS.reloadFutureRoleMemberships();
+            profileJS.scheduleRoleMembershipReloads();
         });
 
         formSubmitEvent();',
@@ -213,6 +218,13 @@ try {
         'bi-download'
     );
 
+    // Ensure the CSRF token exists in the session before releasing the lock, then
+    // release the PHP session write-lock so concurrent requests (e.g. the nav-bar
+    // profile photo) are not queued behind the expensive DB work below.
+    $gCurrentSession->getCsrfToken();
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+    }
 
     // *******************************************************************************
     // User data block
@@ -482,9 +494,21 @@ try {
         $rightsOrigin = array();
         $userRightsArray = array();
 
-        // Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
-        foreach ($rolesRights as $rolesRightsDbName) {
-            $sql = 'SELECT rol_name
+        // Single query for all 13 permission columns instead of 13 separate queries.
+        $sql = 'SELECT rol_name,
+                       rol_all_lists_view,
+                       rol_announcements,
+                       rol_approve_users,
+                       rol_assign_roles,
+                       rol_events,
+                       rol_documents_files,
+                       rol_inventory_admin,
+                       rol_edit_user,
+                       rol_forum_admin,
+                       rol_mail_to_all,
+                       rol_photo,
+                       rol_profile,
+                       rol_weblinks
                   FROM ' . TBL_MEMBERS . '
             INNER JOIN ' . TBL_ROLES . '
                     ON rol_id = mem_rol_id
@@ -496,18 +520,20 @@ try {
                    AND mem_usr_id = ? -- $userId
                    AND (  cat_org_id = ? -- $gCurrentOrgId
                        OR cat_org_id IS NULL )
-                   AND ' . $rolesRightsDbName . ' = true
               ORDER BY cat_org_id, cat_sequence, rol_name';
-            $queryParams = array(DATE_NOW, DATE_NOW, $userId, $gCurrentOrgId);
-            $roleStatement = $gDb->queryPrepared($sql, $queryParams);
+        $roleStatement = $gDb->queryPrepared($sql, array(DATE_NOW, DATE_NOW, $userId, $gCurrentOrgId));
 
-            $roles = array();
-            while ($roleName = $roleStatement->fetchColumn()) {
-                $roles[] = $roleName;
-            }
-
-            if (count($roles) > 0) {
-                $rightsOrigin[$rolesRightsDbName] = implode(', ', $roles);
+        while ($row = $roleStatement->fetch()) {
+            foreach ($rolesRights as $rolesRightsDbName) {
+                // Cross-db safe boolean check: MySQL returns '0'/'1', PostgreSQL returns 'f'/'t'
+                $val = $row[$rolesRightsDbName];
+                if ($val && $val !== '0' && $val !== 'f') {
+                    if (isset($rightsOrigin[$rolesRightsDbName])) {
+                        $rightsOrigin[$rolesRightsDbName] .= ', ' . $row['rol_name'];
+                    } else {
+                        $rightsOrigin[$rolesRightsDbName] = $row['rol_name'];
+                    }
+                }
             }
         }
 

@@ -24,45 +24,103 @@ try {
     // Initialize and check the parameters
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true));
     $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'bool');
+    $getTimestamp = admFuncVariableIsValid($_GET, 'timestamp', 'string', array('defaultValue' => ''));
 
-    // read user data and show error if user doesn't exist
-    $user = new User($gDb, $gProfileFields);
-    $user->readDataByUuid($getUserUuid);
+    $isOwnUserRequest = $gValidLogin && $getUserUuid === (string)$gCurrentUser->getValue('usr_uuid');
 
-    if ((int)$user->getValue('usr_id') === 0) {
-        throw new Exception('SYS_INVALID_PAGE_VIEW');
+    // If this request is not rendering the upload preview, clear stale binary
+    // upload payloads to keep the session lean and fast.
+    if (!$getNewPhoto && strlen((string) $gCurrentSession->getValue('ses_binary')) > 0) {
+        $gCurrentSession->setValue('ses_binary', '');
     }
 
-    // Initialize local variables of the transfer variables
-    $image = null;
+    // For own-user requests, re-use the already loaded session user object and avoid
+    // reloading a full user entity from the database on every nav/profile image request.
+    if ($isOwnUserRequest) {
+        $user = $gCurrentUser;
+    } else {
+        // read user data and show error if user doesn't exist
+        $user = new User($gDb, $gProfileFields);
+        $user->readDataByUuid($getUserUuid);
+
+        if ((int)$user->getValue('usr_id') === 0) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+    }
+
+    // Default photo path based on gender (no DB BLOB involved yet).
     if ((int) $user->getValue('GENDER', 'database') === 2) {
         $photoPath = getThemedFile('/images/profile-photo-female.png');
     } else {
         $photoPath = getThemedFile('/images/profile-photo-male.png');
     }
 
+    // For the new-photo preview case, we need the binary data from the session
+    // before we release the session write-lock.
+    $sessionPhotoData = null;
+    if ($getNewPhoto
+        && $gCurrentUser->hasRightViewProfile($user)
+        && (int)$gSettingsManager->get('profile_photo_storage') === 0) {
+        $sessionPhotoData = $gCurrentSession->getValue('ses_binary');
+    }
+
+    // Release the PHP session write-lock now so other concurrent requests
+    // (e.g. the nav-bar photo) are not queued behind the BLOB fetch below.
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+    }
+
+    // Fast 304 check before any expensive I/O.
+    $etag = '"' . sha1($user->getValue('usr_id') . '|' . $user->getValue('usr_timestamp_changed', 'Y-m-d H:i:s') . '|' . (int)$getNewPhoto) . '"';
+    $ifNoneMatch = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? trim((string)$_SERVER['HTTP_IF_NONE_MATCH']) : '';
+    header('ETag: ' . $etag);
+    header('Last-Modified: ' . $user->getValue('usr_timestamp_changed', 'D, d M Y H:i:s') . ' GMT');
+    if (!$getNewPhoto && $getTimestamp !== '') {
+        // timestamped URLs are content-addressed and can be cached aggressively.
+        header('Cache-Control: private, max-age=31536000, immutable');
+    } else {
+        header('Cache-Control: private, max-age=86400, stale-while-revalidate=60');
+    }
+    if ($ifNoneMatch === $etag) {
+        http_response_code(304);
+        exit;
+    }
+
+    // Load the image — BLOB fetch (if DB storage) happens here, after session is released.
+    $image = null;
     if ($gCurrentUser->hasRightViewProfile($user)) {
         if ($getNewPhoto) {
-            // show temporary saved new photo from upload in database
             if ((int)$gSettingsManager->get('profile_photo_storage') === 0) {
                 $image = new Image();
-                $image->setImageFromData($gCurrentSession->getValue('ses_binary'));
-            } // show temporary saved new photo from upload in filesystem
-            else {
+                $image->setImageFromData((string)$sessionPhotoData);
+            } else {
                 $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '_new.jpg';
                 $image = new Image($photoPath);
             }
         } else {
-            // show photo from database
             if ((int)$gSettingsManager->get('profile_photo_storage') === 0) {
-                if ((string)$user->getValue('usr_photo') !== '') {
+                $photoTimestampToken = preg_replace('/[^0-9A-Za-z_-]/', '', $user->getValue('usr_timestamp_changed', 'Y-m-d-H-i-s'));
+                $profilePhotoCacheFile = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . (int)$user->getValue('usr_id') . '_' . $photoTimestampToken . '.jpg';
+
+                if (is_file($profilePhotoCacheFile)) {
+                    header('Content-Type: image/jpeg');
+                    header('Content-Length: ' . (int)filesize($profilePhotoCacheFile));
+                    readfile($profilePhotoCacheFile);
+                    exit;
+                }
+
+                // getValue('usr_photo') triggers a single lazy-fetch of the BLOB column.
+                $photoData = $user->getValue('usr_photo');
+                if ((string)$photoData !== '') {
+                    if (!is_file($profilePhotoCacheFile)) {
+                        @file_put_contents($profilePhotoCacheFile, $photoData);
+                    }
                     $image = new Image();
-                    $image->setImageFromData($user->getValue('usr_photo'));
+                    $image->setImageFromData($photoData);
                 } else {
                     $image = new Image($photoPath);
                 }
-            } // show photo from folder adm_my_files
-            else {
+            } else {
                 $file = ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $user->getValue('usr_id') . '.jpg';
                 if (is_file($file)) {
                     $photoPath = $file;
@@ -71,15 +129,10 @@ try {
             }
         }
     } else {
-        // if user has no right to view profile then show dummy photo
         $image = new Image($photoPath);
     }
 
     header('Content-Type: ' . $image->getMimeType());
-    // Caching-Header setzen
-    header("Last-Modified: " . $user->getValue('usr_timestamp_changed', 'D, d M Y H:i:s') . " GMT");
-    header("ETag: " . md5_file($photoPath));
-
     $image->copyToBrowser();
     $image->delete();
 } catch (Throwable $e) {

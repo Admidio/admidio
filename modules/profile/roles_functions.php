@@ -103,10 +103,11 @@ function getFormerRolesFromDatabase(int $userId): PDOStatement
  * @param string $htmlListId
  * @param User $user
  * @param PDOStatement $roleStatement
+ * @param bool $storeFormObject If true, persist form objects in session for server-side form validation.
  * @return string
  * @throws \Admidio\Infrastructure\Exception
  */
-function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleStatement): string
+function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleStatement, bool $storeFormObject = true): string
 {
     global $gDb, $gL10n, $gCurrentUser, $gSettingsManager, $gCurrentSession;
 
@@ -251,7 +252,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 $membership['lastUserEditedName'] = $member->getNameOfLastEditingUser();
                 $membership['lastUserEditedTimestamp'] = $member->getValue('mem_timestamp_change');
             }
-            $gCurrentSession->addFormObject($form);
+            if ($storeFormObject) {
+                $gCurrentSession->addFormObject($form);
+            }
 
             ++$countShowRoles;
             $memberships[] = $membership;

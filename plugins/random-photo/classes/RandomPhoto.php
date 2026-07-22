@@ -31,7 +31,7 @@ class RandomPhoto extends PluginAbstract
      */
     private static function getPhotoData() : array
     {
-        global $gCurrentOrgId, $gDb;
+        global $gCurrentOrgId, $gDb, $gCurrentSession;
 
         self::$pluginConfig = self::getPluginConfigValues();
         $photoData = array();
@@ -91,7 +91,26 @@ class RandomPhoto extends PluginAbstract
         }
         $photoData['photoNr'] = $photoNr;
         $photoData['uuid'] = $album->getValue('pho_uuid');
+        $photoData['albumId'] = (int)$album->getValue('pho_id');
+        $photoData['albumBegin'] = $album->getValue('pho_begin', 'Y-m-d');
         $photoData['linkText'] = $linkText;
+
+        // Store minimal metadata of visible albums for fast thumbnail requests.
+        if (isset($gCurrentSession)) {
+            $photoAlbumMap = $gCurrentSession->getValue('ses_photo_album_map');
+            if (!is_array($photoAlbumMap)) {
+                $photoAlbumMap = array();
+            }
+            $photoAlbumMap[$photoData['uuid']] = array(
+                'id' => $photoData['albumId'],
+                'begin' => $photoData['albumBegin']
+            );
+            if (count($photoAlbumMap) > 200) {
+                $photoAlbumMap = array_slice($photoAlbumMap, -200, null, true);
+            }
+            $gCurrentSession->setValue('ses_photo_album_map', $photoAlbumMap);
+        }
+
         return $photoData;
     }
 
@@ -125,6 +144,8 @@ class RandomPhoto extends PluginAbstract
                     $photoData = self::getPhotoData();
                     $randomPhotoPlugin->assignTemplateVariable('photoUUID', $photoData['uuid']);
                     $randomPhotoPlugin->assignTemplateVariable('photoNr', $photoData['photoNr']);
+                    $randomPhotoPlugin->assignTemplateVariable('photoAlbumId', $photoData['albumId']);
+                    $randomPhotoPlugin->assignTemplateVariable('photoAlbumBegin', $photoData['albumBegin']);
                     $randomPhotoPlugin->assignTemplateVariable('photoTitle', $photoData['linkText']);
                     $randomPhotoPlugin->assignTemplateVariable('photoMaxWidth', self::$pluginConfig['random_photo_max_width']);
                     $randomPhotoPlugin->assignTemplateVariable('photoMaxHeight', self::$pluginConfig['random_photo_max_height']);

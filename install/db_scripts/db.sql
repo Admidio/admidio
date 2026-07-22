@@ -392,6 +392,8 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
+CREATE INDEX %PREFIX%_idx_mem_usr_begin ON %PREFIX%_members (mem_usr_id, mem_begin);
+CREATE INDEX %PREFIX%_idx_mem_usr_end ON %PREFIX%_members (mem_usr_id, mem_end);
 CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid);
 
 /*==============================================================*/
