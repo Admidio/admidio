@@ -19,7 +19,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
     /**
      * Create a UserEntity from an Admidio user ID.
      */
-    public function __construct(Database $database, ProfileFields $profileFields = null, ?OIDCClient $client = null, int $userId = 0)
+    public function __construct(Database $database, ?ProfileFields $profileFields = null, ?OIDCClient $client = null, int $userId = 0)
     {
         parent::__construct($database, $profileFields, $userId);
         $this->client = $client;

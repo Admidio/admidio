@@ -296,26 +296,28 @@ try {
                     $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left');
                     $compactTable->disableColumnsSort(array(6));
                     $compactTable->setColumnsNotHideResponsive(array(6));
+                    $data['column_width'] = array('', '', '', '', '', '');
                     break;
                 case 'room':
                     $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
                     $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left', 'left');
                     $compactTable->disableColumnsSort(array(7));
                     $compactTable->setColumnsNotHideResponsive(array(7));
+                    $data['column_width'] = array('', '', '', '', '', '', '');
                     break;
                 case 'participants':
                     $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
                     $columnAlign = array('center', 'left', 'left', 'left', 'left');
                     $compactTable->disableColumnsSort(array(5));
                     $compactTable->setColumnsNotHideResponsive(array(5));
-                    $data['column_width'] = array('', '', '', '35%');
+                    $data['column_width'] = array('', '', '', '35%', '');
                     break;
                 case 'description':
                     $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_CALENDAR'));
                     $columnAlign = array('center', 'left', 'left', 'left', 'left');
                     $compactTable->disableColumnsSort(array(5));
                     $compactTable->setColumnsNotHideResponsive(array(5));
-                    $data['column_width'] = array('', '', '', '35%');
+                    $data['column_width'] = array('', '', '', '35%', '');
                     break;
             }
 

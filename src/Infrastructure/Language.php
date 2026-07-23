@@ -544,7 +544,7 @@ class Language
         $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
         if ($xmlNodes === false || count($xmlNodes) === 0) {
-            throw new \OutOfBoundsException('Could not found text-id!');
+            throw new \OutOfBoundsException('Could not find text-id!');
         }
 
         // replace square brackets with HTML tags
@@ -573,7 +573,7 @@ class Language
             }
         }
 
-        throw new \OutOfBoundsException('Could not found text-id!');
+        throw new \OutOfBoundsException('Could not find text-id!');
     }
 
     /**
