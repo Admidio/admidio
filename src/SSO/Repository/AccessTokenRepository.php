@@ -63,7 +63,7 @@ use Admidio\Infrastructure\Database;
     }
 
     private function getUserClaims(?UserEntityInterface $user): array {
-        return $user instanceof UserEntity ? $user->getClaims() : [];
+        return ($user instanceof \Admidio\SSO\Entity\UserEntity ) ? $user->getClaims() : [];
     }
 
     public function getUserIdByAccessToken(string $accessToken): ?string {
