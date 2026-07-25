@@ -509,10 +509,11 @@ class SAMLService extends SSOService {
                     )
                 );
 
+            $samlSessionIndex = bin2hex(random_bytes(32));
             $assertion->addItem(
                 (new \LightSaml\Model\Assertion\AuthnStatement())
-                ->setAuthnInstant(new \DateTime('-10 MINUTE'))
-                ->setSessionIndex(session_id())
+                    ->setAuthnInstant(new \DateTime('-10 MINUTE'))
+                    ->setSessionIndex($samlSessionIndex)
                     ->setAuthnContext(
                         (new \LightSaml\Model\Assertion\AuthnContext())
                             ->setAuthnContextClassRef(SamlConstants::AUTHN_CONTEXT_UNSPECIFIED)
