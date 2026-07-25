@@ -1613,7 +1613,7 @@
   <string name="SYS_SSO_OIDC_ROLE">OIDC Rollenname</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token-Endpunkt</string>
   <string name="SYS_SSO_OIDC_USERINFO_ENDPOINT">Benutzerinfo Endpunkt</string>
-  <string name="SYS_SSO_REDIRECT_URI">URI umleiten</string>
+  <string name="SYS_SSO_REDIRECT_URI">Weiterleitungs-URI</string>
   <string name="SYS_SSO_REDIRECT_URI_DESC">Der Redirect-URI, an den der Browser nach erfolgreicher Anmeldung weitergeleitet wird.</string>
   <string name="SYS_SSO_REQUIRE_AUTHN_SIGNED">Alle eingehenden Anfragen vom Client (SP) müssen unterzeichnet werden</string>
   <string name="SYS_SSO_ROLE">SSO Rollenname</string>
