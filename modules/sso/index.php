@@ -1,16 +1,16 @@
 <?php
 
 use Laminas\Diactoros\Response\JsonResponse;
+use Psr\Http\Message\ResponseInterface;
 
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\SAMLService;
 
 /**
  ***********************************************************************************************
- * Event list
+ * SSO identity provider endpoints
  *
- * Plugin that lists the latest events in a slim interface and
- * can thus be ideally used in an overview page.
+ * Handles the OpenID Connect and SAML identity provider endpoints.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -19,11 +19,40 @@ use Admidio\SSO\Service\SAMLService;
  */
 try {
     $rootPath = dirname(__DIR__, 2);
-    $pluginFolder = basename(__DIR__);
 
     require_once($rootPath . '/system/common.php');
     $requestUri = $_SERVER['REQUEST_URI'];
-    $method = $_SERVER['REQUEST_METHOD'];
+
+    /**
+     * Send a PSR-7 response to the client.
+     */
+    $sendResponse = static function (ResponseInterface $response): never {
+        http_response_code($response->getStatusCode());
+
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header(sprintf('%s: %s', $name, $value), false);
+            }
+        }
+
+        echo (string) $response->getBody();
+        exit;
+    };
+    /**
+     * Log an unexpected SSO exception without returning its details to the client.
+     */
+    $logSSOException = static function (string $message, Throwable $exception) use ($gLogger): void {
+        $gLogger->error(
+            $message,
+            [
+                'exception' => get_class($exception),
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => $exception->getTraceAsString()
+            ]
+        );
+    };
 
     $type = '';
     if (strpos($requestUri, '/saml/') !== false) {
@@ -39,12 +68,17 @@ try {
             $oidcService = new OIDCService($gDb, $gCurrentUser);
             $oidcService->setupService();
         } catch (Exception $e) {
-            echo json_encode(['error' => 'OIDC service setup failed: ' . $gHtmlPurifierFilter->purify($e->getMessage())]);
-            exit;
+            $logSSOException('Unable to initialize the OIDC connect service', $e);
+            $sendResponse(new JsonResponse([
+                   'error' => 'server_error',
+                    'error_description' => 'The OpenID Connect service could not be initialized.'
+                ],
+                500
+            ));
+            // exit; // $sendResponse WILL EXIT -> no explicit exit needed
         }
 
         try {
-            $response = null;
             if (strpos($requestUri, '/oidc/authorize') !== false) {
                 $response = $oidcService->handleAuthorizationRequest();
             } elseif (strpos($requestUri, '/oidc/token') !== false) {
@@ -62,46 +96,54 @@ try {
             } elseif (strpos($requestUri, '/oidc/logout') !== false) {
                 $response = $oidcService->handleLogoutRequest();
             } else {
-                $response = new JsonResponse(['error' => 'Endpoint not found'], 404);
+                $response = new JsonResponse(['error' => 'invalid_request', 'error_description' => 'Endpoint not found'], 404);
             }
-            if (!empty($response)) {
-                http_response_code($response->getStatusCode());
-                foreach ($response->getHeaders() as $name => $values) {
-                    foreach ($values as $value) {
-                        header(sprintf('%s: %s', $name, $value), false);
-                    }
-                }
-                $body = (string) $response->getBody();
-                echo (string) $response->getBody();
-                exit;
-            }
+            $sendResponse($response);
 
         } catch (Throwable $e) {
-            echo json_encode(['error' => 'OIDC Error in Admidio: ' . $gHtmlPurifierFilter->purify($e->getMessage())]);
-            exit;
+            $logSSOException('An unexpected error occurred at an OpenID Connect endpoint.', $e);
+            $sendResponse(new JsonResponse([
+                    'error' => 'server_error', 
+                    'error_description' => 'The OpenID Connect request could not be processed.'
+                ], 
+                500
+            ));
+            // exit; // $sendResponse WILL EXIT -> no explicit exit needed
         }
 
 
     } elseif ($type === 'saml') {
-
-        $samlService = new SAMLService($gDb, $gCurrentUser);
-
-        if (strpos($requestUri, '/saml/metadata') !== false) {
-            $samlService->handleMetadataRequest();
-        } elseif (strpos($requestUri, '/saml/sso') !== false) {
-            $samlService->handleSSORequest();
-        } elseif (strpos($requestUri, '/saml/slo') !== false) {
-            $samlService->handleSLORequest();
-//        } elseif (strpos($requestUri, '/saml/attribute-query') !== false) {
-//            $samlService->handleAttributeQuery();
-        } else {
-            header('HTTP/1.1 404 Not Found');
-            echo json_encode(['error' => 'Endpoint not found']);
+        try {
+            $samlService = new SAMLService($gDb, $gCurrentUser);
+    
+            if (strpos($requestUri, '/saml/metadata') !== false) {
+                $samlService->handleMetadataRequest();
+            } elseif (strpos($requestUri, '/saml/sso') !== false) {
+                $samlService->handleSSORequest();
+            } elseif (strpos($requestUri, '/saml/slo') !== false) {
+                $samlService->handleSLORequest();
+    //        } elseif (strpos($requestUri, '/saml/attribute-query') !== false) {
+    //            $samlService->handleAttributeQuery();
+            } else {
+                $sendResponse(new JsonResponse(['error' => 'Endpoint not found.'], 404));
+            }
+        } catch (Throwable $e) {
+            $logSSOException('An unexpected error occurred at a SAML endpoint.', $e);
+            $sendResponse(new JsonResponse([
+                    'error' => 'The SAML request could not be processed.'
+                ], 
+                500
+            ));
+            // exit; // $sendResponse WILL EXIT -> no explicit exit needed
         }
 
     } else {
-        header('HTTP/1.1 404 Not Found');
-        echo json_encode(['error' => 'URL or authorization protocol not available']);
+        $sendResponse(
+            new JsonResponse(
+                ['error' => 'SSO endpoint not found or authorization protocoll not available.'],
+                404
+            )
+        );
     }
 
 

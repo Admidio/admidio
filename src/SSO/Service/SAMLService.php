@@ -599,8 +599,17 @@ class SAMLService extends SSOService {
             $httpResponse = $binding->send($messageContext);
             print $httpResponse->getContent();
         } catch (Exception $e) {
-            $gLogger->error($e->getMessage());
-            $this->errorResponse(SamlConstants::STATUS_RESPONDER, $e->getMessage(), $request, $client);
+            $gLogger->error(
+                'Could not process the SAML request.',
+                [
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString()
+                ]
+            );
+            $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
         }
     }
 
@@ -708,8 +717,17 @@ class SAMLService extends SSOService {
             $httpResponse = $binding->send($messageContext, $client->getValue('smc_slo_url'));
             print $httpResponse->getContent();
         } catch (Exception $e) {
-            $gLogger->error($e->getMessage());
-            $this->errorResponse(SamlConstants::STATUS_RESPONDER, $e->getMessage(), $request, $client);
+            $gLogger->error(
+                'Could not process the SAML request.',
+                [
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString()
+                ]
+            );
+            $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
         }
     }
 
@@ -808,8 +826,17 @@ class SAMLService extends SSOService {
             // exit;
 
         } catch (Exception $e) {
-            $gLogger->error($e->getMessage());
-            $this->errorResponse(SamlConstants::STATUS_RESPONDER, $e->getMessage(), $request, $client);
+            $gLogger->error(
+                'Could not process the SAML request.',
+                [
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString()
+                ]
+            );
+            $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
         }
     }
 */
