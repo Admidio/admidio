@@ -587,7 +587,7 @@ class SSOClientPresenter extends PagePresenter
                 '</button>' .
             '</div>' .
             '<div style="display:flex; align-itens: center; gap: 8px;" id="client_secret_shown">' .
-            '<input id="new_ocl_client_secret" name="new_ocl_client_secret" class="form-control focus-ring hidden copy-container" type="text" value="" maxlength="250" style="flex: 1" >' .
+            '<input id="new_ocl_client_secret" name="new_ocl_client_secret" class="form-control focus-ring hidden copy-container" type="text" value="" maxlength="250" style="flex: 1" ' . ($noClientSecretYet?'required':'') . '>' .
                 ($noClientSecretYet ? '' : $cancelRecreateButton) .
             '</div>';
         $this->addJavascript('
