@@ -112,13 +112,16 @@ class OIDCService extends SSOService {
         if (array_key_exists('ocl_scope', $formValues)) {
             $formValues['ocl_scope'] = implode(' ', array_merge(['openid'], $formValues['ocl_scope']));
         }
-        if (array_key_exists('new_ocl_client_secret', $formValues)) {
+        if (array_key_exists('new_ocl_client_secret', $formValues)
+            && $formValues['new_ocl_client_secret'] !== '') {
             // A new client secret -> store the hashed value in the database!
             $client->setValue(
                 $client->getColumnPrefix().'_client_secret',
                 password_hash($formValues['new_ocl_client_secret'], PASSWORD_DEFAULT)
             );
         }
+        // Do not keep the client secret available in plain text longer than required
+        unset($formValues['new_ocl_client_secret']);
     }
 
     public static function setClient(OIDCClient $client) {
