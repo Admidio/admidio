@@ -25,9 +25,6 @@ use Psr\Http\Server\RequestHandlerInterface; // May be useful for middleware in 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use League\OAuth2\Server\Grant\PasswordGrant;
-use League\OAuth2\Server\Grant\ImplicitGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 
 use Admidio\Infrastructure\Database;
@@ -303,39 +300,6 @@ class OIDCService extends SSOService {
 
 
         /* ***********************************************************************
-         * Client Credentials Grant
-         */
-        $server->enableGrantType(
-            new ClientCredentialsGrant(),
-            new \DateInterval('PT1H') // access tokens will expire after 1 hour
-        );
-
-
-        /* ***********************************************************************
-        * Resource owner Password Grant
-        */
-        $grant = new PasswordGrant(
-            $userRepository,
-            $refreshTokenRepository
-        );
-        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
-        $server->enableGrantType(
-            $grant,
-            new \DateInterval('PT1H') // access tokens will expire after 1 hour
-        );
-
-
-        /* ***********************************************************************
-        * Implicit Grant
-        */
-        // Enable the implicit grant on the server
-        $server->enableGrantType(
-            new ImplicitGrant(new \DateInterval('PT1H')),
-            new \DateInterval('PT1H') // access tokens will expire after 1 hour
-        );
-
-
-        /* ***********************************************************************
         * RefreshToken Grant
         */
         $grant = new RefreshTokenGrant($refreshTokenRepository);
@@ -602,7 +566,7 @@ class OIDCService extends SSOService {
             "jwks_uri" => "{$issuer}/jwks",
             "scopes_supported" => ["openid", "profile", "email", "phone", "address", "groups", "custom"],
             "response_types_supported" => ["code"],
-            "grant_types_supported" => ["authorization_code", "refresh_token", "client_credentials"],
+            "grant_types_supported" => ["authorization_code", "refresh_token"],
             "subject_types_supported" => ["public"],
             "id_token_signing_alg_values_supported" => ["RS256"],
             "token_endpoint_auth_methods_supported" => ["client_secret_post", "client_secret_basic"],
