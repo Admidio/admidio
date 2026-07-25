@@ -112,8 +112,13 @@ class OIDCService extends SSOService {
         if (array_key_exists('ocl_scope', $formValues)) {
             $formValues['ocl_scope'] = implode(' ', array_merge(['openid'], $formValues['ocl_scope']));
         }
-        if (array_key_exists('new_ocl_client_secret', $formValues)
-            && $formValues['new_ocl_client_secret'] !== '') {
+        $newClientSecret = (string) ($formValues['new_ocl_client_secret'] ?? '');
+        // new clients require a secret
+        if ($client->isNewRecord() && $newClientSecret === '') {
+            throw new \Exception('SYS_SSO_CLIENT_SECRET_REQUIRED');
+        }
+
+        if ($newClientSecret !== '') {
             // A new client secret -> store the hashed value in the database!
             $client->setValue(
                 $client->getColumnPrefix().'_client_secret',
