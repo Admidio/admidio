@@ -1545,8 +1545,8 @@
   <string name="SYS_SSO_CERT_STATE">State or province</string>
   <string name="SYS_SSO_CERTIFICATE_EXPIRED">The selected certificate has expired.</string>
   <string name="SYS_SSO_CERTIFICATE_FAILURE">Generating a certificate failed: #VAR1#</string>
-  <string name="SYS_SSO_CERTIFICATE_KEY_MISMATCH">The certificate does not match the private key.</string>
   <string name="SYS_SSO_CERTIFICATE_INVALID">The selected certificate is invalid.</string>
+  <string name="SYS_SSO_CERTIFICATE_KEY_MISMATCH">The certificate does not match the private key.</string>
   <string name="SYS_SSO_CERTIFICATE_MISSING">The selected key has no certificate.</string>
   <string name="SYS_SSO_CERTIFICATE_NOT_YET_VALID">The selected certificate is not valid yet.</string>
   <string name="SYS_SSO_CERTIFICATE_SETTINGS">Certificate Settings</string>
@@ -1589,8 +1589,8 @@
   <string name="SYS_SSO_KEY_EDIT">Edit Key</string>
   <string name="SYS_SSO_KEY_EXPIRATION_INVALID">The selected key has an invalid expiration date.</string>
   <string name="SYS_SSO_KEY_EXPIRATION_MISSING">The selected key has no expiration date.</string>
-  <string name="SYS_SSO_KEY_EXPIRES">Expiration date</string>
   <string name="SYS_SSO_KEY_EXPIRED">The selected key has expired.</string>
+  <string name="SYS_SSO_KEY_EXPIRES">Expiration date</string>
   <string name="SYS_SSO_KEY_EXPORT">Export private key</string>
   <string name="SYS_SSO_KEY_EXPORT_FAILURE">Exporting a key failed: #VAR1#</string>
   <string name="SYS_SSO_KEY_IN_USE">This key is currently in use as the configured signing or encryption key.</string>
