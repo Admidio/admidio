@@ -2307,46 +2307,29 @@ class PreferencesPresenter extends PagePresenter
         );
 
         $keyService = new KeyService($gDb);
-
-        // Retrieve and offer only keys that are suitable for SAML signing or encryption!
-        $samlSigningKeys = array();
-        $samlSigningValueAttributes = array();
-        foreach ($keyService->getKeysData(true, KeyService::USAGE_SAML_SIGNING) as $key) {
-            $samlSigningKeys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
+        $keyArray = $keyService->getKeysData(true);
+        // $keys = array('0' => $gL10n->get('SYS_NONE'));
+        $keys = array();
+        $valueAttributes = array();
+        foreach ($keyArray as $key) {
+            $keys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
             // We can add the certificates as additional value attributes to the select entries
-            $samlSigningValueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
-        }
-
-        $samlEncryptionKeys = array();
-        $samlEncryptionValueAttributes = array();
-        foreach ($keyService->getKeysData(true, KeyService::USAGE_SAML_ENCRYPTION) as $key) {
-            $samlEncryptionKeys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
-            $samlEncryptionValueAttributes[$key['key_id']] = array('data-global' => $key['key_certificate']);
-        }
-
-        // Add current signing and/or encryption keys, even if they are invalid, but indicate them as invalid!
-        $currentSamlSigningKeyId = (int) $formValues['sso_saml_signing_key'];
-        if ($currentSamlSigningKeyId > 0 && !array_key_exists($currentSamlSigningKeyId, $samlSigningKeys)) {
-            $samlSigningKeys[$currentSamlSigningKeyId] = $gL10n->get('SYS_SSO_SELECTED_KEY_INVALID');
-        }
-        $currentSamlEncryptionKeyId =(int) $formValues['sso_saml_encryption_key'];
-        if ($currentSamlEncryptionKeyId > 0 && !array_key_exists($currentSamlEncryptionKeyId, $samlEncryptionKeys)) {
-            $samlEncryptionKeys[$currentSamlEncryptionKeyId] = $gL10n->get('SYS_SSO_SELECTED_KEY_INVALID');
+            $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
         }
 
         $formSSO->addSelectBox(
             'sso_saml_signing_key',
             $gL10n->get('SYS_SSO_SIGNING_KEY'),
-            $samlSigningKeys,
+            $keys,
             array('defaultValue' => $formValues['sso_saml_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
-                'valueAttributes' => $samlSigningValueAttributes, 'class' => 'if-saml-enabled')
+                'valueAttributes' => $valueAttributes, 'class' => 'if-saml-enabled')
         );
         $formSSO->addSelectBox(
             'sso_saml_encryption_key',
             $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
-            $samlEncryptionKeys,
+            $keys,
             array('defaultValue' => $formValues['sso_saml_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
-                'valueAttributes' => $samlEncryptionValueAttributes, 'class' => 'if-saml-enabled')
+                'valueAttributes' => $valueAttributes, 'class' => 'if-saml-enabled')
         );
 
         $formSSO->addCheckbox(
@@ -2412,20 +2395,18 @@ class PreferencesPresenter extends PagePresenter
         );
 
         $keyService = new KeyService($gDb);
-        $keyArray = $keyService->getKeysData(true, KeyService::USAGE_OIDC_SIGNING);
+        $keyArray = $keyService->getKeysData(true);
+        // $keys = array('0' => $gL10n->get('SYS_NONE'));
         $keys = array();
         $valueAttributes = array();
         foreach ($keyArray as $key) {
-            $keys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
-            // We can add the certificates as additional value attributes to the select entries
-            $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
+            // OIDC supports only RSA keys!
+            if (str_starts_with($key['key_algorithm'], 'RSA')) {
+                $keys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
+                // We can add the certificates as additional value attributes to the select entries
+                $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
+            }
         }
-
-        // Add current signing and/or encryption keys, even if they are invalid, but indicate them as invalid!
-        $currentOidcKeyId = (int) $formValues['sso_oidc_signing_key'];
-        if ($currentOidcKeyId > 0 && !array_key_exists($currentOidcKeyId, $keys)) {
-            $keys[$currentOidcKeyId] = $gL10n->get('SYS_SSO_SELECTED_KEY_INVALID');
-        }        
 
         $formSSO->addSelectBox(
             'sso_oidc_signing_key',

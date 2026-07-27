@@ -66,8 +66,7 @@ try {
             $keyId = $key->getValue('key_id');
             // Check if key is set as this IdP's signing or encryption key
             if ($gSettingsManager->get('sso_saml_signing_key') == $keyId ||
-                $gSettingsManager->get('sso_saml_encryption_key') == $keyId ||
-                $gSettingsManager->get('sso_oidc_signing_key') == $keyId ) {
+                $gSettingsManager->get('sso_saml_encryption_key') == $keyId) {
                     echo json_encode(array('status' => 'error',
                             'message' => $gL10n->get('SYS_SSO_KEY_IN_USE')));
             } else {

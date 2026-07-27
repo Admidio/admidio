@@ -45,7 +45,7 @@ use Admidio\UI\Presenter\PagePresenter;
 
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Entity\Key;
-use Admidio\SSO\Service\KeyService;
+
 
 class SAMLService extends SSOService {
     private $idpEntityId;
@@ -66,20 +66,6 @@ class SAMLService extends SSOService {
         $this->metadataUrl = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/saml/metadata';
     }
 
-    /**
-     * Validate SAML-specific client settings before saving them.
-     * @param array $formValues
-     * @param \Admidio\SSO\Entity\SSOClient $client
-     * @return void
-     * @throws Exception
-     */
-    protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
-        if (!empty($formValues['smc_encrypt_assertions'])) {
-            // This method checks whether all requirements for encryption are fulfilled and
-            // returns the certificate, which can be ignored here
-            $this->getClientEncryptionCertificate($formValues['smc_x509_certificate']??'');
-        }
-    }
     protected function getRolesRightName(): string {
         return 'sso_saml_access';
     }
@@ -126,18 +112,10 @@ class SAMLService extends SSOService {
 
         // Load Certificate PEM
         $idpCertPem = '';
-        $signatureKeyID = (int) $gSettingsManager->get('sso_saml_signing_key');
-
-        if ($signatureKeyID > 0) {
-            $keyService = new KeyService($this->db);
-            try {
-                $signatureKey = $keyService->getUsableKey($signatureKeyID, KeyService::USAGE_SAML_SIGNING);
-                $idpCertPem = (string) $signatureKey->getValue('key_certificate');
-            } catch (Exception $exception) {
-                // The settings form must remain accessible so that an
-                // administrator can replace an invalid key.
-                $idpCertPem = '';
-            }
+        $signatureKeyID = $gSettingsManager->get('sso_saml_signing_key');
+        if (!empty($signatureKeyID)) {
+            $signatureKey = new Key($this->db, $signatureKeyID);
+            $idpCertPem = $signatureKey->getValue('key_certificate');
         }
 
         $metaURL = $this->getMetadataUrl();
@@ -162,85 +140,28 @@ class SAMLService extends SSOService {
         return $signatureWriter;
     }
 
-    /**
-     * Load and validate the certificate used to encrypt assertions for a SAML client.
-     * @param string $certificatePEM
-     * @return X509Certificate
-     * @throws Exception
-     */
-    private function getClientEncryptionCertificate(string $certificatePEM): X509Certificate {
-        global $gL10n;
-
-        if (trim($certificatePEM) === '') {
-            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_KEY_MISSING'));
-        }
-
-        $certificateResource = openssl_x509_read($certificatePEM);
-        if ($certificateResource === false) {
-            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'));
-        }
-
-        $certificateData = openssl_x509_parse($certificateResource);
-        if ($certificateData === false
-            || !isset($certificateData['validFrom_time_t'])
-            || !isset($certificateData['validTo_time_t'])
-            || time() < $certificateData['validFrom_time_t']
-            || time() > $certificateData['validTo_time_t']
-        ) {
-            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'));
-        }
-
-        $publicKey = openssl_pkey_get_public($certificateResource);
-        if ($publicKey === false) {
-            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'));
-        }
-
-        $publicKeyDetails = openssl_pkey_get_details($publicKey);
-        if (
-            $publicKeyDetails === false
-            || $publicKeyDetails['type'] !== OPENSSL_KEYTYPE_RSA
-        ) {
-            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'));
-        }
-
-        try {
-            $certificate = new X509Certificate();
-            $certificate->loadPem($certificatePEM);
-
-            return $certificate;
-        } catch (\Throwable $exception) {
-            throw new Exception(
-                $gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'),
-                0,
-                $exception
-            );
-        }
-    }
-    
-    /**
-     * Encrypt an assertion with the configured client certificate.
-     * @param Assertion $assertion
-     * @param SAMLClient $client
-     * @return EncryptedAssertionWriter
-     * @throws Exception
-     */
     protected function encryptAssertion(Assertion $assertion, SAMLClient $client, bool $encryptAssertionRequired) {
         global $gL10n;
-        try {
-            // If no encryption certificate is set, the following method throws an exception!
-            $SPcert = $this->getClientEncryptionCertificate($client->getValue('smc_x509_certificate'));
-            $key = KeyHelper::createPublicKey($SPcert);
-
-            $encryptedAssertion = new EncryptedAssertionWriter();
-            $encryptedAssertion->encrypt($assertion, $key);
-
-            return $encryptedAssertion;
-        } catch (Exception $exception) {
-            throw $exception;
-        } catch (\Throwable $exception) {
-            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_FAILED'), 0, $exception);
+        $certPem = $client->getValue('smc_x509_certificate');
+        if (!$certPem) {
+            // Client has no cert configured...
+            $SPcert = null;
+            if ($encryptAssertionRequired) {
+                return $gL10n->get('SYS_SSO_SAML_ENCRYPTION_KEY_MISSING');
+            } else {
+                return false;
+            }
+        } else {
+            $SPcert = new X509Certificate();
+            $SPcert->loadPem($certPem);
         }
+        $key = KeyHelper::createPublicKey($SPcert);
+
+        $encryptedAssertion = new EncryptedAssertionWriter();
+        $encryptedAssertion->encrypt($assertion, $key);
+        return $encryptedAssertion;
     }
+
 
     protected function receiveMessage() {
         $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
@@ -256,37 +177,36 @@ class SAMLService extends SSOService {
         return $messageContext->getMessage();
     }
 
-    /**
-     * Load and validate the keys used by the SAML identity provider.
-     *
-     * @return array
-     * @throws Exception
-     */
-    public function getKeysCertificates(): array
-    {
+    public function getKeysCertificates() {
         global $gSettingsManager;
 
-        $keyService = new KeyService($this->db);
+        // Private key and Certificate for signatures
+        $signatureKeyID = $gSettingsManager->get('sso_saml_signing_key');
+        $signatureKey = new Key($this->db, $signatureKeyID);
 
-        $signatureKey = $keyService->getUsableKey((int) $gSettingsManager->get('sso_saml_signing_key'), KeyService::USAGE_SAML_SIGNING);
+        $idpPrivateKeyPem = $signatureKey->getValue('key_private');
+        $idpCertPem = $signatureKey->getValue('key_certificate');
+        if (!$idpCertPem) {
+            $idpCert = null;
+        } else {
+            $idpCert = new X509Certificate();
+            $idpCert->loadPem($idpCertPem);
+        }
 
-        $idpPrivateKeyPem = (string) $signatureKey->getValue('key_private');
-
-        $idpCert = new X509Certificate();
-        $idpCert->loadPem((string) $signatureKey->getValue('key_certificate'));
-
-        $idpCertEnc = null;
-        $encryptionKeyId = (int) $gSettingsManager->get('sso_saml_encryption_key');
-
-        if ($encryptionKeyId > 0) {
-            $encryptionKey = $keyService->getUsableKey($encryptionKeyId, KeyService::USAGE_SAML_ENCRYPTION);
-
+        // Certificate for Encryption
+        $encryptionKeyID = $gSettingsManager->get('sso_saml_encryption_key');
+        $encryptionKey = new Key($this->db, $encryptionKeyID);
+        $idpCertEncPem = $encryptionKey->getValue('key_certificate');
+        if (!$idpCertEncPem) {
+            $idpCertEnc = null;
+        } else {
             $idpCertEnc = new X509Certificate();
-            $idpCertEnc->loadPem((string) $encryptionKey->getValue('key_certificate'));
+            $idpCertEnc->loadPem($idpCertEncPem);
         }
 
         // Return everything as a named array
         return ['idpPrivateKey' => $idpPrivateKeyPem, 'idpCert' => $idpCert, 'idpCertEnc' => $idpCertEnc];
+
     }
 
     public function handleMetadataRequest() {
@@ -589,11 +509,10 @@ class SAMLService extends SSOService {
                     )
                 );
 
-            $samlSessionIndex = bin2hex(random_bytes(32));
             $assertion->addItem(
                 (new \LightSaml\Model\Assertion\AuthnStatement())
-                    ->setAuthnInstant(new \DateTime('-10 MINUTE'))
-                    ->setSessionIndex($samlSessionIndex)
+                ->setAuthnInstant(new \DateTime('-10 MINUTE'))
+                ->setSessionIndex(session_id())
                     ->setAuthnContext(
                         (new \LightSaml\Model\Assertion\AuthnContext())
                             ->setAuthnContextClassRef(SamlConstants::AUTHN_CONTEXT_UNSPECIFIED)
@@ -653,9 +572,16 @@ class SAMLService extends SSOService {
 
             // IF required, encrypt the assertion
             $encryptAssertion = $client->getValue('smc_encrypt_assertions');
+            $encryptAssertionRequired = false;
             if ($encryptAssertion) {
-                $assertionEnc = $this->encryptAssertion($assertion, $client);
-                $response->addEncryptedAssertion($assertionEnc);
+                $assertionEnc = $this->encryptAssertion($assertion, $client, $encryptAssertionRequired);
+                // If encryption is required, but fails, an exception should be triggered, so assume encryption worked or is not required!
+                if (!is_null($assertionEnc)) {
+                    $response->addEncryptedAssertion($assertionEnc);
+                } else {
+                    $response->addAssertion($assertion);
+                }
+
             } else {
                 // Finally add the assertion to the response:
                 $response->addAssertion($assertion);
@@ -672,17 +598,8 @@ class SAMLService extends SSOService {
             $httpResponse = $binding->send($messageContext);
             print $httpResponse->getContent();
         } catch (Exception $e) {
-            $gLogger->error(
-                'Could not process the SAML request.',
-                [
-                    'exception' => get_class($e),
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => $e->getTraceAsString()
-                ]
-            );
-            $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
+            $gLogger->error($e->getMessage());
+            $this->errorResponse(SamlConstants::STATUS_RESPONDER, $e->getMessage(), $request, $client);
         }
     }
 
@@ -790,17 +707,8 @@ class SAMLService extends SSOService {
             $httpResponse = $binding->send($messageContext, $client->getValue('smc_slo_url'));
             print $httpResponse->getContent();
         } catch (Exception $e) {
-            $gLogger->error(
-                'Could not process the SAML request.',
-                [
-                    'exception' => get_class($e),
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => $e->getTraceAsString()
-                ]
-            );
-            $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
+            $gLogger->error($e->getMessage());
+            $this->errorResponse(SamlConstants::STATUS_RESPONDER, $e->getMessage(), $request, $client);
         }
     }
 
@@ -899,17 +807,8 @@ class SAMLService extends SSOService {
             // exit;
 
         } catch (Exception $e) {
-            $gLogger->error(
-                'Could not process the SAML request.',
-                [
-                    'exception' => get_class($e),
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => $e->getTraceAsString()
-                ]
-            );
-            $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
+            $gLogger->error($e->getMessage());
+            $this->errorResponse(SamlConstants::STATUS_RESPONDER, $e->getMessage(), $request, $client);
         }
     }
 */

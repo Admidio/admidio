@@ -4,31 +4,25 @@ namespace Admidio\SSO\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Users\Entity\User;
 use Admidio\SSO\Entity\Key;
 use Admidio\Infrastructure\Exception;
 
 
 class KeyService {
-    // Constants to indicate signing/encryption usage    
-    public const USAGE_OIDC_SIGNING = 'oidc_signing';
-    public const USAGE_SAML_SIGNING = 'saml_signing';
-    public const USAGE_SAML_ENCRYPTION = 'saml_encryption';
     private Database $db;
+    private User $currentUser;
 
     public function __construct(Database $db) {
         $this->db           = $db;
     }
 
     /**
-     * Return an array of configured cryptographic keys.
-     *
-     * @param bool $activeOnly Only return active keys.
-     * @param string|null $usage Only return keys that are usable for this purpose.
-     *
-     * @return array
-     * @throws Exception
+     * Return an array of all configured cryptographic key data.
+     * @param bool $activeOnly If true, only active key uuids are returned
+     * @return array Returns an array with all key data for list view.
      */
-   public function getKeysData(bool $activeOnly = false, ?string $usage = NULL) {
+    public function getKeysData(bool $activeOnly = false) {
         global $gCurrentOrgId;
         $sql = 'SELECT key_id, key_uuid, key_org_id, key_name, key_algorithm, key_certificate, key_expires_at, key_is_active
                       FROM ' . TBL_SSO_KEYS . '
@@ -36,252 +30,7 @@ class KeyService {
                      ' . ($activeOnly ? ' and key_is_active = TRUE ' : '') . '
                   ORDER BY key_name';
         $keysList = $this->db->getArrayFromSql($sql, array($gCurrentOrgId));
-
-        if ($usage === null) {
-            return $keysList;
-        }
-
-        $usableKeys = array();
-
-        foreach ($keysList as $keyData) {
-            try {
-                $this->getUsableKey((int) $keyData['key_id'], $usage);
-                $usableKeys[] = $keyData;
-            } catch (Exception $exception) {
-                // The key is not offered for this purpose.
-            }
-        }
-
-        return $usableKeys;
-    }
-
-    /**
-     * Load and validate a key for a specific SSO purpose.
-     *
-     * @throws Exception
-     */
-    public function getUsableKey(int $keyId, string $usage): Key {
-        global $gCurrentOrgId;
-
-        if ($keyId <= 0) {
-            throw new Exception('SYS_SSO_KEY_NOT_FOUND');
-        }
-
-        $key = new Key($this->db, $keyId);
-
-        if ($key->isNewRecord() || (int) $key->getValue('key_org_id') !== $gCurrentOrgId) {
-            throw new Exception('SYS_SSO_KEY_NOT_FOUND');
-        }
-
-        if (!(bool) $key->getValue('key_is_active')) {
-            throw new Exception('SYS_SSO_KEY_INACTIVE');
-        }
-
-        $this->validateExpiration($key);
-        $this->validateKeyMaterial($key, $usage);
-        $this->validateUsage($key, $usage);
-
-        return $key;
-    }
-
-    /**
-     * Check whether a key is usable for a specific SSO purpose.
-     */
-    public function isKeyUsable(int $keyId, string $usage): bool {
-        try {
-            $this->getUsableKey($keyId, $usage);
-            return true;
-        } catch (Exception $exception) {
-            return false;
-        }
-    }
-
-    /**
-     * Validate the expiry date stored for a key.
-     *
-     * @throws Exception
-     */
-    private function validateExpiration(Key $key): void
-    {
-        $expiresAtValue = $key->getValue('key_expires_at');
-
-        if ($expiresAtValue === '' || $expiresAtValue === null) {
-            return;
-        }
-
-        $expiresAt = $this->createDateFromDatabaseValue((string) $expiresAtValue);
-
-        if ($expiresAt < new \DateTimeImmutable('today')) {
-            throw new Exception('SYS_SSO_KEY_EXPIRED');
-        }
-    }
-
-    /**
-     * Validate all stored key material and ensure that it belongs together.
-     *
-     * @throws Exception
-     */
-    private function validateKeyMaterial(Key $key, string $usage): void {
-        $privateKeyPem = (string) $key->getValue('key_private');
-        $publicKeyPem = (string) $key->getValue('key_public');
-        $certificatePem = (string) $key->getValue('key_certificate');
-
-        if ($privateKeyPem === '') {
-            throw new Exception('SYS_SSO_PRIVATE_KEY_MISSING');
-        }
-        if ($publicKeyPem === '') {
-            throw new Exception('SYS_SSO_PUBLIC_KEY_MISSING');
-        }
-        $certificateRequired = in_array($usage, [self::USAGE_SAML_SIGNING, self::USAGE_SAML_ENCRYPTION], true);
-        if ($certificateRequired && $certificatePem === '') {
-            throw new Exception('SYS_SSO_CERTIFICATE_MISSING');
-        }
-
-        $privateKey = openssl_pkey_get_private($privateKeyPem);
-        if ($privateKey === false) {
-            throw new Exception('SYS_SSO_PRIVATE_KEY_INVALID');
-        }
-
-        $publicKey = openssl_pkey_get_public($publicKeyPem);
-        if ($publicKey === false) {
-            throw new Exception('SYS_SSO_PUBLIC_KEY_INVALID');
-        }
-
-        $privateKeyDetails = openssl_pkey_get_details($privateKey);
-        $publicKeyDetails = openssl_pkey_get_details($publicKey);
-
-        if (
-            $privateKeyDetails === false
-            || $publicKeyDetails === false
-            || !isset($privateKeyDetails['key'], $publicKeyDetails['key'])
-        ) {
-            throw new Exception('SYS_SSO_KEY_INVALID');
-        }
-
-        if ($this->normalizePublicKey($privateKeyDetails['key']) !== $this->normalizePublicKey($publicKeyDetails['key'])
-            || $privateKeyDetails['type'] !== $publicKeyDetails['type']) {
-            throw new Exception('SYS_SSO_KEY_PAIR_MISMATCH');
-        }
-
-        if ($certificatePem !== '') {
-            $certificate = openssl_x509_read($certificatePem);
-            
-            if ($certificate === false) {
-                throw new Exception('SYS_SSO_CERTIFICATE_INVALID');
-            }
-                
-            if (!openssl_x509_check_private_key($certificate, $privateKey)) {
-                throw new Exception('SYS_SSO_CERTIFICATE_KEY_MISMATCH');
-            }
-            $certificateData = openssl_x509_parse($certificate);
-    
-            if ($certificateData === false) {
-                throw new Exception('SYS_SSO_CERTIFICATE_INVALID');
-            }
-    
-            $currentTimestamp = time();
-    
-            if (isset($certificateData['validFrom_time_t'])
-                && $currentTimestamp < (int) $certificateData['validFrom_time_t']
-            ) {
-                throw new Exception('SYS_SSO_CERTIFICATE_NOT_YET_VALID');
-            }
-    
-            if (isset($certificateData['validTo_time_t'])
-                && $currentTimestamp > (int) $certificateData['validTo_time_t']
-            ) {
-                throw new Exception('SYS_SSO_CERTIFICATE_EXPIRED');
-            }
-        }
-
-
-        $this->validateAlgorithmField($key, $privateKeyDetails);
-    }
-
-    /**
-     * Validate whether a key can be used for the requested protocol operation.
-     *
-     * @throws Exception
-     */
-    private function validateUsage(Key $key, string $usage): void {
-        $privateKey = openssl_pkey_get_private((string) $key->getValue('key_private'));
-        if ($privateKey === false) {
-            throw new Exception('SYS_SSO_PRIVATE_KEY_INVALID');
-        }
-
-        $keyDetails = openssl_pkey_get_details($privateKey);
-        if ($keyDetails === false) {
-            throw new Exception('SYS_SSO_KEY_INVALID');
-        }
-
-        switch ($usage) {
-            case self::USAGE_OIDC_SIGNING:
-            case self::USAGE_SAML_SIGNING:
-            case self::USAGE_SAML_ENCRYPTION:
-                if ($keyDetails['type'] !== OPENSSL_KEYTYPE_RSA) {
-                    throw new Exception('SYS_SSO_RSA_KEY_REQUIRED');
-                }
-                break;
-
-            default:
-                throw new Exception('SYS_SSO_KEY_USAGE_INVALID');
-        }
-    }
-
-    /**
-     * Ensure that the configured algorithm matches the actual key type and size.
-     *
-     * @param array $keyDetails Result of openssl_pkey_get_details().
-     *
-     * @throws Exception
-     */
-    private function validateAlgorithmField(Key $key, array $keyDetails): void {
-        $algorithm = (string) $key->getValue('key_algorithm');
-
-        if ($keyDetails['type'] === OPENSSL_KEYTYPE_RSA) {
-            if (!str_starts_with($algorithm, 'RSA')) {
-                throw new Exception('SYS_SSO_KEY_ALGORITHM_MISMATCH');
-            }
-
-            if (
-                preg_match('/^RSA-(\d+)$/', $algorithm, $matches) === 1
-                && isset($keyDetails['bits'])
-                && (int) $matches[1] !== (int) $keyDetails['bits']
-            ) {
-                throw new Exception('SYS_SSO_KEY_ALGORITHM_MISMATCH');
-            }
-            return;
-        }
-
-        if ($keyDetails['type'] === OPENSSL_KEYTYPE_EC) {
-            if (!str_starts_with($algorithm, 'ECDSA')) {
-                throw new Exception('SYS_SSO_KEY_ALGORITHM_MISMATCH');
-            }
-            return;
-        }
-
-        throw new Exception('SYS_SSO_KEY_TYPE_UNSUPPORTED');
-    }
-
-    /**
-     * Normalize a PEM public key before comparing it.
-     */
-    private function normalizePublicKey(string $publicKey): string
-    {
-        return preg_replace('/\s+/', '', trim($publicKey));
-    }    
-
-    private function createDateFromDatabaseValue(string $value): \DateTimeImmutable {
-        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value);
-        $errors = \DateTimeImmutable::getLastErrors();
-
-        if ($date === false 
-            || (is_array($errors) && ($errors['warning_count'] !== 0 || $errors['error_count'] !== 0))
-            || $date->format('Y-m-d') !== $value
-        ) {
-            throw new Exception('SYS_SSO_KEY_EXPIRATION_INVALID');
-        }
-        return $date;
+        return $keysList;
     }
 
     public function setupKeyConfig(string $algorithm) : array {

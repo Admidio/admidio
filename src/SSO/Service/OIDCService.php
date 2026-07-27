@@ -25,6 +25,9 @@ use Psr\Http\Server\RequestHandlerInterface; // May be useful for middleware in 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\Grant\ClientCredentialsGrant;
+use League\OAuth2\Server\Grant\PasswordGrant;
+use League\OAuth2\Server\Grant\ImplicitGrant;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 
 use Admidio\Infrastructure\Database;
@@ -36,7 +39,6 @@ use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\IdTokenResponse;
 use Admidio\SSO\Grants\OIDCAuthCodeGrant;
-use Admidio\SSO\Service\KeyService;
 
 /** ***************************************************************************
  * Properly handle scopes and claims
@@ -110,21 +112,13 @@ class OIDCService extends SSOService {
         if (array_key_exists('ocl_scope', $formValues)) {
             $formValues['ocl_scope'] = implode(' ', array_merge(['openid'], $formValues['ocl_scope']));
         }
-        $newClientSecret = (string) ($formValues['new_ocl_client_secret'] ?? '');
-        // new clients require a secret
-        if ($client->isNewRecord() && $newClientSecret === '') {
-            throw new \Exception('SYS_SSO_CLIENT_SECRET_REQUIRED');
-        }
-
-        if ($newClientSecret !== '') {
+        if (array_key_exists('new_ocl_client_secret', $formValues)) {
             // A new client secret -> store the hashed value in the database!
             $client->setValue(
                 $client->getColumnPrefix().'_client_secret',
                 password_hash($formValues['new_ocl_client_secret'], PASSWORD_DEFAULT)
             );
         }
-        // Do not keep the client secret available in plain text longer than required
-        unset($formValues['new_ocl_client_secret']);
     }
 
     public static function setClient(OIDCClient $client) {
@@ -247,9 +241,8 @@ class OIDCService extends SSOService {
         $refreshTokenRepository = new RefreshTokenRepository(database: $this->db); // instance of RefreshTokenRepositoryInterface
 
         // Private key for signing
-        $keyService = new KeyService($this->db);
-        $privateKeyID = (int) $gSettingsManager->get('sso_oidc_signing_key');
-        $privateKeyObject = $keyService->getUsableKey($privateKeyID, KeyService::USAGE_OIDC_SIGNING);
+        $privateKeyID = $gSettingsManager->get('sso_oidc_signing_key');
+        $privateKeyObject = new Key($this->db, $privateKeyID);
         $privateKey = new CryptKey($privateKeyObject->getValue('key_private'));
         $publicKey = new CryptKey($privateKeyObject->getValue('key_public'));
 
@@ -297,6 +290,39 @@ class OIDCService extends SSOService {
         // Enable the authentication code grant on the server
         $server->enableGrantType(
             $grant,
+            new \DateInterval('PT1H') // access tokens will expire after 1 hour
+        );
+
+
+        /* ***********************************************************************
+         * Client Credentials Grant
+         */
+        $server->enableGrantType(
+            new ClientCredentialsGrant(),
+            new \DateInterval('PT1H') // access tokens will expire after 1 hour
+        );
+
+
+        /* ***********************************************************************
+        * Resource owner Password Grant
+        */
+        $grant = new PasswordGrant(
+            $userRepository,
+            $refreshTokenRepository
+        );
+        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
+        $server->enableGrantType(
+            $grant,
+            new \DateInterval('PT1H') // access tokens will expire after 1 hour
+        );
+
+
+        /* ***********************************************************************
+        * Implicit Grant
+        */
+        // Enable the implicit grant on the server
+        $server->enableGrantType(
+            new ImplicitGrant(new \DateInterval('PT1H')),
             new \DateInterval('PT1H') // access tokens will expire after 1 hour
         );
 
@@ -524,14 +550,16 @@ class OIDCService extends SSOService {
         }
 
         // Private key and Certificate for signatures
-        $keyService = new KeyService($this->db);
-        $key = $keyService->getUsableKey((int) $gSettingsManager->get('sso_oidc_signing_key'), KeyService::USAGE_OIDC_SIGNING);
-        $publicKeyPem = (string) $key->getValue('key_public');
-        $publicKey = openssl_pkey_get_public($publicKeyPem);
-        $keyDetails = openssl_pkey_get_details($publicKey);
+        $signatureKeyID = $gSettingsManager->get('sso_oidc_signing_key');
+        $signatureKey = new Key($this->db, $signatureKeyID);
 
-        if ($keyDetails === false|| !isset($keyDetails['rsa']['n'], $keyDetails['rsa']['e'])) {
-            throw new \Exception('SYS_SSO_PUBLIC_KEY_INVALID');
+        $idpPublicKeyPem = $signatureKey->getValue('key_public');
+        $keyDetails = openssl_pkey_get_details(openssl_pkey_get_public($idpPublicKeyPem));
+
+        if (!$keyDetails || $keyDetails['type'] != OPENSSL_KEYTYPE_RSA) {
+            http_response_code(500);
+            echo json_encode(["error" => "Invalid public key"]);
+            exit;
         }
 
         // Extract the modulus and exponent
@@ -543,7 +571,7 @@ class OIDCService extends SSOService {
             'keys' => [[
                 'kty' => 'RSA',
                 'use' => 'sig',
-                'kid' => $key->getValue('key_uuid'),
+                'kid' => $signatureKey->getValue('key_uuid'),
                 'alg' => 'RS256',
                 'n'   => $modulus,
                 'e'   => $exponent
@@ -566,7 +594,7 @@ class OIDCService extends SSOService {
             "jwks_uri" => "{$issuer}/jwks",
             "scopes_supported" => ["openid", "profile", "email", "phone", "address", "groups", "custom"],
             "response_types_supported" => ["code"],
-            "grant_types_supported" => ["authorization_code", "refresh_token"],
+            "grant_types_supported" => ["authorization_code", "refresh_token", "client_credentials"],
             "subject_types_supported" => ["public"],
             "id_token_signing_alg_values_supported" => ["RS256"],
             "token_endpoint_auth_methods_supported" => ["client_secret_post", "client_secret_basic"],
