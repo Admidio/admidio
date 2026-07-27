@@ -1650,7 +1650,9 @@
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">Upon successful authentification, an "assertion" is sent to the client. This configuration determines how long (in seconds) this assertion should be considered valid by the client.</string>
   <string name="SYS_SSO_SAML_ENABLED">Enable Single-Sign-On via SAML2.0</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">This setting turns Admidio into a SAML 2.0 identity provider (idP) for single-sign-on, which allows other web applications to authenticate users agains the Admidio user list.</string>
-  <string name="SYS_SSO_SAML_ENCRYPTION_KEY_MISSING">SAML message needs encryption, but client (SP) has no certificate configured.</string>
+  <string name="SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID">Assertion encryption requires a valid RSA certificate from the client.</string>
+  <string name="SYS_SSO_SAML_ENCRYPTION_FAILED">The SAML assertion could not be encrypted.</string>
+  <string name="SYS_SSO_SAML_ENCRYPTION_KEY_MISSING">Assertion encryption requires a certificate from the client.</string>
   <string name="SYS_SSO_SAML_ENTITY_ID">SAML Entity Id</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">The unique identifier for SAML of this Admidio instance. Typically this is the URL of your installation. The client needs to be set up with the exact same entity ID, otherwise login will not work.</string>
   <string name="SYS_SSO_SAML_METADATA_URL">Metadata URL</string>

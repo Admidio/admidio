@@ -66,6 +66,20 @@ class SAMLService extends SSOService {
         $this->metadataUrl = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/saml/metadata';
     }
 
+    /**
+     * Validate SAML-specific client settings before saving them.
+     * @param array $formValues
+     * @param \Admidio\SSO\Entity\SSOClient $client
+     * @return void
+     * @throws Exception
+     */
+    protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
+        if (!empty($formValues['smc_encrypt_assertions'])) {
+            // This method checks whether all requirements for encryption are fulfilled and
+            // returns the certificate, which can be ignored here
+            $this->getClientEncryptionCertificate($formValues['smc_x509_certificate']??'');
+        }
+    }
     protected function getRolesRightName(): string {
         return 'sso_saml_access';
     }
@@ -148,28 +162,85 @@ class SAMLService extends SSOService {
         return $signatureWriter;
     }
 
+    /**
+     * Load and validate the certificate used to encrypt assertions for a SAML client.
+     * @param string $certificatePEM
+     * @return X509Certificate
+     * @throws Exception
+     */
+    private function getClientEncryptionCertificate(string $certificatePEM): X509Certificate {
+        global $gL10n;
+
+        if (trim($certificatePEM) === '') {
+            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_KEY_MISSING'));
+        }
+
+        $certificateResource = openssl_x509_read($certificatePEM);
+        if ($certificateResource === false) {
+            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'));
+        }
+
+        $certificateData = openssl_x509_parse($certificateResource);
+        if ($certificateData === false
+            || !isset($certificateData['validFrom_time_t'])
+            || !isset($certificateData['validTo_time_t'])
+            || time() < $certificateData['validFrom_time_t']
+            || time() > $certificateData['validTo_time_t']
+        ) {
+            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'));
+        }
+
+        $publicKey = openssl_pkey_get_public($certificateResource);
+        if ($publicKey === false) {
+            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'));
+        }
+
+        $publicKeyDetails = openssl_pkey_get_details($publicKey);
+        if (
+            $publicKeyDetails === false
+            || $publicKeyDetails['type'] !== OPENSSL_KEYTYPE_RSA
+        ) {
+            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'));
+        }
+
+        try {
+            $certificate = new X509Certificate();
+            $certificate->loadPem($certificatePEM);
+
+            return $certificate;
+        } catch (\Throwable $exception) {
+            throw new Exception(
+                $gL10n->get('SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID'),
+                0,
+                $exception
+            );
+        }
+    }
+    
+    /**
+     * Encrypt an assertion with the configured client certificate.
+     * @param Assertion $assertion
+     * @param SAMLClient $client
+     * @return EncryptedAssertionWriter
+     * @throws Exception
+     */
     protected function encryptAssertion(Assertion $assertion, SAMLClient $client, bool $encryptAssertionRequired) {
         global $gL10n;
-        $certPem = $client->getValue('smc_x509_certificate');
-        if (!$certPem) {
-            // Client has no cert configured...
-            $SPcert = null;
-            if ($encryptAssertionRequired) {
-                return $gL10n->get('SYS_SSO_SAML_ENCRYPTION_KEY_MISSING');
-            } else {
-                return false;
-            }
-        } else {
-            $SPcert = new X509Certificate();
-            $SPcert->loadPem($certPem);
+        try {
+            // If no encryption certificate is set, the following method throws an exception!
+            $SPcert = $this->getClientEncryptionCertificate($client->getValue('smc_x509_certificate'));
+            $key = KeyHelper::createPublicKey($SPcert);
+
+            $encryptedAssertion = new EncryptedAssertionWriter();
+            $encryptedAssertion->encrypt($assertion, $key);
+
+            return $encryptedAssertion;
+        } catch (Exception $exception) {
+            throw $exception;
+        } catch (\Throwable $exception) {
+            throw new Exception($gL10n->get('SYS_SSO_SAML_ENCRYPTION_FAILED'), 0, $exception);
         }
-        $key = KeyHelper::createPublicKey($SPcert);
-
-        $encryptedAssertion = new EncryptedAssertionWriter();
-        $encryptedAssertion->encrypt($assertion, $key);
-        return $encryptedAssertion;
     }
-
 
     protected function receiveMessage() {
         $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
@@ -582,16 +653,9 @@ class SAMLService extends SSOService {
 
             // IF required, encrypt the assertion
             $encryptAssertion = $client->getValue('smc_encrypt_assertions');
-            $encryptAssertionRequired = false;
             if ($encryptAssertion) {
-                $assertionEnc = $this->encryptAssertion($assertion, $client, $encryptAssertionRequired);
-                // If encryption is required, but fails, an exception should be triggered, so assume encryption worked or is not required!
-                if (!is_null($assertionEnc)) {
-                    $response->addEncryptedAssertion($assertionEnc);
-                } else {
-                    $response->addAssertion($assertion);
-                }
-
+                $assertionEnc = $this->encryptAssertion($assertion, $client);
+                $response->addEncryptedAssertion($assertionEnc);
             } else {
                 // Finally add the assertion to the response:
                 $response->addAssertion($assertion);
