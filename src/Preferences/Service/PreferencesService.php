@@ -14,6 +14,8 @@ use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Language;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\SSO\Service\OIDCService;
+use Admidio\SSO\Service\KeyService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -404,6 +406,24 @@ class PreferencesService
                     }
                 }
                 break;
+
+            case 'sso': 
+                // empty issuerURL means "Use the default URL from the admidio installation's URL"
+                $issuerURL = trim((string)($formValues['sso_oidc_issuer_url'] ?? ''));
+
+                if ($issuerURL !== '') {
+                    $issuerURL = rtrim($issuerURL, '/');
+                }
+
+                // Do not persist the installation-derived default. An empty setting
+                // allows the issuer URL to follow later changes to ADMIDIO_URL.
+                if ($issuerURL === OIDCService::getDefaultIssuerURL()) {
+                    $issuerURL = '';
+                }
+
+                $formValues['sso_oidc_issuer_url'] = $issuerURL;
+                $this->validateSSOSettings($formValues);
+                break;
         }
 
         // Separate the described preferences from the texts. They are normalized as one target
@@ -739,6 +759,39 @@ class PreferencesService
 
         // finally send the mail
         return $email->sendEmail();
+    }
+
+    /**
+     * Validate the keys selected for the enabled SSO protocols.
+     *
+     * Disabled protocols are not validated so that an administrator can
+     * deactivate a protocol or repair an invalid configuration.
+     *
+     * @param array $formValues Validated values of the SSO preferences form.
+     * @return void
+     * @throws Exception
+     */
+    private function validateSSOSettings(array $formValues): void
+    {
+        global $gDb;
+
+        $keyService = new KeyService($gDb);
+
+        $oidcEnabled = (bool) ($formValues['sso_oidc_enabled'] ?? false);
+        if ($oidcEnabled) {
+            // will trigger an exception on illegal keys
+            $keyService->getUsableKey((int) ($formValues['sso_oidc_signing_key'] ?? 0), KeyService::USAGE_OIDC_SIGNING);
+        }
+
+        $samlEnabled = (bool) ($formValues['sso_saml_enabled'] ?? false);
+        if ($samlEnabled) {
+            $keyService->getUsableKey((int) ($formValues['sso_saml_signing_key'] ?? 0), KeyService::USAGE_SAML_SIGNING);
+
+            $samlEncryptionKeyId = (int) ($formValues['sso_saml_encryption_key'] ?? 0);
+            if ($samlEncryptionKeyId > 0) {
+                $keyService->getUsableKey($samlEncryptionKeyId, KeyService::USAGE_SAML_ENCRYPTION);
+            }
+        }
     }
 
     /**
