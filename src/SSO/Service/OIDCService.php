@@ -36,6 +36,7 @@ use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\IdTokenResponse;
 use Admidio\SSO\Grants\OIDCAuthCodeGrant;
+use Admidio\SSO\Service\KeyService;
 
 /** ***************************************************************************
  * Properly handle scopes and claims
@@ -246,8 +247,9 @@ class OIDCService extends SSOService {
         $refreshTokenRepository = new RefreshTokenRepository(database: $this->db); // instance of RefreshTokenRepositoryInterface
 
         // Private key for signing
-        $privateKeyID = $gSettingsManager->get('sso_oidc_signing_key');
-        $privateKeyObject = new Key($this->db, $privateKeyID);
+        $keyService = new KeyService($this->db);
+        $privateKeyID = (int) $gSettingsManager->get('sso_oidc_signing_key');
+        $privateKeyObject = $keyService->getUsableKey($privateKeyID, KeyService::USAGE_OIDC_SIGNING);
         $privateKey = new CryptKey($privateKeyObject->getValue('key_private'));
         $publicKey = new CryptKey($privateKeyObject->getValue('key_public'));
 
@@ -522,16 +524,14 @@ class OIDCService extends SSOService {
         }
 
         // Private key and Certificate for signatures
-        $signatureKeyID = $gSettingsManager->get('sso_oidc_signing_key');
-        $signatureKey = new Key($this->db, $signatureKeyID);
+        $keyService = new KeyService($this->db);
+        $key = $keyService->getUsableKey((int) $gSettingsManager->get('sso_oidc_signing_key'), KeyService::USAGE_OIDC_SIGNING);
+        $publicKeyPem = (string) $key->getValue('key_public');
+        $publicKey = openssl_pkey_get_public($publicKeyPem);
+        $keyDetails = openssl_pkey_get_details($publicKey);
 
-        $idpPublicKeyPem = $signatureKey->getValue('key_public');
-        $keyDetails = openssl_pkey_get_details(openssl_pkey_get_public($idpPublicKeyPem));
-
-        if (!$keyDetails || $keyDetails['type'] != OPENSSL_KEYTYPE_RSA) {
-            http_response_code(500);
-            echo json_encode(["error" => "Invalid public key"]);
-            exit;
+        if ($keyDetails === false|| !isset($keyDetails['rsa']['n'], $keyDetails['rsa']['e'])) {
+            throw new \Exception('SYS_SSO_PUBLIC_KEY_INVALID');
         }
 
         // Extract the modulus and exponent
@@ -543,7 +543,7 @@ class OIDCService extends SSOService {
             'keys' => [[
                 'kty' => 'RSA',
                 'use' => 'sig',
-                'kid' => $signatureKey->getValue('key_uuid'),
+                'kid' => $key->getValue('key_uuid'),
                 'alg' => 'RS256',
                 'n'   => $modulus,
                 'e'   => $exponent

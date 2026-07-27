@@ -45,7 +45,7 @@ use Admidio\UI\Presenter\PagePresenter;
 
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Entity\Key;
-
+use Admidio\SSO\Service\KeyService;
 
 class SAMLService extends SSOService {
     private $idpEntityId;
@@ -112,10 +112,18 @@ class SAMLService extends SSOService {
 
         // Load Certificate PEM
         $idpCertPem = '';
-        $signatureKeyID = $gSettingsManager->get('sso_saml_signing_key');
-        if (!empty($signatureKeyID)) {
-            $signatureKey = new Key($this->db, $signatureKeyID);
-            $idpCertPem = $signatureKey->getValue('key_certificate');
+        $signatureKeyID = (int) $gSettingsManager->get('sso_saml_signing_key');
+
+        if ($signatureKeyID > 0) {
+            $keyService = new KeyService($this->db);
+            try {
+                $signatureKey = $keyService->getUsableKey($signatureKeyID, KeyService::USAGE_SAML_SIGNING);
+                $idpCertPem = (string) $signatureKey->getValue('key_certificate');
+            } catch (Exception $exception) {
+                // The settings form must remain accessible so that an
+                // administrator can replace an invalid key.
+                $idpCertPem = '';
+            }
         }
 
         $metaURL = $this->getMetadataUrl();
@@ -177,36 +185,37 @@ class SAMLService extends SSOService {
         return $messageContext->getMessage();
     }
 
-    public function getKeysCertificates() {
+    /**
+     * Load and validate the keys used by the SAML identity provider.
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function getKeysCertificates(): array
+    {
         global $gSettingsManager;
 
-        // Private key and Certificate for signatures
-        $signatureKeyID = $gSettingsManager->get('sso_saml_signing_key');
-        $signatureKey = new Key($this->db, $signatureKeyID);
+        $keyService = new KeyService($this->db);
 
-        $idpPrivateKeyPem = $signatureKey->getValue('key_private');
-        $idpCertPem = $signatureKey->getValue('key_certificate');
-        if (!$idpCertPem) {
-            $idpCert = null;
-        } else {
-            $idpCert = new X509Certificate();
-            $idpCert->loadPem($idpCertPem);
-        }
+        $signatureKey = $keyService->getUsableKey((int) $gSettingsManager->get('sso_saml_signing_key'), KeyService::USAGE_SAML_SIGNING);
 
-        // Certificate for Encryption
-        $encryptionKeyID = $gSettingsManager->get('sso_saml_encryption_key');
-        $encryptionKey = new Key($this->db, $encryptionKeyID);
-        $idpCertEncPem = $encryptionKey->getValue('key_certificate');
-        if (!$idpCertEncPem) {
-            $idpCertEnc = null;
-        } else {
+        $idpPrivateKeyPem = (string) $signatureKey->getValue('key_private');
+
+        $idpCert = new X509Certificate();
+        $idpCert->loadPem((string) $signatureKey->getValue('key_certificate'));
+
+        $idpCertEnc = null;
+        $encryptionKeyId = (int) $gSettingsManager->get('sso_saml_encryption_key');
+
+        if ($encryptionKeyId > 0) {
+            $encryptionKey = $keyService->getUsableKey($encryptionKeyId, KeyService::USAGE_SAML_ENCRYPTION);
+
             $idpCertEnc = new X509Certificate();
-            $idpCertEnc->loadPem($idpCertEncPem);
+            $idpCertEnc->loadPem((string) $encryptionKey->getValue('key_certificate'));
         }
 
         // Return everything as a named array
         return ['idpPrivateKey' => $idpPrivateKeyPem, 'idpCert' => $idpCert, 'idpCertEnc' => $idpCertEnc];
-
     }
 
     public function handleMetadataRequest() {
