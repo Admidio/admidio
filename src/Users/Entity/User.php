@@ -413,7 +413,12 @@ class User extends Entity
     public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, ?string $totpCode = null): bool
     {
         if ($this->checkPassword($password) && $this->checkMembership($isAdministrator) && $this->checkTotp($totpCode)) {
-            $this->updateSession($setAutoLogin, $updateSessionCookies);
+            $authenticationMethods = array('pwd');
+            if ($this->isTotpAuthenticationRequired()) {
+                $authenticationMethods[] = 'otp';
+            }
+
+            $this->updateSession($setAutoLogin, $updateSessionCookies, $authenticationMethods);        
             if ($updateHash) {
                 $this->rehashIfNecessary($password);
             }
@@ -458,6 +463,21 @@ class User extends Entity
     }
 
     /**
+     * Check whether the current user must authenticate with a TOTP code.
+     * @return bool Returns **true** if TOTP authentication is required.
+     */
+    private function isTotpAuthenticationRequired(): bool
+    {
+        global $gSettingsManager;
+
+        if ($gSettingsManager->has('two_factor_authentication_enabled') && !$gSettingsManager->getBool('two_factor_authentication_enabled')) {
+            return false;
+        }
+
+        return $this->getValue('usr_tfa_secret') !== '';
+    }
+
+    /**
      * Check the totp code of the current user. If the code is correct the session will be updated
      * @param string|null $totpCode The current totp code for the current user.
      * @return true Return true if totp code was correct
@@ -499,12 +519,15 @@ class User extends Entity
         return false;
     }
 
-    private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true): bool
+    private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true, array $authenticationMethods = array('pwd')): bool
     {
         global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($updateSessionCookies) {
             $gCurrentSession->setValue('ses_usr_id', (int)$this->getValue('usr_id'));
+            $gCurrentSession->setValue('ses_authentication_time', DATETIME_NOW);
+            $gCurrentSession->setValue('ses_authentication_methods', implode(' ', $authenticationMethods));
+            $gCurrentSession->setValue('ses_external_session_id', bin2hex(random_bytes(32)));
             $gCurrentSession->save();
         }
 
