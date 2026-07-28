@@ -370,6 +370,91 @@ class OIDCService extends SSOService {
         $this->isServiceSetup = true;
     }
 
+    /**
+     * Read and validate the max_age parameter.
+     * @param ServerRequestInterface $request
+     * @return int|null
+     * @throws OAuthServerException
+     */
+    private function getMaxAge(ServerRequestInterface $request): int|null
+    {
+        $queryParams = $request->getQueryParams();
+
+        if (!array_key_exists('max_age', $queryParams)) {
+            return null;
+        }
+
+        // max_age is a string, which must represent a number, so check this explicitly
+        if ((!is_string($queryParams['max_age']) && !is_int($queryParams['max_age']))
+            || preg_match('/^\d+$/', (string)$queryParams['max_age']) !== 1
+        ) {
+            throw OAuthServerException::invalidRequest('max_age');
+        }
+
+        return (int)$queryParams['max_age'];
+    }
+
+    /**
+     * Check whether the current authentication satisfies max_age.
+     * @param int $maxAge
+     * @return bool
+     */
+    private function isAuthenticationWithinMaxAge(int $maxAge): bool
+    {
+        global $gCurrentSession;
+        $authenticationTime = (int)$gCurrentSession->getValue('ses_authentication_time', 'U');
+
+        if ($authenticationTime === 0) {
+            return false;
+        }
+
+        return time() - $authenticationTime <= $maxAge;
+    }
+
+    private function getAuthenticationRequestID(ServerRequestInterface $request): string
+    {
+        return hash('sha256', (string)$request->getUri());
+    }
+
+    // Prevent a reauthentication loop, because the original URL still contains max_age=0.
+    // So we need to store information about the reauthentication in the session and check
+    // that to break the loop
+    private function hasCompletedReauthentication(ServerRequestInterface $request): bool
+    {
+        global $gCurrentSession;
+
+        if (!isset($_SESSION['oidc_reauthentication_request'])
+            || !is_array($_SESSION['oidc_reauthentication_request'])
+            || !isset($_SESSION['oidc_reauthentication_request']['request_id'])
+            || !isset($_SESSION['oidc_reauthentication_request']['requested_at'])
+        ) {
+            return false;
+        }
+
+        if (!hash_equals(
+                $_SESSION['oidc_reauthentication_request']['request_id'],
+                $this->getAuthenticationRequestID($request))) {
+            return false;
+        }
+
+        if ((int)$gCurrentSession->getValue('ses_authentication_time', 'U')
+            < (int)$_SESSION['oidc_reauthentication_request']['requested_at']) {
+            return false;
+        }
+
+        unset($_SESSION['oidc_reauthentication_request']);
+
+        return true;
+    }
+
+    private function rememberReauthenticationRequest(ServerRequestInterface $request): void
+    {
+        $_SESSION['oidc_reauthentication_request'] = array(
+            'request_id' => $this->getAuthenticationRequestID($request),
+            'requested_at' => time()
+        );
+    }
+
     public function handleAuthorizationRequest(): ResponseInterface {
         global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession;
 
@@ -390,9 +475,17 @@ class OIDCService extends SSOService {
             if (!self::$client->isEnabled()) {
                 throw OAuthServerException::invalidClient($request, 'Client "' . self::$client->getIdentifier() . '" is valid, but disabled. Login is not allowed.');
             }
+            $maxAge = $this->getMaxAge($request);
+            $reauthenticationCompleted = $this->hasCompletedReauthentication($request);
+            $authenticationRequired = !$gValidLogin;
 
-            // Redirect the user to a login endpoint if not logged in yet.
-            if (!$gValidLogin) {
+            if (!$reauthenticationCompleted && $maxAge !== null && !$this->isAuthenticationWithinMaxAge($maxAge)) {
+                $authenticationRequired = true;
+            }
+
+            // Redirect the user to a login endpoint if not logged in yet or the authentication is too old (given by the max_age param)
+            if ($authenticationRequired) {
+                $this->rememberReauthenticationRequest($request);
                 $this->showSSOLoginForm(self::$client);
                 // exit;
             }
