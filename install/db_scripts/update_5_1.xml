@@ -110,5 +110,8 @@
     <step id="760" database="pgsql">SELECT setval(pg_get_serial_sequence('%PREFIX%_user_relation_types', 'urt_id'), COALESCE(MAX(urt_id), 1), MAX(urt_id) IS NOT NULL) FROM %PREFIX%_user_relation_types</step>
     <step id="770">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_value = '' AND prf_name IN ('groups_roles_default_configuration', 'events_list_configuration', 'contacts_list_configuration')</step>
     <step id="780">UpdateStepsCode::updateStep51SeedPluginPreferences</step>
+    <step id="790">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_time timestamp NULL</step>
+    <step id="800">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_methods varchar(255) NULL</step>
+    <step id="810">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_external_session_id varchar(64) NULL</step>
     <step>stop</step>
 </update>
