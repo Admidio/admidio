@@ -80,6 +80,8 @@ class OIDCService extends SSOService {
     private string $logoutEndpoint;
     private string $discoveryURL;
 
+    private OIDCAuthCodeGrant $authCodeGrant;
+
     public static ?OIDCClient $client = null;
 
     private bool $isServiceSetup = false;
@@ -310,6 +312,7 @@ class OIDCService extends SSOService {
              $refreshTokenRepository,
              new \DateInterval('PT10M') // authorization codes will expire after 10 minutes
         );
+        $this->authCodeGrant = $grant;
 
         $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
         // Enable the authentication code grant on the server
@@ -368,7 +371,7 @@ class OIDCService extends SSOService {
     }
 
     public function handleAuthorizationRequest(): ResponseInterface {
-        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger;
+        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession;
 
         if ($gSettingsManager->get('sso_oidc_enabled') !== '1') {
             throw new \Exception("SSO OIDC is not enabled");
@@ -411,6 +414,12 @@ class OIDCService extends SSOService {
             // This form will ask the user to approve the client and the scopes requested.
             // TODO_RK: Implement the authorization page and redirect to it.
             // For now we will just approve the request automatically.
+
+            $authenticationTime = $gCurrentSession->getValue('ses_authentication_time', 'U');
+            if ($authenticationTime === '') {
+                throw OAuthServerException::serverError('The authentication time is missing.');
+            }
+            $this->authCodeGrant->setAuthenticationTime((int)$authenticationTime);
 
             // Once the user has approved or denied the client update the status
             // (true = approved, false = denied)

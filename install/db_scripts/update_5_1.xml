@@ -113,5 +113,6 @@
     <step id="790">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_time timestamp NULL</step>
     <step id="800">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_methods varchar(255) NULL</step>
     <step id="810">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_external_session_id varchar(64) NULL</step>
+    <step id="820">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_auth_time timestamp NULL DEFAULT NULL</step>
     <step>stop</step>
 </update>

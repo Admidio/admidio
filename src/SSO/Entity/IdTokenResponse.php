@@ -27,6 +27,7 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
 {
     protected ?string $nonce;
     private string $issuerURL;
+    protected ?int $authenticationTime = null;
 
     public function __construct(
         IdentityProviderInterface $identityProvider,
@@ -66,6 +67,9 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         if (!empty($this->nonce)) {
             $builder = $builder->withClaim('nonce', $this->nonce);
         }
+        if ($this->authenticationTime !== null) {
+            $builder = $builder->withClaim('auth_time', $this->authenticationTime);
+        }
         return $builder->issuedBy($this->issuerURL);
     }
 
@@ -74,6 +78,11 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
     }
     public function setNonce(?string $nonce) {
         $this->nonce = $nonce;
+    }
+
+    public function setAuthenticationTime(int $authenticationTime): void
+    {
+        $this->authenticationTime = $authenticationTime;
     }
 
 
