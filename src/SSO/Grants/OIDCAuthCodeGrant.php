@@ -16,7 +16,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
+use Admidio\SSO\Entity\AuthCodeEntity;
+use Admidio\SSO\Entity\IdTokenResponse;
 
 /**
  * Custom AuthCodeGrant class to support nonces. The nonce in the auth request is stored 
@@ -27,6 +30,12 @@ use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 class OIDCAuthCodeGrant extends AuthCodeGrant
 {
     protected ?string $nonce = null;
+    protected ?string $authenticationTime = null;
+
+    public function setAuthenticationTime(string $authenticationTime): void
+    {
+        $this->authenticationTime = $authenticationTime;
+    }
 
     public function validateAuthorizationRequest(ServerRequestInterface $request): AuthorizationRequestInterface
     {
@@ -43,7 +52,11 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         array $scopes = []
     ): AuthCodeEntityInterface {
         $authCode = parent::issueAuthCode($authCodeTTL, $client, $userIdentifier, $redirectUri, $scopes);
+        if (!$authCode instanceof AuthCodeEntity) {
+            throw OAuthServerException::serverError('Authorization code is not an instance of AuthCodeEntity.');
+        }
         $authCode->setValue($authCode->getColumnPrefix() . '_nonce', $this->nonce);
+        $authCode->setValue($authCode->getColumnPrefix() . '_auth_time', $this->authenticationTime);
         $authCode->save();
         return $authCode;
     }
@@ -54,6 +67,9 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         DateInterval $accessTokenTTL
     ): ResponseTypeInterface {
         $responseType = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
+        if (!$responseType instanceof IdTokenResponse) {
+            throw OAuthServerException::serverError('Response type is not an instance of IdTokenResponse.');
+        }
 
         // If we arrive here, the auth code was valid -> No need to check validity again!
         $encryptedAuthCode = $this->getRequestParameter('code', $request);
@@ -65,6 +81,11 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
             $nonce = $authCode->getValue($authCode->getColumnPrefix() . '_nonce');
             if (!empty($nonce)) {
                 $responseType->setNonce($nonce);
+            }
+            $authenticationTime = $authCode->getValue($authCode->getColumnPrefix() . '_auth_time', 'U');
+
+            if ($authenticationTime !== '') {
+                $responseType->setAuthenticationTime((int)$authenticationTime);
             }
         }
         return $responseType;
