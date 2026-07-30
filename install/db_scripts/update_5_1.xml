@@ -114,5 +114,19 @@
     <step id="800">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_methods varchar(255) NULL</step>
     <step id="810">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_external_session_id varchar(64) NULL</step>
     <step id="820">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_auth_time timestamp NULL DEFAULT NULL</step>
+    <step id="830">CREATE TABLE %PREFIX%_oidc_consents (
+            oco_id                  integer unsigned    AUTO_INCREMENT, 
+            oco_org_id              integer unsigned    NOT NULL,
+            oco_usr_id              integer unsigned    NOT NULL, 
+            oco_ocl_id              integer unsigned    NOT NULL, 
+            oco_scopes              text                NOT NULL, 
+            oco_timestamp_create    timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+            oco_timestamp_change    timestamp           NULL, 
+            PRIMARY KEY (oco_id), 
+            UNIQUE KEY oco_user_client (oco_org_id, oco_usr_id, oco_ocl_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
     <step>stop</step>
 </update>

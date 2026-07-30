@@ -35,6 +35,8 @@ use Admidio\SSO\Entity\UserEntity;
 use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\IdTokenResponse;
+use Admidio\SSO\Entity\OIDCConsent;
+use Admidio\UI\Presenter\OIDCConsentPresenter;
 use Admidio\SSO\Grants\OIDCAuthCodeGrant;
 use Admidio\SSO\Service\KeyService;
 
@@ -503,10 +505,28 @@ class OIDCService extends SSOService {
             // Once the user has logged in set the user on the AuthorizationRequest
             $authRequest->setUser(new UserEntity($this->db, $gProfileFields, self::$client, $gCurrentUserId));
 
-            // At this point you should redirect the user to an authorization page.
+            // Redirect the user to an authorization page.
             // This form will ask the user to approve the client and the scopes requested.
-            // TODO_RK: Implement the authorization page and redirect to it.
-            // For now we will just approve the request automatically.
+            $consentRequired = !$this->hasOIDCConsent($authRequest);
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+                $form->validate($_POST);
+
+                if (array_key_exists('adm_button_deny', $_POST)) {
+                    $authRequest->setAuthorizationApproved(false);
+                    return $this->authServer->completeAuthorizationRequest($authRequest, $response);
+                }
+
+                if (array_key_exists('adm_button_approve', $_POST)) {
+                    $this->saveOIDCConsent($authRequest);
+                    $consentRequired = false;
+                }
+            }
+
+            if ($consentRequired) {
+                $this->showOIDCConsentForm($authRequest);
+            }
 
             $authenticationTime = $gCurrentSession->getValue('ses_authentication_time', 'U');
             if ($authenticationTime === '') {
@@ -801,6 +821,66 @@ class OIDCService extends SSOService {
         }
         // TODO_RK: Shall we remove the tokens from the database?
         return new JsonResponse(["logout" => true]);
+    }
+
+    private function getRequestedScopeNames(AuthorizationRequestInterface $authRequest): array
+    {
+        return array_map(
+            static fn ($scope): string => $scope->getIdentifier(),
+            $authRequest->getScopes()
+        );
+    }
+
+    private function hasOIDCConsent(AuthorizationRequestInterface $authRequest): bool
+    {
+        global $gCurrentOrgId, $gCurrentUserId;
+
+        $consent = new OIDCConsent($this->db);
+        $consent->readDataByUserAndClient(
+            $gCurrentOrgId,
+            $gCurrentUserId,
+            self::$client->getValue('ocl_id')
+        );
+
+        if ($consent->isNewRecord()) {
+            return false;
+        }
+
+        return $consent->coversScopes(
+            $this->getRequestedScopeNames($authRequest)
+        );
+    }
+
+    private function saveOIDCConsent(AuthorizationRequestInterface $authRequest): void
+    {
+        global $gCurrentOrgId, $gCurrentUserId;
+
+        $consent = new OIDCConsent($this->db);
+        $consent->readDataByUserAndClient(
+            $gCurrentOrgId,
+            $gCurrentUserId,
+            self::$client->getValue('ocl_id')
+        );
+
+        $consent->setValue('oco_org_id', $gCurrentOrgId);
+        $consent->setValue('oco_usr_id', $gCurrentUserId);
+        $consent->setValue('oco_ocl_id', self::$client->getValue('ocl_id'));
+        $consent->setValue(
+            'oco_scopes',
+            implode(' ', $this->getRequestedScopeNames($authRequest))
+        );
+        $consent->save();
+    }
+
+    private function showOIDCConsentForm(AuthorizationRequestInterface $authRequest): void
+    {
+        $presenter = new OIDCConsentPresenter(self::$client->readableName());
+        $presenter->createConsentForm(
+            self::$client,
+            $this->getRequestedScopeNames($authRequest)
+        );
+        $presenter->show();
+        exit;
     }
 }
 
