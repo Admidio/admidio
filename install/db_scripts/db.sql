@@ -612,6 +612,17 @@ ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE %PREFIX%_oidc_consents (
+    oco_id                      integer unsigned    AUTO_INCREMENT,
+    oco_org_id                  integer unsigned    NOT NULL,
+    oco_usr_id                  integer unsigned    NOT NULL,
+    oco_ocl_id                  integer unsigned    NOT NULL,
+    oco_scopes                  text                NOT NULL,
+    oco_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    oco_timestamp_change        timestamp           NULL,
+    PRIMARY KEY (oco_id),
+    UNIQUE KEY oco_user_client (oco_org_id, oco_usr_id, oco_ocl_id)
+)
 
 
 /*==============================================================*/
