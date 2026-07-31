@@ -67,6 +67,7 @@ class Image
                 break;
 
             case IMAGETYPE_PNG:
+                imagesavealpha($imageResource, true);
                 echo imagepng($imageResource);
                 break;
 
@@ -99,6 +100,7 @@ class Image
                 return imagejpeg($imageResource, $pathAndFilename, $quality);
 
             case IMAGETYPE_PNG:
+                imagesavealpha($imageResource, true);
                 return imagepng($imageResource, $pathAndFilename);
 
             default:
