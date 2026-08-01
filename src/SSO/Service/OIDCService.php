@@ -734,13 +734,48 @@ class OIDCService extends SSOService {
             "token_endpoint" => "{$issuer}/token",
             "userinfo_endpoint" => "{$issuer}/userinfo",
             "jwks_uri" => "{$issuer}/jwks",
+            "introspection_endpoint" => "{$issuer}/introspect",
+            "revocation_endpoint" => "{$issuer}/revoke",
             "scopes_supported" => ["openid", "profile", "email", "phone", "address", "groups", "custom"],
             "response_types_supported" => ["code"],
+            "response_modes_supported" => ["query"],
             "grant_types_supported" => ["authorization_code", "refresh_token"],
             "subject_types_supported" => ["public"],
             "id_token_signing_alg_values_supported" => ["RS256"],
             "token_endpoint_auth_methods_supported" => ["client_secret_post", "client_secret_basic"],
+            "revocation_endpoint_auth_methods_supported" => ["client_secret_basic", "client_secret_post"],
+            // announce standard claims, even though each client in admidio can define their own admidio 
+            // profile field -> claim mappeing with arbitrary claims! The custom claims are not included
+            // in the discovery announcement!
+            "claims_supported" => [
+                "sub",
+                "iss",
+                "aud",
+                "exp",
+                "iat",
+                "auth_time",
+                "nonce",
+                "acr",
+                "amr",
+                "sid",
+                "uuid",
+                "preferred_username",
+                "name",
+                "family_name",
+                "given_name",
+                "email",
+                "phone_number",
+                "address",
+                "groups",
+                "locale",
+                "website",
+                "gender",
+                "birthdate"
+            ],
             "acr_values_supported" => [self::AUTHENTICATION_CONTEXT_PASSWORD, self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP],
+            "claims_parameter_supported" => false,
+            "request_parameter_supported" => false,
+            "request_uri_parameter_supported" => false,
         ];
     }
 
