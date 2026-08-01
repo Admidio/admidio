@@ -26,6 +26,7 @@ use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
+use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
@@ -484,6 +485,15 @@ class OIDCService extends SSOService {
             if (!$reauthenticationCompleted && $maxAge !== null && !$this->isAuthenticationWithinMaxAge($maxAge)) {
                 $authenticationRequired = true;
             }
+            
+            // Depending on the prompt parameter, show a login form (if needed) or deny authorization
+            $promptValues = $this->getPromptValues($request);
+            if (!$reauthenticationCompleted && in_array('login', $promptValues, true)) {
+                $authenticationRequired = true;
+            }
+            if ($authenticationRequired && in_array('none', $promptValues, true)) {
+                return $this->createAuthorizationErrorResponse($authRequest, $response, 'login_required');
+            }
 
             // Redirect the user to a login endpoint if not logged in yet or the authentication is too old (given by the max_age param)
             if ($authenticationRequired) {
@@ -507,7 +517,7 @@ class OIDCService extends SSOService {
 
             // Redirect the user to an authorization page.
             // This form will ask the user to approve the client and the scopes requested.
-            $consentRequired = !$this->hasOIDCConsent($authRequest);
+            $consentRequired = !$this->hasOIDCConsent($authRequest) || in_array('consent', $promptValues, true);
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
@@ -525,6 +535,10 @@ class OIDCService extends SSOService {
             }
 
             if ($consentRequired) {
+                // If consent is required, prompt=none must fail, since we cannot show a consent form
+                if (in_array('none', $promptValues, true)) {
+                    return $this->createAuthorizationErrorResponse($authRequest, $response, 'consent_required');
+                }
                 $this->showOIDCConsentForm($authRequest);
             }
 
@@ -881,6 +895,58 @@ class OIDCService extends SSOService {
         );
         $presenter->show();
         exit;
+    }
+
+    private function getPromptValues(ServerRequestInterface $request): array
+    {
+        $queryParams = $request->getQueryParams();
+
+        if (!array_key_exists('prompt', $queryParams)) {
+            return array();
+        }
+
+        if (!is_string($queryParams['prompt'])) {
+            throw OAuthServerException::invalidRequest('prompt');
+        }
+
+        $promptValues = preg_split('/\s+/', trim($queryParams['prompt']));
+
+        if ($promptValues === false || $promptValues === array('')) {
+            throw OAuthServerException::invalidRequest('prompt');
+        }
+
+        foreach ($promptValues as $promptValue) {
+            if (!in_array($promptValue, array('none', 'login', 'consent'), true)) {
+                throw OAuthServerException::invalidRequest('prompt');
+            }
+        }
+
+        if (in_array('none', $promptValues, true) && count($promptValues) > 1) {
+            throw OAuthServerException::invalidRequest('prompt');
+        }
+
+        return array_values(array_unique($promptValues));
+    }
+    
+    private function createAuthorizationErrorResponse(AuthorizationRequestInterface $authRequest, ResponseInterface $response, string $error): ResponseInterface 
+    {
+        $redirectURI = $authRequest->getRedirectUri();
+
+        if ($redirectURI === null) {
+            return new JsonResponse(array('error' => $error), 400);
+        }
+
+        $parameters = array('error' => $error);
+
+        if ($authRequest->getState() !== null) {
+            $parameters['state'] = $authRequest->getState();
+        }
+
+        $separator = str_contains($redirectURI, '?') ? '&' : '?';
+
+        return $response
+            ->withStatus(302)
+            ->withHeader('Location', $redirectURI . $separator . http_build_query($parameters));
     }
 }
 

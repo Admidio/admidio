@@ -17,6 +17,8 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
+use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
 use Admidio\SSO\Entity\AuthCodeEntity;
 use Admidio\SSO\Entity\IdTokenResponse;
@@ -31,6 +33,14 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
 {
     protected ?string $nonce = null;
     protected ?string $authenticationTime = null;
+
+    public function __construct(
+        AuthCodeRepositoryInterface $authCodeRepository,
+        RefreshTokenRepositoryInterface $refreshTokenRepository,
+        DateInterval $authCodeTTL
+    ) {
+        parent::__construct($authCodeRepository, $refreshTokenRepository, $authCodeTTL);
+    }
 
     public function setAuthenticationTime(string $authenticationTime): void
     {
