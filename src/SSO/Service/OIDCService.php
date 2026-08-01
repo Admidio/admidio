@@ -89,6 +89,9 @@ class OIDCService extends SSOService {
 
     private bool $isServiceSetup = false;
 
+    public const AUTHENTICATION_CONTEXT_PASSWORD = 'urn:admidio:authentication:password';
+    public const AUTHENTICATION_CONTEXT_PASSWORD_TOTP = 'urn:admidio:authentication:password-totp';
+
     /**
      * Return the default issuer URL derived from the current Admidio URL.
      * @return string
@@ -542,11 +545,19 @@ class OIDCService extends SSOService {
                 $this->showOIDCConsentForm($authRequest);
             }
 
-            $authenticationTime = $gCurrentSession->getValue('ses_authentication_time', 'U');
-            if ($authenticationTime === '') {
-                throw OAuthServerException::serverError('The authentication time is missing.');
+            $authenticationMethods = preg_split('/\s+/', trim($gCurrentSession->getValue('ses_authentication_methods')));
+
+            $authenticationContext = self::AUTHENTICATION_CONTEXT_PASSWORD;
+            if (in_array('otp', $authenticationMethods, true)) {
+                $authenticationContext = self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP;
             }
-            $this->authCodeGrant->setAuthenticationTime((int)$authenticationTime);
+
+            $this->authCodeGrant->setAuthenticationContext(
+                (int)$gCurrentSession->getValue('ses_authentication_time', 'U'),
+                $gCurrentSession->getValue('ses_external_session_id'),
+                $authenticationMethods,
+                $authenticationContext
+            );
 
             // Once the user has approved or denied the client update the status
             // (true = approved, false = denied)
@@ -729,6 +740,7 @@ class OIDCService extends SSOService {
             "subject_types_supported" => ["public"],
             "id_token_signing_alg_values_supported" => ["RS256"],
             "token_endpoint_auth_methods_supported" => ["client_secret_post", "client_secret_basic"],
+            "acr_values_supported" => [self::AUTHENTICATION_CONTEXT_PASSWORD, self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP],
         ];
     }
 
