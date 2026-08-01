@@ -20,6 +20,7 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
+use Admidio\SSO\Repository\AuthCodeRepository;
 use Admidio\SSO\Entity\AuthCodeEntity;
 use Admidio\SSO\Entity\IdTokenResponse;
 
@@ -96,6 +97,10 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         $authCodePayload = json_decode($this->decrypt($encryptedAuthCode));
 
         // Load the AuthCode from the DB (including the nonce) and pass on the nonce to the response type ()
+        if (!$this->authCodeRepository instanceof AuthCodeRepository) {
+            throw OAuthServerException::serverError('Invalid authorization code repository.');
+        }
+
         $authCode = $this->authCodeRepository->getToken($authCodePayload->auth_code_id);
         if (!($authCode->isNewRecord())) {
             $nonce = $authCode->getValue($authCode->getColumnPrefix() . '_nonce');

@@ -6,8 +6,8 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 
+use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\ScopeEntity;
-
 
 class ScopeRepository implements ScopeRepositoryInterface
 {

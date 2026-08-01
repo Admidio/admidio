@@ -2484,7 +2484,7 @@ class PreferencesPresenter extends PagePresenter
         /* *******************************************************************************
          * OIDC Settings
          */
-        $oidcService = new \Admidio\SSO\Service\OIDCService($gDb, $gCurrentUser);
+        $oidcService = new OIDCService($gDb, $gCurrentUser);
 
         $formSSO->addCustomContent(
             'sso_oidc_settings',

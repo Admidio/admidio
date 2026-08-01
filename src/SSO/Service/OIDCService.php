@@ -182,7 +182,7 @@ class OIDCService extends SSOService {
         return 'sso_oidc_access';
     }
 
-    public function initializeClientObject($database): ?SSOClient {
+    public function initializeClientObject(Database $database): ?SSOClient {
         return new OIDCClient($database);
     }
 
