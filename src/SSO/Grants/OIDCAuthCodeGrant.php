@@ -32,7 +32,10 @@ use Admidio\SSO\Entity\IdTokenResponse;
 class OIDCAuthCodeGrant extends AuthCodeGrant
 {
     protected ?string $nonce = null;
-    protected ?string $authenticationTime = null;
+    protected ?int $authenticationTime = null;
+    protected ?string $sessionID = null;
+    protected array $authenticationMethods = array();
+    protected ?string $authenticationContext = null;
 
     public function __construct(
         AuthCodeRepositoryInterface $authCodeRepository,
@@ -42,9 +45,13 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         parent::__construct($authCodeRepository, $refreshTokenRepository, $authCodeTTL);
     }
 
-    public function setAuthenticationTime(string $authenticationTime): void
+    public function setAuthenticationContext(int $authenticationTime, string $sessionID, 
+            array $authenticationMethods, string $authenticationContext): void 
     {
         $this->authenticationTime = $authenticationTime;
+        $this->sessionID = $sessionID;
+        $this->authenticationMethods = $authenticationMethods;
+        $this->authenticationContext = $authenticationContext;
     }
 
     public function validateAuthorizationRequest(ServerRequestInterface $request): AuthorizationRequestInterface
@@ -67,6 +74,9 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         }
         $authCode->setValue($authCode->getColumnPrefix() . '_nonce', $this->nonce);
         $authCode->setValue($authCode->getColumnPrefix() . '_auth_time', $this->authenticationTime);
+        $authCode->setValue($authCode->getColumnPrefix() . '_session_id', $this->sessionID);
+        $authCode->setValue($authCode->getColumnPrefix() . '_authentication_methods', implode(' ', $this->authenticationMethods));
+        $authCode->setValue($authCode->getColumnPrefix() . '_authentication_context', $this->authenticationContext);
         $authCode->save();
         return $authCode;
     }
@@ -93,9 +103,16 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
                 $responseType->setNonce($nonce);
             }
             $authenticationTime = $authCode->getValue($authCode->getColumnPrefix() . '_auth_time', 'U');
-
-            if ($authenticationTime !== '') {
-                $responseType->setAuthenticationTime((int)$authenticationTime);
+            $sessionID = $authCode->getValue($authCode->getColumnPrefix() . '_session_id');
+            $authenticationMethods = preg_split('/\s+/', trim($authCode->getValue($authCode->getColumnPrefix() . '_authentication_methods')));
+            $authenticationContext = $authCode->getValue($authCode->getColumnPrefix() . '_authentication_context');
+            if (!empty($authenticationTime) && !empty($sessionID) && !empty($authenticationMethods) && !empty($authenticationContext)) {
+                $responseType->setAuthenticationContext(
+                    (int)$authenticationTime,
+                    $sessionID,
+                    $authenticationMethods,
+                    $authenticationContext
+                );
             }
         }
         return $responseType;

@@ -28,6 +28,9 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
     protected ?string $nonce;
     private string $issuerURL;
     protected ?int $authenticationTime = null;
+    protected ?string $sessionID = null;
+    protected array $authenticationMethods = array();
+    protected ?string $authenticationContext = null;
 
     public function __construct(
         IdentityProviderInterface $identityProvider,
@@ -38,6 +41,7 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         parent::__construct($identityProvider, $claimExtractor, $keyIdentifier);
         $this->issuerURL = $issuerURL;
     }
+
     /**
      * @param AccessTokenEntityInterface $accessToken
      * @return array
@@ -70,6 +74,15 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         if ($this->authenticationTime !== null) {
             $builder = $builder->withClaim('auth_time', $this->authenticationTime);
         }
+        if ($this->sessionID !== null) {
+            $builder = $builder->withClaim('sid', $this->sessionID);
+        }
+        if (!empty($this->authenticationMethods)) {
+            $builder = $builder->withClaim('amr', $this->authenticationMethods);
+        }
+        if ($this->authenticationContext !== null) {
+            $builder = $builder->withClaim('acr', $this->authenticationContext);
+        }
         return $builder->issuedBy($this->issuerURL);
     }
 
@@ -80,9 +93,12 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         $this->nonce = $nonce;
     }
 
-    public function setAuthenticationTime(int $authenticationTime): void
+    public function setAuthenticationContext(int $authenticationTime, string $sessionID, array $authenticationMethods, string $authenticationContext): void 
     {
         $this->authenticationTime = $authenticationTime;
+        $this->sessionID = $sessionID;
+        $this->authenticationMethods = $authenticationMethods;
+        $this->authenticationContext = $authenticationContext;
     }
 
 
