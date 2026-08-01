@@ -53,7 +53,14 @@ try {
         // this must be called as ajax request
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+        $postedCsrfToken = $_POST['adm_csrf_token'] ?? '';
+        $fallbackCsrfToken = $_POST['adm_csrf_token_fallback'] ?? '';
+        $sessionCsrfToken = $gCurrentSession->getCsrfToken();
+
+        if ($postedCsrfToken !== $sessionCsrfToken && $fallbackCsrfToken !== $sessionCsrfToken) {
+            echo $gL10n->get('SYS_PROCESS_CANCELED') . ' ' . $gL10n->get('SYS_RELOAD');
+            exit();
+        }
 
         $leadership = false;
         if (isset($_POST['leaderFlag']) && $_POST['leaderFlag'] === 'true') {
@@ -143,8 +150,9 @@ try {
             }
 
             // change data in database
-            $.post(gRootPath + "/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=' . $getRoleUuid . '&user_uuid=" + userUuid,
-                "memberFlag=" + memberChecked + "&leaderFlag=" + leaderChecked + "&adm_csrf_token=' . $gCurrentSession->getCsrfToken() . '",
+            $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment.php?mode=assign&role_uuid=' . $getRoleUuid . '&user_uuid=" + userUuid,
+                "memberFlag=" + memberChecked + "&leaderFlag=" + leaderChecked + "&adm_csrf_token=' . $gCurrentSession->getCsrfToken() . '"
+                    + "&adm_csrf_token_fallback=" + encodeURIComponent((typeof profileJS !== "undefined" && profileJS && profileJS.csrfToken) ? profileJS.csrfToken : ""),
                 function(data) {
                     // check if error occurs
                     if (data !== "success") {

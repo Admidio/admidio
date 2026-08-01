@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Retour au livre d\'or</string>
@@ -1208,7 +1208,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Les pièces jointes des e-mails sont sauvegardées sur l\'espace web et peuvent toujours être consultées dans l\'e-mail sauvegardé après l\'envoi. (Par défaut : activé)</string>
   <string name="SYS_SAVE_CHANGES">Enregistrer les modifications</string>
   <string name="SYS_SAVE_CONFIGURATION">Enregistrer la configuration</string>
-  <string name="SYS_SAVE_DATA">Les données ont été enregistrées.</string>
+  
+  <string name="SYS_SAVE_PENDING">Enregistrement en attente...</string>
+  <string name="SYS_PENDING">En attente...</string>
+    <string name="SYS_SAVE_DATA">Les donn├⌐es ont ├⌐t├⌐ enregistr├⌐es.</string>
+  <string name="SYS_LOADING">Chargement...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Chargement des adhésions aux rôles...</string>
   <string name="SYS_SEARCH">Recherche</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 ans</string>
   <string name="SYS_SEARCH_AGE_DESC">Recherche des utilisateurs de plus de 18 ans</string>
@@ -1466,3 +1471,7 @@
   <string name="SYS_YOUR_NAME">Votre nom</string>
   <string name="SYS_Z_TO_A">Z à A</string>
 </resources>
+
+
+
+

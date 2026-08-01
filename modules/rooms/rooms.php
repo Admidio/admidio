@@ -116,9 +116,11 @@ try {
                             <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
                         </li>
                         <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                                data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($room->getValue('room_name', 'database'))) . '"
-                                data-href="callUrlHideElement(\'room_' . $room->getValue('room_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 'delete', 'room_uuid' => $room->getValue('room_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                                <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
+                            data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                            data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
+                            data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($room->getValue('room_name', 'database'))) . '"
+                            data-href="callUrlHideElement(\'room_' . $room->getValue('room_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 'delete', 'room_uuid' => $room->getValue('room_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
+                            <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
                         </li>
                     </ul>
                 </div>

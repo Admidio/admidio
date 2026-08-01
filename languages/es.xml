@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Volver el Libro de Visitas</string>
@@ -718,4 +718,9 @@
   <string name="SYS_YOUR_LISTS">Tu listas</string>
   <string name="SYS_YOUR_NAME">Tu nombre</string>
   <string name="SYS_Z_TO_A">Z hasta A</string>
+  <string name="SYS_SAVE_DATA">Los datos se han guardado.</string>
+  <string name="SYS_SAVE_PENDING">Guardado pendiente...</string>
+  <string name="SYS_PENDING">Pendiente...</string>
+  <string name="SYS_LOADING">Cargando...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Cargando membresías de roles...</string>
 </resources>

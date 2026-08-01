@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Πίσω στο βιβλίο επισκεπτών</string>
@@ -1124,7 +1124,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Τα συνημμένα email αποθηκεύονται στον χώρο Ιστού και εξακολουθούν να είναι προσβάσιμα στο αποθηκευμένο email μετά την αποστολή. (Default: enabled) </string>
   <string name="SYS_SAVE_CHANGES">Αποθήκευση αλλαγών</string>
   <string name="SYS_SAVE_CONFIGURATION">Αποθήκευση διαμόρφωσης</string>
-  <string name="SYS_SAVE_DATA">Τα δεδομένα έχουν αποθηκευτεί.</string>
+  
+  <string name="SYS_SAVE_PENDING">Η αποθήκευση εκκρεμεί...</string>
+  <string name="SYS_PENDING">Σε εκκρεμότητα...</string>
+    <string name="SYS_SAVE_DATA">╬ñ╬▒ ╬┤╬╡╬┤╬┐╬╝╬¡╬╜╬▒ ╬¡╧ç╬┐╧à╬╜ ╬▒╧Ç╬┐╬╕╬╖╬║╬╡╧à╧ä╬╡╬».</string>
+  <string name="SYS_LOADING">Φόρτωση...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Φόρτωση συμμετοχών ρόλων...</string>
   <string name="SYS_SEARCH">Αναζήτηση</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 ετών</string>
   <string name="SYS_SEARCH_AGE_DESC">Αναζήτηση για όλους τους χρήστες άνω των 18 ετών</string>
@@ -1362,3 +1367,7 @@
   <string name="SYS_YOUR_NAME">Το όνομα σας</string>
   <string name="SYS_Z_TO_A">Από το Ω στο Α</string>
 </resources>
+
+
+
+

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Tilleggsinformasjon</string>
@@ -1360,7 +1360,12 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SAVE_ATTACHMENTS_DESC">E-postvedlegg lagres på webområdet og kan fortsatt nås i den lagrede e-posten etter sending. (Standard: aktivert)</string>
   <string name="SYS_SAVE_CHANGES">Lagre endringer</string>
   <string name="SYS_SAVE_CONFIGURATION">Lagre konfigurasjon</string>
-  <string name="SYS_SAVE_DATA">Dataene ble lagret.</string>
+  
+  <string name="SYS_SAVE_PENDING">Lagring venter...</string>
+  <string name="SYS_PENDING">Venter...</string>
+    <string name="SYS_SAVE_DATA">Dataene ble lagret.</string>
+  <string name="SYS_LOADING">Laster...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Laster rollemedlemskap...</string>
   <string name="SYS_SEARCH_AGE_DESC">Søker etter alle brukere over 18 år</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_DATE_DESC">Søker etter alle brukere født etter 01.03.1986</string>
@@ -1762,3 +1767,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_YOUR_NAME">Ditt navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
 </resources>
+
+
+
+

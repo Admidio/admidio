@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Informații suplimentare</string>
@@ -1385,7 +1385,12 @@
   <string name="SYS_SAVE_ATTACHMENTS_DESC">Atașamentele din e-mailuri sunt salvate în spațiul web și pot fi accesate în continuare în e-mailul salvat după trimitere. (Implicit: activat)</string>
   <string name="SYS_SAVE_CHANGES">Salvare schimbări</string>
   <string name="SYS_SAVE_CONFIGURATION">Salvare configurașie</string>
-  <string name="SYS_SAVE_DATA">Datele au fost salvate</string>
+  
+  <string name="SYS_SAVE_PENDING">Salvare în așteptare...</string>
+  <string name="SYS_PENDING">În așteptare...</string>
+    <string name="SYS_SAVE_DATA">Datele au fost salvate</string>
+  <string name="SYS_LOADING">Se încarcă...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">Se încarcă apartenențele la roluri...</string>
   <string name="SYS_SEARCH_AGE_DESC">Căutarea tuturor utilizatorilor cu vârsta peste 18 ani</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 ani</string>
   <string name="SYS_SEARCH_DATE_DESC">Căutare pentru toți utilizatorii născuți după 01.03.1986</string>
@@ -1793,3 +1798,7 @@
   <string name="SYS_YOUR_NAME">Numele</string>
   <string name="SYS_Z_TO_A">De la Z la A</string>
 </resources>
+
+
+
+

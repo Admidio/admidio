@@ -255,6 +255,8 @@ try {
                         <a class="admidio-icon-link admidio-image-rotate"  href="javascript:void(0)"  data-image="' . $actThumbnail . '" data-direction="left"">
                             <i class="bi bi-arrow-counterclockwise" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ROTATE_PHOTO_LEFT') . '"></i></a>
                         <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                            data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                            data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                             data-message="' . $gL10n->get('SYS_WANT_DELETE_PHOTO') . '"
                             data-href="callUrlHideElement(\'div_image_' . $actThumbnail . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('mode' => 'delete', 'photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
@@ -400,6 +402,8 @@ try {
                                             </li>
                                             ' . $htmlLock . '
                                             <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                                                data-pending-label="' . $gL10n->get('SYS_PENDING') . '"
+                                                data-pending-note="' . $gL10n->get('SYS_SAVE_PENDING') . '"
                                                 data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($childPhotoAlbum->getValue('pho_name', 'database'))) . '"
                                                 data-href="callUrlHideElement(\'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE_ALBUM') . '</a>

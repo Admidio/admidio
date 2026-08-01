@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+﻿<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in guestbook module-->
   <string name="GBO_BACK_TO_GUESTBOOK">Voltar ao livro de visitantes</string>
@@ -1048,7 +1048,12 @@
   <string name="SYS_SAVE_ALL_CANCELLATIONS_DESC">O cancelamento dos participantes em eventos pode ser guardado. Estes cancelamentos serão mostrados na lista de participantes. Se esta opção for desativada, os cancelamentos não serão guardados e não poderão ser vistos através da lista de participantes. Esta opção é válida a partir do momento da ativação e não pode ser aplicada retroativamente! (Padrão: Sim)</string>
   <string name="SYS_SAVE_CHANGES">Guardar alterações</string>
   <string name="SYS_SAVE_CONFIGURATION">Guardar configuração</string>
-  <string name="SYS_SAVE_DATA">Os dados foram guardados</string>
+  
+  <string name="SYS_SAVE_PENDING">Gravação pendente...</string>
+  <string name="SYS_PENDING">Pendente...</string>
+    <string name="SYS_SAVE_DATA">Os dados foram guardados</string>
+  <string name="SYS_LOADING">A carregar...</string>
+  <string name="SYS_LOADING_ROLE_MEMBERSHIPS">A carregar associações de funções...</string>
   <string name="SYS_SEARCH">Buscar</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18a</string>
   <string name="SYS_SEARCH_AGE_DESC">Buscando por todos os usuários maiores de 18 anos</string>
@@ -1266,3 +1271,7 @@
   <string name="SYS_YOUR_NAME">Teu nome</string>
   <string name="SYS_Z_TO_A">Z à A</string>
 </resources>
+
+
+
+
