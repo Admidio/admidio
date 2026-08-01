@@ -2,6 +2,7 @@
 namespace Admidio\SSO\Service;
 
 use League\OAuth2\Server\CryptKey;
+use League\OAuth2\Server\CryptTrait;
 
 use Admidio\SSO\Repository\AccessTokenRepository;
 use Admidio\SSO\Repository\ClientRepository;
@@ -70,9 +71,13 @@ use Admidio\SSO\Service\KeyService;
 
 
 class OIDCService extends SSOService {
+    use CryptTrait;
+
     private AuthorizationServer $authServer;
     private ResourceServer $resourceServer;
     private AccessTokenRepository $accessTokenRepository;
+    private RefreshTokenRepository $refreshTokenRepository;
+
     private ClaimExtractor $claimExtractor;
     private ClientRepository $clientRepository;
 
@@ -305,6 +310,7 @@ class OIDCService extends SSOService {
 
         // Keep references to the relevant objects for later use
         $this->accessTokenRepository = $accessTokenRepository;
+        $this->refreshTokenRepository = $refreshTokenRepository;
         $this->claimExtractor = $claimsExtractor;
         $this->clientRepository = $clientRepository;
 
@@ -315,6 +321,7 @@ class OIDCService extends SSOService {
             $encryptionKey = base64_encode(random_bytes(32));
             $gSettingsManager->set('sso_oidc_encryption_key', $encryptionKey);
         }
+        $this->setEncryptionKey($encryptionKey);
 
         // Setup the authorization server
         $server = new AuthorizationServer(
@@ -860,30 +867,112 @@ class OIDCService extends SSOService {
         }
 
         $request = $this->getRequest();
+        $requestBody = $request->getParsedBody();
+        if (!is_array($requestBody)) {
+            $requestBody = array();
+        }
 
         // Authenticate the client
-        $clientId = $request->getParsedBody()['client_id'] ?? null;
-        $clientSecret = $request->getParsedBody()['client_secret'] ?? null;
+        $clientId = $requestBody['client_id'] ?? null;
+        $clientSecret = $requestBody['client_secret'] ?? null;
 
-        if (!$clientId || !$this->clientRepository->validateClient($clientId, $clientSecret, null)) {
+        if (!is_string($clientId) || $clientId === '' 
+            || !$this->clientRepository->validateClient($clientId, $clientSecret, null)) {
             return new JsonResponse(['error' => 'invalid_client'], 401);
         }
 
-        $tokenValue = $request->getParsedBody()['token'] ?? '';
-        if (!empty($tokenValue)) {
-            try {
-                $validatedRequest = $this->resourceServer->validateAuthenticatedRequest(
-                    $request->withHeader('Authorization', 'Bearer ' . $tokenValue)
-                );
-                $tokenId = $validatedRequest->getAttribute('oauth_access_token_id');
-                $this->accessTokenRepository->revokeAccessToken($tokenId);
-            } catch (\Exception $e) {
-                // RFC 7009: The server responds with HTTP 200 even for invalid tokens
+        $tokenValue = $requestBody['token'] ?? '';
+        $tokenTypeHint = $requestBody['token_type_hint'] ?? null;
+
+        if (!is_string($tokenValue) || $tokenValue === '') {
+            return new JsonResponse([], 200);
+        }
+
+        if ($tokenTypeHint === 'refresh_token') {
+            if (!$this->revokeRefreshToken($tokenValue, $clientId)) {
+                $this->revokeAccessToken($request, $tokenValue, $clientId);
             }
+        } elseif ($tokenTypeHint === 'access_token') {
+            if (!$this->revokeAccessToken($request, $tokenValue, $clientId)) {
+                $this->revokeRefreshToken($tokenValue, $clientId);
+            }
+        } elseif (!$this->revokeAccessToken($request, $tokenValue, $clientId)) {
+            $this->revokeRefreshToken($tokenValue, $clientId);
         }
 
         return new JsonResponse([], 200);
     }
+
+    /**
+     * Revoke an access token.
+     * @param ServerRequestInterface $request
+     * @param string $tokenValue
+     * @param string $clientId
+     * @return bool Returns true if the value was recognized as an access token.
+     */
+    private function revokeAccessToken(ServerRequestInterface $request, string $tokenValue, string $clientId): bool 
+    {
+        try {
+            $validatedRequest = $this->resourceServer->validateAuthenticatedRequest(
+                $request->withHeader('Authorization', 'Bearer ' . $tokenValue)
+            );
+
+            $tokenId = $validatedRequest->getAttribute('oauth_access_token_id');
+            $tokenClientId = $validatedRequest->getAttribute('oauth_client_id');
+
+            if (!is_string($tokenId) || $tokenId === '' || !is_string($tokenClientId)
+                || !hash_equals($clientId, $tokenClientId)
+            ) {
+                return false;
+            }
+
+            $this->accessTokenRepository->revokeAccessToken($tokenId);
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
+
+    /**
+     * Revoke a refresh token and its associated access token.
+     * @param string $tokenValue
+     * @param string $clientId
+     * @return bool Returns true if the value was recognized as a refresh token.
+     */
+    private function revokeRefreshToken(string $tokenValue, string $clientId): bool
+    {
+        try {
+            $tokenPayload = json_decode($this->decrypt($tokenValue), true);
+
+            if (
+                !is_array($tokenPayload)
+                || !isset(
+                    $tokenPayload['refresh_token_id'],
+                    $tokenPayload['access_token_id'],
+                    $tokenPayload['client_id']
+                )
+                || !is_string($tokenPayload['refresh_token_id'])
+                || !is_string($tokenPayload['access_token_id'])
+                || !is_string($tokenPayload['client_id'])
+                || $tokenPayload['refresh_token_id'] === ''
+                || $tokenPayload['access_token_id'] === ''
+                || !hash_equals($clientId, $tokenPayload['client_id'])
+            ) {
+                return false;
+            }
+
+            $this->refreshTokenRepository->revokeRefreshToken(
+                $tokenPayload['refresh_token_id']
+            );
+            $this->accessTokenRepository->revokeAccessToken(
+                $tokenPayload['access_token_id']
+            );
+
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }    
 
     public function handleLogoutRequest() {
         // Properly destroy session and logout user
