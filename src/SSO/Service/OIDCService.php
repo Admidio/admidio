@@ -1080,14 +1080,25 @@ class OIDCService extends SSOService {
         }
     }    
 
-    public function handleLogoutRequest() {
-        // Properly destroy session and logout user
-        if (isset($_SESSION)) {
-            session_unset();
-            session_destroy();
-        }
-        // TODO_RK: Shall we remove the tokens from the database?
-        return new JsonResponse(["logout" => true]);
+    /**
+     * Logout the current user through Admidio's session handling.
+     * @return JsonResponse
+     */
+    public function handleLogoutRequest(): JsonResponse
+    {
+        global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
+
+        $gValidLogin = false;
+
+        // Remove the user from the persisted session, delete auto-login data
+        // and destroy the PHP session.
+        $gCurrentSession->logout();
+
+        // Clear data from global objects.
+        $gCurrentUser->clear();
+        $gMenu->initialize();
+
+        return new JsonResponse(array('logout' => true));
     }
 
     private function getRequestedScopeNames(AuthorizationRequestInterface $authRequest): array
