@@ -69,7 +69,7 @@ class SAMLService extends SSOService {
     /**
      * Validate SAML-specific client settings before saving them.
      * @param array $formValues
-     * @param \Admidio\SSO\Entity\SSOClient $client
+     * @param SSOClient $client
      * @return void
      * @throws Exception
      */
@@ -110,7 +110,7 @@ class SAMLService extends SSOService {
         return $this->idpEntityId;
     }
 
-    public function initializeClientObject($database): ?SSOClient {
+    public function initializeClientObject(Database $database): ?SSOClient {
         return new SAMLClient($database);
     }
 
@@ -656,12 +656,12 @@ class SAMLService extends SSOService {
             }
 
             // IF required, encrypt the assertion
-            $encryptAssertion = $client->getValue('smc_encrypt_assertions');
-            if ($encryptAssertion) {
-                $assertionEnc = $this->encryptAssertion($assertion, $client);
+            $encryptAssertionRequired = (bool)$client->getValue('smc_encrypt_assertions');
+
+            if ($encryptAssertionRequired) {
+                $assertionEnc = $this->encryptAssertion($assertion, $client, $encryptAssertionRequired);
                 $response->addEncryptedAssertion($assertionEnc);
             } else {
-                // Finally add the assertion to the response:
                 $response->addAssertion($assertion);
             }
 
@@ -836,9 +836,12 @@ class SAMLService extends SSOService {
         // $httpResponse = $binding->send($messageContext, $sloUrl);
 
         // Instead of sending it to the browser, capture the URL
-        $request = \Symfony\Component\HttpFoundation\Request::create('/', 'GET');
-        $response = $binding->send($messageContext, $sloUrl, $request);
+        $response = $binding->send($messageContext, $sloUrl);
         $redirectUrl = $response->headers->get('Location');
+
+        if ($redirectUrl === null) {
+            throw new Exception('Could not create the SAML logout redirect URL.');
+        }        
 
         // Send backchannel request via GET (NOT POST!)
         $ch = curl_init();

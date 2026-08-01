@@ -12,7 +12,7 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Presenter\PagePresenter;
 
 
-class SSOService {
+abstract class SSOService {
     protected Database $db;
     protected User $currentUser;
 
@@ -25,9 +25,7 @@ class SSOService {
         $this->currentUser  = $currentUser;
     }
 
-    public function initializeClientObject($database): ?SSOClient {
-        return new SSOClient($database, null, 'sso');
-    }
+    abstract public function initializeClientObject(Database $database): ?SSOClient;
 
     public function createClientObject($clientUUID = null, $clientID = null): ?SSOClient {
         $client = $this->initializeClientObject($this->db);
@@ -158,7 +156,7 @@ class SSOService {
     /**
      * Let SSO implementation save further client settings (e.g. a hashed client secret for OIDC, etc.)
      * @param array $formValues
-     * @param \Admidio\SSO\Entity\SSOClient $client
+     * @param SSOClient $client
      * @return void
      */
     protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
