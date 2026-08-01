@@ -811,15 +811,18 @@ class OIDCService extends SSOService {
 
         // 1. Authenticate the resource server (RFC 7662 Section 2.1)
         // The resource server MUST authenticate using client credentials
-        $clientId = $request->getParsedBody()['client_id'] ?? null;
-        $clientSecret = $request->getParsedBody()['client_secret'] ?? null;
-
-        if (!$clientId || !$this->clientRepository->validateClient($clientId, $clientSecret, null)) {
-            return new JsonResponse(['error' => 'invalid_client'], 401);
+        $clientId = $this->authenticateEndpointClient($request);
+        if ($clientId === null) {
+            return $this->createInvalidClientResponse();
         }
 
         // 2. Get and validate the token
-        $tokenValue = $request->getParsedBody()['token'] ?? '';
+        $requestBody = $request->getParsedBody();
+        if (!is_array($requestBody)) {
+            $requestBody = array();
+        }
+
+        $tokenValue = $requestBody['token'] ?? '';
         if (empty($tokenValue)) {
             return new JsonResponse(['active' => false]);
         }
@@ -873,12 +876,9 @@ class OIDCService extends SSOService {
         }
 
         // Authenticate the client
-        $clientId = $requestBody['client_id'] ?? null;
-        $clientSecret = $requestBody['client_secret'] ?? null;
-
-        if (!is_string($clientId) || $clientId === '' 
-            || !$this->clientRepository->validateClient($clientId, $clientSecret, null)) {
-            return new JsonResponse(['error' => 'invalid_client'], 401);
+        $clientId = $this->authenticateEndpointClient($request);
+        if ($clientId === null) {
+            return $this->createInvalidClientResponse();
         }
 
         $tokenValue = $requestBody['token'] ?? '';
@@ -904,6 +904,112 @@ class OIDCService extends SSOService {
     }
 
     /**
+     * Authenticate a client at an OIDC endpoint.
+     *
+     * Supports the client_secret_basic and client_secret_post authentication methods.
+     *
+     * @param ServerRequestInterface $request
+     * @return string|null Authenticated client ID or null if authentication failed.
+     */
+    private function authenticateEndpointClient(ServerRequestInterface $request): ?string
+    {
+        $clientCredentials = $this->getEndpointClientCredentials($request);
+
+        if ($clientCredentials === null) {
+            return null;
+        }
+
+        try {
+            if (!$this->clientRepository->validateClient(
+                $clientCredentials['clientId'], 
+                $clientCredentials['clientSecret'], 
+                null
+            )) {
+                return null;
+            }
+        } catch (\Throwable $exception) {
+            return null;
+        }
+
+        return $clientCredentials['clientId'];
+    }
+
+    /**
+     * Extract client credentials from HTTP Basic authentication or the request body.
+     *
+     * @param ServerRequestInterface $request
+     * @return array{clientId: string, clientSecret: string}|null
+     */
+    private function getEndpointClientCredentials(ServerRequestInterface $request): ?array
+    {
+        $requestBody = $request->getParsedBody();
+
+        if (!is_array($requestBody)) {
+            $requestBody = array();
+        }
+
+        $authorizationHeader = trim($request->getHeaderLine('Authorization'));
+        $usesBasicAuthentication = strncasecmp($authorizationHeader, 'Basic ', 6) === 0;
+        $usesPostAuthentication = array_key_exists('client_id', $requestBody)
+            || array_key_exists('client_secret', $requestBody);
+
+        // A client must not use more than one authentication method per request.
+        if ($usesBasicAuthentication && $usesPostAuthentication) {
+            return null;
+        }
+
+        if ($usesBasicAuthentication) {
+            $encodedCredentials = trim(substr($authorizationHeader, 6));
+            $decodedCredentials = base64_decode($encodedCredentials, true);
+
+            if ($decodedCredentials === false || !str_contains($decodedCredentials, ':')) {
+                return null;
+            }
+
+            [$clientId, $clientSecret] = explode(':', $decodedCredentials, 2);
+
+            $clientId = urldecode($clientId);
+            $clientSecret = urldecode($clientSecret);
+        } elseif ($usesPostAuthentication) {
+            $clientId = $requestBody['client_id'] ?? null;
+            $clientSecret = $requestBody['client_secret'] ?? null;
+
+            if (!is_string($clientId) || !is_string($clientSecret)) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+
+        if ($clientId === '' || $clientSecret === '') {
+            return null;
+        }
+
+        return array(
+            'clientId' => $clientId,
+            'clientSecret' => $clientSecret
+        );
+    }
+
+    /**
+     * Create the response for failed OIDC endpoint client authentication.
+     * @return JsonResponse
+     */
+    private function createInvalidClientResponse(): JsonResponse
+    {
+        return new JsonResponse(
+            array('error' => 'invalid_client'),
+            401,
+            array(
+                'WWW-Authenticate' => 'Basic realm="Admidio OIDC"',
+                'Cache-Control' => 'no-store',
+                'Pragma' => 'no-cache'
+            )
+        );
+    }
+
+
+   /**
      * Revoke an access token.
      * @param ServerRequestInterface $request
      * @param string $tokenValue
