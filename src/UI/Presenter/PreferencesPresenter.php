@@ -916,7 +916,7 @@ class PreferencesPresenter extends PagePresenter
         $formInventory->addCheckbox(
             'inventory_system_field_names_editable',
             $gL10n->get('SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT'),
-            $formValues['inventory_system_field_names_editable'],
+            (bool) $formValues['inventory_system_field_names_editable'],
             array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
         );
 
@@ -924,7 +924,7 @@ class PreferencesPresenter extends PagePresenter
             $formInventory->addCheckbox(
                 'inventory_allow_keeper_edit',
                 $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
-                $formValues['inventory_allow_keeper_edit'],
+                (bool) $formValues['inventory_allow_keeper_edit'],
                 array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
             );
 
