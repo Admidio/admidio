@@ -28,6 +28,7 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Users\Entity\User;
@@ -129,7 +130,23 @@ class OIDCService extends SSOService {
 
     protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
         if (array_key_exists('ocl_scope', $formValues)) {
-            $formValues['ocl_scope'] = implode(' ', array_merge(['openid'], $formValues['ocl_scope']));
+            if (!is_array($formValues['ocl_scope'])) {
+                throw new Exception('SYS_SSO_CLIENT_SCOPES_INVALID');
+            }
+
+            $selectedScopes = array_values(array_unique($formValues['ocl_scope']));
+            $invalidScopes = array_diff($selectedScopes, OIDCClient::getOptionalScopes());
+
+            if (!empty($invalidScopes)) {
+                throw new Exception(
+                    'SYS_SSO_CLIENT_SCOPES_INVALID',
+                    array(implode(', ', $invalidScopes))
+                );
+            }
+
+            $formValues['ocl_scope'] = implode(' ',
+                array_merge(array(OIDCClient::SCOPE_OPENID), $selectedScopes)
+            );
         }
         $newClientSecret = (string) ($formValues['new_ocl_client_secret'] ?? '');
         // new clients require a secret
@@ -647,15 +664,9 @@ class OIDCService extends SSOService {
             if (!($client instanceof OIDCClient)) {
                 return new JsonResponse(['error' => 'access_denied', 'message' => 'Client not found'], 403);
             }
-            $scopes = $token->getScopes();
-            $scopes = array_map(fn($s) => $s->getIdentifier(), $token->getScopes());
-            $requestScopes = $request->getAttribute('oauth_scopes');
-            $clientScopes = preg_split('/[,;\s]+/', trim($client->getValue($client->getColumnPrefix() . '_scope')));
 
-            if (!empty($requestScopes)) {
-                $scopes = array_intersect($scopes, $requestScopes);
-            }
-            $scopes = array_intersect($scopes, $clientScopes);
+            $scopes = array_map(fn($s) => $s->getIdentifier(), $token->getScopes());
+            $scopes = array_values(array_intersect($scopes, $client->getAllowedScopes()));
 
             // The openid scope with the mandatory sub claim is not added by default, and
             // it cannot be added globally, because then the JWT library will throw an error
@@ -736,7 +747,7 @@ class OIDCService extends SSOService {
             "jwks_uri" => "{$issuer}/jwks",
             "introspection_endpoint" => "{$issuer}/introspect",
             "revocation_endpoint" => "{$issuer}/revoke",
-            "scopes_supported" => ["openid", "profile", "email", "phone", "address", "groups", "custom"],
+            "scopes_supported" => OIDCClient::getSupportedScopes(),
             "response_types_supported" => ["code"],
             "response_modes_supported" => ["query"],
             "grant_types_supported" => ["authorization_code", "refresh_token"],

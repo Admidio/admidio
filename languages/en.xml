@@ -1607,6 +1607,7 @@
   <string name="SYS_SSO_CLIENT_SAML">SAML 2.0 client</string>
   <string name="SYS_SSO_CLIENT_SCOPES">Permitted scopes</string>
   <string name="SYS_SSO_CLIENT_SCOPES_DESC">Scopes are groups of information about the user that can be requested by the client. The OIDC standard defines certain pre-defined (but not required) scopes. Only the 'openid' scope is required and will be added automatically. Selecting further scopes allows Admidio to share those profile data with the client.</string>
+  <string name="SYS_SSO_CLIENT_SCOPES_INVALID">The selected OIDC scopes are invalid: %s</string>
   <string name="SYS_SSO_CLIENT_SECRET">Client Secret</string>
   <string name="SYS_SSO_CLIENT_SECRET_DESC">The (secret) passphrase to authenticate the client. Typically a random string that is exchanged once. On creation, the client secret is shown once and should be copied to the client. Afterwards it is stored as a hashed value in the database, so it is impossible to retrieve it. One can only re-generate a new client secret anc copy that to the client's configuration.</string>
   <string name="SYS_SSO_CLIENT_SECRET_HIDDE">For security reasons, the client secret is only shown on creation.</string>
