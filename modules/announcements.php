@@ -52,7 +52,7 @@ try {
 
     switch ($getMode) {
         case 'cards':
-            $page = new AnnouncementsPresenter($getCategoryUUID);
+            $page = new AnnouncementsPresenter($getCategoryUUID, $getAnnouncementUUID);
             $page->createCards($getOffset);
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
             $page->show();

@@ -35,6 +35,10 @@ class AnnouncementsPresenter extends PagePresenter
      */
     protected string $categoryUUID = '';
     /**
+     * @var string UUID of the announcement that should be displayed.
+     */
+    protected string $announcementUUID = '';
+    /**
      * @var CategoryService An object of the class CategoryService to get all categories.
      */
     protected CategoryService $categories;
@@ -50,13 +54,15 @@ class AnnouncementsPresenter extends PagePresenter
     /**
      * Constructor creates the page object and initialized all parameters.
      * @param string $categoryUUID UUID of the category for which the topics should be filtered.
+     * @param string $announcementUUID UUID of the announcement that should be displayed.
      * @throws Exception
      */
-    public function __construct(string $categoryUUID = '')
+    public function __construct(string $categoryUUID = '', string $announcementUUID = '')
     {
         global $gDb;
 
         $this->categoryUUID = $categoryUUID;
+        $this->announcementUUID = $announcementUUID;
         $this->categories = new CategoryService($gDb, 'FOT');
 
         parent::__construct($categoryUUID);
@@ -143,10 +149,17 @@ class AnnouncementsPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb;
 
-        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'cards', 'category_uuid' => $this->categoryUUID));
+        $baseUrl = SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/announcements.php',
+            array(
+                'mode' => 'cards',
+                'category_uuid' => $this->categoryUUID,
+                'announcement_uuid' => $this->announcementUUID
+            )
+        );
 
         $this->prepareData($offset);
-        $announcementsService = new AnnouncementsService($gDb, $this->categoryUUID);
+        $announcementsService = new AnnouncementsService($gDb, $this->categoryUUID, $this->announcementUUID);
 
         $this->setHtmlID('adm_announcements_cards');
         $this->createSharedHeader('cards');
@@ -306,7 +319,7 @@ class AnnouncementsPresenter extends PagePresenter
     {
         global $gSettingsManager, $gDb, $gCurrentUser, $gL10n, $gCurrentSession;
 
-        $announcementsService = new AnnouncementsService($gDb, $this->categoryUUID);
+        $announcementsService = new AnnouncementsService($gDb, $this->categoryUUID, $this->announcementUUID);
         $data = $announcementsService->findAll($offset, $gSettingsManager->getInt('announcements_per_page'));
         $announcement = new Announcement($gDb);
 
