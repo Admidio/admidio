@@ -34,7 +34,7 @@ class SSOClientPresenter extends PagePresenter
 {
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $clientId Id of the SAML or OIDC client.
+     * @param string $objectUUID UUID of the SAML or OIDC client.
      * @throws Exception
      */
     public function __construct(string $objectUUID = '')
@@ -654,17 +654,16 @@ class SSOClientPresenter extends PagePresenter
             )
         );
         // Make sure the 'openid' scope is always selected (required by the OIDC standard)
-        $scopes = ['profile', 'email', 'address', 'phone', 'groups', 'custom'];
-        $dbvalue = $client->getValue('ocl_scope');
-        $defaultValue = explode(' ', $client->getValue('ocl_scope'));
-        $defaultValue = preg_split('/[,;\s]+/', trim($client->getValue('ocl_scope')));
+        $scopes = OIDCClient::getOptionalScopes();
         $form->addSelectBox(
             'ocl_scope',
             $gL10n->get('SYS_SSO_CLIENT_SCOPES'),
             array_combine($scopes, $scopes),
             array(
                 'property' => FormPresenter::FIELD_DEFAULT,
-                'defaultValue' => array_merge(explode(' ', $client->getValue('ocl_scope'))),
+                'defaultValue' => array_values(
+                    array_intersect($scopes, $client->getAllowedScopes())
+                ),
                 'multiselect' => true,
                 'helpTextId' => 'SYS_SSO_CLIENT_SCOPES_DESC'
             )
