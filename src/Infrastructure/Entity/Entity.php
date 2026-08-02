@@ -510,7 +510,9 @@ class Entity
                 case 'char': // fallthrough
                 case 'varchar': // fallthrough
                 case 'text':
+                case 'tinytext':
                 case 'mediumtext':
+                case 'longtext':
                     if ($format !== 'database') {
                         // if text field and format not 'database' then convert all quotes to HTML syntax
                         $columnValue = SecurityUtils::encodeHTML((string)$columnValue);
@@ -1115,6 +1117,9 @@ class Entity
                     case 'char':
                     case 'varchar':
                     case 'text':
+                    case 'tinytext':
+                    case 'mediumtext':
+                    case 'longtext':
                         // no HTML tags and no HTML entities should be stored in the database
                         $newValue = StringUtils::strStripTags(html_entity_decode($newValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
                         break;
