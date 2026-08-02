@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
+use Admidio\SSO\Service\OIDCService;
 use RuntimeException;
 
 /**
@@ -2215,17 +2216,17 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_SSO_OIDC_ENABLED_DESC')
         );
 
-        if (empty($formValues['sso_oidc_issuer_url'])) {
-            $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
-        }
-        if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
-            $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
-        }
+        // An empty IssuerURL indicates the use of the default admidio base URL
+        // Leave the input box exmpty, but show the default value as
+        // placeholder/hint and copy that value when the copy icon is clicked!
+        $defaultIssuerURL = OIDCService::getDefaultIssuerURL();
         $formSSO->addInput(
             'sso_oidc_issuer_url',
             $gL10n->get('SYS_SSO_OIDC_ISSUER_URL'),
             (string)$formValues['sso_oidc_issuer_url'],
-            array('class' => 'copy-container if-oidc-enabled', 'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
+            array('class' => 'copy-container if-oidc-enabled',
+                  'placeholder' => $defaultIssuerURL,
+                  'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
         );
 
         $keyService = new KeyService($gDb);

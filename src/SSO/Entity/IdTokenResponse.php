@@ -26,13 +26,16 @@ use OpenIDConnectServer\ClaimExtractor;
 class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
 {
     protected ?string $nonce;
+    private string $issuerURL;
 
     public function __construct(
         IdentityProviderInterface $identityProvider,
         ClaimExtractor $claimExtractor,
+        string $issuerURL,
         ?string $keyIdentifier = null
     ) {
         parent::__construct($identityProvider, $claimExtractor, $keyIdentifier);
+        $this->issuerURL = $issuerURL;
     }
     /**
      * @param AccessTokenEntityInterface $accessToken
@@ -55,16 +58,15 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
     // (https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery)
     // The issuer is the URL of the OpenID Provider (OP) that issued the ID token.
     // The OIDC library sets the issuer to the server name only ('https://' . $_SERVER['HTTP_HOST'),
-    // so we need to correct this here!
+    // so we need to override the correct issuerURL here!
 
     protected function getBuilder(AccessTokenEntityInterface $accessToken, UserEntityInterface $userEntity)
     {
-        global $gSettingsManager;
         $builder = parent::getBuilder($accessToken, $userEntity);
         if (!empty($this->nonce)) {
             $builder = $builder->withClaim('nonce', $this->nonce);
         }
-        return $builder->issuedBy( $gSettingsManager->get('sso_oidc_issuer_url'));
+        return $builder->issuedBy($this->issuerURL);
     }
 
     public function getNonce(): string|null {   

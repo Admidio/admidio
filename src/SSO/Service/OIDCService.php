@@ -86,6 +86,15 @@ class OIDCService extends SSOService {
 
     private bool $isServiceSetup = false;
 
+    /**
+     * Return the default issuer URL derived from the current Admidio URL.
+     * @return string
+     */
+    public static function getDefaultIssuerURL(): string
+    {
+        return ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+    }
+
     public function __construct($db, $currentUser) {//, ResourceServer $resourceServer) {
         global $gSettingsManager;
 
@@ -94,11 +103,15 @@ class OIDCService extends SSOService {
         $this->table = TBL_OIDC_CLIENTS;
 
         // Attention: IssuerURL must be the base URL, where ./well-known/openid-configuration is located!
-        $this->issuerURL = $gSettingsManager->get('sso_oidc_issuer_url') ?: ADMIDIO_URL;
-        if (empty($this->issuerURL)) {
-            $this->issuerURL = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
-            $gSettingsManager->set('sso_oidc_issuer_url', $this->issuerURL);
+        $configuredIssuerURL = trim((string)$gSettingsManager->get('sso_oidc_issuer_url'));
+
+        // empty stored issuer URL means "Use the default admidio URL", which will continue working when the installation is moved
+        if ($configuredIssuerURL === '') {
+            $this->issuerURL = self::getDefaultIssuerURL();
+        } else {
+            $this->issuerURL = rtrim($configuredIssuerURL, '/');
         }
+
         $this->authorizationEndpoint = $this->issuerURL  . "/authorize";
         $this->tokenEndpoint = $this->issuerURL . "/token";
         $this->userinfoEndpoint = $this->issuerURL . "/userinfo";
@@ -251,7 +264,12 @@ class OIDCService extends SSOService {
             // new ClaimSetEntity('openid', ['sub']),
             new ClaimSetEntity('groups', ['groups'])
         ]);
-        $responseType = new IdTokenResponse($userRepository, $claimsExtractor, $privateKeyObject->getValue('key_uuid'));
+        $responseType = new IdTokenResponse(
+            $userRepository,
+            $claimsExtractor,
+            $this->issuerURL,
+            $privateKeyObject->getValue('key_uuid')
+        );
 
         // Keep references to the relevant objects for later use
         $this->accessTokenRepository = $accessTokenRepository;
