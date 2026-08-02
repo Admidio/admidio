@@ -183,9 +183,8 @@ try {
         }
     }
 
-    // show a link to download photos if enabled and not at root folder
-    if ($gSettingsManager->getBool('photo_download_enabled') && $getPhotoUuid !== '' && ($photoAlbum->getValue('pho_quantity') > 0 || $albumsCount > 0)) {
-        // show a link to download photos
+    // show a link to download photos if enabled, a valid login exists, and it's not the root folder
+    if ($gSettingsManager->getBool('photo_download_enabled') && $gValidLogin && $getPhotoUuid !== '' && ($photoAlbum->getValue('pho_quantity') > 0 || $albumsCount > 0)) {
         $page->addPageFunctionsMenuItem(
             'menu_item_photos_download',
             $gL10n->get('SYS_DOWNLOAD_ALBUM'),
@@ -255,27 +254,28 @@ try {
                         </a>';
                 }
 
-                if ($gCurrentUser->isAdministratorPhotos() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
-                    $photoThumbnailTable .= '<div id="image_preferences_' . $actThumbnail . '" class="text-center">';
-                }
+                if ($gValidLogin) {
+                    if ($gCurrentUser->isAdministratorPhotos() || $gSettingsManager->getBool('photo_ecard_enabled') || $gSettingsManager->getBool('photo_download_enabled')) {
+                        $photoThumbnailTable .= '<div id="image_preferences_' . $actThumbnail . '" class="text-center">';
+                    }
 
 
-                if ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) {
-                    $photoThumbnailTable .= '
+                    if ($gSettingsManager->getBool('photo_ecard_enabled')) {
+                        $photoThumbnailTable .= '
                         <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/ecards.php', array('photo_nr' => $actThumbnail, 'photo_uuid' => $getPhotoUuid, 'show_page' => $getPhotoNr)) . '">
                             <i class="bi bi-envelope" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_PHOTO_AS_ECARD') . '"></i></a>';
-                }
+                    }
 
-                if ($gSettingsManager->getBool('photo_download_enabled')) {
-                    // show a link to download a photo
-                    $photoThumbnailTable .= '
+                    if ($gSettingsManager->getBool('photo_download_enabled')) {
+                        // show a link to download a photo
+                        $photoThumbnailTable .= '
                         <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_download.php', array('photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)) . '">
                             <i class="bi bi-download" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DOWNLOAD_PHOTO') . '"></i></a>';
-                }
+                    }
 
-                // buttons for moderation
-                if ($gCurrentUser->isAdministratorPhotos()) {
-                    $photoThumbnailTable .= '
+                    // buttons for moderation
+                    if ($gCurrentUser->isAdministratorPhotos()) {
+                        $photoThumbnailTable .= '
                         <a class="admidio-icon-link admidio-image-rotate" href="javascript:void(0)" data-image="' . $actThumbnail . '" data-direction="right">
                             <i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_ROTATE_PHOTO_RIGHT') . '"></i></a>
                         <a class="admidio-icon-link admidio-image-rotate"  href="javascript:void(0)"  data-image="' . $actThumbnail . '" data-direction="left"">
@@ -284,10 +284,11 @@ try {
                             data-message="' . $gL10n->get('SYS_WANT_DELETE_PHOTO') . '"
                             data-href="callUrlHideElement(\'div_image_' . $actThumbnail . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_function.php', array('mode' => 'delete', 'photo_uuid' => $getPhotoUuid, 'photo_nr' => $actThumbnail)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
-                }
+                    }
 
-                if ($gCurrentUser->isAdministratorPhotos() || ($gValidLogin && $gSettingsManager->getBool('photo_ecard_enabled')) || $gSettingsManager->getBool('photo_download_enabled')) {
-                    $photoThumbnailTable .= '</div>';
+                    if ($gCurrentUser->isAdministratorPhotos() || $gSettingsManager->getBool('photo_ecard_enabled') || $gSettingsManager->getBool('photo_download_enabled')) {
+                        $photoThumbnailTable .= '</div>';
+                    }
                 }
                 $photoThumbnailTable .= '</div>';
             }
@@ -295,7 +296,7 @@ try {
 
         // the lightbox should be able to go through the whole album, therefore, we must
         // integrate links to the photos of the album pages to this page and container but hidden
-        if ((int)$gSettingsManager->get('photo_show_mode') === 1) {
+        if ($gSettingsManager->getInt('photo_show_mode') === 1) {
             $photoThumbnailTableShown = false;
 
             for ($hiddenPhotoNr = 1; $hiddenPhotoNr <= $photoAlbum->getValue('pho_quantity'); ++$hiddenPhotoNr) {
