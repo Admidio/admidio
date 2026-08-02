@@ -257,6 +257,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             $memberships[] = $membership;
         }
     }
+    if (count($memberships) === 0) {
+        throw new \Admidio\Infrastructure\Exception('NO_VISIBLE_ROLES');
+    }
     $smarty->assign('memberships', $memberships);
     try {
         return $smarty->fetch('modules/profile.roles-list.row.tpl');

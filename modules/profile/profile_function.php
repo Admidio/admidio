@@ -20,6 +20,7 @@
  * member_uuid : UUID of role membership that should be edited
  ***********************************************************************************************
  */
+
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -41,12 +42,12 @@ try {
     $user = new User($gDb, $gProfileFields);
     $user->readDataByUuid($getUserUuid);
 
+    if (!$gCurrentUser->hasRightViewProfile($user)) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
+
     if ($getMode === 'export') {
         // Export vCard of user
-
-        if (!$gCurrentUser->hasRightViewProfile($user)) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
 
         $filename = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
 
@@ -59,7 +60,7 @@ try {
         header('Cache-Control: private');
         header('Pragma: public');
 
-        // create vcard and check if user is allowed to edit profile, so he can see more data
+        // create vCard and check if user is allowed to edit profile, so he can see more data
         echo $user->getVCard();
     } elseif ($getMode === 'stop_membership') {
         // Cancel membership of role
@@ -101,7 +102,15 @@ try {
         // reload former role memberships
         $roleStatement = getFormerRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        echo getRoleMemberships('former_role_list', $user, $roleStatement);
+        try {
+            echo getRoleMemberships('former_role_list', $user, $roleStatement);
+        } catch (Exception $e) {
+            if ($e->getMessage() === 'NO_VISIBLE_ROLES') {
+                $countRole = 0;
+            } else {
+                throw $e;
+            }
+        }
 
         if ($countRole === 0) {
             /* Tabs */
@@ -118,7 +127,15 @@ try {
         // reload future role memberships
         $roleStatement = getFutureRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        echo getRoleMemberships('future_role_list', $user, $roleStatement);
+        try {
+            echo getRoleMemberships('future_role_list', $user, $roleStatement);
+        } catch (Exception $e) {
+            if ($e->getMessage() === 'NO_VISIBLE_ROLES') {
+                $countRole = 0;
+            } else {
+                throw $e;
+            }
+        }
 
         if ($countRole === 0) {
             /* Tabs */
@@ -174,5 +191,9 @@ try {
         echo 'success';
     }
 } catch (Throwable $e) {
-    handleException($e, in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership')));
+    handleException(
+        $e,
+        in_array($getMode, array('stop_membership', 'remove_former_membership', 'save_membership')),
+        in_array($getMode, array('reload_current_memberships', 'reload_former_memberships', 'reload_future_memberships'))
+    );
 }
