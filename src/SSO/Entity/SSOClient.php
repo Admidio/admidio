@@ -28,7 +28,13 @@ class SSOClient extends Entity
                 $this->readDataByColumns([$this->columnPrefix . '_client_id' => $client_id]);
             }  else {
                 // Set default values for clock skew, assertion lifetime and included fields
-                $this->dbColumns[$this->columnPrefix . '_field_mapping'] = '{"username":"usr_login_name","fullname":"fullname","email":"EMAIL","roles":"roles"}';
+                $defaultMapping = array(
+                    'username' => 'usr_login_name',
+                    'fullname' => 'fullname',
+                    'email' => 'EMAIL',
+                    'roles' => 'roles'
+                );
+                $this->dbColumns[$this->columnPrefix . '_field_mapping'] = json_encode($defaultMapping, JSON_THROW_ON_ERROR);
                 // Use setValue() so this default participates in Entity change tracking for new clients.
                 $this->setValue($this->columnPrefix . '_userid_field', 'usr_login_name');
             }
