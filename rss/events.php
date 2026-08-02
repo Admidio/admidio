@@ -31,8 +31,10 @@ try {
     }
 
     // check if the module is enabled and disallow access if it's disabled
-    if ((int)$gSettingsManager->get('events_module_enabled') !== 1) {
+    if ($gSettingsManager->getInt('events_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
+    } elseif ($gSettingsManager->getInt('events_module_enabled') === 2 && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getOrganization !== '') {
