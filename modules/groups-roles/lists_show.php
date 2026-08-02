@@ -61,8 +61,8 @@ try {
 
     $roleUuidList = explode(',', $getRoleList);
     foreach ($roleUuidList as $key => $roleUuid) {
-        if (!UUID::isValid($roleUuid)) {
-            unset($roleUuidList[$key]);
+        if (!Uuid::isValid($roleUuid)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
     }
     $numberRoles = count($roleUuidList);
@@ -192,6 +192,11 @@ try {
 
     if ($getRelationTypeList !== '') {
         $relationTypeUuidList = explode(',', $getRelationTypeList);
+        foreach ($relationTypeUuidList as $key => $relationTypeUuid) {
+            if (!Uuid::isValid($relationTypeUuid)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+        }
     }
 
     if (count($relationTypeUuidList) > 0) {
