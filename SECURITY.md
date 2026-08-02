@@ -7,20 +7,29 @@ This document outlines security procedures and general policies for the
   * [Comments on this Policy](#comments-on-this-policy)
 
 ## Reporting a Vulnerability
-The *Admidio* team and community take all security bugs in 
-*Admidio* seriously. Thank you for improving the security of
-*Admidio*. We appreciate your efforts and responsible 
-disclosure and will make every effort to acknowledge your contributions.
+The *Admidio* team and community take the security of *Admidio* seriously. 
+We appreciate your efforts to responsibly disclose security vulnerabilities 
+and help keep *Admidio* secure.
 
-Report security bugs by emailing the maintainer at m.fassbender@admidio.org
+If you discover a security vulnerability, please create a **GitHub Security 
+Advisory** in the *Admidio* repository. This allows us to discuss the issue 
+privately, coordinate a fix, and prepare a responsible disclosure before 
+the vulnerability becomes public.
 
-The maintainer will response to your email within the next 2 days. After 
-the initial reply to your report, we will endeavor to keep you informed 
-of the progress towards a fix and full announcement, and may ask for 
-additional information or guidance.
+If you would like to provide additional information or are unable to use 
+**GitHub Security Advisories**, you may also contact the maintainer by email 
+at m.fassbender@admidio.org.
 
-Report security bugs in third-party plugins to the person or team maintaining
-the plugin.
+We aim to acknowledge your report within 3 business days. After the initial 
+response, we will keep you informed about the progress of the investigation, 
+the development of a fix, and the coordinated public disclosure. We may contact 
+you if we need additional information to reproduce or understand the issue.
+
+Please report security vulnerabilities in third-party plugins directly to the 
+respective plugin maintainer, as those plugins are maintained independently 
+from the *Admidio* core project.
+
+Thank you for helping make *Admidio* more secure.
 
 ## Supported Versions
 Here you find a short overview about our versions that we will support with security updates.
