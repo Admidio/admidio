@@ -26,6 +26,8 @@ try {
     // check if module is active
     if ($gSettingsManager->getInt('announcements_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
+    } elseif ($gSettingsManager->getInt('announcements_module_enabled') === 2 && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // Show the RSS feed of the forum topics

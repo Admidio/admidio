@@ -28,6 +28,12 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
+    if ($gSettingsManager->getInt('forum_module_enabled') === 0) {
+        throw new Exception('SYS_MODULE_DISABLED');
+    } elseif ($gSettingsManager->getInt('forum_module_enabled') === 2 && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
+
     // Show the RSS feed of the forum topics
     $forumService = new ForumService($gDb);
     $forumService->rssFeed($getOrganization);
