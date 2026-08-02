@@ -50,12 +50,16 @@ class UploadHandlerPhoto extends UploadHandler
      */
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null): stdClass
     {
-        global $photoAlbum, $gSettingsManager, $gL10n, $gLogger;
+        global $photoAlbum, $gSettingsManager, $gL10n, $gLogger, $gDisableFileUpload;
 
         try {
             $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
             if (isset($file->error)) {
                 throw new Exception($file->error);
+            }
+
+            if ($gDisableFileUpload) {
+                throw new Exception('File upload disabled in global config file!');
             }
 
             $fileLocation = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/' . $file->name;

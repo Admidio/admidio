@@ -47,12 +47,16 @@ class UploadHandlerFile extends UploadHandler
      */
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null): stdClass
     {
-        global $gSettingsManager, $gDb, $gLogger;
+        global $gSettingsManager, $gDb, $gLogger, $gDisableFileUpload;
 
         try {
             $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
             if (isset($file->error)) {
                 throw new Exception($file->error);
+            }
+
+            if ($gDisableFileUpload) {
+                throw new Exception('File upload disabled in global config file!');
             }
 
             // check filename and throw exception if something is wrong
