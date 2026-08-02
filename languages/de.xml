@@ -1607,7 +1607,7 @@
   <string name="SYS_SSO_OIDC_ENABLED">Single-Sign-On über OpenId Connect (OIDC) aktivieren</string>
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Diese Einstellung macht Admidio zu einem OIDC-Identitätsanbieter (idP) für Single-Sign-On, der es anderen Webanwendungen ermöglicht, Benutzer:innen gegenüber der Admidio-Benutzerliste zu authentifizieren.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Aussteller</string>
-  <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Der eindeutige Bezeichner für OIDC dieser Admidio-Instanz. Normalerweise ist dies die Basis-URL deiner Admidio-Installation. Der Client muss mit genau der gleichen Entity-ID eingerichtet werden, sonst funktioniert die Anmeldung nicht.</string>
+  <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Die Aussteller-URL des OpenID-Connect-Providers. Lassen Sie dieses Feld leer, damit die URL automatisch aus der aktuellen Admidio-URL abgeleitet wird. Geben Sie nur dann eine eigene URL an, wenn der Provider unter einer abweichenden externen Adresse veröffentlicht wird.</string>
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpunkt</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Abmelde-Endpunkt</string>
   <string name="SYS_SSO_OIDC_ROLE">OIDC Rollenname</string>
