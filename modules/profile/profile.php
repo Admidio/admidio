@@ -308,6 +308,13 @@ try {
         $profileData[$category] = $categoryData;
     }
 
+    // if birthday is set than add age to the Smarty params
+    if (isset($masterData['BIRTHDAY'])) {
+        $birthday = new \DateTime($masterData['BIRTHDAY']['value']);
+        $age = $birthday->diff(new \DateTime())->y;
+        $page->assignSmartyVariable('age', $age);
+    }
+
     // add missing address fields to masterData so that there is less logic in template necessary
     if (isset($masterData['STREET']) || isset($masterData['POSTCODE']) || isset($masterData['CITY']) || isset($masterData['COUNTRY'])) {
         if (!isset($masterData['STREET'])) {

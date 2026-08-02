@@ -71,6 +71,15 @@
                             </div>
                         </div>
                     {/if}
+            {elseif {$profileField.id} == 'BIRTHDAY'}
+                <div class="admidio-form-group row mb-3">
+                    <div class="col-sm-3">
+                        {$profileField.label}
+                    </div>
+                    <div class="col-sm-9">
+                        <strong>{$profileField.value}</strong>{if $profileField.value !== ''} ({$age} {$l10n->get('SYS_YEARS')}){/if}
+                    </div>
+                </div>
             {else}
                 <div class="admidio-form-group row mb-3">
                     <div class="col-sm-3">
