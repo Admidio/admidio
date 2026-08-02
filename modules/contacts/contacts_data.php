@@ -92,7 +92,7 @@ try {
     $useOrderBy = false;
     $orderCondition = '';
     $orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
-    if (($getMembersShowFilter < ShowMembers::AllContactsAllOrganizations) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter->value < ShowMembers::AllContactsAllOrganizations->value) && $gCurrentUser->isAdministratorUsers()) {
         array_unshift($orderColumns, 'checkbox');
     }
 
@@ -353,7 +353,7 @@ try {
 
     while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
-        if (($getMembersShowFilter < ShowMembers::AllContactsAllOrganizations) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter->value < ShowMembers::AllContactsAllOrganizations->value) && $gCurrentUser->isAdministratorUsers()) {
             $columnNumberJson = 3;
         } else {
             $columnNumberJson = 2;
@@ -380,7 +380,7 @@ try {
         }
 
         // Create row and add first column
-        if (($getMembersShowFilter < ShowMembers::AllContactsAllOrganizations) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter->value < ShowMembers::AllContactsAllOrganizations->value) && $gCurrentUser->isAdministratorUsers()) {
             $columnNumberValues = '2';
             $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => '<input type="checkbox"/>', '1' => $rowNumber);
         } else {
