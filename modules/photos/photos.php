@@ -38,11 +38,11 @@ try {
     $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'int', array('defaultValue' => 1));
     $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'int');
 
-    // Fotoalbums-Objekt erzeugen oder aus Session lesen
+    // Create a photo album object or read one from a session
     if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_uuid') === $getPhotoUuid) {
         $photoAlbum =& $_SESSION['photo_album'];
     } else {
-        // einlesen des Albums falls noch nicht in Session gespeichert
+        // Read the album if it hasn't been saved in the session yet
         $photoAlbum = new Album($gDb);
         if ($getPhotoUuid !== '') {
             $photoAlbum->readDataByUuid($getPhotoUuid);
@@ -50,6 +50,32 @@ try {
 
         $_SESSION['photo_album'] = $photoAlbum;
     }
+
+    // read all (sub-)albums of the current level
+    $sql = 'SELECT *
+              FROM ' . TBL_PHOTOS . '
+             WHERE pho_org_id = ? -- $gCurrentOrgId';
+    $queryParams = array($gCurrentOrgId);
+    if ($getPhotoUuid !== '') {
+        $sql .= '
+        AND pho_pho_id_parent = ? -- $photoAlbum->getValue(\'pho_id\')';
+        $queryParams[] = $photoAlbum->getValue('pho_id');
+    } else {
+        $sql .= '
+        AND (pho_pho_id_parent IS NULL) ';
+    }
+
+    if (!$gCurrentUser->isAdministratorPhotos()) {
+        $sql .= '
+        AND pho_locked = false ';
+    }
+
+    $sql .= '
+    ORDER BY pho_begin DESC';
+
+    $albumStatement = $gDb->queryPrepared($sql, $queryParams);
+    $albumList = $albumStatement->fetchAll();
+    $albumsCount = $albumStatement->rowCount();
 
     // set headline of module
     if ($getPhotoUuid !== '') {
@@ -157,8 +183,8 @@ try {
         }
     }
 
-    // show a link to download photos if enabled
-    if ($gSettingsManager->getBool('photo_download_enabled') && $photoAlbum->getValue('pho_quantity') > 0) {
+    // show a link to download photos if enabled and not at root folder
+    if ($gSettingsManager->getBool('photo_download_enabled') && $getPhotoUuid !== '' && ($photoAlbum->getValue('pho_quantity') > 0 || $albumsCount > 0)) {
         // show a link to download photos
         $page->addPageFunctionsMenuItem(
             'menu_item_photos_download',
@@ -310,33 +336,8 @@ try {
             'photo_nr'
         ));
     }
+
     // Album list
-
-    // show all albums of the current level
-    $sql = 'SELECT *
-              FROM ' . TBL_PHOTOS . '
-             WHERE pho_org_id = ? -- $gCurrentOrgId';
-    $queryParams = array($gCurrentOrgId);
-    if ($getPhotoUuid !== '') {
-        $sql .= '
-        AND pho_pho_id_parent = ? -- $photoAlbum->getValue(\'pho_id\')';
-        $queryParams[] = $photoAlbum->getValue('pho_id');
-    } else {
-        $sql .= '
-        AND (pho_pho_id_parent IS NULL) ';
-    }
-
-    if (!$gCurrentUser->isAdministratorPhotos()) {
-        $sql .= '
-        AND pho_locked = false ';
-    }
-
-    $sql .= '
-    ORDER BY pho_begin DESC';
-
-    $albumStatement = $gDb->queryPrepared($sql, $queryParams);
-    $albumList = $albumStatement->fetchAll();
-    $albumsCount = $albumStatement->rowCount();
 
     if ($albumsCount > 0) {
         // if there are photos in the current album and sub albums exist, then show a separator
@@ -400,7 +401,7 @@ try {
                                             </li>
                                             ' . $htmlLock . '
                                             <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                                                data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($childPhotoAlbum->getValue('pho_name', 'database'))) . '"
+                                                data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($childPhotoAlbum->getValue('pho_name'))) . '"
                                                 data-href="callUrlHideElement(\'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE_ALBUM') . '</a>
                                             </li>
@@ -453,7 +454,7 @@ try {
     }
 
     // Empty album, if the album contains neither photos nor subfolders
-    if ($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($photoAlbum->getValue('pho_quantity')) === 0)) {  // alle vorhandenen Albumen werden ignoriert
+    if ($albumsCount === 0 && ($photoAlbum->getValue('pho_quantity') == 0 || strlen($photoAlbum->getValue('pho_quantity')) === 0)) {  // All existing albums will be ignored
         $page->addHtml($gL10n->get('SYS_ALBUM_CONTAINS_NO_PHOTOS'));
     }
 
