@@ -33,9 +33,6 @@ try {
     // check if the module is enabled and disallow access if it's disabled
     if ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 2) {
-        // only logged-in users can access the module
-        require(__DIR__ . '/../../system/login_valid.php');
     }
 
     // check if download function is enabled
@@ -54,10 +51,6 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    if ((int)$photoAlbum->getValue('pho_quantity') === 0) {
-        throw new Exception('SYS_ALBUM_CONTAINS_NO_PHOTOS');
-    }
-
     // check whether to take original version instead of scaled one
     $takeOriginalsIfAvailable = $gSettingsManager->getBool('photo_keep_original');
 
@@ -67,6 +60,7 @@ try {
     if ($getPhotoNr == null) {
         // get number of photos in total
         $quantity = $photoAlbum->getValue('pho_quantity');
+        $sqlConditions = '';
 
         // get tempFolder and unlink zip file otherwise get a PHP deprecated warning from zip open
         $tempFolder = $tempFileFolderName = ADMIDIO_PATH . FOLDER_TEMP_DATA;
@@ -121,16 +115,21 @@ try {
         // number of sub albums
         $albums = $pdoStatement->rowCount();
 
+        if ((int)$photoAlbum->getValue('pho_quantity') === 0 && $albums === 0) {
+            throw new Exception('SYS_ALBUM_CONTAINS_NO_PHOTOS');
+        }
+
         for ($x = 0; $x < $albums; ++$x) {
             // get id of album
-            $photoAlbum->readDataById((int)$pdoStatement->fetchColumn());
+            $subPhotoAlbum = new Album($gDb);
+            $subPhotoAlbum ->readDataById((int)$pdoStatement->fetchColumn());
 
             // ignore locked albums owned by others
-            if ($photoAlbum->getValue('pho_locked') == 0 || $gCurrentUser->isAdministratorPhotos()) {
-                $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id');
+            if ($subPhotoAlbum->getValue('pho_locked') == 0 || $gCurrentUser->isAdministratorPhotos()) {
+                $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $subPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$subPhotoAlbum->getValue('pho_id');
                 // get number of photos in total
-                $quantity = $photoAlbum->getValue('pho_quantity');
-                $photoAlbumName = $photoAlbum->getValue('pho_name');
+                $quantity = $subPhotoAlbum->getValue('pho_quantity');
+                $photoAlbumName = preg_replace('/[^\p{L}\p{N} _.-]/u', '', $subPhotoAlbum->getValue('pho_name', 'database'));
                 for ($i = 1; $i <= $quantity; ++$i) {
                     if ($takeOriginalsIfAvailable) {
                         // try to find the original version if available, if not fallback to the scaled one
@@ -159,7 +158,7 @@ try {
             // => EXIT
         }
 
-        $filename = $photoAlbum->getValue('pho_name') . ' - ' . $photoAlbum->getPhotographer() . '.zip';
+        $filename = preg_replace('/[^\p{L}\p{N} _.-]/u', '', $photoAlbum->getValue('pho_name', 'database')) . '.zip';
         $filename = FileSystemUtils::getSanitizedPathEntry($filename);
 
         header('Content-Type: application/zip');
