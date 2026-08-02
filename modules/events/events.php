@@ -54,10 +54,9 @@ try {
     $getView = admFuncVariableIsValid($_GET, 'view', 'string', array('defaultValue' => $gSettingsManager->getString('events_view'), 'validValues' => array('detail', 'compact', 'room', 'participants', 'description')));
 
     // check if module is active
-    if ((int)$gSettingsManager->get('events_module_enabled') === 0) {
+    if ($gSettingsManager->getInt('events_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ((int)$gSettingsManager->get('events_module_enabled') === 2) {
-        // module only for valid Users
+    } elseif ($gSettingsManager->getInt('events_module_enabled') === 2) {
         require(__DIR__ . '/../../system/login_valid.php');
     }
 
