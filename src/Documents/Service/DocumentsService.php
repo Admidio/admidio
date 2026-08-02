@@ -230,9 +230,16 @@ class DocumentsService
         while ($row = $filesStatement->fetch()) {
             $folder = new Folder($this->db, $row['fol_id']);
 
-            if ($folder->hasUploadRight()) {
-                $arrAllUploadableFolders[$folder->getValue('fol_uuid')] = $indent . '- ' . $folder->getValue('fol_name');
+            $hasUploadRight = $folder->hasUploadRight();
 
+            if ($hasUploadRight) {
+                $arrAllUploadableFolders[$folder->getValue('fol_uuid')] = $indent . '- ' . $folder->getValue('fol_name');
+            }
+
+            $isVisible = $folder->hasViewRight()
+                || ($folder->getValue('fol_public') && !$folder->getValue('fol_locked'));
+
+            if ($hasUploadRight || $isVisible) {
                 $arrAllUploadableFolders = $this->findFoldersWithUploadRights($row['fol_id'], $arrAllUploadableFolders, $indent . '&nbsp;&nbsp;&nbsp;');
             }
         }
@@ -260,7 +267,12 @@ class DocumentsService
 
         $row = $filesStatement->fetch();
 
-        $arrAllUploadableFolders = array($row['fol_uuid'] => $gL10n->get('SYS_DOCUMENTS_FILES'));
+        $arrAllUploadableFolders = array();
+        $folder = new Folder($this->db, $row['fol_id']);
+
+        if ($folder->hasUploadRight()) {
+            $arrAllUploadableFolders[$row['fol_uuid']] = $gL10n->get('SYS_DOCUMENTS_FILES');
+        }
 
         return $this->findFoldersWithUploadRights($row['fol_id'], $arrAllUploadableFolders);
     }
