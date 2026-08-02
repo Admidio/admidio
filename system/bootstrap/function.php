@@ -24,9 +24,10 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
  * If **jsonResponse** is set to true, then the error message will be returned as JSON object.
  * @param Throwable $e The exception that should be handled
  * @param bool $jsonResponse (optional) If set to true than the error message will be returned as JSON object
+ * @param bool $inlineResponse (optional) If set to true than the error message will be returned as inline HTML without header and footer
  * @return void
  */
-function handleException(Throwable $e, bool $jsonResponse = false): void
+function handleException(Throwable $e, bool $jsonResponse = false, bool $inlineResponse = false): void
 {
     global $gDebug, $gMessage, $gHtmlPurifierFilter;
 
@@ -41,6 +42,9 @@ function handleException(Throwable $e, bool $jsonResponse = false): void
     } else {
         if (isset($gMessage)) {
             try {
+                if ($inlineResponse) {
+                    $gMessage->showHtmlTextOnly();
+                }
                 $gMessage->show($message);
             } catch (Throwable $exceptionMessage) {
                 echo $gHtmlPurifierFilter->purify($exceptionMessage);
