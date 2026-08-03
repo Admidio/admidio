@@ -1628,9 +1628,13 @@
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">Keine OIDC-Clients (Dienstanbieter) konfiguriert!</string>
   <string name="SYS_SSO_NO_SAML_CLIENTS_FOUND">Keine SAML-Clients (Dienstanbieter) konfiguriert!</string>
   <string name="SYS_SSO_OIDC">Single-Sign-On mit OpenId Connect (OIDC)</string>
+  <string name="SYS_SSO_OIDC_ACCESS_TOKEN_LIFETIME">Gültigkeit des Zugriffstokens</string>
+  <string name="SYS_SSO_OIDC_ACCESS_TOKEN_LIFETIME_DESC">Die Anzahl der Sekunden, für die ein ausgestelltes Zugriffstoken gültig bleibt. Der Standardwert beträgt 3600 Sekunden.</string>
   <string name="SYS_SSO_OIDC_ATTRIBUTES">Claims in benutzerdefinierten Bereichen und Feldüberschreibungen</string>
   <string name="SYS_SSO_OIDC_ATTRIBUTES_DESC">Wähle alle Benutzerfelder aus, die in den „benutzerdefinierten“ Bereich aufgenommen werden sollen. Außerdem ist hier die Zuordnung von Standard-Claims möglich, z. B. kann man das Mobiltelefon dem Claim „Telefon“ zuordnen oder ein benutzerdefiniertes Profilfeld für den Claim „Profil“ verwenden.</string>
   <string name="SYS_SSO_OIDC_ALLOW_ACCESS">Zugriff erlauben</string>
+  <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Gültigkeit des Autorisierungscodes</string>
+  <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Die Anzahl der Sekunden, für die ein Autorisierungscode gültig bleibt. Autorisierungscodes sind kurzlebig und können nur einmal verwendet werden. Der Standardwert beträgt 600 Sekunden.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentifizierungs-Endpunkt</string>
   <string name="SYS_SSO_OIDC_AUTHORIZE_CLIENT">%s autorisieren</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1644,6 +1648,8 @@
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Die Aussteller-URL des OpenID-Connect-Providers. Lassen Sie dieses Feld leer, damit die URL automatisch aus der aktuellen Admidio-URL abgeleitet wird. Geben Sie nur dann eine eigene URL an, wenn der Provider unter einer abweichenden externen Adresse veröffentlicht wird.</string>
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpunkt</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Abmelde-Endpunkt</string>
+  <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Gültigkeit des Aktualisierungstokens</string>
+  <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">Die Anzahl der Sekunden, für die ein ausgestelltes Aktualisierungstoken gültig bleibt. Der Standardwert beträgt 2592000 Sekunden, was 30 Tagen entspricht.</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Angeforderte Berechtigungen</string>
   <string name="SYS_SSO_OIDC_ROLE">OIDC Rollenname</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID">Bei Admidio anmelden</string>
