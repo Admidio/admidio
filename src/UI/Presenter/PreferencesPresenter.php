@@ -2536,6 +2536,46 @@ class PreferencesPresenter extends PagePresenter
                 'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
         );
 
+        $formSSO->addInput(
+            'sso_oidc_auth_code_lifetime',
+            $gL10n->get('SYS_SSO_OIDC_AUTH_CODE_LIFETIME'),
+            $formValues['sso_oidc_auth_code_lifetime'],
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'type' => 'number',
+                'minNumber' => 1,
+                'step' => 1,
+                'class' => 'if-oidc-enabled',
+                'helpTextId' => 'SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC'
+            )
+        );
+        $formSSO->addInput(
+            'sso_oidc_access_token_lifetime',
+            $gL10n->get('SYS_SSO_OIDC_ACCESS_TOKEN_LIFETIME'),
+            $formValues['sso_oidc_access_token_lifetime'],
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'type' => 'number',
+                'minNumber' => 1,
+                'step' => 1,
+                'class' => 'if-oidc-enabled',
+                'helpTextId' => 'SYS_SSO_OIDC_ACCESS_TOKEN_LIFETIME_DESC'
+            )
+        );
+        $formSSO->addInput(
+            'sso_oidc_refresh_token_lifetime',
+            $gL10n->get('SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME'),
+            $formValues['sso_oidc_refresh_token_lifetime'],
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'type' => 'number',
+                'minNumber' => 1,
+                'step' => 1,
+                'class' => 'if-oidc-enabled',
+                'helpTextId' => 'SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC'
+            )
+        );
+
         $formSSO->addCustomContent(
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),

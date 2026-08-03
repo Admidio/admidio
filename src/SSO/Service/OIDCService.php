@@ -73,6 +73,10 @@ use Admidio\SSO\Service\KeyService;
 class OIDCService extends SSOService {
     use CryptTrait;
 
+    private const DEFAULT_AUTH_CODE_LIFETIME = 600;
+    private const DEFAULT_ACCESS_TOKEN_LIFETIME = 3600;
+    private const DEFAULT_REFRESH_TOKEN_LIFETIME = 2592000;
+
     private AuthorizationServer $authServer;
     private ResourceServer $resourceServer;
     private AccessTokenRepository $accessTokenRepository;
@@ -281,12 +285,22 @@ class OIDCService extends SSOService {
     public function setupService() {
         global $gSettingsManager, $gLogger;
 
+        $authCodeTTL = new \DateInterval(
+            'PT' . $this->getTokenLifetime('sso_oidc_auth_code_lifetime', self::DEFAULT_AUTH_CODE_LIFETIME) . 'S'
+        );
+        $accessTokenTTL = new \DateInterval(
+            'PT' . $this->getTokenLifetime('sso_oidc_access_token_lifetime', self::DEFAULT_ACCESS_TOKEN_LIFETIME) . 'S'
+        );
+        $refreshTokenTTL = new \DateInterval(
+            'PT' . $this->getTokenLifetime('sso_oidc_refresh_token_lifetime', self::DEFAULT_REFRESH_TOKEN_LIFETIME) . 'S'
+        );
+
         // Init our repositories
         $clientRepository = new ClientRepository($this->db);            // instance of ClientRepositoryInterface
-        $scopeRepository = new ScopeRepository($this->db);                        // instance of ScopeRepositoryInterface
+        $scopeRepository = new ScopeRepository($this->db);              // instance of ScopeRepositoryInterface
         $accessTokenRepository = new AccessTokenRepository($this->db);  // instance of AccessTokenRepositoryInterface
         $authCodeRepository = new AuthCodeRepository($this->db);        // instance of AuthCodeRepositoryInterface
-        $userRepository = new UserRepository($this->db); // instance of UserRepositoryInterface // TODO_RK: Add user ID field and allowed Roles!
+        $userRepository = new UserRepository($this->db);                // instance of UserRepositoryInterface // TODO_RK: Add user ID field and allowed Roles!
         $refreshTokenRepository = new RefreshTokenRepository(database: $this->db); // instance of RefreshTokenRepositoryInterface
 
         // Private key for signing
@@ -337,32 +351,19 @@ class OIDCService extends SSOService {
         /* ***********************************************************************
          * Auth Code Grant
          */
-        $grant = new OIDCAuthCodeGrant(
-             $authCodeRepository,
-             $refreshTokenRepository,
-             new \DateInterval('PT10M') // authorization codes will expire after 10 minutes
-        );
-        $this->authCodeGrant = $grant;
+        $grant = new OIDCAuthCodeGrant($authCodeRepository, $refreshTokenRepository, $authCodeTTL);
+        $grant->setRefreshTokenTTL($refreshTokenTTL); // refresh tokens will expire after 1 month
+        $server->enableGrantType($grant, $accessTokenTTL);
 
-        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
-        // Enable the authentication code grant on the server
-        $server->enableGrantType(
-            $grant,
-            new \DateInterval('PT1H') // access tokens will expire after 1 hour
-        );
+        $this->authCodeGrant = $grant;
 
 
         /* ***********************************************************************
         * RefreshToken Grant
         */
         $grant = new RefreshTokenGrant($refreshTokenRepository);
-        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // new refresh tokens will expire after 1 month
-
-        // Enable the refresh token grant on the server
-        $server->enableGrantType(
-            $grant,
-            new \DateInterval('PT1H') // new access tokens will expire after an hour
-        );
+        $grant->setRefreshTokenTTL($refreshTokenTTL); // new refresh tokens will expire after 1 month
+        $server->enableGrantType($grant, $accessTokenTTL);
 
 
 
@@ -398,6 +399,20 @@ class OIDCService extends SSOService {
         $this->resourceServer = $resourceServer;
 
         $this->isServiceSetup = true;
+    }
+
+    /**
+     * Return a configured OIDC token lifetime in seconds.
+     *
+     * @param string $preferenceName
+     * @param int $defaultLifetime
+     * @return int
+     */
+    private function getTokenLifetime(string $preferenceName, int $defaultLifetime): int
+    {
+        global $gSettingsManager;
+        $lifetime = (int)$gSettingsManager->get($preferenceName);
+        return ($lifetime < 1) ? $defaultLifetime : $lifetime;
     }
 
     /**

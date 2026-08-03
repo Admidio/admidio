@@ -1660,9 +1660,13 @@
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients (Service Providers) configured!</string>
   <string name="SYS_SSO_NO_SAML_CLIENTS_FOUND">No SAML clients (Service Providers) configured!</string>
   <string name="SYS_SSO_OIDC">Single-Sign-On with OpenId Connect (OIDC)</string>
+  <string name="SYS_SSO_OIDC_ACCESS_TOKEN_LIFETIME">Access token lifetime</string>
+  <string name="SYS_SSO_OIDC_ACCESS_TOKEN_LIFETIME_DESC">The number of seconds for which an issued access token remains valid. The default is 3600 seconds.</string>
   <string name="SYS_SSO_OIDC_ALLOW_ACCESS">Allow access</string>
   <string name="SYS_SSO_OIDC_ATTRIBUTES">Claims in custom scope and field overrides</string>
   <string name="SYS_SSO_OIDC_ATTRIBUTES_DESC">Select all user fields that should be included in the 'custom' scope. Additionally, mapping standard claims are possible here, e.g. one can map the mobile phone to the 'phone' claim, or use a custom profile field for the 'profile' claim.</string>
+  <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Auth code lifetime</string>
+  <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">The number of seconds for which an authorization code remains valid. Authorization codes are short-lived and can be used only once. The default is 600 seconds.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentication Endpoint</string>
   <string name="SYS_SSO_OIDC_AUTHORIZE_CLIENT">Authorize %s</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1675,6 +1679,8 @@
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">The issuer URL of the OpenID Connect provider. Leave this field empty to derive the URL automatically from the current Admidio URL. Enter a custom URL only if the provider is published under a different external address.</string>
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpoint</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Logout Endpoint</string>
+  <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Refresh token lifetime</string>
+  <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">The number of seconds for which an issued refresh token remains valid. The default is 2592000 seconds, which corresponds to 30 days.</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Requested permissions</string>
   <string name="SYS_SSO_OIDC_ROLE">OIDC role name</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID">Sign you in</string>

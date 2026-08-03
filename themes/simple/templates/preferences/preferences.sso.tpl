@@ -129,6 +129,9 @@
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_oidc_enabled']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_issuer_url']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['sso_oidc_signing_key']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_auth_code_lifetime']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_access_token_lifetime']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_refresh_token_lifetime']}
 
     {include 'sys-template-parts/form.static-subinformation.tpl' data=$elements['sso_oidc_sso_staticsettings']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_oidc_clients']}
