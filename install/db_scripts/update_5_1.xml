@@ -131,5 +131,6 @@
     <step id="840">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_session_id varchar(64) NULL</step>
     <step id="850">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_authentication_methods varchar(255) NULL</step>
     <step id="860">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_authentication_context varchar(255) NULL</step>
+    <step id="870">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_trusted boolean NOT NULL DEFAULT false</step>
     <step>stop</step>
 </update>

@@ -85,6 +85,15 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         // TODO_RK
         return true;
     }
+    
+    /**
+     * Return whether user consent may be skipped for this client.
+     * @return bool
+     */
+    public function isTrusted(): bool
+    {
+        return (bool)$this->getValue($this->columnPrefix . '_trusted');
+    }
 
     public function getFieldMappingNoDefault(): bool
     {
