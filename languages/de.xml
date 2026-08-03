@@ -1669,6 +1669,8 @@
   <string name="SYS_SSO_OIDC_SCOPE_OTHER">Berechtigung „%s“ verwenden</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER_DESC">Erlaubt den Zugriff auf weitere Daten oder Funktionen, die dieser Client angefordert hat.</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token-Endpunkt</string>
+  <string name="SYS_SSO_OIDC_TRUSTED_CLIENT">Vertrauenswürdiger Client</string>
+  <string name="SYS_SSO_OIDC_TRUSTED_CLIENT_DESC">Erlaubt diesem Client, die konfigurierten Benutzerdaten ohne individuelle Zustimmung der Benutzer zu erhalten. Aktivieren Sie diese Option nur für Anwendungen, die von derselben vertrauenswürdigen Organisation betrieben und kontrolliert werden. Fordert ein Client ausdrücklich eine Zustimmung an, wird die Zustimmungsseite weiterhin angezeigt.</string>
   <string name="SYS_SSO_OIDC_USERINFO_ENDPOINT">Benutzerinfo Endpunkt</string>
   <string name="SYS_SSO_PRIVATE_KEY_INVALID">Der private Schlüssel ist ungültig.</string>
   <string name="SYS_SSO_PRIVATE_KEY_MISSING">Der private Schlüssel fehlt.</string>

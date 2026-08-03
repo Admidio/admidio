@@ -558,6 +558,12 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('ocl_enabled') ?? false,
             array()
         );
+        $form->addCheckbox(
+            'ocl_trusted',
+            $gL10n->get('SYS_SSO_OIDC_TRUSTED_CLIENT'),
+            $client->getValue('ocl_trusted') ?? false,
+            array('helpTextId' => 'SYS_SSO_OIDC_TRUSTED_CLIENT_DESC')
+        );
         $form->addInput(
             'ocl_client_name',
             $gL10n->get('SYS_SSO_CLIENT_NAME'),

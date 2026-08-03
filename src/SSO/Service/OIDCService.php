@@ -559,7 +559,9 @@ class OIDCService extends SSOService {
 
             // Redirect the user to an authorization page.
             // This form will ask the user to approve the client and the scopes requested.
-            $consentRequired = !$this->hasOIDCConsent($authRequest) || in_array('consent', $promptValues, true);
+            // If the client is trusted, no consent is required, except for prompt=consent.
+            $consentRequired = in_array('consent', $promptValues, true)
+                || (!self::$client->isTrusted() && !$this->hasOIDCConsent($authRequest));
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);

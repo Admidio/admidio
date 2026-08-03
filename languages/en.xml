@@ -1700,6 +1700,8 @@
   <string name="SYS_SSO_OIDC_SCOPE_OTHER">Use the %s permission</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER_DESC">Allows access to additional data or functionality requested by this client.</string>  <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token Endpoint</string>
+  <string name="SYS_SSO_OIDC_TRUSTED_CLIENT">Trusted client</string>
+  <string name="SYS_SSO_OIDC_TRUSTED_CLIENT_DESC">Allow this client to receive the configured user data without asking each user for consent. Enable this only for applications that are operated and controlled by the same trusted organization. A client that requests consent explicitly will still show the consent screen.</string>
   <string name="SYS_SSO_OIDC_USERINFO_ENDPOINT">Userinfo Endpoint</string>
   <string name="SYS_SSO_PRIVATE_KEY_INVALID">The selected private key is invalid.</string>
   <string name="SYS_SSO_PRIVATE_KEY_MISSING">The selected key has no private key.</string>
