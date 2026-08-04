@@ -479,6 +479,60 @@ class SAMLService extends SSOService {
         }
     }
 
+    /**
+     * Validate the destination and issue time of an incoming SAML request.
+     *
+     * @param SAMLClient $client
+     * @param SamlMessage $request
+     * @param string $expectedDestination
+     * @return void
+     * @throws Exception
+     */
+    private function validateRequestContext(SAMLClient $client, SamlMessage $request, string $expectedDestination): void 
+    {
+        $destination = $request->getDestination();
+        $requestIsSigned = $request->getSignature() !== null;
+
+        // The HTTP Redirect and HTTP POST bindings require signed messages
+        // to contain the endpoint to which the message was sent.
+        if ($requestIsSigned && empty($destination)) {
+            throw new Exception('The signed SAML request does not contain a destination.');
+        }
+
+        // If Destination is supplied, it must identify this exact endpoint.
+        if (!empty($destination) && !hash_equals($expectedDestination, $destination)) {
+            throw new Exception(
+                'The destination in the SAML request ("' . $destination . '") '
+                . 'does not match the endpoint at which the request was received.'
+            );
+        }
+
+        $issueInstant = $request->getIssueInstantTimestamp();
+        if (!is_int($issueInstant) || $issueInstant <= 0) {
+            throw new Exception('The SAML request does not contain a valid issue instant.');
+        }
+
+        $allowedClockSkew = (int)($client->getValue('smc_allowed_clock_skew') ?? 0);
+        $requestLifetime = (int)($client->getValue('smc_request_lifetime') ?? 300);
+
+        if ($allowedClockSkew < 0) {
+            $allowedClockSkew = 0;
+        }
+
+        if ($requestLifetime < 1) {
+            $requestLifetime = 300;
+        }
+
+        $currentTimestamp = time();
+        if ($issueInstant > $currentTimestamp + $allowedClockSkew) {
+            throw new Exception('The SAML request was issued in the future.');
+        }
+        if ($issueInstant < $currentTimestamp - $requestLifetime - $allowedClockSkew) {
+            throw new Exception('The SAML request has expired.');
+        }
+
+    }
+
 
     public function handleSSORequest(): void
     {
@@ -505,6 +559,8 @@ class SAMLService extends SSOService {
             if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
                 $this->validateSignature($client, $request, $client->getValue('smc_require_auth_signed'));
             }
+
+            $this->validateRequestContext($client, $request, $this->ssoUrl);
 
             if (!$gValidLogin) {
                 $this->showSSOLoginForm($client);
@@ -718,7 +774,8 @@ class SAMLService extends SSOService {
                 $this->validateSignature($client, $request, $client->getValue('smc_require_auth_signed'));
             }
 
-
+            $this->validateRequestContext($client, $request, $this->sloUrl);
+ 
             if ($gValidLogin) {
                 // Logout will only work if you are logged in...
 

@@ -32,6 +32,7 @@
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_sign_assertions']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_encrypt_assertions']}
 
+            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_request_lifetime']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_assertion_lifetime']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_allowed_clock_skew']}
         </div>

@@ -135,5 +135,6 @@
     <step id="880">CREATE INDEX %PREFIX%_idx_oat_expires_at ON %PREFIX%_oidc_access_tokens (oat_expires_at)</step>
     <step id="890">CREATE INDEX %PREFIX%_idx_ort_expires_at ON %PREFIX%_oidc_refresh_tokens (ort_expires_at)</step>
     <step id="900">CREATE INDEX %PREFIX%_idx_oac_expires_at ON %PREFIX%_oidc_auth_codes (oac_expires_at)</step>
+    <step id="910">ALTER TABLE %PREFIX%_saml_clients ADD COLUMN smc_request_lifetime integer unsigned NULL</step>
     <step>stop</step>
 </update>

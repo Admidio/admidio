@@ -284,6 +284,19 @@ class SSOClientPresenter extends PagePresenter
         );
 
         $form->addInput(
+            'smc_request_lifetime',
+            $gL10n->get('SYS_SSO_SAML_REQUEST_LIFETIME'),
+            $client->getValue('smc_request_lifetime') ?? '300',
+            array(
+                'type' => 'number',
+                'minNumber' => 1,
+                'maxNumber' => 9999,
+                'step' => 1,
+                'helpTextId' => 'SYS_SSO_SAML_REQUEST_LIFETIME_DESC'
+            )
+        );
+
+        $form->addInput(
             'smc_assertion_lifetime',
             $gL10n->get('SYS_SSO_SAML_ASSERTION_LIFETIME'),
             $client->getValue('smc_assertion_lifetime') ?? '600',
