@@ -1699,6 +1699,7 @@
   <string name="SYS_SSO_SAML_ENTITY_ID">SAML-Entity-ID</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">Der eindeutige Bezeichner für SAML dieser Admidio-Instanz. Normalerweise ist dies die URL deiner Installation. Der Client muss mit genau der gleichen Entity-ID eingerichtet werden, sonst funktioniert die Anmeldung nicht.</string>
   <string name="SYS_SSO_SAML_METADATA_URL">Metadaten-URL</string>
+  <string name="SYS_SSO_SAML_NAME_ID_POLICY_INVALID">Die angeforderte Richtlinie für die Benutzerkennung wird nicht unterstützt.</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME">Gültigkeit der Anfrage</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME_DESC">Maximales Alter einer eingehenden SAML-Anmelde- oder Abmeldeanfrage in Sekunden. Ältere Anfragen werden abgelehnt. Die konfigurierte Zeitabweichung wird zusätzlich zu diesem Wert berücksichtigt. Der Standardwert beträgt 300 Sekunden.</string>
   <string name="SYS_SSO_SAML_ROLE">SAML Rollenname</string>

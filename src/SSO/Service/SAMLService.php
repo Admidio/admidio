@@ -480,6 +480,58 @@ class SAMLService extends SSOService {
     }
 
     /**
+     * Process the NameID policy of an authentication request.
+     *
+     * Admidio currently supports only the unspecified NameID format. If no
+     * format is requested, the supported unspecified format is used.
+     *
+     * @param AuthnRequest $request
+     * @param string $serviceProviderEntityID
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    private function processNameIDPolicy(AuthnRequest $request, string $serviceProviderEntityID): array {
+        $nameIDFormat = SamlConstants::NAME_ID_FORMAT_UNSPECIFIED;
+        $spNameQualifier = null;
+        $nameIDPolicy = $request->getNameIDPolicy();
+
+        if ($nameIDPolicy === null) {
+            return array(
+                'format' => $nameIDFormat,
+                'spNameQualifier' => $spNameQualifier
+            );
+        }
+
+        $requestedFormat = $nameIDPolicy->getFormat();
+
+        if (!empty($requestedFormat) && $requestedFormat !== SamlConstants::NAME_ID_FORMAT_UNSPECIFIED) {
+            throw new \InvalidArgumentException(
+                'The SAML client requested the unsupported NameID format "' . $requestedFormat . '".'
+            );
+        }
+
+        $requestedSPNameQualifier = $nameIDPolicy->getSPNameQualifier();
+
+        if (!empty($requestedSPNameQualifier)) {
+            if (!hash_equals($serviceProviderEntityID, $requestedSPNameQualifier)) {
+                throw new \InvalidArgumentException(
+                    'The SAML client requested the unsupported SPNameQualifier "' . $requestedSPNameQualifier . '".'
+                );
+            }
+            $spNameQualifier = $requestedSPNameQualifier;
+        }
+
+        // AllowCreate controls whether a new federated identifier may be
+        // established. Admidio returns an existing user field in unspecified
+        // format and does not create a persistent identifier here.
+        return array(
+            'format' => $nameIDFormat,
+            'spNameQualifier' => $spNameQualifier
+        );
+    }
+
+
+    /**
      * Validate the destination and issue time of an incoming SAML request.
      *
      * @param SAMLClient $client
@@ -561,6 +613,7 @@ class SAMLService extends SSOService {
             }
 
             $this->validateRequestContext($client, $request, $this->ssoUrl);
+            $nameIDPolicy = $this->processNameIDPolicy($request, $entityIdClient);
 
             if (!$gValidLogin) {
                 $this->showSSOLoginForm($client);
@@ -632,7 +685,11 @@ class SAMLService extends SSOService {
                 ->setSubjectConfirmationData($subjectConfirmationData);
 
             $subject = new Subject();
-            $subject->setNameID(new NameID($login, SamlConstants::NAME_ID_FORMAT_UNSPECIFIED));
+            $nameID = new NameID($login, $nameIDPolicy['format']);
+            if ($nameIDPolicy['spNameQualifier'] !== null) {
+                $nameID->setSPNameQualifier($nameIDPolicy['spNameQualifier']);
+            }
+            $subject->setNameID($nameID);
             $subject->addSubjectConfirmation($subjectConfirmation);
 
             $assertion
@@ -731,6 +788,14 @@ class SAMLService extends SSOService {
             $binding = new HttpPostBinding();
             $httpResponse = $binding->send($messageContext);
             print $httpResponse->getContent();
+        } catch (\InvalidArgumentException $exception) {
+            $gLogger->error($exception->getMessage());
+            $this->errorResponse(
+                array(SamlConstants::STATUS_REQUESTER, SamlConstants::STATUS_INVALID_NAME_ID_POLICY),
+                $gL10n->get('SYS_SSO_SAML_NAME_ID_POLICY_INVALID'),
+                $request,
+                $client
+            );
         } catch (Exception $e) {
             $gLogger->error(
                 'Could not process the SAML request.',
