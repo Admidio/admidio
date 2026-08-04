@@ -240,16 +240,19 @@ abstract class SSOService {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-login', $headline);
-        if (!empty($message)) {
-            $page->addHtml($message);
-        }
-        // Use javascript to hide the menu bar on the left and the registration 
-        $page->addJavascript('$("#adm_sidebar").hide()', true);
+        $page = new PagePresenter();
+        $page->setHtmlID('admidio-sso-login');
+        $page->setTitle($headline);
+        $page->setContentFullWidth();
+        $page->hideBackLink();
+
+        $page->getSmartyTemplate()->assign('ssoLoginHeadline', $headline);
+        $page->getSmartyTemplate()->assign('ssoLoginMessage', $message ?? '');
+
 
         // TODO_RK: Add "Cancel / Return to SP without logging in" button with JS!
         $loginModule = new \ModuleLogin();
-        $loginModule->addHtmlLogin($page, '');
+        $loginModule->addHtmlLogin($page, '', 'modules/sso.login.tpl');
         $page->show();
         exit;
     }

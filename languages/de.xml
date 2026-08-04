@@ -1575,7 +1575,7 @@
   <string name="SYS_SSO_CLIENT_SAML">SAML 2.0 Client</string>
   <string name="SYS_SSO_CLIENT_SCOPES">Zulässige Bereiche</string>
   <string name="SYS_SSO_CLIENT_SCOPES_DESC">Scopes sind Gruppen von Informationen über den Benutzer, die vom Client angefordert werden können. Der OIDC-Standard definiert bestimmte vordefinierte (aber nicht erforderliche) Bereiche. Nur der Bereich „openid“ ist erforderlich und wird automatisch hinzugefügt. Wenn Sie weitere Bereiche auswählen, kann Admidio diese Profildaten mit dem Client teilen.</string>
-  <string name="SYS_SSO_CLIENT_SCOPES_INVALID">Die ausgewählten OIDC-Berechtigungen sind ungültig: %s</string>
+  <string name="SYS_SSO_CLIENT_SCOPES_INVALID">Die ausgewählten OIDC-Berechtigungen sind ungültig: #VAR1#</string>
   <string name="SYS_SSO_CLIENT_SECRET">Client Secret</string>
   <string name="SYS_SSO_CLIENT_SECRET_DESC">Die (secret) Passphrase zur Authentifizierung des Clients. In der Regel eine zufällige Zeichenfolge, die einmal ausgetauscht wird. Bei der Erstellung wird das Client-Geheimnis einmal angezeigt und sollte auf den Client kopiert werden. Danach wird es als Hash-Wert in der Datenbank gespeichert, so dass es unmöglich ist, es abzurufen. Man kann nur ein neues Client-Geheimnis generieren und dieses in die Konfiguration des Clients kopieren.</string>
   <string name="SYS_SSO_CLIENT_SECRET_HIDDE">Aus Sicherheitsgründen wird das Client Secret nur bei der Erstellung angezeigt.</string>
@@ -1636,9 +1636,9 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Gültigkeit des Autorisierungscodes</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Die Anzahl der Sekunden, für die ein Autorisierungscode gültig bleibt. Autorisierungscodes sind kurzlebig und können nur einmal verwendet werden. Der Standardwert beträgt 600 Sekunden.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentifizierungs-Endpunkt</string>
-  <string name="SYS_SSO_OIDC_AUTHORIZE_CLIENT">%s autorisieren</string>
+  <string name="SYS_SSO_OIDC_AUTHORIZE_CLIENT">#VAR1# autorisieren</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
-  <string name="SYS_SSO_OIDC_CONSENT_DESC">%s möchte auf dein Admidio-Konto zugreifen.</string>
+  <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# möchte auf dein Admidio-Konto zugreifen.</string>
   <string name="SYS_SSO_OIDC_CONSENT_SAVED">Deine Zustimmung wurde gespeichert.</string>
   <string name="SYS_SSO_OIDC_DENY_ACCESS">Zugriff ablehnen</string>
   <string name="SYS_SSO_OIDC_DISCOVERY_URL">URL für die Suche</string>
@@ -1666,7 +1666,7 @@
   <string name="SYS_SSO_OIDC_SCOPE_GROUPS_DESC">Erlaubt den Zugriff auf deine Gruppen- und Rollenzugehörigkeiten.</string>
   <string name="SYS_SSO_OIDC_SCOPE_CUSTOM">Weitere Profildaten anzeigen</string>
   <string name="SYS_SSO_OIDC_SCOPE_CUSTOM_DESC">Erlaubt den Zugriff auf weitere Profildaten, die für diesen Client konfiguriert wurden.</string>
-  <string name="SYS_SSO_OIDC_SCOPE_OTHER">Berechtigung „%s“ verwenden</string>
+  <string name="SYS_SSO_OIDC_SCOPE_OTHER">Berechtigung „#VAR1#“ verwenden</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER_DESC">Erlaubt den Zugriff auf weitere Daten oder Funktionen, die dieser Client angefordert hat.</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token-Endpunkt</string>
   <string name="SYS_SSO_OIDC_TRUSTED_CLIENT">Vertrauenswürdiger Client</string>
