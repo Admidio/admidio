@@ -384,10 +384,10 @@ try {
 
         $events = new ModuleEvents();
         if ($getEventUuid !== '') {
-            $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database')) . '.ics';
+            $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database'));
             $events->setParameter('dat_uuid', $getEventUuid);
         } else {
-            $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname')) . '.ics';
+            $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname'));
             $events->setDateRange($getDateFrom, $getDateTo);
 
             if ($getCatUuid !== '') {
@@ -399,7 +399,7 @@ try {
         }
 
         header('Content-Type: text/calendar; charset=utf-8');
-        header('Content-Disposition: ' . $contentDisposition . '; filename="' . $filename . '"');
+        header('Content-Disposition: ' . $contentDisposition . '; filename="' . $filename . '.ics"');
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');
         header('Pragma: public');
