@@ -576,6 +576,7 @@ CREATE TABLE %PREFIX%_oidc_access_tokens (
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
+CREATE INDEX %PREFIX%_idx_oat_expires_at ON %PREFIX%_oidc_access_tokens (oat_expires_at);
 
 CREATE TABLE %PREFIX%_oidc_refresh_tokens (
     ort_id                      integer unsigned    AUTO_INCREMENT,
@@ -592,6 +593,7 @@ CREATE TABLE %PREFIX%_oidc_refresh_tokens (
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
+CREATE INDEX %PREFIX%_idx_ort_expires_at ON %PREFIX%_oidc_refresh_tokens (ort_expires_at);
 
 CREATE TABLE %PREFIX%_oidc_auth_codes (
     oac_id                      integer unsigned    AUTO_INCREMENT,
@@ -615,6 +617,7 @@ CREATE TABLE %PREFIX%_oidc_auth_codes (
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
+CREATE INDEX %PREFIX%_idx_oac_expires_at ON %PREFIX%_oidc_auth_codes (oac_expires_at);
 
 CREATE TABLE %PREFIX%_oidc_consents (
     oco_id                      integer unsigned    AUTO_INCREMENT,

@@ -19,10 +19,6 @@ class RefreshTokenRepository extends TokenRepository implements RefreshTokenRepo
         return new RefreshTokenEntity($this->db);
     }
 
-    public function newToken() : TokenEntity {
-        return $this->getNewRefreshToken();
-    }
-
     public function getToken(string $tokenId) : TokenEntity {
         return new RefreshTokenEntity($this->db,  $tokenId);
     }
@@ -53,10 +49,4 @@ class RefreshTokenRepository extends TokenRepository implements RefreshTokenRepo
         return $this->isTokenRevoked($tokenId);
     }
 
-    /**
-     * Deletes expired refresh tokens to clean up storage.
-     */
-    public function removeExpiredRefreshTokens(): void {
-        $this->removeExpiredTokens();
-    }
 }
