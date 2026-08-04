@@ -10,6 +10,7 @@ use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Language;
+use Admidio\SSO\Service\OIDCService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -374,13 +375,21 @@ class PreferencesService
                 }
                 break;
 
-            case 'sso':
-                if (empty($formData['sso_oidc_issuer_url'])) {
-                    $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+            case 'sso': 
+                // empty issuerURL means "Use the default URL from the admidio installation's URL"
+                $issuerURL = trim((string)($formValues['sso_oidc_issuer_url'] ?? ''));
+
+                if ($issuerURL !== '') {
+                    $issuerURL = rtrim($issuerURL, '/');
                 }
-                if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
-                    $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
+
+                // Do not persist the installation-derived default. An empty setting
+                // allows the issuer URL to follow later changes to ADMIDIO_URL.
+                if ($issuerURL === OIDCService::getDefaultIssuerURL()) {
+                    $issuerURL = '';
                 }
+
+                $formValues['sso_oidc_issuer_url'] = $issuerURL;
                 break;
         }
 

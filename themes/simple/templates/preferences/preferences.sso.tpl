@@ -42,6 +42,10 @@
             // Determine how to get the value based on the element type
             if ($element.is("input, textarea, select")) {
                 textToCopy = $element.val(); // Get value for form elements
+                // Input fields with empty value, but a placeholder set, will copy the placeholder text rather than the empty string
+                if (textToCopy === "" && $element.is("input, textarea")) {
+                    textToCopy = $element.attr("placeholder") || "";
+                }
             } else {
                 textToCopy = $element.text().trim(); // Get text for divs or spans
             }
