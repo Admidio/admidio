@@ -45,6 +45,7 @@ use Admidio\UI\Presenter\PagePresenter;
 
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Entity\SAMLLogoutTransaction;
+use Admidio\SSO\Entity\SAMLSessionParticipant;
 use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Service\KeyService;
 
@@ -589,7 +590,7 @@ class SAMLService extends SSOService {
 
     public function handleSSORequest(): void
     {
-        global $gCurrentUser, $gSettingsManager, $gL10n, $gProfileFields, $gValidLogin, $gLogger;
+        global $gCurrentSession, $gCurrentUser, $gSettingsManager, $gL10n, $gProfileFields, $gValidLogin, $gLogger;
 
         if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
             throw new Exception("SSO SAML is not enabled");
@@ -715,11 +716,19 @@ class SAMLService extends SSOService {
                     )
                 );
 
-            $samlSessionIndex = bin2hex(random_bytes(32));
+            $sessionIndex = bin2hex(random_bytes(32));
+            $authenticationTimestamp = (int) $gCurrentSession->getValue('ses_authentication_time', 'U');
+
+            if ($authenticationTimestamp <= 0) {
+                throw new Exception('The current Admidio session has no valid authentication time.');
+            }
+
+            $authnInstant = (new \DateTime())->setTimestamp($authenticationTimestamp);
+
             $assertion->addItem(
                 (new \LightSaml\Model\Assertion\AuthnStatement())
-                    ->setAuthnInstant(new \DateTime('-10 MINUTE'))
-                    ->setSessionIndex($samlSessionIndex)
+                    ->setAuthnInstant($authnInstant)
+                    ->setSessionIndex($sessionIndex)
                     ->setSessionNotOnOrAfter($sessionNotOnOrAfter)
                     ->setAuthnContext(
                         (new \LightSaml\Model\Assertion\AuthnContext())
@@ -797,6 +806,11 @@ class SAMLService extends SSOService {
 
             $binding = new HttpPostBinding();
             $httpResponse = $binding->send($messageContext);
+
+            $this->saveSessionParticipant($client, (int) $gCurrentUser->getValue('usr_id'), 
+                (string) $nameID->getValue(), (string) $nameID->getFormat(), $nameID->getSPNameQualifier(),
+                $sessionIndex, $authnInstant, $sessionNotOnOrAfter);
+
             print $httpResponse->getContent();
         } catch (\InvalidArgumentException $exception) {
             $gLogger->error($exception->getMessage());
@@ -822,6 +836,107 @@ class SAMLService extends SSOService {
     }
 
     /**
+     * Persist the SAML session that has been established for a client.
+     *
+     * @throws Exception
+     */
+    private function saveSessionParticipant(SAMLClient $client, int $userId,
+        string $nameID, string $nameIDFormat, ?string $nameIDSPNameQualifier, string $sessionIndex,
+        \DateTimeInterface $authnInstant, \DateTimeInterface $expiresAt): void 
+    {
+        global $gCurrentOrgId, $gCurrentSession;
+
+        $this->removeExpiredSessionParticipants();
+
+        $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
+
+        if ($externalSessionId === '') {
+            throw new Exception('The current Admidio session has no external session identifier.');
+        }
+
+        $clientId = (int) $client->getValue('smc_id');
+
+        $participant = new SAMLSessionParticipant($this->db);
+        $participant->readDataByExternalSessionAndClient($externalSessionId, $clientId);
+        $participant->setParticipantData(
+            $gCurrentOrgId, $userId, $externalSessionId, $clientId,
+            $nameID, $nameIDFormat, $nameIDSPNameQualifier,
+            $sessionIndex, $authnInstant, $expiresAt
+        );
+        $participant->save();
+    }
+
+    /**
+     * Return all active SAML participants of an Admidio session.
+     *
+     * @return array<int,array<string,mixed>>
+     * @throws Exception
+     */
+    private function getActiveSessionParticipants(string $externalSessionId): array 
+    {
+        global $gCurrentOrgId;
+
+        $sql = '
+            SELECT ssp_id,
+                ssp_client_id,
+                ssp_name_id,
+                ssp_name_id_format,
+                ssp_name_id_sp_name_qualifier,
+                ssp_session_index
+            FROM ' . TBL_SAML_SESSION_PARTICIPANTS . '
+            WHERE ssp_org_id = ?
+            AND ssp_external_session_id = ?
+            AND ssp_expires_at > CURRENT_TIMESTAMP
+            ORDER BY ssp_id';
+
+        $statement = $this->db->queryPrepared($sql, array($gCurrentOrgId, $externalSessionId));
+
+        $participants = array();
+        while ($row = $statement->fetch()) {
+            $participants[] = $row;
+        }
+        return $participants;
+    }
+
+    /**
+     * Check whether a LogoutRequest identifies the stored SAML participant.
+     */
+    private function logoutRequestMatchesParticipant(LogoutRequest $request, array $participant): bool 
+    {
+        $requestNameID = $request->getNameID();
+
+        if ($requestNameID === null) {
+            return false;
+        }
+
+        if (!hash_equals((string) $participant['ssp_name_id'],(string) $requestNameID->getValue())) {
+            return false;
+        }
+
+        $storedFormat = (string) $participant['ssp_name_id_format'];
+        $requestFormat = (string) $requestNameID->getFormat();
+
+        if ($requestFormat !== '' && !hash_equals($storedFormat, $requestFormat)) {
+            return false;
+        }
+
+        $storedSPNameQualifier = (string) ($participant['ssp_name_id_sp_name_qualifier'] ?? '');
+        $requestSPNameQualifier = (string) ($requestNameID->getSPNameQualifier() ?? '');
+
+        if (!hash_equals($storedSPNameQualifier,$requestSPNameQualifier)) {
+            return false;
+        }
+
+        $requestSessionIndex = (string) ($request->getSessionIndex() ?? '');
+
+        if ($requestSessionIndex !== '' && !hash_equals((string) $participant['ssp_session_index'], $requestSessionIndex)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Handle incoming SAML LogoutRequest and LogoutResponse messages.
      * @throws Exception
      */
@@ -833,6 +948,7 @@ class SAMLService extends SSOService {
         }
 
         $this->removeExpiredLogoutTransactions();
+        $this->removeExpiredSessionParticipants();
 
         $message = $this->receiveMessage();
 
@@ -853,7 +969,7 @@ class SAMLService extends SSOService {
      */
     private function handleIncomingLogoutRequest(LogoutRequest $request): void
     {
-        global $gCurrentOrgId, $gCurrentUser, $gLogger, $gValidLogin;
+        global $gCurrentOrgId, $gCurrentSession, $gLogger, $gValidLogin;
 
         $issuer = $request->getIssuer();
         if ($issuer === null || empty($issuer->getValue())) {
@@ -867,37 +983,48 @@ class SAMLService extends SSOService {
             $this->validateSLOClient($initiatorClient, $request);
 
             $pendingClients = array();
+            $initiatorParticipantId = null;
 
-            /*
-            * Capture every SP-specific NameID before the local user and session
-            * context are cleared.
-            */
             if ($gValidLogin) {
-                foreach ($this->getIds() as $clientId) {
-                    $client = new SAMLClient($this->db, $clientId);
+                $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
 
-                    if (!$client->isEnabled() || $client->getIdentifier() === $initiatorEntityId) {
-                        continue;
-                    }
+                if ($externalSessionId === '') {
+                    throw new Exception('The current Admidio session has no external session identifier.');
+                }
 
-                    $sloUrl = trim((string) $client->getValue('smc_slo_url'));
-                    $userIdField = (string) $client->getValue('smc_userid_field');
-                    $nameId = (string) ($gCurrentUser->getValue($userIdField) ?? '');
+                $participants = $this->getActiveSessionParticipants($externalSessionId);
+                $initiatorClientId = (int) $initiatorClient->getValue('smc_id');
 
-                    if ($sloUrl === '' || $nameId === '') {
+                foreach ($participants as $participant) {
+                    $participantId = (int) $participant['ssp_id'];
+                    $participantClientId = (int) $participant['ssp_client_id'];
+
+                    if ($participantClientId === $initiatorClientId) {
+                        if (!$this->logoutRequestMatchesParticipant($request, $participant)) {
+                            continue;
+                        }
+
+                        $initiatorParticipantId = $participantId;
                         continue;
                     }
 
                     $pendingClients[] = array(
-                        'clientId' => (int) $client->getValue('smc_id'),
-                        'nameId' => $nameId
+                        'participantId' => $participantId,
+                        'clientId' => $participantClientId,
+                        'nameId' => (string) $participant['ssp_name_id'],
+                        'nameIdFormat' => (string) $participant['ssp_name_id_format'],
+                        'nameIdSPNameQualifier' => $participant['ssp_name_id_sp_name_qualifier'],
+                        'sessionIndex' => (string) $participant['ssp_session_index']
                     );
+                }
+                if ($initiatorParticipantId === null) {
+                    throw new Exception('The LogoutRequest does not match an active SAML session.');
                 }
             }
 
             $transaction = new SAMLLogoutTransaction($this->db);
             $transaction->initialize($gCurrentOrgId, (int) $initiatorClient->getValue('smc_id'),
-                $request->getID(), $request->getRelayState(), $pendingClients);
+                 $initiatorParticipantId, $request->getID(), $request->getRelayState(), $pendingClients);
             $transaction->save();
 
             /*
@@ -911,6 +1038,20 @@ class SAMLService extends SSOService {
             $gLogger->error($exception->getMessage());
             $this->sendLogoutResponse($initiatorClient, $request->getID(), $request->getRelayState(), SamlConstants::STATUS_RESPONDER);
         }
+    }
+
+    private function isPartialLogoutStatus(\LightSaml\Model\Protocol\Status $status): bool 
+    {
+        $statusCode = $status->getStatusCode();
+
+        if ($statusCode === null) {
+            return false;
+        }
+
+        $nestedStatusCode = $statusCode->getStatusCode();
+
+        return $nestedStatusCode !== null
+            && $nestedStatusCode->getValue() === SamlConstants::STATUS_PARTIAL_LOGOUT;
     }
 
     /**
@@ -938,10 +1079,11 @@ class SAMLService extends SSOService {
             throw new Exception('The SAML logout transaction has expired.');
         }
 
+        $currentParticipantId = $transaction->getCurrentParticipantId();
         $currentClientId = $transaction->getCurrentClientId();
         $currentRequestId = $transaction->getCurrentRequestId();
 
-        if ($currentClientId <= 0 || $currentRequestId === '') {
+        if ($currentParticipantId <= 0 || $currentClientId <= 0 || $currentRequestId === '') {
             throw new Exception('The SAML logout transaction has no pending request.');
         }
 
@@ -962,7 +1104,13 @@ class SAMLService extends SSOService {
 
             $status = $response->getStatus();
 
-            if ($status === null || !$status->isSuccess()) {
+            if ($status !== null && $status->isSuccess() && !$this->isPartialLogoutStatus($status)) {
+                /*
+                * Only a successful correlated LogoutResponse confirms that the SP
+                * session represented by this participant has ended.
+                */
+                $this->deleteSessionParticipant($currentParticipantId);
+            } else {
                 $transaction->setPartialLogout(true);
 
                 $statusMessage = $status?->getStatusMessage();
@@ -976,7 +1124,7 @@ class SAMLService extends SSOService {
                 );
             }
 
-            $transaction->setCurrentRequest(null, null);
+            $transaction->setCurrentRequest(null, null, null);
             $transaction->save();
 
             $this->continueLogoutTransaction($transaction);
@@ -987,7 +1135,32 @@ class SAMLService extends SSOService {
     }
 
     /**
-     * Continue with the next SP or finish the logout transaction.
+     * Delete a SAML session participant after confirmed logout.
+     *
+     * @throws Exception
+     */
+    private function deleteSessionParticipant(int $participantId): void
+    {
+        $participant = new SAMLSessionParticipant($this->db, $participantId);
+        $participant->delete();
+    }
+
+    /**
+     * Remove participant records after their advertised session validity.
+     *
+     * @throws Exception
+     */
+    private function removeExpiredSessionParticipants(): void
+    {
+        $sql = '
+            DELETE FROM ' . TBL_SAML_SESSION_PARTICIPANTS . '
+            WHERE ssp_expires_at < CURRENT_TIMESTAMP';
+
+        $this->db->queryPrepared($sql);
+    }
+
+    /**
+     * Continue with the next active SP participant or finish the logout.
      *
      * @throws Exception
      */
@@ -997,35 +1170,65 @@ class SAMLService extends SSOService {
 
         while (count($pendingClients) > 0) {
             $pendingClient = array_shift($pendingClients);
-            $clientId = (int) ($pendingClient['clientId'] ?? 0);
-            $nameId = (string) ($pendingClient['nameId'] ?? '');
+            $transaction->setPendingClients($pendingClients);
 
-            if ($clientId <= 0 || $nameId === '') {
+            $participantId = (int) ($pendingClient['participantId'] ?? 0);
+            $clientId = (int) ($pendingClient['clientId'] ?? 0);
+            $nameID = (string) ($pendingClient['nameId'] ?? '');
+            $nameIDFormat = (string) ($pendingClient['nameIdFormat'] ?? '');
+            $nameIDSPNameQualifier = $pendingClient['nameIdSPNameQualifier'] ?? null;
+            $sessionIndex = (string) ($pendingClient['sessionIndex'] ?? '');
+
+            if ($participantId <= 0 || $clientId <= 0
+                || $nameID === '' || $nameIDFormat === '' || $sessionIndex === ''
+            ) {
                 $transaction->setPartialLogout(true);
+                $transaction->save();
                 continue;
             }
 
             $client = new SAMLClient($this->db, $clientId);
 
             if (!$client->isEnabled() || empty($client->getValue('smc_slo_url'))) {
+                /*
+                * Keep the participant because no successful logout has been
+                * confirmed for that SP.
+                */
                 $transaction->setPartialLogout(true);
+                $transaction->save();
                 continue;
             }
 
-            $transaction->setPendingClients($pendingClients);
 
-            $this->sendLogoutRequest($transaction, $client, $nameId);
+            $this->sendLogoutRequest(
+                $transaction,
+                $participantId,
+                $client,
+                $nameID,
+                $nameIDFormat,
+                is_string($nameIDSPNameQualifier) ? $nameIDSPNameQualifier : null,
+                $sessionIndex
+            );
             return;
         }
 
         $initiatorClient = new SAMLClient($this->db, $transaction->getInitiatorClientId());
 
-        $status =  $transaction->hasPartialLogout()
+        $status = $transaction->hasPartialLogout()
             ? SamlConstants::STATUS_PARTIAL_LOGOUT
             : SamlConstants::STATUS_SUCCESS;
 
         $initiatorRequestId = $transaction->getInitiatorRequestId();
         $initiatorRelayState = $transaction->getInitiatorRelayState();
+        $initiatorParticipantId = $transaction->getInitiatorParticipantId();
+
+        /*
+        * The initiating SP requested logout and receives the final response,
+        * so its participant record no longer represents an active session.
+        */
+        if ($initiatorParticipantId > 0) {
+            $this->deleteSessionParticipant($initiatorParticipantId);
+        }
 
         $transaction->delete();
 
@@ -1037,7 +1240,8 @@ class SAMLService extends SSOService {
      *
      * @throws Exception
      */
-    private function sendLogoutRequest(SAMLLogoutTransaction $transaction, SAMLClient $client, string $nameId): void 
+    private function sendLogoutRequest(SAMLLogoutTransaction $transaction, int $participantId, 
+        SAMLClient $client, string $nameID, string $nameIDFormat, ?string $nameIDSPNameQualifier, string $sessionIndex): void 
     {
         $sloUrl = trim((string) $client->getValue('smc_slo_url'));
 
@@ -1053,9 +1257,12 @@ class SAMLService extends SSOService {
         );
         $logoutRequest->setID($requestId);
         $logoutRequest->setIssueInstant(new \DateTime());
-        $logoutRequest->setNameID(
-            new NameID($nameId, SamlConstants::NAME_ID_FORMAT_UNSPECIFIED)
-        );
+        $logoutNameID = new NameID($nameID, $nameIDFormat);
+        if ($nameIDSPNameQualifier !== null && $nameIDSPNameQualifier !== '') {
+            $logoutNameID->setSPNameQualifier($nameIDSPNameQualifier);
+        }
+        $logoutRequest->setNameID($logoutNameID);
+        $logoutRequest->setSessionIndex($sessionIndex);
         $logoutRequest->setDestination($sloUrl);
         $logoutRequest->setRelayState($transaction->getValue('slt_token'));
 
@@ -1071,7 +1278,7 @@ class SAMLService extends SSOService {
         * Persist correlation data before returning the redirect. The next HTTP
         * request is independent of the destroyed Admidio login session.
         */
-        $transaction->setCurrentRequest((int) $client->getValue('smc_id'), $requestId);
+        $transaction->setCurrentRequest($participantId, (int) $client->getValue('smc_id'), $requestId);
         $transaction->save();
 
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
@@ -1105,11 +1312,17 @@ class SAMLService extends SSOService {
         $logoutResponse->setDestination($sloUrl);
         $logoutResponse->setInResponseTo($inResponseTo);
         $logoutResponse->setRelayState($relayState);
-        $logoutResponse->setStatus(
-            new \LightSaml\Model\Protocol\Status(
-                new \LightSaml\Model\Protocol\StatusCode($statusCode)
-            )
-        );
+
+        if ($statusCode === SamlConstants::STATUS_PARTIAL_LOGOUT) {
+            $statusCodeObject = new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS);
+            $statusCodeObject->setStatusCode(
+                new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_PARTIAL_LOGOUT)
+            );
+        } else {
+            $statusCodeObject = new \LightSaml\Model\Protocol\StatusCode($statusCode);
+        }
+
+        $logoutResponse->setStatus(new \LightSaml\Model\Protocol\Status($statusCodeObject));
 
         $keys = $this->getKeysCertificates();
 
