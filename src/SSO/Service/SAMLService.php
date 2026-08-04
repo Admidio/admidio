@@ -656,6 +656,14 @@ class SAMLService extends SSOService {
             $notBefore = (clone $issueInstant)->sub(new \DateInterval('PT' . ($client->getValue('smc_allowed_clock_skew')??300) . 'S'));
             $notOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . ($client->getValue('smc_assertion_lifetime')??600) . 'S'));
 
+            // Assertion validity and session validity serve different purposes.
+            // SessionNotOnOrAfter tells the service provider when the session
+            // established from this assertion must end.
+            $sessionLifetime = $gSettingsManager->getInt('logout_minutes') * 60;
+            if ($sessionLifetime <= 0) {
+                throw new Exception('The configured login session lifetime is invalid.');
+            }
+            $sessionNotOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . $sessionLifetime . 'S'));
 
             $statusSuccess = new \LightSaml\Model\Protocol\Status(
                 new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));
@@ -711,6 +719,7 @@ class SAMLService extends SSOService {
                 (new \LightSaml\Model\Assertion\AuthnStatement())
                     ->setAuthnInstant(new \DateTime('-10 MINUTE'))
                     ->setSessionIndex($samlSessionIndex)
+                    ->setSessionNotOnOrAfter($sessionNotOnOrAfter)
                     ->setAuthnContext(
                         (new \LightSaml\Model\Assertion\AuthnContext())
                             ->setAuthnContextClassRef(SamlConstants::AUTHN_CONTEXT_UNSPECIFIED)
