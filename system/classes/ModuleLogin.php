@@ -38,9 +38,10 @@ class ModuleLogin
      * organization select box could be shown and the flag if auto login should be activated.
      * @param PagePresenter $page Html content will be added to this page.
      * @param string $organizationShortName Optional the organization that should be preselected in the dialog.
+     * @param string $template Template that should be used to render the login form.
      * @throws Exception
      */
-    public function addHtmlLogin(PagePresenter $page, string $organizationShortName = '')
+    public function addHtmlLogin(PagePresenter $page, string $organizationShortName = '', string $template = 'system/login.tpl')
     {
         global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization, $gCurrentSession;
 
@@ -78,7 +79,7 @@ class ModuleLogin
         // show form
         $form = new FormPresenter(
             'adm_login_form',
-            'system/login.tpl',
+            $template,
             ADMIDIO_URL . FOLDER_SYSTEM . '/login.php?mode=check',
             $page,
             array('showRequiredFields' => false)

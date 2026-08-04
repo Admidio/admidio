@@ -27,8 +27,15 @@ class OIDCConsentPresenter extends PagePresenter
 
         parent::__construct();
 
+        $headline = $gL10n->get('SYS_SSO_OIDC_AUTHORIZE_CLIENT', array($clientName));
+
         $this->setHtmlID('admidio-oidc-consent');
-        $this->setHeadline($gL10n->get('SYS_SSO_OIDC_AUTHORIZE_CLIENT', array($clientName)));
+        $this->setTitle($headline);
+        $this->setContentFullWidth();
+        $this->hideBackLink();
+
+        $this->getSmartyTemplate()->assign('oidcConsentHeadline', $headline);
+
     }
 
     /**
@@ -77,7 +84,7 @@ class OIDCConsentPresenter extends PagePresenter
             array(
                 'icon' => 'bi-x-lg',
                 'type' => 'submit',
-                'class' => 'btn-danger'
+                'class' => 'btn-danger  admidio-margin-bottom'
             )
         );
 
@@ -147,9 +154,8 @@ class OIDCConsentPresenter extends PagePresenter
                     <div class="d-flex align-items-start">
                         <i class="bi bi-check-circle-fill text-success me-3 mt-1"></i>
                         <div>
-                            <div class="fw-semibold">' . $name . '</div>
+                            <div class="fw-semibold">' . $name . ' <span class="fw-normal small text-body-secondary">(' . $escapedScopeName . ')</span></div>
                             <div class="text-body-secondary">' . $description . '</div>
-                            <div class="form-text">' . $escapedScopeName . '</div>
                         </div>
                     </div>
                 </div>';
