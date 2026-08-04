@@ -689,6 +689,33 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_slt_token ON %PREFIX%_saml_logout_transactions (slt_token);
 CREATE INDEX %PREFIX%_idx_slt_expires_at ON %PREFIX%_saml_logout_transactions (slt_expires_at);
 
+
+/*==============================================================*/
+/* Table: adm_saml_session_participants                         */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_saml_session_participants (
+    ssp_id                      integer unsigned    AUTO_INCREMENT,
+    ssp_org_id                  integer unsigned    NOT NULL,
+    ssp_usr_id                  integer unsigned    NOT NULL,
+    ssp_client_id               integer unsigned    NOT NULL,
+    ssp_name_id                 text                NOT NULL,
+    ssp_name_id_format          varchar(255)        NOT NULL,
+    ssp_name_id_sp_name_qualifier varchar(255)      NULL,
+    ssp_external_session_id     varchar(64)         NOT NULL,
+    ssp_session_index           varchar(255)        NOT NULL,
+    ssp_authn_instant           timestamp           NOT NULL,
+    ssp_expires_at              timestamp           NOT NULL,
+    PRIMARY KEY (ssp_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id);
+CREATE INDEX %PREFIX%_idx_ssp_session ON %PREFIX%_saml_session_participants (ssp_external_session_id);
+CREATE INDEX %PREFIX%_idx_ssp_expires_at ON %PREFIX%_saml_session_participants (ssp_expires_at);
+
+ 
 /*==============================================================*/
 /* Table: adm_sso_keys                                               */
 /*==============================================================*/

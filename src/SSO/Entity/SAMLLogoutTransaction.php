@@ -49,7 +49,7 @@ class SAMLLogoutTransaction extends Entity
      *
      * @throws JsonException
      */
-    public function initialize(int $organizationId, int $initiatorClientId, string $initiatorRequestId, ?string $initiatorRelayState, array $pendingClients): void 
+    public function initialize(int $organizationId, int $initiatorClientId, ?int $initiatorParticipantId, string $initiatorRequestId, ?string $initiatorRelayState, array $pendingClients): void 
     {
         $this->setValue('slt_token', bin2hex(random_bytes(32)));
         $this->setValue('slt_org_id', $organizationId);
@@ -57,9 +57,11 @@ class SAMLLogoutTransaction extends Entity
 
         $this->transactionData = array(
             'initiatorClientId' => $initiatorClientId,
+            'initiatorParticipantId' => $initiatorParticipantId,
             'initiatorRequestId' => $initiatorRequestId,
             'initiatorRelayState' => $initiatorRelayState ?? '',
             'pendingClients' => array_values($pendingClients),
+            'currentParticipantId' => null,
             'currentClientId' => null,
             'currentRequestId' => null,
             'partialLogout' => false
@@ -71,6 +73,11 @@ class SAMLLogoutTransaction extends Entity
     public function getInitiatorClientId(): int
     {
         return (int) ($this->transactionData['initiatorClientId'] ?? 0);
+    }
+
+    public function getInitiatorParticipantId(): int
+    {
+        return (int) ($this->transactionData['initiatorParticipantId'] ?? 0);
     }
 
     public function getInitiatorRequestId(): string
@@ -101,6 +108,11 @@ class SAMLLogoutTransaction extends Entity
     {
         $this->transactionData['pendingClients'] = array_values($pendingClients);
         $this->writeTransactionData();
+    }
+
+    public function getCurrentParticipantId(): int
+    {
+        return (int) ($this->transactionData['currentParticipantId'] ?? 0);
     }
 
     public function getCurrentClientId(): int
@@ -150,7 +162,9 @@ class SAMLLogoutTransaction extends Entity
      *
      * @throws JsonException
      */
-    public function setCurrentRequest(?int $clientId, ?string $requestId): void {
+    public function setCurrentRequest(?int $participantId, ?int $clientId, ?string $requestId): void 
+    {
+        $this->transactionData['currentParticipantId'] = $participantId;
         $this->transactionData['currentClientId'] = $clientId;
         $this->transactionData['currentRequestId'] = $requestId;
 

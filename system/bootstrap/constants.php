@@ -150,6 +150,7 @@ const TBL_ROLES_RIGHTS_DATA = TABLE_PREFIX . '_roles_rights_data';
 const TBL_ROOMS = TABLE_PREFIX . '_rooms';
 const TBL_SAML_CLIENTS = TABLE_PREFIX . '_saml_clients';
 const TBL_SAML_LOGOUT_TRANSACTIONS = TABLE_PREFIX . '_saml_logout_transactions';
+const TBL_SAML_SESSION_PARTICIPANTS = TABLE_PREFIX . '_saml_session_participants';
 const TBL_SSO_KEYS = TABLE_PREFIX . '_sso_keys';
 const TBL_SESSIONS = TABLE_PREFIX . '_sessions';
 const TBL_TEXTS = TABLE_PREFIX . '_texts';
