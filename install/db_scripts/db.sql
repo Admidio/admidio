@@ -672,6 +672,24 @@ COLLATE = utf8mb4_unicode_ci;
 
 
 /*==============================================================*/
+/* Table: adm_saml_logout_transactions                           */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_saml_logout_transactions (
+    slt_id                      integer unsigned    AUTO_INCREMENT,
+    slt_token                   varchar(64)         NOT NULL,
+    slt_org_id                  integer unsigned    NOT NULL,
+    slt_data                    text                NOT NULL,
+    slt_expires_at              timestamp           NOT NULL,
+    PRIMARY KEY (slt_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_slt_token ON %PREFIX%_saml_logout_transactions (slt_token);
+CREATE INDEX %PREFIX%_idx_slt_expires_at ON %PREFIX%_saml_logout_transactions (slt_expires_at);
+
+/*==============================================================*/
 /* Table: adm_sso_keys                                               */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_sso_keys (

@@ -44,6 +44,7 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Presenter\PagePresenter;
 
 use Admidio\SSO\Entity\SAMLClient;
+use Admidio\SSO\Entity\SAMLLogoutTransaction;
 use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Service\KeyService;
 
@@ -820,170 +821,397 @@ class SAMLService extends SSOService {
         }
     }
 
-
-    public function handleSLORequest() {
-        global $gCurrentUserId, $gCurrentUser, $gDb, $gMenu, $g_organization, $gLogger;
-        global $gSettingsManager, $gCurrentSession, $gCurrentOrganization, $gProfileFields, $gCurrentOrgId, $gValidLogin;
-
+    /**
+     * Handle incoming SAML LogoutRequest and LogoutResponse messages.
+     * @throws Exception
+     */
+    public function handleSLORequest(): void
+    {
+        global $gSettingsManager;
         if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
-            throw new Exception("SSO SAML is not enabled");
+            throw new Exception('SSO SAML is not enabled');
         }
 
-        $request = $this->receiveMessage();
-        if (!$request instanceof LogoutRequest) {
-            throw new Exception("Invalid request (not a LogoutRequest) in SAMLService->handleSLORequest()");
+        $this->removeExpiredLogoutTransactions();
+
+        $message = $this->receiveMessage();
+
+        if ($message instanceof LogoutRequest) {
+            $this->handleIncomingLogoutRequest($message);
+            return;
+        }
+        if ($message instanceof LogoutResponse) {
+            $this->handleIncomingLogoutResponse($message);
+            return;
+        }
+        throw new Exception('Invalid request in SAMLService->handleSLORequest().');
+    }
+
+    /**
+     * Start an SP-initiated logout transaction.
+     * @throws Exception
+     */
+    private function handleIncomingLogoutRequest(LogoutRequest $request): void
+    {
+        global $gCurrentOrgId, $gCurrentUser, $gLogger, $gValidLogin;
+
+        $issuer = $request->getIssuer();
+        if ($issuer === null || empty($issuer->getValue())) {
+            throw new Exception('The SAML LogoutRequest has no issuer.');
         }
 
-
-        $sessionId = session_id();
-        $entityIdClient = $request->getIssuer()->getValue();
-        $client = $this->getClientFromID($entityIdClient);
+        $initiatorEntityId = $issuer->getValue();
+        $initiatorClient = $this->getClientFromID($initiatorEntityId);
 
         try {
-            if (!$client->isEnabled()) {
-                throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Logout is no possible.");
-            }
-            // Validate signatures. Will throw an exception
-            if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
-                $this->validateSignature($client, $request, $client->getValue('smc_require_auth_signed'));
-            }
+            $this->validateSLOClient($initiatorClient, $request);
 
-            $this->validateRequestContext($client, $request, $this->sloUrl);
- 
+            $pendingClients = array();
+
+            /*
+            * Capture every SP-specific NameID before the local user and session
+            * context are cleared.
+            */
             if ($gValidLogin) {
-                // Logout will only work if you are logged in...
+                foreach ($this->getIds() as $clientId) {
+                    $client = new SAMLClient($this->db, $clientId);
 
-
-                /**  1. LOCAL LOGOUT FROM ADMIDIO */
-
-                // If user is logged in, terminate their current session
-                $this->db->queryPrepared("DELETE FROM adm_sessions WHERE ses_session_id = ?", [$sessionId]);
-
-                $gValidLogin = false;
-
-                // remove user from session
-                $gCurrentSession->logout();
-
-                // if login organization is different to organization of config file then create new session variables
-                if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0 && $g_organization !== '') {
-                    // read organization of config file with their preferences
-                    $gCurrentOrganization->readDataByShortname($g_organization);
-
-                    // read new profile field structure for this organization
-                    $gProfileFields->readProfileFields($gCurrentOrgId);
-
-                    // save new organization id to session
-                    $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
-                    $gCurrentSession->save();
-
-                    // read all settings from the new organization
-                    $gSettingsManager = new SettingsManager($gDb, $gCurrentOrgId);
-                }
-
-
-
-                /**  2. NOTIFY ALL REGISTERED CLIENTS OF THE LOGOUT */
-
-
-                // Notify all registered SPs for logout
-                foreach ($this->getIds() as $spId) {
-                    // Don't send a logout request to the client that initiated the logout request
-                    if ($spId != $entityIdClient) {
-                        $sp = new SAMLClient($this->db, $spId);
-                        if ($sp->isEnabled()) {
-                            $this->sendLogoutRequest($sp, $gCurrentUser);
-                        }
+                    if (!$client->isEnabled() || $client->getIdentifier() === $initiatorEntityId) {
+                        continue;
                     }
+
+                    $sloUrl = trim((string) $client->getValue('smc_slo_url'));
+                    $userIdField = (string) $client->getValue('smc_userid_field');
+                    $nameId = (string) ($gCurrentUser->getValue($userIdField) ?? '');
+
+                    if ($sloUrl === '' || $nameId === '') {
+                        continue;
+                    }
+
+                    $pendingClients[] = array(
+                        'clientId' => (int) $client->getValue('smc_id'),
+                        'nameId' => $nameId
+                    );
                 }
-
-                /**  3. clear data from global objects */
-
-                $gCurrentUser->clear();
-                $gMenu->initialize();
-
             }
 
-            $logoutResponse = new LogoutResponse();
-            $logoutResponse->setIssuer(new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId()));
-            $logoutResponse->setID('ID' . \LightSaml\Helper::generateID());
-            $logoutResponse->setIssueInstant(new \DateTime());
-            $logoutResponse->setDestination($client->getValue('smc_slo_url'));
-            $logoutResponse->setInResponseTo($request->getID());
-            $statusSuccess = new \LightSaml\Model\Protocol\Status(
-                new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));
-            $logoutResponse->setStatus($statusSuccess);
-            $logoutResponse->setRelayState($request->getRelayState());
-            // Sign the whole response!
-            $keys = $this->getKeysCertificates();
-            $signAssertions = $client->getValue('smc_sign_assertions');
-            if ($signAssertions) {
-                $logoutResponse->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
-            }
-            $messageContext = new \LightSaml\Context\Profile\MessageContext();
-            $messageContext->setMessage($logoutResponse);
-            $binding = new HttpRedirectBinding();
-            $httpResponse = $binding->send($messageContext, $client->getValue('smc_slo_url'));
-            print $httpResponse->getContent();
-        } catch (Exception $e) {
-            $gLogger->error(
-                'Could not process the SAML request.',
-                [
-                    'exception' => get_class($e),
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => $e->getTraceAsString()
-                ]
-            );
-            $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
+            $transaction = new SAMLLogoutTransaction($this->db);
+            $transaction->initialize($gCurrentOrgId, (int) $initiatorClient->getValue('smc_id'),
+                $request->getID(), $request->getRelayState(), $pendingClients);
+            $transaction->save();
+
+            /*
+            * All information required for downstream LogoutRequests is now
+            * persisted. Local logout can no longer destroy required SAML state.
+            */
+            $this->performLocalLogout();
+
+            $this->continueLogoutTransaction($transaction);
+        } catch (Exception $exception) {
+            $gLogger->error($exception->getMessage());
+            $this->sendLogoutResponse($initiatorClient, $request->getID(), $request->getRelayState(), SamlConstants::STATUS_RESPONDER);
         }
     }
 
-    public function sendLogoutRequest(SAMLClient $client, User $user) {
-        $sloUrl = $client->getValue('smc_slo_url');
-        $login = $user->getValue($client->getValue('smc_userid_field'))??'';
+    /**
+     * Handle and correlate a LogoutResponse from a service provider.
+     * @throws Exception
+     */
+    private function handleIncomingLogoutResponse(LogoutResponse $response): void
+    {
+        global $gLogger;
 
-        if (empty($sloUrl) || $user->isNewRecord() || empty($login)) {
+        $transactionToken = (string) $response->getRelayState();
+
+        if ($transactionToken === '') {
+            throw new Exception('The SAML LogoutResponse has no logout transaction RelayState.');
+        }
+
+        $transaction = new SAMLLogoutTransaction($this->db);
+
+        if (!$transaction->readDataByToken($transactionToken)) {
+            throw new Exception('The SAML LogoutResponse references an unknown logout transaction.');
+        }
+
+        if ($transaction->isExpired()) {
+            $transaction->delete();
+            throw new Exception('The SAML logout transaction has expired.');
+        }
+
+        $currentClientId = $transaction->getCurrentClientId();
+        $currentRequestId = $transaction->getCurrentRequestId();
+
+        if ($currentClientId <= 0 || $currentRequestId === '') {
+            throw new Exception('The SAML logout transaction has no pending request.');
+        }
+
+        $client = new SAMLClient($this->db, $currentClientId);
+
+        try {
+            $issuer = $response->getIssuer();
+
+            if ($issuer === null|| !hash_equals($client->getIdentifier(), (string) $issuer->getValue())) {
+                throw new Exception('The LogoutResponse issuer does not match the expected client.');
+            }
+
+            $this->validateSLOClient($client, $response);
+
+            if (!hash_equals($currentRequestId, (string) $response->getInResponseTo())) {
+                throw new Exception('The LogoutResponse does not match the pending LogoutRequest.');
+            }
+
+            $status = $response->getStatus();
+
+            if ($status === null || !$status->isSuccess()) {
+                $transaction->setPartialLogout(true);
+
+                $statusMessage = $status?->getStatusMessage();
+
+                $gLogger->warning(
+                    'The SAML client "' . $client->getIdentifier()
+                    . '" returned an unsuccessful LogoutResponse'
+                    . ($statusMessage === null || $statusMessage === ''
+                        ? '.'
+                        : ': ' . $statusMessage)
+                );
+            }
+
+            $transaction->setCurrentRequest(null, null);
+            $transaction->save();
+
+            $this->continueLogoutTransaction($transaction);
+        } catch (Exception $exception) {
+            $gLogger->error($exception->getMessage());
+            throw $exception;
+        }
+    }
+
+    /**
+     * Continue with the next SP or finish the logout transaction.
+     *
+     * @throws Exception
+     */
+    private function continueLogoutTransaction(SAMLLogoutTransaction $transaction): void 
+    {
+        $pendingClients = $transaction->getPendingClients();
+
+        while (count($pendingClients) > 0) {
+            $pendingClient = array_shift($pendingClients);
+            $clientId = (int) ($pendingClient['clientId'] ?? 0);
+            $nameId = (string) ($pendingClient['nameId'] ?? '');
+
+            if ($clientId <= 0 || $nameId === '') {
+                $transaction->setPartialLogout(true);
+                continue;
+            }
+
+            $client = new SAMLClient($this->db, $clientId);
+
+            if (!$client->isEnabled() || empty($client->getValue('smc_slo_url'))) {
+                $transaction->setPartialLogout(true);
+                continue;
+            }
+
+            $transaction->setPendingClients($pendingClients);
+
+            $this->sendLogoutRequest($transaction, $client, $nameId);
             return;
         }
-        $logoutRequest = new LogoutRequest();
-        $logoutRequest->setIssuer(new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId()));
-        $logoutRequest->setId(\LightSaml\Helper::generateId());
-        $logoutRequest->setIssueInstant(new \DateTime());
-        $logoutRequest->setNameID(new NameID($login, SamlConstants::NAME_ID_FORMAT_UNSPECIFIED));
-        $logoutRequest->setDestination($sloUrl);
 
-        // Sign the request
-        $keys = $this->getKeysCertificates();
-        $signAssertions = $client->getValue('smc_sign_assertions');
-        if ($signAssertions) {
-            $logoutRequest->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
+        $initiatorClient = new SAMLClient($this->db, $transaction->getInitiatorClientId());
+
+        $status =  $transaction->hasPartialLogout()
+            ? SamlConstants::STATUS_PARTIAL_LOGOUT
+            : SamlConstants::STATUS_SUCCESS;
+
+        $initiatorRequestId = $transaction->getInitiatorRequestId();
+        $initiatorRelayState = $transaction->getInitiatorRelayState();
+
+        $transaction->delete();
+
+        $this->sendLogoutResponse($initiatorClient, $initiatorRequestId, $initiatorRelayState, $status);
+    }
+
+    /**
+     * Send a front-channel LogoutRequest to the next service provider.
+     *
+     * @throws Exception
+     */
+    private function sendLogoutRequest(SAMLLogoutTransaction $transaction, SAMLClient $client, string $nameId): void 
+    {
+        $sloUrl = trim((string) $client->getValue('smc_slo_url'));
+
+        if ($sloUrl === '') {
+            throw new Exception('The SAML client has no logout service URL.');
         }
+
+        $requestId = 'ID' . \LightSaml\Helper::generateID();
+
+        $logoutRequest = new LogoutRequest();
+        $logoutRequest->setIssuer(
+            new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId())
+        );
+        $logoutRequest->setID($requestId);
+        $logoutRequest->setIssueInstant(new \DateTime());
+        $logoutRequest->setNameID(
+            new NameID($nameId, SamlConstants::NAME_ID_FORMAT_UNSPECIFIED)
+        );
+        $logoutRequest->setDestination($sloUrl);
+        $logoutRequest->setRelayState($transaction->getValue('slt_token'));
+
+        $keys = $this->getKeysCertificates();
+
+        if ($client->getValue('smc_sign_assertions')) {
+            $logoutRequest->setSignature(
+                $this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert'])
+            );
+        }
+
+        /*
+        * Persist correlation data before returning the redirect. The next HTTP
+        * request is independent of the destroyed Admidio login session.
+        */
+        $transaction->setCurrentRequest((int) $client->getValue('smc_id'), $requestId);
+        $transaction->save();
 
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($logoutRequest);
 
         $binding = new HttpRedirectBinding();
-        // $httpResponse = $binding->send($messageContext, $sloUrl);
+        $httpResponse = $binding->send($messageContext, $sloUrl);
 
-        // Instead of sending it to the browser, capture the URL
-        $response = $binding->send($messageContext, $sloUrl);
-        $redirectUrl = $response->headers->get('Location');
-
-        if ($redirectUrl === null) {
-            throw new Exception('Could not create the SAML logout redirect URL.');
-        }        
-
-        // Send backchannel request via GET (NOT POST!)
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $redirectUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $responseContent = curl_exec($ch);
-        curl_close($ch);
-
-        print $responseContent;
+        $this->emitSAMLResponse($httpResponse);
     }
 
+    /**
+     * Send the final LogoutResponse to the initiating service provider.
+     *
+     * @throws Exception
+     */
+    private function sendLogoutResponse(SAMLClient $client, string $inResponseTo, ?string $relayState, string $statusCode): void 
+    {
+        $sloUrl = trim((string) $client->getValue('smc_slo_url'));
+
+        if ($sloUrl === '') {
+            throw new Exception('The initiating SAML client has no logout service URL.');
+        }
+
+        $logoutResponse = new LogoutResponse();
+        $logoutResponse->setIssuer(
+            new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId())
+        );
+        $logoutResponse->setID('ID' . \LightSaml\Helper::generateID());
+        $logoutResponse->setIssueInstant(new \DateTime());
+        $logoutResponse->setDestination($sloUrl);
+        $logoutResponse->setInResponseTo($inResponseTo);
+        $logoutResponse->setRelayState($relayState);
+        $logoutResponse->setStatus(
+            new \LightSaml\Model\Protocol\Status(
+                new \LightSaml\Model\Protocol\StatusCode($statusCode)
+            )
+        );
+
+        $keys = $this->getKeysCertificates();
+
+        if ($client->getValue('smc_sign_assertions')) {
+            $logoutResponse->setSignature(
+                $this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert'])
+            );
+        }
+
+        $messageContext = new \LightSaml\Context\Profile\MessageContext();
+        $messageContext->setMessage($logoutResponse);
+
+        $binding = new HttpRedirectBinding();
+        $httpResponse = $binding->send($messageContext, $sloUrl);
+
+        $this->emitSAMLResponse($httpResponse);
+    }
+
+    /**
+     * Validate a SAML SLO message and its client.
+     *
+     * @throws Exception
+     */
+    private function validateSLOClient(SAMLClient $client, SamlMessage $message): void 
+    {
+        if (!$client->isEnabled()) {
+            throw new Exception('Client "' . $client->getIdentifier() . '" is disabled. Logout is not possible.');
+        }
+
+        if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
+            $this->validateSignature($client, $message, (bool) $client->getValue('smc_require_auth_signed'));
+        }
+
+        $this->validateRequestContext($client, $message, $this->sloUrl);
+    }
+
+    /**
+     * Destroy the local Admidio login after all required SAML user information
+     * has been persisted in the logout transaction.
+     *
+     * @throws Exception
+     */
+    private function performLocalLogout(): void
+    {
+        global $gCurrentUser, $gDb, $gMenu, $g_organization;
+        global $gCurrentOrganization, $gCurrentOrgId, $gCurrentSession;
+        global $gProfileFields, $gSettingsManager, $gValidLogin;
+
+        if (!$gValidLogin) {
+            return;
+        }
+
+        $gValidLogin = false;
+        $gCurrentSession->logout();
+
+        if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0
+            && $g_organization !== ''
+        ) {
+            $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
+
+            $gProfileFields->readProfileFields($gCurrentOrgId);
+
+            $gCurrentSession->setValue('ses_org_id', $gCurrentOrgId);
+            $gCurrentSession->save();
+
+            $gSettingsManager = new SettingsManager($gDb, $gCurrentOrgId);
+        }
+
+        $gCurrentUser->clear();
+        $gMenu->initialize();
+    }
+
+    /**
+     * Remove abandoned SAML logout transactions.
+     *
+     * @throws Exception
+     */
+    private function removeExpiredLogoutTransactions(): void
+    {
+        $sql = '
+            DELETE FROM ' . TBL_SAML_LOGOUT_TRANSACTIONS . '
+            WHERE slt_expires_at < CURRENT_TIMESTAMP';
+
+        $this->db->queryPrepared($sql);
+    }
+
+    /**
+     * Forward the generated Symfony response to the browser.
+     */
+    private function emitSAMLResponse(\Symfony\Component\HttpFoundation\Response $response): void 
+    {
+        http_response_code($response->getStatusCode());
+
+        foreach ($response->headers->allPreserveCaseWithoutCookies() as $name => $values) {
+            foreach ($values as $value) {
+                header($name . ': ' . $value, false);
+            }
+        }
+
+        echo $response->getContent();
+    }
+    
 /*
     public function handleAttributeQuery() {
         // TODO: This should work like the Response to an AuthnRequest, just with the requested attributes
