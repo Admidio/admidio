@@ -25,14 +25,6 @@ use Admidio\Infrastructure\Database;
  class AccessTokenRepository extends TokenRepository implements AccessTokenRepositoryInterface {
     private $inactivityTimeout = 1800;
 
-    /**
-     *  Dummy implementation since the TokenRepository class declares the method abstract, so we MUST implement it, even though we don't need it...
-     * @return TokenEntity
-     */
-    public function newToken(): TokenEntity {
-        return new TokenEntity($this->db);
-    }
-
     public function getToken(string $tokenId) : TokenEntity {
         return new AccessTokenEntity($this->db,  $tokenId);
     }

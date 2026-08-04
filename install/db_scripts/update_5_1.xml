@@ -132,5 +132,8 @@
     <step id="850">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_authentication_methods varchar(255) NULL</step>
     <step id="860">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_authentication_context varchar(255) NULL</step>
     <step id="870">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_trusted boolean NOT NULL DEFAULT false</step>
+    <step id="880">CREATE INDEX %PREFIX%_idx_oat_expires_at ON %PREFIX%_oidc_access_tokens (oat_expires_at)</step>
+    <step id="890">CREATE INDEX %PREFIX%_idx_ort_expires_at ON %PREFIX%_oidc_refresh_tokens (ort_expires_at)</step>
+    <step id="900">CREATE INDEX %PREFIX%_idx_oac_expires_at ON %PREFIX%_oidc_auth_codes (oac_expires_at)</step>
     <step>stop</step>
 </update>
