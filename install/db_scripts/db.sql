@@ -653,6 +653,7 @@ CREATE TABLE %PREFIX%_saml_clients (
     smc_role_mapping            text                NULL,
 
     smc_allowed_clock_skew      integer unsigned    NULL,
+    smc_request_lifetime        integer unsigned    NULL,
     smc_assertion_lifetime      integer unsigned    NULL,
     smc_sign_assertions         bool                DEFAULT true,
     smc_encrypt_assertions      bool                DEFAULT false,
