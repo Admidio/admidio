@@ -753,6 +753,10 @@ class Database
             $replaces = array(
                 // Postgres doesn't know unsigned
                 'unsigned' => '',
+                // Postgres only supports text as a generic text with large limit
+                'tinytext' => 'text',
+                'mediumtext' => 'text',
+                'longtext' => 'text',
                 // since version 4.1 we don't replace boolean with smallint
                 //'boolean'  => 'smallint',
                 // A blob is in Postgres a bytea datatype
