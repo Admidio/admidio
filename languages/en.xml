@@ -1678,7 +1678,12 @@
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">The issuer URL of the OpenID Connect provider. Leave this field empty to derive the URL automatically from the current Admidio URL. Enter a custom URL only if the provider is published under a different external address.</string>
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpoint</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION">Confirm logout</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION_DESC">Do you want to end your Admidio single sign-on session?</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Logout Endpoint</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_URI_INVALID">The registered OIDC logout URI is invalid. Use an absolute HTTPS URI without credentials or a fragment; HTTP is allowed only for loopback hosts.</string>
+  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS">Post-logout redirect URIs</string>
+  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Allowed redirect URIs after RP-initiated logout, one absolute URI per line. A requested post_logout_redirect_uri must exactly match one of these values.</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Refresh token lifetime</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">The number of seconds for which an issued refresh token remains valid. The default is 2592000 seconds, which corresponds to 30 days.</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Requested permissions</string>

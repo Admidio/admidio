@@ -1647,7 +1647,12 @@
   <string name="SYS_SSO_OIDC_ISSUER_URL">Aussteller</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Die Aussteller-URL des OpenID-Connect-Providers. Lassen Sie dieses Feld leer, damit die URL automatisch aus der aktuellen Admidio-URL abgeleitet wird. Geben Sie nur dann eine eigene URL an, wenn der Provider unter einer abweichenden externen Adresse veröffentlicht wird.</string>
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpunkt</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION">Abmeldung bestätigen</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION_DESC">Möchtest du deine Admidio-Single-Sign-On-Sitzung beenden?</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Abmelde-Endpunkt</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_URI_INVALID">Die registrierte OIDC-Abmelde-URI ist ungültig. Verwende eine absolute HTTPS-URI ohne Zugangsdaten oder Fragment; HTTP ist nur für Loopback-Hosts zulässig.</string>
+  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS">Weiterleitungs-URIs nach Abmeldung</string>
+  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Zulässige Weiterleitungs-URIs nach einer vom Client initiierten Abmeldung, eine absolute URI pro Zeile. Eine angeforderte post_logout_redirect_uri muss exakt mit einem dieser Werte übereinstimmen.</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Gültigkeit des Aktualisierungstokens</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">Die Anzahl der Sekunden, für die ein ausgestelltes Aktualisierungstoken gültig bleibt. Der Standardwert beträgt 2592000 Sekunden, was 30 Tagen entspricht.</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Angeforderte Berechtigungen</string>

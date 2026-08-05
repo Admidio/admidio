@@ -39,7 +39,14 @@ use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\IdTokenResponse;
 use Admidio\SSO\Entity\OIDCConsent;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Token\Plain;
+use Lcobucci\JWT\Validation\Constraint\IssuedBy;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Admidio\UI\Presenter\OIDCConsentPresenter;
+use Admidio\UI\Presenter\OIDCLogoutPresenter;
 use Admidio\SSO\Grants\OIDCAuthCodeGrant;
 use Admidio\SSO\Service\KeyService;
 
@@ -138,6 +145,13 @@ class OIDCService extends SSOService {
     }
 
     protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
+        if (array_key_exists('ocl_post_logout_redirect_uris', $formValues)) {
+            $formValues['ocl_post_logout_redirect_uris'] =
+                $this->normalizeRegisteredLogoutUris(
+                    (string) $formValues['ocl_post_logout_redirect_uris']
+                );
+        }
+
         if (array_key_exists('ocl_scope', $formValues)) {
             if (!is_array($formValues['ocl_scope'])) {
                 throw new Exception('SYS_SSO_CLIENT_SCOPES_INVALID');
@@ -172,6 +186,47 @@ class OIDCService extends SSOService {
         }
         // Do not keep the client secret available in plain text longer than required
         unset($formValues['new_ocl_client_secret']);
+    }
+
+    /**
+     * Normalize and validate one absolute logout URI per line.
+     *
+     * @throws Exception
+     */
+    private function normalizeRegisteredLogoutUris(string $value): string
+    {
+        $uris = preg_split('/\R/', trim($value), -1, PREG_SPLIT_NO_EMPTY);
+        if ($uris === false) {
+            throw new Exception('SYS_SSO_OIDC_LOGOUT_URI_INVALID');
+        }
+
+        $normalized = array();
+        foreach ($uris as $uri) {
+            $uri = trim($uri);
+            if ($uri === '') {
+                continue;
+            }
+
+            $parts = parse_url($uri);
+            $host = strtolower((string) ($parts['host'] ?? ''));
+            $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+            $loopback = in_array($host, array('localhost', '127.0.0.1', '::1'), true);
+
+            if (!is_array($parts)
+                || $host === ''
+                || !in_array($scheme, array('https', 'http'), true)
+                || ($scheme === 'http' && !$loopback)
+                || isset($parts['user'])
+                || isset($parts['pass'])
+                || isset($parts['fragment'])
+            ) {
+                throw new Exception('SYS_SSO_OIDC_LOGOUT_URI_INVALID');
+            }
+
+            $normalized[] = $uri;
+        }
+
+        return implode("\n", array_values(array_unique($normalized)));
     }
 
     public static function setClient(OIDCClient $client) {
@@ -283,7 +338,7 @@ class OIDCService extends SSOService {
 
 
     public function setupService() {
-        global $gSettingsManager, $gLogger;
+        global $gSettingsManager, $gLogger, $gCurrentSession;
 
         $authCodeTTL = new \DateInterval(
             'PT' . $this->getTokenLifetime('sso_oidc_auth_code_lifetime', self::DEFAULT_AUTH_CODE_LIFETIME) . 'S'
@@ -319,6 +374,10 @@ class OIDCService extends SSOService {
             $userRepository,
             $claimsExtractor,
             $this->issuerURL,
+            $this->db,
+            $gCurrentSession->getOrganizationId(),
+            (int) $gCurrentSession->getValue('ses_usr_id'),
+            (string) $gCurrentSession->getValue('ses_external_session_id', 'database'),
             $privateKeyObject->getValue('key_uuid')
         );
 
@@ -822,6 +881,7 @@ class OIDCService extends SSOService {
             "jwks_uri" => "{$issuer}/jwks",
             "introspection_endpoint" => "{$issuer}/introspect",
             "revocation_endpoint" => "{$issuer}/revoke",
+            "end_session_endpoint" => "{$issuer}/logout",
             "scopes_supported" => OIDCClient::getSupportedScopes(),
             "response_types_supported" => ["code"],
             "response_modes_supported" => ["query"],
@@ -1150,24 +1210,301 @@ class OIDCService extends SSOService {
     }    
 
     /**
-     * Logout the current user through Admidio's session handling.
-     * @return JsonResponse
+     * Handle OpenID Connect RP-Initiated Logout.
+     *
+     * Requests without id_token_hint are confirmed by the user before the OP
+     * session is terminated. Redirect URIs are accepted only after exact
+     * registration for an identified client.
      */
-    public function handleLogoutRequest(): JsonResponse
+    public function handleLogoutRequest(): ResponseInterface
     {
         global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
 
+        $request = $this->getRequest();
+        $participantService = new OIDCSessionParticipantService($this->db);
+        $participantService->removeExpiredParticipants();
+
+        $body = is_array($request->getParsedBody()) ? $request->getParsedBody() : array();
+
+        if ((array_key_exists('adm_button_cancel', $body)
+                || array_key_exists('adm_button_logout', $body))
+            && isset($_POST['adm_csrf_token'])
+        ) {
+            $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $form->validate($_POST);
+        }
+
+        if (array_key_exists('adm_button_cancel', $body)) {
+            unset($_SESSION['oidc_logout_confirmation']);
+
+            return $this->createOIDCErrorResponse(
+                'access_denied',
+                'The logout request was cancelled by the user.',
+                400
+            );
+        }
+
+        if (array_key_exists('adm_button_logout', $body)) {
+            $context = $_SESSION['oidc_logout_confirmation'] ?? null;
+            unset($_SESSION['oidc_logout_confirmation']);
+
+            if (!is_array($context)
+                || !isset($context['requested_at'], $context['external_session_id'])
+                || (int) $context['requested_at'] < time() - 300
+            ) {
+                return $this->createOIDCErrorResponse(
+                    'invalid_request',
+                    'The logout confirmation has expired.',
+                    400
+                );
+            }
+
+            return $this->completeOIDCLogout(
+                (string) $context['external_session_id'],
+                isset($context['post_logout_redirect_uri'])
+                    ? (string) $context['post_logout_redirect_uri']
+                    : null,
+                isset($context['state']) ? (string) $context['state'] : null,
+                $participantService
+            );
+        }
+
+        $params = array_merge($request->getQueryParams(), $body);
+        $idTokenHint = $params['id_token_hint'] ?? null;
+        $clientIdentifier = $params['client_id'] ?? null;
+        $postLogoutRedirectUri = $params['post_logout_redirect_uri'] ?? null;
+        $state = $params['state'] ?? null;
+
+        foreach (array(
+            'id_token_hint' => $idTokenHint,
+            'client_id' => $clientIdentifier,
+            'post_logout_redirect_uri' => $postLogoutRedirectUri,
+            'state' => $state
+        ) as $parameter => $value) {
+            if ($value !== null && !is_string($value)) {
+                return $this->createOIDCErrorResponse(
+                    'invalid_request',
+                    'Invalid ' . $parameter . '.',
+                    400
+                );
+            }
+        }
+
+        $hintClaims = null;
+        if (is_string($idTokenHint) && $idTokenHint !== '') {
+            try {
+                $hintClaims = $this->validateLogoutIdTokenHint($idTokenHint);
+            } catch (\Throwable $exception) {
+                return $this->createOIDCErrorResponse(
+                    'invalid_request',
+                    'Invalid id_token_hint.',
+                    400
+                );
+            }
+
+            $hintClientIdentifier = $hintClaims['client_id'];
+            if (is_string($clientIdentifier) && $clientIdentifier !== ''
+                && !hash_equals($hintClientIdentifier, $clientIdentifier)
+            ) {
+                return $this->createOIDCErrorResponse(
+                    'invalid_request',
+                    'client_id does not match id_token_hint.',
+                    400
+                );
+            }
+            $clientIdentifier = $hintClientIdentifier;
+        }
+
+        $client = null;
+        if (is_string($clientIdentifier) && $clientIdentifier !== '') {
+            $client = new OIDCClient($this->db, $clientIdentifier);
+            if ($client->isNewRecord() || !$client->isEnabled()) {
+                return $this->createOIDCErrorResponse(
+                    'invalid_request',
+                    'Unknown or disabled client.',
+                    400
+                );
+            }
+        }
+
+        if ($postLogoutRedirectUri !== null
+            && ($client === null
+                || !$client->isPostLogoutRedirectUriAllowed($postLogoutRedirectUri))
+        ) {
+            return $this->createOIDCErrorResponse(
+                'invalid_request',
+                'Unregistered post_logout_redirect_uri.',
+                400
+            );
+        }
+
+        $externalSessionId = (string) $gCurrentSession->getValue(
+            'ses_external_session_id',
+            'database'
+        );
+
+        if ($hintClaims !== null) {
+            if ($externalSessionId !== ''
+                && !hash_equals($externalSessionId, $hintClaims['sid'])
+            ) {
+                return $this->createOIDCErrorResponse(
+                    'invalid_request',
+                    'id_token_hint does not match the current session.',
+                    400
+                );
+            }
+
+            $externalSessionId = $hintClaims['sid'];
+
+            try {
+                $participantService->assertParticipant(
+                    $externalSessionId,
+                    (int) $client->getValue('ocl_id'),
+                    $hintClaims['sub']
+                );
+            } catch (\Throwable $exception) {
+                return $this->createOIDCErrorResponse(
+                    'invalid_request',
+                    'id_token_hint does not identify an active OIDC session.',
+                    400
+                );
+            }
+
+            return $this->completeOIDCLogout(
+                $externalSessionId,
+                $postLogoutRedirectUri,
+                $state,
+                $participantService
+            );
+        }
+
+        $_SESSION['oidc_logout_confirmation'] = array(
+            'external_session_id' => $externalSessionId,
+            'client_id' => $client?->getIdentifier() ?? '',
+            'post_logout_redirect_uri' => $postLogoutRedirectUri,
+            'state' => $state,
+            'requested_at' => time()
+        );
+
+        $presenter = new OIDCLogoutPresenter(
+            $client instanceof OIDCClient ? $client->readableName() : ''
+        );
+        $presenter->createConfirmationForm();
+        $presenter->show();
+        exit;
+    }
+
+    private function completeOIDCLogout(
+        string $externalSessionId,
+        ?string $postLogoutRedirectUri,
+        ?string $state,
+        OIDCSessionParticipantService $participantService
+    ): ResponseInterface {
+        global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
+
         $gValidLogin = false;
-
-        // Remove the user from the persisted session, delete auto-login data
-        // and destroy the PHP session.
         $gCurrentSession->logout();
-
-        // Clear data from global objects.
         $gCurrentUser->clear();
         $gMenu->initialize();
 
-        return new JsonResponse(array('logout' => true));
+        if ($externalSessionId !== '') {
+            $participantService->deleteParticipants($externalSessionId);
+        }
+
+        if ($postLogoutRedirectUri !== null) {
+            $location = $postLogoutRedirectUri;
+            if ($state !== null && $state !== '') {
+                $location .= (str_contains($location, '?') ? '&' : '?')
+                    . http_build_query(array('state' => $state));
+            }
+
+            return (new Response())
+                ->withStatus(302)
+                ->withHeader('Location', $location)
+                ->withHeader('Cache-Control', 'no-store')
+                ->withHeader('Pragma', 'no-cache');
+        }
+
+        return new JsonResponse(
+            array('logout' => true), 200,
+            array('Cache-Control' => 'no-store', 'Pragma' => 'no-cache')
+        );
+    }
+
+    private function createOIDCErrorResponse(
+        string $error,
+        string $description,
+        int $statusCode = 400
+    ): JsonResponse {
+        return new JsonResponse(
+            array(
+                'error' => $error,
+                'error_description' => $description
+            ),
+            $statusCode,
+            array(
+                'Cache-Control' => 'no-store',
+                'Pragma' => 'no-cache'
+            )
+        );
+    }
+
+    /**
+     * Validate the signature and logout-relevant claims of an ID token hint.
+     *
+     * Expiration is intentionally not enforced: a token that represented the
+     * still-active OP session remains usable as a logout hint.
+     *
+     * @return array{client_id:string,sub:string,sid:string}
+     */
+    private function validateLogoutIdTokenHint(string $idTokenHint): array
+    {
+        global $gSettingsManager;
+
+        $keyService = new KeyService($this->db);
+        $key = $keyService->getUsableKey(
+            (int) $gSettingsManager->get('sso_oidc_signing_key'),
+            KeyService::USAGE_OIDC_SIGNING
+        );
+
+        $configuration = Configuration::forAsymmetricSigner(
+            new Sha256(),
+            InMemory::plainText((string) $key->getValue('key_private')),
+            InMemory::plainText((string) $key->getValue('key_public'))
+        );
+
+        $token = $configuration->parser()->parse($idTokenHint);
+        if (!$token instanceof Plain
+            || !$configuration->validator()->validate(
+                $token,
+                new SignedWith($configuration->signer(), $configuration->verificationKey()),
+                new IssuedBy($this->issuerURL)
+            )
+        ) {
+            throw new Exception('Invalid ID token hint.');
+        }
+
+        $audience = $token->claims()->get('aud', array());
+        if (is_string($audience)) {
+            $audience = array($audience);
+        }
+        if (!is_array($audience) || count($audience) !== 1 || !is_string($audience[0])
+        ) {
+            throw new Exception('The ID token hint has an invalid audience.');
+        }
+
+        $subject = $token->claims()->get('sub', null);
+        $sessionId = $token->claims()->get('sid', null);
+        if (!is_string($subject) || $subject === '' || !is_string($sessionId) || $sessionId === ''
+        ) {
+            throw new Exception('The ID token hint has no usable sub or sid claim.');
+        }
+
+        return array(
+            'client_id' => $audience[0],
+            'sub' => $subject,
+            'sid' => $sessionId
+        );
     }
 
     private function getRequestedScopeNames(AuthorizationRequestInterface $authRequest): array

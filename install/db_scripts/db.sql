@@ -547,6 +547,7 @@ CREATE TABLE %PREFIX%_oidc_clients (
     ocl_client_secret           varchar(255)        NOT NULL,
     ocl_require_pkce            bool                NOT NULL DEFAULT true,
     ocl_redirect_uri            text                NOT NULL,
+    ocl_post_logout_redirect_uris text              NULL,
     ocl_grant_types             varchar(255)        NOT NULL,
     ocl_scope                   varchar(255)        DEFAULT NULL,
     ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
@@ -578,6 +579,27 @@ ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 CREATE INDEX %PREFIX%_idx_oat_expires_at ON %PREFIX%_oidc_access_tokens (oat_expires_at);
+
+CREATE TABLE %PREFIX%_oidc_session_participants (
+    osp_id                      integer unsigned    AUTO_INCREMENT,
+    osp_org_id                  integer unsigned    NOT NULL,
+    osp_usr_id                  integer unsigned    NOT NULL,
+    osp_client_id               integer unsigned    NOT NULL,
+    osp_external_session_id     varchar(64)         NOT NULL,
+    osp_subject                 varchar(255)        NOT NULL,
+    osp_expires_at              timestamp           NOT NULL,
+    osp_timestamp_create        timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (osp_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_osp_session_client
+    ON %PREFIX%_oidc_session_participants (osp_external_session_id, osp_client_id);
+CREATE INDEX %PREFIX%_idx_osp_expires_at
+    ON %PREFIX%_oidc_session_participants (osp_expires_at);
+
 
 CREATE TABLE %PREFIX%_oidc_refresh_tokens (
     ort_id                      integer unsigned    AUTO_INCREMENT,

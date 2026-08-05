@@ -85,6 +85,34 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         return (bool) $this->getValue($this->columnPrefix . '_require_pkce');
     }
 
+    /**
+     * Return the registered post-logout redirect URIs.
+     *
+     * One URI is stored per line. Empty lines are ignored.
+     *
+     * @return array<int,string>
+     */
+    public function getPostLogoutRedirectUris(): array
+    {
+        $value = (string) $this->getValue($this->columnPrefix . '_post_logout_redirect_uris', 'database');
+
+        $uris = preg_split('/\R/', trim($value), -1, PREG_SPLIT_NO_EMPTY);
+        if ($uris === false) {
+            return array();
+        }
+
+        return array_values(array_unique(array_filter(
+            array_map('trim', $uris),
+            static fn (string $uri): bool => $uri !== ''
+        )));
+    }
+
+    public function isPostLogoutRedirectUriAllowed(string $uri): bool
+    {
+        return in_array($uri, $this->getPostLogoutRedirectUris(), true);
+
+    }
+
     public function isConfidential(): bool
     {
         // TODO_RK

@@ -20,6 +20,7 @@
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_id']}
             {include 'sys-template-parts/form.custom-content.tpl' data=$elements['ocl_client_secret']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_redirect_uri']}
+            {include 'sys-template-parts/form.multiline.tpl' data=$elements['ocl_post_logout_redirect_uris']}
         </div>
     </div>
     <div class="card admidio-field-group">
