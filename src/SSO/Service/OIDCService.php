@@ -145,12 +145,7 @@ class OIDCService extends SSOService {
     }
 
     protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
-        if (array_key_exists('ocl_post_logout_redirect_uris', $formValues)) {
-            $formValues['ocl_post_logout_redirect_uris'] =
-                $this->normalizeRegisteredLogoutUris(
-                    (string) $formValues['ocl_post_logout_redirect_uris']
-                );
-        }
+        $this->normalizeLogoutUriFormValues($formValues);
 
         if (array_key_exists('ocl_scope', $formValues)) {
             if (!is_array($formValues['ocl_scope'])) {
@@ -189,44 +184,62 @@ class OIDCService extends SSOService {
     }
 
     /**
-     * Normalize and validate one absolute logout URI per line.
+     * Validate and normalize registered OIDC logout URIs.
      *
      * @throws Exception
      */
-    private function normalizeRegisteredLogoutUris(string $value): string
+    private function normalizeLogoutUriFormValues(array &$formValues): void
     {
-        $uris = preg_split('/\R/', trim($value), -1, PREG_SPLIT_NO_EMPTY);
-        if ($uris === false) {
-            throw new Exception('SYS_SSO_OIDC_LOGOUT_URI_INVALID');
+        if (array_key_exists('ocl_post_logout_redirect_uris', $formValues)) {
+            $value = str_replace(array("\r\n", "\r"), "\n", trim((string) $formValues['ocl_post_logout_redirect_uris']));
+            $uris = $value === '' ? array() : explode("\n", $value);
+
+            foreach ($uris as &$uri) {
+                $uri = trim($uri);
+                $this->assertValidRegisteredLogoutUri($uri);
+            }
+            unset($uri);
+
+            $formValues['ocl_post_logout_redirect_uris'] = implode("\n", array_values(array_unique($uris)));
         }
 
-        $normalized = array();
-        foreach ($uris as $uri) {
-            $uri = trim($uri);
-            if ($uri === '') {
+        foreach (array('ocl_frontchannel_logout_uri', 'ocl_backchannel_logout_uri') as $field) {
+            if (!array_key_exists($field, $formValues)) {
                 continue;
             }
 
-            $parts = parse_url($uri);
-            $host = strtolower((string) ($parts['host'] ?? ''));
-            $scheme = strtolower((string) ($parts['scheme'] ?? ''));
-            $loopback = in_array($host, array('localhost', '127.0.0.1', '::1'), true);
-
-            if (!is_array($parts)
-                || $host === ''
-                || !in_array($scheme, array('https', 'http'), true)
-                || ($scheme === 'http' && !$loopback)
-                || isset($parts['user'])
-                || isset($parts['pass'])
-                || isset($parts['fragment'])
-            ) {
-                throw new Exception('SYS_SSO_OIDC_LOGOUT_URI_INVALID');
+            $uri = trim((string) $formValues[$field]);
+            if ($uri !== '') {
+                $this->assertValidRegisteredLogoutUri($uri);
             }
 
-            $normalized[] = $uri;
+            $formValues[$field] = $uri;
         }
+    }
 
-        return implode("\n", array_values(array_unique($normalized)));
+    /**
+     * @throws Exception
+     */
+    private function assertValidRegisteredLogoutUri(string $uri): void
+    {
+        $parts = parse_url($uri);
+        if (filter_var($uri, FILTER_VALIDATE_URL) === false
+            || !is_array($parts)
+            || !isset($parts['scheme'], $parts['host'])
+            || isset($parts['fragment'])
+            || isset($parts['user'])
+            || isset($parts['pass'])
+        ) {
+            throw new Exception('SYS_SSO_OIDC_LOGOUT_URI_INVALID');
+        }
+ 
+        $scheme = strtolower((string) $parts['scheme']);
+        $host = strtolower((string) $parts['host']);
+        $isLoopback = in_array($host, array('localhost', '127.0.0.1', '::1'), true);
+
+        if ($scheme !== 'https' && !($scheme === 'http' && $isLoopback)) {
+            throw new Exception('SYS_SSO_OIDC_LOGOUT_URI_INVALID');
+        }
     }
 
     public static function setClient(OIDCClient $client) {
@@ -882,6 +895,10 @@ class OIDCService extends SSOService {
             "introspection_endpoint" => "{$issuer}/introspect",
             "revocation_endpoint" => "{$issuer}/revoke",
             "end_session_endpoint" => "{$issuer}/logout",
+            "frontchannel_logout_supported" => true,
+            "frontchannel_logout_session_supported" => true,
+            "backchannel_logout_supported" => true,
+            "backchannel_logout_session_supported" => true,
             "scopes_supported" => OIDCClient::getSupportedScopes(),
             "response_types_supported" => ["code"],
             "response_modes_supported" => ["query"],
@@ -1402,6 +1419,9 @@ class OIDCService extends SSOService {
     ): ResponseInterface {
         global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
 
+        $notificationService = new OIDCLogoutNotificationService($this->db, $this->issuerURL);
+        $frontChannelLogoutUris = $externalSessionId === '' ? array() : $notificationService->notifySession($externalSessionId);
+
         $gValidLogin = false;
         $gCurrentSession->logout();
         $gCurrentUser->clear();
@@ -1411,16 +1431,23 @@ class OIDCService extends SSOService {
             $participantService->deleteParticipants($externalSessionId);
         }
 
+        $redirectLocation = null;
         if ($postLogoutRedirectUri !== null) {
-            $location = $postLogoutRedirectUri;
+            $redirectLocation = $postLogoutRedirectUri;
             if ($state !== null && $state !== '') {
-                $location .= (str_contains($location, '?') ? '&' : '?')
+                $redirectLocation .= (str_contains($redirectLocation, '?') ? '&' : '?')
                     . http_build_query(array('state' => $state));
             }
+        }
 
+        if (!empty($frontChannelLogoutUris)) {
+            return $notificationService->createFrontChannelResponse($frontChannelLogoutUris, $redirectLocation);
+        }
+
+        if ($redirectLocation !== null) {
             return (new Response())
                 ->withStatus(302)
-                ->withHeader('Location', $location)
+                ->withHeader('Location', $redirectLocation)
                 ->withHeader('Cache-Control', 'no-store')
                 ->withHeader('Pragma', 'no-cache');
         }

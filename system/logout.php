@@ -10,14 +10,31 @@
  */
 
 use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\SSO\Service\OIDCLogoutNotificationService;
+use Admidio\SSO\Service\OIDCService;
+use Admidio\SSO\Service\OIDCSessionParticipantService;
 
 try {
     require_once(__DIR__ . '/common.php');
+
+    $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
+    $frontChannelLogoutUris = array();
+    $oidcLogoutNotificationService = null;
+
+    if ($externalSessionId !== '') {
+        $oidcService = new OIDCService($gDb, $gCurrentUser);
+        $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
+        $frontChannelLogoutUris = $oidcLogoutNotificationService->notifySession($externalSessionId);
+    }
 
     $gValidLogin = false;
 
     // remove user from session
     $gCurrentSession->logout();
+
+    if ($externalSessionId !== '') {
+        (new OIDCSessionParticipantService($gDb))->deleteParticipants($externalSessionId);
+    }
 
     // if login organization is different to organization of config file then create new session variables
     if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0 && $g_organization !== '') {
@@ -41,6 +58,23 @@ try {
 
     // set homepage to logout page
     $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
+
+    if (!empty($frontChannelLogoutUris) && $oidcLogoutNotificationService !== null) {
+        $response = $oidcLogoutNotificationService->createFrontChannelResponse(
+            $frontChannelLogoutUris,
+            $gHomepage
+        );
+
+        http_response_code($response->getStatusCode());
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header($name . ': ' . $value, false);
+            }
+        }
+
+        echo (string) $response->getBody();
+        exit;
+    }
 
     // message logout successful and go to homepage
     $gMessage->setForwardUrl($gHomepage, 2000);

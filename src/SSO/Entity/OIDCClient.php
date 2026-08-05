@@ -113,6 +113,26 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
 
     }
 
+    public function getFrontChannelLogoutUri(): string
+    {
+        return trim((string) $this->getValue($this->columnPrefix . '_frontchannel_logout_uri', 'database'));
+    }
+
+    public function isFrontChannelLogoutSessionRequired(): bool
+    {
+        return (bool) $this->getValue($this->columnPrefix . '_frontchannel_logout_session_required');
+    }
+
+    public function getBackChannelLogoutUri(): string
+    {
+        return trim((string) $this->getValue($this->columnPrefix . '_backchannel_logout_uri', 'database'));
+    }
+
+    public function isBackChannelLogoutSessionRequired(): bool
+    {
+        return (bool) $this->getValue($this->columnPrefix . '_backchannel_logout_session_required');
+    }
+
     public function isConfidential(): bool
     {
         // TODO_RK

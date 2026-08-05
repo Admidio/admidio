@@ -1375,6 +1375,18 @@ class SAMLService extends SSOService {
             return;
         }
 
+        $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
+
+        if ($externalSessionId !== '') {
+            $oidcService = new OIDCService($gDb, $gCurrentUser);
+            $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
+            // A SAML front-channel transaction is already in progress. Send
+            // OIDC back-channel notifications here and leave front-channel
+            // notifications to ordinary or RP-initiated OIDC logout.
+            $oidcLogoutNotificationService->notifySession($externalSessionId, false);
+            (new OIDCSessionParticipantService($gDb))->deleteParticipants($externalSessionId);
+        }
+
         $gValidLogin = false;
         $gCurrentSession->logout();
 
