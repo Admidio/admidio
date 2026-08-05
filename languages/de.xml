@@ -304,7 +304,7 @@
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_CALENDAR">Kalender</string>
   <string name="SYS_CALENDARS">Kalender</string>
-  <string name="SYS_CANCEL">Absagen</string>
+  <string name="SYS_CANCEL">Abbrechen</string>
   <string name="SYS_CANCEL_EVENT">Du hast die Teilnahme für die Veranstaltung #VAR1_BOLD# am #VAR2# wieder abgesagt.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Beziehung löschen</string>

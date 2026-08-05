@@ -184,10 +184,18 @@ class OIDCLogoutNotificationService
                 self::BACKCHANNEL_LOGOUT_EVENT => new \stdClass()
             ));
 
-        if ($client->isBackChannelLogoutSessionRequired()) {
-            $builder = $builder->withClaim('sid', $externalSessionId);
-        } else {
+        if ($client->isBackChannelLogoutSessionRequired() && $externalSessionId === '') {
+            throw new \RuntimeException('The client requires session-specific back-channel logout but no sid is available.');
+        }
+
+        if ($subject !== '') {
             $builder = $builder->relatedTo($subject);
+        }
+        if ($externalSessionId !== '') {
+            $builder = $builder->withClaim('sid', $externalSessionId);
+        }
+        if ($subject === '' && $externalSessionId === '') {
+            throw new \RuntimeException('A back-channel logout token requires sub, sid or both.');
         }
 
         return $builder

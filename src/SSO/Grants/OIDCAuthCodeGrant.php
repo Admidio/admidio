@@ -34,7 +34,7 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
 {
     protected ?string $nonce = null;
     protected ?int $authenticationTime = null;
-    protected ?string $sessionID = null;
+    protected string $externalSessionId = '';
     protected array $authenticationMethods = array();
     protected ?string $authenticationContext = null;
 
@@ -46,12 +46,22 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         parent::__construct($authCodeRepository, $refreshTokenRepository, $authCodeTTL);
     }
 
-    public function setAuthenticationContext(int $authenticationTime, string $sessionID, 
-            array $authenticationMethods, string $authenticationContext): void 
-    {
+    public function setAuthenticationTime(int $authenticationTime): void {
         $this->authenticationTime = $authenticationTime;
-        $this->sessionID = $sessionID;
+    }
+
+    public function setExternalSessionId(string $externalSessionId): void {
+        if ($externalSessionId === '') {
+            throw new \InvalidArgumentException('The external session identifier must not be empty.');
+        }
+        $this->externalSessionId = $externalSessionId;
+    }
+
+    public function setAuthenticationMethods(array $authenticationMethods): void {
         $this->authenticationMethods = $authenticationMethods;
+    }
+
+    public function setAuthenticationContext(string $authenticationContext): void {
         $this->authenticationContext = $authenticationContext;
     }
 
@@ -75,7 +85,7 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         }
         $authCode->setValue($authCode->getColumnPrefix() . '_nonce', $this->nonce);
         $authCode->setValue($authCode->getColumnPrefix() . '_auth_time', $this->authenticationTime);
-        $authCode->setValue($authCode->getColumnPrefix() . '_session_id', $this->sessionID);
+        $authCode->setValue($authCode->getColumnPrefix() . '_external_session_id', $this->externalSessionId);
         $authCode->setValue($authCode->getColumnPrefix() . '_authentication_methods', implode(' ', $this->authenticationMethods));
         $authCode->setValue($authCode->getColumnPrefix() . '_authentication_context', $this->authenticationContext);
         $authCode->save();
@@ -87,6 +97,8 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         ResponseTypeInterface $responseType,
         DateInterval $accessTokenTTL
     ): ResponseTypeInterface {
+        global $gLogger;
+
         $responseType = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
         if (!$responseType instanceof IdTokenResponse) {
             throw OAuthServerException::serverError('Response type is not an instance of IdTokenResponse.');
@@ -107,17 +119,31 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
             if (!empty($nonce)) {
                 $responseType->setNonce($nonce);
             }
-            $authenticationTime = $authCode->getValue($authCode->getColumnPrefix() . '_auth_time', 'U');
-            $sessionID = $authCode->getValue($authCode->getColumnPrefix() . '_session_id');
-            $authenticationMethods = preg_split('/\s+/', trim($authCode->getValue($authCode->getColumnPrefix() . '_authentication_methods')));
-            $authenticationContext = $authCode->getValue($authCode->getColumnPrefix() . '_authentication_context');
-            if (!empty($authenticationTime) && !empty($sessionID) && !empty($authenticationMethods) && !empty($authenticationContext)) {
-                $responseType->setAuthenticationContext(
-                    (int)$authenticationTime,
-                    $sessionID,
-                    $authenticationMethods,
-                    $authenticationContext
-                );
+
+            $authenticationTime = (int) $authCode->getValue($authCode->getColumnPrefix() . '_auth_time', 'U');
+            $externalSessionId = (string) $authCode->getValue($authCode->getColumnPrefix() . '_external_session_id', 'database');
+            $authenticationMethods = preg_split('/\s+/',
+                trim((string) $authCode->getValue($authCode->getColumnPrefix() . '_authentication_methods')),
+                -1, PREG_SPLIT_NO_EMPTY
+            );
+            $authenticationContext = (string) $authCode->getValue($authCode->getColumnPrefix() . '_authentication_context');
+
+            if ($externalSessionId !== '') {
+                $responseType->setExternalSessionId($externalSessionId);
+            } else {
+                $gLogger->warning('OIDC authorization code has no external session identifier; the ID token will be issued without sid.');
+             }
+
+            if ($authenticationTime > 0) {
+                $responseType->setAuthenticationTime($authenticationTime);
+            }
+
+            if (is_array($authenticationMethods)) {
+                $responseType->setAuthenticationMethods($authenticationMethods);
+            }
+
+            if ($authenticationContext !== '') {
+                $responseType->setAuthenticationContext($authenticationContext);
             }
         }
         return $responseType;
