@@ -85,6 +85,12 @@ class Language
             $this->setLanguage($language);
         }
 
+        $customLanguageFolderPath = ADMIDIO_PATH . FOLDER_DATA . FOLDER_LANGUAGES;
+
+        if (is_dir($customLanguageFolderPath)) {
+            $this->addLanguageFolderPath($customLanguageFolderPath);
+        }
+
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
 
         $this->addPluginLanguageFolderPaths();
