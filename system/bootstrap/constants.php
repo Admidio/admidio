@@ -138,6 +138,7 @@ const TBL_OIDC_CLIENTS = TABLE_PREFIX . '_oidc_clients';
 const TBL_OIDC_CONSENTS = TABLE_PREFIX . '_oidc_consents';
 const TBL_OIDC_ACCESS_TOKENS = TABLE_PREFIX . '_oidc_access_tokens';
 const TBL_OIDC_REFRESH_TOKENS = TABLE_PREFIX . '_oidc_refresh_tokens';
+const TBL_OIDC_SESSION_PARTICIPANTS = TABLE_PREFIX . '_oidc_session_participants';
 const TBL_OIDC_AUTH_CODES = TABLE_PREFIX . '_oidc_auth_codes';
 const TBL_ORGANIZATIONS = TABLE_PREFIX . '_organizations';
 const TBL_PHOTOS = TABLE_PREFIX . '_photos';

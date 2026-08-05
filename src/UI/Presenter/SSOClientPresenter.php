@@ -655,6 +655,16 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('ocl_redirect_uri'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_REDIRECT_URI_DESC'))
         );
+        $form->addMultilineTextInput(
+            'ocl_post_logout_redirect_uris',
+            $gL10n->get('SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS'),
+            (string) $client->getValue('ocl_post_logout_redirect_uris', 'database'),
+            3,
+            array(
+                'maxLength' => 8000,
+                'helpTextId' => 'SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC'
+            )
+        );
         // TODO: Grant Types, Scopes
 
 

@@ -3,6 +3,8 @@ namespace Admidio\SSO\Entity;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
+use Admidio\Infrastructure\Database;
+use Admidio\SSO\Service\OIDCSessionParticipantService;
 use OpenIDConnectServer\Entities\ClaimSetEntity;
 use OpenIDConnectServer\Repositories\IdentityProviderInterface;
 use OpenIDConnectServer\ClaimExtractor;
@@ -31,15 +33,27 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
     protected ?string $sessionID = null;
     protected array $authenticationMethods = array();
     protected ?string $authenticationContext = null;
+    private Database $database;
+    private int $organizationId;
+    private int $sessionUserId;
+    private string $externalSessionId;
 
     public function __construct(
         IdentityProviderInterface $identityProvider,
         ClaimExtractor $claimExtractor,
         string $issuerURL,
+        Database $database,
+        int $organizationId,
+        int $sessionUserId,
+        string $externalSessionId,
         ?string $keyIdentifier = null
     ) {
         parent::__construct($identityProvider, $claimExtractor, $keyIdentifier);
         $this->issuerURL = $issuerURL;
+        $this->database = $database;
+        $this->organizationId = $organizationId;
+        $this->sessionUserId = $sessionUserId;
+        $this->externalSessionId = $externalSessionId;
     }
 
     /**
@@ -56,7 +70,40 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
                 new ClaimSetEntity('custom', array_keys($client->getFieldMapping()))
             );
         }
-        return parent::getExtraParams($accessToken);
+        $extraParams = parent::getExtraParams($accessToken);
+        $this->persistSessionParticipant($accessToken);
+
+        return $extraParams;
+    }
+
+    /**
+     * Persist the client participation represented by the issued ID token.
+     */
+    private function persistSessionParticipant(AccessTokenEntityInterface $accessToken): void
+    {
+        if ($this->externalSessionId === '' || $this->sessionUserId <= 0) {
+            return;
+        }
+
+        $client = $accessToken->getClient();
+        if (!$client instanceof OIDCClient) {
+            return;
+        }
+
+        $userId = (int) $accessToken->getUserIdentifier();
+        if ($userId !== $this->sessionUserId) {
+            throw new \RuntimeException('The issued ID token user does not match the current Admidio session.');
+        }
+
+        $participantService = new OIDCSessionParticipantService($this->database);
+        $participantService->persistParticipant(
+            $this->organizationId,
+            $userId,
+            (int) $client->getValue('ocl_id'),
+            $this->externalSessionId,
+            (string) $accessToken->getUserIdentifier(),
+            $accessToken->getExpiryDateTime()
+        );
     }
 
     // The issuer in the JWT token MUST be the same as the issuer in the discovery document

@@ -170,5 +170,22 @@
     <step id="970">CREATE INDEX %PREFIX%_idx_ssp_session ON %PREFIX%_saml_session_participants (ssp_external_session_id)</step>
     <step id="980">CREATE INDEX %PREFIX%_idx_ssp_expires_at ON %PREFIX%_saml_session_participants (ssp_expires_at)</step>
     <step id="990">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_require_pkce boolean NOT NULL DEFAULT false</step>
+    <step id="1000">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_post_logout_redirect_uris text NULL</step>
+    <step id="1010">CREATE TABLE %PREFIX%_oidc_session_participants (
+            osp_id                      integer unsigned    AUTO_INCREMENT,
+            osp_org_id                  integer unsigned    NOT NULL,
+            osp_usr_id                  integer unsigned    NOT NULL,
+            osp_client_id               integer unsigned    NOT NULL,
+            osp_external_session_id     varchar(64)         NOT NULL,
+            osp_subject                 varchar(255)        NOT NULL,
+            osp_expires_at              timestamp           NOT NULL,
+            osp_timestamp_create        timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (osp_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="1020">CREATE UNIQUE INDEX %PREFIX%_idx_osp_session_client ON %PREFIX%_oidc_session_participants (osp_external_session_id, osp_client_id)</step>
+    <step id="1030">CREATE INDEX %PREFIX%_idx_osp_expires_at ON %PREFIX%_oidc_session_participants (osp_expires_at)</step>
     <step>stop</step>
 </update>
