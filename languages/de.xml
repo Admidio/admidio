@@ -1637,6 +1637,10 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Die Anzahl der Sekunden, für die ein Autorisierungscode gültig bleibt. Autorisierungscodes sind kurzlebig und können nur einmal verwendet werden. Der Standardwert beträgt 600 Sekunden.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentifizierungs-Endpunkt</string>
   <string name="SYS_SSO_OIDC_AUTHORIZE_CLIENT">#VAR1# autorisieren</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Back-Channel-Abmelde-URI</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Absoluter Client-Endpunkt, der beim Ende der Admidio-Sitzung signierte logout_token-POST-Anfragen empfängt.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Back-Channel-Abmeldung benötigt Sitzungs-ID</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Den sid-Claim in Back-Channel-Abmeldetoken aufnehmen.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# möchte auf dein Admidio-Konto zugreifen.</string>
   <string name="SYS_SSO_OIDC_CONSENT_SAVED">Deine Zustimmung wurde gespeichert.</string>
@@ -1644,6 +1648,10 @@
   <string name="SYS_SSO_OIDC_DISCOVERY_URL">URL für die Suche</string>
   <string name="SYS_SSO_OIDC_ENABLED">Single-Sign-On über OpenId Connect (OIDC) aktivieren</string>
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Diese Einstellung macht Admidio zu einem OIDC-Identitätsanbieter (idP) für Single-Sign-On, der es anderen Webanwendungen ermöglicht, Benutzer:innen gegenüber der Admidio-Benutzerliste zu authentifizieren.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Front-Channel-Abmelde-URI</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Absolute URI des Clients, die beim Ende der Admidio-Sitzung in einem ausgeblendeten Browser-Frame geladen wird.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Front-Channel-Abmeldung benötigt Sitzungs-ID</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Die Parameter iss und sid in Front-Channel-Abmeldeanfragen aufnehmen.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Aussteller</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Die Aussteller-URL des OpenID-Connect-Providers. Lassen Sie dieses Feld leer, damit die URL automatisch aus der aktuellen Admidio-URL abgeleitet wird. Geben Sie nur dann eine eigene URL an, wenn der Provider unter einer abweichenden externen Adresse veröffentlicht wird.</string>
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS Endpunkt</string>

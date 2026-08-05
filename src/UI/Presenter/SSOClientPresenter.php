@@ -665,6 +665,30 @@ class SSOClientPresenter extends PagePresenter
                 'helpTextId' => 'SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC'
             )
         );
+        $form->addInput(
+            'ocl_frontchannel_logout_uri',
+            $gL10n->get('SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI'),
+            $client->getValue('ocl_frontchannel_logout_uri', 'database'),
+            array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => 'SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC')
+        );
+        $form->addCheckbox(
+            'ocl_frontchannel_logout_session_required',
+            $gL10n->get('SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED'),
+            (bool) $client->getValue('ocl_frontchannel_logout_session_required'),
+            array('helpTextId' => 'SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC')
+        );
+        $form->addInput(
+            'ocl_backchannel_logout_uri',
+            $gL10n->get('SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI'),
+            $client->getValue('ocl_backchannel_logout_uri', 'database'),
+            array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => 'SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC')
+        );
+        $form->addCheckbox(
+            'ocl_backchannel_logout_session_required',
+            $gL10n->get('SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED'),
+            (bool) $client->getValue('ocl_backchannel_logout_session_required'),
+            array('helpTextId' => 'SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC')
+        );
         // TODO: Grant Types, Scopes
 
 
