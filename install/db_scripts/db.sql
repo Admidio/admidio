@@ -630,7 +630,7 @@ CREATE TABLE %PREFIX%_oidc_auth_codes (
     oac_scope                   text,
     oac_nonce                   varchar(2550)       NULL,
     oac_auth_time               timestamp           NULL,
-    oac_session_id              varchar(64)         NULL,
+    oac_external_session_id     varchar(64)         NULL,
     oac_authentication_methods  varchar(255)        NULL,
     oac_authentication_context  varchar(255)        NULL,
     oac_expires_at              timestamp           NOT NULL,

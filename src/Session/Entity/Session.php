@@ -151,6 +151,14 @@ class Session extends Entity
     }
 
     /**
+     * Return the opaque session identifier that may be exposed to external SSO clients.
+     */
+    public function getExternalSessionId(): string
+    {
+        return (string) $this->getValue('ses_external_session_id', 'database');
+    }
+
+    /**
      * Returns a CSRF token from the session. If no CSRF token exists a new one will be
      * generated and stored within the session. The next call of the method will then
      * return the existing token. The CSRF token has 30 characters. A new token could

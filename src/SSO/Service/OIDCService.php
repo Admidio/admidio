@@ -388,9 +388,6 @@ class OIDCService extends SSOService {
             $claimsExtractor,
             $this->issuerURL,
             $this->db,
-            $gCurrentSession->getOrganizationId(),
-            (int) $gCurrentSession->getValue('ses_usr_id'),
-            (string) $gCurrentSession->getValue('ses_external_session_id', 'database'),
             $privateKeyObject->getValue('key_uuid')
         );
 
@@ -716,12 +713,16 @@ class OIDCService extends SSOService {
                 $authenticationContext = self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP;
             }
 
-            $this->authCodeGrant->setAuthenticationContext(
-                (int)$gCurrentSession->getValue('ses_authentication_time', 'U'),
-                $gCurrentSession->getValue('ses_external_session_id'),
-                $authenticationMethods,
-                $authenticationContext
-            );
+            $externalSessionId = $gCurrentSession->getExternalSessionId();
+            if ($externalSessionId !== '') {
+                $this->authCodeGrant->setExternalSessionId($externalSessionId);
+            } else {
+                $gLogger->warning('OIDC authorization continues without sid because the authenticated session has no external session identifier.');
+            }
+
+            $this->authCodeGrant->setAuthenticationTime((int) $gCurrentSession->getValue('ses_authentication_time', 'U'));
+            $this->authCodeGrant->setAuthenticationMethods($authenticationMethods);
+            $this->authCodeGrant->setAuthenticationContext($authenticationContext);
 
             // Once the user has approved or denied the client update the status
             // (true = approved, false = denied)
@@ -1235,7 +1236,7 @@ class OIDCService extends SSOService {
      */
     public function handleLogoutRequest(): ResponseInterface
     {
-        global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
+        global $gLogger, $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
 
         $request = $this->getRequest();
         $participantService = new OIDCSessionParticipantService($this->db);
@@ -1312,6 +1313,7 @@ class OIDCService extends SSOService {
             try {
                 $hintClaims = $this->validateLogoutIdTokenHint($idTokenHint);
             } catch (\Throwable $exception) {
+                $gLogger->warning('OIDC logout rejected an ID token hint.', array('exception' => $exception));
                 return $this->createOIDCErrorResponse(
                     'invalid_request',
                     'Invalid id_token_hint.',
@@ -1319,17 +1321,7 @@ class OIDCService extends SSOService {
                 );
             }
 
-            $hintClientIdentifier = $hintClaims['client_id'];
-            if (is_string($clientIdentifier) && $clientIdentifier !== ''
-                && !hash_equals($hintClientIdentifier, $clientIdentifier)
-            ) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'client_id does not match id_token_hint.',
-                    400
-                );
-            }
-            $clientIdentifier = $hintClientIdentifier;
+            $clientIdentifier = $hintClaims['client_id'];
         }
 
         $client = null;
@@ -1360,39 +1352,20 @@ class OIDCService extends SSOService {
             'database'
         );
 
-        if ($hintClaims !== null) {
-            if ($externalSessionId !== ''
-                && !hash_equals($externalSessionId, $hintClaims['sid'])
-            ) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'id_token_hint does not match the current session.',
-                    400
-                );
+        if ($hintClaims !== null && $hintClaims['sid'] !== null) {
+            $hintSessionId = $hintClaims['sid'];
+            $matchesCurrentSession = $externalSessionId === ''
+                || hash_equals($externalSessionId, $hintSessionId);
+
+            if ($matchesCurrentSession) {
+                try {
+                    $participantService->assertParticipant($hintSessionId, (int) $client->getValue('ocl_id'), $hintClaims['sub']);
+                    return $this->completeOIDCLogout($hintSessionId, $postLogoutRedirectUri, $state, $participantService);
+                } catch (\Throwable $exception) {
+                    // The hint is valid but cannot be tied to an active tracked
+                    // participant. Continue with explicit user confirmation.
+                }
             }
-
-            $externalSessionId = $hintClaims['sid'];
-
-            try {
-                $participantService->assertParticipant(
-                    $externalSessionId,
-                    (int) $client->getValue('ocl_id'),
-                    $hintClaims['sub']
-                );
-            } catch (\Throwable $exception) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'id_token_hint does not identify an active OIDC session.',
-                    400
-                );
-            }
-
-            return $this->completeOIDCLogout(
-                $externalSessionId,
-                $postLogoutRedirectUri,
-                $state,
-                $participantService
-            );
         }
 
         $_SESSION['oidc_logout_confirmation'] = array(
@@ -1482,9 +1455,12 @@ class OIDCService extends SSOService {
      * Expiration is intentionally not enforced: a token that represented the
      * still-active OP session remains usable as a logout hint.
      *
-     * @return array{client_id:string,sub:string,sid:string}
+     * The sid claim is optional. If it is absent or unusable, the caller must
+     * require explicit user confirmation before terminating the OP session.
+     *
+     * @return array{client_id:string,sub:string,sid:?string}
      */
-    private function validateLogoutIdTokenHint(string $idTokenHint): array
+    private function validateLogoutIdTokenHint(string $idTokenHint, ?string $requestedClientIdentifier = null): array
     {
         global $gSettingsManager;
 
@@ -1515,20 +1491,34 @@ class OIDCService extends SSOService {
         if (is_string($audience)) {
             $audience = array($audience);
         }
-        if (!is_array($audience) || count($audience) !== 1 || !is_string($audience[0])
-        ) {
+        if (!is_array($audience)) {
             throw new Exception('The ID token hint has an invalid audience.');
         }
 
+        $audience = array_values(array_filter($audience, static fn ($value): bool => is_string($value) && $value !== ''));
+
+        if ($requestedClientIdentifier !== null) {
+            if (!in_array($requestedClientIdentifier, $audience, true)) {
+                throw new Exception('client_id does not match id_token_hint.');
+            }
+            $clientIdentifier = $requestedClientIdentifier;
+        } elseif (count($audience) === 1) {
+            $clientIdentifier = $audience[0];
+        } else {
+            throw new Exception('The ID token hint audience does not identify one client.');
+        }
+
         $subject = $token->claims()->get('sub', null);
+        if (!is_string($subject) || $subject === '') {
+            throw new Exception('The ID token hint has no usable sub claim.');
+        }
         $sessionId = $token->claims()->get('sid', null);
-        if (!is_string($subject) || $subject === '' || !is_string($sessionId) || $sessionId === ''
-        ) {
-            throw new Exception('The ID token hint has no usable sub or sid claim.');
+        if (!is_string($sessionId) || $sessionId === '') {
+            $sessionId = null;
         }
 
         return array(
-            'client_id' => $audience[0],
+            'client_id' => $clientIdentifier,
             'sub' => $subject,
             'sid' => $sessionId
         );
