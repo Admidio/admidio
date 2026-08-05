@@ -545,6 +545,7 @@ CREATE TABLE %PREFIX%_oidc_clients (
     ocl_enabled                 bool                DEFAULT true,
     ocl_trusted                 bool                NOT NULL DEFAULT false,
     ocl_client_secret           varchar(255)        NOT NULL,
+    ocl_require_pkce            bool                NOT NULL DEFAULT true,
     ocl_redirect_uri            text                NOT NULL,
     ocl_grant_types             varchar(255)        NOT NULL,
     ocl_scope                   varchar(255)        DEFAULT NULL,

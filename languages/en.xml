@@ -1682,6 +1682,8 @@
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Refresh token lifetime</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">The number of seconds for which an issued refresh token remains valid. The default is 2592000 seconds, which corresponds to 30 days.</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Requested permissions</string>
+  <string name="SYS_SSO_OIDC_REQUIRE_PKCE">Require PKCE</string>
+  <string name="SYS_SSO_OIDC_REQUIRE_PKCE_DESC">Require authorization-code requests from this client to use PKCE with the S256 challenge method. PKCE is always verified when supplied.</string>
   <string name="SYS_SSO_OIDC_ROLE">OIDC role name</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID">Sign you in</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID_DESC">Required to sign you in with OpenID Connect.</string>

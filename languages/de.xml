@@ -1651,6 +1651,8 @@
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Gültigkeit des Aktualisierungstokens</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">Die Anzahl der Sekunden, für die ein ausgestelltes Aktualisierungstoken gültig bleibt. Der Standardwert beträgt 2592000 Sekunden, was 30 Tagen entspricht.</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Angeforderte Berechtigungen</string>
+  <string name="SYS_SSO_OIDC_REQUIRE_PKCE">PKCE verlangen</string>
+  <string name="SYS_SSO_OIDC_REQUIRE_PKCE_DESC">Von diesem Client bei Autorisierungscode-Anfragen PKCE mit der S256-Challenge-Methode verlangen. Wenn PKCE übermittelt wird, wird es immer geprüft.</string>
   <string name="SYS_SSO_OIDC_ROLE">OIDC Rollenname</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID">Bei Admidio anmelden</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID_DESC">Erforderlich für die Anmeldung über OpenID Connect.</string>

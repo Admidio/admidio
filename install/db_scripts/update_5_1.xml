@@ -169,5 +169,6 @@
     <step id="960">CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id)</step>
     <step id="970">CREATE INDEX %PREFIX%_idx_ssp_session ON %PREFIX%_saml_session_participants (ssp_external_session_id)</step>
     <step id="980">CREATE INDEX %PREFIX%_idx_ssp_expires_at ON %PREFIX%_saml_session_participants (ssp_expires_at)</step>
+    <step id="990">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_require_pkce boolean NOT NULL DEFAULT false</step>
     <step>stop</step>
 </update>

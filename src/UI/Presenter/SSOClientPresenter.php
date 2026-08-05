@@ -577,6 +577,12 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('ocl_trusted') ?? false,
             array('helpTextId' => 'SYS_SSO_OIDC_TRUSTED_CLIENT_DESC')
         );
+        $form->addCheckbox(
+            'ocl_require_pkce',
+            $gL10n->get('SYS_SSO_OIDC_REQUIRE_PKCE'),
+            $client->isNewRecord() ? true : (bool) $client->getValue('ocl_require_pkce'),
+            array('helpTextId' => 'SYS_SSO_OIDC_REQUIRE_PKCE_DESC')
+        );
         $form->addInput(
             'ocl_client_name',
             $gL10n->get('SYS_SSO_CLIENT_NAME'),

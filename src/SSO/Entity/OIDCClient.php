@@ -80,6 +80,11 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         return $this->getValue($this->columnPrefix . '_redirect_uri', 'database')??'';
     }
 
+    public function requiresPKCE(): bool
+    {
+        return (bool) $this->getValue($this->columnPrefix . '_require_pkce');
+    }
+
     public function isConfidential(): bool
     {
         // TODO_RK

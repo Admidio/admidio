@@ -500,6 +500,43 @@ class OIDCService extends SSOService {
         );
     }
 
+
+    /**
+     * Validate RFC 7636 PKCE parameters for the current client.
+     *
+     * PKCE is mandatory when configured for the client. When a challenge is
+     * supplied by another client, only S256 is accepted and the OAuth server
+     * performs the corresponding code_verifier validation at the token endpoint.
+     *
+     * @throws OAuthServerException
+     */
+    private function validatePKCEAuthorizationRequest(ServerRequestInterface $request, OIDCClient $client): void 
+    {
+        $queryParams = $request->getQueryParams();
+        $codeChallenge = $queryParams['code_challenge'] ?? null;
+        $codeChallengeMethod = $queryParams['code_challenge_method'] ?? null;
+        $hasChallenge = is_string($codeChallenge) && $codeChallenge !== '';
+
+        if (!$hasChallenge) {
+            if ($client->requiresPKCE()) {
+                throw OAuthServerException::invalidRequest('code_challenge', 'This client requires PKCE for authorization-code requests.');
+            }
+
+            if ($codeChallengeMethod !== null && $codeChallengeMethod !== '') {
+                throw OAuthServerException::invalidRequest('code_challenge', 'code_challenge_method cannot be used without code_challenge.');
+            }
+            return;
+        }
+
+        if (!is_string($codeChallengeMethod) || $codeChallengeMethod !== 'S256') {
+            throw OAuthServerException::invalidRequest('code_challenge_method', 'Only the S256 PKCE code challenge method is supported.');
+        }
+
+        if (preg_match('/^[A-Za-z0-9\-_]{43}$/', $codeChallenge) !== 1) {
+            throw OAuthServerException::invalidRequest('code_challenge', 'The S256 code challenge must be a 43-character base64url value.');
+        }
+    }
+
     public function handleAuthorizationRequest(): ResponseInterface {
         global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession;
 
@@ -515,8 +552,22 @@ class OIDCService extends SSOService {
             }
 
             // Validate the HTTP request and return an AuthorizationRequest object.
+            // League OAuth2 Server persists a supplied challenge in the
+            // authorization code and validates code_verifier at the token endpoint.
             $authRequest = $this->authServer->validateAuthorizationRequest($request);
             self::$client = $authRequest->getClient();
+
+            if (!self::$client instanceof OIDCClient) {
+                throw OAuthServerException::invalidClient($request);
+            }
+
+            // Perform Admidio-specific PKCE policy validation here.
+            // Verifying the PKCE code is done by league/oauth2-server.
+            // AuthCodeGrant persists code_challenge and
+            // code_challenge_method in the encrypted authorization code.
+            // At the token endpoint, AuthCodeGrant validates code_verifier
+            // against that persisted challenge before issuing tokens.
+            $this->validatePKCEAuthorizationRequest($request, self::$client);
             if (!self::$client->isEnabled()) {
                 throw OAuthServerException::invalidClient($request, 'Client "' . self::$client->getIdentifier() . '" is valid, but disabled. Login is not allowed.');
             }
@@ -775,6 +826,7 @@ class OIDCService extends SSOService {
             "response_types_supported" => ["code"],
             "response_modes_supported" => ["query"],
             "grant_types_supported" => ["authorization_code", "refresh_token"],
+            "code_challenge_methods_supported" => ["S256"],
             "subject_types_supported" => ["public"],
             "id_token_signing_alg_values_supported" => ["RS256"],
             "token_endpoint_auth_methods_supported" => ["client_secret_post", "client_secret_basic"],
