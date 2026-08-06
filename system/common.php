@@ -63,7 +63,7 @@ try {
     exit();
 }
 
-// check HTML string vor invalid tags and scripts
+// check HTML string for invalid tags and scripts
 $gHtmlPurifierConfig = HTMLPurifier_Config::createDefault();
 $gHtmlPurifierConfig->set('HTML.Doctype', 'HTML 4.01 Transitional');
 $gHtmlPurifierConfig->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
