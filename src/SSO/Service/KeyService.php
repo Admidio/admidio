@@ -13,6 +13,7 @@ class KeyService {
     public const USAGE_OIDC_SIGNING = 'oidc_signing';
     public const USAGE_SAML_SIGNING = 'saml_signing';
     public const USAGE_SAML_ENCRYPTION = 'saml_encryption';
+    public const CREATE_DEFAULT_KEY_VALUE = '__create_default_key__';
     private Database $db;
 
     public function __construct(Database $db) {
@@ -331,6 +332,60 @@ class KeyService {
         return $config;
     }
 
+    /**
+     * Create a cryptographic key with the default SSO settings.
+     * The generated RSA key can be used for SAML signing/encryption and OIDC signing.
+     *
+     * @return int Database ID of the newly created key.
+     * @throws Exception
+     */
+    public function createDefaultKey(): int
+    {
+        global $gCurrentOrgId, $gCurrentOrganization;
+
+        $algorithm = 'RSA';
+        $expiration = new \DateTime();
+        $expiration->modify('+5 years');
+
+        $nextNumber = 1;
+        foreach ($this->getKeysData() as $keyData) {
+            if (preg_match('/^Default key #(\\d+)$/', (string) $keyData['key_name'], $matches) === 1) {
+                $nextNumber = max($nextNumber, (int) $matches[1] + 1);
+            }
+        }
+
+        $generatedKey = $this->generateKey($algorithm);
+
+        $csrData = array_filter(
+            array(
+                'organizationName' => (string) $gCurrentOrganization->getValue('org_longname', 'database'),
+                'commonName' => ADMIDIO_URL,
+                'emailAddress' => (string) $gCurrentOrganization->getValue('org_email_administrator', 'database')
+            ),
+            static fn(string $value): bool => $value !== ''
+        );
+
+        $certificate = $this->generateCertificate(
+            $generatedKey['private_key'],
+            $csrData,
+            $algorithm,
+            $expiration->format('Y-m-d')
+        );
+
+        $ssoKey = new Key($this->db);
+        $ssoKey->setValue('key_org_id', $gCurrentOrgId);
+        $ssoKey->setValue('key_name', 'Default key #' . $nextNumber);
+        $ssoKey->setValue('key_algorithm', $algorithm);
+        $ssoKey->setValue('key_private', $generatedKey['private_key']);
+        $ssoKey->setValue('key_public', $generatedKey['public_key']);
+        $ssoKey->setValue('key_certificate', $certificate);
+        $ssoKey->setValue('key_expires_at', $expiration->format('Y-m-d'));
+        $ssoKey->setValue('key_is_active', true);
+        $ssoKey->save();
+
+        return (int) $ssoKey->getValue('key_id');
+     }
+ 
     public function generateKey(string $algorithm) : array {
         $config = $this->setupKeyConfig($algorithm);
 

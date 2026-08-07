@@ -410,7 +410,6 @@ class PreferencesService
             case 'sso': 
                 // empty issuerURL means "Use the default URL from the admidio installation's URL"
                 $issuerURL = trim((string)($formValues['sso_oidc_issuer_url'] ?? ''));
-
                 if ($issuerURL !== '') {
                     $issuerURL = rtrim($issuerURL, '/');
                 }
@@ -420,8 +419,22 @@ class PreferencesService
                 if ($issuerURL === OIDCService::getDefaultIssuerURL()) {
                     $issuerURL = '';
                 }
-
                 $formValues['sso_oidc_issuer_url'] = $issuerURL;
+
+                // if any key selection dropdown is set to "Create new key", create one default key and assign 
+                $keySettingNames = array('sso_saml_signing_key', 'sso_saml_encryption_key', 'sso_oidc_signing_key');
+                $newKeyId = 0;
+
+                foreach ($keySettingNames as $settingName) {
+                    if (($formValues[$settingName] ?? '') === KeyService::CREATE_DEFAULT_KEY_VALUE) {
+                        if ($newKeyId === 0) {
+                            $keyService = new KeyService($gDb);
+                            $newKeyId = $keyService->createDefaultKey();
+                        }
+                        $formValues[$settingName] = $newKeyId;
+                    }
+                }
+
                 $this->validateSSOSettings($formValues);
                 break;
         }
