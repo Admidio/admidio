@@ -209,22 +209,22 @@ class SSOKeyPresenter extends PagePresenter
                 'countryName' => '',
                 'stateOrProvinceName' => '',
                 'localityName' => '',
-                'organizationName' => $gCurrentOrganization->getValue('org_longname'),
+                'organizationName' => $gCurrentOrganization->getValue('org_longname') ?? '',
                 'organizationalUnitName' => '',
                 'commonName' => ADMIDIO_URL,
-                'email' => $gCurrentOrganization->getValue('org_email_administrator'),
+                'email' => $gCurrentOrganization->getValue('org_email_administrator') ?? '',
                 'validTo' => $expirationTS->format($dateFormat)
             );
         } else {
             $expirationTS = $key->getValue('key_expires_at', $dateFormat);
             $certData = array(
-                'countryName' => $cert['subject']['C'],
-                'stateOrProvinceName' => $cert['subject']['ST'],
-                'localityName' => $cert['subject']['L'],
-                'organizationName' => $cert['subject']['O'],
-                'organizationalUnitName' => $cert['subject']['OU'],
-                'commonName' => $cert['subject']['CN'],
-                'email' => $cert['subject']['emailAddress'],
+                'countryName' => $cert['subject']['C'] ?? '',
+                'stateOrProvinceName' => $cert['subject']['ST'] ?? '',
+                'localityName' => $cert['subject']['L'] ?? '',
+                'organizationName' => $cert['subject']['O'] ?? '',
+                'organizationalUnitName' => $cert['subject']['OU'] ?? '',
+                'commonName' => $cert['subject']['CN'] ?? '',
+                'email' => $cert['subject']['emailAddress'] ?? '',
                 'validTo' => $expirationTS
             );
         }
