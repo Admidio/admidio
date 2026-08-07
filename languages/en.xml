@@ -1631,6 +1631,7 @@
   <string name="SYS_SSO_KEY_ALGORITHM_DESC">The underlying cryptographic algorithm of the key.</string>
   <string name="SYS_SSO_KEY_ALGORITHM_MISMATCH">The stored algorithm does not match the key.</string>
   <string name="SYS_SSO_KEY_CERTIFICATE">x509 certificate</string>
+  <string name="SYS_SSO_KEY_CREATE_DEFAULT">Create new key with default settings</string>
   <string name="SYS_SSO_KEY_DELETE">Delete Key</string>
   <string name="SYS_SSO_KEY_EDIT">Edit Key</string>
   <string name="SYS_SSO_KEY_EXPIRATION_INVALID">The selected key has an invalid expiration date.</string>

@@ -93,7 +93,48 @@
         }
     });
     $('#sso_oidc_enabled').trigger('change');
-    
+
+    $(function() {
+        const $ssoForm = $("#adm_preferences_form_sso");
+        const initialSsoFormState = $ssoForm.serialize();
+
+        const $keyAdminButtonTemplate = $("#sso_key_admin_button_template");
+
+        $(".sso-key-select").each(function() {
+            const $select = $(this);
+
+            const $button = $keyAdminButtonTemplate
+                .clone()
+                .removeAttr("id")
+                .attr("title", "{$l10n->get('SYS_SSO_KEY_ADMIN')}")
+                .attr("aria-label","{$l10n->get('SYS_SSO_KEY_ADMIN')}");
+
+            $select.wrap(
+                $("<div>").addClass("d-flex align-items-start gap-2")
+            );
+            $button.insertAfter($select);
+        });
+
+        $("#sso_key_admin_button_container").remove();
+
+        $(".sso-key-admin-button").on("click", function() {
+            const keyAdminUrl = "{$ssoKeyAdminUrl}";
+
+            if ($ssoForm.serialize() === initialSsoFormState) {
+                window.location.href = keyAdminUrl;
+                return;
+            }
+
+            const continueAction = "window.location.href=" + JSON.stringify(keyAdminUrl) + ";";
+            messageBox(
+                "{$l10n->get('ORG_NOT_SAVED_SETTINGS_LOST')}" + "<br>" + "{$l10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE')}",
+                undefined, undefined,
+                "yes-no",
+                continueAction
+            );
+        });
+    });
+
 </script>
 
 <form {foreach $attributes as $attribute}
@@ -101,8 +142,11 @@
     {/foreach}>
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
 
-    {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_keys']}
-
+    {* template button that links to the key administration, will be copied/inserted/deleted by JS *}
+    <div id="sso_key_admin_button_container" class="d-none">
+        {include 'sys-template-parts/form.button.tpl' data=$elements['sso_key_admin_button_template']}
+    </div>
+    
 {* ********************************************************************************** 
  * SAML settings 
  * **********************************************************************************}

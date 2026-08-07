@@ -1599,6 +1599,7 @@
   <string name="SYS_SSO_KEY_ALGORITHM_DESC">Der dem Schlüssel zugrunde liegende kryptografische Algorithmus.</string>
   <string name="SYS_SSO_KEY_ALGORITHM_MISMATCH">Der gespeicherte Algorithmus passt nicht zum Schlüssel.</string>
   <string name="SYS_SSO_KEY_CERTIFICATE">x509-Zertifikat</string>
+  <string name="SYS_SSO_KEY_CREATE_DEFAULT">Neuen Schlüssel mit Standardeinstellungen erstellen</string>
   <string name="SYS_SSO_KEY_DELETE">Schlüssel löschen</string>
   <string name="SYS_SSO_KEY_EDIT">Schlüssel bearbeiten</string>
   <string name="SYS_SSO_KEY_EXPIRATION_INVALID">Das Ablaufdatum des ausgewählten Schlüssels ist ungültig.</string>
