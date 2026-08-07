@@ -1546,6 +1546,7 @@
   <string name="SYS_SSO">Single-Sign-On</string>
   <string name="SYS_SSO_ACS_URL">ACS URL</string>
   <string name="SYS_SSO_ACS_URL_DESC">Die URL des Assertion Consumer Servicer (ACS) ist der Haupteinstiegspunkt für den Client. Nach erfolgreicher Anmeldung bei Admidio wird der Benutzer zu dieser URL weitergeleitet und am Client angemeldet.</string>
+  <string name="SYS_SSO_ADVANCED_PROPERTIES">Erweiterte Einstellungen</string>
   <string name="SYS_SSO_ATTRIBUTE">Name des SSO-Attributs</string>
   <string name="SYS_SSO_ATTRIBUTES">Enthaltene Benutzer:innne-Attribute</string>
   <string name="SYS_SSO_ATTRIBUTES_ALLOTHER">Alle verbleibenden Felder mit dem internen Feldnamen von Admidio einschließen</string>
@@ -1568,9 +1569,9 @@
   <string name="SYS_SSO_CLIENT_ADMIN_DESC">Admidio kann als „ID-Provider“ für Single-Sign-On mit den Protokollen SAML 2.0 oder OIDC verwendet werden. Das bedeutet, dass andere Webanwendungen („Clients“) die Benutzerkonten von Admidio zur Authentifizierung und Autorisierung nutzen können. Jeder Client muss hier registriert werden, und der Client muss auch für SSO mit Admidio eingerichtet werden. Wenn sich ein Benutzer bei einer Client-Anwendung anmelden möchte, wird er nicht zum Anmeldebildschirm des Clients, sondern zu Admidio weitergeleitet. Wenn der Benutzer bereits bei Admidio angemeldet ist, wird der angemeldete Benutzer zum Client zurückgeleitet und erhält Zugang. Andernfalls kann sich der Benutzer bei Admidio anmelden und wird dann wieder zur Client-Anwendung zurückgeleitet.</string>
   <string name="SYS_SSO_CLIENT_DELETE">SSO Client löschen</string>
   <string name="SYS_SSO_CLIENT_ID">Client ID</string>
-  <string name="SYS_SSO_CLIENT_ID_DESC">Der eindeutige Bezeichner des Clients, der in der Regel vom Client bereitgestellt wird. In der Regel handelt es sich dabei entweder um eine eindeutige URL oder eine vom Client bereitgestellte, zufällig generierte Zeichenfolge. Es ist wichtig, dass der Wert hier genau mit dem Wert übereinstimmt, der in der Konfiguration des Clients verwendet wird, sonst funktioniert der Client nicht.</string>
-  <string name="SYS_SSO_CLIENT_NAME">Client Name</string>
-  <string name="SYS_SSO_CLIENT_NAME_DESC">Der von Menschen lesbare Name des Clients. Dies ist ein rein beschreibendes Attribut und wird nicht zur Identifizierung von Kunden verwendet.</string>
+  <string name="SYS_SSO_CLIENT_ID_DESC">Eindeutige Kennung des Clients. Muss identisch in der Client-Anwendung hinterlegt werden. Üblicherweise die URL des Clients oder eine zufällige Zeichenfolge.</string>
+  <string name="SYS_SSO_CLIENT_NAME">Name</string>
+  <string name="SYS_SSO_CLIENT_NAME_DESC">Frei wählbarer Name zur Wiedererkennung. Hat keine technische Funktion.</string>
   <string name="SYS_SSO_CLIENT_OIDC">OIDC Client</string>
   <string name="SYS_SSO_CLIENT_SAML">SAML 2.0 Client</string>
   <string name="SYS_SSO_CLIENT_SCOPES">Zulässige Bereiche</string>

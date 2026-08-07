@@ -14,17 +14,12 @@
         <div class="card-header">{$l10n->get('SYS_SSO_NAME_PROPERTIES')}</div>
         <div class="card-body">
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_enabled']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_trusted']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_require_pkce']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_name']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_client_id']}
             {include 'sys-template-parts/form.custom-content.tpl' data=$elements['ocl_client_secret']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_redirect_uri']}
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['ocl_post_logout_redirect_uris']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_frontchannel_logout_uri']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_frontchannel_logout_session_required']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_backchannel_logout_uri']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_backchannel_logout_session_required']}
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_trusted']}
         </div>
     </div>
     <div class="card admidio-field-group">
@@ -116,6 +111,17 @@
             </div>
 
             {include 'sys-template-parts/form.select.tpl' data=$elements['sso_roles_access']}
+        </div>
+    </div>
+    <div class="card admidio-field-group">
+        <div class="card-header"><a id="sso_client_caret_advanced" class="admidio-icon-link admidio-open-close-caret" data-target="sso_client_advanced"> <i class="bi bi-caret-right-fill"></i></a> 
+            {$l10n->get('SYS_SSO_ADVANCED_PROPERTIES')}</div>
+        <div class="card-body" id="sso_client_advanced" style="display: none;">
+            {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_frontchannel_logout_uri']}
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_frontchannel_logout_session_required']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_backchannel_logout_uri']}
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_backchannel_logout_session_required']}
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_require_pkce']}
         </div>
     </div>
     <div class="form-alert" style="display: none;">&nbsp;</div>
