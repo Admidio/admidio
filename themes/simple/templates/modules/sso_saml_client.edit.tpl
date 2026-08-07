@@ -20,23 +20,13 @@
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_client_id']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_acs_url']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_slo_url']}
-        </div>
-    </div>
-    <div class="card admidio-field-group">
-        <div class="card-header">{$l10n->get('SYS_SSO_SIGNATURE_ENCRYPTION')}</div>
-        <div class="card-body">
-            {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_certificate']}
 
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_require_auth_signed']}
+            {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_certificate']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_validate_signatures']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_sign_assertions']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_encrypt_assertions']}
-
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_request_lifetime']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_assertion_lifetime']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_allowed_clock_skew']}
-        </div>
+            </div>
     </div>
+
     <div class="card admidio-field-group">
         <div class="card-header">{$l10n->get('SYS_SSO_USERDATA_ACCESS')}</div>
         <div class="card-body">
@@ -124,6 +114,18 @@
             </div>
 
             {include 'sys-template-parts/form.select.tpl' data=$elements['sso_roles_access']}
+        </div>
+    </div>
+    <div class="card admidio-field-group">
+        <div class="card-header"><a id="sso_client_caret_advanced" class="admidio-icon-link admidio-open-close-caret" data-target="sso_client_advanced"> <i class="bi bi-caret-right-fill"></i></a> 
+            {$l10n->get('SYS_SSO_ADVANCED_PROPERTIES')}</div>
+        <div class="card-body" id="sso_client_advanced" style="display: none;">
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_require_auth_signed']}
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_encrypt_assertions']}
+        
+            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_request_lifetime']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_assertion_lifetime']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_allowed_clock_skew']}
         </div>
     </div>
     <div class="form-alert" style="display: none;">&nbsp;</div>

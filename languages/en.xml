@@ -1578,6 +1578,7 @@
   <string name="SYS_SSO">Single-Sign-On</string>
   <string name="SYS_SSO_ACS_URL">ACS URL</string>
   <string name="SYS_SSO_ACS_URL_DESC">The Assertion Consumer Servicer (ACS) URL is the client's main entry point. After successful login at Admidio, the user will be redirected to that URL and logged in at the client.</string>
+  <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced properties</string>
   <string name="SYS_SSO_ATTRIBUTE">SSO attribute name</string>
   <string name="SYS_SSO_ATTRIBUTES">Included user attributes</string>
   <string name="SYS_SSO_ATTRIBUTES_ALLOTHER">Include all remaining fields with Admidio's internal field name</string>
