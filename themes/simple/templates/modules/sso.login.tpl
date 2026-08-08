@@ -61,33 +61,24 @@
                         {$attribute@key}="{$attribute}"
                     {/foreach}>
 
-                    {include 'sys-template-parts/form.input.tpl'
-                        data=$elements['adm_csrf_token']}
-
-                    {include 'sys-template-parts/form.input.tpl'
-                        data=$elements['usr_login_name']}
-
-                    {include 'sys-template-parts/form.input.tpl'
-                        data=$elements['usr_password']}
-
+                    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
+                    {include 'sys-template-parts/form.input.tpl' data=$elements['usr_login_name']}
+                    {include 'sys-template-parts/form.input.tpl' data=$elements['usr_password']}
                     {if $settings->getBool('two_factor_authentication_enabled')}
-                        {include 'sys-template-parts/form.input.tpl'
-                            data=$elements['usr_totp_code']}
+                        {include 'sys-template-parts/form.input.tpl' data=$elements['usr_totp_code']}
                     {/if}
-
                     {if $currentOrganization->getValue('org_show_org_select')}
-                        {include 'sys-template-parts/form.select.tpl'
-                            data=$elements['org_shortname']}
+                        {include 'sys-template-parts/form.select.tpl' data=$elements['org_shortname']}
                     {/if}
-
                     {if $settings->getBool('enable_auto_login')}
-                        {include 'sys-template-parts/form.checkbox.tpl'
-                            data=$elements['auto_login']}
+                        {include 'sys-template-parts/form.checkbox.tpl' data=$elements['auto_login']}
                     {/if}
 
                     <div class="sso-login-actions d-flex justify-content-center">
-                        {include 'sys-template-parts/form.button.tpl'
-                            data=$elements['adm_button_login']}
+                        {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_login']}
+                        {if isset($elements['adm_button_cancel'])}
+                            {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_cancel']}
+                        {/if}
                     </div>
 
                     <div class="form-alert mt-3" style="display: none;">
@@ -100,9 +91,7 @@
                         <div class="card-body text-center">
                             <p>{$l10n->get('SYS_NO_LOGIN_DATA')}</p>
 
-                            <a class="btn btn-secondary"
-                               href="{$urlAdmidio}/modules/registration.php">
-                                {$l10n->get('SYS_REGISTER')}
+                            <a class="btn btn-secondary" href="{$urlAdmidio}/modules/registration.php">{$l10n->get('SYS_REGISTER')}
                             </a>
                         </div>
                     </div>
