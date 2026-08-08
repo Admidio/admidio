@@ -1636,7 +1636,7 @@
   <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC">SAML und die Gültigkeit der Anmeldung hängen auch von synchronisierten Uhren ab, um die Berechtigungen zu begrenzen. Da einige Systeme einen leichten Zeitunterschied aufweisen können, bietet diese Einstellung eine Möglichkeit, bestimmte Zeitunterschiede zuzulassen.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME">Lebensdauer der an den Client gesendeten SAML-Assertions</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">Nach erfolgreicher Authentifizierung wird eine „Bestätigung“ an den Client gesendet. Diese Konfiguration legt fest, wie lange (in Sekunden) diese Bestätigung vom Client als gültig angesehen werden soll.</string>
-  <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML2.0 aktivieren</string>
+  <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML 2.0 aktivieren</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Diese Einstellung macht Admidio zu einem SAML 2.0 Identity Provider (idP) für Single-Sign-On, der es anderen Webanwendungen ermöglicht, Benutzer gegenüber der Admidio-Benutzerliste zu authentifizieren.</string>
   <string name="SYS_SSO_SAML_ENCRYPTION_KEY_MISSING">SAML-Nachricht muss verschlüsselt werden, aber der Client (SP) hat kein Zertifikat konfiguriert.</string>
   <string name="SYS_SSO_SAML_ENTITY_ID">SAML-Entity-ID</string>
