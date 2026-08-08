@@ -617,6 +617,14 @@ class SAMLService extends SSOService {
             $this->validateRequestContext($client, $request, $this->ssoUrl);
             $nameIDPolicy = $this->processNameIDPolicy($request, $entityIdClient);
 
+            $cancelAuthentication = admFuncVariableIsValid($_GET, 'sso_cancel', 'bool', array('defaultValue' => false));
+
+            if ($cancelAuthentication) {
+                unset($_SESSION['login_forward_url'], $_SESSION['login_forward_url_post']);
+                $this->errorResponse(SamlConstants::STATUS_RESPONDER, $gL10n->get('SYS_SSO_LOGIN_CANCELLED'), $request, $client);
+                return;
+            }
+
             if (!$gValidLogin) {
                 $this->showSSOLoginForm($client);
                 // exit;

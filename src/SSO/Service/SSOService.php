@@ -251,8 +251,12 @@ abstract class SSOService {
 
 
         // TODO_RK: Add "Cancel / Return to SP without logging in" button with JS!
+        $cancelUrl = CURRENT_URL . (str_contains(CURRENT_URL, '?') ? '&' : '?') . 'sso_cancel=1';
+        $cancelPostData = !empty($_POST) ? $_POST : null;
+
         $loginModule = new \ModuleLogin();
-        $loginModule->addHtmlLogin($page, '', 'modules/sso.login.tpl');
+        $loginModule->addHtmlLogin($page, '', 'modules/sso.login.tpl', $cancelUrl, $cancelPostData);
+
         $page->show();
         exit;
     }

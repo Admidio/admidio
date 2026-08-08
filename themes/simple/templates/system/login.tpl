@@ -16,6 +16,9 @@
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['auto_login']}
         {/if}
         {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_login']}
+        {if isset($elements['adm_button_cancel'])}
+            {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_cancel']}
+        {/if}
         <div class="form-alert" style="display: none;">&nbsp;</div>
     </form>
 

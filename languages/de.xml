@@ -995,6 +995,8 @@
   <string name="SYS_LOGGED_AREAS">Protokollierte Bereiche</string>
   <string name="SYS_LOGGED_AREAS_DESC">Wähle die Bereiche aus, für die die Änderungshistorie geführt wird. Jede Änderung an einem Objekt eines ausgewählten Bereichs wird mit altem und neuem Wert sowie Änderungszeit und Benutzer protokolliert. Bereiche von deaktivierten Modulen werden nicht angezeigt. Wird ein Bereich abgewählt, werden bestehende Protokolleinträge nicht gelöscht. Dies kann auf der Seite Änderungshistorie erfolgen. Ein Bereich, dessen Objekte nur teilweise protokolliert werden, wird in einem dritten, unbestimmten Zustand angezeigt und bleibt unverändert, bis du ihn ein- oder ausschaltest.</string>
   <string name="SYS_LOGIN">Anmelden</string>
+  <string name="SYS_LOGIN_CANCEL">Abbrechen</string>
+  <string name="SYS_SSO_LOGIN_CANCELLED">Die Anmeldung wurde vom Benutzer abgebrochen.</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Der gewählte Anmeldename existiert schon.\n\nWähle bitte einen anderen Namen.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
@@ -1622,6 +1624,7 @@
   <string name="SYS_SSO_KEY_USAGE_INVALID">Dieser Verwendungszweck wird nicht unterstützt.</string>
   <string name="SYS_SSO_KEYS">SSO-Schlüssel</string>
   <string name="SYS_SSO_LOAD_METADATA">Client-Metadaten laden</string>
+  <string name="SYS_SSO_LOGIN_CANCELLED">Die Anmeldung wurde vom Benutzer abgebrochen.</string>
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Du bist angemeldet, aber dein Benutzerkonto hat keine Zugriffsberechtigung für den Client (#VAR1#). Melde dich mit einem anderen Konto an oder kehre zum Client zurück.</string>
   <string name="SYS_SSO_METADATA_URL">Metadaten-URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">URL der SAML-Metadaten des Clients. Lade sie, um die Client-Einstellungen automatisch auszufüllen.</string>

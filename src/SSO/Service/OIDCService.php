@@ -657,6 +657,13 @@ class OIDCService extends SSOService {
                 return $this->createAuthorizationErrorResponse($authRequest, $response, 'login_required');
             }
 
+            // The user explicitly cancelled the login/authorization process.
+            $cancelAuthorization = admFuncVariableIsValid($_GET, 'sso_cancel', 'bool', array('defaultValue' => false));
+            if ($cancelAuthorization) {
+                unset($_SESSION['login_forward_url'], $_SESSION['login_forward_url_post']);
+                return $this->createAuthorizationErrorResponse($authRequest, $response, 'access_denied', $gL10n->get('SYS_SSO_LOGIN_CANCELLED'));
+            }
+
             // Redirect the user to a login endpoint if not logged in yet or the authentication is too old (given by the max_age param)
             if ($authenticationRequired) {
                 $this->rememberReauthenticationRequest($request);
@@ -1615,7 +1622,8 @@ class OIDCService extends SSOService {
         return array_values(array_unique($promptValues));
     }
     
-    private function createAuthorizationErrorResponse(AuthorizationRequestInterface $authRequest, ResponseInterface $response, string $error): ResponseInterface 
+    private function createAuthorizationErrorResponse(AuthorizationRequestInterface $authRequest, ResponseInterface $response, string $error,
+    string $errorDescription = ''): ResponseInterface 
     {
         $redirectURI = $authRequest->getRedirectUri();
 
@@ -1624,7 +1632,9 @@ class OIDCService extends SSOService {
         }
 
         $parameters = array('error' => $error);
-
+        if ($errorDescription !== '') {
+            $parameters['error_description'] = $errorDescription;
+        }
         if ($authRequest->getState() !== null) {
             $parameters['state'] = $authRequest->getState();
         }

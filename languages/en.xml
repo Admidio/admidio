@@ -1000,6 +1000,8 @@
   <string name="SYS_LOGGED_AREAS">Logged areas</string>
   <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>
   <string name="SYS_LOGIN">Sign in</string>
+  <string name="SYS_LOGIN_CANCEL">Cancel</string>
+  <string name="SYS_SSO_LOGIN_CANCELLED">Sign-in was cancelled by the user.</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">You have tried to login too many times recently using a wrong password.\nFor security reasons your account has been locked for 15 minutes.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Selected username already exists.\n\nPlease select another name.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Your account has not been activated yet.\n\nYou will be informed as soon as access is possible.</string>
@@ -1655,6 +1657,7 @@
   <string name="SYS_SSO_KEYS">SSO Keys</string>
   <string name="SYS_SSO_LOAD_METADATA">Load Client Metadata</string>
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was cancelled by the user.</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">URL of the client's SAML metadata. Load it to fill the client settings automatically.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>

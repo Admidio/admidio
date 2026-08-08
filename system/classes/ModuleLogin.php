@@ -41,7 +41,7 @@ class ModuleLogin
      * @param string $template Template that should be used to render the login form.
      * @throws Exception
      */
-    public function addHtmlLogin(PagePresenter $page, string $organizationShortName = '', string $template = 'system/login.tpl')
+    public function addHtmlLogin(PagePresenter $page, string $organizationShortName = '', string $template = 'system/login.tpl', string $cancelUrl = '', ?array $cancelPostData = null)
     {
         global $gDb, $gSettingsManager, $gL10n, $gCurrentOrganization, $gCurrentSession;
 
@@ -122,6 +122,28 @@ class ModuleLogin
 
         $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'));
         $form->addSubmitButton('adm_button_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right', 'class' => 'offset-sm-3'));
+
+        if ($cancelUrl !== '') {
+            $form->addButton(
+                'adm_button_cancel',
+                $gL10n->get('SYS_LOGIN_CANCEL'),
+                array('icon' => 'bi-arrow-left')
+            );
+
+            $jsonFlags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
+
+            $page->addJavascript(
+                '$("#adm_button_cancel").on("click", function () {
+                    redirectToURL('
+                    . json_encode($cancelUrl, $jsonFlags)
+                    . ', '
+                    . json_encode($cancelPostData, $jsonFlags)
+                    . ');
+                });',
+                true
+            );
+        }
+
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
