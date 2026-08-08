@@ -24,7 +24,7 @@
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_certificate']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_validate_signatures']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_sign_assertions']}
-            </div>
+        </div>
     </div>
 
     <div class="card admidio-field-group">
