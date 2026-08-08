@@ -604,7 +604,7 @@ class SSOClientPresenter extends PagePresenter
             '</button>';
         $clientSecretContent = '<div style="display: flex; align-items: center; gap: 8px;" id="client_secret_not_shown">' .
                 '<span style="flex: 1" id="client_passwd_label"><em>' .
-                    $gL10n->get('SYS_SSO_CLIENT_SECRET_HIDDE') .
+                    $gL10n->get('SYS_SSO_CLIENT_SECRET_HIDDEN') .
                     '</em></span>' .
                 '<button id="recreate_client_secret" name="recreate_client_secret" type="button" class="btn focus-ring btn-secondary" style="padding: 0px 4px; flex-shrink: 0;">' .
                     '<i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title=""></i>' .
