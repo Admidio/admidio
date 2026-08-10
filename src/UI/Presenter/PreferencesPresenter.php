@@ -3272,9 +3272,48 @@ class PreferencesPresenter extends PagePresenter
                 panelContainer.off("click", "#adm_link_check_update").on("click", "#adm_link_check_update", function(event) {
                     event.preventDefault();
                     var versionInfoContainer = panelContainer.find("#adm_version_content");
+                    var updateGitMaster = panelContainer.find("#adm_update_git_master").is(":checked") ? 1 : 0;
                     versionInfoContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_check", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(htmlVersion) {
-                        versionInfoContainer.html(htmlVersion);
+                    $.post(
+                        "' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_check",
+                        {
+                            adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '",
+                            git_master: updateGitMaster
+                        }
+                    ).done(function(htmlVersion) {
+                         versionInfoContainer.html(htmlVersion);
+                    }).fail(function(response) {
+                        versionInfoContainer.html(response.responseText);
+                    });
+                });
+
+                // Prepare and start the isolated core updater
+                panelContainer.off("click", "#adm_start_core_update").on("click", "#adm_start_core_update", function(event) {
+                    event.preventDefault();
+                    var button = $(this);
+                    var updateGitMaster = panelContainer.find("#adm_update_git_master").is(":checked") ? 1 : 0;
+                    button.prop("disabled", true);
+                    button.find("i").attr("class", "spinner-border spinner-border-sm");
+
+                    $.post(
+                        "' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_prepare",
+                        {
+                            adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '",
+                            git_master: updateGitMaster
+                        }
+                    ).done(function(response) {
+                        var result = typeof response === "string" ? JSON.parse(response) : response;
+                        if (result.status === "success") {
+                            window.location.href = result.url;
+                        } else {
+                            button.prop("disabled", false);
+                            button.find("i").attr("class", "bi bi-arrow-repeat");
+                            alert(result.message);
+                        }
+                    }).fail(function(response) {
+                        button.prop("disabled", false);
+                        button.find("i").attr("class", "bi bi-arrow-repeat");
+                        alert(response.responseText);
                     });
                 });
 

@@ -7,6 +7,13 @@
             <span id="adm_version_content">{$admidioVersion}
                 <a id="adm_link_check_update" href="#adm_link_check_update" title="{$l10n->get('SYS_CHECK_FOR_UPDATE')}">{$l10n->get('SYS_CHECK_FOR_UPDATE')}</a>
             </span>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" value="1" id="adm_update_git_master">
+                <label class="form-check-label" for="adm_update_git_master">
+                    {$l10n->get('SYS_CORE_UPDATE_GIT_MASTER')}
+                </label>
+                <div class="form-text">{$l10n->get('SYS_CORE_UPDATE_GIT_MASTER_DESC')}</div>
+            </div>
         </div>
     </div>
 </div>

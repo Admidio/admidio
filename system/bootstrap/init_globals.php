@@ -17,6 +17,15 @@ if (!isset($gDebug) || !$gDebug) {
     $gDebug = false;
 }
 
+// Optional core update test endpoint. These values are only honored by the updater when debug
+// mode is enabled, so production installations always use the official Admidio update server.
+if (!isset($gCoreUpdateServerUrl)) {
+    $gCoreUpdateServerUrl = '';
+}
+if (!isset($gCoreUpdatePublicKeyFile)) {
+    $gCoreUpdatePublicKeyFile = '';
+}
+
 // create database object and establish connection to database
 if (!isset($gDbType)) {
     $gDbType = 'mysql'; // DB_TYPE

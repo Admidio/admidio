@@ -16,6 +16,7 @@
  *            test_email     - send test email
  *            backup         - create backup of Admidio database
  *            update_check   - Check for a new version of Admidio
+ *            update_prepare - Download an update and start the isolated core updater
  * panel    : The name of the preferences panel that should be shown or saved.
  ***********************************************************************************************
  */
@@ -25,6 +26,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\InstallationUpdate\Service\CoreUpdatePreparationService;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\UI\Presenter\PreferencesPresenter;
 
@@ -133,6 +135,17 @@ try {
 
             $preferences = new PreferencesService();
             echo $preferences->showUpdateInfo();
+            break;
+
+        case 'update_prepare':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $updateGitMaster = admFuncVariableIsValid($_POST, 'git_master', 'bool', array('defaultValue' => false));
+
+            $coreUpdate = new CoreUpdatePreparationService();
+            echo json_encode(array(
+                'status' => 'success',
+                'url' => $coreUpdate->prepareUpdate($updateGitMaster)
+            ));
             break;
     }
 } catch (Throwable $e) {

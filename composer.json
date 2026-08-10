@@ -93,7 +93,8 @@
             "Composer\\Config::disableProcessTimeout",
             "phpunit --coverage-html=tests/reports/coverage"
         ],
-        "test:setup": "php tests/bin/setup-test-env.php"
+        "test:setup": "php tests/bin/setup-test-env.php",
+        "build-release": "@php build-release.php"
     },
     "archive": {
         "exclude": [

@@ -59,6 +59,70 @@ try {
         );
     }
 
+    /**
+     * Loads and validates the authorization created by the normal settings page for an automatic
+     * core update. The random credential is independent of the normal Admidio session and therefore
+     * survives the source-file replacement without requiring another administrator login.
+     *
+     * @param string $updateId
+     * @return array{file:string,data:array<string,mixed>}
+     */
+    function readAuthorizedCoreUpdate(string $updateId): array
+    {
+        if (!preg_match('/^[a-f0-9]{32}$/', $updateId)) {
+            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $stateFile = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/core-update/' . $updateId . '/state.json';
+        if (!is_file($stateFile)) {
+            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $state = json_decode((string) file_get_contents($stateFile), true);
+        if (!is_array($state)
+            || ($state['updateId'] ?? '') !== $updateId
+            || !isset($state['cookieName'], $state['authorizationHash'], $state['expiresAt'])) {
+            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $authorizationToken = $_COOKIE[(string) $state['cookieName']] ?? '';
+        if (!is_string($authorizationToken)
+            || $authorizationToken === ''
+            || !hash_equals((string) $state['authorizationHash'], hash('sha256', $authorizationToken))
+            || (int) $state['expiresAt'] < time()) {
+            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        return array('file' => $stateFile, 'data' => $state);
+    }
+
+    /**
+     * @param string $stateFile
+     * @param array<string,mixed> $state
+     */
+    function writeCoreUpdateState(string $stateFile, array $state): void
+    {
+        $temporaryFile = $stateFile . '.new';
+        $json = json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+
+        if (file_put_contents($temporaryFile, $json, LOCK_EX) === false) {
+            @unlink($temporaryFile);
+            throw new RuntimeException('Could not persist the core update state.');
+        }
+
+        @copy($stateFile, $stateFile . '.previous');
+        if (!@rename($temporaryFile, $stateFile)) {
+            if (is_file($stateFile) && !@unlink($stateFile)) {
+                @unlink($temporaryFile);
+                throw new RuntimeException('Could not persist the core update state.');
+            }
+            if (!@rename($temporaryFile, $stateFile)) {
+                @unlink($temporaryFile);
+                throw new RuntimeException('Could not persist the core update state.');
+            }
+        }
+    }
+
     $rootPath = dirname(__DIR__);
 
     // embed a config file
@@ -88,19 +152,43 @@ try {
     // Initialize and check the parameters
 
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'update', 'result')));
+    $getCoreUpdate = admFuncVariableIsValid($_GET, 'core_update', 'string', array('defaultValue' => ''));
+    $coreUpdate = null;
+
+    if ($getCoreUpdate !== '') {
+        $coreUpdate = readAuthorizedCoreUpdate($getCoreUpdate);
+        $gLoginForUpdate = false;
+    }
 
     // connect to database
     $gDb = Database::createDatabaseInstance();
 
+    // Start a separate, clean PHP session for automatic core updates. This prevents the new
+    // database updater from depending on serialized objects created by the previous source version.
+    $updateSessionPrefix = COOKIE_PREFIX;
+    if (is_array($coreUpdate)) {
+        $updateSessionPrefix .= '_CORE_UPDATE_' . substr($getCoreUpdate, 0, 12);
+    }
+
     // start PHP session
     try {
-        Session::start(COOKIE_PREFIX);
+        Session::start(
+            $updateSessionPrefix,
+            0,
+            is_array($coreUpdate) ? rtrim(ADMIDIO_URL_PATH, '/') . '/install/' : ''
+        );
     } catch (RuntimeException $exception) {
         // TODO
     }
 
     // create a session object
-    if (array_key_exists('gCurrentSession', $_SESSION)) {
+    if (is_array($coreUpdate)) {
+        // Session::__construct currently checks the normal session cookie first. The automatic
+        // updater must use the newly started installation-only session instead.
+        unset($_COOKIE[COOKIE_PREFIX . '_SESSION_ID']);
+        $gCurrentSession = new Session($gDb, $updateSessionPrefix);
+        $_SESSION['gCurrentSession'] = $gCurrentSession;
+    } elseif (array_key_exists('gCurrentSession', $_SESSION)) {
         $gCurrentSession = $_SESSION['gCurrentSession'];
     } else {
         // create a new session object and store it in PHP session
@@ -230,6 +318,15 @@ try {
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
 
             // create form with login and update button
+            $updateParameters = array('mode' => 'update');
+            if (is_array($coreUpdate)) {
+                $coreUpdate['data']['state'] = 'database_update_pending';
+                $coreUpdate['data']['lastError'] = '';
+                writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
+                $updateParameters['core_update'] = $getCoreUpdate;
+            }
+
+            // create form with login and update button
             $form = new FormPresenter(
                 'adm_update_login_form',
                 'update.tpl',
@@ -267,6 +364,16 @@ try {
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
+            if (is_array($coreUpdate)) {
+                $coreUpdate['data']['state'] = 'database_update_completed';
+                $coreUpdate['data']['lastError'] = '';
+                writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
+                admRedirect(
+                    ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?update_id='
+                    . rawurlencode($getCoreUpdate) . '&action=finish'
+                );
+            }
+
             $page = new InstallationPresenter('adm_update_message', $gL10n->get('INS_UPDATE'));
             $page->setUpdateModus();
             $page->showMessage(
@@ -305,12 +412,31 @@ try {
         }
 
         // start the update
+        if (is_array($coreUpdate)) {
+            $coreUpdate['data']['state'] = 'database_update_started';
+            $coreUpdate['data']['lastError'] = '';
+            writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
+        }
+
         $update = new Update();
         $update->doAdmidioUpdate($installedDbVersion);
 
+        if (is_array($coreUpdate)) {
+            $coreUpdate['data']['state'] = 'database_update_completed';
+            $coreUpdate['data']['lastError'] = '';
+            writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
+            $resultUrl = ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?update_id='
+                . rawurlencode($getCoreUpdate) . '&action=finish';
+        } else {
+            $resultUrl = SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php',
+                array('mode' => 'result')
+            );
+        }
+
         echo json_encode(array(
             'status' => 'success',
-            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'result'))
+            'url' => $resultUrl
         ));
         exit();
     } elseif ($getMode === 'result') {
@@ -377,6 +503,11 @@ try {
         $page->show();
     }
 } catch (Throwable $e) {
+    if (isset($coreUpdate) && is_array($coreUpdate)) {
+        $coreUpdate['data']['lastError'] = $e->getMessage();
+        writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
+    }
+
     if ($getMode === 'update') {
         handleException($e, true);
     } else {
