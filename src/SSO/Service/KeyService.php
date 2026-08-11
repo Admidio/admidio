@@ -205,17 +205,33 @@ class KeyService {
      */
     public function save(string $keyUUID, string $mode = 'save')
     {
-        global $gCurrentSession, $gCurrentOrgId;
+        global $gCurrentSession;
 
         // check form field input and sanitized it from malicious content
         $keyEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $keyEditForm->validate($_POST);
 
+        $this->saveData($keyUUID, $formValues, $mode);
+    }
+
+    /**
+     * Save already validated SSO key data.
+     *
+     * @param string $keyUUID UUID of an existing key or an empty string for a new key.
+     * @param array $formValues Validated key and certificate values.
+     * @param string $mode One of save, key or cert.
+     * @return Key
+     * @throws Exception
+     */
+    public function saveData(string $keyUUID, array $formValues, string $mode = 'save'): Key
+    {
+        global $gCurrentOrgId;
+
         $ssoKey = new Key($this->db);
-        if (!empty($keyUUID)) {
+        if ($keyUUID !== '') {
             $ssoKey->readDataByUuid($keyUUID);
         }
-        
+
         // If no key or cert exists yet, make sure it is generated
         if ($ssoKey->isNewRecord() || empty($ssoKey->getValue('key_private'))) {
             $mode = 'key';
@@ -240,8 +256,6 @@ class KeyService {
                 
                 // 2. Sign the existing or new key for a certificate
                 $key_algorithm = $ssoKey->getValue('key_algorithm');
-                $privateKey = $ssoKey->getValue('key_private');
-                $privateKey = openssl_pkey_get_private($privateKey);
                 
                 $csrData = [
                     "countryName" => $formValues['cert_country'],
@@ -249,7 +263,7 @@ class KeyService {
                     "localityName" => $formValues['cert_locality'],
                     "organizationName" => $formValues['cert_org'],
                     "organizationalUnitName" => $formValues['cert_orgunit'],
-                    "commonName" => $formValues['cert_common_name'], // Your IdP domain
+                    "commonName" => $formValues['cert_common_name'],
                     "emailAddress" => $formValues['cert_admin_email'],
                 ];
 
@@ -257,7 +271,7 @@ class KeyService {
 
                 $ssoKey->setValue('key_certificate', $certificatePEM);
                 $ssoKey->setValue('key_expires_at', $formValues['key_expires_at']);
-                
+
                 // fall-through
             case 'save':
                 unset($formValues['key_certificate']);
@@ -265,16 +279,19 @@ class KeyService {
 
                 // 3. Handle all attributes (name, etc.) that do not need the key or cert to be re-generated
 
-                // write form values in menu object
                 foreach ($formValues as $key => $value) {
                     if (str_starts_with($key, 'key_')) {
                         $ssoKey->setValue($key, $value);
                     }
                 }
                 $ssoKey->setValue('key_org_id', $gCurrentOrgId);
+                break;
+            default:
+                throw new Exception('Invalid mode for SSO key save.');
         }
 
         $ssoKey->save();
+        return $ssoKey;
     }
 
 

@@ -138,7 +138,7 @@ class ItemService
      */
     public function save(bool $multiEdit = false): void
     {
-        global $gCurrentSession, $gL10n, $gSettingsManager;
+        global $gCurrentSession;
 
         // check if the current user is authorized to edit the item
         if (!$this->isEditable()) {
@@ -148,6 +148,25 @@ class ItemService
         // check form field input and sanitized it from malicious content
         $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $itemFieldsEditForm->validate($_POST, $multiEdit);
+
+        $this->saveData($formValues, $multiEdit);
+    }
+
+    /**
+     * Save already validated inventory item data.
+     *
+     * @param array $formValues Validated item values.
+     * @param bool $multiEdit If true, only provided values are changed.
+     * @throws Exception
+     */
+    public function saveData(array $formValues, bool $multiEdit = false): void
+    {
+        global $gL10n, $gSettingsManager;
+
+        // check if the current user is authorized to edit the item
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         $startIdx = 1;
         if ($this->postCopyField > 0) {
