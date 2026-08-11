@@ -697,7 +697,9 @@ class Role extends Entity
         }
 
         // reload session of that user because of changes to the assigned roles and rights
-        $gCurrentSession->reload($userId);
+        if (isset($gCurrentSession)) {
+            $gCurrentSession->reload($userId);
+        }
 
         $this->db->endTransaction();
     }
@@ -861,7 +863,9 @@ class Role extends Entity
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they were members of this role
-            $gCurrentSession->reloadAllSessions();
+            if (isset($gCurrentSession)) {
+                $gCurrentSession->reloadAllSessions();
+            }
         } else {
             throw new Exception('Role ' . $this->getValue('rol_name') . ' is a system role and could not be set inactive!');
         }

@@ -227,8 +227,53 @@ class PreferencesService
     }
 
     /**
-     * check availability of update information and if connected
-     * read available Admidio versions from server (text file)
+     * Read the available Admidio versions and determine the update state.
+     *
+     * @return array{stableVersion:string,betaVersion:string,betaRelease:string,versionUpdate:int}
+     */
+    public function getUpdateInformation(): array
+    {
+        $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
+        $updateInfo = @file_get_contents($updateInfoUrl);
+
+        if ($updateInfo === false) {
+            return array(
+                'stableVersion' => 'n/a',
+                'betaVersion' => 'n/a',
+                'betaRelease' => '',
+                'versionUpdate' => 99
+            );
+        }
+
+        $stableVersion = $this->getUpdateVersion($updateInfo, 'Version=');
+        $betaVersion = $this->getUpdateVersion($updateInfo, 'Beta-Version=');
+        $betaRelease = $this->getUpdateVersion($updateInfo, 'Beta-Release=');
+
+        if ($stableVersion === '') {
+            $stableVersion = 'n/a';
+        }
+
+        if ($betaVersion === '') {
+            $betaVersion = 'n/a';
+            $betaRelease = '';
+        }
+
+        return array(
+            'stableVersion' => $stableVersion,
+            'betaVersion' => $betaVersion,
+            'betaRelease' => $betaRelease,
+            'versionUpdate' => $this->checkVersion(
+                ADMIDIO_VERSION,
+                $stableVersion,
+                $betaVersion,
+                $betaRelease,
+                ADMIDIO_VERSION_BETA
+            )
+        );
+    }
+
+    /**
+     * check availability of update information and render it for the preferences UI.
      * @return string Returns the HTML of the update check
      * @throws Exception
      */
@@ -237,44 +282,13 @@ class PreferencesService
         global $gL10n;
         $html = '';
 
-        // check availability of update information and if connected
-        // read available Admidio versions from server (text file)
-        // First select the method (CURL preferred)
-        $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
-        if (@file_get_contents($updateInfoUrl) === false) {
-            // Admidio Versionen nicht auslesbar
-            $stableVersion = 'n/a';
-            $betaVersion = 'n/a';
-            $betaRelease = '';
+        $updateInformation = $this->getUpdateInformation();
+        $stableVersion = $updateInformation['stableVersion'];
+        $betaVersion = $updateInformation['betaVersion'];
+        $betaRelease = $updateInformation['betaRelease'];
+        $versionUpdate = $updateInformation['versionUpdate'];
 
-            $versionUpdate = 99;
-        } else {
-            $updateInfo = file_get_contents($updateInfoUrl);
-
-            // Admidio versions passed from server
-            $stableVersion = $this->getUpdateVersion($updateInfo, 'Version=');
-            $betaVersion = $this->getUpdateVersion($updateInfo, 'Beta-Version=');
-            $betaRelease = $this->getUpdateVersion($updateInfo, 'Beta-Release=');
-
-            // No stable version available (actually impossible)
-            if ($stableVersion === '') {
-                $stableVersion = 'n/a';
-            }
-
-            // No beat version available
-            if ($betaVersion === '') {
-                $betaVersion = 'n/a';
-                $betaRelease = '';
-            }
-
-            // check for update
-            $versionUpdate = $this->checkVersion(ADMIDIO_VERSION, $stableVersion, $betaVersion, $betaRelease, ADMIDIO_VERSION_BETA);
-        }
-
-        // Only continues in display mode, otherwise the current update state can be
-        // queried in the $versionUpdate variable.
         // $versionUpdate (0 = No update, 1 = New stable version, 2 = New beta version, 3 = New stable + beta version, 99 = No connection)
-        // show update result
         if ($versionUpdate === 1) {
             $versionsText = $gL10n->get('SYS_NEW_VERSION_AVAILABLE');
         } elseif ($versionUpdate === 2) {
