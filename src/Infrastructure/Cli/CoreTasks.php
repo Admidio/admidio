@@ -2,16 +2,19 @@
 namespace Admidio\Infrastructure\Cli;
 
 use Admidio\Announcements\Entity\Announcement;
+use Admidio\Announcements\Service\AnnouncementsService;
 use Admidio\Categories\Entity\Category;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\Component;
 use Admidio\Documents\Entity\File as DocumentFile;
 use Admidio\Documents\Entity\Folder;
+use Admidio\Documents\Service\DocumentsService;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
+use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
@@ -34,20 +37,25 @@ use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Messages\Entity\Message;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Photos\Entity\Album;
+use Admidio\Photos\ValueObject\ECard;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\ProfileFields\Entity\SelectOptions as ProfileSelectOptions;
+use Admidio\ProfileFields\Service\ProfileFieldService;
 use Admidio\Requirements\Entity\Provider;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Roles\ValueObject\RoleDependency;
+use Admidio\Roles\ValueObject\ListData;
 use Admidio\Session\Entity\AutoLogin;
 use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Service\KeyService;
+use Admidio\SSO\Service\OIDCService;
+use Admidio\SSO\Service\SAMLService;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -56,6 +64,7 @@ use Admidio\Weblinks\Entity\Weblink;
 use InvalidArgumentException;
 use PDO;
 use RuntimeException;
+use RobThree\Auth\TwoFactorAuth;
 
 /**
  ***********************************************************************************************
@@ -279,19 +288,6 @@ final class CoreTasks
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
         );
         self::task(
-            'upgrade',
-            'unavailable',
-            'Execute the native core database updater for the checked-out Admidio version.',
-            'upgrade [--yes]',
-            'CORE',
-            true,
-            array(),
-            array(self::opt('yes', 'Confirm the database upgrade.', '', false, false, true)),
-            array(),
-            'src/InstallationUpdate/Service/Update.php is still coupled to the web login/session update flow; '
-                . 'the command is reserved for the separate headless-updater PR.'
-        );
-        self::task(
             'system:info',
             'systemInfo',
             'Show Admidio, PHP, database and operating-system information.',
@@ -346,18 +342,6 @@ final class CoreTasks
         self::task('maintenance:repair-documents', 'repairDocuments', 'Run the native documents/files path repair operation.',
             'maintenance:repair-documents [--yes]', 'CORE', true, array(),
             array(self::opt('yes', 'Confirm the repair.', '', false, false, true)));
-        self::task(
-            'maintenance:mode',
-            'unavailable',
-            'Enable, disable or query maintenance mode.',
-            'maintenance:mode enable|disable|status',
-            'CORE',
-            true,
-            array(self::arg('mode', 'enable, disable or status.')),
-            array(),
-            array(),
-            'current src/Infrastructure/Utils/Maintenance.php contains repair utilities but no maintenance-mode API; this command is reserved for the separate maintenance-mode PR.'
-        );
     }
 
     private static function registerConfigTasks(): void
@@ -497,15 +481,16 @@ final class CoreTasks
             ));
         self::task(
             'user:tfa-setup',
-            'unavailable',
-            'Set up two-factor authentication.',
-            'user:tfa-setup USER',
-            'CONTACTS',
+            'userTfaSetup',
+            'Set up two-factor authentication for the acting user.',
+            'user:tfa-setup USER [--secret=SECRET] [--code=CODE]',
+            null,
             true,
             array(self::arg('user', 'User.')),
-            array(),
-            array(),
-            'current modules/profile/two_factor_authentication.php stores the generated secret in the web session between generation and OTP confirmation; no headless setup API exists.'
+            array(
+                self::opt('secret', 'TOTP secret. If omitted, generate and print a new secret.', 'SECRET'),
+                self::opt('code', 'One-time security code. If omitted, prompt interactively.', 'CODE')
+            )
         );
         self::task('user:tfa-reset', 'userTfaReset', 'Remove the configured two-factor secret.',
             'user:tfa-reset USER [--yes]', 'CONTACTS', true,
@@ -770,15 +755,20 @@ final class CoreTasks
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
         self::task(
             'list:export',
-            'unavailable',
+            'listExport',
             'Render a saved member list to CSV/XLSX/ODS/PDF.',
-            'list:export LIST [options] --format=csv|xlsx|ods|pdf|pdfl',
+            'list:export LIST --role=GROUP ... [--relation-type=TYPE ...] [--date-from=DATE] [--date-to=DATE] [--members=active|former|all] --format=csv|xlsx|ods|pdf [--output=FILE]',
             'GROUPS-ROLES',
             true,
             array(self::arg('list', 'List UUID/id.')),
-            array(self::opt('format', 'Export format.', 'FORMAT', true, false, false, array('csv', 'xlsx', 'ods', 'pdf', 'pdfl'))),
-            array(),
-            'current modules/groups-roles/lists_show.php builds exports through web-presenter/output code; there is no reusable headless list-export service in current master.'
+            array(
+                self::opt('role', 'Role/group whose members should be exported.', 'GROUP', true, true),
+                self::opt('relation-type', 'User relation type UUID/id.', 'TYPE', false, true),
+                self::opt('date-from', 'Membership range start.', 'DATE'),
+                self::opt('date-to', 'Membership range end.', 'DATE'),
+                self::opt('members', 'Membership state.', 'STATE', false, false, false, array('active', 'former', 'all')),
+                self::opt('format', 'Export format.', 'FORMAT', true, false, false, array('csv', 'xlsx', 'ods', 'pdf'))
+            )
         );
     }
 
@@ -915,15 +905,13 @@ final class CoreTasks
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
         self::task(
             'announcement:export-rss',
-            'unavailable',
+            'announcementExportRss',
             'Generate the announcements RSS feed.',
             'announcement:export-rss [--category=CATEGORY] [--output=FILE]',
             'ANNOUNCEMENTS',
             true,
             array(),
-            array(self::opt('category', 'Announcement category.', 'CATEGORY')),
-            array(),
-            'AnnouncementsService::rssFeed() emits the HTTP response directly through RssFeed::getRssFeed(); current master has no method returning the RSS document for headless output.'
+            array(self::opt('category', 'Announcement category.', 'CATEGORY'))
         );
     }
 
@@ -969,13 +957,16 @@ final class CoreTasks
             'event:participants EVENT [--format=FORMAT]', 'EVENTS', true,
             array(self::arg('event', 'Event.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
-        $exportReason = 'current event iCalendar output is implemented in the web module/legacy ModuleEvents output path and does not expose a headless document-return API.';
-        self::task('event:export', 'unavailable', 'Export an event as iCalendar.',
-            'event:export EVENT --format=ics [--output=FILE]', 'EVENTS', true,
-            array(self::arg('event', 'Event.')), array(), array(), $exportReason);
-        self::task('event:export-calendar', 'unavailable', 'Export event range/calendar as iCalendar.',
-            'event:export-calendar [options] --format=ics [--output=FILE]', 'EVENTS', true,
-            array(), array(), array(), $exportReason);
+        self::task('event:export', 'eventExport', 'Export an event as iCalendar.',
+            'event:export EVENT [--output=FILE]', 'EVENTS', true,
+            array(self::arg('event', 'Event.')));
+        self::task('event:export-calendar', 'eventExportCalendar', 'Export an event range/calendar as iCalendar.',
+            'event:export-calendar [--calendar=CATEGORY] [--date-from=DATE] [--date-to=DATE] [--output=FILE]',
+            'EVENTS', true, array(), array(
+                self::opt('calendar', 'Event calendar/category.', 'CATEGORY'),
+                self::opt('date-from', 'Start date.', 'DATE'),
+                self::opt('date-to', 'End date.', 'DATE')
+            ));
     }
 
     private static function registerRoomTasks(): void
@@ -1052,15 +1043,13 @@ final class CoreTasks
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
         self::task(
             'forum:export-rss',
-            'unavailable',
+            'forumExportRss',
             'Generate the forum RSS feed.',
             'forum:export-rss [--category=CATEGORY] [--output=FILE]',
             'FORUM',
             true,
             array(),
-            array(self::opt('category', 'Forum category.', 'CATEGORY')),
-            array(),
-            'ForumService::rssFeed() emits the HTTP response through RssFeed directly; current master has no headless RSS document-return API.'
+            array(self::opt('category', 'Forum category.', 'CATEGORY'))
         );
     }
 
@@ -1173,15 +1162,12 @@ final class CoreTasks
             ));
         self::task(
             'document:download',
-            'unavailable',
+            'documentDownload',
             'Download a managed document.',
             'document:download FILE [--output=FILEPATH]',
             'DOCUMENTS-FILES',
             true,
-            array(self::arg('file', 'File UUID.')),
-            array(),
-            array(),
-            'DocumentsService::downloadFile() delegates to File::getFileForDownload(), which emits an HTTP response; current master has no headless permission-checked byte-return method.'
+            array(self::arg('file', 'File UUID.'))
         );
         self::task(
             'document:upload',
@@ -1284,8 +1270,11 @@ final class CoreTasks
             'photo:album-lock ALBUM', 'PHOTOS', true, array(self::arg('album', 'Album.')));
         self::task('photo:album-unlock', 'photoAlbumUnlock', 'Unlock a photo album.',
             'photo:album-unlock ALBUM', 'PHOTOS', true, array(self::arg('album', 'Album.')));
-        $photoFsReason = 'current photo upload/download/rotate/ecard functionality is implemented directly in modules/photos with filesystem/HTTP request handling; no reusable headless photo-file service exists.';
-        foreach (array('photo:album-download','photo:upload','photo:download','photo:delete','photo:rotate','photo:ecard-templates','photo:ecard-send') as $command) {
+        self::task('photo:ecard-templates', 'photoEcardTemplates', 'List available e-card templates.',
+            'photo:ecard-templates [--format=FORMAT]', 'PHOTOS', true, array(),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+        $photoFsReason = 'current photo upload/download/rotate/e-card send functionality is implemented directly in modules/photos with filesystem/HTTP request handling; no reusable headless photo-file service exists.';
+        foreach (array('photo:album-download','photo:upload','photo:download','photo:delete','photo:rotate','photo:ecard-send') as $command) {
             self::task($command, 'unavailable', ucfirst(str_replace(array(':','-'), ' ', $command)) . '.',
                 $command . ' [arguments] [options]', 'PHOTOS', true, array(), array(), array(), $photoFsReason);
         }
@@ -1306,17 +1295,19 @@ final class CoreTasks
             array(self::arg('item', 'Item UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
 
-        $itemReason = 'ItemService::save() and picture handling currently validate FormPresenter/session POST/upload data; '
-            . 'a reusable headless item-save API must be extracted before CLI create/update/copy/picture operations.';
-        self::task('inventory:add', 'unavailable', 'Create an inventory item.',
-            'inventory:add --field=FIELD=VALUE ... [--picture=FILE]', 'INVENTORY', true,
-            array(), array(self::opt('field', 'Inventory field assignment.', 'FIELD=VALUE', true, true)), array(), $itemReason);
-        self::task('inventory:update', 'unavailable', 'Update an inventory item.',
+        self::task('inventory:add', 'inventoryAdd', 'Create an inventory item.',
+            'inventory:add --field=FIELD=VALUE ...', 'INVENTORY', true,
+            array(), array(self::opt('field', 'Inventory field assignment.', 'FIELD=VALUE', true, true)));
+        self::task('inventory:update', 'inventoryUpdate', 'Update an inventory item.',
             'inventory:update ITEM [--field=FIELD=VALUE ...]', 'INVENTORY', true,
-            array(self::arg('item', 'Item.')), array(self::opt('field', 'Inventory field assignment.', 'FIELD=VALUE', false, true)), array(), $itemReason);
-        self::task('inventory:copy', 'unavailable', 'Copy an inventory item.',
-            'inventory:copy ITEM [--copies=N] [--field=FIELD=VALUE ...]', 'INVENTORY', true,
-            array(self::arg('item', 'Item.')), array(), array(), $itemReason);
+            array(self::arg('item', 'Item.')), array(self::opt('field', 'Inventory field assignment.', 'FIELD=VALUE', false, true)));
+        self::task('inventory:copy', 'inventoryCopy', 'Copy an inventory item.',
+            'inventory:copy ITEM [--copies=N] [--number-field=FIELD] [--field=FIELD=VALUE ...]', 'INVENTORY', true,
+            array(self::arg('item', 'Item.')), array(
+                self::opt('copies', 'Number of copies.', 'N'),
+                self::opt('number-field', 'Numeric inventory field to increment for copied items.', 'FIELD'),
+                self::opt('field', 'Inventory field assignment.', 'FIELD=VALUE', false, true)
+            ));
         self::task('inventory:delete', 'inventoryDelete', 'Delete inventory items using ItemService::delete().',
             'inventory:delete ITEM ... [--yes]', 'INVENTORY', true,
             array(self::arg('item', 'One or more items.', true, true)),
@@ -1336,9 +1327,10 @@ final class CoreTasks
         self::task('inventory:return', 'inventoryReturn', 'Return a checked-out inventory item.',
             'inventory:return ITEM [--date=DATE]', 'INVENTORY', true,
             array(self::arg('item', 'Item.')), array(self::opt('date', 'Return date.', 'DATE')));
+        $itemPictureReason = 'current item picture handling is tied to ItemService::save()/showPicture() and web upload/session state; no reusable headless picture API exists.';
         foreach (array('inventory:picture-set', 'inventory:picture-get', 'inventory:picture-delete') as $command) {
             self::task($command, 'unavailable', ucfirst(str_replace(array(':','-'), ' ', $command)) . '.',
-                $command . ' ITEM [FILE]', 'INVENTORY', true, array(), array(), array(), $itemReason);
+                $command . ' ITEM [FILE]', 'INVENTORY', true, array(), array(), array(), $itemPictureReason);
         }
         $importReason = 'Inventory ImportService reads the current uploaded web file/form state; it does not expose a file-path + mapping API.';
         self::task('inventory:import', 'unavailable', 'Import inventory items.',
@@ -1356,11 +1348,28 @@ final class CoreTasks
             'inventory:field-show FIELD [--format=text|json]', 'INVENTORY', true,
             array(self::arg('field', 'Inventory field UUID/id/internal name.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
-        $inventoryFieldReason = 'ItemFieldService::save() validates the web FormPresenter/POST object; current master has no data-oriented field-definition save method.';
-        foreach (array('inventory:field-add','inventory:field-update') as $command) {
-            self::task($command, 'unavailable', ucfirst(str_replace(array(':','-'), ' ', $command)) . '.',
-                $command . ' [FIELD] [options]', 'INVENTORY', true, array(), array(), array(), $inventoryFieldReason);
-        }
+        $inventoryFieldOptions = array(
+            self::opt('name', 'Field name.', 'NAME'),
+            self::opt('type', 'Field type.', 'TYPE', false, false, false, array(
+                'CATEGORY', 'CHECKBOX', 'DATE', 'DECIMAL', 'DROPDOWN', 'DROPDOWN_MULTISELECT',
+                'DROPDOWN_DATE_INTERVAL', 'EMAIL', 'NUMBER', 'PHONE', 'RADIO_BUTTON', 'TEXT', 'TEXT_BIG', 'URL'
+            )),
+            self::opt('connected-field', 'Connected DATE field.', 'FIELD'),
+            self::opt('required', 'Mandatory-field mode.', 'MODE', false, false, false, array('0', '1')),
+            self::opt('description', 'Field description.', 'TEXT')
+        );
+        self::task('inventory:field-add', 'inventoryFieldAdd', 'Create an inventory field.',
+            'inventory:field-add --name=NAME --type=TYPE [options]', 'INVENTORY', true, array(),
+            array_replace($inventoryFieldOptions, array(
+                0 => self::opt('name', 'Field name.', 'NAME', true),
+                1 => self::opt('type', 'Field type.', 'TYPE', true, false, false, array(
+                    'CATEGORY', 'CHECKBOX', 'DATE', 'DECIMAL', 'DROPDOWN', 'DROPDOWN_MULTISELECT',
+                    'DROPDOWN_DATE_INTERVAL', 'EMAIL', 'NUMBER', 'PHONE', 'RADIO_BUTTON', 'TEXT', 'TEXT_BIG', 'URL'
+                ))
+            )));
+        self::task('inventory:field-update', 'inventoryFieldUpdate', 'Update an inventory field.',
+            'inventory:field-update FIELD [options]', 'INVENTORY', true,
+            array(self::arg('field', 'Inventory field.')), $inventoryFieldOptions);
         self::task('inventory:field-delete', 'inventoryFieldDelete', 'Delete an inventory field using ItemFieldService::delete().',
             'inventory:field-delete FIELD [--yes]', 'INVENTORY', true,
             array(self::arg('field', 'Inventory field.')),
@@ -1403,12 +1412,36 @@ final class CoreTasks
             'profile:field-show FIELD [--format=text|json]', 'CONTACTS', true,
             array(self::arg('field', 'Profile field UUID/id/internal name.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
-        $fieldReason = 'ProfileFieldService::save() validates FormPresenter/session POST; current master has no data-oriented profile-field definition save API.';
-        self::task('profile:field-add', 'unavailable', 'Create a profile field.',
-            'profile:field-add [options]', 'CONTACTS', true, array(), array(), array(), $fieldReason);
-        self::task('profile:field-update', 'unavailable', 'Update a profile field.',
+        $profileFieldOptions = array(
+            self::opt('name', 'Field name.', 'NAME'),
+            self::opt('category', 'Profile-field category.', 'CATEGORY'),
+            self::opt('type', 'Field type.', 'TYPE', false, false, false, array(
+                'CHECKBOX', 'DATE', 'DECIMAL', 'DROPDOWN', 'DROPDOWN_MULTISELECT', 'EMAIL',
+                'NUMBER', 'PHONE', 'RADIO_BUTTON', 'TEXT', 'TEXT_BIG', 'URL'
+            )),
+            self::opt('required', 'Mandatory-field mode.', 'MODE', false, false, false, array('0', '1', '2', '3')),
+            self::opt('hidden', 'Hidden field flag.', 'BOOL'),
+            self::opt('disabled', 'Disabled field flag.', 'BOOL'),
+            self::opt('registration', 'Show field during registration.', 'BOOL'),
+            self::opt('default', 'Default value.', 'VALUE'),
+            self::opt('regex', 'Regular expression.', 'REGEX'),
+            self::opt('icon', 'Bootstrap icon.', 'ICON'),
+            self::opt('url', 'URL template.', 'URL'),
+            self::opt('description', 'Field description.', 'TEXT')
+        );
+        self::task('profile:field-add', 'profileFieldAdd', 'Create a profile field.',
+            'profile:field-add --name=NAME --category=CATEGORY --type=TYPE [options]', 'CONTACTS', true, array(),
+            array_replace($profileFieldOptions, array(
+                0 => self::opt('name', 'Field name.', 'NAME', true),
+                1 => self::opt('category', 'Profile-field category.', 'CATEGORY', true),
+                2 => self::opt('type', 'Field type.', 'TYPE', true, false, false, array(
+                    'CHECKBOX', 'DATE', 'DECIMAL', 'DROPDOWN', 'DROPDOWN_MULTISELECT', 'EMAIL',
+                    'NUMBER', 'PHONE', 'RADIO_BUTTON', 'TEXT', 'TEXT_BIG', 'URL'
+                ))
+            )));
+        self::task('profile:field-update', 'profileFieldUpdate', 'Update a profile field.',
             'profile:field-update FIELD [options]', 'CONTACTS', true,
-            array(self::arg('field', 'Profile field.')), array(), array(), $fieldReason);
+            array(self::arg('field', 'Profile field.')), $profileFieldOptions);
         self::task('profile:field-delete', 'profileFieldDelete', 'Delete a profile field through ProfileField::delete().',
             'profile:field-delete FIELD [--yes]', 'CONTACTS', true,
             array(self::arg('field', 'Profile field.')),
@@ -1449,12 +1482,39 @@ final class CoreTasks
             'category-report:show CONFIG [--format=text|json]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report config UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
-        $reportReason = 'category report configuration and export are implemented by system/classes/CategoryReport.php plus module web forms; '
-            . 'current master has no Entity/Service for safely writing configurations or returning generated exports headlessly.';
-        foreach (array('category-report:add','category-report:update','category-report:copy','category-report:delete','category-report:run') as $command) {
-            self::task($command, 'unavailable', ucfirst(str_replace(array(':','-'), ' ', $command)) . '.',
-                $command . ' [arguments] [options]', 'CATEGORY-REPORT', true, array(), array(), array(), $reportReason);
-        }
+        $reportOptions = array(
+            self::opt('name', 'Configuration name.', 'NAME'),
+            self::opt('role', 'Restrict report to role/group.', 'GROUP', false, true),
+            self::opt('category', 'Restrict report to role category.', 'CATEGORY', false, true),
+            self::opt('column', 'Report column code (for example p12, r4, l4, udummy).', 'COLUMN', false, true),
+            self::opt('condition', 'Condition aligned with --column; repeat in column order.', 'CONDITION', false, true),
+            self::opt('number-column', 'Show running row number.', 'BOOL'),
+            self::opt('default', 'Make this the default report configuration.', 'BOOL')
+        );
+        self::task('category-report:add', 'categoryReportAdd', 'Create a category-report configuration.',
+            'category-report:add --name=NAME --column=COLUMN ... [options]', 'CATEGORY-REPORT', true, array(),
+            array_replace($reportOptions, array(
+                0 => self::opt('name', 'Configuration name.', 'NAME', true),
+                3 => self::opt('column', 'Report column code.', 'COLUMN', true, true)
+            )));
+        self::task('category-report:update', 'categoryReportUpdate', 'Update a category-report configuration.',
+            'category-report:update CONFIG [options]', 'CATEGORY-REPORT', true,
+            array(self::arg('config', 'Report config id/name.')), $reportOptions);
+        self::task('category-report:copy', 'categoryReportCopy', 'Copy a category-report configuration.',
+            'category-report:copy CONFIG [--name=NAME]', 'CATEGORY-REPORT', true,
+            array(self::arg('config', 'Report config id/name.')),
+            array(self::opt('name', 'Name of the copied configuration.', 'NAME')));
+        self::task('category-report:delete', 'categoryReportDelete', 'Delete a category-report configuration.',
+            'category-report:delete CONFIG [--yes]', 'CATEGORY-REPORT', true,
+            array(self::arg('config', 'Report config id/name.')),
+            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
+        self::task('category-report:run', 'categoryReportRun', 'Run a category-report configuration.',
+            'category-report:run CONFIG [--date=DATE] [--filter=TEXT] [--format=FORMAT]',
+            'CATEGORY-REPORT', true, array(self::arg('config', 'Report config id/name.')), array(
+                self::opt('date', 'Reference date.', 'DATE'),
+                self::opt('filter', 'Only include rows containing text.', 'TEXT'),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+            ));
     }
 
     private static function registerChangelogTasks(): void
@@ -1503,41 +1563,15 @@ final class CoreTasks
                 self::opt('yes', 'Confirm uninstall.', '', false, false, true)
             ));
         self::task(
-            'plugin:enable',
-            'unavailable',
-            'Enable an installed plugin.',
-            'plugin:enable PLUGIN',
-            'PLUGINS',
-            true,
-            array(self::arg('plugin', 'Plugin name.')),
-            array(),
-            array(),
-            'current PluginAbstract::isActivated() equates activation with installation and PluginManager::getActivePlugins() explicitly has no separate persisted activation state.'
-        );
-        self::task(
-            'plugin:disable',
-            'unavailable',
-            'Disable an installed plugin.',
-            'plugin:disable PLUGIN',
-            'PLUGINS',
-            true,
-            array(self::arg('plugin', 'Plugin name.')),
-            array(),
-            array(),
-            'current PluginAbstract::isActivated() equates activation with installation and PluginManager::getActivePlugins() explicitly has no separate persisted activation state.'
-        );
-        self::task(
             'plugin:move',
-            'unavailable',
+            'pluginMove',
             'Move plugin ordering.',
             'plugin:move PLUGIN up|down',
             'PLUGINS',
             true,
-            array(self::arg('plugin', 'Plugin name.'), self::arg('direction', 'up or down.')),
-            array(),
-            array(),
-            'current PluginManager/PluginAbstract do not expose a generic persisted plugin sequence operation.'
+            array(self::arg('plugin', 'Plugin name.'), self::arg('direction', 'up or down.'))
         );
+
     }
 
     private static function registerRequirementsTasks(): void
@@ -1586,12 +1620,62 @@ final class CoreTasks
                 self::opt('type', 'Disambiguate client type.', 'TYPE', false, false, false, array('saml', 'oidc')),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
             ));
-        $ssoReason = 'SSOService::save() validates the web FormPresenter/POST payload before applying client mappings and access roles; '
-            . 'current master does not expose a data-oriented SSO client save method.';
-        foreach (array('sso:saml-add','sso:saml-update','sso:oidc-add','sso:oidc-update') as $command) {
-            self::task($command, 'unavailable', ucfirst(str_replace(array(':','-'), ' ', $command)) . '.',
-                $command . ' [CLIENT] [options]', 'CORE', true, array(), array(), array(), $ssoReason);
-        }
+        $samlOptions = array(
+            self::opt('name', 'Client name.', 'NAME'),
+            self::opt('client-id', 'SAML service-provider entity/client id.', 'ID'),
+            self::opt('enabled', 'Enabled flag.', 'BOOL'),
+            self::opt('metadata-url', 'Service-provider metadata URL.', 'URL'),
+            self::opt('acs-url', 'Assertion Consumer Service URL.', 'URL'),
+            self::opt('slo-url', 'Single Logout Service URL.', 'URL'),
+            self::opt('certificate', 'X.509 certificate PEM file.', 'FILE'),
+            self::opt('require-auth-signed', 'Require signed AuthnRequests.', 'BOOL'),
+            self::opt('sign-assertions', 'Sign assertions.', 'BOOL'),
+            self::opt('encrypt-assertions', 'Encrypt assertions.', 'BOOL'),
+            self::opt('validate-signatures', 'Validate request signatures.', 'BOOL'),
+            self::opt('assertion-lifetime', 'Assertion lifetime in seconds.', 'SECONDS'),
+            self::opt('clock-skew', 'Allowed clock skew in seconds.', 'SECONDS'),
+            self::opt('userid-field', 'Admidio user field used as SSO subject.', 'FIELD'),
+            self::opt('field-map', 'Map ADM_FIELD=SSO_FIELD.', 'ADM_FIELD=SSO_FIELD', false, true),
+            self::opt('field-map-other', 'Include all other profile fields.', 'BOOL'),
+            self::opt('role-map', 'Map GROUP=SSO_ROLE.', 'GROUP=SSO_ROLE', false, true),
+            self::opt('role-map-other', 'Include all other role memberships.', 'BOOL'),
+            self::opt('access-role', 'Role/group allowed to use this client.', 'GROUP', false, true)
+        );
+        self::task('sso:saml-add', 'ssoSamlAdd', 'Create a SAML client.',
+            'sso:saml-add --name=NAME --client-id=ID --acs-url=URL [options]', 'CORE', true, array(),
+            array_replace($samlOptions, array(
+                0 => self::opt('name', 'Client name.', 'NAME', true),
+                1 => self::opt('client-id', 'SAML service-provider entity/client id.', 'ID', true),
+                4 => self::opt('acs-url', 'Assertion Consumer Service URL.', 'URL', true)
+            )));
+        self::task('sso:saml-update', 'ssoSamlUpdate', 'Update a SAML client.',
+            'sso:saml-update CLIENT [options]', 'CORE', true,
+            array(self::arg('client', 'SAML client UUID/client id.')), $samlOptions);
+
+        $oidcOptions = array(
+            self::opt('name', 'Client name.', 'NAME'),
+            self::opt('client-id', 'OIDC client id.', 'ID'),
+            self::opt('client-secret', 'New client secret. Prefer --client-secret-stdin.', 'SECRET'),
+            self::opt('client-secret-stdin', 'Read the new client secret from STDIN.', '', false, false, true),
+            self::opt('enabled', 'Enabled flag.', 'BOOL'),
+            self::opt('redirect-uri', 'Redirect URI.', 'URI'),
+            self::opt('userid-field', 'Admidio user field used as subject.', 'FIELD'),
+            self::opt('scope', 'Allowed OIDC scope.', 'SCOPE', false, true),
+            self::opt('field-map', 'Map ADM_FIELD=CLAIM.', 'ADM_FIELD=CLAIM', false, true),
+            self::opt('field-map-other', 'Reject/unmapped other fields according to OIDC mapping mode.', 'BOOL'),
+            self::opt('role-map', 'Map GROUP=CLAIM.', 'GROUP=CLAIM', false, true),
+            self::opt('role-map-other', 'Include all other role memberships.', 'BOOL'),
+            self::opt('access-role', 'Role/group allowed to use this client.', 'GROUP', false, true)
+        );
+        self::task('sso:oidc-add', 'ssoOidcAdd', 'Create an OIDC client.',
+            'sso:oidc-add --name=NAME --client-id=ID [options]', 'CORE', true, array(),
+            array_replace($oidcOptions, array(
+                0 => self::opt('name', 'Client name.', 'NAME', true),
+                1 => self::opt('client-id', 'OIDC client id.', 'ID', true)
+            )));
+        self::task('sso:oidc-update', 'ssoOidcUpdate', 'Update an OIDC client.',
+            'sso:oidc-update CLIENT [options]', 'CORE', true,
+            array(self::arg('client', 'OIDC client UUID/client id.')), $oidcOptions);
         self::task('sso:saml-delete', 'ssoDelete', 'Delete a SAML client using the native SAMLClient entity.',
             'sso:saml-delete CLIENT [--yes]', 'CORE', true,
             array(self::arg('client', 'SAML client UUID/client id.')),
@@ -1610,27 +1694,21 @@ final class CoreTasks
             array(self::opt('type', 'Disambiguate client type.', 'TYPE', false, false, false, array('saml', 'oidc'))));
         self::task(
             'sso:oidc-discovery',
-            'unavailable',
+            'ssoOidcDiscovery',
             'Render OIDC discovery metadata.',
-            'sso:oidc-discovery [--output=FILE]',
+            'sso:oidc-discovery [--format=json] [--output=FILE]',
             'CORE',
             true,
             array(),
-            array(),
-            array(),
-            'OIDCService::handleDiscoveryRequest() returns an HTTP PSR-7 response from the web protocol service; current master has no public data method returning the discovery array.'
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('json')))
         );
         self::task(
             'sso:saml-metadata',
-            'unavailable',
+            'ssoSamlMetadata',
             'Render SAML IdP metadata.',
             'sso:saml-metadata [--output=FILE]',
             'CORE',
-            true,
-            array(),
-            array(),
-            array(),
-            'SAMLService::handleMetadataRequest() is an HTTP protocol response method; current master has no public headless metadata-document method.'
+            true
         );
 
         self::task('sso:keys', 'ssoKeys', 'List SSO signing/encryption keys.',
@@ -1642,50 +1720,75 @@ final class CoreTasks
             'sso:key-show KEY [--format=text|json]', 'CORE', true,
             array(self::arg('key', 'Key UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
-        $keySaveReason = 'KeyService::save() validates the web FormPresenter/POST payload; a data-oriented save operation must be extracted before CLI key create/update/regenerate is safe.';
-        foreach (array('sso:key-add','sso:key-update','sso:key-generate','sso:key-regenerate') as $command) {
-            self::task($command, 'unavailable', ucfirst(str_replace(array(':','-'), ' ', $command)) . '.',
-                $command . ' [KEY] [options]', 'CORE', true, array(), array(), array(), $keySaveReason);
-        }
-        self::task(
-            'sso:key-import',
-            'unavailable',
-            'Import an SSO key/certificate.',
-            'sso:key-import --name=NAME --file=FILE [--password-stdin]',
-            'CORE',
-            true,
-            array(),
-            array(),
-            array(),
-            'the import branch in current modules/sso/keys.php is explicitly TODO; no current-master import API exists.'
+        $keyOptions = array(
+            self::opt('name', 'Key name.', 'NAME'),
+            self::opt(
+                'algorithm',
+                'Key algorithm.',
+                'ALGORITHM',
+                false,
+                false,
+                false,
+                array('RSA', 'RSA-2048', 'RSA-3072', 'RSA-4096')
+            ),
+            self::opt('active', 'Active flag.', 'BOOL'),
+            self::opt('country', 'Certificate country code.', 'CODE'),
+            self::opt('state', 'Certificate state/province.', 'TEXT'),
+            self::opt('locality', 'Certificate city/locality.', 'TEXT'),
+            self::opt('organization-name', 'Certificate organization.', 'TEXT'),
+            self::opt('organization-unit', 'Certificate organization unit.', 'TEXT'),
+            self::opt('common-name', 'Certificate common name.', 'TEXT'),
+            self::opt('admin-email', 'Certificate administrator email.', 'EMAIL'),
+            self::opt('expires', 'Certificate expiration date.', 'DATE')
         );
+        $newKeyOptions = array_replace($keyOptions, array(
+            0 => self::opt('name', 'Key name.', 'NAME', true),
+            3 => self::opt('country', 'Certificate country code.', 'CODE', true),
+            4 => self::opt('state', 'Certificate state/province.', 'TEXT', true),
+            5 => self::opt('locality', 'Certificate city/locality.', 'TEXT', true),
+            7 => self::opt('organization-unit', 'Certificate organization unit.', 'TEXT', true)
+        ));
+        self::task('sso:key-add', 'ssoKeyAdd', 'Generate and store a new SSO key/certificate.',
+            'sso:key-add --name=NAME --country=CODE --state=TEXT --locality=TEXT --organization-unit=TEXT [options]',
+            'CORE', true, array(), $newKeyOptions);
+        self::task('sso:key-update', 'ssoKeyUpdate', 'Update SSO key metadata without regenerating the key.',
+            'sso:key-update KEY [--name=NAME] [--active=BOOL]', 'CORE', true,
+            array(self::arg('key', 'Key UUID/id.')), array(
+                self::opt('name', 'Key name.', 'NAME'),
+                self::opt('active', 'Active flag.', 'BOOL')
+            ));
+        self::task('sso:key-generate', 'ssoKeyGenerate', 'Generate a new key and certificate.',
+            'sso:key-generate --name=NAME --country=CODE --state=TEXT --locality=TEXT --organization-unit=TEXT [options]',
+            'CORE', true, array(), $newKeyOptions);
+        self::task('sso:key-regenerate', 'ssoKeyRegenerate', 'Regenerate an existing key and certificate.',
+            'sso:key-regenerate KEY [options] [--yes]', 'CORE', true,
+            array(self::arg('key', 'Key UUID/id.')),
+            array_merge($keyOptions, array(self::opt('yes', 'Confirm key regeneration.', '', false, false, true))));
         self::task('sso:key-delete', 'ssoKeyDelete', 'Delete an SSO key Entity.',
             'sso:key-delete KEY [--yes]', 'CORE', true,
             array(self::arg('key', 'Key UUID/id.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
         self::task(
             'sso:key-export',
-            'unavailable',
+            'ssoKeyExport',
             'Export an SSO key as PKCS#12.',
-            'sso:key-export KEY [--password-stdin] [--output=FILE]',
+            'sso:key-export KEY [--password=PASSWORD|--password-stdin] [--output=FILE]',
             'CORE',
             true,
             array(self::arg('key', 'Key UUID/id.')),
-            array(),
-            array(),
-            'KeyService::exportToPkcs12() sends HTTP headers, echoes data and exits; current master needs a byte-return method before headless export.'
+            array(
+                self::opt('password', 'PKCS#12 export password. Prefer --password-stdin.', 'PASSWORD'),
+                self::opt('password-stdin', 'Read export password from STDIN.', '', false, false, true)
+            )
         );
         self::task(
             'sso:certificate-export',
-            'unavailable',
+            'ssoCertificateExport',
             'Export an SSO certificate.',
             'sso:certificate-export KEY [--output=FILE]',
             'CORE',
             true,
-            array(self::arg('key', 'Key UUID/id.')),
-            array(),
-            array(),
-            'KeyService::exportCertificate() sends HTTP headers, echoes data and exits; current master needs a byte-return method before headless export.'
+            array(self::arg('key', 'Key UUID/id.'))
         );
         self::task('sso:token-cleanup', 'ssoTokenCleanup', 'Delete expired/revoked OIDC token/code rows.',
             'sso:token-cleanup [--yes]', 'CORE', true, array(),
@@ -2580,6 +2683,50 @@ final class CoreTasks
         return 0;
     }
 
+    public static function userTfaSetup(array $arguments, array $options): int
+    {
+        global $gCurrentOrganization, $gCurrentUser, $gCurrentUserId;
+
+        $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
+        if ((int)$user->getValue('usr_id') !== (int)$gCurrentUserId) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        if ($user->hasSetupTfa()) {
+            throw new RuntimeException('Two-factor authentication is already configured for this user.');
+        }
+
+        $tfa = new TwoFactorAuth(issuer: (string)$gCurrentOrganization->getValue('org_longname'));
+        $secret = CliApplication::optionString($options, 'secret');
+        if ($secret === '') {
+            $secret = $tfa->createSecret();
+            CliApplication::writeOutput('Secret: ' . $secret . PHP_EOL, $options, false);
+        }
+
+        $code = CliApplication::optionString($options, 'code');
+        if ($code === '') {
+            if (CliApplication::optionBool($options, 'no-interaction', false)) {
+                throw new RuntimeException('A verification code is required. Pass --code=CODE.');
+            }
+
+            fwrite(STDERR, 'Verification code: ');
+            $input = fgets(STDIN);
+            if ($input === false) {
+                throw new RuntimeException('Could not read verification code from STDIN.');
+            }
+            $code = trim($input);
+        }
+
+        if (!$tfa->verifyCode($secret, $code)) {
+            throw new Exception('SYS_SECURITY_CODE_INVALID');
+        }
+
+        $gCurrentUser->setSecondFactorSecret($secret);
+        $gCurrentUser->save();
+
+        CliApplication::writeSuccess('Two-factor authentication configured.', $options);
+        return 0;
+    }
+
     public static function userTfaStatus(array $arguments, array $options): int
     {
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
@@ -3387,6 +3534,114 @@ final class CoreTasks
         return 0;
     }
 
+    public static function listExport(array $arguments, array $options): int
+    {
+        global $gCurrentOrganization, $gCurrentUser, $gL10n, $gSettingsManager;
+
+        if ($gSettingsManager->getInt('groups_roles_export') === 0
+            || ($gSettingsManager->getInt('groups_roles_export') === 2
+                && !$gCurrentUser->checkRolesRight('rol_edit_user'))) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $list = self::resolveList(CliApplication::requireArgument($arguments, 0, 'list'));
+        self::assertListEditableOrVisible($list, false);
+
+        $roleReferences = CliApplication::optionValues($options, 'role');
+        if (count($roleReferences) === 0) {
+            throw new InvalidArgumentException('At least one --role is required.');
+        }
+
+        $roleUuids = array();
+        $roleNames = array();
+        $hasRightViewProfiles = true;
+        $hasRightViewFormerMembers = true;
+
+        foreach ($roleReferences as $reference) {
+            $role = self::resolveGroup($reference);
+            $roleId = (int)$role->getValue('rol_id');
+
+            if (!$gCurrentUser->hasRightViewRole($roleId)
+                || (!(bool)$role->getValue('rol_valid')
+                    && !$gCurrentUser->checkRolesRight('rol_assign_roles'))) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
+            if (!$gCurrentUser->hasRightViewProfiles($roleId)) {
+                $hasRightViewProfiles = false;
+            }
+            if (!$gCurrentUser->hasRightViewFormerRolesMembers($roleId)) {
+                $hasRightViewFormerMembers = false;
+            }
+
+            $roleUuids[] = (string)$role->getValue('rol_uuid');
+            $roleNames[] = (string)$role->getValue('rol_name');
+        }
+
+        $members = CliApplication::optionString($options, 'members', 'active');
+        $dateFrom = CliApplication::optionString($options, 'date-from', DATE_NOW);
+        $dateTo = CliApplication::optionString($options, 'date-to', DATE_NOW);
+        self::validateDate($dateFrom, '--date-from');
+        self::validateDate($dateTo, '--date-to');
+
+        if ($dateFrom > $dateTo) {
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
+        }
+
+        if (!$hasRightViewFormerMembers) {
+            $members = 'active';
+            $dateFrom = DATE_NOW;
+            $dateTo = DATE_NOW;
+        }
+
+        $relationUuids = array();
+        foreach (CliApplication::optionValues($options, 'relation-type') as $reference) {
+            $relationUuids[] = (string)self::resolveRelationType($reference)->getValue('urt_uuid');
+        }
+
+        if (!$hasRightViewProfiles) {
+            $list->setModeShowOnlyNames();
+        }
+
+        $listData = new ListData();
+        $listData->setDataByConfiguration(
+            $list,
+            array(
+                'showRolesMembers' => $roleUuids,
+                'showAllMembersThisOrga' => $members === 'all',
+                'showFormerMembers' => $members !== 'active',
+                'showRelationTypes' => $relationUuids,
+                'startDate' => $dateFrom,
+                'endDate' => $dateTo
+            )
+        );
+
+        $headlines = $list->getColumnNames();
+        if ($members === 'all') {
+            $headlines[] = $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP');
+        }
+        $listData->setColumnHeadlines($headlines);
+
+        $filename = (string)$gCurrentOrganization->getValue('org_shortname')
+            . '-' . implode('-', $roleNames);
+        if ((string)$list->getValue('lst_name') !== '') {
+            $filename .= '-' . (string)$list->getValue('lst_name');
+        }
+        $filename = FileSystemUtils::getSanitizedPathEntry(str_replace('.', '', html_entity_decode(
+            $filename,
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8'
+        )));
+
+        $export = $listData->createExportFile(
+            $filename,
+            CliApplication::optionString($options, 'format', 'csv')
+        );
+
+        self::moveGeneratedFile($export['path'], $export['filename'], $options);
+        return 0;
+    }
+
     public static function permissionsList(array $arguments, array $options): int
     {
         global $gDb;
@@ -3785,6 +4040,27 @@ final class CoreTasks
         return 0;
     }
 
+    public static function announcementExportRss(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentOrganization;
+
+        $service = new AnnouncementsService(
+            $gDb,
+            CliApplication::optionExists($options, 'category')
+                ? (string)self::resolveCategory(
+                    CliApplication::optionString($options, 'category'),
+                    'ANN'
+                )->getValue('cat_uuid')
+                : ''
+        );
+
+        CliApplication::writeOutput(
+            $service->getRssFeedContent((string)$gCurrentOrganization->getValue('org_shortname')),
+            $options
+        );
+        return 0;
+    }
+
     public static function eventList(array $arguments, array $options): int
     {
         global $gDb, $gCurrentOrgId;
@@ -3975,6 +4251,59 @@ final class CoreTasks
             $rows[] = $participant;
         }
         CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        return 0;
+    }
+
+    public static function eventExport(array $arguments, array $options): int
+    {
+        global $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
+            throw new Exception('SYS_ICAL_DISABLED');
+        }
+
+        $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
+        if (!$event->isVisible()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $events = new \ModuleEvents();
+        $events->setParameter('dat_uuid', (string)$event->getValue('dat_uuid'));
+
+        CliApplication::writeOutput((string)$events->getICalContent(), $options);
+        return 0;
+    }
+
+    public static function eventExportCalendar(array $arguments, array $options): int
+    {
+        global $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
+            throw new Exception('SYS_ICAL_DISABLED');
+        }
+
+        $dateFrom = CliApplication::optionString(
+            $options,
+            'date-from',
+            date('Y-m-d', strtotime('-6 months'))
+        );
+        $dateTo = CliApplication::optionString($options, 'date-to', DATE_MAX);
+        self::validateDate($dateFrom, '--date-from');
+        self::validateDate($dateTo, '--date-to');
+
+        if ($dateFrom > $dateTo) {
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
+        }
+
+        $events = new \ModuleEvents();
+        $events->setDateRange($dateFrom, $dateTo);
+
+        if (CliApplication::optionExists($options, 'calendar')) {
+            $category = self::resolveCategory(CliApplication::optionString($options, 'calendar'), 'EVT');
+            $events->setParameter('cat_uuid', (string)$category->getValue('cat_uuid'));
+        }
+
+        CliApplication::writeOutput((string)$events->getICalContent(), $options);
         return 0;
     }
 
@@ -4190,6 +4519,27 @@ final class CoreTasks
         return 0;
     }
 
+    public static function forumExportRss(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentOrganization;
+
+        $service = new ForumService(
+            $gDb,
+            CliApplication::optionExists($options, 'category')
+                ? (string)self::resolveCategory(
+                    CliApplication::optionString($options, 'category'),
+                    'FOT'
+                )->getValue('cat_uuid')
+                : ''
+        );
+
+        CliApplication::writeOutput(
+            $service->getRssFeedContent((string)$gCurrentOrganization->getValue('org_shortname')),
+            $options
+        );
+        return 0;
+    }
+
     public static function linkList(array $arguments, array $options): int
     {
         global $gDb, $gCurrentOrgId;
@@ -4374,6 +4724,27 @@ final class CoreTasks
             CliApplication::optionString($options, 'format', 'table'),
             $options
         );
+        return 0;
+    }
+
+    public static function documentDownload(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $fileUUID = CliApplication::requireArgument($arguments, 0, 'file');
+        $file = (new DocumentsService($gDb))->prepareFileDownload($fileUUID);
+
+        $source = $file->getFullFilePath();
+        $target = CliApplication::optionString($options, 'output');
+        if ($target === '') {
+            $target = getcwd() . DIRECTORY_SEPARATOR . (string)$file->getValue('fil_name', 'database');
+        }
+
+        if (!@copy($source, $target)) {
+            throw new RuntimeException('Could not copy document to "' . $target . '".');
+        }
+
+        CliApplication::writeSuccess('Document written to ' . $target . '.', $options);
         return 0;
     }
 
@@ -4667,6 +5038,24 @@ final class CoreTasks
     }
 
 
+    public static function photoEcardTemplates(array $arguments, array $options): int
+    {
+        global $gL10n;
+
+        $ecard = new ECard($gL10n);
+        $rows = array();
+        foreach ($ecard->getFileNames(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates') as $filename) {
+            $rows[] = array('template' => $filename);
+        }
+
+        CliApplication::writeRows(
+            $rows,
+            CliApplication::optionString($options, 'format', 'table'),
+            $options
+        );
+        return 0;
+    }
+
     public static function inventoryList(array $arguments, array $options): int
     {
         global $gDb, $gCurrentOrgId;
@@ -4718,6 +5107,71 @@ final class CoreTasks
     {
         $itemData = self::resolveItemData(CliApplication::requireArgument($arguments, 0, 'item'));
         CliApplication::writeValue(self::itemData($itemData), $options);
+        return 0;
+    }
+
+    public static function inventoryAdd(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $formValues = self::inventoryFormValues(CliApplication::optionValues($options, 'field'));
+        if (!isset($formValues['INF-CATEGORY']) || $formValues['INF-CATEGORY'] === '') {
+            throw new InvalidArgumentException('A CATEGORY inventory field assignment is required.');
+        }
+        self::validateRequiredInventoryFields($formValues);
+
+        (new ItemService($gDb))->saveData($formValues);
+        CliApplication::writeSuccess('Inventory item created.', $options);
+        return 0;
+    }
+
+    public static function inventoryUpdate(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $uuid = self::resolveItemUuid(CliApplication::requireArgument($arguments, 0, 'item'));
+        $formValues = self::inventoryFormValues(CliApplication::optionValues($options, 'field'));
+
+        if (count($formValues) === 0) {
+            throw new InvalidArgumentException('At least one --field assignment is required.');
+        }
+
+        (new ItemService($gDb, $uuid))->saveData($formValues, true);
+        CliApplication::writeSuccess('Inventory item updated.', $options);
+        return 0;
+    }
+
+    public static function inventoryCopy(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $source = self::resolveItemData(CliApplication::requireArgument($arguments, 0, 'item'));
+        $formValues = array();
+
+        foreach ($source->getItemFields() as $field) {
+            $name = (string)$field->getValue('inf_name_intern');
+            $formValues['INF-' . $name] = $source->getValue($name, 'database');
+        }
+
+        foreach (self::inventoryFormValues(CliApplication::optionValues($options, 'field')) as $key => $value) {
+            $formValues[$key] = $value;
+        }
+
+        $copies = CliApplication::optionExists($options, 'copies')
+            ? self::positiveInt(CliApplication::optionString($options, 'copies'), '--copies')
+            : 1;
+
+        $numberFieldId = 0;
+        if (CliApplication::optionExists($options, 'number-field')) {
+            $numberField = self::resolveInventoryField(CliApplication::optionString($options, 'number-field'));
+            if ((string)$numberField->getValue('inf_type') !== 'NUMBER') {
+                throw new InvalidArgumentException('--number-field must reference an inventory NUMBER field.');
+            }
+            $numberFieldId = (int)$numberField->getValue('inf_id');
+        }
+
+        (new ItemService($gDb, '', $numberFieldId, $copies))->saveData($formValues);
+        CliApplication::writeSuccess('Inventory item copied.', $options);
         return 0;
     }
 
@@ -4816,6 +5270,41 @@ final class CoreTasks
     {
         $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
         CliApplication::writeValue(self::inventoryFieldData($field), $options);
+        return 0;
+    }
+
+    public static function inventoryFieldAdd(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $values = self::inventoryFieldFormValues($options);
+        if (!isset($values['inf_name'], $values['inf_type'])) {
+            throw new InvalidArgumentException('--name and --type are required.');
+        }
+
+        (new ItemFieldService($gDb))->saveData($values);
+        CliApplication::writeSuccess('Inventory field created.', $options);
+        return 0;
+    }
+
+    public static function inventoryFieldUpdate(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
+        if ((bool)$field->getValue('inf_system')
+            && (CliApplication::optionExists($options, 'type')
+                || CliApplication::optionExists($options, 'connected-field'))) {
+            throw new RuntimeException('The type/connection of a system inventory field cannot be changed.');
+        }
+
+        $values = self::inventoryFieldFormValues($options);
+        if (count($values) === 0) {
+            throw new InvalidArgumentException('No inventory field values were supplied.');
+        }
+
+        (new ItemFieldService($gDb, (string)$field->getValue('inf_uuid')))->saveData($values);
+        CliApplication::writeSuccess('Inventory field updated.', $options);
         return 0;
     }
 
@@ -4951,6 +5440,52 @@ final class CoreTasks
     {
         $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
         CliApplication::writeValue(self::profileFieldData($field), $options);
+        return 0;
+    }
+
+    public static function profileFieldAdd(array $arguments, array $options): int
+    {
+        global $gCurrentUser, $gDb;
+
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $values = self::profileFieldFormValues($options);
+        if (!isset($values['usf_name'], $values['usf_cat_id'], $values['usf_type'])) {
+            throw new InvalidArgumentException('--name, --category and --type are required.');
+        }
+
+        (new ProfileFieldService($gDb))->saveData($values);
+        CliApplication::writeSuccess('Profile field created.', $options);
+        return 0;
+    }
+
+    public static function profileFieldUpdate(array $arguments, array $options): int
+    {
+        global $gCurrentUser, $gDb;
+
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
+        if ((bool)$field->getValue('usf_system')
+            && (CliApplication::optionExists($options, 'category')
+                || CliApplication::optionExists($options, 'type'))) {
+            throw new RuntimeException('The category/type of a system profile field cannot be changed.');
+        }
+
+        $values = self::profileFieldFormValues($options);
+        if (count($values) === 0) {
+            throw new InvalidArgumentException('No profile field values were supplied.');
+        }
+        if (isset($values['usf_name']) && !isset($values['usf_cat_id'])) {
+            $values['usf_cat_id'] = (int)$field->getValue('usf_cat_id');
+        }
+
+        (new ProfileFieldService($gDb, (string)$field->getValue('usf_uuid')))->saveData($values);
+        CliApplication::writeSuccess('Profile field updated.', $options);
         return 0;
     }
 
@@ -5128,6 +5663,206 @@ final class CoreTasks
         );
 
         CliApplication::writeValue($data, $options);
+        return 0;
+    }
+
+    public static function categoryReportAdd(array $arguments, array $options): int
+    {
+        global $gCurrentUser;
+
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $report = new \CategoryReport();
+        $config = self::categoryReportConfigForSave($report->getConfigArray());
+        $values = self::categoryReportFormValues($options, array(
+            'id' => '',
+            'name' => '',
+            'col_fields' => '',
+            'col_conditions' => '',
+            'selection_role' => '',
+            'selection_cat' => '',
+            'number_col' => 0,
+            'default_conf' => false
+        ));
+
+        if ($values['name'] === '' || $values['col_fields'] === '') {
+            throw new InvalidArgumentException('--name and at least one --column are required.');
+        }
+
+        $config[] = $values;
+        $report->saveConfigArray($config);
+
+        CliApplication::writeSuccess('Category-report configuration created.', $options);
+        return 0;
+    }
+
+    public static function categoryReportUpdate(array $arguments, array $options): int
+    {
+        global $gCurrentUser;
+
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $report = new \CategoryReport();
+        $config = self::categoryReportConfigForSave($report->getConfigArray());
+        $index = self::categoryReportConfigIndex(
+            $config,
+            CliApplication::requireArgument($arguments, 0, 'config')
+        );
+        $config[$index] = self::categoryReportFormValues($options, $config[$index]);
+        $report->saveConfigArray($config);
+
+        CliApplication::writeSuccess('Category-report configuration updated.', $options);
+        return 0;
+    }
+
+    public static function categoryReportCopy(array $arguments, array $options): int
+    {
+        global $gCurrentUser;
+
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $report = new \CategoryReport();
+        $config = self::categoryReportConfigForSave($report->getConfigArray());
+        $index = self::categoryReportConfigIndex(
+            $config,
+            CliApplication::requireArgument($arguments, 0, 'config')
+        );
+
+        $copy = $config[$index];
+        $copy['id'] = '';
+        $copy['default_conf'] = false;
+        $copy['name'] = CliApplication::optionExists($options, 'name')
+            ? CliApplication::optionString($options, 'name')
+            : $report->createName(html_entity_decode((string)$copy['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+        $config[] = $copy;
+        $report->saveConfigArray($config);
+
+        CliApplication::writeSuccess('Category-report configuration copied.', $options);
+        return 0;
+    }
+
+    public static function categoryReportDelete(array $arguments, array $options): int
+    {
+        global $gCurrentUser;
+
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $report = new \CategoryReport();
+        $config = self::categoryReportConfigForSave($report->getConfigArray());
+        $index = self::categoryReportConfigIndex(
+            $config,
+            CliApplication::requireArgument($arguments, 0, 'config')
+        );
+
+        CliApplication::confirm(
+            'Delete category-report configuration "' . html_entity_decode(
+                (string)$config[$index]['name'],
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8'
+            ) . '"?',
+            $options
+        );
+
+        $config[$index]['id'] = -1 * (int)$config[$index]['id'];
+        $report->saveConfigArray($config);
+
+        CliApplication::writeSuccess('Category-report configuration deleted.', $options);
+        return 0;
+    }
+
+    public static function categoryReportRun(array $arguments, array $options): int
+    {
+        global $gCurrentUser, $gProfileFields;
+
+        if (!$gCurrentUser->checkRolesRight('rol_all_lists_view')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $report = new \CategoryReport();
+        $config = $report->getConfigArray();
+        $index = self::categoryReportConfigIndex(
+            $config,
+            CliApplication::requireArgument($arguments, 0, 'config')
+        );
+        $report->setConfiguration((int)$config[$index]['id']);
+
+        $date = CliApplication::optionString($options, 'date', DATE_NOW);
+        self::validateDate($date, '--date');
+        $report->generate_listData($date);
+
+        $headers = array();
+        foreach ($report->headerData as $columnHeader) {
+            $headers[] = html_entity_decode(
+                (string)$columnHeader['data'],
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8'
+            );
+        }
+
+        $rows = array();
+        $filter = mb_strtolower(CliApplication::optionString($options, 'filter'));
+        foreach ($report->listData as $memberData) {
+            $row = array();
+            foreach (array_values($memberData) as $indexColumn => $value) {
+                $header = $headers[$indexColumn] ?? 'column_' . ($indexColumn + 1);
+                $headerData = array_values($report->headerData)[$indexColumn] ?? array('id' => 0);
+                $profileFieldId = (int)($headerData['id'] ?? 0);
+
+                if ($profileFieldId > 0) {
+                    $type = (string)$gProfileFields->getPropertyById($profileFieldId, 'usf_type');
+                    if (in_array($type, array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'RADIO_BUTTON'), true)
+                        && $value !== '' && $value !== null) {
+                        $selectOptions = $gProfileFields->getPropertyById(
+                            $profileFieldId,
+                            'ufo_usf_options',
+                            'text'
+                        );
+                        if (is_array($value)) {
+                            $value = implode(', ', array_map(
+                                static fn (mixed $entry): string => (string)($selectOptions[$entry] ?? ''),
+                                $value
+                            ));
+                        } elseif (isset($selectOptions[$value])) {
+                            $value = $selectOptions[$value];
+                        }
+                    } elseif ($type === 'CHECKBOX') {
+                        $value = $value ? 'X' : '';
+                    }
+                } elseif ($value === true) {
+                    $value = 'X';
+                }
+
+                $row[$header] = $value;
+            }
+
+            if ($filter !== ''
+                && !str_contains(
+                    mb_strtolower(implode(' ', array_map(
+                        static fn (mixed $value): string => is_scalar($value) ? (string)$value : '',
+                        $row
+                    ))),
+                    $filter
+                )) {
+                continue;
+            }
+
+            $rows[] = $row;
+        }
+
+        CliApplication::writeRows(
+            $rows,
+            CliApplication::optionString($options, 'format', 'table'),
+            $options
+        );
         return 0;
     }
 
@@ -5383,6 +6118,26 @@ final class CoreTasks
         return 0;
     }
 
+    public static function pluginMove(array $arguments, array $options): int
+    {
+        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+        $direction = self::direction(CliApplication::requireArgument($arguments, 1, 'direction'));
+
+        if (!$plugin::isInstalled()) {
+            throw new RuntimeException('Plugin is not installed.');
+        }
+
+        $sequence = $plugin::getPluginSequence();
+        $newSequence = $direction === 'up' ? max(1, $sequence - 1) : $sequence + 1;
+
+        if (!$plugin::setPluginSequence($newSequence)) {
+            throw new RuntimeException('Plugin sequence could not be updated.');
+        }
+
+        CliApplication::writeSuccess('Plugin moved.', $options);
+        return 0;
+    }
+
     public static function requirementsList(array $arguments, array $options): int
     {
         global $gDb, $gCurrentOrgId;
@@ -5474,6 +6229,24 @@ final class CoreTasks
         return 0;
     }
 
+    public static function ssoOidcDiscovery(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentUser;
+
+        $service = new OIDCService($gDb, $gCurrentUser);
+        CliApplication::writeValue($service->getDiscoveryConfiguration(), $options, 'json');
+        return 0;
+    }
+
+    public static function ssoSamlMetadata(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentUser;
+
+        $service = new SAMLService($gDb, $gCurrentUser);
+        CliApplication::writeOutput($service->getMetadataXml(), $options);
+        return 0;
+    }
+
     public static function ssoList(array $arguments, array $options): int
     {
         global $gDb;
@@ -5541,6 +6314,80 @@ final class CoreTasks
         return self::setSsoEnabled($arguments, $options, false);
     }
 
+    public static function ssoSamlAdd(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentUser;
+
+        [$formValues, $accessRoles] = self::ssoFormValues('saml', null, $options);
+
+        foreach (array('smc_client_name', 'smc_client_id', 'smc_acs_url') as $requiredField) {
+            if (($formValues[$requiredField] ?? '') === '') {
+                throw new InvalidArgumentException('--name, --client-id and --acs-url are required.');
+            }
+        }
+
+        $client = (new SAMLService($gDb, $gCurrentUser))->saveData(null, $formValues, $accessRoles);
+        CliApplication::writeValue(self::ssoClientData($client, 'saml'), $options);
+        return 0;
+    }
+
+    public static function ssoSamlUpdate(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentUser;
+
+        [$client] = self::resolveSsoClient(
+            CliApplication::requireArgument($arguments, 0, 'client'),
+            'saml'
+        );
+        [$formValues, $accessRoles] = self::ssoFormValues('saml', $client, $options);
+
+        $saved = (new SAMLService($gDb, $gCurrentUser))->saveData(
+            (string)$client->getValue('smc_uuid'),
+            $formValues,
+            $accessRoles
+        );
+
+        CliApplication::writeValue(self::ssoClientData($saved, 'saml'), $options);
+        return 0;
+    }
+
+    public static function ssoOidcAdd(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentUser;
+
+        [$formValues, $accessRoles] = self::ssoFormValues('oidc', null, $options);
+
+        foreach (array('ocl_client_name', 'ocl_client_id') as $requiredField) {
+            if (($formValues[$requiredField] ?? '') === '') {
+                throw new InvalidArgumentException('--name and --client-id are required.');
+            }
+        }
+
+        $client = (new OIDCService($gDb, $gCurrentUser))->saveData(null, $formValues, $accessRoles);
+        CliApplication::writeValue(self::ssoClientData($client, 'oidc'), $options);
+        return 0;
+    }
+
+    public static function ssoOidcUpdate(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentUser;
+
+        [$client] = self::resolveSsoClient(
+            CliApplication::requireArgument($arguments, 0, 'client'),
+            'oidc'
+        );
+        [$formValues, $accessRoles] = self::ssoFormValues('oidc', $client, $options);
+
+        $saved = (new OIDCService($gDb, $gCurrentUser))->saveData(
+            (string)$client->getValue('ocl_uuid'),
+            $formValues,
+            $accessRoles
+        );
+
+        CliApplication::writeValue(self::ssoClientData($saved, 'oidc'), $options);
+        return 0;
+    }
+
     public static function ssoDelete(array $arguments, array $options): int
     {
         $type = str_contains(CliApplication::currentCommand(), ':saml-') ? 'saml' : 'oidc';
@@ -5592,12 +6439,81 @@ final class CoreTasks
         return 0;
     }
 
+    public static function ssoKeyAdd(array $arguments, array $options): int
+    {
+        return self::saveSsoKey('', $options, 'key');
+    }
+
+    public static function ssoKeyUpdate(array $arguments, array $options): int
+    {
+        $key = self::resolveSsoKey(CliApplication::requireArgument($arguments, 0, 'key'));
+        $values = array();
+
+        if (CliApplication::optionExists($options, 'name')) {
+            $values['key_name'] = CliApplication::optionString($options, 'name');
+        }
+        if (CliApplication::optionExists($options, 'active')) {
+            $values['key_is_active'] = CliApplication::optionBool($options, 'active', false) ?? false;
+        }
+        if (count($values) === 0) {
+            throw new InvalidArgumentException('No SSO key values were supplied.');
+        }
+
+        $saved = (new KeyService($GLOBALS['gDb']))->saveData(
+            (string)$key->getValue('key_uuid'),
+            $values,
+            'save'
+        );
+
+        CliApplication::writeValue(self::ssoKeyData($saved), $options);
+        return 0;
+    }
+
+    public static function ssoKeyGenerate(array $arguments, array $options): int
+    {
+        return self::saveSsoKey('', $options, 'key');
+    }
+
+    public static function ssoKeyRegenerate(array $arguments, array $options): int
+    {
+        $key = self::resolveSsoKey(CliApplication::requireArgument($arguments, 0, 'key'));
+        CliApplication::confirm('Regenerate SSO key "' . $key->getValue('key_name') . '"?', $options);
+
+        return self::saveSsoKey((string)$key->getValue('key_uuid'), $options, 'key', $key);
+    }
+
     public static function ssoKeyDelete(array $arguments, array $options): int
     {
         $key = self::resolveSsoKey(CliApplication::requireArgument($arguments, 0, 'key'));
         CliApplication::confirm('Delete SSO key "' . $key->getValue('key_name') . '"?', $options);
         $key->delete();
         CliApplication::writeSuccess('SSO key deleted.', $options);
+        return 0;
+    }
+
+    public static function ssoKeyExport(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $key = self::resolveSsoKey(CliApplication::requireArgument($arguments, 0, 'key'));
+        $password = CliApplication::readSecret($options, 'password', 'password-stdin');
+        $export = (new KeyService($gDb))->getPkcs12ExportData(
+            (string)$key->getValue('key_uuid'),
+            $password
+        );
+
+        self::writeExportContent($export, $options);
+        return 0;
+    }
+
+    public static function ssoCertificateExport(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $key = self::resolveSsoKey(CliApplication::requireArgument($arguments, 0, 'key'));
+        $export = (new KeyService($gDb))->getCertificateExportData((string)$key->getValue('key_uuid'));
+
+        self::writeExportContent($export, $options);
         return 0;
     }
 
@@ -7184,15 +8100,19 @@ final class CoreTasks
 
         if (ctype_digit($reference)) {
             $rows = $gDb->queryPrepared(
-                'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_id = ? AND inf_org_id = ?',
+                'SELECT inf_id
+                   FROM ' . TBL_INVENTORY_FIELDS . '
+                  WHERE inf_id = ?
+                    AND (inf_org_id = ? OR inf_org_id IS NULL)',
                 array((int)$reference, $gCurrentOrgId)
             )->fetchAll(PDO::FETCH_COLUMN);
         } else {
             $rows = $gDb->queryPrepared(
                 'SELECT inf_id
                    FROM ' . TBL_INVENTORY_FIELDS . '
-                  WHERE inf_org_id = ? AND (inf_uuid = ? OR inf_name_intern = ?)',
-                array($gCurrentOrgId, $reference, strtoupper($reference))
+                  WHERE (inf_org_id = ? OR inf_org_id IS NULL)
+                    AND (inf_uuid = ? OR UPPER(inf_name_intern) = UPPER(?))',
+                array($gCurrentOrgId, $reference, $reference)
             )->fetchAll(PDO::FETCH_COLUMN);
         }
         $ids = array_values(array_unique(array_map('intval', $rows)));
@@ -7557,6 +8477,590 @@ final class CoreTasks
         );
     }
 
+
+    /**
+     * @param array<int,string> $assignments
+     * @return array<string,mixed>
+     */
+    private static function inventoryFormValues(array $assignments): array
+    {
+        $values = array();
+
+        foreach ($assignments as $assignment) {
+            [$fieldReference, $value] = self::splitAssignment($assignment);
+            $field = self::resolveInventoryField($fieldReference);
+            $fieldName = (string)$field->getValue('inf_name_intern');
+
+            if ($fieldName === 'CATEGORY' && $value !== '') {
+                $value = (string)self::resolveCategory($value, 'IVT')->getValue('cat_uuid');
+            }
+
+            if ((string)$field->getValue('inf_type') === 'DROPDOWN_MULTISELECT') {
+                $value = $value === '' ? array() : array_map('trim', explode(',', $value));
+            }
+
+            $values['INF-' . $fieldName] = $value;
+        }
+
+        return $values;
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
+    /**
+     * Validate the required inventory fields that would normally be enforced by FormPresenter.
+     *
+     * @param array<string,mixed> $formValues
+     */
+    private static function validateRequiredInventoryFields(array $formValues): void
+    {
+        global $gDb, $gCurrentOrgId, $gL10n;
+
+        $itemsData = new ItemsData($gDb, $gCurrentOrgId);
+        foreach ($itemsData->getItemFields() as $itemField) {
+            if ((int)$itemField->getValue('inf_required_input') !== 1) {
+                continue;
+            }
+
+            $postKey = 'INF-' . $itemField->getValue('inf_name_intern');
+            if (!array_key_exists($postKey, $formValues)
+                || (is_array($formValues[$postKey]) && count($formValues[$postKey]) === 0)
+                || (is_string($formValues[$postKey]) && strlen($formValues[$postKey]) === 0)) {
+                throw new Exception(
+                    $gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name')))
+                );
+            }
+        }
+    }
+
+    private static function inventoryFieldFormValues(array $options): array
+    {
+        $values = array();
+
+        foreach (array(
+            'name' => 'inf_name',
+            'type' => 'inf_type',
+            'description' => 'inf_description'
+        ) as $option => $column) {
+            if (CliApplication::optionExists($options, $option)) {
+                $values[$column] = CliApplication::optionString($options, $option);
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'required')) {
+            $required = (int)CliApplication::optionString($options, 'required');
+            if ($required < 0 || $required > 1) {
+                throw new InvalidArgumentException('--required expects 0 or 1.');
+            }
+            $values['inf_required_input'] = $required;
+        }
+
+        if (CliApplication::optionExists($options, 'connected-field')) {
+            $connectedReference = CliApplication::optionString($options, 'connected-field');
+            $values['inf_inf_uuid_connected'] = $connectedReference === ''
+                ? ''
+                : (string)self::resolveInventoryField($connectedReference)->getValue('inf_uuid');
+        }
+
+        return $values;
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
+    private static function profileFieldFormValues(array $options): array
+    {
+        $values = array();
+
+        foreach (array(
+            'name' => 'usf_name',
+            'type' => 'usf_type',
+            'default' => 'usf_default_value',
+            'regex' => 'usf_regex',
+            'icon' => 'usf_icon',
+            'url' => 'usf_url',
+            'description' => 'usf_description'
+        ) as $option => $column) {
+            if (CliApplication::optionExists($options, $option)) {
+                $values[$column] = CliApplication::optionString($options, $option);
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'category')) {
+            $values['usf_cat_id'] = (int)self::resolveCategory(
+                CliApplication::optionString($options, 'category'),
+                'USF'
+            )->getValue('cat_id');
+        }
+
+        if (CliApplication::optionExists($options, 'required')) {
+            $required = (int)CliApplication::optionString($options, 'required');
+            if ($required < 0 || $required > 3) {
+                throw new InvalidArgumentException('--required expects a value from 0 to 3.');
+            }
+            $values['usf_required_input'] = $required;
+        }
+
+        foreach (array(
+            'hidden' => 'usf_hidden',
+            'disabled' => 'usf_disabled',
+            'registration' => 'usf_registration'
+        ) as $option => $column) {
+            if (CliApplication::optionExists($options, $option)) {
+                $values[$column] = CliApplication::optionBool($options, $option, false) ?? false;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * @param array<int,array<string,mixed>> $config
+     */
+    /**
+     * CategoryReport::getConfigArray() HTML-encodes configuration names for the web UI.
+     * Decode them before passing the array back to saveConfigArray(), just as a browser form
+     * submission would do.
+     *
+     * @param array<int,array<string,mixed>> $config
+     * @return array<int,array<string,mixed>>
+     */
+    private static function categoryReportConfigForSave(array $config): array
+    {
+        foreach ($config as &$values) {
+            $values['name'] = html_entity_decode(
+                (string)($values['name'] ?? ''),
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8'
+            );
+        }
+        unset($values);
+
+        return $config;
+    }
+
+    private static function categoryReportConfigIndex(array $config, string $reference): int
+    {
+        $matches = array();
+
+        foreach ($config as $index => $values) {
+            $name = html_entity_decode((string)($values['name'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+            if ((ctype_digit($reference) && (int)$values['id'] === (int)$reference)
+                || (!ctype_digit($reference) && $name === $reference)) {
+                $matches[] = $index;
+            }
+        }
+
+        if (count($matches) !== 1) {
+            throw new InvalidArgumentException(
+                count($matches) === 0
+                    ? 'Unknown category-report configuration.'
+                    : 'Category-report configuration name is ambiguous; use the numeric id.'
+            );
+        }
+
+        return (int)$matches[0];
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     * @param array<string,mixed> $values
+     * @return array<string,mixed>
+     */
+    private static function categoryReportFormValues(array $options, array $values): array
+    {
+        if (CliApplication::optionExists($options, 'name')) {
+            $values['name'] = CliApplication::optionString($options, 'name');
+        }
+
+        if (CliApplication::optionExists($options, 'role')) {
+            $ids = array();
+            foreach (CliApplication::optionValues($options, 'role') as $reference) {
+                $ids[] = (int)self::resolveGroup($reference)->getValue('rol_id');
+            }
+            $values['selection_role'] = implode(',', $ids);
+        }
+
+        if (CliApplication::optionExists($options, 'category')) {
+            $ids = array();
+            foreach (CliApplication::optionValues($options, 'category') as $reference) {
+                $ids[] = (int)self::resolveCategory($reference, 'ROL')->getValue('cat_id');
+            }
+            $values['selection_cat'] = implode(',', $ids);
+        }
+
+        if (CliApplication::optionExists($options, 'column')) {
+            $columns = CliApplication::optionValues($options, 'column');
+            $values['col_fields'] = implode(',', $columns);
+
+            $conditions = CliApplication::optionValues($options, 'condition');
+            $conditions = array_slice($conditions, 0, count($columns));
+            while (count($conditions) < count($columns)) {
+                $conditions[] = '';
+            }
+            $conditions = array_map(
+                static function (string $condition): string {
+                    $condition = str_replace(array('<', '>'), array('{', '}'), $condition);
+                    return trim(str_replace(array("\r", "\n"), ' ', $condition));
+                },
+                $conditions
+            );
+            $values['col_conditions'] = implode(',', $conditions);
+        } elseif (CliApplication::optionExists($options, 'condition')) {
+            throw new InvalidArgumentException('--condition can only be used together with --column.');
+        }
+
+        if (CliApplication::optionExists($options, 'number-column')) {
+            $values['number_col'] = (int)(CliApplication::optionBool($options, 'number-column', false) ?? false);
+        }
+        if (CliApplication::optionExists($options, 'default')) {
+            $values['default_conf'] = CliApplication::optionBool($options, 'default', false) ?? false;
+        }
+
+        return $values;
+    }
+
+    /**
+     * @param SAMLClient|OIDCClient|null $client
+     * @param array<string,mixed> $options
+     * @return array{0:array<string,mixed>,1:array<int,int>}
+     */
+    private static function ssoFormValues(
+        string $type,
+        SAMLClient|OIDCClient|null $client,
+        array $options
+    ): array {
+        $prefix = $type === 'saml' ? 'smc' : 'ocl';
+        $values = array();
+
+        if ($client !== null) {
+            $fieldMapping = $client->getFieldMapping();
+            $roleMapping = $client->getRoleMapping();
+
+            $values['fieldsmap_sso'] = array_keys($fieldMapping);
+            $values['fieldsmap_Admidio'] = array_values($fieldMapping);
+            $values['rolesmap_sso'] = array_keys($roleMapping);
+            $values['rolesmap_Admidio'] = array_values($roleMapping);
+            $values['sso_fields_no_other'] = $client->getFieldMappingCatchall();
+            $values['sso_roles_all_other'] = $client->getRoleMappingCatchall();
+            $accessRoles = array_map('intval', $client->getAccessRolesIds());
+        } else {
+            $values['fieldsmap_sso'] = array();
+            $values['fieldsmap_Admidio'] = array();
+            $values['rolesmap_sso'] = array();
+            $values['rolesmap_Admidio'] = array();
+            $values['sso_fields_no_other'] = false;
+            $values['sso_roles_all_other'] = false;
+            $accessRoles = array();
+        }
+
+        $fieldOptions = $type === 'saml'
+            ? array(
+                'name' => 'smc_client_name',
+                'client-id' => 'smc_client_id',
+                'metadata-url' => 'smc_metadata_url',
+                'acs-url' => 'smc_acs_url',
+                'slo-url' => 'smc_slo_url',
+                'assertion-lifetime' => 'smc_assertion_lifetime',
+                'clock-skew' => 'smc_allowed_clock_skew',
+                'userid-field' => 'smc_userid_field'
+            )
+            : array(
+                'name' => 'ocl_client_name',
+                'client-id' => 'ocl_client_id',
+                'redirect-uri' => 'ocl_redirect_uri',
+                'userid-field' => 'ocl_userid_field'
+            );
+
+        foreach ($fieldOptions as $option => $column) {
+            if (CliApplication::optionExists($options, $option)) {
+                $values[$column] = CliApplication::optionString($options, $option);
+            } elseif ($client !== null) {
+                $values[$column] = $client->getValue($column, 'database');
+            }
+        }
+
+        $boolOptions = $type === 'saml'
+            ? array(
+                'enabled' => 'smc_enabled',
+                'require-auth-signed' => 'smc_require_auth_signed',
+                'sign-assertions' => 'smc_sign_assertions',
+                'encrypt-assertions' => 'smc_encrypt_assertions',
+                'validate-signatures' => 'smc_validate_signatures'
+            )
+            : array('enabled' => 'ocl_enabled');
+
+        foreach ($boolOptions as $option => $column) {
+            if (CliApplication::optionExists($options, $option)) {
+                $values[$column] = CliApplication::optionBool($options, $option, false) ?? false;
+            } elseif ($client !== null) {
+                $values[$column] = (bool)$client->getValue($column);
+            } elseif ($option === 'enabled') {
+                $values[$column] = true;
+            }
+        }
+
+        if ($type === 'saml') {
+            if ($client === null) {
+                $values += array(
+                    'smc_metadata_url' => '',
+                    'smc_slo_url' => '',
+                    'smc_x509_certificate' => '',
+                    'smc_require_auth_signed' => false,
+                    'smc_sign_assertions' => false,
+                    'smc_encrypt_assertions' => false,
+                    'smc_validate_signatures' => false,
+                    'smc_assertion_lifetime' => 600,
+                    'smc_allowed_clock_skew' => 0,
+                    'smc_userid_field' => 'usr_id'
+                );
+            }
+
+            if (CliApplication::optionExists($options, 'certificate')) {
+                $certificateFile = CliApplication::optionString($options, 'certificate');
+                $certificate = @file_get_contents($certificateFile);
+                if ($certificate === false) {
+                    throw new RuntimeException('Could not read certificate file "' . $certificateFile . '".');
+                }
+                $values['smc_x509_certificate'] = $certificate;
+            } elseif ($client !== null) {
+                $values['smc_x509_certificate'] = $client->getValue('smc_x509_certificate', 'database');
+            }
+        } else {
+            if ($client === null) {
+                $values += array(
+                    'ocl_redirect_uri' => '',
+                    'ocl_userid_field' => 'usr_id',
+                    'ocl_scope' => array()
+                );
+            }
+
+            if (CliApplication::optionExists($options, 'scope')) {
+                $values['ocl_scope'] = array_values(array_filter(
+                    CliApplication::optionValues($options, 'scope'),
+                    static fn (string $scope): bool => $scope !== 'openid'
+                ));
+            } elseif ($client !== null) {
+                $scopes = preg_split(
+                    '/[,;\s]+/',
+                    trim((string)$client->getValue('ocl_scope', 'database'))
+                ) ?: array();
+                $values['ocl_scope'] = array_values(array_filter(
+                    $scopes,
+                    static fn (string $scope): bool => $scope !== '' && $scope !== 'openid'
+                ));
+            }
+
+            if (CliApplication::optionExists($options, 'client-secret')
+                || CliApplication::optionBool($options, 'client-secret-stdin', false)) {
+                $secret = CliApplication::readSecret($options, 'client-secret', 'client-secret-stdin');
+                if ($secret === '') {
+                    throw new InvalidArgumentException('The OIDC client secret must not be empty.');
+                }
+                $values['new_ocl_client_secret'] = $secret;
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'field-map')) {
+            $values['fieldsmap_sso'] = array();
+            $values['fieldsmap_Admidio'] = array();
+            foreach (CliApplication::optionValues($options, 'field-map') as $assignment) {
+                [$admidioField, $ssoField] = self::splitAssignment($assignment);
+                $values['fieldsmap_Admidio'][] = $admidioField;
+                $values['fieldsmap_sso'][] = $ssoField;
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'field-map-other')) {
+            $values['sso_fields_no_other'] = CliApplication::optionBool(
+                $options,
+                'field-map-other',
+                false
+            ) ?? false;
+        }
+
+        if (CliApplication::optionExists($options, 'role-map')) {
+            $values['rolesmap_sso'] = array();
+            $values['rolesmap_Admidio'] = array();
+            foreach (CliApplication::optionValues($options, 'role-map') as $assignment) {
+                [$roleReference, $ssoRole] = self::splitAssignment($assignment);
+                $values['rolesmap_Admidio'][] = (int)self::resolveGroup($roleReference)->getValue('rol_id');
+                $values['rolesmap_sso'][] = $ssoRole;
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'role-map-other')) {
+            $values['sso_roles_all_other'] = CliApplication::optionBool(
+                $options,
+                'role-map-other',
+                false
+            ) ?? false;
+        }
+
+        if (CliApplication::optionExists($options, 'access-role')) {
+            $accessRoles = self::resolveRoleIds(CliApplication::optionValues($options, 'access-role'));
+        }
+
+        return array($values, $accessRoles);
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     */
+    private static function saveSsoKey(
+        string $keyUUID,
+        array $options,
+        string $mode,
+        ?Key $existingKey = null
+    ): int {
+        global $gCurrentOrganization, $gDb;
+
+        $values = self::ssoKeyCertificateValues($existingKey);
+
+        $values['key_name'] = CliApplication::optionExists($options, 'name')
+            ? CliApplication::optionString($options, 'name')
+            : ($existingKey === null ? '' : (string)$existingKey->getValue('key_name', 'database'));
+
+        if ($values['key_name'] === '') {
+            throw new InvalidArgumentException('--name is required.');
+        }
+
+        $values['key_algorithm'] = CliApplication::optionExists($options, 'algorithm')
+            ? CliApplication::optionString($options, 'algorithm')
+            : ($existingKey === null ? 'RSA' : (string)$existingKey->getValue('key_algorithm', 'database'));
+
+        $values['key_is_active'] = CliApplication::optionExists($options, 'active')
+            ? (CliApplication::optionBool($options, 'active', true) ?? true)
+            : ($existingKey === null ? true : (bool)$existingKey->getValue('key_is_active'));
+
+        foreach (array(
+            'country' => 'cert_country',
+            'state' => 'cert_state',
+            'locality' => 'cert_locality',
+            'organization-name' => 'cert_org',
+            'organization-unit' => 'cert_orgunit',
+            'common-name' => 'cert_common_name',
+            'admin-email' => 'cert_admin_email',
+            'expires' => 'key_expires_at'
+        ) as $option => $field) {
+            if (CliApplication::optionExists($options, $option)) {
+                $values[$field] = CliApplication::optionString($options, $option);
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'expires')) {
+            self::validateDate($values['key_expires_at'], '--expires');
+        }
+
+        if ($mode === 'key') {
+            foreach (array(
+                'cert_country' => '--country',
+                'cert_state' => '--state',
+                'cert_locality' => '--locality',
+                'cert_orgunit' => '--organization-unit'
+            ) as $field => $optionName) {
+                if (trim((string)$values[$field]) === '') {
+                    throw new InvalidArgumentException(
+                        $optionName . ' is required when generating an SSO key certificate.'
+                    );
+                }
+            }
+        }
+
+        $saved = (new KeyService($gDb))->saveData($keyUUID, $values, $mode);
+        CliApplication::writeValue(self::ssoKeyData($saved), $options);
+        return 0;
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private static function ssoKeyCertificateValues(?Key $key): array
+    {
+        global $gCurrentOrganization;
+
+        $expires = new \DateTime();
+        $expires->modify('+2 years');
+
+        $values = array(
+            'cert_country' => '',
+            'cert_state' => '',
+            'cert_locality' => '',
+            'cert_org' => (string)$gCurrentOrganization->getValue('org_longname'),
+            'cert_orgunit' => '',
+            'cert_common_name' => ADMIDIO_URL,
+            'cert_admin_email' => (string)$gCurrentOrganization->getValue('org_email_administrator'),
+            'key_expires_at' => $expires->format('Y-m-d')
+        );
+
+        if ($key === null) {
+            return $values;
+        }
+
+        $certificate = (string)$key->getValue('key_certificate', 'database');
+        if ($certificate !== '') {
+            $parsed = openssl_x509_parse($certificate);
+            if (is_array($parsed)) {
+                $subject = $parsed['subject'] ?? array();
+                $values['cert_country'] = (string)($subject['C'] ?? '');
+                $values['cert_state'] = (string)($subject['ST'] ?? '');
+                $values['cert_locality'] = (string)($subject['L'] ?? '');
+                $values['cert_org'] = (string)($subject['O'] ?? $values['cert_org']);
+                $values['cert_orgunit'] = (string)($subject['OU'] ?? '');
+                $values['cert_common_name'] = (string)($subject['CN'] ?? $values['cert_common_name']);
+                $values['cert_admin_email'] = (string)($subject['emailAddress'] ?? $values['cert_admin_email']);
+            }
+        }
+
+        $currentExpires = (string)$key->getValue('key_expires_at', 'database');
+        if ($currentExpires !== '') {
+            $values['key_expires_at'] = substr($currentExpires, 0, 10);
+        }
+
+        return $values;
+    }
+
+    /**
+     * @param array{filename:string,contentType:string,content:string} $export
+     * @param array<string,mixed> $options
+     */
+    private static function writeExportContent(array $export, array $options): void
+    {
+        $target = CliApplication::optionString($options, 'output');
+        if ($target === '') {
+            $target = getcwd() . DIRECTORY_SEPARATOR . $export['filename'];
+        }
+
+        if (file_put_contents($target, $export['content']) === false) {
+            throw new RuntimeException('Could not write export file "' . $target . '".');
+        }
+
+        CliApplication::writeSuccess('Export written to ' . $target . '.', $options);
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     */
+    private static function moveGeneratedFile(string $source, string $filename, array $options): void
+    {
+        $target = CliApplication::optionString($options, 'output');
+        if ($target === '') {
+            $target = getcwd() . DIRECTORY_SEPARATOR . $filename;
+        }
+
+        if (!@rename($source, $target)) {
+            if (!@copy($source, $target)) {
+                throw new RuntimeException('Could not write export file "' . $target . '".');
+            }
+            @unlink($source);
+        }
+
+        CliApplication::writeSuccess('Export written to ' . $target . '.', $options);
+    }
 
     private static function changePermissions(string $mode, array $arguments, array $options): int
     {
