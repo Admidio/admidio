@@ -602,9 +602,14 @@ class OIDCService extends SSOService {
 
     public function handleDiscoveryRequest(): JsonResponse
     {
+        return new JsonResponse($this->getDiscoveryConfiguration());
+    }
+
+    public function getDiscoveryConfiguration(): array
+    {
         $issuer = $this->issuerURL;
 
-        $config = [
+        return [
             "issuer" => $issuer,
             "authorization_endpoint" => "{$issuer}/authorize",
             "token_endpoint" => "{$issuer}/token",
@@ -617,7 +622,6 @@ class OIDCService extends SSOService {
             "id_token_signing_alg_values_supported" => ["RS256"],
             "token_endpoint_auth_methods_supported" => ["client_secret_post", "client_secret_basic"],
         ];
-        return new JsonResponse($config);
     }
 
     /**

@@ -67,21 +67,10 @@ class DocumentsService
      */
     public function downloadFile(string $fileUUID, bool $inline = false): void
     {
-        // get recordset of current file from database
-        $file = new File($this->db);
-        $file->getFileForDownload($fileUUID);
+        $file = $this->prepareFileDownload($fileUUID);
 
         // get complete path with filename of the file
         $completePath = $file->getFullFilePath();
-
-        // check if the file already exists
-        if (!is_file($completePath)) {
-            throw new Exception('SYS_FILE_NOT_EXIST');
-        }
-
-        // Increment download counter
-        $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
-        $file->save();
 
         // determine filesize
         $fileSize = filesize($completePath);
@@ -117,6 +106,32 @@ class DocumentsService
             // file output for small files (< 10MB)
             readfile($completePath);
         }
+    }
+
+    /**
+     * Check download permissions, verify the file and increment its download counter.
+     *
+     * @throws Exception
+     */
+    public function prepareFileDownload(string $fileUUID): File
+    {
+        // get recordset of current file from database
+        $file = new File($this->db);
+        $file->getFileForDownload($fileUUID);
+
+        // get complete path with filename of the file
+        $completePath = $file->getFullFilePath();
+
+        // check if the file already exists
+        if (!is_file($completePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        // Increment download counter
+        $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
+        $file->save();
+
+        return $file;
     }
 
     /**

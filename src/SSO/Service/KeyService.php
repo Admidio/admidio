@@ -105,7 +105,11 @@ class KeyService {
         return $certificatePEM;
     }
 
-    public function exportToPkcs12(string $keyUUID, string $password = '') {
+    /**
+     * @return array{filename:string,contentType:string,content:string}
+     */
+    public function getPkcs12ExportData(string $keyUUID, string $password = ''): array
+    {
         global $gL10n;
 
         $ssoKey = new Key($this->db);
@@ -131,27 +135,39 @@ class KeyService {
         if (!$privateKey) {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array(openssl_error_string()));
         }
-        
+
         // Load the certificate
         $certificate = openssl_x509_read($certPem);
         if (!$certificate) {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array(openssl_error_string()));
         }
-        
+
         // Export the PKCS#12
         $pkcs12 = "";
         openssl_pkcs12_export($certificate, $pkcs12, $privateKey, $password, ["friendly_name" => $name]);
-        
+
         if (!$pkcs12) {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array(openssl_error_string()));
         }
-        
-        // Send the PKCS#12 file as a download to the browser (All errors were already handled with an exception, which caused a JSON response!)
-        $filename = FileSystemUtils::getSanitizedPathEntry($name);
-        header('Content-Type: application/x-pkcs12');
-        header('Content-Disposition: attachment; filename="' . $filename . '.p12"');
-        header('Content-Length: ' . strlen($pkcs12));
-        echo $pkcs12;
+
+        $filename = FileSystemUtils::getSanitizedPathEntry($name) . '.p12';
+
+        return array(
+            'filename' => $filename,
+            'contentType' => 'application/x-pkcs12',
+            'content' => $pkcs12
+        );
+    }
+
+    public function exportToPkcs12(string $keyUUID, string $password = ''): void
+    {
+        $export = $this->getPkcs12ExportData($keyUUID, $password);
+
+        // Send the PKCS#12 file as a download to the browser.
+        header('Content-Type: ' . $export['contentType']);
+        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Content-Length: ' . strlen($export['content']));
+        echo $export['content'];
         exit;
     }
 
@@ -262,19 +278,34 @@ class KeyService {
     }
 
 
-    public function exportCertificate(string $keyUUID) {
-        $ssoKey = new Key($this->db);
+    /**
+     * @return array{filename:string,contentType:string,content:string}
+     */
+    public function getCertificateExportData(string $keyUUID): array
+    {
+         $ssoKey = new Key($this->db);
         $ssoKey->readDataByUuid($keyUUID);
         $certificate = $ssoKey->getValue('key_certificate');
-        $filename = FileSystemUtils::getSanitizedPathEntry($ssoKey->getValue('key_name'));
+        $filename = FileSystemUtils::getSanitizedPathEntry($ssoKey->getValue('key_name')) . '_Certificate.pem';
+
+        return array(
+            'filename' => $filename,
+            'contentType' => 'application/x-pem-file',
+            'content' => $certificate
+        );
+    }
+
+    public function exportCertificate(string $keyUUID): void
+    {
+        $export = $this->getCertificateExportData($keyUUID);
 
         // Set headers for file download
-        header('Content-Type: application/x-pem-file');
-        header('Content-Disposition: attachment; filename="' . $filename . '_Certificate.pem"');
-        header('Content-Length: ' . strlen($certificate));
+        header('Content-Type: ' . $export['contentType']);
+        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Content-Length: ' . strlen($export['content']));
 
         // Output the certificate contents
-        echo $certificate;
+        echo $export['content'];
         exit;
     }
 }

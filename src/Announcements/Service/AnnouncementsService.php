@@ -186,6 +186,12 @@ class AnnouncementsService
      */
     public function rssFeed(string $organizationShortName): void
     {
+        header('Content-type: application/xml');
+        echo $this->getRssFeedContent($organizationShortName);
+    }
+
+    public function getRssFeedContent(string $organizationShortName): string
+    {
         global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gL10n, $gCurrentOrgId;
 
         // Check if RSS is active...
@@ -227,7 +233,7 @@ class AnnouncementsService
         }
 
         $gCurrentUser->setOrganization($gCurrentOrgId);
-        $rss->getRssFeed();
+        return $rss->getRssFeedContent();
     }
 
     /**
