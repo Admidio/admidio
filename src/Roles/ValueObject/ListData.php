@@ -245,6 +245,30 @@ class ListData
      */
     public function export(string $filename, string $format = 'csv')
     {
+        $export = $this->createExportFile($filename, $format);
+
+        header('Content-Type: ' . $export['contentType']);
+        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Cache-Control: max-age=0');
+        header('Content-Length: ' . filesize($export['path']));
+
+        if (ob_get_length() > 0) { // Issue 1607 Fix
+            ob_end_clean();
+        }
+
+        readfile($export['path']);
+        unlink($export['path']);
+        exit();
+    }
+
+    /**
+     * Create an export file without sending an HTTP response.
+     *
+     * @return array{path:string,filename:string,contentType:string}
+     * @throws Exception
+     */
+    public function createExportFile(string $filename, string $format = 'csv'): array
+    {
         if (count($this->data) === 0) {
             throw new Exception('The export file will contain no data.');
         }
@@ -278,19 +302,13 @@ class ListData
                 break;
         }
 
-        // save file to server folder because we need the content length otherwise the Excel file is corrupt
-        $tempFileFolderName = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
-        $writer->save($tempFileFolderName);
+        $tempFilePath = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
+        $writer->save($tempFilePath);
 
-        header('Content-Type: ' . $contentType);
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Cache-Control: max-age=0');
-        header('Content-Length: ' . filesize($tempFileFolderName));
-        if(ob_get_length() > 0) { // Issue 1607 Fix
-            ob_end_clean();
-        }
-        $writer->save('php://output');
-        unlink($tempFileFolderName);
-        exit();
+        return array(
+            'path' => $tempFilePath,
+            'filename' => $filename,
+            'contentType' => $contentType
+        );
     }
 }
