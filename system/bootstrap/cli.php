@@ -1,0 +1,110 @@
+<?php
+
+use Admidio\Components\Entity\Component;
+use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Language;
+use Admidio\Organizations\Entity\Organization;
+
+/**
+ ***********************************************************************************************
+ * Basic bootstrap for Admidio command-line scripts.
+ *
+ * This initializes the database, organization, settings and language objects required by
+ * Admidio core code, but deliberately does not start a PHP/web session or initialize
+ * presenters/navigation. Profile fields and the acting user are initialized lazily by the CLI.
+ *
+ * The optional variable $cliOrganization may contain an organization short name that should be
+ * used instead of the organization configured through $g_organization.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+if (PHP_SAPI !== 'cli') {
+    exit('This script may only be called from the command line!');
+}
+
+$rootPath = dirname(__DIR__, 2);
+$configFile = $rootPath . '/adm_my_files/config.php';
+
+if (!is_file($configFile)) {
+    throw new RuntimeException('Admidio configuration file adm_my_files/config.php was not found.');
+}
+
+/*
+ * Some Admidio config.php files select environment-specific database settings through HTTP_HOST.
+ * A CLI process has no request host, so provide a deterministic value before loading config.php.
+ */
+$configHost = isset($cliHost) && $cliHost !== '' ? $cliHost : getenv('ADMIDIO_HOST');
+if ($configHost === false || $configHost === '') {
+    $configHost = 'localhost';
+}
+$_SERVER['HTTP_HOST'] = $configHost;
+$_SERVER['SERVER_NAME'] = $configHost;
+$_SERVER['SERVER_PORT'] = 80;
+$_SERVER['DOCUMENT_ROOT'] = $rootPath;
+$_SERVER['SCRIPT_FILENAME'] = $rootPath . '/admidio';
+$_SERVER['SCRIPT_NAME'] = '/admidio';
+$_SERVER['REQUEST_URI'] = '/admidio';
+
+require_once $configFile;
+
+if (isset($cliOrganization) && $cliOrganization !== '') {
+    $g_organization = $cliOrganization;
+}
+
+// An HTTP redirect has no meaning in a CLI process.
+$gForceHTTPS = false;
+
+/*
+ * system/bootstrap/constants.php derives URL/path constants from $_SERVER. The values below are
+ * only used so the existing non-database bootstrap can run in CLI mode; no HTTP request/session
+ * is created.
+ */
+$rootUrl = parse_url($g_root_path);
+$scheme = is_array($rootUrl) && isset($rootUrl['scheme']) ? $rootUrl['scheme'] : 'http';
+$host = is_array($rootUrl) && isset($rootUrl['host']) ? $rootUrl['host'] : 'localhost';
+$port = is_array($rootUrl) && isset($rootUrl['port'])
+    ? (int)$rootUrl['port']
+    : ($scheme === 'https' ? 443 : 80);
+$urlPath = is_array($rootUrl) && isset($rootUrl['path']) ? rtrim($rootUrl['path'], '/') : '';
+
+$_SERVER['SERVER_PORT'] = $port;
+$_SERVER['HTTP_HOST'] = $host;
+$_SERVER['SERVER_NAME'] = $host;
+$_SERVER['DOCUMENT_ROOT'] = $rootPath;
+$_SERVER['SCRIPT_FILENAME'] = $rootPath . '/admidio';
+$_SERVER['SCRIPT_NAME'] = $urlPath . '/admidio';
+$_SERVER['REQUEST_URI'] = $urlPath . '/admidio';
+
+require_once $rootPath . '/system/bootstrap/bootstrap.php';
+
+$gValidLogin = false;
+
+$gDb = Database::createDatabaseInstance();
+
+if (empty($gDb->getTableColumns(TBL_SESSIONS))) {
+    throw new RuntimeException('The Admidio database is not installed.');
+}
+
+$gSystemComponent = new Component($gDb);
+$gSystemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+
+if (!isset($g_organization)) {
+    $g_organization = '';
+}
+
+$gCurrentOrganization = Organization::createDefaultOrganizationObject($gDb, $g_organization);
+$gCurrentOrgId = (int)$gCurrentOrganization->getValue('org_id');
+
+if ($gCurrentOrgId === 0) {
+    throw new RuntimeException('The configured Admidio organization could not be found.');
+}
+
+$gSettingsManager =& $gCurrentOrganization->getSettingsManager();
+$gL10n = new Language($gSettingsManager->getString('system_language'));
+
+$gCurrentUserId = 0;
+$gCurrentUserUUID = '';

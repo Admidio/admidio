@@ -1,0 +1,51 @@
+#!/usr/bin/env php
+<?php
+/**
+ ***********************************************************************************************
+ * Native Admidio command-line administration utility.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+if (PHP_SAPI !== 'cli') {
+    fwrite(STDERR, "The Admidio CLI may only be executed from the command line.\n");
+    exit(1);
+}
+
+/**
+ * Read one option needed before the Admidio autoloader/bootstrap is available.
+ *
+ * @param array<int,string> $arguments
+ */
+function admCliBootstrapOption(array $arguments, string $name): string
+{
+    $prefix = '--' . $name . '=';
+
+    for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
+        if (str_starts_with($arguments[$index], $prefix)) {
+            return substr($arguments[$index], strlen($prefix));
+        }
+
+        if ($arguments[$index] === '--' . $name && isset($arguments[$index + 1])) {
+            return $arguments[$index + 1];
+        }
+    }
+
+    return '';
+}
+
+$cliHost = admCliBootstrapOption($argv, 'host');
+$cliOrganization = admCliBootstrapOption($argv, 'organization');
+
+try {
+    require __DIR__ . '/system/bootstrap/cli.php';
+
+    $application = new Admidio\Infrastructure\Cli\CliApplication();
+    exit($application->run($argv));
+} catch (Throwable $exception) {
+    fwrite(STDERR, 'Error: ' . $exception->getMessage() . PHP_EOL);
+    exit(1);
+}
