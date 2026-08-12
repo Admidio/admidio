@@ -19,6 +19,7 @@ use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\PluginAbstract;
 use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Service\RegistrationService;
@@ -32,6 +33,7 @@ use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\SelectOptions as InventorySelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Service\ExportService;
+use Admidio\Inventory\Service\ImportService;
 use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Menu\Entity\MenuEntry;
@@ -1332,10 +1334,22 @@ final class CoreTasks
             'inventory:picture-delete ITEM [--yes]', 'INVENTORY', true,
             array(self::arg('item', 'Item.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
-        $importReason = 'Inventory ImportService reads the current uploaded web file/form state; it does not expose a file-path + mapping API.';
-        self::task('inventory:import', 'unavailable', 'Import inventory items.',
+        self::task('inventory:import', 'inventoryImport', 'Import inventory items from a spreadsheet or delimited file.',
             'inventory:import FILE [options]', 'INVENTORY', true,
-            array(self::arg('file', 'Import file.')), array(), array(), $importReason);
+            array(self::arg('file', 'Import file.')), array(
+                self::opt('input-format', 'Input file format.', 'FORMAT', false, false, false,
+                    array('AUTO', 'XLSX', 'XLS', 'ODS', 'CSV', 'HTML')),
+                self::opt('encoding', 'CSV input encoding.', 'ENCODING', false, false, false,
+                    array('GUESS', 'UTF-8', 'UTF-16BE', 'UTF-16LE', 'UTF-32BE', 'UTF-32LE', 'CP1252', 'ISO-8859-1')),
+                self::opt('separator', 'CSV separator.', 'SEPARATOR', false, false, false,
+                    array('auto', 'comma', 'semicolon', 'tab', 'pipe')),
+                self::opt('enclosure', 'CSV field enclosure.', 'ENCLOSURE', false, false, false,
+                    array('auto', 'none', 'double', 'single')),
+                self::opt('sheet', 'Worksheet name or zero-based index.', 'SHEET'),
+                self::opt('first-row', 'Whether the first row contains column names. Defaults to true.', 'BOOL'),
+                self::opt('map', 'Map an inventory field to a one-based column number or header: FIELD=COLUMN.',
+                    'FIELD=COLUMN', false, true)
+            ));
         self::task('inventory:export', 'inventoryExport', 'Export inventory items.',
             'inventory:export --format=FORMAT [--output=FILE]', 'INVENTORY', true,
             array(), array(
@@ -5374,6 +5388,111 @@ final class CoreTasks
         return 0;
     }
 
+    public static function inventoryImport(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentOrgId, $gSettingsManager;
+
+        $file = CliApplication::requireArgument($arguments, 0, 'file');
+        $inputFormat = strtoupper(CliApplication::optionString($options, 'input-format', 'AUTO'));
+        $encoding = CliApplication::optionString($options, 'encoding');
+
+        $separator = match (CliApplication::optionString($options, 'separator', 'auto')) {
+            'comma' => ',',
+            'semicolon' => ';',
+            'tab' => '\t',
+            'pipe' => '|',
+            default => ''
+        };
+        $enclosure = match (CliApplication::optionString($options, 'enclosure', 'auto')) {
+            'none' => '',
+            'double' => '"',
+            'single' => '\'',
+            default => 'AUTO'
+        };
+        $sheet = CliApplication::optionString($options, 'sheet');
+        $firstRow = CliApplication::optionExists($options, 'first-row')
+            ? self::parseBool(CliApplication::optionString($options, 'first-row'))
+            : true;
+
+        $importService = new ImportService();
+        $importData = $importService->readImportFileData(
+            $file,
+            $inputFormat,
+            $encoding,
+            $separator,
+            $enclosure,
+            $sheet
+        );
+
+        if (count($importData) === 0) {
+            throw new InvalidArgumentException('The import file contains no rows.');
+        }
+
+        $headers = $firstRow ? $importData[0] : array();
+        $mapping = array();
+        $usedColumns = array();
+
+        foreach (CliApplication::optionValues($options, 'map') as $assignment) {
+            [$fieldReference, $columnReference] = self::splitAssignment($assignment, '--map');
+            $field = self::resolveInventoryField($fieldReference);
+            $columnIndex = self::resolveInventoryImportColumn($columnReference, $headers, $firstRow);
+
+            if (in_array($columnIndex, $usedColumns, true)) {
+                throw new InvalidArgumentException(
+                    'Import column "' . $columnReference . '" is assigned to more than one inventory field.'
+                );
+            }
+
+            $mapping[(int)$field->getValue('inf_id')] = $columnIndex;
+            $usedColumns[] = $columnIndex;
+        }
+
+        if (count($mapping) === 0) {
+            if (!$firstRow) {
+                throw new InvalidArgumentException(
+                    'At least one --map=FIELD=COLUMN option is required when --first-row=false.'
+                );
+            }
+
+            $itemsData = new ItemsData($gDb, $gCurrentOrgId);
+            foreach ($itemsData->getItemFields() as $field) {
+                $internalName = (string)$field->getValue('inf_name_intern');
+                if ($gSettingsManager->getBool('inventory_items_disable_borrowing')
+                    && in_array($internalName, $itemsData->borrowFieldNames, true)) {
+                    continue;
+                }
+
+                $labels = array(
+                    $internalName,
+                    (string)$field->getValue('inf_name'),
+                    Language::translateIfTranslationStrId((string)$field->getValue('inf_name'))
+                );
+
+                foreach ($headers as $columnIndex => $header) {
+                    if (in_array(trim((string)$header), $labels, true)) {
+                        $mapping[(int)$field->getValue('inf_id')] = (int)$columnIndex;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (count($mapping) === 0) {
+            throw new InvalidArgumentException(
+                'No inventory fields could be mapped. Use --map=FIELD=COLUMN.'
+            );
+        }
+
+        $formValues = $mapping;
+        if ($firstRow) {
+            $formValues['first_row'] = '1';
+        }
+
+        $result = $importService->importData($importData, $formValues);
+        CliApplication::writeSuccess((string)$result['message'], $options);
+        return 0;
+    }
+
     public static function inventoryExport(array $arguments, array $options): int
     {
         $format = CliApplication::optionString($options, 'format');
@@ -8617,6 +8736,52 @@ final class CoreTasks
      * @param array<int,string> $assignments
      * @return array<string,mixed>
      */
+    /**
+     * Resolve a human-friendly import column reference to the zero-based PhpSpreadsheet column index.
+     *
+     * Numeric references are one-based for CLI users; string references match a first-row heading.
+     *
+     * @param array<int,mixed> $headers
+     */
+    private static function resolveInventoryImportColumn(
+        string $reference,
+        array $headers,
+        bool $firstRow
+    ): int {
+        $reference = trim($reference);
+
+        if ($reference !== '' && ctype_digit($reference)) {
+            $column = (int)$reference;
+            if ($column <= 0) {
+                throw new InvalidArgumentException('Import column numbers start at 1.');
+            }
+            return $column - 1;
+        }
+
+        if (!$firstRow) {
+            throw new InvalidArgumentException(
+                'Import columns must be specified by number when --first-row=false.'
+            );
+        }
+
+        $matches = array();
+        foreach ($headers as $columnIndex => $header) {
+            if (trim((string)$header) === $reference) {
+                $matches[] = (int)$columnIndex;
+            }
+        }
+
+        if (count($matches) !== 1) {
+            throw new InvalidArgumentException(
+                count($matches) === 0
+                    ? 'Import column "' . $reference . '" was not found in the first row.'
+                    : 'Import column heading "' . $reference . '" is ambiguous; use a column number.'
+            );
+        }
+
+        return $matches[0];
+    }
+
     private static function inventoryFormValues(array $assignments): array
     {
         $values = array();
