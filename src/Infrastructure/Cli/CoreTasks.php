@@ -41,6 +41,7 @@ use Admidio\Messages\Entity\Message;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Photos\Entity\Album;
 use Admidio\Photos\Service\AlbumService;
+use Admidio\Photos\Service\ECardService;
 use Admidio\Photos\Service\PhotoService;
 use Admidio\Photos\ValueObject\ECard;
 use Admidio\Preferences\Service\PreferencesService;
@@ -1337,18 +1338,27 @@ final class CoreTasks
         );
         self::task(
             'photo:ecard-send',
-            'unavailable',
+            'photoEcardSend',
             'Send an e-card.',
-            'photo:ecard-send ALBUM PHOTO_NUMBER [options]',
+            'photo:ecard-send ALBUM PHOTO_NUMBER --template=TEMPLATE (--user=USER|--group=GROUP) '
+                . '(--message=TEXT|--message-file=FILE)',
             'PHOTOS',
             true,
             array(
                 self::arg('album', 'Album.'),
                 self::arg('photo-number', 'Photo number.')
             ),
-            array(),
-            array(),
-            'ECard can render and send one recipient, but current modules/photos/ecard_send.php still owns recipient expansion, role mail-right checks and message-history persistence; that orchestration should be extracted before exposing it through the CLI.'
+            array(
+                self::opt('template', 'E-card template filename.', 'TEMPLATE', true),
+                self::opt('user', 'Recipient user.', 'USER', false, true),
+                self::opt('group', 'Recipient group; active members are addressed.', 'GROUP', false, true),
+                self::opt('message', 'E-card message.', 'TEXT'),
+                self::opt('message-file', 'Read the e-card message from a file.', 'FILE')
+            ),
+            array(
+                'photo:ecard-send ALBUM 1 --template=default.tpl --user=john '
+                    . '--message="Best wishes!" --as=admin'
+            )
         );
     }
 
@@ -5398,6 +5408,49 @@ final class CoreTasks
             CliApplication::optionString($options, 'format', 'table'),
             $options
         );
+        return 0;
+    }
+
+    public static function photoEcardSend(array $arguments, array $options): int
+    {
+        $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
+        $photoNumber = self::positiveInt(
+            CliApplication::requireArgument($arguments, 1, 'photo-number'),
+            'photo-number'
+        );
+        $template = CliApplication::optionString($options, 'template');
+        if ($template === '') {
+            throw new InvalidArgumentException('--template is required.');
+        }
+
+        $userUuids = array();
+        foreach (CliApplication::optionValues($options, 'user') as $reference) {
+            $user = CliApplication::resolveUser($reference);
+            $userUuids[] = (string)$user->getValue('usr_uuid');
+        }
+
+        $roleUuids = array();
+        foreach (CliApplication::optionValues($options, 'group') as $reference) {
+            $role = self::resolveGroup($reference);
+            $roleUuids[] = (string)$role->getValue('rol_uuid');
+        }
+
+        if (count($userUuids) === 0 && count($roleUuids) === 0) {
+            throw new InvalidArgumentException('At least one --user or --group recipient is required.');
+        }
+
+        $message = self::readTextOption($options, 'message', 'message-file', true);
+
+        (new ECardService($GLOBALS['gDb']))->send(
+            (string)$album->getValue('pho_uuid'),
+            $photoNumber,
+            $template,
+            $message,
+            $roleUuids,
+            $userUuids
+        );
+
+        CliApplication::writeSuccess('E-card sent.', $options);
         return 0;
     }
 
@@ -9588,6 +9641,49 @@ final class CoreTasks
         }
 
         return $values;
+    }
+
+    /**
+     * Read a text value from either an inline option or a file option.
+     *
+     * @param array<string,mixed> $options
+     */
+    private static function readTextOption(
+        array $options,
+        string $valueOption,
+        string $fileOption,
+        bool $required = false
+    ): string {
+        $hasValue = CliApplication::optionExists($options, $valueOption);
+        $hasFile = CliApplication::optionExists($options, $fileOption);
+
+        if ($hasValue && $hasFile) {
+            throw new InvalidArgumentException(
+                'Use either --' . $valueOption . ' or --' . $fileOption . ', not both.'
+            );
+        }
+
+        if ($hasValue) {
+            return CliApplication::optionString($options, $valueOption);
+        }
+
+        if ($hasFile) {
+            $file = CliApplication::optionString($options, $fileOption);
+            $content = @file_get_contents($file);
+            if ($content === false) {
+                throw new InvalidArgumentException('Could not read file "' . $file . '".');
+            }
+
+            return $content;
+        }
+
+        if ($required) {
+            throw new InvalidArgumentException(
+                'Either --' . $valueOption . ' or --' . $fileOption . ' is required.'
+            );
+        }
+
+        return '';
     }
 
     /**

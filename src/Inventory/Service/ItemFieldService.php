@@ -166,7 +166,7 @@ class ItemFieldService
      */
     public function saveData(array $formValues): bool
     {
-        global $gCurrentOrgId, $gCurrentUser;
+        global $gCurrentOrgId, $gCurrentUser, $gDb;
 
         // check if user has admin rights for inventory
         if (!$gCurrentUser->isAdministratorInventory()) {
