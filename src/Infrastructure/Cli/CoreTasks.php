@@ -31,6 +31,7 @@ use Admidio\Inventory\Entity\ItemBorrowData;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\SelectOptions as InventorySelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Service\ExportService;
 use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Menu\Entity\MenuEntry;
@@ -60,6 +61,7 @@ use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
+use Admidio\Users\Service\UserPhotoService;
 use Admidio\Weblinks\Entity\Weblink;
 use InvalidArgumentException;
 use PDO;
@@ -497,27 +499,22 @@ final class CoreTasks
             array(self::arg('user', 'User.')), array(self::opt('yes', 'Confirm reset.', '', false, false, true)));
         self::task(
             'user:photo-set',
-            'unavailable',
+            'userPhotoSet',
             'Set the user profile photo.',
             'user:photo-set USER FILE',
             'CONTACTS',
             true,
-            array(self::arg('user', 'User.'), self::arg('file', 'JPEG/PNG image file.')),
-            array(),
-            array(),
-            'current modules/profile/profile_photo_edit.php contains the image-validation/scaling/storage workflow directly in the web module; no reusable profile-photo service exists.'
+            array(self::arg('user', 'User.'), self::arg('file', 'JPEG/PNG image file.'))
         );
         self::task(
             'user:photo-delete',
-            'unavailable',
+            'userPhotoDelete',
             'Delete the user profile photo.',
             'user:photo-delete USER [--yes]',
             'CONTACTS',
             true,
             array(self::arg('user', 'User.')),
-            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)),
-            array(),
-            'current modules/profile/profile_photo_edit.php contains profile-photo storage/deletion directly in the web module; no reusable profile-photo service exists.'
+            array(self::opt('yes', 'Confirm deletion.', '', false, false, true))
         );
     }
 
@@ -1140,15 +1137,12 @@ final class CoreTasks
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
         self::task(
             'message:get-attachment',
-            'unavailable',
+            'messageGetAttachment',
             'Retrieve a message attachment.',
             'message:get-attachment ATTACHMENT [--output=FILE]',
             'MESSAGES',
             true,
-            array(self::arg('attachment', 'Attachment identifier.')),
-            array(),
-            array(),
-            'current modules/messages/messages_attachment.php performs the attachment ownership/access check and HTTP download; Message exposes attachment metadata but no permission-checked headless attachment fetch operation.'
+            array(self::arg('attachment', 'Attachment UUID.'))
         );
     }
 
@@ -1171,15 +1165,16 @@ final class CoreTasks
         );
         self::task(
             'document:upload',
-            'unavailable',
+            'documentUpload',
             'Upload a managed document.',
             'document:upload FILEPATH --folder=FOLDER [--name=NAME]',
             'DOCUMENTS-FILES',
             true,
             array(self::arg('filepath', 'Local file path.')),
-            array(self::opt('folder', 'Destination folder.', 'FOLDER', true), self::opt('name', 'Stored filename.', 'NAME')),
-            array(),
-            'current upload handling is implemented by the jQuery file-upload endpoint and web request upload semantics; no native headless upload service is exposed.'
+            array(
+                self::opt('folder', 'Destination folder.', 'FOLDER', true),
+                self::opt('name', 'Stored filename.', 'NAME')
+            )
         );
         self::task('document:file-rename', 'documentFileRename', 'Rename a managed file.',
             'document:file-rename FILE NAME', 'DOCUMENTS-FILES', true,
@@ -1327,19 +1322,26 @@ final class CoreTasks
         self::task('inventory:return', 'inventoryReturn', 'Return a checked-out inventory item.',
             'inventory:return ITEM [--date=DATE]', 'INVENTORY', true,
             array(self::arg('item', 'Item.')), array(self::opt('date', 'Return date.', 'DATE')));
-        $itemPictureReason = 'current item picture handling is tied to ItemService::save()/showPicture() and web upload/session state; no reusable headless picture API exists.';
-        foreach (array('inventory:picture-set', 'inventory:picture-get', 'inventory:picture-delete') as $command) {
-            self::task($command, 'unavailable', ucfirst(str_replace(array(':','-'), ' ', $command)) . '.',
-                $command . ' ITEM [FILE]', 'INVENTORY', true, array(), array(), array(), $itemPictureReason);
-        }
+        self::task('inventory:picture-set', 'inventoryPictureSet', 'Set the picture of an inventory item.',
+            'inventory:picture-set ITEM FILE', 'INVENTORY', true,
+            array(self::arg('item', 'Item.'), self::arg('file', 'JPEG/PNG image file.')));
+        self::task('inventory:picture-get', 'inventoryPictureGet', 'Export the picture of an inventory item.',
+            'inventory:picture-get ITEM [--output=FILE]', 'INVENTORY', true,
+            array(self::arg('item', 'Item.')));
+        self::task('inventory:picture-delete', 'inventoryPictureDelete', 'Delete the picture of an inventory item.',
+            'inventory:picture-delete ITEM [--yes]', 'INVENTORY', true,
+            array(self::arg('item', 'Item.')),
+            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
         $importReason = 'Inventory ImportService reads the current uploaded web file/form state; it does not expose a file-path + mapping API.';
         self::task('inventory:import', 'unavailable', 'Import inventory items.',
             'inventory:import FILE [options]', 'INVENTORY', true,
             array(self::arg('file', 'Import file.')), array(), array(), $importReason);
-        $exportReason = 'Inventory ExportService::createExport() sends browser headers/files directly and has no headless output-target API.';
-        self::task('inventory:export', 'unavailable', 'Export inventory items.',
+        self::task('inventory:export', 'inventoryExport', 'Export inventory items.',
             'inventory:export --format=FORMAT [--output=FILE]', 'INVENTORY', true,
-            array(), array(), array(), $exportReason);
+            array(), array(
+                self::opt('format', 'Export format.', 'FORMAT', true, false, false,
+                    array('xlsx', 'ods', 'csv-ms', 'csv-oo', 'pdf', 'pdfl'))
+            ));
 
         self::task('inventory:fields', 'inventoryFields', 'List inventory field definitions.',
             'inventory:fields [--format=FORMAT]', 'INVENTORY', true, array(),
@@ -2757,6 +2759,41 @@ final class CoreTasks
         self::reloadUserSessions((int)$user->getValue('usr_id'));
 
         CliApplication::writeSuccess('Two-factor authentication reset.', $options);
+        return 0;
+    }
+
+
+    public static function userPhotoSet(array $arguments, array $options): int
+    {
+        global $gCurrentUser;
+
+        $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
+        if (!$gCurrentUser->hasRightEditProfile($user)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $sourcePath = CliApplication::requireArgument($arguments, 1, 'file');
+        (new UserPhotoService())->saveFromFile($user, $sourcePath);
+        self::reloadUserSessions((int)$user->getValue('usr_id'));
+
+        CliApplication::writeSuccess('Profile photo updated.', $options);
+        return 0;
+    }
+
+    public static function userPhotoDelete(array $arguments, array $options): int
+    {
+        global $gCurrentUser;
+
+        $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
+        if (!$gCurrentUser->hasRightEditProfile($user)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        CliApplication::confirm('Delete this profile photo?', $options);
+        (new UserPhotoService())->delete($user);
+        self::reloadUserSessions((int)$user->getValue('usr_id'));
+
+        CliApplication::writeSuccess('Profile photo deleted.', $options);
         return 0;
     }
 
@@ -4727,6 +4764,46 @@ final class CoreTasks
         return 0;
     }
 
+
+    public static function messageGetAttachment(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentUserId;
+
+        $attachmentUuid = CliApplication::requireArgument($arguments, 0, 'attachment');
+        $attachment = new Entity($gDb, TBL_MESSAGES_ATTACHMENTS, 'msa');
+
+        if (!$attachment->readDataByUuid($attachmentUuid)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        $message = new Message($gDb, (int)$attachment->getValue('msa_msg_id'));
+        if ($gCurrentUserId !== (int)$message->getValue('msg_usr_id_sender')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $source = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/'
+            . $attachment->getValue('msa_file_name');
+        if (!is_file($source) || !is_readable($source)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        $target = CliApplication::optionString($options, 'output');
+        if ($target === '') {
+            $filename = (string)$attachment->getValue('msa_original_file_name');
+            if ($filename === '') {
+                $filename = (string)$attachment->getValue('msa_file_name');
+            }
+            $target = getcwd() . DIRECTORY_SEPARATOR . FileSystemUtils::getSanitizedPathEntry($filename);
+        }
+
+        if (!@copy($source, $target)) {
+            throw new RuntimeException('Could not copy attachment to "' . $target . '".');
+        }
+
+        CliApplication::writeSuccess('Attachment written to ' . $target . '.', $options);
+        return 0;
+    }
+
     public static function documentDownload(array $arguments, array $options): int
     {
         global $gDb;
@@ -4745,6 +4822,23 @@ final class CoreTasks
         }
 
         CliApplication::writeSuccess('Document written to ' . $target . '.', $options);
+        return 0;
+    }
+
+
+    public static function documentUpload(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $sourcePath = CliApplication::requireArgument($arguments, 0, 'filepath');
+        $folder = self::resolveFolder(CliApplication::optionString($options, 'folder'));
+        $service = new DocumentsService($gDb, (string)$folder->getValue('fol_uuid'));
+        $file = $service->uploadFile($sourcePath, CliApplication::optionString($options, 'name'));
+
+        CliApplication::writeSuccess(
+            'Uploaded document ' . $file->getValue('fil_uuid') . '.',
+            $options
+        );
         return 0;
     }
 
@@ -5245,6 +5339,47 @@ final class CoreTasks
         $item->saveItemData();
         $item->sendNotification();
         CliApplication::writeSuccess('Inventory item returned.', $options);
+        return 0;
+    }
+
+
+    public static function inventoryPictureSet(array $arguments, array $options): int
+    {
+        $itemUuid = self::resolveItemUuid(CliApplication::requireArgument($arguments, 0, 'item'));
+        $sourcePath = CliApplication::requireArgument($arguments, 1, 'file');
+
+        (new ItemService($GLOBALS['gDb'], $itemUuid))->saveItemPictureFromFile($sourcePath);
+
+        CliApplication::writeSuccess('Inventory item picture updated.', $options);
+        return 0;
+    }
+
+    public static function inventoryPictureGet(array $arguments, array $options): int
+    {
+        $itemUuid = self::resolveItemUuid(CliApplication::requireArgument($arguments, 0, 'item'));
+        $picture = (new ItemService($GLOBALS['gDb'], $itemUuid))->getItemPictureData();
+
+        self::writeExportContent($picture, $options);
+        return 0;
+    }
+
+    public static function inventoryPictureDelete(array $arguments, array $options): int
+    {
+        $itemUuid = self::resolveItemUuid(CliApplication::requireArgument($arguments, 0, 'item'));
+
+        CliApplication::confirm('Delete this inventory item picture?', $options);
+        (new ItemService($GLOBALS['gDb'], $itemUuid))->deleteItemPicture();
+
+        CliApplication::writeSuccess('Inventory item picture deleted.', $options);
+        return 0;
+    }
+
+    public static function inventoryExport(array $arguments, array $options): int
+    {
+        $format = CliApplication::optionString($options, 'format');
+        $export = (new ExportService())->createExportFile($format);
+
+        self::moveGeneratedFile($export['path'], $export['filename'], $options);
         return 0;
     }
 

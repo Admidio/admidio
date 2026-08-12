@@ -135,6 +135,89 @@ class DocumentsService
     }
 
     /**
+     * Copy a local file into a managed documents folder and register it in the database.
+     *
+     * @param string $sourcePath Path to a readable local source file.
+     * @param string $filename Optional target filename. The source basename is used if omitted.
+     * @return File The newly registered file entity.
+     * @throws Exception
+     */
+    public function uploadFile(string $sourcePath, string $filename = ''): File
+    {
+        global $gSettingsManager;
+
+        if ($this->folderUUID === '') {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $targetFolder = new Folder($this->db);
+        $targetFolder->getFolderForDownload($this->folderUUID);
+
+        if (!$targetFolder->hasUploadRight()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $maxUploadSize = $gSettingsManager->getInt('documents_files_max_upload_size');
+        if ($maxUploadSize === 0) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        if (!is_file($sourcePath) || !is_readable($sourcePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        $fileSize = filesize($sourcePath);
+        if ($fileSize === false) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+        if ($fileSize > $maxUploadSize * 1024 * 1024) {
+            throw new Exception('SYS_FILE_TO_LARGE_SERVER', array($maxUploadSize));
+        }
+
+        if ($filename === '') {
+            $filename = basename($sourcePath);
+        }
+
+        StringUtils::strIsValidFileName($filename, false);
+        if (!FileSystemUtils::allowedFileExtension($filename)) {
+            throw new Exception('SYS_FILE_EXTENSION_INVALID');
+        }
+
+        $filename = FileSystemUtils::removeInvalidCharsInFilename($filename);
+        $targetPath = $targetFolder->getFullFolderPath() . '/' . $filename;
+
+        if (is_file($targetPath)) {
+            throw new Exception('SYS_FILE_EXIST', array($filename));
+        }
+
+        try {
+            FileSystemUtils::copyFile($sourcePath, $targetPath);
+        } catch (RuntimeException $exception) {
+            throw new Exception('SYS_FOLDER_NOT_WRITABLE', array($targetFolder->getFullFolderPath()));
+        }
+
+        $newFile = new File($this->db);
+        $newFile->setValue('fil_fol_id', (int)$targetFolder->getValue('fol_id'));
+        $newFile->setValue('fil_name', $filename);
+        $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
+        $newFile->setValue('fil_counter', 0);
+
+        try {
+            if ($newFile->save()) {
+                $newFile->sendNotification();
+            }
+        } catch (\Throwable $exception) {
+            try {
+                FileSystemUtils::deleteFileIfExists($targetPath);
+            } catch (RuntimeException) {
+            }
+            throw $exception;
+        }
+
+        return $newFile;
+    }
+
+    /**
      * Read the data of the folder in an array.
      * The returned array contains arrays with the following information:
      * folder, uuid, name, description, timestamp, size, counter, existsInFileSystem
