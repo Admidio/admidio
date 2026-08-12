@@ -39,6 +39,7 @@ use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Messages\Entity\Message;
+use Admidio\Messages\Service\MessageService;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Photos\Entity\Album;
 use Admidio\Photos\Service\AlbumService;
@@ -1152,33 +1153,69 @@ final class CoreTasks
             'message:show MESSAGE [--format=text|json]', 'MESSAGES', true,
             array(self::arg('message', 'Message UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
-        $sendOptions = array(
-            self::opt('type', 'email or private message.', 'TYPE', true, false, false, array('email', 'pm')),
-            self::opt('user', 'Recipient user.', 'USER', false, true),
-            self::opt('group', 'Recipient group.', 'GROUP', false, true),
-            self::opt('subject', 'Message subject.', 'TEXT', true),
+        $messageTextOptions = array(
             self::opt('body', 'Message body.', 'TEXT'),
-            self::opt('body-file', 'Read body from file.', 'FILE'),
-            self::opt('attachment', 'Attachment path.', 'FILE', false, true)
+            self::opt('body-file', 'Read body from file.', 'FILE')
+        );
+        $messageBodyOptions = array_merge(
+            $messageTextOptions,
+            array(self::opt('attachment', 'Attachment path.', 'FILE', false, true))
+        );
+        $messageRecipientOptions = array(
+            self::opt('user', 'Recipient user.', 'USER', false, true),
+            self::opt('group', 'Recipient group; active members are addressed.', 'GROUP', false, true)
         );
         self::task(
             'message:send',
-            'unavailable',
+            'messageSend',
             'Send email/private message using the native Message/Email recipient rules.',
             'message:send --type=email|pm [recipients] --subject=TEXT (--body=TEXT|--body-file=FILE)',
             'MESSAGES',
             true,
             array(),
-            $sendOptions,
-            array(),
-            'current modules/messages/messages_write.php contains the recipient authorization, mail/private-message split and form processing; Message alone does not cover the complete email send workflow as a headless service.'
+            array_merge(
+                array(
+                    self::opt('type', 'Email or private message.', 'TYPE', true, false, false, array('email', 'pm'))
+                ),
+                $messageRecipientOptions,
+                array(
+                    self::opt('subject', 'Message subject.', 'TEXT', true)
+                ),
+                $messageBodyOptions,
+                array(
+                    self::opt('carbon-copy', 'Send a copy of an email to the acting user.', 'BOOL'),
+                    self::opt('delivery-confirmation', 'Request an email read confirmation where allowed.', 'BOOL')
+                )
+            )
         );
-        foreach (array('message:reply', 'message:forward') as $command) {
-            self::task($command, 'unavailable', ucfirst(str_replace(':', ' ', $command)) . '.',
-                $command . ' MESSAGE [options]', 'MESSAGES', true,
-                array(self::arg('message', 'Source message.')), array(), array(),
-                'current master implements reply/forward preparation and send orchestration in modules/messages/messages_write.php; no headless message composition service exists.');
-        }
+        self::task(
+            'message:reply',
+            'messageReply',
+            'Reply to a private-message conversation.',
+            'message:reply MESSAGE (--body=TEXT|--body-file=FILE)',
+            'MESSAGES',
+            true,
+            array(self::arg('message', 'Private-message conversation.')),
+            $messageTextOptions
+        );
+        self::task(
+            'message:forward',
+            'messageForward',
+            'Forward an email as a new email.',
+            'message:forward MESSAGE (--user=USER|--group=GROUP) [options]',
+            'MESSAGES',
+            true,
+            array(self::arg('message', 'Source email.')),
+            array_merge(
+                $messageRecipientOptions,
+                array(self::opt('subject', 'Override the original subject.', 'TEXT')),
+                $messageBodyOptions,
+                array(
+                    self::opt('carbon-copy', 'Send a copy to the acting user.', 'BOOL'),
+                    self::opt('delivery-confirmation', 'Request an email read confirmation where allowed.', 'BOOL')
+                )
+            )
+        );
         self::task('message:delete', 'messageDelete', 'Delete message records using Message::delete().',
             'message:delete MESSAGE ... [--yes]', 'MESSAGES', true,
             array(self::arg('message', 'One or more messages.', true, true)),
@@ -4911,18 +4948,120 @@ final class CoreTasks
         $message = self::resolveMessage(CliApplication::requireArgument($arguments, 0, 'message'));
         self::assertMessageAccess($message);
 
-        CliApplication::writeValue(array(
-            'id' => (int)$message->getValue('msg_id'),
-            'uuid' => (string)$message->getValue('msg_uuid'),
-            'type' => (string)$message->getValue('msg_type'),
-            'subject' => (string)$message->getValue('msg_subject'),
-            'sender_id' => (int)$message->getValue('msg_usr_id_sender'),
-            'timestamp' => (string)$message->getValue('msg_timestamp', 'Y-m-d H:i:s'),
-            'read_state' => (int)$message->getValue('msg_read'),
-            'recipients' => $message->getRecipientsNamesString(),
-            'content' => $message->getContent('database'),
-            'attachments' => $message->getAttachmentsInformation()
-        ), $options);
+        CliApplication::writeValue(self::messageData($message), $options);
+        return 0;
+    }
+
+    public static function messageSend(array $arguments, array $options): int
+    {
+        $type = strtolower(CliApplication::optionString($options, 'type'));
+        if (!in_array($type, array('email', 'pm'), true)) {
+            throw new InvalidArgumentException('--type must be email or pm.');
+        }
+
+        $subject = CliApplication::optionString($options, 'subject');
+        if ($subject === '') {
+            throw new InvalidArgumentException('--subject is required.');
+        }
+
+        $body = self::readTextOption($options, 'body', 'body-file', true);
+        $recipients = self::buildMessageRecipients($options, $type);
+        $attachments = $type === 'email' ? self::buildMessageAttachments($options) : array();
+
+        $userUuid = '';
+        if ($type === 'pm') {
+            if (count($recipients) !== 1 || str_contains($recipients[0], ':')) {
+                throw new InvalidArgumentException('A private message requires exactly one --user recipient.');
+            }
+            $userUuid = $recipients[0];
+        }
+
+        $message = (new MessageService($GLOBALS['gDb']))->sendData(
+            $type,
+            $subject,
+            $body,
+            $recipients,
+            '',
+            $userUuid,
+            '',
+            $attachments,
+            '',
+            '',
+            CliApplication::optionBool($options, 'delivery-confirmation', false) ?? false,
+            CliApplication::optionBool($options, 'carbon-copy', false) ?? false
+        );
+
+        CliApplication::writeValue(self::messageData($message), $options);
+        return 0;
+    }
+
+    public static function messageReply(array $arguments, array $options): int
+    {
+        $message = self::resolveMessage(CliApplication::requireArgument($arguments, 0, 'message'));
+        self::assertMessageAccess($message);
+
+        if ((string)$message->getValue('msg_type') !== Message::MESSAGE_TYPE_PM) {
+            throw new InvalidArgumentException('message:reply can only be used with private-message conversations.');
+        }
+
+        if (CliApplication::optionExists($options, 'attachment')) {
+            throw new InvalidArgumentException('Private messages do not support attachments.');
+        }
+
+        $body = self::readTextOption($options, 'body', 'body-file', true);
+        $savedMessage = (new MessageService($GLOBALS['gDb']))->sendData(
+            Message::MESSAGE_TYPE_PM,
+            (string)$message->getValue('msg_subject', 'database'),
+            $body,
+            array(),
+            (string)$message->getValue('msg_uuid')
+        );
+
+        CliApplication::writeValue(self::messageData($savedMessage), $options);
+        return 0;
+    }
+
+    public static function messageForward(array $arguments, array $options): int
+    {
+        $message = self::resolveMessage(CliApplication::requireArgument($arguments, 0, 'message'));
+        self::assertMessageAccess($message);
+
+        if ((string)$message->getValue('msg_type') !== Message::MESSAGE_TYPE_EMAIL) {
+            throw new InvalidArgumentException('message:forward can only be used with email messages.');
+        }
+
+        $recipients = self::buildMessageRecipients($options, 'email');
+        $subject = CliApplication::optionExists($options, 'subject')
+            ? CliApplication::optionString($options, 'subject')
+            : (string)$message->getValue('msg_subject', 'database');
+
+        if ($subject === '') {
+            throw new InvalidArgumentException('--subject must not be empty.');
+        }
+
+        if (CliApplication::optionExists($options, 'body')
+            || CliApplication::optionExists($options, 'body-file')) {
+            $body = self::readTextOption($options, 'body', 'body-file');
+        } else {
+            $body = $message->getContent('database');
+        }
+
+        $savedMessage = (new MessageService($GLOBALS['gDb']))->sendData(
+            Message::MESSAGE_TYPE_EMAIL,
+            $subject,
+            $body,
+            $recipients,
+            '',
+            '',
+            '',
+            self::buildMessageAttachments($options),
+            '',
+            '',
+            CliApplication::optionBool($options, 'delivery-confirmation', false) ?? false,
+            CliApplication::optionBool($options, 'carbon-copy', false) ?? false
+        );
+
+        CliApplication::writeValue(self::messageData($savedMessage), $options);
         return 0;
     }
 
@@ -8698,6 +8837,86 @@ final class CoreTasks
     {
         $id = CliApplication::resolveId(TBL_MESSAGES, 'msg_id', 'msg_uuid', $reference, 'message');
         return new Message($GLOBALS['gDb'], $id);
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private static function messageData(Message $message): array
+    {
+        return array(
+            'id' => (int)$message->getValue('msg_id'),
+            'uuid' => (string)$message->getValue('msg_uuid'),
+            'type' => (string)$message->getValue('msg_type'),
+            'subject' => (string)$message->getValue('msg_subject', 'database'),
+            'sender_id' => (int)$message->getValue('msg_usr_id_sender'),
+            'timestamp' => (string)$message->getValue('msg_timestamp', 'Y-m-d H:i:s'),
+            'read_state' => (int)$message->getValue('msg_read'),
+            'recipients' => $message->getRecipientsNamesString(),
+            'content' => $message->getContent('database'),
+            'attachments' => $message->getAttachmentsInformation()
+        );
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     * @return array<int,string>
+     */
+    private static function buildMessageRecipients(array $options, string $type): array
+    {
+        $recipients = array();
+
+        foreach (CliApplication::optionValues($options, 'user') as $reference) {
+            $user = CliApplication::resolveUser($reference);
+            $recipients[] = (string)$user->getValue('usr_uuid');
+        }
+
+        $groupReferences = CliApplication::optionValues($options, 'group');
+        if ($type === 'pm' && count($groupReferences) > 0) {
+            throw new InvalidArgumentException('Private messages cannot be sent to groups.');
+        }
+
+        foreach ($groupReferences as $reference) {
+            $role = self::resolveGroup($reference);
+            $recipients[] = 'groupID: ' . $role->getValue('rol_uuid');
+        }
+
+        if (count($recipients) === 0) {
+            throw new InvalidArgumentException('At least one --user or --group recipient is required.');
+        }
+
+        return array_values(array_unique($recipients));
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     * @return array<int,array{path:string,name:string,type:string}>
+     */
+    private static function buildMessageAttachments(array $options): array
+    {
+        $attachments = array();
+
+        foreach (CliApplication::optionValues($options, 'attachment') as $path) {
+            if (!is_file($path) || !is_readable($path)) {
+                throw new InvalidArgumentException('Attachment "' . $path . '" does not exist or is not readable.');
+            }
+
+            $type = 'application/octet-stream';
+            if (function_exists('mime_content_type')) {
+                $detectedType = mime_content_type($path);
+                if (is_string($detectedType) && $detectedType !== '') {
+                    $type = $detectedType;
+                }
+            }
+
+            $attachments[] = array(
+                'path' => $path,
+                'name' => basename($path),
+                'type' => $type
+            );
+        }
+
+        return $attachments;
     }
 
     private static function assertMessageAccess(Message $message): void
