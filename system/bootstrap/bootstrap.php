@@ -44,7 +44,7 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
 // This keeps maintenance mode active even if core files are temporarily unavailable or inconsistent.
 $maintenanceFile = ADMIDIO_PATH . FOLDER_DATA . '/maintenance.json';
 
-if (is_file($maintenanceFile)) {
+if (is_file($maintenanceFile) && PHP_SAPI !== 'cli') {
     $maintenanceJson = file_get_contents($maintenanceFile);
     $maintenanceState = is_string($maintenanceJson) ? json_decode($maintenanceJson, true) : null;
 

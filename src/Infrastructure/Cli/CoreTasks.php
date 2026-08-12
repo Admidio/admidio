@@ -25,6 +25,7 @@ use Admidio\Infrastructure\Plugins\PluginAbstract;
 use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\Maintenance;
+use Admidio\Infrastructure\Utils\MaintenanceMode;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
@@ -488,6 +489,32 @@ final class CoreTasks
         self::task('maintenance:repair-documents', 'repairDocuments', 'Run the native documents/files path repair operation.',
             'maintenance:repair-documents [--yes]', 'CORE', true, array(),
             array(self::opt('yes', 'Confirm the repair.', '', false, false, true)));
+        self::task(
+            'maintenance:mode',
+            'maintenanceMode',
+            'Enable, disable or query the application-wide maintenance mode.',
+            'maintenance:mode [MODE] [--title=TITLE] [--message=MESSAGE] [--retry-after=SECONDS] '
+                . '[--allow-script=SCRIPT]... [--owner=OWNER] [--force] [--format=record|json]',
+            null,
+            false,
+            array(self::arg('mode', 'Operation to perform: enable, disable or status. Defaults to status.', false)),
+            array(
+                self::opt('title', 'Title shown on the maintenance page.', 'TITLE'),
+                self::opt('message', 'Message shown on the maintenance page.', 'MESSAGE'),
+                self::opt('retry-after', 'Retry-After interval in seconds.', 'SECONDS'),
+                self::opt('allow-script', 'Relative script path that may bypass maintenance mode.', 'SCRIPT', false, true),
+                self::opt('owner', 'Maintenance owner identifier. Defaults to "cli".', 'OWNER'),
+                self::opt('force', 'Disable maintenance mode regardless of its owner.', '', false, false, true),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('record', 'json'))
+            ),
+            array(
+                'admidio maintenance:mode',
+                'admidio maintenance:mode status',
+                'admidio maintenance:mode enable --message="Maintenance in progress" --retry-after=300 --yes',
+                'admidio maintenance:mode disable',
+                'admidio maintenance:mode disable --force'
+            )
+        );
     }
 
     private static function registerConfigTasks(): void
@@ -2558,6 +2585,63 @@ final class CoreTasks
         CliApplication::confirm('Repair document folder paths?', $options);
         (new Maintenance($gDb))->repairDocumentsFilesPath();
         CliApplication::writeSuccess('Document path repair completed.', $options);
+        return 0;
+    }
+
+    public static function maintenanceMode(array $arguments, array $options): int
+    {
+        $mode = isset($arguments[0]) ? strtolower((string)$arguments[0]) : 'status';
+
+        if (!in_array($mode, array('enable', 'disable', 'status'), true)) {
+            throw new InvalidArgumentException('MODE expects one of: enable, disable, status.');
+        }
+
+        if ($mode === 'enable') {
+            if (CliApplication::optionBool($options, 'force', false)) {
+                throw new InvalidArgumentException('--force is only valid with maintenance:mode disable.');
+            }
+
+            CliApplication::confirm('Enable maintenance mode?', $options);
+
+            MaintenanceMode::enable(
+                CliApplication::optionString($options, 'title'),
+                CliApplication::optionString($options, 'message'),
+                CliApplication::optionValues($options, 'allow-script'),
+                CliApplication::optionInt($options, 'retry-after', 120) ?? 120,
+                CliApplication::optionString($options, 'owner', 'cli')
+            );
+        } elseif ($mode === 'disable') {
+            foreach (array('title', 'message', 'retry-after', 'allow-script') as $optionName) {
+                if (CliApplication::optionExists($options, $optionName)) {
+                    throw new InvalidArgumentException(
+                        '--' . $optionName . ' is only valid with maintenance:mode enable.'
+                    );
+                }
+            }
+
+            if (CliApplication::optionBool($options, 'force', false)) {
+                MaintenanceMode::disable();
+            } else {
+                MaintenanceMode::disable(CliApplication::optionString($options, 'owner', 'cli'));
+            }
+        } else {
+            foreach (array('title', 'message', 'retry-after', 'allow-script', 'owner', 'force') as $optionName) {
+                if (CliApplication::optionExists($options, $optionName)) {
+                    throw new InvalidArgumentException(
+                        '--' . $optionName . ' is not valid with maintenance:mode status.'
+                    );
+                }
+            }
+        }
+
+        $state = MaintenanceMode::getState();
+        $output = array('enabled' => $state !== null);
+
+        if ($state !== null) {
+            $output += $state;
+        }
+
+        CliApplication::writeValue($output, $options, 'record');
         return 0;
     }
 

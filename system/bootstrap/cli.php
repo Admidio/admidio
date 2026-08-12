@@ -93,6 +93,20 @@ $_SERVER['SCRIPT_FILENAME'] = $rootPath . '/admidio';
 $_SERVER['SCRIPT_NAME'] = $urlPath . '/admidio';
 $_SERVER['REQUEST_URI'] = $urlPath . '/admidio';
 
+/*
+ * Maintenance mode must be manageable even if the database is unavailable and while the regular
+ * bootstrap blocks requests. Load only the constants and Composer autoloader needed by the CLI
+ * and MaintenanceMode utility for that command.
+ */
+if (isset($cliSkipDatabase) && $cliSkipDatabase) {
+    require_once $rootPath . '/system/bootstrap/init_globals.php';
+    require_once $rootPath . '/system/bootstrap/constants.php';
+    require_once ADMIDIO_PATH . '/vendor/autoload.php';
+
+    $gValidLogin = false;
+    return;
+}
+
 require_once $rootPath . '/system/bootstrap/bootstrap.php';
 
 $gValidLogin = false;
