@@ -40,6 +40,8 @@ use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Messages\Entity\Message;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Photos\Entity\Album;
+use Admidio\Photos\Service\AlbumService;
+use Admidio\Photos\Service\PhotoService;
 use Admidio\Photos\ValueObject\ECard;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\Entity\ProfileField;
@@ -1227,7 +1229,7 @@ final class CoreTasks
     {
         self::task('photo:list', 'photoList', 'List photo albums.',
             'photo:list [--parent=ALBUM] [--format=FORMAT]', 'PHOTOS', true, array(), array(
-                self::opt('parent', 'Parent album.', 'ALBUM'),
+                self::opt('parent', 'Parent album or ALL for a root album.', 'ALBUM'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
             ));
         self::task('photo:album-show', 'photoAlbumShow', 'Show a photo album.',
@@ -1236,7 +1238,7 @@ final class CoreTasks
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
         $albumOptions = array(
             self::opt('name', 'Album name.', 'NAME'),
-            self::opt('parent', 'Parent album.', 'ALBUM'),
+            self::opt('parent', 'Parent album or ALL for a root album.', 'ALBUM'),
             self::opt('begin', 'Begin date.', 'DATE'),
             self::opt('end', 'End date.', 'DATE'),
             self::opt('photographers', 'Photographers.', 'TEXT'),
@@ -1245,20 +1247,24 @@ final class CoreTasks
         );
         self::task(
             'photo:album-add',
-            'unavailable',
+            'photoAlbumAdd',
             'Create a photo album.',
-            'photo:album-add NAME [options]',
+            'photo:album-add NAME --begin=DATE [options]',
             'PHOTOS',
             true,
             array(self::arg('name', 'Album name.')),
-            $albumOptions,
-            array(),
-            'current modules/photos/photos_new.php combines Album database changes with organization filesystem directory naming and rename/create behavior; no reusable album-save service exposes that complete operation.'
+            $albumOptions
         );
-        self::task('photo:album-update', 'unavailable', 'Update a photo album.',
-            'photo:album-update ALBUM [options]', 'PHOTOS', true,
-            array(self::arg('album', 'Album.')), $albumOptions, array(),
-            'current modules/photos/photos_new.php combines Album database changes with organization filesystem directory naming and rename/create behavior; no reusable album-save service exposes that complete operation.');
+        self::task(
+            'photo:album-update',
+            'photoAlbumUpdate',
+            'Update a photo album.',
+            'photo:album-update ALBUM [options]',
+            'PHOTOS',
+            true,
+            array(self::arg('album', 'Album.')),
+            $albumOptions
+        );
         self::task('photo:album-delete', 'photoAlbumDelete', 'Delete a photo album through Album::delete().',
             'photo:album-delete ALBUM [--yes]', 'PHOTOS', true,
             array(self::arg('album', 'Album.')),
@@ -1270,11 +1276,80 @@ final class CoreTasks
         self::task('photo:ecard-templates', 'photoEcardTemplates', 'List available e-card templates.',
             'photo:ecard-templates [--format=FORMAT]', 'PHOTOS', true, array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
-        $photoFsReason = 'current photo upload/download/rotate/e-card send functionality is implemented directly in modules/photos with filesystem/HTTP request handling; no reusable headless photo-file service exists.';
-        foreach (array('photo:album-download','photo:upload','photo:download','photo:delete','photo:rotate','photo:ecard-send') as $command) {
-            self::task($command, 'unavailable', ucfirst(str_replace(array(':','-'), ' ', $command)) . '.',
-                $command . ' [arguments] [options]', 'PHOTOS', true, array(), array(), array(), $photoFsReason);
-        }
+        self::task(
+            'photo:album-download',
+            'photoAlbumDownload',
+            'Download all photos of an album as ZIP.',
+            'photo:album-download ALBUM [--output=FILE]',
+            'PHOTOS',
+            true,
+            array(self::arg('album', 'Album.'))
+        );
+        self::task(
+            'photo:upload',
+            'photoUpload',
+            'Upload one or more local image files to an album.',
+            'photo:upload ALBUM FILE ...',
+            'PHOTOS',
+            true,
+            array(
+                self::arg('album', 'Album.'),
+                self::arg('file', 'JPEG/PNG image file.', true, true)
+            )
+        );
+        self::task(
+            'photo:download',
+            'photoDownload',
+            'Download a single photo.',
+            'photo:download ALBUM PHOTO_NUMBER [--output=FILE]',
+            'PHOTOS',
+            true,
+            array(
+                self::arg('album', 'Album.'),
+                self::arg('photo-number', 'Photo number.')
+            )
+        );
+        self::task(
+            'photo:delete',
+            'photoDelete',
+            'Delete one or more photos from an album.',
+            'photo:delete ALBUM PHOTO_NUMBER ... [--yes]',
+            'PHOTOS',
+            true,
+            array(
+                self::arg('album', 'Album.'),
+                self::arg('photo-number', 'One or more photo numbers.', true, true)
+            ),
+            array(self::opt('yes', 'Confirm deletion.', '', false, false, true))
+        );
+        self::task(
+            'photo:rotate',
+            'photoRotate',
+            'Rotate a photo by 90 degrees.',
+            'photo:rotate ALBUM PHOTO_NUMBER --direction=left|right',
+            'PHOTOS',
+            true,
+            array(
+                self::arg('album', 'Album.'),
+                self::arg('photo-number', 'Photo number.')
+            ),
+            array(self::opt('direction', 'Rotation direction.', 'DIRECTION', true, false, false, array('left', 'right')))
+        );
+        self::task(
+            'photo:ecard-send',
+            'unavailable',
+            'Send an e-card.',
+            'photo:ecard-send ALBUM PHOTO_NUMBER [options]',
+            'PHOTOS',
+            true,
+            array(
+                self::arg('album', 'Album.'),
+                self::arg('photo-number', 'Photo number.')
+            ),
+            array(),
+            array(),
+            'ECard can render and send one recipient, but current modules/photos/ecard_send.php still owns recipient expansion, role mail-right checks and message-history persistence; that orchestration should be extracted before exposing it through the CLI.'
+        );
     }
 
     private static function registerInventoryTasks(): void
@@ -5123,6 +5198,168 @@ final class CoreTasks
         return 0;
     }
 
+    public static function photoAlbumAdd(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $values = self::photoAlbumFormValues($options);
+        $values['pho_name'] = CliApplication::requireArgument($arguments, 0, 'name');
+
+        if (!isset($values['pho_begin'])) {
+            throw new InvalidArgumentException('--begin is required when creating a photo album.');
+        }
+
+        $parentUuid = 'ALL';
+        if (CliApplication::optionExists($options, 'parent')) {
+            $parentReference = CliApplication::optionString($options, 'parent');
+            $parentUuid = strtoupper($parentReference) === 'ALL'
+                ? 'ALL'
+                : (string)self::resolveAlbum($parentReference)->getValue('pho_uuid');
+        }
+
+        $album = new Album($gDb);
+        (new AlbumService($gDb))->saveData($album, $values, $parentUuid);
+
+        CliApplication::writeValue(self::albumData($album), $options);
+        return 0;
+    }
+
+    public static function photoAlbumUpdate(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
+        $values = self::photoAlbumFormValues($options);
+
+        $parentUuid = 'ALL';
+        if (CliApplication::optionExists($options, 'parent')) {
+            $parentReference = CliApplication::optionString($options, 'parent');
+            $parentUuid = strtoupper($parentReference) === 'ALL'
+                ? 'ALL'
+                : (string)self::resolveAlbum($parentReference)->getValue('pho_uuid');
+        } elseif ((int)$album->getValue('pho_pho_id_parent') > 0) {
+            $parent = new Album($gDb, (int)$album->getValue('pho_pho_id_parent'));
+            $parentUuid = (string)$parent->getValue('pho_uuid');
+        }
+
+        if (count($values) === 0 && !CliApplication::optionExists($options, 'parent')) {
+            throw new InvalidArgumentException('No photo album values were supplied.');
+        }
+
+        (new AlbumService($gDb))->saveData($album, $values, $parentUuid);
+
+        CliApplication::writeValue(self::albumData($album), $options);
+        return 0;
+    }
+
+    public static function photoAlbumDownload(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
+        $archive = (new PhotoService($gDb, $album))->createAlbumArchive();
+
+        self::moveGeneratedFile($archive['path'], $archive['filename'], $options);
+        return 0;
+    }
+
+    public static function photoUpload(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
+        $files = array_slice($arguments, 1);
+        if (count($files) === 0) {
+            throw new InvalidArgumentException('At least one photo file is required.');
+        }
+
+        $service = new PhotoService($gDb, $album);
+        $numbers = array();
+
+        foreach ($files as $file) {
+            $numbers[] = $service->uploadFromFile((string)$file);
+        }
+
+        CliApplication::writeValue(array('photo_numbers' => $numbers), $options);
+        return 0;
+    }
+
+    public static function photoDownload(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
+        $photoNumber = self::positiveInt(
+            CliApplication::requireArgument($arguments, 1, 'photo-number'),
+            'photo-number'
+        );
+        $download = (new PhotoService($gDb, $album))->getDownloadFile($photoNumber);
+
+        $target = CliApplication::optionString($options, 'output');
+        if ($target === '') {
+            $target = getcwd() . DIRECTORY_SEPARATOR . $download['filename'];
+        }
+
+        if (!@copy($download['path'], $target)) {
+            throw new RuntimeException('Could not copy photo to "' . $target . '".');
+        }
+
+        CliApplication::writeSuccess('Photo written to ' . $target . '.', $options);
+        return 0;
+    }
+
+    public static function photoDelete(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
+        $photoNumbers = array();
+
+        foreach (array_slice($arguments, 1) as $photoNumber) {
+            $photoNumbers[] = self::positiveInt((string)$photoNumber, 'photo-number');
+        }
+
+        if (count($photoNumbers) === 0) {
+            throw new InvalidArgumentException('At least one photo number is required.');
+        }
+
+        $photoNumbers = array_values(array_unique($photoNumbers));
+        rsort($photoNumbers, SORT_NUMERIC);
+
+        CliApplication::confirm(
+            'Delete ' . count($photoNumbers) . ' photo(s) from album "' . $album->getValue('pho_name') . '"?',
+            $options
+        );
+
+        $service = new PhotoService($gDb, $album);
+        foreach ($photoNumbers as $photoNumber) {
+            $service->deletePhoto($photoNumber);
+        }
+
+        CliApplication::writeSuccess('Photo(s) deleted.', $options);
+        return 0;
+    }
+
+    public static function photoRotate(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
+        $photoNumber = self::positiveInt(
+            CliApplication::requireArgument($arguments, 1, 'photo-number'),
+            'photo-number'
+        );
+        $direction = CliApplication::optionString($options, 'direction');
+        if (!in_array($direction, array('left', 'right'), true)) {
+            throw new InvalidArgumentException('--direction must be left or right.');
+        }
+
+        (new PhotoService($gDb, $album))->rotatePhoto($photoNumber, $direction);
+
+        CliApplication::writeSuccess('Photo rotated.', $options);
+        return 0;
+    }
+
     public static function photoAlbumDelete(array $arguments, array $options): int
     {
         $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
@@ -8261,6 +8498,35 @@ final class CoreTasks
             throw new InvalidArgumentException('Photo album was not found.');
         }
         return new Album($gDb, (int)$rows[0]);
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
+    private static function photoAlbumFormValues(array $options): array
+    {
+        $values = array();
+
+        $mapping = array(
+            'name' => 'pho_name',
+            'begin' => 'pho_begin',
+            'end' => 'pho_end',
+            'photographers' => 'pho_photographers',
+            'description' => 'pho_description'
+        );
+
+        foreach ($mapping as $option => $field) {
+            if (CliApplication::optionExists($options, $option)) {
+                $values[$field] = CliApplication::optionString($options, $option);
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'locked')) {
+            $values['pho_locked'] = CliApplication::optionBool($options, 'locked') ? 1 : 0;
+        }
+
+        return $values;
     }
 
     /**

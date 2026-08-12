@@ -21,6 +21,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\Photos\Service\PhotoService;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -51,169 +52,42 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    // check whether to take original version instead of scaled one
-    $takeOriginalsIfAvailable = $gSettingsManager->getBool('photo_keep_original');
+    $photoService = new PhotoService($gDb, $photoAlbum);
+    $temporaryFile = false;
 
-    $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id');
-
-    // check folder vs single download
     if ($getPhotoNr == null) {
-        // get number of photos in total
-        $quantity = $photoAlbum->getValue('pho_quantity');
-        $sqlConditions = '';
-
-        // get tempFolder and unlink zip file otherwise get a PHP deprecated warning from zip open
-        $tempFolder = $tempFileFolderName = ADMIDIO_PATH . FOLDER_TEMP_DATA;
-        $zipTempName = tempnam($tempFolder, 'zip');
-        unlink($zipTempName);
-
-        $zip = new ZipArchive();
-        $zipOpenCode = $zip->open($zipTempName, ZipArchive::CREATE);
-
-        if ($zipOpenCode !== true) {
-            $gMessage->show($gL10n->get('SYS_DOWNLOAD_ZIP_ERROR'));
-            // => EXIT
-        }
-
-        for ($i = 1; $i <= $quantity; ++$i) {
-            if ($takeOriginalsIfAvailable) {
-                // try to find the original version if available, if not fallback to the scaled one
-                $path = $albumFolder . '/originals/' . $i;
-                if (is_file($path . '.jpg')) {
-                    $path .= '.jpg';
-                    $zip->addFile($path, basename($path));
-                    continue;
-                } elseif (is_file($path . '.png')) {
-                    $path .= '.png';
-                    $zip->addFile($path, basename($path));
-                    continue;
-                }
-            }
-
-            $path = $albumFolder . '/' . $i . '.jpg';
-            if (is_file($path)) {
-                $zip->addFile($path, basename($path));
-            }
-        }
-
-        // add sub albums as subfolders
-
-        if (!$gCurrentUser->isAdministratorPhotos()) {
-            $sqlConditions .= ' AND pho_locked = false ';
-        }
-
-        // get sub albums
-        $sql = 'SELECT pho_id
-              FROM ' . TBL_PHOTOS . '
-             WHERE pho_org_id = ? -- $gCurrentOrgId
-               AND pho_pho_id_parent = ? -- $photoAlbum->getValue(\'pho_id\')
-                   ' . $sqlConditions . '
-             ORDER BY pho_begin DESC ';
-        $queryParams = array($gCurrentOrgId, (int)$photoAlbum->getValue('pho_id'));
-        $pdoStatement = $gDb->queryPrepared($sql, $queryParams);
-
-        // number of sub albums
-        $albums = $pdoStatement->rowCount();
-
-        if ((int)$photoAlbum->getValue('pho_quantity') === 0 && $albums === 0) {
-            throw new Exception('SYS_ALBUM_CONTAINS_NO_PHOTOS');
-        }
-
-        for ($x = 0; $x < $albums; ++$x) {
-            // get id of album
-            $subPhotoAlbum = new Album($gDb);
-            $subPhotoAlbum ->readDataById((int)$pdoStatement->fetchColumn());
-
-            // ignore locked albums owned by others
-            if ($subPhotoAlbum->getValue('pho_locked') == 0 || $gCurrentUser->isAdministratorPhotos()) {
-                $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $subPhotoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$subPhotoAlbum->getValue('pho_id');
-                // get number of photos in total
-                $quantity = $subPhotoAlbum->getValue('pho_quantity');
-                $photoAlbumName = preg_replace('/[^\p{L}\p{N} _.-]/u', '', $subPhotoAlbum->getValue('pho_name', 'database'));
-                for ($i = 1; $i <= $quantity; ++$i) {
-                    if ($takeOriginalsIfAvailable) {
-                        // try to find the original version if available, if not fallback to the scaled one
-                        $path = $albumFolder . '/originals/' . $i;
-                        if (is_file($path . '.jpg')) {
-                            $path .= '.jpg';
-                            $zip->addFile($path, $photoAlbumName . '/' . basename($path));
-                            continue;
-                        } elseif (is_file($path . '.png')) {
-                            $path .= '.png';
-                            $zip->addFile($path, $photoAlbumName . '/' . basename($path));
-                            continue;
-                        }
-                    }
-                    $path = $albumFolder . '/' . $i . '.jpg';
-                    if (is_file($path)) {
-                        $zip->addFile($path, $photoAlbumName . '/' . basename($path));
-                    }
-                }
-            }
-        }
-
-        $zipCloseValue = $zip->close();
-        if ($zipCloseValue === false) {
-            $gMessage->show($gL10n->get('SYS_DOWNLOAD_ZIP_ERROR'));
-            // => EXIT
-        }
-
-        $filename = preg_replace('/[^\p{L}\p{N} _.-]/u', '', $photoAlbum->getValue('pho_name', 'database')) . '.zip';
-        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
-
-        header('Content-Type: application/zip');
-        header('Content-Length: ' . filesize($zipTempName));
-        header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Expires: 0');
-        header('Content-Transfer-Encoding: binary');
-        header('Cache-Control: private');
-
-        // send the file, use fpassthru for chunkwise transport
-        $fp = fopen($zipTempName, 'rb');
-        fpassthru($fp);
-
-        try {
-            FileSystemUtils::deleteFileIfExists($zipTempName);
-        } catch (RuntimeException $exception) {
-            $gLogger->error('Could not delete file!', array('filePath' => $zipTempName));
-            // TODO
-        }
+        $download = $photoService->createAlbumArchive();
+        $temporaryFile = true;
     } else {
-        // download single file
-        header('Content-Description: File Transfer');
-        header('Expires: 0');
-        header('Content-Transfer-Encoding: binary');
-        header('Cache-Control: private');
+        $download = $photoService->getDownloadFile($getPhotoNr);
+    }
 
-        if ($takeOriginalsIfAvailable) {
-            // try to find the original version if available, if not fallback to the scaled one
-            $path = $albumFolder . '/originals/' . $getPhotoNr;
-            if (is_file($path . '.jpg')) {
-                header('Content-Type: image/jpeg');
-                header('Content-Length: ' . filesize($path . '.jpg'));
-                header('Content-Disposition: attachment; filename="' . $getPhotoNr . '.jpg"');
-                $fp = fopen($path . '.jpg', 'rb');
-                fpassthru($fp);
-                exit();
-            } elseif (is_file($path . '.png')) {
-                header('Content-Type: image/png');
-                header('Content-Length: ' . filesize($path . '.png'));
-                header('Content-Disposition: attachment; filename="' . $getPhotoNr . '.png"');
-                $fp = fopen($path . '.png', 'rb');
-                fpassthru($fp);
-                exit();
-            }
-        }
+    $fileSize = filesize($download['path']);
+    if ($fileSize === false) {
+        throw new Exception('SYS_FILE_NOT_EXIST');
+    }
 
-        $path = $albumFolder . '/' . $getPhotoNr . '.jpg';
+    header('Content-Type: ' . $download['contentType']);
+    header('Content-Length: ' . $fileSize);
+    header('Content-Description: File Transfer');
+    header('Content-Disposition: attachment; filename="' . $download['filename'] . '"');
+    header('Expires: 0');
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: private');
 
-        if (is_file($path)) {
-            header('Content-Type: image/jpeg');
-            header('Content-Length: ' . filesize($path));
-            header('Content-Disposition: attachment; filename="' . $getPhotoNr . '.jpg"');
-            $fp = fopen($path, 'rb');
-            fpassthru($fp);
+    $file = fopen($download['path'], 'rb');
+    if ($file === false) {
+        throw new Exception('SYS_FILE_NOT_EXIST');
+    }
+
+    fpassthru($file);
+    fclose($file);
+
+    if ($temporaryFile) {
+        try {
+            FileSystemUtils::deleteFileIfExists($download['path']);
+        } catch (RuntimeException $exception) {
+            $gLogger->error('Could not delete file!', array('filePath' => $download['path']));
         }
     }
 } catch (Throwable $e) {
