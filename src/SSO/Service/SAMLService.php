@@ -331,10 +331,12 @@ class SAMLService extends SSOService {
         $idpDescriptor->setProtocolSupportEnumeration(SamlConstants::PROTOCOL_SAML2);
 
         // Add KeyDescriptor for signing
-        $keyDescriptor = new KeyDescriptor();
-        $keyDescriptor->setUse(KeyDescriptor::USE_SIGNING);
-        $keyDescriptor->setCertificate($keys['idpCert']);
-        $idpDescriptor->addKeyDescriptor($keyDescriptor);
+        if ($keys['idpCert'] !== null) {
+            $keyDescriptor = new KeyDescriptor();
+            $keyDescriptor->setUse(KeyDescriptor::USE_SIGNING);
+            $keyDescriptor->setCertificate($keys['idpCert']);
+            $idpDescriptor->addKeyDescriptor($keyDescriptor);
+        }
 
         // Advertise an encryption key only when one is configured.
         if ($keys['idpCertEnc'] !== null) {
@@ -415,8 +417,10 @@ class SAMLService extends SSOService {
         $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
         $response->setIssuer($issuer);
 
-        $keys = $this->getKeysCertificates();
-        $response->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
+        if ($this->shouldSignProtocolResponses($client)) {
+            $keys = $this->getKeysCertificates();
+            $response->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
+        }
 
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($response);
@@ -1213,6 +1217,13 @@ class SAMLService extends SSOService {
         $this->sendLogoutResponse($initiatorClient, $initiatorRequestId, $initiatorRelayState, $status);
     }
 
+    private function shouldSignProtocolResponses(SAMLClient $client): bool
+    {
+        return (bool) $client->getValue('smc_sign_assertions')
+            || (bool) $client->getValue('smc_require_auth_signed')
+            || (bool) $client->getValue('smc_validate_signatures');
+    }
+
     /**
      * Send a front-channel LogoutRequest to the next service provider.
      *
@@ -1246,7 +1257,7 @@ class SAMLService extends SSOService {
 
         $keys = $this->getKeysCertificates();
 
-        if ($client->getValue('smc_sign_assertions')) {
+        if ($this->shouldSignProtocolResponses($client)) {
             $logoutRequest->setSignature(
                 $this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert'])
             );
@@ -1304,7 +1315,7 @@ class SAMLService extends SSOService {
 
         $keys = $this->getKeysCertificates();
 
-        if ($client->getValue('smc_sign_assertions')) {
+        if ($this->shouldSignProtocolResponses($client)) {
             $logoutResponse->setSignature(
                 $this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert'])
             );
