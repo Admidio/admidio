@@ -174,11 +174,13 @@ class OIDCLogoutNotificationService
             InMemory::plainText((string) $key->getValue('key_private')),
             InMemory::plainText((string) $key->getValue('key_public'))
         );
+        $now = new \DateTimeImmutable();
 
         $builder = $configuration->builder()
             ->issuedBy($this->issuerURL)
             ->permittedFor($client->getIdentifier())
-            ->issuedAt(new \DateTimeImmutable())
+            ->issuedAt($now)
+            ->expiresAt($now->modify('+60 seconds'))
             ->identifiedBy(bin2hex(random_bytes(16)))
             ->withClaim('events', array(
                 self::BACKCHANNEL_LOGOUT_EVENT => new \stdClass()

@@ -837,10 +837,6 @@ class OIDCService extends SSOService {
     public function handleJWKSRequest() {
         global $gSettingsManager;
 
-        if (!$this->isServiceSetup) {
-            $this->setupService();
-        }
-
         // Private key and Certificate for signatures
         $keyService = new KeyService($this->db);
         $key = $keyService->getUsableKey((int) $gSettingsManager->get('sso_oidc_signing_key'), KeyService::USAGE_OIDC_SIGNING);
@@ -1377,6 +1373,13 @@ class OIDCService extends SSOService {
             }
         }
 
+        if ($externalSessionId === '') {
+            return $this->createOIDCErrorResponse(
+                'invalid_request',
+                'The current session cannot be used for OpenID Connect logout.',
+                400
+            );
+        }
         $_SESSION['oidc_logout_confirmation'] = array(
             'external_session_id' => $externalSessionId,
             'client_id' => $client?->getIdentifier() ?? '',

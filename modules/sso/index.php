@@ -93,7 +93,6 @@ try {
 
         try {
             $oidcService = new OIDCService($gDb, $gCurrentUser);
-            $oidcService->setupService();
         } catch (Exception $e) {
             $logSSOException('Unable to initialize the OIDC connect service', $e);
             $sendResponse(new JsonResponse([
