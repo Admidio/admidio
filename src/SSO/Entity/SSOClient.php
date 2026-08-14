@@ -49,6 +49,15 @@ class SSOClient extends Entity
         return $this->getValue($this->columnPrefix . '_client_name')??'';
     }
 
+    public function save(bool $updateFingerPrint = true): bool
+    {
+        if ($this->isNewRecord()) {
+            // new clients get the current organization assigned
+            $this->setValue($this->columnPrefix . '_org_id', $GLOBALS['gCurrentOrgId']);
+        }
+
+        return parent::save($updateFingerPrint);
+    }
 
     /**
      * Deletes the selected record of the table and all references in other tables.
