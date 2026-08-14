@@ -191,5 +191,10 @@
     <step id="1050">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_frontchannel_logout_session_required boolean NOT NULL DEFAULT false</step>
     <step id="1060">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_backchannel_logout_uri varchar(2000) NULL</step>
     <step id="1070">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_backchannel_logout_session_required boolean NOT NULL DEFAULT false</step>
+    <step id="1080">UPDATE %PREFIX%_oidc_clients SET ocl_grant_types = 'authorization_code refresh_token'</step>
+    <step id="1090">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_org_id integer unsigned</step>
+    <step id="1100">UPDATE %PREFIX%_oidc_clients SET ocl_org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations) WHERE ocl_org_id IS NULL</step>
+    <step id="1110" database="mysql">ALTER TABLE %PREFIX%_oidc_clients MODIFY COLUMN ocl_org_id integer unsigned NOT NULL</step>
+    <step id="1120" database="pgsql">ALTER TABLE %PREFIX%_oidc_clients ALTER COLUMN ocl_org_id SET NOT NULL</step>
     <step>stop</step>
 </update>

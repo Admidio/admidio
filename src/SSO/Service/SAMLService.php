@@ -45,7 +45,6 @@ use Admidio\UI\Presenter\PagePresenter;
 
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Entity\SAMLLogoutTransaction;
-use Admidio\SSO\Entity\SAMLSessionParticipant;
 use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Service\KeyService;
 
@@ -153,8 +152,6 @@ class SAMLService extends SSOService {
         );
         return $staticSettings;
     }
-
-
 
 
 
@@ -339,11 +336,13 @@ class SAMLService extends SSOService {
         $keyDescriptor->setCertificate($keys['idpCert']);
         $idpDescriptor->addKeyDescriptor($keyDescriptor);
 
-        // Add KeyDescriptor for encryption
-        $keyDescriptor = new KeyDescriptor();
-        $keyDescriptor->setUse(KeyDescriptor::USE_ENCRYPTION);
-        $keyDescriptor->setCertificate($keys['idpCertEnc']);
-        $idpDescriptor->addKeyDescriptor($keyDescriptor);
+        // Advertise an encryption key only when one is configured.
+        if ($keys['idpCertEnc'] !== null) {
+            $keyDescriptor = new KeyDescriptor();
+            $keyDescriptor->setUse(KeyDescriptor::USE_ENCRYPTION);
+            $keyDescriptor->setCertificate($keys['idpCertEnc']);
+            $idpDescriptor->addKeyDescriptor($keyDescriptor);
+        }
 
         // Add NameIDFormats
         $idpDescriptor->addNameIDFormat(SamlConstants::NAME_ID_FORMAT_UNSPECIFIED);
@@ -416,10 +415,8 @@ class SAMLService extends SSOService {
         $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
         $response->setIssuer($issuer);
 
-        if ($client->getValue('smc_sign_assertions')) {
-            $keys = $this->getKeysCertificates();
-            $response->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
-        }
+        $keys = $this->getKeysCertificates();
+        $response->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
 
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($response);
@@ -600,8 +597,13 @@ class SAMLService extends SSOService {
         if (!$request instanceof AuthnRequest) {
             throw new Exception("Invalid request (not an AuthnRequest) in SAMLService->handleSSORequest()");
         }
-        // Load the SAML client data (entityID is in $request->issuer->getValue())
-        $entityIdClient = $request->getIssuer()->getValue();
+        $requestIssuer = $request->getIssuer();
+        if ($requestIssuer === null || empty($requestIssuer->getValue())) {
+            throw new Exception('The SAML AuthnRequest has no issuer.');
+        }
+
+        // Load the SAML client data (entityID is in the request issuer)
+        $entityIdClient = $requestIssuer->getValue();
         $client = $this->getClientFromID($entityIdClient);
 
         try {
@@ -609,9 +611,16 @@ class SAMLService extends SSOService {
                 throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Login is no possible.");
             }
 
-            // Validate signatures. Will throw an exception
-            if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
-                $this->validateSignature($client, $request, $client->getValue('smc_require_auth_signed'));
+            // The global metadata flag and the per-client flag both mean that
+            // an AuthnRequest signature is mandatory.
+            $signatureRequired = $gSettingsManager->getBool('sso_saml_want_requests_signed')
+                || (bool) $client->getValue('smc_require_auth_signed');
+
+            if ($signatureRequired
+                || $request->getSignature() !== null
+                || $client->getValue('smc_validate_signatures')
+            ) {
+                $this->validateSignature($client, $request, $signatureRequired);
             }
 
             $this->validateRequestContext($client, $request, $this->ssoUrl);
@@ -692,7 +701,6 @@ class SAMLService extends SSOService {
             $subjectConfirmationData = new \LightSaml\Model\Assertion\SubjectConfirmationData();
             $subjectConfirmationData
                 ->setRecipient($clientACS) // Required recipient URL
-                ->setNotBefore($notBefore)
                 ->setNotOnOrAfter($notOnOrAfter)
                 ->setInResponseTo($requestId); // ID of the AuthnRequest (optional but recommended)
 
@@ -787,13 +795,12 @@ class SAMLService extends SSOService {
             $assertion->addItem($attributeStatement);
 
 
-            // Sign the assertion and the whole response!
+            // HTTP-POST SSO assertions are always signed. The legacy
+            // smc_sign_assertions setting now controls only the additional
+            // response-level signature.
             $keys = $this->getKeysCertificates();
-            $signAssertions = $client->getValue('smc_sign_assertions');
-
-            if ($signAssertions) {
-                $assertion->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
-            }
+            $signResponse = (bool) $client->getValue('smc_sign_assertions');
+            $assertion->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
 
             // IF required, encrypt the assertion
             $encryptAssertionRequired = (bool)$client->getValue('smc_encrypt_assertions');
@@ -805,7 +812,7 @@ class SAMLService extends SSOService {
                 $response->addAssertion($assertion);
             }
 
-            if ($signAssertions) {
+            if ($signResponse) {
                 $response->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
             }
 
@@ -850,11 +857,12 @@ class SAMLService extends SSOService {
      */
     private function saveSessionParticipant(SAMLClient $client, int $userId,
         string $nameID, string $nameIDFormat, ?string $nameIDSPNameQualifier, string $sessionIndex,
-        \DateTimeInterface $authnInstant, \DateTimeInterface $expiresAt): void 
+        \DateTimeInterface $authnInstant, \DateTimeInterface $expiresAt): void
     {
         global $gCurrentOrgId, $gCurrentSession;
 
-        $this->removeExpiredSessionParticipants();
+        $participantService = new SAMLSessionParticipantService($this->db);
+        $participantService->removeExpiredParticipants();
 
         $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
 
@@ -862,48 +870,40 @@ class SAMLService extends SSOService {
             throw new Exception('The current Admidio session has no external session identifier.');
         }
 
-        $clientId = (int) $client->getValue('smc_id');
-
-        $participant = new SAMLSessionParticipant($this->db);
-        $participant->readDataByExternalSessionAndClient($externalSessionId, $clientId);
-        $participant->setParticipantData(
-            $gCurrentOrgId, $userId, $externalSessionId, $clientId,
+        $participantService->persistParticipant(
+            $gCurrentOrgId, $userId, $externalSessionId, (int) $client->getValue('smc_id'),
             $nameID, $nameIDFormat, $nameIDSPNameQualifier,
             $sessionIndex, $authnInstant, $expiresAt
         );
-        $participant->save();
     }
 
+
     /**
-     * Return all active SAML participants of an Admidio session.
+     * Resolve an SP-initiated LogoutRequest to the persisted SAML participant.
      *
-     * @return array<int,array<string,mixed>>
+     * @return array<string,mixed>|null
      * @throws Exception
      */
-    private function getActiveSessionParticipants(string $externalSessionId): array 
+    private function findActiveSessionParticipant(LogoutRequest $request, int $clientId): ?array
     {
         global $gCurrentOrgId;
 
-        $sql = '
-            SELECT ssp_id,
-                ssp_client_id,
-                ssp_name_id,
-                ssp_name_id_format,
-                ssp_name_id_sp_name_qualifier,
-                ssp_session_index
-            FROM ' . TBL_SAML_SESSION_PARTICIPANTS . '
-            WHERE ssp_org_id = ?
-            AND ssp_external_session_id = ?
-            AND ssp_expires_at > CURRENT_TIMESTAMP
-            ORDER BY ssp_id';
-
-        $statement = $this->db->queryPrepared($sql, array($gCurrentOrgId, $externalSessionId));
-
-        $participants = array();
-        while ($row = $statement->fetch()) {
-            $participants[] = $row;
+        $sessionIndex = (string) ($request->getSessionIndex() ?? '');
+        if ($sessionIndex === '') {
+            return null;
         }
-        return $participants;
+
+        $participantService = new SAMLSessionParticipantService($this->db);
+        $participants = $participantService->getParticipantsByClientAndSessionIndex(
+            $gCurrentOrgId, $clientId, $sessionIndex);
+
+        foreach ($participants as $participant) {
+            if ($this->logoutRequestMatchesParticipant($request, $participant)) {
+                return $participant;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -937,7 +937,8 @@ class SAMLService extends SSOService {
 
         $requestSessionIndex = (string) ($request->getSessionIndex() ?? '');
 
-        if ($requestSessionIndex !== '' && !hash_equals((string) $participant['ssp_session_index'], $requestSessionIndex)) {
+        if ($requestSessionIndex === '' || !hash_equals((string) $participant['ssp_session_index'], $requestSessionIndex)
+        ) {
             return false;
         }
 
@@ -956,7 +957,7 @@ class SAMLService extends SSOService {
         }
 
         $this->removeExpiredLogoutTransactions();
-        $this->removeExpiredSessionParticipants();
+        (new SAMLSessionParticipantService($this->db))->removeExpiredParticipants();
 
         $message = $this->receiveMessage();
 
@@ -977,7 +978,7 @@ class SAMLService extends SSOService {
      */
     private function handleIncomingLogoutRequest(LogoutRequest $request): void
     {
-        global $gCurrentOrgId, $gCurrentSession, $gLogger, $gValidLogin;
+        global $gCurrentOrgId, $gLogger;
 
         $issuer = $request->getIssuer();
         if ($issuer === null || empty($issuer->getValue())) {
@@ -990,56 +991,48 @@ class SAMLService extends SSOService {
         try {
             $this->validateSLOClient($initiatorClient, $request);
 
+            $initiatorClientId = (int) $initiatorClient->getValue('smc_id');
+            $initiatorParticipant = $this->findActiveSessionParticipant($request, $initiatorClientId);
+
+            if ($initiatorParticipant === null) {
+                throw new Exception('The LogoutRequest does not match an active SAML session.');
+            }
+
+            $externalSessionId = (string) $initiatorParticipant['ssp_external_session_id'];
+            $participantService = new SAMLSessionParticipantService($this->db);
+            $participants = $participantService->getParticipants($gCurrentOrgId, $externalSessionId);
             $pendingClients = array();
-            $initiatorParticipantId = null;
 
-            if ($gValidLogin) {
-                $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
+            foreach ($participants as $participant) {
+                $participantId = (int) $participant['ssp_id'];
+                $participantClientId = (int) $participant['ssp_client_id'];
 
-                if ($externalSessionId === '') {
-                    throw new Exception('The current Admidio session has no external session identifier.');
+                if ($participantId === (int) $initiatorParticipant['ssp_id']) {
+                    continue;
                 }
 
-                $participants = $this->getActiveSessionParticipants($externalSessionId);
-                $initiatorClientId = (int) $initiatorClient->getValue('smc_id');
-
-                foreach ($participants as $participant) {
-                    $participantId = (int) $participant['ssp_id'];
-                    $participantClientId = (int) $participant['ssp_client_id'];
-
-                    if ($participantClientId === $initiatorClientId) {
-                        if (!$this->logoutRequestMatchesParticipant($request, $participant)) {
-                            continue;
-                        }
-
-                        $initiatorParticipantId = $participantId;
-                        continue;
-                    }
-
-                    $pendingClients[] = array(
-                        'participantId' => $participantId,
-                        'clientId' => $participantClientId,
-                        'nameId' => (string) $participant['ssp_name_id'],
-                        'nameIdFormat' => (string) $participant['ssp_name_id_format'],
-                        'nameIdSPNameQualifier' => $participant['ssp_name_id_sp_name_qualifier'],
-                        'sessionIndex' => (string) $participant['ssp_session_index']
-                    );
-                }
-                if ($initiatorParticipantId === null) {
-                    throw new Exception('The LogoutRequest does not match an active SAML session.');
-                }
+                $pendingClients[] = array(
+                    'participantId' => $participantId,
+                    'clientId' => $participantClientId,
+                    'nameId' => (string) $participant['ssp_name_id'],
+                    'nameIdFormat' => (string) $participant['ssp_name_id_format'],
+                    'nameIdSPNameQualifier' => $participant['ssp_name_id_sp_name_qualifier'],
+                    'sessionIndex' => (string) $participant['ssp_session_index']
+                );
             }
 
             $transaction = new SAMLLogoutTransaction($this->db);
-            $transaction->initialize($gCurrentOrgId, (int) $initiatorClient->getValue('smc_id'),
-                 $initiatorParticipantId, $request->getID(), $request->getRelayState(), $pendingClients);
+            $transaction->initialize($gCurrentOrgId, $initiatorClientId,
+                (int) $initiatorParticipant['ssp_id'], $request->getID(), $request->getRelayState(), $pendingClients);
             $transaction->save();
 
             /*
-            * All information required for downstream LogoutRequests is now
-            * persisted. Local logout can no longer destroy required SAML state.
-            */
-            $this->performLocalLogout();
+             * All information required for downstream LogoutRequests is now
+             * persisted. Invalidate the Admidio session identified by the
+             * persisted SAML participant, not whichever browser session happens
+             * to be making this request.
+             */
+            $this->performLocalLogout($externalSessionId);
 
             $this->continueLogoutTransaction($transaction);
         } catch (Exception $exception) {
@@ -1078,7 +1071,9 @@ class SAMLService extends SSOService {
 
         $transaction = new SAMLLogoutTransaction($this->db);
 
-        if (!$transaction->readDataByToken($transactionToken)) {
+        if (!$transaction->readDataByToken($transactionToken)
+            || (int) $transaction->getValue('slt_org_id') !== $gCurrentOrgId
+        ) {
             throw new Exception('The SAML LogoutResponse references an unknown logout transaction.');
         }
 
@@ -1117,7 +1112,7 @@ class SAMLService extends SSOService {
                 * Only a successful correlated LogoutResponse confirms that the SP
                 * session represented by this participant has ended.
                 */
-                $this->deleteSessionParticipant($currentParticipantId);
+                (new SAMLSessionParticipantService($this->db))->deleteParticipant($currentParticipantId);
             } else {
                 $transaction->setPartialLogout(true);
 
@@ -1140,31 +1135,6 @@ class SAMLService extends SSOService {
             $gLogger->error($exception->getMessage());
             throw $exception;
         }
-    }
-
-    /**
-     * Delete a SAML session participant after confirmed logout.
-     *
-     * @throws Exception
-     */
-    private function deleteSessionParticipant(int $participantId): void
-    {
-        $participant = new SAMLSessionParticipant($this->db, $participantId);
-        $participant->delete();
-    }
-
-    /**
-     * Remove participant records after their advertised session validity.
-     *
-     * @throws Exception
-     */
-    private function removeExpiredSessionParticipants(): void
-    {
-        $sql = '
-            DELETE FROM ' . TBL_SAML_SESSION_PARTICIPANTS . '
-            WHERE ssp_expires_at < CURRENT_TIMESTAMP';
-
-        $this->db->queryPrepared($sql);
     }
 
     /**
@@ -1235,7 +1205,7 @@ class SAMLService extends SSOService {
         * so its participant record no longer represents an active session.
         */
         if ($initiatorParticipantId > 0) {
-            $this->deleteSessionParticipant($initiatorParticipantId);
+            (new SAMLSessionParticipantService($this->db))->deleteParticipant($initiatorParticipantId);
         }
 
         $transaction->delete();
@@ -1373,26 +1343,59 @@ class SAMLService extends SSOService {
      *
      * @throws Exception
      */
-    private function performLocalLogout(): void
+    private function performLocalLogout(string $externalSessionId): void
     {
         global $gCurrentUser, $gDb, $gMenu, $g_organization;
         global $gCurrentOrganization, $gCurrentOrgId, $gCurrentSession;
         global $gProfileFields, $gSettingsManager, $gValidLogin;
 
-        if (!$gValidLogin) {
-            return;
+        if ($externalSessionId === '') {
+            throw new Exception('The SAML logout target has no external session identifier.');
         }
 
-        $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
+        $oidcService = new OIDCService($gDb, $gCurrentUser);
+        $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
 
-        if ($externalSessionId !== '') {
-            $oidcService = new OIDCService($gDb, $gCurrentUser);
-            $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
-            // A SAML front-channel transaction is already in progress. Send
-            // OIDC back-channel notifications here and leave front-channel
-            // notifications to ordinary or RP-initiated OIDC logout.
-            $oidcLogoutNotificationService->notifySession($externalSessionId, false);
-            (new OIDCSessionParticipantService($gDb))->deleteParticipants($externalSessionId);
+        // A SAML front-channel transaction is already in progress. Send
+        // OIDC back-channel notifications now. Keep participant records because
+        // front-channel-only OIDC clients have not been notified by this flow.
+        $oidcLogoutNotificationService->notifySession($externalSessionId, false);
+
+        $currentExternalSessionId = $gValidLogin
+            ? (string) $gCurrentSession->getValue('ses_external_session_id')
+            : '';
+        $isCurrentSession = $currentExternalSessionId !== ''
+            && hash_equals($currentExternalSessionId, $externalSessionId);
+
+        if (!$isCurrentSession) {
+            // The LogoutRequest can arrive without the browser that owns the
+            // target Admidio session. Invalidate that persisted session and its
+            // auto-login record without touching an unrelated current session.
+            $sql = 'SELECT ses_session_id
+                      FROM ' . TBL_SESSIONS . '
+                     WHERE ses_org_id = ?
+                       AND ses_external_session_id = ?';
+            $statement = $this->db->queryPrepared($sql, array($gCurrentOrgId, $externalSessionId));
+
+            while ($session = $statement->fetch()) {
+                $this->db->queryPrepared(
+                    'DELETE FROM ' . TBL_AUTO_LOGIN . '
+                           WHERE atl_org_id = ?
+                             AND atl_session_id = ?',
+                    array($gCurrentOrgId, $session['ses_session_id'])
+                );
+            }
+
+            $this->db->queryPrepared(
+                'UPDATE ' . TBL_SESSIONS . '
+                    SET ses_usr_id = NULL,
+                        ses_authentication_time = NULL,
+                        ses_authentication_methods = NULL
+                  WHERE ses_org_id = ?
+                    AND ses_external_session_id = ?',
+                array($gCurrentOrgId, $externalSessionId)
+            );
+            return;
         }
 
         $gValidLogin = false;

@@ -22,7 +22,13 @@ class ClientRepository implements ClientRepositoryInterface {
     }
 
     public function getClientEntity($clientIdentifier): ?ClientEntityInterface {
-        $client = new OIDCClient($this->db, $clientIdentifier);
+        global $gCurrentOrgId;
+        $client = new OIDCClient($this->db);
+
+        $client->readDataByColumns(array(
+            'ocl_org_id' => $gCurrentOrgId,
+            'ocl_client_id' => $clientIdentifier
+        ));
         if ($client->isNewRecord()) {
             return null;
         } elseif (!$client->isEnabled()) {
@@ -33,11 +39,19 @@ class ClientRepository implements ClientRepositoryInterface {
         }
     }
     public function validateClient(string $clientIdentifier, ?string $clientSecret, ?string $grantType): bool {
-        $client = new OIDCClient($this->db, $clientIdentifier);
+        global $gCurrentOrgId;
+
+        $client = new OIDCClient($this->db);
+        $client->readDataByColumns(array(
+            'ocl_org_id' => $gCurrentOrgId,
+            'ocl_client_id' => $clientIdentifier
+        ));
         if ($client->isNewRecord()) {
             return false;
         } elseif (!$client->isEnabled()) {
             throw new \Exception('Client "'.$clientIdentifier.'" is valid, but disabled. Login is not allowed.', 400);
+        } elseif ($grantType !== null && !in_array($grantType, $client->getAllowedGrantTypes(), true)) {
+            return false;
         } else {
             return password_verify($clientSecret, $client->getValue($client->getColumnPrefix() . '_client_secret'));
         }
@@ -45,8 +59,13 @@ class ClientRepository implements ClientRepositoryInterface {
 
     public function isRedirectUriAllowed($uri)
     {
+        global $gCurrentOrgId;
+
         $client = new OIDCClient($this->db);
-        $client->readDataByColumns([$client->getColumnPrefix() . '_redirect_uri' => $uri]);
+        $client->readDataByColumns(array(
+            'ocl_org_id' => $gCurrentOrgId,
+            $client->getColumnPrefix() . '_redirect_uri' => $uri
+        ));
         return !$client->isNewRecord();
     }
 };

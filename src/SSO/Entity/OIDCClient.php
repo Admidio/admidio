@@ -24,14 +24,28 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         self::SCOPE_CUSTOM
     );
 
+    private const SUPPORTED_GRANT_TYPES = array(
+        'authorization_code',
+        'refresh_token'
+    );
+
     public function __construct(Database $database, $client_id = null) {
         parent::__construct($database, 'oidc', TBL_OIDC_CLIENTS, 'ocl', $client_id);
-        if ($this->isNewRecord()) {
-            $this->dbColumns[$this->columnPrefix . '_scope'] = implode(' ', self::SUPPORTED_SCOPES);
-
+        if ($this->isNewRecord() && empty($client_id)) {
+            $this->setValue($this->columnPrefix . '_scope', implode(' ', self::SUPPORTED_SCOPES));
+            $this->setValue($this->columnPrefix . '_grant_types', implode(' ', self::SUPPORTED_GRANT_TYPES));
+            $this->setValue($this->columnPrefix . '_userid_field', 'usr_uuid');
         }
     }
 
+    public function save(bool $updateFingerPrint = true): bool
+    {
+        if ($this->isNewRecord() && $this->getValue('ocl_org_id') === '') {
+            $this->setValue('ocl_org_id', $GLOBALS['gCurrentOrgId']);
+        }
+
+        return parent::save($updateFingerPrint);
+    }
 
     /**
      * Return all scopes supported by the Admidio OIDC provider.
@@ -73,6 +87,26 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         }
 
         return $scopes;
+    }
+
+    /**
+     * Return the grant types enabled for this client.
+     * @return array<int,string>
+     */
+    public function getAllowedGrantTypes(): array
+    {
+        $configuredGrantTypes = preg_split(
+            '/\s+/',
+            trim((string) $this->getValue($this->columnPrefix . '_grant_types', 'database')),
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
+
+        if (!is_array($configuredGrantTypes)) {
+            return array();
+        }
+
+        return array_values(array_intersect($configuredGrantTypes, self::SUPPORTED_GRANT_TYPES));
     }
 
     public function getRedirectUri(): string

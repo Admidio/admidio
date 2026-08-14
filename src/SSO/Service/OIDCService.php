@@ -15,7 +15,6 @@ use Admidio\SSO\Repository\UserRepository;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\ServerRequestFactory;
-use Laminas\Diactoros\Stream;
 
 use OpenIDConnectServer\ClaimExtractor;
 use OpenIDConnectServer\Entities\ClaimSetEntity;
@@ -249,7 +248,6 @@ class OIDCService extends SSOService {
         return self::$client;
     }
 
-
     protected function getRolesRightName(): string {
         return 'sso_oidc_access';
     }
@@ -359,9 +357,8 @@ class OIDCService extends SSOService {
         $accessTokenTTL = new \DateInterval(
             'PT' . $this->getTokenLifetime('sso_oidc_access_token_lifetime', self::DEFAULT_ACCESS_TOKEN_LIFETIME) . 'S'
         );
-        $refreshTokenTTL = new \DateInterval(
-            'PT' . $this->getTokenLifetime('sso_oidc_refresh_token_lifetime', self::DEFAULT_REFRESH_TOKEN_LIFETIME) . 'S'
-        );
+        $refreshTokenLifetime = $this->getTokenLifetime('sso_oidc_refresh_token_lifetime', self::DEFAULT_REFRESH_TOKEN_LIFETIME);
+        $refreshTokenTTL = new \DateInterval('PT' . $refreshTokenLifetime . 'S');
 
         // Init our repositories
         $clientRepository = new ClientRepository($this->db);            // instance of ClientRepositoryInterface
@@ -388,6 +385,7 @@ class OIDCService extends SSOService {
             $claimsExtractor,
             $this->issuerURL,
             $this->db,
+            $refreshTokenLifetime,
             $privateKeyObject->getValue('key_uuid')
         );
 
@@ -744,12 +742,7 @@ class OIDCService extends SSOService {
             return $exception->generateHttpResponse($response);
 
         } catch (\Exception $exception) {
-
-            // Unknown exception
-            $body = new Stream(fopen('php://temp', 'r+'));
-            $body->write($exception->getMessage());
-            return $response->withStatus(500)->withBody($body);
-
+            throw $exception;
         }
     }
 
@@ -769,10 +762,7 @@ class OIDCService extends SSOService {
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
-            // Unknown exception
-            $body = new Stream(fopen('php://temp', 'r+'));
-            $body->write($exception->getMessage());
-            return $response->withStatus(500)->withBody($body);
+            throw $exception;
         }
     }
 
@@ -799,7 +789,7 @@ class OIDCService extends SSOService {
             if ($token->getExpiryDateTime() < new \DateTimeImmutable()) {
                 return new JsonResponse(['error' => 'access_denied', 'message' => 'Token expired'], 403);
             }
-            if ($this->accessTokenRepository->isTokenRevoked($tokenId)) {
+            if ($this->accessTokenRepository->isAccessTokenRevoked($tokenId)) {
                 return new JsonResponse(['error' => 'access_denied', 'message' => 'Token was revoked'], 403);
             }
 
@@ -840,10 +830,7 @@ class OIDCService extends SSOService {
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
-            // Unknown exception
-            $body = new Stream(fopen('php://temp', 'r+'));
-            $body->write($exception->getMessage());
-            return $response->withStatus(500)->withBody($body);
+            throw $exception;
         }
     }
 
@@ -915,6 +902,7 @@ class OIDCService extends SSOService {
             "subject_types_supported" => ["public"],
             "id_token_signing_alg_values_supported" => ["RS256"],
             "token_endpoint_auth_methods_supported" => ["client_secret_post", "client_secret_basic"],
+            "introspection_endpoint_auth_methods_supported" => ["client_secret_basic", "client_secret_post"],
             "revocation_endpoint_auth_methods_supported" => ["client_secret_basic", "client_secret_post"],
             // announce standard claims, even though each client in admidio can define their own admidio 
             // profile field -> claim mappeing with arbitrary claims! The custom claims are not included
@@ -944,7 +932,7 @@ class OIDCService extends SSOService {
                 "gender",
                 "birthdate"
             ],
-            "acr_values_supported" => [self::AUTHENTICATION_CONTEXT_PASSWORD, self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP],
+            // "acr_values_supported" => [self::AUTHENTICATION_CONTEXT_PASSWORD, self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP],
             "claims_parameter_supported" => false,
             "request_parameter_supported" => false,
             "request_uri_parameter_supported" => false,
@@ -995,6 +983,13 @@ class OIDCService extends SSOService {
             }
 
             $token = $this->accessTokenRepository->getToken($tokenId);
+            $tokenClient = $token->getClient();
+
+            if (!$tokenClient instanceof OIDCClient
+                || !hash_equals($clientId, $tokenClient->getIdentifier())
+            ) {
+                return new JsonResponse(['active' => false]);
+            }
 
             // Check expiry
             if ($token->getExpiryDateTime() < new \DateTimeImmutable()) {
@@ -1251,10 +1246,13 @@ class OIDCService extends SSOService {
 
         $body = is_array($request->getParsedBody()) ? $request->getParsedBody() : array();
 
-        if ((array_key_exists('adm_button_cancel', $body)
-                || array_key_exists('adm_button_logout', $body))
-            && isset($_POST['adm_csrf_token'])
+        if (array_key_exists('adm_button_cancel', $body)
+            || array_key_exists('adm_button_logout', $body)
         ) {
+            if (!isset($_POST['adm_csrf_token']) || !is_string($_POST['adm_csrf_token'])) {
+                return $this->createOIDCErrorResponse('invalid_request', 'Invalid logout confirmation.', 400);
+            }
+
             $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $form->validate($_POST);
         }
@@ -1317,8 +1315,12 @@ class OIDCService extends SSOService {
 
         $hintClaims = null;
         if (is_string($idTokenHint) && $idTokenHint !== '') {
+            $requestedClientIdentifier = is_string($clientIdentifier) && $clientIdentifier !== ''
+                ? $clientIdentifier
+                : null;
+
             try {
-                $hintClaims = $this->validateLogoutIdTokenHint($idTokenHint);
+                $hintClaims = $this->validateLogoutIdTokenHint($idTokenHint, $requestedClientIdentifier);
             } catch (\Throwable $exception) {
                 $gLogger->warning('OIDC logout rejected an ID token hint.', array('exception' => $exception));
                 return $this->createOIDCErrorResponse(
@@ -1333,7 +1335,7 @@ class OIDCService extends SSOService {
 
         $client = null;
         if (is_string($clientIdentifier) && $clientIdentifier !== '') {
-            $client = new OIDCClient($this->db, $clientIdentifier);
+            $client = $this->createClientObject(null, $clientIdentifier);
             if ($client->isNewRecord() || !$client->isEnabled()) {
                 return $this->createOIDCErrorResponse(
                     'invalid_request',

@@ -175,8 +175,9 @@ class SSOClientPresenter extends PagePresenter
     {
         global $gDb, $gL10n, $gCurrentSession, $gProfileFields, $gCurrentUser;
 
-        // create SAML client object
-        $client = new SAMLClient($gDb);
+        // create organization-scoped SAML client object
+        $SAMLService = new SAMLService($gDb, $gCurrentUser);
+        $client = $SAMLService->createClientObject($this->objectUUID);
         if ($this->objectUUID !== '') {
             $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_SSO_CLIENT_SAML'))));
         } else {
@@ -185,8 +186,8 @@ class SSOClientPresenter extends PagePresenter
         $this->setHtmlID('admidio-saml-client-edit');
 
         $roleAccessSet = array();
-        if ($this->objectUUID !== '') {
-            $client->readDataByUUID($this->objectUUID);
+        if ($this->objectUUID !== '' && $client->isNewRecord()) {
+            throw new Exception('SYS_SSO_INVALID_CLIENT');
         }
 
         $allRolesSet = $this->getAvailableRoles();
@@ -201,7 +202,6 @@ class SSOClientPresenter extends PagePresenter
             $this
         );
 
-        $SAMLService = new SAMLService($gDb, $gCurrentUser);
         $form->addCustomContent(
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
@@ -425,92 +425,109 @@ class SSOClientPresenter extends PagePresenter
      * Button to load metadata from the URL
      */
     $form->addButton('adm_button_metadata_setup', $gL10n->get('SYS_SSO_LOAD_METADATA'), array('icon' => 'bi-gear-fill', 'class' => 'btn btn-primary'));
+    $metadataFetchUrl = json_encode(ADMIDIO_URL . FOLDER_MODULES . '/sso/fetch_metadata.php', JSON_THROW_ON_ERROR);
+    $metadataUrlRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_URL_REQUIRED'), JSON_THROW_ON_ERROR);
+    $metadataLoadFailedMessage = json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR);
+    $metadataInvalidMessage = json_encode($gL10n->get('SYS_SSO_METADATA_INVALID'), JSON_THROW_ON_ERROR);
+
     $this->addJavascript('
     $("#adm_button_metadata_setup").click(function () {
         const metadataUrl = $("#smc_metadata_url").val().trim();
-        if (!metadataUrl) { alert("Please enter a metadata URL."); return;}
+        if (!metadataUrl) {
+            alert(' . $metadataUrlRequiredMessage . ');
+            return;
+        }
 
-        // First try to load the metadata directly from the client. If we run into CORS error (loading from a different server
-        // than the one hosting Admidio is often not permitted), we use the admidio server\'s CORS proxy script.
-        $.get(metadataUrl)
-            .done(function (metadataXml) {
-                handleClientMetadataXML(metadataXml);
-            })
-            .fail(function () {
-                // Loading directly from the client failed, try using the CORS proxy script in admidio\'s source tree
-                const currentDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf(\'/\'));
-                const proxyUrl = `${window.location.origin}${currentDir}/fetch_metadata.php?url=${encodeURIComponent(metadataUrl)}`;
-                $.get(proxyUrl)
-                    .done(function (metadataXml) {
-                        handleClientMetadataXML(metadataXml);
-                    })
-                    .fail(function () {
-                        alert("Error loading metadata. Please check the URL and try again.");
-                    });
-            });
+        $.ajax({
+            url: ' . $metadataFetchUrl . ',
+            method: "POST",
+            dataType: "text",
+            data: {
+                url: metadataUrl,
+                adm_csrf_token: $("#adm_csrf_token").val()
+            }
+        })
+        .done(function (metadataXml) {
+            handleClientMetadataXML(metadataXml);
+        })
+        .fail(function () {
+            alert(' . $metadataLoadFailedMessage . ');
+        });
     });
 
     function handleClientMetadataXML(metadataXml) {
         let xmlDoc;
-        // If response is already an XML Document, use it directly
-        if (metadataXml instanceof Document) {
-            xmlDoc = metadataXml;
-        } else if (typeof metadataXml === "string") {
-            // If response is a string, attempt to parse it as XML
-            xmlDoc = $.parseXML(metadataXml);
-        } else {
-            alert("Unexpected response format.");
+
+        try {
+            if (metadataXml instanceof Document) {
+                xmlDoc = metadataXml;
+            } else if (typeof metadataXml === "string") {
+                xmlDoc = $.parseXML(metadataXml);
+            } else {
+                alert(' . $metadataInvalidMessage . ');
+                return false;
+            }
+        } catch (error) {
+            alert(' . $metadataInvalidMessage . ');
             return false;
         }
-        const $xml = $(xmlDoc);
 
-        // Use native JavaScript methods to handle XML namespaces
-        const entityDescriptor = xmlDoc.querySelector("EntityDescriptor");
-        const entityId = entityDescriptor ? entityDescriptor.getAttribute("entityID") : "";
+        if (!entityDescriptor) {
+            alert(' . $metadataInvalidMessage . ');
+            return false;
+        }
 
-        // Extract Assertion Consumer Service (ACS) URL
-        const acsElement = xmlDoc.querySelector("AssertionConsumerService");
-        const acsUrl = acsElement ? acsElement.getAttribute("Location") : "";
+        const entityId = entityDescriptor.getAttribute("entityID") || "";
 
-        const sloElement = xmlDoc.querySelector("SingleLogoutService");
-        const sloUrl = sloElement ? sloElement.getAttribute("Location") : "";
+        // Prefer the default ACS and otherwise an HTTP-POST ACS, which is the
+        // binding used by Admidio for SAML responses.
+        const acsElements = Array.from(xmlDoc.querySelectorAll("AssertionConsumerService"));
+        const acsElement =
+            acsElements.find((element) => element.getAttribute("isDefault") === "true")
+            || acsElements.find((element) =>
+                element.getAttribute("Binding") === "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST")
+            || acsElements[0];
+        const acsUrl = acsElement ? acsElement.getAttribute("Location") || "" : "";
 
-        // Extract X.509 Certificate
-        const x509Element = xmlDoc.querySelector("KeyDescriptor[use=\'signing\'] X509Certificate");
+        // Admidio currently sends SLO messages with HTTP-Redirect, so prefer
+        // the matching SP endpoint when metadata offers multiple bindings.
+        const sloElements = Array.from(xmlDoc.querySelectorAll("SingleLogoutService"));
+        const sloElement =
+            sloElements.find((element) =>
+                element.getAttribute("Binding") === "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect")
+            || sloElements[0];
+        const sloUrl = sloElement ? sloElement.getAttribute("Location") || "" : "";
+
+        // A KeyDescriptor without a use attribute can be used for signing too.
+        const x509Element = xmlDoc.querySelector(
+            "KeyDescriptor[use=\'signing\'] X509Certificate, KeyDescriptor:not([use]) X509Certificate"
+        );
         const x509Cert = x509Element ? x509Element.textContent.trim() : "";
 
-        // signing flags
-        // XPath-Abfrage zum Finden des SPSSODescriptor-Elements
-        //const spDescriptor = xmlDoc.evaluate("//md:SPSSODescriptor", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         const spDescriptor = xmlDoc.querySelector("SPSSODescriptor");
-
         if (spDescriptor) {
-            // Werte der Attribute auslesen
-            const authnRequestsSigned = spDescriptor.getAttribute("AuthnRequestsSigned") === "true";
-            const wantAssertionsSigned = spDescriptor.getAttribute("WantAssertionsSigned") === "true";
-
-            // Checkboxen anhand der Werte setzen
-            document.getElementById("smc_require_auth_signed").checked = authnRequestsSigned;
-            document.getElementById("smc_sign_assertions").checked = wantAssertionsSigned;
+            document.getElementById("smc_require_auth_signed").checked =
+                spDescriptor.getAttribute("AuthnRequestsSigned") === "true";
         }
 
-        // Populate input fields
-        if (entityId !="") {
+        if (entityId !== "") {
             $("#smc_client_id").val(entityId);
         }
-        if (acsUrl !="") {
+        if (acsUrl !== "") {
             $("#smc_acs_url").val(acsUrl);
         }
-        if (sloUrl !="") {
+        if (sloUrl !== "") {
             $("#smc_slo_url").val(sloUrl);
         }
-        if (x509Cert !="") {
+        if (x509Cert !== "") {
             $("#smc_x509_certificate").val(formatCertificate(x509Cert));
         }
     }
-    // Helper function to format X.509 certificate with proper line breaks
+
     function formatCertificate(cert) {
-        if (!cert) return "";
+        if (!cert) {
+            return "";
+        }
         return `-----BEGIN CERTIFICATE-----\n${cert.match(/.{1,64}/g).join("\n")}\n-----END CERTIFICATE-----`;
     }
         ', true);
@@ -921,8 +938,7 @@ class SSOClientPresenter extends PagePresenter
         $templateClientNodes = array();
         foreach ($SAMLService->getUUIDs() as $clientUUID) {
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $clientUUID));
-            $client = new SAMLClient($gDb);
-            $client->readDataByUuid($clientUUID);
+            $client = $SAMLService->getClientFromUUID($clientUUID);
             $templateClient = array();
             $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('smc_client_name') . '</a>';

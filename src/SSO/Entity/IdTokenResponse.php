@@ -27,24 +27,27 @@ use OpenIDConnectServer\ClaimExtractor;
 // Since the 'custom' scope's claims depend on the client-specific 
 class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
 {
-    protected ?string $nonce;
+    protected ?string $nonce = null;
     private string $issuerURL;
     protected ?int $authenticationTime = null;
     protected string $externalSessionId = '';
     protected array $authenticationMethods = array();
     protected ?string $authenticationContext = null;
     private Database $database;
+    private int $participantLifetime;
 
     public function __construct(
         IdentityProviderInterface $identityProvider,
         ClaimExtractor $claimExtractor,
         string $issuerURL,
         Database $database,
+        int $participantLifetime,
         ?string $keyIdentifier = null
     ) {
         parent::__construct($identityProvider, $claimExtractor, $keyIdentifier);
         $this->issuerURL = $issuerURL;
         $this->database = $database;
+        $this->participantLifetime = $participantLifetime;
     }
 
     /**
@@ -72,7 +75,7 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
      */
     private function persistSessionParticipant(AccessTokenEntityInterface $accessToken): void
     {
-        global $gLogger;
+        global $gCurrentOrgId, $gLogger;
         if ($this->externalSessionId === '') {
             $gLogger->warning('OIDC session participant was not persisted because no external session identifier is available.');
             return;
@@ -83,19 +86,31 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
             throw new \RuntimeException('Cannot persist an OIDC participant for an invalid client.');
         }
 
-        $userId = (int) $accessToken->getUserIdentifier();
+        if (!$accessToken instanceof TokenEntity) {
+            throw new \RuntimeException('Cannot persist an OIDC participant for an unsupported access token entity.');
+        }
+
+        $user = $accessToken->getUser();
+        $userId = (int) $user->getValue('usr_id');
         if ($userId <= 0) {
-            throw new \RuntimeException('Cannot persist an OIDC participant without a valid user identifier.');
+            throw new \RuntimeException('Cannot persist an OIDC participant without a valid Admidio user.');
+        }
+
+        $participantExpiresAt = (new \DateTimeImmutable())->modify(
+            '+' . $this->participantLifetime . ' seconds'
+        );
+        if ($accessToken->getExpiryDateTime() > $participantExpiresAt) {
+            $participantExpiresAt = $accessToken->getExpiryDateTime();
         }
 
         $participantService = new OIDCSessionParticipantService($this->database);
         $participantService->persistParticipant(
-            (int) $client->getValue('ocl_org_id'),
+            $gCurrentOrgId,
             $userId,
             (int) $client->getValue('ocl_id'),
             $this->externalSessionId,
             (string) $accessToken->getUserIdentifier(),
-            $accessToken->getExpiryDateTime()
+            $participantExpiresAt
         );
     }
 
