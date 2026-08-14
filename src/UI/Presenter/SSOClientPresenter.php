@@ -426,6 +426,7 @@ class SSOClientPresenter extends PagePresenter
      */
     $form->addButton('adm_button_metadata_setup', $gL10n->get('SYS_SSO_LOAD_METADATA'), array('icon' => 'bi-gear-fill', 'class' => 'btn btn-primary'));
     $metadataFetchUrl = json_encode(ADMIDIO_URL . FOLDER_MODULES . '/sso/fetch_metadata.php', JSON_THROW_ON_ERROR);
+    $metadataCsrfToken = json_encode($gCurrentSession->getCsrfToken(), JSON_THROW_ON_ERROR);
     $metadataUrlRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_URL_REQUIRED'), JSON_THROW_ON_ERROR);
     $metadataLoadFailedMessage = json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR);
     $metadataInvalidMessage = json_encode($gL10n->get('SYS_SSO_METADATA_INVALID'), JSON_THROW_ON_ERROR);
@@ -444,7 +445,7 @@ class SSOClientPresenter extends PagePresenter
             dataType: "text",
             data: {
                 url: metadataUrl,
-                adm_csrf_token: $("#adm_csrf_token").val()
+                adm_csrf_token: ' . $metadataCsrfToken . '
             }
         })
         .done(function (metadataXml) {
