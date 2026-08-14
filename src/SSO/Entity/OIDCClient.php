@@ -38,15 +38,6 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         }
     }
 
-    public function save(bool $updateFingerPrint = true): bool
-    {
-        if ($this->isNewRecord() && $this->getValue('ocl_org_id') === '') {
-            $this->setValue('ocl_org_id', $GLOBALS['gCurrentOrgId']);
-        }
-
-        return parent::save($updateFingerPrint);
-    }
-
     /**
      * Return all scopes supported by the Admidio OIDC provider.
      * @return array
