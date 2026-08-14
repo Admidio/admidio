@@ -87,6 +87,10 @@ try {
     // Login checks will be done in the individual endpoint handler functions!
 
     if ($type === 'oidc') {
+        if ($gSettingsManager->get('sso_oidc_enabled') !== '1') {
+            $sendResponse(new JsonResponse(['error' => 'invalid_request', 'error_description' => 'SSO endpoint not found.'], 404));
+        }
+
         try {
             $oidcService = new OIDCService($gDb, $gCurrentUser);
             $oidcService->setupService();

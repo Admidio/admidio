@@ -28,12 +28,24 @@ abstract class SSOService {
     abstract public function initializeClientObject(Database $database): ?SSOClient;
 
     public function createClientObject($clientUUID = null, $clientID = null): ?SSOClient {
+        global $gCurrentOrgId;
+
         $client = $this->initializeClientObject($this->db);
+
+        $columns = array(
+            $this->columnPrefix . '_org_id' => $gCurrentOrgId
+        );
+
         if (!empty($clientUUID)) {
-            $client->readDataByUuid($clientUUID);
+            $columns[$this->columnPrefix . '_uuid'] = $clientUUID;
         } elseif (!empty($clientID)) {
-            $client->readDatabyEntityId($clientID);
+            $columns[$this->columnPrefix . '_client_id'] = $clientID;
+        } else {
+            return $client;
         }
+
+        $client->readDataByColumns($columns);
+
         return $client;
     }
 
@@ -51,6 +63,31 @@ abstract class SSOService {
             throw new Exception("SSO client with UUID '$clientUUID' not found in database. Please check the SSO client settings and configure the client in Admidio.");
         }
         return $client;
+    }
+
+    /**
+     * Return organization-scoped values from the SSO client table.
+     *
+     * @return array<int,mixed>
+     * @throws Exception
+     */
+    private function getOrganizationClientValues(string $columnSuffix): array
+    {
+        global $gCurrentOrgId;
+
+        $column = $this->columnPrefix . '_' . $columnSuffix;
+
+        $sql = 'SELECT ' . $column . '
+                FROM ' . $this->table . '
+                WHERE ' . $this->columnPrefix . '_org_id = ?';
+        $statement = $this->db->queryPrepared($sql, array($gCurrentOrgId));
+
+        $values = array();
+        while ($row = $statement->fetch()) {
+            $values[] = $row[$column];
+        }
+
+        return $values;
     }
 
     /**
@@ -112,9 +149,17 @@ abstract class SSOService {
             $ssoFields,
             $admFields
         );
+        if ($this->columnPrefix === 'smc') {
+            // SAML: include all remaining Admidio fields with their internal field name. The SAML
+            // edit form names the checkbox sso_fields_all_other, the CLI sso_fields_no_other.
+            $fieldMappingCatchall = $formValues['sso_fields_all_other'] ?? $formValues['sso_fields_no_other'] ?? false;
+        } else {
+            // OIDC: suppress standard claims that are not explicitly mapped.
+            $fieldMappingCatchall = $formValues['sso_fields_no_other'] ?? false;
+        }
         $client->setFieldMapping(
             array_combine($ssoFields, $admFields),
-            $formValues['sso_fields_no_other'] ?? false
+            (bool) $fieldMappingCatchall
         );
         
         // Collect all role mappings and the catch-all checkbox
@@ -176,17 +221,7 @@ abstract class SSOService {
      */
     public function getClientIds(): array
     {
-        $sql = 'SELECT ' . $this->columnPrefix . '_client_id
-          FROM ' . $this->table . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row[
-                
-                
-                $this->columnPrefix . '_client_id'];
-        }
-        return $clients;
+        return $this->getOrganizationClientValues('client_id');
     }
     
     /**
@@ -196,14 +231,7 @@ abstract class SSOService {
      */
     public function getIds(): array
     {
-        $sql = 'SELECT ' . $this->columnPrefix . '_id
-          FROM ' . $this->table . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row[$this->columnPrefix . '_id'];
-        }
-        return $clients;
+        return $this->getOrganizationClientValues('id');
     }
 
     /**
@@ -213,14 +241,7 @@ abstract class SSOService {
      */
     public function getUUIDs(): array
     {
-        $sql = 'SELECT ' . $this->columnPrefix . '_uuid
-          FROM ' . $this->table . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row[$this->columnPrefix . '_uuid'];
-        }
-        return $clients;
+        return $this->getOrganizationClientValues('uuid');
     }
 
 

@@ -12,9 +12,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\SSO\Entity\SSOClient;
-use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Service\SAMLService;
-use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Service\OIDCService;
 use Admidio\UI\Presenter\SSOClientPresenter;
 
@@ -64,8 +62,11 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $client = new SAMLClient($gDb);
-            $client->readDataByUuid($getClientUUID);
+            $samlService = new SAMLService($gDb, $gCurrentUser);
+            $client = $samlService->getClientFromUUID($getClientUUID);
+            if ($client->isNewRecord()) {
+                throw new Exception('SYS_SSO_INVALID_CLIENT');
+            }
             $client->delete();
             echo json_encode(array('status' => 'success'));
             break;
@@ -101,12 +102,12 @@ try {
 
             $enabled = admFuncVariableIsValid($_POST, 'enabled', 'boolean');
             $getClientUUID = admFuncVariableIsValid($_POST, 'uuid', 'uuid');
-            $client = new SAMLClient($gDb);
-            $client->readDataByUuid($getClientUUID);
+            $samlService = new SAMLService($gDb, $gCurrentUser);
+            $client = $samlService->getClientFromUUID($getClientUUID);
             if ($client->isNewRecord()) {
                 // Not a SAML record, so try OIDC:
-                $client = new OIDCClient($gDb);
-                $client->readDataByUuid($getClientUUID);
+                $oidcService = new OIDCService($gDb, $gCurrentUser);
+                $client = $oidcService->getClientFromUUID($getClientUUID);
             }
             if ($client->isNewRecord()) {
                 throw new Exception('SYS_SSO_INVALID_CLIENT');

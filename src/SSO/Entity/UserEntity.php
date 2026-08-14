@@ -98,7 +98,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
                 return false;
             }
             $this->readDataById($usr_id);
-            return $this->isNewRecord();
+            return !$this->isNewRecord();
         }
 
     }
@@ -145,6 +145,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
         }
 
         $groups =  $this->client->getMappedRoleMemberships($this);
+        $userInfo = array();
         if (!$client->getFieldMappingNoDefault()) {
 
             $userInfo = [

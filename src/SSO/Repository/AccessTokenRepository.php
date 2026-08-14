@@ -10,6 +10,7 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 
 
 use Admidio\SSO\Entity\AccessTokenEntity;
+use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\TokenEntity;
 
 // use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
@@ -50,8 +51,16 @@ use Admidio\Infrastructure\Database;
     public function revokeAccessToken(string $tokenId): void {
         $this->revokeToken($tokenId);
     }
+
     public function isAccessTokenRevoked(string $tokenId): bool {
-        return $this->isTokenRevoked($tokenId);
+        $token = $this->getToken($tokenId);
+
+        if ($token->isNewRecord() || $this->isTokenRevoked($tokenId)) {
+            return true;
+        }
+
+        $client = $token->getClient();
+        return !$client instanceof OIDCClient || !$client->isEnabled();
     }
 
     private function getUserClaims(?UserEntityInterface $user): array {
@@ -61,7 +70,10 @@ use Admidio\Infrastructure\Database;
     public function getUserIdByAccessToken(string $accessToken): ?string {
         $token = $this->getToken($accessToken);
         $now = new \DateTime();
-        if (!$token->isNewRecord() && ($token->getExpiryDateTime() > $now)) {
+        if (!$token->isNewRecord()
+            && !$this->isAccessTokenRevoked($accessToken)
+            && ($token->getExpiryDateTime() > $now)
+        ) {
             return $token->getUserIdentifier();
         } else {
             return null;

@@ -28,7 +28,10 @@ class UserRepository implements IdentityProviderInterface
         $client = OIDCService::getClient();
         $user = new UserEntity($this->db, $gProfileFields, $client);
 
-        $user->readDataByColumns([($client->getUseridField()) => $identifier]);
+        if (!$user->readDataByUserIDfield($client->getUseridField(), (string) $identifier)) {
+            return null;
+        }
+
         return $user;
     }
 
