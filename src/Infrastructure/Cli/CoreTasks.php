@@ -2517,7 +2517,12 @@ final class CoreTasks
 
     public static function userList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId, $gProfileFields;
+        global $gDb, $gCurrentOrgId, $gProfileFields, $gCurrentUser;
+
+        // Same rule as modules/contacts/contacts.php.
+        if (!$gCurrentUser->isAdministratorUsers() && !$gCurrentUser->isAllowedToViewUsers()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         $queryParams = array($gCurrentOrgId);
         $membershipCondition = CliApplication::optionBool($options, 'former', false)
@@ -2594,9 +2599,13 @@ final class CoreTasks
 
     public static function userShow(array $arguments, array $options): int
     {
-        global $gDb, $gProfileFields;
+        global $gDb, $gProfileFields, $gCurrentUser;
 
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
+        if (!$gCurrentUser->hasRightViewProfile($user)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $data = array(
             'id' => (int)$user->getValue('usr_id'),
             'uuid' => (string)$user->getValue('usr_uuid'),
@@ -2833,7 +2842,13 @@ final class CoreTasks
 
     public static function userExport(array $arguments, array $options): int
     {
+        global $gCurrentUser;
+
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
+        if (!$gCurrentUser->hasRightViewProfile($user)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         CliApplication::writeOutput($user->getVCard(), $options);
         return 0;
     }
@@ -3450,8 +3465,16 @@ final class CoreTasks
 
     public static function groupExport(array $arguments, array $options): int
     {
-        global $gDb;
+        global $gDb, $gCurrentUser;
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
+        $roleId = (int)$role->getValue('rol_id');
+
+        // Same rule as list:export: the role must be viewable and its member profiles readable.
+        if (!$gCurrentUser->hasRightViewRole($roleId)
+            || !$gCurrentUser->hasRightViewProfiles($roleId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $userIds = $gDb->queryPrepared(
             'SELECT DISTINCT mem_usr_id
                FROM ' . TBL_MEMBERS . '
@@ -3459,7 +3482,7 @@ final class CoreTasks
                 AND mem_begin <= ?
                 AND mem_end >= ?
            ORDER BY mem_usr_id',
-            array((int)$role->getValue('rol_id'), DATE_NOW, DATE_NOW)
+            array($roleId, DATE_NOW, DATE_NOW)
         )->fetchAll(PDO::FETCH_COLUMN);
 
         $vcards = '';
