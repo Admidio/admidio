@@ -2658,7 +2658,7 @@ final class CoreTasks
 
     public static function userAdd(array $arguments, array $options): int
     {
-        global $gDb, $gProfileFields, $gCurrentOrgId;
+        global $gDb, $gProfileFields, $gCurrentOrgId, $gCurrentUser;
 
         $user = new User($gDb, $gProfileFields);
         self::applyUserFields($user, $options);
@@ -2676,27 +2676,46 @@ final class CoreTasks
             $user->setPassword($password);
         }
 
-        $user->save();
-
-        $defaultRoleCount = (int)$gDb->queryPrepared(
-            'SELECT COUNT(*)
-               FROM ' . TBL_ROLES . '
-         INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
-              WHERE rol_default_registration = true
-                AND cat_org_id = ?',
-            array($gCurrentOrgId)
-        )->fetchColumn();
-
-        if ($defaultRoleCount > 0) {
-            $user->assignDefaultRoles();
-        }
-
+        // Check the requested groups before the user record is written.
+        $roles = array();
         foreach (CliApplication::optionValues($options, 'group') as $groupReference) {
             $role = self::resolveGroup($groupReference);
-            if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
+            if (!$role->allowedToAssignMembers($gCurrentUser)) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
-            $role->startMembership((int)$user->getValue('usr_id'));
+            $roles[] = $role;
+        }
+
+        /*
+         * The user, the default roles and the requested groups belong together. Without a
+         * transaction a failing group assignment leaves a contact without any membership behind.
+         */
+        $gDb->startTransaction();
+        try {
+            $user->save();
+            $userId = (int)$user->getValue('usr_id');
+
+            $defaultRoleCount = (int)$gDb->queryPrepared(
+                'SELECT COUNT(*)
+                   FROM ' . TBL_ROLES . '
+             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                  WHERE rol_default_registration = true
+                    AND cat_org_id = ?',
+                array($gCurrentOrgId)
+            )->fetchColumn();
+
+            if ($defaultRoleCount > 0) {
+                $user->assignDefaultRoles();
+            }
+
+            foreach ($roles as $role) {
+                $role->startMembership($userId);
+            }
+
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
         }
 
         self::reloadUserSessions((int)$user->getValue('usr_id'));
@@ -2752,14 +2771,27 @@ final class CoreTasks
         }
 
         self::applyUserFields($copy, $options);
-        $copy->save();
 
+        // Check the requested groups before the copy is written.
+        $roles = array();
         foreach (CliApplication::optionValues($options, 'group') as $groupReference) {
             $role = self::resolveGroup($groupReference);
             if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
-            $role->startMembership((int)$copy->getValue('usr_id'));
+            $roles[] = $role;
+        }
+
+        $gDb->startTransaction();
+        try {
+            $copy->save();
+            foreach ($roles as $role) {
+                $role->startMembership((int)$copy->getValue('usr_id'));
+            }
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
         }
 
         CliApplication::writeSuccess('Created user copy ' . $copy->getValue('usr_uuid') . '.', $options);
@@ -2768,38 +2800,53 @@ final class CoreTasks
 
     public static function userRemove(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId, $gCurrentUserId;
+        global $gDb, $gCurrentOrgId, $gCurrentUserId, $gCurrentUser;
 
         CliApplication::confirm('End current organization memberships for the selected user(s)?', $options);
 
+        // Resolve and check every reference before the first membership is ended.
+        $users = array();
         foreach ($arguments as $reference) {
             $user = CliApplication::resolveUser($reference);
             if ((int)$user->getValue('usr_id') === $gCurrentUserId) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
+            $users[] = $user;
+        }
 
-            $statement = $gDb->queryPrepared(
-                'SELECT DISTINCT rol_id
-                   FROM ' . TBL_MEMBERS . '
-             INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
-             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
-                  WHERE mem_usr_id = ?
-                    AND mem_begin <= ?
-                    AND mem_end > ?
-                    AND rol_valid = true
-                    AND cat_org_id = ?',
-                array((int)$user->getValue('usr_id'), DATE_NOW, DATE_NOW, $gCurrentOrgId)
-            );
+        $gDb->startTransaction();
+        try {
+            foreach ($users as $user) {
+                $userId = (int)$user->getValue('usr_id');
 
-            while ($roleId = $statement->fetchColumn()) {
-                $role = new Role($gDb, (int)$roleId);
-                if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
-                    throw new Exception('SYS_NO_RIGHTS');
+                $roleIds = $gDb->queryPrepared(
+                    'SELECT DISTINCT rol_id
+                       FROM ' . TBL_MEMBERS . '
+                 INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
+                 INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                      WHERE mem_usr_id = ?
+                        AND mem_begin <= ?
+                        AND mem_end > ?
+                        AND rol_valid = true
+                        AND cat_org_id = ?',
+                    array($userId, DATE_NOW, DATE_NOW, $gCurrentOrgId)
+                )->fetchAll(PDO::FETCH_COLUMN);
+
+                foreach ($roleIds as $roleId) {
+                    $role = new Role($gDb, (int)$roleId);
+                    if (!$role->allowedToAssignMembers($gCurrentUser)) {
+                        throw new Exception('SYS_NO_RIGHTS');
+                    }
+                    $role->stopMembership($userId);
                 }
-                $role->stopMembership((int)$user->getValue('usr_id'));
+
+                self::reloadUserSessions($userId);
             }
 
-            self::reloadUserSessions((int)$user->getValue('usr_id'));
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
         }
 
         CliApplication::writeSuccess('Selected user membership(s) ended.', $options);
@@ -2818,6 +2865,8 @@ final class CoreTasks
 
         $anyOrganization = CliApplication::optionBool($options, 'any-organization', false) ?? false;
 
+        // Resolve and check every reference before the first user is deleted.
+        $users = array();
         foreach ($arguments as $reference) {
             $user = CliApplication::resolveUser($reference, $anyOrganization);
             $userId = (int)$user->getValue('usr_id');
@@ -2843,7 +2892,18 @@ final class CoreTasks
                 throw new Exception('SYS_NO_RIGHTS');
             }
 
-            $user->delete();
+            $users[] = $user;
+        }
+
+        $gDb->startTransaction();
+        try {
+            foreach ($users as $user) {
+                $user->delete();
+            }
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
         }
 
         CliApplication::writeSuccess('Selected user(s) deleted.', $options);
@@ -3293,15 +3353,32 @@ final class CoreTasks
 
     public static function registrationApprove(array $arguments, array $options): int
     {
+        global $gDb;
+
         $registration = self::resolveRegistration(CliApplication::requireArgument($arguments, 0, 'user'));
-        $registration->acceptRegistration();
+
+        // Check the requested groups before the registration is accepted.
+        $roles = array();
         foreach (CliApplication::optionValues($options, 'group') as $groupReference) {
             $role = self::resolveGroup($groupReference);
             if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
-            $role->startMembership((int)$registration->getValue('usr_id'));
+            $roles[] = $role;
         }
+
+        $gDb->startTransaction();
+        try {
+            $registration->acceptRegistration();
+            foreach ($roles as $role) {
+                $role->startMembership((int)$registration->getValue('usr_id'));
+            }
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
+        }
+
         self::reloadUserSessions((int)$registration->getValue('usr_id'));
         CliApplication::writeSuccess('Registration approved.', $options);
         return 0;
@@ -3692,8 +3769,18 @@ final class CoreTasks
         $dependency->clear();
         $dependency->setParent((int)$parent->getValue('rol_id'));
         $dependency->setChild((int)$child->getValue('rol_id'));
-        $dependency->insert($gCurrentUserId);
-        $dependency->updateMembership();
+
+        // updateMembership() propagates the parent memberships to the child role.
+        $gDb->startTransaction();
+        try {
+            $dependency->insert($gCurrentUserId);
+            $dependency->updateMembership();
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
+        }
+
         self::reloadAllSessions();
 
         CliApplication::writeSuccess('Role dependency added.', $options);
@@ -4166,18 +4253,39 @@ final class CoreTasks
         $menu = new MenuEntry($gDb);
         $menu->setValue('men_name', CliApplication::requireArgument($arguments, 0, 'name'));
         self::applyMenuOptions($menu, $options, true);
-        $menu->save();
-        self::saveMenuRights($menu, $options);
+
+        // The entry and its view roles have to appear together.
+        $gDb->startTransaction();
+        try {
+            $menu->save();
+            self::saveMenuRights($menu, $options);
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
+        }
+
         CliApplication::writeValue(array('id' => (int)$menu->getValue('men_id'), 'uuid' => (string)$menu->getValue('men_uuid')), $options);
         return 0;
     }
 
     public static function menuUpdate(array $arguments, array $options): int
     {
+        global $gDb;
+
         $menu = self::resolveMenu(CliApplication::requireArgument($arguments, 0, 'menu'));
         self::applyMenuOptions($menu, $options, false);
-        $menu->save();
-        self::saveMenuRights($menu, $options);
+
+        $gDb->startTransaction();
+        try {
+            $menu->save();
+            self::saveMenuRights($menu, $options);
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
+        }
+
         CliApplication::writeSuccess('Menu entry updated.', $options);
         return 0;
     }
@@ -5129,12 +5237,29 @@ final class CoreTasks
 
     public static function messageDelete(array $arguments, array $options): int
     {
+        global $gDb;
+
         CliApplication::confirm('Delete the selected message record(s)?', $options);
+
+        // Resolve and check every reference before the first message is deleted.
+        $messages = array();
         foreach ($arguments as $reference) {
             $message = self::resolveMessage($reference);
             self::assertMessageAccess($message);
-            $message->delete();
+            $messages[] = $message;
         }
+
+        $gDb->startTransaction();
+        try {
+            foreach ($messages as $message) {
+                $message->delete();
+            }
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
+        }
+
         CliApplication::writeSuccess('Message record(s) deleted.', $options);
         return 0;
     }
@@ -5385,32 +5510,53 @@ final class CoreTasks
 
     public static function documentPermissionsSet(array $arguments, array $options): int
     {
+        global $gDb;
+
         $folder = self::resolveFolder(CliApplication::requireArgument($arguments, 0, 'folder'));
         if (!$GLOBALS['gCurrentUser']->isAdministratorDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
         $recursive = CliApplication::optionBool($options, 'recursive', false) ?? false;
 
-        if (CliApplication::optionExists($options, 'view-role')) {
-            $roleIds = self::resolveRoleIds(CliApplication::optionValues($options, 'view-role'));
-            $current = $folder->getViewRolesIds();
-            $folder->removeRolesOnFolder('folder_view', array_values(array_diff($current, $roleIds)), $recursive);
-            $folder->addRolesOnFolder('folder_view', array_values(array_diff($roleIds, $current)), $recursive);
-        }
-        if (CliApplication::optionExists($options, 'upload-role')) {
-            $roleIds = self::resolveRoleIds(CliApplication::optionValues($options, 'upload-role'));
-            $current = $folder->getUploadRolesIds();
-            $folder->removeRolesOnFolder('folder_upload', array_values(array_diff($current, $roleIds)), $recursive);
-            $folder->addRolesOnFolder('folder_upload', array_values(array_diff($roleIds, $current)), $recursive);
-        }
-        if (CliApplication::optionExists($options, 'public')) {
-            if ($recursive) {
-                $folder->editPublicFlagOnFolder(CliApplication::optionBool($options, 'public', false) ?? false);
-            } else {
-                $folder->setValue('fol_public', (int)(CliApplication::optionBool($options, 'public', false) ?? false));
+        // Resolve the roles before anything is written, so an unknown role changes nothing.
+        $viewRoleIds = CliApplication::optionExists($options, 'view-role')
+            ? self::resolveRoleIds(CliApplication::optionValues($options, 'view-role'))
+            : null;
+        $uploadRoleIds = CliApplication::optionExists($options, 'upload-role')
+            ? self::resolveRoleIds(CliApplication::optionValues($options, 'upload-role'))
+            : null;
+
+        /*
+         * View roles, upload roles and the public flag are three independent writes that together
+         * form one permission state; a partial result would leave the folder inconsistent.
+         */
+        $gDb->startTransaction();
+        try {
+            if ($viewRoleIds !== null) {
+                $current = $folder->getViewRolesIds();
+                $folder->removeRolesOnFolder('folder_view', array_values(array_diff($current, $viewRoleIds)), $recursive);
+                $folder->addRolesOnFolder('folder_view', array_values(array_diff($viewRoleIds, $current)), $recursive);
             }
-            $folder->save();
+            if ($uploadRoleIds !== null) {
+                $current = $folder->getUploadRolesIds();
+                $folder->removeRolesOnFolder('folder_upload', array_values(array_diff($current, $uploadRoleIds)), $recursive);
+                $folder->addRolesOnFolder('folder_upload', array_values(array_diff($uploadRoleIds, $current)), $recursive);
+            }
+            if (CliApplication::optionExists($options, 'public')) {
+                if ($recursive) {
+                    $folder->editPublicFlagOnFolder(CliApplication::optionBool($options, 'public', false) ?? false);
+                } else {
+                    $folder->setValue('fol_public', (int)(CliApplication::optionBool($options, 'public', false) ?? false));
+                }
+                $folder->save();
+            }
+
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
         }
+
         CliApplication::writeSuccess('Folder permissions updated.', $options);
         return 0;
     }
@@ -5858,30 +6004,66 @@ final class CoreTasks
     public static function inventoryDelete(array $arguments, array $options): int
     {
         CliApplication::confirm('Delete the selected inventory item(s)?', $options);
-        foreach ($arguments as $reference) {
-            $uuid = self::resolveItemUuid($reference);
-            (new ItemService($GLOBALS['gDb'], $uuid))->delete();
-        }
+        self::applyToInventoryItems(
+            $arguments,
+            static function (ItemService $service): void {
+                $service->delete();
+            }
+        );
         CliApplication::writeSuccess('Inventory item(s) deleted.', $options);
         return 0;
     }
 
     public static function inventoryRetire(array $arguments, array $options): int
     {
-        foreach ($arguments as $reference) {
-            (new ItemService($GLOBALS['gDb'], self::resolveItemUuid($reference)))->retireItem();
-        }
+        self::applyToInventoryItems(
+            $arguments,
+            static function (ItemService $service): void {
+                $service->retireItem();
+            }
+        );
         CliApplication::writeSuccess('Inventory item(s) retired.', $options);
         return 0;
     }
 
     public static function inventoryReinstate(array $arguments, array $options): int
     {
-        foreach ($arguments as $reference) {
-            (new ItemService($GLOBALS['gDb'], self::resolveItemUuid($reference)))->reinstateItem();
-        }
+        self::applyToInventoryItems(
+            $arguments,
+            static function (ItemService $service): void {
+                $service->reinstateItem();
+            }
+        );
         CliApplication::writeSuccess('Inventory item(s) reinstated.', $options);
         return 0;
+    }
+
+    /**
+     * Resolve every item reference first and then run $operation for all of them in one
+     * transaction, so an unknown reference in the middle of the argument list cannot leave the
+     * preceding items already changed.
+     *
+     * @param array<int,string> $references
+     */
+    private static function applyToInventoryItems(array $references, callable $operation): void
+    {
+        global $gDb;
+
+        $uuids = array();
+        foreach ($references as $reference) {
+            $uuids[] = self::resolveItemUuid((string)$reference);
+        }
+
+        $gDb->startTransaction();
+        try {
+            foreach ($uuids as $uuid) {
+                $operation(new ItemService($gDb, $uuid));
+            }
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            throw $exception;
+        }
     }
 
     public static function inventoryCheckout(array $arguments, array $options): int
