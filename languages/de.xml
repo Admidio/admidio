@@ -1694,6 +1694,7 @@
   <string name="SYS_SSO_OIDC_SCOPE_CUSTOM_DESC">Erlaubt den Zugriff auf weitere Profildaten, die für diesen Client konfiguriert wurden.</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER">Berechtigung „#VAR1#“ verwenden</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER_DESC">Erlaubt den Zugriff auf weitere Daten oder Funktionen, die dieser Client angefordert hat.</string>
+  <string name="SYS_SSO_OIDC_SUGGEST_CLAIMS">Standard-Claims vorschlagen</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token-Endpunkt</string>
   <string name="SYS_SSO_OIDC_TRUSTED_CLIENT">Zustimmungsabfrage überspringen</string>
   <string name="SYS_SSO_OIDC_TRUSTED_CLIENT_DESC">Benutzer nicht um Zustimmung zu den von dieser Anwendung angeforderten Zugriffen bitten. Nur für Anwendungen verwenden, die du kontrollierst und denen du vertraust.</string>

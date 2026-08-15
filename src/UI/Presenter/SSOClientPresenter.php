@@ -791,6 +791,38 @@ class SSOClientPresenter extends PagePresenter
         $this->addJavascript($js['js'], true);
         $this->addJavascript('$("#fieldsmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
 
+        // one-click suggestion of the standard OIDC claims, skipping fields that
+        // either don't exist on this installation or already have a mapping row.
+        $this->addJavascript('
+        function addStandardOidcClaims() {
+            const standardClaims = [
+                ["given_name", "FIRST_NAME"],
+                ["family_name", "LAST_NAME"],
+                ["name", "fullname"],
+                ["preferred_username", "usr_login_name"],
+                ["email", "EMAIL"],
+                ["phone_number", "PHONE"],
+                ["groups", "roles"]
+            ];
+
+            const availableFields = new Set(arr_fieldsmap.map(function (entry) { return entry.id; }));
+            const alreadyMapped = new Set(
+                $("#fieldsmap_tbody select.admidio-field-select")
+                    .map(function () { return $(this).val(); })
+                    .get()
+            );
+
+            standardClaims.forEach(function (claim) {
+                const admidioField = claim[1];
+                const claimName = claim[0];
+                if (availableFields.has(admidioField) && !alreadyMapped.has(admidioField)) {
+                    addColumn_fieldsmap(claimName, admidioField);
+                    alreadyMapped.add(admidioField);
+                }
+            });
+        }
+        ');
+
         // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
         $form->addCustomContent("fieldsmap_Admidio", '', '');
         $form->addCustomContent("fieldsmap_sso", '', '');
