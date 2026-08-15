@@ -1174,9 +1174,12 @@ final class CliApplication
 
             case 'csv':
                 $stream = fopen('php://temp', 'w+');
-                fputcsv($stream, $headers);
+                fputcsv($stream, array_map(array(self::class, 'neutralizeFormula'), $headers));
                 foreach ($rows as $row) {
-                    fputcsv($stream, array_map(array(self::class, 'normalizeCell'), $row));
+                    fputcsv($stream, array_map(
+                        static fn (mixed $value): string => self::neutralizeFormula(self::normalizeCell($value)),
+                        $row
+                    ));
                 }
                 rewind($stream);
                 $output = stream_get_contents($stream);
@@ -1426,6 +1429,27 @@ final class CliApplication
         $padding = $width - self::displayWidth($value);
 
         return $padding > 0 ? $value . str_repeat(' ', $padding) : $value;
+    }
+
+    /**
+     * Prevent a spreadsheet from interpreting an exported cell as a formula.
+     *
+     * A CSV export is normally opened in a spreadsheet application, which treats a leading =, +, -
+     * or @ as the start of a formula. Admidio content such as a profile field or a role name is
+     * free text and must never be evaluated, so such a cell is prefixed with a single quote.
+     */
+    private static function neutralizeFormula(string $value): string
+    {
+        // A plain number such as -5 is data, not a formula, and must stay numeric in the export.
+        if ($value === '' || is_numeric($value)) {
+            return $value;
+        }
+
+        if (str_contains("=+-@\t\r", $value[0])) {
+            return "'" . $value;
+        }
+
+        return $value;
     }
 
     private static function normalizeCell(mixed $value): string
