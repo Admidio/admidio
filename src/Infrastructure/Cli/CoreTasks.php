@@ -2161,22 +2161,13 @@ final class CoreTasks
         $dump = new DatabaseDump($gDb);
         $dump->create($filename);
 
-        $source = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
-        $target = CliApplication::optionString($options, 'output');
-
-        if ($target === '') {
-            $target = getcwd() . DIRECTORY_SEPARATOR . $filename;
-        }
-
-        if (!@rename($source, $target)) {
-            if (!@copy($source, $target)) {
-                $dump->deleteDumpFile();
-                throw new RuntimeException('Could not move database dump to "' . $target . '".');
-            }
-            $dump->deleteDumpFile();
-        }
-
-        CliApplication::writeSuccess('Database backup written to ' . $target . '.', $options);
+        // A dump contains every table of the installation, so restrict it to the invoking user.
+        self::moveGeneratedFile(
+            ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename,
+            $filename,
+            $options,
+            true
+        );
         return 0;
     }
 
@@ -5127,14 +5118,14 @@ final class CoreTasks
             throw new Exception('SYS_FILE_NOT_EXIST');
         }
 
-        $target = CliApplication::optionString($options, 'output');
-        if ($target === '') {
-            $filename = (string)$attachment->getValue('msa_original_file_name');
-            if ($filename === '') {
-                $filename = (string)$attachment->getValue('msa_file_name');
-            }
-            $target = getcwd() . DIRECTORY_SEPARATOR . FileSystemUtils::getSanitizedPathEntry($filename);
+        $filename = (string)$attachment->getValue('msa_original_file_name');
+        if ($filename === '') {
+            $filename = (string)$attachment->getValue('msa_file_name');
         }
+        $target = CliApplication::resolveOutputPath(
+            $options,
+            FileSystemUtils::getSanitizedPathEntry($filename)
+        );
 
         if (!@copy($source, $target)) {
             throw new RuntimeException('Could not copy attachment to "' . $target . '".');
@@ -5152,10 +5143,10 @@ final class CoreTasks
         $file = (new DocumentsService($gDb))->prepareFileDownload($fileUUID);
 
         $source = $file->getFullFilePath();
-        $target = CliApplication::optionString($options, 'output');
-        if ($target === '') {
-            $target = getcwd() . DIRECTORY_SEPARATOR . (string)$file->getValue('fil_name', 'database');
-        }
+        $target = CliApplication::resolveOutputPath(
+            $options,
+            (string)$file->getValue('fil_name', 'database')
+        );
 
         if (!@copy($source, $target)) {
             throw new RuntimeException('Could not copy document to "' . $target . '".');
@@ -5545,11 +5536,7 @@ final class CoreTasks
             'photo-number'
         );
         $download = (new PhotoService($gDb, $album))->getDownloadFile($photoNumber);
-
-        $target = CliApplication::optionString($options, 'output');
-        if ($target === '') {
-            $target = getcwd() . DIRECTORY_SEPARATOR . $download['filename'];
-        }
+        $target = CliApplication::resolveOutputPath($options, $download['filename']);
 
         if (!@copy($download['path'], $target)) {
             throw new RuntimeException('Could not copy photo to "' . $target . '".');
@@ -7287,7 +7274,8 @@ final class CoreTasks
             $password
         );
 
-        self::writeExportContent($export, $options);
+        // The PKCS#12 container holds the private key.
+        self::writeExportContent($export, $options, true);
         return 0;
     }
 
@@ -10266,15 +10254,16 @@ final class CoreTasks
      * @param array{filename:string,contentType:string,content:string} $export
      * @param array<string,mixed> $options
      */
-    private static function writeExportContent(array $export, array $options): void
+    private static function writeExportContent(array $export, array $options, bool $secret = false): void
     {
-        $target = CliApplication::optionString($options, 'output');
-        if ($target === '') {
-            $target = getcwd() . DIRECTORY_SEPARATOR . $export['filename'];
-        }
+        $target = CliApplication::resolveOutputPath($options, $export['filename']);
 
         if (file_put_contents($target, $export['content']) === false) {
             throw new RuntimeException('Could not write export file "' . $target . '".');
+        }
+
+        if ($secret) {
+            CliApplication::protectExportedFile($target);
         }
 
         CliApplication::writeSuccess('Export written to ' . $target . '.', $options);
@@ -10283,18 +10272,27 @@ final class CoreTasks
     /**
      * @param array<string,mixed> $options
      */
-    private static function moveGeneratedFile(string $source, string $filename, array $options): void
-    {
-        $target = CliApplication::optionString($options, 'output');
-        if ($target === '') {
-            $target = getcwd() . DIRECTORY_SEPARATOR . $filename;
-        }
+    private static function moveGeneratedFile(
+        string $source,
+        string $filename,
+        array $options,
+        bool $secret = false
+    ): void {
+        $target = CliApplication::resolveOutputPath($options, $filename);
 
-        if (!@rename($source, $target)) {
-            if (!@copy($source, $target)) {
+        try {
+            if (!@rename($source, $target) && !@copy($source, $target)) {
                 throw new RuntimeException('Could not write export file "' . $target . '".');
             }
-            @unlink($source);
+        } finally {
+            // The generated file lives in adm_my_files/tmp and must not survive a failed export.
+            if (is_file($source)) {
+                @unlink($source);
+            }
+        }
+
+        if ($secret) {
+            CliApplication::protectExportedFile($target);
         }
 
         CliApplication::writeSuccess('Export written to ' . $target . '.', $options);

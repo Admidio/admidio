@@ -1281,6 +1281,41 @@ final class CliApplication
     }
 
     /**
+     * Determine where an exported file should be written.
+     *
+     * An empty --output writes $filename into the working directory. A directory given as --output
+     * receives the natural filename, so "--output=/var/backups/" behaves as a user expects instead
+     * of failing to create a file with that name.
+     *
+     * @param array<string,mixed> $options
+     */
+    public static function resolveOutputPath(array $options, string $filename): string
+    {
+        $target = self::optionString($options, 'output');
+
+        if ($target === '') {
+            return getcwd() . DIRECTORY_SEPARATOR . $filename;
+        }
+
+        if (is_dir($target)) {
+            return rtrim($target, '/\\') . DIRECTORY_SEPARATOR . $filename;
+        }
+
+        return $target;
+    }
+
+    /**
+     * Restrict an exported file to the current user. Used for exports that carry secrets, such as
+     * a database dump or a PKCS#12 container holding a private key.
+     */
+    public static function protectExportedFile(string $path): void
+    {
+        if (is_file($path)) {
+            @chmod($path, 0600);
+        }
+    }
+
+    /**
      * @param array<string,mixed> $options
      */
     public static function writeSuccess(string $message, array $options): void
