@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Infrastructure\Cli;
 
+use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Exception;
@@ -94,6 +95,14 @@ final class CliApplication
         }
 
         self::$currentCommand = $command;
+
+        /*
+         * --as is an impersonation switch, not an authentication. Record which command produced a
+         * changelog record so an administrator can tell a headless change apart from one the user
+         * made in the browser.
+         */
+        LogChanges::setOriginComment('CLI: ' . $command);
+
         $result = ($task['callback'])($input['arguments'], $input['options']);
 
         return is_int($result) ? $result : 0;
