@@ -50,6 +50,7 @@ use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\ProfileFields\Entity\SelectOptions as ProfileSelectOptions;
 use Admidio\ProfileFields\Service\ProfileFieldService;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Requirements\Entity\Provider;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
