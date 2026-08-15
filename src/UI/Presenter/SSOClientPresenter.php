@@ -189,6 +189,7 @@ class SSOClientPresenter extends PagePresenter
         if ($this->objectUUID !== '' && $client->isNewRecord()) {
             throw new Exception('SYS_SSO_INVALID_CLIENT');
         }
+        $this->assignSmartyVariable('isNewClient', $this->objectUUID === '');
 
         $allRolesSet = $this->getAvailableRoles();
 
@@ -232,6 +233,20 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_METADATA_URL'),
             $client->getValue('smc_metadata_url'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_URL_DESC'))
+        );
+        // NEW: scratch field, deliberately not prefixed smc_/ocl_ so SSOService::save() never
+        // tries to persist it as a client column (same convention as sso_fields_all_other etc.)
+        $form->addMultilineTextInput(
+            'sso_saml_metadata_paste',
+            $gL10n->get('SYS_SSO_METADATA_PASTE'),
+            '',
+            4,
+            array('maxLength' => 20000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_PASTE_DESC'))
+        );
+        $form->addButton(
+            'adm_button_metadata_paste_setup',
+            $gL10n->get('SYS_SSO_METADATA_PASTE_BUTTON'),
+            array('icon' => 'bi-clipboard-check', 'class' => 'btn btn-secondary')
         );
         $form->addInput(
             'smc_acs_url',
@@ -430,6 +445,7 @@ class SSOClientPresenter extends PagePresenter
     $metadataUrlRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_URL_REQUIRED'), JSON_THROW_ON_ERROR);
     $metadataLoadFailedMessage = json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR);
     $metadataInvalidMessage = json_encode($gL10n->get('SYS_SSO_METADATA_INVALID'), JSON_THROW_ON_ERROR);
+    $metadataPasteRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_PASTE_REQUIRED'), JSON_THROW_ON_ERROR);
 
     $this->addJavascript('
     $("#adm_button_metadata_setup").click(function () {
@@ -456,6 +472,16 @@ class SSOClientPresenter extends PagePresenter
         });
     });
 
+    // parse pasted metadata directly, no network request
+    $("#adm_button_metadata_paste_setup").click(function () {
+        const pastedXml = $("#sso_saml_metadata_paste").val().trim();
+        if (!pastedXml) {
+            alert(' . $metadataPasteRequiredMessage . ');
+            return;
+        }
+        handleClientMetadataXML(pastedXml);
+    });
+
     function handleClientMetadataXML(metadataXml) {
         let xmlDoc;
 
@@ -473,6 +499,7 @@ class SSOClientPresenter extends PagePresenter
             return false;
         }
 
+        const entityDescriptor = xmlDoc.querySelector("EntityDescriptor");
         if (!entityDescriptor) {
             alert(' . $metadataInvalidMessage . ');
             return false;

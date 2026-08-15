@@ -5,10 +5,24 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     <div class="card admidio-field-group">
-        <div class="card-header">{$l10n->get('SYS_SSO_AUTO_SETUP')}</div>
-        <div class="card-body">
+        <div class="card-header"><a id="sso_client_caret_metadata" class="admidio-icon-link admidio-open-close-caret" data-target="sso_client_metadata"> <i class="bi bi-caret-{if $isNewClient}down{else}right{/if}-fill"></i></a> 
+        {$l10n->get('SYS_SSO_AUTO_SETUP')}</div>
+
+        <div class="card-body" id="sso_client_metadata"{if !$isNewClient} style="display: none;"{/if}>
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_metadata_url']}
-            {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_metadata_setup']}
+            <div id="{$elements['adm_button_metadata_setup'].id}_group" class="admidio-form-group row">
+                <label for="adm_button_metadata_setup" class="col-sm-3 col-form-label"></label>            
+                <div class="col-sm-9">
+                    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_metadata_setup']}
+                </div>
+            </div>
+            {include 'sys-template-parts/form.multiline.tpl' data=$elements['sso_saml_metadata_paste']}
+            <div id="{$elements['adm_button_metadata_paste_setup'].id}_group" class="admidio-form-group row">
+                <label for="adm_button_metadata_paste_setup" class="col-sm-3 col-form-label"></label>            
+                <div class="col-sm-9">
+                    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_metadata_paste_setup']}
+                </div>
+            </div>
             {include 'sys-template-parts/form.static-subinformation.tpl' data=$elements['sso_saml_sso_staticsettings']}
         </div>
     </div>
