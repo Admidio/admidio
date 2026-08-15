@@ -75,7 +75,7 @@ class SSOClientPresenter extends PagePresenter
             {
                 var category = "";
                 var table = document.getElementById("' . $type . '_tbody");
-                var newTableRow = table.insertRow(fieldNumberIntern_' . $type . ');
+                var newTableRow = table.insertRow(-1);
                 newTableRow.setAttribute("id", "row" + (fieldNumberIntern_' . $type . '))
 
                 // New column for selecting the field
