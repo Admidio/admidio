@@ -53,7 +53,7 @@ class ClientRepository implements ClientRepositoryInterface {
         } elseif ($grantType !== null && !in_array($grantType, $client->getAllowedGrantTypes(), true)) {
             return false;
         } else {
-            return password_verify($clientSecret, $client->getValue($client->getColumnPrefix() . '_client_secret'));
+            return password_verify((string) $clientSecret, $client->getValue($client->getColumnPrefix() . '_client_secret'));
         }
     }
 

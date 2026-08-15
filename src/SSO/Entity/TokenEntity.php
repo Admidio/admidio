@@ -23,12 +23,14 @@ class TokenEntity extends Entity implements TokenInterface
 
     protected ?OIDCClient $client = null;
     protected ?UserEntity $user = null;
+    /** @var string Plaintext identifier, only held in memory for a token just created via setIdentifier(). */
+    private string $plainIdentifier = '';
 
     public function __construct(Database $database, string $tableName = '', string $columnPrefix = '', string $tokenId = '') {
         global $gProfileFields;
         parent::__construct($database, $tableName, $columnPrefix);
         if (!empty($tokenId)) {
-            $this->readDataByColumns([$this->columnPrefix . '_token' => $tokenId]);
+            $this->readDataByColumns([$this->columnPrefix . '_token' => self::hashIdentifier($tokenId)]);
         }
     }
 
@@ -100,7 +102,10 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function getIdentifier(): string
     {
-        return $this->getValue($this->columnPrefix . '_token');
+        // A token that was just created in this request still has its plaintext identifier
+        // available; existing tokens loaded from the DB only ever expose the stored hash,
+        // which is sufficient because Admidio never needs to recover the plaintext again.
+        return $this->plainIdentifier !== '' ? $this->plainIdentifier : $this->getValue($this->columnPrefix . '_token');
     }
 
     /**
@@ -108,11 +113,17 @@ class TokenEntity extends Entity implements TokenInterface
      */
     public function setIdentifier(string $identifier): void
     {
-        // TODO_RK: Store identifier as a hash!
-        $this->setValue($this->columnPrefix . '_token', $identifier);
+        $this->plainIdentifier = $identifier;
+        // Store only a one-way hash. The identifier itself is embedded in a signed JWT
+        // (access tokens) or an encrypted payload (auth codes/refresh tokens) handed to the
+        // client; the database never needs to recover the plaintext value again.
+        $this->setValue($this->columnPrefix . '_token', self::hashIdentifier($identifier));
     }
 
-
+    private static function hashIdentifier(string $identifier): string
+    {
+        return hash('sha256', $identifier);
+    }
 
 
     /**

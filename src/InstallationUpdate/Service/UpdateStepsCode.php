@@ -48,6 +48,40 @@ final class UpdateStepsCode
     }
 
     /**
+     * Re-hash existing SSO/OIDC token identifiers in place. As of this update, TokenEntity
+     * stores only a SHA-256 hash of access/refresh token and auth code identifiers instead
+     * of the plaintext value, so lookups by presented token now hash before querying.
+     * Existing rows still hold the plaintext identifier and must be converted, or every
+     * outstanding access/refresh token would stop validating immediately after the update.
+     *
+     * @throws Exception
+     */
+    public static function updateStep51HashSsoTokenIdentifiers(): void
+    {
+        $tokenColumns = array(
+            TBL_OIDC_ACCESS_TOKENS  => array('id' => 'oat_id', 'token' => 'oat_token'),
+            TBL_OIDC_REFRESH_TOKENS => array('id' => 'ort_id', 'token' => 'ort_token'),
+            TBL_OIDC_AUTH_CODES     => array('id' => 'oac_id', 'token' => 'oac_token'),
+        );
+
+        foreach ($tokenColumns as $table => $columns) {
+            $selectSql = 'SELECT ' . $columns['id'] . ' AS id, ' . $columns['token'] . ' AS token FROM ' . $table;
+            $statement = self::$db->queryPrepared($selectSql);
+
+            while ($row = $statement->fetch()) {
+                // A 64-char lowercase hex string is already a SHA-256 hash - running this step
+                // twice (e.g. on a retried update) must not double-hash already-migrated rows.
+                if (preg_match('/^[0-9a-f]{64}$/', (string) $row['token']) === 1) {
+                    continue;
+                }
+
+                $updateSql = 'UPDATE ' . $table . ' SET ' . $columns['token'] . ' = ? WHERE ' . $columns['id'] . ' = ?';
+                self::$db->queryPrepared($updateSql, array(hash('sha256', (string) $row['token']), $row['id']));
+            }
+        }
+    }
+
+    /**
      * This method will convert the charset of the database tables to utf8mb4 if not already done.
      * This is necessary to support emojis and other special characters in the future.
      * @throws Exception

@@ -1649,7 +1649,7 @@
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Autorisierungs-Endpunkt</string>
   <string name="SYS_SSO_OIDC_AUTHORIZE_CLIENT">#VAR1# autorisieren</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Back-Channel-Abmelde-URI</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Client-Endpunkt, der signierte Back-Channel-Abmeldetoken empfängt.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Optional. Endpunkt der Anwendung, der über eine Abmeldung informiert wird, auch wenn kein Browser offen ist.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Sitzungskennung (sid) für Back-Channel-Abmeldung verlangen</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Den OIDC-Claim sid in Back-Channel-Abmeldetoken aufnehmen.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1662,7 +1662,7 @@
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Sitzungskennung (sid) bei Front-Channel-Abmeldung senden</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Die OIDC-Parameter iss und sid mit Front-Channel-Abmeldeanfragen senden.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Front-Channel-Abmelde-URI</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Client-URI, die beim Ende der Admidio-Sitzung im Browser geladen wird.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Optional. Wird beim Abmelden unsichtbar im Browser geladen, damit sich die Anwendung ebenfalls abmeldet.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer-URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Leer lassen, um die öffentliche Admidio-URL zu verwenden. Nur setzen, wenn Admidio unter einer anderen externen URL erreichbar ist.</string>
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">JWKS-Endpunkt</string>
@@ -1671,7 +1671,7 @@
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Abmelde-Endpunkt</string>
   <string name="SYS_SSO_OIDC_LOGOUT_URI_INVALID">Die registrierte OIDC-Abmelde-URI ist ungültig. Verwende eine absolute HTTPS-URI ohne Zugangsdaten oder Fragment; HTTP ist nur für Loopback-Hosts zulässig.</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS">Weiterleitungs-URIs nach Abmeldung</string>
-  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Zulässige Weiterleitungs-URIs nach der Abmeldung, eine absolute URI pro Zeile. Die Übereinstimmung muss exakt sein.</string>
+  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Optional. Wohin Admidio nach der Abmeldung zurückleiten darf, eine URL pro Zeile. Muss exakt mit der von der Anwendung gesendeten URL übereinstimmen.</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Gültigkeit des Aktualisierungstokens</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">Gültigkeitsdauer von Refresh-Tokens in Sekunden. Standard: 2592000 (30 Tage).</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Angeforderte Berechtigungen</string>

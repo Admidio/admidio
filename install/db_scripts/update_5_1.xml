@@ -196,5 +196,7 @@
     <step id="1100">UPDATE %PREFIX%_oidc_clients SET ocl_org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations) WHERE ocl_org_id IS NULL</step>
     <step id="1110" database="mysql">ALTER TABLE %PREFIX%_oidc_clients MODIFY COLUMN ocl_org_id integer unsigned NOT NULL</step>
     <step id="1120" database="pgsql">ALTER TABLE %PREFIX%_oidc_clients ALTER COLUMN ocl_org_id SET NOT NULL</step>
+    <step id="1130">UPDATE %PREFIX%_saml_clients SET smc_org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations) WHERE smc_org_id = 0 OR smc_org_id IS NULL</step>
+    <step id="1140">UpdateStepsCode::updateStep51HashSsoTokenIdentifiers</step>
     <step>stop</step>
 </update>

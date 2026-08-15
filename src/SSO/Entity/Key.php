@@ -21,7 +21,10 @@ class Key extends Entity
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(),
-        ($this->newRecord)?[$this->columnPrefix.'_name']:[]);
+        return array_merge(
+            parent::getIgnoredLogColumns(),
+            ($this->newRecord)?[$this->columnPrefix.'_name']:[],
+            [$this->columnPrefix . '_private']   // never expose the private key in the changelog
+        );
     }
 }
