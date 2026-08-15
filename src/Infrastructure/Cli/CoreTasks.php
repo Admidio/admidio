@@ -144,7 +144,8 @@ final class CoreTasks
         array $options = array(),
         array $examples = array(),
         ?string $unavailableReason = null,
-        string $componentAccess = CliTaskRegistry::ACCESS_ADMINISTRABLE
+        string $componentAccess = CliTaskRegistry::ACCESS_ADMINISTRABLE,
+        ?string $aliasOf = null
     ): void {
         CliTaskRegistry::registerCore(
             $name,
@@ -157,7 +158,45 @@ final class CoreTasks
             $options,
             $examples,
             $unavailableReason,
-            $componentAccess
+            $componentAccess,
+            $aliasOf
+        );
+    }
+
+    /**
+     * Register a second name for an already registered command.
+     *
+     * The alias repeats the arguments and options of the aliased command, because they are part of
+     * its own validation and help output, but it is marked so "admidio list" and the help can show
+     * where it points instead of presenting two independent commands.
+     *
+     * @param array<int,array<string,mixed>> $arguments
+     * @param array<int,array<string,mixed>> $options
+     */
+    private static function alias(
+        string $name,
+        string $aliasOf,
+        string $method,
+        string $usage = '',
+        ?string $component = null,
+        bool $actorRequired = false,
+        array $arguments = array(),
+        array $options = array(),
+        string $componentAccess = CliTaskRegistry::ACCESS_ADMINISTRABLE
+    ): void {
+        self::task(
+            $name,
+            $method,
+            'Alias for ' . $aliasOf . '.',
+            $usage,
+            $component,
+            $actorRequired,
+            $arguments,
+            $options,
+            array(),
+            null,
+            $componentAccess,
+            $aliasOf
         );
     }
 
@@ -524,7 +563,7 @@ final class CoreTasks
             ));
         self::task('user:send-password', 'userSendPassword', 'Send the native password-reset/new-password email.',
             'user:send-password USER', 'CONTACTS', true, array(self::arg('user', 'User.')));
-        self::task('user:send-login', 'userSendPassword', 'Send the native login/new-password email.',
+        self::alias('user:send-login', 'user:send-password', 'userSendPassword',
             'user:send-login USER', 'CONTACTS', true, array(self::arg('user', 'User.')));
         self::task('user:tfa-status', 'userTfaStatus', 'Show whether two-factor authentication is configured.',
             'user:tfa-status USER [--format=text|json]', 'CONTACTS', true,
@@ -639,7 +678,7 @@ final class CoreTasks
             'registration:approve USER [--group=GROUP ...]', 'REGISTRATION', true,
             array(self::arg('user', 'Registration user.')),
             array(self::opt('group', 'Additional group after approval.', 'GROUP', false, true)));
-        self::task('registration:create-user', 'registrationApprove', 'Alias for registration:approve.',
+        self::alias('registration:create-user', 'registration:approve', 'registrationApprove',
             'registration:create-user USER [--group=GROUP ...]', 'REGISTRATION', true,
             array(self::arg('user', 'Registration user.')),
             array(self::opt('group', 'Additional group after approval.', 'GROUP', false, true)));

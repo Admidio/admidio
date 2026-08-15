@@ -37,6 +37,7 @@ final class CliTaskRegistry
      *     name:string,
      *     component:?string,
      *     componentAccess:string,
+     *     aliasOf:?string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -75,12 +76,14 @@ final class CliTaskRegistry
         array $options = array(),
         array $examples = array(),
         ?string $unavailableReason = null,
-        string $componentAccess = self::ACCESS_ADMINISTRABLE
+        string $componentAccess = self::ACCESS_ADMINISTRABLE,
+        ?string $aliasOf = null
     ): void {
         self::registerTask(
             $taskName,
             $componentName,
             $componentAccess,
+            $aliasOf,
             $actorRequired,
             $callback,
             $description,
@@ -128,6 +131,7 @@ final class CliTaskRegistry
             $taskName,
             strtoupper($componentName),
             $componentAccess,
+            null,
             true,
             $callback,
             $description,
@@ -145,6 +149,7 @@ final class CliTaskRegistry
      *     name:string,
      *     component:?string,
      *     componentAccess:string,
+     *     aliasOf:?string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -166,6 +171,7 @@ final class CliTaskRegistry
      *     name:string,
      *     component:?string,
      *     componentAccess:string,
+     *     aliasOf:?string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -211,6 +217,7 @@ final class CliTaskRegistry
         string $taskName,
         ?string $componentName,
         string $componentAccess,
+        ?string $aliasOf,
         bool $actorRequired,
         callable $callback,
         string $description,
@@ -251,6 +258,13 @@ final class CliTaskRegistry
             }
         }
 
+        if ($aliasOf !== null && !isset(self::$tasks[$aliasOf])) {
+            throw new InvalidArgumentException(
+                'CLI command "' . $taskName . '" is declared as an alias of the unknown command "'
+                . $aliasOf . '". Register the aliased command first.'
+            );
+        }
+
         if (isset(self::$tasks[$taskName])) {
             throw new InvalidArgumentException('CLI command "' . $taskName . '" is already registered.');
         }
@@ -271,6 +285,7 @@ final class CliTaskRegistry
             'name' => $taskName,
             'component' => $componentName === null ? null : strtoupper($componentName),
             'componentAccess' => $componentAccess,
+            'aliasOf' => $aliasOf,
             'actorRequired' => $actorRequired || $componentName !== null,
             'callback' => $callback,
             'description' => trim($description),

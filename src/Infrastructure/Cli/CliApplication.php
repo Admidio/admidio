@@ -414,6 +414,7 @@ final class CliApplication
 
             $rows[] = array(
                 'command' => $name,
+                'alias of' => $task['aliasOf'] ?? '',
                 'available' => $task['unavailableReason'] === null ? 'yes' : 'no',
                 'description' => $task['description']
             );
@@ -438,6 +439,14 @@ final class CliApplication
 
         $text .= $this->renderHeadline('Usage', $sectionLevel, $format);
         $text .= $this->renderCodeBlock('admidio ' . $usage, $format);
+
+        if (($task['aliasOf'] ?? null) !== null) {
+            $text .= $this->renderHeadline('Alias', $sectionLevel, $format);
+            $text .= $this->renderParagraph(
+                'This command is another name for ' . $task['aliasOf'] . ' and behaves identically.',
+                $format
+            );
+        }
 
         $text .= $this->renderAvailability($task['unavailableReason'], $format, $sectionLevel);
         $text .= $this->renderArguments($task['arguments'], $format, $sectionLevel);
