@@ -207,6 +207,19 @@ final class CliApplication
     }
 
     /**
+     * Names of the options every command understands, without the leading dashes.
+     *
+     * @return array<int,string>
+     */
+    public static function globalOptionNames(): array
+    {
+        return array_map(
+            static fn (array $option): string => (string)$option['name'],
+            self::GLOBAL_OPTIONS
+        );
+    }
+
+    /**
      * Remember that sessions have to re-read their data, without writing immediately.
      *
      * Marking sessions is a full-table UPDATE on adm_sessions. A command that changes several
