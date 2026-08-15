@@ -7105,48 +7105,49 @@ final class CoreTasks
     {
         global $gDb, $gCurrentUser;
 
-        $permittedTables = array_values(array_unique(ChangelogService::getPermittedTables($gCurrentUser)));
-        if ($gCurrentUser->isAdministrator()) {
-            // A full administrator may inspect every table that is currently configured for logging.
-            $allTables = $gDb->queryPrepared(
-                'SELECT DISTINCT log_table
-                   FROM ' . TBL_LOG_CHANGES . '
-               ORDER BY log_table'
-            )->fetchAll(PDO::FETCH_COLUMN);
-            foreach ($allTables as $table) {
-                if (ChangelogService::hasLogViewPermission((string)$table, $gCurrentUser)) {
-                    $permittedTables[] = (string)$table;
-                }
-            }
-            $permittedTables = array_values(array_unique($permittedTables));
-        } else {
-            $permittedTables = array_values(array_filter(
-                $permittedTables,
-                static fn (string $table): bool => ChangelogService::hasLogViewPermission($table, $gCurrentUser)
-            ));
-        }
+        $permittedTables = array_values(array_filter(
+            array_unique(ChangelogService::getPermittedTables($gCurrentUser)),
+            static fn (string $table): bool => ChangelogService::hasLogViewPermission($table, $gCurrentUser)
+        ));
 
-        if ($permittedTables === array()) {
+        /*
+         * ChangelogService::isTableLogged() falls back to the changelog_table_others preference for
+         * tables it does not know, so asking for a table name that is certainly not configured
+         * answers whether *any* table may be inspected. For an administrator that makes the
+         * log_table restriction pointless, and enumerating the tables would be incomplete anyway.
+         *
+         * The previous implementation derived the list with SELECT DISTINCT log_table over
+         * adm_log_changes instead. That is the largest table of a mature installation and the query
+         * has no predicate to use an index for.
+         */
+        $anyTablePermitted = $gCurrentUser->isAdministrator()
+            && ChangelogService::hasLogViewPermission('adm_cli_unknown_table', $gCurrentUser);
+
+        if (!$anyTablePermitted && $permittedTables === array()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
         $requestedTables = CliApplication::optionValues($options, 'table');
         if ($requestedTables !== array()) {
             foreach ($requestedTables as $table) {
-                if (!in_array($table, $permittedTables, true)) {
+                if (!ChangelogService::hasLogViewPermission($table, $gCurrentUser)
+                    || (!$anyTablePermitted && !in_array($table, $permittedTables, true))) {
                     throw new Exception('SYS_NO_RIGHTS');
                 }
             }
             $tables = $requestedTables;
         } else {
-            $tables = $permittedTables;
+            // No restriction is needed when every table may be inspected anyway.
+            $tables = $anyTablePermitted ? array() : $permittedTables;
         }
 
         $conditions = array();
         $params = array();
-        $placeholders = implode(', ', array_fill(0, count($tables), '?'));
-        $conditions[] = 'log_table IN (' . $placeholders . ')';
-        array_push($params, ...$tables);
+        if ($tables !== array()) {
+            $placeholders = implode(', ', array_fill(0, count($tables), '?'));
+            $conditions[] = 'log_table IN (' . $placeholders . ')';
+            array_push($params, ...$tables);
+        }
 
         $objectUuid = CliApplication::optionString($options, 'object');
         if ($objectUuid !== '') {
@@ -7201,8 +7202,8 @@ final class CoreTasks
                        log_value_old AS value_old, log_value_new AS value_new,
                        log_usr_id_create AS user_id, log_timestamp_create AS timestamp,
                        log_comment AS comment
-                  FROM ' . TBL_LOG_CHANGES . '
-                 WHERE ' . implode(' AND ', $conditions) . '
+                  FROM ' . TBL_LOG_CHANGES
+            . ($conditions === array() ? '' : ' WHERE ' . implode(' AND ', $conditions)) . '
               ORDER BY log_timestamp_create DESC, log_id DESC
                  LIMIT ' . $limit . ' OFFSET ' . $offset;
 
