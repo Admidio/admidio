@@ -148,6 +148,17 @@ final class CoreTasks
         ?string $aliasOf = null,
         ?string $requiredRight = null
     ): void {
+        /*
+         * The callback resolves the method only when the command is executed, so a typo would
+         * survive registration, listing and help and surface as a fatal on first use. Verify it
+         * while the registry is built.
+         */
+        if (!method_exists(self::class, $method)) {
+            throw new InvalidArgumentException(
+                'CLI command "' . $name . '" refers to the unknown callback CoreTasks::' . $method . '().'
+            );
+        }
+
         CliTaskRegistry::registerCore(
             $name,
             static fn (array $arguments, array $options): int => self::$method($arguments, $options),
@@ -364,6 +375,18 @@ final class CoreTasks
             false,
             array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
+        );
+        self::task(
+            'cli:selfcheck',
+            'selfCheck',
+            'Validate the command line itself: registration, help and the internal consistency of its source. '
+                . 'Needs no acting user. Exits with 3 when a problem is found.',
+            'cli:selfcheck [--format=table|json|csv|md|dokuwiki]',
+            null,
+            false,
+            array(),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))),
+            array('admidio cli:selfcheck --format=json')
         );
         self::task(
             'completion',
@@ -2115,6 +2138,46 @@ final class CoreTasks
     public static function listCommands(array $arguments, array $options): int
     {
         return (new CliApplication())->showList($arguments, $options);
+    }
+
+    public static function selfCheck(array $arguments, array $options): int
+    {
+        $problems = CliSelfCheck::run();
+        $statistics = CliSelfCheck::statistics();
+        $format = CliApplication::optionString($options, 'format', 'table');
+
+        if ($format === 'json') {
+            CliApplication::writeValue(
+                array(
+                    'ok' => $problems === array(),
+                    'checked' => $statistics,
+                    'problems' => $problems
+                ),
+                $options,
+                'json'
+            );
+
+            return $problems === array()
+                ? CliApplication::EXIT_SUCCESS
+                : CliApplication::EXIT_STATE_NOT_OK;
+        }
+
+        if ($problems !== array()) {
+            CliApplication::writeRows($problems, $format, $options);
+        }
+
+        CliApplication::writeSuccess(
+            ($problems === array() ? 'OK: ' : 'FAILED: ' . count($problems) . ' problem(s) in ')
+            . $statistics['commands'] . ' commands, '
+            . $statistics['internal_calls'] . ' internal calls and '
+            . $statistics['imports'] . ' imports across '
+            . $statistics['source_files'] . ' source files.',
+            $options
+        );
+
+        return $problems === array()
+            ? CliApplication::EXIT_SUCCESS
+            : CliApplication::EXIT_STATE_NOT_OK;
     }
 
     public static function completion(array $arguments, array $options): int
