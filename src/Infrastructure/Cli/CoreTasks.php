@@ -347,7 +347,7 @@ final class CoreTasks
         self::task(
             'status',
             'status',
-            'Show installation, organization and filesystem/database update status.',
+            'Show installation, organization and filesystem/database update status. Exits with 3 if the status is not ok.',
             'status [--format=text|json]',
             null,
             false,
@@ -368,7 +368,7 @@ final class CoreTasks
         self::task(
             'update:check',
             'updateCheck',
-            'Check the public Admidio release information used by the preferences update check.',
+            'Check the public Admidio release information used by the preferences update check. Exits with 4 if an update is available.',
             'update:check [--format=text|json]',
             'PREFERENCES',
             true,
@@ -412,7 +412,7 @@ final class CoreTasks
         self::task(
             'htaccess:status',
             'htaccessStatus',
-            'Show whether adm_my_files is protected by an .htaccess file.',
+            'Show whether adm_my_files is protected by an .htaccess file. Exits with 3 if it is unprotected.',
             'htaccess:status [--format=text|json]',
             'PREFERENCES',
             true,
@@ -2144,7 +2144,7 @@ final class CoreTasks
              CliApplication::writeValue($data, $options, $format);
         }
 
-        return $state === 'ok' ? 0 : 3;
+        return $state === 'ok' ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_STATE_NOT_OK;
     }
 
     public static function updateCheck(array $arguments, array $options): int
@@ -2172,7 +2172,9 @@ final class CoreTasks
             CliApplication::writeValue($data, $options, $format);
         }
 
-        return (int)$data['versionUpdate'] === 99 ? 4 : 0;
+        return (int)$data['versionUpdate'] === 99
+            ? CliApplication::EXIT_UPDATE_AVAILABLE
+            : CliApplication::EXIT_SUCCESS;
     }
 
     public static function systemInfo(array $arguments, array $options): int
@@ -2256,7 +2258,7 @@ final class CoreTasks
             CliApplication::optionString($options, 'format', 'text')
         );
 
-        return $protected ? 0 : 3;
+        return $protected ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_STATE_NOT_OK;
     }
 
     public static function htaccessEnable(array $arguments, array $options): int

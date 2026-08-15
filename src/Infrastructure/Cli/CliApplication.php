@@ -29,6 +29,27 @@ final class CliApplication
     private static string $currentCommand = '';
 
     /**
+     * The command finished successfully.
+     */
+    public const EXIT_SUCCESS = 0;
+
+    /**
+     * The command could not be executed: invalid input, missing rights or an internal error.
+     */
+    public const EXIT_ERROR = 1;
+
+    /**
+     * The command ran successfully but the state it reports is not the desired one, for example
+     * a pending database update or an unprotected adm_my_files directory.
+     */
+    public const EXIT_STATE_NOT_OK = 3;
+
+    /**
+     * The command ran successfully and a newer Admidio release is available.
+     */
+    public const EXIT_UPDATE_AVAILABLE = 4;
+
+    /**
      * Global options understood by every command.
      *
      * @var array<int,array<string,mixed>>
@@ -44,7 +65,7 @@ final class CliApplication
             'values' => array('text', 'table', 'record', 'json', 'csv', 'md', 'dokuwiki')
         ),
         array('name' => 'output', 'value' => 'FILE', 'description' => 'Write command output to a file.'),
-        array('name' => 'quiet', 'flag' => true, 'description' => 'Suppress non-essential success output.'),
+        array('name' => 'quiet', 'flag' => true, 'description' => 'Suppress confirmation messages. Requested data and errors are still printed.'),
         array('name' => 'no-interaction', 'flag' => true, 'description' => 'Never ask an interactive question.'),
         array('name' => 'yes', 'flag' => true, 'description' => 'Confirm destructive operations.'),
         array('name' => 'help', 'flag' => true, 'description' => 'Show help for the selected command.')
@@ -463,6 +484,25 @@ final class CliApplication
         $text .= $this->renderCodeBlock('admidio [global-options] COMMAND [arguments] [options]', $format);
 
         $text .= $this->renderOptions(self::GLOBAL_OPTIONS, $format, 2, 'Global options');
+
+        $text .= $this->renderHeadline('Exit codes', 2, $format);
+        $text .= $this->renderTable(
+            array('Code', 'Meaning'),
+            array(
+                array((string)self::EXIT_SUCCESS, 'The command finished successfully.'),
+                array((string)self::EXIT_ERROR, 'Invalid input, missing rights or an internal error.'),
+                array(
+                    (string)self::EXIT_STATE_NOT_OK,
+                    'The command ran, but the reported state is not the desired one. '
+                        . 'Used by status and htaccess:status.'
+                ),
+                array(
+                    (string)self::EXIT_UPDATE_AVAILABLE,
+                    'The command ran and a newer Admidio release is available. Used by update:check.'
+                )
+            ),
+            $format
+        );
 
         $text .= $this->renderHeadline('Help', 2, $format);
         $text .= $this->renderList(
