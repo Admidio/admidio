@@ -2110,8 +2110,13 @@ final class CoreTasks
 
     public static function phpInfo(array $arguments, array $options): int
     {
+        /*
+         * INFO_ENVIRONMENT and INFO_VARIABLES are deliberately omitted. In a CLI process they list
+         * $_ENV and $_SERVER, which in a containerized deployment routinely carry the database
+         * credentials of the installation.
+         */
         ob_start();
-        phpinfo();
+        phpinfo(INFO_GENERAL | INFO_CONFIGURATION | INFO_MODULES);
         $content = ob_get_clean();
         if ($content === false) {
             throw new RuntimeException('Could not collect PHP information.');
