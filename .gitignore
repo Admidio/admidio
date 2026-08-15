@@ -39,6 +39,8 @@ php-cs-fixer
 
 # Project-specific IDE settings are local for each developer
 /.vscode/
+CLAUDE.md
+.claudeignore
 
 # For custom configuration
 /.php_cs
