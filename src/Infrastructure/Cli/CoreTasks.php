@@ -8720,10 +8720,19 @@ final class CoreTasks
             array($type, $gCurrentOrgId)
         );
 
+        /*
+         * Only categories whose position actually changes are written. Saving every category of
+         * the type on every category:add and category:update produced a write and a changelog
+         * record per category even when the order was already correct.
+         */
         $sequence = 0;
         $category = new Category($gDb);
         while ($row = $statement->fetch()) {
             ++$sequence;
+            if ((int)$row['cat_sequence'] === $sequence) {
+                continue;
+            }
+
             $category->clear();
             $category->setArray($row);
             $category->setValue('cat_sequence', $sequence);

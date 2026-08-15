@@ -52,6 +52,13 @@ final class CliTaskRegistry
     private static array $tasks = array();
 
     /**
+     * Name-sorted copy of $tasks, built on first use and dropped whenever a task is registered.
+     *
+     * @var array<string,array<string,mixed>>|null
+     */
+    private static ?array $sortedTasks = null;
+
+    /**
      * Core namespaces cannot be extended or shadowed by module registration.
      *
      * @var array<string,bool>
@@ -185,10 +192,12 @@ final class CliTaskRegistry
      */
     public static function getAll(): array
     {
-        $tasks = self::$tasks;
-        ksort($tasks);
+        if (self::$sortedTasks === null) {
+            self::$sortedTasks = self::$tasks;
+            ksort(self::$sortedTasks);
+        }
 
-        return $tasks;
+        return self::$sortedTasks;
     }
 
     /**
@@ -280,6 +289,9 @@ final class CliTaskRegistry
                 throw new InvalidArgumentException('Every CLI option definition must have a name.');
             }
         }
+
+        // A module registering through modules/<module>/cli.php must show up in getAll().
+        self::$sortedTasks = null;
 
         self::$tasks[$taskName] = array(
             'name' => $taskName,
