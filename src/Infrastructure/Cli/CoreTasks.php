@@ -3261,10 +3261,13 @@ final class CoreTasks
 
     public static function registrationSimilar(array $arguments, array $options): int
     {
+        global $gDb, $gProfileFields;
+
         $registration = self::resolveRegistration(CliApplication::requireArgument($arguments, 0, 'user'));
         $rows = array();
+        // The ids come from searchSimilarUsers(), so they need no further lookup.
         foreach ($registration->searchSimilarUsers() as $userId) {
-            $user = CliApplication::resolveUser((string)$userId);
+            $user = new User($gDb, $gProfileFields, (int)$userId);
             $rows[] = array(
                 'id' => (int)$user->getValue('usr_id'),
                 'uuid' => (string)$user->getValue('usr_uuid'),
@@ -3492,7 +3495,7 @@ final class CoreTasks
 
     public static function groupExport(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser;
+        global $gDb, $gCurrentUser, $gProfileFields;
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
         $roleId = (int)$role->getValue('rol_id');
 
@@ -3513,8 +3516,9 @@ final class CoreTasks
         )->fetchAll(PDO::FETCH_COLUMN);
 
         $vcards = '';
+        // The ids come from the membership query above, so they need no further lookup.
         foreach ($userIds as $userId) {
-            $vcards .= CliApplication::resolveUser((string)$userId)->getVCard() . PHP_EOL;
+            $vcards .= (new User($gDb, $gProfileFields, (int)$userId))->getVCard() . PHP_EOL;
         }
         CliApplication::writeOutput($vcards, $options);
         return 0;
