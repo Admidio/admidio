@@ -742,13 +742,14 @@ final class CoreTasks
         self::task('group:deluser', 'groupDelUser', 'End a current group membership using Role::stopMembership().',
             'group:deluser GROUP USER [--date=DATE]', null, true,
             array(self::arg('group', 'Group.'), self::arg('user', 'User.')),
-            array(self::opt('date', 'Membership end date; defaults to today.', 'DATE')));
+            array(self::opt('date', 'Last day of the membership. Without this option the membership is ended as of today.', 'DATE')));
         self::task('group:updateuser', 'groupUpdateUser', 'Update an existing membership period/leader status.',
-            'group:updateuser GROUP USER [--start=DATE] [--end=DATE] [--leader=BOOL]', null, true,
+            'group:updateuser GROUP USER [--start=DATE] [--end=DATE] [--leader=BOOL] [--force-period=BOOL]', null, true,
             array(self::arg('group', 'Group.'), self::arg('user', 'User.')), array(
                 self::opt('start', 'Membership start date.', 'DATE'),
                 self::opt('end', 'Membership end date.', 'DATE'),
-                self::opt('leader', 'Leader status.', 'BOOL')
+                self::opt('leader', 'Leader status.', 'BOOL'),
+                self::opt('force-period', 'Write exactly the given period instead of merging it with an adjacent one. Defaults to true.', 'BOOL')
             ));
         self::task('group:deletemembership', 'groupDeleteMembership', 'Permanently delete one membership history row.',
             'group:deletemembership MEMBERSHIP [--yes]', 'GROUPS-ROLES', true,
@@ -3688,14 +3689,30 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        if (!array_key_exists('date', $options) || CliApplication::optionString($options, 'date') === DATE_NOW) {
+        if (!CliApplication::optionExists($options, 'date')) {
+            // Ends the membership as of today; also guards the administrator role.
             $role->stopMembership((int)$user->getValue('usr_id'));
         } else {
             $endDate = CliApplication::optionString($options, 'date');
-            self::validateDate($endDate);
+            self::validateDate($endDate, '--date');
+
+            /*
+             * Role::stopMembership() refuses to empty the administrator role. An explicit end date
+             * must not become a way around that check, and the membership has to be written
+             * through Role::setMembership() so role dependencies are handled the same way.
+             */
+            if ((bool)$role->getValue('rol_administrator')
+                && ($role->countMembers() + $role->countLeaders()) <= 1) {
+                throw new Exception('SYS_MUST_HAVE_ADMINISTRATOR');
+            }
+
             $membership = self::resolveMembershipForDate($role, $user, $endDate);
-            $membership->setValue('mem_end', $endDate);
-            $membership->save();
+            $role->setMembership(
+                (int)$user->getValue('usr_id'),
+                (string)$membership->getValue('mem_begin', 'Y-m-d'),
+                $endDate,
+                (bool)$membership->getValue('mem_leader')
+            );
         }
 
         self::reloadUserSessions((int)$user->getValue('usr_id'));
@@ -3717,7 +3734,18 @@ final class CoreTasks
         self::validateDateRange($start, $end);
         $leader = CliApplication::optionBool($options, 'leader', (bool)$membership->getValue('mem_leader'));
 
-        $role->setMembership((int)$user->getValue('usr_id'), $start, $end, $leader, true);
+        /*
+         * This command states the period explicitly, so the default is to write exactly that period
+         * instead of merging it with an adjacent one. --force-period=0 restores the merging
+         * behaviour of Role::setMembership().
+         */
+        $role->setMembership(
+            (int)$user->getValue('usr_id'),
+            $start,
+            $end,
+            $leader,
+            CliApplication::optionBool($options, 'force-period', true) ?? true
+        );
         self::reloadUserSessions((int)$user->getValue('usr_id'));
         CliApplication::writeSuccess('Group membership updated.', $options);
         return 0;
