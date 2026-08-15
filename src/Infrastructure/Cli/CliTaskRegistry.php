@@ -19,9 +19,24 @@ use InvalidArgumentException;
 final class CliTaskRegistry
 {
     /**
+     * The acting user must administer the component. This is the default and applies to every
+     * command that changes configuration or data of a module.
+     */
+    public const ACCESS_ADMINISTRABLE = 'administrable';
+
+    /**
+     * The component only has to be visible to the acting user. Used by read-only commands and by
+     * commands whose service implements the real rights model itself. Such a command must perform
+     * the same record-level check as its web counterpart, for example Entity::isVisible() or
+     * User::hasRightViewProfile().
+     */
+    public const ACCESS_VISIBLE = 'visible';
+
+    /**
      * @var array<string,array{
      *     name:string,
      *     component:?string,
+     *     componentAccess:string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -59,11 +74,13 @@ final class CliTaskRegistry
         array $arguments = array(),
         array $options = array(),
         array $examples = array(),
-        ?string $unavailableReason = null
+        ?string $unavailableReason = null,
+        string $componentAccess = self::ACCESS_ADMINISTRABLE
     ): void {
         self::registerTask(
             $taskName,
             $componentName,
+            $componentAccess,
             $actorRequired,
             $callback,
             $description,
@@ -80,8 +97,9 @@ final class CliTaskRegistry
      * Register a module-specific command.
      *
      * A module may provide modules/<module>/cli.php and register a command such as
-     * "inventory:checkout". The component is checked through Component::isAdministrable()
-     * before the callback is executed.
+     * "inventory:checkout". Before the callback is executed the component is checked through
+     * Component::isAdministrable(), or through Component::isVisible() when the command declares
+     * ACCESS_VISIBLE.
      *
      * @param array<int,array<string,mixed>> $arguments
      * @param array<int,array<string,mixed>> $options
@@ -95,7 +113,8 @@ final class CliTaskRegistry
         string $usage = '',
         array $arguments = array(),
         array $options = array(),
-        array $examples = array()
+        array $examples = array(),
+        string $componentAccess = self::ACCESS_ADMINISTRABLE
     ): void {
         if (!str_contains($taskName, ':')) {
             throw new InvalidArgumentException('Module CLI task names must use the form module:task.');
@@ -108,6 +127,7 @@ final class CliTaskRegistry
         self::registerTask(
             $taskName,
             strtoupper($componentName),
+            $componentAccess,
             true,
             $callback,
             $description,
@@ -124,6 +144,7 @@ final class CliTaskRegistry
      * @return array{
      *     name:string,
      *     component:?string,
+     *     componentAccess:string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -144,6 +165,7 @@ final class CliTaskRegistry
      * @return array<string,array{
      *     name:string,
      *     component:?string,
+     *     componentAccess:string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -207,6 +229,7 @@ final class CliTaskRegistry
     private static function registerTask(
         string $taskName,
         ?string $componentName,
+        string $componentAccess,
         bool $actorRequired,
         callable $callback,
         string $description,
@@ -225,6 +248,12 @@ final class CliTaskRegistry
 
         if (!$core && !str_contains($taskName, ':')) {
             throw new InvalidArgumentException('Module CLI task names must use the form module:task.');
+        }
+
+        if (!in_array($componentAccess, array(self::ACCESS_ADMINISTRABLE, self::ACCESS_VISIBLE), true)) {
+            throw new InvalidArgumentException(
+                'CLI command "' . $taskName . '" declares an unknown component access level.'
+            );
         }
 
         if (str_contains($taskName, ':')) {
@@ -260,6 +289,7 @@ final class CliTaskRegistry
         self::$tasks[$taskName] = array(
             'name' => $taskName,
             'component' => $componentName === null ? null : strtoupper($componentName),
+            'componentAccess' => $componentAccess,
             'actorRequired' => $actorRequired || $componentName !== null,
             'callback' => $callback,
             'description' => trim($description),

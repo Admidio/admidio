@@ -90,8 +90,19 @@ final class CliApplication
             self::requireActor($input['options']);
         }
 
-        if ($task['component'] !== null && !Component::isAdministrable($task['component'])) {
-            throw new Exception('SYS_NO_RIGHTS');
+        if ($task['component'] !== null) {
+            /*
+             * A read-only command only requires that the component is visible; it performs the same
+             * record-level check as its web counterpart. Everything that changes data requires the
+             * component to be administrable.
+             */
+            $permitted = $task['componentAccess'] === CliTaskRegistry::ACCESS_VISIBLE
+                ? Component::isVisible($task['component'])
+                : Component::isAdministrable($task['component']);
+
+            if (!$permitted) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
         }
 
         self::$currentCommand = $command;

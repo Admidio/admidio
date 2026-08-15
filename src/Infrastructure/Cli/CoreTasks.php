@@ -143,7 +143,8 @@ final class CoreTasks
         array $arguments = array(),
         array $options = array(),
         array $examples = array(),
-        ?string $unavailableReason = null
+        ?string $unavailableReason = null,
+        string $componentAccess = CliTaskRegistry::ACCESS_ADMINISTRABLE
     ): void {
         CliTaskRegistry::registerCore(
             $name,
@@ -155,7 +156,47 @@ final class CoreTasks
             $arguments,
             $options,
             $examples,
-            $unavailableReason
+            $unavailableReason,
+            $componentAccess
+        );
+    }
+
+    /**
+     * Register a command that only reads data.
+     *
+     * Such a command requires the component to be visible instead of administrable, because it
+     * performs the same record-level check as the corresponding web module - Entity::isVisible(),
+     * User::hasRightViewProfile(), Folder::hasViewRight() and so on. Never use this for a command
+     * that writes, unless the called service implements the complete rights model itself.
+     *
+     * @param array<int,array<string,mixed>> $arguments
+     * @param array<int,array<string,mixed>> $options
+     * @param array<int,string> $examples
+     */
+    private static function readTask(
+        string $name,
+        string $method,
+        string $description,
+        string $usage = '',
+        ?string $component = null,
+        bool $actorRequired = false,
+        array $arguments = array(),
+        array $options = array(),
+        array $examples = array(),
+        ?string $unavailableReason = null
+    ): void {
+        self::task(
+            $name,
+            $method,
+            $description,
+            $usage,
+            $component,
+            $actorRequired,
+            $arguments,
+            $options,
+            $examples,
+            $unavailableReason,
+            CliTaskRegistry::ACCESS_VISIBLE
         );
     }
 
@@ -413,7 +454,7 @@ final class CoreTasks
 
     private static function registerUserTasks(): void
     {
-        self::task('user:list', 'userList', 'List users in the current organization.',
+        self::readTask('user:list', 'userList', 'List users in the current organization.',
             'user:list [--search=TEXT] [--group=GROUP] [--former] [--limit=N] [--offset=N] [--format=FORMAT]',
             'CONTACTS', true, array(), array(
                 self::opt('search', 'Search login name and configured first/last name fields.', 'TEXT'),
@@ -423,7 +464,7 @@ final class CoreTasks
                 self::opt('offset', 'Result offset.', 'N'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('user:show', 'userShow', 'Show user profile data.',
+        self::readTask('user:show', 'userShow', 'Show user profile data.',
             'user:show USER [--memberships] [--relations] [--format=text|json]', 'CONTACTS', true,
             array(self::arg('user', 'User UUID, id or unique login name.')), array(
                 self::opt('memberships', 'Include role memberships.', '', false, false, true),
@@ -461,7 +502,7 @@ final class CoreTasks
             'user:delete USER ... [--yes]', null, true,
             array(self::arg('user', 'One or more users.', true, true)),
             array(self::opt('yes', 'Confirm permanent deletion.', '', false, false, true)));
-        self::task('user:export', 'userExport', 'Export a user as the native vCard representation.',
+        self::readTask('user:export', 'userExport', 'Export a user as the native vCard representation.',
             'user:export USER [--output=FILE]', 'CONTACTS', true,
             array(self::arg('user', 'User to export.')));
         $importReason = 'current src/Users/Entity/UserImport.php and modules/contacts/import.php implement a stateful web import workflow; '
@@ -527,10 +568,10 @@ final class CoreTasks
 
     private static function registerRelationTasks(): void
     {
-        self::task('relation-type:list', 'relationTypeList', 'List user relation types.',
+        self::readTask('relation-type:list', 'relationTypeList', 'List user relation types.',
             'relation-type:list [--format=FORMAT]', 'CONTACTS', true, array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
-        self::task('relation-type:show', 'relationTypeShow', 'Show a user relation type.',
+        self::readTask('relation-type:show', 'relationTypeShow', 'Show a user relation type.',
             'relation-type:show TYPE [--format=text|json]', 'CONTACTS', true,
             array(self::arg('type', 'Relation type UUID or id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -560,7 +601,7 @@ final class CoreTasks
             'relation-type:delete TYPE [--yes]', 'CONTACTS', true,
             array(self::arg('type', 'Relation type UUID/id.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
-        self::task('relation:list', 'relationList', 'List user relations.',
+        self::readTask('relation:list', 'relationList', 'List user relations.',
             'relation:list [USER] [--type=TYPE] [--format=FORMAT]', 'CONTACTS', true,
             array(self::arg('user', 'Optional user.', false)), array(
                 self::opt('type', 'Relation type.', 'TYPE'),
@@ -620,14 +661,14 @@ final class CoreTasks
 
     private static function registerGroupTasks(): void
     {
-        self::task('group:list', 'groupList', 'List groups/roles.',
+        self::readTask('group:list', 'groupList', 'List groups/roles.',
             'group:list [--category=CATEGORY] [--active=BOOL] [--format=FORMAT]', 'GROUPS-ROLES', true,
             array(), array(
                 self::opt('category', 'Role category.', 'CATEGORY'),
                 self::opt('active', 'Filter rol_valid.', 'BOOL'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('group:show', 'groupShow', 'Show a group/role.',
+        self::readTask('group:show', 'groupShow', 'Show a group/role.',
             'group:show GROUP [--members] [--permissions] [--format=text|json]', 'GROUPS-ROLES', true,
             array(self::arg('group', 'Group UUID/id/name.')), array(
                 self::opt('members', 'Include current members.', '', false, false, true),
@@ -668,7 +709,7 @@ final class CoreTasks
             'group:activate GROUP', 'GROUPS-ROLES', true, array(self::arg('group', 'Group.')));
         self::task('group:deactivate', 'groupDeactivate', 'Deactivate a role/group.',
             'group:deactivate GROUP', 'GROUPS-ROLES', true, array(self::arg('group', 'Group.')));
-        self::task('group:export', 'groupExport', 'Export group members as vCards.',
+        self::readTask('group:export', 'groupExport', 'Export group members as vCards.',
             'group:export GROUP [--output=FILE]', 'GROUPS-ROLES', true,
             array(self::arg('group', 'Group.')));
         self::task('group:permissions', 'groupPermissions', 'Show or change native role permission columns.',
@@ -677,7 +718,7 @@ final class CoreTasks
                 self::opt('set', 'Set a rol_* permission column.', 'RIGHT=BOOL', false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
             ));
-        self::task('group:members', 'groupMembers', 'List role memberships.',
+        self::readTask('group:members', 'groupMembers', 'List role memberships.',
             'group:members GROUP [--date=DATE] [--active] [--former] [--future] [--leaders] [--format=FORMAT]',
             'GROUPS-ROLES', true, array(self::arg('group', 'Group.')), array(
                 self::opt('date', 'Reference date.', 'DATE'),
@@ -710,7 +751,7 @@ final class CoreTasks
             'group:deletemembership MEMBERSHIP [--yes]', 'GROUPS-ROLES', true,
             array(self::arg('membership', 'Membership UUID/id.')),
             array(self::opt('yes', 'Confirm permanent history deletion.', '', false, false, true)));
-        self::task('group:dependencies', 'groupDependencies', 'List parent/child role dependencies.',
+        self::readTask('group:dependencies', 'groupDependencies', 'List parent/child role dependencies.',
             'group:dependencies GROUP [--format=FORMAT]', 'GROUPS-ROLES', true,
             array(self::arg('group', 'Group.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
@@ -725,12 +766,12 @@ final class CoreTasks
 
     private static function registerListTasks(): void
     {
-        self::task('list:list', 'listList', 'List saved member-list configurations.',
+        self::readTask('list:list', 'listList', 'List saved member-list configurations.',
             'list:list [--global=BOOL] [--format=FORMAT]', 'GROUPS-ROLES', true, array(), array(
                 self::opt('global', 'Filter global/private lists.', 'BOOL'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('list:show', 'listShow', 'Show a saved member-list configuration.',
+        self::readTask('list:show', 'listShow', 'Show a saved member-list configuration.',
             'list:show LIST [--format=text|json]', 'GROUPS-ROLES', true,
             array(self::arg('list', 'List UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -757,7 +798,7 @@ final class CoreTasks
             'list:delete LIST [--yes]', 'GROUPS-ROLES', true,
             array(self::arg('list', 'List UUID/id.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
-        self::task(
+        self::readTask(
             'list:export',
             'listExport',
             'Render a saved member list to CSV/XLSX/ODS/PDF.',
@@ -803,13 +844,13 @@ final class CoreTasks
 
     private static function registerCategoryTasks(): void
     {
-        self::task('category:list', 'categoryList', 'List categories.',
+        self::readTask('category:list', 'categoryList', 'List categories.',
             'category:list [--type=ANN|AWA|EVT|FOT|IVT|LNK|ROL|USF] [--format=FORMAT]', 'CATEGORIES', true,
             array(), array(
                 self::opt('type', 'Category type.', 'TYPE', false, false, false, array('ANN', 'AWA', 'EVT', 'FOT', 'IVT', 'LNK', 'ROL', 'USF')),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('category:show', 'categoryShow', 'Show a category.',
+        self::readTask('category:show', 'categoryShow', 'Show a category.',
             'category:show CATEGORY [--format=text|json]', 'CATEGORIES', true,
             array(self::arg('category', 'Category UUID/id/name.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -872,7 +913,7 @@ final class CoreTasks
 
     private static function registerAnnouncementTasks(): void
     {
-        self::task('announcement:list', 'announcementList', 'List announcements visible to the acting user.',
+        self::readTask('announcement:list', 'announcementList', 'List announcements visible to the acting user.',
             'announcement:list [--category=CATEGORY] [--search=TEXT] [--limit=N] [--offset=N] [--format=FORMAT]',
             'ANNOUNCEMENTS', true, array(), array(
                 self::opt('category', 'Announcement category.', 'CATEGORY'),
@@ -881,7 +922,7 @@ final class CoreTasks
                 self::opt('offset', 'Result offset.', 'N'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('announcement:show', 'announcementShow', 'Show an announcement.',
+        self::readTask('announcement:show', 'announcementShow', 'Show an announcement.',
             'announcement:show ANNOUNCEMENT [--format=text|json]', 'ANNOUNCEMENTS', true,
             array(self::arg('announcement', 'Announcement UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -907,7 +948,7 @@ final class CoreTasks
             'announcement:delete ANNOUNCEMENT [--yes]', 'ANNOUNCEMENTS', true,
             array(self::arg('announcement', 'Announcement.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
-        self::task(
+        self::readTask(
             'announcement:export-rss',
             'announcementExportRss',
             'Generate the announcements RSS feed.',
@@ -921,7 +962,7 @@ final class CoreTasks
 
     private static function registerEventTasks(): void
     {
-        self::task('event:list', 'eventList', 'List events.',
+        self::readTask('event:list', 'eventList', 'List events.',
             'event:list [--calendar=CATEGORY] [--date-from=DATE] [--date-to=DATE] [--format=FORMAT]',
             'EVENTS', true, array(), array(
                 self::opt('calendar', 'Event category/calendar.', 'CATEGORY'),
@@ -929,7 +970,7 @@ final class CoreTasks
                 self::opt('date-to', 'End date.', 'DATE'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('event:show', 'eventShow', 'Show an event.',
+        self::readTask('event:show', 'eventShow', 'Show an event.',
             'event:show EVENT [--format=text|json]', 'EVENTS', true,
             array(self::arg('event', 'Event UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1003,14 +1044,14 @@ final class CoreTasks
             'event:maybe EVENT [USER] [--comment=TEXT]', null, true,
             array(self::arg('event', 'Event.'), self::arg('user', 'User; defaults to actor.', false)),
             array(self::opt('comment', 'Participation comment.', 'TEXT')));
-        self::task('event:participants', 'eventParticipants', 'List event participants.',
+        self::readTask('event:participants', 'eventParticipants', 'List event participants.',
             'event:participants EVENT [--format=FORMAT]', 'EVENTS', true,
             array(self::arg('event', 'Event.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
-        self::task('event:export', 'eventExport', 'Export an event as iCalendar.',
+        self::readTask('event:export', 'eventExport', 'Export an event as iCalendar.',
             'event:export EVENT [--output=FILE]', 'EVENTS', true,
             array(self::arg('event', 'Event.')));
-        self::task('event:export-calendar', 'eventExportCalendar', 'Export an event range/calendar as iCalendar.',
+        self::readTask('event:export-calendar', 'eventExportCalendar', 'Export an event range/calendar as iCalendar.',
             'event:export-calendar [--calendar=CATEGORY] [--date-from=DATE] [--date-to=DATE] [--output=FILE]',
             'EVENTS', true, array(), array(
                 self::opt('calendar', 'Event calendar/category.', 'CATEGORY'),
@@ -1021,10 +1062,10 @@ final class CoreTasks
 
     private static function registerRoomTasks(): void
     {
-        self::task('room:list', 'roomList', 'List rooms.',
+        self::readTask('room:list', 'roomList', 'List rooms.',
             'room:list [--format=FORMAT]', 'ROOMS', true, array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
-        self::task('room:show', 'roomShow', 'Show a room.',
+        self::readTask('room:show', 'roomShow', 'Show a room.',
             'room:show ROOM [--format=text|json]', 'ROOMS', true,
             array(self::arg('room', 'Room UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1048,12 +1089,12 @@ final class CoreTasks
 
     private static function registerForumTasks(): void
     {
-        self::task('forum:list', 'forumList', 'List forum topics.',
+        self::readTask('forum:list', 'forumList', 'List forum topics.',
             'forum:list [--category=CATEGORY] [--format=FORMAT]', 'FORUM', true, array(), array(
                 self::opt('category', 'Forum category.', 'CATEGORY'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
             ));
-        self::task('forum:topic', 'forumTopic', 'Show a forum topic and its posts.',
+        self::readTask('forum:topic', 'forumTopic', 'Show a forum topic and its posts.',
             'forum:topic TOPIC [--format=text|json]', 'FORUM', true,
             array(self::arg('topic', 'Topic UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1091,7 +1132,7 @@ final class CoreTasks
             'forum:post-delete POST [--yes]', 'FORUM', true,
             array(self::arg('post', 'Post.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
-        self::task(
+        self::readTask(
             'forum:export-rss',
             'forumExportRss',
             'Generate the forum RSS feed.',
@@ -1105,12 +1146,12 @@ final class CoreTasks
 
     private static function registerLinkTasks(): void
     {
-        self::task('link:list', 'linkList', 'List web links.',
+        self::readTask('link:list', 'linkList', 'List web links.',
             'link:list [--category=CATEGORY] [--format=FORMAT]', 'LINKS', true, array(), array(
                 self::opt('category', 'Link category.', 'CATEGORY'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('link:show', 'linkShow', 'Show a web link.',
+        self::readTask('link:show', 'linkShow', 'Show a web link.',
             'link:show LINK [--format=text|json]', 'LINKS', true,
             array(self::arg('link', 'Link UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1141,7 +1182,7 @@ final class CoreTasks
 
     private static function registerMessageTasks(): void
     {
-        self::task('message:list', 'messageList', 'List messages involving the acting user.',
+        self::readTask('message:list', 'messageList', 'List messages involving the acting user.',
             'message:list [--type=email|pm] [--limit=N] [--offset=N] [--format=FORMAT]',
             'MESSAGES', true, array(), array(
                 self::opt('type', 'Message type.', 'TYPE', false, false, false, array('email', 'pm')),
@@ -1149,7 +1190,7 @@ final class CoreTasks
                 self::opt('offset', 'Result offset.', 'N'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
             ));
-        self::task('message:show', 'messageShow', 'Show a message/conversation entry.',
+        self::readTask('message:show', 'messageShow', 'Show a message/conversation entry.',
             'message:show MESSAGE [--format=text|json]', 'MESSAGES', true,
             array(self::arg('message', 'Message UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1165,7 +1206,7 @@ final class CoreTasks
             self::opt('user', 'Recipient user.', 'USER', false, true),
             self::opt('group', 'Recipient group; active members are addressed.', 'GROUP', false, true)
         );
-        self::task(
+        self::readTask(
             'message:send',
             'messageSend',
             'Send email/private message using the native Message/Email recipient rules.',
@@ -1188,7 +1229,7 @@ final class CoreTasks
                 )
             )
         );
-        self::task(
+        self::readTask(
             'message:reply',
             'messageReply',
             'Reply to a private-message conversation.',
@@ -1198,7 +1239,7 @@ final class CoreTasks
             array(self::arg('message', 'Private-message conversation.')),
             $messageTextOptions
         );
-        self::task(
+        self::readTask(
             'message:forward',
             'messageForward',
             'Forward an email as a new email.',
@@ -1220,11 +1261,11 @@ final class CoreTasks
             'message:delete MESSAGE ... [--yes]', 'MESSAGES', true,
             array(self::arg('message', 'One or more messages.', true, true)),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
-        self::task('message:list-attachments', 'messageAttachments', 'List attachments of a message.',
+        self::readTask('message:list-attachments', 'messageAttachments', 'List attachments of a message.',
             'message:list-attachments MESSAGE [--format=FORMAT]', 'MESSAGES', true,
             array(self::arg('message', 'Message.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
-        self::task(
+        self::readTask(
             'message:get-attachment',
             'messageGetAttachment',
             'Retrieve a message attachment.',
@@ -1237,13 +1278,13 @@ final class CoreTasks
 
     private static function registerDocumentTasks(): void
     {
-        self::task('document:list', 'documentList', 'List folders/files visible below a folder.',
+        self::readTask('document:list', 'documentList', 'List folders/files visible below a folder.',
             'document:list [FOLDER] [--recursive] [--format=FORMAT]', 'DOCUMENTS-FILES', true,
             array(self::arg('folder', 'Folder UUID; empty means root.', false)), array(
                 self::opt('recursive', 'Traverse recursively.', '', false, false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task(
+        self::readTask(
             'document:download',
             'documentDownload',
             'Download a managed document.',
@@ -1288,7 +1329,7 @@ final class CoreTasks
             'document:folder-delete FOLDER [--yes]', 'DOCUMENTS-FILES', true,
             array(self::arg('folder', 'Folder UUID.')),
             array(self::opt('yes', 'Confirm recursive deletion.', '', false, false, true)));
-        self::task('document:permissions', 'documentPermissions', 'Show folder view/upload role assignments.',
+        self::readTask('document:permissions', 'documentPermissions', 'Show folder view/upload role assignments.',
             'document:permissions FOLDER [--format=text|json]', 'DOCUMENTS-FILES', true,
             array(self::arg('folder', 'Folder UUID.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1312,12 +1353,12 @@ final class CoreTasks
 
     private static function registerPhotoTasks(): void
     {
-        self::task('photo:list', 'photoList', 'List photo albums.',
+        self::readTask('photo:list', 'photoList', 'List photo albums.',
             'photo:list [--parent=ALBUM] [--format=FORMAT]', 'PHOTOS', true, array(), array(
                 self::opt('parent', 'Parent album or ALL for a root album.', 'ALBUM'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
             ));
-        self::task('photo:album-show', 'photoAlbumShow', 'Show a photo album.',
+        self::readTask('photo:album-show', 'photoAlbumShow', 'Show a photo album.',
             'photo:album-show ALBUM [--format=text|json]', 'PHOTOS', true,
             array(self::arg('album', 'Album UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1358,10 +1399,10 @@ final class CoreTasks
             'photo:album-lock ALBUM', 'PHOTOS', true, array(self::arg('album', 'Album.')));
         self::task('photo:album-unlock', 'photoAlbumUnlock', 'Unlock a photo album.',
             'photo:album-unlock ALBUM', 'PHOTOS', true, array(self::arg('album', 'Album.')));
-        self::task('photo:ecard-templates', 'photoEcardTemplates', 'List available e-card templates.',
+        self::readTask('photo:ecard-templates', 'photoEcardTemplates', 'List available e-card templates.',
             'photo:ecard-templates [--format=FORMAT]', 'PHOTOS', true, array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
-        self::task(
+        self::readTask(
             'photo:album-download',
             'photoAlbumDownload',
             'Download all photos of an album as ZIP.',
@@ -1382,7 +1423,7 @@ final class CoreTasks
                 self::arg('file', 'JPEG/PNG image file.', true, true)
             )
         );
-        self::task(
+        self::readTask(
             'photo:download',
             'photoDownload',
             'Download a single photo.',
@@ -1420,7 +1461,7 @@ final class CoreTasks
             ),
             array(self::opt('direction', 'Rotation direction.', 'DIRECTION', true, false, false, array('left', 'right')))
         );
-        self::task(
+        self::readTask(
             'photo:ecard-send',
             'photoEcardSend',
             'Send an e-card.',
@@ -1448,7 +1489,7 @@ final class CoreTasks
 
     private static function registerInventoryTasks(): void
     {
-        self::task('inventory:list', 'inventoryList', 'List inventory items.',
+        self::readTask('inventory:list', 'inventoryList', 'List inventory items.',
             'inventory:list [--search=TEXT] [--category=CATEGORY] [--status=active|retired|all] [--format=FORMAT]',
             'INVENTORY', true, array(), array(
                 self::opt('search', 'Search item data.', 'TEXT'),
@@ -1456,7 +1497,7 @@ final class CoreTasks
                 self::opt('status', 'Item status.', 'STATUS', false, false, false, array('active', 'retired', 'all')),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('inventory:show', 'inventoryShow', 'Show an inventory item and its configured field values.',
+        self::readTask('inventory:show', 'inventoryShow', 'Show an inventory item and its configured field values.',
             'inventory:show ITEM [--format=text|json]', 'INVENTORY', true,
             array(self::arg('item', 'Item UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1519,17 +1560,17 @@ final class CoreTasks
                 self::opt('map', 'Map an inventory field to a one-based column number or header: FIELD=COLUMN.',
                     'FIELD=COLUMN', false, true)
             ));
-        self::task('inventory:export', 'inventoryExport', 'Export inventory items.',
+        self::readTask('inventory:export', 'inventoryExport', 'Export inventory items.',
             'inventory:export --format=FORMAT [--output=FILE]', 'INVENTORY', true,
             array(), array(
                 self::opt('format', 'Export format.', 'FORMAT', true, false, false,
                     array('xlsx', 'ods', 'csv-ms', 'csv-oo', 'pdf', 'pdfl'))
             ));
 
-        self::task('inventory:fields', 'inventoryFields', 'List inventory field definitions.',
+        self::readTask('inventory:fields', 'inventoryFields', 'List inventory field definitions.',
             'inventory:fields [--format=FORMAT]', 'INVENTORY', true, array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
-        self::task('inventory:field-show', 'inventoryFieldShow', 'Show an inventory field definition.',
+        self::readTask('inventory:field-show', 'inventoryFieldShow', 'Show an inventory field definition.',
             'inventory:field-show FIELD [--format=text|json]', 'INVENTORY', true,
             array(self::arg('field', 'Inventory field UUID/id/internal name.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1562,7 +1603,7 @@ final class CoreTasks
         self::task('inventory:field-move', 'inventoryFieldMove', 'Move an inventory field.',
             'inventory:field-move FIELD up|down', 'INVENTORY', true,
             array(self::arg('field', 'Inventory field.'), self::arg('direction', 'up or down.')));
-        self::task('inventory:options', 'inventoryOptions', 'List select options for an inventory field.',
+        self::readTask('inventory:options', 'inventoryOptions', 'List select options for an inventory field.',
             'inventory:options FIELD [--include-obsolete] [--format=FORMAT]', 'INVENTORY', true,
             array(self::arg('field', 'Inventory field.')), array(
                 self::opt('include-obsolete', 'Include obsolete options.', '', false, false, true),
@@ -1588,12 +1629,12 @@ final class CoreTasks
 
     private static function registerProfileFieldTasks(): void
     {
-        self::task('profile:fields', 'profileFields', 'List profile field definitions.',
+        self::readTask('profile:fields', 'profileFields', 'List profile field definitions.',
             'profile:fields [--category=CATEGORY] [--format=FORMAT]', 'CONTACTS', true, array(), array(
                 self::opt('category', 'Profile-field category.', 'CATEGORY'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
             ));
-        self::task('profile:field-show', 'profileFieldShow', 'Show a profile field definition.',
+        self::readTask('profile:field-show', 'profileFieldShow', 'Show a profile field definition.',
             'profile:field-show FIELD [--format=text|json]', 'CONTACTS', true,
             array(self::arg('field', 'Profile field UUID/id/internal name.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1634,7 +1675,7 @@ final class CoreTasks
         self::task('profile:field-move', 'profileFieldMove', 'Move a profile field.',
             'profile:field-move FIELD up|down', 'CONTACTS', true,
             array(self::arg('field', 'Profile field.'), self::arg('direction', 'up or down.')));
-        self::task('profile:options', 'profileOptions', 'List select options of a profile field.',
+        self::readTask('profile:options', 'profileOptions', 'List select options of a profile field.',
             'profile:options FIELD [--include-obsolete] [--format=FORMAT]', 'CONTACTS', true,
             array(self::arg('field', 'Profile field.')), array(
                 self::opt('include-obsolete', 'Include obsolete options.', '', false, false, true),
@@ -1660,10 +1701,10 @@ final class CoreTasks
 
     private static function registerCategoryReportTasks(): void
     {
-        self::task('category-report:list', 'categoryReportList', 'List category-report configurations.',
+        self::readTask('category-report:list', 'categoryReportList', 'List category-report configurations.',
             'category-report:list [--format=FORMAT]', 'CATEGORY-REPORT', true, array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
-        self::task('category-report:show', 'categoryReportShow', 'Show a category-report configuration.',
+        self::readTask('category-report:show', 'categoryReportShow', 'Show a category-report configuration.',
             'category-report:show CONFIG [--format=text|json]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report config UUID/id.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
@@ -1693,7 +1734,7 @@ final class CoreTasks
             'category-report:delete CONFIG [--yes]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report config id/name.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
-        self::task('category-report:run', 'categoryReportRun', 'Run a category-report configuration.',
+        self::readTask('category-report:run', 'categoryReportRun', 'Run a category-report configuration.',
             'category-report:run CONFIG [--date=DATE] [--filter=TEXT] [--format=FORMAT]',
             'CATEGORY-REPORT', true, array(self::arg('config', 'Report config id/name.')), array(
                 self::opt('date', 'Reference date.', 'DATE'),
@@ -3328,19 +3369,36 @@ final class CoreTasks
            ORDER BY cat.cat_sequence, rol.rol_name',
             $params
         )->fetchAll();
+
+        // Only roles the acting user may see, as in the groups-roles web module.
+        $rows = array_values(array_filter(
+            $rows,
+            static fn (array $row): bool => $GLOBALS['gCurrentUser']->hasRightViewRole((int)$row['id'])
+        ));
+
         CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
         return 0;
     }
 
     public static function groupShow(array $arguments, array $options): int
     {
+        global $gCurrentUser;
+
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
+        $roleId = (int)$role->getValue('rol_id');
+        if (!$gCurrentUser->hasRightViewRole($roleId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $data = self::roleData($role);
 
         if (CliApplication::optionBool($options, 'permissions', false)) {
             $data['permissions'] = self::rolePermissionData($role);
         }
         if (CliApplication::optionBool($options, 'members', false)) {
+            if (!$gCurrentUser->hasRightViewProfiles($roleId)) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $data['members'] = self::membershipRows($role, DATE_NOW, 'active', false);
         }
 
@@ -3479,7 +3537,15 @@ final class CoreTasks
 
     public static function groupMembers(array $arguments, array $options): int
     {
+        global $gCurrentUser;
+
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
+        $roleId = (int)$role->getValue('rol_id');
+        if (!$gCurrentUser->hasRightViewRole($roleId)
+            || !$gCurrentUser->hasRightViewProfiles($roleId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $date = CliApplication::optionString($options, 'date', DATE_NOW);
         self::validateDate($date);
 
@@ -3581,7 +3647,13 @@ final class CoreTasks
 
     public static function groupDependencies(array $arguments, array $options): int
     {
+        global $gCurrentUser;
+
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
+        if (!$gCurrentUser->hasRightViewRole((int)$role->getValue('rol_id'))) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $rows = array();
         foreach (RoleDependency::getParentRoles($GLOBALS['gDb'], (int)$role->getValue('rol_id')) as $id) {
             $parent = new Role($GLOBALS['gDb'], (int)$id);
