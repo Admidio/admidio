@@ -2759,9 +2759,15 @@ final class CoreTasks
 
     public static function userCopy(array $arguments, array $options): int
     {
-        global $gDb, $gProfileFields;
+        global $gDb, $gProfileFields, $gCurrentOrgId, $gCurrentUser;
 
         $source = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
+
+        // Copying a profile discloses and duplicates all of its data.
+        if (!$gCurrentUser->hasRightEditProfile($source)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $copy = new User($gDb, $gProfileFields);
 
         foreach ($gProfileFields->getProfileFields() as $field) {
@@ -2793,9 +2799,26 @@ final class CoreTasks
         $gDb->startTransaction();
         try {
             $copy->save();
-            foreach ($roles as $role) {
-                $role->startMembership((int)$copy->getValue('usr_id'));
+            $copyId = (int)$copy->getValue('usr_id');
+
+            // Same default-role handling as user:add, otherwise the copy has no membership at all.
+            $defaultRoleCount = (int)$gDb->queryPrepared(
+                'SELECT COUNT(*)
+                   FROM ' . TBL_ROLES . '
+             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                  WHERE rol_default_registration = true
+                    AND cat_org_id = ?',
+                array($gCurrentOrgId)
+            )->fetchColumn();
+
+            if ($defaultRoleCount > 0) {
+                $copy->assignDefaultRoles();
             }
+
+            foreach ($roles as $role) {
+                $role->startMembership($copyId);
+            }
+
             $gDb->endTransaction();
         } catch (\Throwable $exception) {
             $gDb->rollback();
