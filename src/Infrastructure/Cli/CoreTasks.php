@@ -3547,11 +3547,7 @@ final class CoreTasks
         } else {
             $endDate = CliApplication::optionString($options, 'date');
             self::validateDate($endDate);
-            $membership = self::resolveMembershipForDate(
-                (int)$role->getValue('rol_id'),
-                (int)$user->getValue('usr_id'),
-                $endDate
-            );
+            $membership = self::resolveMembershipForDate($role, $user, $endDate);
             $membership->setValue('mem_end', $endDate);
             $membership->save();
         }
@@ -3569,12 +3565,7 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $membership = self::resolveMembershipForDate(
-            (int)$role->getValue('rol_id'),
-            (int)$user->getValue('usr_id'),
-            DATE_NOW,
-            true
-        );
+        $membership = self::resolveMembershipForDate($role, $user, DATE_NOW, true);
         $start = CliApplication::optionString($options, 'start', (string)$membership->getValue('mem_begin', 'Y-m-d'));
         $end = CliApplication::optionString($options, 'end', (string)$membership->getValue('mem_end', 'Y-m-d'));
         self::validateDateRange($start, $end);
@@ -5361,7 +5352,7 @@ final class CoreTasks
         if (!$GLOBALS['gCurrentUser']->isAdministratorDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
-        $rows = self::getUnregisteredEntries($folder, false);
+        $rows = self::getUnregisteredEntries($folder);
         CliApplication::writeRows(
             $rows,
             CliApplication::optionString($options, 'format', 'table'),
@@ -7464,7 +7455,7 @@ final class CoreTasks
         return $direction;
     }
 
-    private static function validateDate(string $date, string $label): void
+    private static function validateDate(string $date, string $label = 'date'): void
     {
         $parsed = \DateTimeImmutable::createFromFormat('!Y-m-d', $date);
         $errors = \DateTimeImmutable::getLastErrors();
@@ -7487,7 +7478,7 @@ final class CoreTasks
     /**
      * @return array{0:string,1:string}
      */
-    private static function splitAssignment(string $assignment, string $label): array
+    private static function splitAssignment(string $assignment, string $label = 'assignment'): array
     {
         $position = strpos($assignment, '=');
         if ($position === false || $position === 0) {
@@ -8002,11 +7993,21 @@ final class CoreTasks
         return new Membership($gDb, $id);
     }
 
-    private static function resolveMembershipForDate(Role $role, User $user, string $date): Membership
-    {
+    /**
+     * @param bool $allowLatest Fall back to the most recent membership if none covers $date.
+     */
+    private static function resolveMembershipForDate(
+        Role $role,
+        User $user,
+        string $date,
+        bool $allowLatest = false
+    ): Membership {
         global $gDb;
 
         self::validateDate($date, 'membership date');
+        $roleId = (int)$role->getValue('rol_id');
+        $userId = (int)$user->getValue('usr_id');
+
         $ids = $gDb->queryPrepared(
             'SELECT mem_id
                FROM ' . TBL_MEMBERS . '
@@ -8014,8 +8015,23 @@ final class CoreTasks
                 AND mem_usr_id = ?
                 AND ? BETWEEN mem_begin AND mem_end
            ORDER BY mem_begin DESC, mem_id DESC',
-            array((int)$role->getValue('rol_id'), (int)$user->getValue('usr_id'), $date)
+            array($roleId, $userId, $date)
         )->fetchAll(PDO::FETCH_COLUMN);
+
+        if (count($ids) === 0 && $allowLatest) {
+            $ids = array_slice(
+                $gDb->queryPrepared(
+                    'SELECT mem_id
+                       FROM ' . TBL_MEMBERS . '
+                      WHERE mem_rol_id = ?
+                        AND mem_usr_id = ?
+                   ORDER BY mem_begin DESC, mem_id DESC',
+                    array($roleId, $userId)
+                )->fetchAll(PDO::FETCH_COLUMN),
+                0,
+                1
+            );
+        }
 
         if (count($ids) !== 1) {
             throw new InvalidArgumentException(
@@ -9642,7 +9658,7 @@ final class CoreTasks
         $values = array();
 
         foreach ($assignments as $assignment) {
-            [$fieldReference, $value] = self::splitAssignment($assignment);
+            [$fieldReference, $value] = self::splitAssignment($assignment, '--field');
             $field = self::resolveInventoryField($fieldReference);
             $fieldName = (string)$field->getValue('inf_name_intern');
 
