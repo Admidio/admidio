@@ -66,6 +66,22 @@ final class CliTaskRegistry
     private static array $coreNamespaces = array();
 
     /**
+     * Directory name of the module whose cli.php is currently being loaded, or null outside of that.
+     *
+     * @var string|null
+     */
+    private static ?string $moduleContext = null;
+
+    /**
+     * Announce which module's cli.php is being loaded, so its registrations can be restricted to
+     * its own command namespace.
+     */
+    public static function setModuleContext(?string $module): void
+    {
+        self::$moduleContext = $module;
+    }
+
+    /**
      * Register an Admidio core command.
      *
      * @param array<int,array<string,mixed>> $arguments
@@ -106,10 +122,34 @@ final class CliTaskRegistry
     /**
      * Register a module-specific command.
      *
-     * A module may provide modules/<module>/cli.php and register a command such as
-     * "inventory:checkout". Before the callback is executed the component is checked through
-     * Component::isAdministrable(), or through Component::isVisible() when the command declares
-     * ACCESS_VISIBLE.
+     * A module provides modules/<module>/cli.php, which is loaded on every CLI invocation. It may
+     * only register commands of its own namespace, which is the name of its directory, and not one
+     * that Admidio core already uses. An acting user is always required, and before the callback
+     * runs the component is checked through Component::isAdministrable(), or through
+     * Component::isVisible() when the command declares ACCESS_VISIBLE.
+     *
+     * A failure while loading the file is reported but does not stop the other commands.
+     *
+     * **Example** modules/example/cli.php
+     * ```
+     * use Admidio\Infrastructure\Cli\CliApplication;
+     * use Admidio\Infrastructure\Cli\CliTaskRegistry;
+     *
+     * CliTaskRegistry::register(
+     *     'example:greet',
+     *     'CORE',
+     *     function (array $arguments, array $options): int {
+     *         CliApplication::writeSuccess(
+     *             'Hello ' . CliApplication::requireArgument($arguments, 0, 'name') . '.',
+     *             $options
+     *         );
+     *         return CliApplication::EXIT_SUCCESS;
+     *     },
+     *     'Greet somebody.',
+     *     'example:greet NAME',
+     *     array(array('name' => 'name', 'description' => 'Who to greet.', 'required' => true))
+     * );
+     * ```
      *
      * @param array<int,array<string,mixed>> $arguments
      * @param array<int,array<string,mixed>> $options
@@ -259,6 +299,14 @@ final class CliTaskRegistry
             if (!$core && isset(self::$coreNamespaces[$namespace])) {
                 throw new InvalidArgumentException(
                     'CLI namespace "' . $namespace . '" is reserved by Admidio core.'
+                );
+            }
+
+            // A module owns exactly the namespace named after its directory.
+            if (!$core && self::$moduleContext !== null && $namespace !== self::$moduleContext) {
+                throw new InvalidArgumentException(
+                    'Module "' . self::$moduleContext . '" may only register commands of the "'
+                    . self::$moduleContext . ':" namespace, but tried to register "' . $taskName . '".'
                 );
             }
 

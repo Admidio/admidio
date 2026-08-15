@@ -504,7 +504,26 @@ final class CliApplication
         sort($registrationFiles);
 
         foreach ($registrationFiles as $registrationFile) {
-            require_once $registrationFile;
+            $module = basename(dirname($registrationFile));
+
+            /*
+             * A module may only register commands of its own namespace, and a broken module must
+             * not take the whole command line down with it: without this, a single faulty cli.php
+             * would make even "admidio help" unusable. The problem is reported and the remaining
+             * commands stay available.
+             */
+            CliTaskRegistry::setModuleContext($module);
+            try {
+                require_once $registrationFile;
+            } catch (Throwable $exception) {
+                fwrite(
+                    STDERR,
+                    'Warning: the CLI commands of module "' . $module . '" were not registered: '
+                    . $exception->getMessage() . PHP_EOL
+                );
+            } finally {
+                CliTaskRegistry::setModuleContext(null);
+            }
         }
     }
 
