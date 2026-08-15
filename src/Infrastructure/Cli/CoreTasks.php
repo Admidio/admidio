@@ -3372,6 +3372,13 @@ final class CoreTasks
 
     public static function registrationConfirm(array $arguments, array $options): int
     {
+        /*
+         * This command is the counterpart of the confirmation link a registrant receives by email,
+         * where nobody is logged in either, so it deliberately runs without --as. It still has to
+         * establish the globals that a web request always provides.
+         */
+        CliApplication::ensureAnonymousActor();
+
         $registration = self::resolveRegistration(CliApplication::requireArgument($arguments, 0, 'user'));
         $validationId = CliApplication::requireArgument($arguments, 1, 'validation-id');
 

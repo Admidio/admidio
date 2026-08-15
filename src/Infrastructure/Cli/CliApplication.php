@@ -834,6 +834,32 @@ final class CliApplication
      * because it has to recognise memberships in other organizations before deleting an account;
      * it opts in through $anyOrganization.
      */
+    /**
+     * Provide the globals that Admidio code expects even when a command runs without --as.
+     *
+     * A web request always has a $gCurrentUser object, an anonymous one for a visitor who is not
+     * logged in. Commands that deliberately run without an acting user - the counterparts of the
+     * public self-service pages - have to establish the same invariant, otherwise any code they
+     * reach that dereferences $gCurrentUser fails on an undefined variable.
+     */
+    public static function ensureAnonymousActor(): void
+    {
+        global $gDb, $gCurrentOrgId, $gCurrentUser, $gProfileFields, $gChangeNotification;
+
+        if (!isset($gProfileFields) || !$gProfileFields instanceof ProfileFields) {
+            $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
+        }
+
+        if (!isset($gChangeNotification) || !$gChangeNotification instanceof ChangeNotification) {
+            $gChangeNotification = new ChangeNotification();
+        }
+
+        if (!isset($gCurrentUser) || !$gCurrentUser instanceof User) {
+            // An empty user object, exactly as a visitor without a login has.
+            $gCurrentUser = new User($gDb, $gProfileFields);
+        }
+    }
+
     public static function resolveUser(string $reference, bool $anyOrganization = false): User
     {
         global $gDb, $gCurrentOrgId, $gProfileFields;
