@@ -125,40 +125,6 @@ final class CliApplication
     }
 
     /**
-     * Extract the small set of options needed before the Admidio bootstrap is loaded.
-     *
-     * @param array<int,string> $argv
-     * @return array{host:string,organization:string}
-     */
-    public static function getBootstrapOptions(array $argv): array
-    {
-        return array(
-            'host' => self::readRawOption($argv, 'host'),
-            'organization' => self::readRawOption($argv, 'organization')
-        );
-    }
-
-    /**
-     * @param array<int,string> $argv
-     */
-    private static function readRawOption(array $argv, string $name): string
-    {
-        $prefix = '--' . $name . '=';
-
-        for ($index = 1, $count = count($argv); $index < $count; ++$index) {
-            if (str_starts_with($argv[$index], $prefix)) {
-                return substr($argv[$index], strlen($prefix));
-            }
-
-            if ($argv[$index] === '--' . $name && isset($argv[$index + 1])) {
-                return $argv[$index + 1];
-            }
-        }
-
-        return '';
-    }
-
-    /**
      * @param array<int,string> $argv
      */
     private function findCommand(array $argv): string
@@ -1097,16 +1063,6 @@ final class CliApplication
         }
 
         return $arguments[$index];
-    }
-
-    public static function validateDate(string $date, string $label = 'date'): string
-    {
-        $object = \DateTime::createFromFormat('!Y-m-d', $date);
-        if ($object === false || $object->format('Y-m-d') !== $date) {
-            throw new InvalidArgumentException($label . ' must use YYYY-MM-DD.');
-        }
-
-        return $date;
     }
 
     public static function validateDateTime(string $dateTime, string $label = 'date/time'): string

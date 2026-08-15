@@ -7564,10 +7564,19 @@ final class CoreTasks
         return 0;
     }
 
+    /**
+     * Callback of the commands that cannot be executed in the current Admidio version.
+     *
+     * CliApplication::run() already refuses a task that carries an unavailableReason and reports
+     * that reason, so this method is normally never reached. It is kept deliberately as the
+     * fallback for the case that a command is registered with this callback but without a reason:
+     * the command then still fails with a meaningful message instead of silently doing nothing.
+     */
     public static function unavailable(array $arguments, array $options): int
     {
         throw new RuntimeException(
-            'This command is registered as unavailable in the current Admidio master.'
+            'Command "' . CliApplication::currentCommand()
+            . '" is not available in this Admidio version.'
         );
     }
 
@@ -9682,10 +9691,6 @@ final class CoreTasks
 
 
     /**
-     * @param array<int,string> $assignments
-     * @return array<string,mixed>
-     */
-    /**
      * Resolve a human-friendly import column reference to the zero-based PhpSpreadsheet column index.
      *
      * Numeric references are one-based for CLI users; string references match a first-row heading.
@@ -9754,10 +9759,6 @@ final class CoreTasks
         return $values;
     }
 
-    /**
-     * @param array<string,mixed> $options
-     * @return array<string,mixed>
-     */
     /**
      * Validate the required inventory fields that would normally be enforced by FormPresenter.
      *
@@ -9866,9 +9867,6 @@ final class CoreTasks
         return $values;
     }
 
-    /**
-     * @param array<int,array<string,mixed>> $config
-     */
     /**
      * CategoryReport::getConfigArray() HTML-encodes configuration names for the web UI.
      * Decode them before passing the array back to saveConfigArray(), just as a browser form

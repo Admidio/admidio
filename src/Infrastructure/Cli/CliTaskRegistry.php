@@ -203,25 +203,6 @@ final class CliTaskRegistry
     }
 
     /**
-     * @return array<int,string>
-     */
-    public static function getOptionFlags(string $taskName): array
-    {
-        $flags = array('help', 'quiet', 'no-interaction', 'yes');
-
-        $task = self::get($taskName);
-        if ($task !== null) {
-            foreach ($task['options'] as $option) {
-                if (($option['flag'] ?? false) === true && isset($option['name'])) {
-                    $flags[] = (string)$option['name'];
-                }
-            }
-        }
-
-        return array_values(array_unique($flags));
-    }
-
-    /**
      * @param array<int,array<string,mixed>> $arguments
      * @param array<int,array<string,mixed>> $options
      * @param array<int,string> $examples

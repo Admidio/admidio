@@ -18,6 +18,10 @@ if (PHP_SAPI !== 'cli') {
 /**
  * Read one option needed before the Admidio autoloader/bootstrap is available.
  *
+ * --host and --organization have to be known before adm_my_files/config.php is loaded, which is
+ * long before the class autoloader exists. This small parser therefore cannot live in
+ * CliApplication; the duplication with its option handling is intentional.
+ *
  * @param array<int,string> $arguments
  */
 function admCliBootstrapOption(array $arguments, string $name): string
