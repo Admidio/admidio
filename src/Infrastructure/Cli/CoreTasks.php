@@ -4479,6 +4479,12 @@ final class CoreTasks
             $params[] = $search;
             $params[] = $search;
         }
+        $format = CliApplication::optionString($options, 'format', 'table');
+        if (!self::restrictToVisibleCategories('ANN', 'ann.ann_cat_id', $where, $params)) {
+            CliApplication::writeRows(array(), $format, $options);
+            return 0;
+        }
+
         $limit = max(0, CliApplication::optionInt($options, 'limit', 0));
         $offset = max(0, CliApplication::optionInt($options, 'offset', 0));
         $sql = 'SELECT ann.ann_id AS id, ann.ann_uuid AS uuid, ann.ann_headline AS headline,
@@ -4487,21 +4493,15 @@ final class CoreTasks
             INNER JOIN ' . TBL_CATEGORIES . ' cat ON cat.cat_id = ann.ann_cat_id
                  WHERE ' . implode(' AND ', $where) . '
               ORDER BY ann.ann_timestamp_create DESC';
-        $all = $gDb->queryPrepared($sql, $params)->fetchAll();
-        $rows = array();
-        foreach ($all as $row) {
-            $announcement = new Announcement($gDb, (int)$row['id']);
-            if ($announcement->isVisible()) {
-                $rows[] = $row;
-            }
+
+        // Visibility is part of the query now, so the database can do the paging.
+        if ($limit > 0) {
+            $sql .= ' LIMIT ' . $limit . ' OFFSET ' . $offset;
+        } elseif ($offset > 0) {
+            $sql .= ' LIMIT ' . PHP_INT_MAX . ' OFFSET ' . $offset;
         }
 
-        // Paging has to be applied to the visible records, not to the raw result set.
-        if ($limit > 0 || $offset > 0) {
-            $rows = array_slice($rows, $offset, $limit > 0 ? $limit : null);
-        }
-
-        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        CliApplication::writeRows($gDb->queryPrepared($sql, $params)->fetchAll(), $format, $options);
         return 0;
     }
 
@@ -4636,7 +4636,13 @@ final class CoreTasks
             }
         }
 
-        $all = $gDb->queryPrepared(
+        $format = CliApplication::optionString($options, 'format', 'table');
+        if (!self::restrictToVisibleCategories('EVT', 'dat.dat_cat_id', $where, $params)) {
+            CliApplication::writeRows(array(), $format, $options);
+            return 0;
+        }
+
+        $rows = $gDb->queryPrepared(
             'SELECT dat.dat_id AS id, dat.dat_uuid AS uuid, dat.dat_headline AS headline,
                     dat.dat_begin AS begin, dat.dat_end AS end, dat.dat_all_day AS all_day,
                     cat.cat_name AS calendar, dat.dat_location AS location
@@ -4647,14 +4653,7 @@ final class CoreTasks
             $params
         )->fetchAll();
 
-        $rows = array();
-        foreach ($all as $row) {
-            $event = new Event($gDb, (int)$row['id']);
-            if ($event->isVisible()) {
-                $rows[] = $row;
-            }
-        }
-        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        CliApplication::writeRows($rows, $format, $options);
         return 0;
     }
 
@@ -4954,7 +4953,13 @@ final class CoreTasks
             $where[] = 'fot.fot_cat_id = ?';
             $params[] = (int)$category->getValue('cat_id');
         }
-        $all = $gDb->queryPrepared(
+        $format = CliApplication::optionString($options, 'format', 'table');
+        if (!self::restrictToVisibleCategories('FOT', 'fot.fot_cat_id', $where, $params)) {
+            CliApplication::writeRows(array(), $format, $options);
+            return 0;
+        }
+
+        $rows = $gDb->queryPrepared(
             'SELECT fot.fot_id AS id, fot.fot_uuid AS uuid, fot.fot_title AS title,
                     cat.cat_name AS category, fot.fot_views AS views, fot.fot_timestamp_create AS created_at
                FROM ' . TBL_FORUM_TOPICS . ' fot
@@ -4963,14 +4968,7 @@ final class CoreTasks
            ORDER BY fot.fot_timestamp_create DESC',
             $params
         )->fetchAll();
-        $rows = array();
-        foreach ($all as $row) {
-            $topic = new Topic($gDb, (int)$row['id']);
-            if ($topic->isVisible()) {
-                $rows[] = $row;
-            }
-        }
-        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        CliApplication::writeRows($rows, $format, $options);
         return 0;
     }
 
@@ -5131,7 +5129,13 @@ final class CoreTasks
             $where[] = 'lnk.lnk_cat_id = ?';
             $params[] = (int)$category->getValue('cat_id');
         }
-        $all = $gDb->queryPrepared(
+        $format = CliApplication::optionString($options, 'format', 'table');
+        if (!self::restrictToVisibleCategories('LNK', 'lnk.lnk_cat_id', $where, $params)) {
+            CliApplication::writeRows(array(), $format, $options);
+            return 0;
+        }
+
+        $rows = $gDb->queryPrepared(
             'SELECT lnk.lnk_id AS id, lnk.lnk_uuid AS uuid, lnk.lnk_name AS name,
                     lnk.lnk_url AS url, lnk.lnk_sequence AS sequence, cat.cat_name AS category
                FROM ' . TBL_LINKS . ' lnk
@@ -5140,14 +5144,7 @@ final class CoreTasks
            ORDER BY cat.cat_sequence, lnk.lnk_sequence',
             $params
         )->fetchAll();
-        $rows = array();
-        foreach ($all as $row) {
-            $link = new Weblink($gDb, (int)$row['id']);
-            if ($link->isVisible()) {
-                $rows[] = $row;
-            }
-        }
-        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        CliApplication::writeRows($rows, $format, $options);
         return 0;
     }
 
@@ -5752,7 +5749,7 @@ final class CoreTasks
 
     public static function photoList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId;
+        global $gDb, $gCurrentOrgId, $gCurrentUser;
 
         $params = array($gCurrentOrgId);
         $parentSql = '';
@@ -5762,30 +5759,23 @@ final class CoreTasks
             $params[] = (int)$parent->getValue('pho_id');
         }
 
-        $rows = array();
-        $statement = $gDb->queryPrepared(
-            'SELECT pho_id, pho_uuid, pho_name, pho_begin, pho_end, pho_quantity,
-                    pho_locked, pho_pho_id_parent
+        /*
+         * Album::isVisible() requires the album to belong to the current organization and, unless
+         * the user administers photos, not to be locked. Both are expressed in the query instead of
+         * loading every album only to ask it.
+         */
+        $lockedSql = $gCurrentUser->isAdministratorPhotos() ? '' : ' AND pho_locked = false';
+
+        $rows = $gDb->queryPrepared(
+            'SELECT pho_id AS id, pho_uuid AS uuid, pho_name AS name, pho_begin AS begin,
+                    pho_end AS end, pho_quantity AS quantity, pho_locked AS locked,
+                    pho_pho_id_parent AS parent_id
                FROM ' . TBL_PHOTOS . '
-              WHERE pho_org_id = ?' . $parentSql . '
+              WHERE pho_org_id = ?' . $parentSql . $lockedSql . '
            ORDER BY pho_begin DESC, pho_name',
             $params
-        );
-        while ($row = $statement->fetch()) {
-            $album = new Album($gDb, (int)$row['pho_id']);
-            if ($album->isVisible()) {
-                $rows[] = array(
-                    'id' => $row['pho_id'],
-                    'uuid' => $row['pho_uuid'],
-                    'name' => $row['pho_name'],
-                    'begin' => $row['pho_begin'],
-                    'end' => $row['pho_end'],
-                    'quantity' => $row['pho_quantity'],
-                    'locked' => $row['pho_locked'],
-                    'parent_id' => $row['pho_pho_id_parent']
-                );
-            }
-        }
+        )->fetchAll();
+
         CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
         return 0;
     }
@@ -8873,6 +8863,37 @@ final class CoreTasks
         (new RolesRights($gDb, 'menu_view', (int)$menu->getValue('men_id')))
             ->saveRoles(self::resolveRoleIds(CliApplication::optionValues($options, 'view-role')));
         self::reloadAllSessions();
+    }
+
+    /**
+     * Restrict a listing to the categories the acting user may view.
+     *
+     * The list commands used to build one Entity per result row only to call isVisible(), which for
+     * announcements, events, forum topics and weblinks is nothing but a membership test against
+     * User::getAllVisibleCategories(). Reading that list once and filtering in SQL removes a query
+     * per row, and it makes LIMIT/OFFSET exact because the filter is applied by the database.
+     *
+     * @param array<int,string> $where
+     * @param array<int,mixed> $params
+     * @return bool False if the user may not see any category of that type, so the result is empty.
+     */
+    private static function restrictToVisibleCategories(
+        string $categoryType,
+        string $categoryColumn,
+        array &$where,
+        array &$params
+    ): bool {
+        global $gCurrentUser;
+
+        $visibleCategories = array_map('intval', $gCurrentUser->getAllVisibleCategories($categoryType));
+        if ($visibleCategories === array()) {
+            return false;
+        }
+
+        $where[] = $categoryColumn . ' IN (' . implode(', ', array_fill(0, count($visibleCategories), '?')) . ')';
+        array_push($params, ...$visibleCategories);
+
+        return true;
     }
 
     private static function resolveAnnouncement(string $reference): Announcement
