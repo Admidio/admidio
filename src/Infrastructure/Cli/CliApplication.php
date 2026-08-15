@@ -1095,14 +1095,49 @@ final class CliApplication
     public static function readSecret(array $options, string $optionName, string $stdinFlag): string
     {
         if (self::optionBool($options, $stdinFlag, false)) {
-            $value = fgets(STDIN);
-            if ($value === false) {
-                throw new RuntimeException('Could not read value from STDIN.');
-            }
-            return rtrim($value, "\r\n");
+            return self::readSecretLine();
         }
 
         return self::optionString($options, $optionName);
+    }
+
+    /**
+     * Read one line from STDIN without echoing it back when STDIN is a terminal, so an
+     * interactively typed secret does not stay visible on screen or in a captured session.
+     *
+     * Terminal echo can only be switched off through stty, which is not available on Windows.
+     * There the value is read as before.
+     */
+    private static function readSecretLine(): string
+    {
+        $restore = null;
+
+        if (PHP_OS_FAMILY !== 'Windows'
+            && function_exists('stream_isatty')
+            && @stream_isatty(STDIN)
+            && function_exists('shell_exec')) {
+            $settings = @shell_exec('stty -g 2>/dev/null');
+            if (is_string($settings) && trim($settings) !== '') {
+                $restore = trim($settings);
+                @shell_exec('stty -echo 2>/dev/null');
+            }
+        }
+
+        try {
+            $value = fgets(STDIN);
+        } finally {
+            if ($restore !== null) {
+                @shell_exec('stty ' . escapeshellarg($restore) . ' 2>/dev/null');
+                // The user's newline was swallowed together with the echo.
+                fwrite(STDERR, PHP_EOL);
+            }
+        }
+
+        if ($value === false) {
+            throw new RuntimeException('Could not read value from STDIN.');
+        }
+
+        return rtrim($value, "\r\n");
     }
 
     /**

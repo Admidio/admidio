@@ -475,7 +475,7 @@ final class CoreTasks
         self::task('user:set-password', 'userSetPassword', 'Set a user password.',
             'user:set-password USER [--password=PASSWORD|--password-stdin]', 'CONTACTS', true,
             array(self::arg('user', 'User.')), array(
-                self::opt('password', 'New password.', 'PASSWORD'),
+                self::opt('password', 'New password. Prefer --password-stdin.', 'PASSWORD'),
                 self::opt('password-stdin', 'Read password from STDIN.', '', false, false, true)
             ));
         self::task('user:send-password', 'userSendPassword', 'Send the native password-reset/new-password email.',
@@ -491,12 +491,13 @@ final class CoreTasks
             'user:tfa-setup',
             'userTfaSetup',
             'Set up two-factor authentication for the acting user.',
-            'user:tfa-setup USER [--secret=SECRET] [--code=CODE]',
+            'user:tfa-setup USER [--secret=SECRET|--secret-stdin] [--code=CODE]',
             null,
             true,
             array(self::arg('user', 'User.')),
             array(
-                self::opt('secret', 'TOTP secret. If omitted, generate and print a new secret.', 'SECRET'),
+                self::opt('secret', 'TOTP secret. Prefer --secret-stdin. If omitted, generate and print a new secret.', 'SECRET'),
+                self::opt('secret-stdin', 'Read the TOTP secret from STDIN.', '', false, false, true),
                 self::opt('code', 'One-time security code. If omitted, prompt interactively.', 'CODE')
             )
         );
@@ -2854,7 +2855,7 @@ final class CoreTasks
         }
 
         $tfa = new TwoFactorAuth(issuer: (string)$gCurrentOrganization->getValue('org_longname'));
-        $secret = CliApplication::optionString($options, 'secret');
+        $secret = CliApplication::readSecret($options, 'secret', 'secret-stdin');
         if ($secret === '') {
             $secret = $tfa->createSecret();
             CliApplication::writeOutput('Secret: ' . $secret . PHP_EOL, $options, false);
