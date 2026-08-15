@@ -5106,7 +5106,7 @@ final class CoreTasks
 
     public static function messageGetAttachment(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUserId;
+        global $gDb;
 
         $attachmentUuid = CliApplication::requireArgument($arguments, 0, 'attachment');
         $attachment = new Entity($gDb, TBL_MESSAGES_ATTACHMENTS, 'msa');
@@ -5116,9 +5116,7 @@ final class CoreTasks
         }
 
         $message = new Message($gDb, (int)$attachment->getValue('msa_msg_id'));
-        if ($gCurrentUserId !== (int)$message->getValue('msg_usr_id_sender')) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+        self::assertMessageAccess($message);
 
         $source = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/'
             . $attachment->getValue('msa_file_name');
