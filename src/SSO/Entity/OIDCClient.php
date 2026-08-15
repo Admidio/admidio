@@ -3,6 +3,7 @@ namespace Admidio\SSO\Entity;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use Admidio\Infrastructure\Database;
+use Admidio\Changelog\Entity\LogChanges;
 
 class OIDCClient extends SSOClient implements ClientEntityInterface
 {
@@ -177,4 +178,13 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
     {
         return $this->getFieldMappingCatchall();
     }
+
+    protected function adjustLogEntry(LogChanges $logEntry)
+    {
+        if ($logEntry->getValue('log_field') == $this->columnPrefix . '_client_secret') {
+            $logEntry->setValue('log_value_old', '********');
+            $logEntry->setValue('log_value_new', '********');
+        }
+    }
+
 }

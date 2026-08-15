@@ -27,8 +27,8 @@ class OIDCConsentPresenter extends PagePresenter
 
         parent::__construct();
 
-        $headline = $gL10n->get('SYS_SSO_OIDC_AUTHORIZE_CLIENT', array($clientName));
-
+        $headline = $gL10n->get('SYS_SSO_OIDC_AUTHORIZE_CLIENT', array(htmlspecialchars($clientName, ENT_QUOTES)));
+    
         $this->setHtmlID('admidio-oidc-consent');
         $this->setTitle($headline);
         $this->setContentFullWidth();
