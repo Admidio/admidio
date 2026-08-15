@@ -29,6 +29,18 @@ final class CliApplication
     private static string $currentCommand = '';
 
     /**
+     * Whether every session has to be marked for reload before the process ends.
+     */
+    private static bool $reloadAllSessions = false;
+
+    /**
+     * Ids of the users whose sessions have to be marked for reload, used as a set.
+     *
+     * @var array<int,bool>
+     */
+    private static array $reloadUserSessions = array();
+
+    /**
      * Single-letter aliases for the global flags that are typed most often.
      *
      * Only flags are abbreviated: a short option that takes a value would have to define whether
@@ -166,7 +178,13 @@ final class CliApplication
          */
         LogChanges::setOriginComment('CLI: ' . $command);
 
-        $result = ($task['callback'])($input['arguments'], $input['options']);
+        try {
+            $result = ($task['callback'])($input['arguments'], $input['options']);
+        } finally {
+            // Also on failure: parts of the work may have been committed, and marking a session for
+            // reload is idempotent.
+            self::flushSessionReload();
+        }
 
         return is_int($result) ? $result : 0;
     }
@@ -174,6 +192,50 @@ final class CliApplication
     public static function currentCommand(): string
     {
         return self::$currentCommand;
+    }
+
+    /**
+     * Remember that sessions have to re-read their data, without writing immediately.
+     *
+     * Marking sessions is a full-table UPDATE on adm_sessions. A command that changes several
+     * objects - or a provisioning script looping over config:set - triggered one such update per
+     * change, although a single one at the end of the process has exactly the same effect.
+     *
+     * @param int|null $userId Restrict to one user, or null for every session.
+     */
+    public static function queueSessionReload(?int $userId = null): void
+    {
+        if ($userId === null) {
+            self::$reloadAllSessions = true;
+            return;
+        }
+
+        if ($userId > 0) {
+            self::$reloadUserSessions[$userId] = true;
+        }
+    }
+
+    /**
+     * Perform the session reload that was requested during this process, at most one statement.
+     */
+    public static function flushSessionReload(): void
+    {
+        global $gDb;
+
+        if (self::$reloadAllSessions) {
+            $gDb->queryPrepared('UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true');
+        } elseif (self::$reloadUserSessions !== array()) {
+            $userIds = array_keys(self::$reloadUserSessions);
+            $gDb->queryPrepared(
+                'UPDATE ' . TBL_SESSIONS . '
+                    SET ses_reload = true
+                  WHERE ses_usr_id IN (' . implode(', ', array_fill(0, count($userIds), '?')) . ')',
+                $userIds
+            );
+        }
+
+        self::$reloadAllSessions = false;
+        self::$reloadUserSessions = array();
     }
 
     /**

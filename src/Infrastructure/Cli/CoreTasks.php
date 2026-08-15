@@ -7881,19 +7881,19 @@ final class CoreTasks
         return array(substr($assignment, 0, $position), substr($assignment, $position + 1));
     }
 
+    /**
+     * Both helpers only record the request; CliApplication performs at most one statement at the
+     * end of the process. A command that changes several objects used to issue one UPDATE over
+     * adm_sessions per change.
+     */
     private static function reloadUserSessions(int $userId): void
     {
-        global $gDb;
-        $gDb->queryPrepared(
-            'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true WHERE ses_usr_id = ?',
-            array($userId)
-        );
+        CliApplication::queueSessionReload($userId);
     }
 
     private static function reloadAllSessions(): void
     {
-        global $gDb;
-        $gDb->queryPrepared('UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true');
+        CliApplication::queueSessionReload();
     }
 
     private static function assertUniqueLogin(string $login, int $excludeUserId = 0): void

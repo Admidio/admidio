@@ -99,12 +99,24 @@ $gValidLogin = false;
 
 $gDb = Database::createDatabaseInstance();
 
-if (empty($gDb->getTableColumns(TBL_SESSIONS))) {
-    throw new RuntimeException('The Admidio database is not installed.');
+/*
+ * The CORE component doubles as the installation probe. Reading it is needed anyway, whereas the
+ * previous getTableColumns() check asked the information schema on every single invocation only to
+ * find out whether Admidio is installed at all.
+ */
+$gSystemComponent = new Component($gDb);
+
+try {
+    $gSystemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+} catch (Throwable $exception) {
+    throw new RuntimeException(
+        'The Admidio database is not installed or cannot be read: ' . $exception->getMessage()
+    );
 }
 
-$gSystemComponent = new Component($gDb);
-$gSystemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+if ((int)$gSystemComponent->getValue('com_id') === 0) {
+    throw new RuntimeException('The Admidio database is not installed.');
+}
 
 if (!isset($g_organization)) {
     $g_organization = '';
