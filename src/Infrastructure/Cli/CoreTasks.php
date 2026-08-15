@@ -492,7 +492,7 @@ final class CoreTasks
             self::opt('homepage', 'Organization homepage.', 'URL'),
             self::opt('parent', 'Parent organization.', 'ORG'),
             self::opt('show-organization-select', 'Show organization selection at login.', 'BOOL'),
-            self::opt('share-members', 'Reuse parent members in suborganizations.', 'BOOL')
+            self::opt('share-members', 'Set contacts_suborganization_use_same_members on the PARENT organization, so its suborganizations share its members.', 'BOOL')
         );
         self::task('organization:add', 'organizationAdd', 'Create a suborganization with native basic data and preferences.',
             'organization:add --short-name=NAME --name=NAME --email=EMAIL [options]', 'ORGANIZATIONS', true, array(),
@@ -2485,6 +2485,11 @@ final class CoreTasks
             $organization->createBasicData($gCurrentUserId);
             Entity::setLoggingEnabled(true);
 
+            /*
+             * The preference belongs to the parent: it decides whether its suborganizations
+             * reuse its members. It is therefore written on the parent, not on the new
+             * organization.
+             */
             if (CliApplication::optionExists($options, 'share-members')) {
                 $parent = new Organization($gDb, $parentId);
                 $parentSettingsManager =& $parent->getSettingsManager();
@@ -6266,7 +6271,7 @@ final class CoreTasks
         $separator = match (CliApplication::optionString($options, 'separator', 'auto')) {
             'comma' => ',',
             'semicolon' => ';',
-            'tab' => '\t',
+            'tab' => "\t",
             'pipe' => '|',
             default => ''
         };
@@ -6893,7 +6898,9 @@ final class CoreTasks
             $options
         );
 
-        $config[$index]['id'] = -1 * (int)$config[$index]['id'];
+        // A negative id marks the entry as deleted for saveConfigArray(). Negating an already
+        // negative id would revive it, so make the sign unconditional.
+        $config[$index]['id'] = -1 * abs((int)$config[$index]['id']);
         $report->saveConfigArray($config);
 
         CliApplication::writeSuccess('Category-report configuration deleted.', $options);
