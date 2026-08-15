@@ -51,7 +51,6 @@ use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\ProfileFields\Entity\SelectOptions as ProfileSelectOptions;
 use Admidio\ProfileFields\Service\ProfileFieldService;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
-use Admidio\Requirements\Entity\Provider;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
@@ -124,7 +123,6 @@ final class CoreTasks
         self::registerCategoryReportTasks();
         self::registerChangelogTasks();
         self::registerPluginTasks();
-        self::registerRequirementsTasks();
         self::registerSsoTasks();
         self::registerSessionTasks();
         self::registerModuleTasks();
@@ -1758,38 +1756,6 @@ final class CoreTasks
             array(self::arg('plugin', 'Plugin name.'), self::arg('direction', 'up or down.'))
         );
 
-    }
-
-    private static function registerRequirementsTasks(): void
-    {
-        self::task('requirements:list', 'requirementsList', 'List requirements providers visible to the actor.',
-            'requirements:list [--query=TEXT] [--format=FORMAT]', null, true, array(), array(
-                self::opt('query', 'Search provider name/address/url/description.', 'TEXT'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
-            ));
-        self::task('requirements:show', 'requirementsShow', 'Show a requirements provider if visible.',
-            'requirements:show PROVIDER [--format=text|json]', null, true,
-            array(self::arg('provider', 'Provider UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
-        $providerOptions = array(
-            self::opt('name', 'Provider name.', 'NAME'),
-            self::opt('address', 'Postal address.', 'TEXT'),
-            self::opt('url', 'Website.', 'URL'),
-            self::opt('description', 'Description.', 'TEXT'),
-            self::opt('qualified', 'Qualified flag; administrator only.', 'BOOL'),
-            self::opt('public', 'Public visibility flag.', 'BOOL'),
-            self::opt('editable', 'Editable-by-users flag.', 'BOOL')
-        );
-        self::task('requirements:provider-add', 'requirementsAdd', 'Create a requirements provider.',
-            'requirements:provider-add --name=NAME [options]', null, true, array(),
-            array_replace($providerOptions, array(0 => self::opt('name', 'Provider name.', 'NAME', true))));
-        self::task('requirements:provider-update', 'requirementsUpdate', 'Update a requirements provider according to Provider access rules.',
-            'requirements:provider-update PROVIDER [options]', null, true,
-            array(self::arg('provider', 'Provider.')), $providerOptions);
-        self::task('requirements:provider-delete', 'requirementsDelete', 'Delete a requirements provider if Provider::isDeletable().',
-            'requirements:provider-delete PROVIDER [--yes]', null, true,
-            array(self::arg('provider', 'Provider.')),
-            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
     }
 
     private static function registerSsoTasks(): void
@@ -6911,97 +6877,6 @@ final class CoreTasks
         return 0;
     }
 
-    public static function requirementsList(array $arguments, array $options): int
-    {
-        global $gDb, $gCurrentOrgId;
-
-        $params = array($gCurrentOrgId);
-        $searchSql = '';
-        $query = CliApplication::optionString($options, 'query');
-        if ($query !== '') {
-            $searchSql = ' AND (LOWER(rqp_name) LIKE LOWER(?)
-                              OR LOWER(COALESCE(rqp_address, \'\')) LIKE LOWER(?)
-                              OR LOWER(COALESCE(rqp_url, \'\')) LIKE LOWER(?)
-                              OR LOWER(COALESCE(rqp_description, \'\')) LIKE LOWER(?))';
-            $term = '%' . $query . '%';
-            array_push($params, $term, $term, $term, $term);
-        }
-
-        $rows = $gDb->queryPrepared(
-            'SELECT rqp_id AS id, rqp_uuid AS uuid, rqp_name AS name,
-                    rqp_address AS address, rqp_url AS url,
-                    rqp_qualified AS qualified, rqp_public AS public,
-                    rqp_editable AS editable, rqp_usr_id_create AS created_by
-               FROM ' . TBL_REQ_PROVIDERS . '
-              WHERE rqp_org_id = ?' . $searchSql . '
-           ORDER BY rqp_name, rqp_id',
-            $params
-        )->fetchAll();
-
-        $visible = array();
-        foreach ($rows as $row) {
-            $provider = new Provider($gDb, (int)$row['id']);
-            if ($provider->isVisible()) {
-                $visible[] = $row;
-            }
-        }
-
-        CliApplication::writeRows(
-            $visible,
-            CliApplication::optionString($options, 'format', 'table'),
-            $options
-        );
-        return 0;
-    }
-
-    public static function requirementsShow(array $arguments, array $options): int
-    {
-        $provider = self::resolveProvider(CliApplication::requireArgument($arguments, 0, 'provider'));
-        if (!$provider->isVisible()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-        CliApplication::writeValue(self::providerData($provider), $options);
-        return 0;
-    }
-
-    public static function requirementsAdd(array $arguments, array $options): int
-    {
-        global $gDb, $gCurrentOrgId;
-
-        $provider = new Provider($gDb);
-        $provider->setValue('rqp_org_id', $gCurrentOrgId);
-        self::applyProviderOptions($provider, $options, true);
-        $provider->save();
-
-        CliApplication::writeValue(self::providerData($provider), $options);
-        return 0;
-    }
-
-    public static function requirementsUpdate(array $arguments, array $options): int
-    {
-        $provider = self::resolveProvider(CliApplication::requireArgument($arguments, 0, 'provider'));
-        if (!$provider->isEditable()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-        self::applyProviderOptions($provider, $options, false);
-        $provider->save();
-
-        CliApplication::writeSuccess('Requirements provider updated.', $options);
-        return 0;
-    }
-
-    public static function requirementsDelete(array $arguments, array $options): int
-    {
-        $provider = self::resolveProvider(CliApplication::requireArgument($arguments, 0, 'provider'));
-        if (!$provider->isDeletable()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-        CliApplication::confirm('Delete provider "' . $provider->getValue('rqp_name') . '"?', $options);
-        $provider->delete();
-        CliApplication::writeSuccess('Requirements provider deleted.', $options);
-        return 0;
-    }
-
     public static function ssoOidcDiscovery(array $arguments, array $options): int
     {
         global $gDb, $gCurrentUser;
@@ -9361,85 +9236,6 @@ final class CoreTasks
         }
 
         $selectOptions->setSequence($sequence);
-    }
-
-    private static function resolveProvider(string $reference): Provider
-    {
-        global $gDb, $gCurrentOrgId;
-
-        if (ctype_digit($reference)) {
-            $rows = $gDb->queryPrepared(
-                'SELECT rqp_id FROM ' . TBL_REQ_PROVIDERS . ' WHERE rqp_id = ? AND rqp_org_id = ?',
-                array((int)$reference, $gCurrentOrgId)
-            )->fetchAll(PDO::FETCH_COLUMN);
-        } else {
-            $rows = $gDb->queryPrepared(
-                'SELECT rqp_id FROM ' . TBL_REQ_PROVIDERS . ' WHERE rqp_uuid = ? AND rqp_org_id = ?',
-                array($reference, $gCurrentOrgId)
-            )->fetchAll(PDO::FETCH_COLUMN);
-        }
-        if (count($rows) !== 1) {
-            throw new InvalidArgumentException('Requirements provider was not found.');
-        }
-        return new Provider($gDb, (int)$rows[0]);
-    }
-
-    /**
-     * @return array<string,mixed>
-     */
-    private static function providerData(Provider $provider): array
-    {
-        return array(
-            'id' => (int)$provider->getValue('rqp_id'),
-            'uuid' => (string)$provider->getValue('rqp_uuid'),
-            'organization_id' => (int)$provider->getValue('rqp_org_id'),
-            'name' => $provider->getValue('rqp_name', 'database'),
-            'address' => $provider->getValue('rqp_address', 'database'),
-            'url' => $provider->getValue('rqp_url', 'database'),
-            'description' => $provider->getValue('rqp_description', 'database'),
-            'qualified' => (bool)$provider->getValue('rqp_qualified'),
-            'public' => (bool)$provider->getValue('rqp_public'),
-            'editable' => (bool)$provider->getValue('rqp_editable'),
-            'created_by' => (int)$provider->getValue('rqp_usr_id_create')
-        );
-    }
-
-    private static function applyProviderOptions(Provider $provider, array $options, bool $new): void
-    {
-        if (CliApplication::optionExists($options, 'name')) {
-            $provider->setValue('rqp_name', CliApplication::optionString($options, 'name'));
-        } elseif ($new) {
-            throw new InvalidArgumentException('--name is required.');
-        }
-
-        foreach (array(
-            'address' => 'rqp_address',
-            'url' => 'rqp_url',
-            'description' => 'rqp_description'
-        ) as $option => $column) {
-            if (CliApplication::optionExists($options, $option)) {
-                $provider->setValue($column, CliApplication::optionString($options, $option));
-            }
-        }
-
-        $mayChangeVisibility = $new || $provider->canChangeVisibilityFlags();
-        foreach (array('public' => 'rqp_public', 'editable' => 'rqp_editable') as $option => $column) {
-            if (CliApplication::optionExists($options, $option)) {
-                if (!$mayChangeVisibility) {
-                    throw new Exception('SYS_NO_RIGHTS');
-                }
-                $provider->setValue($column, CliApplication::optionBool($options, $option, false) ?? false);
-            }
-        }
-
-        if (CliApplication::optionExists($options, 'qualified')) {
-            if (!Component::isAdministrable('REQUIREMENTS')) {
-                throw new Exception('SYS_NO_RIGHTS');
-            }
-            $provider->setValue('rqp_qualified', CliApplication::optionBool($options, 'qualified', false) ?? false);
-        } elseif ($new) {
-            $provider->setValue('rqp_qualified', false);
-        }
     }
 
     private static function resolvePlugin(string $reference): PluginAbstract
