@@ -50,6 +50,14 @@ try {
     $application = new Admidio\Infrastructure\Cli\CliApplication();
     exit($application->run($argv));
 } catch (Throwable $exception) {
+    /*
+     * The bootstrap itself can fail, for example when config.php is missing, and then the class is
+     * not available to classify the failure. Fall back to the plain message in that case.
+     */
+    if (class_exists(Admidio\Infrastructure\Cli\CliApplication::class, false)) {
+        exit(Admidio\Infrastructure\Cli\CliApplication::handleThrowable($exception, $argv));
+    }
+
     fwrite(STDERR, 'Error: ' . $exception->getMessage() . PHP_EOL);
     exit(1);
 }

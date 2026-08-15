@@ -50,6 +50,21 @@ final class CliApplication
     public const EXIT_UPDATE_AVAILABLE = 4;
 
     /**
+     * The arguments or options were wrong: unknown command, missing argument, invalid value.
+     */
+    public const EXIT_USAGE = 2;
+
+    /**
+     * Admidio rejected the operation: missing rights or a failed domain validation.
+     */
+    public const EXIT_REJECTED = 5;
+
+    /**
+     * The operation was valid and permitted but could not be completed.
+     */
+    public const EXIT_FAILED = 6;
+
+    /**
      * Global options understood by every command.
      *
      * @var array<int,array<string,mixed>>
@@ -145,6 +160,72 @@ final class CliApplication
     public static function currentCommand(): string
     {
         return self::$currentCommand;
+    }
+
+    /**
+     * Report a failure and return the exit code that describes it.
+     *
+     * A calling script could previously not tell a typo apart from a missing right or a database
+     * outage: everything was printed as "Error: ..." and exited with 1. The exception class carries
+     * that distinction, so it is mapped to a dedicated code, and the message is emitted as JSON
+     * when the caller asked for JSON.
+     *
+     * @param array<int,string> $argv Raw arguments; the command line may not have been parsed yet.
+     */
+    public static function handleThrowable(Throwable $exception, array $argv = array()): int
+    {
+        $exitCode = match (true) {
+            $exception instanceof InvalidArgumentException => self::EXIT_USAGE,
+            $exception instanceof Exception => self::EXIT_REJECTED,
+            // PDOException extends RuntimeException, but a database failure is an internal error.
+            $exception instanceof \PDOException, $exception instanceof \Error => self::EXIT_ERROR,
+            $exception instanceof RuntimeException => self::EXIT_FAILED,
+            default => self::EXIT_ERROR
+        };
+
+        // The message of an Admidio exception is already translated by its constructor.
+        $message = $exception->getMessage();
+
+        if (self::wantsJsonOutput($argv)) {
+            fwrite(
+                STDERR,
+                json_encode(
+                    array(
+                        'success' => false,
+                        'error' => array(
+                            'message' => $message,
+                            'type' => (new \ReflectionClass($exception))->getShortName(),
+                            'exitCode' => $exitCode
+                        )
+                    ),
+                    JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+                ) . PHP_EOL
+            );
+        } else {
+            fwrite(STDERR, 'Error: ' . $message . PHP_EOL);
+        }
+
+        return $exitCode;
+    }
+
+    /**
+     * Detect --format=json directly in the raw arguments, because a failure may happen before or
+     * while the command line is parsed.
+     *
+     * @param array<int,string> $argv
+     */
+    private static function wantsJsonOutput(array $argv): bool
+    {
+        for ($index = 1, $count = count($argv); $index < $count; ++$index) {
+            if ($argv[$index] === '--format=json') {
+                return true;
+            }
+            if ($argv[$index] === '--format' && ($argv[$index + 1] ?? '') === 'json') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -521,7 +602,8 @@ final class CliApplication
             array('Code', 'Meaning'),
             array(
                 array((string)self::EXIT_SUCCESS, 'The command finished successfully.'),
-                array((string)self::EXIT_ERROR, 'Invalid input, missing rights or an internal error.'),
+                array((string)self::EXIT_ERROR, 'An internal error, for example a database failure.'),
+                array((string)self::EXIT_USAGE, 'Wrong arguments or options: unknown command, missing argument, invalid value.'),
                 array(
                     (string)self::EXIT_STATE_NOT_OK,
                     'The command ran, but the reported state is not the desired one. '
@@ -530,7 +612,9 @@ final class CliApplication
                 array(
                     (string)self::EXIT_UPDATE_AVAILABLE,
                     'The command ran and a newer Admidio release is available. Used by update:check.'
-                )
+                ),
+                array((string)self::EXIT_REJECTED, 'Admidio rejected the operation: missing rights or a failed validation.'),
+                array((string)self::EXIT_FAILED, 'The operation was permitted but could not be completed.')
             ),
             $format
         );
@@ -1474,6 +1558,23 @@ final class CliApplication
      */
     public static function writeSuccess(string $message, array $options): void
     {
+        /*
+         * A caller that asked for JSON has to receive JSON from every command, otherwise a script
+         * gets an object from group:add and an English sentence from group:update. The confirmation
+         * is the result document of a command that has nothing else to report.
+         */
+        if (strtolower(self::optionString($options, 'format')) === 'json') {
+            self::writeOutput(
+                json_encode(
+                    array('success' => true, 'message' => $message),
+                    JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+                ) . PHP_EOL,
+                $options,
+                false
+            );
+            return;
+        }
+
         if (!self::optionBool($options, 'quiet', false)) {
             self::writeOutput($message . PHP_EOL, $options, false);
         }
