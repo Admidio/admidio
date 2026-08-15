@@ -2805,9 +2805,10 @@ final class CoreTasks
 
     public static function userUpdate(array $arguments, array $options): int
     {
+        global $gCurrentUser;
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
 
-        if (!$GLOBALS['gCurrentUser']->hasRightEditProfile($user)) {
+        if (!$gCurrentUser->hasRightEditProfile($user)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -2862,7 +2863,7 @@ final class CoreTasks
         $roles = array();
         foreach (CliApplication::optionValues($options, 'group') as $groupReference) {
             $role = self::resolveGroup($groupReference);
-            if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
+            if (!$role->allowedToAssignMembers($gCurrentUser)) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
             $roles[] = $role;
@@ -3028,8 +3029,9 @@ final class CoreTasks
 
     public static function userSetPassword(array $arguments, array $options): int
     {
+        global $gCurrentUser;
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
-        if (!$GLOBALS['gCurrentUser']->hasRightEditProfile($user)) {
+        if (!$gCurrentUser->hasRightEditProfile($user)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -3444,6 +3446,7 @@ final class CoreTasks
 
     public static function registrationConfirm(array $arguments, array $options): int
     {
+        global $gDb;
         /*
          * This command is the counterpart of the confirmation link a registrant receives by email,
          * where nobody is logged in either, so it deliberately runs without --as. It still has to
@@ -3454,7 +3457,7 @@ final class CoreTasks
         $registration = self::resolveRegistration(CliApplication::requireArgument($arguments, 0, 'user'));
         $validationId = CliApplication::requireArgument($arguments, 1, 'validation-id');
 
-        $service = new RegistrationService($GLOBALS['gDb'], (string)$registration->getValue('usr_uuid'));
+        $service = new RegistrationService($gDb, (string)$registration->getValue('usr_uuid'));
         $result = $service->confirmRegistration($validationId);
 
         CliApplication::writeValue($result, $options);
@@ -3463,7 +3466,7 @@ final class CoreTasks
 
     public static function registrationApprove(array $arguments, array $options): int
     {
-        global $gDb;
+        global $gDb, $gCurrentUser;
 
         $registration = self::resolveRegistration(CliApplication::requireArgument($arguments, 0, 'user'));
 
@@ -3471,7 +3474,7 @@ final class CoreTasks
         $roles = array();
         foreach (CliApplication::optionValues($options, 'group') as $groupReference) {
             $role = self::resolveGroup($groupReference);
-            if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
+            if (!$role->allowedToAssignMembers($gCurrentUser)) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
             $roles[] = $role;
@@ -3496,6 +3499,7 @@ final class CoreTasks
 
     public static function registrationAssign(array $arguments, array $options): int
     {
+        global $gDb;
         $registration = self::resolveRegistration(
             CliApplication::requireArgument($arguments, 0, 'registration-user')
         );
@@ -3504,7 +3508,7 @@ final class CoreTasks
         );
 
         $service = new RegistrationService(
-            $GLOBALS['gDb'],
+            $gDb,
             (string)$registration->getValue('usr_uuid')
         );
         $result = $service->assignRegistration(
@@ -3540,7 +3544,7 @@ final class CoreTasks
 
     public static function groupList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId;
+        global $gDb, $gCurrentOrgId, $gCurrentUser;
         $where = array('(cat.cat_org_id = ? OR cat.cat_org_id IS NULL)');
         $params = array($gCurrentOrgId);
 
@@ -3566,10 +3570,13 @@ final class CoreTasks
         )->fetchAll();
 
         // Only roles the acting user may see, as in the groups-roles web module.
-        $rows = array_values(array_filter(
-            $rows,
-            static fn (array $row): bool => $GLOBALS['gCurrentUser']->hasRightViewRole((int)$row['id'])
-        ));
+        $visible = array();
+        foreach ($rows as $row) {
+            if ($gCurrentUser->hasRightViewRole((int)$row['id'])) {
+                $visible[] = $row;
+            }
+        }
+        $rows = $visible;
 
         CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
         return 0;
@@ -3761,9 +3768,10 @@ final class CoreTasks
 
     public static function groupAddUser(array $arguments, array $options): int
     {
+        global $gCurrentUser;
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 1, 'user'));
-        if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
+        if (!$role->allowedToAssignMembers($gCurrentUser)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -3785,9 +3793,10 @@ final class CoreTasks
 
     public static function groupDelUser(array $arguments, array $options): int
     {
+        global $gCurrentUser;
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 1, 'user'));
-        if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
+        if (!$role->allowedToAssignMembers($gCurrentUser)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -3824,9 +3833,10 @@ final class CoreTasks
 
     public static function groupUpdateUser(array $arguments, array $options): int
     {
+        global $gCurrentUser;
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 1, 'user'));
-        if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
+        if (!$role->allowedToAssignMembers($gCurrentUser)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -3855,9 +3865,10 @@ final class CoreTasks
 
     public static function groupDeleteMembership(array $arguments, array $options): int
     {
+        global $gCurrentUser, $gDb;
         $membership = self::resolveMembership(CliApplication::requireArgument($arguments, 0, 'membership'));
-        $role = new Role($GLOBALS['gDb'], (int)$membership->getValue('mem_rol_id'));
-        if (!$role->allowedToAssignMembers($GLOBALS['gCurrentUser'])) {
+        $role = new Role($gDb, (int)$membership->getValue('mem_rol_id'));
+        if (!$role->allowedToAssignMembers($gCurrentUser)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
         CliApplication::confirm('Permanently delete this membership history row?', $options);
@@ -3870,7 +3881,7 @@ final class CoreTasks
 
     public static function groupDependencies(array $arguments, array $options): int
     {
-        global $gCurrentUser;
+        global $gCurrentUser, $gDb;
 
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
         if (!$gCurrentUser->hasRightViewRole((int)$role->getValue('rol_id'))) {
@@ -3878,12 +3889,12 @@ final class CoreTasks
         }
 
         $rows = array();
-        foreach (RoleDependency::getParentRoles($GLOBALS['gDb'], (int)$role->getValue('rol_id')) as $id) {
-            $parent = new Role($GLOBALS['gDb'], (int)$id);
+        foreach (RoleDependency::getParentRoles($gDb, (int)$role->getValue('rol_id')) as $id) {
+            $parent = new Role($gDb, (int)$id);
             $rows[] = array('direction' => 'parent', 'id' => (int)$id, 'uuid' => $parent->getValue('rol_uuid'), 'name' => $parent->getValue('rol_name'));
         }
-        foreach (RoleDependency::getChildRoles($GLOBALS['gDb'], (int)$role->getValue('rol_id')) as $id) {
-            $child = new Role($GLOBALS['gDb'], (int)$id);
+        foreach (RoleDependency::getChildRoles($gDb, (int)$role->getValue('rol_id')) as $id) {
+            $child = new Role($gDb, (int)$id);
             $rows[] = array('direction' => 'child', 'id' => (int)$id, 'uuid' => $child->getValue('rol_uuid'), 'name' => $child->getValue('rol_name'));
         }
         CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
@@ -4170,9 +4181,10 @@ final class CoreTasks
 
     public static function permissionsShow(array $arguments, array $options): int
     {
+        global $gDb;
         $right = CliApplication::requireArgument($arguments, 0, 'right-type');
         $objectId = self::positiveInt(CliApplication::requireArgument($arguments, 1, 'object-id'), 'object-id');
-        $rights = new RolesRights($GLOBALS['gDb'], $right, $objectId);
+        $rights = new RolesRights($gDb, $right, $objectId);
         CliApplication::writeValue(array(
             'right_type' => $right,
             'object_id' => $objectId,
@@ -4198,10 +4210,11 @@ final class CoreTasks
 
     public static function permissionsClear(array $arguments, array $options): int
     {
+        global $gDb;
         $right = CliApplication::requireArgument($arguments, 0, 'right-type');
         $objectId = self::positiveInt(CliApplication::requireArgument($arguments, 1, 'object-id'), 'object-id');
         CliApplication::confirm('Clear all role assignments for this object right?', $options);
-        (new RolesRights($GLOBALS['gDb'], $right, $objectId))->delete();
+        (new RolesRights($gDb, $right, $objectId))->delete();
         self::reloadAllSessions();
         CliApplication::writeSuccess('Object rights cleared.', $options);
         return 0;
@@ -4231,6 +4244,7 @@ final class CoreTasks
 
     public static function categoryShow(array $arguments, array $options): int
     {
+        global $gDb;
         $category = self::resolveCategory(CliApplication::requireArgument($arguments, 0, 'category'));
         $id = (int)$category->getValue('cat_id');
         CliApplication::writeValue(array(
@@ -4243,8 +4257,8 @@ final class CoreTasks
             'system' => (bool)$category->getValue('cat_system'),
             'sequence' => (int)$category->getValue('cat_sequence'),
             'organization_id' => $category->getValue('cat_org_id'),
-            'view_roles' => (new RolesRights($GLOBALS['gDb'], 'category_view', $id))->getRolesNames(),
-            'edit_roles' => (new RolesRights($GLOBALS['gDb'], 'category_edit', $id))->getRolesNames()
+            'view_roles' => (new RolesRights($gDb, 'category_view', $id))->getRolesNames(),
+            'edit_roles' => (new RolesRights($gDb, 'category_edit', $id))->getRolesNames()
         ), $options);
         return 0;
     }
@@ -4366,6 +4380,7 @@ final class CoreTasks
 
     public static function menuShow(array $arguments, array $options): int
     {
+        global $gDb;
         $menu = self::resolveMenu(CliApplication::requireArgument($arguments, 0, 'menu'));
         $id = (int)$menu->getValue('men_id');
         CliApplication::writeValue(array(
@@ -4379,7 +4394,7 @@ final class CoreTasks
             'icon' => $menu->getValue('men_icon'),
             'node' => (bool)$menu->getValue('men_node'),
             'standard' => (bool)$menu->getValue('men_standard'),
-            'view_roles' => (new RolesRights($GLOBALS['gDb'], 'menu_view', $id))->getRolesNames()
+            'view_roles' => (new RolesRights($gDb, 'menu_view', $id))->getRolesNames()
         ), $options);
         return 0;
     }
@@ -4656,24 +4671,26 @@ final class CoreTasks
 
     public static function eventAdd(array $arguments, array $options): int
     {
+        global $gDb;
         // --headline, --from and --calendar are declared as required in the registration.
-        $event = new Event($GLOBALS['gDb']);
+        $event = new Event($gDb);
         $formValues = self::buildEventFormValues($event, $options, true);
 
-        $savedEvent = (new EventService($GLOBALS['gDb']))->saveData('', $formValues);
+        $savedEvent = (new EventService($gDb))->saveData('', $formValues);
         CliApplication::writeValue(self::eventData($savedEvent), $options);
         return 0;
     }
 
     public static function eventUpdate(array $arguments, array $options): int
     {
+        global $gDb;
         $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
         if (!$event->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
         $formValues = self::buildEventFormValues($event, $options, false);
-        $savedEvent = (new EventService($GLOBALS['gDb']))->saveData(
+        $savedEvent = (new EventService($gDb))->saveData(
             (string)$event->getValue('dat_uuid'),
             $formValues
         );
@@ -4684,13 +4701,14 @@ final class CoreTasks
 
     public static function eventCopy(array $arguments, array $options): int
     {
+        global $gDb;
         $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
         if (!$event->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
         $formValues = self::buildEventFormValues($event, $options, false);
-        $savedEvent = (new EventService($GLOBALS['gDb']))->saveData(
+        $savedEvent = (new EventService($gDb))->saveData(
             (string)$event->getValue('dat_uuid'),
             $formValues,
             '',
@@ -4795,6 +4813,7 @@ final class CoreTasks
 
     public static function eventParticipants(array $arguments, array $options): int
     {
+        global $gDb;
         $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
         if (!$event->isVisible()) {
             throw new Exception('SYS_NO_RIGHTS');
@@ -4803,7 +4822,7 @@ final class CoreTasks
             CliApplication::writeRows(array(), CliApplication::optionString($options, 'format', 'table'), $options);
             return 0;
         }
-        $participants = new Participants($GLOBALS['gDb'], (int)$event->getValue('dat_rol_id'));
+        $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
         $rows = array();
         foreach ($participants->getParticipantsArray() as $participant) {
             $rows[] = $participant;
@@ -4867,7 +4886,8 @@ final class CoreTasks
 
     public static function roomList(array $arguments, array $options): int
     {
-        $rows = $GLOBALS['gDb']->queryPrepared(
+        global $gDb;
+        $rows = $gDb->queryPrepared(
             'SELECT room_id AS id, room_uuid AS uuid, room_name AS name,
                     room_capacity AS capacity, room_overhang AS overhang, room_description AS description
                FROM ' . TBL_ROOMS . '
@@ -4886,7 +4906,8 @@ final class CoreTasks
 
     public static function roomAdd(array $arguments, array $options): int
     {
-        $room = new Room($GLOBALS['gDb']);
+        global $gDb;
+        $room = new Room($gDb);
         $room->setValue('room_name', CliApplication::requireArgument($arguments, 0, 'name'));
         self::applyRoomOptions($room, $options);
         $room->save();
@@ -4981,7 +5002,8 @@ final class CoreTasks
 
     public static function forumTopicAdd(array $arguments, array $options): int
     {
-        $topic = new Topic($GLOBALS['gDb']);
+        global $gDb;
+        $topic = new Topic($gDb);
         $category = self::resolveCategory(CliApplication::optionString($options, 'category'), 'FOT');
         $topic->setValue('fot_cat_id', (int)$category->getValue('cat_id'));
         $topic->setValue('fot_title', CliApplication::optionString($options, 'title'));
@@ -5026,11 +5048,12 @@ final class CoreTasks
 
     public static function forumPostAdd(array $arguments, array $options): int
     {
+        global $gDb;
         $topic = self::resolveTopic(CliApplication::requireArgument($arguments, 0, 'topic'));
         if (!$topic->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
-        $post = new Post($GLOBALS['gDb']);
+        $post = new Post($gDb);
         $post->setValue('fop_fot_id', (int)$topic->getValue('fot_id'));
         $post->setValue('fop_text', CliApplication::optionString($options, 'text'));
         if ($post->save()) {
@@ -5042,9 +5065,9 @@ final class CoreTasks
 
     public static function forumPostUpdate(array $arguments, array $options): int
     {
-        global $gCurrentUser;
+        global $gCurrentUser, $gDb;
         $post = self::resolvePost(CliApplication::requireArgument($arguments, 0, 'post'));
-        $topic = new Topic($GLOBALS['gDb'], (int)$post->getValue('fop_fot_id'));
+        $topic = new Topic($gDb, (int)$post->getValue('fop_fot_id'));
         if (!$topic->isEditable()
             && !$gCurrentUser->isAdministratorForum()
             && (int)$post->getValue('fop_usr_id_create') !== (int)$gCurrentUser->getValue('usr_id')) {
@@ -5060,9 +5083,9 @@ final class CoreTasks
 
     public static function forumPostDelete(array $arguments, array $options): int
     {
-        global $gCurrentUser;
+        global $gCurrentUser, $gDb;
         $post = self::resolvePost(CliApplication::requireArgument($arguments, 0, 'post'));
-        $topic = new Topic($GLOBALS['gDb'], (int)$post->getValue('fop_fot_id'));
+        $topic = new Topic($gDb, (int)$post->getValue('fop_fot_id'));
         if ((int)$topic->getValue('fot_fop_id_first_post') === (int)$post->getValue('fop_id')) {
             throw new InvalidArgumentException('Delete the topic to delete its first post.');
         }
@@ -5149,7 +5172,8 @@ final class CoreTasks
 
     public static function linkAdd(array $arguments, array $options): int
     {
-        $link = new Weblink($GLOBALS['gDb']);
+        global $gDb;
+        $link = new Weblink($gDb);
         self::applyLinkOptions($link, $options, true);
         if ($link->save()) {
             $link->sendNotification();
@@ -5252,6 +5276,7 @@ final class CoreTasks
 
     public static function messageSend(array $arguments, array $options): int
     {
+        global $gDb;
         $type = strtolower(CliApplication::optionString($options, 'type'));
         if (!in_array($type, array('email', 'pm'), true)) {
             throw new InvalidArgumentException('--type must be email or pm.');
@@ -5274,7 +5299,7 @@ final class CoreTasks
             $userUuid = $recipients[0];
         }
 
-        $message = (new MessageService($GLOBALS['gDb']))->sendData(
+        $message = (new MessageService($gDb))->sendData(
             $type,
             $subject,
             $body,
@@ -5295,6 +5320,7 @@ final class CoreTasks
 
     public static function messageReply(array $arguments, array $options): int
     {
+        global $gDb;
         $message = self::resolveMessage(CliApplication::requireArgument($arguments, 0, 'message'));
         self::assertMessageAccess($message);
 
@@ -5307,7 +5333,7 @@ final class CoreTasks
         }
 
         $body = self::readTextOption($options, 'body', 'body-file', true);
-        $savedMessage = (new MessageService($GLOBALS['gDb']))->sendData(
+        $savedMessage = (new MessageService($gDb))->sendData(
             Message::MESSAGE_TYPE_PM,
             (string)$message->getValue('msg_subject', 'database'),
             $body,
@@ -5321,6 +5347,7 @@ final class CoreTasks
 
     public static function messageForward(array $arguments, array $options): int
     {
+        global $gDb;
         $message = self::resolveMessage(CliApplication::requireArgument($arguments, 0, 'message'));
         self::assertMessageAccess($message);
 
@@ -5344,7 +5371,7 @@ final class CoreTasks
             $body = $message->getContent('database');
         }
 
-        $savedMessage = (new MessageService($GLOBALS['gDb']))->sendData(
+        $savedMessage = (new MessageService($gDb))->sendData(
             Message::MESSAGE_TYPE_EMAIL,
             $subject,
             $body,
@@ -5499,8 +5526,9 @@ final class CoreTasks
 
     public static function documentFileRename(array $arguments, array $options): int
     {
+        global $gDb;
         $file = self::resolveDocumentFile(CliApplication::requireArgument($arguments, 0, 'file'));
-        $folder = new Folder($GLOBALS['gDb'], (int)$file->getValue('fil_fol_id'));
+        $folder = new Folder($gDb, (int)$file->getValue('fil_fol_id'));
         if (!$folder->hasUploadRight()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -5526,8 +5554,9 @@ final class CoreTasks
 
     public static function documentFileMove(array $arguments, array $options): int
     {
+        global $gDb;
         $file = self::resolveDocumentFile(CliApplication::requireArgument($arguments, 0, 'file'));
-        $source = new Folder($GLOBALS['gDb'], (int)$file->getValue('fil_fol_id'));
+        $source = new Folder($gDb, (int)$file->getValue('fil_fol_id'));
         if (!$source->hasUploadRight()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -5542,8 +5571,9 @@ final class CoreTasks
 
     public static function documentFileDelete(array $arguments, array $options): int
     {
+        global $gDb;
         $file = self::resolveDocumentFile(CliApplication::requireArgument($arguments, 0, 'file'));
-        $folder = new Folder($GLOBALS['gDb'], (int)$file->getValue('fil_fol_id'));
+        $folder = new Folder($gDb, (int)$file->getValue('fil_fol_id'));
         if (!$folder->hasUploadRight()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -5638,10 +5668,10 @@ final class CoreTasks
 
     public static function documentPermissionsSet(array $arguments, array $options): int
     {
-        global $gDb;
+        global $gDb, $gCurrentUser;
 
         $folder = self::resolveFolder(CliApplication::requireArgument($arguments, 0, 'folder'));
-        if (!$GLOBALS['gCurrentUser']->isAdministratorDocumentsFiles()) {
+        if (!$gCurrentUser->isAdministratorDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
         $recursive = CliApplication::optionBool($options, 'recursive', false) ?? false;
@@ -5691,8 +5721,9 @@ final class CoreTasks
 
     public static function documentUnregistered(array $arguments, array $options): int
     {
+        global $gCurrentUser;
         $folder = self::resolveFolder($arguments[0] ?? '');
-        if (!$GLOBALS['gCurrentUser']->isAdministratorDocumentsFiles()) {
+        if (!$gCurrentUser->isAdministratorDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
         $rows = self::getUnregisteredEntries($folder);
@@ -5706,8 +5737,9 @@ final class CoreTasks
 
     public static function documentRegister(array $arguments, array $options): int
     {
+        global $gCurrentUser;
         $folder = self::resolveFolder(CliApplication::requireArgument($arguments, 0, 'folder'));
-        if (!$GLOBALS['gCurrentUser']->isAdministratorDocumentsFiles()) {
+        if (!$gCurrentUser->isAdministratorDocumentsFiles()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
         self::registerUnregisteredRecursive(
@@ -5966,6 +5998,7 @@ final class CoreTasks
 
     public static function photoEcardSend(array $arguments, array $options): int
     {
+        global $gDb;
         $album = self::resolveAlbum(CliApplication::requireArgument($arguments, 0, 'album'));
         $photoNumber = self::positiveInt(
             CliApplication::requireArgument($arguments, 1, 'photo-number'),
@@ -5994,7 +6027,7 @@ final class CoreTasks
 
         $message = self::readTextOption($options, 'message', 'message-file', true);
 
-        (new ECardService($GLOBALS['gDb']))->send(
+        (new ECardService($gDb))->send(
             (string)$album->getValue('pho_uuid'),
             $photoNumber,
             $template,
@@ -6238,10 +6271,11 @@ final class CoreTasks
 
     public static function inventoryPictureSet(array $arguments, array $options): int
     {
+        global $gDb;
         $itemUuid = self::resolveItemUuid(CliApplication::requireArgument($arguments, 0, 'item'));
         $sourcePath = CliApplication::requireArgument($arguments, 1, 'file');
 
-        (new ItemService($GLOBALS['gDb'], $itemUuid))->saveItemPictureFromFile($sourcePath);
+        (new ItemService($gDb, $itemUuid))->saveItemPictureFromFile($sourcePath);
 
         CliApplication::writeSuccess('Inventory item picture updated.', $options);
         return 0;
@@ -6249,8 +6283,9 @@ final class CoreTasks
 
     public static function inventoryPictureGet(array $arguments, array $options): int
     {
+        global $gDb;
         $itemUuid = self::resolveItemUuid(CliApplication::requireArgument($arguments, 0, 'item'));
-        $picture = (new ItemService($GLOBALS['gDb'], $itemUuid))->getItemPictureData();
+        $picture = (new ItemService($gDb, $itemUuid))->getItemPictureData();
 
         self::writeExportContent($picture, $options);
         return 0;
@@ -6258,10 +6293,11 @@ final class CoreTasks
 
     public static function inventoryPictureDelete(array $arguments, array $options): int
     {
+        global $gDb;
         $itemUuid = self::resolveItemUuid(CliApplication::requireArgument($arguments, 0, 'item'));
 
         CliApplication::confirm('Delete this inventory item picture?', $options);
-        (new ItemService($GLOBALS['gDb'], $itemUuid))->deleteItemPicture();
+        (new ItemService($gDb, $itemUuid))->deleteItemPicture();
 
         CliApplication::writeSuccess('Inventory item picture deleted.', $options);
         return 0;
@@ -6495,18 +6531,20 @@ final class CoreTasks
 
     public static function inventoryFieldDelete(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
         CliApplication::confirm('Delete inventory field "' . $field->getValue('inf_name') . '"?', $options);
-        (new ItemFieldService($GLOBALS['gDb'], (string)$field->getValue('inf_uuid')))->delete();
+        (new ItemFieldService($gDb, (string)$field->getValue('inf_uuid')))->delete();
         CliApplication::writeSuccess('Inventory field deleted.', $options);
         return 0;
     }
 
     public static function inventoryFieldMove(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
         $direction = self::direction(CliApplication::requireArgument($arguments, 1, 'direction'));
-        (new ItemFieldService($GLOBALS['gDb'], (string)$field->getValue('inf_uuid')))->moveSequence(
+        (new ItemFieldService($gDb, (string)$field->getValue('inf_uuid')))->moveSequence(
             $direction === 'up' ? ItemFieldService::MOVE_UP : ItemFieldService::MOVE_DOWN
         );
         CliApplication::writeSuccess('Inventory field moved.', $options);
@@ -6515,8 +6553,9 @@ final class CoreTasks
 
     public static function inventoryOptions(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
-        $select = new InventorySelectOptions($GLOBALS['gDb'], (int)$field->getValue('inf_id'));
+        $select = new InventorySelectOptions($gDb, (int)$field->getValue('inf_id'));
         $rows = array_values($select->getAllOptions(
             CliApplication::optionBool($options, 'include-obsolete', false) ?? false
         ));
@@ -6526,9 +6565,10 @@ final class CoreTasks
 
     public static function inventoryOptionAdd(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
         $value = CliApplication::requireArgument($arguments, 1, 'value');
-        $select = new InventorySelectOptions($GLOBALS['gDb'], (int)$field->getValue('inf_id'));
+        $select = new InventorySelectOptions($gDb, (int)$field->getValue('inf_id'));
         $select->setOptionValues(array(0 => array('value' => $value, 'obsolete' => false)));
         CliApplication::writeSuccess('Inventory select option added.', $options);
         return 0;
@@ -6536,9 +6576,10 @@ final class CoreTasks
 
     public static function inventoryOptionUpdate(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
         $optionId = self::positiveInt(CliApplication::requireArgument($arguments, 1, 'option'), 'option');
-        $select = new InventorySelectOptions($GLOBALS['gDb'], (int)$field->getValue('inf_id'));
+        $select = new InventorySelectOptions($gDb, (int)$field->getValue('inf_id'));
         if (!$select->readDataById($optionId)) {
             throw new InvalidArgumentException('Unknown inventory select option.');
         }
@@ -6561,9 +6602,10 @@ final class CoreTasks
 
     public static function inventoryOptionDelete(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
         $optionId = self::positiveInt(CliApplication::requireArgument($arguments, 1, 'option'), 'option');
-        $select = new InventorySelectOptions($GLOBALS['gDb'], (int)$field->getValue('inf_id'));
+        $select = new InventorySelectOptions($gDb, (int)$field->getValue('inf_id'));
         if (!$select->readDataById($optionId)) {
             throw new InvalidArgumentException('Unknown inventory select option.');
         }
@@ -6581,11 +6623,12 @@ final class CoreTasks
 
     public static function inventoryOptionMove(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveInventoryField(CliApplication::requireArgument($arguments, 0, 'field'));
         $optionId = self::positiveInt(CliApplication::requireArgument($arguments, 1, 'option'), 'option');
         $direction = self::direction(CliApplication::requireArgument($arguments, 2, 'direction'));
         self::moveSelectOption(
-            new InventorySelectOptions($GLOBALS['gDb'], (int)$field->getValue('inf_id')),
+            new InventorySelectOptions($gDb, (int)$field->getValue('inf_id')),
             $optionId,
             $direction
         );
@@ -6694,8 +6737,9 @@ final class CoreTasks
 
     public static function profileOptions(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
-        $select = new ProfileSelectOptions($GLOBALS['gDb'], (int)$field->getValue('usf_id'));
+        $select = new ProfileSelectOptions($gDb, (int)$field->getValue('usf_id'));
         $rows = array_values($select->getAllOptions(
             CliApplication::optionBool($options, 'include-obsolete', false) ?? false
         ));
@@ -6705,9 +6749,10 @@ final class CoreTasks
 
     public static function profileOptionAdd(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
         $value = CliApplication::requireArgument($arguments, 1, 'value');
-        $select = new ProfileSelectOptions($GLOBALS['gDb'], (int)$field->getValue('usf_id'));
+        $select = new ProfileSelectOptions($gDb, (int)$field->getValue('usf_id'));
         $select->setOptionValues(array(0 => array('value' => $value, 'obsolete' => false)));
         CliApplication::writeSuccess('Profile select option added.', $options);
         return 0;
@@ -6715,9 +6760,10 @@ final class CoreTasks
 
     public static function profileOptionUpdate(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
         $optionId = self::positiveInt(CliApplication::requireArgument($arguments, 1, 'option'), 'option');
-        $select = new ProfileSelectOptions($GLOBALS['gDb'], (int)$field->getValue('usf_id'));
+        $select = new ProfileSelectOptions($gDb, (int)$field->getValue('usf_id'));
         if (!$select->readDataById($optionId)) {
             throw new InvalidArgumentException('Unknown profile select option.');
         }
@@ -6740,9 +6786,10 @@ final class CoreTasks
 
     public static function profileOptionDelete(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
         $optionId = self::positiveInt(CliApplication::requireArgument($arguments, 1, 'option'), 'option');
-        $select = new ProfileSelectOptions($GLOBALS['gDb'], (int)$field->getValue('usf_id'));
+        $select = new ProfileSelectOptions($gDb, (int)$field->getValue('usf_id'));
         if (!$select->readDataById($optionId)) {
             throw new InvalidArgumentException('Unknown profile select option.');
         }
@@ -6760,11 +6807,12 @@ final class CoreTasks
 
     public static function profileOptionMove(array $arguments, array $options): int
     {
+        global $gDb;
         $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
         $optionId = self::positiveInt(CliApplication::requireArgument($arguments, 1, 'option'), 'option');
         $direction = self::direction(CliApplication::requireArgument($arguments, 2, 'direction'));
         self::moveSelectOption(
-            new ProfileSelectOptions($GLOBALS['gDb'], (int)$field->getValue('usf_id')),
+            new ProfileSelectOptions($gDb, (int)$field->getValue('usf_id')),
             $optionId,
             $direction
         );
@@ -7542,6 +7590,7 @@ final class CoreTasks
 
     public static function ssoKeyUpdate(array $arguments, array $options): int
     {
+        global $gDb;
         $key = self::resolveSsoKey(CliApplication::requireArgument($arguments, 0, 'key'));
         $values = array();
 
@@ -7555,7 +7604,7 @@ final class CoreTasks
             throw new InvalidArgumentException('No SSO key values were supplied.');
         }
 
-        $saved = (new KeyService($GLOBALS['gDb']))->saveData(
+        $saved = (new KeyService($gDb))->saveData(
             (string)$key->getValue('key_uuid'),
             $values,
             'save'
@@ -7834,7 +7883,8 @@ final class CoreTasks
 
     private static function reloadUserSessions(int $userId): void
     {
-        $GLOBALS['gDb']->queryPrepared(
+        global $gDb;
+        $gDb->queryPrepared(
             'UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true WHERE ses_usr_id = ?',
             array($userId)
         );
@@ -7842,7 +7892,8 @@ final class CoreTasks
 
     private static function reloadAllSessions(): void
     {
-        $GLOBALS['gDb']->queryPrepared('UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true');
+        global $gDb;
+        $gDb->queryPrepared('UPDATE ' . TBL_SESSIONS . ' SET ses_reload = true');
     }
 
     private static function assertUniqueLogin(string $login, int $excludeUserId = 0): void
@@ -8433,7 +8484,8 @@ final class CoreTasks
      */
     private static function getListColumnRows(int $listId): array
     {
-        return $GLOBALS['gDb']->queryPrepared(
+        global $gDb;
+        return $gDb->queryPrepared(
             'SELECT lsc_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter
                FROM ' . TBL_LIST_COLUMNS . '
               WHERE lsc_lst_id = ?
@@ -8756,12 +8808,14 @@ final class CoreTasks
 
     private static function resolveMenu(string $reference): MenuEntry
     {
+        global $gDb;
         $id = CliApplication::resolveId(TBL_MENU, 'men_id', 'men_uuid', $reference, 'menu entry');
-        return new MenuEntry($GLOBALS['gDb'], $id);
+        return new MenuEntry($gDb, $id);
     }
 
     private static function applyMenuOptions(MenuEntry $menu, array $options, bool $new): void
     {
+        global $gDb;
         foreach (array(
             'name' => 'men_name',
             'description' => 'men_description',
@@ -8788,7 +8842,7 @@ final class CoreTasks
             if ($component === '') {
                 $menu->setValue('men_com_id', 0);
             } else {
-                $id = (int)$GLOBALS['gDb']->queryPrepared(
+                $id = (int)$gDb->queryPrepared(
                     'SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE UPPER(com_name_intern) = UPPER(?)',
                     array($component)
                 )->fetchColumn();
@@ -8802,16 +8856,18 @@ final class CoreTasks
 
     private static function saveMenuRights(MenuEntry $menu, array $options): void
     {
+        global $gDb;
         if (!CliApplication::optionExists($options, 'view-role')) {
             return;
         }
-        (new RolesRights($GLOBALS['gDb'], 'menu_view', (int)$menu->getValue('men_id')))
+        (new RolesRights($gDb, 'menu_view', (int)$menu->getValue('men_id')))
             ->saveRoles(self::resolveRoleIds(CliApplication::optionValues($options, 'view-role')));
         self::reloadAllSessions();
     }
 
     private static function resolveAnnouncement(string $reference): Announcement
     {
+        global $gDb;
         $id = CliApplication::resolveId(
             TBL_ANNOUNCEMENTS,
             'ann_id',
@@ -8819,7 +8875,7 @@ final class CoreTasks
             $reference,
             'announcement'
         );
-        return new Announcement($GLOBALS['gDb'], $id);
+        return new Announcement($gDb, $id);
     }
 
     private static function applyAnnouncementOptions(Announcement $announcement, array $options, bool $new): void
@@ -8859,8 +8915,9 @@ final class CoreTasks
 
     private static function resolveEvent(string $reference): Event
     {
+        global $gDb;
         $id = CliApplication::resolveId(TBL_EVENTS, 'dat_id', 'dat_uuid', $reference, 'event');
-        return new Event($GLOBALS['gDb'], $id);
+        return new Event($gDb, $id);
     }
 
     /**
@@ -9153,20 +9210,23 @@ final class CoreTasks
 
     private static function resolveTopic(string $reference): Topic
     {
+        global $gDb;
         $id = CliApplication::resolveId(TBL_FORUM_TOPICS, 'fot_id', 'fot_uuid', $reference, 'forum topic');
-        return new Topic($GLOBALS['gDb'], $id);
+        return new Topic($gDb, $id);
     }
 
     private static function resolvePost(string $reference): Post
     {
+        global $gDb;
         $id = CliApplication::resolveId(TBL_FORUM_POSTS, 'fop_id', 'fop_uuid', $reference, 'forum post');
-        return new Post($GLOBALS['gDb'], $id);
+        return new Post($gDb, $id);
     }
 
     private static function resolveLink(string $reference): Weblink
     {
+        global $gDb;
         $id = CliApplication::resolveId(TBL_LINKS, 'lnk_id', 'lnk_uuid', $reference, 'web link');
-        return new Weblink($GLOBALS['gDb'], $id);
+        return new Weblink($gDb, $id);
     }
 
     private static function applyLinkOptions(Weblink $link, array $options, bool $new): void
@@ -9196,8 +9256,9 @@ final class CoreTasks
 
     private static function resolveMessage(string $reference): Message
     {
+        global $gDb;
         $id = CliApplication::resolveId(TBL_MESSAGES, 'msg_id', 'msg_uuid', $reference, 'message');
-        return new Message($GLOBALS['gDb'], $id);
+        return new Message($gDb, $id);
     }
 
     /**
@@ -9302,7 +9363,8 @@ final class CoreTasks
 
     private static function resolveFolder(string $reference): Folder
     {
-        $folder = new Folder($GLOBALS['gDb']);
+        global $gDb;
+        $folder = new Folder($gDb);
         $folder->getFolderForDownload($reference);
         return $folder;
     }
@@ -9332,6 +9394,7 @@ final class CoreTasks
      */
     private static function collectFolderContents(Folder $folder, array &$rows, bool $recursive): void
     {
+        global $gDb;
         foreach ($folder->getSubfoldersWithProperties() as $subfolderData) {
             $rows[] = array(
                 'type' => 'folder',
@@ -9344,7 +9407,7 @@ final class CoreTasks
                 'exists' => (bool)$subfolderData['fol_exists']
             );
             if ($recursive) {
-                $subfolder = new Folder($GLOBALS['gDb'], (int)$subfolderData['fol_id']);
+                $subfolder = new Folder($gDb, (int)$subfolderData['fol_id']);
                 if ($subfolder->hasViewRight()) {
                     self::collectFolderContents($subfolder, $rows, true);
                 }
@@ -9407,6 +9470,7 @@ final class CoreTasks
 
     private static function registerUnregisteredRecursive(Folder $folder, bool $recursive): void
     {
+        global $gDb;
         foreach (self::getUnregisteredEntries($folder) as $entry) {
             $name = (string)$entry['name'];
             if ($name === '') {
@@ -9417,7 +9481,7 @@ final class CoreTasks
 
         if ($recursive) {
             foreach ($folder->getSubfoldersWithProperties() as $subfolderData) {
-                $subfolder = new Folder($GLOBALS['gDb'], (int)$subfolderData['fol_id']);
+                $subfolder = new Folder($gDb, (int)$subfolderData['fol_id']);
                 if ($subfolder->hasUploadRight()) {
                     self::registerUnregisteredRecursive($subfolder, true);
                 }
@@ -9556,9 +9620,10 @@ final class CoreTasks
      */
     private static function itemData(ItemsData $itemData): array
     {
+        global $gDb;
         $data = array(
             'id' => $itemData->getItemId(),
-            'uuid' => (string)$GLOBALS['gDb']->queryPrepared(
+            'uuid' => (string)$gDb->queryPrepared(
                 'SELECT ini_uuid FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?',
                 array($itemData->getItemId())
             )->fetchColumn(),
@@ -10551,12 +10616,13 @@ final class CoreTasks
 
     private static function changePermissions(string $mode, array $arguments, array $options): int
     {
+        global $gDb;
         $right = CliApplication::requireArgument($arguments, 0, 'right-type');
         $objectId = self::positiveInt(
             CliApplication::requireArgument($arguments, 1, 'object-id'),
             'object-id'
         );
-        $rights = new RolesRights($GLOBALS['gDb'], $right, $objectId);
+        $rights = new RolesRights($gDb, $right, $objectId);
         if ((int)$rights->getValue('ror_id') === 0) {
             throw new InvalidArgumentException('Unknown object-right type "' . $right . '".');
         }
