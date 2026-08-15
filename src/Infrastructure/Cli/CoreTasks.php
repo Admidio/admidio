@@ -1613,9 +1613,7 @@ final class CoreTasks
             'inventory:picture-delete ITEM [--yes]', 'INVENTORY', true,
             array(self::arg('item', 'Item.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
-        self::task('inventory:import', 'inventoryImport', 'Import inventory items from a spreadsheet or delimited file.',
-            'inventory:import FILE [options]', 'INVENTORY', true,
-            array(self::arg('file', 'Import file.')), array(
+        $importOptions = array(
                 self::opt('input-format', 'Input file format.', 'FORMAT', false, false, false,
                     array('AUTO', 'XLSX', 'XLS', 'ODS', 'CSV', 'HTML')),
                 self::opt('encoding', 'CSV input encoding.', 'ENCODING', false, false, false,
@@ -1628,7 +1626,16 @@ final class CoreTasks
                 self::opt('first-row', 'Whether the first row contains column names. Defaults to true.', 'BOOL'),
                 self::opt('map', 'Map an inventory field to a one-based column number or header: FIELD=COLUMN.',
                     'FIELD=COLUMN', false, true)
-            ));
+        );
+        self::task('inventory:import', 'inventoryImport', 'Import inventory items from a spreadsheet or delimited file.',
+            'inventory:import FILE [options]', 'INVENTORY', true,
+            array(self::arg('file', 'Import file.')), $importOptions);
+        self::readTask('inventory:import-check', 'inventoryImportCheck',
+            'Preview an inventory import: report the resolved field mapping and the number of items without writing anything.',
+            'inventory:import-check FILE [options] [--format=text|json]', 'INVENTORY', true,
+            array(self::arg('file', 'Import file.')), array_merge($importOptions, array(
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+            )));
         self::readTask('inventory:export', 'inventoryExport', 'Export inventory items.',
             'inventory:export --format=FORMAT [--output=FILE]', 'INVENTORY', true,
             array(), array(
@@ -6260,7 +6267,17 @@ final class CoreTasks
         return 0;
     }
 
-    public static function inventoryImport(array $arguments, array $options): int
+    /**
+     * Read the import file and resolve the field mapping, without writing anything.
+     *
+     * Shared by inventory:import and inventory:import-check so the preview is guaranteed to
+     * describe the same mapping the import would use.
+     *
+     * @param array<int,string> $arguments
+     * @param array<string,mixed> $options
+     * @return array{service:ImportService,rows:array<int,array<int,mixed>>,mapping:array<int,int>,firstRow:bool}
+     */
+    private static function prepareInventoryImport(array $arguments, array $options): array
     {
         global $gDb, $gCurrentOrgId, $gSettingsManager;
 
@@ -6355,13 +6372,55 @@ final class CoreTasks
             );
         }
 
-        $formValues = $mapping;
-        if ($firstRow) {
+        return array(
+            'service' => $importService,
+            'rows' => $importData,
+            'mapping' => $mapping,
+            'firstRow' => $firstRow
+        );
+    }
+
+    public static function inventoryImport(array $arguments, array $options): int
+    {
+        $prepared = self::prepareInventoryImport($arguments, $options);
+
+        $formValues = $prepared['mapping'];
+        if ($prepared['firstRow']) {
             $formValues['first_row'] = '1';
         }
 
-        $result = $importService->importData($importData, $formValues);
+        $result = $prepared['service']->importData($prepared['rows'], $formValues);
         CliApplication::writeSuccess((string)$result['message'], $options);
+        return 0;
+    }
+
+    public static function inventoryImportCheck(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $prepared = self::prepareInventoryImport($arguments, $options);
+
+        $rows = array();
+        foreach ($prepared['mapping'] as $fieldId => $columnIndex) {
+            $field = new ItemField($gDb, (int)$fieldId);
+            $rows[] = array(
+                'field' => (string)$field->getValue('inf_name_intern'),
+                'name' => (string)$field->getValue('inf_name'),
+                'type' => (string)$field->getValue('inf_type'),
+                'required' => (int)$field->getValue('inf_required_input') === 1,
+                'column' => $columnIndex + 1
+            );
+        }
+
+        $dataRows = count($prepared['rows']) - ($prepared['firstRow'] ? 1 : 0);
+
+        CliApplication::writeValue(array(
+            'items_to_import' => max(0, $dataRows),
+            'first_row_contains_column_names' => $prepared['firstRow'],
+            'mapped_fields' => count($prepared['mapping']),
+            'mapping' => $rows
+        ), $options);
+
         return 0;
     }
 
