@@ -29,6 +29,20 @@ final class CliApplication
     private static string $currentCommand = '';
 
     /**
+     * Single-letter aliases for the global flags that are typed most often.
+     *
+     * Only flags are abbreviated: a short option that takes a value would have to define whether
+     * the value is attached or a separate token, which is not worth the ambiguity here.
+     *
+     * @var array<string,string>
+     */
+    private const SHORT_OPTIONS = array(
+        'h' => 'help',
+        'q' => 'quiet',
+        'y' => 'yes'
+    );
+
+    /**
      * The command finished successfully.
      */
     public const EXIT_SUCCESS = 0;
@@ -80,10 +94,10 @@ final class CliApplication
             'values' => array('text', 'table', 'record', 'json', 'csv', 'md', 'dokuwiki')
         ),
         array('name' => 'output', 'value' => 'FILE', 'description' => 'Write command output to a file.'),
-        array('name' => 'quiet', 'flag' => true, 'description' => 'Suppress confirmation messages. Requested data and errors are still printed.'),
+        array('name' => 'quiet', 'flag' => true, 'description' => 'Suppress confirmation messages. Requested data and errors are still printed. Short form -q.'),
         array('name' => 'no-interaction', 'flag' => true, 'description' => 'Never ask an interactive question.'),
-        array('name' => 'yes', 'flag' => true, 'description' => 'Confirm destructive operations.'),
-        array('name' => 'help', 'flag' => true, 'description' => 'Show help for the selected command.')
+        array('name' => 'yes', 'flag' => true, 'description' => 'Confirm destructive operations. Short form -y.'),
+        array('name' => 'help', 'flag' => true, 'description' => 'Show help for the selected command. Short form -h.')
     );
 
     /**
@@ -251,6 +265,19 @@ final class CliApplication
                 return array('command' => $argv[$index + 1] ?? '', 'error' => null);
             }
 
+            // Short flags may precede the command just like their long forms.
+            if (!str_starts_with($token, '--') && str_starts_with($token, '-') && strlen($token) > 1) {
+                if (isset(self::SHORT_OPTIONS[substr($token, 1)])) {
+                    continue;
+                }
+
+                return array(
+                    'command' => '',
+                    'error' => 'Unknown option "' . $token . '". Known short options are -'
+                        . implode(', -', array_keys(self::SHORT_OPTIONS)) . '.'
+                );
+            }
+
             if (!str_starts_with($token, '--')) {
                 return array('command' => $token, 'error' => null);
             }
@@ -325,6 +352,22 @@ final class CliApplication
 
             if ($parseOptions && $token === '--') {
                 $parseOptions = false;
+                continue;
+            }
+
+            if ($parseOptions
+                && !str_starts_with($token, '--')
+                && str_starts_with($token, '-')
+                && strlen($token) > 1) {
+                $letter = substr($token, 1);
+                if (!isset(self::SHORT_OPTIONS[$letter])) {
+                    throw new InvalidArgumentException(
+                        'Unknown option "' . $token . '". Known short options are -'
+                        . implode(', -', array_keys(self::SHORT_OPTIONS)) . '.'
+                    );
+                }
+
+                self::appendOption($options, self::SHORT_OPTIONS[$letter], true);
                 continue;
             }
 
