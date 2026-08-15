@@ -41,6 +41,20 @@ $configHost = isset($cliHost) && $cliHost !== '' ? $cliHost : getenv('ADMIDIO_HO
 if ($configHost === false || $configHost === '') {
     $configHost = 'localhost';
 }
+
+/*
+ * The value ends up in HTTP_HOST, SERVER_NAME and REQUEST_URI and is therefore read by config.php
+ * and by the URL constants derived in constants.php. Accept only a host name with an optional port
+ * so a caller cannot smuggle a path, a scheme or a header break into those values.
+ */
+if (!preg_match('/^(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*(?::\d{1,5})?$/', $configHost)
+    && !preg_match('/^\[[0-9A-Fa-f:.]+](?::\d{1,5})?$/', $configHost)) {
+    throw new RuntimeException(
+        'The host "' . $configHost . '" is not a valid host name. --host and ADMIDIO_HOST expect '
+        . 'a host name with an optional port, for example "example.org" or "example.org:8080".'
+    );
+}
+
 $_SERVER['HTTP_HOST'] = $configHost;
 $_SERVER['SERVER_NAME'] = $configHost;
 $_SERVER['SERVER_PORT'] = 80;
