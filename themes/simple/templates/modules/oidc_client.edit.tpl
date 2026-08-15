@@ -57,6 +57,8 @@
                             <tr id="table_row_button nosort">
                                 <td colspan="3">
                                     <a class="icon-text-link" href="javascript:addColumn_fieldsmap()"><i class="bi bi-plus-circle-fill"></i> {$l10n->get('SYS_ADD_FIELD')}</a>
+                                    &nbsp;·&nbsp;
+                                    <a class="icon-text-link" href="javascript:addStandardOidcClaims()"><i class="bi bi-magic"></i> {$l10n->get('SYS_SSO_OIDC_SUGGEST_CLAIMS')}</a>
                                 </td>
                             </tr>
                             <tr id="table_row_button nosort">

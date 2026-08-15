@@ -1726,6 +1726,7 @@
   <string name="SYS_SSO_OIDC_SCOPE_CUSTOM_DESC">Allows access to additional profile fields configured for this client.</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER">Use the #VAR1# permission</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER_DESC">Allows access to additional data or functionality requested by this client.</string>
+  <string name="SYS_SSO_OIDC_SUGGEST_CLAIMS">Suggest standard claims</string>
   <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Token URL</string>
   <string name="SYS_SSO_OIDC_TRUSTED_CLIENT">Skip consent screen</string>
   <string name="SYS_SSO_OIDC_TRUSTED_CLIENT_DESC">Do not ask users to approve this application’s requested access. Use only for applications you control and trust.</string>
