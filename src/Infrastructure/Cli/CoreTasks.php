@@ -966,11 +966,12 @@ final class CoreTasks
     private static function registerEventTasks(): void
     {
         self::readTask('event:list', 'eventList', 'List events.',
-            'event:list [--calendar=CATEGORY] [--date-from=DATE] [--date-to=DATE] [--format=FORMAT]',
+            'event:list [--calendar=CATEGORY] [--date-from=DATE] [--date-to=DATE] [--state=actual|old|all] [--format=FORMAT]',
             'EVENTS', true, array(), array(
                 self::opt('calendar', 'Event category/calendar.', 'CATEGORY'),
                 self::opt('date-from', 'Start date.', 'DATE'),
                 self::opt('date-to', 'End date.', 'DATE'),
+                self::opt('state', 'Restrict to upcoming or past events.', 'STATE', false, false, false, array('actual', 'old', 'all')),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('event:show', 'eventShow', 'Show an event.',
@@ -1007,7 +1008,11 @@ final class CoreTasks
             'EVENTS',
             true,
             array(),
-            $eventOptions
+            array_replace($eventOptions, array(
+                0 => self::opt('headline', 'Event title.', 'TEXT', true),
+                1 => self::opt('from', 'Event start date/time (YYYY-MM-DDTHH:MM).', 'DATETIME', true),
+                3 => self::opt('calendar', 'Event category/calendar.', 'CATEGORY', true)
+            ))
         );
         self::task(
             'event:update',
@@ -1382,7 +1387,9 @@ final class CoreTasks
             'PHOTOS',
             true,
             array(self::arg('name', 'Album name.')),
-            $albumOptions
+            array_replace($albumOptions, array(
+                2 => self::opt('begin', 'Begin date.', 'DATE', true)
+            ))
         );
         self::task(
             'photo:album-update',
@@ -4519,16 +4526,7 @@ final class CoreTasks
 
     public static function eventAdd(array $arguments, array $options): int
     {
-        if (!CliApplication::optionExists($options, 'headline')) {
-            throw new InvalidArgumentException('--headline is required.');
-        }
-        if (!CliApplication::optionExists($options, 'from')) {
-            throw new InvalidArgumentException('--from is required.');
-        }
-        if (!CliApplication::optionExists($options, 'calendar')) {
-            throw new InvalidArgumentException('--calendar is required.');
-        }
-
+        // --headline, --from and --calendar are declared as required in the registration.
         $event = new Event($GLOBALS['gDb']);
         $formValues = self::buildEventFormValues($event, $options, true);
 
@@ -5644,12 +5642,9 @@ final class CoreTasks
     {
         global $gDb;
 
+        // --begin is declared as required in the registration.
         $values = self::photoAlbumFormValues($options);
         $values['pho_name'] = CliApplication::requireArgument($arguments, 0, 'name');
-
-        if (!isset($values['pho_begin'])) {
-            throw new InvalidArgumentException('--begin is required when creating a photo album.');
-        }
 
         $parentUuid = 'ALL';
         if (CliApplication::optionExists($options, 'parent')) {
