@@ -860,7 +860,15 @@ final class CliApplication
         return $user;
     }
 
-    public static function resolveUser(string $reference): User
+    /**
+     * Resolve a user reference to a User entity.
+     *
+     * The lookup is restricted to members of the current organization, so a USER argument cannot
+     * address contacts of a foreign organization. Only user:delete needs the unrestricted lookup,
+     * because it has to recognise memberships in other organizations before deleting an account;
+     * it opts in through $anyOrganization.
+     */
+    public static function resolveUser(string $reference, bool $anyOrganization = false): User
     {
         global $gDb, $gCurrentOrgId, $gProfileFields;
 
@@ -868,18 +876,44 @@ final class CliApplication
             $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
         }
 
+        $scope = '';
+        $scopeParams = array();
+        if (!$anyOrganization) {
+            /*
+             * A user belongs to the organization if they hold a membership in one of its roles -
+             * current or former, so former members stay addressable - or if they have a pending
+             * registration for it, because a registration has no membership until it is approved.
+             */
+            $scope = ' AND (EXISTS (
+                        SELECT 1
+                          FROM ' . TBL_MEMBERS . '
+                    INNER JOIN ' . TBL_ROLES . '      ON rol_id = mem_rol_id
+                    INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                         WHERE mem_usr_id = usr_id
+                           AND rol_valid = true
+                           AND (cat_org_id = ? OR cat_org_id IS NULL)
+                      ) OR EXISTS (
+                        SELECT 1
+                          FROM ' . TBL_REGISTRATIONS . '
+                         WHERE reg_usr_id = usr_id
+                           AND reg_org_id = ?
+                      ))';
+            $scopeParams[] = $gCurrentOrgId;
+            $scopeParams[] = $gCurrentOrgId;
+        }
+
         if (ctype_digit($reference)) {
             $statement = $gDb->queryPrepared(
-                'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_id = ?',
-                array((int)$reference)
+                'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_id = ?' . $scope,
+                array_merge(array((int)$reference), $scopeParams)
             );
         } else {
             $statement = $gDb->queryPrepared(
                 'SELECT usr_id
                    FROM ' . TBL_USERS . '
-                  WHERE usr_uuid = ?
-                     OR UPPER(usr_login_name) = UPPER(?)',
-                array($reference, $reference)
+                  WHERE (usr_uuid = ?
+                     OR UPPER(usr_login_name) = UPPER(?))' . $scope,
+                array_merge(array($reference, $reference), $scopeParams)
             );
         }
 

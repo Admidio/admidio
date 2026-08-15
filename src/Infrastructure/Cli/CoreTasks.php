@@ -499,9 +499,12 @@ final class CoreTasks
             array(self::arg('user', 'One or more users.', true, true)),
             array(self::opt('yes', 'Confirm removal.', '', false, false, true)));
         self::task('user:delete', 'userDelete', 'Permanently delete users where the native organization checks allow it.',
-            'user:delete USER ... [--yes]', null, true,
+            'user:delete USER ... [--any-organization] [--yes]', null, true,
             array(self::arg('user', 'One or more users.', true, true)),
-            array(self::opt('yes', 'Confirm permanent deletion.', '', false, false, true)));
+            array(
+                self::opt('any-organization', 'Also resolve users that are not members of the current organization.', '', false, false, true),
+                self::opt('yes', 'Confirm permanent deletion.', '', false, false, true)
+            ));
         self::readTask('user:export', 'userExport', 'Export a user as the native vCard representation.',
             'user:export USER [--output=FILE]', 'CONTACTS', true,
             array(self::arg('user', 'User to export.')));
@@ -2813,8 +2816,10 @@ final class CoreTasks
 
         CliApplication::confirm('Permanently delete the selected user(s)?', $options);
 
+        $anyOrganization = CliApplication::optionBool($options, 'any-organization', false) ?? false;
+
         foreach ($arguments as $reference) {
-            $user = CliApplication::resolveUser($reference);
+            $user = CliApplication::resolveUser($reference, $anyOrganization);
             $userId = (int)$user->getValue('usr_id');
 
             if ($userId === $gCurrentUserId) {
