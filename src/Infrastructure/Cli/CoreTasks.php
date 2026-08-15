@@ -145,7 +145,8 @@ final class CoreTasks
         array $examples = array(),
         ?string $unavailableReason = null,
         string $componentAccess = CliTaskRegistry::ACCESS_ADMINISTRABLE,
-        ?string $aliasOf = null
+        ?string $aliasOf = null,
+        ?string $requiredRight = null
     ): void {
         CliTaskRegistry::registerCore(
             $name,
@@ -159,7 +160,8 @@ final class CoreTasks
             $examples,
             $unavailableReason,
             $componentAccess,
-            $aliasOf
+            $aliasOf,
+            $requiredRight
         );
     }
 
@@ -562,7 +564,7 @@ final class CoreTasks
             array(
                 self::opt('any-organization', 'Also resolve users that are not members of the current organization.', '', false, false, true),
                 self::opt('yes', 'Confirm permanent deletion.', '', false, false, true)
-            ));
+            ), requiredRight: 'administrator');
         self::readTask('user:export', 'userExport', 'Export a user as the native vCard representation.',
             'user:export USER [--output=FILE]', 'CONTACTS', true,
             array(self::arg('user', 'User to export.')));
@@ -654,14 +656,14 @@ final class CoreTasks
                     self::opt('type', 'Relation shape.', 'TYPE', true, false, false, array('symmetrical', 'asymmetrical', 'unidirectional'))
                 ),
                 array_slice($baseTypeOptions, 1)
-            ));
+            ), requiredRight: 'administrator');
         self::task('relation-type:update', 'relationTypeUpdate', 'Update a user relation type. Its existing relation shape is retained, matching current master.',
             'relation-type:update TYPE [options]', 'CONTACTS', true,
-            array(self::arg('type', 'Relation type UUID/id.')), $baseTypeOptions);
+            array(self::arg('type', 'Relation type UUID/id.')), $baseTypeOptions, requiredRight: 'administrator');
         self::task('relation-type:delete', 'relationTypeDelete', 'Delete a user relation type.',
             'relation-type:delete TYPE [--yes]', 'CONTACTS', true,
             array(self::arg('type', 'Relation type UUID/id.')),
-            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
+            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)), requiredRight: 'administrator');
         self::readTask('relation:list', 'relationList', 'List user relations.',
             'relation:list [USER] [--type=TYPE] [--format=FORMAT]', 'CONTACTS', true,
             array(self::arg('user', 'Optional user.', false)), array(
@@ -1740,10 +1742,10 @@ final class CoreTasks
                     'CHECKBOX', 'DATE', 'DECIMAL', 'DROPDOWN', 'DROPDOWN_MULTISELECT', 'EMAIL',
                     'NUMBER', 'PHONE', 'RADIO_BUTTON', 'TEXT', 'TEXT_BIG', 'URL'
                 ))
-            )));
+            )), requiredRight: 'administrator');
         self::task('profile:field-update', 'profileFieldUpdate', 'Update a profile field.',
             'profile:field-update FIELD [options]', 'CONTACTS', true,
-            array(self::arg('field', 'Profile field.')), $profileFieldOptions);
+            array(self::arg('field', 'Profile field.')), $profileFieldOptions, requiredRight: 'administrator');
         self::task('profile:field-delete', 'profileFieldDelete', 'Delete a profile field through ProfileField::delete().',
             'profile:field-delete FIELD [--yes]', 'CONTACTS', true,
             array(self::arg('field', 'Profile field.')),
@@ -1798,18 +1800,18 @@ final class CoreTasks
             array_replace($reportOptions, array(
                 0 => self::opt('name', 'Configuration name.', 'NAME', true),
                 3 => self::opt('column', 'Report column code.', 'COLUMN', true, true)
-            )));
+            )), requiredRight: 'administrator');
         self::task('category-report:update', 'categoryReportUpdate', 'Update a category-report configuration.',
             'category-report:update CONFIG [options]', 'CATEGORY-REPORT', true,
-            array(self::arg('config', 'Report config id/name.')), $reportOptions);
+            array(self::arg('config', 'Report config id/name.')), $reportOptions, requiredRight: 'administrator');
         self::task('category-report:copy', 'categoryReportCopy', 'Copy a category-report configuration.',
             'category-report:copy CONFIG [--name=NAME]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report config id/name.')),
-            array(self::opt('name', 'Name of the copied configuration.', 'NAME')));
+            array(self::opt('name', 'Name of the copied configuration.', 'NAME')), requiredRight: 'administrator');
         self::task('category-report:delete', 'categoryReportDelete', 'Delete a category-report configuration.',
             'category-report:delete CONFIG [--yes]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report config id/name.')),
-            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
+            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)), requiredRight: 'administrator');
         self::readTask('category-report:run', 'categoryReportRun', 'Run a category-report configuration.',
             'category-report:run CONFIG [--date=DATE] [--filter=TEXT] [--format=FORMAT]',
             'CATEGORY-REPORT', true, array(self::arg('config', 'Report config id/name.')), array(
@@ -2961,10 +2963,6 @@ final class CoreTasks
     {
         global $gDb, $gCurrentOrgId, $gCurrentUser, $gCurrentUserId;
 
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
         CliApplication::confirm('Permanently delete the selected user(s)?', $options);
 
         $anyOrganization = CliApplication::optionBool($options, 'any-organization', false) ?? false;
@@ -3202,11 +3200,7 @@ final class CoreTasks
 
     public static function relationTypeAdd(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser;
-
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+        global $gDb;
 
         $kind = CliApplication::optionString($options, 'type');
         if (!in_array($kind, array(
@@ -3260,11 +3254,7 @@ final class CoreTasks
 
     public static function relationTypeUpdate(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser;
-
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+        global $gDb;
 
         $relationType = self::resolveRelationType(CliApplication::requireArgument($arguments, 0, 'type'));
         $kind = $relationType->getRelationTypeString();
@@ -3297,10 +3287,6 @@ final class CoreTasks
 
     public static function relationTypeDelete(array $arguments, array $options): int
     {
-        global $gCurrentUser;
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
         CliApplication::confirm('Delete this relation type?', $options);
         self::resolveRelationType(CliApplication::requireArgument($arguments, 0, 'type'))->delete();
         CliApplication::writeSuccess('Relation type deleted.', $options);
@@ -6672,11 +6658,7 @@ final class CoreTasks
 
     public static function profileFieldAdd(array $arguments, array $options): int
     {
-        global $gCurrentUser, $gDb;
-
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+        global $gDb;
 
         $values = self::profileFieldFormValues($options);
         if (!isset($values['usf_name'], $values['usf_cat_id'], $values['usf_type'])) {
@@ -6690,11 +6672,7 @@ final class CoreTasks
 
     public static function profileFieldUpdate(array $arguments, array $options): int
     {
-        global $gCurrentUser, $gDb;
-
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+        global $gDb;
 
         $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
         if ((bool)$field->getValue('usf_system')
@@ -6900,12 +6878,6 @@ final class CoreTasks
 
     public static function categoryReportAdd(array $arguments, array $options): int
     {
-        global $gCurrentUser;
-
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
         $report = new \CategoryReport();
         $config = self::categoryReportConfigForSave($report->getConfigArray());
         $values = self::categoryReportFormValues($options, array(
@@ -6932,12 +6904,6 @@ final class CoreTasks
 
     public static function categoryReportUpdate(array $arguments, array $options): int
     {
-        global $gCurrentUser;
-
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
         $report = new \CategoryReport();
         $config = self::categoryReportConfigForSave($report->getConfigArray());
         $index = self::categoryReportConfigIndex(
@@ -6953,12 +6919,6 @@ final class CoreTasks
 
     public static function categoryReportCopy(array $arguments, array $options): int
     {
-        global $gCurrentUser;
-
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
         $report = new \CategoryReport();
         $config = self::categoryReportConfigForSave($report->getConfigArray());
         $index = self::categoryReportConfigIndex(
@@ -6982,12 +6942,6 @@ final class CoreTasks
 
     public static function categoryReportDelete(array $arguments, array $options): int
     {
-        global $gCurrentUser;
-
-        if (!$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
-
         $report = new \CategoryReport();
         $config = self::categoryReportConfigForSave($report->getConfigArray());
         $index = self::categoryReportConfigIndex(

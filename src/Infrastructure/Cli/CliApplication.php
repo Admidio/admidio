@@ -169,6 +169,18 @@ final class CliApplication
             }
         }
 
+        /*
+         * Some commands need a right on top of their component, for example the contacts module and
+         * a full administrator. Declaring it keeps the requirement in the registry, where "admidio
+         * help" can show it, instead of hiding it in the first lines of the callback.
+         */
+        if ($task['requiredRight'] !== null) {
+            $method = CliTaskRegistry::ADDITIONAL_RIGHTS[$task['requiredRight']];
+            if (!$GLOBALS['gCurrentUser']->$method()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+        }
+
         self::$currentCommand = $command;
 
         /*
@@ -701,6 +713,14 @@ final class CliApplication
             $text .= $this->renderHeadline('Alias', $sectionLevel, $format);
             $text .= $this->renderParagraph(
                 'This command is another name for ' . $task['aliasOf'] . ' and behaves identically.',
+                $format
+            );
+        }
+
+        if (($task['requiredRight'] ?? null) !== null) {
+            $text .= $this->renderHeadline('Required right', $sectionLevel, $format);
+            $text .= $this->renderParagraph(
+                'The acting user selected with --as must be an Admidio ' . $task['requiredRight'] . '.',
                 $format
             );
         }

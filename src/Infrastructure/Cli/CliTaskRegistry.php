@@ -33,11 +33,24 @@ final class CliTaskRegistry
     public const ACCESS_VISIBLE = 'visible';
 
     /**
+     * Rights a command may require in addition to its component, mapped to the User method that
+     * answers them. The component alone cannot express these: relation-type:add for example needs
+     * the contacts module *and* a full administrator, while isAdministrable('CONTACTS') is
+     * satisfied by a contacts administrator.
+     *
+     * @var array<string,string>
+     */
+    public const ADDITIONAL_RIGHTS = array(
+        'administrator' => 'isAdministrator'
+    );
+
+    /**
      * @var array<string,array{
      *     name:string,
      *     component:?string,
      *     componentAccess:string,
      *     aliasOf:?string,
+     *     requiredRight:?string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -100,13 +113,15 @@ final class CliTaskRegistry
         array $examples = array(),
         ?string $unavailableReason = null,
         string $componentAccess = self::ACCESS_ADMINISTRABLE,
-        ?string $aliasOf = null
+        ?string $aliasOf = null,
+        ?string $requiredRight = null
     ): void {
         self::registerTask(
             $taskName,
             $componentName,
             $componentAccess,
             $aliasOf,
+            $requiredRight,
             $actorRequired,
             $callback,
             $description,
@@ -179,6 +194,7 @@ final class CliTaskRegistry
             strtoupper($componentName),
             $componentAccess,
             null,
+            null,
             true,
             $callback,
             $description,
@@ -197,6 +213,7 @@ final class CliTaskRegistry
      *     component:?string,
      *     componentAccess:string,
      *     aliasOf:?string,
+     *     requiredRight:?string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -219,6 +236,7 @@ final class CliTaskRegistry
      *     component:?string,
      *     componentAccess:string,
      *     aliasOf:?string,
+     *     requiredRight:?string,
      *     actorRequired:bool,
      *     callback:callable,
      *     description:string,
@@ -267,6 +285,7 @@ final class CliTaskRegistry
         ?string $componentName,
         string $componentAccess,
         ?string $aliasOf,
+        ?string $requiredRight,
         bool $actorRequired,
         callable $callback,
         string $description,
@@ -315,6 +334,12 @@ final class CliTaskRegistry
             }
         }
 
+        if ($requiredRight !== null && !isset(self::ADDITIONAL_RIGHTS[$requiredRight])) {
+            throw new InvalidArgumentException(
+                'CLI command "' . $taskName . '" requires the unknown right "' . $requiredRight . '".'
+            );
+        }
+
         if ($aliasOf !== null && !isset(self::$tasks[$aliasOf])) {
             throw new InvalidArgumentException(
                 'CLI command "' . $taskName . '" is declared as an alias of the unknown command "'
@@ -346,6 +371,7 @@ final class CliTaskRegistry
             'component' => $componentName === null ? null : strtoupper($componentName),
             'componentAccess' => $componentAccess,
             'aliasOf' => $aliasOf,
+            'requiredRight' => $requiredRight,
             'actorRequired' => $actorRequired || $componentName !== null,
             'callback' => $callback,
             'description' => trim($description),
