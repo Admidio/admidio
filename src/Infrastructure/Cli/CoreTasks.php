@@ -9190,31 +9190,39 @@ final class CoreTasks
      */
     private static function getUnregisteredEntries(Folder $folder): array
     {
-        $contents = array(
+        /*
+         * Folder::addAdditionalToFolderContents() reports the physical entries that have no
+         * database record under the separate keys additionalFolders/additionalFiles; the registered
+         * entries stay in folders/files. DocumentsService::findUnregisteredFoldersFiles() applies
+         * the same rule, but formats the file size for the web UI, so the raw size is collected
+         * here to keep the CLI output machine-readable.
+         */
+        $contents = $folder->addAdditionalToFolderContents(array(
             'folders' => $folder->getSubfoldersWithProperties(),
             'files' => $folder->getFilesWithProperties()
-        );
-        $contents = $folder->addAdditionalToFolderContents($contents);
+        ));
 
+        $path = $folder->getFolderPath();
         $rows = array();
-        foreach ($contents['folders'] ?? array() as $entry) {
-            if (($entry['fol_id'] ?? 0) === 0 || ($entry['fol_uuid'] ?? '') === '') {
-                $rows[] = array(
-                    'type' => 'folder',
-                    'name' => $entry['fol_name'] ?? $entry['name'] ?? '',
-                    'path' => $entry['fol_path'] ?? $folder->getFolderPath()
-                );
-            }
+
+        foreach ($contents['additionalFolders'] ?? array() as $entry) {
+            $rows[] = array(
+                'type' => 'folder',
+                'name' => (string)($entry['fol_name'] ?? ''),
+                'size' => '',
+                'path' => $path
+            );
         }
-        foreach ($contents['files'] ?? array() as $entry) {
-            if (($entry['fil_id'] ?? 0) === 0 || ($entry['fil_uuid'] ?? '') === '') {
-                $rows[] = array(
-                    'type' => 'file',
-                    'name' => $entry['fil_name'] ?? $entry['name'] ?? '',
-                    'path' => $folder->getFolderPath()
-                );
-            }
+
+        foreach ($contents['additionalFiles'] ?? array() as $entry) {
+            $rows[] = array(
+                'type' => 'file',
+                'name' => (string)($entry['fil_name'] ?? ''),
+                'size' => (int)($entry['fil_size'] ?? 0),
+                'path' => $path
+            );
         }
+
         return $rows;
     }
 
