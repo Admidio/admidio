@@ -6046,17 +6046,26 @@ final class CoreTasks
         $search = mb_strtolower(CliApplication::optionString($options, 'search'));
         $rows = array();
 
+        /*
+         * ItemsData::isRetired() reads the STATUS select options again for every item it is called
+         * on. The status id is already part of the rows returned by readItems(), so the id of the
+         * retired option is resolved once and compared directly. That also lets the category and
+         * status filters run before readItemData(), which is the expensive call per item.
+         */
+        $retiredStatusId = self::inventoryRetiredStatusId($items);
+
         foreach ($items->getItems() as $itemRow) {
             if ($categoryId !== null && (int)$itemRow['ini_cat_id'] !== $categoryId) {
                 continue;
             }
+
+            $isRetired = $retiredStatusId > 0 && (int)$itemRow['ini_status'] === $retiredStatusId;
+            if (($statusFilter === 'retired' && !$isRetired)
+                || ($statusFilter === 'active' && $isRetired)) {
+                continue;
+            }
+
             $items->readItemData((string)$itemRow['ini_uuid']);
-            if ($statusFilter === 'retired' && !$items->isRetired()) {
-                continue;
-            }
-            if ($statusFilter === 'active' && $items->isRetired()) {
-                continue;
-            }
 
             $row = array(
                 'id' => (int)$itemRow['ini_id'],
@@ -9609,6 +9618,28 @@ final class CoreTasks
         $album->setValue('pho_locked', $locked);
         $album->save();
         CliApplication::writeSuccess('Photo album ' . ($locked ? 'locked.' : 'unlocked.'), $options);
+        return 0;
+    }
+
+    /**
+     * Id of the STATUS select option that marks an inventory item as retired, or 0 if the
+     * installation has no such option.
+     */
+    private static function inventoryRetiredStatusId(ItemsData $items): int
+    {
+        global $gDb;
+
+        $statusFieldId = (int)$items->getProperty('STATUS', 'inf_id');
+        if ($statusFieldId === 0) {
+            return 0;
+        }
+
+        foreach ((new InventorySelectOptions($gDb, $statusFieldId))->getAllOptions() as $option) {
+            if (($option['value'] ?? '') === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS') {
+                return (int)$option['id'];
+            }
+        }
+
         return 0;
     }
 
