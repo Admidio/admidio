@@ -783,6 +783,10 @@ final class CliApplication
      * --as does not authenticate the selected user. Local execution rights and access to the
      * Admidio configuration/database are the command-line security boundary.
      *
+     * The selected account must nevertheless be usable: it has to be activated (usr_valid) and an
+     * active member of the current organization, so the command line cannot act as an identity
+     * that would be rejected by User::checkLogin().
+     *
      * @param array<string,mixed> $options
      */
     public static function requireActor(array $options): User
@@ -810,6 +814,24 @@ final class CliApplication
         }
 
         $user = self::resolveUser($reference);
+
+        /*
+         * --as does not authenticate, but it must not grant an identity that could not log in at
+         * all. Both checks are evaluated before $gValidLogin is set, because every following
+         * Component and User right check derives from that state.
+         */
+        if (!(bool)$user->getValue('usr_valid')) {
+            throw new RuntimeException(
+                'The Admidio account "' . $reference . '" is not activated and cannot be used with --as.'
+            );
+        }
+
+        if (!$user->isMemberOfOrganization()) {
+            throw new RuntimeException(
+                'The Admidio account "' . $reference . '" is not an active member of the current organization.'
+            );
+        }
+
         $gCurrentUser = $user;
         $gCurrentUserId = (int)$user->getValue('usr_id');
         $gCurrentUserUUID = (string)$user->getValue('usr_uuid');
