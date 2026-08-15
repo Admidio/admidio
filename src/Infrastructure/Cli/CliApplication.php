@@ -81,10 +81,12 @@ final class CliApplication
         CoreTasks::register();
         $this->loadModuleTasks();
 
-        $command = $this->findCommand($argv);
-        if ($command === '') {
-            $command = 'help';
+        $found = $this->findCommand($argv);
+        if ($found['error'] !== null) {
+            throw new InvalidArgumentException($found['error']);
         }
+
+        $command = $found['command'] !== '' ? $found['command'] : 'help';
 
         $input = $this->parseInput($argv, $command);
 
@@ -146,9 +148,17 @@ final class CliApplication
     }
 
     /**
+     * Determine the command name from the argument list.
+     *
+     * Only the global options may precede the command, because the task-specific options are not
+     * known before the command is. A token that cannot be classified is reported through the error
+     * element rather than silently falling back to the help command, which would produce a message
+     * naming the wrong command.
+     *
      * @param array<int,string> $argv
+     * @return array{command:string,error:?string}
      */
-    private function findCommand(array $argv): string
+    private function findCommand(array $argv): array
     {
         $globalFlags = array('quiet', 'no-interaction', 'yes', 'help');
         $globalValueOptions = array('host', 'organization', 'as', 'format', 'output');
@@ -157,11 +167,11 @@ final class CliApplication
             $token = $argv[$index];
 
             if ($token === '--') {
-                return $argv[$index + 1] ?? '';
+                return array('command' => $argv[$index + 1] ?? '', 'error' => null);
             }
 
             if (!str_starts_with($token, '--')) {
-                return $token;
+                return array('command' => $token, 'error' => null);
             }
 
             $optionName = substr($token, 2);
@@ -174,15 +184,36 @@ final class CliApplication
             }
 
             if (in_array($optionName, $globalValueOptions, true)) {
+                $value = $argv[$index + 1] ?? null;
+
+                if ($value === null || str_starts_with($value, '--')) {
+                    return array('command' => '', 'error' => '--' . $optionName . ' expects a value.');
+                }
+
+                /*
+                 * "admidio --format user:list" would consume the command as the option value and
+                 * leave no command at all. Point at the = form instead of silently showing help.
+                 */
+                if (CliTaskRegistry::get($value) !== null) {
+                    return array(
+                        'command' => '',
+                        'error' => 'The value of --' . $optionName . ' is the command name "' . $value
+                            . '". Use --' . $optionName . '=VALUE when the option precedes the command.'
+                    );
+                }
+
                 ++$index;
                 continue;
             }
 
-            // Unknown pre-command options cannot be classified safely. Leave validation to parseInput.
-            return '';
+            return array(
+                'command' => '',
+                'error' => 'Unknown option "--' . $optionName . '" before the command name. '
+                    . 'Only global options may precede the command.'
+            );
         }
 
-        return '';
+        return array('command' => '', 'error' => null);
     }
 
     /**

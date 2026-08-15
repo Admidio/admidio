@@ -269,22 +269,8 @@ final class CoreTasks
         bool $flag = false,
         array $values = array()
     ): array {
-        if ($name === 'format'
-            && !in_array('record', $values, true)
-            && (
-                in_array('table', $values, true)
-                || (
-                    count($values) === 2
-                    && in_array('text', $values, true)
-                    && in_array('json', $values, true)
-                )
-            )) {
-            $position = array_search(
-                in_array('table', $values, true) ? 'table' : 'text',
-                $values,
-                true
-            );
-            array_splice($values, $position + 1, 0, array('record'));
+        if ($name === 'format') {
+            $values = self::withRecordFormat($values);
         }
 
         $option = array(
@@ -302,6 +288,39 @@ final class CoreTasks
         }
 
         return $option;
+    }
+
+    /**
+     * Add the "record" format to a --format option that can render it.
+     *
+     * CliApplication::writeRows() renders "record" - the field/value layout - for every result set
+     * it can render as a table, and writeValue() renders it for a single data record. Those are
+     * exactly the commands whose values contain "table", or the pair "text" and "json". Listing it
+     * in each of the roughly one hundred registrations would be pure repetition, so it is derived
+     * here; the rule lives in one place instead of being an unexplained side effect of opt().
+     *
+     * @param array<int,string> $values
+     * @return array<int,string>
+     */
+    private static function withRecordFormat(array $values): array
+    {
+        if (in_array('record', $values, true)) {
+            return $values;
+        }
+
+        $rendersTable = in_array('table', $values, true);
+        $rendersSingleRecord = count($values) === 2
+            && in_array('text', $values, true)
+            && in_array('json', $values, true);
+
+        if (!$rendersTable && !$rendersSingleRecord) {
+            return $values;
+        }
+
+        $position = array_search($rendersTable ? 'table' : 'text', $values, true);
+        array_splice($values, $position + 1, 0, array('record'));
+
+        return $values;
     }
 
     private static function registerGeneralTasks(): void
