@@ -1625,6 +1625,10 @@
   <string name="SYS_SSO_LOAD_METADATA">Client-Metadaten laden</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Die Anmeldung wurde vom Benutzer abgebrochen.</string>
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Du bist angemeldet, aber dein Benutzerkonto hat keine Zugriffsberechtigung für den Client (#VAR1#). Melde dich mit einem anderen Konto an oder kehre zum Client zurück.</string>
+  <string name="SYS_SSO_METADATA_PASTE">Oder Metadaten einfügen</string>
+  <string name="SYS_SSO_METADATA_PASTE_DESC">Falls Admidio die Metadaten-URL nicht erreichen kann (z. B. in einem internen Netzwerk), füge den Inhalt der Metadaten-Datei der Anwendung hier ein.</string>
+  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Eingefügte Metadaten übernehmen</string>
+  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Füge zuerst den Inhalt der Metadaten-Datei ein.</string>
   <string name="SYS_SSO_METADATA_URL">Metadaten-URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Füge die URL der SAML-Metadaten der Anwendung ein und wähle anschließend „Metadaten laden“, um diese Einstellungen auszufüllen.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Gib zuerst eine URL für die SAML-Metadaten ein.</string>
