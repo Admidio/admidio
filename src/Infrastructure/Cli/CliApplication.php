@@ -580,7 +580,7 @@ final class CliApplication
 
         $underlineCharacters = array(1 => '=', 2 => '-', 3 => '~', 4 => '.', 5 => '.');
         return $headline . PHP_EOL
-            . str_repeat($underlineCharacters[$level], strlen($headline))
+            . str_repeat($underlineCharacters[$level], self::displayWidth($headline))
             . PHP_EOL . PHP_EOL;
     }
 
@@ -674,12 +674,12 @@ final class CliApplication
 
         $widths = array_fill(0, count($headers), 0);
         foreach ($headers as $index => $header) {
-            $widths[$index] = strlen($header);
+            $widths[$index] = self::displayWidth($header);
         }
 
         foreach ($rows as $row) {
             foreach ($row as $index => $value) {
-                $widths[$index] = max($widths[$index], strlen($value));
+                $widths[$index] = max($widths[$index], self::displayWidth($value));
             }
         }
 
@@ -687,7 +687,7 @@ final class CliApplication
         $allRows = array_merge(array($headers), $rows);
         foreach ($allRows as $rowIndex => $row) {
             foreach ($row as $index => $value) {
-                $output .= str_pad($value, $widths[$index] + 2);
+                $output .= self::padCell($value, $widths[$index] + 2);
             }
             $output = rtrim($output) . PHP_EOL;
 
@@ -1121,7 +1121,16 @@ final class CliApplication
             return;
         }
 
-        $headers = array_keys($rows[0]);
+        /*
+         * Result sets are not guaranteed to be homogeneous - inventory:list for example builds one
+         * cell per configured item field. Align every row to the union of all keys so the column
+         * order is stable and no branch can read an undefined index.
+         */
+        $headers = self::collectHeaders($rows);
+        $rows = array_map(
+            static fn (array $row): array => self::alignRow($row, $headers),
+            $rows
+        );
 
         switch ($format) {
             case 'json':
@@ -1178,11 +1187,11 @@ final class CliApplication
             case 'table':
                 $widths = array_fill(0, count($headers), 0);
                 foreach ($headers as $index => $header) {
-                    $widths[$index] = strlen($header);
+                    $widths[$index] = self::displayWidth($header);
                 }
                 foreach ($rows as $row) {
                     foreach (array_values($row) as $index => $value) {
-                        $widths[$index] = max($widths[$index], strlen(self::normalizeCell($value)));
+                        $widths[$index] = max($widths[$index], self::displayWidth(self::normalizeCell($value)));
                     }
                 }
 
@@ -1191,7 +1200,7 @@ final class CliApplication
                 foreach ($allRows as $rowIndex => $row) {
                     $cells = array_values($row);
                     foreach ($cells as $index => $value) {
-                        $output .= str_pad(self::normalizeCell($value), $widths[$index] + 2);
+                        $output .= self::padCell(self::normalizeCell($value), $widths[$index] + 2);
                     }
                     $output = rtrim($output) . PHP_EOL;
                     if ($rowIndex === 0) {
@@ -1296,6 +1305,57 @@ final class CliApplication
         }
 
         echo $content;
+    }
+
+    /**
+     * Return the union of all row keys, preserving first-seen order.
+     *
+     * @param array<int,array<string,mixed>> $rows
+     * @return array<int,string>
+     */
+    private static function collectHeaders(array $rows): array
+    {
+        $headers = array();
+
+        foreach ($rows as $row) {
+            foreach (array_keys($row) as $key) {
+                $headers[(string)$key] = true;
+            }
+        }
+
+        return array_keys($headers);
+    }
+
+    /**
+     * @param array<string,mixed> $row
+     * @param array<int,string> $headers
+     * @return array<string,mixed>
+     */
+    private static function alignRow(array $row, array $headers): array
+    {
+        $aligned = array();
+
+        foreach ($headers as $header) {
+            $aligned[$header] = $row[$header] ?? '';
+        }
+
+        return $aligned;
+    }
+
+    /**
+     * Number of terminal columns a value occupies. strlen() counts bytes, so every umlaut in a
+     * role, category or user name would shift the following columns of a text table.
+     */
+    private static function displayWidth(string $value): int
+    {
+        return mb_strlen($value, 'UTF-8');
+    }
+
+    private static function padCell(string $value, int $width): string
+    {
+        $padding = $width - self::displayWidth($value);
+
+        return $padding > 0 ? $value . str_repeat(' ', $padding) : $value;
     }
 
     private static function normalizeCell(mixed $value): string
