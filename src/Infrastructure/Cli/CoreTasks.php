@@ -4182,9 +4182,6 @@ final class CoreTasks
             INNER JOIN ' . TBL_CATEGORIES . ' cat ON cat.cat_id = ann.ann_cat_id
                  WHERE ' . implode(' AND ', $where) . '
               ORDER BY ann.ann_timestamp_create DESC';
-        if ($limit > 0) {
-            $sql .= ' LIMIT ' . $limit . ' OFFSET ' . $offset;
-        }
         $all = $gDb->queryPrepared($sql, $params)->fetchAll();
         $rows = array();
         foreach ($all as $row) {
@@ -4193,6 +4190,12 @@ final class CoreTasks
                 $rows[] = $row;
             }
         }
+
+        // Paging has to be applied to the visible records, not to the raw result set.
+        if ($limit > 0 || $offset > 0) {
+            $rows = array_slice($rows, $offset, $limit > 0 ? $limit : null);
+        }
+
         CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
         return 0;
     }
