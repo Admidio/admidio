@@ -21,6 +21,47 @@ class KeyService {
     }
 
     /**
+     * Create a key object for the given UUID. Cryptographic keys belong to one organization,
+     * so the key is only read if it belongs to the current organization. The UUID alone must
+     * never be sufficient to address a key of a different organization.
+     *
+     * @param string $keyUUID UUID of the cryptographic key. If empty, an empty key object is returned.
+     * @return Key Key object; still a new record if the UUID is empty or does not belong to this organization.
+     * @throws Exception
+     */
+    public function createKeyObject(string $keyUUID = ''): Key {
+        global $gCurrentOrgId;
+
+        $ssoKey = new Key($this->db);
+
+        if ($keyUUID !== '') {
+            $ssoKey->readDataByColumns(array(
+                'key_org_id' => $gCurrentOrgId,
+                'key_uuid' => $keyUUID
+            ));
+        }
+
+        return $ssoKey;
+    }
+
+    /**
+     * Read an existing cryptographic key of the current organization.
+     *
+     * @param string $keyUUID UUID of the cryptographic key.
+     * @return Key Key object of the current organization.
+     * @throws Exception SYS_SSO_KEY_NOT_FOUND
+     */
+    public function getKeyFromUUID(string $keyUUID): Key {
+        $ssoKey = $this->createKeyObject($keyUUID);
+
+        if ($ssoKey->isNewRecord()) {
+            throw new Exception('SYS_SSO_KEY_NOT_FOUND');
+        }
+
+        return $ssoKey;
+    }
+
+    /**
      * Return an array of configured cryptographic keys.
      *
      * @param bool $activeOnly Only return active keys.
@@ -428,12 +469,13 @@ class KeyService {
     {
         global $gL10n;
 
-        $ssoKey = new Key($this->db);
-        $ssoKey->readDataByUuid($keyUUID);
-
         if (empty($keyUUID)) {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array($gL10n->get('SYS_ERROR_UUID_MISSING')));
         }
+
+        // only keys of the current organization may be exported
+        $ssoKey = $this->createKeyObject($keyUUID);
+
         if ($ssoKey->isNewRecord()) {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array($gL10n->get('SYS_SSO_KEY_NOT_FOUND')));
         }
@@ -543,9 +585,11 @@ class KeyService {
     {
         global $gCurrentOrgId;
 
-        $ssoKey = new Key($this->db);
-        if ($keyUUID !== '') {
-            $ssoKey->readDataByUuid($keyUUID);
+        // only keys of the current organization may be modified
+        $ssoKey = $this->createKeyObject($keyUUID);
+
+        if (!empty($keyUUID) && $ssoKey->isNewRecord()) {
+            throw new Exception('SYS_SSO_KEY_NOT_FOUND');
         }
 
         // If no key or cert exists yet, make sure it is generated
@@ -613,12 +657,29 @@ class KeyService {
 
     /**
      * @return array{filename:string,contentType:string,content:string}
+     * @throws Exception
      */
     public function getCertificateExportData(string $keyUUID): array
     {
-         $ssoKey = new Key($this->db);
-        $ssoKey->readDataByUuid($keyUUID);
-        $certificate = $ssoKey->getValue('key_certificate');
+        global $gL10n;
+
+        if (empty($keyUUID)) {
+            throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array($gL10n->get('SYS_ERROR_UUID_MISSING')));
+        }
+
+        // only certificates of the current organization may be exported
+        $ssoKey = $this->createKeyObject($keyUUID);
+
+        if ($ssoKey->isNewRecord()) {
+            throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array($gL10n->get('SYS_SSO_KEY_NOT_FOUND')));
+        }
+
+        $certificate = (string) $ssoKey->getValue('key_certificate');
+
+        if ($certificate === '') {
+            throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array($gL10n->get('SYS_SSO_CERTIFICATE_MISSING')));
+        }
+
         $filename = FileSystemUtils::getSanitizedPathEntry($ssoKey->getValue('key_name')) . '_Certificate.pem';
 
         return array(

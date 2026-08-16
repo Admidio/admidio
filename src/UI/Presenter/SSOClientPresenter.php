@@ -578,8 +578,9 @@ class SSOClientPresenter extends PagePresenter
     {
         global $gDb, $gL10n, $gCurrentSession, $gProfileFields, $gCurrentUser;
 
-        // create OIDC client object
-        $client = new OIDCClient($gDb);
+        // create organization-scoped OIDC client object
+        $OIDCService = new OIDCService($gDb, $gCurrentUser);
+        $client = $OIDCService->createClientObject($this->objectUUID);
         if ($this->objectUUID !== '') {
             $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_SSO_CLIENT_OIDC'))));
         } else {
@@ -588,8 +589,8 @@ class SSOClientPresenter extends PagePresenter
         $this->setHtmlID('admidio-oidc-client-edit');
 
         $allRolesSet = $this->getAvailableRoles();
-        if ($this->objectUUID !== '') {
-            $client->readDataByUUID($this->objectUUID);
+        if ($this->objectUUID !== '' && $client->isNewRecord()) {
+            throw new Exception('SYS_SSO_INVALID_CLIENT');
         }
 
         ChangelogService::displayHistoryButton($this, 'oidc-client', 'oidc_clients', !empty($this->objectUUID), array('uuid' => $this->objectUUID));
@@ -602,7 +603,6 @@ class SSOClientPresenter extends PagePresenter
             $this
         );
 
-        $OIDCService = new OIDCService($gDb, $gCurrentUser);
         $form->addCustomContent(
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
@@ -1062,7 +1062,6 @@ class SSOClientPresenter extends PagePresenter
         foreach ($OIDCService->getUUIDs() as $clientUUID) {
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $clientUUID));
             $client = $OIDCService->createClientObject($clientUUID);
-            $client->readDataByUuid($clientUUID);
             $templateClient = array();
             $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('ocl_client_name') . '</a>';

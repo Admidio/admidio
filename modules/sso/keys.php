@@ -11,7 +11,6 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Service\KeyService;
 use Admidio\UI\Presenter\SSOKeyPresenter;
 
@@ -61,9 +60,10 @@ try {
             // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $key = new Key($gDb);
-            $key->readDataByUuid($getKeyUUID);
-            $keyId = $key->getValue('key_id');
+            // only keys of the current organization may be deleted
+            $keyService = new KeyService($gDb);
+            $key = $keyService->getKeyFromUUID($getKeyUUID);
+            $keyId = (int) $key->getValue('key_id');
             // Check if key is set as this IdP's signing or encryption key
             if ($gSettingsManager->get('sso_saml_signing_key') == $keyId ||
                 $gSettingsManager->get('sso_saml_encryption_key') == $keyId ||

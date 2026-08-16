@@ -133,7 +133,11 @@ class OIDCLogoutNotificationService
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CONNECTTIMEOUT => 3,
                 CURLOPT_TIMEOUT => 5,
-                CURLOPT_FOLLOWLOCATION => false
+                CURLOPT_FOLLOWLOCATION => false,
+                // the logout URI is configured by an administrator, so restrict the
+                // request to HTTP(S) and never expose the response to the browser
+                CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+                CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS
             ));
 
             $result = curl_exec($curl);
