@@ -3,7 +3,6 @@ namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Service\KeyService;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
@@ -121,10 +120,12 @@ class SSOKeyPresenter extends PagePresenter
             }
         </style>");
 
-        // create SAML client object
-        $key = new Key($gDb);
-        if (!empty($this->keyUUID)) {
-            $key->readDataByUuid($this->keyUUID);
+        // create organization-scoped cryptographic key object
+        $keyService = new KeyService($gDb);
+        $key = $keyService->createKeyObject($this->keyUUID);
+
+        if (!empty($this->keyUUID) && $key->isNewRecord()) {
+            throw new Exception('SYS_SSO_KEY_NOT_FOUND');
         }
 
         $haveKey = !$key->isNewRecord();
