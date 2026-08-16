@@ -100,17 +100,17 @@ class ProfileFieldsPresenter extends PagePresenter
         $this->addJavascript('
             function updateDefaultValueField() {
                 // get the default value to set the correct selected option
-                
+
 
                 // spli the default values into an array (separated by comma)
                 let defaultValues = $("#usf_default_value").val().split(",");
-                
-                // replace the default option value input field with a selectbox containing the options                    
+
+                // replace the default option value input field with a selectbox containing the options
                 $("#usf_default_value").replaceWith(function() {
                     let selectBox = $("<select></select>")
                         .attr("id", "usf_default_value")
                         .addClass("form-select focus-ring ");
-                        
+
                     if ($("#usf_type").val() === "DROPDOWN_MULTISELECT") {
                         selectBox.attr("name", "usf_default_value[]")
                         selectBox.attr("multiple", "multiple")
@@ -118,7 +118,7 @@ class ProfileFieldsPresenter extends PagePresenter
                     else {
                         selectBox.attr("name", "usf_default_value")
                     }
-                    
+
                     // add a placeholder option
                     if ($("#usf_type").val() === "DROPDOWN_MULTISELECT") {
                         selectBox.append($("<option></option>")
@@ -136,7 +136,7 @@ class ProfileFieldsPresenter extends PagePresenter
                             .attr("value", "")
                             .text("-' . $gL10n->get('SYS_PLEASE_CHOOSE') . '-"));
                    }
-                        
+
                     // add all options from the options table
                     $("#ufo_usf_options_table").find("input[name$=\'[value]\']").each(function() {
                         let optionValue = $(this).val();
@@ -158,7 +158,7 @@ class ProfileFieldsPresenter extends PagePresenter
                 // update the displaye help text
                 var helpTextContainer = document.getElementById("usf_default_value_group").getElementsByTagName("div")[0].getElementsByClassName("form-text")[0];
                 helpTextContainer.innerHTML = "' . $gL10n->get('SYS_DEFAULT_VALUE_SELECT_OPTIONS_DESC') . '";
-                
+
                 // make the selectbox a multiselect if necessary
                 if ($("#usf_type").val() === "DROPDOWN_MULTISELECT") {
                     $("#usf_default_value").select2({
@@ -204,7 +204,7 @@ class ProfileFieldsPresenter extends PagePresenter
                 }
             });
             $("#usf_type").trigger("change");
-            
+
             // when a new option is added or the value of an option is changed we have to update the default value select box
             $("#ufo_usf_options_table").on("input", "input[name$=\'[value]\']", function() {
                 if ($("#usf_type").val() === "DROPDOWN" || $("#usf_type").val() === "DROPDOWN_MULTISELECT" || $("#usf_type").val() === "RADIO_BUTTON") {
@@ -212,7 +212,7 @@ class ProfileFieldsPresenter extends PagePresenter
                     updateDefaultValueField()
                 }
             });
-            
+
             ', true
         );
 
@@ -578,7 +578,7 @@ class ProfileFieldsPresenter extends PagePresenter
             } else {
                 $templateRowProfileField['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'adm_profile_field_' . $userField->getValue('usf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('mode' => 'delete', 'uuid' => $userField->getValue('usf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($userField->getValue('usf_name', 'database'))),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($userField->getValue('usf_name'))),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')
                 );
