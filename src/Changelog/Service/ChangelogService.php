@@ -1134,7 +1134,7 @@ class ChangelogService {
             }
         }
 
-        return $tablesPermitted;
+        return array_values(array_unique($tablesPermitted));
     }
 
     /**
