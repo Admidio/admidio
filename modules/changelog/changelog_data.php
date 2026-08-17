@@ -61,6 +61,7 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Database;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
@@ -369,8 +370,8 @@ try {
                 $relUUID = '';
                 $rid = $row['related_id'];
                 if (empty($rid)) {
-                    // do nothing
-                    $columnValues[] = $relatedName;
+                    // no related id -> no link, but the name still has to be encoded
+                    $columnValues[] = SecurityUtils::encodeHTML($relatedName);
                 } elseif (ctype_digit($rid)) { // numeric related_ID -> Interpret it as ID
                     $relID = (int)$row['related_id'];
                     $columnValues[] = ChangelogService::createLink($relatedName, $relatedTable, $relID, $relUUID);
@@ -391,7 +392,7 @@ try {
         } elseif (!empty($fieldInfo)) {
             // Note: Even for user fields, we don't want to use the current user field name from the database, but the name stored in the log table from the time the change was done!.
             $fieldName = (is_array($fieldInfo) && isset($fieldInfo['name'])) ? $fieldInfo['name'] : $fieldInfo;
-            $columnValues[] = Language::translateIfTranslationStrId($fieldName);
+            $columnValues[] = SecurityUtils::encodeHTML(Language::translateIfTranslationStrId($fieldName));
         } else {
             $columnValues[] = '';
         }
@@ -407,6 +408,12 @@ try {
         } elseif (is_array($fieldInfo) && isset($fieldInfo['type'])) {
             $valueNew = ChangelogService::formatValue($valueNew, $fieldInfo['type'], $fieldInfo['entries']??[]);
             $valueOld = ChangelogService::formatValue($valueOld, $fieldInfo['type'], $fieldInfo['entries']??[]);
+        } else {
+            // No type information for this field. The raw database value must never be sent to the
+            // DataTable as HTML, so it is passed through formatValue() with an empty type, which
+            // strips tags and encodes the value without applying any type specific formatting.
+            $valueNew = ChangelogService::formatValue($valueNew, '');
+            $valueOld = ChangelogService::formatValue($valueOld, '');
         }
 
         $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';

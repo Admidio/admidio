@@ -782,6 +782,13 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/keys.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             }
         }
+        // The returned string is rendered as HTML by the changelog DataTable, while every caller
+        // passes plain text that originates from the database (record names, related object names,
+        // user names). Encode it here, at the single place where the return value is assembled.
+        // Note: the 'roles_rights_data' case above returns early via a recursive call, which runs
+        // through this same encoding exactly once.
+        $text = SecurityUtils::encodeHTML(StringUtils::strStripTags($text));
+
         if ($url != '') {
             return '<a href="'.$url.'">'.$text.'</a>';
         } else {
@@ -1026,7 +1033,10 @@ class ChangelogService {
                     $object->readDataById($admVal);
                     $admVal = $object->readableName();
                 }
-                $table .= '<tr><td>' . $admVal . '</td><td>' . $ssoVal . "</td></tr>\n";
+                // formatValue() deliberately skips its encoding for the mapping types, so the
+                // values decoded from the JSON are still raw and have to be encoded here.
+                $table .= '<tr><td>' . SecurityUtils::encodeHTML((string)$admVal) . '</td><td>'
+                    . SecurityUtils::encodeHTML((string)$ssoVal) . "</td></tr>\n";
             }
         }
         $table .= '</table>';
