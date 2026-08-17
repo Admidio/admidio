@@ -1136,13 +1136,20 @@ class ChangelogService {
         if ($user->isAdministratorEvents())
             $tablesPermitted[] = 'events';
         if ($user->isAdministratorDocumentsFiles())
-            $tablesPermitted = array_merge($tablesPermitted, ['files', 'folders']);
+            // The role rights of a folder are stored in roles_rights_data, and the history buttons
+            // of the documents module request that table in addition to files and folders.
+            $tablesPermitted = array_merge($tablesPermitted, ['files', 'folders', 'roles_rights_data']);
         if ($user->isAdministratorUsers())
             $tablesPermitted = array_merge($tablesPermitted, ['users', 'user_data', 'user_relations', 'members']);
         if ($user->isAdministratorPhotos())
             $tablesPermitted[] = 'photos';
         if ($user->isAdministratorWeblinks())
             $tablesPermitted[] = 'links';
+        if ($user->isAdministratorInventory())
+            $tablesPermitted = array_merge($tablesPermitted, ['inventory_fields', 'inventory_field_select_options',
+                'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data']);
+        if ($user->isAdministratorForum())
+            $tablesPermitted = array_merge($tablesPermitted, ['forum_topics', 'forum_posts']);
 
         // HANDLE REGISTERED CALLBACKS to add additional tables
         // First process callbacks defined for the given module:
