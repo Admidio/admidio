@@ -146,9 +146,6 @@ try {
     // add page to navigation history
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    // add page to navigation history
-    $gNavigation->addUrl(CURRENT_URL, $headline);
-
     // filter_date_from and filter_date_to can use the internal ISO format
     // or the configured Admidio date format.
     $objDateFrom = DateTimeUtils::parseDate($getDateFrom, '1970-01-01');
