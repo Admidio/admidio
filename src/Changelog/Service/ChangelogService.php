@@ -1148,29 +1148,32 @@ class ChangelogService {
     public static function isTableLogged(string|array $table) : bool {
         global $gSettingsManager;
 
-        if ($gSettingsManager->getInt('changelog_module_enabled') > 0) { // Changelog enabled at all
-            // show link to view profile field change history if change history is enabled for at least one of the tables.
-            // Unknown tables are handled by the changelog_table_others preferences key!
-            if (is_array($table)) {
-                $tables = $table;
-            } else {
-                $tables = explode(',', $table);
-            }
-
-            $isLogged = array_map(function($t) {
-                global $gSettingsManager;
-                if (in_array($t, ChangelogService::$noLogTables)) {
-                    return false;
-                } elseif (!empty(ChangelogService::getTableLabel($t) && $gSettingsManager->has('changelog_table_'.$t))) {
-                    return $gSettingsManager->getBool('changelog_table_'.$t);
-                } else {
-                    return $gSettingsManager->getBool('changelog_table_others');
-                }
-            }, $tables);
-            return in_array(true, $isLogged);
-        } else {
+        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) { // Changelog not enabled
             return false;
         }
+
+        $tables = is_array($table) ? $table : explode(',', $table);
+
+        foreach ($tables as $tableName) {
+            $tableName = trim($tableName);
+            if ($tableName === '' || in_array($tableName, self::$noLogTables, true)) {
+                continue;
+            }
+
+            $settingName = 'changelog_table_' . $tableName;
+            $tableIsKnown = ChangelogService::getTableLabel($tableName) !== '';
+
+            // Once we find ANY requested table that is logged, we can return true!
+            if ($tableIsKnown && $gSettingsManager->has($settingName)) {
+                if ($gSettingsManager->getBool($settingName)) {
+                    return true;
+                }
+            } elseif ($gSettingsManager->getBool('changelog_table_others')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
