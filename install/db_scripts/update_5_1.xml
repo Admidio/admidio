@@ -53,5 +53,10 @@
     <step id="480">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_captcha_enabled'</step>
     <step id="490">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_enable_captcha'</step>
     <step id="500">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
+    <step id="510">ALTER TABLE %PREFIX%_log_changes ADD COLUMN log_org_id integer unsigned</step>
+    <step id="520">UPDATE %PREFIX%_log_changes SET log_org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations) WHERE log_org_id IS NULL AND (SELECT COUNT(*) FROM %PREFIX%_organizations) = 1</step>
+    <step id="530">CREATE INDEX %PREFIX%_idx_log_org_timestamp ON %PREFIX%_log_changes (log_org_id, log_timestamp_create)</step>
+    <step id="540">CREATE INDEX %PREFIX%_idx_log_table_record ON %PREFIX%_log_changes (log_table, log_record_id)</step>
+    <step id="550">CREATE INDEX %PREFIX%_idx_log_record_uuid ON %PREFIX%_log_changes (log_record_uuid)</step>
     <step>stop</step>
 </update>

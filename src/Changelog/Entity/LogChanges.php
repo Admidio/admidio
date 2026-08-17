@@ -337,17 +337,23 @@ class LogChanges extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
+        global $gCurrentOrgId;
+
         if (in_array($this->objectTableName, ChangelogService::$noLogTables) ||
             !ChangelogService::isTableLogged($this->objectTableName)) {
             return false;
         }
-        global $gCurrentSession, $gChangeNotification, $gCurrentUser;
 
         if (self::$originComment !== '' && (string)$this->getValue('log_comment') === '') {
             $this->setValue('log_comment', self::$originComment);
         }
 
-        $newRecord = $this->newRecord;
+        // adm_log_changes is a global table shared by all organizations. Remember the organization
+        // the change was made in, so that the change history can be restricted to it later on.
+        if (isset($gCurrentOrgId) && $gCurrentOrgId > 0 && (int)$this->getValue('log_org_id') === 0) {
+            $this->setValue('log_org_id', $gCurrentOrgId);
+        }
+
         return parent::save($updateFingerPrint);
     }
 
