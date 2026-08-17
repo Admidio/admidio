@@ -72,6 +72,11 @@ class OrganizationService
         $settingsManager->setMulti($defaultOrgPreferences, false);
         $newOrganization->createBasicData($gCurrentUserId);
 
+        // the base data of the new organization is set up, so log all further changes again.
+        // Entity::$loggingEnabled is a static, so leaving it disabled would switch off the
+        // changelog for every entity for the rest of the request.
+        Entity::setLoggingEnabled(true);
+
         // now refresh the session organization object because of the new organization
         $currentOrganizationId = $gCurrentOrgId;
         $gCurrentOrganization = new Organization($gDb, $currentOrganizationId);

@@ -68,8 +68,10 @@ class Session extends Entity
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
 
-        // disable logging of changes for auto login entries
-        self::$loggingEnabled = false;
+        // NOTE: Changes to the session table must not be logged, but this must NOT be done by
+        // setting Entity::$loggingEnabled, which is a static and would switch off the changelog
+        // for every other entity for the rest of the request. The table 'sessions' is listed in
+        // ChangelogService::$noLogTables, which already prevents any log entry for it.
 
         // determine session id
         if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
