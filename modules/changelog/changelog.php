@@ -53,22 +53,14 @@ try {
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
-    // named array of permission flag (true/false/"user-specific" per table)
-    $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
     if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
-    if ($gSettingsManager->getInt('changelog_module_enabled') === 2 && !$gCurrentUser->isAdministrator()) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
-    $accessAll = $gCurrentUser->isAdministrator() ||
-        (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted)));
 
-    // create a user object. Will fill it later if we encounter a user id
+    // create a user object. Will be filled if the log of one particular user is requested.
     $user = new User($gDb, $gProfileFields);
-    $userUuid = null;
     // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
-    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ['users', 'user_data', 'user_relations', 'members'])));
+    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ChangelogService::$userTables)));
     if ($isUserLog) {
         if (!empty($getUuid)) {
             $user->readDataByUuid($getUuid);
@@ -76,21 +68,19 @@ try {
             $user->readDataById($getId);
         }
         if (!$user->isNewRecord()) {
-            $userUuid = $user->getValue('usr_uuid');
+            // Address the user by uuid from here on: for the user_data table the record id is the
+            // id of the data row and not of the user, so filtering by id would match the log
+            // entries of a different user.
+            $getUuid = $user->getValue('usr_uuid');
+            $getId = 0;
         }
     }
 
-    // Access permissions:
-    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user:
-    if (!$accessAll &&
-            !(!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) &&
-            $isUserLog) {
-        // If a user UUID is given, we need access to that particular user
-        // if no UUID is given, isAdministratorUsers permissions are required
-        if (($userUuid === '' && !$gCurrentUser->isAdministratorUsers())
-            || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
-                throw new Exception('SYS_NO_RIGHTS');
-       }
+    // All view permissions are evaluated in one place. An empty list means no access at all.
+    $subject = $user->isNewRecord() ? null : $user;
+    $readableTables = ChangelogService::getReadableTables($gCurrentUser, $getTables, $subject);
+    if (count($readableTables) === 0) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
 
@@ -209,7 +199,6 @@ try {
     $columnHeading = array();
     $columnHeading[] = $gL10n->get('SYS_ABR_NO');
 
-    // $table->setDatatablesOrderColumns(array(array(8, 'desc')));
     if ($showTableColumn) {
         $columnHeading[] = $gL10n->get('SYS_TABLE');
     }
@@ -236,7 +225,11 @@ try {
 
     $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog_data.php', $filterFields));
 //    $table->setColumnAlignByArray($columnAlignment);
-    $table->disableColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+    // Only the running number cannot be sorted. All other columns are sorted server-side, see the
+    // whitelist $orderColumns in changelog_data.php, which must stay in sync with the columns here.
+    $table->disableColumnsSort(array(1));
+    // sort by the date of the change (last column), newest first
+    $table->setOrderColumns(array(array(count($columnHeading), 'desc')));
     $table->setColumnsNotHideResponsive(array(count($columnHeading)));
     // $table->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
     $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');

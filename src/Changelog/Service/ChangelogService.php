@@ -1171,6 +1171,106 @@ class ChangelogService {
     }
 
     /**
+     * Database tables that hold data shared between all organizations. They are not protected by
+     * per-table permissions, but by the right to edit the profile of the affected user.
+     * @var array
+     */
+    public static array $userTables = array('users', 'user_data', 'user_relations', 'members');
+
+    /**
+     * Check whether the user may read the changelog of all tables without any restriction.
+     * @param User $user The user whose permissions should be checked
+     * @return bool Returns true if no table restriction has to be applied for that user
+     * @throws Exception
+     */
+    public static function hasUnrestrictedAccess(User $user) : bool {
+        global $gSettingsManager;
+
+        return $gSettingsManager->getInt('changelog_module_enabled') > 0 && $user->isAdministrator();
+    }
+
+    /**
+     * Determine which of the requested database tables the given user is allowed to read in the
+     * changelog. This is the single place where changelog view permissions are evaluated.
+     *
+     * The result is deliberately not filtered by isTableLogged(): entries that were recorded while
+     * logging was still enabled must stay readable after logging has been switched off again.
+     *
+     * @param User $user The user whose permissions should be checked
+     * @param array $requestedTables The tables requested by the caller. An empty array means "all known tables".
+     * @param User|null $subject If the changelog of one particular user is requested, that user.
+     * @return string[] The subset of tables the user may read. An empty array means "no access at all".
+     * @throws Exception
+     */
+    public static function getReadableTables(User $user, array $requestedTables = array(), ?User $subject = null) : array {
+        global $gSettingsManager;
+
+        // Changelog disabled globally, or only enabled for administrators
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
+            return array();
+        }
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 2 && !$user->isAdministrator()) {
+            return array();
+        }
+
+        $candidates = $requestedTables;
+        if (count($candidates) === 0) {
+            $candidates = array_keys(self::getTableLabel());
+        }
+
+        if ($user->isAdministrator()) {
+            return array_values($candidates);
+        }
+
+        $tablesPermitted = self::getPermittedTables($user);
+
+        // The user tables are shared between all organizations and use per-user permissions:
+        // either the user may administer all contacts (already covered by getPermittedTables), or
+        // a concrete subject was requested whose profile the user is allowed to edit, or - if no
+        // subject was requested at all - the user may at least see the changes to his/her own
+        // data. In the latter two cases the caller MUST restrict the log entries of those tables
+        // to the corresponding user, see getUserTableRestriction().
+        if ($subject !== null && !$subject->isNewRecord()) {
+            if ($user->hasRightEditProfile($subject)) {
+                $tablesPermitted = array_merge($tablesPermitted, self::$userTables);
+            }
+        } elseif ($user->hasRightEditProfile($user)) {
+            $tablesPermitted = array_merge($tablesPermitted, self::$userTables);
+        }
+
+        return array_values(array_intersect($candidates, $tablesPermitted));
+    }
+
+    /**
+     * Return the user the log entries of the shared user tables have to be restricted to.
+     *
+     * getReadableTables() grants access to the user tables on a per-user basis, so whenever the
+     * current user may not administer all contacts, the entries of those tables must additionally
+     * be restricted to the one user he/she is allowed to see. Doing this as an SQL condition (and
+     * not by dropping rows afterwards) keeps the record counts and the paging of the changelog
+     * table correct.
+     *
+     * @param User $user The user whose permissions should be checked
+     * @param User|null $subject If the changelog of one particular user is requested, that user.
+     * @return string The uuid the entries of the user tables must be restricted to, or an empty
+     *                string if the user may read those tables without any restriction.
+     * @throws Exception
+     */
+    public static function getUserTableRestriction(User $user, ?User $subject = null) : string {
+        // administrators and user administrators may read the log of all users
+        if ($user->isAdministrator() || $user->isAdministratorUsers()) {
+            return '';
+        }
+
+        if ($subject !== null && !$subject->isNewRecord() && $user->hasRightEditProfile($subject)) {
+            return (string)$subject->getValue('usr_uuid');
+        }
+
+        // everyone else may only see the changes to his/her own data
+        return (string)$user->getValue('usr_uuid');
+    }
+
+    /**
      * Check whether changes to a given table or a list of given database tables are logged at all.
      * This is independent of particular viewing permissions of the current user.
      * If multiple tables are given (as a comma-separated string), at least one of them needs to be logged.
@@ -1246,49 +1346,60 @@ class ChangelogService {
      * @throws Exception
      */
     public static function displayHistoryButton(PagePresenter $page, string $area, string|array $table, bool $condition = true, array $params = array()) : void {
-        global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
+        global $gL10n;
 
-        // Changelog disabled globally
-        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
+        $url = self::getHistoryUrl($table, $condition, $params);
+        if ($url === '') {
             return;
         }
-        // Changelog only enabled for admins
-        if ($gSettingsManager->getInt('changelog_module_enabled') === 2 && !$gCurrentUser->isAdministrator()) {
-            return;
-        }
-
-        // Required tables is/are not logged at all, or condition for history button not met
-        if (!self::isTableLogged($table) || !$condition)
-            return;
-
-
-        if (!is_array($table))
-            $table = explode(',', $table);
-
-        $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-        // Admin always has access. Other users can have permissions per table.
-        $hasAccess = $gCurrentUser->isAdministrator() ||
-            (!empty($table) && empty(array_diff($table, $tablesPermitted)));
-
-        // No explicit table permissions. But user data can be accessed on a per-user permission level.
-        $isUserLog = (!empty($table) && empty(array_diff($table, ['users', 'user_data', 'user_relations', 'members'])));
-        if (!$hasAccess && $isUserLog && !empty($params['uuid'])) {
-            $user = new User($gDb, $gProfileFields);
-            $user->readDataByUuid($params['uuid']);
-            // If a user UUID is given, we need access to that particular user
-            if ($gCurrentUser->hasRightEditProfile($user)) {
-                $hasAccess = true;
-            }
-        }
-
-        if (!$hasAccess)
-            return;
 
         $page->addPageFunctionsMenuItem(
             "menu_item_{$area}_change_history",
             $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)),
+            $url,
             'bi-clock-history'
+        );
+    }
+
+    /**
+     * Build the URL of the changelog page for the given table(s), if the changelog is enabled for
+     * them and the current user is allowed to view those objects. This is the shared implementation
+     * behind displayHistoryButton() and displayHistoryButtonTable().
+     *
+     * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple)
+     * @param bool $condition Additional condition to display/hide
+     * @param array $params Additional URL parameters (uuid, id, related_id, ...)
+     * @return string The URL of the changelog page, or an empty string if it must not be offered
+     * @throws Exception
+     */
+    private static function getHistoryUrl(string|array $table, bool $condition = true, array $params = array()) : string {
+        global $gCurrentUser, $gProfileFields, $gDb;
+
+        // Required table(s) are not logged at all, or the condition for the history button is not met
+        if (!$condition || !self::isTableLogged($table)) {
+            return '';
+        }
+
+        if (!is_array($table)) {
+            $table = array_map('trim', explode(',', $table));
+        }
+
+        // If the log of one particular user is requested, the permission can also be granted
+        // through the right to edit that user's profile.
+        $subject = null;
+        if (!empty($params['uuid']) && !empty($table) && empty(array_diff($table, self::$userTables))) {
+            $subject = new User($gDb, $gProfileFields);
+            $subject->readDataByUuid($params['uuid']);
+        }
+
+        // the user needs read access to every requested table
+        if (count(array_diff($table, self::getReadableTables($gCurrentUser, $table, $subject))) > 0) {
+            return '';
+        }
+
+        return SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php',
+            array_merge(array('table' => implode(',', $table)), $params)
         );
     }
 
@@ -1304,47 +1415,16 @@ class ChangelogService {
      * @throws Exception
      */
     public static function displayHistoryButtonTable(string|array $table, bool $condition = true, array $params = array()) : array {
-        global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
+        global $gL10n;
 
-        // Changelog disabled globally
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+        $url = self::getHistoryUrl($table, $condition, $params);
+        if ($url === '') {
             return array();
         }
-        // Changelog only enabled for admins
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
-            return array();
-        }
-
-        // Required tables is/are not logged at all, or condition for history button not met
-        if (!self::isTableLogged($table) || !$condition)
-            return array();
-
-
-        if (!is_array($table))
-            $table = explode(',', $table);
-
-        $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-        // Admin always has access. Other users can have permissions per table.
-        $hasAccess = $gCurrentUser->isAdministrator() ||
-            (!empty($table) && empty(array_diff($table, $tablesPermitted)));
-
-        // No explicit table permissions. But user data can be accessed on a per-user permission level.
-        $isUserLog = (!empty($table) && empty(array_diff($table, ['users', 'user_data', 'user_relations', 'members'])));
-        if (!$hasAccess && $isUserLog && !empty($params['uuid'])) {
-            $user = new User($gDb, $gProfileFields);
-            $user->readDataByUuid($params['uuid']);
-            // If a user UUID is given, we need access to that particular user
-            if ($gCurrentUser->hasRightEditProfile($user)) {
-                $hasAccess = true;
-            }
-        }
-
-        if (!$hasAccess)
-            return array();
 
         // If the user has access to the changelog, create the link to the changelog page
         return array(
-            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)),
+            'url' => $url,
             'icon' => 'bi bi-clock-history',
             'tooltip' => $gL10n->get('SYS_CHANGE_HISTORY'),
         );

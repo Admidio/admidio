@@ -102,22 +102,14 @@ try {
 
 
 
-    // named array of permission flag (true/false/"user-specific" per table)
-    $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
     if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
-    if ($gSettingsManager->getInt('changelog_module_enabled') === 2 && !$gCurrentUser->isAdministrator()) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
-    $accessAll = $gCurrentUser->isAdministrator() ||
-        (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted)));
 
-    // create a user object. Will fill it later if we encounter a user id
+    // create a user object. Will be filled if the log of one particular user is requested.
     $user = new User($gDb, $gProfileFields);
-    $userUuid = null;
     // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
-    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ['users', 'user_data', 'user_relations', 'members'])));
+    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ChangelogService::$userTables)));
     if ($isUserLog) {
         if (!empty($getUuid)) {
             $user->readDataByUuid($getUuid);
@@ -125,21 +117,20 @@ try {
             $user->readDataById($getId);
         }
         if (!$user->isNewRecord()) {
-            $userUuid = $user->getValue('usr_uuid');
+            // Address the user by uuid from here on: for the user_data table the record id is the
+            // id of the data row and not of the user, so filtering by id would match the log
+            // entries of a different user.
+            $getUuid = $user->getValue('usr_uuid');
+            $getId = 0;
         }
     }
 
-    // Access permissions:
-    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user:
-    if (!$accessAll &&
-            !(!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) &&
-            $isUserLog) {
-        // If a user UUID is given, we need access to that particular user
-        // if no UUID is given, isAdministratorUsers permissions are required
-        if (($userUuid === '' && !$gCurrentUser->isAdministratorUsers())
-            || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
-                throw new Exception('SYS_NO_RIGHTS');
-       }
+    // All view permissions are evaluated in one place and are applied as SQL conditions below,
+    // so that the record counts and the paging match exactly what is displayed.
+    $subject = $user->isNewRecord() ? null : $user;
+    $readableTables = ChangelogService::getReadableTables($gCurrentUser, $getTables, $subject);
+    if (count($readableTables) === 0) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
 
@@ -159,28 +150,46 @@ try {
     $dateToHtml = $objDateTo->format($gSettingsManager->getString('system_date'));
 
 
-    // create order statement
-    $orderCondition = '';
-    // $orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
+    // Logic for hiding certain columns:
+    // If we have only one table name given, hide the table column
+    // If we view the user profile field changes page, hide the column, too
+    $showTableColumn = (count($getTables) !== 1);
+    // If none of the related-to values is set, hide the related_to column
+    $showRelatedColumn = true;
 
-    // if (array_key_exists('order', $_GET)) {
-    //     foreach ($_GET['order'] as $order) {
-    //         if (is_numeric($order['column'])) {
-    //             if ($orderCondition === '') {
-    //                 $orderCondition = ' ORDER BY ';
-    //             } else {
-    //                 $orderCondition .= ', ';
-    //             }
+    // Whitelist of the columns that can be sorted. The array index corresponds to the column
+    // position that DataTables sends and must match the order in which the columns are written
+    // to $columnValues further down.
+    $orderColumns = array('id');
+    if ($showTableColumn) {
+        $orderColumns[] = 'table_name';
+    }
+    $orderColumns[] = 'name';
+    if ($showRelatedColumn) {
+        $orderColumns[] = 'related_name';
+    }
+    $orderColumns[] = 'field_name';
+    $orderColumns[] = 'value_new';
+    $orderColumns[] = 'value_old';
+    $orderColumns[] = 'create_last_name';
+    $orderColumns[] = 'timestamp';
 
-    //             if (strtoupper($order['dir']) === 'ASC') {
-    //                 $orderCondition .= $orderColumns[$order['column']] . ' ASC ';
-    //             } else {
-    //                 $orderCondition .= $orderColumns[$order['column']] . ' DESC ';
-    //             }
-    //         }
-    //     }
-    // } else {
-    // }
+    // create order statement. Only column names from the whitelist above are used, so the
+    // request cannot inject anything into the ORDER BY clause.
+    $orderCondition = ' ORDER BY id DESC ';
+    if (isset($_GET['order']) && is_array($_GET['order'])) {
+        $orderParts = array();
+        foreach ($_GET['order'] as $order) {
+            $columnIndex = (int)($order['column'] ?? -1);
+            if (array_key_exists($columnIndex, $orderColumns)) {
+                $orderParts[] = $orderColumns[$columnIndex]
+                    . (strtoupper($order['dir'] ?? '') === 'ASC' ? ' ASC' : ' DESC');
+            }
+        }
+        if (count($orderParts) > 0) {
+            $orderCondition = ' ORDER BY ' . implode(', ', $orderParts) . ' ';
+        }
+    }
 
     // create search conditions
     $searchCondition = '';
@@ -199,7 +208,8 @@ try {
         }
 
         foreach ($searchString as $searchWord) {
-            $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', array_map(fn($col) => "COALESCE($col, '')", $searchColumns)) . ') LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
+            // Both sides have to be lowered, otherwise the search is case-sensitive on PostgreSQL.
+            $searchCondition .= ' AND LOWER(CONCAT(' . implode(', \' \', ', array_map(fn($col) => "COALESCE($col, '')", $searchColumns)) . ')) LIKE CONCAT(\'%\', LOWER(' . $searchValue . '), \'%\') ';
             $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
         }
 
@@ -221,10 +231,24 @@ try {
                              OR log_table IN (\'users\', \'user_data\', \'user_relations\')) ';
     $queryParamsConditions[] = $gCurrentOrgId;
 
-    if (!is_null($getTables) && count($getTables) > 0) {
-        // Add each table as a separate condition, joined by OR:
-        $sqlConditions .= ' AND ( ' .  implode(' OR ', array_map(fn($tbl) => 'log_table = ?', $getTables)) . ' ) ';
-        $queryParamsConditions = array_merge($queryParamsConditions, $getTables);
+    // Restrict the result to the tables the current user may read. $readableTables is already the
+    // intersection of the requested tables and the permitted ones, so this also applies the table
+    // filter of the request. Administrators that did not request specific tables see everything,
+    // including tables of third-party extensions that are unknown to getTableLabel().
+    if (!ChangelogService::hasUnrestrictedAccess($gCurrentUser) || count($getTables) > 0) {
+        $sqlConditions .= ' AND log_table IN (' . Database::getQmForValues($readableTables) . ') ';
+        $queryParamsConditions = array_merge($queryParamsConditions, $readableTables);
+    }
+
+    // Access to the shared user tables is granted per user, so their entries have to be restricted
+    // to the one user the current user is allowed to see. Without a restriction the user may read
+    // the log of all users (administrators and user administrators).
+    $userTableRestriction = ChangelogService::getUserTableRestriction($gCurrentUser, $subject);
+    if ($userTableRestriction !== '') {
+        $sqlConditions .= ' AND (log_table NOT IN (' . Database::getQmForValues(ChangelogService::$userTables) . ')
+                                 OR log_record_uuid = ?) ';
+        $queryParamsConditions = array_merge($queryParamsConditions, ChangelogService::$userTables);
+        $queryParamsConditions[] = $userTableRestriction;
     }
 
     if (!is_null($getId) && $getId > 0) {
@@ -262,8 +286,7 @@ try {
                AND create_first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
         WHERE
                log_timestamp_create BETWEEN ? AND ? -- $dateFromIntern and $dateToIntern
-        ' . $sqlConditions . '
-        ORDER BY log_id DESC';
+        ' . $sqlConditions;
 
     $queryParams = array_merge([
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
@@ -291,60 +314,30 @@ try {
 
     $rowNumber = $getStart; // count for every row
 
-    // get count of all members and store into json
-    $countSql = 'SELECT COUNT(*) AS count_total FROM (' . $mainSql . ') as entries ';
-    $countTotalStatement = $gDb->queryPrepared($countSql, $queryParams); // TODO add more params
+    // All permission checks are part of the sql conditions above, so no rows are dropped while
+    // building the output and both counts are exact.
+    $countTotalStatement = $gDb->queryPrepared('SELECT COUNT(*) FROM (' . $mainSql . ') AS entries', $queryParams);
     $jsonArray['recordsTotal'] = (int)$countTotalStatement->fetchColumn();
+
+    if ($getSearch === '') {
+        $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
+    } else {
+        $countFilteredStatement = $gDb->queryPrepared(
+            'SELECT COUNT(*) FROM (' . $mainSql . ') AS entries ' . $searchCondition,
+            array_merge($queryParams, $queryParamsSearch)
+        );
+        $jsonArray['recordsFiltered'] = (int)$countFilteredStatement->fetchColumn();
+    }
 
     $jsonArray['data'] = array();
 
 
-
-
-
     $fieldHistoryStatement = $gDb->queryPrepared($sql, $queryParamsMain);
 
-    // Logic for hiding certain columns:
-    // If we have only one table name given, hide the table column
-    // If we view the user profile field changes page, hide the column, too
-    $showTableColumn = true;
-    if (count($getTables) == 1) {
-        $showTableColumn = false;
-    }
-    // If none of the related-to values is set, hide the related_to column
-    $showRelatedColumn = true;
-
-
     $fieldStrings = ChangelogService::getFieldTranslations();
-    $recordsHidden = 0;
 
     while ($row = $fieldHistoryStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
-        $rowTable = $row['table_name'];
-
-        $allowRecordAccess = false;
-        // First step: Check view permissions to that particular log entry:
-        if ($accessAll || in_array($rowTable, $tablesPermitted)) {
-            $allowRecordAccess = true;
-        } else {
-            // no global access permissions to that particular data/table
-            // Some objects have more fine-grained permissions (e.g. each group can have access permissions
-            // based on the user's role -> the calling user might have access to one particular role, but not in general)
-            if (in_array($rowTable, ['users', 'user_data', 'user_relations', 'members'])) {
-                // user UUID is available as uuid; current user has no general access to profile data, but might have permissions to this specific user (due to fole permissions)
-                $rowUser = new User($gDb, $gProfileFields);
-                $rowUser->readDataByUuid($row['uuid']);
-                if ($gCurrentUser->hasRightEditProfile($rowUser)) {
-                    $allowRecordAccess = true;
-                }
-            }
-            // NO access to this record allowed -> Set flag to show warning about records being
-            // hidden due to insufficient permissions
-            if (!$allowRecordAccess) {
-                ++$recordsHidden;
-                continue;
-            }
-        }
 
         $fieldInfo = $row['field_name'];
         $fieldInfo = array_key_exists($fieldInfo, $fieldStrings) ? $fieldStrings[$fieldInfo] : $fieldInfo;
@@ -441,30 +434,11 @@ try {
         $jsonArray['data'][] = $columnValues;
     }
 
-    // set count of filtered records
-    if ($getSearch !== '') {
-        if ($rowNumber < $getStart + $getLength) {
-            $jsonArray['recordsFiltered'] = $rowNumber;
-        } else {
-            // read count of all filtered records without limit and offset
-            $sql = 'SELECT COUNT(*) AS count
-                  FROM (' . $mainSql . ') AS members
-                       ' . $searchCondition;
-            $countFilteredStatement = $gDb->queryPrepared($sql, $queryParams);
+    // The record counts are determined together with the queries above, because all permission
+    // checks are part of the sql conditions and no record can be dropped afterwards.
 
-            $jsonArray['recordsFiltered'] = (int)$countFilteredStatement->fetchColumn();
-        }
-    } else {
-        $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
-    }
-
-    if ($recordsHidden > 0) {
-        $jsonArray['notice']['DT_notice'] = '<i class="bi bi-exclamation-circle-fill"></i>' .
-            $gL10n->get('SYS_LOG_RECORDS_HIDDEN', [$recordsHidden]);
-    } else {
-        // Make sure the notice is hidden!
-        $jsonArray['notice']['DT_notice'] = '';
-    }
+    // Make sure a notice of a previous draw is hidden!
+    $jsonArray['notice']['DT_notice'] = '';
 
     echo json_encode($jsonArray);
 } catch (Throwable $e) {
