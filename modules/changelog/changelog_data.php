@@ -227,7 +227,7 @@ try {
         $sqlConditions .= ' AND (log_record_uuid = ? )';
         $queryParamsConditions[] = $getUuid;
     }
-    if (!is_null($getRelatedId) && $getRelatedId > 0) {
+    if (!is_null($getRelatedId) && $getRelatedId !== '') {
         $sqlConditions .= ' AND (log_related_id = ? )';
         $queryParamsConditions[] = $getRelatedId;
     }
