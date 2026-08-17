@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Users\Entity\User;
@@ -375,16 +376,8 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
             break;
 
         case 'date':
-            // check if date is a valid Admidio date format
-            $objAdmidioDate = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
-
-            if (!$objAdmidioDate) {
-                // check if date has english format
-                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $value);
-
-                if (!$objEnglishDate) {
-                    throw new Exception('The date parameter "' . $variableName . '" has an invalid date format!');
-                }
+            if (DateTimeUtils::parseDate($value) === null) {
+                throw new Exception('The date parameter "' . $variableName . '" has an invalid date format!');
             }
             break;
 

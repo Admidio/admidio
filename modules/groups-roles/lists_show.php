@@ -28,6 +28,8 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
+
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Service\RolesService;
@@ -153,12 +155,7 @@ try {
         // if the event is in the past then show all members that were registered for this event
         $eventEnd = $event->getValue('dat_end', 'Y-m-d');
         $eventEnd = DateTime::createFromFormat('Y-m-d', $eventEnd);
-        $dateNow = DateTime::createFromFormat('Y-m-d',DATE_NOW);
-        if ($dateNow === false) {
-            // check if DATE_NOW has system format
-            $dateNow = DateTime::createFromFormat($gSettingsManager->getString('system_date'), DATE_NOW);
-            $dateNow->format('Y-m-d');
-        }
+        $dateNow = new DateTime(DATE_NOW);
 
         $getMembersShowFiler = ($eventEnd < $dateNow) ? 2 : 0;
         $getDateFrom = DATE_NOW;
@@ -166,19 +163,16 @@ try {
     }
 
     // Create date objects and format events in system format
-    $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
-    if ($objDateFrom === false) {
-        // check if date_from  has system format
-        $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
+    $objDateFrom = DateTimeUtils::parseDate($getDateFrom);
+    $objDateTo = DateTimeUtils::parseDate($getDateTo);
+
+    if ($objDateFrom === null || $objDateTo === null) {
+        throw new Exception('SYS_DATE_INVALID');
     }
+
     $dateFrom = $objDateFrom->format($gSettingsManager->getString('system_date'));
     $startDateEnglishFormat = $objDateFrom->format('Y-m-d');
 
-    $objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
-    if ($objDateTo === false) {
-        // check if date_from  has system format
-        $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
-    }
     $dateTo = $objDateTo->format($gSettingsManager->getString('system_date'));
     $endDateEnglishFormat = $objDateTo->format('Y-m-d');
 

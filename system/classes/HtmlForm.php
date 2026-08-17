@@ -4,6 +4,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 
 /**
  * @brief Creates an Admidio specific form with special elements
@@ -706,8 +707,11 @@ class HtmlForm
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
-            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
-
+            $datetime = DateTimeUtils::parseDateTime($value);
+            if ($value !== '' && $datetime !== null) {
+                $value = $datetime->format('Y-m-d\TH:i');
+            }
+            
             // now add a date and a time field to the form
             $attributes['dateValue'] = null;
             $attributes['timeValue'] = null;
@@ -725,9 +729,10 @@ class HtmlForm
             $attributes['timeValueAttributes'] = array();
             $attributes['timeValueAttributes']['class'] = 'form-control datetime-time-control';
         } elseif ($optionsAll['type'] === 'date') {
-            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
-            if (!empty($value) && is_object($datetime))
+            $datetime = DateTimeUtils::parseDate($value);
+            if ($value !== '' && $datetime !== null) {
                 $value = $datetime->format('Y-m-d');
+            }
             $attributes['pattern'] = '\d{4}-\d{2}-\d{2}';
         } elseif ($optionsAll['type'] === 'time') {
             $datetime = DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);

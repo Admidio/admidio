@@ -14,6 +14,7 @@ use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Changelog\Entity\LogChanges;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\QRServerProvider;
@@ -2260,9 +2261,9 @@ class User extends Entity
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE') {
-            $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $newValue);
+            $date = DateTimeUtils::parseDate($newValue);
 
-            if ($date !== false) {
+            if ($date !== null) {
                 $newValue = $date->format('Y-m-d');
             }
         } elseif (

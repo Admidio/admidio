@@ -64,7 +64,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
-
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 
 
 
@@ -74,7 +74,7 @@ try {
     require(__DIR__ . '/../../system/login_valid.php');
 
     // calculate default date from which the profile fields history should be shown
-    $filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
+    $filterDateFrom = new DateTime(DATE_NOW);
     $filterDateFrom->modify('-' . $gSettingsManager->getInt('contacts_field_history_days') . ' day');
 
 
@@ -145,26 +145,10 @@ try {
     }
 
 
-
-    // filter_date_from and filter_date_to can have different formats
-    // now we try to get a default format for intern use and html output
-    $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
-    if ($objDateFrom === false) {
-        // check if date has system format
-        $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
-        if ($objDateFrom === false) {
-            $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
-        }
-    }
-
-    $objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
-    if ($objDateTo === false) {
-        // check if date has system format
-        $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
-        if ($objDateTo === false) {
-            $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
-        }
-    }
+    // filter_date_from and filter_date_to can use the internal ISO format
+    // or the configured Admidio date format.
+    $objDateFrom = DateTimeUtils::parseDate($getDateFrom, '1970-01-01');
+    $objDateTo = DateTimeUtils::parseDate($getDateTo, DATE_NOW);
 
     // DateTo should be greater than DateFrom
     if ($objDateFrom > $objDateTo) {
