@@ -10,7 +10,7 @@
  ***********************************************************************************************
  *
  *
- * This script will read all requested change history fecords from the database. It is optimized to
+ * This script will read all requested change history records from the database. It is optimized to
  * work with the javascript DataTables and will return the data in json format.
  *
  * **Code example**
@@ -73,7 +73,7 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
 
-    // calculate default date from which the profile fields history should be shown
+    // calculate default date from which the history should be shown
     $filterDateFrom = new DateTime(DATE_NOW);
     $filterDateFrom->modify('-' . $gSettingsManager->getInt('contacts_field_history_days') . ' day');
 
@@ -100,15 +100,12 @@ try {
 
 
 
-
-    $haveID = !empty($getId) || !empty($getUuid);
-
     // named array of permission flag (true/false/"user-specific" per table)
     $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-    if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+    if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
-    if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
+    if ($gSettingsManager->getInt('changelog_module_enabled') === 2 && !$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
     $accessAll = $gCurrentUser->isAdministrator() ||
@@ -305,7 +302,6 @@ try {
     }
     // If none of the related-to values is set, hide the related_to column
     $showRelatedColumn = true;
-    $noShowRelatedTables = ['user_fields', 'user_field_select_options', 'users', 'user_data'];
 
 
     $fieldStrings = ChangelogService::getFieldTranslations();
@@ -345,7 +341,6 @@ try {
 
         $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
         $columnValues    = array('DT_RowId' => 'row_log_' . $row['id'], '0' => $rowNumber);
-        $columnNumber    = 1;
 
         // 1. Column showing DB table name (only if more then one tables are shown; One table should be displayed in the headline!)
         if ($showTableColumn) {
@@ -425,7 +420,6 @@ try {
             $actorName = ChangelogService::createLink($actorName, 'users', 0, $row['uuid_usr_create']);
         }
         $columnValues[] = $actorName;
-        // $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'..'</a>';
         $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date') . ' ' .$gSettingsManager->getString('system_time'));
         $jsonArray['data'][] = $columnValues;
     }

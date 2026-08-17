@@ -1148,7 +1148,7 @@ class ChangelogService {
     public static function isTableLogged(string|array $table) : bool {
         global $gSettingsManager;
 
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) { // Changelog not enabled
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) { // Changelog not enabled
             return false;
         }
 
@@ -1190,8 +1190,8 @@ class ChangelogService {
             $user = $gCurrentUser;
         }
 
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 1 ||
-            ($gSettingsManager->getInt('changelog_module_enabled') == 2 && $user->isAdministrator())) {
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 1 ||
+            ($gSettingsManager->getInt('changelog_module_enabled') === 2 && $user->isAdministrator())) {
             return self::isTableLogged($table);
         } else {
             return false;
@@ -1216,11 +1216,11 @@ class ChangelogService {
         global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
 
         // Changelog disabled globally
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
             return;
         }
         // Changelog only enabled for admins
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 2 && !$gCurrentUser->isAdministrator()) {
             return;
         }
 

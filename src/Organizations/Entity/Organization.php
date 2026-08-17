@@ -962,7 +962,7 @@ class Organization extends Entity
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
+    protected function adjustLogEntry(LogChanges $logEntry): void {
         $orgParentId = (int) $this->getValue('org_org_id_parent');
         if ($orgParentId > 0) {
             $sql = 'SELECT org_id, org_longname, org_shortname

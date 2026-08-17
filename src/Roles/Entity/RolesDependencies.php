@@ -76,7 +76,7 @@ class RolesDependencies extends Entity
      * 
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
+    protected function adjustLogEntry(LogChanges $logEntry): void {
         $parent_role = new Role($this->db, $this->getValue('rld_rol_id_parent'));
         $child_role = new Role($this->db, $this->getValue('rld_rol_id_child'));
 
