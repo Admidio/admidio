@@ -4,6 +4,7 @@ namespace Admidio\Preferences\Entity;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Changelog\Entity\LogChanges;
 
 /**
  * @brief Class manages access to database table adm_preferences
@@ -42,4 +43,25 @@ class Preferences extends Entity
     {
         return array_merge(parent::getIgnoredLogColumns(), ['prf_name', 'prf_org_id']);
     }
+    /**
+     * Mask sensitive values of certain preference in the ChangeLog
+     */
+    protected function adjustLogEntry(LogChanges $logEntry): void
+    {
+        parent::adjustLogEntry($logEntry);
+
+        if ($logEntry->getValue('log_field') !== 'prf_value') {
+            return;
+        }
+
+        if (in_array(
+            $this->getValue('prf_name'),
+            array('mail_smtp_password'),
+            true
+        )) {
+            $logEntry->setValue('log_value_old', '********');
+            $logEntry->setValue('log_value_new', '********');
+        }
+    }
+
 }

@@ -296,7 +296,7 @@ class Entity
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry)
+    protected function adjustLogEntry(LogChanges $logEntry): void
     {
     }
 

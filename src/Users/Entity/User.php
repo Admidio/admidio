@@ -2382,7 +2382,7 @@ class User extends Entity
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry)
+    protected function adjustLogEntry(LogChanges $logEntry): void
     {
         if (in_array($logEntry->getValue('log_field'), array('usr_password', 'usr_tfa_secret'))) {
             $logEntry->setValue('log_value_old', '********');
