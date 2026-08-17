@@ -60,6 +60,7 @@ $defaultOrgPreferences = array(
 
     // Changelog settings
     'changelog_module_enabled' => '1',
+    'changelog_default_days' => '365',
     'changelog_table_user_data' => '1',
     'changelog_table_users' => '1',
     'changelog_table_members' => '1',
@@ -147,7 +148,6 @@ $defaultOrgPreferences = array(
     'category_report_default_configuration' => '',
 
     // Contacts
-    'contacts_field_history_days' => '365',
     'contacts_list_configuration' => '',
     'contacts_per_page' => '25',
     'contacts_show_all' => '1',

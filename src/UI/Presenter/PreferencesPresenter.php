@@ -485,6 +485,13 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['changelog_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_ENABLE_CHANGELOG_DESC')
         );
 
+        $formChangelog->addInput(
+            'changelog_default_days',
+            $gL10n->get('SYS_CHANGELOG_DEFAULT_DAYS'),
+            $formValues['changelog_default_days'] ?? '365',
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_CHANGELOG_DEFAULT_DAYS_DESC')
+        );
+
         $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], ChangelogService::getTableLabel());
         // $selectedTables = explode(',', $formValues['changelog_tables']??'');
         $formChangelog->addCustomContent(
@@ -762,12 +769,6 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_CONTACTS_PER_PAGE'),
             $selectBoxEntries,
             array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(25)))
-        );
-        $formContacts->addInput(
-            'contacts_field_history_days',
-            $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
-            $formValues['contacts_field_history_days'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
         );
         $formContacts->addCheckbox(
             'contacts_show_all',

@@ -40,8 +40,7 @@ require(__DIR__ . '/../../system/login_valid.php');
 try {
 
     // calculate default date from which the history should be shown
-    $filterDateFrom = new DateTime(DATE_NOW);
-    $filterDateFrom->modify('-' . $gSettingsManager->getInt('contacts_field_history_days') . ' day');
+    $filterDateFrom = ChangelogService::getDefaultFilterDateFrom();
 
 
     // Initialize and check the parameters

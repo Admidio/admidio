@@ -58,5 +58,11 @@
     <step id="530">CREATE INDEX %PREFIX%_idx_log_org_timestamp ON %PREFIX%_log_changes (log_org_id, log_timestamp_create)</step>
     <step id="540">CREATE INDEX %PREFIX%_idx_log_table_record ON %PREFIX%_log_changes (log_table, log_record_id)</step>
     <step id="550">CREATE INDEX %PREFIX%_idx_log_record_uuid ON %PREFIX%_log_changes (log_record_uuid)</step>
+    <!-- rename preference 'contacts_field_history_days' to 'changelog_default_days'. The new preference
+         has already been inserted with its default value by Update::updateOrgPreferences(), so the old
+         value is copied over and the obsolete preference is removed afterwards. -->
+    <step id="560" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'contacts_field_history_days' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_default_days'</step>
+    <step id="570" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'contacts_field_history_days' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'changelog_default_days'</step>
+    <step id="580">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_field_history_days'</step>
     <step>stop</step>
 </update>

@@ -5,6 +5,7 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['changelog_module_enabled']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['changelog_default_days']}
 
 <div class="admidio-form-group admidio-form-changelog-tables
     {if $formType neq "vertical" and $formType neq "navbar"}row{/if}

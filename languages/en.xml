@@ -340,6 +340,8 @@
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last modified</string>
   <string name="SYS_CHANGED_BY">Changed by</string>
+  <string name="SYS_CHANGELOG_DEFAULT_DAYS">Default time period of the change history (days)</string>
+  <string name="SYS_CHANGELOG_DEFAULT_DAYS_DESC">The change history is shown for the given period of time in days by default. This is only the default filter option, which every user can change on the change history page. Enter 0 to show the complete change history without any date limit. (Default: 365)</string>
   <string name="SYS_CHARACTERS">Characters</string>
   <string name="SYS_CHECK_FOR_UPDATE">Check for update</string>
   <string name="SYS_CHECKBOX">Checkbox</string>

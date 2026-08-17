@@ -1271,6 +1271,30 @@ class ChangelogService {
     }
 
     /**
+     * Return the date from which the change history should be shown by default.
+     *
+     * The period is configured with the preference changelog_default_days. A value of 0 means that
+     * the change history is not limited by date at all. The user can always change the period with
+     * the filter of the changelog page.
+     *
+     * @return DateTime The start date of the default filter period
+     * @throws Exception
+     */
+    public static function getDefaultFilterDateFrom() : DateTime {
+        global $gSettingsManager;
+
+        $defaultDays = $gSettingsManager->getInt('changelog_default_days');
+        if ($defaultDays <= 0) {
+            // no limit -> start well before the first possible log entry
+            return new DateTime('1970-01-01');
+        }
+
+        $dateFrom = new DateTime(DATE_NOW);
+        $dateFrom->modify('-' . $defaultDays . ' day');
+        return $dateFrom;
+    }
+
+    /**
      * Check whether changes to a given table or a list of given database tables are logged at all.
      * This is independent of particular viewing permissions of the current user.
      * If multiple tables are given (as a comma-separated string), at least one of them needs to be logged.
