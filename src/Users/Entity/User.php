@@ -2384,10 +2384,10 @@ class User extends Entity
      */
     protected function adjustLogEntry(LogChanges $logEntry)
     {
-        if ($logEntry->getValue('log_field') == 'usr_password') {
+        if (in_array($logEntry->getValue('log_field'), array('usr_password', 'usr_tfa_secret'))) {
             $logEntry->setValue('log_value_old', '********');
             $logEntry->setValue('log_value_new', '********');
-        } elseif ($logEntry->getValue('log_field') == 'usr_photo') {
+        } elseif ($logEntry->getValue('log_field') === 'usr_photo') {
             $logEntry->setValue('log_value_old', '[...]');
             $logEntry->setValue('log_value_new', '[...]');
         }
