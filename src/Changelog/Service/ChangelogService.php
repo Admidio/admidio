@@ -876,6 +876,19 @@ class ChangelogService {
 
                 case 'URL':
                     if ($value !== '') {
+                        // The value is a historic entry from the log table and may predate any
+                        // input validation, so only schemes that are safe to open may be turned
+                        // into a clickable link. Values without a scheme (e.g. the relative menu
+                        // urls like /modules/preferences.php) stay linkable, everything else is
+                        // shown as plain text. $value is already HTML encoded at this point, which
+                        // leaves the scheme untouched. Browsers ignore whitespace and control
+                        // characters within the scheme, so remove them before the check.
+                        $scheme = preg_replace('/[\s\x00-\x1F]+/', '', $value);
+                        if (preg_match('/^([a-z][a-z0-9+.\-]*):/i', $scheme, $schemeMatch)
+                            && !in_array(strtolower($schemeMatch[1]), array('http', 'https', 'mailto'), true)) {
+                            break;
+                        }
+
                         $displayValue = $value;
 
                         // trim "http://", "https://", "//"
