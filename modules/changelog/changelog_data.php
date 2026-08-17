@@ -244,12 +244,12 @@ try {
         log_timestamp_create as timestamp
         FROM ' . TBL_LOG_CHANGES . '
         -- Extract data of the creating user...
-        INNER JOIN '.TBL_USERS.' usr_create
+        LEFT JOIN '.TBL_USERS.' usr_create
                 ON usr_create.usr_id = log_usr_id_create
-        INNER JOIN '.TBL_USER_DATA.' AS create_last_name
+        LEFT JOIN '.TBL_USER_DATA.' AS create_last_name
                 ON create_last_name.usd_usr_id = log_usr_id_create
                AND create_last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-        INNER JOIN '.TBL_USER_DATA.' AS create_first_name
+        LEFT JOIN '.TBL_USER_DATA.' AS create_first_name
                 ON create_first_name.usd_usr_id = log_usr_id_create
                AND create_first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
         WHERE
@@ -418,7 +418,13 @@ try {
         $columnValues[] = (!empty($valueOld)) ? $valueOld : '&nbsp;';
 
         // 6. User and date of the change
-        $columnValues[] = ChangelogService::createLink($row['create_last_name'].', '.$row['create_first_name'], 'users', 0, $row['uuid_usr_create']);
+        $actorName = ($row['create_last_name'] ?? '') . ', ' . ($row['create_first_name'] ?? '');
+        if ($actorName === ', ') {
+            $actorName = $gL10n->get('SYS_DELETED_USER');
+        } else {
+            $actorName = ChangelogService::createLink($actorName, 'users', 0, $row['uuid_usr_create']);
+        }
+        $columnValues[] = $actorName;
         // $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'..'</a>';
         $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date') . ' ' .$gSettingsManager->getString('system_time'));
         $jsonArray['data'][] = $columnValues;
