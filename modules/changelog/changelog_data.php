@@ -81,7 +81,7 @@ try {
     // Initialize and check the parameters
     $getTable = admFuncVariableIsValid($_GET, 'table','string');
     $getTables = ($getTable !== null && $getTable != "") ? array_map('trim', explode(",", $getTable)) : [];
-    $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'string');
+    $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getId = admFuncVariableIsValid($_GET, 'id', 'int');
     $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
@@ -280,7 +280,6 @@ try {
             . $limitCondition;
     }
     $queryParamsMain = array_merge($queryParams, $queryParamsSearch);
-    $logStatement = $gDb->queryPrepared($sql, $queryParamsMain); // TODO add more params
 
     $rowNumber = $getStart; // count for every row
 
