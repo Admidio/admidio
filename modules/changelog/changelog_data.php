@@ -68,7 +68,11 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 
 
-
+// This script always answers with JSON, even if an exception is thrown before the request
+// parameters could be evaluated (e.g. while the system is still bootstrapping). Set up the
+// response and the content type up front, so the catch block below can always emit a valid reply.
+$jsonArray = array('draw' => 0, 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => array());
+header('Content-Type: application/json');
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -92,12 +96,9 @@ try {
     $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
-    $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
+    $getSearch = admFuncVariableIsValid($_GET['search'] ?? array(), 'value', 'string');
 
-
-    $jsonArray = array('draw' => (int)$getDraw);
-
-    header('Content-Type: application/json');
+    $jsonArray['draw'] = (int)$getDraw;
 
 
 
@@ -459,7 +460,13 @@ try {
     echo json_encode($jsonArray);
 } catch (Throwable $e) {
     // NOTE: DataTables expects the form {'error' => 'message'}, so we can't use the default handleException($e, true); call!
-    $jsonArray['error'] = $e->getMessage();
+    // The message is inserted into the page by our DataTables error handler, and it can contain
+    // data that originates from the request or from the database, so it has to be purified the
+    // same way handleException() does. The purifier is only missing if the exception occurred
+    // while common.php was still being loaded; in that case fall back to encoding everything.
+    $jsonArray['error'] = isset($gHtmlPurifierFilter)
+        ? $gHtmlPurifierFilter->purify($e->getMessage())
+        : SecurityUtils::encodeHTML($e->getMessage());
     echo json_encode($jsonArray);
     exit();
 }
