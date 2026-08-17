@@ -91,8 +91,7 @@ try {
         // if no UUID is given, isAdministratorUsers permissions are required
         if (($userUuid === '' && !$gCurrentUser->isAdministratorUsers())
             || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
-//                throw new Exception('SYS_NO_RIGHTS');
-                $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+                throw new Exception('SYS_NO_RIGHTS');
        }
     }
 
