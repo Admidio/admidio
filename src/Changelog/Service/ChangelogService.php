@@ -312,8 +312,10 @@ class ChangelogService {
                 return new UserRelation($gDb);
             case 'user_relation_types':
                 return new UserRelationType($gDb);
-            case 'forum_topic':
+            case 'forum_topics':
                 return new Topic($gDb);
+            case 'forum_posts':
+                return new Post($gDb);
             case 'saml_clients':
                 return new SAMLClient($gDb);
             case 'oidc_clients':

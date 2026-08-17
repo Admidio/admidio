@@ -95,6 +95,7 @@ $defaultOrgPreferences = array(
     'changelog_table_inventory_item_borrow_data' => '0',
     'changelog_table_saml_clients' => '0',
     'changelog_table_oidc_clients' => '0',
+    'changelog_table_sso_keys' => '0',
     'changelog_table_others' => '0',
 
     // E-mail dispatch
