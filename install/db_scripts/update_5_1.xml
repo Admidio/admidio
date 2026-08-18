@@ -64,5 +64,7 @@
     <step id="560" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'contacts_field_history_days' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_default_days'</step>
     <step id="570" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'contacts_field_history_days' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'changelog_default_days'</step>
     <step id="580">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_field_history_days'</step>
+    <step id="590">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta) VALUES ('MODULE', 'SYS_CHANGE_HISTORY', 'CHANGELOG', '5.1.0', 0)</step>
+    <step id="600">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description) VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CHANGELOG'), 2, %UUID%, false, 6, true, 'changelog', '/modules/changelog/changelog.php', 'clock-history', 'SYS_CHANGE_HISTORY', 'SYS_CHANGE_HISTORY_DESC')</step>
     <step>stop</step>
 </update>

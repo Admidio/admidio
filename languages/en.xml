@@ -333,6 +333,7 @@
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CHANGE_DATE">Change date</string>
   <string name="SYS_CHANGE_HISTORY">Change history</string>
+  <string name="SYS_CHANGE_HISTORY_DESC">Overview of all recorded data changes, including the user who made each change and the time it was made.</string>
   <string name="SYS_CHANGE_HISTORY_GENERIC">Change history: #VAR1#</string>
   <string name="SYS_CHANGE_HISTORY_GENERIC2">Change history: #VAR1# (#VAR2#)</string>
   <string name="SYS_CHANGE_HISTORY_OF">Change history of #VAR1#</string>
