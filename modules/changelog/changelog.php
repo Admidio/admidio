@@ -210,7 +210,7 @@ try {
     $columnHeading[] = $gL10n->get('SYS_PREVIOUS_VALUE');
     $columnHeading[] = $gL10n->get('SYS_NEW_VALUE');
     $columnHeading[] = $gL10n->get('SYS_CHANGED_BY');
-    $columnHeading[] = $gL10n->get('SYS_CHANGE_DATE');
+    $columnHeading[] = $gL10n->get('SYS_DATE_MODIFIED');
 
     $page->assignSmartyVariable('headers', $columnHeading);
 
