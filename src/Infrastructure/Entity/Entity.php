@@ -293,6 +293,19 @@ class Entity
      * Adjust the changelog entry for this db record. By default, record_id, record_name are taken
      * from this record, linked and related are left empty, and the field is the column name of each change.
      *
+     * What a class has to provide so that its table produces useful changelog entries:
+     *  - a key column, and preferably a <prefix>_uuid column. Without the uuid the changelog can
+     *    only show the record name as plain text and cannot link to the record.
+     *  - a readableName() that names the record. The default falls back to the name, headline or
+     *    text column and finally to the numeric id, which is of little use in a log.
+     *  - getIgnoredLogColumns() for the columns that are noise, and adjustLogEntry() for the ones
+     *    whose value must not be stored, see User::adjustLogEntry() for the masking of secrets.
+     *  - an adjustLogEntry() override for relation and composite-key tables, where the record of
+     *    the log entry is not the record itself. Membership and RolesDependencies point their
+     *    entries at the user and name the role as the related object.
+     * The table also has to be registered in ChangelogService, which documents the methods that
+     * have to be kept in sync.
+     *
      * @param LogChanges $logEntry The log entry to adjust
      *
      * @return void

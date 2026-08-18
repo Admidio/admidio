@@ -51,6 +51,32 @@ use ModuleEvents;
  * This class adds some static functions that are used in the changelog module to keep the
  * code easy to read and short
  *
+ * **What the changelog records**
+ *
+ * The changelog is an audit trail of the application, not of the database. Its only source are
+ * Entity::save() and Entity::delete(), so a change is recorded if, and only if, it was made
+ * through an Entity object. Statements that are sent to the database directly, bulk updates,
+ * changes made by other programs and changes made in the database itself never appear in it.
+ * Whenever a service deletes or updates dependent records with its own SQL, it has to read those
+ * records through their Entity and delete them there, or the audit trail loses them silently.
+ * A database trigger would see all of them, but none of the application context that makes an
+ * entry readable: the acting user, the readable name of the record, the translated field names,
+ * the masking of secrets and the organization the change belongs to.
+ *
+ * A database table without an Entity class of its own is therefore not covered, except that its
+ * table name still falls under the preference changelog_table_others.
+ *
+ * **Keeping a table complete**
+ *
+ * The name of the database table is the type discriminator of a log entry, and it is used by
+ * several methods of this class that have to be kept in sync when a table is added:
+ * getTableLabel() for its title, getFieldTranslations() for the title and type of each of its
+ * columns, createLink() for the link to the record, getObjectForTable() for the object the page
+ * headline is built from, getRelatedTable() if its entries point at a record of another table,
+ * and getPermittedTables() for the users that may read its entries. A third-party extension
+ * registers all of these through registerCallback() instead, see the example at the end of this
+ * file.
+ *
  * **Code example**
  * ```
  * $allLogTables = ChangelogService::getTableLabel();
