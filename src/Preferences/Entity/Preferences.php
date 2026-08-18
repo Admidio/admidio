@@ -54,9 +54,11 @@ class Preferences extends Entity
             return;
         }
 
+        // NOTE: sso_saml_encryption_key is NOT secret. It holds the id of an entry of adm_sso_keys
+        // (see PreferencesPresenter::createSSOForm()), not the key itself, and stays readable.
         if (in_array(
             $this->getValue('prf_name'),
-            array('mail_smtp_password'),
+            array('mail_smtp_password', 'sso_oidc_encryption_key'),
             true
         )) {
             $logEntry->setValue('log_value_old', '********');
