@@ -1,6 +1,7 @@
 <?php
 
 use Admidio\Application\Navigation;
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
@@ -163,6 +164,9 @@ if (array_key_exists('gCurrentSession', $_SESSION)
 
     // delete old entries in session table
     $gCurrentSession->tableCleanup($gSettingsManager->getInt('logout_minutes'));
+
+    // delete the entries of the change history that are older than the configured retention period
+    ChangelogService::purgeOldEntriesIfDue();
 }
 
 // Check if reduced layout should be shown

@@ -61,6 +61,8 @@ $defaultOrgPreferences = array(
     // Changelog settings
     'changelog_module_enabled' => '1',
     'changelog_default_days' => '365',
+    'changelog_retention_days' => '0',
+    'changelog_last_purge' => '0',
     'changelog_table_user_data' => '1',
     'changelog_table_users' => '1',
     'changelog_table_members' => '1',

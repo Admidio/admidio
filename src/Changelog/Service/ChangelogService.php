@@ -106,6 +106,11 @@ class ChangelogService {
         'oidc_access_tokens', 'oidc_refresh_tokens', 'oidc_auth_codes', 'registrations',
         'sessions'];
 
+    /**
+     * Minimum number of seconds between two runs of the automatic purge of the change history.
+     */
+    protected const PURGE_INTERVAL_SECONDS = 86400;
+
 
     /**
      * array holding all customizations by third-party extensions.
@@ -1410,6 +1415,95 @@ class ChangelogService {
         $dateFrom = new DateTime(DATE_NOW);
         $dateFrom->modify('-' . $defaultDays . ' day');
         return $dateFrom;
+    }
+
+    /**
+     * Delete the entries of the change history that are older than the retention period of the
+     * preference changelog_retention_days. The entries are only removed from the old end of the
+     * history, so that the history of a single record or action can never be removed selectively.
+     *
+     * @param int|null $retentionDays Number of days the entries should be kept. A value of 0 (the
+     *                                default of the preference) keeps them forever and deletes
+     *                                nothing. If null, the preference of the organization is used.
+     * @param int|null $organizationId The organization whose entries should be deleted. If null,
+     *                                 the current organization is used.
+     * @return int Returns the number of deleted entries
+     * @throws Exception
+     */
+    public static function purgeOldEntries(?int $retentionDays = null, ?int $organizationId = null): int
+    {
+        global $gDb, $gSettingsManager, $gCurrentOrgId;
+
+        if ($retentionDays === null) {
+            $retentionDays = $gSettingsManager->getInt('changelog_retention_days');
+        }
+        // 0 means that the change history is kept without any limit
+        if ($retentionDays <= 0) {
+            return 0;
+        }
+
+        if ($organizationId === null) {
+            $organizationId = (int)$gCurrentOrgId;
+        }
+
+        $deleteBefore = new DateTime();
+        $deleteBefore->modify('-' . $retentionDays . ' day');
+
+        // Entries of the tables that are shared between all organizations and entries that were
+        // written before log_org_id existed have no organization. They may only be deleted if this
+        // installation has one organization, because otherwise the purge of one organization would
+        // delete entries that another organization still has to keep.
+        $countStatement = $gDb->queryPrepared('SELECT COUNT(*) FROM ' . TBL_ORGANIZATIONS);
+        $entriesWithoutOrganization = ($countStatement !== false && (int)$countStatement->fetchColumn() === 1);
+
+        $sql = 'DELETE FROM ' . TBL_LOG_CHANGES . '
+                 WHERE log_timestamp_create < ? -- $deleteBefore
+                   AND (log_org_id = ? ' . ($entriesWithoutOrganization ? 'OR log_org_id IS NULL' : '') . ')';
+        $statement = $gDb->queryPrepared($sql, array($deleteBefore->format('Y-m-d H:i:s'), $organizationId));
+
+        // Remember when the entries of this organization were purged, so that the opportunistic
+        // purge of purgeOldEntriesIfDue() and a cron job do not repeat the work of each other.
+        if ($organizationId === (int) $gCurrentOrgId) {
+            $gSettingsManager->set('changelog_last_purge', (string) time());
+        }
+
+        return ($statement === false) ? 0 : $statement->rowCount();
+    }
+
+    /**
+     * Purge the outdated entries of the change history, but at most once every PURGE_INTERVAL_SECONDS.
+     * This is the opportunistic purge that keeps the change history from growing without limit in
+     * installations that have no cron job. It is deliberately cheap: if no retention period is
+     * configured or the last purge is not old enough, it does nothing but read two preferences.
+     *
+     * The timestamp of the last purge is stored in the preference changelog_last_purge and is
+     * written before the entries are deleted, so that requests that arrive while a purge is still
+     * running do not start a second one. A purge that is triggered by a cron job or by the button
+     * in the preferences updates the same timestamp, so this method then stays idle.
+     *
+     * @return int Returns the number of deleted entries
+     * @throws Exception
+     */
+    public static function purgeOldEntriesIfDue(): int
+    {
+        global $gSettingsManager;
+
+        // This is called on every request, so it also has to work in an installation whose
+        // database is still on an older version and does not have these preferences yet.
+        if (!$gSettingsManager->has('changelog_retention_days')
+            || $gSettingsManager->getInt('changelog_retention_days') <= 0) {
+            return 0;
+        }
+
+        $now = time();
+        if ($gSettingsManager->has('changelog_last_purge')
+            && $now - $gSettingsManager->getInt('changelog_last_purge') < self::PURGE_INTERVAL_SECONDS) {
+            return 0;
+        }
+
+        $gSettingsManager->set('changelog_last_purge', (string) $now);
+
+        return self::purgeOldEntries();
     }
 
     /**

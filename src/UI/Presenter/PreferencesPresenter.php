@@ -492,6 +492,22 @@ class PreferencesPresenter extends PagePresenter
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_CHANGELOG_DEFAULT_DAYS_DESC')
         );
 
+        $formChangelog->addInput(
+            'changelog_retention_days',
+            $gL10n->get('SYS_CHANGELOG_RETENTION_DAYS'),
+            $formValues['changelog_retention_days'] ?? '0',
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_CHANGELOG_RETENTION_DAYS_DESC')
+        );
+
+        // The purge is not part of the form, it is a separate action that deletes data immediately.
+        $formChangelog->addCustomContent(
+            'changelog_purge',
+            '',
+            '<a id="adm_link_changelog_purge" href="#adm_link_changelog_purge" class="btn btn-secondary">
+                <i class="bi bi-trash"></i>' . $gL10n->get('SYS_CHANGELOG_PURGE') . '</a>
+             <div id="adm_changelog_purge_result" class="form-text"></div>'
+        );
+
         $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], ChangelogService::getTableLabel());
         // $selectedTables = explode(',', $formValues['changelog_tables']??'');
         $formChangelog->addCustomContent(
@@ -2878,6 +2894,19 @@ class PreferencesPresenter extends PagePresenter
                     versionInfoContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
                     $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_check", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(htmlVersion) {
                         versionInfoContainer.html(htmlVersion);
+                    });
+                });
+
+                // Delete the entries of the change history that are older than the retention period
+                panelContainer.off("click", "#adm_link_changelog_purge").on("click", "#adm_link_changelog_purge", function(event) {
+                    event.preventDefault();
+                    if (!confirm("' . $gL10n->get('SYS_CHANGELOG_PURGE_CONFIRM') . '")) {
+                        return;
+                    }
+                    var resultContainer = panelContainer.find("#adm_changelog_purge_result");
+                    resultContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>");
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=changelog_purge", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(resultText) {
+                        resultContainer.text(resultText);
                     });
                 });
 
