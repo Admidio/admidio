@@ -336,6 +336,7 @@
   <string name="SYS_CHANGE_HISTORY_DESC">Overview of all recorded data changes, including the user who made each change and the time it was made.</string>
   <string name="SYS_CHANGE_HISTORY_GENERIC">Change history: #VAR1#</string>
   <string name="SYS_CHANGE_HISTORY_GENERIC2">Change history: #VAR1# (#VAR2#)</string>
+  <string name="SYS_CHANGE_HISTORY_NO_ENTRIES">No changes were recorded in the selected period. Note that changes are only recorded for the data areas that are enabled in the settings of the change history.</string>
   <string name="SYS_CHANGE_HISTORY_OF">Change history of #VAR1#</string>
   <string name="SYS_CHANGE_HISTORY_USERDATA">Change history of user data and memberships</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
@@ -450,6 +451,7 @@
   <string name="SYS_CURRENT_PROFILE_PICTURE">Current profile picture</string>
   <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Current role memberships</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR2#.</string>
+  <string name="SYS_DATA_AREA">Data area</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, web links ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
   <string name="SYS_DATA_PROTECTION">Data protection</string>

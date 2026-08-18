@@ -199,17 +199,18 @@ try {
     $columnHeading[] = $gL10n->get('SYS_ABR_NO');
 
     if ($showTableColumn) {
-        $columnHeading[] = $gL10n->get('SYS_TABLE');
+        $columnHeading[] = $gL10n->get('SYS_DATA_AREA');
     }
     $columnHeading[] = $gL10n->get('SYS_NAME');
     if ($showRelatedColumn) {
         $columnHeading[] = $gL10n->get('SYS_RELATED_TO');
     }
     $columnHeading[] = $gL10n->get('SYS_FIELD');
-    $columnHeading[] = $gL10n->get('SYS_NEW_VALUE');
+    // The order of the value columns must match the order in which changelog_data.php writes them.
     $columnHeading[] = $gL10n->get('SYS_PREVIOUS_VALUE');
-    $columnHeading[] = $gL10n->get('SYS_EDITED_BY');
-    $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
+    $columnHeading[] = $gL10n->get('SYS_NEW_VALUE');
+    $columnHeading[] = $gL10n->get('SYS_CHANGED_BY');
+    $columnHeading[] = $gL10n->get('SYS_CHANGE_DATE');
 
     $page->assignSmartyVariable('headers', $columnHeading);
 
@@ -235,7 +236,7 @@ try {
     // The largest selectable page length matches the limit enforced in changelog_data.php.
     $table->setRowsPerPageMenuEntries(array(10 => '10', 25 => '25', 50 => '50', 100 => '100', 500 => '500', 1000 => '1000'));
     $table->disableShowAllEntries();
-    $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
+    $table->setMessageIfNoRowsFound('SYS_CHANGE_HISTORY_NO_ENTRIES');
     $table->createJavascript(0, count($columnHeading));
 
 

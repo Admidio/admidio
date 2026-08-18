@@ -180,8 +180,8 @@ try {
         $orderColumns[] = 'related_name';
     }
     $orderColumns[] = 'field_name';
-    $orderColumns[] = 'value_new';
     $orderColumns[] = 'value_old';
+    $orderColumns[] = 'value_new';
     $orderColumns[] = 'create_last_name';
     $orderColumns[] = 'timestamp';
 
@@ -443,8 +443,9 @@ try {
             $valueOld = ChangelogService::formatValue($valueOld, '');
         }
 
-        $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';
+        // The previous value comes first, so that a change reads from left to right.
         $columnValues[] = (!empty($valueOld)) ? $valueOld : '&nbsp;';
+        $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';
 
         // 6. User and date of the change
         $actorName = ($row['create_last_name'] ?? '') . ', ' . ($row['create_first_name'] ?? '');
