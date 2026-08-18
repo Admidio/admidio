@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Changelog\Service;
 
+use InvalidArgumentException;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
@@ -18,7 +19,6 @@ use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Entity\Post;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\Item;
-use Admidio\Inventory\ValueObjects\ItemsData;
 
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -104,7 +104,8 @@ class ChangelogService {
      * value, the next callback or the default processing of the ChangelogService
      * method will proceed.
      * @param string $function The method of the ChangelogService class that should be customized. One of
-     *     'getTableLabel', 'getObjectForTable', 'getFieldTranslations', 'createLink', 'formatValue', 'getRelatedTable', 'getPermittedTables'
+     *     'getTableLabel', 'getTableLabelArray', 'getObjectForTable', 'getFieldTranslations', 'createLink',
+     *     'formatValue', 'getRelatedTable', 'getPermittedTables'. Any other value throws an InvalidArgumentException.
      * @param string $moduleOrKey The module or type that should be customized. If
      *     empty, the callback will be executed for all values, and it will be used
      *     if it evaluates to a non-empty value.
@@ -114,8 +115,19 @@ class ChangelogService {
      * @return void
      */
     public static function registerCallback(string $function, string $moduleOrKey, mixed $callback) : void {
+        // Fail here and not somewhere in an unrelated changelog request later on: an unknown
+        // method would silently add a key that no ChangelogService method ever consults.
+        if (!array_key_exists($function, self::$customCallbacks)) {
+            throw new InvalidArgumentException('Unsupported changelog callback "' . $function . '".');
+        }
+
         if (empty($moduleOrKey)) {
             if ($function == 'getTableLabelArray' || $function == 'getFieldTranslations') {
+                // These two are merged into the lookup tables instead of being evaluated, so the
+                // registered value has to be an array.
+                if (!is_array($callback)) {
+                    throw new InvalidArgumentException('The changelog callback "' . $function . '" must be an array.');
+                }
                 self::$customCallbacks[$function] = array_merge(self::$customCallbacks[$function], $callback);
             } else {
                 // append callback to list of callbacks for all values
@@ -876,7 +888,7 @@ class ChangelogService {
      * @throws Exception
      */
     public static function formatValue($value, $type, $entries = []) {
-        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n, $gCurrentOrganization, $gCurrentOrgId;
+        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n, $gCurrentOrganization;
         if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping', 'SSO_field_mapping', 'SSO_roles_mapping', 'OIDC_field_mapping', 'OIDC_roles_mapping']) ) {
             $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
         }
@@ -932,15 +944,6 @@ class ChangelogService {
                         if ($date instanceof DateTime) {
                             $htmlValue = $date->format($gSettingsManager->getString('system_date'));
                         }
-                    }
-                    break;
-                case 'INVENTORY_STATUS':
-                    // The status of an item is an option of the item field STATUS. Entries that
-                    // were written before the raw database value was logged already contain the
-                    // text of the option instead of its id and are displayed unchanged.
-                    if (is_numeric($value)) {
-                        $itemsData = new ItemsData($gDb, $gCurrentOrgId);
-                        $htmlValue = $itemsData->getHtmlValue('STATUS', $value);
                     }
                     break;
                 case 'EMAIL':
@@ -1140,46 +1143,6 @@ class ChangelogService {
     }
 
     /**
-     * Item field types of the inventory whose value is stored as the id(s) of the selected option(s).
-     * @var array
-     */
-    protected static array $inventorySelectFieldTypes = array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'DROPDOWN_DATE_INTERVAL', 'RADIO_BUTTON');
-
-    /**
-     * Format the value of an inventory item data change with the definition of the item field it
-     * belongs to. This is the counterpart of the user profile fields, whose values are formatted
-     * with the profile field definition.
-     *
-     * @param ItemsData $itemsData The item fields of the current organization
-     * @param int $fieldId The inf_id of the item field the value belongs to
-     * @param string|null $value The value as it is stored in the changelog
-     * @return string The formatted value
-     * @throws Exception
-     */
-    public static function formatInventoryItemValue(ItemsData $itemsData, int $fieldId, ?string $value): string
-    {
-        $fieldNameIntern = $itemsData->getPropertyById($fieldId, 'inf_name_intern');
-
-        // getHtmlValue() returns the value of text based fields unchanged, so the raw database
-        // value has to be encoded before it is formatted.
-        $value = (string)self::formatValue($value, '');
-
-        // The keeper and the last receiver of an item are stored as the id of the user
-        if (in_array($fieldNameIntern, array('KEEPER', 'LAST_RECEIVER'), true) && is_numeric($value)) {
-            return (string)self::formatValue($value, 'USER');
-        }
-
-        // Entries that were written before the raw database value was logged already contain the
-        // text of the selected option instead of its id and are therefore displayed unchanged.
-        if (in_array($itemsData->getProperty($fieldNameIntern, 'inf_type'), self::$inventorySelectFieldTypes, true)
-            && preg_match('/^\d+(\s*,\s*\d+)*$/', $value) !== 1) {
-            return $value;
-        }
-
-        return $itemsData->getHtmlValue($fieldNameIntern, $value);
-    }
-
-    /**
      * For a given database table and potentially a related object ID, return the type of table for the related object.
      * In many cases, the related object will have the same type (e.g. menu or folder hierarchy), but for other objects,
      * the related object has a different type (e.g. a file has the folder as related object, a membership record has the
@@ -1293,6 +1256,18 @@ class ChangelogService {
      * @var array
      */
     public static array $userTables = array('users', 'user_data', 'user_relations', 'members');
+
+    /**
+     * Check whether nothing but tables of $userTables were requested. Those tables are not
+     * protected by per-table permissions, but by the right to edit the profile of the affected
+     * user, so the caller has to read that user and pass it on to getReadableTables() and
+     * getUserTableRestriction().
+     * @param array $tables The requested database tables of the changelog
+     * @return bool Returns true if at least one table was requested and all of them are user tables
+     */
+    public static function isUserHistory(array $tables) : bool {
+        return count($tables) > 0 && count(array_diff($tables, self::$userTables)) === 0;
+    }
 
     /**
      * Check whether the user may read the changelog of all tables without any restriction.
@@ -1449,29 +1424,6 @@ class ChangelogService {
 
         return false;
     }
-
-    /**
-     * Check whether changes to a given table or a list of given database tables are logged at all.
-     * This is independent of particular viewing permissions of the current user.
-     * If multiple tables are given (as a comma-separated string), at least one of them needs to be logged.
-     * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple())
-     * @return bool Returns true if the database table (or at least one, of multiple are given) is logged
-     * @throws Exception
-     */
-    public static function hasLogViewPermission(string|array $table, ?User $user = null) : bool {
-        global $gSettingsManager, $gCurrentUser;
-        if (empty($user)) {
-            $user = $gCurrentUser;
-        }
-
-        if ($gSettingsManager->getInt('changelog_module_enabled') === 1 ||
-            ($gSettingsManager->getInt('changelog_module_enabled') === 2 && $user->isAdministrator())) {
-            return self::isTableLogged($table);
-        } else {
-            return false;
-        }
-    }
-
 
     /**
      * Display a "Change History" button in the current module's PagePresenter if changelog functionality

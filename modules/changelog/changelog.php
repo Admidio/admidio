@@ -59,7 +59,7 @@ try {
     // create a user object. Will be filled if the log of one particular user is requested.
     $user = new User($gDb, $gProfileFields);
     // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
-    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ChangelogService::$userTables)));
+    $isUserLog = ChangelogService::isUserHistory($getTables);
     if ($isUserLog) {
         if (!empty($getUuid)) {
             $user->readDataByUuid($getUuid);

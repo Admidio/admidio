@@ -120,7 +120,7 @@ try {
     // create a user object. Will be filled if the log of one particular user is requested.
     $user = new User($gDb, $gProfileFields);
     // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
-    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ChangelogService::$userTables)));
+    $isUserLog = ChangelogService::isUserHistory($getTables);
     if ($isUserLog) {
         if (!empty($getUuid)) {
             $user->readDataByUuid($getUuid);
@@ -421,13 +421,17 @@ try {
             // Format the values depending on the user field type:
             $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueNew);
             $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueOld);
-        } elseif ($row['table_name'] == 'inventory_item_data') {
-            // Format the values depending on the item field type, just like the user fields above
+        } elseif ($row['table_name'] == 'inventory_item_data'
+                  || (is_array($fieldInfo) && ($fieldInfo['type'] ?? '') === 'INVENTORY_STATUS')) {
+            // Format the values depending on the item field type, just like the user fields above.
+            // The item data table names the item field in log_field, while the status column of an
+            // item belongs to the item field STATUS.
             if ($itemsData === null) {
                 $itemsData = new ItemsData($gDb, $gCurrentOrgId);
             }
-            $valueNew = ChangelogService::formatInventoryItemValue($itemsData, (int) $row['field'], $valueNew);
-            $valueOld = ChangelogService::formatInventoryItemValue($itemsData, (int) $row['field'], $valueOld);
+            $itemField = ($row['table_name'] == 'inventory_item_data') ? (int) $row['field'] : 'STATUS';
+            $valueNew = $itemsData->formatChangelogValue($itemField, $valueNew);
+            $valueOld = $itemsData->formatChangelogValue($itemField, $valueOld);
         } elseif (is_array($fieldInfo) && isset($fieldInfo['type'])) {
             $valueNew = ChangelogService::formatValue($valueNew, $fieldInfo['type'], $fieldInfo['entries']??[]);
             $valueOld = ChangelogService::formatValue($valueOld, $fieldInfo['type'], $fieldInfo['entries']??[]);
