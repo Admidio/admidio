@@ -52,7 +52,12 @@ class LogChanges extends Entity
 
     /**
      * Constructor that will create an object of a recordset of the table adm_log_changes.
-     * If the id is set, then the specific membership will be loaded.
+     * If the id is set, then the specific log entry will be loaded.
+     *
+     * A log entry is a snapshot: it stores the name of the record and of the related object as
+     * they were at the time of the change, because the record it refers to may be changed or
+     * deleted afterwards. It is therefore deliberately not joined to the table it refers to.
+     *
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $table
      * @param int $logId
@@ -63,131 +68,7 @@ class LogChanges extends Entity
         // We want to log changes from everyone, even those not allowed to change anything -> detect possible bugs or at least hold people accountable!
         $this->saveChangesWithoutRights();
         $this->objectTableName = $table;
-        $this->connectReferencedTable($this->objectTableName);
         parent::__construct($database, TBL_LOG_CHANGES, 'log', $logId);
-    }
-
-
-    /**
-     * As the log table is a generic table referencing objects of all DB tables, we cannot use Foreign keys and
-     * hardcoded connections to additional tables. Instead, we derive the connected additional table and the
-     * corresponding keys from the $table argument passed to the constructor (or loaded from the DB).
-     */
-    private function connectReferencedTable(string $table): void
-    {
-        // Depending on the type of object (identified by DB table), connect different additional object tables to retrieve record data
-        switch ($table) {
-            case 'announcements':
-                $this->connectAdditionalTable(TBL_ANNOUNCEMENTS, 'ann_id', 'log_record_id');
-                break;
-            case 'categories':
-                $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'log_record_id');
-                break;
-            case 'category_report':
-                $this->connectAdditionalTable(TBL_CATEGORY_REPORT, 'crt_id', 'log_record_id');
-                break;
-            case 'components':
-                $this->connectAdditionalTable(TBL_COMPONENTS, 'com_id', 'log_record_id');
-                break;
-            case 'events':
-                $this->connectAdditionalTable(TBL_EVENTS, 'dat_id', 'log_record_id');
-                break;
-            case 'files':
-                $this->connectAdditionalTable(TBL_FILES, 'fil_id', 'log_record_id');
-                break;
-            case 'folders':
-                $this->connectAdditionalTable(TBL_FOLDERS, 'fol_id', 'log_record_id');
-                break;
-            case 'links':
-                $this->connectAdditionalTable(TBL_LINKS, 'lnk_id', 'log_record_id');
-                break;
-            case 'list_columns':
-                $this->connectAdditionalTable(TBL_LIST_COLUMNS, 'lsc_id', 'log_record_id');
-                break;
-            case 'lists':
-                $this->connectAdditionalTable(TBL_LISTS, 'lst_id', 'log_record_id');
-                break;
-            case 'members':
-                $this->connectAdditionalTable(TBL_MEMBERS, 'mem_id', 'log_record_id');
-                break;
-            case 'menu':
-                $this->connectAdditionalTable(TBL_MENU, 'men_id', 'log_record_id');
-                break;
-            case 'messages':
-                $this->connectAdditionalTable(TBL_MESSAGES, 'msg_id', 'log_record_id');
-                break;
-            case 'messages_attachments':
-                $this->connectAdditionalTable(TBL_MESSAGES_ATTACHMENTS, 'msa_id', 'log_record_id');
-                break;
-            case 'messages_content':
-                $this->connectAdditionalTable(TBL_MESSAGES_CONTENT, 'msc_id', 'log_record_id');
-                break;
-            case 'messages_recipients':
-                $this->connectAdditionalTable(TBL_MESSAGES_RECIPIENTS, 'msr_id', 'log_record_id');
-                break;
-            case 'organizations':
-                $this->connectAdditionalTable(TBL_ORGANIZATIONS, 'org_id', 'log_record_id');
-                break;
-            case 'photos':
-                $this->connectAdditionalTable(TBL_PHOTOS, 'pho_id', 'log_record_id');
-                break;
-            case 'preferences':
-                $this->connectAdditionalTable(TBL_PREFERENCES, 'prf_id', 'log_record_id');
-                break;
-            case 'role_dependencies':
-                // TODO: How shall we connect role dependencies? There is no single unique key, but two (parent and child!)
-                // $this->connectAdditionalTable(TBL_ROLE_DEPENDENCIES, '', 'log_record_id');
-                break;
-            case 'roles':
-                $this->connectAdditionalTable(TBL_ROLES, 'rol_id', 'log_record_id');
-                break;
-            case 'roles_rights':
-                $this->connectAdditionalTable(TBL_ROLES_RIGHTS, 'ror_id', 'log_record_id');
-                break;
-            case 'roles_rights_data':
-                $this->connectAdditionalTable(TBL_ROLES_RIGHTS_DATA, 'rrd_id', 'log_record_id');
-                break;
-            case 'inventory_fields':
-                $this->connectAdditionalTable(TBL_INVENTORY_FIELDS, 'inf_id', 'log_record_id');
-                break;
-            case 'inventory_field_select_options':
-                $this->connectAdditionalTable(TBL_INVENTORY_FIELD_OPTIONS, 'ifo_id', 'log_record_id');
-                break;
-            case 'inventory_items':
-                $this->connectAdditionalTable(TBL_INVENTORY_ITEMS, 'ini_id', 'log_record_id');
-                break;
-            case 'inventory_item_borrow_data':
-                $this->connectAdditionalTable(TBL_INVENTORY_ITEM_BORROW_DATA, 'inb_id', 'log_record_id');
-                break;
-            case 'inventory_item_data':
-                $this->connectAdditionalTable(TBL_INVENTORY_ITEM_DATA, 'ind_id', 'log_record_id');
-                break;
-            case 'rooms':
-                $this->connectAdditionalTable(TBL_ROOMS, 'room_id', 'log_record_id');
-                break;
-            case 'texts':
-                $this->connectAdditionalTable(TBL_TEXTS, 'txt_id', 'log_record_id');
-                break;
-            case 'users':
-                $this->connectAdditionalTable(TBL_USERS, 'usr_id', 'log_record_id');
-                break;
-            case 'user_data':
-                $this->connectAdditionalTable(TBL_USER_DATA, 'usd_id', 'log_record_id');
-                break;
-            case 'user_fields':
-                $this->connectAdditionalTable(TBL_USER_FIELDS, 'usf_id', 'log_record_id');
-                break;
-            case 'user_field_select_options':
-                $this->connectAdditionalTable(TBL_USER_FIELD_OPTIONS, 'ufo_id', 'log_record_id');
-                break;
-            case 'user_relations':
-                $this->connectAdditionalTable(TBL_USER_RELATIONS, 'ure_id', 'log_record_id');
-                break;
-            case 'user_relation_types':
-                $this->connectAdditionalTable(TBL_USER_RELATION_TYPES, 'urt_id', 'log_record_id');
-                break;
-        }
-
     }
 
 

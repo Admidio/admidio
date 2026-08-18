@@ -532,13 +532,6 @@ class PreferencesPresenter extends PagePresenter
             );
         }
 
-        // $formChangelog->addCheckbox(
-        //     'changelog_allow_deletion',
-        //     $gL10n->get('SYS_LOG_ALLOW_DELETION'),
-        //     (bool)($formValues['changelog_allow_deletion']??false),
-        //     array('helpTextId' => 'SYS_LOG_ALLOW_DELETION_DESC')
-        // );
-
         $formChangelog->addSubmitButton(
             'adm_button_save_changelog',
             $gL10n->get('SYS_SAVE'),
