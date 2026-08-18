@@ -65,6 +65,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Database;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 
 
@@ -335,6 +336,9 @@ try {
 
     $fieldStrings = ChangelogService::getFieldTranslations();
 
+    // Item fields of the inventory, only read if the changelog contains inventory item data
+    $itemsData = null;
+
     while ($row = $fieldHistoryStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
 
@@ -407,6 +411,13 @@ try {
             // Format the values depending on the user field type:
             $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueNew);
             $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueOld);
+        } elseif ($row['table_name'] == 'inventory_item_data') {
+            // Format the values depending on the item field type, just like the user fields above
+            if ($itemsData === null) {
+                $itemsData = new ItemsData($gDb, $gCurrentOrgId);
+            }
+            $valueNew = ChangelogService::formatInventoryItemValue($itemsData, (int) $row['field'], $valueNew);
+            $valueOld = ChangelogService::formatInventoryItemValue($itemsData, (int) $row['field'], $valueOld);
         } elseif (is_array($fieldInfo) && isset($fieldInfo['type'])) {
             $valueNew = ChangelogService::formatValue($valueNew, $fieldInfo['type'], $fieldInfo['entries']??[]);
             $valueOld = ChangelogService::formatValue($valueOld, $fieldInfo['type'], $fieldInfo['entries']??[]);

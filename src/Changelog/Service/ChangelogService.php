@@ -18,6 +18,7 @@ use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Entity\Post;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\ValueObjects\ItemsData;
 
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -525,18 +526,20 @@ class ChangelogService {
             'inf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
             'inf_sequence' =>              'SYS_ORDER',
             'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
-            'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS'),
+            'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS', 'type' => 'INVENTORY_STATUS'),
             'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE', 'type' => 'PICTURE'),
-            'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
-            'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
-            'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
-            'ind_value_url' =>             array('name' => 'SYS_VALUE', 'type' => 'URL'),
-            'ind_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
-            'ind_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
-            'ind_value' =>                 'SYS_VALUE',  
+            // Changes of the item data are logged with the item field as field name, so the
+            // following column names only occur in entries of previous Admidio versions.
+            'ind_value' =>                 'SYS_VALUE',
+            'ind_value_bool' =>            'SYS_VALUE',
+            'ind_value_date' =>            'SYS_VALUE',
+            'ind_value_mail' =>            'SYS_VALUE',
+            'ind_value_url' =>             'SYS_VALUE',
+            'ind_value_icon' =>            'SYS_VALUE',
+            'ind_value_usr' =>             'SYS_VALUE',
             'inb_last_receiver' =>         array('name' => 'SYS_INVENTORY_LAST_RECEIVER', 'type' => 'USER'),
-            'inb_borrow_date' =>             array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATE'),
-            'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATE'),
+            'inb_borrow_date' =>           array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATETIME'),
+            'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATETIME'),
             'ifo_value' =>                 'SYS_VALUE',
             'ifo_inf_id' =>                'SYS_INVENTORY_ITEMFIELD',
             'ifo_sequence' =>              'SYS_ORDER',
@@ -819,7 +822,7 @@ class ChangelogService {
      * @throws Exception
      */
     public static function formatValue($value, $type, $entries = []) {
-        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n, $gCurrentOrganization;
+        global $gSettingsManager, $gCurrentUserUUID, $gDb, $gProfileFields, $gL10n, $gCurrentOrganization, $gCurrentOrgId;
         if ($value != '' && !in_array($type, ['SAML_field_mapping', 'SAML_roles_mapping', 'SSO_field_mapping', 'SSO_roles_mapping', 'OIDC_field_mapping', 'OIDC_roles_mapping']) ) {
             $value = SecurityUtils::encodeHTML(StringUtils::strStripTags($value));
         }
@@ -860,6 +863,30 @@ class ChangelogService {
                         if ($date instanceof DateTime) {
                             $htmlValue = $date->format($gSettingsManager->getString('system_date'));
                         }
+                    }
+                    break;
+                case 'DATETIME':
+                    // The value can be stored with or without a time part
+                    $date = DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                    if (!$date instanceof DateTime) {
+                        $date = DateTime::createFromFormat('Y-m-d H:i', $value);
+                    }
+                    if ($date instanceof DateTime) {
+                        $htmlValue = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+                    } else {
+                        $date = DateTime::createFromFormat('Y-m-d', $value);
+                        if ($date instanceof DateTime) {
+                            $htmlValue = $date->format($gSettingsManager->getString('system_date'));
+                        }
+                    }
+                    break;
+                case 'INVENTORY_STATUS':
+                    // The status of an item is an option of the item field STATUS. Entries that
+                    // were written before the raw database value was logged already contain the
+                    // text of the option instead of its id and are displayed unchanged.
+                    if (is_numeric($value)) {
+                        $itemsData = new ItemsData($gDb, $gCurrentOrgId);
+                        $htmlValue = $itemsData->getHtmlValue('STATUS', $value);
                     }
                     break;
                 case 'EMAIL':
@@ -1059,6 +1086,46 @@ class ChangelogService {
     }
 
     /**
+     * Item field types of the inventory whose value is stored as the id(s) of the selected option(s).
+     * @var array
+     */
+    protected static array $inventorySelectFieldTypes = array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'DROPDOWN_DATE_INTERVAL', 'RADIO_BUTTON');
+
+    /**
+     * Format the value of an inventory item data change with the definition of the item field it
+     * belongs to. This is the counterpart of the user profile fields, whose values are formatted
+     * with the profile field definition.
+     *
+     * @param ItemsData $itemsData The item fields of the current organization
+     * @param int $fieldId The inf_id of the item field the value belongs to
+     * @param string|null $value The value as it is stored in the changelog
+     * @return string The formatted value
+     * @throws Exception
+     */
+    public static function formatInventoryItemValue(ItemsData $itemsData, int $fieldId, ?string $value): string
+    {
+        $fieldNameIntern = $itemsData->getPropertyById($fieldId, 'inf_name_intern');
+
+        // getHtmlValue() returns the value of text based fields unchanged, so the raw database
+        // value has to be encoded before it is formatted.
+        $value = (string)self::formatValue($value, '');
+
+        // The keeper and the last receiver of an item are stored as the id of the user
+        if (in_array($fieldNameIntern, array('KEEPER', 'LAST_RECEIVER'), true) && is_numeric($value)) {
+            return (string)self::formatValue($value, 'USER');
+        }
+
+        // Entries that were written before the raw database value was logged already contain the
+        // text of the selected option instead of its id and are therefore displayed unchanged.
+        if (in_array($itemsData->getProperty($fieldNameIntern, 'inf_type'), self::$inventorySelectFieldTypes, true)
+            && preg_match('/^\d+(\s*,\s*\d+)*$/', $value) !== 1) {
+            return $value;
+        }
+
+        return $itemsData->getHtmlValue($fieldNameIntern, $value);
+    }
+
+    /**
      * For a given database table and potentially a related object ID, return the type of table for the related object.
      * In many cases, the related object will have the same type (e.g. menu or folder hierarchy), but for other objects,
      * the related object has a different type (e.g. a file has the folder as related object, a membership record has the
@@ -1098,10 +1165,6 @@ class ChangelogService {
                 return 'forum_topics';
             case 'forum_topics':
                 return 'forum_posts';
-            case 'inventory_fields':
-                return 'inventory_items';
-            case 'inventory_items':
-                return 'inventory_fields';
             case 'list_columns':
                 // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
                 if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {

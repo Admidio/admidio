@@ -1268,6 +1268,14 @@ class ItemsData
             $updateItem->save();
         }
 
+        // The item record has to be created before its data rows can be written, so the item name
+        // was not yet known when the record was inserted and neither its creation nor the values
+        // it was created with could be logged. Now that the item data is saved, log them.
+        if ($this->mItemCreated) {
+            $newItem = new Item($this->mDb, $this, $this->mItemId);
+            $newItem->logPostponedCreation();
+        }
+
         $this->columnsValueChanged = false;
         $this->readItemData($this->mItemUUID);
         $this->mDb->endTransaction();
