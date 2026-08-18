@@ -418,8 +418,13 @@ class Entity
     public function delete(): bool
     {
         if (array_key_exists($this->keyColumnName, $this->dbColumns) && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
-            // Log record deletion, then delete
+            // Log record deletion, then delete. The deletion of the dependent records that a
+            // derived delete() removes beforehand is a change of its own and is not part of this
+            // change set.
+            $previousChangeSet = LogChanges::startChangeSet();
             $this->logDeletion();
+            LogChanges::endChangeSet($previousChangeSet);
+
             $sql = 'DELETE FROM ' . $this->tableName . '
                      WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
             $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
@@ -880,6 +885,12 @@ class Entity
             }
         }
 
+        // Every log entry that is written by this save belongs to the same change: the creation
+        // entry and the entries of the initial values of a new record, or all fields that this
+        // save has modified. LogChanges stamps them with one UUID, so that they can be shown
+        // together in the change history.
+        $previousChangeSet = LogChanges::startChangeSet();
+
         if ($this->insertRecord) {
             // insert record and remember the new id
             $sql = 'INSERT INTO ' . $this->tableName . '
@@ -907,6 +918,8 @@ class Entity
                 $this->logModifications($logChanges);
             }
         }
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->columnsValueChanged = false;
 

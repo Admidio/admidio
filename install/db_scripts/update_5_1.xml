@@ -66,5 +66,7 @@
     <step id="580">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_field_history_days'</step>
     <step id="590">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta) VALUES ('MODULE', 'SYS_CHANGE_HISTORY', 'CHANGELOG', '5.1.0', 0)</step>
     <step id="600">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description) VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CHANGELOG'), 2, %UUID%, false, 6, true, 'changelog', '/modules/changelog/changelog.php', 'clock-history', 'SYS_CHANGE_HISTORY', 'SYS_CHANGE_HISTORY_DESC')</step>
+    <step id="610">ALTER TABLE %PREFIX%_log_changes ADD COLUMN log_change_uuid varchar(36)</step>
+    <step id="620">CREATE INDEX %PREFIX%_idx_log_change_uuid ON %PREFIX%_log_changes (log_change_uuid)</step>
     <step>stop</step>
 </update>

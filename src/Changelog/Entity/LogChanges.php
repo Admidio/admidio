@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Changelog\Service\ChangelogService;
+use Ramsey\Uuid\Uuid;
 
 /**
  ***********************************************************************************************
@@ -47,6 +48,69 @@ class LogChanges extends Entity
     public static function setOriginComment(string $comment): void
     {
         self::$originComment = $comment;
+    }
+
+    /**
+     * UUID of the change that is currently being logged. All log entries that are written while
+     * a change set is open belong together, e.g. the creation entry and the entries of the initial
+     * values of a new record, or all fields that one save has modified.
+     *
+     * The value is null if no change set is open and an empty string if a change set is open but
+     * its UUID has not been needed yet. The UUID is only generated once an entry is really written,
+     * so that a save of an unlogged table does not create one.
+     * @var string|null
+     */
+    protected static ?string $changeUuid = null;
+
+
+    /**
+     * Open a change set. All log entries that are written until the change set is closed again
+     * share one UUID in log_change_uuid, so that the change history can show them together.
+     *
+     * Change sets nest like the transactions of the Database class: the outermost one wins. If a
+     * change set is already open, this call joins it instead of starting a new one, and the
+     * matching endChangeSet() then leaves it open. That is what makes one save of a record that
+     * saves further records of its own, such as a user with its profile fields, one single change.
+     *
+     * Every call has to be paired with an endChangeSet() call that is passed the returned value.
+     *
+     * @return string|null Returns the change set that was open before, to be passed to endChangeSet()
+     */
+    public static function startChangeSet(): ?string
+    {
+        $previousChangeSet = self::$changeUuid;
+        if ($previousChangeSet === null) {
+            self::$changeUuid = '';
+        }
+        return $previousChangeSet;
+    }
+
+    /**
+     * Close the change set that the matching startChangeSet() call has opened. If that call only
+     * joined a change set that was already open, the change set stays open.
+     *
+     * @param string|null $previousChangeSet The return value of the matching startChangeSet() call
+     * @return void
+     */
+    public static function endChangeSet(?string $previousChangeSet): void
+    {
+        if ($previousChangeSet === null) {
+            self::$changeUuid = null;
+        }
+    }
+
+    /**
+     * UUID of the change set that is currently open, generating it if this is the first entry
+     * that is written within it.
+     *
+     * @return string|null Returns the UUID or null if no change set is open
+     */
+    protected static function getChangeUuid(): ?string
+    {
+        if (self::$changeUuid === '') {
+            self::$changeUuid = (string)Uuid::uuid4();
+        }
+        return self::$changeUuid;
     }
 
 
@@ -233,6 +297,17 @@ class LogChanges extends Entity
         // the change was made in, so that the change history can be restricted to it later on.
         if (isset($gCurrentOrgId) && $gCurrentOrgId > 0 && (int)$this->getValue('log_org_id') === 0) {
             $this->setValue('log_org_id', $gCurrentOrgId);
+        }
+
+        // Remember which entries were written by the same change, so that all fields that one save
+        // has modified can be shown together. The column is missing if the database of the
+        // installation has not been updated yet, in which case the change is logged without it.
+        if (array_key_exists('log_change_uuid', $this->dbColumns)
+            && (string)$this->getValue('log_change_uuid') === '') {
+            $changeUuid = self::getChangeUuid();
+            if ($changeUuid !== null) {
+                $this->setValue('log_change_uuid', $changeUuid);
+            }
         }
 
         return parent::save($updateFingerPrint);

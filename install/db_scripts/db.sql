@@ -1154,6 +1154,9 @@ CREATE TABLE %PREFIX%_log_changes
     log_org_id                  integer unsigned    NULL,     -- Organization in whose context the change was made.
                                                               -- NULL for changes outside an organization context and
                                                               -- for entries written before this column existed.
+    log_change_uuid             varchar(36)         NULL,     -- Groups all entries that were written by the same
+                                                              -- change, e.g. every field that one save has modified.
+                                                              -- NULL for entries written before this column existed.
     log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
 
     log_record_id               integer unsigned    NOT NULL, -- The record id in the original table
@@ -1187,6 +1190,7 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE INDEX %PREFIX%_idx_log_org_timestamp ON %PREFIX%_log_changes (log_org_id, log_timestamp_create);
 CREATE INDEX %PREFIX%_idx_log_table_record ON %PREFIX%_log_changes (log_table, log_record_id);
 CREATE INDEX %PREFIX%_idx_log_record_uuid ON %PREFIX%_log_changes (log_record_uuid);
+CREATE INDEX %PREFIX%_idx_log_change_uuid ON %PREFIX%_log_changes (log_change_uuid);
 
 /*==============================================================*/
 /* Foreign Key Constraints                                      */

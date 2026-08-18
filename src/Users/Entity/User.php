@@ -1893,6 +1893,11 @@ class User extends Entity
 
         $this->db->startTransaction();
 
+        // The user record and the records of its profile fields are saved one by one, but they are
+        // one single change of the user. Open a change set around all of them, so that the change
+        // history can show the profile fields that one save has modified together.
+        $previousChangeSet = LogChanges::startChangeSet();
+
         // if new user then set create id and the uuid
         $updateCreateUserId = false;
         if ($usrId === 0) {
@@ -1936,6 +1941,7 @@ class User extends Entity
             $gChangeNotification->logUserCreation($usrId, $this);
         }
 
+        LogChanges::endChangeSet($previousChangeSet);
         $this->db->endTransaction();
 
         return $returnValue;
