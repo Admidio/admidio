@@ -124,6 +124,9 @@ class ChangelogService {
         } else {
             self::$customCallbacks[$function][$moduleOrKey] = $callback;
         }
+
+        // the callbacks feed into the cached lookup tables
+        self::resetCache();
     }
 
     static protected function evaluateCallback(mixed $callback, ...$args) : mixed {
@@ -134,6 +137,33 @@ class ChangelogService {
         }
     }
 
+    /**
+     * Cached lookup tables. getTableLabel() is consulted for every single log write and
+     * getFieldTranslations() builds a large array of translated texts, so neither of them may be
+     * rebuilt on each call.
+     * @var array|null
+     */
+    private static ?array $tableLabelCache = null;
+    private static ?array $fieldTranslationsCache = null;
+
+    /**
+     * Language the cached field translations were built for. The cache is only valid as long as
+     * the language of the current request does not change.
+     * @var string
+     */
+    private static string $fieldTranslationsLanguage = '';
+
+    /**
+     * Drop all cached lookup tables. Must be called whenever a callback is registered that changes
+     * their content.
+     * @return void
+     */
+    public static function resetCache(): void
+    {
+        self::$tableLabelCache = null;
+        self::$fieldTranslationsCache = null;
+        self::$fieldTranslationsLanguage = '';
+    }
 
     /**
      * Return a human-readable title for the given database table. If table is
@@ -157,7 +187,31 @@ class ChangelogService {
             }
         }
         // If none of the callbacks matches, proceed with the default processing...
+        $tableLabels = self::getTableLabels();
 
+        if ($table == null) {
+            return $tableLabels;
+        } else {
+            if (array_key_exists($table, $tableLabels)) {
+                return Language::translateIfTranslationStrId($tableLabels[$table]);
+            } else {
+                return '';
+            }
+        }
+    }
+
+    /**
+     * Named list of all database tables and their translation ids, including the entries that were
+     * added by third-party extensions. The list is needed for every single log write, so it is
+     * built once per request and cached afterwards.
+     *
+     * @return array Named array of database table name => translation id
+     */
+    private static function getTableLabels(): array
+    {
+        if (self::$tableLabelCache !== null) {
+            return self::$tableLabelCache;
+        }
 
         /**
          * Named list of all available table columns and their translation IDs.
@@ -212,17 +266,9 @@ class ChangelogService {
             'sso_keys' => 'SYS_SSO_KEYS',
             'others' => 'SYS_ALL_OTHERS',
         );
-        $tableLabels = array_merge($tableLabels, self::$customCallbacks['getTableLabelArray']);
 
-        if ($table == null) {
-            return $tableLabels;
-        } else {
-            if (array_key_exists($table, $tableLabels)) {
-                return Language::translateIfTranslationStrId($tableLabels[$table]);
-            } else {
-                return '';
-            }
-        }
+        self::$tableLabelCache = array_merge($tableLabels, self::$customCallbacks['getTableLabelArray']);
+        return self::$tableLabelCache;
     }
 
 
@@ -359,6 +405,12 @@ class ChangelogService {
     public static function getFieldTranslations(): array
     {
         global $gL10n;
+
+        // The result contains translated texts, so it can only be reused for the same language.
+        if (self::$fieldTranslationsCache !== null
+            && self::$fieldTranslationsLanguage === $gL10n->getLanguage()) {
+            return self::$fieldTranslationsCache;
+        }
 
         $userFieldText = array(
             'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
@@ -663,7 +715,9 @@ class ChangelogService {
             'key_is_active' =>              array('name' => 'SYS_SSO_KEY_ACTIVE', 'type' => 'BOOL'),
 
         );
-        return array_merge($translations, self::$customCallbacks['getFieldTranslations']);
+        self::$fieldTranslationsLanguage = $gL10n->getLanguage();
+        self::$fieldTranslationsCache = array_merge($translations, self::$customCallbacks['getFieldTranslations']);
+        return self::$fieldTranslationsCache;
     }
 
 
