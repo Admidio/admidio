@@ -333,8 +333,10 @@
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CHANGE_DATE">Datum ändern</string>
   <string name="SYS_CHANGE_HISTORY">Änderungshistorie</string>
+  <string name="SYS_CHANGE_HISTORY_DESC">Übersicht über alle Datenänderungen mit dem Zeitpunkt und Benutzer der Änderung</string>
   <string name="SYS_CHANGE_HISTORY_GENERIC">Änderungshistorie: #VAR1#</string>
   <string name="SYS_CHANGE_HISTORY_GENERIC2">Änderungshistorie: #VAR1# (#VAR2#)</string>
+  <string name="SYS_CHANGE_HISTORY_NO_ENTRIES">Im ausgewählten Zeitraum wurden keine Änderungen aufgezeichnet. Es werden nur jene Änderungen aufgezeichnet, die in den Einstellungen der Änderungshistorie aktiviert sind.</string>
   <string name="SYS_CHANGE_HISTORY_OF">Änderungshistorie von #VAR1#</string>
   <string name="SYS_CHANGE_HISTORY_USERDATA">Änderungshistorie der Benutzerdaten und Mitgliedschaften</string>
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>
@@ -447,6 +449,7 @@
   <string name="SYS_CURRENT_PROFILE_PICTURE">Aktuelles Profilfoto</string>
   <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Aktuelle Rollenmitgliedschaften</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem #VAR1#Profil#VAR2# eine E-Mail-Adresse ein.</string>
+  <string name="SYS_DATA_AREA">Bereich</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Ist diese Option aktiviert, so sind die Objekte (Veranstaltungen, Ankündigungen, Weblinks ...) dieser Kategorie auch auf den Webseiten folgender Organisationen sichtbar:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Daten für mehrere Organisationen sichtbar</string>
   <string name="SYS_DATA_PROTECTION">Datenschutz</string>
