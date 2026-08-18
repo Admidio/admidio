@@ -471,6 +471,17 @@ class Membership extends Entity
     }
 
     /**
+     * User and role of this membership, each read only once for the changelog entries of one
+     * save operation. adjustLogEntry() is called for every changed column.
+     * @var User|null
+     */
+    private ?User $logUser = null;
+    /**
+     * @var Role|null
+     */
+    private ?Role $logRole = null;
+
+    /**
      * Adjust the changelog entry for this db record.
      *
      * For group memberships, we want to display the user's name as record name
@@ -485,15 +496,19 @@ class Membership extends Entity
     {
         global $gProfileFields;
         $usrId = (int)$this->getValue('mem_usr_id');
+        $rolId = (int)$this->getValue('mem_rol_id');
 
-        $user = new User($this->db, $gProfileFields, $usrId);
-        $logEntry->setValue('log_record_name', $user->readableName());
-        $logEntry->setValue('log_record_uuid', $user->getValue('usr_uuid'));
+        if ($this->logUser === null || (int)$this->logUser->getValue('usr_id') !== $usrId) {
+            $this->logUser = new User($this->db, $gProfileFields, $usrId);
+        }
+        if ($this->logRole === null || (int)$this->logRole->getValue('rol_id') !== $rolId) {
+            $this->logRole = new Role($this->db, $rolId);
+        }
+
+        $logEntry->setValue('log_record_name', $this->logUser->readableName());
+        $logEntry->setValue('log_record_uuid', $this->logUser->getValue('usr_uuid'));
         $logEntry->setLogLinkID($usrId);
 
-        $rolId = $this->getValue('mem_rol_id');
-        $role = new Role($this->db, $rolId);
-
-        $logEntry->setLogRelated($role->getValue('rol_uuid'), $role->getValue('rol_name'));
+        $logEntry->setLogRelated($this->logRole->getValue('rol_uuid'), $this->logRole->getValue('rol_name'));
     }
 }
