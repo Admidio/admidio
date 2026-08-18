@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  ***********************************************************************************************
@@ -55,8 +56,11 @@ class UserData extends Entity
             // No change, nothing to log
             return true;
         }
+        if (!self::$loggingEnabled) return false;
+
         global $gProfileFields;
         $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return false;
 
         $userID = $this->getValue('usd_usr_id');
         $user = new User($this->db, $gProfileFields, $userID);

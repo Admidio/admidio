@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -82,7 +83,10 @@ class ItemData extends Entity
             return true;
         }
 
+        if (!self::$loggingEnabled) return false;
+
         $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return false;
 
         $itemID = (int)$this->getValue('ind_ini_id');
         $item = new Item($this->db, $this->mItemsData, $itemID);

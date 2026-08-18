@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Changelog\Service\ChangelogService;
 use DateTime;
 use Ramsey\Uuid\Uuid;
 use Throwable;
@@ -309,8 +310,12 @@ class Entity
     public function logCreation(): bool
     {
         if (!self::$loggingEnabled) return false;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        // Check whether this table is logged at all before collecting the data for the log entry.
+        // readableName() and adjustLogEntry() may read further records from the database, and
+        // LogChanges::save() would discard all of that work again.
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
             $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
@@ -333,8 +338,12 @@ class Entity
     public function logDeletion(): bool
     {
         if (!self::$loggingEnabled) return false;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        // Check whether this table is logged at all before collecting the data for the log entry.
+        // readableName() and adjustLogEntry() may read further records from the database, and
+        // LogChanges::save() would discard all of that work again.
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
             $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
@@ -360,9 +369,10 @@ class Entity
     {
         if (!self::$loggingEnabled) return false;
         if (count($logChanges) === 0) return false;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $retVal = true;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
         $id = $this->dbColumns[$this->keyColumnName];
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
