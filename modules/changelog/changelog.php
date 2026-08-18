@@ -231,6 +231,10 @@ try {
     $table->setOrderColumns(array(array(count($columnHeading), 'desc')));
     $table->setColumnsNotHideResponsive(array(count($columnHeading)));
     // $table->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
+    // The changelog is not bounded in size, so it must not offer to read all entries at once.
+    // The largest selectable page length matches the limit enforced in changelog_data.php.
+    $table->setRowsPerPageMenuEntries(array(10 => '10', 25 => '25', 50 => '50', 100 => '100', 500 => '500', 1000 => '1000'));
+    $table->disableShowAllEntries();
     $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
     $table->createJavascript(0, count($columnHeading));
 

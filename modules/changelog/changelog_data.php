@@ -98,6 +98,17 @@ try {
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
     $getSearch = admFuncVariableIsValid($_GET['search'] ?? array(), 'value', 'string');
 
+    // The changelog grows without any bound, so a request for all entries would read, format and
+    // encode the complete log of the organization at once. The page length menu of the table
+    // therefore does not offer that (see disableShowAllEntries() in changelog.php), and the page
+    // length is limited here as well, so that a hand-crafted request cannot exceed it either.
+    // A length of -1, which DataTables uses for "all entries", ends up at the same limit.
+    $maxRowsPerRequest = 1000;
+    $getStart = max(0, $getStart);
+    if ($getLength < 1 || $getLength > $maxRowsPerRequest) {
+        $getLength = $maxRowsPerRequest;
+    }
+
     $jsonArray['draw'] = (int)$getDraw;
 
 
@@ -295,10 +306,9 @@ try {
         $dateToIntern . ' 23:59:59',
     ], $queryParamsConditions);
 
-    $limitCondition = '';
-    if ($getLength > 0) {
-        $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
-    }
+    // $getLength and $getStart are validated as integers and bounded above, so they can be
+    // inlined into the statement.
+    $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
 
     if ($getSearch === '') {
         // no search condition entered then return all records in dependence of order, limit and offset
