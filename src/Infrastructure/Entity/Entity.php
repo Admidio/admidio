@@ -790,6 +790,20 @@ class Entity
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor, then these columns with their timestamp will be updated.
      * For a new record if there is a UUID column, a new uuid will be created and stored.
+     *
+     * The changelog entries of the change are written after the record itself was written, and
+     * they are not part of a transaction of their own. A failing log write does not undo the
+     * change and does not turn the return value into false: an error of the database ends the
+     * request anyway, and the changelog must not be able to block an ordinary save. Callers that
+     * need the record and its log entries to be written together have to open a transaction
+     * around the whole operation themselves, e.g.
+     * ```
+     * $gDb->startTransaction();
+     * $entity->save();
+     * $gDb->endTransaction();
+     * ```
+     * Transactions are counted, so this is also safe when the caller is already within one.
+     *
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if a table has columns like **usr_id_create** or **usr_id_change**
      * @return bool If an update or insert into the database was done, then return true, otherwise false.
@@ -876,6 +890,8 @@ class Entity
                 if ($this->keyColumnName !== '') {
                     $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
                 }
+                // The result of the log writes is deliberately not evaluated, see the comment
+                // about transactions in the description of this method.
                 $this->logCreation();
                 $this->logModifications($logChanges);
                 $this->insertRecord = false;
