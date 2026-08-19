@@ -33,35 +33,13 @@ if (!is_file($configFile)) {
     throw new RuntimeException('Admidio configuration file adm_my_files/config.php was not found.');
 }
 
+require_once $rootPath . '/system/bootstrap/cli-request.php';
+
 /*
  * Some Admidio config.php files select environment-specific database settings through HTTP_HOST.
  * A CLI process has no request host, so provide a deterministic value before loading config.php.
  */
-$configHost = isset($cliHost) && $cliHost !== '' ? $cliHost : getenv('ADMIDIO_HOST');
-if ($configHost === false || $configHost === '') {
-    $configHost = 'localhost';
-}
-
-/*
- * The value ends up in HTTP_HOST, SERVER_NAME and REQUEST_URI and is therefore read by config.php
- * and by the URL constants derived in constants.php. Accept only a host name with an optional port
- * so a caller cannot smuggle a path, a scheme or a header break into those values.
- */
-if (!preg_match('/^(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*(?::\d{1,5})?$/', $configHost)
-    && !preg_match('/^\[[0-9A-Fa-f:.]+](?::\d{1,5})?$/', $configHost)) {
-    throw new RuntimeException(
-        'The host "' . $configHost . '" is not a valid host name. --host and ADMIDIO_HOST expect '
-        . 'a host name with an optional port, for example "example.org" or "example.org:8080".'
-    );
-}
-
-$_SERVER['HTTP_HOST'] = $configHost;
-$_SERVER['SERVER_NAME'] = $configHost;
-$_SERVER['SERVER_PORT'] = 80;
-$_SERVER['DOCUMENT_ROOT'] = $rootPath;
-$_SERVER['SCRIPT_FILENAME'] = $rootPath . '/admidio';
-$_SERVER['SCRIPT_NAME'] = '/admidio';
-$_SERVER['REQUEST_URI'] = '/admidio';
+admCliRequestVariables($rootPath, admCliRequestHost(isset($cliHost) ? $cliHost : ''));
 
 require_once $configFile;
 
@@ -77,21 +55,7 @@ $gForceHTTPS = false;
  * only used so the existing non-database bootstrap can run in CLI mode; no HTTP request/session
  * is created.
  */
-$rootUrl = parse_url($g_root_path);
-$scheme = is_array($rootUrl) && isset($rootUrl['scheme']) ? $rootUrl['scheme'] : 'http';
-$host = is_array($rootUrl) && isset($rootUrl['host']) ? $rootUrl['host'] : 'localhost';
-$port = is_array($rootUrl) && isset($rootUrl['port'])
-    ? (int)$rootUrl['port']
-    : ($scheme === 'https' ? 443 : 80);
-$urlPath = is_array($rootUrl) && isset($rootUrl['path']) ? rtrim($rootUrl['path'], '/') : '';
-
-$_SERVER['SERVER_PORT'] = $port;
-$_SERVER['HTTP_HOST'] = $host;
-$_SERVER['SERVER_NAME'] = $host;
-$_SERVER['DOCUMENT_ROOT'] = $rootPath;
-$_SERVER['SCRIPT_FILENAME'] = $rootPath . '/admidio';
-$_SERVER['SCRIPT_NAME'] = $urlPath . '/admidio';
-$_SERVER['REQUEST_URI'] = $urlPath . '/admidio';
+admCliRequestVariablesFromUrl($rootPath, $g_root_path);
 
 /*
  * Maintenance mode must be manageable even if the database is unavailable and while the regular

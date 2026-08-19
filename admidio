@@ -42,15 +42,20 @@ function admCliBootstrapOption(array $arguments, string $name): string
 }
 
 /**
- * Determine the command before the full CLI bootstrap is available.
+ * Read the name of the command out of the arguments.
  *
- * This is only used for commands that must be able to run without a database connection.
+ * The command decides which bootstrap can be used, so it has to be known before the registry
+ * exists. Only the first token that is neither an option nor the value of an option is taken; a
+ * misspelled command is reported later by CliApplication, which knows every command. The tokens
+ * are read exactly like CliApplication::findCommand() reads them, short flags included, so both
+ * arrive at the same command.
  *
  * @param array<int,string> $arguments
  */
 function admCliBootstrapCommand(array $arguments): string
 {
     $globalFlags = array('quiet', 'no-interaction', 'yes', 'help');
+    $globalShortFlags = array('h', 'q', 'y');
     $globalValueOptions = array('host', 'organization', 'as', 'format', 'output');
 
     for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
@@ -58,6 +63,15 @@ function admCliBootstrapCommand(array $arguments): string
 
         if ($token === '--') {
             return $arguments[$index + 1] ?? '';
+        }
+
+        // Short flags may precede the command just like their long forms.
+        if (!str_starts_with($token, '--') && str_starts_with($token, '-') && strlen($token) > 1) {
+            if (in_array(substr($token, 1), $globalShortFlags, true)) {
+                continue;
+            }
+
+            return '';
         }
 
         if (!str_starts_with($token, '--')) {
@@ -86,10 +100,54 @@ function admCliBootstrapCommand(array $arguments): string
 
 $cliHost = admCliBootstrapOption($argv, 'host');
 $cliOrganization = admCliBootstrapOption($argv, 'organization');
-$cliSkipDatabase = admCliBootstrapCommand($argv) === 'maintenance:mode';
+$cliCommand = admCliBootstrapCommand($argv);
+
+/*
+ * Maintenance mode has to be inspectable and revocable while the database is unavailable, so its
+ * command reads the configuration file but opens no database connection.
+ */
+$cliSkipDatabase = $cliCommand === 'maintenance:mode';
+
+/*
+ * An installation has no configuration file and no database yet, so its commands need a bootstrap
+ * that creates neither. Everything the constants are derived from is read from the command line
+ * there, and the commands check that their options match what was bootstrapped.
+ */
+$installationCommands = array('install:check', 'install:run');
+
+/*
+ * The commands that only describe the command line have to work on an Admidio that is not installed
+ * yet, otherwise install:run could not even be looked up before it is used.
+ */
+$documentationCommands = array('', 'help', 'list', 'completion', 'cli:selfcheck');
+
+$installationBootstrap = in_array($cliCommand, $installationCommands, true)
+    || (in_array($cliCommand, $documentationCommands, true) && !is_file(__DIR__ . '/adm_my_files/config.php'));
 
 try {
-    require __DIR__ . '/system/bootstrap/cli.php';
+    if (in_array($cliCommand, $installationCommands, true)) {
+        /*
+         * Ask for the values that the command line does not contain. This happens here and not in
+         * the command, because the table prefix and the time zone are needed to build the table
+         * names and the timestamps of the installation, which Admidio does while it is bootstrapping.
+         */
+        if (!in_array('--help', $argv, true) && !in_array('-h', $argv, true)) {
+            require __DIR__ . '/vendor/autoload.php';
+            $argv = Admidio\Infrastructure\Cli\CliInstallationInput::complete($argv, __DIR__);
+        }
+
+        $cliRootUrl = admCliBootstrapOption($argv, 'root-url');
+        $cliLanguage = admCliBootstrapOption($argv, 'language');
+        $cliTablePrefix = admCliBootstrapOption($argv, 'table-prefix');
+        $cliDbType = admCliBootstrapOption($argv, 'db-type');
+        $cliTimezone = admCliBootstrapOption($argv, 'timezone');
+    }
+
+    if ($installationBootstrap) {
+        require __DIR__ . '/system/bootstrap/cli-installation.php';
+    } else {
+        require __DIR__ . '/system/bootstrap/cli.php';
+    }
 
     $application = new Admidio\Infrastructure\Cli\CliApplication();
     exit($application->run($argv));
