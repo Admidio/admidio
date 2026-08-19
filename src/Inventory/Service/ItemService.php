@@ -197,10 +197,12 @@ class ItemService
                         // Write value from field to the item class object
                         $this->itemRessource->setValue($infNameIntern, $formValues[$postKey]);
                     }
-                } elseif ($itemField->getValue('inf_type') === 'CHECKBOX' && !$multiEdit) {
-                    // Set value to '0' for unchecked checkboxes
-                    $this->itemRessource->setValue($itemField->getValue('inf_name_intern'), '0');
                 }
+                // NOTE: Unchecked checkboxes must NOT be set to '0' here. A field that is missing
+                // in the form values was not part of the submitted form at all - the borrow form
+                // for example only contains the borrow fields - and its value must stay unchanged.
+                // FormPresenter::validate() already adds the value '0' for every checkbox that
+                // belongs to the submitted form and was not checked by the user.
             }
 
             // save item data

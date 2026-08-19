@@ -38,6 +38,53 @@ class SettingsManager
     private bool $throwExceptions = true;
 
     /**
+     * @var array<string,string> Default values of preferences that were registered at runtime by a
+     *      module or a plugin instead of being seeded from install/db_scripts/preferences.php.
+     *      The list is static and is therefore not part of the settings that are stored in the
+     *      session, so it has to be built again in every request. That is intentional: the defaults
+     *      of a plugin that is no longer active must not survive its deactivation.
+     */
+    private static array $registeredDefaults = array();
+
+    /**
+     * Register the default values of preferences that do not come from the preferences.php of the
+     * installation. A preference that is registered here behaves like any other preference, but it
+     * needs no row in adm_preferences and therefore no installation and no update step: as long as
+     * it was never saved, reading it returns the registered default. The row is written by the
+     * usual set() as soon as the value is really changed.
+     *
+     * This is what allows a module or a plugin to add a preference of its own. Register the
+     * defaults in every request, before the preference is read for the first time.
+     *
+     * @param array<string,mixed> $defaults Named array of preference name => default value
+     * @return void
+     * @throws Exception
+     */
+    public static function registerDefaults(array $defaults): void
+    {
+        foreach ($defaults as $name => $value) {
+            if (!self::isValidName($name)) {
+                throw new Exception('Settings name "' . $name . '" is an invalid string!');
+            }
+
+            // if an array is given as value, convert it to a string, just like set() does
+            if (is_array($value)) {
+                foreach ($value as $entry) {
+                    if (!self::isValidValue($entry)) {
+                        throw new Exception('Settings value of "' . $name . '" is an invalid value!');
+                    }
+                }
+                $value = implode(',', $value);
+            }
+            if (!self::isValidValue($value)) {
+                throw new Exception('Settings value "' . $value . '" is an invalid value!');
+            }
+
+            self::$registeredDefaults[$name] = (string)$value;
+        }
+    }
+
+    /**
      * SettingsManager constructor.
      * @param Database $database
      * @param int $orgId
@@ -129,7 +176,9 @@ class SettingsManager
             $this->resetAll();
         }
 
-        return $this->settings;
+        // The stored values win over the registered defaults of the modules and plugins, which are
+        // only used for the preferences that were never saved.
+        return array_merge(self::$registeredDefaults, $this->settings);
     }
 
     /**
@@ -146,6 +195,12 @@ class SettingsManager
         }
         if (!$this->has($name, $update) && $this->throwExceptions) {
             throw new Exception('Settings name "' . $name . '" does not exist!');
+        }
+
+        // A preference that was registered by a module or a plugin and was never saved has no row
+        // in the database and falls back to its registered default.
+        if (!array_key_exists($name, $this->settings)) {
+            return (string)(self::$registeredDefaults[$name] ?? '');
         }
 
         return (string)$this->settings[$name];
@@ -239,7 +294,9 @@ class SettingsManager
 
                 return true;
             } catch (\UnexpectedValueException $e) {
-                return false;
+                // The preference has no row in the database, but it exists if a module or a
+                // plugin has registered a default value for it.
+                return array_key_exists($name, self::$registeredDefaults);
             }
         }
 

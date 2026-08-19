@@ -223,7 +223,9 @@ class ItemsData
 
             while ($row = $itemDataStatement->fetch()) {
                 if (!array_key_exists($row['ind_inf_id'], $this->mItemData)) {
-                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this, $row['ind_inf_id']);
+                    // The entities are indexed by the item field, but they are loaded by their own
+                    // key column ind_id. Passing ind_inf_id here reads an unrelated data row.
+                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this, (int)$row['ind_id']);
                 }
                 $this->mItemData[$row['ind_inf_id']]->setArray($row);
             }
@@ -238,15 +240,20 @@ class ItemsData
 
             while ($row = $itemBorrowStatement->fetch()) {
                 foreach ($this->getItemFields() as $itemField) {
-                    $itemBorrowData = new ItemBorrowData($this->mDb, $this, $row['inb_ini_id']);
                     $fieldNameIntern = $itemField->getValue('inf_name_intern');
-                    $fieldId = $itemField->getValue('inf_id');
-                    if (in_array($fieldNameIntern, $this->borrowFieldNames)) {
-                        if (!array_key_exists($fieldId, $this->mItemData)) {
-                            $this->mItemData[$fieldId] = $itemBorrowData;
-                        }
-                        $this->mItemData[$fieldId]->setArray($row);
+                    if (!in_array($fieldNameIntern, $this->borrowFieldNames)) {
+                        continue;
                     }
+                    $fieldId = $itemField->getValue('inf_id');
+                    if (!array_key_exists($fieldId, $this->mItemData)) {
+                        // Same as above: the entity is loaded by its own key column inb_id.
+                        // inb_ini_id is the item the borrow data belongs to and would read an
+                        // unrelated row. The object is only built for the borrow fields and only
+                        // when it is really needed, because the constructor clones this object
+                        // and reads from the database.
+                        $this->mItemData[$fieldId] = new ItemBorrowData($this->mDb, $this, (int)$row['inb_id']);
+                    }
+                    $this->mItemData[$fieldId]->setArray($row);
                 }
             }
         } else {

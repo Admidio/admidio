@@ -2177,10 +2177,13 @@ class FormPresenter
                     throw new Exception('SYS_FIELD_EMPTY', array($element['label']));
                 }
             } elseif (isset($element['property']) && $element['property'] === $this::FIELD_DISABLED) {
-                // no value should be set if a field is marked as disabled
-                if (isset($fieldValues[$element['id']])) {
-                    unset($fieldValues[$element['id']]);
-                }
+                // No value should be set if a field is marked as disabled. The browser does not
+                // submit a disabled control at all, so there is nothing the user could have
+                // entered. Continue with the next element instead of only dropping the value:
+                // the checkbox default below would otherwise store '0' for a disabled checkbox
+                // and thereby clear a value the user was never able to change.
+                unset($fieldValues[$element['id']]);
+                continue;
             }
 
             // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
