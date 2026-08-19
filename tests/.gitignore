@@ -1,0 +1,19 @@
+# Test artifacts and temporary files
+reports/
+coverage/
+.phpunit.cache/
+*.log
+
+# Test environment
+.env.test
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
