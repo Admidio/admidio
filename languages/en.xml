@@ -342,6 +342,9 @@
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHANGED_AT">Last modified</string>
   <string name="SYS_CHANGED_BY">Changed by</string>
+  <string name="SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS">Profile and role settings</string>
+  <string name="SYS_CHANGELOG_AREA_REPORTS">Lists and reports</string>
+  <string name="SYS_CHANGELOG_AREA_USER_PROFILE">User profile and roles</string>
   <string name="SYS_CHANGELOG_CHANGED_FIELDS">#VAR1# fields</string>
   <string name="SYS_CHANGELOG_DEFAULT_DAYS">Default time period of the change history (days)</string>
   <string name="SYS_CHANGELOG_DEFAULT_DAYS_DESC">The change history is shown for the given period of time in days by default. This is only the default filter option, which every user can change on the change history page. Enter 0 to show the complete change history without any date limit. (Default: 365)</string>
@@ -770,10 +773,9 @@
   <string name="SYS_GROUPS_ROLES_DESC">Overview and management of all groups and roles of the organization. Different member lists can be displayed, exported and own lists can be created.</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
-  <string name="SYS_HEADER_CONTENT_MODULES">Content modules (documents, events, announcements, etc.)</string>
-  <string name="SYS_HEADER_PREFERENCES">General Preferences</string>
+  <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
+  <string name="SYS_HEADER_PREFERENCES">Settings</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
-  <string name="SYS_HEADER_USER_ROLE_SETTINGS">Settings for users and groups/roles</string>
   <string name="SYS_HEADLINE">Headline</string>
   <string name="SYS_HIDDEN">Hidden</string>
   <string name="SYS_HIGHLIGHT_EVENT">Highlight event</string>
@@ -989,8 +991,8 @@
   <string name="SYS_LOCKED">Locked</string>
   <string name="SYS_LOG">Log</string>
   <string name="SYS_LOG_RECORDS_HIDDEN">Some or all changelog entries have been hidden due to insufficient user permissions to access them.</string>
-  <string name="SYS_LOGGED_TABLES">Logged tables</string>
-  <string name="SYS_LOGGED_TABLES_DESC">Select all types of objects for the changelog. For those objects, all individual modifications will be logged in the change history with old and new value, as well as modification time and user. If an object type is deselected, existing log entries are not deleted. This can be done in the changelog page.</string>
+  <string name="SYS_LOGGED_AREAS">Logged areas</string>
+  <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>
   <string name="SYS_LOGIN">Sign in</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">You have tried to login too many times recently using a wrong password.\nFor security reasons your account has been locked for 15 minutes.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Selected username already exists.\n\nPlease select another name.</string>

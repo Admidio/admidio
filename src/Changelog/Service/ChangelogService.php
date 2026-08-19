@@ -119,6 +119,7 @@ class ChangelogService {
     protected static array $customCallbacks = array(
         'getTableLabel' => ['' => []],
         'getTableLabelArray' => [],
+        'getAreaArray' => [],
         'getObjectForTable' => ['' => []],
         'getFieldTranslations' => [],
         'createLink' => ['' => []],
@@ -153,8 +154,8 @@ class ChangelogService {
         }
 
         if (empty($moduleOrKey)) {
-            if ($function == 'getTableLabelArray' || $function == 'getFieldTranslations') {
-                // These two are merged into the lookup tables instead of being evaluated, so the
+            if ($function == 'getTableLabelArray' || $function == 'getFieldTranslations' || $function == 'getAreaArray') {
+                // These are merged into the lookup tables instead of being evaluated, so the
                 // registered value has to be an array.
                 if (!is_array($callback)) {
                     throw new InvalidArgumentException('The changelog callback "' . $function . '" must be an array.');
@@ -312,6 +313,198 @@ class ChangelogService {
 
         self::$tableLabelCache = array_merge($tableLabels, self::$customCallbacks['getTableLabelArray']);
         return self::$tableLabelCache;
+    }
+
+
+    /**
+     * The sections the areas of the change history are grouped into. The order of the sections is
+     * the order they are displayed in. A section with an empty title is displayed without a heading.
+     *
+     * @return array Named array of section id => translation id of the heading
+     */
+    public static function getAreaSections(): array
+    {
+        return array(
+            'user_role_data' => 'SYS_HEADER_USER_ROLE_DATA',
+            'content_modules' => 'SYS_HEADER_CONTENT_MODULES',
+            'settings' => 'SYS_HEADER_PREFERENCES',
+            'other' => ''
+        );
+    }
+
+    /**
+     * The areas the change history can be switched on and off for. An area bundles all database
+     * tables of one module or of one group of settings, so the user configures the change history
+     * in the modules he knows and never in database tables.
+     *
+     * Every table of getTableLabel() that no area claims is added to the area 'other', so a table
+     * that a third-party extension registered is configurable even if the extension does not
+     * declare an area for it.
+     *
+     * An extension adds its own area, or adds its tables to an existing one, by registering an
+     * array of the same shape:
+     * ```
+     * ChangelogService::registerCallback('getAreaArray', '', array(
+     *     'my_module' => array('label' => 'PLG_MY_MODULE', 'section' => 'content_modules',
+     *         'enabledBy' => array('my_module_plugin_enabled'), 'tables' => array('my_table'))
+     * ));
+     * ```
+     *
+     * @return array Ordered named array of area id => array with the keys
+     *      **label** (translation id), **section** (id of getAreaSections()),
+     *      **enabledBy** (names of the preferences that enable the module, the area is displayed
+     *      as soon as one of them is enabled; an empty array means the area is always displayed)
+     *      and **tables** (database table names without prefix)
+     * @throws Exception
+     */
+    public static function getAreas(): array
+    {
+        $areas = array(
+            'user_profile' => array(
+                'label' => 'SYS_CHANGELOG_AREA_USER_PROFILE',
+                'section' => 'user_role_data',
+                'enabledBy' => array(),
+                'tables' => array('users', 'user_data', 'members', 'user_relations')
+            ),
+            'permissions' => array(
+                'label' => 'SYS_ROLE_RIGHTS',
+                'section' => 'user_role_data',
+                'enabledBy' => array(),
+                'tables' => array('roles_rights', 'roles_rights_data')
+            ),
+            'documents_files' => array(
+                'label' => 'SYS_DOCUMENTS_FILES',
+                'section' => 'content_modules',
+                'enabledBy' => array('documents_files_module_enabled'),
+                'tables' => array('files', 'folders')
+            ),
+            'photos' => array(
+                'label' => 'SYS_PHOTO_ALBUMS',
+                'section' => 'content_modules',
+                'enabledBy' => array('photo_module_enabled'),
+                'tables' => array('photos')
+            ),
+            'announcements' => array(
+                'label' => 'SYS_ANNOUNCEMENTS',
+                'section' => 'content_modules',
+                'enabledBy' => array('announcements_module_enabled'),
+                'tables' => array('announcements')
+            ),
+            'events' => array(
+                'label' => 'SYS_EVENTS',
+                'section' => 'content_modules',
+                'enabledBy' => array('events_module_enabled'),
+                'tables' => array('events', 'rooms')
+            ),
+            'forum' => array(
+                'label' => 'SYS_FORUM',
+                'section' => 'content_modules',
+                'enabledBy' => array('forum_module_enabled'),
+                'tables' => array('forum_topics', 'forum_posts')
+            ),
+            'inventory' => array(
+                'label' => 'SYS_INVENTORY',
+                'section' => 'content_modules',
+                'enabledBy' => array('inventory_module_enabled'),
+                'tables' => array('inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data')
+            ),
+            'weblinks' => array(
+                'label' => 'SYS_WEBLINKS',
+                'section' => 'content_modules',
+                'enabledBy' => array('weblinks_module_enabled'),
+                'tables' => array('links')
+            ),
+            'profile_role_settings' => array(
+                'label' => 'SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS',
+                'section' => 'settings',
+                'enabledBy' => array(),
+                'tables' => array('roles', 'role_dependencies', 'user_fields', 'user_field_select_options', 'user_relation_types')
+            ),
+            'reports' => array(
+                'label' => 'SYS_CHANGELOG_AREA_REPORTS',
+                'section' => 'settings',
+                'enabledBy' => array(),
+                'tables' => array('lists', 'list_columns', 'category_report')
+            ),
+            'sso' => array(
+                'label' => 'SYS_SSO',
+                'section' => 'settings',
+                'enabledBy' => array('sso_saml_enabled', 'sso_oidc_enabled'),
+                'tables' => array('saml_clients', 'oidc_clients', 'sso_keys')
+            ),
+            'preferences' => array(
+                'label' => 'SYS_SETTINGS',
+                'section' => 'settings',
+                'enabledBy' => array(),
+                'tables' => array('organizations', 'menu', 'preferences', 'texts', 'categories')
+            ),
+            'other' => array(
+                'label' => 'SYS_ALL_OTHERS',
+                'section' => 'other',
+                'enabledBy' => array(),
+                'tables' => array('others')
+            )
+        );
+
+        // An extension may either define a new area or add its tables to an existing one, so the
+        // registered definition is merged into the existing area instead of replacing it.
+        foreach (self::$customCallbacks['getAreaArray'] as $areaId => $area) {
+            if (isset($areas[$areaId])) {
+                $areas[$areaId]['tables'] = array_merge($areas[$areaId]['tables'], $area['tables'] ?? array());
+                unset($area['tables']);
+                $areas[$areaId] = array_merge($areas[$areaId], $area);
+            } else {
+                $areas[$areaId] = array_merge(array('label' => '', 'section' => 'other', 'enabledBy' => array(), 'tables' => array()), $area);
+            }
+        }
+
+        // Every table that no area claims is configured together with the unnamed tables. Without
+        // this a table of a third-party extension would have no checkbox at all.
+        $assignedTables = array();
+        foreach ($areas as $area) {
+            $assignedTables = array_merge($assignedTables, $area['tables']);
+        }
+        $areas['other']['tables'] = array_values(array_unique(array_merge(
+            $areas['other']['tables'],
+            array_diff(array_keys(self::getTableLabel()), $assignedTables)
+        )));
+
+        return $areas;
+    }
+
+    /**
+     * The areas of getAreas() that belong to a module that is enabled. An area of a disabled module
+     * must not only be hidden but be left out of the form completely: the preferences of its tables
+     * are kept unchanged, so switching the module on again restores the previous configuration.
+     *
+     * @return array The displayed areas in the same shape as getAreas()
+     * @throws Exception
+     */
+    public static function getVisibleAreas(): array
+    {
+        global $gSettingsManager;
+
+        $areas = self::getAreas();
+
+        foreach ($areas as $areaId => $area) {
+            if (count($area['enabledBy']) === 0) {
+                continue;
+            }
+
+            $moduleEnabled = false;
+            foreach ($area['enabledBy'] as $preferenceName) {
+                if ($gSettingsManager->has($preferenceName) && $gSettingsManager->getInt($preferenceName) > 0) {
+                    $moduleEnabled = true;
+                    break;
+                }
+            }
+
+            if (!$moduleEnabled) {
+                unset($areas[$areaId]);
+            }
+        }
+
+        return $areas;
     }
 
 
