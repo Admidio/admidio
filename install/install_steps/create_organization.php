@@ -11,7 +11,7 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\InstallationUpdate\Service\Installation;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 
@@ -101,14 +101,13 @@ if ($mode === 'html') {
     $_SESSION['orga_email']     = $formValues['adm_organization_email'];
     $_SESSION['orga_timezone']  = $formValues['adm_organization_timezone'];
 
-    if (!in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true)) {
-        throw new Exception('SYS_FIELD_INVALID_INPUT', array('ORG_TIMEZONE'));
-    }
-
-    // allow only letters, numbers and special characters like .-_+@
-    if (!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar')) {
-        throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
-    }
+    // check the entered values with the same rules that a headless installation uses
+    Installation::validateOrganizationInput(
+        $_SESSION['orga_shortname'],
+        $_SESSION['orga_longname'],
+        $_SESSION['orga_email'],
+        $_SESSION['orga_timezone']
+    );
 
     echo json_encode(array(
         'status' => 'success',

@@ -47,6 +47,7 @@
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organization #VAR1_BOLD# already exists. Please select another name.</string>
   <string name="INS_PHONE_LIST">Phone list</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Please choose a language</string>
+  <string name="INS_ROOT_URL_INVALID">The URL of the Admidio installation is not valid. Enter the complete URL of the installation, for example https://www.example.org/admidio</string>
   <string name="INS_SET_ORGANIZATION">Define organization</string>
   <string name="INS_SET_UP_ORGANIZATION">Setting up organization</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Set up successful</string>
