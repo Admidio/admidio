@@ -217,6 +217,58 @@ class TestDataBuilder
     }
 
     /**
+     * Create a test component
+     *
+     * @param string $type Component type (e.g., 'events', 'members')
+     * @param int $orgId Organization ID
+     * @param string $name Component name
+     * @return array Component data
+     */
+    public function createComponent(string $type, int $orgId = 0, string $name = ''): array
+    {
+        if ($orgId === 0 && !empty($this->organizations)) {
+            $orgId = $this->organizations[0]['org_id'];
+        }
+
+        if (empty($name)) {
+            $name = ucfirst($type);
+        }
+
+        $componentData = [
+            'com_id' => rand(1000, 9999),
+            'com_uuid' => $this->generateUuid(),
+            'com_type' => $type,
+            'com_name' => $name,
+            'org_id' => $orgId,
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        return $componentData;
+    }
+
+    /**
+     * Create a test profile field
+     *
+     * @param string $dbColumn Database column name
+     * @param string $fieldType Field type (TEXT, DATE, PHONE, DROPDOWN, etc.)
+     * @param string $name Field display name
+     * @return array ProfileField data
+     */
+    public function createProfileField(string $dbColumn, string $fieldType, string $name): array
+    {
+        $fieldData = [
+            'usd_id' => rand(1000, 9999),
+            'usd_uuid' => $this->generateUuid(),
+            'usd_column_name' => $dbColumn,
+            'usd_field_type' => $fieldType,
+            'usd_name' => $name,
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        return $fieldData;
+    }
+
+    /**
      * Generate a UUID v4
      */
     private function generateUuid(): string
