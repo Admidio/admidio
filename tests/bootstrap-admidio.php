@@ -54,8 +54,52 @@ if (!getenv('TEST_DATABASE_ENGINE')) {
 // Load Admidio's autoloader
 require_once $admidioRoot . '/vendor/autoload.php';
 
-// Load system bootstrap constants (TBL_*, DB_*, etc)
-require_once $admidioRoot . '/system/bootstrap/constants.php';
+// Define table constants needed by entities (without loading full constants.php which needs app config)
+// Table prefix used for all tables
+define('TABLE_PREFIX', 'adm');
+
+// Database table constants that entities require
+const TBL_ANNOUNCEMENTS = TABLE_PREFIX . '_announcements';
+const TBL_AUTO_LOGIN = TABLE_PREFIX . '_auto_login';
+const TBL_CATEGORIES = TABLE_PREFIX . '_categories';
+const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
+const TBL_COMPONENTS = TABLE_PREFIX . '_components';
+const TBL_EVENTS = TABLE_PREFIX . '_events';
+const TBL_FILES = TABLE_PREFIX . '_files';
+const TBL_FOLDERS = TABLE_PREFIX . '_folders';
+const TBL_FORUM_TOPICS = TABLE_PREFIX . '_forum_topics';
+const TBL_FORUM_POSTS = TABLE_PREFIX . '_forum_posts';
+const TBL_GUESTBOOK = TABLE_PREFIX . '_guestbook';
+const TBL_GUESTBOOK_COMMENTS = TABLE_PREFIX . '_guestbook_comments';
+const TBL_IDS = TABLE_PREFIX . '_ids';
+const TBL_LINKS = TABLE_PREFIX . '_links';
+const TBL_LIST_COLUMNS = TABLE_PREFIX . '_list_columns';
+const TBL_LISTS = TABLE_PREFIX . '_lists';
+const TBL_LOG_CHANGES = TABLE_PREFIX . '_log_changes';
+const TBL_MEMBERS = TABLE_PREFIX . '_members';
+const TBL_MENU = TABLE_PREFIX . '_menu';
+const TBL_MESSAGES = TABLE_PREFIX . '_messages';
+const TBL_MESSAGES_ATTACHMENTS = TABLE_PREFIX . '_messages_attachments';
+const TBL_MESSAGES_CONTENT = TABLE_PREFIX . '_messages_content';
+const TBL_MESSAGES_RECIPIENTS = TABLE_PREFIX . '_messages_recipients';
+const TBL_OIDC_CLIENTS = TABLE_PREFIX . '_oidc_clients';
+const TBL_OIDC_ACCESS_TOKENS = TABLE_PREFIX . '_oidc_access_tokens';
+const TBL_OIDC_REFRESH_TOKENS = TABLE_PREFIX . '_oidc_refresh_tokens';
+const TBL_OIDC_AUTH_CODES = TABLE_PREFIX . '_oidc_auth_codes';
+const TBL_ORGANIZATIONS = TABLE_PREFIX . '_organizations';
+const TBL_PHOTOS = TABLE_PREFIX . '_photos';
+const TBL_PREFERENCES = TABLE_PREFIX . '_preferences';
+const TBL_REGISTRATIONS = TABLE_PREFIX . '_registrations';
+const TBL_ROLE_DEPENDENCIES = TABLE_PREFIX . '_role_dependencies';
+const TBL_ROLES = TABLE_PREFIX . '_roles';
+const TBL_ROLES_RIGHTS = TABLE_PREFIX . '_roles_rights';
+const TBL_ROLES_RIGHTS_DATA = TABLE_PREFIX . '_roles_rights_data';
+const TBL_ROOMS = TABLE_PREFIX . '_rooms';
+const TBL_SAML_CLIENTS = TABLE_PREFIX . '_saml_clients';
+const TBL_SSO_KEYS = TABLE_PREFIX . '_sso_keys';
+const TBL_USERS = TABLE_PREFIX . '_users';
+const TBL_USER_DATA = TABLE_PREFIX . '_user_data';
+const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
 
 // Load system bootstrap functions (getExecutionTime, etc)
 require_once $admidioRoot . '/system/bootstrap/function.php';
