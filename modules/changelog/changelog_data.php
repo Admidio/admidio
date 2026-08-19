@@ -364,6 +364,7 @@ try {
         // The action is reduced to a rank, because the entries of a new record are the creation
         // entry and one entry per initial value, so CREATED and MODIFY occur in the same change.
         $sql = 'SELECT ' . $changeKey . ' AS change_key, COUNT(*) AS entry_count,
+                COUNT(entries.field) AS field_count,
                 MIN(entries.id) AS id, MAX(entries.change_uuid) AS change_uuid,
                 MAX(entries.table_name) AS table_name, MAX(entries.record_id) AS record_id,
                 MAX(entries.uuid) AS uuid, MAX(entries.name) AS name, MAX(entries.link_id) AS link_id,
@@ -402,6 +403,10 @@ try {
     // Item fields of the inventory, only read if the changelog contains inventory item data
     $itemsData = null;
 
+    // Lowest action rank of the entries of a requested change, CREATED before DELETED before
+    // MODIFY. It decides which value columns the detail table needs.
+    $detailActionRank = 3;
+
     while ($row = $fieldHistoryStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
 
@@ -409,10 +414,24 @@ try {
         // every other mode a row is one single entry.
         if ($groupChanges) {
             $entryCount = (int)$row['entry_count'];
+            // The creation and deletion entries have no field of their own, so the number of
+            // changed fields is smaller than the number of entries of the change.
+            $fieldCount = (int)$row['field_count'];
+            if ($fieldCount === 0) {
+                // a change that consists of entries without a field of their own
+                $fieldCount = $entryCount;
+            }
             $action = array(1 => 'CREATED', 2 => 'DELETED')[(int)$row['action_rank']] ?? 'MODIFY';
         } else {
             $entryCount = 1;
+            $fieldCount = 1;
             $action = $row['action'];
+            // The columns of the detail table depend on the change as a whole, so remember which
+            // kind of change these entries belong to.
+            $detailActionRank = min(
+                $detailActionRank,
+                array('CREATED' => 1, 'DELETED' => 2)[$action] ?? 3
+            );
         }
 
         $fieldInfo = $row['field_name'];
@@ -479,7 +498,7 @@ try {
                 . '<a href="#" class="adm-changelog-details" data-change-uuid="'
                 . SecurityUtils::encodeHTML((string)$row['change_uuid']) . '">'
                 . '<i class="bi bi-chevron-right"></i> '
-                . $gL10n->get('SYS_CHANGELOG_CHANGED_FIELDS', array($entryCount)) . '</a>';
+                . $gL10n->get('SYS_CHANGELOG_CHANGED_FIELDS', array($fieldCount)) . '</a>';
         } elseif ($actionIndicator !== '') {
             $fieldCell = $actionIndicator;
         } elseif (!empty($fieldInfo)) {
@@ -551,6 +570,34 @@ try {
             );
         } else {
             $jsonArray['data'][] = $columnValues;
+        }
+    }
+
+    if ($showDetails) {
+        // A creation has no previous value and a deletion has no new value, so that column is left
+        // out of the detail table entirely instead of showing a column of empty cells. The script
+        // sends the headings along with the rows, so the page only has to render what it gets.
+        $detailAction = array(1 => 'CREATED', 2 => 'DELETED')[$detailActionRank] ?? 'MODIFY';
+        $showValueOld = ($detailAction !== 'CREATED');
+        $showValueNew = ($detailAction !== 'DELETED');
+
+        $jsonArray['columns'] = array($gL10n->get('SYS_FIELD'));
+        if ($showValueOld) {
+            $jsonArray['columns'][] = $gL10n->get('SYS_PREVIOUS_VALUE');
+        }
+        if ($showValueNew) {
+            $jsonArray['columns'][] = $gL10n->get('SYS_NEW_VALUE');
+        }
+
+        foreach ($jsonArray['data'] as $index => $entry) {
+            $detailRow = array($entry[0]);
+            if ($showValueOld) {
+                $detailRow[] = $entry[1];
+            }
+            if ($showValueNew) {
+                $detailRow[] = $entry[2];
+            }
+            $jsonArray['data'][$index] = $detailRow;
         }
     }
 

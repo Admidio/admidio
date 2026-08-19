@@ -296,18 +296,22 @@ try {
                     return;
                 }
 
-                // The sub table is indented on both sides, so that it is clearly inside the row
-                // it belongs to, and scrolls on its own if its values are wider than the page.
+                // The script decides which value columns this change needs and sends the headings
+                // along with the rows, so there is nothing to interpret here.
                 var html = "<div class=\"adm-changelog-details-table table-responsive\">"
-                    + "<table class=\"table table-sm mb-0\"><thead><tr>"
-                    + "<th>' . $gL10n->get('SYS_FIELD') . '</th>"
-                    + "<th>' . $gL10n->get('SYS_PREVIOUS_VALUE') . '</th>"
-                    + "<th>' . $gL10n->get('SYS_NEW_VALUE') . '</th></tr></thead><tbody>";
+                    + "<table class=\"table table-sm mb-0\"><thead><tr>";
+                $.each(json.columns, function(index, heading) {
+                    html += "<th>" + heading + "</th>";
+                });
+                html += "</tr></thead><tbody>";
 
                 $.each(json.data, function(index, entry) {
-                    html += "<tr><td>" + entry[0] + "</td><td>" + entry[1] + "</td><td>" + entry[2] + "</td></tr>";
+                    html += "<tr>";
+                    $.each(entry, function(cellIndex, cell) {
+                        html += "<td>" + cell + "</td>";
+                    });
+                    html += "</tr>";
                 });
-
                 cell.html(html + "</tbody></table></div>");
             });
         });
