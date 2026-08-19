@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Session\Entity\Session;
 use Admidio\UI\Presenter\InstallationPresenter;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
 
 /**
  ***********************************************************************************************
@@ -36,7 +37,8 @@ try {
      */
     function getAdmidioUrl(bool $checkForwardedHost = true): string
     {
-        $ssl = !empty($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0;
+        $ssl = (!empty($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0)
+            || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strcasecmp($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') === 0);
         $sp = strtolower($_SERVER['SERVER_PROTOCOL']);
         $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
         $port = (int)$_SERVER['SERVER_PORT'];
@@ -105,7 +107,16 @@ try {
 
     $gL10n = new Language($language);
 
-    $language = $gL10n->getLanguage();
+    /*
+     * The wizard skips the language step if a configuration file already exists, therefore the
+     * language of the browser is used until the user selects one. It is stored in the session
+     * because the installation writes it as the language of the new organization.
+     */
+    if ($gL10n->getLanguage() === '') {
+        $gL10n->setLanguage(Language::determineBrowserLanguage('en'));
+    }
+
+    $_SESSION['language'] = $gL10n->getLanguage();
 
     /* Disable logging changes to the database. This will not be reverted,
      *  i.e. during installation / setup no logs are written. The next user
@@ -159,7 +170,7 @@ try {
             // save database parameters of config.php in session variables
             $_SESSION['db_type'] = DB_TYPE;
             $_SESSION['db_host'] = DB_HOST;
-            $_SESSION['db_port'] = DB_PORT;
+            $_SESSION['db_port'] = InstallationConfig::normalizePort(DB_PORT);
             $_SESSION['db_name'] = DB_NAME;
             $_SESSION['db_username'] = DB_USERNAME;
             $_SESSION['db_password'] = DB_PASSWORD;
