@@ -828,6 +828,14 @@ ul.changelog-tableselect-list {
     list-style-type: none;
 }
 
+/* An area of the change history has three states. Bootstrap fills the indeterminate state with
+   the same colour as the checked one, so an area whose objects are only logged in part would
+   look like a fully logged one. Only the fill is muted here, the dash of Bootstrap is kept. */
+ul.changelog-tableselect-list .form-check-input[type=checkbox]:indeterminate {
+    background-color: #999999;
+    border-color: #999999;
+}
+
 /* The single entries that one change consists of are shown in a table inside the row of that
    change. It is indented on both sides, so that it is clearly subordinate to its row, and it
    scrolls on its own if its values are wider than the space that is left. */
