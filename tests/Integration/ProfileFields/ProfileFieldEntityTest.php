@@ -143,8 +143,8 @@ class ProfileFieldEntityTest extends DatabaseTestCase
 
         // User can have values for multiple fields
         $this->assertNotEmpty($user['usr_id']);
-        $this->assertNotEqual($field1['usd_id'], $field2['usd_id']);
-        $this->assertNotEqual($field2['usd_id'], $field3['usd_id']);
+        $this->assertNotEquals($field1['usd_id'], $field2['usd_id']);
+        $this->assertNotEquals($field2['usd_id'], $field3['usd_id']);
     }
 
     /**
@@ -160,7 +160,7 @@ class ProfileFieldEntityTest extends DatabaseTestCase
         $field2 = $builder->createProfileField('usd_field2', 'TEXT', 'Field 2');
 
         // UUIDs should be different
-        $this->assertNotEqual($field1['usd_uuid'], $field2['usd_uuid']);
+        $this->assertNotEquals($field1['usd_uuid'], $field2['usd_uuid']);
     }
 
     /**

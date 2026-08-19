@@ -77,7 +77,7 @@ class PermissionEntityTest extends DatabaseTestCase
         $user2 = $builder->createUser('user2', 'user2@test.local', $org2['org_id']);
 
         // Users from different orgs should not see each other's data
-        $this->assertNotEqual($user1['org_id'], $user2['org_id']);
+        $this->assertNotEquals($user1['org_id'], $user2['org_id']);
     }
 
     /**
@@ -129,7 +129,7 @@ class PermissionEntityTest extends DatabaseTestCase
         $user2 = $builder->createUser('user2', 'user2@test.local');
 
         // Users should only see their own and authorized records
-        $this->assertNotEqual($user1['usr_id'], $user2['usr_id']);
+        $this->assertNotEquals($user1['usr_id'], $user2['usr_id']);
     }
 
     /**

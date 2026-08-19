@@ -78,7 +78,7 @@ class CategoryEntityTest extends DatabaseTestCase
         $this->assertNotEmpty($cat1['cat_id']);
         $this->assertNotEmpty($cat2['cat_id']);
         $this->assertNotEmpty($cat3['cat_id']);
-        $this->assertNotEqual($cat1['cat_id'], $cat2['cat_id']);
+        $this->assertNotEquals($cat1['cat_id'], $cat2['cat_id']);
     }
 
     /**
@@ -145,7 +145,7 @@ class CategoryEntityTest extends DatabaseTestCase
         $cat2 = $builder->createCategory('Category2', 'ANNOUNCEMENTS');
 
         // UUIDs should be different
-        $this->assertNotEqual($cat1['cat_uuid'], $cat2['cat_uuid']);
+        $this->assertNotEquals($cat1['cat_uuid'], $cat2['cat_uuid']);
     }
 
     /**
@@ -178,7 +178,7 @@ class CategoryEntityTest extends DatabaseTestCase
         $cat2 = $builder->createCategory('Events', 'EVENTS', $org2['org_id']);
 
         // Categories belong to different organizations
-        $this->assertNotEqual($cat1['org_id'], $cat2['org_id']);
+        $this->assertNotEquals($cat1['org_id'], $cat2['org_id']);
     }
 
     /**
@@ -199,6 +199,6 @@ class CategoryEntityTest extends DatabaseTestCase
         // Same name, different organizations
         $this->assertEquals('News', $cat1['cat_name']);
         $this->assertEquals('News', $cat2['cat_name']);
-        $this->assertNotEqual($cat1['cat_id'], $cat2['cat_id']);
+        $this->assertNotEquals($cat1['cat_id'], $cat2['cat_id']);
     }
 }

@@ -101,7 +101,7 @@ class ComponentEntityTest extends DatabaseTestCase
         $comp2 = $builder->createComponent('module2', $org2['org_id'], 'Module 2');
 
         // Components belong to different organizations
-        $this->assertNotEqual($comp1['org_id'], $comp2['org_id']);
+        $this->assertNotEquals($comp1['org_id'], $comp2['org_id']);
     }
 
     /**
@@ -119,7 +119,7 @@ class ComponentEntityTest extends DatabaseTestCase
         // Both instances should exist
         $this->assertNotEmpty($comp1['com_id']);
         $this->assertNotEmpty($comp2['com_id']);
-        $this->assertNotEqual($comp1['com_id'], $comp2['com_id']);
+        $this->assertNotEquals($comp1['com_id'], $comp2['com_id']);
     }
 
     /**
@@ -135,7 +135,7 @@ class ComponentEntityTest extends DatabaseTestCase
         $comp2 = $builder->createComponent('module2', 0, 'Module 2');
 
         // UUIDs should be different
-        $this->assertNotEqual($comp1['com_uuid'], $comp2['com_uuid']);
+        $this->assertNotEquals($comp1['com_uuid'], $comp2['com_uuid']);
     }
 
     /**

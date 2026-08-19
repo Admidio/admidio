@@ -46,6 +46,12 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 // Ensure test markers exist (safety against destructive tests)
 TestEnvironment::validateTestEnvironment();
 
+// Load Admidio bootstrap for integration tests (initializes $gDb, $gLogger, etc.)
+$bootstrapAdmidio = dirname(__DIR__) . '/tests/bootstrap-admidio.php';
+if (file_exists($bootstrapAdmidio)) {
+    require $bootstrapAdmidio;
+}
+
 /**
  * Test environment validation
  */
