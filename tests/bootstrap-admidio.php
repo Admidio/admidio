@@ -54,6 +54,9 @@ if (!getenv('TEST_DATABASE_ENGINE')) {
 // Load Admidio's autoloader
 require_once $admidioRoot . '/vendor/autoload.php';
 
+// Load system bootstrap constants (TBL_*, DB_*, etc)
+require_once $admidioRoot . '/system/bootstrap/constants.php';
+
 // Load system bootstrap functions (getExecutionTime, etc)
 require_once $admidioRoot . '/system/bootstrap/function.php';
 
