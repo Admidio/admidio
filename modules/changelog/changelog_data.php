@@ -363,12 +363,17 @@ try {
         // of a single entry, all others show the number of entries and are expanded on demand.
         // The action is reduced to a rank, because the entries of a new record are the creation
         // entry and one entry per initial value, so CREATED and MODIFY occur in the same change.
+        // The entries of a change do not all belong to the same record: deleting a role also
+        // deletes its memberships and its rights. The columns that describe the record must
+        // therefore all come from one and the same entry, the one the change is about. A record
+        // logs its own creation before its initial values and its own deletion after the records
+        // that were removed with it, so that entry is the first of a change unless the change is
+        // a deletion, where it is the last one.
+        $mainEntry = 'CASE WHEN MIN(CASE entries.action WHEN \'CREATED\' THEN 1 WHEN \'DELETED\' THEN 2 ELSE 3 END) = 2'
+            . ' THEN MAX(entries.id) ELSE MIN(entries.id) END';
+
         $sql = 'SELECT ' . $changeKey . ' AS change_key, COUNT(*) AS entry_count,
-                COUNT(entries.field) AS field_count,
-                MIN(entries.id) AS id, MAX(entries.change_uuid) AS change_uuid,
-                MAX(entries.table_name) AS table_name, MAX(entries.record_id) AS record_id,
-                MAX(entries.uuid) AS uuid, MAX(entries.name) AS name, MAX(entries.link_id) AS link_id,
-                MAX(entries.related_id) AS related_id, MAX(entries.related_name) AS related_name,
+                MIN(entries.id) AS id, ' . $mainEntry . ' AS main_id, MAX(entries.change_uuid) AS change_uuid,
                 MAX(entries.field) AS field, MAX(entries.field_name) AS field_name,
                 MIN(CASE entries.action WHEN \'CREATED\' THEN 1 WHEN \'DELETED\' THEN 2 ELSE 3 END) AS action_rank,
                 MAX(entries.value_new) AS value_new, MAX(entries.value_old) AS value_old,
@@ -397,6 +402,33 @@ try {
 
 
     $fieldHistoryStatement = $gDb->queryPrepared($sql, $queryParamsMain);
+    $logRows = $fieldHistoryStatement->fetchAll(PDO::FETCH_ASSOC);
+
+    // Read the record of every change of this page in one query. Only the entries that the query
+    // above has already returned are read, so they passed all permission checks with it.
+    $mainRecords = array();
+    if ($groupChanges) {
+        $mainIds = array_filter(array_map('intval', array_column($logRows, 'main_id')));
+        if (count($mainIds) > 0) {
+            $sqlMain = 'SELECT log_id, log_table, log_record_id, log_record_uuid, log_record_name,
+                               log_record_linkid, log_related_id, log_related_name
+                          FROM ' . TBL_LOG_CHANGES . '
+                         WHERE log_id IN (' . Database::getQmForValues($mainIds) . ')';
+            $mainStatement = $gDb->queryPrepared($sqlMain, $mainIds);
+
+            while ($mainRow = $mainStatement->fetch(PDO::FETCH_ASSOC)) {
+                $mainRecords[(int)$mainRow['log_id']] = array(
+                    'table_name' => $mainRow['log_table'],
+                    'record_id' => $mainRow['log_record_id'],
+                    'uuid' => $mainRow['log_record_uuid'],
+                    'name' => $mainRow['log_record_name'],
+                    'link_id' => $mainRow['log_record_linkid'],
+                    'related_id' => $mainRow['log_related_id'],
+                    'related_name' => $mainRow['log_related_name']
+                );
+            }
+        }
+    }
 
     $fieldStrings = ChangelogService::getFieldTranslations();
 
@@ -407,24 +439,34 @@ try {
     // MODIFY. It decides which value columns the detail table needs.
     $detailActionRank = 3;
 
-    while ($row = $fieldHistoryStatement->fetch(PDO::FETCH_BOTH)) {
+    // The records and the areas that the entries of a requested change belong to. A change of a
+    // single record needs neither column in its detail table, a bulk deletion needs both: without
+    // the area, the deletion of a membership is indistinguishable from the deletion of the user.
+    $detailRecords = array();
+    $detailTables = array();
+
+    foreach ($logRows as $row) {
         ++$rowNumber;
+
+        // A grouped row describes the record that its change is about, not an aggregate of all
+        // records that the change has touched. The record is only missing if it was purged between
+        // the two queries, in which case the change is still listed, just without its record.
+        if ($groupChanges) {
+            $row = array_merge(
+                array('table_name' => '', 'record_id' => 0, 'uuid' => '', 'name' => '',
+                    'link_id' => 0, 'related_id' => '', 'related_name' => ''),
+                $row,
+                $mainRecords[(int)($row['main_id'] ?? 0)] ?? array()
+            );
+        }
 
         // A grouped row stands for all entries of one change and reports how many there are. In
         // every other mode a row is one single entry.
         if ($groupChanges) {
             $entryCount = (int)$row['entry_count'];
-            // The creation and deletion entries have no field of their own, so the number of
-            // changed fields is smaller than the number of entries of the change.
-            $fieldCount = (int)$row['field_count'];
-            if ($fieldCount === 0) {
-                // a change that consists of entries without a field of their own
-                $fieldCount = $entryCount;
-            }
             $action = array(1 => 'CREATED', 2 => 'DELETED')[(int)$row['action_rank']] ?? 'MODIFY';
         } else {
             $entryCount = 1;
-            $fieldCount = 1;
             $action = $row['action'];
             // The columns of the detail table depend on the change as a whole, so remember which
             // kind of change these entries belong to.
@@ -453,10 +495,11 @@ try {
         $rowName = $row['name'] ?? '';
         $rowName = Language::translateIfTranslationStrId($rowName);
         if ($row['table_name'] == 'members') {
-            $columnValues[] = ChangelogService::createLink($rowName, 'users', $rowLinkId, $row['uuid'] ?? '');
+            $recordCell = ChangelogService::createLink($rowName, 'users', $rowLinkId, $row['uuid'] ?? '');
         } else {
-            $columnValues[] = ChangelogService::createLink($rowName, $row['table_name'], $rowLinkId, $row['uuid'] ?? '');
+            $recordCell = ChangelogService::createLink($rowName, $row['table_name'], $rowLinkId, $row['uuid'] ?? '');
         }
+        $columnValues[] = $recordCell;
 
         // 3. Optional Related-To column, e.g. for group memberships, we show the user as main name and the group as related
         //    Similarly, files/folders, organizations, guestbook comments, etc. show their parent as related
@@ -498,7 +541,7 @@ try {
                 . '<a href="#" class="adm-changelog-details" data-change-uuid="'
                 . SecurityUtils::encodeHTML((string)$row['change_uuid']) . '">'
                 . '<i class="bi bi-chevron-right"></i> '
-                . $gL10n->get('SYS_CHANGELOG_CHANGED_FIELDS', array($fieldCount)) . '</a>';
+                . $gL10n->get('SYS_CHANGELOG_CHANGED_ENTRIES', array($entryCount)) . '</a>';
         } elseif ($actionIndicator !== '') {
             $fieldCell = $actionIndicator;
         } elseif (!empty($fieldInfo)) {
@@ -561,9 +604,15 @@ try {
         $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date') . ' ' .$gSettingsManager->getString('system_time'));
 
         if ($showDetails) {
-            // The detail rows of a change repeat neither the record nor the user and the date, all
-            // entries of a change share them with the row that was expanded.
+            // The detail rows of a change repeat neither the user nor the date, all entries of a
+            // change share them with the row that was expanded. The record is repeated whenever the
+            // entries do not all belong to the same one, which is the case as soon as a deletion
+            // removes dependent records together with the record itself.
+            $detailRecords[$row['table_name'] . ':' . $row['record_id']] = true;
+            $detailTables[$row['table_name']] = true;
             $jsonArray['data'][] = array(
+                ChangelogService::getTableLabel($row['table_name']),
+                $recordCell,
                 $fieldCell,
                 (!empty($valueOld)) ? $valueOld : '&nbsp;',
                 (!empty($valueNew)) ? $valueNew : '&nbsp;'
@@ -581,7 +630,19 @@ try {
         $showValueOld = ($detailAction !== 'CREATED');
         $showValueNew = ($detailAction !== 'DELETED');
 
-        $jsonArray['columns'] = array($gL10n->get('SYS_FIELD'));
+        // The entries of a bulk deletion belong to different records, so each of them has to name
+        // its own. A change of a single record repeats the record of the expanded row instead.
+        $showArea = (count($detailTables) > 1);
+        $showRecord = (count($detailRecords) > 1);
+
+        $jsonArray['columns'] = array();
+        if ($showArea) {
+            $jsonArray['columns'][] = $gL10n->get('SYS_DATA_AREA');
+        }
+        if ($showRecord) {
+            $jsonArray['columns'][] = $gL10n->get('SYS_NAME');
+        }
+        $jsonArray['columns'][] = $gL10n->get('SYS_FIELD');
         if ($showValueOld) {
             $jsonArray['columns'][] = $gL10n->get('SYS_PREVIOUS_VALUE');
         }
@@ -590,12 +651,19 @@ try {
         }
 
         foreach ($jsonArray['data'] as $index => $entry) {
-            $detailRow = array($entry[0]);
-            if ($showValueOld) {
+            $detailRow = array();
+            if ($showArea) {
+                $detailRow[] = $entry[0];
+            }
+            if ($showRecord) {
                 $detailRow[] = $entry[1];
             }
+            $detailRow[] = $entry[2];
+            if ($showValueOld) {
+                $detailRow[] = $entry[3];
+            }
             if ($showValueNew) {
-                $detailRow[] = $entry[2];
+                $detailRow[] = $entry[4];
             }
             $jsonArray['data'][$index] = $detailRow;
         }

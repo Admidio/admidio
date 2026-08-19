@@ -345,7 +345,7 @@
   <string name="SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS">Profil- und Rolleneinstellungen</string>
   <string name="SYS_CHANGELOG_AREA_REPORTS">Listen und Auswertungen</string>
   <string name="SYS_CHANGELOG_AREA_USER_PROFILE">Benutzerprofil und Rollen</string>
-  <string name="SYS_CHANGELOG_CHANGED_FIELDS">#VAR1# Felder</string>
+  <string name="SYS_CHANGELOG_CHANGED_ENTRIES">#VAR1# Einträge</string>
   <string name="SYS_CHANGELOG_DEFAULT_DAYS">Standard-Anzeigezeitraum der Änderungshistorie (Tage)</string>
   <string name="SYS_CHANGELOG_DEFAULT_DAYS_DESC">Die Änderungshistorie wird standardmäßig für den angegebenen Zeitraum in Tagen angezeigt. Das ist nur die Voreinstellung des Filters, die auf der Seite der Änderungshistorie von jedem Benutzer geändert werden kann. Mit dem Wert 0 wird die vollständige Änderungshistorie ohne Datumseinschränkung angezeigt. (Standard: 365)</string>
   <string name="SYS_CHANGELOG_GROUP_CHANGES">Änderungen gruppieren</string>
