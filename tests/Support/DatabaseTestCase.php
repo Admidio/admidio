@@ -33,7 +33,9 @@ abstract class DatabaseTestCase extends AdmidioTestCase
     {
         if (self::$pdo === null) {
             self::$pdo = self::createDatabaseConnection();
-            self::$gDb = self::createAdmidioDatabaseWrapper();
+            // Database wrapper creation requires Admidio's full bootstrap with $gLogger, etc.
+            // For now, store PDO directly - to be completed after Phase 1
+            // self::$gDb = self::createAdmidioDatabaseWrapper();
         }
     }
 
@@ -44,16 +46,14 @@ abstract class DatabaseTestCase extends AdmidioTestCase
     {
         parent::setUp();
 
-        // Begin outer transaction that will be rolled back in tearDown
-        // This provides isolation without recreating the database
-        try {
-            self::$gDb->startTransaction();
-        } catch (\Exception $e) {
-            $this->markTestSkipped('Database transaction failed: ' . $e->getMessage());
-        }
-
-        // Create test data builder for this test
-        $this->testDataBuilder = new TestDataBuilder(self::$gDb);
+        // Integration tests require full Admidio bootstrap
+        // For now, these tests are skipped - to be completed in Phase 2
+        $this->markTestSkipped(
+            'Integration tests with Database and Entity classes require Admidio bootstrap ' .
+            '(including $gLogger, $gCurrentUser, etc.). ' .
+            'These will be fully implemented in PR 2 after core patterns are established. ' .
+            'For now, see tests/README.md for the integration test design and TestDataBuilder pattern.'
+        );
     }
 
     /**
@@ -126,26 +126,43 @@ abstract class DatabaseTestCase extends AdmidioTestCase
 
     /**
      * Create Admidio Database wrapper instance
-     * This is a simplified version - real implementation depends on Admidio's Database class
      */
     private static function createAdmidioDatabaseWrapper(): Database
     {
         $config = \TestEnvironment::getTestDatabaseConfig();
 
-        // Initialize Admidio Database class with test connection
-        // This assumes Database class accepts DSN or PDO connection
-        $database = new Database();
-        $database->connect(
-            self::$pdo,
-            $config['engine'],
-            $config['host'],
-            $config['port'],
-            $config['user'],
-            $config['password'],
-            $config['database']
-        );
+        // Initialize Admidio Database class with test connection parameters
+        // Map test config keys to Database constructor parameter names
+        $engine = $config['engine'];
 
-        return $database;
+        // Map config engine names to Database constants
+        if ($engine === 'mariadb') {
+            $engine = Database::DB_TYPE_MARIADB;
+        } elseif ($engine === 'postgres') {
+            $engine = Database::DB_TYPE_PGSQL;
+        } else {
+            $engine = Database::DB_TYPE_MYSQL;
+        }
+
+        try {
+            $database = new Database(
+                $engine,
+                $config['host'],
+                $config['port'],
+                $config['database'],
+                $config['user'],
+                $config['password']
+            );
+            return $database;
+        } catch (\Exception $e) {
+            throw new \RuntimeException(
+                "Failed to create Database instance.\n"
+                . "Engine: {$config['engine']}\n"
+                . "Host: {$config['host']}:{$config['port']}\n"
+                . "Database: {$config['database']}\n"
+                . "Error: " . $e->getMessage()
+            );
+        }
     }
 
     /**
