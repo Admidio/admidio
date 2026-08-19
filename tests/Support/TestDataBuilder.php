@@ -165,6 +165,7 @@ class TestDataBuilder
             'cat_name' => $name,
             'cat_type' => $type,
             'org_id' => $orgId,
+            'created_at' => date('Y-m-d H:i:s'),
         ];
     }
 

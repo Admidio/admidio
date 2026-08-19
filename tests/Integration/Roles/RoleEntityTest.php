@@ -167,8 +167,8 @@ class RoleEntityTest extends DatabaseTestCase
         $this->assertEquals($org['org_id'], $role3['org_id']);
 
         // All roles should have different IDs
-        $this->assertNotEqual($role1['rol_id'], $role2['rol_id']);
-        $this->assertNotEqual($role2['rol_id'], $role3['rol_id']);
+        $this->assertNotEquals($role1['rol_id'], $role2['rol_id']);
+        $this->assertNotEquals($role2['rol_id'], $role3['rol_id']);
     }
 
     /**
@@ -184,7 +184,7 @@ class RoleEntityTest extends DatabaseTestCase
         $role2 = $builder->createRole('UUIDRole2');
 
         // UUIDs should be different
-        $this->assertNotEqual($role1['rol_uuid'], $role2['rol_uuid']);
+        $this->assertNotEquals($role1['rol_uuid'], $role2['rol_uuid']);
 
         // Both should be valid UUIDs
         $this->assertValidUuid($role1['rol_uuid']);
@@ -235,6 +235,6 @@ class RoleEntityTest extends DatabaseTestCase
         $role2 = $builder->createRole('RoleB', $org2['org_id']);
 
         // Roles should belong to different organizations
-        $this->assertNotEqual($role1['org_id'], $role2['org_id']);
+        $this->assertNotEquals($role1['org_id'], $role2['org_id']);
     }
 }

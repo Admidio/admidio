@@ -57,7 +57,7 @@ class OrganizationEntityTest extends DatabaseTestCase
         $org2 = $builder->createOrganization('Org2');
 
         // UUIDs should be different
-        $this->assertNotEqual($org1['org_uuid'], $org2['org_uuid']);
+        $this->assertNotEquals($org1['org_uuid'], $org2['org_uuid']);
 
         // Both should be valid UUIDs
         $this->assertValidUuid($org1['org_uuid']);
@@ -78,8 +78,8 @@ class OrganizationEntityTest extends DatabaseTestCase
         $org3 = $builder->createOrganization('Company C');
 
         // All should have different IDs
-        $this->assertNotEqual($org1['org_id'], $org2['org_id']);
-        $this->assertNotEqual($org2['org_id'], $org3['org_id']);
+        $this->assertNotEquals($org1['org_id'], $org2['org_id']);
+        $this->assertNotEquals($org2['org_id'], $org3['org_id']);
 
         // Should be able to retrieve all
         $orgs = $builder->getOrganizations();
@@ -130,7 +130,7 @@ class OrganizationEntityTest extends DatabaseTestCase
         $user2 = $builder->createUser('user2', 'user2@test.local', $org2['org_id']);
 
         // Users should belong to different organizations
-        $this->assertNotEqual($user1['org_id'], $user2['org_id']);
+        $this->assertNotEquals($user1['org_id'], $user2['org_id']);
     }
 
     /**
@@ -149,7 +149,7 @@ class OrganizationEntityTest extends DatabaseTestCase
         $role2 = $builder->createRole('Role2', $org2['org_id']);
 
         // Roles should belong to different organizations
-        $this->assertNotEqual($role1['org_id'], $role2['org_id']);
+        $this->assertNotEquals($role1['org_id'], $role2['org_id']);
     }
 
     /**
@@ -171,12 +171,12 @@ class OrganizationEntityTest extends DatabaseTestCase
         $user2a = $builder->createUser('user2a', 'user2a@test.local', $org2['org_id']);
 
         // Verify isolation
-        $this->assertNotEqual($org1['org_id'], $org2['org_id']);
-        $this->assertNotEqual($role1a['org_id'], $role2a['org_id']);
-        $this->assertNotEqual($user1a['org_id'], $user2a['org_id']);
+        $this->assertNotEquals($org1['org_id'], $org2['org_id']);
+        $this->assertNotEquals($role1a['org_id'], $role2a['org_id']);
+        $this->assertNotEquals($user1a['org_id'], $user2a['org_id']);
 
         // Users can have same login in different orgs
         $user1b = $builder->createUser('user1a', 'user1a@company2.local', $org2['org_id']);
-        $this->assertNotEqual($user1a['usr_id'], $user1b['usr_id']);
+        $this->assertNotEquals($user1a['usr_id'], $user1b['usr_id']);
     }
 }

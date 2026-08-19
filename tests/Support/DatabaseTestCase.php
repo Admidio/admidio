@@ -31,11 +31,15 @@ abstract class DatabaseTestCase extends AdmidioTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        if (self::$pdo === null) {
-            self::$pdo = self::createDatabaseConnection();
-            // Database wrapper creation requires Admidio's full bootstrap with $gLogger, etc.
-            // For now, store PDO directly - to be completed after Phase 1
-            // self::$gDb = self::createAdmidioDatabaseWrapper();
+        // Database is initialized by bootstrap-admidio.php
+        // which is loaded by tests/bootstrap.php during PHPUnit initialization
+        if (isset($GLOBALS['gDb']) && $GLOBALS['gDb'] instanceof Database) {
+            self::$gDb = $GLOBALS['gDb'];
+        } else {
+            // Fallback if bootstrap didn't run (shouldn't happen)
+            throw new \RuntimeException(
+                'Database not initialized. Ensure Admidio bootstrap is loaded via tests/bootstrap.php'
+            );
         }
     }
 
@@ -46,14 +50,16 @@ abstract class DatabaseTestCase extends AdmidioTestCase
     {
         parent::setUp();
 
-        // Integration tests require full Admidio bootstrap
-        // For now, these tests are skipped - to be completed in Phase 2
-        $this->markTestSkipped(
-            'Integration tests with Database and Entity classes require Admidio bootstrap ' .
-            '(including $gLogger, $gCurrentUser, etc.). ' .
-            'These will be fully implemented in PR 2 after core patterns are established. ' .
-            'For now, see tests/README.md for the integration test design and TestDataBuilder pattern.'
-        );
+        // Begin outer transaction that will be rolled back in tearDown
+        // This provides isolation without recreating the database
+        try {
+            self::$gDb->startTransaction();
+        } catch (\Exception $e) {
+            $this->markTestSkipped('Database transaction failed: ' . $e->getMessage());
+        }
+
+        // Create test data builder for this test
+        $this->testDataBuilder = new TestDataBuilder(self::$gDb);
     }
 
     /**

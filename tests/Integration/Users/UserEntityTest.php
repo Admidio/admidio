@@ -94,7 +94,7 @@ class UserEntityTest extends DatabaseTestCase
         $user2 = $builder->createUser('uuid2', 'uuid2@test.local');
 
         // UUIDs should be different
-        $this->assertNotEqual($user1['usr_uuid'], $user2['usr_uuid']);
+        $this->assertNotEquals($user1['usr_uuid'], $user2['usr_uuid']);
 
         // Both should be valid UUIDs
         $this->assertValidUuid($user1['usr_uuid']);
@@ -121,8 +121,8 @@ class UserEntityTest extends DatabaseTestCase
         $this->assertEquals($org['org_id'], $user3['org_id']);
 
         // All users should have different IDs
-        $this->assertNotEqual($user1['usr_id'], $user2['usr_id']);
-        $this->assertNotEqual($user2['usr_id'], $user3['usr_id']);
+        $this->assertNotEquals($user1['usr_id'], $user2['usr_id']);
+        $this->assertNotEquals($user2['usr_id'], $user3['usr_id']);
     }
 
     /**
@@ -209,6 +209,6 @@ class UserEntityTest extends DatabaseTestCase
         $user2 = $builder->createUser('org2user', 'org2@test.local', $org2['org_id']);
 
         // Users should belong to different organizations
-        $this->assertNotEqual($user1['org_id'], $user2['org_id']);
+        $this->assertNotEquals($user1['org_id'], $user2['org_id']);
     }
 }

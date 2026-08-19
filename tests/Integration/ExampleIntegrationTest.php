@@ -97,8 +97,8 @@ class ExampleIntegrationTest extends DatabaseTestCase
         $role = $this->createTestRole('Test Role');
 
         // Verify all fixtures are distinct
-        $this->assertNotEqual($user1['usr_id'], $user2['usr_id']);
-        $this->assertNotEqual($user1['usr_uuid'], $user2['usr_uuid']);
+        $this->assertNotEquals($user1['usr_id'], $user2['usr_id']);
+        $this->assertNotEquals($user1['usr_uuid'], $user2['usr_uuid']);
 
         // Verify UUID format
         $this->assertValidUuid($org['org_uuid']);
