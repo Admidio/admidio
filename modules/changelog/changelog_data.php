@@ -42,6 +42,10 @@
  * id...............: If set only show the change history of that database record
  * uuid             : If set only show the change history of that database record
  * related_id       : If set only show the change history of objects related to that id (e.g. membership of a role/group)
+ * change_uuid      : If set, the single entries of that one change are returned instead of the grouped
+ *                    list. This is the request of the detail rows that a grouped row expands to.
+ * group_changes    : Return the entries that were written by the same change as one row. Active by
+ *                    default, the page passes the resolved value on, see changelog.php.
  * filter_date_from : is set to actual date,
  *                    if no date information is delivered
  * filter_date_to   : is set to 31.12.9999,
@@ -89,6 +93,8 @@ try {
     $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getId = admFuncVariableIsValid($_GET, 'id', 'int');
     $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
+    $getChangeUuid = admFuncVariableIsValid($_GET, 'change_uuid', 'uuid');
+    $getGroupChanges = admFuncVariableIsValid($_GET, 'group_changes', 'bool', array('defaultValue' => true));
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
@@ -275,9 +281,21 @@ try {
         $queryParamsConditions[] = $getRelatedId;
     }
 
+    // The detail rows of one change are requested through the same script and therefore pass all
+    // the permission conditions above as well.
+    $showDetails = (!is_null($getChangeUuid) && $getChangeUuid !== '');
+    if ($showDetails) {
+        $sqlConditions .= ' AND (log_change_uuid = ? )';
+        $queryParamsConditions[] = $getChangeUuid;
+    }
+
+    // The entries of one change are collapsed into one row unless the filter of the page asks for
+    // every single entry. The detail rows of a change are single entries by definition.
+    $groupChanges = ($showDetails ? false : $getGroupChanges);
 
 
-    $mainSql = 'SELECT log_id as id, log_table as table_name,
+
+    $mainSql = 'SELECT log_id as id, log_change_uuid as change_uuid, log_table as table_name,
         log_record_id as record_id, log_record_uuid as uuid, log_record_name as name, log_record_linkid as link_id,
         log_related_id as related_id, log_related_name as related_name,
         log_field as field, log_field_name as field_name,
@@ -310,34 +328,69 @@ try {
     // inlined into the statement.
     $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
 
+    // The search is applied to the single entries, before they are grouped below, so that a change
+    // is found by the name of one of the fields it has modified.
     if ($getSearch === '') {
-        // no search condition entered then return all records in dependence of order, limit and offset
-        $sql = $mainSql . $orderCondition . $limitCondition;
+        $entriesSql = $mainSql;
+        $entriesParams = $queryParams;
     } else {
-        $sql = 'SELECT *
-              FROM (' . $mainSql . ') AS entries
-               ' . $searchCondition
-            . $orderCondition
-            . $limitCondition;
+        $entriesSql = 'SELECT * FROM (' . $mainSql . ') AS entries ' . $searchCondition;
+        $entriesParams = array_merge($queryParams, $queryParamsSearch);
     }
-    $queryParamsMain = array_merge($queryParams, $queryParamsSearch);
+
+    if ($showDetails) {
+        // The single entries of one change, in the order in which they were written. A change
+        // consists of the fields of one save, so the number of entries is small and needs no paging.
+        $sql = $entriesSql . ' ORDER BY id ASC LIMIT ' . $maxRowsPerRequest;
+        $queryParamsMain = $entriesParams;
+        $countSql = 'SELECT COUNT(*) FROM (' . $entriesSql . ') AS entries';
+        $countParams = $entriesParams;
+    } elseif (!$groupChanges) {
+        // Every logged entry is a row of its own, so the query is the plain list of entries and the
+        // counts are the number of entries.
+        $sql = $entriesSql . $orderCondition . $limitCondition;
+        $queryParamsMain = $entriesParams;
+        $countSql = 'SELECT COUNT(*) FROM (' . $entriesSql . ') AS entries';
+        $countParams = $entriesParams;
+    } else {
+        // All entries that one save or deletion has written are shown as one row that can be
+        // expanded. Entries that were written before log_change_uuid existed have none of their
+        // own, so they are grouped by their record id and each of them stays a row of its own.
+        $changeKey = 'COALESCE(entries.change_uuid, CONCAT(\'#\', entries.id))';
+
+        // The entries of one change share everything but the field and its two values, so the
+        // shared columns are aggregated. The field columns are only used for a change that consists
+        // of a single entry, all others show the number of entries and are expanded on demand.
+        // The action is reduced to a rank, because the entries of a new record are the creation
+        // entry and one entry per initial value, so CREATED and MODIFY occur in the same change.
+        $sql = 'SELECT ' . $changeKey . ' AS change_key, COUNT(*) AS entry_count,
+                MIN(entries.id) AS id, MAX(entries.change_uuid) AS change_uuid,
+                MAX(entries.table_name) AS table_name, MAX(entries.record_id) AS record_id,
+                MAX(entries.uuid) AS uuid, MAX(entries.name) AS name, MAX(entries.link_id) AS link_id,
+                MAX(entries.related_id) AS related_id, MAX(entries.related_name) AS related_name,
+                MAX(entries.field) AS field, MAX(entries.field_name) AS field_name,
+                MIN(CASE entries.action WHEN \'CREATED\' THEN 1 WHEN \'DELETED\' THEN 2 ELSE 3 END) AS action_rank,
+                MAX(entries.value_new) AS value_new, MAX(entries.value_old) AS value_old,
+                MAX(entries.usr_id_create) AS usr_id_create, MAX(entries.uuid_usr_create) AS uuid_usr_create,
+                MAX(entries.create_last_name) AS create_last_name, MAX(entries.create_first_name) AS create_first_name,
+                MAX(entries.timestamp) AS timestamp
+              FROM (' . $entriesSql . ') AS entries
+             GROUP BY ' . $changeKey;
+        $queryParamsMain = $entriesParams;
+        $countSql = 'SELECT COUNT(*) FROM (' . $sql . ') AS changes';
+        $countParams = $entriesParams;
+
+        $sql .= $orderCondition . $limitCondition;
+    }
 
     $rowNumber = $getStart; // count for every row
 
     // All permission checks are part of the sql conditions above, so no rows are dropped while
-    // building the output and both counts are exact.
-    $countTotalStatement = $gDb->queryPrepared('SELECT COUNT(*) FROM (' . $mainSql . ') AS entries', $queryParams);
-    $jsonArray['recordsTotal'] = (int)$countTotalStatement->fetchColumn();
-
-    if ($getSearch === '') {
-        $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
-    } else {
-        $countFilteredStatement = $gDb->queryPrepared(
-            'SELECT COUNT(*) FROM (' . $mainSql . ') AS entries ' . $searchCondition,
-            array_merge($queryParams, $queryParamsSearch)
-        );
-        $jsonArray['recordsFiltered'] = (int)$countFilteredStatement->fetchColumn();
-    }
+    // building the output and the counts are exact. They count the changes and not the single
+    // entries, because a change is what the table shows as one row.
+    $countStatement = $gDb->queryPrepared($countSql, $countParams);
+    $jsonArray['recordsTotal'] = (int)$countStatement->fetchColumn();
+    $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
 
     $jsonArray['data'] = array();
 
@@ -351,6 +404,16 @@ try {
 
     while ($row = $fieldHistoryStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
+
+        // A grouped row stands for all entries of one change and reports how many there are. In
+        // every other mode a row is one single entry.
+        if ($groupChanges) {
+            $entryCount = (int)$row['entry_count'];
+            $action = array(1 => 'CREATED', 2 => 'DELETED')[(int)$row['action_rank']] ?? 'MODIFY';
+        } else {
+            $entryCount = 1;
+            $action = $row['action'];
+        }
 
         $fieldInfo = $row['field_name'];
         $fieldInfo = array_key_exists($fieldInfo, $fieldStrings) ? $fieldStrings[$fieldInfo] : $fieldInfo;
@@ -401,23 +464,44 @@ try {
         }
 
         // 4. The field that was changed. For record creation/deletion, show an indicator, too.
-        if ($row['action'] == "DELETED") {
-            $columnValues[] = '<em>['.$gL10n->get('SYS_DELETED').']</em>';
-        } elseif ($row['action'] == 'CREATED') {
-            $columnValues[] = '<em>['.$gL10n->get('SYS_CREATED').']</em>';
+        $actionIndicator = '';
+        if ($action == 'DELETED') {
+            $actionIndicator = '<em>['.$gL10n->get('SYS_DELETED').']</em>';
+        } elseif ($action == 'CREATED') {
+            $actionIndicator = '<em>['.$gL10n->get('SYS_CREATED').']</em>';
+        }
+
+        if ($entryCount > 1) {
+            // The change consists of several entries, so the single fields are not shown here. The
+            // link expands the row and requests them, see changelog.php.
+            $fieldCell = $actionIndicator
+                . ($actionIndicator === '' ? '' : ' ')
+                . '<a href="#" class="adm-changelog-details" data-change-uuid="'
+                . SecurityUtils::encodeHTML((string)$row['change_uuid']) . '">'
+                . '<i class="bi bi-chevron-right"></i> '
+                . $gL10n->get('SYS_CHANGELOG_CHANGED_FIELDS', array($entryCount)) . '</a>';
+        } elseif ($actionIndicator !== '') {
+            $fieldCell = $actionIndicator;
         } elseif (!empty($fieldInfo)) {
             // Note: Even for user fields, we don't want to use the current user field name from the database, but the name stored in the log table from the time the change was done!.
             $fieldName = (is_array($fieldInfo) && isset($fieldInfo['name'])) ? $fieldInfo['name'] : $fieldInfo;
-            $columnValues[] = SecurityUtils::encodeHTML(Language::translateIfTranslationStrId($fieldName));
+            $fieldCell = SecurityUtils::encodeHTML(Language::translateIfTranslationStrId($fieldName));
         } else {
-            $columnValues[] = '';
+            $fieldCell = '';
         }
+        $columnValues[] = $fieldCell;
 
 
         // 5. Show new and old values; For some tables we know further details about formatting
         $valueNew = $row['value_new'];
         $valueOld = $row['value_old'];
-        if ($row['table_name'] == 'user_data') {
+        if ($entryCount > 1) {
+            // The change consists of several entries and therefore has no single pair of values.
+            // They are shown in the detail rows that the row expands to, so nothing is formatted
+            // here: the aggregated field of the change does not belong to any particular value.
+            $valueNew = '';
+            $valueOld = '';
+        } elseif ($row['table_name'] == 'user_data') {
             // Format the values depending on the user field type:
             $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueNew);
             $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueOld);
@@ -456,7 +540,18 @@ try {
         }
         $columnValues[] = $actorName;
         $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date') . ' ' .$gSettingsManager->getString('system_time'));
-        $jsonArray['data'][] = $columnValues;
+
+        if ($showDetails) {
+            // The detail rows of a change repeat neither the record nor the user and the date, all
+            // entries of a change share them with the row that was expanded.
+            $jsonArray['data'][] = array(
+                $fieldCell,
+                (!empty($valueOld)) ? $valueOld : '&nbsp;',
+                (!empty($valueNew)) ? $valueNew : '&nbsp;'
+            );
+        } else {
+            $jsonArray['data'][] = $columnValues;
+        }
     }
 
     // The record counts are determined together with the queries above, because all permission

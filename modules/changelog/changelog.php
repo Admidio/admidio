@@ -13,6 +13,11 @@
  * id...............: If set only show the change history of that database record
  * uuid             : If set only show the change history of that database record
  * related_id       : If set only show the change history of objects related to that id (e.g. membership of a role/group)
+ * group_changes    : Show the entries that were written by the same change as one row that can be
+ *                    expanded. Active by default, see filter_submitted.
+ * filter_submitted : Marks a request that comes from the filter form. Only then does a missing
+ *                    group_changes mean that the checkbox was unticked and not that the request
+ *                    simply does not carry the parameter.
  * filter_date_from : is set to actual date,
  *                    if no date information is delivered
  * filter_date_to   : is set to 31.12.9999,
@@ -49,6 +54,11 @@ try {
     $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getId = admFuncVariableIsValid($_GET, 'id', 'int');
     $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
+    // A checkbox that is not ticked is not submitted at all, so the hidden filter_submitted tells
+    // the two cases apart: without it the request does not come from the filter form and grouping
+    // is used, with it a missing group_changes means that the user has unticked the checkbox.
+    $filterSubmitted = admFuncVariableIsValid($_GET, 'filter_submitted', 'bool', array('defaultValue' => false));
+    $getGroupChanges = admFuncVariableIsValid($_GET, 'group_changes', 'bool', array('defaultValue' => !$filterSubmitted));
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
@@ -179,10 +189,21 @@ try {
     $form->addInput('uuid', '', $getUuid, array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('id', '', $getId, array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('related_id', '', $getRelatedId, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('filter_submitted', '', '1', array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
+    // If the box is unticked, the table shows one row per logged entry instead.
+    $form->addCheckbox('group_changes', $gL10n->get('SYS_CHANGELOG_GROUP_CHANGES'), $getGroupChanges);
     $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
     $form->addToHtmlPage();
+
+    // Switching between the grouped and the single entry view reloads the page, so that the table
+    // is built for the right kind of rows.
+    $page->addJavascript('
+        $("#group_changes").change(function() {
+            $("#adm_navbar_filter_form").submit();
+        });
+    ', true);
 
     $table = new DataTables($page, 'adm_history_table');
 
@@ -220,7 +241,8 @@ try {
         'id' => $getId,
         'related_id' => $getRelatedId,
         'filter_date_from' => $getDateFrom,
-        'filter_date_to' => $getDateTo
+        'filter_date_to' => $getDateTo,
+        'group_changes' => (int)$getGroupChanges
     );
 
     $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog_data.php', $filterFields));
@@ -238,6 +260,58 @@ try {
     $table->disableShowAllEntries();
     $table->setMessageIfNoRowsFound('SYS_CHANGE_HISTORY_NO_ENTRIES');
     $table->createJavascript(0, count($columnHeading));
+
+    // A row that stands for a change of several fields can be expanded. The entries of that change
+    // are requested from the same script and are inserted as one additional row below it. They are
+    // deliberately not built with the child rows of DataTables, because the responsive extension of
+    // the table already uses those for the columns it hides on small screens.
+    $detailsUrl = SecurityUtils::encodeUrl(
+        ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog_data.php',
+        array_merge($filterFields, array('draw' => 1, 'start' => 0, 'length' => 1000))
+    );
+
+    $page->addJavascript('
+        $("#adm_history_table tbody").on("click", "a.adm-changelog-details", function(event) {
+            event.preventDefault();
+
+            var link = $(this);
+            var icon = link.find("i");
+            var row = link.closest("tr");
+
+            if (row.next("tr.adm-changelog-detail-row").length > 0) {
+                row.next("tr.adm-changelog-detail-row").remove();
+                icon.removeClass("bi-chevron-down").addClass("bi-chevron-right");
+                return;
+            }
+
+            icon.removeClass("bi-chevron-right").addClass("bi-chevron-down");
+            row.after("<tr class=\"adm-changelog-detail-row\"><td class=\"p-0\" colspan=\"' . count($columnHeading) . '\"></td></tr>");
+
+            var cell = row.next("tr.adm-changelog-detail-row").children("td");
+            cell.html("<div class=\"adm-changelog-details-table\"><i class=\"spinner-border spinner-border-sm\"></i></div>");
+
+            $.getJSON("' . $detailsUrl . '&change_uuid=" + encodeURIComponent(link.data("change-uuid")), function(json) {
+                if (json.error) {
+                    cell.html("<div class=\"adm-changelog-details-table\"></div>").children("div").text(json.error);
+                    return;
+                }
+
+                // The sub table is indented on both sides, so that it is clearly inside the row
+                // it belongs to, and scrolls on its own if its values are wider than the page.
+                var html = "<div class=\"adm-changelog-details-table table-responsive\">"
+                    + "<table class=\"table table-sm mb-0\"><thead><tr>"
+                    + "<th>' . $gL10n->get('SYS_FIELD') . '</th>"
+                    + "<th>' . $gL10n->get('SYS_PREVIOUS_VALUE') . '</th>"
+                    + "<th>' . $gL10n->get('SYS_NEW_VALUE') . '</th></tr></thead><tbody>";
+
+                $.each(json.data, function(index, entry) {
+                    html += "<tr><td>" + entry[0] + "</td><td>" + entry[1] + "</td><td>" + entry[2] + "</td></tr>";
+                });
+
+                cell.html(html + "</tbody></table></div>");
+            });
+        });
+    ', true);
 
 
 

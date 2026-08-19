@@ -338,8 +338,10 @@
   <string name="SYS_CHANGE_PASSWORD">Passwort ändern</string>
   <string name="SYS_CHANGED_AT">Geändert am</string>
   <string name="SYS_CHANGED_BY">Geändert von</string>
+  <string name="SYS_CHANGELOG_CHANGED_FIELDS">#VAR1# Felder</string>
   <string name="SYS_CHANGELOG_DEFAULT_DAYS">Standard-Anzeigezeitraum der Änderungshistorie (Tage)</string>
   <string name="SYS_CHANGELOG_DEFAULT_DAYS_DESC">Die Änderungshistorie wird standardmäßig für den angegebenen Zeitraum in Tagen angezeigt. Das ist nur die Voreinstellung des Filters, die auf der Seite der Änderungshistorie von jedem Benutzer geändert werden kann. Mit dem Wert 0 wird die vollständige Änderungshistorie ohne Datumseinschränkung angezeigt. (Standard: 365)</string>
+  <string name="SYS_CHANGELOG_GROUP_CHANGES">Änderungen gruppieren</string>
   <string name="SYS_CHANGELOG_PURGE">Alte Einträge jetzt löschen</string>
   <string name="SYS_CHANGELOG_PURGE_CONFIRM">Möchten Sie wirklich alle Einträge der Änderungshistorie löschen, die älter als die Aufbewahrungsdauer sind? Das kann nicht rückgängig gemacht werden.</string>
   <string name="SYS_CHANGELOG_PURGE_RESULT">#VAR1# Einträge der Änderungshistorie wurden gelöscht.</string>
