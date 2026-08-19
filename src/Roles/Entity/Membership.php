@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Users\Entity\User;
 use DateTime;
 use Throwable;
@@ -492,6 +493,64 @@ class Membership extends Entity
      * @return void
      * @throws Exception
      */
+    /**
+     * Write one changelog entry for every membership that the given condition selects. A membership
+     * is logged with the user it belongs to, so adjustLogEntry() reads a User object with all its
+     * profile field data. Deleting a role would read one such object per member, therefore this
+     * method collects the user and the role of the whole set in a single query.
+     *
+     * @param array $identifyingColumns The columns that identify a single membership. They are not
+     *                                  needed here, the whole record is read in one query anyway.
+     * @param string $sqlWhereCondition Condition that selects the memberships, without the leading
+     *                                  keyword WHERE and only with columns of adm_members.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of written log entries.
+     * @throws Exception
+     */
+    public function logBulkDeletion(array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        global $gProfileFields;
+
+        if (!self::$loggingEnabled) return 0;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return 0;
+
+        $sql = 'SELECT mem_id, mem_usr_id, usr_uuid, rol_uuid, rol_name,
+                       last_name.usd_value AS last_name, first_name.usd_value AS first_name
+                  FROM ' . TBL_MEMBERS . '
+            INNER JOIN ' . TBL_USERS . '
+                    ON usr_id = mem_usr_id
+            INNER JOIN ' . TBL_ROLES . '
+                    ON rol_id = mem_rol_id
+             LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                    ON last_name.usd_usr_id = mem_usr_id
+                   AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
+             LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                    ON first_name.usd_usr_id = mem_usr_id
+                   AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
+                 WHERE ' . $sqlWhereCondition;
+        $queryParams = array_merge(
+            array((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id')),
+            $queryParams
+        );
+        $records = $this->db->queryPrepared($sql, $queryParams)->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($records as $record) {
+            $logEntry = new LogChanges($this->db);
+            $logEntry->setLogDeletion(
+                $table,
+                (int)$record['mem_id'],
+                $record['usr_uuid'],
+                $record['last_name'] . ', ' . $record['first_name']
+            );
+            $logEntry->setLogLinkID((int)$record['mem_usr_id']);
+            $logEntry->setLogRelated($record['rol_uuid'], $record['rol_name']);
+            $logEntry->save();
+        }
+
+        return count($records);
+    }
+
     protected function adjustLogEntry(LogChanges $logEntry): void
     {
         global $gProfileFields;

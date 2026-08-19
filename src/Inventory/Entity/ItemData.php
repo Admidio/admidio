@@ -114,6 +114,110 @@ class ItemData extends Entity
     }
 
     /**
+     * Write one changelog entry for every item value that the given condition selects. Deleting a
+     * value means setting the item field to empty, so the entries are modifications to an empty
+     * value, exactly like logDeletion() writes them for a single record.
+     *
+     * A value is logged with the item it belongs to. Reading an Item object per record would read
+     * the name of the same item again and again, and deleting an item field affects every item, so
+     * the items are read once as a whole.
+     *
+     * @param array $identifyingColumns The columns that identify a single value. They are not
+     *                                  needed here, the whole record is read in one query anyway.
+     * @param string $sqlWhereCondition Condition that selects the values, without the leading
+     *                                  keyword WHERE and only with columns of adm_inventory_item_data.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of written log entries.
+     * @throws Exception
+     */
+    public function logBulkDeletion(array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        if (!self::$loggingEnabled) return 0;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return 0;
+
+        $sql = 'SELECT ind_id, ind_ini_id, ind_inf_id, ind_value
+                  FROM ' . TBL_INVENTORY_ITEM_DATA . '
+                 WHERE ' . $sqlWhereCondition;
+        $records = $this->db->queryPrepared($sql, $queryParams)->fetchAll(\PDO::FETCH_ASSOC);
+
+        // A value that is empty already is no change, and the category and the status of an item
+        // are logged for the inventory_items table instead, see logItemfieldChange().
+        $records = array_values(array_filter($records, function (array $record) {
+            if ($record['ind_value'] === null || $record['ind_value'] === '') {
+                return false;
+            }
+            $fieldNameIntern = $this->mItemsData->getPropertyById((int)$record['ind_inf_id'], 'inf_name_intern', 'database');
+            return !in_array($fieldNameIntern, array('CATEGORY', 'STATUS'), true);
+        }));
+        if (count($records) === 0) {
+            return 0;
+        }
+
+        $items = $this->readItemsOfRecords(array_column($records, 'ind_ini_id'));
+        $logEntries = 0;
+
+        foreach ($records as $record) {
+            $itemId = (int)$record['ind_ini_id'];
+            $fieldId = (int)$record['ind_inf_id'];
+
+            $logEntry = new LogChanges($this->db, $table);
+            $logEntry->setLogModification(
+                $table,
+                (int)$record['ind_id'],
+                $items[$itemId]['ini_uuid'] ?? null,
+                $items[$itemId]['name'] ?? (string)$record['ind_id'],
+                $fieldId,
+                $this->mItemsData->getPropertyById($fieldId, 'inf_name', 'database'),
+                $record['ind_value'],
+                null
+            );
+            $logEntry->setLogLinkID($itemId);
+            $logEntry->save();
+            $logEntry->clear();
+            $logEntries++;
+        }
+
+        return $logEntries;
+    }
+
+    /**
+     * Read the uuid and the name of the given items in one query, so that a bulk deletion does not
+     * create an Item object for every single record. The name of an item is a value of the item
+     * itself, so it is read from the item data of the field ITEMNAME.
+     *
+     * @param array $itemIds The ids of the items, duplicates are allowed.
+     * @return array Returns a named array of item id => array with the keys **ini_uuid** and **name**
+     * @throws Exception
+     */
+    private function readItemsOfRecords(array $itemIds): array
+    {
+        $itemIds = array_values(array_unique(array_map('intval', $itemIds)));
+        if (count($itemIds) === 0) {
+            return array();
+        }
+
+        $sql = 'SELECT ini_id, ini_uuid, item_name.ind_value AS item_name
+                  FROM ' . TBL_INVENTORY_ITEMS . '
+             LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS item_name
+                    ON item_name.ind_ini_id = ini_id
+                   AND item_name.ind_inf_id = ? -- $this->mItemsData->getProperty(\'ITEMNAME\', \'inf_id\')
+                 WHERE ini_id IN (' . Database::getQmForValues($itemIds) . ')';
+        $queryParams = array_merge(array((int)$this->mItemsData->getProperty('ITEMNAME', 'inf_id')), $itemIds);
+        $statement = $this->db->queryPrepared($sql, $queryParams);
+
+        $items = array();
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $items[(int)$row['ini_id']] = array(
+                'ini_uuid' => $row['ini_uuid'],
+                'name' => (string)$row['item_name']
+            );
+        }
+
+        return $items;
+    }
+
+    /**
      * Logs deletion of the DB record
      * Deletion actually means setting the user field to an empty value, so log a change to empty instead of deletion!
      *

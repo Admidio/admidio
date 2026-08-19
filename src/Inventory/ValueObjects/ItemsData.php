@@ -15,6 +15,7 @@ use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\ItemBorrowData;
 use Admidio\Categories\Entity\Category;
+use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Inventory\Entity\SelectOptions;
 
@@ -1166,19 +1167,33 @@ class ItemsData
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        // Log record deletion, then delete
-        $item = new Item($this->mDb, $this, $this->mItemId);
-        $item->logDeletion();
+        // Deleting an item is one action of the user, so the item and its data belong into one
+        // change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
 
-        // delete all item data
+        $item = new Item($this->mDb, $this, $this->mItemId);
+
+        // delete all item data. The values are logged before they are removed, a plain DELETE would
+        // take them out of the change history without a trace.
+        $itemData = new ItemData($this->mDb, $this);
+        $itemData->logBulkDeletion(array('ind_id'), 'ind_ini_id = ?', array($this->mItemId));
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
+
         // delete all item borrow data
+        $itemBorrowData = new ItemBorrowData($this->mDb, $this);
+        $itemBorrowData->logBulkDeletion(array('inb_id'), 'inb_ini_id = ?', array($this->mItemId));
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
-        // delete item
+
+        // Log and delete the item itself last. The change history shows a change with the record it
+        // is about, and it recognizes that record as the entry that a deletion logs last.
+        $item->logDeletion();
+
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
         $this->mDb->queryPrepared($sql, array($this->mItemId, $this->organizationId));
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->mItemDeleted = true;
     }

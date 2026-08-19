@@ -435,6 +435,71 @@ class Entity
     }
 
     /**
+     * Delete all records of a dependent table that belong to this record. Every record is read and
+     * deleted through its own Entity, so that each single deletion is written to the changelog. A
+     * bulk DELETE would remove the records from the audit trail without a trace, see the class
+     * documentation of ChangelogService.
+     *
+     * The identifying columns are named explicitly, because not every table has a single key
+     * column. adm_role_dependencies for example is identified by its parent and its child.
+     *
+     * @param Entity $object An empty object of the dependent table. It is reused for every record.
+     * @param array $identifyingColumns The columns that identify a single record of that table.
+     * @param string $sqlWhereCondition Condition that selects the dependent records, without the
+     *                                  leading keyword WHERE.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of deleted records.
+     * @throws Exception
+     */
+    protected function deleteDependentRecords(Entity $object, array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        $object->logBulkDeletion($identifyingColumns, $sqlWhereCondition, $queryParams);
+
+        $sql = 'DELETE FROM ' . $object->tableName . '
+                 WHERE ' . $sqlWhereCondition;
+        $statement = $this->db->queryPrepared($sql, $queryParams);
+
+        return $statement->rowCount();
+    }
+
+    /**
+     * Write one changelog entry for every record that the given condition selects. It is called by
+     * deleteDependentRecords() right before the records are deleted, so the entries still describe
+     * records that exist.
+     *
+     * The default implementation reads one record after the other and lets logDeletion() build its
+     * entry, so that an entity which customizes its log entry keeps exactly the entry it writes for
+     * a single deletion. An entity whose dependent records can be many should override this method
+     * and collect the same data in as few queries as possible.
+     *
+     * @param array $identifyingColumns The columns that identify a single record of that table.
+     * @param string $sqlWhereCondition Condition that selects the records, without the leading
+     *                                  keyword WHERE. It may only use columns of the own table,
+     *                                  because deleteDependentRecords() reuses it for the DELETE.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of written log entries.
+     * @throws Exception
+     */
+    public function logBulkDeletion(array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        if (!self::$loggingEnabled) return 0;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return 0;
+
+        $sql = 'SELECT ' . implode(', ', $identifyingColumns) . '
+                  FROM ' . $this->tableName . '
+                 WHERE ' . $sqlWhereCondition;
+        $records = $this->db->queryPrepared($sql, $queryParams)->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($records as $record) {
+            $this->readDataByColumns($record);
+            $this->logDeletion();
+        }
+
+        return count($records);
+    }
+
+    /**
      * Get the first name and last name of the person who has created this record. In dependence of the preference
      * system_show_create_edit the login name will be shown. If the current user has a valid login and the
      * parameter **$linkToProfile** is set, then an HTML link to the profile is set around the name.

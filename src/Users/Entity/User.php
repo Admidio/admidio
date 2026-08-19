@@ -9,6 +9,9 @@ use Admidio\Infrastructure\SystemMail;
 use Admidio\Messages\Entity\Message;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Roles\Entity\ListColumns;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
@@ -678,19 +681,6 @@ class User extends Entity
                             SET usr_usr_id_change = NULL
                             WHERE usr_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
-                          WHERE lsc_lst_id IN (SELECT lst_id
-                                                 FROM ' . TBL_LISTS . '
-                                                WHERE lst_usr_id = ' . $usrId . '
-                                                AND lst_global = false)';
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
-                          WHERE lst_global = false
-                          AND lst_usr_id = ' . $usrId;
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MEMBERS . '
-                          WHERE mem_usr_id = ' . $usrId;
-
         $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
                           WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'];
 
@@ -759,16 +749,48 @@ class User extends Entity
         $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
                           WHERE ses_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
-                          WHERE usd_usr_id = ' . $usrId;
-
         $this->db->startTransaction();
+
+        // Deleting a user is one action of the user, so everything that is removed together with
+        // the user belongs into one change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
 
         foreach ($sqlQueries as $sqlQuery) {
             $this->db->query($sqlQuery); // TODO add more params
         }
 
+        // The columns of a list must be removed before the list itself, they are selected through it.
+        $this->deleteDependentRecords(
+            new ListColumns($this->db),
+            array('lsc_id'),
+            'lsc_lst_id IN (SELECT lst_id FROM ' . TBL_LISTS . ' WHERE lst_usr_id = ? AND lst_global = false)',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new ListConfiguration($this->db),
+            array('lst_id'),
+            'lst_global = false AND lst_usr_id = ?',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new Membership($this->db),
+            array('mem_id'),
+            'mem_usr_id = ?',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new UserData($this->db),
+            array('usd_id'),
+            'usd_usr_id = ?',
+            array($usrId)
+        );
+
         $returnValue = parent::delete();
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->db->endTransaction();
 
