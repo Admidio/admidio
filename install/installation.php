@@ -63,6 +63,13 @@ try {
 
     require_once($rootPath . '/system/bootstrap/bootstrap.php');
 
+    // check HTML string for invalid tags and scripts, handleException() needs this filter
+    $gHtmlPurifierConfig = HTMLPurifier_Config::createDefault();
+    $gHtmlPurifierConfig->set('HTML.Doctype', 'HTML 4.01 Transitional');
+    $gHtmlPurifierConfig->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+    $gHtmlPurifierConfig->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+    $gHtmlPurifierFilter = new HTMLPurifier($gHtmlPurifierConfig);
+
     $availableSteps = array('welcome', 'connect_database', 'create_organization', 'create_administrator', 'create_config', 'download_config', 'start_installation', 'installation_successful');
 
     if (isset($_GET['mode']) && $_GET['mode'] == 'check') {
