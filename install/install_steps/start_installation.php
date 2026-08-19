@@ -192,8 +192,6 @@ $sql = 'UPDATE ' . TBL_USER_RELATION_TYPES . '
          WHERE urt_id = 7';
 $db->queryPrepared($sql);
 
-\Admidio\InstallationUpdate\Service\Installation::disableSoundexSearchIfPgSql($db);
-
 // create new organization
 $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
 $gCurrentOrganization->setValue('org_longname', $_SESSION['orga_longname']);
@@ -229,6 +227,10 @@ if (is_int($benchmarkResults['options']['cost'])) {
 // create all necessary data for this organization
 $gSettingsManager =& $gCurrentOrganization->getSettingsManager();
 $gSettingsManager->setMulti($defaultOrgPreferences, false);
+
+// the preferences of the organization exist now, so the value can be changed
+\Admidio\InstallationUpdate\Service\Installation::disableSoundexSearchIfPgSql($db);
+
 $gCurrentOrganization->createBasicData($adminUsrId);
 
 // create default room for room module in database
