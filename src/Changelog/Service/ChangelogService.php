@@ -1517,6 +1517,14 @@ class ChangelogService {
     public static function isTableLogged(string|array $table) : bool {
         global $gSettingsManager;
 
+        // Whether a table is logged is a preference of the organization, so nothing can be logged
+        // while the system is still starting up and no organization is known yet. The update reads
+        // the session, and with it the auto login, before it determines the organization, so this
+        // is reached with no settings at all.
+        if (!isset($gSettingsManager)) {
+            return false;
+        }
+
         if ($gSettingsManager->getInt('changelog_module_enabled') === 0) { // Changelog not enabled
             return false;
         }
