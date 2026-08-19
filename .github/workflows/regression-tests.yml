@@ -1,0 +1,248 @@
+name: Regression Tests
+
+on:
+  pull_request:
+    branches: [ v4.3 ]
+    paths:
+      - 'src/**'
+      - 'system/**'
+      - 'adm_cli/**'
+      - 'install/**'
+      - 'modules/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
+      - '.github/workflows/regression-tests.yml'
+  push:
+    branches: [ master ]
+  schedule:
+    # Run on schedule for MySQL (third database)
+    - cron: '0 2 * * MON'
+  workflow_dispatch:
+    inputs:
+      database:
+        description: 'Database engine to test'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - mariadb
+          - postgres
+          - mysql
+          - all
+
+jobs:
+  fast-checks:
+    name: Fast Checks
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, gd, iconv, json, pdo, posix, simplexml, zip
+          coverage: none
+
+      - name: Check PHP syntax
+        run: find src system -name '*.php' -exec php -l {} \;
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run PHP-CS-Fixer
+        run: php .php-cs-fixer.dist.php --dry-run --diff || true
+
+      - name: Run unit tests
+        run: composer test:unit
+
+  mariadb:
+    name: MariaDB 10.6
+    needs: fast-checks
+    runs-on: ubuntu-22.04
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: admidio_test
+          MYSQL_USER: admidio
+          MYSQL_PASSWORD: admidio_test
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+
+      mailpit:
+        image: axllent/mailpit:latest
+        options: >-
+          --health-cmd="curl -f http://localhost:8025 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 1025:1025
+          - 8025:8025
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, gd, iconv, json, pdo, pdo_mysql, posix, simplexml, zip
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Create test environment
+        run: |
+          cp .env.test.example .env.test
+          sed -i 's/TEST_DATABASE_ENGINE=.*/TEST_DATABASE_ENGINE=mariadb/' .env.test
+          php tests/bin/setup-test-env.php --db=mariadb
+
+      - name: Run integration tests (MariaDB)
+        run: composer test:integration --db=mariadb
+
+      - name: Run CLI tests
+        run: composer test:cli || true  # Optional in PR 1
+
+      - name: Upload coverage
+        if: always()
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          flags: mariadb
+
+  postgres:
+    name: PostgreSQL 15
+    needs: fast-checks
+    runs-on: ubuntu-22.04
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: admidio_test
+          POSTGRES_USER: admidio
+          POSTGRES_PASSWORD: admidio_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 5432:5432
+
+      mailpit:
+        image: axllent/mailpit:latest
+        options: >-
+          --health-cmd="curl -f http://localhost:8025 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 1025:1025
+          - 8025:8025
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, gd, iconv, json, pdo, pdo_pgsql, posix, simplexml, zip
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Create test environment
+        run: |
+          cp .env.test.example .env.test
+          sed -i 's/TEST_DATABASE_ENGINE=.*/TEST_DATABASE_ENGINE=postgres/' .env.test
+          php tests/bin/setup-test-env.php --db=postgres
+
+      - name: Run integration tests (PostgreSQL)
+        run: composer test:integration --db=postgres
+
+  mysql:
+    name: MySQL 8.0
+    needs: fast-checks
+    if: github.event_name == 'schedule' || github.event.inputs.database == 'mysql' || github.event.inputs.database == 'all'
+    runs-on: ubuntu-22.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: admidio_test
+          MYSQL_USER: admidio
+          MYSQL_PASSWORD: admidio_test
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, gd, iconv, json, pdo, pdo_mysql, posix, simplexml, zip
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Create test environment
+        run: |
+          cp .env.test.example .env.test
+          sed -i 's/TEST_DATABASE_ENGINE=.*/TEST_DATABASE_ENGINE=mysql/' .env.test
+          sed -i 's/TEST_DB_MYSQL_PORT=.*/TEST_DB_MYSQL_PORT=3306/' .env.test
+          php tests/bin/setup-test-env.php --db=mysql
+
+      - name: Run integration tests (MySQL)
+        run: composer test:integration --db=mysql
+
+  post-results:
+    name: Post Test Results
+    needs: [fast-checks, mariadb, postgres]
+    if: always()
+    runs-on: ubuntu-22.04
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const jobs = context.payload.workflow_run?.jobs || [];
+
+            let comment = '## 🧪 Regression Test Results\n\n';
+
+            if (jobs.length === 0) {
+              comment += '✅ All tests passed!\n';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

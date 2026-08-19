@@ -1,0 +1,98 @@
+version: '3.8'
+
+# Admidio Regression Test Suite - Docker Compose for Local Development
+# Start services: docker-compose -f docker-compose.test.yml up -d
+# Stop services: docker-compose -f docker-compose.test.yml down
+
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: admidio-test-mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: admidio_test
+      MYSQL_USER: admidio
+      MYSQL_PASSWORD: admidio_test
+      MYSQL_INITDB_SKIP_TZINFO: "yes"
+    volumes:
+      - mariadb_test_data:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h localhost --silent
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - admidio-test
+
+  postgres:
+    image: postgres:15
+    container_name: admidio-test-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: admidio_test
+      POSTGRES_USER: admidio
+      POSTGRES_PASSWORD: admidio_test
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U admidio
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - admidio-test
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: admidio-test-mailpit
+    ports:
+      - "1025:1025"    # SMTP port
+      - "8025:8025"    # Web UI (http://localhost:8025)
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+      MP_DATA_FILE: /data/mailpit.db
+    volumes:
+      - mailpit_test_data:/data
+    healthcheck:
+      test: curl -f http://localhost:8025 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - admidio-test
+
+volumes:
+  mariadb_test_data:
+    driver: local
+  postgres_test_data:
+    driver: local
+  mailpit_test_data:
+    driver: local
+
+networks:
+  admidio-test:
+    driver: bridge
+
+# Notes:
+#
+# MariaDB 10.6 - Widely used, compatible with MySQL 5.7+
+# PostgreSQL 15 - Latest stable version
+# Mailpit - Lightweight SMTP testing (web UI at http://localhost:8025)
+#
+# Expected startup time: ~30 seconds
+# Each service has health checks enabled
+#
+# Check container status: docker-compose -f docker-compose.test.yml ps
+# View logs: docker-compose -f docker-compose.test.yml logs -f [service-name]
+# Clean up: docker-compose -f docker-compose.test.yml down -v (removes volumes)
