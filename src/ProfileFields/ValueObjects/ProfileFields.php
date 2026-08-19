@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
@@ -741,11 +742,10 @@ class ProfileFields
                     }
                     break;
                 case 'DATE':
-                    // Date must be valid and formatted
-                    $date = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $fieldValue);
-                    if ($date === false) {
-                        $date = DateTime::createFromFormat('Y-m-d', $fieldValue);
-                        if ($date === false && !$this->noValueCheck) {
+                    $date = DateTimeUtils::parseDate($fieldValue);
+
+                    if ($date === null) {
+                        if (!$this->noValueCheck) {
                             throw new Exception('SYS_DATE_INVALID', array($this->mProfileFields[$fieldNameIntern]->getValue('usf_name'), $gSettingsManager->getString('system_date')));
                         }
                     } else {
