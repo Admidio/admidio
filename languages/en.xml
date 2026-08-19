@@ -349,6 +349,7 @@
   <string name="SYS_CHANGELOG_PURGE">Delete old entries now</string>
   <string name="SYS_CHANGELOG_PURGE_CONFIRM">Do you really want to delete all entries of the change history that are older than the retention period? This cannot be undone.</string>
   <string name="SYS_CHANGELOG_PURGE_RESULT">#VAR1# entries of the change history were deleted.</string>
+  <string name="SYS_CHANGELOG_PURGE_SAVE_FIRST">Save the changed retention period first, the entries are deleted with the period that is stored.</string>
   <string name="SYS_CHANGELOG_RETENTION_DAYS">Retention period of the change history (days)</string>
   <string name="SYS_CHANGELOG_RETENTION_DAYS_DESC">Entries of the change history that are older than the given number of days are deleted. Enter 0 to keep the change history without any limit. Entries are only ever removed from the oldest end, the history of a single record cannot be deleted separately. (Default: 0)</string>
   <string name="SYS_CHARACTERS">Characters</string>

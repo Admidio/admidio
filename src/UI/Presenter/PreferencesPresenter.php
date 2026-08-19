@@ -2897,9 +2897,34 @@ class PreferencesPresenter extends PagePresenter
                     });
                 });
 
+                // The purge deletes with the retention period that is stored in the preferences and
+                // not with the one that is currently shown in the form. As long as the two differ,
+                // the button is disabled: a period that was raised but not saved yet would otherwise
+                // delete far more than the value on the screen suggests.
+                function updateChangelogPurgeState() {
+                    var retentionInput = panelContainer.find("#changelog_retention_days");
+                    if (retentionInput.length === 0) {
+                        return;
+                    }
+
+                    var unsavedPeriod = (retentionInput.val() !== retentionInput.prop("defaultValue"));
+                    panelContainer.find("#adm_link_changelog_purge")
+                        .toggleClass("disabled", unsavedPeriod)
+                        .attr("aria-disabled", unsavedPeriod ? "true" : "false");
+                    panelContainer.find("#adm_changelog_purge_result")
+                        .text(unsavedPeriod ? "' . $gL10n->get('SYS_CHANGELOG_PURGE_SAVE_FIRST') . '" : "");
+                }
+
+                panelContainer.off("input", "#changelog_retention_days")
+                    .on("input", "#changelog_retention_days", updateChangelogPurgeState);
+                updateChangelogPurgeState();
+
                 // Delete the entries of the change history that are older than the retention period
                 panelContainer.off("click", "#adm_link_changelog_purge").on("click", "#adm_link_changelog_purge", function(event) {
                     event.preventDefault();
+                    if ($(this).hasClass("disabled")) {
+                        return;
+                    }
                     if (!confirm("' . $gL10n->get('SYS_CHANGELOG_PURGE_CONFIRM') . '")) {
                         return;
                     }

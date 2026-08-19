@@ -349,6 +349,7 @@
   <string name="SYS_CHANGELOG_PURGE">Alte Einträge jetzt löschen</string>
   <string name="SYS_CHANGELOG_PURGE_CONFIRM">Möchtest du wirklich alle Einträge der Änderungshistorie löschen, die älter als die Aufbewahrungsdauer sind? Das kann nicht rückgängig gemacht werden.</string>
   <string name="SYS_CHANGELOG_PURGE_RESULT">#VAR1# Einträge der Änderungshistorie wurden gelöscht.</string>
+  <string name="SYS_CHANGELOG_PURGE_SAVE_FIRST">Bitte zuerst die geänderte Aufbewahrungsdauer speichern, gelöscht wird mit der gespeicherten Dauer.</string>
   <string name="SYS_CHANGELOG_RETENTION_DAYS">Aufbewahrungsdauer der Änderungshistorie (Tage)</string>
   <string name="SYS_CHANGELOG_RETENTION_DAYS_DESC">Einträge der Änderungshistorie, die älter als die angegebene Anzahl an Tagen sind, werden gelöscht. Mit dem Wert 0 wird die Änderungshistorie unbegrenzt aufbewahrt. Es werden immer nur die ältesten Einträge entfernt, die Historie eines einzelnen Datensatzes kann nicht gezielt gelöscht werden. (Standard: 0)</string>
   <string name="SYS_CHARACTERS">Zeichen</string>
