@@ -166,6 +166,100 @@ class AdmidioTestFixture
     }
 
     /**
+     * Create and save a role that carries a given set of rights
+     *
+     * @param string $name Role name
+     * @param int $orgId Organization ID
+     * @param array<string,int> $rights Role right columns to set, e.g. array('rol_edit_user' => 1)
+     * @return array Role data with rol_id
+     */
+    public function createAndSaveRoleWithRights(string $name, int $orgId, array $rights = []): array
+    {
+        $role = new Role($this->gDb);
+        // no $gCurrentUser is logged in during tests, so the category edit-rights check has to be bypassed
+        $role->saveChangesWithoutRights();
+        $role->setValue('rol_name', $name);
+        $role->setValue('rol_cat_id', $this->getDefaultRoleCategory($orgId));
+
+        foreach ($rights as $column => $value) {
+            $role->setValue($column, $value);
+        }
+        $role->save();
+
+        $roleData = [
+            'rol_id' => (int) $role->getValue('rol_id'),
+            'rol_uuid' => $role->getValue('rol_uuid'),
+            'rol_name' => $role->getValue('rol_name'),
+            'org_id' => $orgId,
+        ];
+
+        $this->createdIds['roles'][] = $roleData['rol_id'];
+        return $roleData;
+    }
+
+    /**
+     * Assign a user to a role with an explicit membership period and leader flag
+     *
+     * @param int $usrId User ID
+     * @param int $rolId Role ID
+     * @param string $begin First day of the membership
+     * @param string $end Last day of the membership
+     * @param bool $leader Whether the user is a leader of the role
+     * @return array Membership data with mem_id
+     */
+    public function assignUserToRolePeriod(int $usrId, int $rolId, string $begin, string $end, bool $leader = false): array
+    {
+        $membership = new Membership($this->gDb);
+        $membership->setValue('mem_usr_id', $usrId);
+        $membership->setValue('mem_rol_id', $rolId);
+        $membership->setValue('mem_begin', $begin);
+        $membership->setValue('mem_end', $end);
+        $membership->setValue('mem_leader', $leader ? 1 : 0);
+        $membership->save();
+
+        $memData = [
+            'mem_id' => (int) $membership->getValue('mem_id'),
+            'mem_usr_id' => $usrId,
+            'mem_rol_id' => $rolId,
+        ];
+
+        $this->createdIds['memberships'][] = $memData['mem_id'];
+        return $memData;
+    }
+
+    /**
+     * Delete a membership through its entity, so that it stays in the changelog
+     *
+     * @param int $memId Membership ID
+     * @return bool True if deleted
+     */
+    public function deleteMembership(int $memId): bool
+    {
+        $membership = new Membership($this->gDb, $memId);
+        if ((int) $membership->getValue('mem_id') === 0) {
+            return false;
+        }
+        $membership->delete();
+
+        return true;
+    }
+
+    /**
+     * Set the rol_valid flag of an existing role
+     *
+     * @param int $rolId Role ID
+     * @param bool $valid Validity flag to store
+     * @return void
+     */
+    public function setRoleValidity(int $rolId, bool $valid): void
+    {
+        $role = new Role($this->gDb, $rolId);
+        $role->saveChangesWithoutRights();
+        $role->setValue('rol_valid', $valid ? 1 : 0);
+        $role->save();
+    }
+
+    /**
      * Create and save a category to database
      *
      * @param string $name Category name
