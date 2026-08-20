@@ -9,7 +9,6 @@ namespace Admidio\Tests\Integration\Users;
 
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\AdmidioTestFixture;
-use Admidio\Users\Entity\User;
 
 class UserManagementTest extends DatabaseTestCase
 {
@@ -29,9 +28,10 @@ class UserManagementTest extends DatabaseTestCase
 
         $user = $fixture->createAndSaveUser('testuser', 'test@example.local');
 
-        // Verify user exists with correct login
-        $this->assertNotEmpty($user['usr_id']);
-        $this->assertEquals('testuser', $user['usr_login_name']);
+        // the row has to exist in the database, not just in the object the fixture returned
+        $stored = $fixture->getUserById($user['usr_id']);
+        $this->assertNotEmpty($stored);
+        $this->assertEquals('testuser', $stored['usr_login_name']);
     }
 
     /**
@@ -48,16 +48,14 @@ class UserManagementTest extends DatabaseTestCase
         $user3 = $fixture->createAndSaveUser('user3', 'user3@example.local');
 
         // Verify all users exist with unique IDs
-        $this->assertNotEmpty($user1['usr_id']);
-        $this->assertNotEmpty($user2['usr_id']);
-        $this->assertNotEmpty($user3['usr_id']);
         $this->assertNotEquals($user1['usr_id'], $user2['usr_id']);
         $this->assertNotEquals($user2['usr_id'], $user3['usr_id']);
+        $this->assertNotEquals($user1['usr_id'], $user3['usr_id']);
 
-        // Verify correct login names
-        $this->assertEquals('user1', $user1['usr_login_name']);
-        $this->assertEquals('user2', $user2['usr_login_name']);
-        $this->assertEquals('user3', $user3['usr_login_name']);
+        // each one has to be readable back with its own login name
+        $this->assertEquals('user1', $fixture->getUserById($user1['usr_id'])['usr_login_name']);
+        $this->assertEquals('user2', $fixture->getUserById($user2['usr_id'])['usr_login_name']);
+        $this->assertEquals('user3', $fixture->getUserById($user3['usr_id'])['usr_login_name']);
     }
 
     /**
@@ -72,13 +70,16 @@ class UserManagementTest extends DatabaseTestCase
         $user1 = $fixture->createAndSaveUser('user1', 'user1@example.local');
         $user2 = $fixture->createAndSaveUser('user2', 'user2@example.local');
 
-        // Verify UUIDs are unique
-        $this->assertNotEmpty($user1['usr_uuid']);
-        $this->assertNotEmpty($user2['usr_uuid']);
-        $this->assertNotEquals($user1['usr_uuid'], $user2['usr_uuid']);
+        $stored1 = $fixture->getUserById($user1['usr_id']);
+        $stored2 = $fixture->getUserById($user2['usr_id']);
 
-        // Verify UUID format (basic check)
-        $this->assertMatchesRegularExpression('/^[a-f0-9\-]{36}$/', $user1['usr_uuid']);
+        // Verify UUIDs are unique
+        $this->assertNotEquals($stored1['usr_uuid'], $stored2['usr_uuid']);
+
+        // Verify UUID format
+        $uuidPattern = '/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i';
+        $this->assertMatchesRegularExpression($uuidPattern, $stored1['usr_uuid']);
+        $this->assertMatchesRegularExpression($uuidPattern, $stored2['usr_uuid']);
     }
 
     /**
@@ -97,6 +98,7 @@ class UserManagementTest extends DatabaseTestCase
 
         // Verify found user
         $this->assertNotEmpty($foundUser);
+        $this->assertEquals($user['usr_id'], $foundUser['usr_id']);
         $this->assertEquals($user['usr_login_name'], $foundUser['usr_login_name']);
     }
 
@@ -122,23 +124,23 @@ class UserManagementTest extends DatabaseTestCase
     }
 
     /**
-     * Test users are initially invalid (need approval)
+     * Test that a user created through the Entity API is valid right away.
+     * User::clear() sets usr_valid to 1 ("new user should be valid (except registration)"),
+     * so only UserRegistration creates a user that still needs approval.
      *
-     * @testdox Newly created users are marked as invalid by default
+     * @testdox Users created through the Entity API are valid immediately
      */
     public function testNewUserValidity(): void
     {
         $fixture = $this->getFixture();
 
-        $user = $fixture->createAndSaveUser('invalidtest', 'invalid@example.local');
+        $user = $fixture->createAndSaveUser('validitytest', 'validity@example.local');
 
-        // Check user validity in database
         $sql = 'SELECT usr_valid FROM ' . TBL_USERS . ' WHERE usr_id = ?';
         $result = $this->getDatabase()->queryPrepared($sql, [$user['usr_id']]);
         $row = $result->fetch();
 
-        // New users should be invalid until approved
-        $this->assertNotNull($row['usr_valid']);
+        $this->assertTrue((bool) $row['usr_valid']);
     }
 
     /**
@@ -152,8 +154,9 @@ class UserManagementTest extends DatabaseTestCase
 
         $user = $fixture->createAndSaveUser('typetest', 'type@example.local');
 
-        // Verify ID is integer
-        $this->assertIsInt($user['usr_id']);
-        $this->assertGreaterThan(0, $user['usr_id']);
+        // read the key back from the database, the fixture casts its own return value to int
+        $stored = $fixture->getUserById($user['usr_id']);
+        $this->assertIsInt($stored['usr_id']);
+        $this->assertGreaterThan(0, $stored['usr_id']);
     }
 }
