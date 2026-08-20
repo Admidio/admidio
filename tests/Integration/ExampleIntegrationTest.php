@@ -13,6 +13,19 @@ use Admidio\Tests\Support\DatabaseTestCase;
 class ExampleIntegrationTest extends DatabaseTestCase
 {
     /**
+     * Every test in this class builds its data with TestDataBuilder, which returns generated
+     * arrays and never writes to the database, so none of them verifies any Admidio behaviour.
+     * They are kept as a specification of what still needs coverage and will be reimplemented
+     * against the real database for whatever the later test phases do not already cover.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->markTestIncomplete('Uses the in-memory TestDataBuilder, needs a real database test.');
+    }
+
+    /**
      * Example: Create test organization
      *
      * @testdox Test data builder creates organization
