@@ -54,9 +54,39 @@ if (!getenv('TEST_DATABASE_ENGINE')) {
 // Load Admidio's autoloader
 require_once $admidioRoot . '/vendor/autoload.php';
 
-// Define table constants needed by entities (without loading full constants.php which needs app config)
-// Table prefix used for all tables
-define('TABLE_PREFIX', 'adm');
+// Define constants needed by Admidio infrastructure
+// These are normally defined in system/bootstrap/constants.php
+const MIN_PHP_VERSION = '8.2.0';
+const ADMIDIO_VERSION_MAIN = 5;
+const ADMIDIO_VERSION_MINOR = 1;
+const ADMIDIO_VERSION_PATCH = 0;
+const ADMIDIO_VERSION_BETA = 0;
+const ADMIDIO_VERSION = ADMIDIO_VERSION_MAIN . '.' . ADMIDIO_VERSION_MINOR . '.' . ADMIDIO_VERSION_PATCH;
+const ADMIDIO_HOMEPAGE = 'https://www.admidio.org/';
+const HTTPS = false;
+const FOLDER_DATA = '/adm_my_files';
+const FOLDER_TEMP_DATA = '/adm_my_files/temp';
+const FOLDER_SYSTEM = '/system';
+const FOLDER_INSTALLATION = '/install';
+const FOLDER_LIBS = '/libs';
+const FOLDER_LANGUAGES = '/languages';
+const FOLDER_THEMES = '/themes';
+const FOLDER_MODULES = '/modules';
+const FOLDER_PLUGINS = '/plugins';
+const DATE_MAX = '9999-12-31';
+const TABLE_PREFIX = 'adm';
+
+// Define as PHP define() since they depend on runtime values
+define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION);
+define('ADMIDIO_PATH', $admidioRoot);
+define('DATE_NOW', date('Y-m-d'));
+define('DATETIME_NOW', date('Y-m-d H:i:s'));
+define('SCRIPT_START_TIME', microtime(true));
+define('DOMAIN', 'admidio.test');
+define('ADMIDIO_URL', 'http://admidio.test');
+define('ADMIDIO_URL_PATH', '');
+define('SCHEME', 'http');
+define('HOST', 'admidio.test');
 
 // Database table constants that entities require
 const TBL_ANNOUNCEMENTS = TABLE_PREFIX . '_announcements';
@@ -100,6 +130,22 @@ const TBL_SSO_KEYS = TABLE_PREFIX . '_sso_keys';
 const TBL_USERS = TABLE_PREFIX . '_users';
 const TBL_USER_DATA = TABLE_PREFIX . '_user_data';
 const TBL_USER_LOG = TABLE_PREFIX . '_user_log';
+const TBL_USER_FIELDS = TABLE_PREFIX . '_user_fields';
+const TBL_USER_FIELD_OPTIONS = TABLE_PREFIX . '_user_field_select_options';
+const TBL_USER_RELATIONS = TABLE_PREFIX . '_user_relations';
+const TBL_USER_RELATION_TYPES = TABLE_PREFIX . '_user_relation_types';
+const TBL_SESSIONS = TABLE_PREFIX . '_sessions';
+const TBL_TEXTS = TABLE_PREFIX . '_texts';
+const TBL_INVENTORY_ITEM_DATA = TABLE_PREFIX . '_inventory_item_data';
+const TBL_INVENTORY_FIELDS = TABLE_PREFIX . '_inventory_fields';
+const TBL_INVENTORY_FIELD_OPTIONS = TABLE_PREFIX . '_inventory_field_select_options';
+const TBL_INVENTORY_ITEMS = TABLE_PREFIX . '_inventory_items';
+const TBL_INVENTORY_ITEM_BORROW_DATA = TABLE_PREFIX . '_inventory_item_borrow_data';
+
+// Password settings
+const PASSWORD_MIN_LENGTH = 8;
+const PASSWORD_GEN_LENGTH = 16;
+const PASSWORD_GEN_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 // Load system bootstrap functions (getExecutionTime, etc)
 require_once $admidioRoot . '/system/bootstrap/function.php';
@@ -116,8 +162,24 @@ $gCurrentSession = null;
 $GLOBALS['gCurrentUser'] = $gCurrentUser;
 $GLOBALS['gCurrentSession'] = $gCurrentSession;
 
+// Initialize Language for Installation service
+$gL10n = new \Admidio\Infrastructure\Language('en');
+$GLOBALS['gL10n'] = $gL10n;
+
+// Initialize global password hash algorithm
+$gPasswordHashAlgorithm = 'DEFAULT';
+$GLOBALS['gPasswordHashAlgorithm'] = $gPasswordHashAlgorithm;
+
 // Now get database configuration and initialize
 $dbConfig = getTestDatabaseConfig();
+
+// Map engine name to PDO_ENGINE constant for DB_TYPE
+$engineMap = [
+    'mariadb' => \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL,
+    'mysql' => \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL,
+    'postgres' => \Admidio\Infrastructure\Database::PDO_ENGINE_PGSQL,
+];
+define('DB_TYPE', $engineMap[$dbConfig['engine']] ?? \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL);
 
 try {
     // Initialize Admidio Database class
@@ -215,6 +277,14 @@ class TestLogger
      * Log an error
      */
     public function error(string $message, array $context = []): void
+    {
+        // Tests don't need logging output
+    }
+
+    /**
+     * Log a notice message
+     */
+    public function notice(string $message, array $context = []): void
     {
         // Tests don't need logging output
     }

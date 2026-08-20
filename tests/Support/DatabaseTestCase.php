@@ -41,6 +41,36 @@ abstract class DatabaseTestCase extends AdmidioTestCase
                 'Database not initialized. Ensure Admidio bootstrap is loaded via tests/bootstrap.php'
             );
         }
+
+        // Initialize full Admidio installation if not already done
+        static $initialized = false;
+        if (!$initialized) {
+            echo "\n  Setting up Admidio test database...\n";
+
+            $dbConfig = self::getTestDatabaseConfig();
+            TestDatabaseInitializer::initialize(self::$gDb, $dbConfig);
+
+            $initialized = true;
+            echo "\n";
+        }
+    }
+
+    /**
+     * Get test database configuration
+     */
+    protected static function getTestDatabaseConfig(): array
+    {
+        $engine = getenv('TEST_DATABASE_ENGINE') ?: 'mariadb';
+        $prefix = 'TEST_DB_' . strtoupper($engine);
+
+        return [
+            'engine' => $engine,
+            'host' => getenv($prefix . '_HOST') ?: 'localhost',
+            'port' => (int)(getenv($prefix . '_PORT') ?: ($engine === 'postgres' ? 5432 : 3306)),
+            'user' => getenv($prefix . '_USER') ?: 'admidio',
+            'password' => getenv($prefix . '_PASS') ?: '',
+            'database' => getenv($prefix . '_NAME') ?: 'admidio_test',
+        ];
     }
 
     /**
