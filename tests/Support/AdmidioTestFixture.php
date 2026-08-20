@@ -166,6 +166,39 @@ class AdmidioTestFixture
     }
 
     /**
+     * Seed an organization with the default preferences of a fresh installation.
+     *
+     * An organization created through the Organization entity alone has no preferences at all,
+     * unlike one created by the installer, so any Admidio code that reads a setting throws
+     * "Settings name ... does not exist". Call this for a test that exercises such code.
+     *
+     * @param int $orgId Organization ID
+     * @return void
+     */
+    public function seedDefaultPreferences(int $orgId): void
+    {
+        // the same file the installer reads, it defines $defaultOrgPreferences
+        require(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
+
+        // written as one statement instead of through SettingsManager::setMulti(): that saves one
+        // Preferences entity per row and takes about twenty seconds for the whole set, which is
+        // far too slow to call from a test
+        $rows = array();
+        $values = array();
+        foreach ($defaultOrgPreferences as $name => $value) {
+            if (is_array($value)) {
+                $value = implode(',', $value);
+            }
+            $rows[] = '(?, ?, ?)';
+            array_push($values, $orgId, $name, (string) $value);
+        }
+
+        $sql = 'INSERT INTO ' . TBL_PREFERENCES . ' (prf_org_id, prf_name, prf_value)
+                VALUES ' . implode(', ', $rows);
+        $this->gDb->queryPrepared($sql, $values);
+    }
+
+    /**
      * Create and save a role that carries a given set of rights
      *
      * @param string $name Role name
