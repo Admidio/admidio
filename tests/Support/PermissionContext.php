@@ -68,11 +68,15 @@ trait PermissionContext
 
         $previous = array(
             'gCurrentUser' => $GLOBALS['gCurrentUser'] ?? null,
+            'gCurrentUserId' => $GLOBALS['gCurrentUserId'] ?? 0,
+            'gCurrentOrganization' => $GLOBALS['gCurrentOrganization'] ?? null,
             'gValidLogin' => $GLOBALS['gValidLogin'] ?? null,
             'gSettingsManager' => $GLOBALS['gSettingsManager'] ?? null,
         );
 
         $GLOBALS['gCurrentUser'] = $user;
+        $GLOBALS['gCurrentUserId'] = (int) $user->getValue('usr_id');
+        $GLOBALS['gCurrentOrganization'] = $organization;
         $GLOBALS['gValidLogin'] = $validLogin;
         $GLOBALS['gSettingsManager'] = $organization->getSettingsManager();
 
