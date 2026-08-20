@@ -32,34 +32,37 @@ class OrganizationScopeTest extends DatabaseTestCase
         $cat1 = $fixture->createAndSaveCategory('Events Org1', 'EVT', $org1['org_id']);
         $cat2 = $fixture->createAndSaveCategory('Events Org2', 'EVT', $org2['org_id']);
 
-        // Verify categories belong to correct orgs
-        $this->assertEquals($org1['org_id'], $cat1['org_id']);
-        $this->assertEquals($org2['org_id'], $cat2['org_id']);
-        $this->assertNotEquals($cat1['cat_id'], $cat2['cat_id']);
+        // the stored owner has to be the org the category was created for
+        $this->assertEquals($org1['org_id'], (int) $fixture->getCategoryById($cat1['cat_id'])['cat_org_id']);
+        $this->assertEquals($org2['org_id'], (int) $fixture->getCategoryById($cat2['cat_id'])['cat_org_id']);
 
-        // Verify both exist independently
-        $this->assertNotEmpty($cat1['cat_id']);
-        $this->assertNotEmpty($cat2['cat_id']);
+        // querying org1 must not return org2's category
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_org_id = ? AND cat_type = ?';
+        $result = $this->getDatabase()->queryPrepared($sql, [$org1['org_id'], 'EVT']);
+        $org1CatIds = array_map('intval', array_column($result->fetchAll(), 'cat_id'));
+
+        $this->assertContains($cat1['cat_id'], $org1CatIds);
+        $this->assertNotContains($cat2['cat_id'], $org1CatIds);
     }
 
     /**
-     * Test that users created without explicit org are global
+     * Test that the user record itself carries no organization
      *
-     * @testdox Users can be created as global (not org-scoped)
+     * @testdox User records are not scoped to an organization
      */
     public function testGlobalUsersNotScoped(): void
     {
         $fixture = $this->getFixture();
-        $org = $fixture->createAndSaveOrganization('Test Org');
+        $fixture->createAndSaveOrganization('Test Org');
 
-        // Create user without explicit organization
         $user = $fixture->createAndSaveUser('globaluser', 'global@example.local');
 
-        // Verify user exists
-        $this->assertNotEmpty($user['usr_id']);
-        // Note: Users are typically global in Admidio, but can be assigned to roles in specific orgs
-        $userData = $fixture->getUserById($user['usr_id']);
-        $this->assertNotEmpty($userData);
+        // users belong to an organization through their role memberships, so adm_users
+        // itself has no org column at all
+        $columns = array_keys($fixture->getUserById($user['usr_id']));
+        $orgColumns = array_filter($columns, static fn($column) => str_contains($column, 'org'));
+
+        $this->assertSame([], array_values($orgColumns));
     }
 
     /**
@@ -71,24 +74,20 @@ class OrganizationScopeTest extends DatabaseTestCase
     {
         $fixture = $this->getFixture();
         $orgName = 'Test Organization';
-        $orgShort = 'test';
+        $orgShort = 'metadata';
 
         $org = $fixture->createAndSaveOrganization($orgName, $orgShort);
 
-        // Verify organization data
-        $this->assertIsArray($org);
-        if (isset($org['org_id'])) {
-            $this->assertIsInt($org['org_id']);
-        }
-        if (isset($org['org_uuid'])) {
-            $this->assertNotEmpty($org['org_uuid']);
-        }
-        if (isset($org['org_longname'])) {
-            $this->assertEquals($orgName, $org['org_longname']);
-        }
-        if (isset($org['org_shortname'])) {
-            $this->assertEquals($orgShort, $org['org_shortname']);
-        }
+        // read the row back instead of trusting the values the fixture echoed
+        $stored = $fixture->getOrganizationById($org['org_id']);
+        $this->assertNotEmpty($stored);
+
+        $this->assertEquals($orgName, $stored['org_longname']);
+        $this->assertEquals($orgShort, $stored['org_shortname']);
+        $this->assertMatchesRegularExpression(
+            '/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i',
+            $stored['org_uuid']
+        );
     }
 
     /**
@@ -104,16 +103,19 @@ class OrganizationScopeTest extends DatabaseTestCase
         $org2 = $fixture->createAndSaveOrganization('Org 2', 'org2');
         $org3 = $fixture->createAndSaveOrganization('Org 3', 'org3');
 
-        // Verify all exist with unique IDs
-        $this->assertNotEmpty($org1['org_id']);
-        $this->assertNotEmpty($org2['org_id']);
-        $this->assertNotEmpty($org3['org_id']);
-        $this->assertNotEquals($org1['org_id'], $org2['org_id']);
-        $this->assertNotEquals($org2['org_id'], $org3['org_id']);
-        $this->assertNotEquals($org1['org_id'], $org3['org_id']);
+        $ids = [$org1['org_id'], $org2['org_id'], $org3['org_id']];
+        $this->assertCount(3, array_unique($ids));
 
-        // Verify unique UUIDs
-        $this->assertNotEquals($org1['org_uuid'], $org2['org_uuid']);
-        $this->assertNotEquals($org2['org_uuid'], $org3['org_uuid']);
+        // all three are readable back with their own short name
+        $this->assertEquals('org1', $fixture->getOrganizationById($org1['org_id'])['org_shortname']);
+        $this->assertEquals('org2', $fixture->getOrganizationById($org2['org_id'])['org_shortname']);
+        $this->assertEquals('org3', $fixture->getOrganizationById($org3['org_id'])['org_shortname']);
+
+        $uuids = [
+            $fixture->getOrganizationById($org1['org_id'])['org_uuid'],
+            $fixture->getOrganizationById($org2['org_id'])['org_uuid'],
+            $fixture->getOrganizationById($org3['org_id'])['org_uuid'],
+        ];
+        $this->assertCount(3, array_unique($uuids));
     }
 }

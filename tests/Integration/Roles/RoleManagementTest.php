@@ -18,27 +18,28 @@ class RoleManagementTest extends DatabaseTestCase
     }
 
     /**
-     * Test creating roles using direct SQL (avoiding permission checks)
+     * Test creating roles through the Role entity
      *
-     * @testdox Roles can be created in the database
+     * @testdox Roles can be created through the Role entity
      */
     public function testRoleCreation(): void
     {
         $fixture = $this->getFixture();
         $org = $fixture->createAndSaveOrganization('Test Org');
-        $cat = $fixture->createAndSaveCategory('Roles', 'ROL', $org['org_id']);
 
-        // Create role using direct SQL to bypass permission checks
-        $sql = 'INSERT INTO ' . TBL_ROLES . ' (rol_name, rol_cat_id, rol_uuid) VALUES (?, ?, UUID())';
-        $this->getDatabase()->queryPrepared($sql, ['Test Role', $cat['cat_id']]);
-        $roleId = (int) $this->getDatabase()->lastInsertId();
+        $role = $fixture->createAndSaveRole('Test Role', $org['org_id'], 'A description');
 
-        // Verify role exists
-        $this->assertGreaterThan(0, $roleId);
+        $this->assertGreaterThan(0, $role['rol_id']);
 
-        $roleData = $fixture->getRoleById($roleId);
+        // read the row back rather than trusting the returned array
+        $roleData = $fixture->getRoleById($role['rol_id']);
         $this->assertNotEmpty($roleData);
         $this->assertEquals('Test Role', $roleData['rol_name']);
+        $this->assertEquals('A description', $roleData['rol_description']);
+        $this->assertMatchesRegularExpression(
+            '/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i',
+            $roleData['rol_uuid']
+        );
     }
 
     /**
@@ -50,33 +51,24 @@ class RoleManagementTest extends DatabaseTestCase
     {
         $fixture = $this->getFixture();
         $org = $fixture->createAndSaveOrganization('Test Org');
-        $cat = $fixture->createAndSaveCategory('Roles', 'ROL', $org['org_id']);
 
-        $sql = 'INSERT INTO ' . TBL_ROLES . ' (rol_name, rol_cat_id, rol_uuid) VALUES (?, ?, UUID())';
+        $role1 = $fixture->createAndSaveRole('Role 1', $org['org_id']);
+        $role2 = $fixture->createAndSaveRole('Role 2', $org['org_id']);
+        $role3 = $fixture->createAndSaveRole('Role 3', $org['org_id']);
 
-        $this->getDatabase()->queryPrepared($sql, ['Role 1', $cat['cat_id']]);
-        $role1Id = (int) $this->getDatabase()->lastInsertId();
-
-        $this->getDatabase()->queryPrepared($sql, ['Role 2', $cat['cat_id']]);
-        $role2Id = (int) $this->getDatabase()->lastInsertId();
-
-        $this->getDatabase()->queryPrepared($sql, ['Role 3', $cat['cat_id']]);
-        $role3Id = (int) $this->getDatabase()->lastInsertId();
-
-        // Verify all exist uniquely
-        $this->assertNotEquals($role1Id, $role2Id);
-        $this->assertNotEquals($role2Id, $role3Id);
+        $ids = [$role1['rol_id'], $role2['rol_id'], $role3['rol_id']];
+        $this->assertCount(3, array_unique($ids));
 
         // Verify correct names
-        $this->assertEquals('Role 1', $fixture->getRoleById($role1Id)['rol_name']);
-        $this->assertEquals('Role 2', $fixture->getRoleById($role2Id)['rol_name']);
-        $this->assertEquals('Role 3', $fixture->getRoleById($role3Id)['rol_name']);
+        $this->assertEquals('Role 1', $fixture->getRoleById($role1['rol_id'])['rol_name']);
+        $this->assertEquals('Role 2', $fixture->getRoleById($role2['rol_id'])['rol_name']);
+        $this->assertEquals('Role 3', $fixture->getRoleById($role3['rol_id'])['rol_name']);
     }
 
     /**
-     * Test roles belong to categories
+     * Test roles are stored under the category they were created in
      *
-     * @testdox Each role must belong to a category
+     * @testdox A role is stored under the category it was created in
      */
     public function testRolesHaveCategories(): void
     {
@@ -84,13 +76,15 @@ class RoleManagementTest extends DatabaseTestCase
         $org = $fixture->createAndSaveOrganization('Test Org');
         $cat = $fixture->createAndSaveCategory('Roles', 'ROL', $org['org_id']);
 
-        $sql = 'INSERT INTO ' . TBL_ROLES . ' (rol_name, rol_cat_id, rol_uuid) VALUES (?, ?, UUID())';
-        $this->getDatabase()->queryPrepared($sql, ['Test Role', $cat['cat_id']]);
-        $roleId = (int) $this->getDatabase()->lastInsertId();
+        $role = $fixture->createAndSaveRoleInCategory('Test Role', $cat['cat_id']);
 
-        // Verify role has correct category
-        $roleData = $fixture->getRoleById($roleId);
-        $this->assertEquals($cat['cat_id'], $roleData['rol_cat_id']);
+        $roleData = $fixture->getRoleById($role['rol_id']);
+        $this->assertEquals($cat['cat_id'], (int) $roleData['rol_cat_id']);
+
+        // the category is a real row of type ROL, not a dangling id
+        $catData = $fixture->getCategoryById((int) $roleData['rol_cat_id']);
+        $this->assertNotEmpty($catData);
+        $this->assertEquals('ROL', $catData['cat_type']);
     }
 
     /**
@@ -106,12 +100,8 @@ class RoleManagementTest extends DatabaseTestCase
         $user2 = $fixture->createAndSaveUser('user2', 'user2@example.local');
         $user3 = $fixture->createAndSaveUser('user3', 'user3@example.local');
 
-        $cat = $fixture->createAndSaveCategory('Roles', 'ROL', $org['org_id']);
-        $sql = 'INSERT INTO ' . TBL_ROLES . ' (rol_name, rol_cat_id, rol_uuid) VALUES (?, ?, UUID())';
-        $this->getDatabase()->queryPrepared($sql, ['Test Role', $cat['cat_id']]);
-        $roleId = (int) $this->getDatabase()->lastInsertId();
-
-        $this->assertGreaterThan(0, $roleId);
+        $role = $fixture->createAndSaveRole('Test Role', $org['org_id']);
+        $roleId = $role['rol_id'];
 
         // Initially no members
         $this->assertEquals(0, $fixture->countRoleMemberships($roleId));
@@ -139,23 +129,19 @@ class RoleManagementTest extends DatabaseTestCase
     {
         $fixture = $this->getFixture();
         $org = $fixture->createAndSaveOrganization('Test Org');
-        $cat = $fixture->createAndSaveCategory('Roles', 'ROL', $org['org_id']);
 
         $names = [
             'Simple Role',
             'Role with Numbers 123',
             'Role (Special)',
-            'Role & More',
+            'Role / Slash',
         ];
 
-        $sql = 'INSERT INTO ' . TBL_ROLES . ' (rol_name, rol_cat_id, rol_uuid) VALUES (?, ?, UUID())';
-
         foreach ($names as $name) {
-            $this->getDatabase()->queryPrepared($sql, [$name, $cat['cat_id']]);
-            $roleId = (int) $this->getDatabase()->lastInsertId();
+            $role = $fixture->createAndSaveRole($name, $org['org_id']);
 
-            $roleData = $fixture->getRoleById($roleId);
-            $this->assertEquals($name, $roleData['rol_name']);
+            // the name has to survive the round trip through the database unchanged
+            $this->assertEquals($name, $fixture->getRoleById($role['rol_id'])['rol_name']);
         }
     }
 }

@@ -59,6 +59,16 @@ class AdmidioTestFixture
         $org->setValue('org_shortname', $shortName);
         $org->save();
 
+        // org_shortname is varchar(10) with a unique index, and the collation is case insensitive,
+        // so a name that is too long or collides with an existing org leaves the record unsaved.
+        // Without this check the test would go on with org_id 0 and assert against nothing.
+        if ((int) $org->getValue('org_id') === 0) {
+            throw new \RuntimeException(
+                'Organization "' . $name . '" (' . $shortName . ') was not saved. The short name must be at most '
+                . '10 characters and unique, note that the installed test organization already uses "TEST".'
+            );
+        }
+
         $orgData = [
             'org_id' => (int) $org->getValue('org_id'),
             'org_uuid' => $org->getValue('org_uuid'),
@@ -106,6 +116,8 @@ class AdmidioTestFixture
     public function createAndSaveRole(string $name, int $orgId, string $description = ''): array
     {
         $role = new Role($this->gDb);
+        // no $gCurrentUser is logged in during tests, so the category edit-rights check has to be bypassed
+        $role->saveChangesWithoutRights();
         $role->setValue('rol_name', $name);
         $role->setValue('rol_description', $description);
         $role->setValue('rol_cat_id', $this->getDefaultRoleCategory($orgId));
@@ -117,6 +129,36 @@ class AdmidioTestFixture
             'rol_name' => $role->getValue('rol_name'),
             'rol_description' => $role->getValue('rol_description'),
             'org_id' => $orgId,
+        ];
+
+        $this->createdIds['roles'][] = $roleData['rol_id'];
+        return $roleData;
+    }
+
+    /**
+     * Create and save a role in a specific category
+     *
+     * @param string $name Role name
+     * @param int $catId Category ID the role belongs to
+     * @param string $description Role description
+     * @return array Role data with rol_id
+     */
+    public function createAndSaveRoleInCategory(string $name, int $catId, string $description = ''): array
+    {
+        $role = new Role($this->gDb);
+        // no $gCurrentUser is logged in during tests, so the category edit-rights check has to be bypassed
+        $role->saveChangesWithoutRights();
+        $role->setValue('rol_name', $name);
+        $role->setValue('rol_description', $description);
+        $role->setValue('rol_cat_id', $catId);
+        $role->save();
+
+        $roleData = [
+            'rol_id' => (int) $role->getValue('rol_id'),
+            'rol_uuid' => $role->getValue('rol_uuid'),
+            'rol_name' => $role->getValue('rol_name'),
+            'rol_description' => $role->getValue('rol_description'),
+            'cat_id' => $catId,
         ];
 
         $this->createdIds['roles'][] = $roleData['rol_id'];
@@ -329,5 +371,31 @@ class AdmidioTestFixture
         $sql = 'SELECT 1 FROM ' . TBL_MEMBERS . ' WHERE mem_id = ?';
         $result = $this->gDb->queryPrepared($sql, [$memId]);
         return $result->rowCount() > 0;
+    }
+
+    /**
+     * Get organization from database by ID
+     *
+     * @param int $orgId Organization ID
+     * @return array Organization data
+     */
+    public function getOrganizationById(int $orgId): array
+    {
+        $sql = 'SELECT * FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?';
+        $result = $this->gDb->queryPrepared($sql, [$orgId]);
+        return $result->fetch() ?: [];
+    }
+
+    /**
+     * Get category from database by ID
+     *
+     * @param int $catId Category ID
+     * @return array Category data
+     */
+    public function getCategoryById(int $catId): array
+    {
+        $sql = 'SELECT * FROM ' . TBL_CATEGORIES . ' WHERE cat_id = ?';
+        $result = $this->gDb->queryPrepared($sql, [$catId]);
+        return $result->fetch() ?: [];
     }
 }

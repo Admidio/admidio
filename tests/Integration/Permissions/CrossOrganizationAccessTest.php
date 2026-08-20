@@ -18,6 +18,20 @@ class CrossOrganizationAccessTest extends DatabaseTestCase
     }
 
     /**
+     * Read the category ids an organization sees, which are its own plus the global ones.
+     *
+     * @return int[]
+     */
+    private function visibleCategoryIds(int $orgId, string $type): array
+    {
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . '
+                 WHERE cat_type = ? AND (cat_org_id = ? OR cat_org_id IS NULL)';
+        $result = $this->getDatabase()->queryPrepared($sql, [$type, $orgId]);
+
+        return array_map('intval', array_column($result->fetchAll(), 'cat_id'));
+    }
+
+    /**
      * Test categories are isolated between organizations
      *
      * @testdox Categories in Org1 don't appear in Org2's category list
@@ -28,20 +42,26 @@ class CrossOrganizationAccessTest extends DatabaseTestCase
         $org1 = $fixture->createAndSaveOrganization('Org 1', 'org1');
         $org2 = $fixture->createAndSaveOrganization('Org 2', 'org2');
 
-        // Create categories in each org
-        $cat1_org1 = $fixture->createAndSaveCategory('Events', 'EVT', $org1['org_id']);
-        $cat1_org2 = $fixture->createAndSaveCategory('Events', 'EVT', $org2['org_id']);
+        // same category name in each org
+        $catOrg1 = $fixture->createAndSaveCategory('Events', 'EVT', $org1['org_id']);
+        $catOrg2 = $fixture->createAndSaveCategory('Events', 'EVT', $org2['org_id']);
 
-        // Verify they're different categories despite same name
-        $this->assertNotEquals($cat1_org1['cat_id'], $cat1_org2['cat_id']);
-        $this->assertEquals($org1['org_id'], $cat1_org1['org_id']);
-        $this->assertEquals($org2['org_id'], $cat1_org2['org_id']);
+        $this->assertNotEquals($catOrg1['cat_id'], $catOrg2['cat_id']);
+
+        // each org's list contains its own category and not the other one's
+        $org1Visible = $this->visibleCategoryIds($org1['org_id'], 'EVT');
+        $this->assertContains($catOrg1['cat_id'], $org1Visible);
+        $this->assertNotContains($catOrg2['cat_id'], $org1Visible);
+
+        $org2Visible = $this->visibleCategoryIds($org2['org_id'], 'EVT');
+        $this->assertContains($catOrg2['cat_id'], $org2Visible);
+        $this->assertNotContains($catOrg1['cat_id'], $org2Visible);
     }
 
     /**
-     * Test users can be created globally and assigned to different orgs
+     * Test one user can hold memberships in roles of several organizations
      *
-     * @testdox Single user can interact with multiple organizations
+     * @testdox Single user can hold roles in multiple organizations
      */
     public function testUsersAreGlobalAcrossOrgs(): void
     {
@@ -49,19 +69,30 @@ class CrossOrganizationAccessTest extends DatabaseTestCase
         $org1 = $fixture->createAndSaveOrganization('Org 1', 'org1');
         $org2 = $fixture->createAndSaveOrganization('Org 2', 'org2');
 
-        // Create shared user (not org-scoped)
+        // the user record itself is not org-scoped, the membership is
         $user = $fixture->createAndSaveUser('shareduser', 'shared@example.local');
 
-        // Verify user exists as global entity
-        $foundUser = $fixture->getUserById($user['usr_id']);
-        $this->assertNotEmpty($foundUser);
-        $this->assertEquals('shareduser', $foundUser['usr_login_name']);
+        $role1 = $fixture->createAndSaveRole('Members Org1', $org1['org_id']);
+        $role2 = $fixture->createAndSaveRole('Members Org2', $org2['org_id']);
+
+        $mem1 = $fixture->assignUserToRole($user['usr_id'], $role1['rol_id']);
+        $mem2 = $fixture->assignUserToRole($user['usr_id'], $role2['rol_id']);
+
+        $this->assertTrue($fixture->membershipExists($mem1['mem_id']));
+        $this->assertTrue($fixture->membershipExists($mem2['mem_id']));
+
+        // the very same user record backs both memberships
+        $sql = 'SELECT DISTINCT mem_usr_id FROM ' . TBL_MEMBERS . ' WHERE mem_rol_id IN (?, ?)';
+        $result = $this->getDatabase()->queryPrepared($sql, [$role1['rol_id'], $role2['rol_id']]);
+        $userIds = array_map('intval', array_column($result->fetchAll(), 'mem_usr_id'));
+
+        $this->assertEquals([$user['usr_id']], $userIds);
     }
 
     /**
      * Test global categories are visible to all orgs
      *
-     * @testdox Global categories (org_id=0) are accessible from any org
+     * @testdox Global categories (cat_org_id IS NULL) are visible from every org
      */
     public function testGlobalCategoriesAreShared(): void
     {
@@ -69,21 +100,18 @@ class CrossOrganizationAccessTest extends DatabaseTestCase
         $org1 = $fixture->createAndSaveOrganization('Org 1', 'org1');
         $org2 = $fixture->createAndSaveOrganization('Org 2', 'org2');
 
-        // Create global category (org_id = 0)
+        // a category created without an org id is global
         $globalCat = $fixture->createAndSaveCategory('Global Events', 'EVT', 0);
-
-        // Create org-specific categories
         $orgCat1 = $fixture->createAndSaveCategory('Org1 Events', 'EVT', $org1['org_id']);
-        $orgCat2 = $fixture->createAndSaveCategory('Org2 Events', 'EVT', $org2['org_id']);
 
-        // Verify scope
-        $this->assertEquals(0, $globalCat['org_id']);
-        $this->assertEquals($org1['org_id'], $orgCat1['org_id']);
-        $this->assertEquals($org2['org_id'], $orgCat2['org_id']);
+        // the global one really has no org in the database
+        $stored = $fixture->getCategoryById($globalCat['cat_id']);
+        $this->assertNull($stored['cat_org_id']);
 
-        // All should exist as separate entities
-        $this->assertNotEquals($globalCat['cat_id'], $orgCat1['cat_id']);
-        $this->assertNotEquals($globalCat['cat_id'], $orgCat2['cat_id']);
+        // and it shows up for both organizations, while the org-scoped one does not
+        $this->assertContains($globalCat['cat_id'], $this->visibleCategoryIds($org1['org_id'], 'EVT'));
+        $this->assertContains($globalCat['cat_id'], $this->visibleCategoryIds($org2['org_id'], 'EVT'));
+        $this->assertNotContains($orgCat1['cat_id'], $this->visibleCategoryIds($org2['org_id'], 'EVT'));
     }
 
     /**
@@ -97,26 +125,19 @@ class CrossOrganizationAccessTest extends DatabaseTestCase
         $org1 = $fixture->createAndSaveOrganization('Isolated Org 1', 'iso1');
         $org2 = $fixture->createAndSaveOrganization('Isolated Org 2', 'iso2');
 
-        // Create separate data in each org
         $cat1 = $fixture->createAndSaveCategory('Org1 Cat', 'EVT', $org1['org_id']);
         $cat2 = $fixture->createAndSaveCategory('Org2 Cat', 'EVT', $org2['org_id']);
 
-        // Query org1 categories (simplified - just verify they exist independently)
-        $sql = 'SELECT COUNT(*) as count FROM ' . TBL_CATEGORIES . ' WHERE cat_org_id = ? AND cat_type = ?';
+        // a strictly org-scoped query returns exactly the org's own category
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_org_id = ? AND cat_type = ?';
+
         $result = $this->getDatabase()->queryPrepared($sql, [$org1['org_id'], 'EVT']);
-        $row = $result->fetch();
-        $org1Count = (int) $row['count'];
+        $org1Ids = array_map('intval', array_column($result->fetchAll(), 'cat_id'));
+        $this->assertEquals([$cat1['cat_id']], $org1Ids);
 
         $result = $this->getDatabase()->queryPrepared($sql, [$org2['org_id'], 'EVT']);
-        $row = $result->fetch();
-        $org2Count = (int) $row['count'];
-
-        // Each org has at least its own category
-        $this->assertGreaterThanOrEqual(1, $org1Count);
-        $this->assertGreaterThanOrEqual(1, $org2Count);
-
-        // Verify they're tracking their own data
-        $this->assertNotEquals($cat1['cat_id'], $cat2['cat_id']);
+        $org2Ids = array_map('intval', array_column($result->fetchAll(), 'cat_id'));
+        $this->assertEquals([$cat2['cat_id']], $org2Ids);
     }
 
     /**
@@ -128,25 +149,29 @@ class CrossOrganizationAccessTest extends DatabaseTestCase
     {
         $fixture = $this->getFixture();
 
-        // Create multiple organizations with similar structure
-        $orgs = [];
+        $orgIds = [];
+        $catIds = [];
+
+        // three organizations with an identically named category each
         for ($i = 1; $i <= 3; $i++) {
             $org = $fixture->createAndSaveOrganization("Company $i", "company$i");
-            $orgs[$i] = $org;
+            $cat = $fixture->createAndSaveCategory('Events', 'EVT', $org['org_id']);
 
-            // Create users in each org
-            $user = $fixture->createAndSaveUser("user$i", "user$i@example.local");
-
-            // Create categories in each org
-            $cat = $fixture->createAndSaveCategory("Events", 'EVT', $org['org_id']);
-
-            // Verify structure
-            $this->assertEquals($org['org_id'], $orgs[$i]['org_id']);
+            $orgIds[] = $org['org_id'];
+            $catIds[$org['org_id']] = $cat['cat_id'];
         }
 
-        // Verify all orgs exist independently
-        $this->assertNotEquals($orgs[1]['org_id'], $orgs[2]['org_id']);
-        $this->assertNotEquals($orgs[2]['org_id'], $orgs[3]['org_id']);
-        $this->assertNotEquals($orgs[1]['org_id'], $orgs[3]['org_id']);
+        $this->assertCount(3, array_unique($orgIds));
+        $this->assertCount(3, array_unique($catIds));
+
+        // despite the shared name, each org resolves to its own category
+        foreach ($catIds as $orgId => $catId) {
+            $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . '
+                     WHERE cat_org_id = ? AND cat_type = ? AND cat_name = ?';
+            $result = $this->getDatabase()->queryPrepared($sql, [$orgId, 'EVT', 'Events']);
+            $found = array_map('intval', array_column($result->fetchAll(), 'cat_id'));
+
+            $this->assertEquals([$catId], $found);
+        }
     }
 }

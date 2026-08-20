@@ -1,8 +1,9 @@
 <?php
 /**
- * Category Hierarchy Tests
+ * Category Tests
  *
- * Tests category parent-child relationships and hierarchy management.
+ * Tests category creation, typing and organization scoping.
+ * Admidio categories are a flat, ordered list per type, they have no parent-child hierarchy.
  */
 
 namespace Admidio\Tests\Integration\Categories;
@@ -32,15 +33,10 @@ class CategoryHierarchyTest extends DatabaseTestCase
         $roleCat = $fixture->createAndSaveCategory('Roles', 'ROL', $org['org_id']);
         $announceCat = $fixture->createAndSaveCategory('Announcements', 'ANN', $org['org_id']);
 
-        // Verify types are correct
-        $this->assertEquals('EVT', $eventCat['cat_type']);
-        $this->assertEquals('ROL', $roleCat['cat_type']);
-        $this->assertEquals('ANN', $announceCat['cat_type']);
-
-        // Verify all exist
-        $this->assertNotEmpty($eventCat['cat_id']);
-        $this->assertNotEmpty($roleCat['cat_id']);
-        $this->assertNotEmpty($announceCat['cat_id']);
+        // the type has to be the stored one, not the one the fixture echoed back
+        $this->assertEquals('EVT', $fixture->getCategoryById($eventCat['cat_id'])['cat_type']);
+        $this->assertEquals('ROL', $fixture->getCategoryById($roleCat['cat_id'])['cat_type']);
+        $this->assertEquals('ANN', $fixture->getCategoryById($announceCat['cat_id'])['cat_type']);
     }
 
     /**
@@ -57,15 +53,17 @@ class CategoryHierarchyTest extends DatabaseTestCase
         $cat2 = $fixture->createAndSaveCategory('Events 2', 'EVT', $org['org_id']);
         $cat3 = $fixture->createAndSaveCategory('Events 3', 'EVT', $org['org_id']);
 
-        // Verify all are unique
-        $this->assertNotEquals($cat1['cat_id'], $cat2['cat_id']);
-        $this->assertNotEquals($cat2['cat_id'], $cat3['cat_id']);
-        $this->assertNotEquals($cat1['cat_id'], $cat3['cat_id']);
+        $ids = [$cat1['cat_id'], $cat2['cat_id'], $cat3['cat_id']];
+        $this->assertCount(3, array_unique($ids));
 
-        // Verify all have same type
-        $this->assertEquals('EVT', $cat1['cat_type']);
-        $this->assertEquals('EVT', $cat2['cat_type']);
-        $this->assertEquals('EVT', $cat3['cat_type']);
+        // all three are stored, of the same type, under the same organization
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_org_id = ? AND cat_type = ?';
+        $result = $this->getDatabase()->queryPrepared($sql, [$org['org_id'], 'EVT']);
+        $stored = array_map('intval', array_column($result->fetchAll(), 'cat_id'));
+
+        sort($ids);
+        sort($stored);
+        $this->assertEquals($ids, $stored);
     }
 
     /**
@@ -81,14 +79,16 @@ class CategoryHierarchyTest extends DatabaseTestCase
         $cat1 = $fixture->createAndSaveCategory('Cat1', 'EVT', $org['org_id']);
         $cat2 = $fixture->createAndSaveCategory('Cat2', 'EVT', $org['org_id']);
 
-        // Verify UUIDs are unique
-        $this->assertNotEmpty($cat1['cat_uuid']);
-        $this->assertNotEmpty($cat2['cat_uuid']);
-        $this->assertNotEquals($cat1['cat_uuid'], $cat2['cat_uuid']);
+        $uuid1 = $fixture->getCategoryById($cat1['cat_id'])['cat_uuid'];
+        $uuid2 = $fixture->getCategoryById($cat2['cat_id'])['cat_uuid'];
 
-        // Verify UUID format (basic check)
-        $this->assertMatchesRegularExpression('/^[a-f0-9\-]{36}$/', $cat1['cat_uuid']);
-        $this->assertMatchesRegularExpression('/^[a-f0-9\-]{36}$/', $cat2['cat_uuid']);
+        // Verify UUIDs are unique
+        $this->assertNotEquals($uuid1, $uuid2);
+
+        // Verify UUID format
+        $uuidPattern = '/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i';
+        $this->assertMatchesRegularExpression($uuidPattern, $uuid1);
+        $this->assertMatchesRegularExpression($uuidPattern, $uuid2);
     }
 
     /**
@@ -104,16 +104,15 @@ class CategoryHierarchyTest extends DatabaseTestCase
         // Create org-scoped category
         $orgCat = $fixture->createAndSaveCategory('Org Events', 'EVT', $org['org_id']);
 
-        // Create global category (org_id = 0)
+        // Create global category (no organization)
         $globalCat = $fixture->createAndSaveCategory('Global Events', 'EVT', 0);
 
-        // Verify scoping
-        $this->assertEquals($org['org_id'], $orgCat['org_id']);
-        $this->assertEquals(0, $globalCat['org_id']);
-
-        // Verify both exist
-        $this->assertNotEmpty($orgCat['cat_id']);
-        $this->assertNotEmpty($globalCat['cat_id']);
+        // the scope has to be what the database stores
+        $this->assertEquals(
+            $org['org_id'],
+            (int) $fixture->getCategoryById($orgCat['cat_id'])['cat_org_id']
+        );
+        $this->assertNull($fixture->getCategoryById($globalCat['cat_id'])['cat_org_id']);
     }
 
     /**
@@ -134,7 +133,9 @@ class CategoryHierarchyTest extends DatabaseTestCase
 
         foreach ($names as $name) {
             $cat = $fixture->createAndSaveCategory($name, 'EVT', $org['org_id']);
-            $this->assertEquals($name, $cat['cat_name']);
+
+            // the name has to survive the round trip through the database unchanged
+            $this->assertEquals($name, $fixture->getCategoryById($cat['cat_id'])['cat_name']);
         }
     }
 }
