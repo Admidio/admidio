@@ -374,6 +374,34 @@ class AdmidioTestFixture
     }
 
     /**
+     * Mark user as valid
+     *
+     * @param int $usrId User ID
+     * @return void
+     */
+    public function markUserAsValid(int $usrId): void
+    {
+        $this->setUserValidity($usrId, true);
+    }
+
+    /**
+     * Set the usr_valid flag of an existing user
+     *
+     * @param int $usrId User ID
+     * @param bool $valid Validity flag to store
+     * @return void
+     */
+    public function setUserValidity(int $usrId, bool $valid): void
+    {
+        $user = new User($this->gDb);
+        $user->readDataById($usrId);
+        // no $gCurrentUser is logged in during tests, so the edit-rights check has to be bypassed
+        $user->saveChangesWithoutRights();
+        $user->setValue('usr_valid', $valid ? 1 : 0);
+        $user->save();
+    }
+
+    /**
      * Get organization from database by ID
      *
      * @param int $orgId Organization ID
@@ -397,5 +425,22 @@ class AdmidioTestFixture
         $sql = 'SELECT * FROM ' . TBL_CATEGORIES . ' WHERE cat_id = ?';
         $result = $this->gDb->queryPrepared($sql, [$catId]);
         return $result->fetch() ?: [];
+    }
+
+    /**
+     * Check if user is valid
+     *
+     * @param int $usrId User ID
+     * @return bool True if user is valid
+     */
+    public function isUserValid(int $usrId): bool
+    {
+        $sql = 'SELECT usr_valid FROM ' . TBL_USERS . ' WHERE usr_id = ?';
+        $result = $this->gDb->queryPrepared($sql, [$usrId]);
+        if ($result && $result->rowCount() > 0) {
+            $row = $result->fetch();
+            return (bool) ($row['usr_valid'] ?? false);
+        }
+        return false;
     }
 }
