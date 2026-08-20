@@ -185,6 +185,122 @@ class RoleMembershipRightsTest extends DatabaseTestCase
     }
 
     /**
+     * Test that a group leader may administrate the members of their own role.
+     * hasRightEditProfile() accepts a leader whose rol_leader_rights allow editing, but only for
+     * users that are plain members of a role the leader leads.
+     *
+     * @testdox A group leader may edit the profiles of the members of their role
+     */
+    public function testLeaderMayEditMembersOfTheirOwnRole(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Leader Org', 'leadedit');
+        $role = $fixture->createAndSaveRoleWithRights(
+            'Led Role',
+            $org['org_id'],
+            ['rol_leader_rights' => Role::ROLE_LEADER_MEMBERS_EDIT]
+        );
+
+        $leader = $fixture->createAndSaveUser('editleader', 'el@example.local');
+        $member = $fixture->createAndSaveUser('editmember', 'em@example.local');
+
+        $fixture->assignUserToRolePeriod($leader['usr_id'], $role['rol_id'], date('Y-m-d'), '9999-12-31', true);
+        $fixture->assignUserToRole($member['usr_id'], $role['rol_id']);
+
+        $leaderUser = $this->loadUserInOrganization($leader['usr_id'], $org['org_id']);
+        $memberUser = $this->loadUserInOrganization($member['usr_id'], $org['org_id']);
+
+        $this->assertTrue($leaderUser->hasRightEditProfile($memberUser));
+
+        // the leader holds no module wide right, the permission is limited to their own group
+        $this->assertFalse($leaderUser->isAdministratorUsers());
+    }
+
+    /**
+     * Test that the delegated right stops at the boundary of the led role
+     *
+     * @testdox A group leader may not edit the profile of someone outside their role
+     */
+    public function testLeaderMayNotEditMembersOfAnotherRole(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Leader Org', 'leadedit');
+        $ledRole = $fixture->createAndSaveRoleWithRights(
+            'Led Role',
+            $org['org_id'],
+            ['rol_leader_rights' => Role::ROLE_LEADER_MEMBERS_EDIT]
+        );
+        $otherRole = $fixture->createAndSaveRoleWithRights('Other Role', $org['org_id']);
+
+        $leader = $fixture->createAndSaveUser('boundleader', 'bl@example.local');
+        $outsider = $fixture->createAndSaveUser('boundoutsider', 'bo@example.local');
+
+        $fixture->assignUserToRolePeriod($leader['usr_id'], $ledRole['rol_id'], date('Y-m-d'), '9999-12-31', true);
+        $fixture->assignUserToRole($outsider['usr_id'], $otherRole['rol_id']);
+
+        $leaderUser = $this->loadUserInOrganization($leader['usr_id'], $org['org_id']);
+        $outsiderUser = $this->loadUserInOrganization($outsider['usr_id'], $org['org_id']);
+
+        $this->assertFalse($leaderUser->hasRightEditProfile($outsiderUser));
+    }
+
+    /**
+     * Test that a leader without edit rights may not edit their members
+     *
+     * @testdox A leader whose role grants no edit rights may not edit its members
+     */
+    public function testLeaderWithoutEditRightsMayNotEditMembers(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Leader Org', 'leadedit');
+
+        // assigning members is allowed, editing them is not
+        $role = $fixture->createAndSaveRoleWithRights(
+            'Led Role',
+            $org['org_id'],
+            ['rol_leader_rights' => Role::ROLE_LEADER_MEMBERS_ASSIGN]
+        );
+
+        $leader = $fixture->createAndSaveUser('assignleader', 'al@example.local');
+        $member = $fixture->createAndSaveUser('assignmember', 'am@example.local');
+
+        $fixture->assignUserToRolePeriod($leader['usr_id'], $role['rol_id'], date('Y-m-d'), '9999-12-31', true);
+        $fixture->assignUserToRole($member['usr_id'], $role['rol_id']);
+
+        $leaderUser = $this->loadUserInOrganization($leader['usr_id'], $org['org_id']);
+        $memberUser = $this->loadUserInOrganization($member['usr_id'], $org['org_id']);
+
+        // isLeaderOfRole reads the same cache as isMemberOfRole and does not fill it either
+        $leaderUser->checkRolesRight();
+
+        $this->assertTrue($leaderUser->isLeaderOfRole($role['rol_id']));
+        $this->assertFalse($leaderUser->hasRightEditProfile($memberUser));
+    }
+
+    /**
+     * Test that the leader flag is reported for the led role only
+     *
+     * @testdox isLeaderOfRole reports the role the user leads
+     */
+    public function testIsLeaderOfRoleReportsTheLedRole(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Leader Org', 'leadflag');
+        $ledRole = $fixture->createAndSaveRoleWithRights('Led Role', $org['org_id']);
+        $plainRole = $fixture->createAndSaveRoleWithRights('Plain Role', $org['org_id']);
+
+        $user = $fixture->createAndSaveUser('flagleader', 'fl@example.local');
+        $fixture->assignUserToRolePeriod($user['usr_id'], $ledRole['rol_id'], date('Y-m-d'), '9999-12-31', true);
+        $fixture->assignUserToRole($user['usr_id'], $plainRole['rol_id']);
+
+        $leaderUser = $this->loadUserInOrganization($user['usr_id'], $org['org_id']);
+        $leaderUser->checkRolesRight();
+
+        $this->assertTrue($leaderUser->isLeaderOfRole($ledRole['rol_id']));
+        $this->assertFalse($leaderUser->isLeaderOfRole($plainRole['rol_id']));
+    }
+
+    /**
      * Test that removing the membership removes the right
      *
      * @testdox Ending a membership removes the rights it granted
