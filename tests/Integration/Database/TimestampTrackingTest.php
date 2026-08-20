@@ -50,8 +50,9 @@ class TimestampTrackingTest extends DatabaseTestCase
 
     /**
      * Test that changing a record fills the change fingerprint.
-     * Entity::save() writes cat_timestamp_change and cat_usr_id_change only when a user is logged
-     * in, so the test has to provide one.
+     * Entity::save() deliberately skips the change fingerprint when the same user edits their own
+     * new record within 15 minutes, so the change has to be made by a different user than the one
+     * that created the record.
      *
      * @testdox Updating a category records who changed it and when
      */
