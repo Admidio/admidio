@@ -30,7 +30,6 @@
 use Admidio\Categories\Entity\Category;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
-use Admidio\Events\Service\EventService;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -93,6 +92,8 @@ try {
     }
 
     if ($getMode === 'edit') {
+        // Create a new event or edit an existing event
+
         // save the country only together with the location
         if (strlen($_POST['dat_location']) === 0) {
             $_POST['dat_country'] = null;
@@ -102,9 +103,255 @@ try {
         $eventEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $eventEditForm->validate($_POST);
 
-        $eventService = new EventService($gDb);
-        $eventService->saveData($getCopy ? (string)$originalEventUuid : $getEventUuid, $formValues, $getUserUuid, $getCopy);
+        if ($formValues['event_participation_possible'] == 1
+            && (!isset($formValues['adm_event_participation_right']) || array_count_values($formValues['adm_event_participation_right']) == 0)) {
+            throw new Exception('SYS_FIELD_EMPTY', array('SYS_REGISTRATION_POSSIBLE_FOR'));
+        }
 
+        $calendar = new Category($gDb);
+        $calendar->readDataByUuid($formValues['cat_uuid']);
+        $formValues['dat_cat_id'] = $calendar->getValue('cat_id');
+
+        if ($formValues['dat_all_day'] === '1') {
+            $formValues['event_from_time'] = '00:00';
+            $formValues['event_to_time'] = '00:00';
+        }
+
+        // ------------------------------------------------
+        // Check valid format of date and time input
+        // ------------------------------------------------
+
+        $startDateTime = DateTime::createFromFormat('Y-m-d H:i', $formValues['event_from'] . ' ' . $formValues['event_from_time']);
+        if (!$startDateTime) {
+            // Error: now check if date format or time format was wrong and show message
+            $startDateTime = DateTime::createFromFormat('Y-m-d', $formValues['event_from']);
+
+            if (!$startDateTime) {
+                throw new Exception('SYS_DATE_INVALID', array('SYS_START', 'YYYY-MM-DD'));
+            } else {
+                throw new Exception('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_START'), 'HH:ii'));
+            }
+        } else {
+            // now write date and time with database format to date object
+            $formValues['dat_begin'] = $formValues['event_from'] . ' ' . $formValues['event_from_time'];
+        }
+
+        // if date-to is not filled then take date-from
+        if (strlen($formValues['event_to']) === 0) {
+            $formValues['event_to'] = $formValues['event_from'];
+        }
+        if (strlen($formValues['event_to_time']) === 0) {
+            $formValues['event_to_time'] = $formValues['event_from_time'];
+        }
+
+        $endDateTime = DateTime::createFromFormat('Y-m-d H:i', $formValues['event_to'] . ' ' . $formValues['event_to_time']);
+
+        if (!$endDateTime) {
+            // Error: now check if date format or time format was wrong and show message
+            $endDateTime = DateTime::createFromFormat('Y-m-d', $formValues['event_to']);
+
+            if (!$endDateTime) {
+                throw new Exception('SYS_DATE_INVALID', array('SYS_END', 'YYYY-MM-DD'));
+            } else {
+                throw new Exception('SYS_TIME_INVALID', array($gL10n->get('SYS_TIME') . ' ' . $gL10n->get('SYS_END'), 'HH:ii'));
+            }
+        } else {
+            // now write date and time with database format to date object
+            $formValues['dat_end'] = $formValues['event_to'] . ' ' . $formValues['event_to_time'];
+        }
+
+        // DateTo should be greater than DateFrom (Timestamp must be less)
+        if ($startDateTime > $endDateTime) {
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
+        }
+
+        if (!isset($formValues['dat_room_id'])) {
+            $formValues['dat_room_id'] = 0;
+        }
+
+        if (!is_numeric($formValues['dat_max_members'])) {
+            $formValues['dat_max_members'] = 0;
+        } else {
+            // First check the current participants to prevent invalid reduction of the limit
+            $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
+            $totalMembers = $participants->getCount();
+
+            if ($formValues['dat_max_members'] < $totalMembers && $formValues['dat_max_members'] > 0) {
+                // minimum value must fit to current number of participants
+                $formValues['dat_max_members'] = $totalMembers;
+            }
+        }
+
+        if ($formValues['event_participation_possible'] == 1 && (string)$formValues['event_deadline'] !== '') {
+            $formValues['dat_deadline'] = $formValues['event_deadline'] . ' ' . ((string)$formValues['event_deadline_time'] === '' ? '00:00' : $formValues['event_deadline_time']);
+        } else {
+            $formValues['dat_deadline'] = null;
+        }
+
+        if (isset($formValues['adm_event_participation_right'])) {
+            // save changed roles rights of the category
+            $rightCategoryView = new RolesRights($gDb, 'category_view', (int)$calendar->getValue('cat_id'));
+
+            // if roles for visibility are assigned to the category than check if the assigned roles of event participation
+            // are within the visibility roles set otherwise show error
+            if (count($rightCategoryView->getRolesIds()) > 0
+                && count(array_intersect(array_map('intval', $formValues['adm_event_participation_right']), $rightCategoryView->getRolesIds())) !== count($formValues['adm_event_participation_right'])) {
+                throw new Exception('SYS_EVENT_CATEGORIES_ROLES_DIFFERENT', array(implode(', ', $rightCategoryView->getRolesNames())));
+            }
+        }
+
+        // ------------------------------------------------
+        // Check if the selected room is already reserved for the appointment
+        // ------------------------------------------------
+
+        if ($gSettingsManager->getBool('events_rooms_enabled')) {
+            $eventRoomId = (int)$formValues['dat_room_id'];
+
+            if ($eventRoomId > 0) {
+                $sql = 'SELECT COUNT(*) AS count
+                      FROM ' . TBL_EVENTS . '
+                     WHERE dat_begin  <= ? -- $endDateTime->format(\'Y-m-d H:i:s\')
+                       AND dat_end    >= ? -- $startDateTime->format(\'Y-m-d H:i:s\')
+                       AND dat_room_id = ? -- $datRoomId
+                       AND dat_uuid    <> ? -- $getDateUuid';
+                $queryParams = array(
+                    $endDateTime->format('Y-m-d H:i:s'),
+                    $startDateTime->format('Y-m-d H:i:s'),
+                    $eventRoomId,
+                    $getEventUuid
+                );
+                $eventsStatement = $gDb->queryPrepared($sql, $queryParams);
+
+                if ($eventsStatement->fetchColumn()) {
+                    throw new Exception('SYS_ROOM_RESERVED');
+                }
+
+                $event->setValue('dat_room_id', $eventRoomId);
+                $room = new Room($gDb);
+                $room->readDataById($eventRoomId);
+                $number = (int)$room->getValue('room_capacity') + (int)$room->getValue('room_overhang');
+                $event->setValue('dat_max_members', $number);
+                $eventMaxMembers = (int)$formValues['dat_max_members'];
+
+                if ($eventMaxMembers > 0 && $eventMaxMembers < $number) {
+                    $event->setValue('dat_max_members', $eventMaxMembers);
+                }
+                // Raumname für Benachrichtigung
+                $room = $room->getValue('room_name');
+            }
+        }
+
+        // write form values into the event object
+        foreach ($formValues as $key => $value) {
+            if (str_starts_with($key, 'dat_')) {
+                $event->setValue($key, $value);
+            }
+        }
+
+        $gDb->startTransaction();
+        if ($event->save()) {
+            // Notification an email for new or changed entries to all members of the notification role
+            $event->sendNotification();
+        }
+
+        // save changed roles rights of the category
+        if (isset($formValues['adm_event_participation_right'])) {
+            $eventParticipationRoles = array_map('intval', $formValues['adm_event_participation_right']);
+        } else {
+            $eventParticipationRoles = array();
+        }
+
+        $rightEventParticipation = new RolesRights($gDb, 'event_participation', (int)$event->getValue('dat_id'));
+        $rightEventParticipation->saveRoles($eventParticipationRoles);
+
+        // ----------------------------------------------
+        // if necessary write away role for participation
+        // ----------------------------------------------
+
+        if ($formValues['event_participation_possible'] == 1) {
+            if ($event->getValue('dat_rol_id') > 0) {
+                // if event exists, and you could register to this event then we must check
+                // if the data of the role must be changed
+                $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
+
+                $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
+                $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
+                // role members are allowed to view lists
+                $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_LEADERS);
+                // role members are allowed to send mail to this role
+                $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_NOBODY);
+                $role->setValue('rol_max_members', (int)$event->getValue('dat_max_members'));
+
+                $role->save();
+            } else {
+                // create role for participation
+                if ($getCopy) {
+                    // copy original role with their settings
+                    $sql = 'SELECT dat_rol_id
+                              FROM ' . TBL_EVENTS . '
+                             WHERE dat_uuid = ?';
+                    $pdoStatement = $gDb->queryPrepared($sql, array($originalEventUuid));
+
+                    $role = new Role($gDb, (int)$pdoStatement->fetchColumn());
+                    $role->setNewRecord();
+                } else {
+                    // Read category for event participation
+                    $sql = 'SELECT cat_id
+                              FROM ' . TBL_CATEGORIES . '
+                             WHERE cat_name_intern = \'EVENTS\'
+                               AND cat_org_id = ?';
+                    $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
+                    if (!$row = $pdoStatement->fetch()) {
+                        throw new Exception('No category found for event participation!');
+                    }
+                    $role = new Role($gDb);
+                    $role->setType(Role::ROLE_EVENT);
+
+                    // these are the default settings for an event role
+                    $role->setValue('rol_cat_id', (int)$row['cat_id']);
+                    // role members are allowed to view lists
+                    $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
+                    // role members are allowed to send mail to this role
+                    $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_NOBODY);
+                    $role->setValue('rol_leader_rights', Role::ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participants
+                    $role->setValue('rol_max_members', (int)$formValues['dat_max_members']);
+                }
+
+                $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline', 'database'));
+                $role->setValue('rol_description', substr($event->getValue('dat_description', 'database'), 0, 3999));
+
+                $role->save();
+
+                // match dat_rol_id (reference between event and role)
+                $event->setValue('dat_rol_id', (int)$role->getValue('rol_id'));
+                $event->save();
+            }
+
+            // check if flag is set that current user wants to participate as leader to the event
+            if (isset($formValues['event_current_user_assigned']) && $formValues['event_current_user_assigned'] == 1
+                && !$gCurrentUser->isLeaderOfRole((int)$event->getValue('dat_rol_id'))) {
+                // user wants to participate -> add him to event and set approval state to 2 ( user attend )
+                $role->startMembership($user->getValue('usr_id'), true);
+            } elseif (!isset($formValues['event_current_user_assigned'])
+                && $gCurrentUser->isMemberOfRole((int)$event->getValue('dat_rol_id'))) {
+                // user doesn't want to participate as leader -> remove his participation as leader from the event,
+                // don't remove the participation itself!
+                $member = new Membership($gDb);
+                $member->readDataByColumns(array('mem_rol_id' => (int)$role->getValue('rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+                $member->setValue('mem_leader', 0);
+                $member->save();
+            }
+        } else {
+            if ($event->getValue('dat_rol_id') > 0) {
+                // event participation was deselected -> delete flag in event and then delete role
+                $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
+                $event->setValue('dat_rol_id', '');
+                $event->save();
+                $role->delete();
+            }
+        }
+
+        $gDb->endTransaction();
         $gNavigation->deleteLastUrl();
 
         echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));

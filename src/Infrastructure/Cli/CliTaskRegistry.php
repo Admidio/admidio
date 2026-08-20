@@ -138,10 +138,11 @@ final class CliTaskRegistry
      * Register a module-specific command.
      *
      * A module provides modules/<module>/cli.php, which is loaded on every CLI invocation. It may
-     * only register commands of its own namespace, which is the name of its directory, and not one
-     * that Admidio core already uses. An acting user is always required, and before the callback
-     * runs the component is checked through Component::isAdministrable(), or through
-     * Component::isVisible() when the command declares ACCESS_VISIBLE.
+     * only register commands of its own namespace, which is the name of its directory or the
+     * singular form of it, and not one that Admidio core already uses. An acting user is always
+     * required, and before the callback runs the component is checked through
+     * Component::isAdministrable(), or through Component::isVisible() when the command declares
+     * ACCESS_VISIBLE.
      *
      * A failure while loading the file is reported but does not stop the other commands.
      *
@@ -321,12 +322,25 @@ final class CliTaskRegistry
                 );
             }
 
-            // A module owns exactly the namespace named after its directory.
-            if (!$core && self::$moduleContext !== null && $namespace !== self::$moduleContext) {
-                throw new InvalidArgumentException(
-                    'Module "' . self::$moduleContext . '" may only register commands of the "'
-                    . self::$moduleContext . ':" namespace, but tried to register "' . $taskName . '".'
-                );
+            if (!$core && self::$moduleContext !== null) {
+                /*
+                 * A module owns the namespace named after its directory. Module directories are
+                 * plural where the command namespace is singular - modules/events supplies
+                 * "event:list" - so the singular form belongs to the module as well.
+                 */
+                $ownNamespaces = array(self::$moduleContext);
+                $singular = preg_replace('/s$/', '', self::$moduleContext);
+                if ($singular !== self::$moduleContext) {
+                    $ownNamespaces[] = $singular;
+                }
+
+                if (!in_array($namespace, $ownNamespaces, true)) {
+                    throw new InvalidArgumentException(
+                        'Module "' . self::$moduleContext . '" may only register commands of the "'
+                        . implode(':" or "', $ownNamespaces) . ':" namespace, but tried to register "'
+                        . $taskName . '".'
+                    );
+                }
             }
 
             if ($core) {
