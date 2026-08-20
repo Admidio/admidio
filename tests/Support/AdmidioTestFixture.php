@@ -168,15 +168,15 @@ class AdmidioTestFixture
         }
 
         $membership = new Membership($this->gDb);
-        $membership->setValue('usr_id', $usrId);
-        $membership->setValue('rol_id', $rolId);
+        $membership->setValue('mem_usr_id', $usrId);
+        $membership->setValue('mem_rol_id', $rolId);
         $membership->setValue('mem_begin', $startDate);
         $membership->save();
 
         $memData = [
             'mem_id' => (int) $membership->getValue('mem_id'),
-            'usr_id' => $usrId,
-            'rol_id' => $rolId,
+            'mem_usr_id' => $usrId,
+            'mem_rol_id' => $rolId,
             'mem_begin' => $membership->getValue('mem_begin'),
             'mem_end' => $membership->getValue('mem_end'),
         ];
@@ -256,7 +256,8 @@ class AdmidioTestFixture
      */
     public function deleteUser(int $usrId): bool
     {
-        $user = new User($this->gDb, $usrId);
+        $user = new User($this->gDb);
+        $user->readDataById($usrId);
         if ($user->getValue('usr_id')) {
             $user->delete();
             return true;
@@ -272,10 +273,13 @@ class AdmidioTestFixture
      */
     public function countRoleMemberships(int $rolId): int
     {
-        $sql = 'SELECT COUNT(*) as count FROM ' . TBL_MEMBERS . ' WHERE rol_id = ?';
+        $sql = 'SELECT COUNT(*) as count FROM ' . TBL_MEMBERS . ' WHERE mem_rol_id = ?';
         $result = $this->gDb->queryPrepared($sql, [$rolId]);
-        $row = $result->fetch();
-        return (int) ($row['count'] ?? 0);
+        if ($result && $result->rowCount() > 0) {
+            $row = $result->fetch();
+            return (int) ($row['count'] ?? 0);
+        }
+        return 0;
     }
 
     /**
@@ -286,9 +290,9 @@ class AdmidioTestFixture
      */
     public function getRoleMemberships(int $rolId): array
     {
-        $sql = 'SELECT * FROM ' . TBL_MEMBERS . ' WHERE rol_id = ?';
+        $sql = 'SELECT * FROM ' . TBL_MEMBERS . ' WHERE mem_rol_id = ?';
         $result = $this->gDb->queryPrepared($sql, [$rolId]);
-        return $result->fetchAll() ?: [];
+        return ($result && $result->rowCount() > 0) ? $result->fetchAll() : [];
     }
 
     /**
