@@ -21,35 +21,10 @@ define('ADMIDIO_TEST_BOOTSTRAP_LOADED', true);
 // Get the Admidio root path
 $admidioRoot = dirname(__DIR__);
 
-// Load environment configuration
-$envFile = $admidioRoot . '/.env.test';
-if (!file_exists($envFile)) {
-    throw new RuntimeException(
-        "Test environment not configured.\n"
-        . "Copy .env.test.example to .env.test and run: php tests/bin/setup-test-env.php"
-    );
-}
+// .env.test or the process environment configures which database the run uses
+require_once __DIR__ . '/env.php';
 
-// Load environment variables
-$lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-foreach ($lines as $line) {
-    if (empty($line) || strpos($line, '#') === 0) {
-        continue;
-    }
-    if (strpos($line, '=') === false) {
-        continue;
-    }
-    [$name, $value] = explode('=', $line, 2);
-    $name = trim($name);
-    $value = trim($value);
-    putenv("$name=$value");
-    $_ENV[$name] = $value;
-}
-
-// Verify test environment
-if (!getenv('TEST_DATABASE_ENGINE')) {
-    throw new RuntimeException('TEST_DATABASE_ENGINE not set in .env.test');
-}
+admidioTestLoadEnvironment($admidioRoot . '/.env.test');
 
 // Load Admidio's autoloader
 require_once $admidioRoot . '/vendor/autoload.php';
@@ -201,16 +176,22 @@ try {
     // Initialize Admidio Database class
     // Logger is now available globally for Database to use
     $gDb = createTestDatabase($dbConfig);
-} catch (\Exception $e) {
-    throw new RuntimeException(
-        "Failed to initialize test database.\n"
-        . "Ensure Docker services are running: docker-compose -f docker-compose.test.yml up -d\n"
-        . "Error: " . $e->getMessage()
+    $GLOBALS['gDb'] = $gDb;
+} catch (\Throwable $e) {
+    // The unit tests need no database, so a failed connection is only reported once a test asks
+    // for it. DatabaseTestCase::setUpBeforeClass() reads the message out of this global.
+    $GLOBALS['gDbConnectionError'] = sprintf(
+        "Failed to connect to the %s test database '%s' at %s:%d as '%s'.\n"
+        . "Start the test services with: docker-compose -f docker-compose.test.yml up -d\n"
+        . 'Error: %s',
+        $dbConfig['engine'],
+        $dbConfig['database'],
+        $dbConfig['host'],
+        $dbConfig['port'],
+        $dbConfig['user'],
+        $e->getMessage()
     );
 }
-
-// Make database available globally
-$GLOBALS['gDb'] = $gDb;
 
 // ============================================================================
 // Helper Functions
@@ -221,17 +202,7 @@ $GLOBALS['gDb'] = $gDb;
  */
 function getTestDatabaseConfig(): array
 {
-    $engine = getenv('TEST_DATABASE_ENGINE') ?: 'mariadb';
-    $prefix = 'TEST_DB_' . strtoupper($engine);
-
-    return [
-        'engine' => $engine,
-        'host' => getenv($prefix . '_HOST') ?: 'localhost',
-        'port' => (int)(getenv($prefix . '_PORT') ?: ($engine === 'postgres' ? 5432 : 3306)),
-        'user' => getenv($prefix . '_USER') ?: 'admidio',
-        'password' => getenv($prefix . '_PASS') ?: '',
-        'database' => getenv($prefix . '_NAME') ?: 'admidio_test',
-    ];
+    return admidioTestDatabaseConfig();
 }
 
 /**
@@ -301,6 +272,33 @@ class TestLogger
      * Log a notice message
      */
     public function notice(string $message, array $context = []): void
+    {
+        // Tests don't need logging output
+    }
+
+    /**
+     * Log a critical message
+     *
+     * Database::query() calls this before it reports an SQL error, so a missing method turns the
+     * error into "Call to undefined method TestLogger::critical()" and hides what really failed.
+     */
+    public function critical(string $message, array $context = []): void
+    {
+        // Tests don't need logging output
+    }
+
+    /**
+     * Log an alert message
+     */
+    public function alert(string $message, array $context = []): void
+    {
+        // Tests don't need logging output
+    }
+
+    /**
+     * Log an emergency message
+     */
+    public function emergency(string $message, array $context = []): void
     {
         // Tests don't need logging output
     }

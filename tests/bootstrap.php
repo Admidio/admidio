@@ -4,41 +4,10 @@
  * Loads environment variables and initializes test framework
  */
 
-use Admidio\Infrastructure\Database;
+require_once __DIR__ . '/env.php';
 
-// Load environment variables from .env.test
-$envFile = dirname(__DIR__) . '/.env.test';
-if (file_exists($envFile)) {
-    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (empty($line) || strpos($line, '#') === 0) {
-            continue;
-        }
-        if (strpos($line, '=') === false) {
-            continue;
-        }
-        [$name, $value] = explode('=', $line, 2);
-        $name = trim($name);
-        $value = trim($value);
-        putenv("$name=$value");
-        $_ENV[$name] = $value;
-    }
-} else {
-    throw new RuntimeException(
-        "Test environment not configured.\n"
-        . "Run: php tests/bin/setup-test-env.php\n"
-        . "Or copy: cp .env.test.example .env.test"
-    );
-}
-
-// Verify test environment is properly configured
-if (!getenv('TEST_DATABASE_ENGINE')) {
-    throw new RuntimeException('TEST_DATABASE_ENGINE not set in .env.test');
-}
-
-if (!getenv('TEST_FILES_PATH')) {
-    throw new RuntimeException('TEST_FILES_PATH not set in .env.test');
-}
+// .env.test or the process environment configures which database the run uses
+admidioTestLoadEnvironment();
 
 // Load Admidio autoloader
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -47,10 +16,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 TestEnvironment::validateTestEnvironment();
 
 // Load Admidio bootstrap for integration tests (initializes $gDb, $gLogger, etc.)
-$bootstrapAdmidio = dirname(__DIR__) . '/tests/bootstrap-admidio.php';
-if (file_exists($bootstrapAdmidio)) {
-    require $bootstrapAdmidio;
-}
+require __DIR__ . '/bootstrap-admidio.php';
 
 /**
  * Test environment validation
@@ -95,17 +61,7 @@ class TestEnvironment
 
     public static function getTestDatabaseConfig(): array
     {
-        $engine = getenv('TEST_DATABASE_ENGINE') ?: 'mariadb';
-        $prefix = 'TEST_DB_' . strtoupper($engine);
-
-        return [
-            'engine' => $engine,
-            'host' => getenv($prefix . '_HOST') ?: 'localhost',
-            'port' => getenv($prefix . '_PORT') ?: ($engine === 'postgres' ? 5432 : 3306),
-            'user' => getenv($prefix . '_USER') ?: 'admidio',
-            'password' => getenv($prefix . '_PASS') ?: '',
-            'database' => getenv($prefix . '_NAME') ?: 'admidio_test',
-        ];
+        return admidioTestDatabaseConfig();
     }
 
     public static function verifyDatabaseConnection(): bool

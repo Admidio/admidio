@@ -31,9 +31,10 @@ abstract class DatabaseTestCase extends AdmidioTestCase
         if (isset($GLOBALS['gDb']) && $GLOBALS['gDb'] instanceof Database) {
             self::$gDb = $GLOBALS['gDb'];
         } else {
-            // Fallback if bootstrap didn't run (shouldn't happen)
+            // the bootstrap connects lazily so that the unit tests run without a database
             throw new \RuntimeException(
-                'Database not initialized. Ensure Admidio bootstrap is loaded via tests/bootstrap.php'
+                $GLOBALS['gDbConnectionError']
+                ?? 'Database not initialized. Ensure Admidio bootstrap is loaded via tests/bootstrap.php'
             );
         }
 
@@ -55,17 +56,7 @@ abstract class DatabaseTestCase extends AdmidioTestCase
      */
     protected static function getTestDatabaseConfig(): array
     {
-        $engine = getenv('TEST_DATABASE_ENGINE') ?: 'mariadb';
-        $prefix = 'TEST_DB_' . strtoupper($engine);
-
-        return [
-            'engine' => $engine,
-            'host' => getenv($prefix . '_HOST') ?: 'localhost',
-            'port' => (int)(getenv($prefix . '_PORT') ?: ($engine === 'postgres' ? 5432 : 3306)),
-            'user' => getenv($prefix . '_USER') ?: 'admidio',
-            'password' => getenv($prefix . '_PASS') ?: '',
-            'database' => getenv($prefix . '_NAME') ?: 'admidio_test',
-        ];
+        return admidioTestDatabaseConfig();
     }
 
     /**
