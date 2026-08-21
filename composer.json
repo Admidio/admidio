@@ -73,11 +73,26 @@
             "@test:unit",
             "@test:integration"
         ],
-        "test:unit": "phpunit --testsuite=\"Unit Tests\"",
-        "test:integration": "phpunit --testsuite=\"Integration Tests\"",
-        "test:cli": "phpunit --testsuite=\"CLI Tests\"",
-        "test:all": "phpunit",
-        "test:coverage": "phpunit --coverage-html=tests/reports/coverage",
+        "test:unit": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --testsuite=\"Unit Tests\""
+        ],
+        "test:integration": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --testsuite=\"Integration Tests\""
+        ],
+        "test:cli": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --testsuite=\"CLI Tests\""
+        ],
+        "test:all": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit"
+        ],
+        "test:coverage": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --coverage-html=tests/reports/coverage"
+        ],
         "test:setup": "php tests/bin/setup-test-env.php"
     },
     "archive": {
