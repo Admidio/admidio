@@ -103,6 +103,11 @@ class TestDatabaseInitializer
         // Run full installation
         $result = Installation::install($database, $installConfig);
 
+        // Installation::install() gives itself five minutes through set_time_limit(), which in a
+        // web request covers only that request but here applies to the whole PHPUnit process and
+        // kills the run once the suite needs longer than that.
+        @set_time_limit(0);
+
         echo "  ✓ Database initialized\n";
         echo "  ✓ Schema created\n";
         echo "  ✓ Default data installed\n";
