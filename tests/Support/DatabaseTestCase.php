@@ -7,15 +7,9 @@
 namespace Admidio\Tests\Support;
 
 use Admidio\Infrastructure\Database;
-use PDO;
 
 abstract class DatabaseTestCase extends AdmidioTestCase
 {
-    /**
-     * PDO connection for test database
-     */
-    protected static ?PDO $pdo = null;
-
     /**
      * Admidio Database wrapper
      */
@@ -92,103 +86,10 @@ abstract class DatabaseTestCase extends AdmidioTestCase
     }
 
     /**
-     * Create PDO connection to test database
-     */
-    private static function createDatabaseConnection(): PDO
-    {
-        $config = \TestEnvironment::getTestDatabaseConfig();
-
-        $dsn = self::buildDsn($config);
-        $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        ];
-
-        try {
-            return new PDO($dsn, $config['user'], $config['password'], $options);
-        } catch (\PDOException $e) {
-            throw new \RuntimeException(
-                "Failed to connect to test database.\n"
-                . "Engine: {$config['engine']}\n"
-                . "Host: {$config['host']}:{$config['port']}\n"
-                . "Database: {$config['database']}\n"
-                . "Error: " . $e->getMessage() . "\n\n"
-                . "Start test databases with:\n"
-                . "  docker-compose -f docker-compose.test.yml up -d"
-            );
-        }
-    }
-
-    /**
-     * Build DSN string for database connection
-     */
-    private static function buildDsn(array $config): string
-    {
-        if ($config['engine'] === 'postgres') {
-            return sprintf(
-                'pgsql:host=%s;port=%d;dbname=%s',
-                $config['host'],
-                $config['port'],
-                $config['database']
-            );
-        }
-
-        // MySQL/MariaDB
-        return sprintf(
-            'mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4',
-            $config['host'],
-            $config['port'],
-            $config['database']
-        );
-    }
-
-    /**
-     * Create Admidio Database wrapper instance
-     */
-    private static function createAdmidioDatabaseWrapper(): Database
-    {
-        $config = \TestEnvironment::getTestDatabaseConfig();
-
-        // Initialize Admidio Database class with test connection parameters
-        // Map test config keys to Database constructor parameter names
-        $engine = $config['engine'];
-
-        // Map config engine names to Database constants
-        if ($engine === 'mariadb') {
-            $engine = Database::DB_TYPE_MARIADB;
-        } elseif ($engine === 'postgres') {
-            $engine = Database::DB_TYPE_PGSQL;
-        } else {
-            $engine = Database::DB_TYPE_MYSQL;
-        }
-
-        try {
-            $database = new Database(
-                $engine,
-                $config['host'],
-                $config['port'],
-                $config['database'],
-                $config['user'],
-                $config['password']
-            );
-            return $database;
-        } catch (\Exception $e) {
-            throw new \RuntimeException(
-                "Failed to create Database instance.\n"
-                . "Engine: {$config['engine']}\n"
-                . "Host: {$config['host']}:{$config['port']}\n"
-                . "Database: {$config['database']}\n"
-                . "Error: " . $e->getMessage()
-            );
-        }
-    }
-
-    /**
      * Get the test database connection
      */
     protected function getDatabase(): Database
     {
         return self::$gDb;
     }
-
 }

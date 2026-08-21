@@ -63,33 +63,4 @@ class TestEnvironment
     {
         return admidioTestDatabaseConfig();
     }
-
-    public static function verifyDatabaseConnection(): bool
-    {
-        $config = self::getTestDatabaseConfig();
-
-        try {
-            if ($config['engine'] === 'postgres') {
-                $dsn = sprintf(
-                    'pgsql:host=%s;port=%d;dbname=%s',
-                    $config['host'],
-                    $config['port'],
-                    $config['database']
-                );
-            } else {
-                $dsn = sprintf(
-                    'mysql:host=%s;port=%d;dbname=%s',
-                    $config['host'],
-                    $config['port'],
-                    $config['database']
-                );
-            }
-
-            $pdo = new PDO($dsn, $config['user'], $config['password']);
-            $pdo = null;
-            return true;
-        } catch (PDOException $e) {
-            return false;
-        }
-    }
 }
