@@ -39,15 +39,14 @@ If you have existing MySQL/PostgreSQL servers:
 ```
 tests/
 ├── Unit/                    # Fast unit tests (no DB)
-│   └── ExampleUnitTest.php
-├── Integration/             # Database integration tests
-│   └── ExampleIntegrationTest.php
+├── Integration/             # Database integration tests, one directory per domain
 ├── Cli/                     # CLI regression tests
 ├── Support/                 # Test infrastructure
 │   ├── AdmidioTestCase.php           # Base test class
 │   ├── DatabaseTestCase.php          # DB test class with transaction isolation
 │   ├── CliTestCase.php               # CLI test class
-│   ├── TestDataBuilder.php           # Fixture builder
+│   ├── AdmidioTestFixture.php        # Fixture builder that writes through the entities
+│   ├── PermissionContext.php         # Sets the globals rights are resolved against
 │   └── CliTestCase.php
 ├── Fixtures/                # Test data files
 │   ├── documents/
@@ -108,16 +107,18 @@ class MyTest extends AdmidioTestCase
 <?php
 namespace Admidio\Tests\Integration;
 
+use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 
 class MyIntegrationTest extends DatabaseTestCase
 {
     public function testUserCreation(): void
     {
-        $user = $this->createTestUser('testuser', 'test@example.com');
-        
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $user = $fixture->createAndSaveUser('testuser', 'test@example.local');
+
         $this->assertNotEmpty($user['usr_id']);
-        $this->assertEquals('testuser', $user['usr_login']);
+        $this->assertEquals('testuser', $user['usr_login_name']);
     }
 }
 ```
@@ -139,25 +140,27 @@ Assert that a CLI command succeeded
 ### `assertCliFails($result, $expectedExitCode = 1, $message = '')`
 Assert that a CLI command failed
 
-## Test Data Builder
+## Test Fixture
 
-The `TestDataBuilder` class creates test fixtures through production APIs:
+`AdmidioTestFixture` creates records through the Admidio entities, so a fixture goes through the
+same code the application uses and really is in the database:
 
 ```php
-$builder = $this->getTestDataBuilder();
+$fixture = new AdmidioTestFixture($this->getDatabase());
 
-// Create fixtures
-$org = $builder->createOrganization('Test Org');
-$user = $builder->createUser('testuser', 'test@example.com');
-$role = $builder->createRole('Members');
-$category = $builder->createCategory('Events', 'EVENTS');
+$org = $fixture->createAndSaveOrganization('Test Org', 'testorg');
+$user = $fixture->createAndSaveUser('testuser', 'test@example.local');
+$role = $fixture->createAndSaveRoleWithRights('Members', $org['org_id'], ['rol_announcements' => 1]);
+$fixture->assignUserToRole($user['usr_id'], $role['rol_id']);
+```
 
-// Assign membership
-$membership = $builder->assignUserToRole($user, $role);
+The `PermissionContext` trait sets the globals Admidio resolves rights against:
 
-// Retrieve fixtures
-$org = $builder->getOrganization();      // First created
-$orgs = $builder->getOrganizations();    // All created
+```php
+$member = $this->loadUserInOrganization($user['usr_id'], $org['org_id']);
+$this->withCurrentUser($member, $org['org_id'], true, function () {
+    // $gCurrentUser, $gCurrentOrgId and $gSettingsManager are set in here
+});
 ```
 
 ## Database Configuration

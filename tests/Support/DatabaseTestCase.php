@@ -22,11 +22,6 @@ abstract class DatabaseTestCase extends AdmidioTestCase
     protected static ?Database $gDb = null;
 
     /**
-     * Test data builder for creating fixtures
-     */
-    protected ?TestDataBuilder $testDataBuilder = null;
-
-    /**
      * Set up test database connection (one-time for all tests)
      */
     public static function setUpBeforeClass(): void
@@ -87,9 +82,6 @@ abstract class DatabaseTestCase extends AdmidioTestCase
         } catch (\Exception $e) {
             $this->markTestSkipped('Database transaction failed: ' . $e->getMessage());
         }
-
-        // Create test data builder for this test
-        $this->testDataBuilder = new TestDataBuilder(self::$gDb);
     }
 
     /**
@@ -105,7 +97,6 @@ abstract class DatabaseTestCase extends AdmidioTestCase
             error_log('Rollback failed: ' . $e->getMessage());
         }
 
-        $this->testDataBuilder = null;
         parent::tearDown();
     }
 
@@ -209,35 +200,4 @@ abstract class DatabaseTestCase extends AdmidioTestCase
         return self::$gDb;
     }
 
-    /**
-     * Get the test data builder
-     */
-    protected function getTestDataBuilder(): TestDataBuilder
-    {
-        return $this->testDataBuilder;
-    }
-
-    /**
-     * Create a fresh organization for testing
-     */
-    protected function createTestOrganization(string $name = 'TEST'): array
-    {
-        return $this->testDataBuilder->createOrganization($name);
-    }
-
-    /**
-     * Create a test user
-     */
-    protected function createTestUser(string $login = 'testuser', string $email = 'test@example.local'): array
-    {
-        return $this->testDataBuilder->createUser($login, $email);
-    }
-
-    /**
-     * Create a test role
-     */
-    protected function createTestRole(string $name = 'Members'): array
-    {
-        return $this->testDataBuilder->createRole($name);
-    }
 }
