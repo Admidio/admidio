@@ -1,6 +1,11 @@
 # Admidio Regression Test Suite
 
-Comprehensive automated testing for Admidio Core functionality.
+Automated regression tests for Admidio core functionality.
+
+Every integration test writes to and reads from a real database through the Admidio entities and
+services. There are no mocks and no fake database: the suite installs Admidio from scratch through
+the same `Installation` service the web installer uses, and each test then runs inside a transaction
+that is rolled back afterwards.
 
 ## Quick Start
 
@@ -13,14 +18,14 @@ cp .env.test.example .env.test
 # 2. Start test databases
 docker-compose -f docker-compose.test.yml up -d
 
-# 3. Setup test environment
+# 3. Setup test environment (creates the directories, waits for the database)
 php tests/bin/setup-test-env.php
 
 # 4. Run tests
-composer test:unit                      # Run unit tests
-composer test:integration               # Run integration tests (MariaDB)
-composer test:integration --db=postgres # Run against PostgreSQL
-composer test:all                       # Run everything
+composer test:unit          # unit tests, no database needed
+composer test:integration   # integration tests
+composer test:cli           # command line tests
+composer test:all           # everything
 
 # 5. Stop test databases when done
 docker-compose -f docker-compose.test.yml down
@@ -28,58 +33,90 @@ docker-compose -f docker-compose.test.yml down
 
 ### Without Docker
 
-If you have existing MySQL/PostgreSQL servers:
+If you have an existing MySQL/MariaDB or PostgreSQL server:
 
-1. Update `.env.test` with your database connection details
-2. Run `php tests/bin/setup-test-env.php`
-3. Run tests with `composer test:integration`
+1. Create an empty database whose name contains `test` and a user that may create tables in it
+2. Put the connection settings into `.env.test`
+3. Run `php tests/bin/setup-test-env.php`
+4. Run the tests with the `composer test:*` commands above
 
-## Directory Structure
+The suite **drops every table** in that database before it installs Admidio into it. It refuses to
+start unless the database name and `TEST_FILES_PATH` both contain `test`.
+
+## What the suite contains
+
+391 tests in 45 files:
+
+| Suite | Files | Tests | Needs a database |
+|-------|-------|-------|------------------|
+| `tests/Unit` | 1 | 8 | no |
+| `tests/Integration` | 40 | 351 | yes |
+| `tests/Cli` | 4 | 32 | yes |
 
 ```
 tests/
 ├── Unit/                    # Fast unit tests (no DB)
-├── Integration/             # Database integration tests, one directory per domain
-├── Cli/                     # CLI regression tests
+├── Integration/             # Database integration tests, one directory per domain (22 of them)
+├── Cli/                     # Command line and installation tests
 ├── Support/                 # Test infrastructure
-│   ├── AdmidioTestCase.php           # Base test class
+│   ├── AdmidioTestCase.php           # Base test class and the custom assertions
 │   ├── DatabaseTestCase.php          # DB test class with transaction isolation
-│   ├── CliTestCase.php               # CLI test class
+│   ├── TestDatabaseInitializer.php   # Installs Admidio once per PHPUnit process
 │   ├── AdmidioTestFixture.php        # Fixture builder that writes through the entities
-│   ├── PermissionContext.php         # Sets the globals rights are resolved against
-│   └── CliTestCase.php
-├── Fixtures/                # Test data files
-│   ├── documents/
-│   ├── images/
-│   ├── import/
-│   └── mail/
+│   └── PermissionContext.php         # Sets the globals rights are resolved against
 ├── bin/
-│   └── setup-test-env.php   # Environment setup script
+│   └── setup-test-env.php   # Environment setup and connectivity check
+├── env.php                  # Reads .env.test and the process environment
 ├── bootstrap.php            # PHPUnit bootstrap
-└── README.md               # This file
+├── bootstrap-admidio.php    # Constants, globals and database connection Admidio needs
+└── README.md                # This file
 ```
 
 ## Test Organization
 
 ### Unit Tests
 - **Purpose:** Fast validation of pure logic
-- **Dependencies:** No database, filesystem, or network
-- **Execution Time:** < 5 seconds
+- **Dependencies:** none, they run without a database
 - **Location:** `tests/Unit/`
 
 ### Integration Tests
-- **Purpose:** Entity/Service behavior with real database
-- **Dependencies:** Real database connection (MariaDB, PostgreSQL, or MySQL)
-- **Execution Time:** 20-30 minutes (parallelized)
-- **Location:** `tests/Integration/`
-- **Organization:** By domain (Users, Events, etc.)
+- **Purpose:** Entity and service behaviour against a real database
+- **Dependencies:** a database, installed by the suite itself
+- **Location:** `tests/Integration/`, organized by domain (Users, Events, Roles, ...)
 
 ### CLI Tests
-- **Purpose:** Complete administrative workflows
-- **Dependencies:** CLI infrastructure, database
-- **Execution Time:** 10-15 minutes
+- **Purpose:** The command line infrastructure and the result of a headless installation
+- **Dependencies:** a database
 - **Location:** `tests/Cli/`
-- **Modes:** In-process (fast) and subprocess (realistic)
+- They exercise `CliApplication`, `CliTaskRegistry` and `MaintenanceMode` **in process**. There is
+  no subprocess test: `system/bootstrap/cli.php` reads `adm_my_files/config.php` unconditionally, so
+  `./admidio` cannot be pointed at the test database.
+
+## How a test runs
+
+```
+PHPUnit starts
+  tests/bootstrap.php        -> environment, autoloader, safety checks
+  tests/bootstrap-admidio.php-> constants, globals, database connection
+  first DatabaseTestCase     -> TestDatabaseInitializer drops every table and installs Admidio
+
+each test
+  setUp()                    -> start a transaction
+  ...the test runs, services may open nested transactions...
+  tearDown()                 -> roll the transaction back
+```
+
+Nothing a test writes survives it, so the tests do not depend on each other and the database is
+installed once per process rather than once per test.
+
+Two things to know when writing a test:
+
+- `Admidio\Infrastructure\Exception::__construct()` calls `$gDb->rollback()`, which unwinds the
+  transaction stack to depth 0 and with it the transaction that isolates the test. A test that
+  expects an Admidio exception should assert the message and read nothing further from the database.
+- `Entity::$loggingEnabled` is static and `Session::__construct()` switches it off for the whole
+  process. A test that needs the changelog has to call `Entity::setLoggingEnabled(true)` in its
+  `setUp()` and restore the previous value in `tearDown()`.
 
 ## Writing Tests
 
@@ -118,27 +155,17 @@ class MyIntegrationTest extends DatabaseTestCase
         $user = $fixture->createAndSaveUser('testuser', 'test@example.local');
 
         $this->assertNotEmpty($user['usr_id']);
-        $this->assertEquals('testuser', $user['usr_login_name']);
     }
 }
 ```
 
 ## Custom Assertions
 
-### `assertValidUuid($value, $message = '')`
-Assert that a value is a valid UUID v4
+`AdmidioTestCase` adds three assertions to the PHPUnit ones:
 
-### `assertValidTimestamp($value, $message = '')`
-Assert that a value is a valid timestamp
-
-### `assertArrayHasKeys($keys, $array, $message = '')`
-Assert that array has specific keys
-
-### `assertCliSuccess($result, $message = '')`
-Assert that a CLI command succeeded
-
-### `assertCliFails($result, $expectedExitCode = 1, $message = '')`
-Assert that a CLI command failed
+- `assertValidUuid($value, $message = '')` - the value is a UUID
+- `assertValidTimestamp($value, $message = '')` - the value is a timestamp
+- `assertArrayHasKeys($keys, $array, $message = '')` - the array has all of these keys
 
 ## Test Fixture
 
@@ -163,92 +190,102 @@ $this->withCurrentUser($member, $org['org_id'], true, function () {
 });
 ```
 
-## Database Configuration
+## Configuration
 
-### Environment Variables
+The run is configured through environment variables. `tests/env.php` reads `.env.test` into the
+process environment, but **a variable that is already set wins over the file**, so a CI job
+configures a run through its own environment and needs no `.env.test` at all.
 
-Set in `.env.test`:
+These are the variables the suite reads:
 
-- `TEST_DATABASE_ENGINE` - Primary engine (mariadb, mysql, postgres)
-- `TEST_DB_MARIADB_HOST`, `TEST_DB_MARIADB_PORT`, `TEST_DB_MARIADB_USER`, `TEST_DB_MARIADB_PASS`, `TEST_DB_MARIADB_NAME`
-- `TEST_DB_POSTGRES_HOST`, `TEST_DB_POSTGRES_PORT`, `TEST_DB_POSTGRES_USER`, `TEST_DB_POSTGRES_PASS`, `TEST_DB_POSTGRES_NAME`
-- `TEST_DB_MYSQL_HOST`, `TEST_DB_MYSQL_PORT`, `TEST_DB_MYSQL_USER`, `TEST_DB_MYSQL_PASS`, `TEST_DB_MYSQL_NAME`
-- `TEST_FILES_PATH` - Test files directory (must contain "test")
-- `TEST_FIXTURES_PATH` - Fixtures directory
+| Variable | Meaning |
+|----------|---------|
+| `TEST_DATABASE_ENGINE` | `mariadb`, `mysql` or `postgres` - selects which of the blocks below is used |
+| `TEST_DB_<ENGINE>_HOST` | host, use `127.0.0.1` rather than `localhost` for MySQL |
+| `TEST_DB_<ENGINE>_PORT` | port |
+| `TEST_DB_<ENGINE>_USER` | user |
+| `TEST_DB_<ENGINE>_PASS` | password |
+| `TEST_DB_<ENGINE>_NAME` | database, must contain `test` |
+| `TEST_FILES_PATH` | writable directory for uploads and temporary files, must contain `test` |
+| `TEST_MAIL_HOST`, `TEST_MAIL_PORT` | only used by the setup script to report whether Mailpit answers |
 
-### Transaction Isolation
+`<ENGINE>` is `MARIADB`, `MYSQL` or `POSTGRES`.
 
-Integration tests use transaction-based isolation for speed:
+### Choosing the database engine
 
-```php
-setUp()    // Start outer transaction
-  ...test runs...
-  Service may start nested transactions
-tearDown() // Rollback outer transaction (reverts all changes)
+The engine is part of the environment, not a command line option:
+
+```bash
+# in .env.test
+TEST_DATABASE_ENGINE=postgres
+
+# or for one run
+TEST_DATABASE_ENGINE=postgres composer test:integration
 ```
 
-**Benefits:**
-- No database recreation per test
-- Tests run 10-100x faster
-- Prevents data leakage between tests
-- Nested transactions supported
+PostgreSQL needs the `pdo_pgsql` extension, MySQL and MariaDB need `pdo_mysql`.
 
 ## Running Tests
 
-### Commands
-
 ```bash
-# Run unit tests only
-composer test:unit
-
-# Run integration tests (MariaDB by default)
-composer test:integration
-
-# Run against specific database
-composer test:integration --db=postgres
-composer test:integration --db=mysql
-
-# Run CLI tests
-composer test:cli
-
-# Run everything
-composer test:all
-
-# Run with coverage
-composer test:coverage
-
-# Setup environment
-composer test:setup
+composer test:unit          # unit tests only
+composer test:integration   # integration tests
+composer test:cli           # command line tests
+composer test:all           # all three suites in one process
+composer test:coverage      # HTML coverage report in tests/reports/coverage (needs Xdebug)
+composer test:setup         # tests/bin/setup-test-env.php
 ```
 
 ### GitHub Actions
 
-Tests run automatically on:
-- Every PR against `v4.3`
-- Every push to `master`
-- Scheduled weekly for MySQL
+`.github/workflows/regression-tests.yml` runs on every pull request against `v4.3`, on every push
+to `v4.3`, weekly for MySQL, and on demand:
 
-Workflows:
-- `fast-checks` - PHP syntax, CS-Fixer, unit tests (every PR)
-- `mariadb` - MariaDB integration + CLI (every PR)
-- `postgres` - PostgreSQL integration (every PR)
-- `mysql` - MySQL integration (scheduled)
+| Job | Runs | Contents |
+|-----|------|----------|
+| `fast-checks` | every run | PHP syntax of `src`, `system`, `modules`, `install`, `tests`; `composer validate`; unit tests |
+| `mariadb` | every run | MariaDB 10.6, integration and CLI tests |
+| `postgres` | every run | PostgreSQL 15, integration and CLI tests |
+| `mysql` | weekly and on demand | MySQL 8.0, integration and CLI tests |
 
-## CI/CD Database Matrix
+The database jobs get their configuration from the `env:` block of the job, so nothing copies or
+edits `.env.test` on the runner.
 
-| Database | Version | Trigger | Purpose |
-|----------|---------|---------|---------|
-| MariaDB | 10.6 | Every PR | Primary testing |
-| PostgreSQL | 15 | Every PR | Cross-database validation |
-| MySQL | 8.0 | Scheduled | Third engine compatibility |
+## Differences between the engines
+
+The suite runs on MariaDB and PostgreSQL. Three tests behave differently or are skipped on
+PostgreSQL, each of them because of a defect in Admidio rather than in the test:
+
+- `UserRelationWorkflowTest::testATypeWithoutACounterpartIsUnidirectional` and
+  `::testARelationOfAUnidirectionalTypeHasNoCounterpart` are skipped: the installation writes
+  `urt_id` 1 to 8 by hand and never advances the PostgreSQL sequence, so the application cannot
+  create a relation type until the sequence has passed 8.
+- `DatabaseAbstractionTest::testDatabaseReportsWhichEngineItRunsOn` skips its `tableExists()`
+  assertions: the method compares `information_schema.table_schema` with the database name, which on
+  PostgreSQL is the schema and never matches.
+- `DatabaseAbstractionTest::testCaseSensitivityOfTextComparisonDependsOnTheEngine` asserts both
+  behaviours: MySQL compares text without regard to case, PostgreSQL byte by byte.
+
+A fresh MySQL or MariaDB installation is also missing the two forum tables, because their
+definitions in `install/db_scripts/db.sql` end with the PostgreSQL clause `ENCODING 'UTF8'`.
+`InstallationResultTest::testForumTablesAreMissingAfterAFreshInstallation` pins that down and fails
+once it is fixed, which is the point.
+
+## Performance
+
+Measured on one developer machine (PHP 8.4, databases in Docker), whole suite, 391 tests:
+
+- MariaDB 10.6: about 7 minutes
+- PostgreSQL 15: about 1 minute
+- Unit tests alone: under a second
+
+Most of the time goes into the installation at the start of the process and into the entities, not
+into PHPUnit.
 
 ## Troubleshooting
 
-### Database Connection Failed
+### Database connection failed
 
-**Error:** "Cannot connect to test database"
-
-**Solution:**
 ```bash
 # Verify containers are running
 docker-compose -f docker-compose.test.yml ps
@@ -260,60 +297,25 @@ docker-compose -f docker-compose.test.yml logs mariadb
 docker-compose -f docker-compose.test.yml restart
 ```
 
-### Permission Denied on Test Files
+A MySQL client reads `localhost` as "connect through the unix socket". Use `127.0.0.1` for a
+database that is published on a port.
 
-**Error:** "Permission denied" when writing test files
+### Permission denied on test files
 
-**Solution:**
 ```bash
-# Ensure test directory exists and is writable
 mkdir -p adm_my_files_test
 chmod 777 adm_my_files_test
 ```
 
-### Tests Hanging
+### The unit tests fail at the bootstrap
 
-**Likely cause:** Database connection not isolated properly
-
-**Solution:**
-- Check database is responding: `docker-compose -f docker-compose.test.yml ps`
-- Verify connection settings in `.env.test`
-- Run `php tests/bin/setup-test-env.php` again
-
-## Performance
-
-**Typical Execution Times (Parallelized):**
-- Unit tests: < 5 seconds
-- Integration tests: 20-30 minutes
-- CLI tests: 10-15 minutes
-- **Total:** 45-60 minutes
-
-**Tips for Speed:**
-- Run unit tests first (`composer test:unit`)
-- Run integration tests in parallel on CI
-- Use transaction isolation (not fresh DB per test)
-- Run slow CLI tests last
-
-## Next Steps
-
-After PR 1 (Infrastructure):
-
-1. **PR 2 (Foundation)** - Database, Entity, User, Role tests
-2. **PR 3 (Services)** - Event, Message, Photo, Document services
-3. **PR 4 (CLI Regression)** - Complete workflow scenarios
-4. **PR 5 (Lifecycle)** - Installation and upgrade tests
-5. **PR 6 (Polish)** - Optimization and documentation
+`TEST_DATABASE_ENGINE` and `TEST_FILES_PATH` have to be set even for the unit tests, because the
+bootstrap checks that it is looking at a test environment. The unit tests themselves need no
+database: if the connection fails, the bootstrap remembers the error and only reports it when a test
+asks for the database.
 
 ## References
 
 - [PHPUnit Documentation](https://phpunit.de/)
-- [Admidio Architecture](https://www.admidio.org/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [GitHub Actions](https://docs.github.com/en/actions)
-
-## Getting Help
-
-- Check `phpunit.xml` for configuration
-- Review example tests in `tests/Unit/` and `tests/Integration/`
-- See `tests/Support/` for available test case classes
-- Check this README for common issues
