@@ -123,8 +123,8 @@ class TestDatabaseInitializer
     {
         try {
             $result = $database->queryPrepared(
-                'SELECT COUNT(*) as cnt FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?',
-                [$config['database']]
+                'SELECT COUNT(*) AS cnt FROM information_schema.tables WHERE table_schema = ?',
+                [self::schemaName($config)]
             );
             $row = $result->fetch();
             $tableCount = (int) ($row['cnt'] ?? 0);
@@ -135,33 +135,59 @@ class TestDatabaseInitializer
     }
 
     /**
+     * Name of the schema the Admidio tables live in
+     *
+     * MySQL and MariaDB report the database itself as the schema, PostgreSQL the schema inside it.
+     */
+    private static function schemaName(array $config): string
+    {
+        return $config['engine'] === 'postgres' ? 'public' : $config['database'];
+    }
+
+    /**
      * Drop all tables in database
      */
     private static function dropAllTables(Database $database, array $config): void
     {
+        $postgres = $config['engine'] === 'postgres';
+
         try {
-            // Disable foreign key checks temporarily
-            $database->queryPrepared('SET FOREIGN_KEY_CHECKS = 0');
+            if (!$postgres) {
+                // Disable foreign key checks temporarily
+                $database->queryPrepared('SET FOREIGN_KEY_CHECKS = 0');
+            }
 
             // Get list of all tables
             $result = $database->queryPrepared(
-                'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?',
-                [$config['database']]
+                'SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND table_type = ?',
+                [self::schemaName($config), 'BASE TABLE']
             );
 
-            $count = 0;
+            // read the whole list before dropping anything, the statement is reused for the drops
+            $tables = [];
             while ($row = $result->fetch()) {
-                $tableName = $row['TABLE_NAME'];
+                $tables[] = $row['table_name'] ?? $row['TABLE_NAME'];
+            }
+
+            $count = 0;
+            foreach ($tables as $tableName) {
+                // PostgreSQL does not know backticks and needs the dependent constraints dropped too
+                $sql = $postgres
+                    ? 'DROP TABLE IF EXISTS "' . $tableName . '" CASCADE'
+                    : 'DROP TABLE IF EXISTS `' . $tableName . '`';
+
                 try {
-                    $database->query("DROP TABLE IF EXISTS `{$tableName}`");
+                    $database->query($sql, false);
                     $count++;
                 } catch (\Exception $e) {
                     // Silently skip errors
                 }
             }
 
-            // Re-enable foreign key checks
-            $database->queryPrepared('SET FOREIGN_KEY_CHECKS = 1');
+            if (!$postgres) {
+                // Re-enable foreign key checks
+                $database->queryPrepared('SET FOREIGN_KEY_CHECKS = 1');
+            }
 
             if ($count > 0) {
                 echo "  ✓ Dropped $count existing tables\n";

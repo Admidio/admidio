@@ -12,6 +12,7 @@
 
 namespace Admidio\Tests\Cli;
 
+use Admidio\Infrastructure\Database;
 use Admidio\Tests\Support\DatabaseTestCase;
 
 class InstallationResultTest extends DatabaseTestCase
@@ -28,10 +29,19 @@ class InstallationResultTest extends DatabaseTestCase
      */
     private function tableNames(): array
     {
-        $sql = 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE()';
-        $rows = $this->getDatabase()->queryPrepared($sql)->fetchAll();
+        // MySQL reports the database as the schema, PostgreSQL the schema inside it
+        $schema = $this->getDatabase()->getEngine() === Database::PDO_ENGINE_PGSQL
+            ? 'public'
+            : DB_NAME;
 
-        return array_map('strtolower', array_column($rows, 'TABLE_NAME'));
+        $sql = 'SELECT table_name FROM information_schema.tables WHERE table_schema = ?';
+        $rows = $this->getDatabase()->queryPrepared($sql, [$schema])->fetchAll();
+
+        // MySQL 8 answers with the column name in upper case however the query spells it,
+        // MariaDB and PostgreSQL keep it as written, so the row is read by position
+        return array_map(static function (array $row): string {
+            return strtolower((string) reset($row));
+        }, $rows);
     }
 
     /**
@@ -56,7 +66,7 @@ class InstallationResultTest extends DatabaseTestCase
     /**
      * Test the known gap in the schema
      *
-     * @testdox The forum tables are missing after a fresh installation
+     * @testdox The forum tables are missing after a fresh MySQL installation
      */
     public function testForumTablesAreMissingAfterAFreshInstallation(): void
     {
@@ -65,8 +75,19 @@ class InstallationResultTest extends DatabaseTestCase
         // install/db_scripts/db.sql ends both forum table definitions with the PostgreSQL clause
         // ENCODING 'UTF8', which MySQL and MariaDB reject, so the two tables are never created and
         // the forum module cannot be opened. Only fresh installations are affected, the update
-        // steps create them correctly. Recorded as a finding; this test fails once it is fixed,
+        // steps create them correctly. Recorded as finding 0; this test fails once it is fixed,
         // which is the point.
+        //
+        // PostgreSQL is not affected: Database::preparePgSqlQuery() cuts everything behind the
+        // last bracket of a CREATE TABLE, so the offending clause never reaches the server and
+        // the installation ends up with two tables more than the same installation on MySQL.
+        if ($this->getDatabase()->getEngine() === Database::PDO_ENGINE_PGSQL) {
+            $this->assertContains(strtolower(TBL_FORUM_TOPICS), $tables);
+            $this->assertContains(strtolower(TBL_FORUM_POSTS), $tables);
+
+            return;
+        }
+
         $this->assertNotContains(strtolower(TBL_FORUM_TOPICS), $tables);
         $this->assertNotContains(strtolower(TBL_FORUM_POSTS), $tables);
     }

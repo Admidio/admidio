@@ -7,6 +7,7 @@
 
 namespace Admidio\Tests\Integration\Core;
 
+use Admidio\Infrastructure\Database;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\AdmidioTestFixture;
 
@@ -122,8 +123,8 @@ class DatabaseConnectionTest extends DatabaseTestCase
         $this->assertTrue(defined('DB_TYPE'));
         $this->assertNotEmpty(DB_TYPE);
 
-        // Verify it's one of the supported types
-        $this->assertContains(DB_TYPE, ['sqlite', 'mysql', 'mariadb', 'postgres']);
+        // DB_TYPE carries the PDO engine, not the product: MariaDB and MySQL share 'mysql'
+        $this->assertContains(DB_TYPE, [Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL]);
     }
 
     /**
