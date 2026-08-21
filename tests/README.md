@@ -206,7 +206,7 @@ These are the variables the suite reads:
 | `TEST_DB_<ENGINE>_USER` | user |
 | `TEST_DB_<ENGINE>_PASS` | password |
 | `TEST_DB_<ENGINE>_NAME` | database, must contain `test` |
-| `TEST_FILES_PATH` | writable directory for uploads and temporary files, must contain `test` |
+| `TEST_FILES_PATH` | the adm_my_files of the test run, Admidio's `FOLDER_DATA` points at it. Inside the checkout, path must contain `test` |
 | `TEST_MAIL_HOST`, `TEST_MAIL_PORT` | only used by the setup script to report whether Mailpit answers |
 
 `<ENGINE>` is `MARIADB`, `MYSQL` or `POSTGRES`.
@@ -303,8 +303,8 @@ database that is published on a port.
 ### Permission denied on test files
 
 ```bash
-mkdir -p adm_my_files_test
-chmod 777 adm_my_files_test
+mkdir -p tests/adm_my_files
+chmod 777 tests/adm_my_files
 ```
 
 ### The unit tests fail at the bootstrap

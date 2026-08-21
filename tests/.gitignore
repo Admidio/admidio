@@ -4,6 +4,9 @@ coverage/
 .phpunit.cache/
 *.log
 
+# The adm_my_files of the test run, created by tests/bin/setup-test-env.php
+adm_my_files/
+
 # Test environment
 .env.test
 

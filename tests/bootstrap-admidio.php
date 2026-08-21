@@ -39,8 +39,6 @@ const ADMIDIO_VERSION_BETA = 0;
 const ADMIDIO_VERSION = ADMIDIO_VERSION_MAIN . '.' . ADMIDIO_VERSION_MINOR . '.' . ADMIDIO_VERSION_PATCH;
 const ADMIDIO_HOMEPAGE = 'https://www.admidio.org/';
 const HTTPS = false;
-const FOLDER_DATA = '/adm_my_files';
-const FOLDER_TEMP_DATA = '/adm_my_files/temp';
 const FOLDER_SYSTEM = '/system';
 const FOLDER_INSTALLATION = '/install';
 const FOLDER_LIBS = '/libs';
@@ -54,6 +52,11 @@ const TABLE_PREFIX = 'adm';
 // Define as PHP define() since they depend on runtime values
 define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION);
 define('ADMIDIO_PATH', $admidioRoot);
+
+// Installation::install() creates ecard_templates, logs, mail_templates and temp below this
+// folder, so it has to be the directory of the test run and not the adm_my_files of the checkout
+define('FOLDER_DATA', admidioTestDataFolder($admidioRoot));
+define('FOLDER_TEMP_DATA', FOLDER_DATA . '/temp');
 define('DATE_NOW', date('Y-m-d'));
 define('DATETIME_NOW', date('Y-m-d H:i:s'));
 define('SCRIPT_START_TIME', microtime(true));

@@ -91,7 +91,7 @@ exit(0);
  */
 function createTestDirectories(): void
 {
-    $testFilesPath = admidioTestEnv('TEST_FILES_PATH', './adm_my_files_test');
+    $testFilesPath = admidioTestEnv('TEST_FILES_PATH', './tests/adm_my_files');
 
     // Safety check: path must contain 'test'
     if (stripos($testFilesPath, 'test') === false) {
@@ -204,7 +204,7 @@ function verifyMailConnection(): bool
  */
 function createTestMarker(): void
 {
-    $testFilesPath = admidioTestEnv('TEST_FILES_PATH', './adm_my_files_test');
+    $testFilesPath = admidioTestEnv('TEST_FILES_PATH', './tests/adm_my_files');
     $markerFile = $testFilesPath . '/.test-environment-marker';
 
     if (!file_exists($markerFile)) {

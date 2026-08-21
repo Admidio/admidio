@@ -99,3 +99,37 @@ function admidioTestDatabaseConfig(?string $engine = null): array
         'database' => admidioTestEnv($prefix . '_NAME', 'admidio_test')
     );
 }
+
+/**
+ * The data folder of the test run, as the path below the repository root that Admidio appends to
+ * ADMIDIO_PATH.
+ *
+ * Admidio addresses everything it writes as ADMIDIO_PATH . FOLDER_DATA, so the constant has to
+ * point at the directory of the test run. Otherwise TEST_FILES_PATH is decorative and the run
+ * writes into the adm_my_files of the checkout, which on a developer machine is a real
+ * installation.
+ *
+ * @param string $admidioRoot Path of the repository
+ * @throws RuntimeException if the directory is not inside the repository
+ */
+function admidioTestDataFolder(string $admidioRoot): string
+{
+    $path = admidioTestEnv('TEST_FILES_PATH', './tests/adm_my_files');
+
+    if (!is_dir($path)) {
+        mkdir($path, 0777, true);
+    }
+
+    $folder = realpath($path);
+    $root = realpath($admidioRoot);
+
+    if ($folder === false || $root === false || !str_starts_with($folder, $root . DIRECTORY_SEPARATOR)) {
+        throw new RuntimeException(
+            "TEST_FILES_PATH has to name a directory inside the Admidio checkout, because Admidio\n"
+            . "addresses its data folder as ADMIDIO_PATH . FOLDER_DATA.\n"
+            . 'Current: ' . $path
+        );
+    }
+
+    return str_replace(DIRECTORY_SEPARATOR, '/', substr($folder, strlen($root)));
+}
