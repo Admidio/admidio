@@ -64,32 +64,21 @@ class InstallationResultTest extends DatabaseTestCase
     }
 
     /**
-     * Test the known gap in the schema
+     * Test the tables that a fresh installation used to miss
      *
-     * @testdox The forum tables are missing after a fresh MySQL installation
+     * @testdox A fresh installation creates the forum tables
      */
-    public function testForumTablesAreMissingAfterAFreshInstallation(): void
+    public function testFreshInstallationCreatesTheForumTables(): void
     {
         $tables = $this->tableNames();
 
-        // install/db_scripts/db.sql ends both forum table definitions with the PostgreSQL clause
-        // ENCODING 'UTF8', which MySQL and MariaDB reject, so the two tables are never created and
-        // the forum module cannot be opened. Only fresh installations are affected, the update
-        // steps create them correctly. Recorded as finding 0; this test fails once it is fixed,
-        // which is the point.
-        //
-        // PostgreSQL is not affected: Database::preparePgSqlQuery() cuts everything behind the
-        // last bracket of a CREATE TABLE, so the offending clause never reaches the server and
-        // the installation ends up with two tables more than the same installation on MySQL.
-        if ($this->getDatabase()->getEngine() === Database::PDO_ENGINE_PGSQL) {
-            $this->assertContains(strtolower(TBL_FORUM_TOPICS), $tables);
-            $this->assertContains(strtolower(TBL_FORUM_POSTS), $tables);
-
-            return;
-        }
-
-        $this->assertNotContains(strtolower(TBL_FORUM_TOPICS), $tables);
-        $this->assertNotContains(strtolower(TBL_FORUM_POSTS), $tables);
+        // both definitions in install/db_scripts/db.sql used to end with the PostgreSQL clause
+        // ENCODING 'UTF8', which MySQL and MariaDB reject, so a fresh installation was missing
+        // these two tables and the forum module could not be opened. PostgreSQL never showed it,
+        // because Database::preparePgSqlQuery() cuts everything behind the last bracket of a
+        // CREATE TABLE and the offending clause never reached the server.
+        $this->assertContains(strtolower(TBL_FORUM_TOPICS), $tables);
+        $this->assertContains(strtolower(TBL_FORUM_POSTS), $tables);
     }
 
     /**
