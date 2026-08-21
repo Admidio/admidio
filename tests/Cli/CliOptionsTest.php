@@ -206,6 +206,10 @@ class CliOptionsTest extends DatabaseTestCase
             $this->assertContains($expected, $global);
         }
 
+        // the ones that decide which installation and which configuration file are addressed
+        $this->assertContains('config', $global);
+        $this->assertContains('host', $global);
+
         // and the ones that make a command usable from a script
         $this->assertContains('quiet', $global);
         $this->assertContains('no-interaction', $global);

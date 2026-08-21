@@ -45,13 +45,13 @@ start unless the database name and `TEST_FILES_PATH` both contain `test`.
 
 ## What the suite contains
 
-391 tests in 45 files:
+396 tests in 46 files:
 
 | Suite | Files | Tests | Needs a database |
 |-------|-------|-------|------------------|
 | `tests/Unit` | 1 | 8 | no |
 | `tests/Integration` | 40 | 351 | yes |
-| `tests/Cli` | 4 | 32 | yes |
+| `tests/Cli` | 5 | 37 | yes |
 
 ```
 tests/
@@ -63,7 +63,8 @@ tests/
 │   ├── DatabaseTestCase.php          # DB test class with transaction isolation
 │   ├── TestDatabaseInitializer.php   # Installs Admidio once per PHPUnit process
 │   ├── AdmidioTestFixture.php        # Fixture builder that writes through the entities
-│   └── PermissionContext.php         # Sets the globals rights are resolved against
+│   ├── PermissionContext.php         # Sets the globals rights are resolved against
+│   └── CliSubprocess.php             # Starts ./admidio against the test database
 ├── bin/
 │   └── setup-test-env.php   # Environment setup and connectivity check
 ├── env.php                  # Reads .env.test and the process environment
@@ -85,12 +86,18 @@ tests/
 - **Location:** `tests/Integration/`, organized by domain (Users, Events, Roles, ...)
 
 ### CLI Tests
-- **Purpose:** The command line infrastructure and the result of a headless installation
+- **Purpose:** The command line infrastructure, the entry point and the result of a headless installation
 - **Dependencies:** a database
 - **Location:** `tests/Cli/`
-- They exercise `CliApplication`, `CliTaskRegistry` and `MaintenanceMode` **in process**. There is
-  no subprocess test: `system/bootstrap/cli.php` reads `adm_my_files/config.php` unconditionally, so
-  `./admidio` cannot be pointed at the test database.
+- Most of them exercise `CliApplication`, `CliTaskRegistry` and `MaintenanceMode` in process.
+  `CliProcessTest` starts `./admidio` as a real process instead, pointed at the test database
+  through the `--config` option of the CLI.
+
+A subprocess connects on its own and uses the `adm_my_files` of the checkout for its files. It
+therefore sees what the installation committed and never what a test wrote inside its
+transaction, and a test that drives it must not let it write anything. The trait
+`tests/Support/CliSubprocess` writes the configuration file for the engine of the run and starts
+the process.
 
 ## How a test runs
 
@@ -278,14 +285,20 @@ once it is fixed, which is the point.
 
 ## Performance
 
-Measured on one developer machine (PHP 8.4, databases in Docker), whole suite, 391 tests:
+Whole suite, 396 tests, measured on one developer machine:
 
-- MariaDB 10.11: about 7 minutes
-- PostgreSQL 15: about 1 minute
-- Unit tests alone: under a second
+| Where | Engine | Time |
+|-------|--------|------|
+| Windows, PHP 8.4 | MariaDB in Docker | about 7 minutes |
+| Linux container, PHP 8.2 | MariaDB 10.11 | 0:57 |
+| Linux container, PHP 8.2 | PostgreSQL 15 | 0:46 |
+| Linux container, PHP 8.2 | MySQL 8.0 | 1:12 |
+
+The unit tests alone take under a second anywhere.
 
 Most of the time goes into the installation at the start of the process and into the entities, not
-into PHPUnit.
+into PHPUnit. The Windows figure is dominated by process and connection overhead, which is why the
+same suite is an order of magnitude faster in a Linux container and why CI is not slow.
 
 ## Troubleshooting
 
