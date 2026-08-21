@@ -181,6 +181,10 @@ $engineMap = [
 ];
 define('DB_TYPE', $engineMap[$dbConfig['engine']] ?? \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL);
 
+// system/bootstrap/constants.php defines this from the configuration file; Database::tableExists()
+// looks the schema up by it
+define('DB_NAME', $dbConfig['database']);
+
 define('COOKIE_PREFIX', preg_replace('/\W/', '_', 'ADMIDIO_' . TABLE_PREFIX));
 
 // Session entity calls session_regenerate_id(), which requires an active PHP session.
