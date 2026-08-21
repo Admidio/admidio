@@ -1,235 +1,347 @@
 <?php
 /**
- * Database Abstraction Layer Tests
+ * Database Abstraction Tests
  *
- * Validates that Admidio's generic SQL works correctly across all supported database engines.
- * Tests MySQL, MariaDB, and PostgreSQL behavior.
+ * Tests the behaviour Admidio relies on from whichever database it runs against. The Database class
+ * hides the differences between MySQL, MariaDB and PostgreSQL, so the same statements and the same
+ * values have to come back the same way on all of them.
  *
- * @testdox Database abstraction layer handles cross-database SQL correctly
+ * These tests describe what the application assumes. Running them against a second engine is what
+ * turns them from a description into a comparison.
  */
 
 namespace Admidio\Tests\Integration\Database;
 
+use Admidio\Categories\Entity\Category;
+use Admidio\Roles\Entity\Role;
+use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 
 class DatabaseAbstractionTest extends DatabaseTestCase
 {
-    /**
-     * Every test in this class builds its data with TestDataBuilder, which returns generated
-     * arrays and never writes to the database, so none of them verifies any Admidio behaviour.
-     * They are kept as a specification of what still needs coverage and will be reimplemented
-     * against the real database for whatever the later test phases do not already cover.
-     */
-    protected function setUp(): void
+    protected function getFixture(): AdmidioTestFixture
     {
-        parent::setUp();
-
-        $this->markTestIncomplete('Uses the in-memory TestDataBuilder, needs a real database test.');
+        return new AdmidioTestFixture($this->getDatabase());
     }
 
     /**
-     * Test database connection and basic query execution
-     *
-     * @testdox Database connection is established and working
+     * The nesting depth of the open transactions, which the class only keeps internally.
      */
-    public function testDatabaseConnection(): void
+    private function transactionDepth(): int
     {
-        $database = $this->getDatabase();
-        $this->assertNotNull($database);
+        $property = new \ReflectionProperty($this->getDatabase(), 'transactions');
+        $property->setAccessible(true);
 
-        // Execute simple query
-        $result = $database->queryPrepared('SELECT 1 as test_value');
-        $this->assertNotNull($result);
+        return (int) $property->getValue($this->getDatabase());
     }
 
     /**
-     * Test boolean value handling across engines
+     * Test that the engine is known
      *
-     * @testdox Boolean values are stored and retrieved correctly
+     * @testdox The database reports which engine and product it runs on
      */
-    public function testBooleanHandling(): void
+    public function testDatabaseReportsWhichEngineItRunsOn(): void
     {
-        $database = $this->getDatabase();
+        $db = $this->getDatabase();
 
-        // Create a test user with boolean fields
-        $builder = $this->getTestDataBuilder();
-        $user = $builder->createUser('booltest', 'bool@test.local');
+        $this->assertContains($db->getEngine(), array('mysql', 'pgsql'));
+        $this->assertNotEmpty($db->getName());
 
-        // Most Admidio fields use tinyint(1) for booleans
-        // This test verifies the pattern works
-        $this->assertNotEmpty($user['usr_id']);
+        // the tables the application needs are there under the configured prefix
+        $this->assertTrue($db->tableExists(TBL_USERS));
+        $this->assertTrue($db->tableExists(TBL_ROLES));
+        $this->assertFalse($db->tableExists(TABLE_PREFIX . '_not_a_table'));
     }
 
     /**
-     * Test UUID/GUID handling across engines
+     * Test that a boolean survives the round trip
      *
-     * @testdox UUIDs are stored and retrieved as valid values
+     * @testdox A boolean column is stored and read back as a decision
      */
-    public function testUuidHandling(): void
+    public function testBooleanColumnIsStoredAndReadBackAsADecision(): void
     {
-        $builder = $this->getTestDataBuilder();
-        $org = $builder->createOrganization('UUIDTest');
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Bool Org', 'boolorg');
+        $category = $fixture->createAndSaveCategory('Bool Category', 'ROL', $org['org_id']);
 
-        // Verify UUID format is valid across engines
-        $this->assertNotEmpty($org['org_uuid']);
-        $this->assertValidUuid($org['org_uuid']);
+        $role = new Role($this->getDatabase());
+        $role->saveChangesWithoutRights();
+        $role->setValue('rol_cat_id', $category['cat_id']);
+        $role->setValue('rol_name', 'Bool Role');
+        $role->setValue('rol_announcements', 1);
+        $role->setValue('rol_events', 0);
+        $role->save();
+
+        $sql = 'SELECT rol_announcements, rol_events, rol_valid FROM ' . TBL_ROLES . ' WHERE rol_id = ?';
+        $row = $this->getDatabase()->queryPrepared($sql, [$role->getValue('rol_id')])->fetch();
+
+        $this->assertTrue((bool) $row['rol_announcements']);
+        $this->assertFalse((bool) $row['rol_events']);
+
+        // a column with a default is true without anybody setting it
+        $this->assertTrue((bool) $row['rol_valid']);
     }
 
     /**
-     * Test LIMIT/OFFSET behavior across engines
+     * Test that a boolean can be searched for
      *
-     * @testdox LIMIT and OFFSET work correctly on all engines
+     * @testdox A boolean can be used as a bound parameter in a condition
      */
-    public function testLimitOffset(): void
+    public function testBooleanCanBeUsedAsABoundParameter(): void
     {
-        $builder = $this->getTestDataBuilder();
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Bool Org', 'boolorg');
+        $category = $fixture->createAndSaveCategory('Bool Category', 'ROL', $org['org_id']);
+        $fixture->createAndSaveRoleInCategory('Valid Role', $category['cat_id']);
+        $invalid = $fixture->createAndSaveRoleInCategory('Invalid Role', $category['cat_id']);
+        $fixture->setRoleValidity($invalid['rol_id'], false);
 
-        // Create multiple test records
-        for ($i = 0; $i < 5; $i++) {
-            $builder->createCategory("Category $i", 'TEST');
+        $db = $this->getDatabase();
+        $sql = 'SELECT rol_name FROM ' . TBL_ROLES . ' WHERE rol_cat_id = ? AND rol_valid = ?';
+
+        $valid = array_column($db->queryPrepared($sql, [$category['cat_id'], true])->fetchAll(), 'rol_name');
+        $notValid = array_column($db->queryPrepared($sql, [$category['cat_id'], false])->fetchAll(), 'rol_name');
+
+        $this->assertEquals(array('Valid Role'), $valid);
+        $this->assertEquals(array('Invalid Role'), $notValid);
+    }
+
+    /**
+     * Test that a result can be cut into pages
+     *
+     * @testdox A result set can be limited and offset
+     */
+    public function testResultSetCanBeLimitedAndOffset(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Limit Org', 'limitorg');
+        $category = $fixture->createAndSaveCategory('Limit Category', 'ROL', $org['org_id']);
+        foreach (array('A', 'B', 'C', 'D', 'E') as $suffix) {
+            $fixture->createAndSaveRoleInCategory('Role ' . $suffix, $category['cat_id']);
         }
 
-        // In real tests, we'd query the database directly with LIMIT/OFFSET
-        // This demonstrates the pattern
-        $this->assertTrue(true);
+        $db = $this->getDatabase();
+        $sql = 'SELECT rol_name FROM ' . TBL_ROLES . ' WHERE rol_cat_id = ? ORDER BY rol_name';
+
+        $all = array_column($db->queryPrepared($sql, [$category['cat_id']])->fetchAll(), 'rol_name');
+        $this->assertEquals(array('Role A', 'Role B', 'Role C', 'Role D', 'Role E'), $all);
+
+        $firstTwo = array_column($db->queryPrepared($sql . ' LIMIT 2', [$category['cat_id']])->fetchAll(), 'rol_name');
+        $this->assertEquals(array('Role A', 'Role B'), $firstTwo);
+
+        $nextTwo = array_column($db->queryPrepared($sql . ' LIMIT 2 OFFSET 2', [$category['cat_id']])->fetchAll(), 'rol_name');
+        $this->assertEquals(array('Role C', 'Role D'), $nextTwo);
     }
 
     /**
-     * Test NULL value handling across engines
+     * Test that sorting is stable
      *
-     * @testdox NULL values are handled correctly in all engines
+     * @testdox Sorting returns the rows in the order that was asked for
      */
-    public function testNullHandling(): void
+    public function testSortingReturnsTheRowsInTheOrderThatWasAskedFor(): void
     {
-        $builder = $this->getTestDataBuilder();
-        $user = $builder->createUser('nulltest', 'null@test.local');
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Sort Org', 'sortorg');
+        $category = $fixture->createAndSaveCategory('Sort Category', 'ROL', $org['org_id']);
+        foreach (array('Charlie', 'alpha', 'Bravo') as $name) {
+            $fixture->createAndSaveRoleInCategory($name, $category['cat_id']);
+        }
 
-        // User has NULL end date for membership (indefinite)
-        // This tests NULL handling across engines
-        $this->assertNotNull($user['usr_id']);
+        $db = $this->getDatabase();
+        $sql = 'SELECT rol_name FROM ' . TBL_ROLES . ' WHERE rol_cat_id = ? ORDER BY rol_name ';
+
+        $ascending = array_column($db->queryPrepared($sql . 'ASC', [$category['cat_id']])->fetchAll(), 'rol_name');
+        $descending = array_column($db->queryPrepared($sql . 'DESC', [$category['cat_id']])->fetchAll(), 'rol_name');
+
+        $this->assertEquals(array_reverse($ascending), $descending);
+
+        // the collation sorts without regard to case, so the lower case name is not sorted last
+        $this->assertEquals(array('alpha', 'Bravo', 'Charlie'), $ascending);
     }
 
     /**
-     * Test date/time handling across engines
+     * Test that text is compared without regard to case
      *
-     * @testdox Date and time values are stored and retrieved correctly
+     * @testdox Text is compared without regard to case
      */
-    public function testDateTimeHandling(): void
+    public function testTextIsComparedWithoutRegardToCase(): void
     {
-        $builder = $this->getTestDataBuilder();
-        $org = $builder->createOrganization('DateTimeTest');
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Case Org', 'caseorg');
+        $fixture->createAndSaveCategory('Mixed Case Name', 'ROL', $org['org_id']);
 
-        // Timestamps should be valid
-        $this->assertValidTimestamp($org['created_at']);
+        $db = $this->getDatabase();
+        $sql = 'SELECT COUNT(*) FROM ' . TBL_CATEGORIES . ' WHERE cat_org_id = ? AND cat_name = ?';
+
+        $this->assertEquals(1, (int) $db->queryPrepared($sql, [$org['org_id'], 'Mixed Case Name'])->fetchColumn());
+
+        // this is what makes two organizations that differ only in the case of their short name
+        // collide on the unique index
+        $this->assertEquals(1, (int) $db->queryPrepared($sql, [$org['org_id'], 'mixed case name'])->fetchColumn());
+        $this->assertEquals(1, (int) $db->queryPrepared($sql, [$org['org_id'], 'MIXED CASE NAME'])->fetchColumn());
     }
 
     /**
-     * Test transaction support across engines
+     * Test that text outside the latin alphabet survives
      *
-     * @testdox Transactions work with nested transaction support
+     * @testdox Text of any script is stored and read back unchanged
      */
-    public function testTransactionSupport(): void
+    public function testTextOfAnyScriptIsStoredAndReadBackUnchanged(): void
     {
-        $database = $this->getDatabase();
-        $builder = $this->getTestDataBuilder();
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Utf Org', 'utforg');
 
-        // Outer transaction started in setUp
-        $org1 = $builder->createOrganization('TransTest1');
-        $this->assertNotEmpty($org1['org_id']);
+        $names = array('Grüße aus Wien', 'Ελληνικά', '日本語のテキスト', 'Крокодил', 'Emoji ✓ ☂');
+        $ids = array();
+        foreach ($names as $index => $name) {
+            $category = $fixture->createAndSaveCategory($name, 'ROL', $org['org_id']);
+            $ids[$index] = $category['cat_id'];
+        }
 
-        // Create another org in same transaction
-        $org2 = $builder->createOrganization('TransTest2');
-        $this->assertNotEmpty($org2['org_id']);
-
-        // Both should exist until rollback in tearDown
-        $this->assertNotEquals($org1['org_id'], $org2['org_id']);
+        $db = $this->getDatabase();
+        $sql = 'SELECT cat_name FROM ' . TBL_CATEGORIES . ' WHERE cat_id = ?';
+        foreach ($names as $index => $name) {
+            $this->assertEquals($name, $db->queryPrepared($sql, [$ids[$index]])->fetchColumn());
+        }
     }
 
     /**
-     * Test foreign key constraints are enforced
+     * Test that a missing value stays missing
      *
-     * @testdox Foreign key relationships are validated
+     * @testdox A column without a value is read back as null and can be searched for
      */
-    public function testForeignKeyHandling(): void
+    public function testColumnWithoutAValueIsReadBackAsNull(): void
     {
-        $builder = $this->getTestDataBuilder();
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Null Org', 'nullorg');
+        $category = $fixture->createAndSaveCategory('Null Category', 'ROL', $org['org_id']);
+        $role = $fixture->createAndSaveRoleInCategory('Null Role', $category['cat_id']);
 
-        // Create organization and user
-        $org = $builder->createOrganization('FKTest');
-        $user = $builder->createUser('fktest', 'fk@test.local', $org['org_id']);
+        $db = $this->getDatabase();
+        $sql = 'SELECT rol_description, rol_timestamp_change FROM ' . TBL_ROLES . ' WHERE rol_id = ?';
+        $row = $db->queryPrepared($sql, [$role['rol_id']])->fetch();
 
-        // User should reference valid organization
-        $this->assertEquals($org['org_id'], $user['org_id']);
+        $this->assertNull($row['rol_timestamp_change']);
+
+        // and a condition finds it, which a comparison with a value would not
+        $sql = 'SELECT COUNT(*) FROM ' . TBL_ROLES . ' WHERE rol_id = ? AND rol_timestamp_change IS NULL';
+        $this->assertEquals(1, (int) $db->queryPrepared($sql, [$role['rol_id']])->fetchColumn());
     }
 
     /**
-     * Test auto-increment/SEQUENCE behavior across engines
+     * Test that a new record gets an id
      *
-     * @testdox Auto-increment values are assigned correctly on all engines
+     * @testdox Every inserted record is given the next free key
      */
-    public function testAutoIncrementBehavior(): void
+    public function testEveryInsertedRecordIsGivenTheNextFreeKey(): void
     {
-        $builder = $this->getTestDataBuilder();
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Key Org', 'keyorg');
+        $category = $fixture->createAndSaveCategory('Key Category', 'ROL', $org['org_id']);
 
-        $org1 = $builder->createOrganization('AutoInc1');
-        $org2 = $builder->createOrganization('AutoInc2');
+        $first = $fixture->createAndSaveRoleInCategory('First Role', $category['cat_id']);
+        $second = $fixture->createAndSaveRoleInCategory('Second Role', $category['cat_id']);
 
-        // IDs should be numeric and incrementing
-        $this->assertIsInt($org1['org_id']);
-        $this->assertIsInt($org2['org_id']);
-        $this->assertGreaterThan(0, $org1['org_id']);
-        $this->assertGreaterThan(0, $org2['org_id']);
+        $this->assertGreaterThan(0, $first['rol_id']);
+        $this->assertGreaterThan($first['rol_id'], $second['rol_id']);
+
+        // the key the insert reports is the key the row actually has
+        $sql = 'SELECT rol_name FROM ' . TBL_ROLES . ' WHERE rol_id = ?';
+        $this->assertEquals('Second Role', $this->getDatabase()->queryPrepared($sql, [$second['rol_id']])->fetchColumn());
     }
 
     /**
-     * Test character encoding across engines
+     * Test that transactions can be nested
      *
-     * @testdox UTF-8 characters are stored and retrieved correctly
+     * @testdox Transactions are counted so that an inner one does not commit the outer one
      */
-    public function testCharacterEncoding(): void
+    public function testTransactionsAreCountedSoAnInnerOneDoesNotCommitTheOuter(): void
     {
-        $builder = $this->getTestDataBuilder();
+        $db = $this->getDatabase();
 
-        // Test with UTF-8 characters
-        $orgName = 'Ümläutë Tëst Örgänïzätîön';
-        $org = $builder->createOrganization($orgName);
+        // the test itself already runs inside a transaction
+        $outer = $this->transactionDepth();
+        $this->assertGreaterThan(0, $outer);
 
-        $this->assertEquals($orgName, $org['org_name']);
+        $db->startTransaction();
+        $this->assertEquals($outer + 1, $this->transactionDepth());
+
+        $db->startTransaction();
+        $this->assertEquals($outer + 2, $this->transactionDepth());
+
+        $db->endTransaction();
+        $db->endTransaction();
+
+        // back where it started, and the outer transaction is still open
+        $this->assertEquals($outer, $this->transactionDepth());
     }
 
     /**
-     * Test case sensitivity across engines
+     * Test that a rollback discards everything
      *
-     * @testdox String comparisons are case-sensitive where expected
+     * @testdox A rollback discards the whole stack of transactions at once
      */
-    public function testCaseSensitivity(): void
+    public function testRollbackDiscardsTheWholeStackAtOnce(): void
     {
-        $builder = $this->getTestDataBuilder();
+        $db = $this->getDatabase();
 
-        $user1 = $builder->createUser('CaseTest', 'case@test.local');
-        $user2 = $builder->createUser('casetest', 'case2@test.local');
+        $db->startTransaction();
+        $db->startTransaction();
+        $this->assertGreaterThan(1, $this->transactionDepth());
 
-        // Both should be created as different users
-        $this->assertNotEquals($user1['usr_id'], $user2['usr_id']);
+        $db->rollback();
+
+        // rollback does not unwind one level, it ends every open transaction
+        $this->assertEquals(0, $this->transactionDepth());
+
+        // the test has lost its isolation now, so start a fresh transaction for the tear down
+        $db->startTransaction();
     }
 
     /**
-     * Test ORDER BY behavior across engines
+     * Test the shortcut that returns rows as an array
      *
-     * @testdox ORDER BY clause works consistently across engines
+     * @testdox A statement can be read straight into an array
      */
-    public function testOrderByBehavior(): void
+    public function testStatementCanBeReadStraightIntoAnArray(): void
     {
-        $builder = $this->getTestDataBuilder();
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Array Org', 'arrayorg');
+        $category = $fixture->createAndSaveCategory('Array Category', 'ROL', $org['org_id']);
+        $fixture->createAndSaveRoleInCategory('Array Role', $category['cat_id']);
 
-        // Create multiple organizations with different names
-        $builder->createOrganization('Zebra');
-        $builder->createOrganization('Alpha');
-        $builder->createOrganization('Beta');
+        $rows = $this->getDatabase()->getArrayFromSql(
+            'SELECT rol_name FROM ' . TBL_ROLES . ' WHERE rol_cat_id = ?',
+            array($category['cat_id'])
+        );
 
-        $orgs = $builder->getOrganizations();
+        $this->assertCount(1, $rows);
+        $this->assertEquals('Array Role', $rows[0]['rol_name']);
+    }
 
-        // Should have all 3 organizations
-        $this->assertCount(3, $orgs);
+    /**
+     * Test that the placeholder list is built for the values
+     *
+     * @testdox A list of values can be turned into placeholders for a statement
+     */
+    public function testListOfValuesCanBeTurnedIntoPlaceholders(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('In Org', 'inorg');
+        $category = $fixture->createAndSaveCategory('In Category', 'ROL', $org['org_id']);
+        $first = $fixture->createAndSaveRoleInCategory('First Role', $category['cat_id']);
+        $second = $fixture->createAndSaveRoleInCategory('Second Role', $category['cat_id']);
+        $third = $fixture->createAndSaveRoleInCategory('Third Role', $category['cat_id']);
+
+        $wanted = array($first['rol_id'], $third['rol_id']);
+        $db = $this->getDatabase();
+
+        $sql = 'SELECT rol_name FROM ' . TBL_ROLES . '
+                 WHERE rol_id IN (' . \Admidio\Infrastructure\Database::getQmForValues($wanted) . ')
+              ORDER BY rol_name';
+        $names = array_column($db->queryPrepared($sql, $wanted)->fetchAll(), 'rol_name');
+
+        $this->assertEquals(array('First Role', 'Third Role'), $names);
+        $this->assertNotContains('Second Role', $names);
     }
 }

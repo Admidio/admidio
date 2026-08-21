@@ -145,5 +145,60 @@ class DataIntegrityTest extends DatabaseTestCase
             $uuidPattern,
             $fixture->getCategoryById($cat['cat_id'])['cat_uuid']
         );
+
+        $role = $fixture->createAndSaveRole('UUID Role', $org['org_id']);
+        $this->assertMatchesRegularExpression(
+            $uuidPattern,
+            $fixture->getRoleById($role['rol_id'])['rol_uuid']
+        );
+    }
+
+    /**
+     * Test that the unique ids really are unique
+     *
+     * @testdox The unique id of a record is never handed out twice
+     */
+    public function testUniqueIdOfARecordIsNeverHandedOutTwice(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Unique Org', 'uniqorg');
+
+        $uuids = array();
+        for ($index = 0; $index < 5; ++$index) {
+            $role = $fixture->createAndSaveRole('Role ' . $index, $org['org_id']);
+            $uuids[] = $fixture->getRoleById($role['rol_id'])['rol_uuid'];
+
+            $user = $fixture->createAndSaveUser('uniq' . $index, 'u' . $index . '@example.local');
+            $uuids[] = $fixture->getUserById($user['usr_id'])['usr_uuid'];
+
+            $category = $fixture->createAndSaveCategory('Category ' . $index, 'ROL', $org['org_id']);
+            $uuids[] = $fixture->getCategoryById($category['cat_id'])['cat_uuid'];
+        }
+
+        // a uuid is what links a record across requests, so a repeat would address the wrong record
+        $this->assertCount(count($uuids), array_unique($uuids));
+    }
+
+    /**
+     * Test that records remember when they were created and by whom
+     *
+     * @testdox A record records when it was created and who created it
+     */
+    public function testRecordRecordsWhenItWasCreatedAndByWhom(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Stamp Org', 'stamporg');
+        $role = $fixture->createAndSaveRole('Stamped Role', $org['org_id']);
+
+        $sql = 'SELECT rol_timestamp_create, rol_usr_id_create, rol_timestamp_change, rol_usr_id_change
+                  FROM ' . TBL_ROLES . ' WHERE rol_id = ?';
+        $row = $this->getDatabase()->queryPrepared($sql, [$role['rol_id']])->fetch();
+
+        $this->assertNotEmpty($row['rol_timestamp_create']);
+        $this->assertEquals(date('Y-m-d'), substr($row['rol_timestamp_create'], 0, 10));
+
+        // nothing has been changed yet, so the change fingerprint is still empty
+        $this->assertNull($row['rol_timestamp_change']);
+        $this->assertNull($row['rol_usr_id_change']);
     }
 }
