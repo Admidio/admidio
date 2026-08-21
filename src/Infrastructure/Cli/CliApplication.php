@@ -96,6 +96,7 @@ final class CliApplication
      * @var array<int,array<string,mixed>>
      */
     private const GLOBAL_OPTIONS = array(
+        array('name' => 'config', 'value' => 'FILE', 'description' => 'Configuration file to use instead of adm_my_files/config.php.'),
         array('name' => 'host', 'value' => 'HOST', 'description' => 'Host used by host-dependent config.php files.'),
         array('name' => 'organization', 'value' => 'ORG', 'description' => 'Organization short name.'),
         array('name' => 'as', 'value' => 'USER', 'description' => 'Acting Admidio user for rights and audit identity.'),
@@ -343,7 +344,7 @@ final class CliApplication
     private function findCommand(array $argv): array
     {
         $globalFlags = array('quiet', 'no-interaction', 'yes', 'help');
-        $globalValueOptions = array('host', 'organization', 'as', 'format', 'output');
+        $globalValueOptions = array('config', 'host', 'organization', 'as', 'format', 'output');
 
         for ($index = 1, $count = count($argv); $index < $count; ++$index) {
             $token = $argv[$index];
