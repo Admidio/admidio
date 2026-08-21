@@ -109,6 +109,11 @@ each test
 Nothing a test writes survives it, so the tests do not depend on each other and the database is
 installed once per process rather than once per test.
 
+The bootstrap sets `$gDebug`, so PDO runs in `ERRMODE_EXCEPTION` and a failing statement raises
+an Admidio exception with the SQL error instead of being swallowed. Without it PostgreSQL reports
+a rejected statement only through the return value of `execute()`, which `Database::queryPrepared()`
+passes on as `false` without a log entry, and a test then sees a record that was never written.
+
 Two things to know when writing a test:
 
 - `Admidio\Infrastructure\Exception::__construct()` calls `$gDb->rollback()`, which unwinds the

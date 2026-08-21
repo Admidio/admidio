@@ -175,6 +175,15 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 $_SERVER['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
 $_SERVER['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'] ?? 'Admidio Test Suite';
 
+/*
+ * Database::setConnectionOptions() reads this and puts PDO into ERRMODE_EXCEPTION instead of
+ * ERRMODE_SILENT. Without it a statement that PostgreSQL rejects through the return value of
+ * execute() is not reported at all: queryPrepared() answers false, Entity::save() answers false
+ * and the test sees a record that is simply not there.
+ */
+$gDebug = true;
+$GLOBALS['gDebug'] = $gDebug;
+
 try {
     // Initialize Admidio Database class
     // Logger is now available globally for Database to use
