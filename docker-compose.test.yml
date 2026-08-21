@@ -6,7 +6,7 @@ version: '3.8'
 
 services:
   mariadb:
-    image: mariadb:10.6
+    image: mariadb:10.11
     container_name: admidio-test-mariadb
     ports:
       - "3306:3306"
@@ -86,7 +86,7 @@ networks:
 
 # Notes:
 #
-# MariaDB 10.6 - Widely used, compatible with MySQL 5.7+
+# MariaDB 10.11 - Long term support release, compatible with MySQL 5.7+
 # PostgreSQL 15 - Latest stable version
 # Mailpit - Lightweight SMTP testing (web UI at http://localhost:8025)
 #

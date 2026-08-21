@@ -244,7 +244,7 @@ to `v4.3`, weekly for MySQL, and on demand:
 | Job | Runs | Contents |
 |-----|------|----------|
 | `fast-checks` | every run | PHP syntax of `src`, `system`, `modules`, `install`, `tests`; `composer validate`; unit tests |
-| `mariadb` | every run | MariaDB 10.6, integration and CLI tests |
+| `mariadb` | every run | MariaDB 10.11, integration and CLI tests |
 | `postgres` | every run | PostgreSQL 15, integration and CLI tests |
 | `mysql` | weekly and on demand | MySQL 8.0, integration and CLI tests |
 
@@ -275,7 +275,7 @@ once it is fixed, which is the point.
 
 Measured on one developer machine (PHP 8.4, databases in Docker), whole suite, 391 tests:
 
-- MariaDB 10.6: about 7 minutes
+- MariaDB 10.11: about 7 minutes
 - PostgreSQL 15: about 1 minute
 - Unit tests alone: under a second
 
