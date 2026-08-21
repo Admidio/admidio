@@ -18,8 +18,8 @@ if (PHP_SAPI !== 'cli') {
 /**
  * Read one option needed before the Admidio autoloader/bootstrap is available.
  *
- * --host and --organization have to be known before adm_my_files/config.php is loaded, which is
- * long before the class autoloader exists. This small parser therefore cannot live in
+ * --config, --host and --organization have to be known before the configuration file is loaded,
+ * which is long before the class autoloader exists. This small parser therefore cannot live in
  * CliApplication; the duplication with its option handling is intentional.
  *
  * @param array<int,string> $arguments
@@ -56,7 +56,7 @@ function admCliBootstrapCommand(array $arguments): string
 {
     $globalFlags = array('quiet', 'no-interaction', 'yes', 'help');
     $globalShortFlags = array('h', 'q', 'y');
-    $globalValueOptions = array('host', 'organization', 'as', 'format', 'output');
+    $globalValueOptions = array('config', 'host', 'organization', 'as', 'format', 'output');
 
     for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
         $token = $arguments[$index];
@@ -103,8 +103,19 @@ $cliOrganization = admCliBootstrapOption($argv, 'organization');
 $cliCommand = admCliBootstrapCommand($argv);
 
 /*
- * Maintenance mode has to be inspectable and revocable while the database is unavailable, so its
- * command reads the configuration file but opens no database connection.
+ * A second installation on the same machine, a test database or a restored backup can be
+ * addressed with its own configuration file. The path is resolved here so that the bootstrap,
+ * the check below and the install commands all mean the same file.
+ */
+$cliConfigFile = admCliBootstrapOption($argv, 'config');
+
+if ($cliConfigFile === '') {
+    $cliConfigFile = __DIR__ . '/adm_my_files/config.php';
+}
+
+/*
+ * Maintenance mode has to be manageable while the database is unavailable, so its command is
+ * bootstrapped without a database connection (see system/bootstrap/cli.php).
  */
 $cliSkipDatabase = $cliCommand === 'maintenance:mode';
 
@@ -122,7 +133,7 @@ $installationCommands = array('install:check', 'install:run');
 $documentationCommands = array('', 'help', 'list', 'completion', 'cli:selfcheck');
 
 $installationBootstrap = in_array($cliCommand, $installationCommands, true)
-    || (in_array($cliCommand, $documentationCommands, true) && !is_file(__DIR__ . '/adm_my_files/config.php'));
+    || (in_array($cliCommand, $documentationCommands, true) && !is_file($cliConfigFile));
 
 try {
     if (in_array($cliCommand, $installationCommands, true)) {

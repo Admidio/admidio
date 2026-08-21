@@ -17,8 +17,8 @@ use Admidio\Infrastructure\Language;
  * values are taken from the command line instead, and the install commands verify that what they
  * received matches what was bootstrapped here.
  *
- * The following variables are read if the calling script has set them: $cliHost, $cliRootUrl,
- * $cliLanguage, $cliTablePrefix, $cliDbType and $cliTimezone.
+ * The following variables are read if the calling script has set them: $cliConfigFile, $cliHost,
+ * $cliRootUrl, $cliLanguage, $cliTablePrefix, $cliDbType and $cliTimezone.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -31,7 +31,12 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $rootPath = dirname(__DIR__, 2);
-$configFile = $rootPath . '/adm_my_files/config.php';
+$configFile = isset($cliConfigFile) && $cliConfigFile !== ''
+    ? $cliConfigFile
+    : $rootPath . '/adm_my_files/config.php';
+
+// install:run writes the configuration file of the new installation to exactly this place
+define('ADMIDIO_CONFIG_FILE', $configFile);
 
 require_once $rootPath . '/system/bootstrap/cli-request.php';
 

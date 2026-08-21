@@ -14,7 +14,8 @@ use Admidio\Organizations\Entity\Organization;
  * presenters/navigation. Profile fields and the acting user are initialized lazily by the CLI.
  *
  * The optional variable $cliOrganization may contain an organization short name that should be
- * used instead of the organization configured through $g_organization.
+ * used instead of the organization configured through $g_organization. The optional variable
+ * $cliConfigFile may contain the path of a configuration file that replaces adm_my_files/config.php.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -27,11 +28,16 @@ if (PHP_SAPI !== 'cli') {
 }
 
 $rootPath = dirname(__DIR__, 2);
-$configFile = $rootPath . '/adm_my_files/config.php';
+$configFile = isset($cliConfigFile) && $cliConfigFile !== ''
+    ? $cliConfigFile
+    : $rootPath . '/adm_my_files/config.php';
 
 if (!is_file($configFile)) {
-    throw new RuntimeException('Admidio configuration file adm_my_files/config.php was not found.');
+    throw new RuntimeException('Admidio configuration file ' . $configFile . ' was not found.');
 }
+
+// the install commands write their configuration file to the same place the bootstrap reads it
+define('ADMIDIO_CONFIG_FILE', $configFile);
 
 require_once $rootPath . '/system/bootstrap/cli-request.php';
 
