@@ -36,7 +36,10 @@ class MembershipLifecycleTest extends DatabaseTestCase
      */
     private function administrator(): User
     {
-        return new User($this->getDatabase(), $GLOBALS['gProfileFields'], 1);
+        $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = ?';
+        $usrId = (int) $this->getDatabase()->queryPrepared($sql, ['admin'])->fetchColumn();
+
+        return new User($this->getDatabase(), $GLOBALS['gProfileFields'], $usrId);
     }
 
     /**
