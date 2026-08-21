@@ -39,7 +39,7 @@ concurrency:
 env:
   PHP_VERSION: '8.2'
   # the suite refuses to run unless database and file path are marked as a test environment
-  TEST_FILES_PATH: ./adm_my_files_test
+  TEST_FILES_PATH: ./tests/adm_my_files
 
 defaults:
   run:
