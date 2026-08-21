@@ -45,7 +45,10 @@ class AuthenticationSecurityTest extends DatabaseTestCase
      */
     private function asAdministrator(callable $callback)
     {
-        $administrator = new User($this->getDatabase(), $GLOBALS['gProfileFields'], 1);
+        $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = ?';
+        $usrId = (int) $this->getDatabase()->queryPrepared($sql, ['admin'])->fetchColumn();
+
+        $administrator = new User($this->getDatabase(), $GLOBALS['gProfileFields'], $usrId);
 
         return $this->withCurrentUser($administrator, self::ORG_ID, true, $callback);
     }
