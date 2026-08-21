@@ -25,6 +25,8 @@ use Admidio\Infrastructure\Utils\MaintenanceMode;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
+use Admidio\InstallationUpdate\Service\Installation;
+use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemBorrowData;
 use Admidio\Inventory\Entity\ItemField;
@@ -411,12 +413,67 @@ final class CoreTasks
 
     private static function registerSystemTasks(): void
     {
-        $installReason = 'current master implements installation as the procedural web flow under install/install_steps/; '
-            . 'src/InstallationUpdate/Service/Installation.php has no complete headless installation operation.';
-        self::task('install:check', 'unavailable', 'Validate prerequisites for a new installation.',
-            'install:check', null, false, array(), array(), array(), $installReason);
-        self::task('install:run', 'unavailable', 'Install a new Admidio database and organization.',
-            'install:run', null, false, array(), array(), array(), $installReason);
+        /*
+         * The database of a new installation is described by adm_my_files/config.php. If that file
+         * already exists, its values are used and the --db-* options may only repeat them. If it
+         * doesn't exist, the options describe the database and install:run writes the file.
+         *
+         * Every value that is not given as an option is asked for, in the order of the web
+         * installation wizard, unless --no-interaction forbids questions.
+         */
+        $installOptions = array(
+            self::opt('db-type', 'Database system. Required without an existing configuration file.', 'TYPE', false, false, false, array('mariadb', 'mysql', 'pgsql')),
+            self::opt('db-host', 'Host name or IP address of the database server.', 'HOST'),
+            self::opt('db-port', 'Port of the database server. Empty for the default port of the database system.', 'PORT'),
+            self::opt('db-name', 'Name of the database.', 'NAME'),
+            self::opt('db-user', 'User of the database.', 'USER'),
+            self::opt('db-password', 'Password of the database user. Prefer --db-password-stdin.', 'PASSWORD'),
+            self::opt('db-password-stdin', 'Read the password of the database user from STDIN.', '', false, false, true),
+            self::opt('table-prefix', 'Prefix of the Admidio tables, "adm" by default.', 'PREFIX'),
+            self::opt('root-url', 'URL of this Admidio installation. Required without an existing configuration file.', 'URL'),
+            self::opt('language', 'Language of the new organization, "en" by default.', 'LANGUAGE'),
+            self::opt('timezone', 'Time zone of the new organization.', 'TIMEZONE'),
+            self::opt('organization-shortname', 'Short name of the organization.', 'NAME', true),
+            self::opt('organization-name', 'Name of the organization.', 'NAME', true),
+            self::opt('organization-email', 'Email address of the organization administrator.', 'EMAIL', true),
+            self::opt('admin-login', 'Login name of the administrator.', 'LOGIN', true),
+            self::opt('admin-first-name', 'First name of the administrator.', 'NAME', true),
+            self::opt('admin-last-name', 'Last name of the administrator.', 'NAME', true),
+            self::opt('admin-email', 'Email address of the administrator.', 'EMAIL', true),
+            self::opt('admin-password', 'Password of the administrator. Prefer --admin-password-stdin.', 'PASSWORD'),
+            self::opt('admin-password-stdin', 'Read the password of the administrator from STDIN. It is the second line if the database password is read from STDIN too.', '', false, false, true),
+            self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+        );
+        $installUsage = '--db-type=TYPE --db-host=HOST --db-name=NAME --db-user=USER --root-url=URL'
+            . ' --organization-shortname=NAME --organization-name=NAME --organization-email=EMAIL'
+            . ' --admin-login=LOGIN --admin-first-name=NAME --admin-last-name=NAME --admin-email=EMAIL [options]';
+        $installExample = 'admidio %COMMAND% --db-type=mariadb --db-host=localhost --db-name=admidio --db-user=admidio'
+            . ' --db-password-stdin --root-url=https://www.example.org/admidio --timezone=Europe/Berlin'
+            . ' --organization-shortname=EXAMPLE --organization-name="Example Organization" --organization-email=info@example.org'
+            . ' --admin-login=admin --admin-first-name=Anna --admin-last-name=Admin --admin-email=anna@example.org --admin-password-stdin';
+
+        self::task(
+            'install:check',
+            'installCheck',
+            'Check all values and prerequisites of a new installation without changing anything. Missing values are asked for.',
+            'install:check ' . $installUsage,
+            null,
+            false,
+            array(),
+            $installOptions,
+            array(str_replace('%COMMAND%', 'install:check', $installExample))
+        );
+        self::task(
+            'install:run',
+            'installRun',
+            'Install a new Admidio database with its first organization and administrator. Missing values are asked for, --no-interaction requires all of them as options.',
+            'install:run ' . $installUsage . ' [--yes]',
+            null,
+            false,
+            array(),
+            array_merge($installOptions, array(self::opt('yes', 'Confirm the installation.', '', false, false, true))),
+            array(str_replace('%COMMAND%', 'install:run', $installExample) . ' --yes')
+        );
 
         self::task(
             'update:check',
@@ -2289,6 +2346,236 @@ final class CoreTasks
         }
 
         return $state === 'ok' ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_STATE_NOT_OK;
+    }
+
+    /**
+     * Path of the configuration file that describes the database of this Admidio installation.
+     */
+    private static function installationConfigPath(): string
+    {
+        return ADMIDIO_PATH . FOLDER_DATA . '/config.php';
+    }
+
+    /**
+     * Build the input of a new installation out of the options of install:check and install:run.
+     *
+     * Admidio derives its table names, its time zone and its URL from the configuration file while
+     * it is bootstrapping, therefore long before this command runs. The corresponding options were
+     * already read by the CLI bootstrap, and the values of the bootstrap are the defaults here. A
+     * difference between both means that the option cannot take effect, so it is reported instead
+     * of silently installing something else.
+     *
+     * @param array<string,mixed> $options
+     * @throws Exception
+     */
+    private static function installationConfig(array $options): InstallationConfig
+    {
+        global $gL10n;
+
+        $configFileExists = is_file(self::installationConfigPath());
+
+        $config = InstallationConfig::fromArray(array(
+            'dbType' => CliApplication::optionString($options, 'db-type', $configFileExists ? DB_TYPE : ''),
+            'dbHost' => CliApplication::optionString($options, 'db-host', $configFileExists ? (string) DB_HOST : ''),
+            'dbPort' => CliApplication::optionString($options, 'db-port', $configFileExists && DB_PORT !== null ? (string) DB_PORT : ''),
+            'dbName' => CliApplication::optionString($options, 'db-name', $configFileExists ? (string) DB_NAME : ''),
+            'dbUsername' => CliApplication::optionString($options, 'db-user', $configFileExists ? (string) DB_USERNAME : ''),
+            'dbPassword' => self::installationSecret($options, 'db-password', $configFileExists ? (string) DB_PASSWORD : ''),
+            'tablePrefix' => CliApplication::optionString($options, 'table-prefix', TABLE_PREFIX),
+            'rootUrl' => CliApplication::optionString($options, 'root-url', $configFileExists ? ADMIDIO_URL : ''),
+            'language' => CliApplication::optionString($options, 'language', $gL10n->getLanguage()),
+            'timezone' => CliApplication::optionString($options, 'timezone', date_default_timezone_get()),
+            'organizationShortName' => CliApplication::optionString($options, 'organization-shortname'),
+            'organizationName' => CliApplication::optionString($options, 'organization-name'),
+            'organizationEmail' => CliApplication::optionString($options, 'organization-email'),
+            'adminLogin' => CliApplication::optionString($options, 'admin-login'),
+            'adminFirstName' => CliApplication::optionString($options, 'admin-first-name'),
+            'adminLastName' => CliApplication::optionString($options, 'admin-last-name'),
+            'adminEmail' => CliApplication::optionString($options, 'admin-email'),
+            'adminPassword' => self::installationSecret($options, 'admin-password', '')
+        ));
+
+        if ($configFileExists) {
+            /*
+             * The site reads its database out of the configuration file, so an installation into a
+             * different database would leave a site that cannot reach its own data.
+             */
+            self::assertConfigFileValue('db-type', $config->dbType, DB_TYPE);
+            self::assertConfigFileValue('db-host', $config->dbHost, (string) DB_HOST);
+            self::assertConfigFileValue('db-port', (string) $config->dbPort, (string) InstallationConfig::normalizePort(DB_PORT));
+            self::assertConfigFileValue('db-name', $config->dbName, (string) DB_NAME);
+            self::assertConfigFileValue('db-user', $config->dbUsername, (string) DB_USERNAME);
+            self::assertConfigFileValue('db-password', $config->dbPassword, (string) DB_PASSWORD, false);
+            self::assertConfigFileValue('table-prefix', $config->tablePrefix, TABLE_PREFIX);
+            self::assertConfigFileValue('timezone', $config->timezone, date_default_timezone_get());
+            self::assertConfigFileValue('root-url', $config->rootUrl, rtrim(ADMIDIO_URL, '/'));
+
+            return $config;
+        }
+
+        if (CliApplication::optionString($options, 'root-url') === '') {
+            throw new InvalidArgumentException(
+                'Missing required option --root-url. Without ' . FOLDER_DATA
+                . '/config.php the URL of the new installation is not known.'
+            );
+        }
+
+        self::assertBootstrapValue('db-type', $config->dbType, DB_TYPE);
+        self::assertBootstrapValue('table-prefix', $config->tablePrefix, TABLE_PREFIX);
+        self::assertBootstrapValue('timezone', $config->timezone, date_default_timezone_get());
+        self::assertBootstrapValue('root-url', $config->rootUrl, rtrim(ADMIDIO_URL, '/'));
+
+        return $config;
+    }
+
+    /**
+     * Read a password of the installation, either from its option or from a line of STDIN.
+     *
+     * @param array<string,mixed> $options
+     */
+    private static function installationSecret(array $options, string $name, string $default): string
+    {
+        $secret = CliApplication::readSecret($options, $name, $name . '-stdin');
+
+        return $secret === '' ? $default : $secret;
+    }
+
+    /**
+     * Check an option of the installation against the value that the configuration file defines.
+     *
+     * @param bool $showValues Set to false for a secret, whose values may not be printed.
+     * @throws InvalidArgumentException
+     */
+    private static function assertConfigFileValue(
+        string $option,
+        string $value,
+        string $configFileValue,
+        bool $showValues = true
+    ): void {
+        if ($value === $configFileValue) {
+            return;
+        }
+
+        throw new InvalidArgumentException(
+            '--' . $option . ($showValues ? ' is "' . $value . '" but ' : ' does not match ')
+            . FOLDER_DATA . '/config.php' . ($showValues ? ' defines "' . $configFileValue . '"' : '')
+            . '. An existing configuration file defines the database of this installation, so either '
+            . 'remove the option or the configuration file.'
+        );
+    }
+
+    /**
+     * Check an option of the installation against the value that Admidio was started with.
+     *
+     * The constants that are derived from these options exist before a command is dispatched, so the
+     * CLI bootstrap reads them itself. It only understands the forms "--option value" and
+     * "--option=value" outside of the "--" terminator.
+     *
+     * @throws RuntimeException
+     */
+    private static function assertBootstrapValue(string $option, string $value, string $bootstrapValue): void
+    {
+        if ($value === $bootstrapValue) {
+            return;
+        }
+
+        throw new RuntimeException(
+            '--' . $option . ' was not readable before Admidio started, which is why "' . $bootstrapValue
+            . '" was used instead of "' . $value . '". Write the option as --' . $option . '=VALUE.'
+        );
+    }
+
+    /**
+     * Report the values of an installation that a command has established.
+     *
+     * @param array<string,mixed> $options
+     * @param array<string,mixed> $result
+     */
+    private static function writeInstallationValues(InstallationConfig $config, array $result, array $options): void
+    {
+        CliApplication::writeValue(
+            array_merge(
+                array(
+                    'config_file' => self::installationConfigPath(),
+                    'database_type' => $config->dbType,
+                    'database_host' => $config->dbHost,
+                    'database_name' => $config->dbName,
+                    'table_prefix' => $config->tablePrefix,
+                    'root_url' => $config->rootUrl,
+                    'organization' => $config->organizationShortName,
+                    'administrator' => $config->adminLogin
+                ),
+                $result
+            ),
+            $options,
+            CliApplication::optionString($options, 'format', 'record')
+        );
+    }
+
+    public static function installCheck(array $arguments, array $options): int
+    {
+        $config = self::installationConfig($options);
+        $configFileExists = is_file(self::installationConfigPath());
+
+        Installation::validateConfiguration($config);
+
+        /*
+         * The command may not change anything, so the folders that the installation needs are only
+         * checked for the permission that would let install:run create them.
+         */
+        if (!is_dir(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
+            throw new RuntimeException(FOLDER_DATA . ' has to exist and it has to be writable.');
+        }
+
+        $db = Installation::connectDatabase($config);
+
+        self::writeInstallationValues(
+            $config,
+            array(
+                'config_file_state' => $configFileExists ? 'exists' : 'will be created',
+                'database_version' => $db->getName() . ' ' . $db->getVersion(),
+                'installable' => true
+            ),
+            $options
+        );
+
+        return CliApplication::EXIT_SUCCESS;
+    }
+
+    public static function installRun(array $arguments, array $options): int
+    {
+        $config = self::installationConfig($options);
+        $configFileExists = is_file(self::installationConfigPath());
+
+        Installation::validateConfiguration($config);
+        Installation::checkFolderPermissions();
+
+        // everything is checked before the first change, so a rejected installation leaves no traces
+        $db = Installation::connectDatabase($config);
+
+        CliApplication::confirm(
+            'Install Admidio for the organization "' . $config->organizationShortName . '" into the database "'
+            . $config->dbName . '" of ' . $config->dbHost . '?',
+            $options
+        );
+
+        if (!$configFileExists) {
+            Installation::writeConfigFile($config, self::installationConfigPath());
+        }
+
+        $result = Installation::install($db, $config);
+
+        self::writeInstallationValues(
+            $config,
+            array(
+                'organization_id' => $result['organizationId'],
+                'administrator_id' => $result['administratorId'],
+                'installed' => true
+            ),
+            $options
+        );
+
+        return CliApplication::EXIT_SUCCESS;
     }
 
     public static function updateCheck(array $arguments, array $options): int
