@@ -81,7 +81,7 @@ jobs:
         run: composer test:unit
 
   mariadb:
-    name: MariaDB 10.6
+    name: MariaDB 10.11
     needs: fast-checks
     if: github.event.inputs.database == '' || github.event.inputs.database == 'mariadb' || github.event.inputs.database == 'all'
     runs-on: ubuntu-latest
@@ -94,7 +94,7 @@ jobs:
       TEST_DB_MARIADB_NAME: admidio_test
     services:
       mariadb:
-        image: mariadb:10.6
+        image: mariadb:10.11
         env:
           MARIADB_ROOT_PASSWORD: root
           MARIADB_DATABASE: admidio_test
