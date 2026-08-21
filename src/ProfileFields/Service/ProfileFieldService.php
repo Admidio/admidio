@@ -52,19 +52,7 @@ class ProfileFieldService
      */
     public function save()
     {
-        global $gCurrentSession, $gDb;
-
-        // lastname and firstname must always be mandatory fields and visible in registration dialog
-        if ($this->profileFieldRessource->getValue('usf_name_intern') === 'LAST_NAME'
-            || $this->profileFieldRessource->getValue('usf_name_intern') === 'FIRST_NAME') {
-            $_POST['usf_required_input'] = 1;
-            $_POST['usf_registration'] = 1;
-        }
-
-        // email must always be visible in registration dialog
-        if ($this->profileFieldRessource->getValue('usf_name_intern') === 'EMAIL') {
-            $_POST['usf_registration'] = 1;
-        }
+        global $gCurrentSession;
 
         // Swap input, because the field name is different from the dialog
         if (isset($_POST['usf_hidden'])) {
@@ -77,14 +65,38 @@ class ProfileFieldService
         $profileFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $profileFieldsEditForm->validate($_POST);
 
-        if (isset($_POST['usf_name']) && $this->profileFieldRessource->getValue('usf_name') !== $_POST['usf_name']) {
+        $this->saveData($formValues);
+    }
+
+    /**
+     * Save already validated profile field data.
+     *
+     * @param array $formValues Validated profile field values.
+     * @throws Exception
+     */
+    public function saveData(array $formValues): void
+    {
+        // lastname and firstname must always be mandatory fields and visible in registration dialog
+        if ($this->profileFieldRessource->getValue('usf_name_intern') === 'LAST_NAME'
+            || $this->profileFieldRessource->getValue('usf_name_intern') === 'FIRST_NAME') {
+            $formValues['usf_required_input'] = 1;
+            $formValues['usf_registration'] = 1;
+        }
+
+        // email must always be visible in registration dialog
+        if ($this->profileFieldRessource->getValue('usf_name_intern') === 'EMAIL') {
+            $formValues['usf_registration'] = 1;
+        }
+
+        if (isset($formValues['usf_name'])
+            && $this->profileFieldRessource->getValue('usf_name') !== $formValues['usf_name']) {
             // See if the field already exists
             $sql = 'SELECT COUNT(*) AS count
                   FROM ' . TBL_USER_FIELDS . '
-                 WHERE usf_name   = ? -- $_POST[\'usf_name\']
-                   AND usf_cat_id = ? -- $_POST[\'usf_cat_id\']
-                   AND usf_uuid  <> ? -- $getUsfUUID';
-            $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usf_name'], (int)$_POST['usf_cat_id'], $this->UUID));
+                 WHERE usf_name   = ? -- $formValues[\'usf_name\']
+                   AND usf_cat_id = ? -- $formValues[\'usf_cat_id\']
+                   AND usf_uuid  <> ? -- $this->UUID';
+            $pdoStatement = $this->db->queryPrepared($sql, array($formValues['usf_name'], (int)$formValues['usf_cat_id'], $this->UUID));
 
             if ($pdoStatement->fetchColumn() > 0) {
                 throw new Exception('ORG_FIELD_EXIST');
@@ -98,7 +110,7 @@ class ProfileFieldService
             } elseif (str_starts_with($key, 'ufo_')) {
                 // if the key starts with 'ufo_' then it is a user field option,
                 // and we save it in the user field options table
-                $options = array_map(function($item) {
+                $options = array_map(function ($item) {
                     if ($item['obsolete'] === '') {
                         $item['obsolete'] = '0';
                     }

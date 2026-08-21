@@ -32,6 +32,23 @@ class LogChanges extends Entity
      */
     protected string $objectTableName;
 
+    /**
+     * Origin of the changes that are logged in this request, stored in log_comment. A normal web
+     * request leaves this empty; the command-line utility sets the executed command, so an
+     * administrator can tell a headless change apart from one made in the browser.
+     * @var string
+     */
+    private static string $originComment = '';
+
+    /**
+     * Mark all following changelog records as originating from the given context.
+     * @param string $comment For example "CLI: group:adduser".
+     */
+    public static function setOriginComment(string $comment): void
+    {
+        self::$originComment = $comment;
+    }
+
 
     /**
      * Constructor that will create an object of a recordset of the table adm_log_changes.
@@ -325,6 +342,10 @@ class LogChanges extends Entity
             return false;
         }
         global $gCurrentSession, $gChangeNotification, $gCurrentUser;
+
+        if (self::$originComment !== '' && (string)$this->getValue('log_comment') === '') {
+            $this->setValue('log_comment', self::$originComment);
+        }
 
         $newRecord = $this->newRecord;
         return parent::save($updateFingerPrint);

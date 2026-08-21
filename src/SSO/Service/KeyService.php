@@ -105,7 +105,11 @@ class KeyService {
         return $certificatePEM;
     }
 
-    public function exportToPkcs12(string $keyUUID, string $password = '') {
+    /**
+     * @return array{filename:string,contentType:string,content:string}
+     */
+    public function getPkcs12ExportData(string $keyUUID, string $password = ''): array
+    {
         global $gL10n;
 
         $ssoKey = new Key($this->db);
@@ -131,27 +135,39 @@ class KeyService {
         if (!$privateKey) {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array(openssl_error_string()));
         }
-        
+
         // Load the certificate
         $certificate = openssl_x509_read($certPem);
         if (!$certificate) {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array(openssl_error_string()));
         }
-        
+
         // Export the PKCS#12
         $pkcs12 = "";
         openssl_pkcs12_export($certificate, $pkcs12, $privateKey, $password, ["friendly_name" => $name]);
-        
+
         if (!$pkcs12) {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array(openssl_error_string()));
         }
-        
-        // Send the PKCS#12 file as a download to the browser (All errors were already handled with an exception, which caused a JSON response!)
-        $filename = FileSystemUtils::getSanitizedPathEntry($name);
-        header('Content-Type: application/x-pkcs12');
-        header('Content-Disposition: attachment; filename="' . $filename . '.p12"');
-        header('Content-Length: ' . strlen($pkcs12));
-        echo $pkcs12;
+
+        $filename = FileSystemUtils::getSanitizedPathEntry($name) . '.p12';
+
+        return array(
+            'filename' => $filename,
+            'contentType' => 'application/x-pkcs12',
+            'content' => $pkcs12
+        );
+    }
+
+    public function exportToPkcs12(string $keyUUID, string $password = ''): void
+    {
+        $export = $this->getPkcs12ExportData($keyUUID, $password);
+
+        // Send the PKCS#12 file as a download to the browser.
+        header('Content-Type: ' . $export['contentType']);
+        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Content-Length: ' . strlen($export['content']));
+        echo $export['content'];
         exit;
     }
 
@@ -189,17 +205,33 @@ class KeyService {
      */
     public function save(string $keyUUID, string $mode = 'save')
     {
-        global $gCurrentSession, $gCurrentOrgId;
+        global $gCurrentSession;
 
         // check form field input and sanitized it from malicious content
         $keyEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $keyEditForm->validate($_POST);
 
+        $this->saveData($keyUUID, $formValues, $mode);
+    }
+
+    /**
+     * Save already validated SSO key data.
+     *
+     * @param string $keyUUID UUID of an existing key or an empty string for a new key.
+     * @param array $formValues Validated key and certificate values.
+     * @param string $mode One of save, key or cert.
+     * @return Key
+     * @throws Exception
+     */
+    public function saveData(string $keyUUID, array $formValues, string $mode = 'save'): Key
+    {
+        global $gCurrentOrgId;
+
         $ssoKey = new Key($this->db);
-        if (!empty($keyUUID)) {
+        if ($keyUUID !== '') {
             $ssoKey->readDataByUuid($keyUUID);
         }
-        
+
         // If no key or cert exists yet, make sure it is generated
         if ($ssoKey->isNewRecord() || empty($ssoKey->getValue('key_private'))) {
             $mode = 'key';
@@ -224,8 +256,6 @@ class KeyService {
                 
                 // 2. Sign the existing or new key for a certificate
                 $key_algorithm = $ssoKey->getValue('key_algorithm');
-                $privateKey = $ssoKey->getValue('key_private');
-                $privateKey = openssl_pkey_get_private($privateKey);
                 
                 $csrData = [
                     "countryName" => $formValues['cert_country'],
@@ -233,7 +263,7 @@ class KeyService {
                     "localityName" => $formValues['cert_locality'],
                     "organizationName" => $formValues['cert_org'],
                     "organizationalUnitName" => $formValues['cert_orgunit'],
-                    "commonName" => $formValues['cert_common_name'], // Your IdP domain
+                    "commonName" => $formValues['cert_common_name'],
                     "emailAddress" => $formValues['cert_admin_email'],
                 ];
 
@@ -241,7 +271,7 @@ class KeyService {
 
                 $ssoKey->setValue('key_certificate', $certificatePEM);
                 $ssoKey->setValue('key_expires_at', $formValues['key_expires_at']);
-                
+
                 // fall-through
             case 'save':
                 unset($formValues['key_certificate']);
@@ -249,32 +279,50 @@ class KeyService {
 
                 // 3. Handle all attributes (name, etc.) that do not need the key or cert to be re-generated
 
-                // write form values in menu object
                 foreach ($formValues as $key => $value) {
                     if (str_starts_with($key, 'key_')) {
                         $ssoKey->setValue($key, $value);
                     }
                 }
                 $ssoKey->setValue('key_org_id', $gCurrentOrgId);
+                break;
+            default:
+                throw new Exception('Invalid mode for SSO key save.');
         }
 
         $ssoKey->save();
+        return $ssoKey;
     }
 
 
-    public function exportCertificate(string $keyUUID) {
-        $ssoKey = new Key($this->db);
+    /**
+     * @return array{filename:string,contentType:string,content:string}
+     */
+    public function getCertificateExportData(string $keyUUID): array
+    {
+         $ssoKey = new Key($this->db);
         $ssoKey->readDataByUuid($keyUUID);
         $certificate = $ssoKey->getValue('key_certificate');
-        $filename = FileSystemUtils::getSanitizedPathEntry($ssoKey->getValue('key_name'));
+        $filename = FileSystemUtils::getSanitizedPathEntry($ssoKey->getValue('key_name')) . '_Certificate.pem';
+
+        return array(
+            'filename' => $filename,
+            'contentType' => 'application/x-pem-file',
+            'content' => $certificate
+        );
+    }
+
+    public function exportCertificate(string $keyUUID): void
+    {
+        $export = $this->getCertificateExportData($keyUUID);
 
         // Set headers for file download
-        header('Content-Type: application/x-pem-file');
-        header('Content-Disposition: attachment; filename="' . $filename . '_Certificate.pem"');
-        header('Content-Length: ' . strlen($certificate));
+        header('Content-Type: ' . $export['contentType']);
+        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Content-Length: ' . strlen($export['content']));
 
         // Output the certificate contents
-        echo $certificate;
+        echo $export['content'];
         exit;
     }
 }

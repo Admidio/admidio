@@ -509,6 +509,30 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
+     * Set the sequence of the plugin in the overview.
+     *
+     * @return bool Returns true if the plugin defines an overview sequence setting.
+     */
+    public static function setPluginSequence(int $sequence): bool
+    {
+        global $gSettingsManager;
+
+        $sequenceSuffix = '_overview_sequence';
+        $sequenceKeys = array_filter(array_keys(self::$defaultConfig), function($key) use ($sequenceSuffix) {
+            return substr($key, -strlen($sequenceSuffix)) === $sequenceSuffix;
+        });
+
+        if (empty($sequenceKeys)) {
+            return false;
+        }
+
+        $sequenceKey = array_values($sequenceKeys)[0];
+        $gSettingsManager->set($sequenceKey, $sequence);
+
+        return true;
+    }
+
+    /**
      * Check if the plugin has all dependencies installed.
      * @return bool Returns true if all dependencies are installed, false otherwise.
      * @throws Exception

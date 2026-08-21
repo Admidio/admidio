@@ -73,7 +73,16 @@ class RssFeed
     /**
      * @return void
      */
-    public function getRssFeed()
+    public function getRssFeed(): void
+    {
+        header('Content-type: application/xml');
+        echo $this->getRssFeedContent();
+    }
+
+    /**
+     * @return string Returns the complete RSS feed.
+     */
+    public function getRssFeedContent(): string
     {
         $rssFeed = $this->getRssHeader();
         $rssFeed .= $this->getChannelOpener();
@@ -82,8 +91,7 @@ class RssFeed
         $rssFeed .= $this->getChannelCloser();
         $rssFeed .= $this->getRssFooter();
 
-        header('Content-type: application/xml');
-        echo $rssFeed;
+        return $rssFeed;
     }
 
     /**

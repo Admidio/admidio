@@ -118,7 +118,7 @@ class ProfileField extends Entity
 
         $return = parent::delete();
 
-        if (is_object($gCurrentSession)) {
+        if (isset($gCurrentSession) && is_object($gCurrentSession)) {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->reloadAllSessions();
         }

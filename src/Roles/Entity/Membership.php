@@ -165,8 +165,10 @@ class Membership extends Entity
             }
         }
 
-        // renew a user object of the affected user because of edited role assignment
-        $gCurrentSession->reload((int)$this->getValue('mem_usr_id'));
+        if (isset($gCurrentSession)) {
+            // renew a user object of the affected user because of edited role assignment
+            $gCurrentSession->reload((int)$this->getValue('mem_usr_id'));
+        }
 
         return parent::delete();
     }

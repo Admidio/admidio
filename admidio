@@ -1,0 +1,107 @@
+#!/usr/bin/env php
+<?php
+/**
+ ***********************************************************************************************
+ * Native Admidio command-line administration utility.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+if (PHP_SAPI !== 'cli') {
+    fwrite(STDERR, "The Admidio CLI may only be executed from the command line.\n");
+    exit(1);
+}
+
+/**
+ * Read one option needed before the Admidio autoloader/bootstrap is available.
+ *
+ * --host and --organization have to be known before adm_my_files/config.php is loaded, which is
+ * long before the class autoloader exists. This small parser therefore cannot live in
+ * CliApplication; the duplication with its option handling is intentional.
+ *
+ * @param array<int,string> $arguments
+ */
+function admCliBootstrapOption(array $arguments, string $name): string
+{
+    $prefix = '--' . $name . '=';
+
+    for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
+        if (str_starts_with($arguments[$index], $prefix)) {
+            return substr($arguments[$index], strlen($prefix));
+        }
+
+        if ($arguments[$index] === '--' . $name && isset($arguments[$index + 1])) {
+            return $arguments[$index + 1];
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Determine the command before the full CLI bootstrap is available.
+ *
+ * This is only used for commands that must be able to run without a database connection.
+ *
+ * @param array<int,string> $arguments
+ */
+function admCliBootstrapCommand(array $arguments): string
+{
+    $globalFlags = array('quiet', 'no-interaction', 'yes', 'help');
+    $globalValueOptions = array('host', 'organization', 'as', 'format', 'output');
+
+    for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
+        $token = $arguments[$index];
+
+        if ($token === '--') {
+            return $arguments[$index + 1] ?? '';
+        }
+
+        if (!str_starts_with($token, '--')) {
+            return $token;
+        }
+
+        $optionName = substr($token, 2);
+        if (str_contains($optionName, '=')) {
+            continue;
+        }
+
+        if (in_array($optionName, $globalFlags, true)) {
+            continue;
+        }
+
+        if (in_array($optionName, $globalValueOptions, true)) {
+            ++$index;
+            continue;
+        }
+
+        return '';
+    }
+
+    return '';
+}
+
+$cliHost = admCliBootstrapOption($argv, 'host');
+$cliOrganization = admCliBootstrapOption($argv, 'organization');
+$cliSkipDatabase = admCliBootstrapCommand($argv) === 'maintenance:mode';
+
+try {
+    require __DIR__ . '/system/bootstrap/cli.php';
+
+    $application = new Admidio\Infrastructure\Cli\CliApplication();
+    exit($application->run($argv));
+} catch (Throwable $exception) {
+    /*
+     * The bootstrap itself can fail, for example when config.php is missing, and then the class is
+     * not available to classify the failure. Fall back to the plain message in that case.
+     */
+    if (class_exists(Admidio\Infrastructure\Cli\CliApplication::class, false)) {
+        exit(Admidio\Infrastructure\Cli\CliApplication::handleThrowable($exception, $argv));
+    }
+
+    fwrite(STDERR, 'Error: ' . $exception->getMessage() . PHP_EOL);
+    exit(1);
+}

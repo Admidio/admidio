@@ -67,21 +67,10 @@ class DocumentsService
      */
     public function downloadFile(string $fileUUID, bool $inline = false): void
     {
-        // get recordset of current file from database
-        $file = new File($this->db);
-        $file->getFileForDownload($fileUUID);
+        $file = $this->prepareFileDownload($fileUUID);
 
         // get complete path with filename of the file
         $completePath = $file->getFullFilePath();
-
-        // check if the file already exists
-        if (!is_file($completePath)) {
-            throw new Exception('SYS_FILE_NOT_EXIST');
-        }
-
-        // Increment download counter
-        $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
-        $file->save();
 
         // determine filesize
         $fileSize = filesize($completePath);
@@ -117,6 +106,115 @@ class DocumentsService
             // file output for small files (< 10MB)
             readfile($completePath);
         }
+    }
+
+    /**
+     * Check download permissions, verify the file and increment its download counter.
+     *
+     * @throws Exception
+     */
+    public function prepareFileDownload(string $fileUUID): File
+    {
+        // get recordset of current file from database
+        $file = new File($this->db);
+        $file->getFileForDownload($fileUUID);
+
+        // get complete path with filename of the file
+        $completePath = $file->getFullFilePath();
+
+        // check if the file already exists
+        if (!is_file($completePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        // Increment download counter
+        $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
+        $file->save();
+
+        return $file;
+    }
+
+    /**
+     * Copy a local file into a managed documents folder and register it in the database.
+     *
+     * @param string $sourcePath Path to a readable local source file.
+     * @param string $filename Optional target filename. The source basename is used if omitted.
+     * @return File The newly registered file entity.
+     * @throws Exception
+     */
+    public function uploadFile(string $sourcePath, string $filename = ''): File
+    {
+        global $gSettingsManager;
+
+        if ($this->folderUUID === '') {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $targetFolder = new Folder($this->db);
+        $targetFolder->getFolderForDownload($this->folderUUID);
+
+        if (!$targetFolder->hasUploadRight()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $maxUploadSize = $gSettingsManager->getInt('documents_files_max_upload_size');
+        if ($maxUploadSize === 0) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        if (!is_file($sourcePath) || !is_readable($sourcePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        $fileSize = filesize($sourcePath);
+        if ($fileSize === false) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+        if ($fileSize > $maxUploadSize * 1024 * 1024) {
+            throw new Exception('SYS_FILE_TO_LARGE_SERVER', array($maxUploadSize));
+        }
+
+        if ($filename === '') {
+            $filename = basename($sourcePath);
+        }
+
+        StringUtils::strIsValidFileName($filename, false);
+        if (!FileSystemUtils::allowedFileExtension($filename)) {
+            throw new Exception('SYS_FILE_EXTENSION_INVALID');
+        }
+
+        $filename = FileSystemUtils::removeInvalidCharsInFilename($filename);
+        $targetPath = $targetFolder->getFullFolderPath() . '/' . $filename;
+
+        if (is_file($targetPath)) {
+            throw new Exception('SYS_FILE_EXIST', array($filename));
+        }
+
+        try {
+            FileSystemUtils::copyFile($sourcePath, $targetPath);
+        } catch (RuntimeException $exception) {
+            throw new Exception('SYS_FOLDER_NOT_WRITABLE', array($targetFolder->getFullFolderPath()));
+        }
+
+        $newFile = new File($this->db);
+        $newFile->setValue('fil_fol_id', (int)$targetFolder->getValue('fol_id'));
+        $newFile->setValue('fil_name', $filename);
+        $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
+        $newFile->setValue('fil_counter', 0);
+
+        try {
+            if ($newFile->save()) {
+                $newFile->sendNotification();
+            }
+        } catch (\Throwable $exception) {
+            try {
+                FileSystemUtils::deleteFileIfExists($targetPath);
+            } catch (RuntimeException) {
+            }
+            throw $exception;
+        }
+
+        return $newFile;
     }
 
     /**

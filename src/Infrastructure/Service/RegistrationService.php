@@ -50,7 +50,8 @@ class RegistrationService
      * @return array{message: string, forwardUrl: string} Array with message and forward url.
      * @throws Exception
      */
-    public function assignRegistration(string $assignUserUUID, bool $memberOfOrganization): array
+    public function assignRegistration(string $assignUserUUID, bool $memberOfOrganization,
+        bool $redirectToRoleAssignment = true): array
     {
         global $gSettingsManager, $gProfileFields, $gCurrentUser, $gL10n, $gNavigation;
 
@@ -90,7 +91,7 @@ class RegistrationService
 
             // if current user has the right to assign roles then show roles dialog
             // otherwise go to previous url (default roles are assigned automatically)
-            if ($gCurrentUser->isAdministratorRoles()) {
+            if ($redirectToRoleAssignment && $gCurrentUser->isAdministratorRoles()) {
                 // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
                 admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $assignUserUUID, 'accept_registration' => true)));
                 // => EXIT
@@ -100,7 +101,7 @@ class RegistrationService
             // so save user data and then show error
             $user->save();
             $this->db->endTransaction();
-            return array('message' => $e->getMessage(), 'forwardUrl' => $gNavigation->getPreviousUrl());
+            return array('message' => $e->getMessage(), 'forwardUrl' => isset($gNavigation) ? $gNavigation->getPreviousUrl() : '');
         }
 
         return array('message' => $message, 'forwardUrl' => ADMIDIO_URL.FOLDER_MODULES.'/registration.php');

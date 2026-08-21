@@ -209,7 +209,13 @@ class SAMLService extends SSOService {
 
     }
 
-    public function handleMetadataRequest() {
+    public function handleMetadataRequest(): void
+    {
+        header('Content-Type: application/xml');
+        echo $this->getMetadataXml();
+    }
+
+    public function getMetadataXml(): string {
         global $gSettingsManager;
         if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
             throw new Exception("SSO SAML is not enabled");
@@ -293,13 +299,11 @@ class SAMLService extends SSOService {
             $entityDescriptor->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
         }
 
-        // Output metadata as XML
-        header('Content-Type: application/xml');
-
+        // Create metadata XML
         $context = new SerializationContext();
         $entityDescriptor->serialize($context->getDocument(), $context);
 
-        echo $context->getDocument()->saveXML();
+        return $context->getDocument()->saveXML();
     }
 
     public function errorResponse(string|array $status, $message, $request, $client) {

@@ -77,30 +77,66 @@ class SSOService {
         // check form field input and sanitized it from malicious content
         $clientEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $clientEditForm->validate($_POST);
-        $client = $this->createClientObject($getClientUUID);
+
+        if (isset($_POST['sso_roles_access'])) {
+            $accessRoles = array_map('intval', $_POST['sso_roles_access']);
+        } else {
+            $accessRoles = array();
+        }
+
+        $this->saveData($getClientUUID, $formValues, $accessRoles);
+    }
+
+    /**
+     * Save already validated SSO client data.
+     *
+     * @param string|null $clientUUID UUID of an existing client or null for a new client.
+     * @param array $formValues Validated SSO client values.
+     * @param array<int,int|string> $accessRoles Roles that are allowed to use this client.
+     * @return SSOClient
+     * @throws Exception
+     */
+    public function saveData(?string $clientUUID, array $formValues, array $accessRoles = array()): SSOClient
+    {
+        $client = $this->createClientObject($clientUUID);
 
         $this->db->startTransaction();
         $this->saveCustomClientSettings($formValues, $client);
 
         // Collect all field mappings and the catch-all checkbox
         // If a SSO field is left empty, use the admidio name!
-        $ssoFields = $formValues['fieldsmap_sso']??[];
-        $admFields = $formValues['fieldsmap_Admidio']??[];
-        $ssoFields = array_map(function ($a, $b) { return (!empty($a)) ? $a : $b;}, $ssoFields, $admFields);
-        $client->setFieldMapping(array_combine($ssoFields, $admFields), $formValues['sso_fields_no_other']??false);
+        $ssoFields = $formValues['fieldsmap_sso'] ?? array();
+        $admFields = $formValues['fieldsmap_Admidio'] ?? array();
+        $ssoFields = array_map(
+            function ($ssoField, $admField) {
+                return !empty($ssoField) ? $ssoField : $admField;
+            },
+            $ssoFields,
+            $admFields
+        );
+        $client->setFieldMapping(
+            array_combine($ssoFields, $admFields),
+            $formValues['sso_fields_no_other'] ?? false
+        );
         
         // Collect all role mappings and the catch-all checkbox
-        $ssoRoles = $formValues['rolesmap_sso']??[];
-        $admRoles = $formValues['rolesmap_Admidio']??[];
-        $ssoRoles = array_map( function($s, $a) { 
-                if (empty($s)) {
-                    $role = new Role($this->db, $a);
+        $ssoRoles = $formValues['rolesmap_sso'] ?? array();
+        $admRoles = $formValues['rolesmap_Admidio'] ?? array();
+        $ssoRoles = array_map(
+            function ($ssoRole, $admRole) {
+                if (empty($ssoRole)) {
+                    $role = new Role($this->db, $admRole);
                     return $role->readableName();
-                } else { 
-                    return $s; 
                 }
-            }, $ssoRoles, $admRoles);
-        $client->setRoleMapping(array_combine($ssoRoles, $admRoles), $formValues['sso_roles_all_other']??false);
+                return $ssoRole;
+            },
+            $ssoRoles,
+            $admRoles
+        );
+        $client->setRoleMapping(
+            array_combine($ssoRoles, $admRoles),
+            $formValues['sso_roles_all_other'] ?? false
+        );
 
         // write all other form values
         foreach ($formValues as $key => $value) {
@@ -111,17 +147,12 @@ class SSOService {
 
         $client->save();
 
-        // save changed roles rights of the menu
-        if (isset($_POST['sso_roles_access'])) {
-            $accessRoles = array_map('intval', $_POST['sso_roles_access']);
-        } else {
-            $accessRoles = array();
-        }
-
         $accessRolesRights = new RolesRights($this->db, $this->getRolesRightName(), $client->getValue($client->getKeyColumnName()));
-        $accessRolesRights->saveRoles($accessRoles);
-
+        $accessRolesRights->saveRoles(array_map('intval', $accessRoles));
+ 
         $this->db->endTransaction();
+
+        return $client;
     }
 
     /**

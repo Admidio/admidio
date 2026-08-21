@@ -15,12 +15,9 @@
  ***********************************************************************************************
  */
 
-use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Utils\FileSystemUtils;
-use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Messages\Entity\Message;
-use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Messages\Service\MessageService;
 use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
 
@@ -32,325 +29,108 @@ try {
     $getUsrUUID = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string');
 
-    // Check form values
     $postUserUuidList = '';
     $postListUuid = '';
-    $sendResult = false;
 
     if ($gValidLogin) {
         $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
         $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
     }
 
-    // check form field input and sanitized it from malicious content
+    // check form field input and sanitize it from malicious content
     $messagesSendForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
     $formValues = $messagesSendForm->validate($_POST);
 
-    if (isset($_POST['msg_to'])) {
-        $postTo = $_POST['msg_to'];
-        if ($getMsgType === Message::MESSAGE_TYPE_PM && $getUsrUUID === '' && UUID::isValid($postTo[0])) {
-            $getUsrUUID = $postTo[0];
-        }
+    $recipients = array_values(
+        array_filter(
+            isset($_POST['msg_to']) && is_array($_POST['msg_to']) ? $_POST['msg_to'] : array(),
+            'is_string'
+        )
+    );
+
+    if ($postListUuid !== '') {
+        $recipients = array_values(array_filter(
+            explode(',', $postUserUuidList),
+            static fn (string $uuid): bool => Uuid::isValid($uuid)
+        ));
     }
 
-    // if message not PM it must be Email and then directly check the parameters
-    if ($getMsgType !== Message::MESSAGE_TYPE_PM) {
-        $getMsgType = Message::MESSAGE_TYPE_EMAIL;
+    if ($getMsgType === Message::MESSAGE_TYPE_PM
+        && $getUsrUUID === ''
+        && isset($recipients[0])
+        && Uuid::isValid($recipients[0])) {
+        $getUsrUUID = $recipients[0];
     }
 
-    // Stop if pm should be sent pm module is disabled
-    if ($getMsgType === Message::MESSAGE_TYPE_PM && !$gSettingsManager->getBool('pm_module_enabled')) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    }
-
-    // Stop if mail should be sent and mail module is disabled
-    if ($getMsgType === Message::MESSAGE_TYPE_EMAIL && !($gSettingsManager->getInt('mail_module_enabled') === 1 || ($gSettingsManager->getInt('mail_module_enabled') === 2 && $gValidLogin))) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    }
-
-    // if message is EMAIL then check the parameters
-    if ($getMsgType === Message::MESSAGE_TYPE_EMAIL) {
-        // if Attachment size is higher than max_post_size from php.ini, then $_POST is empty.
-        if (empty($_POST)) {
-            throw new Exception('SYS_INVALID_PAGE_VIEW');
-        }
-    }
-
-    // object to handle the current message in the database
-    $message = new Message($gDb);
-    $message->readDataByUuid($getMsgUUID);
-
-    if ($getMsgUUID !== '') {
-        $getMsgType = $message->getValue('msg_type');
-    } else {
-        $message->setValue('msg_type', $getMsgType);
-        $message->setValue('msg_usr_id_sender', $gCurrentUserId);
-        $message->setValue('msg_subject', $formValues['msg_subject']);
-    }
-    $message->addContent($formValues['msg_body']);
-
-    // check if PM or Email and to steps:
-    if ($getMsgType === Message::MESSAGE_TYPE_EMAIL) {
-        $sqlConditions = '';
-        $sqlEmailField = '';
-
-        // if no User is set, he is not able to ask for delivery confirmation
-        if (!($gCurrentUserId > 0 && (int)$gSettingsManager->get('mail_delivery_confirmation') === 2)
-            && (int)$gSettingsManager->get('mail_delivery_confirmation') !== 1) {
-            $formValues['delivery_confirmation'] = false;
-        }
-
-        if (isset($postTo)) {
-            if ($postListUuid !== '') { // the uuid of a list was passed
-                $postTo = explode(',', $postUserUuidList);
-                foreach ($postTo as $key => $uuid) {
-                    if (!UUID::isValid($uuid)) {
-                        unset($postListUuid[$key]);
-                    }
-                }
-            }
-
-            // Create new Email Object
-            $email = new Email();
-
-            foreach ($postTo as $value) {
-                // set condition if email should only send to the email address of the user field
-                // with the internal name 'EMAIL'
-                if (!$gSettingsManager->getBool('mail_send_to_all_addresses')) {
-                    $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
-                }
-
-                // check if role or user is given
-                if (str_contains($value, ':')) {
-                    $moduleMessages = new ModuleMessages();
-                    $group = $moduleMessages->msgGroupSplit($value);
-
-                    // check if role rights are granted to the User
-                    $sql = 'SELECT rol_mail_this_role, rol_id, rol_name
-                      FROM ' . TBL_ROLES . '
-                INNER JOIN ' . TBL_CATEGORIES . '
-                        ON cat_id = rol_cat_id
-                       AND (  cat_org_id = ? -- $gCurrentOrgId
-                           OR cat_org_id IS NULL)
-                     WHERE rol_uuid = ? -- $group[\'uuid\']';
-                    $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId, $group['uuid']));
-                    $row = $statement->fetch();
-
-                    // logged out ones just to role with permission level "all visitors"
-                    // logged-in user is just allowed to send to role with permission
-                    // role must be from actual Organisation
-                    if ((!$gValidLogin && (int)$row['rol_mail_this_role'] !== 3)
-                        || ($gValidLogin && !$gCurrentUser->hasRightSendMailToRole((int)$row['rol_id']))
-                        || $row['rol_id'] === null) {
-                        throw new Exception('SYS_INVALID_PAGE_VIEW');
-                    }
-
-                    // add role to the message object
-                    $message->addRole($row['rol_id'], $group['role_mode'], $row['rol_name']);
-
-                    // add all role members as recipients to the email
-                    $email->addRecipientsByRole($group['uuid'], $group['status']);
-                } else {
-                    // create user object
-                    $user = new User($gDb, $gProfileFields);
-                    $user->readDataByUuid($value);
-
-                    // only send email to user if current user is allowed to view this user, and he has a valid email address
-                    if ($gCurrentUser->hasRightViewProfile($user)) {
-                        // add user to the message object
-                        $message->addUser($user->getValue('usr_id'), $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
-
-                        // add user as recipients to the email
-                        $email->addRecipientsByUser($user->getValue('usr_uuid'));
-                    }
-                }
-            }
-        } else {
-            // message when no receiver is given
-            throw new Exception('SYS_INVALID_PAGE_VIEW');
-        }
-
-        // if no valid recipients exists show message
-        if ($email->countRecipients() === 0) {
-            throw new Exception('SYS_NO_VALID_RECIPIENTS');
-        }
-
+    $attachments = array();
+    if (isset($_FILES['userfile'])) {
         if (!$gValidLogin) {
-            $email->setSender($formValues['sender_email'], $formValues['sender_name']);
-            $senderName = $formValues['sender_name'];
-            $senderEmail = $formValues['sender_email'];
-        } elseif (isset($formValues['sender_email']) && Uuid::isValid($formValues['sender_email'])) {
-            // check if sender email is a valid UUID and then read email from database
-            $sql = 'SELECT usd_value
-                  FROM ' . TBL_USER_FIELDS . '
-            INNER JOIN ' . TBL_USER_DATA . '
-                    ON usd_usf_id = usf_id
-                 WHERE usf_uuid = ? -- $formValues[\'sender_email\']
-                   AND usd_usr_id = ? -- $gCurrentUserId
-                   AND usd_value IS NOT NULL';
-
-            $pdoStatement = $gDb->queryPrepared($sql, array($formValues['sender_email'], $gCurrentUserId));
-            $senderName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
-            $senderEmail = $pdoStatement->fetchColumn();
-            $email->setSender($senderEmail, $senderName);
-        } else {
-            $senderName = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME');
-            $senderEmail = $gCurrentUser->getValue('EMAIL');
-        }
-
-        $email->setSubject($formValues['msg_subject']);
-
-        // check for attachment
-        if (isset($_FILES['userfile'])) {
-            // final check if user is logged in
-            if (!$gValidLogin) {
-                throw new Exception('SYS_INVALID_PAGE_VIEW');
-            }
-            $attachmentSize = 0;
-            // add now every attachment
-            for ($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]); ++$currentAttachmentNo) {
-                // check if Upload was OK
-                if (($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_OK)
-                    && ($_FILES['userfile']['error'][$currentAttachmentNo] !== UPLOAD_ERR_NO_FILE)) {
-                    throw new Exception('SYS_ATTACHMENT_TO_LARGE');
-                }
-
-                // only check attachment if there was already a file added
-                if (strlen($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) > 0) {
-                    // check if a file was really uploaded
-                    if (!file_exists($_FILES['userfile']['tmp_name'][$currentAttachmentNo]) || !is_uploaded_file($_FILES['userfile']['tmp_name'][$currentAttachmentNo])) {
-                        throw new Exception('SYS_FILE_NOT_EXIST');
-                    }
-
-                    if ($_FILES['userfile']['error'][$currentAttachmentNo] === UPLOAD_ERR_OK) {
-                        // check filename and throw exception if something is wrong
-                        StringUtils::strIsValidFileName($_FILES['userfile']['name'][$currentAttachmentNo], false);
-
-                        // check for valid file extension of attachment
-                        if (!FileSystemUtils::allowedFileExtension($_FILES['userfile']['name'][$currentAttachmentNo])) {
-                            throw new Exception('SYS_FILE_EXTENSION_INVALID');
-                        }
-
-                        // check the size of the attachment
-                        $attachmentSize += $_FILES['userfile']['size'][$currentAttachmentNo];
-                        if ($attachmentSize > Email::getMaxAttachmentSize()) {
-                            throw new Exception('SYS_ATTACHMENT_TO_LARGE');
-                        }
-
-                        // set file type to standard if not given
-                        if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0) {
-                            $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';
-                        }
-
-                        // add the attachment to the email and message object
-                        $email->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
-                        $message->addAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo]);
-                    }
-                }
-            }
-        }
-
-        // if possible send HTML mail
-        if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
-            $email->setHtmlMail();
-        }
-
-        // add confirmation mail to the sender
-        if ($formValues['delivery_confirmation']) {
-            $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
-        }
-
-        if ($postListUuid !== '') {
-            $showList = new ListConfiguration($gDb);
-            $showList->readDataByUuid($postListUuid);
-            $listName = $showList->getValue('lst_name');
-            $receiverName = $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
-        } elseif ($gSettingsManager->getBool('mail_into_to')) {
-            $receiverName = $message->getRecipientsNamesString();
-        } else {
-            $receiverName = $message->getRecipientsNamesString(false);
-        }
-
-        // load mail template and replace text
-        $email->setTemplateText($formValues['msg_body'], $senderName, $senderEmail, $gCurrentUser->getValue('usr_uuid'), $receiverName);
-
-        // finally send the mail
-        $sendResult = $email->sendEmail();
-
-        // set flag if copy should be sent to sender
-        if (isset($formValues['carbon_copy']) && $formValues['carbon_copy'] && $gValidLogin) {
-            $email->sendCopyEmail();
-        }
-
-        // within this mode a smtp protocol will be shown and the header was still send to browser
-        if ($gDebug && headers_sent()) {
-            $email->isSMTP();
-            $gMessage->showHtmlTextOnly();
-        }
-    } else {
-        // ***** PM *****
-
-        // check if user is allowed to view message
-        if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
-        // create user object for conversation partner
-        if ($getMsgUUID !== '') {
-            if ($message->getValue('msg_usr_id_sender') !== $gCurrentUserId) {
-                $user = new User($gDb, $gProfileFields, $message->getValue('msg_usr_id_sender'));
-            } else {
-                $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
+        for ($currentAttachmentNo = 0;
+             isset($_FILES['userfile']['name'][$currentAttachmentNo]);
+             ++$currentAttachmentNo) {
+            $uploadError = $_FILES['userfile']['error'][$currentAttachmentNo];
+
+            if ($uploadError !== UPLOAD_ERR_OK && $uploadError !== UPLOAD_ERR_NO_FILE) {
+                throw new Exception('SYS_ATTACHMENT_TO_LARGE');
             }
-        } elseif ($getUsrUUID !== '') {
-            $user = new User($gDb, $gProfileFields);
-            $user->readDataByUuid($getUsrUUID);
-        }
 
-        // add user to the message object
-        if ($message->isNewRecord()) {
-            $message->addUser($user->getValue('usr_id'));
-        }
-        $message->setValue('msg_read', 1);
-        $message->setValue('msg_timestamp', DATETIME_NOW);
+            $temporaryFile = (string)$_FILES['userfile']['tmp_name'][$currentAttachmentNo];
+            if ($temporaryFile === '') {
+                continue;
+            }
 
-        // check if it is allowed to send to this user
-        if ((!$gCurrentUser->isAdministratorUsers() && !isMember((int)$user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
-            throw new Exception('SYS_USER_ID_NOT_FOUND');
-        }
+            if (!file_exists($temporaryFile) || !is_uploaded_file($temporaryFile)) {
+                throw new Exception('SYS_FILE_NOT_EXIST');
+            }
 
-        // check if receiver of message has valid login
-        if ($user->getValue('usr_login_name') === '') {
-            throw new Exception('SYS_FIELD_EMPTY', array('SYS_TO'));
+            $attachments[] = array(
+                'path' => $temporaryFile,
+                'name' => (string)$_FILES['userfile']['name'][$currentAttachmentNo],
+                'type' => (string)$_FILES['userfile']['type'][$currentAttachmentNo]
+            );
         }
-
-        $sendResult = true;
     }
 
-    // save message to database if send/save is OK
-    if ($sendResult === true) { // don't remove check === true. ($sendResult) won't work
-        if ($gValidLogin) {
-            $message->save();
-        }
+    $messageService = new MessageService($gDb);
+    $message = $messageService->sendData(
+        $getMsgType,
+        (string)$formValues['msg_subject'],
+        (string)$formValues['msg_body'],
+        $recipients,
+        $getMsgUUID,
+        $getUsrUUID,
+        $postListUuid,
+        $attachments,
+        (string)($formValues['sender_name'] ?? ''),
+        (string)($formValues['sender_email'] ?? ''),
+        !empty($formValues['delivery_confirmation']),
+        !empty($formValues['carbon_copy'])
+    );
 
-        // after sending remove the send page from navigation stack
-        $gNavigation->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 
-        // message if sending was OK
-        if ($getMsgType === Message::MESSAGE_TYPE_PM) {
-            $successMessage = $gL10n->get('SYS_PRIVATE_MESSAGE_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
-        } else {
-            $successMessage = $gL10n->get('SYS_EMAIL_SEND');
-        }
-        echo json_encode(array('status' => 'success', 'message' => $successMessage, 'url' => $gNavigation->getUrl()));
-        exit();
+    if ((string)$message->getValue('msg_type') === Message::MESSAGE_TYPE_PM) {
+        $partnerId = (int)$message->getValue('msg_usr_id_sender') !== $gCurrentUserId
+            ? (int)$message->getValue('msg_usr_id_sender')
+            : (int)$message->getConversationPartner();
+        $user = new User($gDb, $gProfileFields, $partnerId);
+
+        $successMessage = $gL10n->get(
+            'SYS_PRIVATE_MESSAGE_SEND',
+            array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))
+        );
     } else {
-        if ($getMsgType === Message::MESSAGE_TYPE_PM) {
-            throw new Exception('SYS_PRIVATE_MESSAGE_NOT_SEND', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $sendResult));
-        } else {
-            throw new Exception('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
-        }
+        $successMessage = $gL10n->get('SYS_EMAIL_SEND');
     }
+
+    echo json_encode(array(
+        'status' => 'success',
+        'message' => $successMessage,
+        'url' => $gNavigation->getUrl()
+    ));
 } catch (Throwable $e) {
     handleException($e, true);
 }
