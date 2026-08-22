@@ -10,7 +10,7 @@
  ***********************************************************************************************
  *
  *
- * This script will read all requested change history fecords from the database. It is optimized to
+ * This script will read all requested change history records from the database. It is optimized to
  * work with the javascript DataTables and will return the data in json format.
  *
  * **Code example**
@@ -42,6 +42,10 @@
  * id...............: If set only show the change history of that database record
  * uuid             : If set only show the change history of that database record
  * related_id       : If set only show the change history of objects related to that id (e.g. membership of a role/group)
+ * change_uuid      : If set, the single entries of that one change are returned instead of the grouped
+ *                    list. This is the request of the detail rows that a grouped row expands to.
+ * group_changes    : Return the entries that were written by the same change as one row. Active by
+ *                    default, the page passes the resolved value on, see changelog.php.
  * filter_date_from : is set to actual date,
  *                    if no date information is delivered
  * filter_date_to   : is set to 31.12.9999,
@@ -61,29 +65,36 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Database;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 
 
-
+// This script always answers with JSON, even if an exception is thrown before the request
+// parameters could be evaluated (e.g. while the system is still bootstrapping). Set up the
+// response and the content type up front, so the catch block below can always emit a valid reply.
+$jsonArray = array('draw' => 0, 'recordsTotal' => 0, 'recordsFiltered' => 0, 'data' => array());
+header('Content-Type: application/json');
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
 
-    // calculate default date from which the profile fields history should be shown
-    $filterDateFrom = new DateTime(DATE_NOW);
-    $filterDateFrom->modify('-' . $gSettingsManager->getInt('contacts_field_history_days') . ' day');
+    // calculate default date from which the history should be shown
+    $filterDateFrom = ChangelogService::getDefaultFilterDateFrom();
 
 
     // Initialize and check the parameters
     $getTable = admFuncVariableIsValid($_GET, 'table','string');
     $getTables = ($getTable !== null && $getTable != "") ? array_map('trim', explode(",", $getTable)) : [];
-    $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'string');
+    $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getId = admFuncVariableIsValid($_GET, 'id', 'int');
     $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
+    $getChangeUuid = admFuncVariableIsValid($_GET, 'change_uuid', 'uuid');
+    $getGroupChanges = admFuncVariableIsValid($_GET, 'group_changes', 'bool', array('defaultValue' => true));
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
@@ -91,34 +102,31 @@ try {
     $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
-    $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
+    $getSearch = admFuncVariableIsValid($_GET['search'] ?? array(), 'value', 'string');
+
+    // The changelog grows without any bound, so a request for all entries would read, format and
+    // encode the complete log of the organization at once. The page length menu of the table
+    // therefore does not offer that (see disableShowAllEntries() in changelog.php), and the page
+    // length is limited here as well, so that a hand-crafted request cannot exceed it either.
+    // A length of -1, which DataTables uses for "all entries", ends up at the same limit.
+    $maxRowsPerRequest = 1000;
+    $getStart = max(0, $getStart);
+    if ($getLength < 1 || $getLength > $maxRowsPerRequest) {
+        $getLength = $maxRowsPerRequest;
+    }
+
+    $jsonArray['draw'] = (int)$getDraw;
 
 
-    $jsonArray = array('draw' => (int)$getDraw);
 
-    header('Content-Type: application/json');
-
-
-
-
-    $haveID = !empty($getId) || !empty($getUuid);
-
-    // named array of permission flag (true/false/"user-specific" per table)
-    $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-    if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+    if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
-    if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
-    $accessAll = $gCurrentUser->isAdministrator() ||
-        (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted)));
 
-    // create a user object. Will fill it later if we encounter a user id
+    // create a user object. Will be filled if the log of one particular user is requested.
     $user = new User($gDb, $gProfileFields);
-    $userUuid = null;
     // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
-    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ['users', 'user_data', 'user_relations', 'members'])));
+    $isUserLog = ChangelogService::isUserHistory($getTables);
     if ($isUserLog) {
         if (!empty($getUuid)) {
             $user->readDataByUuid($getUuid);
@@ -126,22 +134,20 @@ try {
             $user->readDataById($getId);
         }
         if (!$user->isNewRecord()) {
-            $userUuid = $user->getValue('usr_uuid');
+            // Address the user by uuid from here on: for the user_data table the record id is the
+            // id of the data row and not of the user, so filtering by id would match the log
+            // entries of a different user.
+            $getUuid = $user->getValue('usr_uuid');
+            $getId = 0;
         }
     }
 
-    // Access permissions:
-    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user:
-    if (!$accessAll &&
-            !(!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) &&
-            $isUserLog) {
-        // If a user UUID is given, we need access to that particular user
-        // if no UUID is given, isAdministratorUsers permissions are required
-        if (($userUuid === '' && !$gCurrentUser->isAdministratorUsers())
-            || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
-//                throw new Exception('SYS_NO_RIGHTS');
-                $gMessage->show(content: $gL10n->get('SYS_NO_RIGHTS'));
-       }
+    // All view permissions are evaluated in one place and are applied as SQL conditions below,
+    // so that the record counts and the paging match exactly what is displayed.
+    $subject = $user->isNewRecord() ? null : $user;
+    $readableTables = ChangelogService::getReadableTables($gCurrentUser, $getTables, $subject);
+    if (count($readableTables) === 0) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
 
@@ -161,28 +167,46 @@ try {
     $dateToHtml = $objDateTo->format($gSettingsManager->getString('system_date'));
 
 
-    // create order statement
-    $orderCondition = '';
-    // $orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
+    // Logic for hiding certain columns:
+    // If we have only one table name given, hide the table column
+    // If we view the user profile field changes page, hide the column, too
+    $showTableColumn = (count($getTables) !== 1);
+    // If none of the related-to values is set, hide the related_to column
+    $showRelatedColumn = true;
 
-    // if (array_key_exists('order', $_GET)) {
-    //     foreach ($_GET['order'] as $order) {
-    //         if (is_numeric($order['column'])) {
-    //             if ($orderCondition === '') {
-    //                 $orderCondition = ' ORDER BY ';
-    //             } else {
-    //                 $orderCondition .= ', ';
-    //             }
+    // Whitelist of the columns that can be sorted. The array index corresponds to the column
+    // position that DataTables sends and must match the order in which the columns are written
+    // to $columnValues further down.
+    $orderColumns = array('id');
+    if ($showTableColumn) {
+        $orderColumns[] = 'table_name';
+    }
+    $orderColumns[] = 'name';
+    if ($showRelatedColumn) {
+        $orderColumns[] = 'related_name';
+    }
+    $orderColumns[] = 'field_name';
+    $orderColumns[] = 'value_old';
+    $orderColumns[] = 'value_new';
+    $orderColumns[] = 'create_last_name';
+    $orderColumns[] = 'timestamp';
 
-    //             if (strtoupper($order['dir']) === 'ASC') {
-    //                 $orderCondition .= $orderColumns[$order['column']] . ' ASC ';
-    //             } else {
-    //                 $orderCondition .= $orderColumns[$order['column']] . ' DESC ';
-    //             }
-    //         }
-    //     }
-    // } else {
-    // }
+    // create order statement. Only column names from the whitelist above are used, so the
+    // request cannot inject anything into the ORDER BY clause.
+    $orderCondition = ' ORDER BY id DESC ';
+    if (isset($_GET['order']) && is_array($_GET['order'])) {
+        $orderParts = array();
+        foreach ($_GET['order'] as $order) {
+            $columnIndex = (int)($order['column'] ?? -1);
+            if (array_key_exists($columnIndex, $orderColumns)) {
+                $orderParts[] = $orderColumns[$columnIndex]
+                    . (strtoupper($order['dir'] ?? '') === 'ASC' ? ' ASC' : ' DESC');
+            }
+        }
+        if (count($orderParts) > 0) {
+            $orderCondition = ' ORDER BY ' . implode(', ', $orderParts) . ' ';
+        }
+    }
 
     // create search conditions
     $searchCondition = '';
@@ -201,7 +225,8 @@ try {
         }
 
         foreach ($searchString as $searchWord) {
-            $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', array_map(fn($col) => "COALESCE($col, '')", $searchColumns)) . ') LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
+            // Both sides have to be lowered, otherwise the search is case-sensitive on PostgreSQL.
+            $searchCondition .= ' AND LOWER(CONCAT(' . implode(', \' \', ', array_map(fn($col) => "COALESCE($col, '')", $searchColumns)) . ')) LIKE CONCAT(\'%\', LOWER(' . $searchValue . '), \'%\') ';
             $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
         }
 
@@ -214,10 +239,33 @@ try {
     $sqlConditions = '';
     $queryParamsConditions = array();
 
-    if (!is_null($getTables) && count($getTables) > 0) {
-        // Add each table as a separate condition, joined by OR:
-        $sqlConditions .= ' AND ( ' .  implode(' OR ', array_map(fn($tbl) => 'log_table = ?', $getTables)) . ' ) ';
-        $queryParamsConditions = array_merge($queryParamsConditions, $getTables);
+    // adm_log_changes is a global table, so the entries have to be restricted to the current
+    // organization. The user tables are shared between all organizations (a user can be a member
+    // of several organizations), so their entries stay visible and are protected by the per-user
+    // permission check instead. Entries without an organization stay visible, too, so that the
+    // audit trail has no gaps.
+    $sqlConditions .= ' AND (log_org_id = ? OR log_org_id IS NULL
+                             OR log_table IN (\'users\', \'user_data\', \'user_relations\')) ';
+    $queryParamsConditions[] = $gCurrentOrgId;
+
+    // Restrict the result to the tables the current user may read. $readableTables is already the
+    // intersection of the requested tables and the permitted ones, so this also applies the table
+    // filter of the request. Administrators that did not request specific tables see everything,
+    // including tables of third-party extensions that are unknown to getTableLabel().
+    if (!ChangelogService::hasUnrestrictedAccess($gCurrentUser) || count($getTables) > 0) {
+        $sqlConditions .= ' AND log_table IN (' . Database::getQmForValues($readableTables) . ') ';
+        $queryParamsConditions = array_merge($queryParamsConditions, $readableTables);
+    }
+
+    // Access to the shared user tables is granted per user, so their entries have to be restricted
+    // to the one user the current user is allowed to see. Without a restriction the user may read
+    // the log of all users (administrators and user administrators).
+    $userTableRestriction = ChangelogService::getUserTableRestriction($gCurrentUser, $subject);
+    if ($userTableRestriction !== '') {
+        $sqlConditions .= ' AND (log_table NOT IN (' . Database::getQmForValues(ChangelogService::$userTables) . ')
+                                 OR log_record_uuid = ?) ';
+        $queryParamsConditions = array_merge($queryParamsConditions, ChangelogService::$userTables);
+        $queryParamsConditions[] = $userTableRestriction;
     }
 
     if (!is_null($getId) && $getId > 0) {
@@ -228,14 +276,26 @@ try {
         $sqlConditions .= ' AND (log_record_uuid = ? )';
         $queryParamsConditions[] = $getUuid;
     }
-    if (!is_null($getRelatedId) && $getRelatedId > 0) {
+    if (!is_null($getRelatedId) && $getRelatedId !== '') {
         $sqlConditions .= ' AND (log_related_id = ? )';
         $queryParamsConditions[] = $getRelatedId;
     }
 
+    // The detail rows of one change are requested through the same script and therefore pass all
+    // the permission conditions above as well.
+    $showDetails = (!is_null($getChangeUuid) && $getChangeUuid !== '');
+    if ($showDetails) {
+        $sqlConditions .= ' AND (log_change_uuid = ? )';
+        $queryParamsConditions[] = $getChangeUuid;
+    }
+
+    // The entries of one change are collapsed into one row unless the filter of the page asks for
+    // every single entry. The detail rows of a change are single entries by definition.
+    $groupChanges = ($showDetails ? false : $getGroupChanges);
 
 
-    $mainSql = 'SELECT log_id as id, log_table as table_name,
+
+    $mainSql = 'SELECT log_id as id, log_change_uuid as change_uuid, log_table as table_name,
         log_record_id as record_id, log_record_uuid as uuid, log_record_name as name, log_record_linkid as link_id,
         log_related_id as related_id, log_related_name as related_name,
         log_field as field, log_field_name as field_name,
@@ -245,18 +305,17 @@ try {
         log_timestamp_create as timestamp
         FROM ' . TBL_LOG_CHANGES . '
         -- Extract data of the creating user...
-        INNER JOIN '.TBL_USERS.' usr_create
+        LEFT JOIN '.TBL_USERS.' usr_create
                 ON usr_create.usr_id = log_usr_id_create
-        INNER JOIN '.TBL_USER_DATA.' AS create_last_name
+        LEFT JOIN '.TBL_USER_DATA.' AS create_last_name
                 ON create_last_name.usd_usr_id = log_usr_id_create
                AND create_last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-        INNER JOIN '.TBL_USER_DATA.' AS create_first_name
+        LEFT JOIN '.TBL_USER_DATA.' AS create_first_name
                 ON create_first_name.usd_usr_id = log_usr_id_create
                AND create_first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
         WHERE
                log_timestamp_create BETWEEN ? AND ? -- $dateFromIntern and $dateToIntern
-        ' . $sqlConditions . '
-        ORDER BY log_id DESC';
+        ' . $sqlConditions;
 
     $queryParams = array_merge([
         $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
@@ -265,80 +324,156 @@ try {
         $dateToIntern . ' 23:59:59',
     ], $queryParamsConditions);
 
-    $limitCondition = '';
-    if ($getLength > 0) {
-        $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
+    // $getLength and $getStart are validated as integers and bounded above, so they can be
+    // inlined into the statement.
+    $limitCondition = ' LIMIT ' . $getLength . ' OFFSET ' . $getStart;
+
+    // The search is applied to the single entries, before they are grouped below, so that a change
+    // is found by the name of one of the fields it has modified.
+    if ($getSearch === '') {
+        $entriesSql = $mainSql;
+        $entriesParams = $queryParams;
+    } else {
+        $entriesSql = 'SELECT * FROM (' . $mainSql . ') AS entries ' . $searchCondition;
+        $entriesParams = array_merge($queryParams, $queryParamsSearch);
     }
 
-    if ($getSearch === '') {
-        // no search condition entered then return all records in dependence of order, limit and offset
-        $sql = $mainSql . $orderCondition . $limitCondition;
+    if ($showDetails) {
+        // The single entries of one change, in the order in which they were written. A change
+        // consists of the fields of one save, so the number of entries is small and needs no paging.
+        $sql = $entriesSql . ' ORDER BY id ASC LIMIT ' . $maxRowsPerRequest;
+        $queryParamsMain = $entriesParams;
+        $countSql = 'SELECT COUNT(*) FROM (' . $entriesSql . ') AS entries';
+        $countParams = $entriesParams;
+    } elseif (!$groupChanges) {
+        // Every logged entry is a row of its own, so the query is the plain list of entries and the
+        // counts are the number of entries.
+        $sql = $entriesSql . $orderCondition . $limitCondition;
+        $queryParamsMain = $entriesParams;
+        $countSql = 'SELECT COUNT(*) FROM (' . $entriesSql . ') AS entries';
+        $countParams = $entriesParams;
     } else {
-        $sql = 'SELECT *
-              FROM (' . $mainSql . ') AS entries
-               ' . $searchCondition
-            . $orderCondition
-            . $limitCondition;
+        // All entries that one save or deletion has written are shown as one row that can be
+        // expanded. Entries that were written before log_change_uuid existed have none of their
+        // own, so they are grouped by their record id and each of them stays a row of its own.
+        $changeKey = 'COALESCE(entries.change_uuid, CONCAT(\'#\', entries.id))';
+
+        // The entries of one change share everything but the field and its two values, so the
+        // shared columns are aggregated. The field columns are only used for a change that consists
+        // of a single entry, all others show the number of entries and are expanded on demand.
+        // The action is reduced to a rank, because the entries of a new record are the creation
+        // entry and one entry per initial value, so CREATED and MODIFY occur in the same change.
+        // The entries of a change do not all belong to the same record: deleting a role also
+        // deletes its memberships and its rights. The columns that describe the record must
+        // therefore all come from one and the same entry, the one the change is about. A record
+        // logs its own creation before its initial values and its own deletion after the records
+        // that were removed with it, so that entry is the first of a change unless the change is
+        // a deletion, where it is the last one.
+        $mainEntry = 'CASE WHEN MIN(CASE entries.action WHEN \'CREATED\' THEN 1 WHEN \'DELETED\' THEN 2 ELSE 3 END) = 2'
+            . ' THEN MAX(entries.id) ELSE MIN(entries.id) END';
+
+        $sql = 'SELECT ' . $changeKey . ' AS change_key, COUNT(*) AS entry_count,
+                MIN(entries.id) AS id, ' . $mainEntry . ' AS main_id, MAX(entries.change_uuid) AS change_uuid,
+                MAX(entries.field) AS field, MAX(entries.field_name) AS field_name,
+                MIN(CASE entries.action WHEN \'CREATED\' THEN 1 WHEN \'DELETED\' THEN 2 ELSE 3 END) AS action_rank,
+                MAX(entries.value_new) AS value_new, MAX(entries.value_old) AS value_old,
+                MAX(entries.usr_id_create) AS usr_id_create, MAX(entries.uuid_usr_create) AS uuid_usr_create,
+                MAX(entries.create_last_name) AS create_last_name, MAX(entries.create_first_name) AS create_first_name,
+                MAX(entries.timestamp) AS timestamp
+              FROM (' . $entriesSql . ') AS entries
+             GROUP BY ' . $changeKey;
+        $queryParamsMain = $entriesParams;
+        $countSql = 'SELECT COUNT(*) FROM (' . $sql . ') AS changes';
+        $countParams = $entriesParams;
+
+        $sql .= $orderCondition . $limitCondition;
     }
-    $queryParamsMain = array_merge($queryParams, $queryParamsSearch);
-    $logStatement = $gDb->queryPrepared($sql, $queryParamsMain); // TODO add more params
 
     $rowNumber = $getStart; // count for every row
 
-    // get count of all members and store into json
-    $countSql = 'SELECT COUNT(*) AS count_total FROM (' . $mainSql . ') as entries ';
-    $countTotalStatement = $gDb->queryPrepared($countSql, $queryParams); // TODO add more params
-    $jsonArray['recordsTotal'] = (int)$countTotalStatement->fetchColumn();
+    // All permission checks are part of the sql conditions above, so no rows are dropped while
+    // building the output and the counts are exact. They count the changes and not the single
+    // entries, because a change is what the table shows as one row.
+    $countStatement = $gDb->queryPrepared($countSql, $countParams);
+    $jsonArray['recordsTotal'] = (int)$countStatement->fetchColumn();
+    $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
 
     $jsonArray['data'] = array();
 
 
-
-
-
     $fieldHistoryStatement = $gDb->queryPrepared($sql, $queryParamsMain);
+    $logRows = $fieldHistoryStatement->fetchAll(PDO::FETCH_ASSOC);
 
-    // Logic for hiding certain columns:
-    // If we have only one table name given, hide the table column
-    // If we view the user profile field changes page, hide the column, too
-    $showTableColumn = true;
-    if (count($getTables) == 1) {
-        $showTableColumn = false;
+    // Read the record of every change of this page in one query. Only the entries that the query
+    // above has already returned are read, so they passed all permission checks with it.
+    $mainRecords = array();
+    if ($groupChanges) {
+        $mainIds = array_filter(array_map('intval', array_column($logRows, 'main_id')));
+        if (count($mainIds) > 0) {
+            $sqlMain = 'SELECT log_id, log_table, log_record_id, log_record_uuid, log_record_name,
+                               log_record_linkid, log_related_id, log_related_name
+                          FROM ' . TBL_LOG_CHANGES . '
+                         WHERE log_id IN (' . Database::getQmForValues($mainIds) . ')';
+            $mainStatement = $gDb->queryPrepared($sqlMain, $mainIds);
+
+            while ($mainRow = $mainStatement->fetch(PDO::FETCH_ASSOC)) {
+                $mainRecords[(int)$mainRow['log_id']] = array(
+                    'table_name' => $mainRow['log_table'],
+                    'record_id' => $mainRow['log_record_id'],
+                    'uuid' => $mainRow['log_record_uuid'],
+                    'name' => $mainRow['log_record_name'],
+                    'link_id' => $mainRow['log_record_linkid'],
+                    'related_id' => $mainRow['log_related_id'],
+                    'related_name' => $mainRow['log_related_name']
+                );
+            }
+        }
     }
-    // If none of the related-to values is set, hide the related_to column
-    $showRelatedColumn = true;
-    $noShowRelatedTables = ['user_fields', 'user_field_select_options', 'users', 'user_data'];
-
 
     $fieldStrings = ChangelogService::getFieldTranslations();
-    $recordsHidden = 0;
 
-    while ($row = $fieldHistoryStatement->fetch(PDO::FETCH_BOTH)) {
+    // Item fields of the inventory, only read if the changelog contains inventory item data
+    $itemsData = null;
+
+    // Lowest action rank of the entries of a requested change, CREATED before DELETED before
+    // MODIFY. It decides which value columns the detail table needs.
+    $detailActionRank = 3;
+
+    // The records and the areas that the entries of a requested change belong to. A change of a
+    // single record needs neither column in its detail table, a bulk deletion needs both: without
+    // the area, the deletion of a membership is indistinguishable from the deletion of the user.
+    $detailRecords = array();
+    $detailTables = array();
+
+    foreach ($logRows as $row) {
         ++$rowNumber;
-        $rowTable = $row['table_name'];
 
-        $allowRecordAccess = false;
-        // First step: Check view permissions to that particular log entry:
-        if ($accessAll || in_array($rowTable, $tablesPermitted)) {
-            $allowRecordAccess = true;
+        // A grouped row describes the record that its change is about, not an aggregate of all
+        // records that the change has touched. The record is only missing if it was purged between
+        // the two queries, in which case the change is still listed, just without its record.
+        if ($groupChanges) {
+            $row = array_merge(
+                array('table_name' => '', 'record_id' => 0, 'uuid' => '', 'name' => '',
+                    'link_id' => 0, 'related_id' => '', 'related_name' => ''),
+                $row,
+                $mainRecords[(int)($row['main_id'] ?? 0)] ?? array()
+            );
+        }
+
+        // A grouped row stands for all entries of one change and reports how many there are. In
+        // every other mode a row is one single entry.
+        if ($groupChanges) {
+            $entryCount = (int)$row['entry_count'];
+            $action = array(1 => 'CREATED', 2 => 'DELETED')[(int)$row['action_rank']] ?? 'MODIFY';
         } else {
-            // no global access permissions to that particular data/table
-            // Some objects have more fine-grained permissions (e.g. each group can have access permissions
-            // based on the user's role -> the calling user might have access to one particular role, but not in general)
-            if (in_array($rowTable, ['users', 'user_data', 'user_relations', 'members'])) {
-                // user UUID is available as uuid; current user has no general access to profile data, but might have permissions to this specific user (due to fole permissions)
-                $rowUser = new User($gDb, $gProfileFields);
-                $rowUser->readDataByUuid($row['uuid']);
-                if ($gCurrentUser->hasRightEditProfile($rowUser)) {
-                    $allowRecordAccess = true;
-                }
-            }
-            // NO access to this record allowed -> Set flag to show warning about records being
-            // hidden due to insufficient permissions
-            if (!$allowRecordAccess) {
-                ++$recordsHidden;
-                continue;
-            }
+            $entryCount = 1;
+            $action = $row['action'];
+            // The columns of the detail table depend on the change as a whole, so remember which
+            // kind of change these entries belong to.
+            $detailActionRank = min(
+                $detailActionRank,
+                array('CREATED' => 1, 'DELETED' => 2)[$action] ?? 3
+            );
         }
 
         $fieldInfo = $row['field_name'];
@@ -347,7 +482,6 @@ try {
 
         $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
         $columnValues    = array('DT_RowId' => 'row_log_' . $row['id'], '0' => $rowNumber);
-        $columnNumber    = 1;
 
         // 1. Column showing DB table name (only if more then one tables are shown; One table should be displayed in the headline!)
         if ($showTableColumn) {
@@ -361,10 +495,11 @@ try {
         $rowName = $row['name'] ?? '';
         $rowName = Language::translateIfTranslationStrId($rowName);
         if ($row['table_name'] == 'members') {
-            $columnValues[] = ChangelogService::createLink($rowName, 'users', $rowLinkId, $row['uuid'] ?? '');
+            $recordCell = ChangelogService::createLink($rowName, 'users', $rowLinkId, $row['uuid'] ?? '');
         } else {
-            $columnValues[] = ChangelogService::createLink($rowName, $row['table_name'], $rowLinkId, $row['uuid'] ?? '');
+            $recordCell = ChangelogService::createLink($rowName, $row['table_name'], $rowLinkId, $row['uuid'] ?? '');
         }
+        $columnValues[] = $recordCell;
 
         // 3. Optional Related-To column, e.g. for group memberships, we show the user as main name and the group as related
         //    Similarly, files/folders, organizations, guestbook comments, etc. show their parent as related
@@ -376,8 +511,8 @@ try {
                 $relUUID = '';
                 $rid = $row['related_id'];
                 if (empty($rid)) {
-                    // do nothing
-                    $columnValues[] = $relatedName;
+                    // no related id -> no link, but the name still has to be encoded
+                    $columnValues[] = SecurityUtils::encodeHTML($relatedName);
                 } elseif (ctype_digit($rid)) { // numeric related_ID -> Interpret it as ID
                     $relID = (int)$row['related_id'];
                     $columnValues[] = ChangelogService::createLink($relatedName, $relatedTable, $relID, $relUUID);
@@ -391,70 +526,165 @@ try {
         }
 
         // 4. The field that was changed. For record creation/deletion, show an indicator, too.
-        if ($row['action'] == "DELETED") {
-            $columnValues[] = '<em>['.$gL10n->get('SYS_DELETED').']</em>';
-        } elseif ($row['action'] == 'CREATED') {
-            $columnValues[] = '<em>['.$gL10n->get('SYS_CREATED').']</em>';
+        $actionIndicator = '';
+        if ($action == 'DELETED') {
+            $actionIndicator = '<em>['.$gL10n->get('SYS_DELETED').']</em>';
+        } elseif ($action == 'CREATED') {
+            $actionIndicator = '<em>['.$gL10n->get('SYS_CREATED').']</em>';
+        }
+
+        if ($entryCount > 1) {
+            // The change consists of several entries, so the single fields are not shown here. The
+            // link expands the row and requests them, see changelog.php.
+            $fieldCell = $actionIndicator
+                . ($actionIndicator === '' ? '' : ' ')
+                . '<a href="#" class="adm-changelog-details" data-change-uuid="'
+                . SecurityUtils::encodeHTML((string)$row['change_uuid']) . '">'
+                . '<i class="bi bi-chevron-right"></i> '
+                . $gL10n->get('SYS_CHANGELOG_CHANGED_ENTRIES', array($entryCount)) . '</a>';
+        } elseif ($actionIndicator !== '') {
+            $fieldCell = $actionIndicator;
         } elseif (!empty($fieldInfo)) {
             // Note: Even for user fields, we don't want to use the current user field name from the database, but the name stored in the log table from the time the change was done!.
             $fieldName = (is_array($fieldInfo) && isset($fieldInfo['name'])) ? $fieldInfo['name'] : $fieldInfo;
-            $columnValues[] = Language::translateIfTranslationStrId($fieldName);
+            $fieldCell = SecurityUtils::encodeHTML(Language::translateIfTranslationStrId($fieldName));
         } else {
-            $columnValues[] = '';
+            $fieldCell = '';
         }
+        $columnValues[] = $fieldCell;
 
 
         // 5. Show new and old values; For some tables we know further details about formatting
         $valueNew = $row['value_new'];
         $valueOld = $row['value_old'];
-        if ($row['table_name'] == 'user_data') {
+        if ($entryCount > 1) {
+            // The change consists of several entries and therefore has no single pair of values.
+            // They are shown in the detail rows that the row expands to, so nothing is formatted
+            // here: the aggregated field of the change does not belong to any particular value.
+            $valueNew = '';
+            $valueOld = '';
+        } elseif ($row['table_name'] == 'user_data') {
             // Format the values depending on the user field type:
             $valueNew = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueNew);
             $valueOld = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern'), $valueOld);
+        } elseif ($row['table_name'] == 'inventory_item_data'
+                  || (is_array($fieldInfo) && ($fieldInfo['type'] ?? '') === 'INVENTORY_STATUS')) {
+            // Format the values depending on the item field type, just like the user fields above.
+            // The item data table names the item field in log_field, while the status column of an
+            // item belongs to the item field STATUS.
+            if ($itemsData === null) {
+                $itemsData = new ItemsData($gDb, $gCurrentOrgId);
+            }
+            $itemField = ($row['table_name'] == 'inventory_item_data') ? (int) $row['field'] : 'STATUS';
+            $valueNew = $itemsData->formatChangelogValue($itemField, $valueNew);
+            $valueOld = $itemsData->formatChangelogValue($itemField, $valueOld);
         } elseif (is_array($fieldInfo) && isset($fieldInfo['type'])) {
             $valueNew = ChangelogService::formatValue($valueNew, $fieldInfo['type'], $fieldInfo['entries']??[]);
             $valueOld = ChangelogService::formatValue($valueOld, $fieldInfo['type'], $fieldInfo['entries']??[]);
+        } else {
+            // No type information for this field. The raw database value must never be sent to the
+            // DataTable as HTML, so it is passed through formatValue() with an empty type, which
+            // strips tags and encodes the value without applying any type specific formatting.
+            $valueNew = ChangelogService::formatValue($valueNew, '');
+            $valueOld = ChangelogService::formatValue($valueOld, '');
         }
 
-        $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';
+        // The previous value comes first, so that a change reads from left to right.
         $columnValues[] = (!empty($valueOld)) ? $valueOld : '&nbsp;';
+        $columnValues[] = (!empty($valueNew)) ? $valueNew : '&nbsp;';
 
         // 6. User and date of the change
-        $columnValues[] = ChangelogService::createLink($row['create_last_name'].', '.$row['create_first_name'], 'users', 0, $row['uuid_usr_create']);
-        // $columnValues[] = '<a href="'.SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['uuid_usr_create'])).'">'..'</a>';
-        $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date') . ' ' .$gSettingsManager->getString('system_time'));
-        $jsonArray['data'][] = $columnValues;
-    }
-
-    // set count of filtered records
-    if ($getSearch !== '') {
-        if ($rowNumber < $getStart + $getLength) {
-            $jsonArray['recordsFiltered'] = $rowNumber;
+        $actorName = ($row['create_last_name'] ?? '') . ', ' . ($row['create_first_name'] ?? '');
+        if ($actorName === ', ') {
+            $actorName = $gL10n->get('SYS_DELETED_USER');
         } else {
-            // read count of all filtered records without limit and offset
-            $sql = 'SELECT COUNT(*) AS count
-                  FROM (' . $mainSql . ') AS members
-                       ' . $searchCondition;
-            $countFilteredStatement = $gDb->queryPrepared($sql, $queryParams);
-
-            $jsonArray['recordsFiltered'] = (int)$countFilteredStatement->fetchColumn();
+            $actorName = ChangelogService::createLink($actorName, 'users', 0, $row['uuid_usr_create']);
         }
-    } else {
-        $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
+        $columnValues[] = $actorName;
+        $columnValues[] = $timestampCreate->format($gSettingsManager->getString('system_date') . ' ' .$gSettingsManager->getString('system_time'));
+
+        if ($showDetails) {
+            // The detail rows of a change repeat neither the user nor the date, all entries of a
+            // change share them with the row that was expanded. The record is repeated whenever the
+            // entries do not all belong to the same one, which is the case as soon as a deletion
+            // removes dependent records together with the record itself.
+            $detailRecords[$row['table_name'] . ':' . $row['record_id']] = true;
+            $detailTables[$row['table_name']] = true;
+            $jsonArray['data'][] = array(
+                ChangelogService::getTableLabel($row['table_name']),
+                $recordCell,
+                $fieldCell,
+                (!empty($valueOld)) ? $valueOld : '&nbsp;',
+                (!empty($valueNew)) ? $valueNew : '&nbsp;'
+            );
+        } else {
+            $jsonArray['data'][] = $columnValues;
+        }
     }
 
-    if ($recordsHidden > 0) {
-        $jsonArray['notice']['DT_notice'] = '<i class="bi bi-exclamation-circle-fill"></i>' .
-            $gL10n->get('SYS_LOG_RECORDS_HIDDEN', [$recordsHidden]);
-    } else {
-        // Make sure the notice is hidden!
-        $jsonArray['notice']['DT_notice'] = '';
+    if ($showDetails) {
+        // A creation has no previous value and a deletion has no new value, so that column is left
+        // out of the detail table entirely instead of showing a column of empty cells. The script
+        // sends the headings along with the rows, so the page only has to render what it gets.
+        $detailAction = array(1 => 'CREATED', 2 => 'DELETED')[$detailActionRank] ?? 'MODIFY';
+        $showValueOld = ($detailAction !== 'CREATED');
+        $showValueNew = ($detailAction !== 'DELETED');
+
+        // The entries of a bulk deletion belong to different records, so each of them has to name
+        // its own. A change of a single record repeats the record of the expanded row instead.
+        $showArea = (count($detailTables) > 1);
+        $showRecord = (count($detailRecords) > 1);
+
+        $jsonArray['columns'] = array();
+        if ($showArea) {
+            $jsonArray['columns'][] = $gL10n->get('SYS_DATA_AREA');
+        }
+        if ($showRecord) {
+            $jsonArray['columns'][] = $gL10n->get('SYS_NAME');
+        }
+        $jsonArray['columns'][] = $gL10n->get('SYS_FIELD');
+        if ($showValueOld) {
+            $jsonArray['columns'][] = $gL10n->get('SYS_PREVIOUS_VALUE');
+        }
+        if ($showValueNew) {
+            $jsonArray['columns'][] = $gL10n->get('SYS_NEW_VALUE');
+        }
+
+        foreach ($jsonArray['data'] as $index => $entry) {
+            $detailRow = array();
+            if ($showArea) {
+                $detailRow[] = $entry[0];
+            }
+            if ($showRecord) {
+                $detailRow[] = $entry[1];
+            }
+            $detailRow[] = $entry[2];
+            if ($showValueOld) {
+                $detailRow[] = $entry[3];
+            }
+            if ($showValueNew) {
+                $detailRow[] = $entry[4];
+            }
+            $jsonArray['data'][$index] = $detailRow;
+        }
     }
+
+    // The record counts are determined together with the queries above, because all permission
+    // checks are part of the sql conditions and no record can be dropped afterwards.
+
+    // Make sure a notice of a previous draw is hidden!
+    $jsonArray['notice']['DT_notice'] = '';
 
     echo json_encode($jsonArray);
 } catch (Throwable $e) {
     // NOTE: DataTables expects the form {'error' => 'message'}, so we can't use the default handleException($e, true); call!
-    $jsonArray['error'] = $e->getMessage();
+    // The message is inserted into the page by our DataTables error handler, and it can contain
+    // data that originates from the request or from the database, so it has to be purified the
+    // same way handleException() does. The purifier is only missing if the exception occurred
+    // while common.php was still being loaded; in that case fall back to encoding everything.
+    $jsonArray['error'] = isset($gHtmlPurifierFilter)
+        ? $gHtmlPurifierFilter->purify($e->getMessage())
+        : SecurityUtils::encodeHTML($e->getMessage());
     echo json_encode($jsonArray);
     exit();
 }

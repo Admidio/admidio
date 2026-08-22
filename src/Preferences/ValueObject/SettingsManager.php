@@ -131,10 +131,11 @@ class SettingsManager
      */
     private function delete(string $name)
     {
-        $sql = 'DELETE FROM ' . TBL_PREFERENCES . '
-                 WHERE prf_org_id = ? -- $orgId
-                   AND prf_name   = ? -- $name';
-        $this->db->queryPrepared($sql, array($this->orgId, $name));
+        // The setting is removed through its own entity, so the deletion reaches the change history.
+        // A plain DELETE would take it out of the audit trail without a trace.
+        $preference = new Preferences($this->db);
+        $preference->readDataByColumns(array('prf_org_id' => $this->orgId, 'prf_name' => $name));
+        $preference->delete();
     }
 
     /**

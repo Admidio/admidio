@@ -60,6 +60,9 @@ $defaultOrgPreferences = array(
 
     // Changelog settings
     'changelog_module_enabled' => '1',
+    'changelog_default_days' => '365',
+    'changelog_retention_days' => '0',
+    'changelog_last_purge' => '0',
     'changelog_table_user_data' => '1',
     'changelog_table_users' => '1',
     'changelog_table_members' => '1',
@@ -95,6 +98,7 @@ $defaultOrgPreferences = array(
     'changelog_table_inventory_item_borrow_data' => '0',
     'changelog_table_saml_clients' => '0',
     'changelog_table_oidc_clients' => '0',
+    'changelog_table_sso_keys' => '0',
     'changelog_table_others' => '0',
 
     // E-mail dispatch
@@ -146,7 +150,6 @@ $defaultOrgPreferences = array(
     'category_report_default_configuration' => '',
 
     // Contacts
-    'contacts_field_history_days' => '365',
     'contacts_list_configuration' => '',
     'contacts_per_page' => '25',
     'contacts_show_all' => '1',

@@ -2,6 +2,7 @@
 namespace Admidio\Roles\Entity;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
@@ -263,29 +264,43 @@ class Role extends Entity
 
         $this->db->startTransaction();
 
-        $sql = 'DELETE FROM ' . TBL_ROLE_DEPENDENCIES . '
-                 WHERE rld_rol_id_parent = ? -- $rolId
-                    OR rld_rol_id_child  = ? -- $rolId';
-        $this->db->queryPrepared($sql, array($rolId, $rolId));
+        // Deleting a role is one action of the user, so the role and everything that is removed
+        // together with it belong into one change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
 
-        $sql = 'DELETE FROM ' . TBL_MEMBERS . '
-                 WHERE mem_rol_id = ? -- $rolId';
-        $this->db->queryPrepared($sql, array($rolId));
+        $this->deleteDependentRecords(
+            new RolesDependencies($this->db),
+            array('rld_rol_id_parent', 'rld_rol_id_child'),
+            'rld_rol_id_parent = ? OR rld_rol_id_child = ?',
+            array($rolId, $rolId)
+        );
+
+        $this->deleteDependentRecords(
+            new Membership($this->db),
+            array('mem_id'),
+            'mem_rol_id = ?',
+            array($rolId)
+        );
 
         $sql = 'UPDATE ' . TBL_EVENTS . '
                    SET dat_rol_id = NULL
                  WHERE dat_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
 
-        $sql = 'DELETE FROM ' . TBL_ROLES_RIGHTS_DATA . '
-                 WHERE rrd_rol_id = ? -- $rolId';
-        $this->db->queryPrepared($sql, array($rolId));
+        $this->deleteDependentRecords(
+            new RolesRightsData($this->db),
+            array('rrd_id'),
+            'rrd_rol_id = ?',
+            array($rolId)
+        );
 
         $sql = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
                  WHERE msr_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
 
         $return = parent::delete();
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         if (isset($gCurrentSession)) {
             // all active users must renew their user data because maybe their

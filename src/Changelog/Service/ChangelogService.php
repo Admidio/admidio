@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Changelog\Service;
 
+use InvalidArgumentException;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
@@ -50,6 +51,32 @@ use ModuleEvents;
  * This class adds some static functions that are used in the changelog module to keep the
  * code easy to read and short
  *
+ * **What the changelog records**
+ *
+ * The changelog is an audit trail of the application, not of the database. Its only source are
+ * Entity::save() and Entity::delete(), so a change is recorded if, and only if, it was made
+ * through an Entity object. Statements that are sent to the database directly, bulk updates,
+ * changes made by other programs and changes made in the database itself never appear in it.
+ * Whenever a service deletes or updates dependent records with its own SQL, it has to read those
+ * records through their Entity and delete them there, or the audit trail loses them silently.
+ * A database trigger would see all of them, but none of the application context that makes an
+ * entry readable: the acting user, the readable name of the record, the translated field names,
+ * the masking of secrets and the organization the change belongs to.
+ *
+ * A database table without an Entity class of its own is therefore not covered, except that its
+ * table name still falls under the preference changelog_table_others.
+ *
+ * **Keeping a table complete**
+ *
+ * The name of the database table is the type discriminator of a log entry, and it is used by
+ * several methods of this class that have to be kept in sync when a table is added:
+ * getTableLabel() for its title, getFieldTranslations() for the title and type of each of its
+ * columns, createLink() for the link to the record, getObjectForTable() for the object the page
+ * headline is built from, getRelatedTable() if its entries point at a record of another table,
+ * and getPermittedTables() for the users that may read its entries. A third-party extension
+ * registers all of these through registerCallback() instead, see the example at the end of this
+ * file.
+ *
  * **Code example**
  * ```
  * $allLogTables = ChangelogService::getTableLabel();
@@ -79,6 +106,11 @@ class ChangelogService {
         'oidc_access_tokens', 'oidc_refresh_tokens', 'oidc_auth_codes', 'registrations',
         'sessions'];
 
+    /**
+     * Minimum number of seconds between two runs of the automatic purge of the change history.
+     */
+    protected const PURGE_INTERVAL_SECONDS = 86400;
+
 
     /**
      * array holding all customizations by third-party extensions.
@@ -87,6 +119,7 @@ class ChangelogService {
     protected static array $customCallbacks = array(
         'getTableLabel' => ['' => []],
         'getTableLabelArray' => [],
+        'getAreaArray' => [],
         'getObjectForTable' => ['' => []],
         'getFieldTranslations' => [],
         'createLink' => ['' => []],
@@ -103,7 +136,8 @@ class ChangelogService {
      * value, the next callback or the default processing of the ChangelogService
      * method will proceed.
      * @param string $function The method of the ChangelogService class that should be customized. One of
-     *     'getTableLabel', 'getObjectForTable', 'getFieldTranslations', 'createLink', 'formatValue', 'getRelatedTable', 'getPermittedTables'
+     *     'getTableLabel', 'getTableLabelArray', 'getObjectForTable', 'getFieldTranslations', 'createLink',
+     *     'formatValue', 'getRelatedTable', 'getPermittedTables'. Any other value throws an InvalidArgumentException.
      * @param string $moduleOrKey The module or type that should be customized. If
      *     empty, the callback will be executed for all values, and it will be used
      *     if it evaluates to a non-empty value.
@@ -113,8 +147,19 @@ class ChangelogService {
      * @return void
      */
     public static function registerCallback(string $function, string $moduleOrKey, mixed $callback) : void {
+        // Fail here and not somewhere in an unrelated changelog request later on: an unknown
+        // method would silently add a key that no ChangelogService method ever consults.
+        if (!array_key_exists($function, self::$customCallbacks)) {
+            throw new InvalidArgumentException('Unsupported changelog callback "' . $function . '".');
+        }
+
         if (empty($moduleOrKey)) {
-            if ($function == 'getTableLabelArray' || $function == 'getFieldTranslations') {
+            if ($function == 'getTableLabelArray' || $function == 'getFieldTranslations' || $function == 'getAreaArray') {
+                // These are merged into the lookup tables instead of being evaluated, so the
+                // registered value has to be an array.
+                if (!is_array($callback)) {
+                    throw new InvalidArgumentException('The changelog callback "' . $function . '" must be an array.');
+                }
                 self::$customCallbacks[$function] = array_merge(self::$customCallbacks[$function], $callback);
             } else {
                 // append callback to list of callbacks for all values
@@ -123,6 +168,9 @@ class ChangelogService {
         } else {
             self::$customCallbacks[$function][$moduleOrKey] = $callback;
         }
+
+        // the callbacks feed into the cached lookup tables
+        self::resetCache();
     }
 
     static protected function evaluateCallback(mixed $callback, ...$args) : mixed {
@@ -133,6 +181,33 @@ class ChangelogService {
         }
     }
 
+    /**
+     * Cached lookup tables. getTableLabel() is consulted for every single log write and
+     * getFieldTranslations() builds a large array of translated texts, so neither of them may be
+     * rebuilt on each call.
+     * @var array|null
+     */
+    private static ?array $tableLabelCache = null;
+    private static ?array $fieldTranslationsCache = null;
+
+    /**
+     * Language the cached field translations were built for. The cache is only valid as long as
+     * the language of the current request does not change.
+     * @var string
+     */
+    private static string $fieldTranslationsLanguage = '';
+
+    /**
+     * Drop all cached lookup tables. Must be called whenever a callback is registered that changes
+     * their content.
+     * @return void
+     */
+    public static function resetCache(): void
+    {
+        self::$tableLabelCache = null;
+        self::$fieldTranslationsCache = null;
+        self::$fieldTranslationsLanguage = '';
+    }
 
     /**
      * Return a human-readable title for the given database table. If table is
@@ -156,7 +231,31 @@ class ChangelogService {
             }
         }
         // If none of the callbacks matches, proceed with the default processing...
+        $tableLabels = self::getTableLabels();
 
+        if ($table == null) {
+            return $tableLabels;
+        } else {
+            if (array_key_exists($table, $tableLabels)) {
+                return Language::translateIfTranslationStrId($tableLabels[$table]);
+            } else {
+                return '';
+            }
+        }
+    }
+
+    /**
+     * Named list of all database tables and their translation ids, including the entries that were
+     * added by third-party extensions. The list is needed for every single log write, so it is
+     * built once per request and cached afterwards.
+     *
+     * @return array Named array of database table name => translation id
+     */
+    private static function getTableLabels(): array
+    {
+        if (self::$tableLabelCache !== null) {
+            return self::$tableLabelCache;
+        }
 
         /**
          * Named list of all available table columns and their translation IDs.
@@ -211,17 +310,201 @@ class ChangelogService {
             'sso_keys' => 'SYS_SSO_KEYS',
             'others' => 'SYS_ALL_OTHERS',
         );
-        $tableLabels = array_merge($tableLabels, self::$customCallbacks['getTableLabelArray']);
 
-        if ($table == null) {
-            return $tableLabels;
-        } else {
-            if (array_key_exists($table, $tableLabels)) {
-                return Language::translateIfTranslationStrId($tableLabels[$table]);
+        self::$tableLabelCache = array_merge($tableLabels, self::$customCallbacks['getTableLabelArray']);
+        return self::$tableLabelCache;
+    }
+
+
+    /**
+     * The sections the areas of the change history are grouped into. The order of the sections is
+     * the order they are displayed in. A section with an empty title is displayed without a heading.
+     *
+     * @return array Named array of section id => translation id of the heading
+     */
+    public static function getAreaSections(): array
+    {
+        return array(
+            'user_role_data' => 'SYS_HEADER_USER_ROLE_DATA',
+            'content_modules' => 'SYS_HEADER_CONTENT_MODULES',
+            'settings' => 'SYS_HEADER_PREFERENCES',
+            'other' => ''
+        );
+    }
+
+    /**
+     * The areas the change history can be switched on and off for. An area bundles all database
+     * tables of one module or of one group of settings, so the user configures the change history
+     * in the modules he knows and never in database tables.
+     *
+     * Every table of getTableLabel() that no area claims is added to the area 'other', so a table
+     * that a third-party extension registered is configurable even if the extension does not
+     * declare an area for it.
+     *
+     * An extension adds its own area, or adds its tables to an existing one, by registering an
+     * array of the same shape:
+     * ```
+     * ChangelogService::registerCallback('getAreaArray', '', array(
+     *     'my_module' => array('label' => 'PLG_MY_MODULE', 'section' => 'content_modules',
+     *         'enabledBy' => array('my_module_plugin_enabled'), 'tables' => array('my_table'))
+     * ));
+     * ```
+     *
+     * @return array Ordered named array of area id => array with the keys
+     *      **label** (translation id), **section** (id of getAreaSections()),
+     *      **enabledBy** (names of the preferences that enable the module, the area is displayed
+     *      as soon as one of them is enabled; an empty array means the area is always displayed)
+     *      and **tables** (database table names without prefix)
+     * @throws Exception
+     */
+    public static function getAreas(): array
+    {
+        $areas = array(
+            'user_profile' => array(
+                'label' => 'SYS_CHANGELOG_AREA_USER_PROFILE',
+                'section' => 'user_role_data',
+                'enabledBy' => array(),
+                'tables' => array('users', 'user_data', 'members', 'user_relations')
+            ),
+            'permissions' => array(
+                'label' => 'SYS_ROLE_RIGHTS',
+                'section' => 'user_role_data',
+                'enabledBy' => array(),
+                'tables' => array('roles_rights', 'roles_rights_data')
+            ),
+            'documents_files' => array(
+                'label' => 'SYS_DOCUMENTS_FILES',
+                'section' => 'content_modules',
+                'enabledBy' => array('documents_files_module_enabled'),
+                'tables' => array('files', 'folders')
+            ),
+            'photos' => array(
+                'label' => 'SYS_PHOTO_ALBUMS',
+                'section' => 'content_modules',
+                'enabledBy' => array('photo_module_enabled'),
+                'tables' => array('photos')
+            ),
+            'announcements' => array(
+                'label' => 'SYS_ANNOUNCEMENTS',
+                'section' => 'content_modules',
+                'enabledBy' => array('announcements_module_enabled'),
+                'tables' => array('announcements')
+            ),
+            'events' => array(
+                'label' => 'SYS_EVENTS',
+                'section' => 'content_modules',
+                'enabledBy' => array('events_module_enabled'),
+                'tables' => array('events', 'rooms')
+            ),
+            'forum' => array(
+                'label' => 'SYS_FORUM',
+                'section' => 'content_modules',
+                'enabledBy' => array('forum_module_enabled'),
+                'tables' => array('forum_topics', 'forum_posts')
+            ),
+            'inventory' => array(
+                'label' => 'SYS_INVENTORY',
+                'section' => 'content_modules',
+                'enabledBy' => array('inventory_module_enabled'),
+                'tables' => array('inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data')
+            ),
+            'weblinks' => array(
+                'label' => 'SYS_WEBLINKS',
+                'section' => 'content_modules',
+                'enabledBy' => array('weblinks_module_enabled'),
+                'tables' => array('links')
+            ),
+            'profile_role_settings' => array(
+                'label' => 'SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS',
+                'section' => 'settings',
+                'enabledBy' => array(),
+                'tables' => array('roles', 'role_dependencies', 'user_fields', 'user_field_select_options', 'user_relation_types')
+            ),
+            'reports' => array(
+                'label' => 'SYS_CHANGELOG_AREA_REPORTS',
+                'section' => 'settings',
+                'enabledBy' => array(),
+                'tables' => array('lists', 'list_columns', 'category_report')
+            ),
+            'sso' => array(
+                'label' => 'SYS_SSO',
+                'section' => 'settings',
+                'enabledBy' => array('sso_saml_enabled', 'sso_oidc_enabled'),
+                'tables' => array('saml_clients', 'oidc_clients', 'sso_keys')
+            ),
+            'preferences' => array(
+                'label' => 'SYS_SETTINGS',
+                'section' => 'settings',
+                'enabledBy' => array(),
+                'tables' => array('organizations', 'menu', 'preferences', 'texts', 'categories')
+            ),
+            'other' => array(
+                'label' => 'SYS_ALL_OTHERS',
+                'section' => 'other',
+                'enabledBy' => array(),
+                'tables' => array('others')
+            )
+        );
+
+        // An extension may either define a new area or add its tables to an existing one, so the
+        // registered definition is merged into the existing area instead of replacing it.
+        foreach (self::$customCallbacks['getAreaArray'] as $areaId => $area) {
+            if (isset($areas[$areaId])) {
+                $areas[$areaId]['tables'] = array_merge($areas[$areaId]['tables'], $area['tables'] ?? array());
+                unset($area['tables']);
+                $areas[$areaId] = array_merge($areas[$areaId], $area);
             } else {
-                return '';
+                $areas[$areaId] = array_merge(array('label' => '', 'section' => 'other', 'enabledBy' => array(), 'tables' => array()), $area);
             }
         }
+
+        // Every table that no area claims is configured together with the unnamed tables. Without
+        // this a table of a third-party extension would have no checkbox at all.
+        $assignedTables = array();
+        foreach ($areas as $area) {
+            $assignedTables = array_merge($assignedTables, $area['tables']);
+        }
+        $areas['other']['tables'] = array_values(array_unique(array_merge(
+            $areas['other']['tables'],
+            array_diff(array_keys(self::getTableLabel()), $assignedTables)
+        )));
+
+        return $areas;
+    }
+
+    /**
+     * The areas of getAreas() that belong to a module that is enabled. An area of a disabled module
+     * must not only be hidden but be left out of the form completely: the preferences of its tables
+     * are kept unchanged, so switching the module on again restores the previous configuration.
+     *
+     * @return array The displayed areas in the same shape as getAreas()
+     * @throws Exception
+     */
+    public static function getVisibleAreas(): array
+    {
+        global $gSettingsManager;
+
+        $areas = self::getAreas();
+
+        foreach ($areas as $areaId => $area) {
+            if (count($area['enabledBy']) === 0) {
+                continue;
+            }
+
+            $moduleEnabled = false;
+            foreach ($area['enabledBy'] as $preferenceName) {
+                if ($gSettingsManager->has($preferenceName) && $gSettingsManager->getInt($preferenceName) > 0) {
+                    $moduleEnabled = true;
+                    break;
+                }
+            }
+
+            if (!$moduleEnabled) {
+                unset($areas[$areaId]);
+            }
+        }
+
+        return $areas;
     }
 
 
@@ -312,8 +595,10 @@ class ChangelogService {
                 return new UserRelation($gDb);
             case 'user_relation_types':
                 return new UserRelationType($gDb);
-            case 'forum_topic':
+            case 'forum_topics':
                 return new Topic($gDb);
+            case 'forum_posts':
+                return new Post($gDb);
             case 'saml_clients':
                 return new SAMLClient($gDb);
             case 'oidc_clients':
@@ -356,6 +641,12 @@ class ChangelogService {
     public static function getFieldTranslations(): array
     {
         global $gL10n;
+
+        // The result contains translated texts, so it can only be reused for the same language.
+        if (self::$fieldTranslationsCache !== null
+            && self::$fieldTranslationsLanguage === $gL10n->getLanguage()) {
+            return self::$fieldTranslationsCache;
+        }
 
         $userFieldText = array(
             'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
@@ -523,18 +814,20 @@ class ChangelogService {
             'inf_required_input' =>        array('name' => 'SYS_REQUIRED_INPUT', 'type' => 'BOOL'),
             'inf_sequence' =>              'SYS_ORDER',
             'ini_cat_id' =>                array('name' => 'SYS_CATEGORY', 'type' => 'CATEGORY'),
-            'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS'),
+            'ini_status' =>                array('name' => 'SYS_INVENTORY_STATUS', 'type' => 'INVENTORY_STATUS'),
             'ini_picture' =>               array('name' => 'SYS_INVENTORY_ITEM_PICTURE', 'type' => 'PICTURE'),
-            'ind_value_bool' =>            array('name' => 'SYS_VALUE', 'type' => 'BOOL'),
-            'ind_value_date' =>            array('name' => 'SYS_VALUE', 'type' => 'DATE'),  
-            'ind_value_mail' =>            array('name' => 'SYS_VALUE', 'type' => 'EMAIL'),  
-            'ind_value_url' =>             array('name' => 'SYS_VALUE', 'type' => 'URL'),
-            'ind_value_icon' =>            array('name' => 'SYS_VALUE', 'type' => 'ICON'),
-            'ind_value_usr' =>             array('name' => 'SYS_VALUE', 'type' => 'USER'),
-            'ind_value' =>                 'SYS_VALUE',  
+            // Changes of the item data are logged with the item field as field name, so the
+            // following column names only occur in entries of previous Admidio versions.
+            'ind_value' =>                 'SYS_VALUE',
+            'ind_value_bool' =>            'SYS_VALUE',
+            'ind_value_date' =>            'SYS_VALUE',
+            'ind_value_mail' =>            'SYS_VALUE',
+            'ind_value_url' =>             'SYS_VALUE',
+            'ind_value_icon' =>            'SYS_VALUE',
+            'ind_value_usr' =>             'SYS_VALUE',
             'inb_last_receiver' =>         array('name' => 'SYS_INVENTORY_LAST_RECEIVER', 'type' => 'USER'),
-            'inb_borrow_date' =>             array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATE'),
-            'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATE'),
+            'inb_borrow_date' =>           array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATETIME'),
+            'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATETIME'),
             'ifo_value' =>                 'SYS_VALUE',
             'ifo_inf_id' =>                'SYS_INVENTORY_ITEMFIELD',
             'ifo_sequence' =>              'SYS_ORDER',
@@ -658,7 +951,9 @@ class ChangelogService {
             'key_is_active' =>              array('name' => 'SYS_SSO_KEY_ACTIVE', 'type' => 'BOOL'),
 
         );
-        return array_merge($translations, self::$customCallbacks['getFieldTranslations']);
+        self::$fieldTranslationsLanguage = $gL10n->getLanguage();
+        self::$fieldTranslationsCache = array_merge($translations, self::$customCallbacks['getFieldTranslations']);
+        return self::$fieldTranslationsCache;
     }
 
 
@@ -782,6 +1077,13 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/keys.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             }
         }
+        // The returned string is rendered as HTML by the changelog DataTable, while every caller
+        // passes plain text that originates from the database (record names, related object names,
+        // user names). Encode it here, at the single place where the return value is assembled.
+        // Note: the 'roles_rights_data' case above returns early via a recursive call, which runs
+        // through this same encoding exactly once.
+        $text = SecurityUtils::encodeHTML(StringUtils::strStripTags($text));
+
         if ($url != '') {
             return '<a href="'.$url.'">'.$text.'</a>';
         } else {
@@ -853,6 +1155,21 @@ class ChangelogService {
                         }
                     }
                     break;
+                case 'DATETIME':
+                    // The value can be stored with or without a time part
+                    $date = DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                    if (!$date instanceof DateTime) {
+                        $date = DateTime::createFromFormat('Y-m-d H:i', $value);
+                    }
+                    if ($date instanceof DateTime) {
+                        $htmlValue = $date->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
+                    } else {
+                        $date = DateTime::createFromFormat('Y-m-d', $value);
+                        if ($date instanceof DateTime) {
+                            $htmlValue = $date->format($gSettingsManager->getString('system_date'));
+                        }
+                    }
+                    break;
                 case 'EMAIL':
                     // the value in db is only the position, now search for the text
                     if ($value !== '') {
@@ -867,6 +1184,19 @@ class ChangelogService {
 
                 case 'URL':
                     if ($value !== '') {
+                        // The value is a historic entry from the log table and may predate any
+                        // input validation, so only schemes that are safe to open may be turned
+                        // into a clickable link. Values without a scheme (e.g. the relative menu
+                        // urls like /modules/preferences.php) stay linkable, everything else is
+                        // shown as plain text. $value is already HTML encoded at this point, which
+                        // leaves the scheme untouched. Browsers ignore whitespace and control
+                        // characters within the scheme, so remove them before the check.
+                        $scheme = preg_replace('/[\s\x00-\x1F]+/', '', $value);
+                        if (preg_match('/^([a-z][a-z0-9+.\-]*):/i', $scheme, $schemeMatch)
+                            && !in_array(strtolower($schemeMatch[1]), array('http', 'https', 'mailto'), true)) {
+                            break;
+                        }
+
                         $displayValue = $value;
 
                         // trim "http://", "https://", "//"
@@ -1026,7 +1356,10 @@ class ChangelogService {
                     $object->readDataById($admVal);
                     $admVal = $object->readableName();
                 }
-                $table .= '<tr><td>' . $admVal . '</td><td>' . $ssoVal . "</td></tr>\n";
+                // formatValue() deliberately skips its encoding for the mapping types, so the
+                // values decoded from the JSON are still raw and have to be encoded here.
+                $table .= '<tr><td>' . SecurityUtils::encodeHTML((string)$admVal) . '</td><td>'
+                    . SecurityUtils::encodeHTML((string)$ssoVal) . "</td></tr>\n";
             }
         }
         $table .= '</table>';
@@ -1073,13 +1406,10 @@ class ChangelogService {
                 return 'forum_topics';
             case 'forum_topics':
                 return 'forum_posts';
-            case 'inventory_fields':
-                return 'inventory_items';
-            case 'inventory_items':
-                return 'inventory_fields';
             case 'list_columns':
                 // The related item is either a user field or a column name mem_ or usr_ -> in the latter case, convert it to a translatable string and translate
                 if (!empty($relatedName) && (str_starts_with($relatedName, 'mem_') || str_starts_with($relatedName, 'usr_'))) {
+                    $fieldStrings = ChangelogService::getFieldTranslations();
                     $relatedName = $fieldStrings[$relatedName]??$relatedName;
                     if (is_array($relatedName)) {
                         $relatedName = $relatedName['name']??'-';
@@ -1110,13 +1440,20 @@ class ChangelogService {
         if ($user->isAdministratorEvents())
             $tablesPermitted[] = 'events';
         if ($user->isAdministratorDocumentsFiles())
-            $tablesPermitted = array_merge($tablesPermitted, ['files', 'folders']);
+            // The role rights of a folder are stored in roles_rights_data, and the history buttons
+            // of the documents module request that table in addition to files and folders.
+            $tablesPermitted = array_merge($tablesPermitted, ['files', 'folders', 'roles_rights_data']);
         if ($user->isAdministratorUsers())
             $tablesPermitted = array_merge($tablesPermitted, ['users', 'user_data', 'user_relations', 'members']);
         if ($user->isAdministratorPhotos())
             $tablesPermitted[] = 'photos';
         if ($user->isAdministratorWeblinks())
             $tablesPermitted[] = 'links';
+        if ($user->isAdministratorInventory())
+            $tablesPermitted = array_merge($tablesPermitted, ['inventory_fields', 'inventory_field_select_options',
+                'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data']);
+        if ($user->isAdministratorForum())
+            $tablesPermitted = array_merge($tablesPermitted, ['forum_topics', 'forum_posts']);
 
         // HANDLE REGISTERED CALLBACKS to add additional tables
         // First process callbacks defined for the given module:
@@ -1134,7 +1471,232 @@ class ChangelogService {
             }
         }
 
-        return $tablesPermitted;
+        return array_values(array_unique($tablesPermitted));
+    }
+
+    /**
+     * Database tables that hold data shared between all organizations. They are not protected by
+     * per-table permissions, but by the right to edit the profile of the affected user.
+     * @var array
+     */
+    public static array $userTables = array('users', 'user_data', 'user_relations', 'members');
+
+    /**
+     * Check whether nothing but tables of $userTables were requested. Those tables are not
+     * protected by per-table permissions, but by the right to edit the profile of the affected
+     * user, so the caller has to read that user and pass it on to getReadableTables() and
+     * getUserTableRestriction().
+     * @param array $tables The requested database tables of the changelog
+     * @return bool Returns true if at least one table was requested and all of them are user tables
+     */
+    public static function isUserHistory(array $tables) : bool {
+        return count($tables) > 0 && count(array_diff($tables, self::$userTables)) === 0;
+    }
+
+    /**
+     * Check whether the user may read the changelog of all tables without any restriction.
+     * @param User $user The user whose permissions should be checked
+     * @return bool Returns true if no table restriction has to be applied for that user
+     * @throws Exception
+     */
+    public static function hasUnrestrictedAccess(User $user) : bool {
+        global $gSettingsManager;
+
+        return $gSettingsManager->getInt('changelog_module_enabled') > 0 && $user->isAdministrator();
+    }
+
+    /**
+     * Determine which of the requested database tables the given user is allowed to read in the
+     * changelog. This is the single place where changelog view permissions are evaluated.
+     *
+     * The result is deliberately not filtered by isTableLogged(): entries that were recorded while
+     * logging was still enabled must stay readable after logging has been switched off again.
+     *
+     * @param User $user The user whose permissions should be checked
+     * @param array $requestedTables The tables requested by the caller. An empty array means "all known tables".
+     * @param User|null $subject If the changelog of one particular user is requested, that user.
+     * @return string[] The subset of tables the user may read. An empty array means "no access at all".
+     * @throws Exception
+     */
+    public static function getReadableTables(User $user, array $requestedTables = array(), ?User $subject = null) : array {
+        global $gSettingsManager;
+
+        // Changelog disabled globally, or only enabled for administrators
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
+            return array();
+        }
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 2 && !$user->isAdministrator()) {
+            return array();
+        }
+
+        $candidates = $requestedTables;
+        if (count($candidates) === 0) {
+            $candidates = array_keys(self::getTableLabel());
+        }
+
+        if ($user->isAdministrator()) {
+            return array_values($candidates);
+        }
+
+        $tablesPermitted = self::getPermittedTables($user);
+
+        // The user tables are shared between all organizations and use per-user permissions:
+        // either the user may administer all contacts (already covered by getPermittedTables), or
+        // a concrete subject was requested whose profile the user is allowed to edit, or - if no
+        // subject was requested at all - the user may at least see the changes to his/her own
+        // data. In the latter two cases the caller MUST restrict the log entries of those tables
+        // to the corresponding user, see getUserTableRestriction().
+        if ($subject !== null && !$subject->isNewRecord()) {
+            if ($user->hasRightEditProfile($subject)) {
+                $tablesPermitted = array_merge($tablesPermitted, self::$userTables);
+            }
+        } elseif ($user->hasRightEditProfile($user)) {
+            $tablesPermitted = array_merge($tablesPermitted, self::$userTables);
+        }
+
+        return array_values(array_intersect($candidates, $tablesPermitted));
+    }
+
+    /**
+     * Return the user the log entries of the shared user tables have to be restricted to.
+     *
+     * getReadableTables() grants access to the user tables on a per-user basis, so whenever the
+     * current user may not administer all contacts, the entries of those tables must additionally
+     * be restricted to the one user he/she is allowed to see. Doing this as an SQL condition (and
+     * not by dropping rows afterwards) keeps the record counts and the paging of the changelog
+     * table correct.
+     *
+     * @param User $user The user whose permissions should be checked
+     * @param User|null $subject If the changelog of one particular user is requested, that user.
+     * @return string The uuid the entries of the user tables must be restricted to, or an empty
+     *                string if the user may read those tables without any restriction.
+     * @throws Exception
+     */
+    public static function getUserTableRestriction(User $user, ?User $subject = null) : string {
+        // administrators and user administrators may read the log of all users
+        if ($user->isAdministrator() || $user->isAdministratorUsers()) {
+            return '';
+        }
+
+        if ($subject !== null && !$subject->isNewRecord() && $user->hasRightEditProfile($subject)) {
+            return (string)$subject->getValue('usr_uuid');
+        }
+
+        // everyone else may only see the changes to his/her own data
+        return (string)$user->getValue('usr_uuid');
+    }
+
+    /**
+     * Return the date from which the change history should be shown by default.
+     *
+     * The period is configured with the preference changelog_default_days. A value of 0 means that
+     * the change history is not limited by date at all. The user can always change the period with
+     * the filter of the changelog page.
+     *
+     * @return DateTime The start date of the default filter period
+     * @throws Exception
+     */
+    public static function getDefaultFilterDateFrom() : DateTime {
+        global $gSettingsManager;
+
+        $defaultDays = $gSettingsManager->getInt('changelog_default_days');
+        if ($defaultDays <= 0) {
+            // no limit -> start well before the first possible log entry
+            return new DateTime('1970-01-01');
+        }
+
+        $dateFrom = new DateTime(DATE_NOW);
+        $dateFrom->modify('-' . $defaultDays . ' day');
+        return $dateFrom;
+    }
+
+    /**
+     * Delete the entries of the change history that are older than the retention period of the
+     * preference changelog_retention_days. The entries are only removed from the old end of the
+     * history, so that the history of a single record or action can never be removed selectively.
+     *
+     * @param int|null $retentionDays Number of days the entries should be kept. A value of 0 (the
+     *                                default of the preference) keeps them forever and deletes
+     *                                nothing. If null, the preference of the organization is used.
+     * @param int|null $organizationId The organization whose entries should be deleted. If null,
+     *                                 the current organization is used.
+     * @return int Returns the number of deleted entries
+     * @throws Exception
+     */
+    public static function purgeOldEntries(?int $retentionDays = null, ?int $organizationId = null): int
+    {
+        global $gDb, $gSettingsManager, $gCurrentOrgId;
+
+        if ($retentionDays === null) {
+            $retentionDays = $gSettingsManager->getInt('changelog_retention_days');
+        }
+        // 0 means that the change history is kept without any limit
+        if ($retentionDays <= 0) {
+            return 0;
+        }
+
+        if ($organizationId === null) {
+            $organizationId = (int)$gCurrentOrgId;
+        }
+
+        $deleteBefore = new DateTime();
+        $deleteBefore->modify('-' . $retentionDays . ' day');
+
+        // Entries of the tables that are shared between all organizations and entries that were
+        // written before log_org_id existed have no organization. They may only be deleted if this
+        // installation has one organization, because otherwise the purge of one organization would
+        // delete entries that another organization still has to keep.
+        $countStatement = $gDb->queryPrepared('SELECT COUNT(*) FROM ' . TBL_ORGANIZATIONS);
+        $entriesWithoutOrganization = ($countStatement !== false && (int)$countStatement->fetchColumn() === 1);
+
+        $sql = 'DELETE FROM ' . TBL_LOG_CHANGES . '
+                 WHERE log_timestamp_create < ? -- $deleteBefore
+                   AND (log_org_id = ? ' . ($entriesWithoutOrganization ? 'OR log_org_id IS NULL' : '') . ')';
+        $statement = $gDb->queryPrepared($sql, array($deleteBefore->format('Y-m-d H:i:s'), $organizationId));
+
+        // Remember when the entries of this organization were purged, so that the opportunistic
+        // purge of purgeOldEntriesIfDue() and a cron job do not repeat the work of each other.
+        if ($organizationId === (int) $gCurrentOrgId) {
+            $gSettingsManager->set('changelog_last_purge', (string) time());
+        }
+
+        return ($statement === false) ? 0 : $statement->rowCount();
+    }
+
+    /**
+     * Purge the outdated entries of the change history, but at most once every PURGE_INTERVAL_SECONDS.
+     * This is the opportunistic purge that keeps the change history from growing without limit in
+     * installations that have no cron job. It is deliberately cheap: if no retention period is
+     * configured or the last purge is not old enough, it does nothing but read two preferences.
+     *
+     * The timestamp of the last purge is stored in the preference changelog_last_purge and is
+     * written before the entries are deleted, so that requests that arrive while a purge is still
+     * running do not start a second one. A purge that is triggered by a cron job or by the button
+     * in the preferences updates the same timestamp, so this method then stays idle.
+     *
+     * @return int Returns the number of deleted entries
+     * @throws Exception
+     */
+    public static function purgeOldEntriesIfDue(): int
+    {
+        global $gSettingsManager;
+
+        // This is called on every request, so it also has to work in an installation whose
+        // database is still on an older version and does not have these preferences yet.
+        if (!$gSettingsManager->has('changelog_retention_days')
+            || $gSettingsManager->getInt('changelog_retention_days') <= 0) {
+            return 0;
+        }
+
+        $now = time();
+        if ($gSettingsManager->has('changelog_last_purge')
+            && $now - $gSettingsManager->getInt('changelog_last_purge') < self::PURGE_INTERVAL_SECONDS) {
+            return 0;
+        }
+
+        $gSettingsManager->set('changelog_last_purge', (string) $now);
+
+        return self::purgeOldEntries();
     }
 
     /**
@@ -1148,53 +1710,41 @@ class ChangelogService {
     public static function isTableLogged(string|array $table) : bool {
         global $gSettingsManager;
 
-        if ($gSettingsManager->getInt('changelog_module_enabled') > 0) { // Changelog enabled at all
-            // show link to view profile field change history if change history is enabled for at least one of the tables.
-            // Unknown tables are handled by the changelog_table_others preferences key!
-            if (is_array($table)) {
-                $tables = $table;
-            } else {
-                $tables = explode(',', $table);
+        // Whether a table is logged is a preference of the organization, so nothing can be logged
+        // while the system is still starting up and no organization is known yet. The update reads
+        // the session, and with it the auto login, before it determines the organization, so this
+        // is reached with no settings at all.
+        if (!isset($gSettingsManager)) {
+            return false;
+        }
+
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) { // Changelog not enabled
+            return false;
+        }
+
+        $tables = is_array($table) ? $table : explode(',', $table);
+
+        foreach ($tables as $tableName) {
+            $tableName = trim($tableName);
+            if ($tableName === '' || in_array($tableName, self::$noLogTables, true)) {
+                continue;
             }
 
-            $isLogged = array_map(function($t) {
-                global $gSettingsManager;
-                if (in_array($t, ChangelogService::$noLogTables)) {
-                    return false;
-                } elseif (!empty(ChangelogService::getTableLabel($t) && $gSettingsManager->has('changelog_table_'.$t))) {
-                    return $gSettingsManager->getBool('changelog_table_'.$t);
-                } else {
-                    return $gSettingsManager->getBool('changelog_table_others');
+            $settingName = 'changelog_table_' . $tableName;
+            $tableIsKnown = ChangelogService::getTableLabel($tableName) !== '';
+
+            // Once we find ANY requested table that is logged, we can return true!
+            if ($tableIsKnown && $gSettingsManager->has($settingName)) {
+                if ($gSettingsManager->getBool($settingName)) {
+                    return true;
                 }
-            }, $tables);
-            return in_array(true, $isLogged);
-        } else {
-            return false;
+            } elseif ($gSettingsManager->getBool('changelog_table_others')) {
+                return true;
+            }
         }
+
+        return false;
     }
-
-    /**
-     * Check whether changes to a given table or a list of given database tables are logged at all.
-     * This is independent of particular viewing permissions of the current user.
-     * If multiple tables are given (as a comma-separated string), at least one of them needs to be logged.
-     * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple())
-     * @return bool Returns true if the database table (or at least one, of multiple are given) is logged
-     * @throws Exception
-     */
-    public static function hasLogViewPermission(string|array $table, ?User $user = null) : bool {
-        global $gSettingsManager, $gCurrentUser;
-        if (empty($user)) {
-            $user = $gCurrentUser;
-        }
-
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 1 ||
-            ($gSettingsManager->getInt('changelog_module_enabled') == 2 && $user->isAdministrator())) {
-            return self::isTableLogged($table);
-        } else {
-            return false;
-        }
-    }
-
 
     /**
      * Display a "Change History" button in the current module's PagePresenter if changelog functionality
@@ -1210,49 +1760,60 @@ class ChangelogService {
      * @throws Exception
      */
     public static function displayHistoryButton(PagePresenter $page, string $area, string|array $table, bool $condition = true, array $params = array()) : void {
-        global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
+        global $gL10n;
 
-        // Changelog disabled globally
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+        $url = self::getHistoryUrl($table, $condition, $params);
+        if ($url === '') {
             return;
         }
-        // Changelog only enabled for admins
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
-            return;
-        }
-
-        // Required tables is/are not logged at all, or condition for history button not met
-        if (!self::isTableLogged($table) || !$condition)
-            return;
-
-
-        if (!is_array($table))
-            $table = explode(',', $table);
-
-        $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-        // Admin always has access. Other users can have permissions per table.
-        $hasAccess = $gCurrentUser->isAdministrator() ||
-            (!empty($table) && empty(array_diff($table, $tablesPermitted)));
-
-        // No explicit table permissions. But user data can be accessed on a per-user permission level.
-        $isUserLog = (!empty($table) && empty(array_diff($table, ['users', 'user_data', 'user_relations', 'members'])));
-        if (!$hasAccess && $isUserLog && !empty($params['uuid'])) {
-            $user = new User($gDb, $gProfileFields);
-            $user->readDataByUuid($params['uuid']);
-            // If a user UUID is given, we need access to that particular user
-            if ($gCurrentUser->hasRightEditProfile($user)) {
-                $hasAccess = true;
-            }
-        }
-
-        if (!$hasAccess)
-            return;
 
         $page->addPageFunctionsMenuItem(
             "menu_item_{$area}_change_history",
             $gL10n->get('SYS_CHANGE_HISTORY'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)),
+            $url,
             'bi-clock-history'
+        );
+    }
+
+    /**
+     * Build the URL of the changelog page for the given table(s), if the changelog is enabled for
+     * them and the current user is allowed to view those objects. This is the shared implementation
+     * behind displayHistoryButton() and displayHistoryButtonTable().
+     *
+     * @param string|array $table The database table(s) of the changelog (comma-separated list for multiple)
+     * @param bool $condition Additional condition to display/hide
+     * @param array $params Additional URL parameters (uuid, id, related_id, ...)
+     * @return string The URL of the changelog page, or an empty string if it must not be offered
+     * @throws Exception
+     */
+    private static function getHistoryUrl(string|array $table, bool $condition = true, array $params = array()) : string {
+        global $gCurrentUser, $gProfileFields, $gDb;
+
+        // Required table(s) are not logged at all, or the condition for the history button is not met
+        if (!$condition || !self::isTableLogged($table)) {
+            return '';
+        }
+
+        if (!is_array($table)) {
+            $table = array_map('trim', explode(',', $table));
+        }
+
+        // If the log of one particular user is requested, the permission can also be granted
+        // through the right to edit that user's profile.
+        $subject = null;
+        if (!empty($params['uuid']) && !empty($table) && empty(array_diff($table, self::$userTables))) {
+            $subject = new User($gDb, $gProfileFields);
+            $subject->readDataByUuid($params['uuid']);
+        }
+
+        // the user needs read access to every requested table
+        if (count(array_diff($table, self::getReadableTables($gCurrentUser, $table, $subject))) > 0) {
+            return '';
+        }
+
+        return SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php',
+            array_merge(array('table' => implode(',', $table)), $params)
         );
     }
 
@@ -1268,47 +1829,16 @@ class ChangelogService {
      * @throws Exception
      */
     public static function displayHistoryButtonTable(string|array $table, bool $condition = true, array $params = array()) : array {
-        global $gCurrentUser, $gL10n, $gProfileFields, $gDb, $gSettingsManager;
+        global $gL10n;
 
-        // Changelog disabled globally
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+        $url = self::getHistoryUrl($table, $condition, $params);
+        if ($url === '') {
             return array();
         }
-        // Changelog only enabled for admins
-        if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
-            return array();
-        }
-
-        // Required tables is/are not logged at all, or condition for history button not met
-        if (!self::isTableLogged($table) || !$condition)
-            return array();
-
-
-        if (!is_array($table))
-            $table = explode(',', $table);
-
-        $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-        // Admin always has access. Other users can have permissions per table.
-        $hasAccess = $gCurrentUser->isAdministrator() ||
-            (!empty($table) && empty(array_diff($table, $tablesPermitted)));
-
-        // No explicit table permissions. But user data can be accessed on a per-user permission level.
-        $isUserLog = (!empty($table) && empty(array_diff($table, ['users', 'user_data', 'user_relations', 'members'])));
-        if (!$hasAccess && $isUserLog && !empty($params['uuid'])) {
-            $user = new User($gDb, $gProfileFields);
-            $user->readDataByUuid($params['uuid']);
-            // If a user UUID is given, we need access to that particular user
-            if ($gCurrentUser->hasRightEditProfile($user)) {
-                $hasAccess = true;
-            }
-        }
-
-        if (!$hasAccess)
-            return array();
 
         // If the user has access to the changelog, create the link to the changelog page
         return array(
-            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog.php', array_merge(array('table' => implode(',',$table)), $params)),
+            'url' => $url,
             'icon' => 'bi bi-clock-history',
             'tooltip' => $gL10n->get('SYS_CHANGE_HISTORY'),
         );

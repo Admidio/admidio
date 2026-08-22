@@ -53,6 +53,10 @@ class DataTables
         100 => '100'
     );
     /**
+     * @var bool Flag if the page length menu should offer an entry that shows all rows at once.
+     */
+    protected bool $showAllEntries = true;
+    /**
      * @var array<int,string> Array with the column number as key and the 'asc' or 'desc' as value.
      */
     protected array $columnsOrder = array();
@@ -144,7 +148,7 @@ class DataTables
             $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
             // set page length menu entries
             // check if there is an entry with the value of -1, if not then add it
-            if (!array_key_exists(-1, $this->rowsPerPageMenuEntries)) {
+            if ($this->showAllEntries && !array_key_exists(-1, $this->rowsPerPageMenuEntries)) {
                 $this->rowsPerPageMenuEntries[-1] = $gL10n->get('SYS_ALL');
             }
             $this->datatablesInitParameters[] = '"lengthMenu": [' . json_encode(array_keys($this->rowsPerPageMenuEntries)) . ', ' . json_encode(array_values($this->rowsPerPageMenuEntries)) . ']';
@@ -414,6 +418,16 @@ class DataTables
     public function setRowsPerPageMenuEntries(array $menuEntries)
     {
         $this->rowsPerPageMenuEntries = $menuEntries;
+    }
+
+    /**
+     * Remove the entry that shows all rows at once from the page length menu. Use this for tables
+     * whose number of rows is not bounded, where reading the complete table in one request would
+     * be too expensive. The server side script must limit the page length accordingly.
+     */
+    public function disableShowAllEntries()
+    {
+        $this->showAllEntries = false;
     }
 
     /**

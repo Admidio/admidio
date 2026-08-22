@@ -2,6 +2,7 @@
 
 namespace Admidio\Preferences\Service;
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -386,6 +387,24 @@ class PreferencesService
                 // get real filename of the template file
                 if ($formData['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
                     $formValues['photo_ecard_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $formData['photo_ecard_template']);
+                }
+                break;
+
+            case 'changelog':
+                // The form offers one checkbox per area, the preferences store one flag per
+                // database table. An area that is still in its mixed state was not touched by the
+                // user, so the flags of its tables have to be left exactly as they are.
+                foreach (ChangelogService::getVisibleAreas() as $areaId => $area) {
+                    $areaValue = $formValues['changelog_area_' . $areaId] ?? 'mixed';
+                    unset($formValues['changelog_area_' . $areaId]);
+
+                    if ($areaValue !== '1' && $areaValue !== '0') {
+                        continue;
+                    }
+
+                    foreach ($area['tables'] as $tableName) {
+                        $formValues['changelog_table_' . $tableName] = $areaValue;
+                    }
                 }
                 break;
 

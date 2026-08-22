@@ -472,6 +472,11 @@ class Organization extends Entity
      */
     public function delete(): bool
     {
+        // The records of the organization are deleted in bulk on purpose and are deliberately not
+        // written to the change history: the history is scoped to an organization itself, so the
+        // entries of a deleted organization could never be viewed again anyway. Everywhere else a
+        // bulk deletion has to go through deleteDependentRecords(), see the class documentation of
+        // ChangelogService.
         $this->db->startTransaction();
 
         // delete all category reports
@@ -962,7 +967,7 @@ class Organization extends Entity
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
+    protected function adjustLogEntry(LogChanges $logEntry): void {
         $orgParentId = (int) $this->getValue('org_org_id_parent');
         if ($orgParentId > 0) {
             $sql = 'SELECT org_id, org_longname, org_shortname

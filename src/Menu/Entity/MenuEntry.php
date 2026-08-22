@@ -268,7 +268,7 @@ class MenuEntry extends Entity
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
+    protected function adjustLogEntry(LogChanges $logEntry): void {
         if (!empty($this->getValue('men_men_id_parent'))) {
             $folEntry = new MenuEntry($this->db, $this->getValue('men_men_id_parent'));
             $logEntry->setLogRelated($folEntry->getValue('men_uuid'), $folEntry->getValue('men_name'));

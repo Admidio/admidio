@@ -8,8 +8,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Entity\LogChanges;
-use Admidio\Users\Entity\User;
-use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Changelog\Service\ChangelogService;
 
 /**
  * @brief Class manages access to database table adm_files
@@ -54,7 +53,7 @@ class ItemData extends Entity
      * Since creation means setting value from NULL to something, deletion mean setting the field to empty,
      * we need one generic change log function that is called on creation, deletion and modification.
      *
-     * The log entries are: record ID for ind_id, but uuid and link point to User id.
+     * The log entries are: record ID for ind_id, but uuid, name and link point to the item.
      * log_field is the inf_id and log_field_name is the fields external name.
      *
      * @param string|null $oldval previous value before the change (can be null)
@@ -64,76 +63,39 @@ class ItemData extends Entity
      */
     protected function logItemfieldChange(?string $oldval = null, ?string $newval = null): bool
     {
-        global $gDb, $gProfileFields;
-
         if ($oldval === $newval) {
             // No change, nothing to log
             return true;
         }
 
-        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        $field = (int)$this->getValue('ind_inf_id');
+        $fieldNameIntern = $this->mItemsData->getPropertyById($field, 'inf_name_intern', 'database');
 
-        $itemID = $this->getValue('ind_ini_id');
-        $item = new Item($gDb, $this->mItemsData, $itemID);
-        $itemUUID = $item->getValue('ini_uuid');
-
-        $id = $this->dbColumns[$this->keyColumnName];
-        $field = $this->getValue('ind_inf_id');
-        $fieldName = 'ind_value';
-        $objectName = $this->mItemsData->getPropertyById((int)$field, 'inf_name', 'database');
-        $fieldNameIntern = $this->mItemsData->getPropertyById((int)$field, 'inf_name_intern', 'database');
-        $infType = $this->mItemsData->getPropertyById((int)$field, 'inf_type');
-        $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
-
-        if ($infType === 'CATEGORY') {
-            // Category changes are logged in the inventory items table
+        // The category and the status of an item are stored in the item record itself,
+        // so their changes are logged for the inventory_items table instead.
+        if (in_array($fieldNameIntern, array('CATEGORY', 'STATUS'), true)) {
             return true;
-        } elseif (in_array($infType, array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'DROPDOWN_DATE_INTERVAL', 'RADIOBUTTON'))) {
-            $vallist = $this->mItemsData->getProperty($fieldNameIntern, 'ifo_inf_options');
-            if (isset($vallist[$oldval])) {
-                $oldval = $vallist[$oldval];
-            }
-            if (isset($vallist[$newval])) {
-                $newval = $vallist[$newval];
-            }
-        } elseif ($infType === 'CHECKBOX') {
-            $fieldName = $fieldName . '_bool';
-        } elseif ($infType === 'TEXT') {
-            if ($fieldNameIntern === 'ITEMNAME' && $itemName === '') {
-                $itemName = $newval;
-            } elseif ($fieldNameIntern === 'KEEPER') {
-                $fieldName = $fieldName . '_usr';
-            } elseif ($fieldNameIntern === 'LAST_RECEIVER') {
-                $user = new User($this->db, $gProfileFields);
-                if (is_numeric($oldval) && is_numeric($newval)) {
-                    $foundOld = $user->readDataById($oldval);
-                    $foundNew = $user->readDataById($newval);
-                    if ($foundOld && $foundNew) {
-                        $fieldName = $fieldName . '_usr';
-                    }
-                } elseif (is_numeric($oldval)) {
-                    if ($user->readDataById($oldval)) {
-                        $oldval = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
-                    }
-                } elseif (is_numeric($newval)) {
-                    if ($user->readDataById($newval)) {
-                        $newval = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
-                    }
-                }
-            }
-        } elseif ($infType === 'DATE') {
-            $fieldName = $fieldName . '_date';
-        } elseif ($infType === 'EMAIL') {
-            $fieldName = $fieldName . '_mail';
-        } elseif ($infType === 'URL') {
-            $fieldName = $fieldName . '_url';
-        } elseif ($infType === 'ICON') {
-            $fieldName = $fieldName . '_icon';
         }
 
+        // The creation of an item is already logged with its name, so the initial setting of the
+        // name must not be logged as a change of the item as well.
+        if ($fieldNameIntern === 'ITEMNAME' && $this->mItemsData->isNewItem()) {
+            return true;
+        }
+
+        if (!self::$loggingEnabled) return false;
+
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return false;
+
+        $itemID = (int)$this->getValue('ind_ini_id');
+        $item = new Item($this->db, $this->mItemsData, $itemID);
+
+        $id = $this->dbColumns[$this->keyColumnName];
+        $fieldName = $this->mItemsData->getPropertyById($field, 'inf_name', 'database');
+
         $logEntry = new LogChanges($this->db, $table);
-        $logEntry->setLogModification($table, $id, $itemUUID, $objectName, $field, $fieldName, $oldval, $newval);
-        /* $logEntry->setLogRelated($itemUUID, $itemName); */
+        $logEntry->setLogModification($table, $id, $item->getValue('ini_uuid'), $item->readableName(), $field, $fieldName, $oldval, $newval);
         $logEntry->setLogLinkID($itemID);
         return $logEntry->save();
     }
@@ -149,6 +111,110 @@ class ItemData extends Entity
     public function logCreation(): bool
     {
         return true;
+    }
+
+    /**
+     * Write one changelog entry for every item value that the given condition selects. Deleting a
+     * value means setting the item field to empty, so the entries are modifications to an empty
+     * value, exactly like logDeletion() writes them for a single record.
+     *
+     * A value is logged with the item it belongs to. Reading an Item object per record would read
+     * the name of the same item again and again, and deleting an item field affects every item, so
+     * the items are read once as a whole.
+     *
+     * @param array $identifyingColumns The columns that identify a single value. They are not
+     *                                  needed here, the whole record is read in one query anyway.
+     * @param string $sqlWhereCondition Condition that selects the values, without the leading
+     *                                  keyword WHERE and only with columns of adm_inventory_item_data.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of written log entries.
+     * @throws Exception
+     */
+    public function logBulkDeletion(array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        if (!self::$loggingEnabled) return 0;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return 0;
+
+        $sql = 'SELECT ind_id, ind_ini_id, ind_inf_id, ind_value
+                  FROM ' . TBL_INVENTORY_ITEM_DATA . '
+                 WHERE ' . $sqlWhereCondition;
+        $records = $this->db->queryPrepared($sql, $queryParams)->fetchAll(\PDO::FETCH_ASSOC);
+
+        // A value that is empty already is no change, and the category and the status of an item
+        // are logged for the inventory_items table instead, see logItemfieldChange().
+        $records = array_values(array_filter($records, function (array $record) {
+            if ($record['ind_value'] === null || $record['ind_value'] === '') {
+                return false;
+            }
+            $fieldNameIntern = $this->mItemsData->getPropertyById((int)$record['ind_inf_id'], 'inf_name_intern', 'database');
+            return !in_array($fieldNameIntern, array('CATEGORY', 'STATUS'), true);
+        }));
+        if (count($records) === 0) {
+            return 0;
+        }
+
+        $items = $this->readItemsOfRecords(array_column($records, 'ind_ini_id'));
+        $logEntries = 0;
+
+        foreach ($records as $record) {
+            $itemId = (int)$record['ind_ini_id'];
+            $fieldId = (int)$record['ind_inf_id'];
+
+            $logEntry = new LogChanges($this->db, $table);
+            $logEntry->setLogModification(
+                $table,
+                (int)$record['ind_id'],
+                $items[$itemId]['ini_uuid'] ?? null,
+                $items[$itemId]['name'] ?? (string)$record['ind_id'],
+                $fieldId,
+                $this->mItemsData->getPropertyById($fieldId, 'inf_name', 'database'),
+                $record['ind_value'],
+                null
+            );
+            $logEntry->setLogLinkID($itemId);
+            $logEntry->save();
+            $logEntry->clear();
+            $logEntries++;
+        }
+
+        return $logEntries;
+    }
+
+    /**
+     * Read the uuid and the name of the given items in one query, so that a bulk deletion does not
+     * create an Item object for every single record. The name of an item is a value of the item
+     * itself, so it is read from the item data of the field ITEMNAME.
+     *
+     * @param array $itemIds The ids of the items, duplicates are allowed.
+     * @return array Returns a named array of item id => array with the keys **ini_uuid** and **name**
+     * @throws Exception
+     */
+    private function readItemsOfRecords(array $itemIds): array
+    {
+        $itemIds = array_values(array_unique(array_map('intval', $itemIds)));
+        if (count($itemIds) === 0) {
+            return array();
+        }
+
+        $sql = 'SELECT ini_id, ini_uuid, item_name.ind_value AS item_name
+                  FROM ' . TBL_INVENTORY_ITEMS . '
+             LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS item_name
+                    ON item_name.ind_ini_id = ini_id
+                   AND item_name.ind_inf_id = ? -- $this->mItemsData->getProperty(\'ITEMNAME\', \'inf_id\')
+                 WHERE ini_id IN (' . Database::getQmForValues($itemIds) . ')';
+        $queryParams = array_merge(array((int)$this->mItemsData->getProperty('ITEMNAME', 'inf_id')), $itemIds);
+        $statement = $this->db->queryPrepared($sql, $queryParams);
+
+        $items = array();
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $items[(int)$row['ini_id']] = array(
+                'ini_uuid' => $row['ini_uuid'],
+                'name' => (string)$row['item_name']
+            );
+        }
+
+        return $items;
     }
 
     /**
@@ -173,7 +239,7 @@ class ItemData extends Entity
      */
     public function logModifications(array $logChanges): bool
     {
-        if ($logChanges['ind_value']) {
+        if (!empty($logChanges['ind_value'])) {
             return $this->logItemfieldChange($logChanges['ind_value']['oldValue'], $logChanges['ind_value']['newValue']);
         } else {
             // Nothing to log at all!

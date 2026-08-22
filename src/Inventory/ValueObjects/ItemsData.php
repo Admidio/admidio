@@ -15,6 +15,8 @@ use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\ItemBorrowData;
 use Admidio\Categories\Entity\Category;
+use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Inventory\Entity\SelectOptions;
 
 // PHP namespaces
@@ -500,6 +502,46 @@ class ItemsData
                 JOIN ' . TBL_USER_DATA . ' as last_name ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
                 JOIN ' . TBL_USER_DATA . ' as first_name ON first_name.usd_usr_id = usr_id AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
                 WHERE usr_valid = true AND EXISTS (SELECT 1 FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . ' WHERE mem_usr_id = usr_id AND mem_rol_id = rol_id AND mem_begin <= \'' . DATE_NOW . '\' AND mem_end > \'' . DATE_NOW . '\' AND rol_valid = true AND rol_cat_id = cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)) ORDER BY last_name.usd_value, first_name.usd_value;';
+    }
+
+    /**
+     * Item field types whose value is stored as the id(s) of the selected option(s).
+     * @var array
+     */
+    protected static array $selectFieldTypes = array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'DROPDOWN_DATE_INTERVAL', 'RADIO_BUTTON');
+
+    /**
+     * Format a value of the changelog with the definition of the item field it belongs to. This is
+     * the counterpart of the user profile fields, whose values are formatted with the profile field
+     * definition. The changelog itself has no knowledge of the item fields, so it delegates here.
+     *
+     * @param int|string $field The item field the value belongs to, either its inf_id (as stored in
+     *                          log_field for the item data table) or its internal name
+     * @param string|null $value The value as it is stored in the changelog
+     * @return string Returns the formatted and html encoded value
+     * @throws Exception
+     */
+    public function formatChangelogValue(int|string $field, ?string $value): string
+    {
+        $fieldNameIntern = is_int($field) ? $this->getPropertyById($field, 'inf_name_intern') : $field;
+
+        // getHtmlValue() returns the value of text based fields unchanged, so the raw database
+        // value has to be encoded before it is formatted.
+        $value = (string)ChangelogService::formatValue($value, '');
+
+        // The keeper and the last receiver of an item are stored as the id of the user
+        if (in_array($fieldNameIntern, array('KEEPER', 'LAST_RECEIVER'), true) && is_numeric($value)) {
+            return (string)ChangelogService::formatValue($value, 'USER');
+        }
+
+        // Entries that were written before the raw database value was logged already contain the
+        // text of the selected option instead of its id and are therefore displayed unchanged.
+        if (in_array($this->getProperty($fieldNameIntern, 'inf_type'), self::$selectFieldTypes, true)
+            && preg_match('/^\d+(\s*,\s*\d+)*$/', $value) !== 1) {
+            return $value;
+        }
+
+        return $this->getHtmlValue($fieldNameIntern, $value);
     }
 
     /**
@@ -1125,19 +1167,33 @@ class ItemsData
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        // Log record deletion, then delete
-        $item = new Item($this->mDb, $this, $this->mItemId);
-        $item->logDeletion();
+        // Deleting an item is one action of the user, so the item and its data belong into one
+        // change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
 
-        // delete all item data
+        $item = new Item($this->mDb, $this, $this->mItemId);
+
+        // delete all item data. The values are logged before they are removed, a plain DELETE would
+        // take them out of the change history without a trace.
+        $itemData = new ItemData($this->mDb, $this);
+        $itemData->logBulkDeletion(array('ind_id'), 'ind_ini_id = ?', array($this->mItemId));
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
+
         // delete all item borrow data
+        $itemBorrowData = new ItemBorrowData($this->mDb, $this);
+        $itemBorrowData->logBulkDeletion(array('inb_id'), 'inb_ini_id = ?', array($this->mItemId));
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
-        // delete item
+
+        // Log and delete the item itself last. The change history shows a change with the record it
+        // is about, and it recognizes that record as the entry that a deletion logs last.
+        $item->logDeletion();
+
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
         $this->mDb->queryPrepared($sql, array($this->mItemId, $this->organizationId));
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->mItemDeleted = true;
     }
@@ -1266,6 +1322,14 @@ class ItemsData
             $updateItem = new Item($this->mDb, $this, $this->mItemId);
             $updateItem->setValue('ini_usr_id_change', $gCurrentUser->getValue('usr_id'), false);
             $updateItem->save();
+        }
+
+        // The item record has to be created before its data rows can be written, so the item name
+        // was not yet known when the record was inserted and neither its creation nor the values
+        // it was created with could be logged. Now that the item data is saved, log them.
+        if ($this->mItemCreated) {
+            $newItem = new Item($this->mDb, $this, $this->mItemId);
+            $newItem->logPostponedCreation();
         }
 
         $this->columnsValueChanged = false;

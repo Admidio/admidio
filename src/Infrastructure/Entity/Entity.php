@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Changelog\Service\ChangelogService;
 use DateTime;
 use Ramsey\Uuid\Uuid;
 use Throwable;
@@ -292,11 +293,24 @@ class Entity
      * Adjust the changelog entry for this db record. By default, record_id, record_name are taken
      * from this record, linked and related are left empty, and the field is the column name of each change.
      *
+     * What a class has to provide so that its table produces useful changelog entries:
+     *  - a key column, and preferably a <prefix>_uuid column. Without the uuid the changelog can
+     *    only show the record name as plain text and cannot link to the record.
+     *  - a readableName() that names the record. The default falls back to the name, headline or
+     *    text column and finally to the numeric id, which is of little use in a log.
+     *  - getIgnoredLogColumns() for the columns that are noise, and adjustLogEntry() for the ones
+     *    whose value must not be stored, see User::adjustLogEntry() for the masking of secrets.
+     *  - an adjustLogEntry() override for relation and composite-key tables, where the record of
+     *    the log entry is not the record itself. Membership and RolesDependencies point their
+     *    entries at the user and name the role as the related object.
+     * The table also has to be registered in ChangelogService, which documents the methods that
+     * have to be kept in sync.
+     *
      * @param LogChanges $logEntry The log entry to adjust
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry)
+    protected function adjustLogEntry(LogChanges $logEntry): void
     {
     }
 
@@ -309,8 +323,12 @@ class Entity
     public function logCreation(): bool
     {
         if (!self::$loggingEnabled) return false;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        // Check whether this table is logged at all before collecting the data for the log entry.
+        // readableName() and adjustLogEntry() may read further records from the database, and
+        // LogChanges::save() would discard all of that work again.
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
             $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
@@ -333,8 +351,12 @@ class Entity
     public function logDeletion(): bool
     {
         if (!self::$loggingEnabled) return false;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        // Check whether this table is logged at all before collecting the data for the log entry.
+        // readableName() and adjustLogEntry() may read further records from the database, and
+        // LogChanges::save() would discard all of that work again.
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
             $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
@@ -360,9 +382,10 @@ class Entity
     {
         if (!self::$loggingEnabled) return false;
         if (count($logChanges) === 0) return false;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $retVal = true;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
         $id = $this->dbColumns[$this->keyColumnName];
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
@@ -395,8 +418,13 @@ class Entity
     public function delete(): bool
     {
         if (array_key_exists($this->keyColumnName, $this->dbColumns) && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
-            // Log record deletion, then delete
+            // Log record deletion, then delete. The deletion of the dependent records that a
+            // derived delete() removes beforehand is a change of its own and is not part of this
+            // change set.
+            $previousChangeSet = LogChanges::startChangeSet();
             $this->logDeletion();
+            LogChanges::endChangeSet($previousChangeSet);
+
             $sql = 'DELETE FROM ' . $this->tableName . '
                      WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
             $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
@@ -404,6 +432,71 @@ class Entity
 
         $this->clear();
         return true;
+    }
+
+    /**
+     * Delete all records of a dependent table that belong to this record. Every record is read and
+     * deleted through its own Entity, so that each single deletion is written to the changelog. A
+     * bulk DELETE would remove the records from the audit trail without a trace, see the class
+     * documentation of ChangelogService.
+     *
+     * The identifying columns are named explicitly, because not every table has a single key
+     * column. adm_role_dependencies for example is identified by its parent and its child.
+     *
+     * @param Entity $object An empty object of the dependent table. It is reused for every record.
+     * @param array $identifyingColumns The columns that identify a single record of that table.
+     * @param string $sqlWhereCondition Condition that selects the dependent records, without the
+     *                                  leading keyword WHERE.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of deleted records.
+     * @throws Exception
+     */
+    protected function deleteDependentRecords(Entity $object, array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        $object->logBulkDeletion($identifyingColumns, $sqlWhereCondition, $queryParams);
+
+        $sql = 'DELETE FROM ' . $object->tableName . '
+                 WHERE ' . $sqlWhereCondition;
+        $statement = $this->db->queryPrepared($sql, $queryParams);
+
+        return $statement->rowCount();
+    }
+
+    /**
+     * Write one changelog entry for every record that the given condition selects. It is called by
+     * deleteDependentRecords() right before the records are deleted, so the entries still describe
+     * records that exist.
+     *
+     * The default implementation reads one record after the other and lets logDeletion() build its
+     * entry, so that an entity which customizes its log entry keeps exactly the entry it writes for
+     * a single deletion. An entity whose dependent records can be many should override this method
+     * and collect the same data in as few queries as possible.
+     *
+     * @param array $identifyingColumns The columns that identify a single record of that table.
+     * @param string $sqlWhereCondition Condition that selects the records, without the leading
+     *                                  keyword WHERE. It may only use columns of the own table,
+     *                                  because deleteDependentRecords() reuses it for the DELETE.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of written log entries.
+     * @throws Exception
+     */
+    public function logBulkDeletion(array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        if (!self::$loggingEnabled) return 0;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return 0;
+
+        $sql = 'SELECT ' . implode(', ', $identifyingColumns) . '
+                  FROM ' . $this->tableName . '
+                 WHERE ' . $sqlWhereCondition;
+        $records = $this->db->queryPrepared($sql, $queryParams)->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($records as $record) {
+            $this->readDataByColumns($record);
+            $this->logDeletion();
+        }
+
+        return count($records);
     }
 
     /**
@@ -767,6 +860,20 @@ class Entity
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor, then these columns with their timestamp will be updated.
      * For a new record if there is a UUID column, a new uuid will be created and stored.
+     *
+     * The changelog entries of the change are written after the record itself was written, and
+     * they are not part of a transaction of their own. A failing log write does not undo the
+     * change and does not turn the return value into false: an error of the database ends the
+     * request anyway, and the changelog must not be able to block an ordinary save. Callers that
+     * need the record and its log entries to be written together have to open a transaction
+     * around the whole operation themselves, e.g.
+     * ```
+     * $gDb->startTransaction();
+     * $entity->save();
+     * $gDb->endTransaction();
+     * ```
+     * Transactions are counted, so this is also safe when the caller is already within one.
+     *
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if a table has columns like **usr_id_create** or **usr_id_change**
      * @return bool If an update or insert into the database was done, then return true, otherwise false.
@@ -843,6 +950,12 @@ class Entity
             }
         }
 
+        // Every log entry that is written by this save belongs to the same change: the creation
+        // entry and the entries of the initial values of a new record, or all fields that this
+        // save has modified. LogChanges stamps them with one UUID, so that they can be shown
+        // together in the change history.
+        $previousChangeSet = LogChanges::startChangeSet();
+
         if ($this->insertRecord) {
             // insert record and remember the new id
             $sql = 'INSERT INTO ' . $this->tableName . '
@@ -853,6 +966,8 @@ class Entity
                 if ($this->keyColumnName !== '') {
                     $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
                 }
+                // The result of the log writes is deliberately not evaluated, see the comment
+                // about transactions in the description of this method.
                 $this->logCreation();
                 $this->logModifications($logChanges);
                 $this->insertRecord = false;
@@ -868,6 +983,8 @@ class Entity
                 $this->logModifications($logChanges);
             }
         }
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->columnsValueChanged = false;
 

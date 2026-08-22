@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Components\Entity;
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
@@ -240,6 +241,18 @@ class Component extends Entity
 
             case 'CATEGORY-REPORT':
                 if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
+                    return true;
+                }
+                break;
+
+            case 'CHANGELOG':
+                // The change history is visible as soon as the user may read the log of at least
+                // one database table, which is not restricted to administrators: the administrator
+                // of a single module may read the log of that module, and every user may read the
+                // history of his/her own profile. getReadableTables() is the same method the
+                // module itself uses, and it also evaluates changelog_module_enabled, so the menu
+                // entry disappears when the changelog is switched off or limited to administrators.
+                if ($gValidLogin && count(ChangelogService::getReadableTables($gCurrentUser)) > 0) {
                     return true;
                 }
                 break;
