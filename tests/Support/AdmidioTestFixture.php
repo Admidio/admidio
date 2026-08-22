@@ -57,9 +57,9 @@ class AdmidioTestFixture
         $org = new Organization($this->gDb);
         $org->setValue('org_longname', $name);
         $org->setValue('org_shortname', $shortName);
-        // org_homepage and org_email_administrator are NOT NULL without a default. MySQL fills them
-        // with an empty string because Admidio switches the session to ANSI mode, PostgreSQL rejects
-        // the whole insert, so an organization is only portable if the fixture sets them.
+        // org_homepage and org_email_administrator are NOT NULL without a default. Entity::save()
+        // writes them as empty strings now, the fixture sets real values so that a test that reads
+        // them back gets something meaningful.
         $org->setValue('org_homepage', 'https://www.example.local');
         $org->setValue('org_email_administrator', 'admin@example.local');
         $org->save();
