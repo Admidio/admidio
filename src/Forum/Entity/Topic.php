@@ -202,7 +202,7 @@ class Topic extends Entity
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();
 
-            if ($this->isNewRecord()) {
+            if ($this->wasInserted()) {
                 $messageTitleText = 'SYS_FORUM_TOPIC_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
@@ -292,9 +292,11 @@ class Topic extends Entity
         }
 
         $this->db->startTransaction();
+        // parent::save() clears the new-record state, so the answer has to be kept before it
+        $newTopic = $this->newRecord;
         $returnCode = parent::save($updateFingerPrint);
 
-        if ($this->newRecord) {
+        if ($newTopic) {
             $this->firstPost->setValue('fop_fot_id', $this->getValue('fot_id'));
             $this->firstPost->save();
             $this->setValue('fot_fop_id_first_post', $this->firstPost->getValue('fop_id'));

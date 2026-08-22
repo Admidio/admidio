@@ -239,11 +239,12 @@ class File extends Entity
         }
 
         $returnCode = parent::save($updateFingerPrint);
+        $inserted = $this->wasInserted();
 
         // read data to fill folder information to the object
-        if ($this->newRecord) {
+        if ($inserted) {
             $this->readDataById($this->getValue('fil_id'));
-            $this->newRecord = true;
+            $this->insertedRecord = true;
         }
 
         return $returnCode;

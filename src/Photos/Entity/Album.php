@@ -306,7 +306,7 @@ class Album extends Entity
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();
 
-            if ($this->isNewRecord()) {
+            if ($this->wasInserted()) {
                 $messageTitleText = 'SYS_ALBUM_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';

@@ -43,8 +43,7 @@ class AnnouncementVisibilityTest extends DatabaseTestCase
 
     /**
      * Read an announcement back and answer a question about it as the given user.
-     * The record has to be read again: a freshly saved object has no data of the joined category
-     * yet, so isVisible() and isEditable() would judge an empty category.
+     * The rights depend on the current user, so the object is read again for each of them.
      */
     private function askAs(User $user, int $orgId, int $annId, string $method): bool
     {

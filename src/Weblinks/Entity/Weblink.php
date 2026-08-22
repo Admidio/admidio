@@ -166,7 +166,10 @@ class Weblink extends Entity
         $returnCode = parent::save($updateFingerPrint);
         if ($returnCode) {
             // Refresh the joined category columns used by isVisible() and isEditable().
+            // Reading the record back clears the inserted state, which sendNotification() needs.
+            $inserted = $this->wasInserted();
             $this->readDataById((int) $this->getValue('lnk_id'));
+            $this->insertedRecord = $inserted;
         }
 
         return $returnCode;
@@ -188,7 +191,7 @@ class Weblink extends Entity
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();
 
-            if ($this->isNewRecord()) {
+            if ($this->wasInserted()) {
                 $messageTitleText = 'SYS_LINK_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';

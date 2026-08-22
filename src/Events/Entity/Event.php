@@ -399,7 +399,10 @@ class Event extends Entity
         $returnCode = parent::save($updateFingerPrint);
         if ($returnCode) {
             // Refresh the joined category columns used by isVisible() and isEditable().
+            // Reading the record back clears the inserted state, which sendNotification() needs.
+            $inserted = $this->wasInserted();
             $this->readDataById((int) $this->getValue('dat_id'));
+            $this->insertedRecord = $inserted;
         }
 
         return $returnCode;
@@ -454,7 +457,7 @@ class Event extends Entity
 
             $notification = new Email();
 
-            if ($this->isNewRecord()) {
+            if ($this->wasInserted()) {
                 $messageTitleText = 'SYS_EVENT_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';

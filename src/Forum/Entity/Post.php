@@ -80,11 +80,12 @@ class Post extends Entity
     public function save(bool $updateFingerPrint = true): bool
     {
         $returnCode = parent::save($updateFingerPrint);
+        $inserted = $this->wasInserted();
 
         // read data to fill folder information to the object
-        if ($this->newRecord) {
+        if ($inserted) {
             $this->readDataById($this->getValue('fop_id'));
-            $this->newRecord = true;
+            $this->insertedRecord = true;
         }
 
         return $returnCode;
@@ -106,7 +107,7 @@ class Post extends Entity
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();
 
-            if ($this->isNewRecord()) {
+            if ($this->wasInserted()) {
                 $messageTitleText = 'SYS_FORUM_POST_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
