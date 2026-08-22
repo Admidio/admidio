@@ -53,5 +53,50 @@
     <step id="480">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_captcha_enabled'</step>
     <step id="490">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_enable_captcha'</step>
     <step id="500">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
+    <!-- The db.sql during early 5.1 versions had a mysql syntax error (pgsql features used), 
+         so on new installations the forum tables were not created without an error message.
+         Updates from 5.0 or ealier properly created the tables and set the encoding. So on 
+         mysql/mariadb we need to create the tables and corresponding constraints and indices 
+         for good, if they dont't exist -->
+    <step id="510" database="mysql">CREATE TABLE IF NOT EXISTS %PREFIX%_forum_topics
+        (
+            fot_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            fot_uuid                    varchar(36)         NOT NULL,
+            fot_cat_id                  integer unsigned    NOT NULL,
+            fot_fop_id_first_post       integer unsigned,
+            fot_title                   varchar(255)        NOT NULL,
+            fot_views                   integer unsigned    NOT NULL    DEFAULT 0,
+            fot_usr_id_create           integer unsigned,
+            fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (fot_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci</step>
+    <step id="520" database="mysql">CREATE UNIQUE INDEX IF NOT EXISTS %PREFIX%_idx_fot_uuid ON %PREFIX%_forum_topics (fot_uuid)</step>
+    <step id="530" database="mysql">CREATE TABLE IF NOT EXISTS %PREFIX%_forum_posts
+        (
+            fop_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+            fop_fot_id                  integer unsigned    NOT NULL,
+            fop_uuid                    varchar(36)         NOT NULL,
+            fop_text                    text                NOT NULL,
+            fop_usr_id_create           integer unsigned,
+            fop_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            fop_usr_id_change           integer unsigned,
+            fop_timestamp_change        timestamp           NULL        DEFAULT NULL,
+            PRIMARY KEY (fop_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT character SET = utf8
+        COLLATE = utf8_unicode_ci</step>
+    <step id="540" database="mysql">CREATE UNIQUE INDEX IF NOT EXISTS %PREFIX%_idx_fop_uuid ON %PREFIX%_forum_posts (fop_uuid)</step>
+    <step id="550" database="mysql">ALTER TABLE %PREFIX%_forum_topics
+        ADD CONSTRAINT %PREFIX%_fk_fot_cat         FOREIGN KEY IF NOT EXISTS (fot_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_fot_first_fop   FOREIGN KEY IF NOT EXISTS (fot_fop_id_first_post)   REFERENCES %PREFIX%_forum_posts (fop_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_fot_usr_create  FOREIGN KEY IF NOT EXISTS (fot_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="560" database="mysql">ALTER TABLE %PREFIX%_forum_posts
+        ADD CONSTRAINT %PREFIX%_fk_fop_fot         FOREIGN KEY IF NOT EXISTS (fop_fot_id)         REFERENCES %PREFIX%_forum_topics (fot_id)        ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_fop_usr_create  FOREIGN KEY IF NOT EXISTS (fop_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_fop_usr_change  FOREIGN KEY IF NOT EXISTS (fop_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step>stop</step>
 </update>

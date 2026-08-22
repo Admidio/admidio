@@ -263,10 +263,10 @@ CREATE TABLE %PREFIX%_forum_topics
     fot_usr_id_create           integer unsigned,
     fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (fot_id)
-    )
-    ENGINE = InnoDB
-    DEFAULT CHARSET = utf8mb4
-    ENCODING 'UTF8';
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_fot_uuid ON %PREFIX%_forum_topics (fot_uuid);
 
@@ -284,10 +284,10 @@ CREATE TABLE %PREFIX%_forum_posts
     fop_usr_id_change           integer unsigned,
     fop_timestamp_change        timestamp           NULL        DEFAULT NULL,
     PRIMARY KEY (fop_id)
-    )
-    ENGINE = InnoDB
-    DEFAULT CHARSET = utf8mb4
-    ENCODING 'UTF8';
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_fop_uuid ON %PREFIX%_forum_posts (fop_uuid);
 
