@@ -323,13 +323,10 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
 
     // set the default value for each datatype if no value is given and no value was required
     if (array_key_exists($variableName, $array) && $array[$variableName] !== '') {
-        if ($datatype === 'bool' || $datatype === 'boolean') {
-            $value = (bool)$array[$variableName];
-        } elseif ($datatype === 'numeric' || $datatype === 'int') {
-            $value = (int)$array[$variableName];
-        } elseif ($datatype === 'float') {
-            $value = (float)$array[$variableName];
-        } elseif ($datatype === 'array') {
+        if ($datatype === 'bool' || $datatype === 'boolean'
+            || $datatype === 'numeric' || $datatype === 'int' || $datatype === 'float'
+            || $datatype === 'array') {
+            // Keep the original value until it has been validated below.
             $value = $array[$variableName];
         } else {
             $value = (string)$array[$variableName];
@@ -361,12 +358,6 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
         }
     }
 
-    // check if parameter has a valid value
-    // do a strict check with in_array because the function doesn't work properly
-    if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true)) {
-        throw new Exception('The parameter "' . $variableName . '" has an invalid value!');
-    }
-
     switch ($datatype) {
         case 'file': // fallthrough
         case 'folder':
@@ -390,22 +381,29 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
             $value = $valid;
             break;
 
-        case 'int': // fallthrough
-        case 'float': // fallthrough
-        case 'numeric':
-            // numeric datatype should only contain numbers
+        case 'int':
+            if (is_int($value)) {
+                break;
+            }
+            if (!is_string($value) || preg_match('/^[+-]?\d+$/D', $value) !== 1) {
+                throw new Exception('The numeric parameter ' . $variableName . ' has an invalid value!');
+            }
+            $value = (int) $value;
+            break;
+
+        case 'float':
             if (!is_numeric($value)) {
                 throw new Exception('The numeric parameter ' . $variableName . ' has an invalid value!');
-            } else {
-                if ($datatype === 'int') {
-                    $value = filter_var($value, FILTER_VALIDATE_INT);
-                } elseif ($datatype === 'float') {
-                    $value = filter_var($value, FILTER_VALIDATE_FLOAT);
-                } else {
-                    // https://www.php.net/manual/en/function.is-numeric.php#107326
-                    $value += 0;
-                }
             }
+            $value = (float) $value;
+            break;
+
+        case 'numeric':
+            if (!is_numeric($value)) {
+                throw new Exception('The numeric parameter ' . $variableName . ' has an invalid value!');
+            }
+            // https://www.php.net/manual/en/function.is-numeric.php#107326
+            $value += 0;
             break;
 
         case 'string':
@@ -428,6 +426,12 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
                 throw new Exception('The parameter "' . $variableName . '" has an invalid URL!');
             }
             break;
+    }
+
+    // Check valid values after validation and type conversion so strict comparisons
+    // continue to work for integer, float and boolean parameters.
+    if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true)) {
+        throw new Exception('The parameter "' . $variableName . '" has an invalid value!');
     }
 
     return $value;
