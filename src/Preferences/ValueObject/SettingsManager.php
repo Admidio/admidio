@@ -296,6 +296,7 @@ class SettingsManager
             } catch (\UnexpectedValueException $e) {
                 // The preference has no row in the database, but it exists if a module or a
                 // plugin has registered a default value for it.
+                unset($this->settings[$name]);
                 return array_key_exists($name, self::$registeredDefaults);
             }
         }
@@ -485,7 +486,11 @@ class SettingsManager
      */
     private function updateOrInsertSetting(string $name, string $value, bool $update = true)
     {
-        if ($this->has($name, true)) {
+        // Calling has() forces loading the current value from the database -- if it exists
+        $this->has($name, true);
+
+        // If a value was loaded from the database, change it, otherwise insert
+        if (array_key_exists($name, $this->settings)) {
             if ($update && $this->settings[$name] !== $value) {
                 $this->update($name, $value);
             }
