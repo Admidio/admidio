@@ -574,8 +574,13 @@ class Database
     {
         $tableExists = false;
 
-        $sql = 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?';
-        $statement = $this->queryPrepared($sql, array(DB_NAME, $tableName));
+        if ($this->engine === self::PDO_ENGINE_PGSQL) {
+            $sql = 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = current_schema() AND table_name = ?';
+            $statement = $this->queryPrepared($sql, array($tableName));
+        } else {
+            $sql = 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?';
+            $statement = $this->queryPrepared($sql, array(DB_NAME, $tableName));
+        }
         if ($statement->fetchColumn() > 0) {
             $tableExists = true;
         }
