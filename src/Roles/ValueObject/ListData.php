@@ -30,10 +30,10 @@ class ListData
      */
     protected array $data = array();
     /**
-     * @var ListConfiguration An object of the ListConfiguration that could be used to read data
+     * @var ListConfiguration|null An object of the ListConfiguration that could be used to read data
      * and to format data to different output formats.
      */
-    protected ListConfiguration $listConfiguration;
+    protected ?ListConfiguration $listConfiguration = null;
     /**
      * @var Spreadsheet An object of the PhpSpreadsheet which will handle the export
      */
@@ -83,6 +83,13 @@ class ListData
     protected function prepareOutputFormat(string $outputFormat): array
     {
         global $gL10n;
+
+        // Custom SQL and array data have no ListConfiguration that could apply
+        // column-specific formatting. In that case the supplied values are already
+        // the output representation.
+        if ($this->listConfiguration === null) {
+            return $this->data;
+        }
 
         $outputData = array();
         $startRow = 0;
