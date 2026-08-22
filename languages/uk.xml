@@ -644,7 +644,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">Членство користувача #VAR1_BOLD# у #VAR2_BOLD# було успішно завершено!</string>
   <string name="SYS_ERROR">Помилка</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Відбулася помилка при доступі до бази даних:\n\n#VAR1#</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Список #VAR1_BOLD# збережений як стандартна конфігурація для модуля #VAR1# у цій організації і не може бути видалений. Встановіть іншу конфігурацію замість конфігурації за замовчуванням у налаштуваннях модуля та спробуйте видалити цю конфігурацію після цього.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Список #VAR1_BOLD# збережений як стандартна конфігурація для модуля #VAR2# у цій організації і не може бути видалений. Встановіть іншу конфігурацію замість конфігурації за замовчуванням у налаштуваннях модуля та спробуйте видалити цю конфігурацію після цього.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ПОМИЛКА 404 - СТОРІНКА НЕ ЗНАЙДЕНА!</string>
   <string name="SYS_EVENT">Подія</string>
   <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">Ви призначили ролі учасникам, яким заборонено бачити події у вибраній категорії.</string>

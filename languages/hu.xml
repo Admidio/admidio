@@ -644,7 +644,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">A #VAR1_BOLD#-on a kiválasztott felhasználók tagsági regisztrációja sikeresen lezárult!</string>
   <string name="SYS_ENTRY">Bejegyzés</string>
   <string name="SYS_ERROR">Hiba</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">A #VAR1_BOLD# lista a szervezeten belül a #VAR1# modul alapértelmezett konfigurációjaként van tárolva, ezért nem törölhető. Állítson be egy másik konfigurációt alapértelmezettként a modul beállításaiban, majd próbálja meg törölni ezt a konfigurációt.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">A #VAR1_BOLD# lista a szervezeten belül a #VAR2# modul alapértelmezett konfigurációjaként van tárolva, ezért nem törölhető. Állítson be egy másik konfigurációt alapértelmezettként a modul beállításaiban, majd próbálja meg törölni ezt a konfigurációt.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">404-es hiba – Az oldal nem található!</string>
   <string name="SYS_ERROR_UUID_MISSING">Hiányzik az UUID</string>
   <string name="SYS_EVENT">Esemény</string>

@@ -633,7 +633,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">Înregistrarea utilizatorilor selectați la #VAR1_BOLD# s-a finalizat cu succes!</string>
   <string name="SYS_ENTRY">Poziție</string>
   <string name="SYS_ERROR">Eroare</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Lista #VAR1_BOLD# este stocată ca configurație implicită pentru modulul #VAR1# în această organizație și nu poate fi ștersă. Setați o altă configurație ca configurație implicită în setările modulului și încercați să ștergeți această configurație ulterior.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Lista #VAR1_BOLD# este stocată ca configurație implicită pentru modulul #VAR2# în această organizație și nu poate fi ștersă. Setați o altă configurație ca configurație implicită în setările modulului și încercați să ștergeți această configurație ulterior.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">EROARE 404 - PAGINA NU A FOST GĂSITĂ!</string>
   <string name="SYS_ERROR_UUID_MISSING">Lipsește UUID</string>
   <string name="SYS_EVENT">Eveniment</string>
