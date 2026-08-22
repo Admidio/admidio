@@ -48,13 +48,8 @@ class DatabaseAbstractionTest extends DatabaseTestCase
         $this->assertContains($db->getEngine(), array('mysql', 'pgsql'));
         $this->assertNotEmpty($db->getName());
 
-        if ($db->getEngine() === Database::PDO_ENGINE_PGSQL) {
-            // tableExists() compares information_schema.table_schema with the database name,
-            // which on PostgreSQL is the schema and therefore never matches (finding 27)
-            $this->markTestSkipped('Database::tableExists() always answers false on PostgreSQL (finding 27).');
-        }
-
-        // the tables the application needs are there under the configured prefix
+        // the tables the application needs are there under the configured prefix, on both engines:
+        // on PostgreSQL information_schema.table_schema is the schema and not the database name
         $this->assertTrue($db->tableExists(TBL_USERS));
         $this->assertTrue($db->tableExists(TBL_ROLES));
         $this->assertFalse($db->tableExists(TABLE_PREFIX . '_not_a_table'));

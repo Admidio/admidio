@@ -13,6 +13,7 @@
 namespace Admidio\Tests\Integration\Security;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
@@ -183,9 +184,9 @@ class SqlInjectionTest extends DatabaseTestCase
     /**
      * Test the one query that is built by concatenation
      *
-     * @testdox The list configuration puts role ids into its SQL, so the caller has to validate them
+     * @testdox The list configuration refuses role ids that are not UUIDs
      */
-    public function testListConfigurationRequiresValidatedRoleIds(): void
+    public function testListConfigurationRefusesRoleIdsThatAreNotUuids(): void
     {
         $fixture = $this->getFixture();
         $role = $fixture->createAndSaveRoleWithRights('Injection Admins', self::ORG_ID, ['rol_edit_user' => 1]);
@@ -195,8 +196,8 @@ class SqlInjectionTest extends DatabaseTestCase
 
         $payload = "') OR 1=1 -- ";
 
-        // this is the guard: the modules check every role id against the uuid format before they
-        // hand it to getSQL(), which concatenates it into the statement without escaping
+        // getSQL() concatenates the role ids into the statement, so it checks the format itself
+        // instead of relying on its callers to have done it
         $this->assertFalse(Uuid::isValid($payload));
         $this->assertTrue(Uuid::isValid($role['rol_uuid']));
 
@@ -206,10 +207,23 @@ class SqlInjectionTest extends DatabaseTestCase
             $list->addColumn((int) $GLOBALS['gProfileFields']->getProperty('LAST_NAME', 'usf_id'));
             $list->save();
 
-            // the payload is placed into the statement verbatim, so nothing below the caller
-            // would stop it. Recorded as a finding.
-            $craftedSql = $list->getSQL(array('showRolesMembers' => array($payload)));
-            $this->assertStringContainsString($payload, $craftedSql);
+            // an id that is not a UUID never reaches the statement
+            $refused = false;
+            try {
+                $list->getSQL(array('showRolesMembers' => array($payload)));
+            } catch (Exception $e) {
+                $refused = true;
+            }
+            $this->assertTrue($refused);
+
+            // the same holds for the relation types
+            $refused = false;
+            try {
+                $list->getSQL(array('showRelationTypes' => array($payload)));
+            } catch (Exception $e) {
+                $refused = true;
+            }
+            $this->assertTrue($refused);
 
             // a validated id is used the same way and selects only that role
             $properSql = $list->getSQL(array('showRolesMembers' => array($role['rol_uuid'])));
