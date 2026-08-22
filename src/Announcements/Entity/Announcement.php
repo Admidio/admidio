@@ -183,7 +183,13 @@ class Announcement extends Entity
             throw new Exception('Announcement could not be saved because you are not allowed to edit announcements of this category.');
         }
 
-        return parent::save($updateFingerPrint);
+        $returnCode = parent::save($updateFingerPrint);
+        if ($returnCode) {
+            // Refresh the joined category columns used by isVisible() and isEditable().
+            $this->readDataById((int) $this->getValue('ann_id'));
+        }
+
+        return $returnCode;
     }
 
     /**

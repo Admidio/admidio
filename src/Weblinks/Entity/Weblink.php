@@ -163,7 +163,13 @@ class Weblink extends Entity
             throw new Exception('Weblink could not be saved because you are not allowed to edit weblinks of this category.');
         }
 
-        return parent::save($updateFingerPrint);
+        $returnCode = parent::save($updateFingerPrint);
+        if ($returnCode) {
+            // Refresh the joined category columns used by isVisible() and isEditable().
+            $this->readDataById((int) $this->getValue('lnk_id'));
+        }
+
+        return $returnCode;
     }
 
     /**

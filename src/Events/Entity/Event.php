@@ -396,7 +396,13 @@ class Event extends Entity
             throw new Exception('Event could not be saved because you are not allowed to edit events of this category.');
         }
 
-        return parent::save($updateFingerPrint);
+        $returnCode = parent::save($updateFingerPrint);
+        if ($returnCode) {
+            // Refresh the joined category columns used by isVisible() and isEditable().
+            $this->readDataById((int) $this->getValue('dat_id'));
+        }
+
+        return $returnCode;
     }
 
     /**
