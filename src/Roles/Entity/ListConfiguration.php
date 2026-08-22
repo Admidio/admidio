@@ -11,6 +11,7 @@ use DateTime;
 use ModuleEvents;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @brief Class manages the list configuration
@@ -726,6 +727,17 @@ class ListConfiguration extends Entity
             'endDate' => null
         );
         $optionsAll = array_replace($optionsDefault, $options);
+
+        foreach ($optionsAll['showRolesMembers'] as $roleUUID) {
+            if (!is_string($roleUUID) || !Uuid::isValid($roleUUID)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+        }
+        foreach ($optionsAll['showRelationTypes'] as $relationTypeUUID) {
+            if (!is_string($relationTypeUUID) || !Uuid::isValid($relationTypeUUID)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+        }
 
         $this->showLeaders = $optionsAll['showLeaderFlag'];
         // if there is more than 1 role, don't show the leaders
