@@ -1,7 +1,5 @@
 <?php
 
-use Admidio\Infrastructure\Database;
-
 /**
  * @brief Admidio specific enhancements of the exception class
  *
@@ -33,8 +31,9 @@ use Admidio\Infrastructure\Database;
 class AdmException extends Exception
 {
     /**
-     * Constructor saves the parameters to the class and will call the parent constructor. Also, a **rollback**
-     * of open database translation will be done.
+     * Constructor saves the parameters to the class and will call the parent constructor.
+     *
+     * Creating the exception does not touch the database, see Admidio\Infrastructure\Exception.
      * @param string $message Translation **id** or simple text that should be shown when exception is caught
      * @param array<int,string> $params Optional parameter for language string of translation id
      * @throws Exception
@@ -42,12 +41,7 @@ class AdmException extends Exception
      */
     public function __construct($message, $params = array())
     {
-        global $gLogger, $gDb, $gL10n;
-
-        if ($gDb instanceof Database) {
-            // if there is an open transaction we should perform a rollback
-            $gDb->rollback();
-        }
+        global $gLogger, $gL10n;
 
         // if text is a translation-id then translate it
         if (Admidio\Infrastructure\Language::isTranslationStringId($message)) {

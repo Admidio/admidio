@@ -30,20 +30,18 @@ namespace Admidio\Infrastructure;
 class Exception extends \Exception
 {
     /**
-     * Constructor saves the parameters to the class and will call the parent constructor. Also, a **rollback**
-     * of open database translation will be done.
+     * Constructor saves the parameters to the class and will call the parent constructor.
+     *
+     * Creating the exception does not touch the database. A request that really ends because of an
+     * exception is rolled back by handleException(); an exception that is caught and handled leaves
+     * the transaction of its caller intact.
      * @param string $message Translation **id** or simple text that should be shown when exception is caught
      * @param array<int,string> $params Optional parameter for language string of translation id
      * @throws Exception
      */
     public function __construct($message, $params = array())
     {
-        global $gLogger, $gDb, $gL10n;
-
-        if ($gDb instanceof Database) {
-            // if there is an open transaction we should perform a rollback
-            $gDb->rollback();
-        }
+        global $gLogger, $gL10n;
 
         // if text is a translation-id then translate it
         if (Language::isTranslationStringId($message)) {
