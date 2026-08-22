@@ -22,13 +22,13 @@ class RoleMembershipRightsTest extends DatabaseTestCase
     }
 
     /**
-     * Test that the membership list has to be read before it can be queried.
-     * isMemberOfRole() only looks at the cache that checkRolesRight() fills, it does not fill it
-     * itself, so on a freshly read user it answers false for a role the user really is in.
+     * Test that the membership question is answered without reading the rights first.
+     * isMemberOfRole() reads the cache that checkRolesRight() fills and calls that method itself,
+     * so a freshly read user answers correctly right away.
      *
-     * @testdox isMemberOfRole only answers once the roles have been read
+     * @testdox isMemberOfRole reads the roles it needs itself
      */
-    public function testIsMemberOfRoleNeedsTheRightsToBeReadFirst(): void
+    public function testIsMemberOfRoleReadsTheRolesItself(): void
     {
         $fixture = $this->getFixture();
         $org = $fixture->createAndSaveOrganization('Member Org', 'memorg');
@@ -41,12 +41,15 @@ class RoleMembershipRightsTest extends DatabaseTestCase
         // the membership exists in the database
         $this->assertEquals(1, $fixture->countRoleMemberships($role['rol_id']));
 
-        // but the object does not know about it yet
-        $this->assertFalse($member->isMemberOfRole($role['rol_id']));
-
-        // reading the rights fills the cache, and only then is the answer correct
-        $member->checkRolesRight();
+        // the object fills its role cache itself, so no separate checkRolesRight() is needed
         $this->assertTrue($member->isMemberOfRole($role['rol_id']));
+
+        // the same holds for the leader question and for the lists of role UUIDs
+        $this->assertFalse($member->isLeaderOfRole($role['rol_id']));
+        $this->assertContains($role['rol_id'], $member->getRoleMemberships());
+        $this->assertIsArray($member->getRolesViewMemberships());
+        $this->assertIsArray($member->getRolesViewProfiles());
+        $this->assertIsArray($member->getRolesWriteMails());
     }
 
     /**
