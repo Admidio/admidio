@@ -82,6 +82,11 @@ class ListConfiguration extends Entity
         parent::__construct($database, TBL_LISTS, 'lst', $listID);
 
         if ($listID > 0) {
+            // a list that has no row of its own does not exist, a list without columns is valid
+            if ($this->isNewRecord()) {
+                throw new Exception('List-Configuration was not found.');
+            }
+
             $this->readColumns();
         }
     }
@@ -1074,7 +1079,9 @@ class ListConfiguration extends Entity
     /**
      * Read data of responsible columns and store in an object. Only columns of profile fields which the current
      * user is allowed to view will be stored in the object. If only the role membership should be shown, then
-     * remove all columns except first name, last name and assignment timestamps.
+     * remove all columns except first name, last name and assignment timestamps. A configuration without any
+     * column is valid: removing every column and starting again is an ordinary way to edit a list, so the
+     * object is then read with an empty column list.
      * @throws Exception
      */
     public function readColumns(): void
@@ -1088,10 +1095,6 @@ class ListConfiguration extends Entity
                  WHERE lsc_lst_id = ? -- $this->getValue(\'lst_id\')
               ORDER BY lsc_number';
         $lscStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('lst_id')));
-
-        if ($lscStatement->rowCount() === 0) {
-            throw new Exception('List-Configuration was not found.');
-        }
 
         while ($lscRow = $lscStatement->fetch()) {
             $usfId = (int)$lscRow['lsc_usf_id'];
