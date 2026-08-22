@@ -89,10 +89,6 @@ class User extends Entity
      */
     protected int $organizationId;
     /**
-     * @var bool Flag if the user has the right to assign at least one role
-     */
-    protected bool $assignRoles;
-    /**
      * @var array<int,bool> Array with all user ids where the current user is allowed to edit the profile.
      */
     protected array $usersEditAllowed = array();
@@ -257,7 +253,6 @@ class User extends Entity
         }
 
         if (count($this->rolesRights) === 0) {
-            $this->assignRoles = false;
             $tmpRolesRights = array(
                 'rol_all_lists_view' => false,
                 'rol_announcements' => false,
@@ -302,14 +297,6 @@ class User extends Entity
                         // if user is leader in this role than add role id and leader rights to array
                         $this->rolesMembershipLeader[$roleId] = $rolLeaderRights;
 
-                        // if role leader could assign new members then remember this setting
-                        // roles for confirmation of events should be ignored
-                        if (
-                            $row['cat_name_intern'] !== 'EVENTS'
-                            && ($rolLeaderRights === Role::ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-                        ) {
-                            $this->assignRoles = true;
-                        }
                     } else {
                         $this->rolesMembershipNoLeader[] = $roleId;
                     }
@@ -324,11 +311,6 @@ class User extends Entity
                         }
                     }
                     unset($value);
-
-                    // set flag assignRoles of user can manage roles
-                    if ((int)$row['rol_assign_roles'] === 1) {
-                        $this->assignRoles = true;
-                    }
 
                     // set administrator flag
                     if ((int)$row['rol_administrator'] === 1) {
