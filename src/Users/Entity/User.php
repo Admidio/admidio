@@ -1719,6 +1719,8 @@ class User extends Entity
      */
     public function isLeaderOfRole(int $roleId): bool
     {
+        $this->checkRolesRight();
+
         return array_key_exists($roleId, $this->rolesMembershipLeader);
     }
 
@@ -1759,6 +1761,8 @@ class User extends Entity
      */
     public function isMemberOfRole(int $roleId): bool
     {
+        $this->checkRolesRight();
+
         return in_array($roleId, $this->rolesMembership, true);
     }
 
