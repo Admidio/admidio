@@ -888,8 +888,22 @@ class Database
             if ($this->pdoStatement !== false) {
                 $success = $this->pdoStatement->execute($params);
 
-                // When executing PostgreSQL statements, at least if there is a table missing, no exception is thrown. But the PDOStatement.execute() returns false.
+                // With PDO::ERRMODE_SILENT a failed execute() returns false instead of throwing.
+                // Report that error through the same application path as a PDOException.
                 if (!$success) {
+                    $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
+
+                    $errorInfo = $this->pdoStatement->errorInfo();
+                    $errorCode = (string) ($errorInfo[0] ?? '');
+                    $errorMessage = (string) ($errorInfo[2] ?? 'Unknown database error');
+
+                    if ($showError) {
+                        $gLogger->critical('PDO error: ' . $errorMessage);
+                        $this->showError($errorMessage, $errorCode);
+                        // => EXIT
+                    }
+
+                    $gLogger->warning('PDO error: ' . $errorMessage);
                     return false;
                 }
 
