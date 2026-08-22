@@ -244,8 +244,8 @@ class ItemField extends Entity
         global $gCurrentUser, $gCurrentOrgId;
 
         // only administrators can edit item fields
-        if (!$gCurrentUser->isAdministrator() && !$this->saveChangesWithoutRights) {
-            throw new Exception('Item field could not be saved because only administrators are allowed to edit item fields.');
+        if (!$gCurrentUser->isAdministratorInventory() && !$this->saveChangesWithoutRights) {
+            throw new Exception('Item field could not be saved because only inventory administrators are allowed to edit item fields.');
             // => EXIT
         }
 
