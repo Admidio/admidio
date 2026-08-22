@@ -123,8 +123,12 @@ class ItemField extends Entity
 
         $sql = 'SELECT inf_id
                   FROM ' . TBL_INVENTORY_FIELDS . '
-                 WHERE inf_name_intern = ? -- $newNameIntern';
-        $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
+                 WHERE inf_org_id = ? -- $this->getValue(\'inf_org_id\')
+                   AND inf_name_intern = ? -- $newNameIntern';
+        $userFieldsStatement = $this->db->queryPrepared(
+            $sql,
+            array((int) $this->getValue('inf_org_id'), $newNameIntern)
+        );
 
         if ($userFieldsStatement->rowCount() > 0) {
             ++$index;
