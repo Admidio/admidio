@@ -703,27 +703,35 @@ class Installation
      */
     private static function createUserRelationTypes(Database $db, int $systemUserId): void
     {
+        $relationTypes = array(
+            'SYS_PARENT' => array('male' => 'SYS_FATHER', 'female' => 'SYS_MOTHER', 'inverse' => 'SYS_CHILD'),
+            'SYS_CHILD' => array('male' => 'SYS_SON', 'female' => 'SYS_DAUGHTER', 'inverse' => 'SYS_PARENT'),
+            'SYS_SIBLING' => array('male' => 'SYS_BROTHER', 'female' => 'SYS_SISTER', 'inverse' => 'SYS_SIBLING'),
+            'SYS_SPOUSE' => array('male' => 'SYS_HUSBAND', 'female' => 'SYS_WIFE', 'inverse' => 'SYS_SPOUSE'),
+            'SYS_COHABITANT' => array('male' => 'SYS_COHABITANT_MALE', 'female' => 'SYS_COHABITANT_FEMALE', 'inverse' => 'SYS_COHABITANT'),
+            'SYS_COMPANION' => array('male' => 'SYS_BOYFRIEND', 'female' => 'SYS_GIRLFRIEND', 'inverse' => 'SYS_COMPANION'),
+            'SYS_SUPERIOR' => array('male' => 'SYS_SUPERIOR_MALE', 'female' => 'SYS_SUPERIOR_FEMALE', 'inverse' => 'SYS_SUBORDINATE'),
+            'SYS_SUBORDINATE' => array('male' => 'SYS_SUBORDINATE_MALE', 'female' => 'SYS_SUBORDINATE_FEMALE', 'inverse' => 'SYS_SUPERIOR')
+        );
+
+        $relationTypeIds = array();
         $sql = 'INSERT INTO ' . TBL_USER_RELATION_TYPES . '
-                       (urt_id, urt_uuid, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-                VALUES (1, \'' . Uuid::uuid4() . '\', \'SYS_PARENT\',      \'SYS_FATHER\',           \'SYS_MOTHER\',          null, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (2, \'' . Uuid::uuid4() . '\', \'SYS_CHILD\',       \'SYS_SON\',              \'SYS_DAUGHTER\',           1, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (3, \'' . Uuid::uuid4() . '\', \'SYS_SIBLING\',     \'SYS_BROTHER\',          \'SYS_SISTER\',             3, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (4, \'' . Uuid::uuid4() . '\', \'SYS_SPOUSE\',      \'SYS_HUSBAND\',          \'SYS_WIFE\',               4, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (5, \'' . Uuid::uuid4() . '\', \'SYS_COHABITANT\',  \'SYS_COHABITANT_MALE\',  \'SYS_COHABITANT_FEMALE\',  5, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (6, \'' . Uuid::uuid4() . '\', \'SYS_COMPANION\',   \'SYS_BOYFRIEND\',        \'SYS_GIRLFRIEND\',         6, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (7, \'' . Uuid::uuid4() . '\', \'SYS_SUPERIOR\',    \'SYS_SUPERIOR_MALE\',    \'SYS_SUPERIOR_FEMALE\', null, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (8, \'' . Uuid::uuid4() . '\', \'SYS_SUBORDINATE\', \'SYS_SUBORDINATE_MALE\', \'SYS_SUBORDINATE_FEMALE\', 7, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')';
-        $db->query($sql); // TODO add more params
+                       (urt_uuid, urt_name, urt_name_male, urt_name_female, urt_usr_id_create, urt_timestamp_create)
+                VALUES (?, ?, ?, ?, ?, ?)';
 
-        $sql = 'UPDATE ' . TBL_USER_RELATION_TYPES . '
-                   SET urt_id_inverse = 2
-                 WHERE urt_id = 1';
-        $db->queryPrepared($sql);
+        foreach ($relationTypes as $name => $relationType) {
+            $db->queryPrepared(
+                $sql,
+                array((string) Uuid::uuid4(), $name, $relationType['male'], $relationType['female'], $systemUserId, DATETIME_NOW)
+            );
+            $relationTypeIds[$name] = $db->lastInsertId();
+        }
 
-        $sql = 'UPDATE ' . TBL_USER_RELATION_TYPES . '
-                   SET urt_id_inverse = 8
-                 WHERE urt_id = 7';
-        $db->queryPrepared($sql);
+
+        $sql = 'UPDATE ' . TBL_USER_RELATION_TYPES . ' SET urt_id_inverse = ? WHERE urt_id = ?';
+        foreach ($relationTypes as $name => $relationType) {
+            $db->queryPrepared($sql, array($relationTypeIds[$relationType['inverse']], $relationTypeIds[$name]));
+        }
     }
 
     /**
