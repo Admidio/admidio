@@ -541,7 +541,8 @@ class Message extends Entity
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if
      *                                table has columns like **usr_id_create** or **usr_id_changed**
-     * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @return bool Returns **true** if at least one record was saved and all records that needed saving
+     *              were saved successfully, otherwise **false**.
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -551,35 +552,54 @@ class Message extends Entity
             $this->setValue('msg_timestamp', DATETIME_NOW);
         }
 
-        $returnValue = parent::save($updateFingerPrint);
+        $messageNeedsSave = $this->isNewRecord() || $this->hasColumnsValueChanged();
+        $messageSaved = parent::save($updateFingerPrint);
 
-        if ($returnValue) {
-            // now save every recipient
+        $somethingSaved = $messageSaved;
+        $allSaved = !$messageNeedsSave || $messageSaved;
+
+        // Dependent records may have changed even if no column of adm_messages changed.
+        // Only save them if the message itself did not fail and has a database id.
+        if ($allSaved && (int) $this->getValue('msg_id') > 0) {
             foreach ($this->msgRecipientsObjectArray as $msgRecipientsObject) {
-                $msgRecipientsObject->setValue('msr_msg_id', $this->getValue('msg_id'));
-                $msgRecipientsObject->save();
+                if ($msgRecipientsObject->isNewRecord() || $msgRecipientsObject->hasColumnsValueChanged()) {
+                    $msgRecipientsObject->setValue('msr_msg_id', $this->getValue('msg_id'));
+                    $recipientSaved = $msgRecipientsObject->save();
+
+                    $somethingSaved = $somethingSaved || $recipientSaved;
+                    $allSaved = $allSaved && $recipientSaved;
+                }
             }
 
-            if (isset($this->msgContentObject)) {
-                // now save the message to the database
+            if (isset($this->msgContentObject)
+                && ($this->msgContentObject->isNewRecord() || $this->msgContentObject->hasColumnsValueChanged())) {
                 $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
                 $this->msgContentObject->setValue('msc_usr_id', $GLOBALS['gCurrentUserId']);
-                $returnValue = $this->msgContentObject->save();
+                $contentSaved = $this->msgContentObject->save();
+
+                $somethingSaved = $somethingSaved || $contentSaved;
+                $allSaved = $allSaved && $contentSaved;
             }
 
-            $this->saveAttachments();
+            if (count($this->msgAttachments) > 0) {
+                $attachmentsSaved = $this->saveAttachments();
+
+                $somethingSaved = $somethingSaved || $attachmentsSaved;
+                $allSaved = $allSaved && $attachmentsSaved;
+            }
         }
 
-        return $returnValue;
+        return $somethingSaved && $allSaved;
     }
 
     /**
      * Saves the files of the stored filenames in the array **$msgAttachments** within the filesystem folder
      * adm_my_files/messages_attachments. Therefore, the filename will get the prefix with the id of this
      * message.
+     * @return bool Returns **true** if all queued attachments were saved, otherwise **false**.
      * @throws Exception
      */
-    protected function saveAttachments()
+    protected function saveAttachments(): bool
     {
         global $gSettingsManager, $gCurrentOrganization;
 
@@ -591,6 +611,9 @@ class Message extends Entity
             }
         }
 
+        $allSaved = true;
+        $unsavedAttachments = array();
+
         foreach ($this->msgAttachments as $attachment) {
             $file_name = $this->getValue('msg_id').'_'.$attachment[1];
 
@@ -598,13 +621,22 @@ class Message extends Entity
                 FileSystemUtils::copyFile($attachment[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
             }
 
-            // save message recipient as Entity object to the array
+            // save message attachment as Entity object
             $messageAttachment = new Entity($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
             $messageAttachment->setValue('msa_msg_id', $this->getValue('msg_id'));
             $messageAttachment->setValue('msa_file_name', $file_name);
             $messageAttachment->setValue('msa_original_file_name', $attachment[1]);
-            $messageAttachment->save();
+
+            if (!$messageAttachment->save()) {
+                $allSaved = false;
+                $unsavedAttachments[] = $attachment;
+            }
         }
+
+        // Keep only failed attachments queued, so another save() does not duplicate successful ones.
+        $this->msgAttachments = $unsavedAttachments;
+
+        return $allSaved;
     }
 
     /**
