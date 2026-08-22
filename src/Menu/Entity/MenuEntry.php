@@ -249,8 +249,8 @@ class MenuEntry extends Entity
      */
     public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
-        if ($newValue !== parent::getValue($columnName) && $checkValue) {
-            if ($columnName === 'men_icon' && $newValue !== '') {
+        if ($newValue !== parent::getValue($columnName)) {
+            if ($checkValue && $columnName === 'men_icon' && $newValue !== '') {
                 // check if bootstrap icons syntax is used
                 if (preg_match('/[^a-z0-9-]/', $newValue)) {
                     throw new Exception('SYS_INVALID_ICON_NAME');
