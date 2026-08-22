@@ -937,6 +937,10 @@ class Entity
 
         $logChanges = array();
 
+        // An insert must also contain the columns for which the database requires a value but which the
+        // caller has not set. It is read before the loop below, because that loop resets the changed flags.
+        $requiredColumns = $this->insertRecord ? $this->getRequiredColumnsWithoutValue() : array();
+
         // Loop over all DB fields and add them to the update
         foreach ($this->dbColumns as $key => $value) {
             // fields of other tables must not appear in insert/update
@@ -968,6 +972,12 @@ class Entity
                     $this->columnsInfos[$key]['changed'] = false;
                 }
             }
+        }
+
+        // These columns carry no information, so they are deliberately not part of the changelog.
+        foreach ($requiredColumns as $key => $value) {
+            $sqlFieldArray[] = $key;
+            $queryParams[] = $value;
         }
 
         // Every log entry that is written by this save belongs to the same change: the creation
@@ -1013,6 +1023,68 @@ class Entity
         $this->columnsValueChanged = false;
 
         return $returnCode;
+    }
+
+    /**
+     * Collect the columns of the table for which the database requires a value but which the caller has
+     * not set: columns that are NOT NULL and have no default. save() writes only the changed columns, so
+     * such a column is missing from the INSERT. MySQL accepts that only because
+     * Database::setConnectionOptions() switches the connection to SQL_MODE 'ANSI', which replaces the
+     * server default and therefore drops STRICT_TRANS_TABLES. PostgreSQL rejects the row, so without this
+     * the same entity code stores a record on one engine and nothing on the other.
+     *
+     * The value that is written is the empty value of the column type. Date and time columns are
+     * deliberately left out: there is no empty date, and a fabricated one would hide the missing value
+     * instead of letting the database report it.
+     *
+     * @return array<string,mixed> Column name and value of every column that must be added to an INSERT
+     */
+    private function getRequiredColumnsWithoutValue(): array
+    {
+        $requiredColumns = array();
+
+        foreach ($this->dbColumns as $key => $value) {
+            // only columns of the table of this class and only those the caller has not set
+            if (!str_starts_with($key, $this->columnPrefix . '_')
+                || $this->columnsInfos[$key]['serial']
+                || $this->columnsInfos[$key]['changed']) {
+                continue;
+            }
+
+            // the column accepts NULL, or the database fills it itself
+            if ($this->columnsInfos[$key]['null']
+                || array_key_exists('default', $this->columnsInfos[$key])) {
+                continue;
+            }
+
+            switch ($this->columnsInfos[$key]['type']) {
+                case 'boolean': // fallthrough
+                case 'tinyint':
+                    $requiredColumns[$key] = (DB_TYPE === Database::PDO_ENGINE_PGSQL) ? 'false' : 0;
+                    break;
+
+                case 'integer': // fallthrough
+                case 'smallint': // fallthrough
+                case 'bigint': // fallthrough
+                case 'decimal': // fallthrough
+                case 'numeric': // fallthrough
+                case 'double': // fallthrough
+                case 'float':
+                    $requiredColumns[$key] = 0;
+                    break;
+
+                case 'date': // fallthrough
+                case 'time': // fallthrough
+                case 'datetime': // fallthrough
+                case 'timestamp':
+                    break;
+
+                default:
+                    $requiredColumns[$key] = '';
+            }
+        }
+
+        return $requiredColumns;
     }
 
     /**

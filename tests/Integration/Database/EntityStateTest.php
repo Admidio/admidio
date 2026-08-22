@@ -10,6 +10,7 @@ namespace Admidio\Tests\Integration\Database;
 
 use Admidio\Announcements\Entity\Announcement;
 use Admidio\Categories\Entity\Category;
+use Admidio\Organizations\Entity\Organization;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
@@ -151,5 +152,50 @@ class EntityStateTest extends DatabaseTestCase
         });
         $this->assertTrue($announcement->wasInserted());
         $this->assertFalse($announcement->isNewRecord());
+    }
+
+    /**
+     * Test that an insert contains the columns the database requires
+     *
+     * @testdox An insert contains the NOT NULL columns that the caller did not set
+     */
+    public function testAnInsertContainsTheRequiredColumnsTheCallerDidNotSet(): void
+    {
+        // org_homepage and org_email_administrator are NOT NULL without a default. An insert that
+        // leaves them out is accepted by MySQL only because the connection runs with SQL_MODE
+        // 'ANSI' and therefore without STRICT_TRANS_TABLES, while PostgreSQL rejects the row.
+        $organization = new Organization($this->getDatabase());
+        $organization->setValue('org_shortname', 'reqcol');
+        $organization->setValue('org_longname', 'Required columns organization');
+
+        $this->assertTrue($organization->save());
+        $orgId = (int) $organization->getValue('org_id');
+        $this->assertGreaterThan(0, $orgId);
+
+        $sql = 'SELECT org_homepage, org_email_administrator FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?';
+        $row = $this->getDatabase()->queryPrepared($sql, [$orgId])->fetch();
+        $this->assertNotFalse($row);
+        $this->assertSame('', $row['org_homepage']);
+        $this->assertSame('', $row['org_email_administrator']);
+    }
+
+    /**
+     * Test that a value the caller sets is not overwritten by the empty default
+     *
+     * @testdox A required column that the caller sets keeps its value
+     */
+    public function testARequiredColumnThatTheCallerSetsKeepsItsValue(): void
+    {
+        $organization = new Organization($this->getDatabase());
+        $organization->setValue('org_shortname', 'reqcol2');
+        $organization->setValue('org_longname', 'Required columns organization 2');
+        $organization->setValue('org_homepage', 'https://example.local');
+        $organization->setValue('org_email_administrator', 'reqcol2@example.local');
+        $organization->save();
+
+        $sql = 'SELECT org_homepage, org_email_administrator FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?';
+        $row = $this->getDatabase()->queryPrepared($sql, [(int) $organization->getValue('org_id')])->fetch();
+        $this->assertEquals('https://example.local', $row['org_homepage']);
+        $this->assertEquals('reqcol2@example.local', $row['org_email_administrator']);
     }
 }
