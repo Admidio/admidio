@@ -168,9 +168,45 @@ class UserImportTest extends DatabaseTestCase
     /**
      * Test the mode that fills the contact in
      *
-     * @testdox The completing mode writes the values of the import file
+     * @testdox The completing mode only fills the fields that are still empty
      */
-    public function testCompletingModeWritesTheValuesOfTheImportFile(): void
+    public function testCompletingModeOnlyFillsTheFieldsThatAreStillEmpty(): void
+    {
+        $usrId = $this->asAdministrator(function () {
+            return $this->import(array('LAST_NAME' => 'Import', 'FIRST_NAME' => 'Ida', 'CITY' => 'Graz'));
+        });
+
+        $accepted = $this->asAdministrator(function () {
+            $import = new UserImport($this->getDatabase(), $GLOBALS['gProfileFields']);
+            $import->setImportMode(UserImport::USER_IMPORT_COMPLETE);
+            $import->readDataByFirstnameLastName('Ida', 'Import');
+            $accepted = array(
+                'CITY' => $import->setValue('CITY', 'Linz'),
+                'STREET' => $import->setValue('STREET', 'Hauptstrasse 1')
+            );
+            $import->save();
+
+            return $accepted;
+        });
+
+        $profile = $this->profileOf($usrId);
+
+        // the field that had no value yet is filled
+        $this->assertTrue($accepted['STREET']);
+        $this->assertEquals('Hauptstrasse 1', $profile['STREET']);
+
+        // the field that already had a value keeps it, this is the mode that is offered as
+        // SYS_COMPLEMENT and it must not overwrite what the contact already has
+        $this->assertFalse($accepted['CITY']);
+        $this->assertEquals('Graz', $profile['CITY']);
+    }
+
+    /**
+     * Test that the completing mode does not clear a field
+     *
+     * @testdox The completing mode does not clear a field with an empty column
+     */
+    public function testCompletingModeDoesNotClearAFieldWithAnEmptyColumn(): void
     {
         $usrId = $this->asAdministrator(function () {
             return $this->import(array('LAST_NAME' => 'Import', 'FIRST_NAME' => 'Ida', 'CITY' => 'Graz'));
@@ -180,16 +216,11 @@ class UserImportTest extends DatabaseTestCase
             $import = new UserImport($this->getDatabase(), $GLOBALS['gProfileFields']);
             $import->setImportMode(UserImport::USER_IMPORT_COMPLETE);
             $import->readDataByFirstnameLastName('Ida', 'Import');
-            $import->setValue('CITY', 'Linz');
-            $import->setValue('STREET', 'Hauptstrasse 1');
+            $import->setValue('CITY', '');
             $import->save();
         });
 
-        $profile = $this->profileOf($usrId);
-        $this->assertEquals('Hauptstrasse 1', $profile['STREET']);
-
-        // a value that the import file brings replaces what was there
-        $this->assertEquals('Linz', $profile['CITY']);
+        $this->assertEquals('Graz', $this->profileOf($usrId)['CITY']);
     }
 
     /**
