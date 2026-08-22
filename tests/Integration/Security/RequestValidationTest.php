@@ -80,6 +80,31 @@ class RequestValidationTest extends DatabaseTestCase
     }
 
     /**
+     * Test that an allowed value is returned exactly as it was listed
+     *
+     * @testdox An allowed value is returned as it is listed and not html encoded
+     */
+    public function testAllowedValueIsReturnedAsItIsListed(): void
+    {
+        // The CSV import offers the quotation characters as the enclosure of a column. They are
+        // read as a string, and the html encoding of that datatype would turn them into &quot; and
+        // &#039;, which are not the characters the reader has to be given.
+        $enclosure = array('validValues' => array('', 'AUTO', '"', '\''));
+
+        $this->assertSame('"', admFuncVariableIsValid(array('e' => '"'), 'e', 'string', $enclosure));
+        $this->assertSame('\'', admFuncVariableIsValid(array('e' => '\''), 'e', 'string', $enclosure));
+        $this->assertSame('AUTO', admFuncVariableIsValid(array('e' => 'AUTO'), 'e', 'string', $enclosure));
+
+        // anything that is not listed is still refused, markup included
+        $this->assertTrue($this->refuses(array('e' => '<b>AUTO</b>'), 'e', 'string', $enclosure));
+
+        // an int parameter is converted first and compared to the list afterwards
+        $modes = array('validValues' => array(1, 2, 3));
+        $this->assertSame(2, admFuncVariableIsValid(array('m' => '2'), 'm', 'int', $modes));
+        $this->assertTrue($this->refuses(array('m' => '9'), 'm', 'int', $modes));
+    }
+
+    /**
      * Test that a string parameter cannot carry markup
      *
      * @testdox A string parameter is stripped of html and encoded
@@ -209,25 +234,25 @@ class RequestValidationTest extends DatabaseTestCase
     }
 
     /**
-     * Test that a numeric parameter does not raise on text
+     * Test that a numeric parameter refuses text
      *
-     * @testdox A numeric parameter turns text into zero instead of refusing it
+     * @testdox A numeric parameter refuses text instead of turning it into zero
      */
-    public function testNumericParameterTurnsTextIntoZero(): void
+    public function testNumericParameterRefusesText(): void
     {
-        // The value is cast to the datatype before it is checked, so is_numeric() always sees a
-        // number and the guard below it never fires. A caller that passes dat_id=abc therefore
-        // works on record 0 rather than getting an error. Recorded as a finding, pinned here so
-        // that a fix is noticed.
-        $this->assertEquals(0, admFuncVariableIsValid(array('id' => 'abc'), 'id', 'numeric'));
+        // The value is validated before it is converted, so text no longer arrives as record 0.
+        $this->assertTrue($this->refuses(array('id' => 'abc'), 'id', 'numeric'));
 
-        // a payload is cut down to the number it starts with instead of being refused
-        $this->assertEquals(1, admFuncVariableIsValid(array('id' => "1 OR 1=1"), 'id', 'int'));
+        // a payload is refused instead of being cut down to the number it starts with
+        $this->assertTrue($this->refuses(array('id' => "1 OR 1=1"), 'id', 'int'));
 
-        // the same cast makes every non-empty value a true boolean
-        $this->assertTrue(admFuncVariableIsValid(array('b' => 'maybe'), 'b', 'bool'));
+        // and a boolean parameter only accepts what filter_var recognises
+        $this->assertTrue($this->refuses(array('b' => 'maybe'), 'b', 'bool'));
+        $this->assertTrue(admFuncVariableIsValid(array('b' => '1'), 'b', 'bool'));
+        $this->assertFalse(admFuncVariableIsValid(array('b' => 'false'), 'b', 'bool'));
 
         // a genuine number is unaffected
         $this->assertEquals(42, admFuncVariableIsValid(array('id' => '42'), 'id', 'numeric'));
+        $this->assertSame(42, admFuncVariableIsValid(array('id' => '42'), 'id', 'int'));
     }
 }
