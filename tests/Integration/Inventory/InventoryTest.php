@@ -213,24 +213,56 @@ class InventoryTest extends DatabaseTestCase
         $this->assertEquals('COLOUR', $names[0]);
         $this->assertEquals('COLOUR_2', $names[1]);
 
-        // the name is checked against every organization, not only the current one, so a name that
-        // an existing system field already uses is numbered as well
+        // the name is checked within the organization, and this organization already has the
+        // delivered system field KEEPER, so the new one is numbered
         $this->assertEquals('KEEPER_2', $names[2]);
     }
 
     /**
      * Test which right is needed to store an item field
      *
-     * @testdox Storing an item field needs administrator rights for the whole organization
+     * @testdox Storing an item field needs the inventory administrator right
      */
-    public function testStoringAnItemFieldNeedsFullAdministratorRights(): void
+    public function testStoringAnItemFieldNeedsTheInventoryAdministratorRight(): void
     {
         $inventoryAdmin = $this->makeInventoryUser('invonly', false);
 
-        $this->withCurrentUser($inventoryAdmin, self::ORG_ID, true, function () use ($inventoryAdmin) {
+        $infId = $this->withCurrentUser($inventoryAdmin, self::ORG_ID, true, function () use ($inventoryAdmin) {
             // the user administrates the inventory but not the organization
             $this->assertTrue($inventoryAdmin->isAdministratorInventory());
             $this->assertFalse($inventoryAdmin->isAdministrator());
+
+            $field = new ItemField($this->getDatabase());
+            $field->setValue('inf_org_id', self::ORG_ID);
+            $field->setValue('inf_type', 'TEXT');
+            $field->setValue('inf_name', 'Allowed for the inventory administrator');
+            $this->assertTrue($field->save());
+
+            return (int) $field->getValue('inf_id');
+        });
+
+        // save() and delete() ask for the same right, so the same user may remove it again
+        $this->withCurrentUser($inventoryAdmin, self::ORG_ID, true, function () use ($infId) {
+            $field = new ItemField($this->getDatabase(), $infId);
+            $this->assertTrue($field->delete());
+        });
+    }
+
+    /**
+     * Test that a user without the inventory right may not store an item field
+     *
+     * @testdox A user without the inventory right cannot store an item field
+     */
+    public function testStoringAnItemFieldWithoutTheInventoryRightIsRefused(): void
+    {
+        $fixture = $this->getFixture();
+        $role = $fixture->createAndSaveRoleWithRights('Inventory outsiders', self::ORG_ID);
+        $user = $fixture->createAndSaveUser('invnone', 'invnone@example.local');
+        $fixture->assignUserToRole($user['usr_id'], $role['rol_id']);
+        $member = $this->loadUserInOrganization($user['usr_id'], self::ORG_ID);
+
+        $this->withCurrentUser($member, self::ORG_ID, true, function () use ($member) {
+            $this->assertFalse($member->isAdministratorInventory());
 
             $field = new ItemField($this->getDatabase());
             $field->setValue('inf_org_id', self::ORG_ID);

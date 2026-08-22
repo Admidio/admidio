@@ -10,7 +10,6 @@
 
 namespace Admidio\Tests\Integration\Workflows;
 
-use Admidio\Infrastructure\Database;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
@@ -43,20 +42,6 @@ class UserRelationWorkflowTest extends DatabaseTestCase
         $administrator = new User($this->getDatabase(), $GLOBALS['gProfileFields'], $usrId);
 
         return $this->withCurrentUser($administrator, self::ORG_ID, true, $callback);
-    }
-
-    /**
-     * Skip a test that has to store a relation type of its own.
-     *
-     * The installation writes urt_id 1 to 8 with explicit values and never moves the PostgreSQL
-     * sequence behind them, so the next eight inserts collide with the delivered rows and
-     * Entity::save() answers false without an error (finding 26).
-     */
-    private function requireStorableRelationType(): void
-    {
-        if ($this->getDatabase()->getEngine() === Database::PDO_ENGINE_PGSQL) {
-            $this->markTestSkipped('A new relation type cannot be stored on PostgreSQL (finding 26).');
-        }
     }
 
     /**
@@ -166,7 +151,6 @@ class UserRelationWorkflowTest extends DatabaseTestCase
      */
     public function testATypeWithoutACounterpartIsUnidirectional(): void
     {
-        $this->requireStorableRelationType();
 
         $urtId = $this->asAdministrator(function () {
             $type = new UserRelationType($this->getDatabase());
@@ -253,7 +237,6 @@ class UserRelationWorkflowTest extends DatabaseTestCase
      */
     public function testARelationOfAUnidirectionalTypeHasNoCounterpart(): void
     {
-        $this->requireStorableRelationType();
 
         $fixture = $this->getFixture();
         $userA = $fixture->createAndSaveUser('relone', 'r1@example.local');
