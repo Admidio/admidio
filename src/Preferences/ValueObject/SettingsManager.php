@@ -395,6 +395,11 @@ class SettingsManager
     /**
      * Expects an array with setting name and value and will then add all the settings of the array to
      * the database. Checks the existence of each setting and perform an insert or update.
+     *
+     * The settings that are already stored are read once for the whole array. Asking the database for
+     * every single name instead doubles the number of statements, and this method is called with the
+     * roughly 200 default preferences whenever an organization is created or updated.
+     *
      * @param array<string,mixed> $settings Array with all setting names and values to set
      * @param bool $update Set true to make a force reload of this setting from the database
      * @throws Exception
@@ -419,8 +424,16 @@ class SettingsManager
 
         $this->db->startTransaction();
 
+        $storedSettings = $this->loadAll();
+
         foreach ($settings as $name => $value) {
-            $this->updateOrInsertSetting($name, (string)$value, $update);
+            $value = (string)$value;
+
+            if (!array_key_exists($name, $storedSettings)) {
+                $this->insert($name, $value);
+            } elseif ($update && $storedSettings[$name] !== $value) {
+                $this->update($name, $value);
+            }
         }
 
         $this->db->endTransaction();
