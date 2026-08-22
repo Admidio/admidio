@@ -272,6 +272,47 @@ class ListConfigurationTest extends DatabaseTestCase
     }
 
     /**
+     * Test that a list keeps working after its last column was removed
+     *
+     * @testdox A list configuration without columns can be read back
+     */
+    public function testAListConfigurationWithoutColumnsCanBeReadBack(): void
+    {
+        $admin = $this->makeUserAdministrator('listempty');
+
+        $counts = $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $list = new ListConfiguration($this->getDatabase());
+            $list->setValue('lst_name', 'Emptied list');
+            $list->addColumn($this->profileField('LAST_NAME'));
+            $list->save();
+            $lstId = (int) $list->getValue('lst_id');
+
+            // removing every column and starting again is an ordinary way to edit a list
+            $list->deleteColumn(1, true);
+            $list->save();
+
+            $reread = new ListConfiguration($this->getDatabase(), $lstId);
+
+            return array($reread->countColumns(), $reread->getValue('lst_name'));
+        });
+
+        $this->assertEquals(0, $counts[0]);
+        $this->assertEquals('Emptied list', $counts[1]);
+    }
+
+    /**
+     * Test that a list id that does not exist is still reported
+     *
+     * @testdox A list id that does not exist is refused
+     */
+    public function testAListIdThatDoesNotExistIsRefused(): void
+    {
+        $this->expectException(Exception::class);
+
+        new ListConfiguration($this->getDatabase(), 999999);
+    }
+
+    /**
      * Test that the column names come from the profile fields
      *
      * @testdox The column names are taken from the profile field definitions
