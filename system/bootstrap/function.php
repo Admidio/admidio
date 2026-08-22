@@ -358,6 +358,23 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
         }
     }
 
+    if ($optionsAll['validValues'] !== null) {
+        // A parameter that is restricted to a set of allowed values is returned exactly as it is
+        // listed there. Without this the datatype conversion below would rewrite it: a string is
+        // stripped and HTML encoded, which turns the double quote of the CSV import into &quot; and
+        // also stops it from ever matching the list again.
+        if (in_array($value, $optionsAll['validValues'], true)) {
+            return $value;
+        }
+
+        // bool, int, float and numeric only get their real type in the switch below, so for them the
+        // comparison is repeated after the conversion. Every other datatype is checked on the value
+        // as it arrived, which is what the caller has listed.
+        if (!in_array($datatype, array('bool', 'boolean', 'int', 'float', 'numeric'), true)) {
+            throw new Exception('The parameter "' . $variableName . '" has an invalid value!');
+        }
+    }
+
     switch ($datatype) {
         case 'file': // fallthrough
         case 'folder':
@@ -428,8 +445,6 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
             break;
     }
 
-    // Check valid values after validation and type conversion so strict comparisons
-    // continue to work for integer, float and boolean parameters.
     if ($optionsAll['validValues'] !== null && !in_array($value, $optionsAll['validValues'], true)) {
         throw new Exception('The parameter "' . $variableName . '" has an invalid value!');
     }

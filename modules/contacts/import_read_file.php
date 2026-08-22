@@ -39,7 +39,7 @@ try {
         $_POST,
         'import_enclosure',
         'string',
-        array('validValues' => array('', 'AUTO', '"', '\|'))
+        array('validValues' => array('', 'AUTO', '"', '\''))
     );
     $postWorksheet = admFuncVariableIsValid($_POST, 'import_sheet', 'string');
     $postRoleUUID = admFuncVariableIsValid($_POST, 'import_role_uuid', 'uuid');
