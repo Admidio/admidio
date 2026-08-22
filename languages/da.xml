@@ -1163,7 +1163,7 @@
   <string name="SYS_OVERHANG">Overbooking</string>
   <string name="SYS_OVERVIEW">Oversigt</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Oversigt over udvidelser</string>
-  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække & Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække &amp; Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
   <string name="SYS_PAGE_NEXT">Næste</string>
   <string name="SYS_PAGE_PREVIOUS">Forrige</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# og #VAR2#</string>
