@@ -328,14 +328,9 @@ class Message extends Entity
         // if content was not set until now than read it from the database if message was already stored there
         if (!isset($this->msgContentObject) && $this->getValue('msg_id') > 0) {
             $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
-                      FROM '. TBL_MESSAGES_CONTENT. ' msc1
+                      FROM '. TBL_MESSAGES_CONTENT. '
                      WHERE msc_msg_id = ? -- $this->getValue(\'msg_id\')
-                       AND NOT EXISTS (
-                           SELECT 1
-                             FROM '. TBL_MESSAGES_CONTENT. ' msc2
-                            WHERE msc2.msc_msg_id = msc1.msc_msg_id
-                              AND msc2.msc_timestamp > msc1.msc_timestamp
-                           )';
+                  ORDER BY msc_id DESC';
             $messageContentStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
             $this->msgContentObject = new MessageContent($this->db);
