@@ -948,6 +948,8 @@ class User extends Entity
      */
     public function getRolesViewProfiles(): array
     {
+        $this->checkRolesRight();
+
         return $this->rolesViewProfilesUUID;
     }
 
@@ -957,6 +959,8 @@ class User extends Entity
      */
     public function getRolesViewMemberships(): array
     {
+        $this->checkRolesRight();
+
         return $this->rolesViewMembershipsUUID;
     }
 
@@ -966,6 +970,8 @@ class User extends Entity
      */
     public function getRolesWriteMails(): array
     {
+        $this->checkRolesRight();
+
         return $this->rolesWriteMailsUUID;
     }
 
