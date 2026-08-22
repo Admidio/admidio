@@ -635,7 +635,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">Kasutaja #VAR1_BOLD# liikmestaatus asukohas #VAR2_BOLD# on edukalt lõpule viidud!</string>
   <string name="SYS_ERROR">Viga</string>
   <string name="SYS_ERROR_DATABASE_ACCESS">Andmebaasi juurdepääsul ilmnes viga:\n\n#VAR1#</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Loend #VAR1_BOLD# on salvestatud selle organisatsiooni mooduli #VAR1# vaikekonfiguratsioonina ja seda ei saa kustutada. Määrake mooduli sätetes teine konfiguratsioon vaikekonfiguratsioonile ja proovige see konfiguratsioon hiljem kustutada.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Loend #VAR1_BOLD# on salvestatud selle organisatsiooni mooduli #VAR2# vaikekonfiguratsioonina ja seda ei saa kustutada. Määrake mooduli sätetes teine konfiguratsioon vaikekonfiguratsioonile ja proovige see konfiguratsioon hiljem kustutada.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">VIGA 404 – LEHTE EI LEIA!</string>
   <string name="SYS_EVENT">Sündmus</string>
   <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">Olete määranud rollid osalejatele, kellel ei ole lubatud valitud kategooria kuupäevi näha. Valige osalejatele üks järgmistest rollidest: # VAR1_BOLD #.</string>

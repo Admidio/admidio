@@ -628,7 +628,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">Medlemskapene til de valgte brukerne på #VAR1_BOLD# ble fullført!</string>
   <string name="SYS_ENTRY">Oppføring</string>
   <string name="SYS_ERROR">Feil</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Listen #VAR1_BOLD# er lagret som standardkonfigurasjon for modulen #VAR1# i denne organisasjonen og kan ikke slettes. Angi en annen konfigurasjon til standardkonfigurasjonen i modulinnstillingene, og prøv å slette denne konfigurasjonen etterpå.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Listen #VAR1_BOLD# er lagret som standardkonfigurasjon for modulen #VAR2# i denne organisasjonen og kan ikke slettes. Angi en annen konfigurasjon til standardkonfigurasjonen i modulinnstillingene, og prøv å slette denne konfigurasjonen etterpå.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">FEIL 404 - SIDEN FINNES IKKE!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID mangler</string>
   <string name="SYS_EVENT">Arrangement</string>

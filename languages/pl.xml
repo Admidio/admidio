@@ -644,7 +644,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">Członkostwa wybranych użytkowników w #VAR1_BOLD# zostały pomyślnie zakończone.</string>
   <string name="SYS_ENTRY">Wpis</string>
   <string name="SYS_ERROR">Błąd</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Lista #VAR1_BOLD# jest przechowywana jako domyślna konfiguracja modułu #VAR1# w tej organizacji i nie można jej usunąć. Ustaw inną konfigurację na konfigurację domyślną w ustawieniach modułu i spróbuj później usunąć tę konfigurację.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Lista #VAR1_BOLD# jest przechowywana jako domyślna konfiguracja modułu #VAR2# w tej organizacji i nie można jej usunąć. Ustaw inną konfigurację na konfigurację domyślną w ustawieniach modułu i spróbuj później usunąć tę konfigurację.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">Błąd 404 - strona nie znaleziona!</string>
   <string name="SYS_ERROR_UUID_MISSING">Brak UUID</string>
   <string name="SYS_EVENT">Wydarzenie</string>

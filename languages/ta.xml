@@ -628,7 +628,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">தேர்ந்தெடுக்கப்பட்ட பயனர்களின் #VAR1_BOLD#-இலுள்ள உறுப்பினர் நிலைகள் வெற்றிகரமாக முடிக்கப்பட்டன!</string>
   <string name="SYS_ENTRY">உள்ளீடு</string>
   <string name="SYS_ERROR">பிழை</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">#VAR1_BOLD# என்ற பட்டியல் இந்த நிறுவனத்தில் உள்ள #VAR1# தொகுதிக்கு இயல்புநிலை உள்ளமைவாகச் சேமிக்கப்பட்டுள்ளது, அதை நீக்க முடியாது. தொகுதி அமைப்புகளில் மற்றொரு உள்ளமைவை இயல்புநிலை உள்ளமைவாக அமைத்து, அதன் பிறகு இந்த உள்ளமைவை நீக்க முயற்சிக்கவும்.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">#VAR1_BOLD# என்ற பட்டியல் இந்த நிறுவனத்தில் உள்ள #VAR2# தொகுதிக்கு இயல்புநிலை உள்ளமைவாகச் சேமிக்கப்பட்டுள்ளது, அதை நீக்க முடியாது. தொகுதி அமைப்புகளில் மற்றொரு உள்ளமைவை இயல்புநிலை உள்ளமைவாக அமைத்து, அதன் பிறகு இந்த உள்ளமைவை நீக்க முயற்சிக்கவும்.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">பிழை 404 - பக்கம் காணப்படவில்லை!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID இல்லை</string>
   <string name="SYS_EVENT">நிகழ்வு</string>

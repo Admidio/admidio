@@ -633,7 +633,7 @@
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">Členství vybraných uživatelů v #VAR1_BOLD# byla úspěšně ukončena!</string>
   <string name="SYS_ENTRY">Záznam</string>
   <string name="SYS_ERROR">Chyba</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Seznam #VAR1_BOLD# je v této organizaci uložen jako výchozí konfigurace pro modul #VAR1# a nelze jej smazat. V nastavení modulu nastavte jinou výchozí konfiguraci a poté se pokuste tuto konfiguraci smazat.</string>
+  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Seznam #VAR1_BOLD# je v této organizaci uložen jako výchozí konfigurace pro modul #VAR2# a nelze jej smazat. V nastavení modulu nastavte jinou výchozí konfiguraci a poté se pokuste tuto konfiguraci smazat.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">CHYBA 404 - STRÁNKA NENALEZENA!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID chybí</string>
   <string name="SYS_EVENT">Událost</string>
