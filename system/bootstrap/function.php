@@ -14,6 +14,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Users\Entity\User;
 use Ramsey\Uuid\Uuid;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
@@ -23,6 +24,9 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
 /**
  * This function handles exceptions and shows the error message.
  * If **jsonResponse** is set to true, then the error message will be returned as JSON object.
+ *
+ * The request ends here, so an open transaction is rolled back first. That is the only place where
+ * an exception discards what the request has written; building an exception object does not.
  * @param Throwable $e The exception that should be handled
  * @param bool $jsonResponse (optional) If set to true than the error message will be returned as JSON object
  * @param bool $inlineResponse (optional) If set to true than the error message will be returned as inline HTML without header and footer
@@ -30,7 +34,11 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
  */
 function handleException(Throwable $e, bool $jsonResponse = false, bool $inlineResponse = false): void
 {
-    global $gDebug, $gMessage, $gHtmlPurifierFilter;
+    global $gDebug, $gMessage, $gHtmlPurifierFilter, $gDb;
+
+    if ($gDb instanceof Database) {
+        $gDb->rollback();
+    }
 
     $message = $gHtmlPurifierFilter->purify($e->getMessage());
 

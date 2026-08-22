@@ -6,10 +6,9 @@
  * readable form, and an account that collected three wrong attempts within a quarter of an hour is
  * closed for that long, which is what turns guessing from cheap into pointless.
  *
- * Note on the shape of these tests: Admidio\Infrastructure\Exception rolls the open transaction
- * back in its constructor. A refused login therefore also discards the transaction this test runs
- * in, so a test that expects a refusal asserts the reason and must not look at the database
- * afterwards. The state a refusal depends on is prepared directly instead.
+ * A refused login writes before it throws: handleIncorrectLogin() increments usr_number_invalid and
+ * saves it. Building the exception no longer rolls that back, so the counter survives the refusal
+ * and the tests can read the database afterwards.
  */
 
 namespace Admidio\Tests\Integration\Security;
@@ -93,6 +92,16 @@ class AuthenticationSecurityTest extends DatabaseTestCase
     }
 
     /**
+     * The number of failed login attempts that is stored for a user.
+     */
+    private function failedAttemptsOf(int $usrId): int
+    {
+        $sql = 'SELECT usr_number_invalid FROM ' . TBL_USERS . ' WHERE usr_id = ?';
+
+        return (int) $this->getDatabase()->queryPrepared($sql, [$usrId])->fetchColumn();
+    }
+
+    /**
      * Record failed login attempts on a user without going through a refusal.
      */
     private function recordFailedAttempts(int $usrId, int $count, string $lastAttempt): void
@@ -103,8 +112,6 @@ class AuthenticationSecurityTest extends DatabaseTestCase
 
     /**
      * Attempt a login and return the reason it was refused, or null when it succeeded.
-     *
-     * A refusal rolls the transaction back, so nothing may be read from the database afterwards.
      */
     private function attemptLogin(int $usrId, string $password): ?string
     {
@@ -201,6 +208,25 @@ class AuthenticationSecurityTest extends DatabaseTestCase
 
         // the message does not reveal whether the account exists
         $this->assertStringContainsString('username and/or password', $message);
+    }
+
+    /**
+     * Test that the refusal itself counts the attempt
+     *
+     * @testdox A refused login counts the attempt even within an open transaction
+     */
+    public function testRefusedLoginCountsTheAttemptWithinATransaction(): void
+    {
+        $user = $this->createMember('countinguser');
+        $this->assertEquals(0, $this->failedAttemptsOf($user['usr_id']));
+
+        // this test runs inside a transaction, and handleIncorrectLogin() writes the counter before
+        // the refusal is thrown. Building the exception must not discard that write.
+        $this->assertNotNull($this->attemptLogin($user['usr_id'], 'not-the-password'));
+        $this->assertEquals(1, $this->failedAttemptsOf($user['usr_id']));
+
+        $this->assertNotNull($this->attemptLogin($user['usr_id'], 'still-not-the-password'));
+        $this->assertEquals(2, $this->failedAttemptsOf($user['usr_id']));
     }
 
     /**

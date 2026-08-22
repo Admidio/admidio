@@ -97,10 +97,12 @@ class RegistrationService
                 // => EXIT
             }
         } catch (Exception $e) {
-            // exception is thrown when email couldn't be sent
-            // so save user data and then show error
+            // The exception is normally thrown when the email could not be sent, at which point the
+            // transaction is already committed and the user data only has to be written again. If it
+            // comes from the block above instead, the transaction is still open and must not be
+            // committed, because the changes it holds are only half applied.
+            $this->db->rollback();
             $user->save();
-            $this->db->endTransaction();
             return array('message' => $e->getMessage(), 'forwardUrl' => isset($gNavigation) ? $gNavigation->getPreviousUrl() : '');
         }
 
