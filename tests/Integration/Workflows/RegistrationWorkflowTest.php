@@ -66,10 +66,6 @@ class RegistrationWorkflowTest extends DatabaseTestCase
 
     /**
      * Read the registration back the way the module does, by uuid.
-     *
-     * The object that created the registration must not be reused: Entity::save() leaves the
-     * new-record flag set, so UserRegistration::save() would run its "new registration" branch
-     * again and set the user back to invalid.
      */
     private function readRegistration(string $userUuid): UserRegistration
     {
@@ -224,6 +220,33 @@ class RegistrationWorkflowTest extends DatabaseTestCase
 
         $this->assertTrue($this->isValid($registered['usr_id']));
         $this->assertFalse($this->registrationRow($registered['usr_id']));
+    }
+
+    /**
+     * Test that the registration can be accepted on the object that created it
+     *
+     * @testdox A registration can be accepted on the object that created it
+     */
+    public function testRegistrationCanBeAcceptedOnTheObjectThatCreatedIt(): void
+    {
+        // UserRegistration::save() sets usr_valid to 0 while the registration record is new. The
+        // record is stored by the first save(), so the acceptance that follows on the same object
+        // must not walk into that branch again.
+        $usrId = $this->asAdministrator(function () {
+            $registration = new UserRegistration($this->getDatabase(), $GLOBALS['gProfileFields'], 0, self::ORG_ID);
+            $registration->notSendEmail();
+            $registration->setValue('usr_login_name', 'sameobject');
+            $registration->setValue('LAST_NAME', 'Sameobject');
+            $registration->setPassword('A-Good-Password-1');
+            $registration->save();
+
+            $registration->acceptRegistration();
+
+            return (int) $registration->getValue('usr_id');
+        });
+
+        $this->assertTrue($this->isValid($usrId));
+        $this->assertFalse($this->registrationRow($usrId));
     }
 
     /**

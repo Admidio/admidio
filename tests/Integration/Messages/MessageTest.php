@@ -277,8 +277,7 @@ class MessageTest extends DatabaseTestCase
         $this->withCurrentUser($receiver, self::ORG_ID, true, function () use ($msgId) {
             $message = new Message($this->getDatabase(), $msgId);
             $message->addContent('Second');
-            // the reply only reaches the database if the message row itself changes as well
-            $message->setValue('msg_timestamp', date('Y-m-d H:i:s', time() + 1));
+            // the reply reaches the database although no column of adm_messages changed
             $message->save();
         });
 

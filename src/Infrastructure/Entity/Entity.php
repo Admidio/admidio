@@ -67,6 +67,12 @@ class Entity
      */
     protected bool $newRecord;
     /**
+     * @var bool Flag whether a save() of this object has inserted the record into the database.
+     *           Unlike newRecord it stays true when the same object is saved again afterwards, so
+     *           code that runs after save() can still tell a created record from a changed one.
+     */
+    protected bool $insertedRecord = false;
+    /**
      * @var bool Flag if the data of this record must be inserted or updated
      */
     protected bool $insertRecord;
@@ -140,6 +146,7 @@ class Entity
     {
         $this->newRecord = true;
         $this->insertRecord = true;
+        $this->insertedRecord = false;
         $this->columnsValueChanged = false;
         $this->saveChangesWithoutRights = false;
 
@@ -683,6 +690,18 @@ class Entity
     }
 
     /**
+     * If a save() of this object has inserted the record into the database, then this method will
+     * return true. In contrast to isNewRecord() the answer does not change when the same object is
+     * saved again afterwards, so it can be used after save() to tell a created record from a changed
+     * one, e.g. to choose between a "created" and a "changed" notification.
+     * @return bool Returns **true** if this object has created the record it represents
+     */
+    public function wasInserted(): bool
+    {
+        return $this->insertedRecord;
+    }
+
+    /**
      * Reads a record out of the table in the database selected by the conditions of the param **$sqlWhereCondition** out of the table.
      * If the SQL finds more than one record, the method returns **false**.
      * Per default, all columns of the default table will be read and stored in the object.
@@ -722,6 +741,7 @@ class Entity
                 $row = $readDataStatement->fetch();
                 $this->newRecord = false;
                 $this->insertRecord = false;
+                $this->insertedRecord = false;
 
                 // move data to class column value array
                 foreach ($row as $key => $value) {
@@ -970,7 +990,11 @@ class Entity
                 // about transactions in the description of this method.
                 $this->logCreation();
                 $this->logModifications($logChanges);
+                // the flags are set after the log was written, because the log methods of some
+                // classes decide by the new-record state what they have to write
+                $this->newRecord = false;
                 $this->insertRecord = false;
+                $this->insertedRecord = true;
             }
         } else {
             $sql = 'UPDATE ' . $this->tableName . '
@@ -1043,6 +1067,7 @@ class Entity
         } else {
             $this->newRecord = false;
             $this->insertRecord = false;
+            $this->insertedRecord = false;
         }
     }
 
@@ -1101,6 +1126,7 @@ class Entity
     {
         $this->newRecord = true;
         $this->insertRecord = true;
+        $this->insertedRecord = false;
 
         if (array_key_exists($this->columnPrefix . '_id', $this->dbColumns)) {
             $this->setValue($this->columnPrefix . '_id', 0);
