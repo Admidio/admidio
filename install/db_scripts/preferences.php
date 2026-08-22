@@ -150,7 +150,7 @@ $defaultOrgPreferences = array(
     'category_report_default_configuration' => '',
 
     // Contacts
-    'contacts_list_configuration' => '',
+    'contacts_list_configuration' => '0',
     'contacts_per_page' => '25',
     'contacts_show_all' => '1',
     'contacts_suborganization_use_same_members' => '0',
@@ -184,7 +184,7 @@ $defaultOrgPreferences = array(
     'inventory_add_date' => '0',
 
     // Events
-    'events_list_configuration' => '',
+    'events_list_configuration' => '0',
     'events_ical_export_enabled' => '1',
     'events_may_take_part' => '0',
     'events_module_enabled' => '1',
@@ -202,7 +202,7 @@ $defaultOrgPreferences = array(
     'forum_view' => 'cards',
 
     // Groups and roles
-    'groups_roles_default_configuration' => '',
+    'groups_roles_default_configuration' => '0',
     'groups_roles_module_enabled' => '1',
     'groups_roles_export' => '1',
     'groups_roles_edit_lists' => '1',
