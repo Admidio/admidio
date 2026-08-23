@@ -165,12 +165,6 @@ define('DB_NAME', $dbConfig['database']);
 
 define('COOKIE_PREFIX', preg_replace('/\W/', '_', 'ADMIDIO_' . TABLE_PREFIX));
 
-// Session entity calls session_regenerate_id(), which requires an active PHP session.
-// The CLI SAPI starts none on its own.
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-
 // request variables that Admidio reads unconditionally but the CLI SAPI does not provide
 $_SERVER['REMOTE_ADDR'] = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
 $_SERVER['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'] ?? 'Admidio Test Suite';
