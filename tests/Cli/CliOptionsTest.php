@@ -10,10 +10,10 @@
 namespace Admidio\Tests\Cli;
 
 use Admidio\Infrastructure\Cli\CliApplication;
-use Admidio\Tests\Support\DatabaseTestCase;
+use Admidio\Tests\Support\AdmidioTestCase;
 use InvalidArgumentException;
 
-class CliOptionsTest extends DatabaseTestCase
+class CliOptionsTest extends AdmidioTestCase
 {
     /**
      * A parsed command line, the way CliApplication hands it to a task.

@@ -21,28 +21,6 @@ class ConfigurationBootstrapTest extends DatabaseTestCase
     }
 
     /**
-     * Test configuration constants are loaded
-     *
-     * @testdox Configuration file constants are properly defined
-     */
-    public function testConfigurationFilesLoaded(): void
-    {
-        // Verify critical Admidio constants are defined
-        $this->assertTrue(defined('ADMIDIO_URL'));
-        $this->assertNotEmpty(ADMIDIO_URL);
-
-        $this->assertTrue(defined('FOLDER_MODULES'));
-        $this->assertNotEmpty(FOLDER_MODULES);
-
-        $this->assertTrue(defined('COOKIE_PREFIX'));
-        $this->assertNotEmpty(COOKIE_PREFIX);
-
-        // Verify database configuration
-        $this->assertTrue(defined('DB_TYPE'));
-        $this->assertNotEmpty(DB_TYPE);
-    }
-
-    /**
      * Test session object can be created
      *
      * @testdox Session object can be instantiated and stored in database
@@ -90,7 +68,7 @@ class ConfigurationBootstrapTest extends DatabaseTestCase
     /**
      * Test organization can be bootstrapped
      *
-     * @testdox Organization object can be created and preferences loaded
+     * @testdox Organization entity can be saved and loaded from the database
      */
     public function testOrganizationBootstrapping(): void
     {
@@ -128,15 +106,14 @@ class ConfigurationBootstrapTest extends DatabaseTestCase
 
         $this->assertNotNull($settingsManager);
 
-        // Verify we can access preferences (even if empty)
-        // system_language is a default preference
-        try {
-            $language = $settingsManager->getString('system_language');
-            $this->assertNotEmpty($language);
-        } catch (\Exception $e) {
-            // Might not be in preferences table yet, that's OK
-            $this->assertTrue(true);
-        }
+        // Exercise SettingsManager persistence instead of allowing a missing preference to pass.
+        $settingsManager->set('bootstrap_test_setting', 'persisted');
+        $reloadedOrganization = new Organization($db, $orgData['org_id']);
+
+        $this->assertSame(
+            'persisted',
+            $reloadedOrganization->getSettingsManager()->getString('bootstrap_test_setting')
+        );
     }
 
     /**
@@ -146,12 +123,10 @@ class ConfigurationBootstrapTest extends DatabaseTestCase
      */
     public function testLanguageObjectInitialization(): void
     {
-        // Test English language
-        $language = new Language('en', true);
-        $this->assertNotNull($language);
+        $language = new Language('en', false);
 
-        // Language object should be created (file might not have all strings in test)
-        $this->assertNotNull($language);
+        // This proves that the production language loader actually parsed the shipped language file.
+        $this->assertSame('Save', $language->get('SYS_SAVE'));
     }
 
     /**
@@ -192,9 +167,8 @@ class ConfigurationBootstrapTest extends DatabaseTestCase
                  WHERE com_type = ? AND com_name_intern = ?';
         $result = $db->queryPrepared($sql, ['SYSTEM', 'CORE']);
 
-        // Component should exist (created during installation)
-        // If not found in test DB, that's OK - just verify query works
-        $this->assertNotNull($result);
+        // The installation contract requires this row. A successful query with zero rows is not enough.
+        $this->assertGreaterThan(0, (int)$result->fetchColumn());
     }
 
     /**
@@ -216,6 +190,6 @@ class ConfigurationBootstrapTest extends DatabaseTestCase
 
         $this->assertIsArray($row);
         $this->assertArrayHasKey('count', $row);
-        $this->assertIsInt($row['count'] ?? 0);
+        $this->assertGreaterThan(0, (int)$row['count']);
     }
 }

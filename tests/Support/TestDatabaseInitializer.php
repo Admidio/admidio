@@ -53,25 +53,9 @@ class TestDatabaseInitializer
         $GLOBALS['gCurrentUserId'] = $gCurrentUserId;
         $GLOBALS['gCurrentSession'] = $gCurrentSession;
 
-        // Check if database is already initialized
-        if (self::isAlreadyInitialized($database, $config)) {
-            echo "  ℹ Database already initialized, skipping installation\n";
-            // Get the admin user and organization
-            $adminQuery = $database->queryPrepared(
-                'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login = ?',
-                ['admin']
-            );
-            $adminUser = $adminQuery->fetch();
-
-            $orgQuery = $database->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS . ' LIMIT 1');
-            $org = $orgQuery->fetch();
-
-            return [
-                'organizationId' => (int) ($org['org_id'] ?? 1),
-                'administratorId' => (int) ($adminUser['usr_id'] ?? 1),
-            ];
-        }
-
+        // Every PHPUnit process starts from a schema produced by the current production installer.
+        // Reusing a database merely because it already has many tables can hide installer/schema
+        // regressions and makes tests depend on whatever a previous run left behind.
         echo "  Installing Admidio production setup...\n";
 
         // Drop all existing tables to start fresh
@@ -117,24 +101,6 @@ class TestDatabaseInitializer
     }
 
     /**
-     * Check if database is already initialized
-     */
-    private static function isAlreadyInitialized(Database $database, array $config): bool
-    {
-        try {
-            $result = $database->queryPrepared(
-                'SELECT COUNT(*) AS cnt FROM information_schema.tables WHERE table_schema = ?',
-                [self::schemaName($config)]
-            );
-            $row = $result->fetch();
-            $tableCount = (int) ($row['cnt'] ?? 0);
-            return $tableCount > 50; // Admidio has ~50+ tables
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
      * Name of the schema the Admidio tables live in
      *
      * MySQL and MariaDB report the database itself as the schema, PostgreSQL the schema inside it.
@@ -171,6 +137,11 @@ class TestDatabaseInitializer
 
             $count = 0;
             foreach ($tables as $tableName) {
+                // Never delete unrelated tables just because they share a dedicated test database.
+                if (!str_starts_with((string)$tableName, TABLE_PREFIX . '_')) {
+                    continue;
+                }
+
                 // PostgreSQL does not know backticks and needs the dependent constraints dropped too
                 $sql = $postgres
                     ? 'DROP TABLE IF EXISTS "' . $tableName . '" CASCADE'

@@ -4,19 +4,9 @@
  * Loads environment variables and initializes test framework
  */
 
-require_once __DIR__ . '/env.php';
-
-// .env.test or the process environment configures which database the run uses
-admidioTestLoadEnvironment();
-
-// Load Admidio autoloader
+// Unit tests must stay independent of the database and filesystem. DatabaseTestCase loads
+// tests/bootstrap-admidio.php lazily when the first integration/CLI test actually needs it.
 require dirname(__DIR__) . '/vendor/autoload.php';
-
-// Ensure test markers exist (safety against destructive tests)
-TestEnvironment::validateTestEnvironment();
-
-// Load Admidio bootstrap for integration tests (initializes $gDb, $gLogger, etc.)
-require __DIR__ . '/bootstrap-admidio.php';
 
 /**
  * Test environment validation
@@ -30,11 +20,12 @@ class TestEnvironment
         $dbNameEnv = 'TEST_DB_' . strtoupper($dbEngine) . '_NAME';
         $dbName = getenv($dbNameEnv);
 
-        if (!$dbName || stripos($dbName, 'test') === false) {
+        if (!$dbName || !preg_match('/(?:^|[_-])test(?:[_-]|$)/i', $dbName)) {
             throw new RuntimeException(
-                "Safety check failed: Database name '$dbName' does not contain 'test'.\n"
-                . "Refusing to run destructive tests on non-test database.\n"
-                . "Configure TEST_DB_*_NAME to include 'test' in the name."
+                "Safety check failed: Database name '$dbName' does not contain 'test' as a separate token.\n"
+                . "Refusing to run destructive tests on a database whose name could merely contain "
+                . "the letters 'test'.\n"
+                . "Use a dedicated name such as 'admidio_test'."
             );
         }
 

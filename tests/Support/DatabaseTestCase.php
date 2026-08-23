@@ -20,8 +20,15 @@ abstract class DatabaseTestCase extends AdmidioTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        // Database is initialized by bootstrap-admidio.php
-        // which is loaded by tests/bootstrap.php during PHPUnit initialization
+        // Keep the global PHPUnit bootstrap DB-free. Only database-backed tests load the Admidio
+        // integration bootstrap, so `composer test:unit` remains a true unit-test boundary.
+        if (!defined('ADMIDIO_TEST_BOOTSTRAP_LOADED')) {
+            require_once dirname(__DIR__) . '/env.php';
+            admidioTestLoadEnvironment();
+            \TestEnvironment::validateTestEnvironment();
+            require dirname(__DIR__) . '/bootstrap-admidio.php';
+        }
+
         if (isset($GLOBALS['gDb']) && $GLOBALS['gDb'] instanceof Database) {
             self::$gDb = $GLOBALS['gDb'];
         } else {

@@ -7,10 +7,10 @@
  * point otherwise reads adm_my_files/config.php, which on a developer machine describes a real
  * installation.
  *
- * The process opens its own connection, so it sees the state the installation committed and nothing
- * a test wrote inside its transaction. It also uses the adm_my_files of the checkout for its files,
- * not the directory of the test run. Both together mean: read from the installed data, write
- * nothing.
+ * The process opens its own connection, so it sees committed installation data and nothing a test
+ * wrote inside its transaction. Database-only E2E workflows may deliberately write through the
+ * subprocess when they clean up after themselves. File-writing commands are intentionally excluded,
+ * because the real CLI bootstrap uses the checkout's adm_my_files rather than the test data folder.
  */
 
 namespace Admidio\Tests\Support;

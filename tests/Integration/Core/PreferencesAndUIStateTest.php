@@ -36,8 +36,11 @@ class PreferencesAndUIStateTest extends DatabaseTestCase
         $orgEntity = new Organization($db, $org['org_id']);
         $settingsManager = $orgEntity->getSettingsManager();
 
-        // Settings manager should exist
-        $this->assertNotNull($settingsManager);
+        $settingsManager->set('loadable_preference', 'loaded');
+
+        // A fresh Organization must load the value from the database, not from the first manager's cache.
+        $reloaded = new Organization($db, $org['org_id']);
+        $this->assertSame('loaded', $reloaded->getSettingsManager()->getString('loadable_preference'));
     }
 
     /**
@@ -181,10 +184,9 @@ class PreferencesAndUIStateTest extends DatabaseTestCase
                  WHERE prf_org_id = ? AND prf_name = ?';
         $result = $db->queryPrepared($sql, [$org['org_id'], 'system_language']);
 
-        if ($result->rowCount() > 0) {
-            $row = $result->fetch();
-            $this->assertEquals('de', $row['prf_value']);
-        }
+        $this->assertSame(1, $result->rowCount());
+        $row = $result->fetch();
+        $this->assertEquals('de', $row['prf_value']);
     }
 
     /**
@@ -248,10 +250,11 @@ class PreferencesAndUIStateTest extends DatabaseTestCase
         $result2 = $db->queryPrepared($sql, [$org2['org_id'], 'shared_pref']);
         $row2 = $result2->fetch();
 
-        // Both should exist with different values
-        if ($result1->rowCount() > 0 && $result2->rowCount() > 0) {
-            $this->assertNotEquals($row1['prf_value'], $row2['prf_value']);
-        }
+        // Both writes must exist and each organization must retain its own value.
+        $this->assertSame(1, $result1->rowCount());
+        $this->assertSame(1, $result2->rowCount());
+        $this->assertSame('org1_value', $row1['prf_value']);
+        $this->assertSame('org2_value', $row2['prf_value']);
     }
 
     /**
@@ -268,8 +271,7 @@ class PreferencesAndUIStateTest extends DatabaseTestCase
         $result = $db->queryPrepared($sql, []);
 
         $this->assertNotNull($result);
-        // Components might exist from installation
-        $this->assertGreaterThanOrEqual(0, $result->rowCount());
+        $this->assertGreaterThan(0, $result->rowCount());
     }
 
     /**
@@ -286,8 +288,7 @@ class PreferencesAndUIStateTest extends DatabaseTestCase
                  WHERE com_type = ? AND com_name_intern = ?';
         $result = $db->queryPrepared($sql, ['SYSTEM', 'CORE']);
 
-        // Might exist or not depending on installation state
-        $this->assertNotNull($result);
+        $this->assertGreaterThan(0, (int)$result->fetchColumn());
     }
 
     /**
@@ -315,9 +316,9 @@ class PreferencesAndUIStateTest extends DatabaseTestCase
                  WHERE prf_org_id = ? AND prf_name = ?';
         $result = $db->queryPrepared($sql, [$org['org_id'], 'array_pref']);
 
-        if ($result->rowCount() > 0) {
-            $row = $result->fetch();
-            $this->assertStringContainsString(',', $row['prf_value']);
-        }
+        $this->assertSame(1, $result->rowCount());
+        $row = $result->fetch();
+        $this->assertSame('value1,value2,value3', $row['prf_value']);
+        $this->assertSame('value1,value2,value3', $settingsManager->getString('array_pref', true));
     }
 }
