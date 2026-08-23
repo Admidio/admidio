@@ -13,6 +13,7 @@
 namespace Admidio\Tests\Integration\Messages;
 
 use Admidio\Messages\Entity\Message;
+use Admidio\Messages\Service\MessageService;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
@@ -44,6 +45,12 @@ class MessageTest extends DatabaseTestCase
         $sender = $fixture->createAndSaveUser($prefix . 'sender', $prefix . 's@example.local');
         $receiver = $fixture->createAndSaveUser($prefix . 'receiver', $prefix . 'r@example.local');
 
+        // MessageService only sends private messages to members of the current organization.
+        // Use a real role membership so the service has to enforce the same rule as production.
+        $members = $fixture->createAndSaveRole('Message ' . $prefix, self::ORG_ID);
+        $fixture->assignUserToRole($sender['usr_id'], $members['rol_id']);
+        $fixture->assignUserToRole($receiver['usr_id'], $members['rol_id']);
+
         return array(
             $this->loadUserInOrganization($sender['usr_id'], self::ORG_ID),
             $this->loadUserInOrganization($receiver['usr_id'], self::ORG_ID)
@@ -51,26 +58,20 @@ class MessageTest extends DatabaseTestCase
     }
 
     /**
-     * Send a private message and return its id.
-     *
-     * MessageService marks a new private message unread and stamps it with the current time. That
-     * is also what makes the message row dirty, which Message::save() requires before it stores
-     * the content and the recipients.
+     * Send a private message through the same MessageService used by the messages module.
      */
-    private function sendPrivateMessage(User $sender, int $receiverId, string $subject, string $body): int
+    private function sendPrivateMessage(User $sender, User $receiver, string $subject, string $body): int
     {
-        return $this->withCurrentUser($sender, self::ORG_ID, true, function () use ($receiverId, $subject, $body) {
-            $message = new Message($this->getDatabase());
-            $message->setValue('msg_type', Message::MESSAGE_TYPE_PM);
-            $message->setValue('msg_subject', $subject);
-            $message->setValue('msg_usr_id_sender', $GLOBALS['gCurrentUserId']);
-            $message->addUser($receiverId);
-            $message->addContent($body);
-            $message->setValue('msg_read', 1);
-            $message->setValue('msg_timestamp', DATETIME_NOW);
-            $message->save();
+        return $this->withCurrentUser($sender, self::ORG_ID, true, function () use ($receiver, $subject, $body) {
+            $service = new MessageService($this->getDatabase());
+            $message = $service->sendData(
+                Message::MESSAGE_TYPE_PM,
+                $subject,
+                $body,
+                array((string)$receiver->getValue('usr_uuid'))
+            );
 
-            return (int) $message->getValue('msg_id');
+            return (int)$message->getValue('msg_id');
         });
     }
 
@@ -111,7 +112,7 @@ class MessageTest extends DatabaseTestCase
     {
         list($sender, $receiver) = $this->twoUsers('pm1');
 
-        $msgId = $this->sendPrivateMessage($sender, (int) $receiver->getValue('usr_id'), 'Lunch?', 'Are you coming?');
+        $msgId = $this->sendPrivateMessage($sender, $receiver, 'Lunch?', 'Are you coming?');
 
         $sql = 'SELECT msg_type, msg_subject, msg_usr_id_sender, msg_uuid, msg_timestamp
                   FROM ' . TBL_MESSAGES . ' WHERE msg_id = ?';
@@ -135,7 +136,7 @@ class MessageTest extends DatabaseTestCase
     {
         list($sender, $receiver) = $this->twoUsers('pm2');
 
-        $msgId = $this->sendPrivateMessage($sender, (int) $receiver->getValue('usr_id'), 'Subject', 'The body');
+        $msgId = $this->sendPrivateMessage($sender, $receiver, 'Subject', 'The body');
 
         $sql = 'SELECT msc_msg_id, msc_usr_id, msc_message FROM ' . TBL_MESSAGES_CONTENT . ' WHERE msc_msg_id = ?';
         $rows = $this->getDatabase()->queryPrepared($sql, [$msgId])->fetchAll();
@@ -160,7 +161,7 @@ class MessageTest extends DatabaseTestCase
         list($sender, $receiver) = $this->twoUsers('pm3');
         $receiverId = (int) $receiver->getValue('usr_id');
 
-        $msgId = $this->sendPrivateMessage($sender, $receiverId, 'Subject', 'Body');
+        $msgId = $this->sendPrivateMessage($sender, $receiver, 'Subject', 'Body');
 
         $sql = 'SELECT msr_usr_id, msr_rol_id, msr_role_mode FROM ' . TBL_MESSAGES_RECIPIENTS . ' WHERE msr_msg_id = ?';
         $rows = $this->getDatabase()->queryPrepared($sql, [$msgId])->fetchAll();
@@ -241,7 +242,7 @@ class MessageTest extends DatabaseTestCase
         list($sender, $receiver) = $this->twoUsers('pm5');
         $receiverId = (int) $receiver->getValue('usr_id');
 
-        $msgId = $this->sendPrivateMessage($sender, $receiverId, 'Subject', 'Body');
+        $msgId = $this->sendPrivateMessage($sender, $receiver, 'Subject', 'Body');
 
         // seen from either side the partner is the recipient stored with the message
         $this->assertEquals($receiverId, $this->askAs($sender, $msgId, fn (Message $m) => $m->getConversationPartner()));
@@ -272,7 +273,7 @@ class MessageTest extends DatabaseTestCase
     public function testReplyAddsASecondPartToTheConversation(): void
     {
         list($sender, $receiver) = $this->twoUsers('pm6');
-        $msgId = $this->sendPrivateMessage($sender, (int) $receiver->getValue('usr_id'), 'Subject', 'First');
+        $msgId = $this->sendPrivateMessage($sender, $receiver, 'Subject', 'First');
 
         $this->withCurrentUser($receiver, self::ORG_ID, true, function () use ($msgId) {
             $message = new Message($this->getDatabase(), $msgId);
@@ -304,7 +305,7 @@ class MessageTest extends DatabaseTestCase
     public function testDeletingAPrivateMessageMarksItBeforeRemovingIt(): void
     {
         list($sender, $receiver) = $this->twoUsers('pm7');
-        $msgId = $this->sendPrivateMessage($sender, (int) $receiver->getValue('usr_id'), 'Subject', 'Body');
+        $msgId = $this->sendPrivateMessage($sender, $receiver, 'Subject', 'Body');
 
         // the first party deletes it: the message is only flagged, so the other party still has it
         $this->askAs($sender, $msgId, fn (Message $m) => $m->delete());
@@ -349,7 +350,7 @@ class MessageTest extends DatabaseTestCase
     public function testPrivateMessageIsUnreadOnlyForTheReceiver(): void
     {
         list($sender, $receiver) = $this->twoUsers('pm8');
-        $msgId = $this->sendPrivateMessage($sender, (int) $receiver->getValue('usr_id'), 'Subject', 'Body');
+        $msgId = $this->sendPrivateMessage($sender, $receiver, 'Subject', 'Body');
 
         $this->assertTrue($this->askAs($receiver, $msgId, fn (Message $m) => $m->isUnread()));
         $this->assertFalse($this->askAs($sender, $msgId, fn (Message $m) => $m->isUnread()));
@@ -370,8 +371,8 @@ class MessageTest extends DatabaseTestCase
         $receiverId = (int) $receiver->getValue('usr_id');
         $senderId = (int) $sender->getValue('usr_id');
 
-        $this->sendPrivateMessage($sender, $receiverId, 'One', 'Body');
-        $this->sendPrivateMessage($sender, $receiverId, 'Two', 'Body');
+        $this->sendPrivateMessage($sender, $receiver, 'One', 'Body');
+        $this->sendPrivateMessage($sender, $receiver, 'Two', 'Body');
 
         $counts = $this->withCurrentUser($receiver, self::ORG_ID, true, function () use ($receiverId, $senderId) {
             $message = new Message($this->getDatabase());

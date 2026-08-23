@@ -11,9 +11,9 @@ namespace Admidio\Tests\Cli;
 
 use Admidio\Infrastructure\Cli\CliTaskRegistry;
 use Admidio\Infrastructure\Cli\CoreTasks;
-use Admidio\Tests\Support\DatabaseTestCase;
+use Admidio\Tests\Support\AdmidioTestCase;
 
-class CliTaskRegistryTest extends DatabaseTestCase
+class CliTaskRegistryTest extends AdmidioTestCase
 {
     protected function setUp(): void
     {
@@ -39,7 +39,7 @@ class CliTaskRegistryTest extends DatabaseTestCase
         // one command from each corner of the application. The event and the room commands were
         // taken out of the core command line and are not registered by CoreTasks::register() until
         // the events module supplies them again, so they are not part of this list.
-        foreach (array('user:show', 'group:list', 'category:list', 'announcement:list', 'maintenance:mode', 'cli:selfcheck') as $expected) {
+        foreach (array('user:show', 'group:list', 'category:list', 'message:list', 'maintenance:mode', 'cli:selfcheck') as $expected) {
             $this->assertArrayHasKey($expected, $tasks, $expected . ' should be a registered command.');
         }
     }
@@ -104,6 +104,52 @@ class CliTaskRegistryTest extends DatabaseTestCase
                 $name,
                 'The command "' . $name . '" does not follow the area:action naming.'
             );
+        }
+    }
+
+     /**
+     * Test the metadata contract of every registered command
+     *
+     * @testdox Every registered command has complete and unambiguous help metadata
+     */
+    public function testEveryRegisteredCommandHasCompleteContractMetadata(): void
+    {
+        foreach (CliTaskRegistry::getAll() as $name => $task) {
+            $this->assertSame($name, $task['name'], 'Registry key and command name differ.');
+            $this->assertNotSame('', trim($task['description']), $name . ' has no description.');
+            $this->assertNotSame('', trim($task['usage']), $name . ' has no usage.');
+            $this->assertIsCallable($task['callback'], $name . ' has no callable callback.');
+
+            foreach (array('arguments', 'options') as $kind) {
+                $names = array();
+
+                foreach ($task[$kind] as $definition) {
+                    $this->assertArrayHasKey('name', $definition, $name . ' has an unnamed ' . $kind . ' entry.');
+                    $this->assertArrayHasKey(
+                        'description',
+                        $definition,
+                        $name . ' has an undocumented ' . $kind . ' entry.'
+                    );
+                    $this->assertNotSame(
+                        '',
+                        trim((string)$definition['name']),
+                        $name . ' has an empty ' . $kind . ' name.'
+                    );
+                    $this->assertNotSame(
+                        '',
+                        trim((string)$definition['description']),
+                        $name . ' has an undocumented ' . $definition['name'] . ' ' . $kind . ' entry.'
+                    );
+
+                    $names[] = (string)$definition['name'];
+                }
+
+                $this->assertSame(
+                    count($names),
+                    count(array_unique($names)),
+                    $name . ' contains duplicate ' . $kind . ' names.'
+                );
+            }
         }
     }
 
