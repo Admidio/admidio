@@ -71,7 +71,7 @@ class MenuEntry extends Entity
 
         $sql = 'SELECT men_id
                   FROM '.TBL_MENU.'
-                 WHERE men_name_intern = ? -- $newNameIntern';
+                 WHERE UPPER(men_name_intern) = UPPER(?) -- $newNameIntern';
         $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
         if ($userFieldsStatement->rowCount() > 0) {

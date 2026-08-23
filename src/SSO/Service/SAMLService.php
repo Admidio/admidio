@@ -653,7 +653,7 @@ class SAMLService extends SSOService {
                 // if login organization is different to organization of config file then create new session variables
                 if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0 && $g_organization !== '') {
                     // read organization of config file with their preferences
-                    $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
+                    $gCurrentOrganization->readDataByShortname($g_organization);
 
                     // read new profile field structure for this organization
                     $gProfileFields->readProfileFields($gCurrentOrgId);

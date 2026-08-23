@@ -679,9 +679,11 @@ try {
                     if ($_POST['usr_login_name'] !== $user['user']->getValue('usr_login_name')) {
                         if (strlen($_POST['usr_login_name']) > 0) {
                             // check if the username is already assigned
+                            // the login folds the case, so this check has to do the same or a second
+                            // account that differs only in case slips through on PostgreSQL
                             $sql = 'SELECT usr_uuid
                             FROM ' . TBL_USERS . '
-                            WHERE usr_login_name = ?';
+                            WHERE UPPER(usr_login_name) = UPPER(?)';
                             $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
 
                             if ($pdoStatement->rowCount() > 0 && $pdoStatement->fetchColumn() !== $user['uuid']) {

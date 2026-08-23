@@ -97,11 +97,11 @@ class UserImport extends User
             INNER JOIN '.TBL_USER_DATA.' AS last_name
                     ON last_name.usd_usr_id = usr_id
                    AND last_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'LAST_NAME\', \'usf_id\')
-                   AND last_name.usd_value  = ? -- $user->getValue(\'LAST_NAME\', \'database\')
+                   AND UPPER(last_name.usd_value) = UPPER(?) -- $user->getValue(\'LAST_NAME\', \'database\')
             INNER JOIN '.TBL_USER_DATA.' AS first_name
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
-                   AND first_name.usd_value  = ? -- $user->getValue(\'FIRST_NAME\', \'database\')
+                   AND UPPER(first_name.usd_value) = UPPER(?) -- $user->getValue(\'FIRST_NAME\', \'database\')
                  WHERE usr_valid = true';
         $queryParams = array(
             $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),

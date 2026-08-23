@@ -165,7 +165,7 @@ class ProfileField extends Entity
 
         $sql = 'SELECT usf_id
                   FROM ' . TBL_USER_FIELDS . '
-                 WHERE usf_name_intern = ? -- $newNameIntern';
+                 WHERE UPPER(usf_name_intern) = UPPER(?) -- $newNameIntern';
         $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
         if ($userFieldsStatement->rowCount() > 0) {

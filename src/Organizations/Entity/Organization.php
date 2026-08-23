@@ -75,13 +75,38 @@ class Organization extends Entity
         if (is_numeric($organization)) {
             $this->readDataById($organization);
         } else {
-            $this->readDataByColumns(array('org_shortname' => $organization));
+            $this->readDataByShortname($organization);
         }
 
         if ((int)$this->getValue('org_id') > 0) {
             $this->settingsManager = new SettingsManager($database, (int)$this->getValue('org_id'));
             $this->settingsManager->resetAll();
         }
+    }
+
+    /**
+     * Read the organization that carries the given short name.
+     *
+     * The short name identifies the organization in the configuration file, in the login and in the
+     * URL, so the comparison must not depend on the case. MySQL folds it through the collation of
+     * the column, PostgreSQL does not, therefore the statement says so itself.
+     * @param string $shortname The short name of the organization
+     * @return bool Returns **true** if an organization with that short name was found
+     * @throws Exception
+     */
+    public function readDataByShortname(string $shortname): bool
+    {
+        // initialize the object, so that all fields are empty
+        $this->clear();
+
+        $returnCode = $this->readData(' UPPER(org_shortname) = UPPER(?) ', array($shortname));
+
+        // as readDataByColumns() does, keep the name that was searched for when nothing was found
+        if (!$returnCode) {
+            $this->setValue('org_shortname', $shortname);
+        }
+
+        return $returnCode;
     }
 
     /**

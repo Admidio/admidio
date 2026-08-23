@@ -174,7 +174,7 @@ try {
                 INNER JOIN ' . TBL_USER_DATA . ' AS email
                         ON email.usd_usr_id = usr_id
                        AND email.usd_usf_id = ? -- $gProfileFields->getProperty(\'EMAIL\', \'usf_id\')
-                       AND email.usd_value  = ? -- $formValues[\'recipient_email\']
+                       AND UPPER(email.usd_value) = UPPER(?) -- $formValues[\'recipient_email\']
                      WHERE LENGTH(usr_login_name) > 0
                        AND rol_valid  = true
                        AND usr_valid  = true
@@ -197,7 +197,7 @@ try {
                         ON cat_id = rol_cat_id
                 INNER JOIN ' . TBL_USERS . '
                         ON usr_id = mem_usr_id
-                     WHERE usr_login_name = ? -- $formValues[\'recipient_email\']
+                     WHERE UPPER(usr_login_name) = UPPER(?) -- $formValues[\'recipient_email\']
                        AND rol_valid  = true
                        AND usr_valid  = true
                        AND mem_begin <= ? -- DATE_NOW

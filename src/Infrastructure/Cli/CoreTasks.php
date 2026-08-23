@@ -4731,7 +4731,7 @@ final class CoreTasks
         $where = '';
         $params = array();
         if (array_key_exists('type', $options)) {
-            $where = ' WHERE ror.ror_name_intern = ?';
+            $where = ' WHERE UPPER(ror.ror_name_intern) = UPPER(?)';
             $params[] = CliApplication::optionString($options, 'type');
         }
         $rows = $gDb->queryPrepared(
@@ -8534,7 +8534,7 @@ final class CoreTasks
             $id = (int)$gDb->queryPrepared(
                 'SELECT org_id
                    FROM ' . TBL_ORGANIZATIONS . '
-                  WHERE org_uuid = ? OR org_shortname = ?',
+                  WHERE org_uuid = ? OR UPPER(org_shortname) = UPPER(?)',
                 array($reference, $reference)
             )->fetchColumn();
             if ($id === 0) {
@@ -8578,7 +8578,7 @@ final class CoreTasks
             $rows = $gDb->queryPrepared(
                 'SELECT urt_id
                    FROM ' . TBL_USER_RELATION_TYPES . '
-                  WHERE urt_uuid = ? OR urt_name = ?',
+                  WHERE urt_uuid = ? OR UPPER(urt_name) = UPPER(?)',
                 $params
             )->fetchAll(PDO::FETCH_COLUMN);
             $ids = array_values(array_unique(array_map('intval', $rows)));
@@ -8700,7 +8700,7 @@ final class CoreTasks
                 'SELECT rol_id
                    FROM ' . TBL_ROLES . '
              INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
-                  WHERE (rol_uuid = ? OR rol_name = ?)
+                  WHERE (rol_uuid = ? OR UPPER(rol_name) = UPPER(?))
                     AND (cat_org_id = ? OR cat_org_id IS NULL)',
                 array($reference, $reference, $gCurrentOrgId)
             )->fetchAll(PDO::FETCH_COLUMN);

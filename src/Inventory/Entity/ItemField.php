@@ -124,7 +124,7 @@ class ItemField extends Entity
         $sql = 'SELECT inf_id
                   FROM ' . TBL_INVENTORY_FIELDS . '
                  WHERE inf_org_id = ? -- $this->getValue(\'inf_org_id\')
-                   AND inf_name_intern = ? -- $newNameIntern';
+                   AND UPPER(inf_name_intern) = UPPER(?) -- $newNameIntern';
         $userFieldsStatement = $this->db->queryPrepared(
             $sql,
             array((int) $this->getValue('inf_org_id'), $newNameIntern)

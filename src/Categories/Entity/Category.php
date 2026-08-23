@@ -152,7 +152,7 @@ class Category extends Entity
 
         $sql = 'SELECT cat_id
                   FROM '.TBL_CATEGORIES.'
-                 WHERE cat_name_intern = ? -- $newNameIntern';
+                 WHERE UPPER(cat_name_intern) = UPPER(?) -- $newNameIntern';
         $categoriesStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
         if ($categoriesStatement->rowCount() > 0) {
