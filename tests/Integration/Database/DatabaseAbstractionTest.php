@@ -178,8 +178,9 @@ class DatabaseAbstractionTest extends DatabaseTestCase
         $this->assertEquals(1, (int) $db->queryPrepared($sql, [$org['org_id'], 'Mixed Case Name'])->fetchColumn());
 
         // MySQL compares under utf8mb4_unicode_ci and finds the row whatever the case, PostgreSQL
-        // compares byte by byte and does not. Uniqueness therefore means something different on
-        // the two engines, for login names and organization short names as well (finding 28).
+        // compares byte by byte and does not, so a plain = means something different on the two
+        // engines. Admidio therefore folds the case itself wherever a name identifies a record,
+        // see CaseInsensitiveLookupTest; this test pins what the engines do on their own.
         $expected = $db->getEngine() === Database::PDO_ENGINE_PGSQL ? 0 : 1;
 
         $this->assertEquals($expected, (int) $db->queryPrepared($sql, [$org['org_id'], 'mixed case name'])->fetchColumn());

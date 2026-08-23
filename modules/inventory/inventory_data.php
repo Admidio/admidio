@@ -177,13 +177,10 @@ try {
                     $infId = (int)$itemFields[$colUpper]->getValue('inf_id');
                     $infType = $itemFields[$colUpper]->getValue('inf_type');
                 } else {
-                    // fallback to DB lookup if not present in $itemFields (robustness)
-                    $stmtF = $gDb->queryPrepared('SELECT inf_id, inf_type FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_name_intern = ? AND (inf_org_id = ? OR inf_org_id IS NULL) LIMIT 1', array($colName, $gCurrentOrgId));
+                    // fallback to DB lookup if not present in $itemFields (robustness). The lookup
+                    // ignores the case, so the upper case variant needs no second query.
+                    $stmtF = $gDb->queryPrepared('SELECT inf_id, inf_type FROM ' . TBL_INVENTORY_FIELDS . ' WHERE UPPER(inf_name_intern) = UPPER(?) AND (inf_org_id = ? OR inf_org_id IS NULL) LIMIT 1', array($colName, $gCurrentOrgId));
                     $rowF = $stmtF->fetch();
-                    if (!$rowF) {
-                        $stmtF = $gDb->queryPrepared('SELECT inf_id, inf_type FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_name_intern = ? AND (inf_org_id = ? OR inf_org_id IS NULL) LIMIT 1', array($colUpper, $gCurrentOrgId));
-                        $rowF = $stmtF->fetch();
-                    }
                     if ($rowF) {
                         $infId = (int)$rowF['inf_id'];
                         $infType = $rowF['inf_type'];
