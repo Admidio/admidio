@@ -38,6 +38,10 @@ class StringUtilsTest extends AdmidioTestCase
     {
         $this->assertTrue(StringUtils::strEndsWith('README.PHP', '.php', false));
         $this->assertFalse(StringUtils::strEndsWith('README.PHP', '.xml', false));
+        // the whole ending has to be compared, not just its first character
+        $this->assertFalse(StringUtils::strEndsWith('README.PHP', '.pdf', false));
+        // an ending longer than the string must not read before the start of the string
+        $this->assertFalse(StringUtils::strEndsWith('.php', 'README.php', false));
     }
 
     /**

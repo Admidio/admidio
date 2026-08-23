@@ -86,7 +86,8 @@ final class StringUtils
             return str_ends_with($string, $end);
         }
 
-        return $end === '' || ($string !== '' && substr_compare($string, $end, -strlen($end), true) === 0);
+        return $end === '' || (strlen($end) <= strlen($string)
+            && substr_compare($string, $end, -strlen($end), strlen($end), true) === 0);
     }
 
     /**
