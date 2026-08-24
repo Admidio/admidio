@@ -1455,13 +1455,15 @@ class SAMLService extends SSOService {
             throw new Exception('The SAML logout target has no external session identifier.');
         }
 
-        $oidcService = new OIDCService($gDb, $gCurrentUser);
-        $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
+        if ($gSettingsManager->get('sso_oidc_enabled') === '1') {
+            $oidcService = new OIDCService($gDb, $gCurrentUser);
+            $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
 
-        // A SAML front-channel transaction is already in progress. Send
-        // OIDC back-channel notifications now. Keep participant records because
-        // front-channel-only OIDC clients have not been notified by this flow.
-        $oidcLogoutNotificationService->notifySession($gCurrentOrgId, $externalSessionId, false);
+            // A SAML front-channel transaction is already in progress. Send
+            // OIDC back-channel notifications now. Keep participant records because
+            // front-channel-only OIDC clients have not been notified by this flow.
+            $oidcLogoutNotificationService->notifySession($gCurrentOrgId, $externalSessionId, false);
+        }
 
         $currentExternalSessionId = $gValidLogin
             ? (string) $gCurrentSession->getValue('ses_external_session_id')

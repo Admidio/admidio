@@ -792,6 +792,9 @@ class PreferencesService
 
         $oidcEnabled = (bool) ($formValues['sso_oidc_enabled'] ?? false);
         if ($oidcEnabled) {
+            // will trigger an exception on an issuer that is no OIDC issuer identifier
+            OIDCService::assertValidIssuerURL((string) ($formValues['sso_oidc_issuer_url'] ?? ''));
+
             // will trigger an exception on illegal keys
             $keyService->getUsableKey((int) ($formValues['sso_oidc_signing_key'] ?? 0), KeyService::USAGE_OIDC_SIGNING);
         }

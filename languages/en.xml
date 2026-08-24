@@ -1700,6 +1700,7 @@
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
+  <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
   <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">Public keys URL</string>
   <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION">Confirm logout</string>
   <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION_DESC">Do you want to end your Admidio single sign-on session?</string>

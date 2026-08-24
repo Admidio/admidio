@@ -117,6 +117,46 @@ class OIDCService extends SSOService {
         return ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
     }
 
+    /**
+     * Validate a configured issuer URL against the OpenID Connect issuer identifier rules.
+     *
+     * The issuer identifier must use HTTPS and must not carry a query or a fragment
+     * component (OpenID Connect Discovery 1.0, section 2). Like the registered logout
+     * URIs, HTTP is tolerated for loopback hosts so that a local installation remains
+     * usable for development.
+     *
+     * @param string $issuerURL Configured issuer URL. An empty value is not validated,
+     *                          it means that the Admidio URL is used.
+     * @return void
+     * @throws Exception SYS_SSO_OIDC_ISSUER_URL_INVALID
+     */
+    public static function assertValidIssuerURL(string $issuerURL): void
+    {
+        if ($issuerURL === '') {
+            return;
+        }
+
+        $parts = parse_url($issuerURL);
+        if (filter_var($issuerURL, FILTER_VALIDATE_URL) === false
+            || !is_array($parts)
+            || !isset($parts['scheme'], $parts['host'])
+            || isset($parts['query'])
+            || isset($parts['fragment'])
+            || isset($parts['user'])
+            || isset($parts['pass'])
+        ) {
+            throw new Exception('SYS_SSO_OIDC_ISSUER_URL_INVALID');
+        }
+
+        $scheme = strtolower((string) $parts['scheme']);
+        $host = strtolower((string) $parts['host']);
+        $isLoopback = in_array($host, array('localhost', '127.0.0.1', '::1'), true);
+
+        if ($scheme !== 'https' && !($scheme === 'http' && $isLoopback)) {
+            throw new Exception('SYS_SSO_OIDC_ISSUER_URL_INVALID');
+        }
+    }
+
     public function __construct($db, $currentUser) {//, ResourceServer $resourceServer) {
         global $gSettingsManager;
 
@@ -131,6 +171,10 @@ class OIDCService extends SSOService {
         if ($configuredIssuerURL === '') {
             $this->issuerURL = self::getDefaultIssuerURL();
         } else {
+            // A stored issuer that does not satisfy the OIDC issuer rules would be
+            // published in the discovery document and in every iss claim, so fail here
+            // instead of serving a consistently wrong issuer identifier.
+            self::assertValidIssuerURL($configuredIssuerURL);
             $this->issuerURL = rtrim($configuredIssuerURL, '/');
         }
 

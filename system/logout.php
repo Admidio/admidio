@@ -21,7 +21,7 @@ try {
     $frontChannelLogoutUris = array();
     $oidcLogoutNotificationService = null;
 
-    if ($externalSessionId !== '') {
+    if ($externalSessionId !== '' && $gSettingsManager->get('sso_oidc_enabled') === '1') {
         $oidcService = new OIDCService($gDb, $gCurrentUser);
         $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
         $frontChannelLogoutUris = $oidcLogoutNotificationService->notifySession($gCurrentOrgId, $externalSessionId);
