@@ -30,8 +30,7 @@ class InventoryServicePathTest extends AdministratorTestCase
         $this->assertTrue($fieldService->saveData(array(
             'inf_name' => $fieldName,
             'inf_type' => 'TEXT',
-            'inf_required_input' => 0,
-            'inf_disabled' => 0
+            'inf_required_input' => 0
         )));
 
         $fieldRow = $db->queryPrepared(
