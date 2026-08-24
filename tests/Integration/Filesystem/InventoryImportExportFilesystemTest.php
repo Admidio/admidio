@@ -66,8 +66,8 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
 
         $handle = fopen($csvPath, 'wb');
         $this->assertNotFalse($handle);
-        fputcsv($handle, array('Item', 'Category', 'Status'));
-        fputcsv($handle, array($itemName, $categoryName, $statusLabel));
+        fputcsv($handle, array('Item', 'Category', 'Status'), ',', '"', '');
+        fputcsv($handle, array($itemName, $categoryName, $statusLabel), ',', '"', '');
         fclose($handle);
 
         $importService = new ImportService();
