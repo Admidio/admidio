@@ -30,6 +30,16 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         'refresh_token'
     );
 
+    /**
+     * The subject of an ID token must be unique and must never be reassigned to another
+     * person (OpenID Connect Core, section 2). A login name and an e-mail address are
+     * neither immutable nor unique in Admidio, so only these two remain.
+     */
+    private const SUPPORTED_SUBJECT_FIELDS = array(
+        'usr_uuid',
+        'usr_id'
+    );
+
     public function __construct(Database $database, $client_id = null) {
         parent::__construct($database, 'oidc', TBL_OIDC_CLIENTS, 'ocl', $client_id);
         if ($this->isNewRecord() && empty($client_id)) {
@@ -46,6 +56,15 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
     public static function getSupportedScopes(): array
     {
         return self::SUPPORTED_SCOPES;
+    }
+
+    /**
+     * Return the user fields that may be used as the OIDC subject of a client.
+     * @return array<int,string>
+     */
+    public static function getSupportedSubjectFields(): array
+    {
+        return self::SUPPORTED_SUBJECT_FIELDS;
     }
 
     /**

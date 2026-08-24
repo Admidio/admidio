@@ -82,6 +82,36 @@ final class UpdateStepsCode
     }
 
     /**
+     * Report the OIDC clients whose subject is a value that can change or be reassigned.
+     * OpenID Connect requires the subject to be unique and never reassigned, so a login name
+     * and an e-mail address are no longer offered when a client is edited. The stored value
+     * is deliberately left alone: changing it would give the relying party a new subject for
+     * the same person, and every account it has bound to the old subject would be orphaned.
+     * The administrator has to make that decision, so this step only names the clients.
+     *
+     * @throws Exception
+     */
+    public static function updateStep51WarnAboutMutableOIDCSubjects(): void
+    {
+        global $gLogger, $gL10n;
+
+        $sql = 'SELECT ocl_client_name, ocl_userid_field
+                  FROM ' . TBL_OIDC_CLIENTS . '
+                 WHERE ocl_userid_field NOT IN (\'usr_uuid\', \'usr_id\')
+                 ORDER BY ocl_client_name';
+        $statement = self::$db->queryPrepared($sql);
+
+        $clients = array();
+        while ($row = $statement->fetch()) {
+            $clients[] = $row['ocl_client_name'] . ' (' . $row['ocl_userid_field'] . ')';
+        }
+
+        if (count($clients) > 0) {
+            $gLogger->warning($gL10n->get('INS_WARNING_SSO_OIDC_MUTABLE_SUBJECT', array(implode(', ', $clients))));
+        }
+    }
+
+    /**
      * This method will convert the charset of the database tables to utf8mb4 if not already done.
      * This is necessary to support emojis and other special characters in the future.
      * @throws Exception

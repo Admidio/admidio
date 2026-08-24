@@ -746,13 +746,40 @@ class SSOClientPresenter extends PagePresenter
             ['usr_login_name', $gL10n->get('SYS_SSO_USERID_LOGIN') . ' - usr_login_name', $gL10n->get('SYS_SSO_USERID_FIELDS')],
             ['EMAIL', $gL10n->get('SYS_EMAIL') . ' - EMAIL', $gL10n->get('SYS_SSO_USERID_FIELDS')],
         ];
+
+        /*
+        * The subject of an OIDC client must be unique and must never be reassigned to
+        * another person (OpenID Connect Core, section 2), so only the two immutable
+        * identifiers can be chosen. A client that still uses a login name or an e-mail
+        * address keeps its value in the list, marked as no longer supported: dropping it
+        * would silently change the subject on the next save and break the accounts that
+        * the relying party has bound to the old one.
+        */
+        $subjectFields = array();
+        foreach ($useridFields as $useridField) {
+            if (in_array($useridField[0], OIDCClient::getSupportedSubjectFields(), true)) {
+                $subjectFields[] = $useridField;
+            }
+        }
+
+        $configuredSubjectField = (string) $client->getValue('ocl_userid_field');
+        if ($configuredSubjectField !== ''
+            && !in_array($configuredSubjectField, OIDCClient::getSupportedSubjectFields(), true)
+        ) {
+            $subjectFields[] = array(
+                $configuredSubjectField,
+                $configuredSubjectField . ' - ' . $gL10n->get('SYS_SSO_USERID_FIELD_UNSUPPORTED'),
+                $gL10n->get('SYS_SSO_USERID_FIELDS')
+            );
+        }
+
         $form->addSelectBox(
             'ocl_userid_field',
             $gL10n->get('SYS_SSO_USERID_FIELD'),
-            $useridFields,
+            $subjectFields,
             array(
                 'property' => FormPresenter::FIELD_REQUIRED,
-                'defaultValue' => $client->getValue('ocl_userid_field'),
+                'defaultValue' => $configuredSubjectField,
                 'multiselect' => false,
                 'helpTextId' => 'SYS_SSO_USERID_FIELD_DESC'
             )

@@ -200,6 +200,19 @@ class OIDCService extends SSOService {
     protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
         $this->normalizeLogoutUriFormValues($formValues);
 
+        if (array_key_exists('ocl_userid_field', $formValues)) {
+            $subjectField = (string) $formValues['ocl_userid_field'];
+
+            // A client that was configured with a mutable identifier may keep it, so that
+            // saving the form does not reassign the subject behind the relying party's
+            // back, but no client may be moved to one.
+            if (!in_array($subjectField, OIDCClient::getSupportedSubjectFields(), true)
+                && $subjectField !== (string) $client->getValue('ocl_userid_field')
+            ) {
+                throw new Exception('SYS_SSO_USERID_FIELD_INVALID', array($subjectField));
+            }
+        }
+
         if (array_key_exists('ocl_scope', $formValues)) {
             if (!is_array($formValues['ocl_scope'])) {
                 throw new Exception('SYS_SSO_CLIENT_SCOPES_INVALID');
