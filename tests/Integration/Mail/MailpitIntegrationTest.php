@@ -96,8 +96,19 @@ class MailpitIntegrationTest extends AdministratorTestCase
     {
         global $gSettingsManager;
 
-        $oldSendingMode = $gSettingsManager->getInt('mail_sending_mode');
+        $oldSettings = array(
+            'mail_sending_mode' => $gSettingsManager->getInt('mail_sending_mode'),
+            'mail_sender_mode' => $gSettingsManager->getInt('mail_sender_mode'),
+            'mail_sender_email' => $gSettingsManager->getString('mail_sender_email'),
+            'mail_sender_name' => $gSettingsManager->getString('mail_sender_name')
+        );
+
         $gSettingsManager->set('mail_sending_mode', Email::SENDINGMODE_SINGLE);
+        // Email::__construct() immediately calls setSender(). Use a valid configured sender
+        // so this test reaches the PHPMailer send failure it is intended to exercise.
+        $gSettingsManager->set('mail_sender_mode', 2);
+        $gSettingsManager->set('mail_sender_email', 'mail-failure-sender@example.test');
+        $gSettingsManager->set('mail_sender_name', 'Admidio Regression');
 
         try {
             $email = new class extends Email {
@@ -114,7 +125,9 @@ class MailpitIntegrationTest extends AdministratorTestCase
             $this->expectException(\Admidio\Infrastructure\Exception::class);
             $email->sendEmail();
         } finally {
-            $gSettingsManager->set('mail_sending_mode', $oldSendingMode);
+            foreach ($oldSettings as $name => $value) {
+                $gSettingsManager->set($name, $value);
+            }
         }
     }
 
