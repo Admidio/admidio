@@ -3,6 +3,7 @@
 namespace Admidio\SSO\Service;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\SSO\Entity\OIDCClient;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Stream;
@@ -116,28 +117,34 @@ class OIDCLogoutNotificationService
 
     private function sendBackChannelLogout(OIDCClient $client, string $externalSessionId, string $subject): void 
     {
-        global $gLogger;
+        global $gLogger, $gSettingsManager;
 
         try {
+            // The logout URI is configured by an administrator and the request is sent by
+            // the server itself, so it is validated and pinned like the metadata request.
+            $logoutUri = $client->getBackChannelLogoutUri();
+            $requestOptions = SecurityUtils::getOutboundRequestCurlOptions(
+                $logoutUri,
+                $gSettingsManager->getBool('sso_allow_private_network')
+            );
+
             $logoutToken = $this->createBackChannelLogoutToken($client, $externalSessionId, $subject);
 
-            $curl = curl_init($client->getBackChannelLogoutUri());
+            $curl = curl_init($logoutUri);
             if ($curl === false) {
                 throw new \RuntimeException('Could not initialize the back-channel HTTP request.');
             }
 
-            curl_setopt_array($curl, array(
+            curl_setopt_array($curl, $requestOptions + array(
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => http_build_query(array('logout_token' => $logoutToken)),
                 CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded'),
-                CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CONNECTTIMEOUT => 3,
                 CURLOPT_TIMEOUT => 5,
-                CURLOPT_FOLLOWLOCATION => false,
-                // the logout URI is configured by an administrator, so restrict the
-                // request to HTTP(S) and never expose the response to the browser
-                CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
-                CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS
+                // never buffer the response body of the relying party
+                CURLOPT_WRITEFUNCTION => static function ($curlHandle, string $chunk): int {
+                    return strlen($chunk);
+                }
             ));
 
             $result = curl_exec($curl);

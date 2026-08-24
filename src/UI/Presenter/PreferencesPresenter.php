@@ -2380,6 +2380,15 @@ class PreferencesPresenter extends PagePresenter
             )
         );
 
+        // Applies to both protocols: the metadata request and the OIDC back-channel logout
+        // are the two requests that Admidio sends from the server to a configured address.
+        $formSSO->addCheckbox(
+            'sso_allow_private_network',
+            $gL10n->get('SYS_SSO_ALLOW_PRIVATE_NETWORK'),
+            (bool)$formValues['sso_allow_private_network'],
+            array('helpTextId' => 'SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC')
+        );
+
         $samlService = new \Admidio\SSO\Service\SAMLService($gDb, $gCurrentUser);
 
         $formSSO->addCustomContent(

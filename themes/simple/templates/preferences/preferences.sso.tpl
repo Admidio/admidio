@@ -147,6 +147,8 @@
         {include 'sys-template-parts/form.button.tpl' data=$elements['sso_key_admin_button_template']}
     </div>
     
+{include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_allow_private_network']}
+
 {* ********************************************************************************** 
  * SAML settings 
  * **********************************************************************************}
