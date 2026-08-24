@@ -2,7 +2,7 @@ name: Regression Tests
 
 on:
   pull_request:
-    branches: [ v4.3 ]
+    branches: [ master ]
     paths:
       - 'src/**'
       - 'system/**'
@@ -15,7 +15,7 @@ on:
       - 'phpunit.xml'
       - '.github/workflows/regression-tests.yml'
   push:
-    branches: [ v4.3 ]
+    branches: [ master ]
   schedule:
     # Run on schedule for MySQL (third database)
     - cron: '0 2 * * MON'
