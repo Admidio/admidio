@@ -95,7 +95,7 @@ class ExportService
             $filename = date('Y-m-d') . '_' . $filename;
         }
 
-        $inventoryPage = new InventoryPresenter();
+        $inventoryPage = new InventoryPresenter(false);
 
         $sql = 'SELECT COUNT(org_id) AS count FROM ' . TBL_ORGANIZATIONS;
         $result = $gDb->queryPrepared($sql);
@@ -136,6 +136,32 @@ class ExportService
                 $pdf->AddPage();
 
                 $smarty = $inventoryPage->createSmartyObject();
+
+                // createExportFile() is also used from the CLI bootstrap, where THEME_PATH and
+                // THEME_FALLBACK_PATH are intentionally not defined. Add the same template
+                // directories that system/common.php would configure for a web request.
+                if (!defined('THEME_PATH')) {
+                    $theme = $gSettingsManager->has('theme')
+                        ? $gSettingsManager->getString('theme')
+                        : 'simple';
+                    if ($theme === '' || $theme === 'modern') {
+                        $theme = 'simple';
+                    }
+
+                    $smarty->setTemplateDir(
+                        ADMIDIO_PATH . FOLDER_THEMES . '/' . $theme . '/templates/'
+                    );
+
+                    if ($gSettingsManager->has('theme_fallback')
+                        && $gSettingsManager->getString('theme_fallback') !== '') {
+                        $smarty->addTemplateDir(
+                            ADMIDIO_PATH . FOLDER_THEMES . '/'
+                            . $gSettingsManager->getString('theme_fallback')
+                            . '/templates/'
+                        );
+                    }
+                }
+
                 $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
                 $smarty->assign('column_align', $data['column_align']);
                 $smarty->assign('headers', $data['headers']);

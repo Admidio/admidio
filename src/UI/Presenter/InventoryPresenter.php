@@ -71,10 +71,14 @@ class InventoryPresenter extends PagePresenter
 
 
     /**
-     * Constructor creates the page object and initialized all parameters.
+     * Constructor creates the inventory presenter and initializes all parameters.
+     *
+     * @param bool $initializePage If **false**, only initialize the inventory data needed by
+     *                             non-HTML consumers such as ExportService. This deliberately
+     *                             avoids the web-only PagePresenter bootstrap (theme/session).
      * @throws Exception
      */
-    public function __construct()
+    public function __construct(bool $initializePage = true)
     {
         global $gDb, $gCurrentOrgId;
 
@@ -94,7 +98,9 @@ class InventoryPresenter extends PagePresenter
 
         $this->categoryService = new CategoryService($gDb, 'IVT');
 
-        parent::__construct($this->getFilterCategoryUUID);
+        if ($initializePage) {
+            parent::__construct($this->getFilterCategoryUUID);
+        }
     }
 
     /**
