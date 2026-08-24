@@ -710,9 +710,9 @@ class Email extends PHPMailer
 
             if ($errorMessage !== '') {
                 if ($gCurrentUser->isAdministrator()) {
-                    throw new Exception('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, implode('<br />', $errorRecipients)));
+                    throw new \Admidio\Infrastructure\Exception('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, implode('<br />', $errorRecipients)));
                 } else {
-                    throw new Exception('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, count($errorRecipients) . ' ' . $gL10n->get('SYS_RECIPIENT')));
+                    throw new \Admidio\Infrastructure\Exception('SYS_EMAIL_NOT_SEND_TO_RECIPIENTS', array($errorMessage, count($errorRecipients) . ' ' . $gL10n->get('SYS_RECIPIENT')));
                 }
             }
         } else {
