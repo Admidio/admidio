@@ -124,10 +124,17 @@ class Folder extends Entity
         $newObjectPath = $this->getFullFolderPath() . '/' . $newFolderFileName;
         $folderId = (int)$this->getValue('fol_id');
 
-        // Ensure the resolved path is within the folder directory
+        // Ensure the resolved path is within the folder directory.
+        // realpath() uses the native directory separator, so normalize both paths before comparing them.
         $realPath = realpath($newObjectPath);
         $folderPath = realpath($this->getFullFolderPath());
-        if ($realPath === false || !str_starts_with($realPath, $folderPath . '/')) {
+        if ($realPath === false || $folderPath === false) {
+            throw new Exception('SYS_FILENAME_INVALID');
+        }
+
+        $realPath = str_replace('\\', '/', $realPath);
+        $folderPath = rtrim(str_replace('\\', '/', $folderPath), '/');
+        if (!str_starts_with($realPath, $folderPath . '/')) {
             throw new Exception('SYS_FILENAME_INVALID');
         }
 
