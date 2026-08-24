@@ -754,7 +754,12 @@ class OIDCService extends SSOService {
             
             // Depending on the prompt parameter, show a login form (if needed) or deny authorization
             $promptValues = $this->getPromptValues($request);
-            if (!$reauthenticationCompleted && in_array('login', $promptValues, true)) {
+            // An Admidio session holds exactly one account, so account selection is the
+            // login form, where the user can continue with the current account or sign
+            // in with a different one.
+            if (!$reauthenticationCompleted
+                && (in_array('login', $promptValues, true) || in_array('select_account', $promptValues, true))
+            ) {
                 $authenticationRequired = true;
             }
             if ($authenticationRequired && in_array('none', $promptValues, true)) {
@@ -1723,7 +1728,7 @@ class OIDCService extends SSOService {
         }
 
         foreach ($promptValues as $promptValue) {
-            if (!in_array($promptValue, array('none', 'login', 'consent'), true)) {
+            if (!in_array($promptValue, array('none', 'login', 'consent', 'select_account'), true)) {
                 throw OAuthServerException::invalidRequest('prompt');
             }
         }
