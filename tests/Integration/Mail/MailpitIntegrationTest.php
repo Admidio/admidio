@@ -41,10 +41,6 @@ class MailpitIntegrationTest extends AdministratorTestCase
             'mail_html_registered_users' => $gSettingsManager->getBool('mail_html_registered_users')
         );
 
-        $oldFirstName = $gCurrentUser->getValue('FIRST_NAME', 'database');
-        $oldLastName = $gCurrentUser->getValue('LAST_NAME', 'database');
-        $oldEmail = $gCurrentUser->getValue('EMAIL', 'database');
-
         $recipient = 'mailpit-regression-' . bin2hex(random_bytes(6)) . '@example.test';
         $expectedSubject = $gL10n->get(
             'SYS_EMAIL_FUNCTION_TEST',
@@ -84,11 +80,9 @@ class MailpitIntegrationTest extends AdministratorTestCase
             $subject = (string)($message['Subject'] ?? $message['subject'] ?? '');
             $this->assertSame($expectedSubject, $subject);
         } finally {
-            $gCurrentUser->setValue('FIRST_NAME', $oldFirstName);
-            $gCurrentUser->setValue('LAST_NAME', $oldLastName);
-            $gCurrentUser->setValue('EMAIL', $oldEmail);
-            $gCurrentUser->save();
-
+            // DatabaseTestCase rolls the administrator profile changes back and
+            // AdministratorTestCase discards this in-memory User object in tearDown().
+            // Do not issue a second profile-only User::save() just for cleanup.
             foreach ($oldSettings as $name => $value) {
                 $gSettingsManager->set($name, $value);
             }
