@@ -55,19 +55,21 @@ if (verifyDatabaseConnection($database) === false) {
 }
 echo "✓ Database connection successful\n\n";
 
-// Step 4: Verify mail connection (optional)
+// Step 4: Verify mail connection
 echo "Step 4: Checking mail (Mailpit) connectivity...\n";
 if (verifyMailConnection()) {
     echo "✓ Mail server reachable\n";
 } else {
-    echo "⚠ Mail server not reachable (optional, continues)\n";
+    echo "✗ Mail server not reachable\n";
+    echo "  The integration suite contains a real Mailpit delivery test.\n";
+    exit(1);
 }
 echo "\n";
 
-// Step 5: Create test marker file
-echo "Step 5: Creating test environment marker...\n";
-createTestMarker();
-echo "✓ Test marker created\n\n";
+// Step 5: Verify the source-controlled filesystem safety marker
+echo "Step 5: Verifying test environment marker...\n";
+verifyTestMarker();
+echo "✓ Test marker verified\n\n";
 
 // Success message
 echo "Setup Complete!\n";
@@ -200,14 +202,18 @@ function verifyMailConnection(): bool
 }
 
 /**
- * Create test environment marker file
+ * Verify the source-controlled test environment marker.
+ *
+ * The marker is deliberately not created here. Filesystem regression tests only perform
+ * destructive cleanup when the checkout itself contains this marker.
  */
-function createTestMarker(): void
+function verifyTestMarker(): void
 {
     $testFilesPath = admidioTestEnv('TEST_FILES_PATH', './tests/adm_my_files');
-    $markerFile = $testFilesPath . '/.test-environment-marker';
-
-    if (!file_exists($markerFile)) {
-        file_put_contents($markerFile, 'This directory contains test data and can be safely deleted.' . PHP_EOL);
+    $markerFile = $testFilesPath . '/.admidio-regression-test';
+    if (!is_file($markerFile)) {
+        throw new RuntimeException(
+            'Safety check failed: filesystem regression test marker is missing: ' . $markerFile
+        );
     }
 }

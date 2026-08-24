@@ -63,7 +63,7 @@ services:
     volumes:
       - mailpit_test_data:/data
     healthcheck:
-      test: curl -f http://localhost:8025 || exit 1
+      test: [ "CMD", "/mailpit", "readyz" ]
       interval: 10s
       timeout: 5s
       retries: 5

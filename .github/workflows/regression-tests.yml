@@ -14,6 +14,8 @@ on:
       - 'composer.lock'
       - 'phpunit.xml'
       - '.github/workflows/regression-tests.yml'
+      - '.env.test.example'
+      - 'docker-compose.test.yml'
   push:
     branches: [ master ]
   schedule:
@@ -40,6 +42,10 @@ env:
   PHP_VERSION: '8.2'
   # the suite refuses to run unless database and file path are marked as a test environment
   TEST_FILES_PATH: ./tests/adm_my_files
+  TEST_MAIL_HOST: 127.0.0.1
+  TEST_MAIL_PORT: '1025'
+  TEST_MAILPIT_API_HOST: 127.0.0.1
+  TEST_MAILPIT_API_PORT: '8025'
 
 defaults:
   run:
@@ -108,6 +114,11 @@ jobs:
           --health-start-period=30s
         ports:
           - 3306:3306
+      mailpit:
+        image: axllent/mailpit:latest
+        ports:
+          - 1025:1025
+          - 8025:8025
 
     steps:
       - uses: actions/checkout@v4
@@ -121,6 +132,17 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Wait for Mailpit
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail 'http://127.0.0.1:8025/api/v1/messages?limit=1' > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Mailpit did not become ready on port 8025."
+          exit 1
 
       - name: Prepare test environment
         run: php tests/bin/setup-test-env.php
@@ -158,6 +180,11 @@ jobs:
           --health-start-period=30s
         ports:
           - 5432:5432
+      mailpit:
+        image: axllent/mailpit:latest
+        ports:
+          - 1025:1025
+          - 8025:8025
 
     steps:
       - uses: actions/checkout@v4
@@ -171,6 +198,17 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Wait for Mailpit
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail 'http://127.0.0.1:8025/api/v1/messages?limit=1' > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Mailpit did not become ready on port 8025."
+          exit 1
 
       - name: Prepare test environment
         run: php tests/bin/setup-test-env.php
@@ -209,6 +247,11 @@ jobs:
           --health-start-period=30s
         ports:
           - 3306:3306
+      mailpit:
+        image: axllent/mailpit:latest
+        ports:
+          - 1025:1025
+          - 8025:8025
 
     steps:
       - uses: actions/checkout@v4
@@ -222,6 +265,17 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Wait for Mailpit
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail 'http://127.0.0.1:8025/api/v1/messages?limit=1' > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Mailpit did not become ready on port 8025."
+          exit 1
 
       - name: Prepare test environment
         run: php tests/bin/setup-test-env.php
