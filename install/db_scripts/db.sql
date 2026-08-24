@@ -655,9 +655,12 @@ CREATE TABLE %PREFIX%_oidc_consents (
     oco_scopes                  text                NOT NULL,
     oco_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     oco_timestamp_change        timestamp           NULL,
-    PRIMARY KEY (oco_id),
-    UNIQUE KEY oco_user_client (oco_org_id, oco_usr_id, oco_ocl_id)
+    PRIMARY KEY (oco_id)
 )
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+CREATE UNIQUE INDEX %PREFIX%_idx_oco_user_client ON %PREFIX%_oidc_consents (oco_org_id, oco_usr_id, oco_ocl_id);
 
 
 /*==============================================================*/
