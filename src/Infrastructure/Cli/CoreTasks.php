@@ -1320,7 +1320,8 @@ final class CoreTasks
         self::task('message:delete', 'messageDelete', 'Delete message records using Message::delete().',
             'message:delete MESSAGE ... [--yes]', 'MESSAGES', true,
             array(self::arg('message', 'One or more messages.', true, true)),
-            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
+            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)),
+            array(), null, CliTaskRegistry::ACCESS_VISIBLE);
         self::readTask('message:list-attachments', 'messageAttachments', 'List attachments of a message.',
             'message:list-attachments MESSAGE [--format=FORMAT]', 'MESSAGES', true,
             array(self::arg('message', 'Message.')),
@@ -5627,6 +5628,14 @@ final class CoreTasks
         foreach ($arguments as $reference) {
             $message = self::resolveMessage($reference);
             self::assertMessageAccess($message);
+
+            // Message::delete() implements the two-participant lifecycle for private messages.
+            // Email records remain deletable only by their sender.
+            if ((int)$message->getValue('msg_usr_id_sender') !== $GLOBALS['gCurrentUserId']
+                && (string)$message->getValue('msg_type') !== Message::MESSAGE_TYPE_PM) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             $messages[] = $message;
         }
 
