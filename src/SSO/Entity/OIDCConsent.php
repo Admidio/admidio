@@ -28,4 +28,19 @@ class OIDCConsent extends Entity
 
         return count(array_diff($scopes, $storedScopes)) === 0;
     }
+
+    /**
+     * Whether this consent was given for the claim release policy of this fingerprint.
+     *
+     * The scopes alone do not describe what a client receives, because the claim mapping of
+     * the client decides which profile fields a scope releases. A consent that was stored
+     * before the fingerprint existed does not describe a policy at all and never matches, so
+     * the user is asked once more.
+     */
+    public function matchesReleasePolicy(string $policyHash): bool
+    {
+        $storedHash = (string) $this->getValue('oco_policy_hash');
+
+        return $storedHash !== '' && hash_equals($storedHash, $policyHash);
+    }
 }

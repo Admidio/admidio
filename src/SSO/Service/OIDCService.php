@@ -1704,6 +1704,39 @@ class OIDCService extends SSOService {
         );
     }
 
+    /**
+     * Fingerprint of what a client actually receives once the user has approved it.
+     *
+     * A consent stores the approved scopes, but what a scope releases is decided by the
+     * claim and role mapping of the client. An administrator could otherwise map further
+     * profile fields into a scope the user has already approved. Storing a fingerprint of
+     * that mapping with the consent makes such a change visible, so the user is asked
+     * again instead of releasing more than they agreed to. The fingerprint describes the
+     * permission, it does not duplicate any profile value.
+     *
+     * @param OIDCClient $client Client whose release policy should be described.
+     * @return string SHA-256 fingerprint of the effective claim release policy.
+     * @throws \JsonException
+     */
+    private function getReleasePolicyHash(OIDCClient $client): string
+    {
+        $fieldMapping = $client->getFieldMapping();
+        ksort($fieldMapping);
+
+        $roleMapping = $client->getRoleMapping();
+        ksort($roleMapping);
+
+        return hash('sha256', json_encode(
+            array(
+                'fields' => $fieldMapping,
+                'fields_catchall' => $client->getFieldMappingCatchall(),
+                'roles' => $roleMapping,
+                'roles_catchall' => $client->getRoleMappingCatchall()
+            ),
+            JSON_THROW_ON_ERROR
+        ));
+    }
+
     private function hasOIDCConsent(AuthorizationRequestInterface $authRequest): bool
     {
         global $gCurrentOrgId, $gCurrentUserId;
@@ -1716,6 +1749,10 @@ class OIDCService extends SSOService {
         );
 
         if ($consent->isNewRecord()) {
+            return false;
+        }
+
+        if (!$consent->matchesReleasePolicy($this->getReleasePolicyHash(self::$client))) {
             return false;
         }
 
@@ -1742,6 +1779,7 @@ class OIDCService extends SSOService {
             'oco_scopes',
             implode(' ', $this->getRequestedScopeNames($authRequest))
         );
+        $consent->setValue('oco_policy_hash', $this->getReleasePolicyHash(self::$client));
         $consent->save();
     }
 
