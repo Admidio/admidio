@@ -109,6 +109,16 @@ class OIDCService extends SSOService {
     public const AUTHENTICATION_CONTEXT_PASSWORD_TOTP = 'urn:admidio:authentication:password-totp';
 
     /**
+     * The parameters of an authorization request that a client may send in a form POST.
+     * Everything else that arrives in the body belongs to the Admidio consent form.
+     */
+    private const AUTHORIZATION_REQUEST_PARAMETERS = array(
+        'response_type', 'client_id', 'redirect_uri', 'scope', 'state', 'nonce',
+        'response_mode', 'prompt', 'max_age', 'display', 'ui_locales', 'acr_values',
+        'id_token_hint', 'login_hint', 'code_challenge', 'code_challenge_method'
+    );
+
+    /**
      * Return the default issuer URL derived from the current Admidio URL.
      * @return string
      */
@@ -392,6 +402,58 @@ class OIDCService extends SSOService {
     }
 
 
+    /**
+     * Return the authorization request with the parameters of a form POST normalized into
+     * the query parameters of the request.
+     *
+     * OpenID Connect Core, section 3.1.2.1, requires the authorization endpoint to accept
+     * GET and POST. The OAuth library and the Admidio helpers read the authorization
+     * parameters from the query string, so a client that posts them is answered by moving
+     * them there. The Admidio consent form posts to the same endpoint but keeps the
+     * authorization parameters in the query string of its action URL; its own fields are
+     * not authorization parameters and are left untouched.
+     *
+     * @return ServerRequestInterface
+     * @throws OAuthServerException A parameter arrives twice with two different values.
+     */
+    private function getAuthorizationRequest(): ServerRequestInterface
+    {
+        $request = $this->getRequest();
+
+        if (strtoupper($request->getMethod()) !== 'POST') {
+            return $request;
+        }
+
+        $body = $request->getParsedBody();
+
+        if (!is_array($body)) {
+            return $request;
+        }
+
+        $queryParams = $request->getQueryParams();
+
+        foreach (self::AUTHORIZATION_REQUEST_PARAMETERS as $parameter) {
+            if (!array_key_exists($parameter, $body)) {
+                continue;
+            }
+
+            if (!is_string($body[$parameter])) {
+                throw OAuthServerException::invalidRequest($parameter);
+            }
+
+            // A parameter must not be sent twice with different values (RFC 6749,
+            // section 3.1). Resolving such a conflict silently is what makes request
+            // smuggling between the two parameter sources possible.
+            if (array_key_exists($parameter, $queryParams) && $queryParams[$parameter] !== $body[$parameter]) {
+                throw OAuthServerException::invalidRequest($parameter);
+            }
+
+            $queryParams[$parameter] = $body[$parameter];
+        }
+
+        return $request->withQueryParams($queryParams);
+    }
+
     public function setupService() {
         global $gSettingsManager, $gLogger, $gCurrentSession;
 
@@ -655,7 +717,7 @@ class OIDCService extends SSOService {
             throw new \Exception("SSO OIDC is not enabled");
         }
 
-        $request = $this->getRequest();
+        $request = $this->getAuthorizationRequest();
         $response = new Response();
         try {
             if (!$this->isServiceSetup) {
@@ -732,8 +794,10 @@ class OIDCService extends SSOService {
             $consentRequired = in_array('consent', $promptValues, true)
                 || (!self::$client->isTrusted() && !$this->hasOIDCConsent($authRequest));
 
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            // Only a post of the Admidio consent form carries a decision. A client that
+            // posts its authorization request has no Admidio form behind it.
+            if (array_key_exists('adm_button_approve', $_POST) || array_key_exists('adm_button_deny', $_POST)) {
+                $form = $gCurrentSession->getFormObject((string) ($_POST['adm_csrf_token'] ?? ''));
                 $form->validate($_POST);
 
                 if (array_key_exists('adm_button_deny', $_POST)) {
