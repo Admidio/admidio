@@ -214,7 +214,12 @@ class CliProcessTest extends DatabaseTestCase
         $announcementUuid = '';
 
         try {
-            $category = $this->adminCliJson(array('category:add', 'ANN', 'CLI announcements ' . $suffix));
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'ANN',
+                'CLI announcements ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid()
+            ));
             $categoryUuid = (string)$category['uuid'];
 
             $created = $this->adminCliJson(array(
@@ -269,7 +274,12 @@ class CliProcessTest extends DatabaseTestCase
         $linkUuid = '';
 
         try {
-            $category = $this->adminCliJson(array('category:add', 'LNK', 'CLI links ' . $suffix));
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'LNK',
+                'CLI links ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid()
+            ));
             $categoryUuid = (string)$category['uuid'];
 
             $created = $this->adminCliJson(array(
@@ -324,7 +334,12 @@ class CliProcessTest extends DatabaseTestCase
         $itemUuid = '';
 
         try {
-            $category = $this->adminCliJson(array('category:add', 'IVT', 'CLI inventory ' . $suffix));
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'IVT',
+                'CLI inventory ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid()
+            ));
             $categoryUuid = (string)$category['uuid'];
 
             $statusOptions = $this->adminCliJson(array('inventory:options', 'STATUS'));
@@ -403,7 +418,12 @@ class CliProcessTest extends DatabaseTestCase
         $fieldUuid = '';
 
         try {
-            $category = $this->adminCliJson(array('category:add', 'USF', 'CLI profile fields ' . $suffix));
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'USF',
+                'CLI profile fields ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid()
+            ));
             $categoryUuid = (string)$category['uuid'];
 
             $fieldName = 'CLI field ' . $suffix;
@@ -709,6 +729,26 @@ class CliProcessTest extends DatabaseTestCase
         $this->assertIsArray($data);
 
         return $data;
+    }
+
+    /**
+     * Resolve the installer-created administrator role without depending on its translated name.
+     */
+    private function administratorRoleUuid(): string
+    {
+        $roles = $this->adminCliJson(array('group:list'));
+
+        foreach ($roles as $role) {
+            if ((bool)($role['administrator'] ?? false)) {
+                $uuid = (string)($role['uuid'] ?? '');
+                if ($uuid !== '') {
+                    return $uuid;
+                }
+            }
+        }
+
+        $this->fail('The production installation did not expose an administrator role through group:list.');
+        return '';
     }
 
     /**

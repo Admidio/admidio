@@ -4,7 +4,7 @@ namespace Admidio\Tests\Integration\Mail;
 
 use Admidio\Infrastructure\Email;
 use Admidio\Preferences\Service\PreferencesService;
-use Admidio\Tests\Support\DatabaseTestCase;
+use Admidio\Tests\Support\AdministratorTestCase;
 
 /**
  * Integration test for the real Admidio SMTP path.
@@ -12,7 +12,7 @@ use Admidio\Tests\Support\DatabaseTestCase;
  * Docker health is deliberately not consulted. The test only cares whether SMTP accepts the
  * production email and whether Mailpit's HTTP API exposes that delivered message.
  */
-class MailpitIntegrationTest extends DatabaseTestCase
+class MailpitIntegrationTest extends AdministratorTestCase
 {
     /**
      * @testdox PreferencesService sends a real email through Mailpit and the message reaches its API

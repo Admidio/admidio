@@ -5,7 +5,7 @@ namespace Admidio\Tests\Integration\Services;
 use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\ValueObjects\ItemsData;
-use Admidio\Tests\Support\DatabaseTestCase;
+use Admidio\Tests\Support\AdministratorTestCase;
 
 /**
  * Regression coverage for the headless inventory Service APIs.
@@ -13,7 +13,7 @@ use Admidio\Tests\Support\DatabaseTestCase;
  * Fixtures are resolved from the production installation data and mutations go through
  * ItemFieldService/ItemService. Raw queries are used only as an independent assertion boundary.
  */
-class InventoryServicePathTest extends DatabaseTestCase
+class InventoryServicePathTest extends AdministratorTestCase
 {
     /**
      * @testdox Inventory field and item lifecycle is persisted by the production Services

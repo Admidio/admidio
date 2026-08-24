@@ -3,12 +3,12 @@
 namespace Admidio\Tests\Integration\Services;
 
 use Admidio\ProfileFields\Service\ProfileFieldService;
-use Admidio\Tests\Support\DatabaseTestCase;
+use Admidio\Tests\Support\AdministratorTestCase;
 
 /**
  * Regression coverage for ProfileFieldService::saveData().
  */
-class ProfileFieldServicePathTest extends DatabaseTestCase
+class ProfileFieldServicePathTest extends AdministratorTestCase
 {
     /**
      * @testdox Profile fields created and updated through ProfileFieldService are really persisted
@@ -22,7 +22,7 @@ class ProfileFieldServicePathTest extends DatabaseTestCase
             'SELECT cat_id
                FROM ' . TBL_CATEGORIES . '
               WHERE cat_type = ?
-                AND cat_org_id = ?
+                AND (cat_org_id = ? OR cat_org_id IS NULL)
            ORDER BY cat_id
               LIMIT 1',
             array('USF', $gCurrentOrgId)
@@ -101,11 +101,13 @@ class ProfileFieldServicePathTest extends DatabaseTestCase
             'SELECT cat_id
                FROM ' . TBL_CATEGORIES . '
               WHERE cat_type = ?
-                AND cat_org_id = ?
+                AND (cat_org_id = ? OR cat_org_id IS NULL)
            ORDER BY cat_id
               LIMIT 1',
             array('USF', $gCurrentOrgId)
         )->fetchColumn();
+
+        $this->assertGreaterThan(0, $categoryId);
 
         $name = 'Duplicate service field ' . bin2hex(random_bytes(5));
         $values = array(

@@ -9,13 +9,13 @@ use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Menu\Service\MenuService;
 use Admidio\Roles\Service\RolesService;
-use Admidio\Tests\Support\DatabaseTestCase;
+use Admidio\Tests\Support\AdministratorTestCase;
 use Admidio\UI\Presenter\GroupsRolesPresenter;
 
 /**
  * Regression coverage for database-backed Service read paths that are used by web and CLI callers.
  */
-class ReadModelServicePathTest extends DatabaseTestCase
+class ReadModelServicePathTest extends AdministratorTestCase
 {
     /**
      * @testdox CategoryService returns real visible categories from the current organization

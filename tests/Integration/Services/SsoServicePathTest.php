@@ -3,12 +3,12 @@
 namespace Admidio\Tests\Integration\Services;
 
 use Admidio\SSO\Service\OIDCService;
-use Admidio\Tests\Support\DatabaseTestCase;
+use Admidio\Tests\Support\AdministratorTestCase;
 
 /**
  * Regression coverage for the reusable SSO service save path.
  */
-class SsoServicePathTest extends DatabaseTestCase
+class SsoServicePathTest extends AdministratorTestCase
 {
     /**
      * @testdox OIDCService persists, hashes and updates the complete client contract

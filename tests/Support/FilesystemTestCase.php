@@ -12,7 +12,7 @@ use RuntimeException;
  * The guard is intentionally strict: destructive cleanup is only allowed below
  * tests/adm_my_files and only if the committed marker file is present.
  */
-abstract class FilesystemTestCase extends DatabaseTestCase
+abstract class FilesystemTestCase extends AdministratorTestCase
 {
     private string $testDataRoot = '';
 
