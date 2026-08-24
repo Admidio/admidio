@@ -1234,7 +1234,7 @@ class OIDCService extends SSOService {
      */
     public function handleLogoutRequest(): ResponseInterface
     {
-        global $gLogger, $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
+        global $gLogger, $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin, $gCurrentOrgId;
 
         $request = $this->getRequest();
         $participantService = new OIDCSessionParticipantService($this->db);
@@ -1364,7 +1364,7 @@ class OIDCService extends SSOService {
 
             if ($matchesCurrentSession) {
                 try {
-                    $participantService->assertParticipant($hintSessionId, (int) $client->getValue('ocl_id'), $hintClaims['sub']);
+                    $participantService->assertParticipant($gCurrentOrgId, $hintSessionId, (int) $client->getValue('ocl_id'), $hintClaims['sub']);
                     return $this->completeOIDCLogout($hintSessionId, $postLogoutRedirectUri, $state, $participantService);
                 } catch (\Throwable $exception) {
                     // The hint is valid but cannot be tied to an active tracked
@@ -1402,10 +1402,10 @@ class OIDCService extends SSOService {
         ?string $state,
         OIDCSessionParticipantService $participantService
     ): ResponseInterface {
-        global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
+        global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin, $gCurrentOrgId;
 
         $notificationService = new OIDCLogoutNotificationService($this->db, $this->issuerURL);
-        $frontChannelLogoutUris = $externalSessionId === '' ? array() : $notificationService->notifySession($externalSessionId);
+        $frontChannelLogoutUris = $externalSessionId === '' ? array() : $notificationService->notifySession($gCurrentOrgId, $externalSessionId);
 
         $gValidLogin = false;
         $gCurrentSession->logout();
@@ -1413,7 +1413,7 @@ class OIDCService extends SSOService {
         $gMenu->initialize();
 
         if ($externalSessionId !== '') {
-            $participantService->deleteParticipants($externalSessionId);
+            $participantService->deleteParticipants($gCurrentOrgId, $externalSessionId);
         }
 
         $redirectLocation = null;

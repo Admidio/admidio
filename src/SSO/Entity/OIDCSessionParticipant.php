@@ -19,9 +19,10 @@ class OIDCSessionParticipant extends Entity
     /**
      * @throws Exception
      */
-    public function readDataBySessionAndClient(string $externalSessionId, int $clientId): bool
+    public function readDataBySessionAndClient(int $organizationId, string $externalSessionId, int $clientId): bool
     {
         return $this->readDataByColumns(array(
+            'osp_org_id' => $organizationId,
             'osp_external_session_id' => $externalSessionId,
             'osp_client_id' => $clientId
         ));

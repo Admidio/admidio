@@ -24,7 +24,7 @@ try {
     if ($externalSessionId !== '') {
         $oidcService = new OIDCService($gDb, $gCurrentUser);
         $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
-        $frontChannelLogoutUris = $oidcLogoutNotificationService->notifySession($externalSessionId);
+        $frontChannelLogoutUris = $oidcLogoutNotificationService->notifySession($gCurrentOrgId, $externalSessionId);
     }
 
     $gValidLogin = false;
@@ -33,7 +33,7 @@ try {
     $gCurrentSession->logout();
 
     if ($externalSessionId !== '') {
-        (new OIDCSessionParticipantService($gDb))->deleteParticipants($externalSessionId);
+        (new OIDCSessionParticipantService($gDb))->deleteParticipants($gCurrentOrgId, $externalSessionId);
     }
 
     // if login organization is different to organization of config file then create new session variables

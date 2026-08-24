@@ -28,18 +28,21 @@ class OIDCLogoutNotificationService
      *
      * @return array<int,string> Front-channel logout iframe URLs.
      */
-    public function notifySession(string $externalSessionId, bool $includeFrontChannel = true): array 
+    public function notifySession(int $organizationId, string $externalSessionId, bool $includeFrontChannel = true): array 
     {
         $frontChannelUris = array();
 
-        foreach ($this->participantService->getParticipants($externalSessionId) as $participant) {
+        foreach ($this->participantService->getParticipants($organizationId, $externalSessionId) as $participant) {
             $clientId = (int) ($participant['osp_client_id'] ?? 0);
             if ($clientId <= 0) {
                 continue;
             }
 
             $client = new OIDCClient($this->database, $clientId);
-            if ($client->isNewRecord() || !$client->isEnabled()) {
+            if ($client->isNewRecord()
+                || (int) $client->getValue('ocl_org_id') !== $organizationId
+                || !$client->isEnabled()
+            ) {
                 continue;
             }
 

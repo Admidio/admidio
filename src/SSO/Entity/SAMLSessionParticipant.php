@@ -21,10 +21,11 @@ class SAMLSessionParticipant extends Entity
      *
      * @throws Exception
      */
-    public function readDataByExternalSessionAndClient(string $externalSessionId, int $clientId): bool 
+    public function readDataByExternalSessionAndClient(int $organizationId, string $externalSessionId, int $clientId): bool 
     {
         return $this->readDataByColumns(
             array(
+                'ssp_org_id' => $organizationId,
                 'ssp_external_session_id' => $externalSessionId,
                 'ssp_client_id' => $clientId
             )
