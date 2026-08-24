@@ -638,13 +638,47 @@ class SAMLService extends SSOService {
                 return;
             }
 
-            if (!$gValidLogin) {
+            /*
+            * ForceAuthn asks for a fresh authentication even when an Admidio session
+            * already exists, IsPassive forbids any interaction with the user. The
+            * AuthnRequest is replayed after the login form, so the fact that the fresh
+            * login has happened is remembered in the session; without that the replayed
+            * request would demand a login again and again.
+            */
+            $isPassive = (bool) $request->getIsPassive();
+            $authenticationRequired = !$gValidLogin
+                || ((bool) $request->getForceAuthn() && !$this->hasCompletedReauthentication($request));
+
+            if ($authenticationRequired && $isPassive) {
+                $this->errorResponse(
+                    array(SamlConstants::STATUS_REQUESTER, SamlConstants::STATUS_NO_PASSIVE),
+                    'The request is passive, but the user would have to authenticate.',
+                    $request,
+                    $client
+                );
+                return;
+            }
+
+            if ($authenticationRequired) {
+                $this->rememberReauthenticationRequest($request);
                 $this->showSSOLoginForm($client);
                 // exit;
             }
 
             // Check whether the current user has access permissions to the SP client:
             if (!$client->hasAccessRight()) {
+                if ($isPassive) {
+                    // The user is authenticated but not allowed to use this client, and a
+                    // passive request must not be answered with an interactive page.
+                    $this->errorResponse(
+                        SamlConstants::STATUS_REQUESTER,
+                        $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName())),
+                        $request,
+                        $client
+                    );
+                    return;
+                }
+
                 $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' .
                     $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName())) .
                     '</div>';
@@ -852,6 +886,52 @@ class SAMLService extends SSOService {
             );
             $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
         }
+    }
+
+    /**
+     * Whether the fresh authentication that this AuthnRequest asked for has just happened.
+     *
+     * The login form returns to the same SSO URL, so the AuthnRequest is processed a second
+     * time and still carries ForceAuthn. Without this marker the request would send the user
+     * to the login form again. The marker is tied to the request id and is only accepted when
+     * the session was authenticated after the request was remembered.
+     */
+    private function hasCompletedReauthentication(AuthnRequest $request): bool
+    {
+        global $gCurrentSession;
+
+        $requestId = (string) $request->getID();
+        $rememberedRequest = $_SESSION['saml_reauthentication_request'] ?? null;
+
+        if ($requestId === ''
+            || !is_array($rememberedRequest)
+            || !isset($rememberedRequest['request_id'], $rememberedRequest['requested_at'])
+        ) {
+            return false;
+        }
+
+        if (!hash_equals((string) $rememberedRequest['request_id'], $requestId)) {
+            return false;
+        }
+
+        if ((int) $gCurrentSession->getValue('ses_authentication_time', 'U') < (int) $rememberedRequest['requested_at']) {
+            return false;
+        }
+
+        unset($_SESSION['saml_reauthentication_request']);
+
+        return true;
+    }
+
+    /**
+     * Remember that this AuthnRequest sent the user to the login form for a fresh login.
+     */
+    private function rememberReauthenticationRequest(AuthnRequest $request): void
+    {
+        $_SESSION['saml_reauthentication_request'] = array(
+            'request_id' => (string) $request->getID(),
+            'requested_at' => time()
+        );
     }
 
     /**
