@@ -952,33 +952,67 @@ class OIDCService extends SSOService {
 
         // Private key and Certificate for signatures
         $keyService = new KeyService($this->db);
-        $key = $keyService->getUsableKey((int) $gSettingsManager->get('sso_oidc_signing_key'), KeyService::USAGE_OIDC_SIGNING);
-        $publicKeyPem = (string) $key->getValue('key_public');
-        $publicKey = openssl_pkey_get_public($publicKeyPem);
-        $keyDetails = openssl_pkey_get_details($publicKey);
+        $signingKeyId = (int) $gSettingsManager->get('sso_oidc_signing_key');
+        $signingKey = $keyService->getUsableKey($signingKeyId, KeyService::USAGE_OIDC_SIGNING);
+        $signingJwk = $this->createJsonWebKey($signingKey);
 
-        if ($keyDetails === false|| !isset($keyDetails['rsa']['n'], $keyDetails['rsa']['e'])) {
+        if ($signingJwk === null) {
             throw new \Exception('SYS_SSO_PUBLIC_KEY_INVALID');
         }
 
-        // Extract the modulus and exponent
-        $modulus = rtrim(strtr(base64_encode($keyDetails['rsa']['n']), '+/', '-_'), '=');
-        $exponent = rtrim(strtr(base64_encode($keyDetails['rsa']['e']), '+/', '-_'), '=');
+        // The key that is currently used for signatures comes first, followed by every
+        // other key of the organization that is still usable for OIDC signatures. A key
+        // that was replaced in the preferences therefore stays published until it is
+        // deactivated, so ID tokens and logout tokens signed with it can still be
+        // validated by the relying parties during the rotation.
+        $jwks = array('keys' => array($signingJwk));
 
-        // Build the JWKS response
-        $jwks = [
-            'keys' => [[
-                'kty' => 'RSA',
-                'use' => 'sig',
-                'kid' => $key->getValue('key_uuid'),
-                'alg' => 'RS256',
-                'n'   => $modulus,
-                'e'   => $exponent
-            ]]
-        ];
+        foreach ($keyService->getKeysData(true, KeyService::USAGE_OIDC_SIGNING) as $keyData) {
+            $keyId = (int) $keyData['key_id'];
+
+            if ($keyId === $signingKeyId) {
+                continue;
+            }
+
+            $jwk = $this->createJsonWebKey(new Key($this->db, $keyId));
+            if ($jwk !== null) {
+                $jwks['keys'][] = $jwk;
+            }
+        }
 
         // Return as JSON
         return new JsonResponse($jwks);
+    }
+
+    /**
+     * Convert the public part of a cryptographic key to a JSON Web Key.
+     *
+     * @param Key $key Cryptographic key of the current organization.
+     * @return array|null The JWK, or null if the stored public key is not a usable RSA key.
+     */
+    private function createJsonWebKey(Key $key): ?array
+    {
+        $publicKey = openssl_pkey_get_public((string) $key->getValue('key_public'));
+
+        if ($publicKey === false) {
+            return null;
+        }
+
+        $keyDetails = openssl_pkey_get_details($publicKey);
+
+        if ($keyDetails === false || !isset($keyDetails['rsa']['n'], $keyDetails['rsa']['e'])) {
+            return null;
+        }
+
+        return array(
+            'kty' => 'RSA',
+            'use' => 'sig',
+            'kid' => $key->getValue('key_uuid'),
+            'alg' => 'RS256',
+            // Extract the modulus and exponent
+            'n'   => rtrim(strtr(base64_encode($keyDetails['rsa']['n']), '+/', '-_'), '='),
+            'e'   => rtrim(strtr(base64_encode($keyDetails['rsa']['e']), '+/', '-_'), '=')
+        );
     }
 
     public function handleDiscoveryRequest(): JsonResponse
