@@ -90,6 +90,35 @@ class MailpitIntegrationTest extends AdministratorTestCase
     }
 
     /**
+     * @testdox A PHPMailer failure in single-recipient mode is wrapped in an Admidio exception
+     */
+    public function testSingleRecipientFailureIsWrappedInAdmidioException(): void
+    {
+        global $gSettingsManager;
+
+        $oldSendingMode = $gSettingsManager->getInt('mail_sending_mode');
+        $gSettingsManager->set('mail_sending_mode', Email::SENDINGMODE_SINGLE);
+
+        try {
+            $email = new class extends Email {
+                public function send(): bool
+                {
+                    throw new \PHPMailer\PHPMailer\Exception('Simulated SMTP failure');
+                }
+            };
+
+            $this->assertTrue(
+                $email->addRecipient('mail-failure@example.test', 'Mail', 'Failure')
+            );
+
+            $this->expectException(\Admidio\Infrastructure\Exception::class);
+            $email->sendEmail();
+        } finally {
+            $gSettingsManager->set('mail_sending_mode', $oldSendingMode);
+        }
+    }
+
+    /**
      * @return array<string,mixed>|null
      */
     private function waitForMailpitMessage(string $host, int $port, string $recipient): ?array
