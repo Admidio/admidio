@@ -1257,11 +1257,12 @@ class SAMLService extends SSOService {
 
         $keys = $this->getKeysCertificates();
 
-        if ($this->shouldSignProtocolResponses($client)) {
-            $logoutRequest->setSignature(
-                $this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert'])
-            );
-        }
+        // The Single Logout profile requires a LogoutRequest that is sent through the
+        // HTTP Redirect or HTTP POST binding to be signed, independently of the
+        // signature settings of the client.
+        $logoutRequest->setSignature(
+            $this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert'])
+        );
 
         /*
         * Persist correlation data before returning the redirect. The next HTTP
@@ -1315,11 +1316,10 @@ class SAMLService extends SSOService {
 
         $keys = $this->getKeysCertificates();
 
-        if ($this->shouldSignProtocolResponses($client)) {
-            $logoutResponse->setSignature(
-                $this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert'])
-            );
-        }
+        // A LogoutResponse sent through a front-channel binding must be signed as well.
+        $logoutResponse->setSignature(
+            $this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert'])
+        );
 
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($logoutResponse);
@@ -1341,8 +1341,19 @@ class SAMLService extends SSOService {
             throw new Exception('Client "' . $client->getIdentifier() . '" is disabled. Logout is not possible.');
         }
 
-        if ($client->getValue('smc_require_auth_signed') || $client->getValue('smc_validate_signatures')) {
-            $this->validateSignature($client, $message, (bool) $client->getValue('smc_require_auth_signed'));
+        /*
+        * The Single Logout profile requires signed messages on the front-channel
+        * bindings. Admidio can only verify a signature when a certificate is stored for
+        * the client, so the signature is mandatory for every client that has one, and
+        * for every client whose configuration demands signatures. A client without a
+        * certificate has no verifiable identity at all and keeps the previous behaviour.
+        */
+        $signatureRequired = trim((string) $client->getValue('smc_x509_certificate')) !== ''
+            || (bool) $client->getValue('smc_require_auth_signed')
+            || (bool) $client->getValue('smc_validate_signatures');
+
+        if ($signatureRequired) {
+            $this->validateSignature($client, $message, true);
         }
 
         $this->validateRequestContext($client, $message, $this->sloUrl);
