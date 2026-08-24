@@ -26,7 +26,7 @@ class OIDCSessionParticipantService
         \DateTimeInterface $expiresAt
     ): void {
         $participant = new OIDCSessionParticipant($this->database);
-        $participant->readDataBySessionAndClient($externalSessionId, $clientId);
+        $participant->readDataBySessionAndClient($organizationId, $externalSessionId, $clientId);
         $participant->setParticipantData(
             $organizationId,
             $userId,
@@ -41,7 +41,7 @@ class OIDCSessionParticipantService
     /**
      * @return array<int,array<string,mixed>>
      */
-    public function getParticipants(string $externalSessionId): array
+    public function getParticipants(int $organizationId, string $externalSessionId): array
     {
         $statement = $this->database->queryPrepared(
             'SELECT osp_id,
@@ -52,10 +52,11 @@ class OIDCSessionParticipantService
                     osp_subject,
                     osp_expires_at
                FROM ' . TBL_OIDC_SESSION_PARTICIPANTS . '
-              WHERE osp_external_session_id = ?
+              WHERE osp_org_id = ?
+                AND osp_external_session_id = ?
                 AND osp_expires_at > CURRENT_TIMESTAMP
               ORDER BY osp_id',
-            array($externalSessionId)
+            array($organizationId, $externalSessionId)
         );
 
         $participants = array();
@@ -72,12 +73,13 @@ class OIDCSessionParticipantService
      * @throws Exception
      */
     public function assertParticipant(
+        int $organizationId,
         string $externalSessionId,
         int $clientId,
         string $subject
     ): void {
         $participant = new OIDCSessionParticipant($this->database);
-        if (!$participant->readDataBySessionAndClient($externalSessionId, $clientId)) {
+        if (!$participant->readDataBySessionAndClient($organizationId, $externalSessionId, $clientId)) {
             throw new Exception(
                 'The ID token hint does not identify an active OIDC session.'
             );
@@ -93,12 +95,13 @@ class OIDCSessionParticipantService
         }
     }
 
-    public function deleteParticipants(string $externalSessionId): void
+    public function deleteParticipants(int $organizationId, string $externalSessionId): void
     {
         $this->database->queryPrepared(
             'DELETE FROM ' . TBL_OIDC_SESSION_PARTICIPANTS . '
-              WHERE osp_external_session_id = ?',
-            array($externalSessionId)
+              WHERE osp_org_id = ?
+                AND osp_external_session_id = ?',
+            array($organizationId, $externalSessionId)
         );
     }
 

@@ -1370,7 +1370,7 @@ class SAMLService extends SSOService {
         // A SAML front-channel transaction is already in progress. Send
         // OIDC back-channel notifications now. Keep participant records because
         // front-channel-only OIDC clients have not been notified by this flow.
-        $oidcLogoutNotificationService->notifySession($externalSessionId, false);
+        $oidcLogoutNotificationService->notifySession($gCurrentOrgId, $externalSessionId, false);
 
         $currentExternalSessionId = $gValidLogin
             ? (string) $gCurrentSession->getValue('ses_external_session_id')

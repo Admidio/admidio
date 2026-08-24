@@ -30,7 +30,7 @@ class SAMLSessionParticipantService
         \DateTimeInterface $expiresAt
     ): void {
         $participant = new SAMLSessionParticipant($this->database);
-        $participant->readDataByExternalSessionAndClient($externalSessionId, $clientId);
+        $participant->readDataByExternalSessionAndClient($organizationId, $externalSessionId, $clientId);
         $participant->setParticipantData(
             $organizationId,
             $userId,
