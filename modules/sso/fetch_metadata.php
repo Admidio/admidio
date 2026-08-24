@@ -19,50 +19,18 @@ try {
     $csrfToken = admFuncVariableIsValid($_POST, 'adm_csrf_token', 'string');
     SecurityUtils::validateCsrfToken($csrfToken);
 
-    $rawUrl = trim(admFuncVariableIsValid($_POST, 'url', 'string'));
-    $url = filter_var($rawUrl, FILTER_VALIDATE_URL);
+    $url = trim(admFuncVariableIsValid($_POST, 'url', 'string'));
 
-    if ($url === false || strcasecmp((string) parse_url($url, PHP_URL_SCHEME), 'https') !== 0) {
+    // The metadata URL is requested by the server, so it must be a public HTTPS target.
+    // The returned options pin cURL to the address that was validated here.
+    try {
+        $requestOptions = SecurityUtils::getOutboundRequestCurlOptions(
+            $url,
+            $gSettingsManager->getBool('sso_allow_private_network')
+        );
+    } catch (Exception $e) {
         http_response_code(400);
         exit;
-    }
-
-    // Do not allow basic auth on the metadata URL or fragments
-    if (parse_url($url, PHP_URL_USER) !== null
-        || parse_url($url, PHP_URL_PASS) !== null
-        || parse_url($url, PHP_URL_FRAGMENT) !== null
-    ) {
-        http_response_code(400);
-        exit;
-    }
-
-    $host = parse_url($url, PHP_URL_HOST);
-    $port = parse_url($url, PHP_URL_PORT) ?? 443;
-
-    if (!is_string($host) || $host === '' || $port < 1 || $port > 65535) {
-        http_response_code(400);
-        exit;
-    }
-
-    // Pin cURL to one of the addresses that was validated here. Force IPv4 so
-    // cURL cannot fall back to an unvalidated AAAA record after this check.
-    if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
-        $addresses = array($host);
-    } else {
-        $addresses = gethostbynamel($host);
-    }
-
-    if ($addresses === false || count($addresses) === 0) {
-        http_response_code(400);
-        exit;
-    }
-
-    // Disallow private IPs, among others
-    foreach ($addresses as $address) {
-        if (filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
-            http_response_code(400);
-            exit;
-        }
     }
 
     $metadata = '';
@@ -74,12 +42,7 @@ try {
         throw new RuntimeException('Could not initialize the metadata request.');
     }
 
-    curl_setopt_array($curl, array(
-        CURLOPT_RESOLVE => array($host . ':' . $port . ':' . $addresses[0]),
-        CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-        CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
-        CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS,
-        CURLOPT_FOLLOWLOCATION => false,
+    curl_setopt_array($curl, $requestOptions + array(
         CURLOPT_CONNECTTIMEOUT => 5,
         CURLOPT_TIMEOUT => 10,
         CURLOPT_WRITEFUNCTION => static function ($curlHandle, string $chunk) use (

@@ -172,6 +172,84 @@ final class SecurityUtils
     }
 
     /**
+     * Validate a URL that Admidio requests from the server itself and return the cURL
+     * options that bind the request to the validated address.
+     *
+     * A request that the server sends to a configured URL can otherwise be aimed at
+     * services that are only reachable from within the network of the installation. The
+     * URL must therefore use HTTPS and must not carry credentials or a fragment, and
+     * every address of the host must be a public IPv4 address. The returned options
+     * force IPv4 and pin the connection to the address that was validated here, so a
+     * second name resolution cannot answer with a different, private address after the
+     * check (DNS rebinding).
+     *
+     * An installation that federates with a service inside its own network can allow
+     * private destinations. The address is then still resolved once and pinned, and plain
+     * HTTP becomes acceptable, because a service on the local network commonly has no
+     * certificate that Admidio could verify.
+     *
+     * @param string $url URL that Admidio is going to request.
+     * @param bool $allowPrivateNetwork Allow private and reserved addresses and plain HTTP.
+     * @return array<int,mixed> cURL options for the validated URL.
+     * @throws Exception SYS_OUTBOUND_URL_NOT_ALLOWED
+     */
+    public static function getOutboundRequestCurlOptions(string $url, bool $allowPrivateNetwork = false): array
+    {
+        $validatedUrl = filter_var($url, FILTER_VALIDATE_URL);
+        $scheme = strtolower((string) parse_url((string) $validatedUrl, PHP_URL_SCHEME));
+        $allowedSchemes = $allowPrivateNetwork ? array('https', 'http') : array('https');
+
+        if ($validatedUrl === false
+            || !in_array($scheme, $allowedSchemes, true)
+            || parse_url($validatedUrl, PHP_URL_USER) !== null
+            || parse_url($validatedUrl, PHP_URL_PASS) !== null
+            || parse_url($validatedUrl, PHP_URL_FRAGMENT) !== null
+        ) {
+            throw new Exception('SYS_OUTBOUND_URL_NOT_ALLOWED');
+        }
+
+        $host = parse_url($validatedUrl, PHP_URL_HOST);
+        $port = parse_url($validatedUrl, PHP_URL_PORT) ?? ($scheme === 'http' ? 80 : 443);
+
+        if (!is_string($host) || $host === '' || $port < 1 || $port > 65535) {
+            throw new Exception('SYS_OUTBOUND_URL_NOT_ALLOWED');
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
+            $addresses = array($host);
+        } else {
+            $addresses = gethostbynamel($host);
+        }
+
+        if ($addresses === false || count($addresses) === 0) {
+            throw new Exception('SYS_OUTBOUND_URL_NOT_ALLOWED');
+        }
+
+        // Every address of the host must pass, otherwise a host that publishes a public
+        // and a private address could still be used to reach the private one.
+        $addressFlags = FILTER_FLAG_IPV4;
+        if (!$allowPrivateNetwork) {
+            $addressFlags |= FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
+        }
+
+        foreach ($addresses as $address) {
+            if (filter_var($address, FILTER_VALIDATE_IP, $addressFlags) === false) {
+                throw new Exception('SYS_OUTBOUND_URL_NOT_ALLOWED');
+            }
+        }
+
+        $protocols = $allowPrivateNetwork ? CURLPROTO_HTTPS | CURLPROTO_HTTP : CURLPROTO_HTTPS;
+
+        return array(
+            CURLOPT_RESOLVE => array($host . ':' . $port . ':' . $addresses[0]),
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+            CURLOPT_PROTOCOLS => $protocols,
+            CURLOPT_REDIR_PROTOCOLS => $protocols,
+            CURLOPT_FOLLOWLOCATION => false
+        );
+    }
+
+    /**
      * Method will check the CSRF token from the parameter against the CSRF token of the
      * current session. If these tokens don't match an exception will be thrown.
      * @param string $csrfToken The CSRF token that should be validated.
