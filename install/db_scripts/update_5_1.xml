@@ -199,5 +199,6 @@
     <step id="1140">UpdateStepsCode::updateStep51HashSsoTokenIdentifiers</step>
     <step id="1150">UpdateStepsCode::updateStep51WarnAboutMutableOIDCSubjects</step>
     <step id="1160">CREATE UNIQUE INDEX %PREFIX%_idx_oco_user_client ON %PREFIX%_oidc_consents (oco_org_id, oco_usr_id, oco_ocl_id)</step>
+    <step id="1170">ALTER TABLE %PREFIX%_oidc_consents ADD COLUMN oco_policy_hash varchar(64) NULL</step>
     <step>stop</step>
 </update>

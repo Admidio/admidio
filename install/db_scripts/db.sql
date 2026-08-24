@@ -653,6 +653,7 @@ CREATE TABLE %PREFIX%_oidc_consents (
     oco_usr_id                  integer unsigned    NOT NULL,
     oco_ocl_id                  integer unsigned    NOT NULL,
     oco_scopes                  text                NOT NULL,
+    oco_policy_hash             varchar(64)         NULL,
     oco_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     oco_timestamp_change        timestamp           NULL,
     PRIMARY KEY (oco_id)
