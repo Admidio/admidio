@@ -4,8 +4,9 @@ coverage/
 .phpunit.cache/
 *.log
 
-# The adm_my_files of the test run, created by tests/bin/setup-test-env.php
-adm_my_files/
+# Ignore generated adm_my_files content, but keep the safety marker in Git.
+adm_my_files/*
+!adm_my_files/.admidio-regression-test
 
 # Test environment
 .env.test

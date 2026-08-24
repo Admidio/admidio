@@ -15,10 +15,10 @@ that is rolled back afterwards.
 # 1. Copy environment configuration
 cp .env.test.example .env.test
 
-# 2. Start test databases
+# 2. Start test services (databases and Mailpit)
 docker-compose -f docker-compose.test.yml up -d
 
-# 3. Setup test environment (creates the directories, waits for the database)
+# 3. Setup test environment (creates directories and verifies external services)
 php tests/bin/setup-test-env.php
 
 # 4. Run tests
@@ -27,7 +27,7 @@ composer test:integration   # integration tests
 composer test:cli           # command line tests
 composer test:all           # everything
 
-# 5. Stop test databases when done
+# 5. Stop test services when done
 docker-compose -f docker-compose.test.yml down
 ```
 
@@ -40,8 +40,10 @@ If you have an existing MySQL/MariaDB or PostgreSQL server:
 3. Run `php tests/bin/setup-test-env.php`
 4. Run the tests with the `composer test:*` commands above
 
-The suite **drops every table** in that database before it installs Admidio into it. It refuses to
-start unless the database name and `TEST_FILES_PATH` both contain `test`.
+The full integration suite also requires Mailpit (or another compatible SMTP sink exposing the
+Mailpit API). The suite **drops every table** in the configured database before it installs Admidio
+into it. Filesystem regression operations are refused unless `TEST_FILES_PATH` points to the
+dedicated test tree and its source-controlled marker is present.
 
 ## What the suite contains
 
@@ -219,7 +221,8 @@ These are the variables the suite reads:
 | `TEST_DB_<ENGINE>_PASS` | password |
 | `TEST_DB_<ENGINE>_NAME` | database, must contain `test` |
 | `TEST_FILES_PATH` | the adm_my_files of the test run, Admidio's `FOLDER_DATA` points at it. Inside the checkout, path must contain `test` |
-| `TEST_MAIL_HOST`, `TEST_MAIL_PORT` | only used by the setup script to report whether Mailpit answers |
+| `TEST_MAIL_HOST`, `TEST_MAIL_PORT` | Mailpit SMTP endpoint used by the setup check and the real mail integration test |
+| `TEST_MAILPIT_API_HOST`, `TEST_MAILPIT_API_PORT` | Mailpit HTTP API endpoint used to verify actual delivery |
 
 `<ENGINE>` is `MARIADB`, `MYSQL` or `POSTGRES`.
 
@@ -250,15 +253,15 @@ composer test:setup         # tests/bin/setup-test-env.php
 
 ### GitHub Actions
 
-`.github/workflows/regression-tests.yml` runs on every pull request against `v4.3`, on every push
-to `v4.3`, weekly for MySQL, and on demand:
+`.github/workflows/regression-tests.yml` runs on every pull request against `master`, on every push
+to `master`, weekly for MySQL, and on demand:
 
 | Job | Runs | Contents |
 |-----|------|----------|
 | `fast-checks` | every run | PHP syntax of `src`, `system`, `modules`, `install`, `tests`; `composer validate`; unit tests |
-| `mariadb` | every run | MariaDB 10.11, integration and CLI tests |
-| `postgres` | every run | PostgreSQL 15, integration and CLI tests |
-| `mysql` | weekly and on demand | MySQL 8.0, integration and CLI tests |
+| `mariadb` | every run | MariaDB 10.11 + Mailpit, integration and CLI tests |
+| `postgres` | every run | PostgreSQL 15 + Mailpit, integration and CLI tests |
+| `mysql` | weekly and on demand | MySQL 8.0 + Mailpit, integration and CLI tests |
 
 The database jobs get their configuration from the `env:` block of the job, so nothing copies or
 edits `.env.test` on the runner.
