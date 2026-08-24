@@ -198,5 +198,6 @@
     <step id="1120" database="pgsql">ALTER TABLE %PREFIX%_oidc_clients ALTER COLUMN ocl_org_id SET NOT NULL</step>
     <step id="1130">UPDATE %PREFIX%_saml_clients SET smc_org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations) WHERE smc_org_id = 0 OR smc_org_id IS NULL</step>
     <step id="1140">UpdateStepsCode::updateStep51HashSsoTokenIdentifiers</step>
+    <step id="1150">UpdateStepsCode::updateStep51WarnAboutMutableOIDCSubjects</step>
     <step>stop</step>
 </update>
