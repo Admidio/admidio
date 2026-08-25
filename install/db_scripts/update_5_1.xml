@@ -109,5 +109,6 @@
     <step id="750">UPDATE %PREFIX%_menu SET men_url = '/modules/events.php' WHERE men_name_intern = 'events'</step>
     <step id="760" database="pgsql">SELECT setval(pg_get_serial_sequence('%PREFIX%_user_relation_types', 'urt_id'), COALESCE(MAX(urt_id), 1), MAX(urt_id) IS NOT NULL) FROM %PREFIX%_user_relation_types</step>
     <step id="770">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_value = '' AND prf_name IN ('groups_roles_default_configuration', 'events_list_configuration', 'contacts_list_configuration')</step>
+    <step id="780">UpdateStepsCode::updateStep51SeedPluginPreferences</step>
     <step>stop</step>
 </update>

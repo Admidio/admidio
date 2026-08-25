@@ -62,8 +62,8 @@ class OrganizationService
         // After setting up the base organization record, we don't want to add changelog entries for all the copying of the settings to the new org!
         Entity::setLoggingEnabled(false);
 
-        // write all preferences from preferences.php in table adm_preferences
-        require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
+        // every organization starts with the registered defaults of the core and of the plugins
+        $defaultOrgPreferences = PreferenceDefinitions::defaults();
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');

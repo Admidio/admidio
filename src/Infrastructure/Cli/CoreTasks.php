@@ -3437,7 +3437,7 @@ final class CoreTasks
             $organization->save();
 
             Entity::setLoggingEnabled(false);
-            require ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php';
+            $defaultOrgPreferences = PreferenceDefinitions::defaults();
             $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
 
             $newSettingsManager =& $organization->getSettingsManager();

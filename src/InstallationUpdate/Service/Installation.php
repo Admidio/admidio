@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Users\Entity\User;
 use DateTimeZone;
@@ -787,8 +788,8 @@ class Installation
     {
         global $gPasswordHashAlgorithm;
 
-        // read all preferences from preferences.php
-        require(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
+        // the registered defaults of the core and of every plugin that is in use
+        $defaultOrgPreferences = PreferenceDefinitions::defaults();
 
         // set some specific preferences whose values came from the input of the installation
         $defaultOrgPreferences['system_language'] = $config->language;

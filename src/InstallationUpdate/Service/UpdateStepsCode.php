@@ -9,6 +9,8 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\Preferences\Service\PreferenceDefinitions;
+use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\RolesRights;
@@ -186,6 +188,31 @@ final class UpdateStepsCode
                 $instance->doInstall();
             }
         }
+    }
+
+    /**
+     * Give every organization a row for every preference of every plugin.
+     *
+     * Until now a plugin wrote its preferences with the settings manager of the organization the
+     * administrator happened to be in, so every other organization had none. Reading one of them
+     * there answered a registered default instead of a stored value, which is not what a
+     * preference is.
+     *
+     * @throws Exception
+     */
+    public static function updateStep51SeedPluginPreferences(): void
+    {
+        $pluginManager = new PluginManager();
+
+        foreach ($pluginManager->getAvailablePlugins() as $plugin) {
+            if (!isset($plugin['interface']) || $plugin['interface'] === null) {
+                continue;
+            }
+            // reading the metadata registers the definitions of the plugin
+            $plugin['interface']::getInstance();
+        }
+
+        PreferencesService::seedDefaults(PreferenceDefinitions::registeredNames());
     }
 
     /**

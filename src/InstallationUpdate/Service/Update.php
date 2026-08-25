@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
@@ -141,7 +142,7 @@ class Update
         PhpIniUtils::startNewExecutionTimeLimit(120);
 
         // first write the possible new Orga settings in DB
-        require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
+        PreferencesService::seedDefaults();
 
         // calculate the best cost value for your server performance
         $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
@@ -151,13 +152,16 @@ class Update
             $updateOrgPreferences = array('system_hashing_cost' => $benchmarkResults['options']['cost']);
         }
 
+        if ($updateOrgPreferences === array()) {
+            return;
+        }
+
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationStatement = $gDb->queryPrepared($sql);
 
         while ($orgId = $organizationStatement->fetchColumn()) {
             $organization = new Organization($gDb, $orgId);
             $settingsManager =& $organization->getSettingsManager();
-            $settingsManager->setMulti($defaultOrgPreferences, false);
             $settingsManager->setMulti($updateOrgPreferences);
         }
     }

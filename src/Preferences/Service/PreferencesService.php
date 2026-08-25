@@ -12,6 +12,8 @@ use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Language;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\Preferences\ValueObject\SettingsManager;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -606,6 +608,74 @@ class PreferencesService
      * @param array<string,string> $normalized
      * @throws Exception
      */
+    /**
+     * Write the registry default of the named preferences into every organization.
+     *
+     * A preference exists for an organization as soon as it has a row, and it gets that row here.
+     * An organization that already stores a value keeps it, so seeding the same names again is
+     * what an update does when a new version brought new preferences.
+     *
+     * @param array<int,string> $names The preferences to seed, or all of them if the array is empty.
+     * @throws Exception
+     */
+    public static function seedDefaults(array $names = array()): void
+    {
+        global $gDb, $gSettingsManager;
+
+        $defaults = PreferenceDefinitions::defaults();
+        if ($names !== array()) {
+            $defaults = array_intersect_key($defaults, array_flip($names));
+        }
+        if ($defaults === array()) {
+            return;
+        }
+
+        $statement = $gDb->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS);
+        while ($organizationId = $statement->fetchColumn()) {
+            $organization = new Organization($gDb, (int)$organizationId);
+            $settingsManager =& $organization->getSettingsManager();
+            // false: an organization that already decided about a preference is not overwritten.
+            $settingsManager->setMulti($defaults, false);
+        }
+
+        if (isset($gSettingsManager) && $gSettingsManager instanceof SettingsManager) {
+            $gSettingsManager->resetAll();
+        }
+    }
+
+    /**
+     * Remove the named preferences from every organization.
+     *
+     * The counterpart of seedDefaults(), for a module or plugin that is uninstalled. A preference
+     * that an organization never stored is silently skipped.
+     *
+     * @param array<int,string> $names
+     * @throws Exception
+     */
+    public static function removePreferences(array $names): void
+    {
+        global $gDb, $gSettingsManager;
+
+        if ($names === array()) {
+            return;
+        }
+
+        $statement = $gDb->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS);
+        while ($organizationId = $statement->fetchColumn()) {
+            $organization = new Organization($gDb, (int)$organizationId);
+            $settingsManager =& $organization->getSettingsManager();
+            foreach ($names as $name) {
+                if ($settingsManager->has($name)) {
+                    $settingsManager->del($name);
+                }
+            }
+        }
+
+        if (isset($gSettingsManager) && $gSettingsManager instanceof SettingsManager) {
+            $gSettingsManager->resetAll();
+        }
+    }
+
     private function persistCorePreferences(array $normalized): void
     {
         global $gDb, $gL10n, $gSettingsManager;
