@@ -3428,15 +3428,10 @@ final class CoreTasks
                     array((int)$user->getValue('usr_id'))
                 )->fetchAll();
 
+                $visibleUsers = array();
                 foreach ($relations as $relation) {
-                    try {
-                        $otherUser = CliApplication::resolveUser((string)$relation['related_user_id']);
-                    } catch (InvalidArgumentException) {
-                        // Never expose an endpoint that does not belong to the selected organization.
-                        continue;
-                    }
-
-                    if (!$gCurrentUser->hasRightViewProfile($otherUser)) {
+                    $otherUser = self::visibleRelationEndpoint((int)$relation['related_user_id'], $visibleUsers);
+                    if ($otherUser === null) {
                         continue;
                     }
 
@@ -4009,13 +4004,43 @@ final class CoreTasks
         return 0;
     }
 
+    /**
+     * Resolve one endpoint of a user relation, or null if the acting user may not see it.
+     *
+     * An endpoint is only shown if the user belongs to the selected organization and the acting
+     * user may open their profile - the same two decisions the web relation list makes. A relation
+     * list repeats the same users many times, so every user is read only once.
+     *
+     * @param array<int,?User> $cache
+     */
+    private static function visibleRelationEndpoint(int $userId, array &$cache): ?User
+    {
+        global $gCurrentUser;
+
+        if (!array_key_exists($userId, $cache)) {
+            try {
+                $user = CliApplication::resolveUser((string)$userId);
+            } catch (InvalidArgumentException) {
+                $user = null;
+            }
+
+            $cache[$userId] = ($user !== null && $gCurrentUser->hasRightViewProfile($user)) ? $user : null;
+        }
+
+        return $cache[$userId];
+    }
+
     public static function relationList(array $arguments, array $options): int
     {
-        global $gDb;
+        global $gDb, $gCurrentUser;
+
         $where = array('1 = 1');
         $params = array();
         if (isset($arguments[0])) {
             $user = CliApplication::resolveUser($arguments[0]);
+            if (!$gCurrentUser->hasRightViewProfile($user)) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $where[] = '(ure_usr_id1 = ? OR ure_usr_id2 = ?)';
             $params[] = (int)$user->getValue('usr_id');
             $params[] = (int)$user->getValue('usr_id');
@@ -4026,7 +4051,7 @@ final class CoreTasks
             $params[] = (int)$type->getValue('urt_id');
         }
 
-        $rows = $gDb->queryPrepared(
+        $relationRows = $gDb->queryPrepared(
             'SELECT ure.ure_id AS id, ure.ure_uuid AS uuid, urt.urt_name AS type,
                     ure.ure_usr_id1 AS user1_id, ure.ure_usr_id2 AS user2_id
                FROM ' . TBL_USER_RELATIONS . ' ure
@@ -4035,16 +4060,43 @@ final class CoreTasks
            ORDER BY ure.ure_id',
             $params
         )->fetchAll();
+
+        $rows = array();
+        $visibleUsers = array();
+        foreach ($relationRows as $row) {
+            $user1 = self::visibleRelationEndpoint((int)$row['user1_id'], $visibleUsers);
+            $user2 = self::visibleRelationEndpoint((int)$row['user2_id'], $visibleUsers);
+
+            if ($user1 === null || $user2 === null) {
+                continue;
+            }
+
+            $rows[] = array(
+                'id' => (int)$row['id'],
+                'uuid' => (string)$row['uuid'],
+                'type' => (string)$row['type'],
+                'user1_uuid' => (string)$user1->getValue('usr_uuid'),
+                'user2_uuid' => (string)$user2->getValue('usr_uuid')
+            );
+        }
+
         CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
         return 0;
     }
 
     public static function relationAdd(array $arguments, array $options): int
     {
-        global $gDb;
+        global $gDb, $gCurrentUser;
+
         $user1 = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user1'));
         $user2 = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 1, 'user2'));
         $type = self::resolveRelationType(CliApplication::requireArgument($arguments, 2, 'type'));
+
+        if (!$gCurrentUser->hasRightEditProfile($user1)
+            || !$gCurrentUser->hasRightEditProfile($user2)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         if ((int)$user1->getValue('usr_id') === (int)$user2->getValue('usr_id')) {
             throw new InvalidArgumentException('A user relation requires two different users.');
         }
@@ -4089,14 +4141,42 @@ final class CoreTasks
             throw $e;
         }
 
-        CliApplication::writeValue(array('id' => (int)$relation->getValue('ure_id'), 'uuid' => (string)$relation->getValue('ure_uuid')), $options);
+        CliApplication::writeValue(
+            array(
+                'id' => (int)$relation->getValue('ure_id'),
+                'uuid' => (string)$relation->getValue('ure_uuid')
+            ),
+            $options
+        );
         return 0;
     }
 
     public static function relationDelete(array $arguments, array $options): int
     {
+        global $gCurrentUser;
+
+        $relation = self::resolveRelation(CliApplication::requireArgument($arguments, 0, 'relation'));
+
+        /*
+         * resolveRelation() is deliberately global because relation UUIDs/ids are globally unique.
+         * Resolve both endpoints again through the organization-scoped user resolver before the
+         * record can be mutated.
+         */
+        try {
+            $user1 = CliApplication::resolveUser((string)$relation->getValue('ure_usr_id1'));
+            $user2 = CliApplication::resolveUser((string)$relation->getValue('ure_usr_id2'));
+        } catch (InvalidArgumentException) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        if (!$gCurrentUser->hasRightEditProfile($user1)
+            || !$gCurrentUser->hasRightEditProfile($user2)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         CliApplication::confirm('Delete this user relation?', $options);
-        self::resolveRelation(CliApplication::requireArgument($arguments, 0, 'relation'))->delete();
+        $relation->delete();
+
         CliApplication::writeSuccess('User relation deleted.', $options);
         return 0;
     }
