@@ -950,6 +950,15 @@ class Entity
             }
         }
 
+        // A caller may set columnsValueChanged for a change that belongs to a connected object and
+        // not to a column of this table, User::save() for its profile fields for example. If no
+        // column of this table changed, there is nothing to update, and an UPDATE without a SET
+        // clause would be a syntax error.
+        if (!$this->insertRecord && count($sqlSetArray) === 0) {
+            $this->columnsValueChanged = false;
+            return false;
+        }
+
         // Every log entry that is written by this save belongs to the same change: the creation
         // entry and the entries of the initial values of a new record, or all fields that this
         // save has modified. LogChanges stamps them with one UUID, so that they can be shown
