@@ -5910,10 +5910,6 @@ final class CoreTasks
             throw new InvalidArgumentException('message:reply can only be used with private-message conversations.');
         }
 
-        if (CliApplication::optionExists($options, 'attachment')) {
-            throw new InvalidArgumentException('Private messages do not support attachments.');
-        }
-
         $body = self::readTextOption($options, 'body', 'body-file', true);
         $savedMessage = (new MessageService($gDb))->sendData(
             Message::MESSAGE_TYPE_PM,
