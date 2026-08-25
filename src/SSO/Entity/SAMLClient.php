@@ -9,4 +9,13 @@ class SAMLClient extends SSOClient
         parent::__construct($database, 'saml', TBL_SAML_CLIENTS, 'smc', $client_id);
     }
 
+    /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'saml_client';
+    }
+
 }

@@ -50,6 +50,15 @@ class ItemData extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'inventory_item_data';
+    }
+
+    /**
      * Since creation means setting value from NULL to something, deletion mean setting the field to empty,
      * we need one generic change log function that is called on creation, deletion and modification.
      *

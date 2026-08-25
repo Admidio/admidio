@@ -75,6 +75,15 @@ class RolesRights extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'role_right';
+    }
+
+    /**
      * Add all roles of the parameter array to the current roles rights object.
      * @param array<int,int> $roleIds Array with all role ids that should be added.
      * @throws Exception

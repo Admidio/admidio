@@ -49,6 +49,15 @@ class Topic extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'forum_topic';
+    }
+
+    /**
      * Deletes the selected guestbook entry and all comments.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred

@@ -46,6 +46,15 @@ class ItemField extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'inventory_field';
+    }
+
+    /**
      * Deletes the selected field and all references in other tables.
      * Also, the gap in sequence will be closed. After that the class will be initialized.
      * @return true true if no error occurred

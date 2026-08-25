@@ -66,6 +66,15 @@ class Event extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'event';
+    }
+
+    /**
      * Check if the current user is allowed to participate in this event.
      * Therefore, we check if the user is member of a role that is assigned to
      * the right event_participation. This method will also return **true** if the deadline is exceeded
