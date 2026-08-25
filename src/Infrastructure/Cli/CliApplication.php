@@ -1725,12 +1725,14 @@ final class CliApplication
 
             case 'csv':
                 $stream = fopen('php://temp', 'w+');
-                fputcsv($stream, array_map(array(self::class, 'neutralizeFormula'), $headers));
+                // The default $escape is deprecated since PHP 8.4; '' is the documented
+                // successor and the only one that writes RFC 4180 compliant CSV.
+                fputcsv($stream, array_map(array(self::class, 'neutralizeFormula'), $headers), escape: '');
                 foreach ($rows as $row) {
                     fputcsv($stream, array_map(
                         static fn (mixed $value): string => self::neutralizeFormula(self::normalizeCell($value)),
                         $row
-                    ));
+                    ), escape: '');
                 }
                 rewind($stream);
                 $output = stream_get_contents($stream);
