@@ -8395,55 +8395,68 @@ final class CoreTasks
         return 0;
     }
 
+    /**
+     * The user whose change history is requested, or null if the request is not about one user.
+     *
+     * The tables of the user history are shared between all organizations, so they are not
+     * protected by a table permission but by the right to edit the profile of that one user.
+     *
+     * @param array<int,string> $tables
+     */
+    private static function changelogSubject(array $tables, string $recordUuid): ?User
+    {
+        global $gDb, $gProfileFields;
+
+        if ($recordUuid === '' || !ChangelogService::isUserHistory($tables)) {
+            return null;
+        }
+
+        $user = new User($gDb, $gProfileFields);
+        $user->readDataByUuid($recordUuid);
+
+        return $user->isNewRecord() ? null : $user;
+    }
+
     public static function changelogList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser;
+        global $gDb, $gCurrentUser, $gSettingsManager;
 
-        $permittedTables = array_values(array_filter(
-            array_unique(ChangelogService::getPermittedTables($gCurrentUser)),
-            static fn (string $table): bool => ChangelogService::hasLogViewPermission($table, $gCurrentUser)
-        ));
-
-        /*
-         * ChangelogService::isTableLogged() falls back to the changelog_table_others preference for
-         * tables it does not know, so asking for a table name that is certainly not configured
-         * answers whether *any* table may be inspected. For an administrator that makes the
-         * log_table restriction pointless, and enumerating the tables would be incomplete anyway.
-         *
-         * The previous implementation derived the list with SELECT DISTINCT log_table over
-         * adm_log_changes instead. That is the largest table of a mature installation and the query
-         * has no predicate to use an index for.
-         */
-        $anyTablePermitted = $gCurrentUser->isAdministrator()
-            && ChangelogService::hasLogViewPermission('adm_cli_unknown_table', $gCurrentUser);
-
-        if (!$anyTablePermitted && $permittedTables === array()) {
-            throw new Exception('SYS_NO_RIGHTS');
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
+            throw new Exception('SYS_MODULE_DISABLED');
         }
 
         $requestedTables = CliApplication::optionValues($options, 'table');
-        if ($requestedTables !== array()) {
-            foreach ($requestedTables as $table) {
-                if (!ChangelogService::hasLogViewPermission($table, $gCurrentUser)
-                    || (!$anyTablePermitted && !in_array($table, $permittedTables, true))) {
-                    throw new Exception('SYS_NO_RIGHTS');
-                }
-            }
-            $tables = $requestedTables;
-        } else {
-            // No restriction is needed when every table may be inspected anyway.
-            $tables = $anyTablePermitted ? array() : $permittedTables;
+        $objectUuid = CliApplication::optionString($options, 'object');
+        $subject = self::changelogSubject($requestedTables, $objectUuid);
+
+        /*
+         * ChangelogService is the single place where the view permissions of the change history
+         * are decided, see modules/changelog/changelog_data.php. They are applied as conditions of
+         * the query and not by dropping rows, so --limit and --offset stay meaningful.
+         */
+        $readableTables = ChangelogService::getReadableTables($gCurrentUser, $requestedTables, $subject);
+        if ($readableTables === array()) {
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $conditions = array();
         $params = array();
-        if ($tables !== array()) {
-            $placeholders = implode(', ', array_fill(0, count($tables), '?'));
-            $conditions[] = 'log_table IN (' . $placeholders . ')';
-            array_push($params, ...$tables);
+
+        // An administrator that asked for no table also sees the tables of third-party extensions.
+        if (!ChangelogService::hasUnrestrictedAccess($gCurrentUser) || $requestedTables !== array()) {
+            $conditions[] = 'log_table IN (' . Database::getQmForValues($readableTables) . ')';
+            array_push($params, ...$readableTables);
         }
 
-        $objectUuid = CliApplication::optionString($options, 'object');
+        // The user tables are shared between all organizations and are restricted per user.
+        $userTableRestriction = ChangelogService::getUserTableRestriction($gCurrentUser, $subject);
+        if ($userTableRestriction !== '') {
+            $conditions[] = '(log_table NOT IN (' . Database::getQmForValues(ChangelogService::$userTables) . ')
+                              OR log_record_uuid = ?)';
+            array_push($params, ...ChangelogService::$userTables);
+            $params[] = $userTableRestriction;
+        }
+
         if ($objectUuid !== '') {
             $conditions[] = 'log_record_uuid = ?';
             $params[] = $objectUuid;
@@ -8512,7 +8525,11 @@ final class CoreTasks
 
     public static function changelogShow(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser;
+        global $gDb, $gCurrentUser, $gSettingsManager;
+
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
+            throw new Exception('SYS_MODULE_DISABLED');
+        }
 
         $id = self::positiveInt(CliApplication::requireArgument($arguments, 0, 'change'), 'change');
         $row = $gDb->queryPrepared(
@@ -8534,9 +8551,17 @@ final class CoreTasks
         }
 
         $table = (string)$row['table_name'];
-        $permittedTables = ChangelogService::getPermittedTables($gCurrentUser);
-        if ((!$gCurrentUser->isAdministrator() && !in_array($table, $permittedTables, true))
-            || !ChangelogService::hasLogViewPermission($table, $gCurrentUser)) {
+        $subject = self::changelogSubject(array($table), (string)$row['record_uuid']);
+
+        if (ChangelogService::getReadableTables($gCurrentUser, array($table), $subject) === array()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        // A record of a shared user table is only readable for the one user it belongs to.
+        $userTableRestriction = ChangelogService::getUserTableRestriction($gCurrentUser, $subject);
+        if ($userTableRestriction !== ''
+            && in_array($table, ChangelogService::$userTables, true)
+            && (string)$row['record_uuid'] !== $userTableRestriction) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
