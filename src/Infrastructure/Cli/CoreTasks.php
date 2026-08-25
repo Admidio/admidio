@@ -616,13 +616,16 @@ final class CoreTasks
             self::opt('name', 'Organization long name.', 'NAME'),
             self::opt('email', 'Administrator email address.', 'EMAIL'),
             self::opt('homepage', 'Organization homepage.', 'URL'),
-            self::opt('parent', 'Parent organization.', 'ORG'),
             self::opt('show-organization-select', 'Show organization selection at login.', 'BOOL'),
             self::opt('share-members', 'Set contacts_suborganization_use_same_members on the PARENT organization, so its suborganizations share its members.', 'BOOL')
         );
+        $orgAddOptions = $orgOptions;
+        array_splice($orgAddOptions, 4, 0, array(
+            self::opt('parent', 'Parent organization.', 'ORG')
+        ));
         self::task('organization:add', 'organizationAdd', 'Create a suborganization with native basic data and preferences.',
             'organization:add --short-name=NAME --name=NAME --email=EMAIL [options]', 'ORGANIZATIONS', true, array(),
-            array_replace($orgOptions, array(
+            array_replace($orgAddOptions, array(
                 0 => self::opt('short-name', 'Organization short name.', 'NAME', true),
                 1 => self::opt('name', 'Organization long name.', 'NAME', true),
                 2 => self::opt('email', 'Administrator email address.', 'EMAIL', true)
@@ -3233,11 +3236,6 @@ final class CoreTasks
         if (CliApplication::optionExists($options, 'short-name')
             && CliApplication::optionString($options, 'short-name') !== (string)$organization->getValue('org_shortname')) {
             throw new RuntimeException('Current OrganizationService does not permit changing org_shortname.');
-        }
-
-        if (CliApplication::optionExists($options, 'parent')) {
-            $parent = self::resolveOrganization(CliApplication::optionString($options, 'parent'));
-            $organization->setValue('org_org_id_parent', (int)$parent->getValue('org_id'));
         }
 
         if (CliApplication::optionExists($options, 'show-organization-select')) {
