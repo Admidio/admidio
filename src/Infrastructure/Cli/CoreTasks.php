@@ -3800,6 +3800,17 @@ final class CoreTasks
         $tfa = new TwoFactorAuth(issuer: (string)$gCurrentOrganization->getValue('org_longname'));
         $secret = CliApplication::readSecret($options, 'secret', 'secret-stdin');
         if ($secret === '') {
+            if (CliApplication::optionBool($options, 'no-interaction', false)) {
+                throw new InvalidArgumentException(
+                    'Non-interactive TFA setup requires --secret or --secret-stdin.'
+                );
+            }
+            if (CliApplication::optionString($options, 'format', 'text') === 'json') {
+                throw new InvalidArgumentException(
+                    'JSON mode cannot display a newly generated TFA secret. Provide --secret or --secret-stdin.'
+                );
+            }
+
             $secret = $tfa->createSecret();
             CliApplication::writeOutput('Secret: ' . $secret . PHP_EOL, $options, false);
         }
