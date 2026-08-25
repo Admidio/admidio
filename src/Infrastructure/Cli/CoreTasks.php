@@ -3351,7 +3351,7 @@ final class CoreTasks
 
     public static function userShow(array $arguments, array $options): int
     {
-        global $gDb, $gProfileFields, $gCurrentUser;
+        global $gDb, $gProfileFields, $gCurrentOrgId, $gCurrentUser, $gCurrentUserId, $gSettingsManager;
 
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
         if (!$gCurrentUser->hasRightViewProfile($user)) {
@@ -3366,34 +3366,88 @@ final class CoreTasks
             'profile' => array()
         );
 
+        /*
+         * The profile page applies this predicate to every single profile field. The broad
+         * hasRightViewProfile() check above only decides whether the profile itself may be opened.
+         */
         foreach ($gProfileFields->getProfileFields() as $field) {
             $nameIntern = (string)$field->getValue('usf_name_intern');
-            $data['profile'][$nameIntern] = $user->getValue($nameIntern, 'database');
+            if ($gCurrentUser->allowedViewProfileField($user, $nameIntern)) {
+                $data['profile'][$nameIntern] = $user->getValue($nameIntern, 'database');
+            }
         }
 
         if (CliApplication::optionBool($options, 'memberships', false)) {
-            $data['memberships'] = $gDb->queryPrepared(
-                'SELECT mem_uuid AS uuid, rol_uuid AS role_uuid, rol_name AS role,
+            $memberships = $gDb->queryPrepared(
+                'SELECT mem_uuid AS uuid, mem_rol_id AS role_id, rol_uuid AS role_uuid, rol_name AS role,
                         mem_begin AS begin, mem_end AS end, mem_leader AS leader
                    FROM ' . TBL_MEMBERS . '
              INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
+             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
                   WHERE mem_usr_id = ?
+                    AND rol_valid = true
+                    AND cat_name_intern <> \'EVENTS\'
+                    AND (cat_org_id = ? OR cat_org_id IS NULL)
                ORDER BY mem_begin DESC, rol_name',
-                array((int)$user->getValue('usr_id'))
+                array((int)$user->getValue('usr_id'), $gCurrentOrgId)
             )->fetchAll();
+
+            $data['memberships'] = array();
+            foreach ($memberships as $membership) {
+                // mem_end is exclusive, so a membership that ends today is already a former one.
+                $isFormer = strcmp((string)$membership['end'], DATE_NOW) <= 0;
+                if (($isFormer && !$gSettingsManager->getBool('profile_show_former_roles'))
+                    || (!$isFormer && !$gSettingsManager->getBool('profile_show_roles'))) {
+                    continue;
+                }
+
+                if ($gCurrentUserId !== (int)$user->getValue('usr_id')
+                    && !$gCurrentUser->hasRightViewRole((int)$membership['role_id'])) {
+                    continue;
+                }
+
+                unset($membership['role_id']);
+                $data['memberships'][] = $membership;
+            }
         }
 
         if (CliApplication::optionBool($options, 'relations', false)) {
-            $data['relations'] = $gDb->queryPrepared(
-                'SELECT ure_uuid AS uuid, urt_uuid AS type_uuid, urt_name AS type,
-                        usr2.usr_uuid AS related_user_uuid, usr2.usr_login_name AS related_login
-                   FROM ' . TBL_USER_RELATIONS . '
-             INNER JOIN ' . TBL_USER_RELATION_TYPES . ' ON urt_id = ure_urt_id
-             INNER JOIN ' . TBL_USERS . ' AS usr2 ON usr2.usr_id = ure_usr_id2
-                  WHERE ure_usr_id1 = ?
-               ORDER BY urt_name, usr2.usr_login_name',
-                array((int)$user->getValue('usr_id'))
-            )->fetchAll();
+            $data['relations'] = array();
+
+            if ($gSettingsManager->getBool('contacts_user_relations_enabled')) {
+                $relations = $gDb->queryPrepared(
+                    'SELECT ure_uuid AS uuid, urt_uuid AS type_uuid, urt_name AS type,
+                            ure_usr_id2 AS related_user_id
+                       FROM ' . TBL_USER_RELATIONS . '
+                 INNER JOIN ' . TBL_USER_RELATION_TYPES . ' ON urt_id = ure_urt_id
+                      WHERE ure_usr_id1 = ?
+                        AND urt_name <> \'\'
+                        AND urt_name_male <> \'\'
+                        AND urt_name_female <> \'\'
+                   ORDER BY urt_name',
+                    array((int)$user->getValue('usr_id'))
+                )->fetchAll();
+
+                foreach ($relations as $relation) {
+                    try {
+                        $otherUser = CliApplication::resolveUser((string)$relation['related_user_id']);
+                    } catch (InvalidArgumentException) {
+                        // Never expose an endpoint that does not belong to the selected organization.
+                        continue;
+                    }
+
+                    if (!$gCurrentUser->hasRightViewProfile($otherUser)) {
+                        continue;
+                    }
+
+                    $data['relations'][] = array(
+                        'uuid' => (string)$relation['uuid'],
+                        'type_uuid' => (string)$relation['type_uuid'],
+                        'type' => (string)$relation['type'],
+                        'related_user_uuid' => (string)$otherUser->getValue('usr_uuid')
+                    );
+                }
+            }
         }
 
         CliApplication::writeValue($data, $options);
