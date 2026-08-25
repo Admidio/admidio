@@ -77,6 +77,7 @@ use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
 use Admidio\Users\Entity\UserImport;
 use Admidio\Users\Service\ContactImportService;
+use Admidio\Users\Service\ContactService;
 use Admidio\Users\Service\UserPhotoService;
 use Admidio\Weblinks\Entity\Weblink;
 use InvalidArgumentException;
@@ -3812,6 +3813,7 @@ final class CoreTasks
         }
 
         self::applyUserFields($user, $options);
+        self::assertRequiredProfileFields($user);
         $user->save();
         self::reloadUserSessions((int)$user->getValue('usr_id'));
 
@@ -3894,49 +3896,25 @@ final class CoreTasks
 
     public static function userRemove(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId, $gCurrentUserId, $gCurrentUser;
+        global $gDb, $gProfileFields;
 
         CliApplication::confirm('End current organization memberships for the selected user(s)?', $options);
 
-        // Resolve and check every reference before the first membership is ended.
+        // Resolve every reference before the first membership is ended.
         $users = array();
         foreach ($arguments as $reference) {
-            $user = CliApplication::resolveUser($reference);
-            if ((int)$user->getValue('usr_id') === $gCurrentUserId) {
-                throw new Exception('SYS_NO_RIGHTS');
-            }
-            $users[] = $user;
+            $users[] = CliApplication::resolveUser($reference);
         }
 
+        $contactService = new ContactService($gDb, $gProfileFields);
+
+        // Either every selected contact loses its memberships or none does.
         $gDb->startTransaction();
         try {
             foreach ($users as $user) {
-                $userId = (int)$user->getValue('usr_id');
-
-                $roleIds = $gDb->queryPrepared(
-                    'SELECT DISTINCT rol_id
-                       FROM ' . TBL_MEMBERS . '
-                 INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
-                 INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
-                      WHERE mem_usr_id = ?
-                        AND mem_begin <= ?
-                        AND mem_end > ?
-                        AND rol_valid = true
-                        AND cat_org_id = ?',
-                    array($userId, DATE_NOW, DATE_NOW, $gCurrentOrgId)
-                )->fetchAll(PDO::FETCH_COLUMN);
-
-                foreach ($roleIds as $roleId) {
-                    $role = new Role($gDb, (int)$roleId);
-                    if (!$role->allowedToAssignMembers($gCurrentUser)) {
-                        throw new Exception('SYS_NO_RIGHTS');
-                    }
-                    $role->stopMembership($userId);
-                }
-
-                self::reloadUserSessions($userId);
+                $contactService->endMembership($user);
+                self::reloadUserSessions((int)$user->getValue('usr_id'));
             }
-
             $gDb->endTransaction();
         } catch (\Throwable $exception) {
             $gDb->rollback();
@@ -3944,51 +3922,29 @@ final class CoreTasks
         }
 
         CliApplication::writeSuccess('Selected user membership(s) ended.', $options);
-        return 0;
+        return CliApplication::EXIT_SUCCESS;
     }
 
     public static function userDelete(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId, $gCurrentUser, $gCurrentUserId;
+        global $gDb, $gProfileFields;
 
         CliApplication::confirm('Permanently delete the selected user(s)?', $options);
 
         $anyOrganization = CliApplication::optionBool($options, 'any-organization', false) ?? false;
 
-        // Resolve and check every reference before the first user is deleted.
+        // Resolve every reference before the first user is deleted.
         $users = array();
         foreach ($arguments as $reference) {
-            $user = CliApplication::resolveUser($reference, $anyOrganization);
-            $userId = (int)$user->getValue('usr_id');
-
-            if ($userId === $gCurrentUserId) {
-                throw new Exception('SYS_NO_RIGHTS');
-            }
-
-            $otherOrganizationMemberships = (int)$gDb->queryPrepared(
-                'SELECT COUNT(*)
-                   FROM ' . TBL_MEMBERS . '
-             INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
-             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
-                  WHERE rol_valid = true
-                    AND cat_org_id <> ?
-                    AND mem_begin <= ?
-                    AND mem_end > ?
-                    AND mem_usr_id = ?',
-                array($gCurrentOrgId, DATE_NOW, DATE_NOW, $userId)
-            )->fetchColumn();
-
-            if ($otherOrganizationMemberships > 0) {
-                throw new Exception('SYS_NO_RIGHTS');
-            }
-
-            $users[] = $user;
+            $users[] = CliApplication::resolveUser($reference, $anyOrganization);
         }
+
+        $contactService = new ContactService($gDb, $gProfileFields);
 
         $gDb->startTransaction();
         try {
             foreach ($users as $user) {
-                $user->delete();
+                $contactService->delete($user);
             }
             $gDb->endTransaction();
         } catch (\Throwable $exception) {
@@ -3997,7 +3953,7 @@ final class CoreTasks
         }
 
         CliApplication::writeSuccess('Selected user(s) deleted.', $options);
-        return 0;
+        return CliApplication::EXIT_SUCCESS;
     }
 
     public static function userExport(array $arguments, array $options): int
@@ -9238,21 +9194,13 @@ final class CoreTasks
     }
 
     /**
-     * Apply the same required-profile-field contract used by the administrator web form when a
-     * new contact is saved. Login/password are intentionally not part of this check: the logged-in
-     * administrator form also permits contacts without login credentials.
+     * Reject a contact that the web contact form would not have accepted either.
      */
     private static function assertRequiredProfileFields(User $user): void
     {
-        global $gProfileFields;
+        global $gDb, $gProfileFields;
 
-        foreach ($gProfileFields->getProfileFields() as $field) {
-            $internalName = (string)$field->getValue('usf_name_intern');
-            if ($gProfileFields->hasRequiredInput($internalName, 0, false)
-                && trim((string)$user->getValue($internalName, 'database')) === '') {
-                throw new InvalidArgumentException('Required profile field "' . $internalName . '" is empty.');
-            }
-        }
+        (new ContactService($gDb, $gProfileFields))->assertRequiredFields($user);
     }
 
     private static function applyUserFields(User $user, array $options): void

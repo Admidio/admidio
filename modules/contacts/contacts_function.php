@@ -23,8 +23,8 @@
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Roles\Entity\Role;
 use Admidio\Users\Entity\User;
+use Admidio\Users\Service\ContactService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -101,6 +101,7 @@ try {
 
     $statusData = array();
     $error = false;
+    $contactService = new ContactService($gDb, $gProfileFields);
     foreach ($getUserUuids as $userUuid) {
         // Create user-object
         $user = new User($gDb, $gProfileFields);
@@ -108,67 +109,26 @@ try {
 
         $statusMsg = '';
 
-        if ($getMode === 'delete') {
-            // Check if user is also in other organizations
-            $sql = 'SELECT COUNT(*) AS count
-                FROM ' . TBL_MEMBERS . '
-            INNER JOIN ' . TBL_ROLES . '
-                    ON rol_id = mem_rol_id
-            INNER JOIN ' . TBL_CATEGORIES . '
-                    ON cat_id = rol_cat_id
-                WHERE rol_valid   = true
-                AND cat_org_id <> ? -- $gCurrentOrgId
-                AND mem_begin  <= ? -- DATE_NOW
-                AND mem_end     > ? -- DATE_NOW
-                AND mem_usr_id  = ? -- $user->getValue(\'usr_id\')';
-            $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
-            $isAlsoInOtherOrgas = $pdoStatement->fetchColumn() > 0;
-        }
-
         if ($getMode === 'remove') {
-            // User has to be a member of this organization
-            // User could not delete himself
-            // Administrators could not be deleted
-            if (!isMember($user->getValue('usr_id')) || $gCurrentUserId === (int)$user->getValue('usr_id')
-                || (!$gCurrentUser->isAdministrator() && $user->isAdministrator())) {
+            try {
+                $contactService->endMembership($user);
+            } catch (Exception) {
+                // One contact that may not be touched does not stop the rest of the selection.
                 $error = true;
                 $statusData[$userUuid] = 'error';
                 continue;
-            }
-
-            $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
-                    FROM ' . TBL_MEMBERS . '
-                INNER JOIN ' . TBL_ROLES . '
-                        ON rol_id = mem_rol_id
-                INNER JOIN ' . TBL_CATEGORIES . '
-                        ON cat_id = rol_cat_id
-                    WHERE rol_valid  = true
-                    AND (  cat_org_id = ? -- $gCurrentOrgId
-                        OR cat_org_id IS NULL )
-                    AND mem_begin <= ? -- DATE_NOW
-                    AND mem_end    > ? -- DATE_NOW
-                    AND mem_usr_id = ? -- $user->getValue(\'usr_id\')';
-            $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentOrgId, DATE_NOW, DATE_NOW, $user->getValue('usr_id')));
-
-            while ($row = $pdoStatement->fetch()) {
-                // stop all role memberships of this organization
-                $role = new Role($gDb, $row['mem_rol_id']);
-                $role->stopMembership($row['mem_usr_id']);
             }
 
             $statusMsg = (count($getUserUuids) === 1) ? $gL10n->get('SYS_END_MEMBERSHIP_OF_USER_OK', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname'))) : $gL10n->get('SYS_END_MEMBERSHIP_OF_USERS_OK', array($gCurrentOrganization->getValue('org_longname')));
             $statusData[$userUuid] = 'success';
         } elseif ($getMode === 'delete') {
-            // User must not be in any other organization
-            // User could not delete himself
-            // Only administrators are allowed to do this
-            if ($isAlsoInOtherOrgas || $gCurrentUserId === (int)$user->getValue('usr_id') || !$gCurrentUser->isAdministrator()) {
+            try {
+                $contactService->delete($user);
+            } catch (Exception) {
                 $error = true;
                 $statusData[$userUuid] = 'error';
                 continue;
             }
-            // Delete user from database
-            $user->delete();
 
             $statusMsg = $gL10n->get('SYS_DELETE_DATA');
             $statusData[$userUuid] = 'success';
