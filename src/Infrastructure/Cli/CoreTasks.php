@@ -3555,7 +3555,8 @@ final class CoreTasks
     {
         global $gDb, $gCurrentOrgId, $gProfileFields, $gCurrentUser;
 
-        // Same rule as modules/contacts/contacts.php.
+        // Same rule as modules/contacts/contacts.php. The query below follows contacts_data.php,
+        // where a participation in an event does not make somebody a contact of the organization.
         if (!$gCurrentUser->isAdministratorUsers() && !$gCurrentUser->isAllowedToViewUsers()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -3607,6 +3608,7 @@ final class CoreTasks
              LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
                     ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ?
                  WHERE rol_valid = true
+                   AND cat_name_intern <> \'EVENTS\'
                    AND (cat_org_id = ? OR cat_org_id IS NULL)'
             . $membershipCondition . $groupCondition . $searchCondition
             . ' ORDER BY last_name.usd_value, first_name.usd_value, usr_login_name';
