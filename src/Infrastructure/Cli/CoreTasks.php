@@ -3303,7 +3303,7 @@ final class CoreTasks
         $output = CliApplication::optionString($options, 'output');
 
         if ($output !== '') {
-            CliApplication::writeNewFile($output, $json, $includeSecrets);
+            CliApplication::writeNewFile($output, $json, $includeSecrets, self::overwriteRequested($options));
         } else {
             CliApplication::writeOutput($json, $options, false);
         }
