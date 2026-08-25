@@ -18,6 +18,7 @@ use Admidio\Events\ValueObject\Participants;
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
@@ -2383,74 +2384,151 @@ final class CoreTasks
 
     public static function version(array $arguments, array $options): int
     {
-        global $gSystemComponent;
+        [$systemComponent, $databaseError] = self::tryReadCoreComponent();
 
         $data = array(
             'filesystem' => ADMIDIO_VERSION_TEXT,
-            'database' => self::componentVersion($gSystemComponent)
+            'database' => $systemComponent instanceof Component
+                ? self::componentVersion($systemComponent)
+                : null
         );
+        if ($databaseError !== null) {
+            $data['database_error'] = $databaseError;
+        }
 
         $format = CliApplication::optionString($options, 'format', 'text');
         if ($format === 'text') {
-            CliApplication::writeOutput(
-                'Admidio ' . $data['filesystem'] . PHP_EOL
-                . 'Database core ' . $data['database'] . PHP_EOL,
-                $options
-            );
+            $output = 'Admidio ' . $data['filesystem'] . PHP_EOL;
+            if ($data['database'] !== null) {
+                $output .= 'Database core ' . $data['database'] . PHP_EOL;
+            } elseif ($databaseError !== null) {
+                $output .= 'Database core unavailable: ' . $databaseError . PHP_EOL;
+            }
+            CliApplication::writeOutput($output, $options);
         } else {
             CliApplication::writeValue($data, $options, $format);
         }
 
-        return 0;
+        return CliApplication::EXIT_SUCCESS;
     }
 
     public static function status(array $arguments, array $options): int
     {
-        global $gSystemComponent, $gCurrentOrganization;
+        global $gDb, $gCurrentOrganization, $g_organization;
 
-        if ((int)$gSystemComponent->getValue('com_id') === 0) {
-            throw new RuntimeException('The CORE component record was not found in the database.');
-        }
-
-        $databaseVersion = self::componentVersion($gSystemComponent);
-        $filesystemVersion = ADMIDIO_VERSION
-            . (ADMIDIO_VERSION_BETA > 0 ? '-Beta.' . ADMIDIO_VERSION_BETA : '');
-        $updateCompleted = $gSystemComponent->getValue('com_update_completed');
-        $updateStep = (int)$gSystemComponent->getValue('com_update_step');
-
-        if ($updateCompleted === '' || $updateCompleted === null) {
-            $state = 'update-required';
-        } elseif ($updateCompleted !== true && $updateCompleted !== 1 && $updateCompleted !== '1') {
-            $state = 'update-incomplete';
-        } else {
-            $comparison = version_compare($databaseVersion, $filesystemVersion);
-            $state = $comparison < 0 ? 'update-required'
-                : ($comparison > 0 ? 'filesystem-older-than-database' : 'ok');
-        }
+        [$systemComponent, $databaseError] = self::tryReadCoreComponent();
 
         $data = array(
-            'organization' => (string)$gCurrentOrganization->getValue('org_shortname'),
+            'organization' => null,
             'filesystem_version' => ADMIDIO_VERSION_TEXT,
-            'database_version' => $databaseVersion,
-            'database_update_step' => $updateStep,
-            'status' => $state
+            'database_version' => null,
+            'database_update_step' => null,
+            'status' => 'not-configured'
         );
+
+        if ($systemComponent instanceof Component) {
+            try {
+                if (!isset($gCurrentOrganization) || !$gCurrentOrganization instanceof Organization) {
+                    $gCurrentOrganization = Organization::createDefaultOrganizationObject(
+                        $gDb,
+                        isset($g_organization) ? (string)$g_organization : ''
+                    );
+                }
+
+                if ((int)$gCurrentOrganization->getValue('org_id') === 0) {
+                    throw new RuntimeException('The configured Admidio organization could not be found.');
+                }
+
+                $databaseVersion = self::componentVersion($systemComponent);
+                $filesystemVersion = ADMIDIO_VERSION
+                    . (ADMIDIO_VERSION_BETA > 0 ? '-Beta.' . ADMIDIO_VERSION_BETA : '');
+                $updateCompleted = $systemComponent->getValue('com_update_completed');
+                $updateStep = (int)$systemComponent->getValue('com_update_step');
+
+                if ($updateCompleted === '' || $updateCompleted === null) {
+                    $state = 'update-required';
+                } elseif ($updateCompleted !== true && $updateCompleted !== 1 && $updateCompleted !== '1') {
+                    $state = 'update-incomplete';
+                } else {
+                    $comparison = version_compare($databaseVersion, $filesystemVersion);
+                    $state = $comparison < 0 ? 'update-required'
+                        : ($comparison > 0 ? 'filesystem-older-than-database' : 'ok');
+                }
+
+                $data['organization'] = (string)$gCurrentOrganization->getValue('org_shortname');
+                $data['database_version'] = $databaseVersion;
+                $data['database_update_step'] = $updateStep;
+                $data['status'] = $state;
+            } catch (\Throwable $exception) {
+                $databaseError = $exception->getMessage();
+                $data['status'] = 'organization-unavailable';
+            }
+        } elseif (is_file(self::installationConfigPath())) {
+            $data['status'] = 'database-unavailable';
+        }
+
+        if ($databaseError !== null) {
+            $data['detail'] = $databaseError;
+        }
 
         $format = CliApplication::optionString($options, 'format', 'text');
         if ($format === 'text') {
-            CliApplication::writeOutput(
-                'Organization: ' . $data['organization'] . PHP_EOL
+            $output = 'Organization: ' . ($data['organization'] ?? '-') . PHP_EOL
                 . 'Filesystem:   ' . $data['filesystem_version'] . PHP_EOL
-                . 'Database:     ' . $data['database_version'] . PHP_EOL
-                . 'Update step:  ' . $data['database_update_step'] . PHP_EOL
-                . 'Status:       ' . strtoupper(str_replace('-', ' ', $data['status'])) . PHP_EOL,
-                $options
-            );
+                . 'Database:     ' . ($data['database_version'] ?? '-') . PHP_EOL
+                . 'Update step:  ' . ($data['database_update_step'] ?? '-') . PHP_EOL
+                . 'Status:       ' . strtoupper(str_replace('-', ' ', $data['status'])) . PHP_EOL;
+            if ($databaseError !== null) {
+                $output .= 'Detail:       ' . $databaseError . PHP_EOL;
+            }
+            CliApplication::writeOutput($output, $options);
         } else {
-             CliApplication::writeValue($data, $options, $format);
+            CliApplication::writeValue($data, $options, $format);
         }
 
-        return $state === 'ok' ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_STATE_NOT_OK;
+        return $data['status'] === 'ok'
+            ? CliApplication::EXIT_SUCCESS
+            : CliApplication::EXIT_STATE_NOT_OK;
+    }
+
+    /**
+     * Read the installed CORE component without making version/status depend on the full CLI bootstrap.
+     *
+     * @return array{0:?Component,1:?string}
+     */
+    private static function tryReadCoreComponent(): array
+    {
+        global $gDb, $gSystemComponent;
+
+        if (isset($gSystemComponent)
+            && $gSystemComponent instanceof Component
+            && (int)$gSystemComponent->getValue('com_id') > 0) {
+            return array($gSystemComponent, null);
+        }
+
+        if (!is_file(self::installationConfigPath())) {
+            return array(null, 'Admidio configuration file adm_my_files/config.php was not found.');
+        }
+
+        try {
+            if (!isset($gDb) || !$gDb instanceof Database) {
+                $gDb = Database::createDatabaseInstance();
+            }
+
+            $gSystemComponent = new Component($gDb);
+            $gSystemComponent->readDataByColumns(array(
+                'com_type' => 'SYSTEM',
+                'com_name_intern' => 'CORE'
+            ));
+
+            if ((int)$gSystemComponent->getValue('com_id') === 0) {
+                return array(null, 'The Admidio database is not installed.');
+            }
+
+            return array($gSystemComponent, null);
+        } catch (\Throwable $exception) {
+            return array(null, $exception->getMessage());
+        }
     }
 
     /**

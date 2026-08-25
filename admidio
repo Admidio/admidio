@@ -130,7 +130,7 @@ $installationCommands = array('install:check', 'install:run');
  * The commands that only describe the command line have to work on an Admidio that is not installed
  * yet, otherwise install:run could not even be looked up before it is used.
  */
-$documentationCommands = array('', 'help', 'list', 'completion', 'cli:selfcheck');
+$documentationCommands = array('', 'help', 'list', 'version', 'completion', 'cli:selfcheck', 'status');
 
 $installationBootstrap = in_array($cliCommand, $installationCommands, true)
     || (in_array($cliCommand, $documentationCommands, true) && !is_file($cliConfigFile));

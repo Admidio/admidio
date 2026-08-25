@@ -45,6 +45,10 @@ admCliRequestVariables($rootPath, admCliRequestHost(isset($cliHost) ? $cliHost :
 if (is_file($configFile)) {
     // an existing configuration file wins, the new installation has to use the database it defines
     require_once $configFile;
+
+    if (isset($cliOrganization) && $cliOrganization !== '') {
+        $g_organization = $cliOrganization;
+    }
 } else {
     if (isset($cliTablePrefix) && $cliTablePrefix !== '') {
         $g_tbl_praefix = $cliTablePrefix;
