@@ -31,7 +31,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create an HTML page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-login', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_login', $headline);
         $loginModule = new ModuleLogin();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();

@@ -19,7 +19,7 @@ use Smarty\Smarty;
  * **Code example**
  * ```
  * // create a simple HTML page with some text
- * $page = PagePresenter::withHtmlIDAndHeadline('admidio-example');
+ * $page = PagePresenter::withHtmlIDAndHeadline('adm_example');
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple HTML page');
  * $page->addHtml('<strong>This is a simple HTML page!</strong>');

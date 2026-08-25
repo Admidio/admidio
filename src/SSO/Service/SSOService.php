@@ -242,7 +242,7 @@ class SSOService {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-login', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_login', $headline);
         if (!empty($message)) {
             $page->addHtml($message);
         }

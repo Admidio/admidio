@@ -67,7 +67,7 @@ try {
     }
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-weblinks', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_links', $headline);
 
     if ($gSettingsManager->getBool('enable_rss')) {
         $page->addRssFile(

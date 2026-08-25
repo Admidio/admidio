@@ -41,7 +41,7 @@ try {
     $_SESSION['contacts_list_configuration'] = $contactsListConfig;
 
     // Set a link to display all users or only members
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-contacts', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_contacts', $headline);
     $page->setContentFullWidth();
 
     if ($gCurrentUser->isAdministratorUsers() || $gCurrentUser->isAllowedToViewUsers()) {
