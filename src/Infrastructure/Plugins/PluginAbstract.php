@@ -3,6 +3,7 @@
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Preferences\Service\PreferencesService;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
@@ -223,10 +224,12 @@ abstract class PluginAbstract implements PluginInterface
     }
 
     /**
-     * Make the default values of the plugin known to the settings manager. The preferences of a
-     * plugin have no row in adm_preferences until they are saved for the first time, so without
-     * this registration the rest of Admidio would not see them at all: a plugin cannot add its
-     * preferences to install/db_scripts/preferences.php.
+     * Add the preferences of the plugin to the canonical preference registry.
+     *
+     * A plugin cannot write its preferences into install/db_scripts/preferences.php, so it
+     * describes them in the defaultConfig of its JSON file and registers them here. From that
+     * point on they are ordinary Admidio preferences: PreferencesService seeds them into every
+     * organization, validates them and removes them again when the plugin is uninstalled.
      *
      * @return void
      * @throws Exception
@@ -240,16 +243,43 @@ abstract class PluginAbstract implements PluginInterface
                 continue;
             }
 
+            $type = match ((string)($configuration['type'] ?? 'string')) {
+                'boolean' => 'bool',
+                'integer' => 'int',
+                default => 'string'
+            };
             $value = $configuration['value'];
-            // Preferences are stored as strings, so a boolean default has to be converted the same
-            // way SettingsManager::set() would store it.
+
+            // Preferences are stored as strings, so the default has to be converted the same way
+            // SettingsManager::set() would store it.
             if (is_bool($value)) {
                 $value = $value ? '1' : '0';
+            } elseif (is_array($value)) {
+                /*
+                 * An associative value keeps its keys in a preference of its own, because a
+                 * preference stores one string and the order of the keys would be lost otherwise.
+                 */
+                if (array_keys($value) !== range(0, count($value) - 1)) {
+                    $defaults[$key . '_keys'] = array('default' => implode(',', array_keys($value)));
+                }
+                $value = implode(',', $value);
             }
-            $defaults[$key] = $value;
+
+            $defaults[$key] = array('default' => (string)$value, 'type' => $type);
         }
 
-        SettingsManager::registerDefaults($defaults);
+        foreach ($defaults as $key => $definition) {
+            PreferenceDefinitions::register($key, $definition);
+        }
+
+        /*
+         * TODO remove once every organization is seeded on install: SettingsManager still answers
+         * a preference that has no row from this list, see SettingsManager::registerDefaults().
+         */
+        SettingsManager::registerDefaults(array_map(
+            static fn (array $definition): string => (string)$definition['default'],
+            $defaults
+        ));
     }
 
     /**

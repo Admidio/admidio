@@ -75,6 +75,16 @@ final class PreferenceDefinitions
     );
 
     /**
+     * Definitions that a module or a plugin added with register().
+     *
+     * They are not part of the class like the core definitions are, because they only exist while
+     * the module or plugin that brought them is in use.
+     *
+     * @var array<string,array<string,mixed>>
+     */
+    private static array $registered = array();
+
+    /**
      * The keys a definition of table() may use. Everything else is a typo, see coverageProblems().
      *
      * @var array<int,string>
@@ -100,15 +110,16 @@ final class PreferenceDefinitions
      *
      * - default          string  The value a new organization gets. Exactly one of default and
      *                            defaultProvider has to be present.
-     * - defaultProvider  string  Name of a default that can only be built once the installation
-     *                            constants exist, because it is derived from them. One of the
-     *                            DEFAULT_* constants of this class.
+     * - defaultProvider  mixed   A default that can only be built once a request runs, because it
+     *                            is derived from it. One of the DEFAULT_* constants of this class,
+     *                            or a callable(): string for a definition that brings its own.
      * - type             string  string (the default), bool, int, enum or reference. A bool is
      *                            normalized to '0'/'1' and accepts 0/1, true/false, yes/no and
      *                            on/off, an int to its decimal representation. A reference is a
      *                            string that names another record and is checked by its validator.
-     * - values           array   The permitted values of an enum, as strings. Required for enum
-     *                            and meaningless for every other type.
+     * - values           mixed   The permitted values of an enum, as an array of strings or as a
+     *                            callable(): array that builds them. Required for enum and
+     *                            meaningless for every other type.
      * - minimum          int     Smallest permitted value of an int.
      * - maximum          int     Largest permitted value of an int.
      * - maxLength        int     Largest permitted length of a string, matching the length the
@@ -121,13 +132,20 @@ final class PreferenceDefinitions
      * - internal         bool    Admidio maintains the value itself, an administrator does not.
      *                            The installer still seeds it, but supportedNames(), definition()
      *                            and the whole config:* write path refuse it.
-     * - validator        string  Name of the semantic rule that is applied after the scalar type
-     *                            was normalized, one of the VALIDATOR_* constants of this class. A
-     *                            validator sees the complete proposed target state, so it can
-     *                            judge preferences that depend on each other.
+     * - validator        mixed   The semantic rule that is applied after the scalar type was
+     *                            normalized: one of the VALIDATOR_* constants of this class, or a
+     *                            callable(string $name, string $value, array $proposedValues)
+     *                            that returns the value it accepts and throws
+     *                            InvalidArgumentException for the ones it does not. A validator
+     *                            sees the complete proposed target state, so it can judge
+     *                            preferences that depend on each other.
      *
      * coverageProblems() rejects a key that is not in this list, so a typo cannot silently turn
      * into a constraint that is never applied.
+     *
+     * A module or a plugin describes its own preferences the same way and hands them to
+     * register(); the callable form of validator, values and defaultProvider is there for the
+     * rules this class cannot know.
      *
      * @return array<string,array<string,mixed>|string>
      */
@@ -355,16 +373,74 @@ final class PreferenceDefinitions
      */
     public static function all(): array
     {
-        static $definitions = null;
+        static $core = null;
 
-        if ($definitions === null) {
-            $definitions = array();
+        if ($core === null) {
+            $core = array();
             foreach (self::table() as $name => $definition) {
-                $definitions[$name] = is_array($definition) ? $definition : array('default' => $definition);
+                $core[$name] = is_array($definition) ? $definition : array('default' => $definition);
             }
         }
 
-        return $definitions;
+        return $core + self::$registered;
+    }
+
+    /**
+     * Add the definition of a preference that does not belong to the Admidio core.
+     *
+     * A module or a plugin describes its own preferences exactly like table() describes the core
+     * ones, and from here on nothing distinguishes them: they are seeded into every organization,
+     * validated by normalizeValues(), masked in the changelog when they are sensitive and offered
+     * by config:*. Where the core registry cannot know a rule, the definition may bring its own:
+     * validator, values and defaultProvider also accept a callable.
+     *
+     * The registration is not stored anywhere. It has to happen in every request in which the
+     * preference is used, before it is read for the first time, and a preference of a plugin that
+     * is not active must therefore not be registered at all.
+     *
+     * @param array<string,mixed>|string $definition A definition as described at table(), or a
+     *                                               plain string that is read as its default.
+     * @throws InvalidArgumentException if the name is already taken or the definition is invalid
+     */
+    public static function register(string $name, array|string $definition): void
+    {
+        if (!preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name)) {
+            throw new InvalidArgumentException('Preference name "' . $name . '" is not a valid preference name.');
+        }
+        if (array_key_exists($name, self::table())) {
+            throw new InvalidArgumentException('Preference "' . $name . '" is a core preference and cannot be registered.');
+        }
+
+        $definition = is_array($definition) ? $definition : array('default' => $definition);
+
+        /*
+         * Registering the same definition again is what happens when the metadata of a plugin is
+         * read more than once in a request. Two different definitions for one name are a conflict
+         * that the module or plugin has to resolve.
+         */
+        if (array_key_exists($name, self::$registered)) {
+            if (self::$registered[$name] == $definition) {
+                return;
+            }
+            throw new InvalidArgumentException('Preference "' . $name . '" is already registered with a different definition.');
+        }
+
+        $problems = self::definitionProblems($name, $definition);
+        if ($problems !== array()) {
+            throw new InvalidArgumentException(implode(' ', $problems));
+        }
+
+        self::$registered[$name] = $definition;
+    }
+
+    /**
+     * The names that were added with register(), in registration order.
+     *
+     * @return array<int,string>
+     */
+    public static function registeredNames(): array
+    {
+        return array_keys(self::$registered);
     }
 
     /** @return array<string,string> */
@@ -373,7 +449,7 @@ final class PreferenceDefinitions
         $defaults = array();
         foreach (self::all() as $name => $definition) {
             $defaults[$name] = array_key_exists('defaultProvider', $definition)
-                ? self::resolveDefaultProvider((string)$definition['defaultProvider'])
+                ? self::resolveDefaultProvider($definition['defaultProvider'])
                 : (string)$definition['default'];
         }
         return $defaults;
@@ -451,11 +527,15 @@ final class PreferenceDefinitions
         self::assertSupported($name);
         $definition = self::rawDefinition($name);
         if (array_key_exists('defaultProvider', $definition)) {
-            $definition['default'] = self::resolveDefaultProvider((string)$definition['defaultProvider']);
+            $definition['default'] = self::resolveDefaultProvider($definition['defaultProvider']);
         }
         unset($definition['internal'], $definition['validator'], $definition['defaultProvider']);
         $definition['type'] ??= 'string';
         $definition['sensitive'] = !empty($definition['sensitive']);
+        if ($definition['type'] === 'enum') {
+            // A schema is read by somebody who cannot call the closure that produced the values.
+            $definition['values'] = self::enumValues($definition);
+        }
         return $definition;
     }
 
@@ -544,9 +624,10 @@ final class PreferenceDefinitions
         }
 
         if ($type === 'enum') {
-            if (!in_array($value, $definition['values'] ?? array(), true)) {
+            $values = self::enumValues($definition);
+            if (!in_array($value, $values, true)) {
                 throw new InvalidArgumentException(
-                    'Preference "' . $name . '" expects one of: ' . implode(', ', $definition['values'] ?? array()) . '.'
+                    'Preference "' . $name . '" expects one of: ' . implode(', ', $values) . '.'
                 );
             }
             return $value;
@@ -574,37 +655,78 @@ final class PreferenceDefinitions
     {
         $problems = array();
         foreach (self::all() as $name => $definition) {
-            $hasDefault = array_key_exists('default', $definition);
-            $hasProvider = array_key_exists('defaultProvider', $definition);
-            if ($hasDefault === $hasProvider) {
-                $problems[] = 'Preference "' . $name
-                    . '" must define exactly one of default or defaultProvider.';
-            } elseif ($hasProvider
-                && !in_array((string)$definition['defaultProvider'], self::DEFAULT_PROVIDERS, true)) {
-                $problems[] = 'Preference "' . $name . '" uses the unknown default provider "'
-                    . $definition['defaultProvider'] . '".';
-            }
-            $type = $definition['type'] ?? 'string';
-            if (!in_array($type, array('bool', 'int', 'enum', 'reference', 'string'), true)) {
-                $problems[] = 'Preference "' . $name . '" has unsupported type "' . $type . '".';
-            }
-            if ($type === 'enum' && empty($definition['values'])) {
-                $problems[] = 'Preference "' . $name . '" is an enum without values.';
-            }
-            $validator = (string)($definition['validator'] ?? '');
-            if ($validator !== '' && !in_array($validator, self::VALIDATORS, true)) {
-                $problems[] = 'Preference "' . $name . '" uses the unknown validator "'
-                    . $validator . '".';
-            }
-            foreach (array_diff(array_keys($definition), self::DEFINITION_KEYS) as $key) {
-                $problems[] = 'Preference "' . $name . '" uses the unknown key "' . $key . '".';
-            }
+            $problems = array_merge($problems, self::definitionProblems($name, $definition));
         }
         return $problems;
     }
 
-    private static function resolveDefaultProvider(string $provider): string
+    /**
+     * Everything that is wrong with one definition, described so that the author can fix it.
+     *
+     * @param array<string,mixed> $definition
+     * @return array<int,string>
+     */
+    private static function definitionProblems(string $name, array $definition): array
     {
+        $problems = array();
+        $hasDefault = array_key_exists('default', $definition);
+        $hasProvider = array_key_exists('defaultProvider', $definition);
+        if ($hasDefault === $hasProvider) {
+            $problems[] = 'Preference "' . $name
+                . '" must define exactly one of default or defaultProvider.';
+        } elseif ($hasProvider) {
+            $provider = $definition['defaultProvider'];
+            if (is_string($provider)) {
+                if (!in_array($provider, self::DEFAULT_PROVIDERS, true)) {
+                    $problems[] = 'Preference "' . $name . '" uses the unknown default provider "'
+                        . $provider . '".';
+                }
+            } elseif (!is_callable($provider)) {
+                $problems[] = 'Preference "' . $name
+                    . '" needs one of the known default providers or a callable that returns the default.';
+            }
+        }
+
+        $type = $definition['type'] ?? 'string';
+        if (!in_array($type, array('bool', 'int', 'enum', 'reference', 'string'), true)) {
+            $problems[] = 'Preference "' . $name . '" has unsupported type "' . $type . '".';
+        }
+        if ($type === 'enum'
+            && !(is_array($definition['values'] ?? null) && $definition['values'] !== array())
+            && !is_callable($definition['values'] ?? null)) {
+            $problems[] = 'Preference "' . $name . '" is an enum without values.';
+        }
+
+        if (array_key_exists('validator', $definition)) {
+            $validator = $definition['validator'];
+            if (is_string($validator)) {
+                if ($validator !== '' && !in_array($validator, self::VALIDATORS, true)) {
+                    $problems[] = 'Preference "' . $name . '" uses the unknown validator "'
+                        . $validator . '".';
+                }
+            } elseif (!is_callable($validator)) {
+                $problems[] = 'Preference "' . $name
+                    . '" needs one of the known validators or a callable that checks the value.';
+            }
+        }
+
+        foreach (array_diff(array_keys($definition), self::DEFINITION_KEYS) as $key) {
+            $problems[] = 'Preference "' . $name . '" uses the unknown key "' . $key . '".';
+        }
+
+        return $problems;
+    }
+
+    /**
+     * @param callable|string $provider One of the DEFAULT_* constants, or a callable that returns
+     *                                  a default which can only be built while a request runs.
+     */
+    private static function resolveDefaultProvider(callable|string $provider): string
+    {
+        if (!is_string($provider)) {
+            return (string)$provider();
+        }
+
         return match ($provider) {
             self::DEFAULT_DOMAIN_COPYRIGHT => '© ' . self::runtimeConstant('DOMAIN'),
             self::DEFAULT_ADMIDIO_URL => self::runtimeConstant('ADMIDIO_URL'),
@@ -612,6 +734,22 @@ final class PreferenceDefinitions
                 . self::runtimeConstant('FOLDER_MODULES') . '/sso/index.php',
             default => throw new InvalidArgumentException('Unknown preference default provider "' . $provider . '".')
         };
+    }
+
+    /**
+     * The permitted values of an enum, whether they are written down or built while a request runs.
+     *
+     * @param array<string,mixed> $definition
+     * @return array<int,string>
+     */
+    private static function enumValues(array $definition): array
+    {
+        $values = $definition['values'] ?? array();
+        if (!is_array($values)) {
+            $values = (array)$values();
+        }
+
+        return array_values(array_map(static fn (mixed $value): string => (string)$value, $values));
     }
 
     private static function runtimeConstant(string $name): string
@@ -647,13 +785,24 @@ final class PreferenceDefinitions
     /**
      * @param array<string,string> $proposedValues Values normalized in the same batch.
      */
+    /**
+     * @param callable|string $validator One of the VALIDATOR_* constants, or a callable that
+     *                                   receives the name, the normalized value and the complete
+     *                                   proposed target state, returns the value it accepts and
+     *                                   throws InvalidArgumentException for the ones it does not.
+     * @param array<string,string> $proposedValues
+     */
     private static function runValidator(
         string $name,
         string $value,
-        string $validator,
+        callable|string $validator,
         array $proposedValues
     ): string {
         global $gDb, $gCurrentOrgId, $gCurrentOrganization, $gL10n, $gSettingsManager;
+
+        if (!is_string($validator)) {
+            return (string)$validator($name, $value, $proposedValues);
+        }
 
         switch ($validator) {
             case '':
