@@ -439,6 +439,15 @@ final class CoreTasks
         );
     }
 
+    /**
+     * The jobs of maintenance:run, in the order in which they are executed.
+     *
+     * @var array<int,string>
+     */
+    private const MAINTENANCE_JOBS = array(
+        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens'
+    );
+
     private static function registerSystemTasks(): void
     {
         /*
@@ -569,9 +578,9 @@ final class CoreTasks
             'maintenance:repair-documents [--yes]', 'CORE', true, array(),
             array(self::opt('yes', 'Confirm the repair.', '', false, false, true)));
         self::task('maintenance:run', 'maintenanceRun', 'Run the available native maintenance jobs and report each result.',
-            'maintenance:run [--job=categories|documents]... [--yes] [--format=table|json|json-api|csv|md|dokuwiki]',
+            'maintenance:run [--job=JOB]... [--yes] [--format=table|json|json-api|csv|md|dokuwiki]',
             'CORE', true, array(), array(
-                self::opt('job', 'Maintenance job to run; repeat to select more than one.', 'JOB', false, true, false, array('categories', 'documents')),
+                self::opt('job', 'Maintenance job to run; repeat to select more than one. Without the option every job runs.', 'JOB', false, true, false, self::MAINTENANCE_JOBS),
                 self::opt('yes', 'Confirm maintenance execution.', '', false, false, true),
                 self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
@@ -3071,14 +3080,18 @@ final class CoreTasks
         CliApplication::confirm('Run the selected Admidio maintenance jobs?', $options);
         $requested = CliApplication::optionValues($options, 'job');
         if (count($requested) === 0) {
-            $requested = array('categories', 'documents');
+            // One crontab entry is supposed to cover the recurring work of an installation.
+            $requested = self::MAINTENANCE_JOBS;
         }
         $requested = array_values(array_unique($requested));
 
         $maintenance = new Maintenance($gDb);
         $jobs = array(
             'categories' => static fn (): mixed => $maintenance->reorganizeCategories(),
-            'documents' => static fn (): mixed => $maintenance->repairDocumentsFilesPath()
+            'documents' => static fn (): mixed => $maintenance->repairDocumentsFilesPath(),
+            'sessions' => static fn (): mixed => self::cleanupSessions(30),
+            'auto-logins' => static fn (): mixed => self::cleanupAutoLogins(),
+            'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens()
         );
         $rows = array();
         $failures = 0;
@@ -8942,9 +8955,16 @@ final class CoreTasks
 
     public static function ssoTokenCleanup(array $arguments, array $options): int
     {
-        global $gDb;
-
         CliApplication::confirm('Delete expired/revoked OIDC token and authorization-code rows?', $options);
+        self::cleanupSsoTokens();
+
+        CliApplication::writeSuccess('OIDC token cleanup completed.', $options);
+        return CliApplication::EXIT_SUCCESS;
+    }
+
+    private static function cleanupSsoTokens(): void
+    {
+        global $gDb;
 
         $gDb->queryPrepared(
             'DELETE FROM ' . TBL_OIDC_ACCESS_TOKENS . '
@@ -8961,9 +8981,6 @@ final class CoreTasks
                   WHERE oac_expires_at < ? OR oac_revoked = true OR oac_used = true',
             array(DATETIME_NOW)
         );
-
-        CliApplication::writeSuccess('OIDC token cleanup completed.', $options);
-        return 0;
     }
 
     public static function sessionInvalidate(array $arguments, array $options): int
@@ -8984,30 +9001,46 @@ final class CoreTasks
 
     public static function sessionCleanup(array $arguments, array $options): int
     {
-        global $gDb;
+        self::cleanupSessions(
+            CliApplication::optionExists($options, 'max-inactive-minutes')
+                ? self::positiveInt(
+                    CliApplication::optionString($options, 'max-inactive-minutes'),
+                    '--max-inactive-minutes'
+                )
+                : 30
+        );
 
-        $minutes = CliApplication::optionExists($options, 'max-inactive-minutes')
-            ? self::positiveInt(CliApplication::optionString($options, 'max-inactive-minutes'), '--max-inactive-minutes')
-            : 30;
-        $cutoff = date('Y-m-d H:i:s', time() - $minutes * 60);
+        CliApplication::writeSuccess('Stale sessions deleted.', $options);
+        return CliApplication::EXIT_SUCCESS;
+    }
+
+    /**
+     * Session::tableCleanup() spares the session of the running request, which a command-line
+     * process does not have, so the condition is the only difference to the native cleanup.
+     */
+    private static function cleanupSessions(int $maxInactiveMinutes): void
+    {
+        global $gDb;
 
         $gDb->queryPrepared(
             'DELETE FROM ' . TBL_SESSIONS . ' WHERE ses_timestamp < ?',
-            array($cutoff)
+            array(date('Y-m-d H:i:s', time() - $maxInactiveMinutes * 60))
         );
-        CliApplication::writeSuccess('Stale sessions deleted.', $options);
-        return 0;
     }
 
     public static function autoLoginCleanup(array $arguments, array $options): int
     {
-        global $gDb;
-
-        $autoLogin = new AutoLogin($gDb);
-        $autoLogin->tableCleanup();
+        self::cleanupAutoLogins();
 
         CliApplication::writeSuccess('Expired auto-login records deleted.', $options);
-        return 0;
+        return CliApplication::EXIT_SUCCESS;
+    }
+
+    private static function cleanupAutoLogins(): void
+    {
+        global $gDb;
+
+        (new AutoLogin($gDb))->tableCleanup();
     }
 
     public static function moduleList(array $arguments, array $options): int
