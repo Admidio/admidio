@@ -418,6 +418,16 @@ final class CoreTasks
             array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
         );
+        self::task(
+            'whoami',
+            'whoAmI',
+            'Show the resolved acting user, organization and effective role rights.',
+            'whoami [--format=text|json]',
+            null,
+            true,
+            array(),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
+        );
     }
 
     private static function registerSystemTasks(): void
@@ -709,6 +719,12 @@ final class CoreTasks
                 self::opt('password', 'New password. Prefer --password-stdin.', 'PASSWORD'),
                 self::opt('password-stdin', 'Read password from STDIN.', '', false, false, true)
             ));
+        self::task('user:lock', 'userLock', 'Lock a user account by disabling login.',
+            'user:lock USER', 'CONTACTS', true,
+            array(self::arg('user', 'User.')));
+        self::task('user:unlock', 'userUnlock', 'Unlock a user account by enabling login.',
+            'user:unlock USER', 'CONTACTS', true,
+            array(self::arg('user', 'User.')));
         self::task('user:send-password', 'userSendPassword', 'Send the native password-reset/new-password email.',
             'user:send-password USER', 'CONTACTS', true, array(self::arg('user', 'User.')));
         self::alias('user:send-login', 'user:send-password', 'userSendPassword',
@@ -907,6 +923,12 @@ final class CoreTasks
             array(self::arg('group', 'Group.')), array(
                 self::opt('set', 'Set a rol_* permission column.', 'RIGHT=BOOL', false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+            ));
+        self::task('group:permission-holders', 'groupPermissionHolders',
+            'List current-organization roles that grant one native role permission.',
+            'group:permission-holders RIGHT [--format=FORMAT]', 'GROUPS-ROLES', true,
+            array(self::arg('right', 'Native rol_* permission column.')), array(
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('group:members', 'groupMembers', 'List role memberships.',
             'group:members GROUP [--date=DATE] [--active] [--former] [--future] [--leaders] [--format=FORMAT]',
@@ -2498,6 +2520,38 @@ final class CoreTasks
             : CliApplication::EXIT_STATE_NOT_OK;
     }
 
+    public static function whoAmI(array $arguments, array $options): int
+    {
+        global $gCurrentOrganization, $gCurrentUser;
+
+        $data = array(
+            'user_id' => (int)$gCurrentUser->getValue('usr_id'),
+            'user_uuid' => (string)$gCurrentUser->getValue('usr_uuid'),
+            'login' => (string)$gCurrentUser->getValue('usr_login_name'),
+            'organization_id' => (int)$gCurrentOrganization->getValue('org_id'),
+            'organization_uuid' => (string)$gCurrentOrganization->getValue('org_uuid'),
+            'organization' => (string)$gCurrentOrganization->getValue('org_shortname'),
+            'administrator' => $gCurrentUser->isAdministrator(),
+            'administrator_users' => $gCurrentUser->isAdministratorUsers(),
+            'administrator_roles' => $gCurrentUser->isAdministratorRoles(),
+            'administrator_announcements' => $gCurrentUser->isAdministratorAnnouncements(),
+            'administrator_events' => $gCurrentUser->isAdministratorEvents(),
+            'administrator_documents_files' => $gCurrentUser->isAdministratorDocumentsFiles(),
+            'administrator_inventory' => $gCurrentUser->isAdministratorInventory(),
+            'administrator_forum' => $gCurrentUser->isAdministratorForum(),
+            'administrator_photos' => $gCurrentUser->isAdministratorPhotos(),
+            'administrator_registration' => $gCurrentUser->isAdministratorRegistration(),
+            'administrator_weblinks' => $gCurrentUser->isAdministratorWeblinks()
+        );
+
+        foreach (self::rolePermissionColumns() as $right) {
+            $data[$right] = $gCurrentUser->checkRolesRight($right);
+        }
+
+        CliApplication::writeValue($data, $options);
+        return CliApplication::EXIT_SUCCESS;
+    }
+
     /**
      * Read the installed CORE component without making version/status depend on the full CLI bootstrap.
      *
@@ -3777,6 +3831,34 @@ final class CoreTasks
         return 0;
     }
 
+    public static function userLock(array $arguments, array $options): int
+    {
+        self::setUserLoginValidity($arguments, $options, false);
+        return CliApplication::EXIT_SUCCESS;
+    }
+
+    public static function userUnlock(array $arguments, array $options): int
+    {
+        self::setUserLoginValidity($arguments, $options, true);
+        return CliApplication::EXIT_SUCCESS;
+    }
+
+    private static function setUserLoginValidity(array $arguments, array $options, bool $valid): void
+    {
+        global $gCurrentUser;
+
+        $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
+        if (!$gCurrentUser->hasRightEditProfile($user)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $user->setValue('usr_valid', $valid);
+        $user->save();
+
+        self::reloadUserSessions((int)$user->getValue('usr_id'));
+        CliApplication::writeSuccess($valid ? 'User unlocked.' : 'User locked.', $options);
+    }
+
     public static function userSendPassword(array $arguments, array $options): int
     {
         $user = CliApplication::resolveUser(CliApplication::requireArgument($arguments, 0, 'user'));
@@ -4548,6 +4630,37 @@ final class CoreTasks
 
         CliApplication::writeValue(self::rolePermissionData($role), $options);
         return 0;
+    }
+
+    public static function groupPermissionHolders(array $arguments, array $options): int
+    {
+        global $gDb, $gCurrentOrgId;
+
+        $right = CliApplication::requireArgument($arguments, 0, 'right');
+        if (!in_array($right, self::rolePermissionColumns(), true)) {
+            throw new InvalidArgumentException(
+                'Unknown role permission "' . $right . '". Valid values: '
+                . implode(', ', self::rolePermissionColumns()) . '.'
+            );
+        }
+
+        // $right is selected from the fixed allowlist above; all values remain bound parameters.
+        $rows = $gDb->queryPrepared(
+            'SELECT rol_uuid AS uuid, rol_name AS role, cat_name AS category, rol_valid AS active
+               FROM ' . TBL_ROLES . '
+         INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+              WHERE (cat_org_id = ? OR cat_org_id IS NULL)
+                AND ' . $right . ' = true
+           ORDER BY cat_sequence, rol_name',
+            array($gCurrentOrgId)
+        )->fetchAll();
+
+        CliApplication::writeRows(
+            $rows,
+            CliApplication::optionString($options, 'format', 'table'),
+            $options
+        );
+        return CliApplication::EXIT_SUCCESS;
     }
 
     public static function groupMembers(array $arguments, array $options): int
