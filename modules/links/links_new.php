@@ -58,7 +58,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-weblinks-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_links_edit', $headline);
 
     ChangelogService::displayHistoryButton($page, 'weblinks', 'links', !empty($getLinkUuid), array('uuid' => $getLinkUuid));
 

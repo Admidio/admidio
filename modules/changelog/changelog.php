@@ -164,7 +164,7 @@ try {
 
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-history', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_changelog', $headline);
     $page->setContentFullWidth();
 
     // Logic for hiding certain columns:

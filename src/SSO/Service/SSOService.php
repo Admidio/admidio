@@ -262,8 +262,13 @@ abstract class SSOService {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
+        // Every other SSO page uses the adm_sso_* prefix (see SSOClientPresenter, SSOKeyPresenter);
+        // this one is not the ordinary module login page, so it does not share its adm_login ID.
+        // It also renders its own headline and message inside a custom card - see
+        // themes/simple/templates/modules/sso.login.tpl - and already hides the sidebar via CSS,
+        // so it does not use setHeadline()/addHtml() or the sidebar-hiding JS of the ordinary pages.
         $page = new PagePresenter();
-        $page->setHtmlID('admidio-sso-login');
+        $page->setHtmlID('adm_sso_login');
         $page->setTitle($headline);
         $page->setContentFullWidth();
         $page->hideBackLink();

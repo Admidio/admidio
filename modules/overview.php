@@ -27,7 +27,7 @@ try {
     $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-house-door-fill');
 
     // create html page object and load template file
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-overview', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_overview', $headline);
     $page->setContentFullWidth();
 
     // get all overview plugins and add them to the template

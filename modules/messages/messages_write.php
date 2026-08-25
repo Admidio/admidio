@@ -203,7 +203,7 @@ try {
     }
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-messages-write', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_messages_write', $headline);
 
     if ($getMsgType === Message::MESSAGE_TYPE_PM) {
         // show form

@@ -47,7 +47,7 @@ try {
             $gL10n = new Language('en');
         }
 
-        $page = new InstallationPresenter('admidio-update-message', $gL10n->get('INS_UPDATE'));
+        $page = new InstallationPresenter('adm_update_message', $gL10n->get('INS_UPDATE'));
         $page->setUpdateModus();
         $page->showMessage(
             'error',
@@ -223,7 +223,7 @@ try {
         if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
             || (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep > $currentUpdateStep)) {
             // create a page with the notice that the installation must be configured on the next pages
-            $page = new InstallationPresenter('admidio-update', $gL10n->get('INS_UPDATE_VERSION', array(ADMIDIO_VERSION_TEXT)));
+            $page = new InstallationPresenter('adm_update', $gL10n->get('INS_UPDATE_VERSION', array(ADMIDIO_VERSION_TEXT)));
             $page->addTemplateFile('update.tpl');
             $page->setUpdateModus();
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
@@ -266,7 +266,7 @@ try {
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
-            $page = new InstallationPresenter('admidio-update-message', $gL10n->get('INS_UPDATE'));
+            $page = new InstallationPresenter('adm_update_message', $gL10n->get('INS_UPDATE'));
             $page->setUpdateModus();
             $page->showMessage(
                 'success',
@@ -279,7 +279,7 @@ try {
             // => EXIT
         } // if source version smaller than database -> show error
         else {
-            $page = new InstallationPresenter('admidio-update-message', $gL10n->get('INS_UPDATE'));
+            $page = new InstallationPresenter('adm_update_message', $gL10n->get('INS_UPDATE'));
             $page->setUpdateModus();
             $page->showMessage(
                 'error',
@@ -367,7 +367,7 @@ try {
         }
 
         // show notice that update was successful
-        $page = new InstallationPresenter('admidio-update-successful', $gL10n->get('INS_UPDATE'));
+        $page = new InstallationPresenter('adm_update_successful', $gL10n->get('INS_UPDATE'));
         $page->addTemplateFile('update.successful.tpl');
         $page->assignSmartyVariable('updateWarnings', $updateWarnings);
         $page->assignSmartyVariable('updateInfos', $updateInfos);
