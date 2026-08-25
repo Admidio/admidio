@@ -3295,10 +3295,13 @@ final class CoreTasks
         }
 
         $queryParams = array($gCurrentOrgId);
-        $membershipCondition = CliApplication::optionBool($options, 'former', false)
-            ? ''
-            : ' AND mem_begin <= ? AND mem_end > ?';
-        if ($membershipCondition !== '') {
+        if (CliApplication::optionBool($options, 'former', false)) {
+            // "Include former" means active + ended memberships, but never future-only memberships.
+            $membershipCondition = ' AND mem_begin <= ?';
+            $queryParams[] = DATE_NOW;
+        } else {
+            // Native Admidio treats mem_end as exclusive, see User::hasRightViewProfile() and contacts_data.php.
+            $membershipCondition = ' AND mem_begin <= ? AND mem_end > ?';
             $queryParams[] = DATE_NOW;
             $queryParams[] = DATE_NOW;
         }
