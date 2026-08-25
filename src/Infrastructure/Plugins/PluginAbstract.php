@@ -4,7 +4,6 @@ namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Preferences\Service\PreferenceDefinitions;
-use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Menu\Entity\MenuEntry;
@@ -240,7 +239,7 @@ abstract class PluginAbstract implements PluginInterface
      *
      * @return array<int,string>
      */
-    private static function preferenceNames(): array
+    public static function getPreferenceNames(): array
     {
         $names = array();
 
@@ -296,15 +295,6 @@ abstract class PluginAbstract implements PluginInterface
         foreach ($defaults as $key => $definition) {
             PreferenceDefinitions::register($key, $definition);
         }
-
-        /*
-         * TODO remove once every organization is seeded on install: SettingsManager still answers
-         * a preference that has no row from this list, see SettingsManager::registerDefaults().
-         */
-        SettingsManager::registerDefaults(array_map(
-            static fn (array $definition): string => (string)$definition['default'],
-            $defaults
-        ));
     }
 
     /**
@@ -846,7 +836,7 @@ abstract class PluginAbstract implements PluginInterface
          * does it for the core preferences. Without that an organization other than the current
          * one would have no value at all for them.
          */
-        PreferencesService::seedDefaults(self::preferenceNames());
+        PreferencesService::seedDefaults(self::getPreferenceNames());
 
         // check if the db_scripts folder exists
         if (is_dir(self::$pluginPath . DIRECTORY_SEPARATOR . 'db_scripts')) {
@@ -992,7 +982,7 @@ abstract class PluginAbstract implements PluginInterface
         }
 
         // delete the plugin config values from every organization
-        PreferencesService::removePreferences(self::preferenceNames());
+        PreferencesService::removePreferences(self::getPreferenceNames());
 
         // remove the plugin menu entry
         if ($removeMenuEntry) {
@@ -1028,7 +1018,7 @@ abstract class PluginAbstract implements PluginInterface
         }
 
         // a new version may bring new preferences; the ones an organization already has are kept
-        PreferencesService::seedDefaults(self::preferenceNames());
+        PreferencesService::seedDefaults(self::getPreferenceNames());
 
         // update the plugin
         $componentUpdateHandle = new ComponentUpdate($gDb);

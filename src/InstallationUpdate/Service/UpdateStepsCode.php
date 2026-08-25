@@ -9,7 +9,6 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Organizations\Entity\Organization;
-use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -203,16 +202,21 @@ final class UpdateStepsCode
     public static function updateStep51SeedPluginPreferences(): void
     {
         $pluginManager = new PluginManager();
+        $names = array();
 
         foreach ($pluginManager->getAvailablePlugins() as $plugin) {
             if (!isset($plugin['interface']) || $plugin['interface'] === null) {
                 continue;
             }
+
             // reading the metadata registers the definitions of the plugin
-            $plugin['interface']::getInstance();
+            $instance = $plugin['interface']::getInstance();
+            if ($instance->isInstalled()) {
+                $names = array_merge($names, $instance->getPreferenceNames());
+            }
         }
 
-        PreferencesService::seedDefaults(PreferenceDefinitions::registeredNames());
+        PreferencesService::seedDefaults(array_values(array_unique($names)));
     }
 
     /**

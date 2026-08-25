@@ -91,6 +91,14 @@ interface PluginInterface
     public static function isInstalled(): bool;
 
     /**
+     * The preferences this plugin owns. They are registered with PreferenceDefinitions and get a
+     * row in every organization when the plugin is installed.
+     *
+     * @return array<int,string>
+     */
+    public static function getPreferenceNames(): array;
+
+    /**
      * @return bool
      * @throws Exception
      */

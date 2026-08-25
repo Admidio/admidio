@@ -434,6 +434,16 @@ final class PreferenceDefinitions
     }
 
     /**
+     * The names of the preferences that Admidio itself defines.
+     *
+     * @return array<int,string>
+     */
+    public static function coreNames(): array
+    {
+        return array_keys(self::table());
+    }
+
+    /**
      * The names that were added with register(), in registration order.
      *
      * @return array<int,string>

@@ -406,8 +406,8 @@ class PreferencesService
                 break;
         }
 
-        // Separate core preferences from plugin/text values. Core values are normalized as one
-        // target set so cross-preference rules see all changes from this panel at once.
+        // Separate the described preferences from the texts. They are normalized as one target
+        // set so cross-preference rules see all changes from this panel at once.
         $corePreferences = array();
 
         foreach ($formValues as $key => $value) {
@@ -432,8 +432,8 @@ class PreferencesService
                 continue;
             }
 
-            // Plugin-specific preferences remain owned by their plugin and are not part of the
-            // canonical core registry.
+            // Everything a module or a plugin registered is supported above, so what is left is
+            // a preference nothing describes. It is stored as it is submitted.
             $gSettingsManager->set($key, $value);
         }
 
@@ -615,17 +615,17 @@ class PreferencesService
      * An organization that already stores a value keeps it, so seeding the same names again is
      * what an update does when a new version brought new preferences.
      *
-     * @param array<int,string> $names The preferences to seed, or all of them if the array is empty.
+     * The names are always explicit: a definition that is registered in this request does not
+     * necessarily belong to something that is installed, and only what is installed gets rows.
+     *
+     * @param array<int,string> $names The preferences to seed.
      * @throws Exception
      */
-    public static function seedDefaults(array $names = array()): void
+    public static function seedDefaults(array $names): void
     {
         global $gDb, $gSettingsManager;
 
-        $defaults = PreferenceDefinitions::defaults();
-        if ($names !== array()) {
-            $defaults = array_intersect_key($defaults, array_flip($names));
-        }
+        $defaults = array_intersect_key(PreferenceDefinitions::defaults(), array_flip($names));
         if ($defaults === array()) {
             return;
         }

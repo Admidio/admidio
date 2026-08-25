@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -142,7 +143,7 @@ class Update
         PhpIniUtils::startNewExecutionTimeLimit(120);
 
         // first write the possible new Orga settings in DB
-        PreferencesService::seedDefaults();
+        PreferencesService::seedDefaults(PreferenceDefinitions::coreNames());
 
         // calculate the best cost value for your server performance
         $benchmarkResults = PasswordUtils::costBenchmark($gPasswordHashAlgorithm);
