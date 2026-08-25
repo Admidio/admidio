@@ -1963,13 +1963,15 @@ class User extends Entity
             // Register all non-empty fields for the notification
             $gChangeNotification->logUserCreation($usrId, $this);
         }
-        if ($newRecord) {
-            Hooks::do_action('user_created', $this, $gCurrentUser);
-
-        }
-
         LogChanges::endChangeSet($previousChangeSet);
         $this->db->endTransaction();
+
+        // After the transaction of this method, so that a creation that was rolled back here is not
+        // reported. A transaction of the caller still encloses it, so this is not yet the commit
+        // boundary that a committed-change hook needs.
+        if ($newRecord) {
+            Hooks::doAction('user_created', $this, $gCurrentUser);
+        }
 
         return $returnValue;
     }
