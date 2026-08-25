@@ -3643,10 +3643,11 @@ final class CoreTasks
          * The profile page applies this predicate to every single profile field. The broad
          * hasRightViewProfile() check above only decides whether the profile itself may be opened.
          */
+        $valueFormat = CliApplication::isMachineFormat($options) ? 'database' : '';
         foreach ($gProfileFields->getProfileFields() as $field) {
             $nameIntern = (string)$field->getValue('usf_name_intern');
             if ($gCurrentUser->allowedViewProfileField($user, $nameIntern)) {
-                $data['profile'][$nameIntern] = $user->getValue($nameIntern, 'database');
+                $data['profile'][$nameIntern] = $user->getValue($nameIntern, $valueFormat);
             }
         }
 

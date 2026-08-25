@@ -1832,6 +1832,24 @@ final class CliApplication
     }
 
     /**
+     * Whether the selected output format is read by a program and not by a person.
+     *
+     * A value that a script parses should keep the representation it has in the database, a value
+     * that is read on a terminal the one the web interface shows. A command that formats its own
+     * values asks here which of the two the caller wants.
+     *
+     * @param array<string,mixed> $options
+     */
+    public static function isMachineFormat(array $options, string $defaultFormat = 'text'): bool
+    {
+        return in_array(
+            strtolower(self::optionString($options, 'format', $defaultFormat)),
+            array('json', 'json-api', 'csv'),
+            true
+        );
+    }
+
+    /**
      * @param array<string,mixed> $options
      */
     public static function writeValue(mixed $value, array $options, string $defaultFormat = 'text'): void
