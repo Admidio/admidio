@@ -62,7 +62,7 @@ function admCliBootstrapOption(array $arguments, string $name): string
  */
 function admCliBootstrapCommand(array $arguments): string
 {
-    $globalFlags = array('quiet', 'no-interaction', 'yes', 'help');
+    $globalFlags = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite');
     $globalShortFlags = array('h', 'q', 'y');
     $globalValueOptions = array('config', 'host', 'organization', 'as', 'format', 'output');
 

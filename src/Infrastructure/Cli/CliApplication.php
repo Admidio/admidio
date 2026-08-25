@@ -107,6 +107,11 @@ final class CliApplication
             'values' => array('text', 'table', 'record', 'json', 'csv', 'md', 'dokuwiki')
         ),
         array('name' => 'output', 'value' => 'FILE', 'description' => 'Write command output to a file.'),
+        array(
+            'name' => 'overwrite',
+            'flag' => true,
+            'description' => 'Replace the file selected with --output if it already exists.'
+        ),
         array('name' => 'quiet', 'flag' => true, 'description' => 'Suppress confirmation messages. Requested data and errors are still printed. Short form -q.'),
         array('name' => 'no-interaction', 'flag' => true, 'description' => 'Never ask an interactive question.'),
         array('name' => 'yes', 'flag' => true, 'description' => 'Confirm destructive operations. Short form -y.'),
@@ -343,7 +348,7 @@ final class CliApplication
      */
     private function findCommand(array $argv): array
     {
-        $globalFlags = array('quiet', 'no-interaction', 'yes', 'help');
+        $globalFlags = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite');
         $globalValueOptions = array('config', 'host', 'organization', 'as', 'format', 'output');
 
         for ($index = 1, $count = count($argv); $index < $count; ++$index) {
@@ -419,7 +424,7 @@ final class CliApplication
     private function parseInput(array $argv, string $command): array
     {
         $task = CliTaskRegistry::get($command);
-        $flagOptions = array('quiet', 'no-interaction', 'yes', 'help');
+        $flagOptions = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite');
 
         if ($task !== null) {
             foreach ($task['options'] as $definition) {
@@ -1714,20 +1719,263 @@ final class CliApplication
     }
 
     /**
-     * Restrict an exported file to the current user. Used for exports that carry secrets, such as
-     * a database dump or a PKCS#12 container holding a private key.
+     * Write a new output/export file without following or replacing an existing path.
+     *
+     * Secret files are created under a restrictive umask and chmodded before their first byte is
+     * written. The completed temporary file is published with link(), whose destination creation
+     * fails atomically for an existing regular file, symlink or dangling symlink.
      */
-    public static function protectExportedFile(string $path): void
+    public static function writeNewFile(
+        string $path,
+        string $content,
+        bool $secret = false,
+        bool $overwrite = false
+    ): void
     {
-        if (is_file($path)) {
-            @chmod($path, 0600);
+        $directory = dirname($path);
+        if (!is_dir($directory) || !is_writable($directory)) {
+            throw new RuntimeException('Output directory "' . $directory . '" is not writable.');
         }
+
+        [$temporaryPath, $handle, $oldUmask] = self::createOutputTemporaryFile($directory, $secret);
+
+        try {
+            $offset = 0;
+            $length = strlen($content);
+            while ($offset < $length) {
+                $written = fwrite($handle, substr($content, $offset));
+                if ($written === false || $written === 0) {
+                    throw new RuntimeException('Could not write temporary output file.');
+                }
+                $offset += $written;
+            }
+
+            self::flushOutputFile($handle);
+            fclose($handle);
+            $handle = false;
+
+            self::publishOutputTemporaryFile($temporaryPath, $path, $secret, $overwrite);
+            $temporaryPath = '';
+        } catch (Throwable $exception) {
+            if (is_resource($handle)) {
+                fclose($handle);
+            }
+            if ($temporaryPath !== '' && (is_file($temporaryPath) || is_link($temporaryPath))) {
+                @unlink($temporaryPath);
+            }
+            throw $exception;
+        } finally {
+            if ($oldUmask !== null) {
+                umask($oldUmask);
+            }
+        }
+    }
+
+    /**
+     * Copy a readable source file to a newly and exclusively published output path.
+     */
+    public static function copyToNewFile(
+        string $source,
+        string $target,
+        bool $secret = false,
+        bool $overwrite = false
+    ): void
+    {
+        $sourceHandle = @fopen($source, 'rb');
+        if ($sourceHandle === false) {
+            throw new RuntimeException('Could not read source file "' . $source . '".');
+        }
+
+        $directory = dirname($target);
+        if (!is_dir($directory) || !is_writable($directory)) {
+            fclose($sourceHandle);
+            throw new RuntimeException('Output directory "' . $directory . '" is not writable.');
+        }
+
+        [$temporaryPath, $targetHandle, $oldUmask] = self::createOutputTemporaryFile($directory, $secret);
+
+        try {
+            while (!feof($sourceHandle)) {
+                $buffer = fread($sourceHandle, 1024 * 1024);
+                if ($buffer === false) {
+                    throw new RuntimeException('Could not read source file "' . $source . '".');
+                }
+                if ($buffer === '') {
+                    continue;
+                }
+
+                $offset = 0;
+                $length = strlen($buffer);
+                while ($offset < $length) {
+                    $written = fwrite($targetHandle, substr($buffer, $offset));
+                    if ($written === false || $written === 0) {
+                        throw new RuntimeException('Could not write temporary output file.');
+                    }
+                    $offset += $written;
+                }
+            }
+
+            self::flushOutputFile($targetHandle);
+            fclose($targetHandle);
+            $targetHandle = false;
+
+            self::publishOutputTemporaryFile($temporaryPath, $target, $secret, $overwrite);
+            $temporaryPath = '';
+        } catch (Throwable $exception) {
+            if (is_resource($targetHandle)) {
+                fclose($targetHandle);
+            }
+            if ($temporaryPath !== '' && (is_file($temporaryPath) || is_link($temporaryPath))) {
+                @unlink($temporaryPath);
+            }
+            throw $exception;
+        } finally {
+            fclose($sourceHandle);
+            if ($oldUmask !== null) {
+                umask($oldUmask);
+            }
+        }
+    }
+
+    /**
+     * Create an unpredictable temporary output file in the destination directory.
+     *
+     * Publishing is done later with link(), not rename(): hard-link creation fails atomically if
+     * the requested destination already exists, including regular symlinks and dangling symlinks.
+     *
+     * @return array{0:string,1:resource,2:?int}
+     */
+    private static function createOutputTemporaryFile(string $directory, bool $secret): array
+    {
+        $oldUmask = null;
+        if ($secret) {
+            $oldUmask = umask(0077);
+        }
+
+        $temporaryPath = @tempnam($directory, '.admidio-cli-');
+        if ($temporaryPath === false) {
+            if ($oldUmask !== null) {
+                umask($oldUmask);
+            }
+            throw new RuntimeException('Could not create a temporary output file in "' . $directory . '".');
+        }
+
+        $handle = @fopen($temporaryPath, 'wb');
+        if ($handle === false) {
+            @unlink($temporaryPath);
+            if ($oldUmask !== null) {
+                umask($oldUmask);
+            }
+            throw new RuntimeException('Could not open temporary output file in "' . $directory . '".');
+        }
+
+        if ($secret && !chmod($temporaryPath, 0600)) {
+            fclose($handle);
+            @unlink($temporaryPath);
+            umask($oldUmask);
+            throw new RuntimeException('Could not restrict permissions of temporary output file.');
+        }
+
+        return array($temporaryPath, $handle, $oldUmask);
+    }
+
+    /**
+     * @param resource $handle
+     */
+    private static function flushOutputFile($handle): void
+    {
+        if (!fflush($handle)) {
+            throw new RuntimeException('Could not flush temporary output file.');
+        }
+        if (function_exists('fsync') && !fsync($handle)) {
+            throw new RuntimeException('Could not synchronize temporary output file.');
+        }
+    }
+
+    private static function publishOutputTemporaryFile(
+        string $temporaryPath,
+        string $target,
+        bool $secret,
+        bool $overwrite
+    ): void {
+        if ($overwrite) {
+            /*
+             * --overwrite replaces one file, it never turns a directory or a symlink into one.
+             * rename() replaces the entry itself, so a symlink is removed instead of followed.
+             */
+            if ((is_link($target) || file_exists($target)) && !(is_file($target) && !is_link($target))) {
+                throw new RuntimeException(
+                    'Output file "' . $target . '" is not a regular file and is not replaced.'
+                );
+            }
+            if (!@rename($temporaryPath, $target)) {
+                throw new RuntimeException('Could not publish output file "' . $target . '".');
+            }
+            return;
+        }
+
+        /*
+         * link() creates a new directory entry only when $target does not already exist. Unlike
+         * rename() it does not replace an existing path, and it does not follow a symlink that
+         * points nowhere. Keeping the temporary file in the same directory also ensures both
+         * paths are on the same filesystem.
+         */
+        if (@link($temporaryPath, $target)) {
+            if (!@unlink($temporaryPath)) {
+                @unlink($target);
+                throw new RuntimeException('Could not finalize output file "' . $target . '".');
+            }
+            return;
+        }
+
+        if (is_link($target) || file_exists($target)) {
+            throw new RuntimeException(
+                'Output file "' . $target . '" already exists. Pass --overwrite to replace it.'
+            );
+        }
+
+        /*
+         * Not every filesystem an Admidio installation writes to supports hard links. O_EXCL of
+         * fopen("x") gives the same exclusive creation, only the content becomes visible while it
+         * is still being written.
+         */
+        $handle = @fopen($target, 'xb');
+        if ($handle === false) {
+            throw new RuntimeException('Could not publish output file "' . $target . '".');
+        }
+
+        try {
+            if ($secret && !chmod($target, 0600)) {
+                throw new RuntimeException('Could not restrict permissions of output file "' . $target . '".');
+            }
+
+            $source = @fopen($temporaryPath, 'rb');
+            if ($source === false) {
+                throw new RuntimeException('Could not publish output file "' . $target . '".');
+            }
+
+            try {
+                if (stream_copy_to_stream($source, $handle) === false) {
+                    throw new RuntimeException('Could not publish output file "' . $target . '".');
+                }
+                self::flushOutputFile($handle);
+            } finally {
+                fclose($source);
+            }
+        } catch (Throwable $exception) {
+            fclose($handle);
+            @unlink($target);
+            throw $exception;
+        }
+
+        fclose($handle);
+        @unlink($temporaryPath);
     }
 
     /**
      * @param array<string,mixed> $options
      */
-    public static function writeSuccess(string $message, array $options): void
+    public static function writeSuccess(string $message, array $options, bool $honorOutputFile = true): void
     {
         /*
          * A caller that asked for JSON has to receive JSON from every command, otherwise a script
@@ -1741,13 +1989,13 @@ final class CliApplication
                     JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
                 ) . PHP_EOL,
                 $options,
-                false
+                $honorOutputFile
             );
             return;
         }
 
         if (!self::optionBool($options, 'quiet', false)) {
-            self::writeOutput($message . PHP_EOL, $options, false);
+            self::writeOutput($message . PHP_EOL, $options, $honorOutputFile);
         }
     }
 
@@ -1759,9 +2007,7 @@ final class CliApplication
         $filename = $honorOutputFile ? self::optionString($options, 'output') : '';
 
         if ($filename !== '') {
-            if (file_put_contents($filename, $content) === false) {
-                throw new RuntimeException('Could not write output file "' . $filename . '".');
-            }
+            self::writeNewFile($filename, $content, false, self::optionBool($options, 'overwrite', false) ?? false);
             return;
         }
 

@@ -2862,11 +2862,25 @@ final class CoreTasks
 
         $filename = 'admidio-' . date('Ymd-His') . '.sql.gz';
         $dump = new DatabaseDump($gDb);
-        $dump->create($filename);
+
+        // The dump library creates the temporary file itself, so set the restrictive umask before it
+        // is observable. moveGeneratedFile() applies the same protection to the final destination.
+        $oldUmask = umask(0077);
+        try {
+            $dump->create($filename);
+        } finally {
+            umask($oldUmask);
+        }
+
+        $temporaryFile = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
+        if (!chmod($temporaryFile, 0600)) {
+            @unlink($temporaryFile);
+            throw new RuntimeException('Could not restrict permissions of the generated database dump.');
+        }
 
         // A dump contains every table of the installation, so restrict it to the invoking user.
         self::moveGeneratedFile(
-            ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename,
+            $temporaryFile,
             $filename,
             $options,
             true
@@ -5912,11 +5926,9 @@ final class CoreTasks
             FileSystemUtils::getSanitizedPathEntry($filename)
         );
 
-        if (!@copy($source, $target)) {
-            throw new RuntimeException('Could not copy attachment to "' . $target . '".');
-        }
+        CliApplication::copyToNewFile($source, $target, false, self::overwriteRequested($options));
 
-        CliApplication::writeSuccess('Attachment written to ' . $target . '.', $options);
+        CliApplication::writeSuccess('Attachment written to ' . $target . '.', $options, false);
         return 0;
     }
 
@@ -5933,11 +5945,9 @@ final class CoreTasks
             (string)$file->getValue('fil_name', 'database')
         );
 
-        if (!@copy($source, $target)) {
-            throw new RuntimeException('Could not copy document to "' . $target . '".');
-        }
+        CliApplication::copyToNewFile($source, $target, false, self::overwriteRequested($options));
 
-        CliApplication::writeSuccess('Document written to ' . $target . '.', $options);
+        CliApplication::writeSuccess('Document written to ' . $target . '.', $options, false);
         return 0;
     }
 
@@ -6339,11 +6349,9 @@ final class CoreTasks
         $download = (new PhotoService($gDb, $album))->getDownloadFile($photoNumber);
         $target = CliApplication::resolveOutputPath($options, $download['filename']);
 
-        if (!@copy($download['path'], $target)) {
-            throw new RuntimeException('Could not copy photo to "' . $target . '".');
-        }
+        CliApplication::copyToNewFile($download['path'], $target, false, self::overwriteRequested($options));
 
-        CliApplication::writeSuccess('Photo written to ' . $target . '.', $options);
+        CliApplication::writeSuccess('Photo written to ' . $target . '.', $options, false);
         return 0;
     }
 
@@ -11682,6 +11690,16 @@ final class CoreTasks
     }
 
     /**
+     * Whether the caller allows an existing output file to be replaced.
+     *
+     * @param array<string,mixed> $options
+     */
+    private static function overwriteRequested(array $options): bool
+    {
+        return CliApplication::optionBool($options, 'overwrite', false) ?? false;
+    }
+
+    /**
      * @param array{filename:string,contentType:string,content:string} $export
      * @param array<string,mixed> $options
      */
@@ -11689,15 +11707,9 @@ final class CoreTasks
     {
         $target = CliApplication::resolveOutputPath($options, $export['filename']);
 
-        if (file_put_contents($target, $export['content']) === false) {
-            throw new RuntimeException('Could not write export file "' . $target . '".');
-        }
+        CliApplication::writeNewFile($target, $export['content'], $secret, self::overwriteRequested($options));
 
-        if ($secret) {
-            CliApplication::protectExportedFile($target);
-        }
-
-        CliApplication::writeSuccess('Export written to ' . $target . '.', $options);
+        CliApplication::writeSuccess('Export written to ' . $target . '.', $options, false);
     }
 
     /**
@@ -11712,9 +11724,7 @@ final class CoreTasks
         $target = CliApplication::resolveOutputPath($options, $filename);
 
         try {
-            if (!@rename($source, $target) && !@copy($source, $target)) {
-                throw new RuntimeException('Could not write export file "' . $target . '".');
-            }
+            CliApplication::copyToNewFile($source, $target, $secret, self::overwriteRequested($options));
         } finally {
             // The generated file lives in adm_my_files/tmp and must not survive a failed export.
             if (is_file($source)) {
@@ -11722,11 +11732,7 @@ final class CoreTasks
             }
         }
 
-        if ($secret) {
-            CliApplication::protectExportedFile($target);
-        }
-
-        CliApplication::writeSuccess('Export written to ' . $target . '.', $options);
+        CliApplication::writeSuccess('Export written to ' . $target . '.', $options, false);
     }
 
     private static function changePermissions(string $mode, array $arguments, array $options): int
