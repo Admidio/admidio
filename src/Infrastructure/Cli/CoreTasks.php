@@ -75,6 +75,8 @@ use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
 use Admidio\Users\Entity\UserRelationType;
+use Admidio\Users\Entity\UserImport;
+use Admidio\Users\Service\ContactImportService;
 use Admidio\Users\Service\UserPhotoService;
 use Admidio\Weblinks\Entity\Weblink;
 use InvalidArgumentException;
@@ -692,7 +694,7 @@ final class CoreTasks
         );
         self::task('user:add', 'userAdd', 'Create a user using native profile fields and default-role assignment.',
             'user:add --field=FIELD=VALUE ... [--login=LOGIN] [--password-stdin] [--group=GROUP ...]',
-            'CONTACTS', true, array(), $userWriteOptions);
+            'CONTACTS', true, array(), $userWriteOptions, requiredRight: 'usersAdministrator');
         self::task('user:update', 'userUpdate', 'Update login/profile data of a user.',
             'user:update USER [--login=LOGIN] [--field=FIELD=VALUE ...]', 'CONTACTS', true,
             array(self::arg('user', 'User UUID, id or login name.')), array(
@@ -720,14 +722,30 @@ final class CoreTasks
         self::readTask('user:export', 'userExport', 'Export a user as the native vCard representation.',
             'user:export USER [--output=FILE]', 'CONTACTS', true,
             array(self::arg('user', 'User to export.')));
-        $importReason = 'current src/Users/Entity/UserImport.php and modules/contacts/import.php implement a stateful web import workflow; '
-            . 'there is no complete data-oriented import service to call headlessly without duplicating that workflow.';
-        self::task('user:import', 'unavailable', 'Import contacts from a supported spreadsheet/text file.',
-            'user:import FILE [options]', 'CONTACTS', true,
-            array(self::arg('file', 'Import file.')), array(), array(), $importReason);
-        self::task('user:import-check', 'unavailable', 'Validate and preview a contacts import.',
-            'user:import-check FILE [options]', 'CONTACTS', true,
-            array(self::arg('file', 'Import file.')), array(), array(), $importReason);
+        $contactImportOptions = array(
+            self::opt('group', 'Role/group that imported contacts receive.', 'GROUP', true),
+            self::opt('mode', 'Existing-contact handling.', 'MODE', false, false, false, array_keys(ContactImportService::IMPORT_MODES)),
+            self::opt('map', 'Map internal Admidio FIELD to a zero-based column index or header: FIELD=COLUMN.', 'FIELD=COLUMN', false, true),
+            self::opt('no-header', 'Treat the first row as data instead of column titles.', '', false, false, true),
+            self::opt('input-format', 'Input file format.', 'FORMAT', false, false, false, ContactImportService::inputFormats()),
+            self::opt('encoding', 'CSV/HTML input encoding; GUESS enables detection.', 'ENCODING', false, false, false,
+                ContactImportService::INPUT_ENCODINGS),
+            self::opt('delimiter', 'CSV delimiter (comma, semicolon, tab or pipe).', 'CHAR', false, false, false, array_keys(ContactImportService::CSV_DELIMITERS)),
+            self::opt('enclosure', 'CSV enclosure character.', 'CHAR', false, false, false, ContactImportService::CSV_ENCLOSURES),
+            self::opt('worksheet', 'Worksheet name or zero-based worksheet index.', 'SHEET')
+        );
+        self::task('user:import', 'userImport', 'Import contacts using the same UserImport semantics as the web wizard.',
+            'user:import FILE --group=GROUP [--map=FIELD=COLUMN]... [options] [--format=record|json]',
+            'CONTACTS', true, array(self::arg('file', 'Import file.')),
+            array_merge($contactImportOptions, array(
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json'))
+            )), requiredRight: 'usersAdministrator');
+        self::task('user:import-check', 'userImportCheck', 'Validate and preview a contacts import without persisting rows.',
+            'user:import-check FILE --group=GROUP [--map=FIELD=COLUMN]... [options] [--format=record|json]',
+            'CONTACTS', true, array(self::arg('file', 'Import file.')),
+            array_merge($contactImportOptions, array(
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json'))
+            )), requiredRight: 'usersAdministrator');
         self::task('user:set-password', 'userSetPassword', 'Set a user password.',
             'user:set-password USER [--password=PASSWORD|--password-stdin]', 'CONTACTS', true,
             array(self::arg('user', 'User.')), array(
@@ -3631,6 +3649,8 @@ final class CoreTasks
             $user->setPassword($password);
         }
 
+        self::assertRequiredProfileFields($user);
+
         // Check the requested groups before the user record is written.
         $roles = array();
         foreach (CliApplication::optionValues($options, 'group') as $groupReference) {
@@ -3733,6 +3753,7 @@ final class CoreTasks
         }
 
         self::applyUserFields($copy, $options);
+        self::assertRequiredProfileFields($copy);
 
         // Check the requested groups before the copy is written.
         $roles = array();
@@ -3896,6 +3917,65 @@ final class CoreTasks
 
         CliApplication::writeOutput($user->getVCard(), $options);
         return 0;
+    }
+
+    public static function userImport(array $arguments, array $options): int
+    {
+        return self::runUserImport($arguments, $options, false);
+    }
+
+    public static function userImportCheck(array $arguments, array $options): int
+    {
+        return self::runUserImport($arguments, $options, true);
+    }
+
+    private static function runUserImport(array $arguments, array $options, bool $dryRun): int
+    {
+        global $gDb, $gProfileFields, $gCurrentUser;
+
+        $role = self::resolveGroup(CliApplication::optionString($options, 'group'));
+        if (!$gCurrentUser->hasRightViewRole((int)$role->getValue('rol_id'))
+            || (!$gCurrentUser->isAdministratorRoles() && !$role->getValue('rol_default_registration'))
+            || (!$gCurrentUser->isAdministrator() && $role->getValue('rol_administrator'))) {
+            throw new Exception('SYS_ROLE_SELECT_RIGHT', array($role->getValue('rol_name')));
+        }
+
+        $mappingAssignments = array();
+        foreach (CliApplication::optionValues($options, 'map') as $assignment) {
+            [$field, $column] = self::splitAssignment($assignment, '--map');
+            $field = str_starts_with(strtolower($field), 'usr_') ? strtolower($field) : strtoupper($field);
+            if (array_key_exists($field, $mappingAssignments)) {
+                throw new InvalidArgumentException('Import field "' . $field . '" is mapped more than once.');
+            }
+            $mappingAssignments[$field] = $column;
+        }
+
+        $mode = ContactImportService::importModeFromName(
+            CliApplication::optionString($options, 'mode', 'not-edit')
+        );
+
+        $service = new ContactImportService($gDb, $gProfileFields);
+        $rows = $service->readFile(
+            CliApplication::requireArgument($arguments, 0, 'file'),
+            CliApplication::optionString($options, 'input-format', 'AUTO'),
+            CliApplication::optionString($options, 'encoding'),
+            CliApplication::optionString($options, 'delimiter'),
+            CliApplication::optionString($options, 'enclosure', 'AUTO'),
+            CliApplication::optionString($options, 'worksheet')
+        );
+        $firstRowHeader = !CliApplication::optionBool($options, 'no-header', false);
+        $mapping = $service->resolveMapping($rows, $mappingAssignments, $firstRowHeader);
+        $result = $service->importRows(
+            $rows,
+            $mapping,
+            (int)$role->getValue('rol_id'),
+            $mode,
+            $firstRowHeader,
+            $dryRun
+        );
+
+        CliApplication::writeValue($result, $options, 'record');
+        return $result['errors'] > 0 ? CliApplication::EXIT_FAILED : CliApplication::EXIT_SUCCESS;
     }
 
     public static function userSetPassword(array $arguments, array $options): int
@@ -9027,6 +9107,24 @@ final class CoreTasks
 
         if ((int)$gDb->queryPrepared($sql, $params)->fetchColumn() > 0) {
             throw new Exception('SYS_LOGIN_NAME_EXIST');
+        }
+    }
+
+    /**
+     * Apply the same required-profile-field contract used by the administrator web form when a
+     * new contact is saved. Login/password are intentionally not part of this check: the logged-in
+     * administrator form also permits contacts without login credentials.
+     */
+    private static function assertRequiredProfileFields(User $user): void
+    {
+        global $gProfileFields;
+
+        foreach ($gProfileFields->getProfileFields() as $field) {
+            $internalName = (string)$field->getValue('usf_name_intern');
+            if ($gProfileFields->hasRequiredInput($internalName, 0, false)
+                && trim((string)$user->getValue($internalName, 'database')) === '') {
+                throw new InvalidArgumentException('Required profile field "' . $internalName . '" is empty.');
+            }
         }
     }
 

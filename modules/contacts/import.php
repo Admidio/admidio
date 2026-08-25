@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Users\Service\ContactImportService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -43,7 +44,7 @@ try {
         $page,
         array('enableFileUpload' => true)
     );
-    $formats = array(
+    $formatLabels = array(
         'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
         'XLSX' => $gL10n->get('SYS_EXCEL_2007_365'),
         'XLS' => $gL10n->get('SYS_EXCEL_97_2003'),
@@ -51,6 +52,10 @@ try {
         'CSV' => $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
         'HTML' => $gL10n->get('SYS_HTML_TABLE')
     );
+    $formats = array();
+    foreach (ContactImportService::inputFormats() as $format) {
+        $formats[$format] = $formatLabels[$format];
+    }
     $form->addSelectBox(
         'format',
         $gL10n->get('SYS_FORMAT'),
@@ -94,8 +99,7 @@ try {
         '',
         array('class' => 'import-setting import-XLSX import-XLS import-ODS import-HTML import-AUTO'));
 
-    $selectBoxEntries = array(
-        '' => $gL10n->get('SYS_DEFAULT_ENCODING_UTF8'),
+    $encodingLabels = array(
         'GUESS' => $gL10n->get('SYS_ENCODING_GUESS'),
         'UTF-8' => $gL10n->get('SYS_UTF8'),
         'UTF-16BE' => $gL10n->get('SYS_UTF16BE'),
@@ -105,6 +109,10 @@ try {
         'CP1252' => $gL10n->get('SYS_CP1252'),
         'ISO-8859-1' => $gL10n->get('SYS_ISO_8859_1')
     );
+    $selectBoxEntries = array('' => $gL10n->get('SYS_DEFAULT_ENCODING_UTF8'));
+    foreach (ContactImportService::INPUT_ENCODINGS as $encoding) {
+        $selectBoxEntries[$encoding] = $encodingLabels[$encoding];
+    }
     $form->addSelectBox(
         'import_coding',
         $gL10n->get('SYS_CODING'),
@@ -115,13 +123,16 @@ try {
         )
     );
 
-    $selectBoxEntries = array(
-        '' => $gL10n->get('SYS_AUTO_DETECT'),
+    $delimiterLabels = array(
         ',' => $gL10n->get('SYS_COMMA'),
         ';' => $gL10n->get('SYS_SEMICOLON'),
         '\t' => $gL10n->get('SYS_TAB'),
         '|' => $gL10n->get('SYS_PIPE')
     );
+    $selectBoxEntries = array('' => $gL10n->get('SYS_AUTO_DETECT'));
+    foreach (array_keys(ContactImportService::CSV_DELIMITERS) as $delimiter) {
+        $selectBoxEntries[$delimiter] = $delimiterLabels[$delimiter];
+    }
     $form->addSelectBox(
         'import_separator',
         $gL10n->get('SYS_SEPARATOR_FOR_CSV_FILE'),
@@ -132,12 +143,15 @@ try {
         )
     );
 
-    $selectBoxEntries = array(
+    $enclosureLabels = array(
         'AUTO' => $gL10n->get('SYS_AUTO_DETECT'),
-        '' => $gL10n->get('SYS_NO_QUOTATION'),
         '"' => $gL10n->get('SYS_DQUOTE'),
-        '\'' => $gL10n->get('SYS_QUOTE')
+        "'" => $gL10n->get('SYS_QUOTE')
     );
+    $selectBoxEntries = array('' => $gL10n->get('SYS_NO_QUOTATION'));
+    foreach (ContactImportService::CSV_ENCLOSURES as $enclosure) {
+        $selectBoxEntries[$enclosure] = $enclosureLabels[$enclosure];
+    }
     $form->addSelectBox(
         'import_enclosure',
         $gL10n->get('SYS_FIELD_ENCLOSURE'),
@@ -190,19 +204,23 @@ try {
         )
     );
 
-    $selectBoxEntries = array(
-        1 => $gL10n->get('SYS_DO_NOT_EDIT'),
-        2 => $gL10n->get('SYS_DUPLICATE'),
-        3 => $gL10n->get('SYS_REPLACE'),
-        4 => $gL10n->get('SYS_COMPLEMENT')
+    $importModeLabels = array(
+        'not-edit' => $gL10n->get('SYS_DO_NOT_EDIT'),
+        'duplicate' => $gL10n->get('SYS_DUPLICATE'),
+        'replace' => $gL10n->get('SYS_REPLACE'),
+        'complete' => $gL10n->get('SYS_COMPLEMENT')
     );
+    $selectBoxEntries = array();
+    foreach (ContactImportService::IMPORT_MODES as $modeName => $modeValue) {
+        $selectBoxEntries[$modeValue] = $importModeLabels[$modeName];
+    }
     $form->addSelectBox(
         'user_import_mode',
         $gL10n->get('SYS_EXISTING_CONTACTS'),
         $selectBoxEntries,
         array(
             'property' => FormPresenter::FIELD_REQUIRED,
-            'defaultValue' => 1,
+            'defaultValue' => ContactImportService::IMPORT_MODES['not-edit'],
             'showContextDependentFirstEntry' => false,
             'helpTextId' => 'SYS_IDENTIFY_USERS'
         )

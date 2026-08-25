@@ -41,7 +41,8 @@ final class CliTaskRegistry
      * @var array<string,string>
      */
     public const ADDITIONAL_RIGHTS = array(
-        'administrator' => 'isAdministrator'
+        'administrator' => 'isAdministrator',
+        'usersAdministrator' => 'isAdministratorUsers'
     );
 
     /**

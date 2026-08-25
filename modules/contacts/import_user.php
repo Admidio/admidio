@@ -15,11 +15,7 @@
  */
 
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Utils\PhpIniUtils;
-use Admidio\Roles\Entity\Role;
-use Admidio\Roles\ValueObject\RoleDependency;
-use Admidio\Users\Entity\UserImport;
-use Ramsey\Uuid\Uuid;
+use Admidio\Users\Service\ContactImportService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -34,145 +30,44 @@ try {
     }
 
     if ($getMode === 'import') {
-        // check form field input and sanitized it from malicious content
+        // Validate the web form and convert its UUID-based field assignments to the service's
+        // canonical internal-name mapping. The actual import workflow is shared with the CLI.
         $contactsImportAssignFieldsForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $contactsImportAssignFieldsForm->validate($_POST);
-
-        // go through each line from the file one by one and create the user in the DB
-        $line = reset($_SESSION['import_data']);
-        $userImport = new UserImport($gDb, $gProfileFields);
-        $identifyUserByUuid = false;
         $firstRowTitle = array_key_exists('first_row', $_POST);
-        $startRow = 0;
-        $countImportNewUser = 0;
-        $countImportEditUser = 0;
-        $countImportEditRole = 0;
-        $importMessage = '';
-        $importMessages = array();
-        $userCounted = false;
-        $importedFields = array();
-        // array matches the profile field ids with the columns of the import file
-        $importProfileFields = array();
 
-        // create array with all profile fields that where assigned to columns of the import file
-        foreach ($_POST as $formFieldId => $importFileColumn) {
-            if ($importFileColumn !== ''
-                && (Uuid::isValid($formFieldId) || strpos($formFieldId, 'usr_') !== false)) {
-                if ($formFieldId === 'usr_uuid') {
-                    $identifyUserByUuid = true;
-                }
-                $importProfileFields[$formFieldId] = (int)$importFileColumn;
-            }
-        }
-
-        // Determine dependent roles
-        $depRoles = RoleDependency::getParentRoles($gDb, (int)$_SESSION['rol_id']);
-
-        if ($firstRowTitle) {
-            // skip first line, because here are the column names
-            $line = next($_SESSION['import_data']);
-            $startRow = 1;
-        }
-
-        // set execution time to 10 minutes because we have a lot to do
-        PhpIniUtils::startNewExecutionTimeLimit(600);
-
-        for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) {
-            $userCounted = false;
-            $userLoginName = '';
-            $userPassword = '';
-            $userImport->clear();
-
-            $userImport->setImportMode((int)$_SESSION['user_import_mode']);
-            if ($identifyUserByUuid) {
-                $userImport->readDataByUuid($line[$importProfileFields['usr_uuid']] ?? '');
-            } else {
-                $userImport->readDataByFirstnameLastName(
-                    trim($line[$importProfileFields[$gProfileFields->getProperty('FIRST_NAME', 'usf_uuid')]]),
-                    trim($line[$importProfileFields[$gProfileFields->getProperty('LAST_NAME', 'usf_uuid')]])
-                );
-            }
-
-            foreach ($importProfileFields as $assignedFieldColumnId => $columnKey) {
-                $columnValue = $line[$columnKey] ?? '';
-
-                // remove spaces and html tags
-                $columnValue = trim(strip_tags($columnValue));
-
-                if (Uuid::isValid($assignedFieldColumnId)) {
-                    // special case for date columns from Excel. We read the data without format
-                    // so excel give us an integer for the date that must be converted
-                    if ($gProfileFields->getPropertyByUuid($assignedFieldColumnId, 'usf_type') === 'DATE' && is_numeric($columnValue)) {
-                        $columnValue = date($gSettingsManager->getString('system_date'), \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($columnValue));
-                    }
-
-                    $userImport->setValue($gProfileFields->getPropertyByUuid($assignedFieldColumnId, 'usf_name_intern'), $columnValue);
-                } else {
-                    // remember username and password and add it later to the user
-                    if ($assignedFieldColumnId === 'usr_login_name') {
-                        $userLoginName = $columnValue;
-                    } elseif ($assignedFieldColumnId === 'usr_password') {
-                        $userPassword = $columnValue;
-                    }
-                }
-            }
-
-            // add login data to the user
-            // Ideally, both username and password are set using the same import
-            // Setting username without password is possible (user needs to reset password to be able to log in)
-            // Setting the password only should only be possible if an existing user already has a username assigned
-            if ($userPassword !== '') {
-                if ($userLoginName == '') {
-                    $userLoginName = $userImport->getValue('usr_login_name');
-                }
-                if (!empty($userLoginName)) {
-                    try {
-                        $userImport->setLoginData($userLoginName, $userPassword);
-                    } catch (Exception $e) {
-                        $importMessages[] = $e->getMessage();
-                    }
-                } else {
-                    $importMessages[] = $userImport->getValue('FIRST_NAME') . ' ' . $userImport->getValue('LAST_NAME') . ": password given for new user, but no username";
-                }
-            } else {
-                if (!empty($userLoginName)) {
-                    $userImport->setValue('usr_login_name', $userLoginName);
-                }
-            }
-
-            if ($userImport->isNewRecord()) {
-                ++$countImportNewUser;
-                $userCounted = true;
-            }
-
-            // save imported data of the user in database
-            if ($userImport->save() && !$userCounted) {
-                ++$countImportEditUser;
-                $userCounted = true;
-            }
-
-            // assign role membership to user
-            $role = new Role($gDb, (int)$_SESSION['rol_id']);
-            $role->startMembership($userImport->getValue('usr_id'));
-            ++$countImportEditRole;
-
-            $line = next($_SESSION['import_data']);
-        }
+        $importService = new ContactImportService($gDb, $gProfileFields);
+        $mapping = $importService->resolveWebMapping($formValues);
+        $result = $importService->importRows(
+            $_SESSION['import_data'],
+            $mapping,
+            (int)$_SESSION['rol_id'],
+            (int)$_SESSION['user_import_mode'],
+            $firstRowTitle
+        );
 
         // initialize session parameters
         $_SESSION['role'] = '';
         $_SESSION['user_import_mode'] = '';
         $_SESSION['import_data'] = '';
 
+        $importMessages = array();
+        foreach ($result['rows'] as $rowResult) {
+            if ($rowResult['messages'] !== '') {
+                $importMessages[] = 'Row ' . $rowResult['row'] . ': ' . $rowResult['messages'];
+            }
+        }
+
+        $importMessage = '';
         if (count($importMessages) > 0) {
             $importMessage = '<h4>' . $gL10n->get('SYS_LOG') . '</h4><br />';
             $importMessage .= implode('<br />', $importMessages);
         }
 
         $_SESSION['import_log'] = array(
-            'countImportNewUser' => $countImportNewUser,
-            'countImportEditUser' => $countImportEditUser,
-            'countImportEditRole' => $countImportEditRole,
+            'countImportNewUser' => $result['new'],
+            'countImportEditUser' => $result['updated'],
+            'countImportEditRole' => $result['memberships'],
             'importMessage' => $importMessage
         );
 

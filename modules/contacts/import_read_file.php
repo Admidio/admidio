@@ -10,6 +10,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\Role;
+use Admidio\Users\Service\ContactImportService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -21,29 +22,34 @@ try {
         'format',
         'string',
         array('requireValue' => true,
-            'validValues' => array('AUTO', 'XLSX', 'XLS', 'ODS', 'CSV', 'HTML'))
+            'validValues' => ContactImportService::inputFormats())
     );
     $postImportCoding = admFuncVariableIsValid(
         $_POST,
         'import_coding',
         'string',
-        array('validValues' => array('', 'GUESS', 'UTF-8', 'UTF-16BE', 'UTF-16LE', 'UTF-32BE', 'UTF-32LE', 'CP1252', 'ISO-8859-1'))
+        array('validValues' => array_merge(array(''), ContactImportService::INPUT_ENCODINGS))
     );
     $postSeparator = admFuncVariableIsValid(
         $_POST,
         'import_separator',
         'string',
-        array('validValues' => array('', ',', ';', '\t', '|'))
+        array('validValues' => array_merge(array(''), array_keys(ContactImportService::CSV_DELIMITERS)))
     );
     $postEnclosure = admFuncVariableIsValid(
         $_POST,
         'import_enclosure',
         'string',
-        array('validValues' => array('', 'AUTO', '"', '\''))
+        array('validValues' => array_merge(array(''), ContactImportService::CSV_ENCLOSURES))
     );
     $postWorksheet = admFuncVariableIsValid($_POST, 'import_sheet', 'string');
     $postRoleUUID = admFuncVariableIsValid($_POST, 'import_role_uuid', 'uuid');
-    $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'int', array('requireValue' => true));
+    $postUserImportMode = admFuncVariableIsValid(
+        $_POST,
+        'user_import_mode',
+        'int',
+        array('requireValue' => true, 'validValues' => array_values(ContactImportService::IMPORT_MODES))
+    );
 
     // only authorized users should import users
     if (!$gCurrentUser->isAdministratorUsers()) {
@@ -77,70 +83,20 @@ try {
         throw new Exception('SYS_ROLE_SELECT_RIGHT', array($role->getValue('rol_name')));
     }
 
-    // read file using the phpSpreadsheet library
+    // Keep the web wizard responsible for upload/session handling, but use the same data-oriented
+    // import service as the CLI for spreadsheet parsing.
     $_SESSION['rol_id'] = (int)$role->getValue('rol_id');
     $_SESSION['user_import_mode'] = $postUserImportMode;
 
-    switch ($postImportFormat) {
-        case 'XLSX':
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-            break;
-
-        case 'XLS':
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
-            break;
-
-        case 'ODS':
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Ods();
-            break;
-
-        case 'CSV':
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-            if ($postImportCoding === 'GUESS') {
-                $postImportCoding = \PhpOffice\PhpSpreadsheet\Reader\Csv::guessEncoding($importfile);
-            } elseif ($postImportCoding === '') {
-                $postImportCoding = 'UTF-8';
-            }
-            $reader->setInputEncoding($postImportCoding);
-
-            if ($postSeparator != '') {
-                $reader->setDelimiter($postSeparator);
-            }
-
-            if ($postEnclosure != 'AUTO') {
-                $reader->setEnclosure($postEnclosure);
-            }
-            break;
-
-        case 'HTML':
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
-            break;
-
-        case 'AUTO':
-        default:
-            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($importfile);
-            break;
-    }
-
-    // TODO: Better error handling if file cannot be loaded (phpSpreadsheet apparently does not always use exceptions)
-    if (isset($reader) and !is_null($reader)) {
-        $spreadsheet = $reader->load($importfile);
-        // Read specified sheet (passed as argument/param)
-        if (is_numeric($postWorksheet)) {
-            $sheet = $spreadsheet->getSheet($postWorksheet);
-        } elseif (!empty($postWorksheet)) {
-            $sheet = $spreadsheet->getSheetByName($postWorksheet);
-        } else {
-            $sheet = $spreadsheet->getActiveSheet();
-        }
-
-        if (empty($sheet)) {
-            throw new Exception('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet));
-        } else {
-            // read data to array without any format
-            $_SESSION['import_data'] = $sheet->toArray(null, true, false);
-        }
-    }
+    $importService = new ContactImportService($gDb, $gProfileFields);
+    $_SESSION['import_data'] = $importService->readFile(
+        $importfile,
+        $postImportFormat,
+        $postImportCoding,
+        $postSeparator,
+        $postEnclosure,
+        $postWorksheet
+    );
 
     echo json_encode(array(
         'status' => 'success',
