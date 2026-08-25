@@ -218,19 +218,45 @@ class MessageService
                 $receiverName
             );
 
-            $sendResult = $email->sendEmail();
+            /*
+             * Write the message, its recipients, its content and its attachments before the first
+             * external delivery: afterwards a failing write can no longer be undone. The
+             * transaction stays open until the mail was handed over, so a message that was never
+             * sent also leaves no history behind.
+             */
+            $transactionStarted = false;
+            if ($gValidLogin) {
+                $this->db->startTransaction();
+                $transactionStarted = true;
+                $message->save();
+            }
 
-            if ($carbonCopy && $gValidLogin) {
-                $email->sendCopyEmail();
+            try {
+                $sendResult = $email->sendEmail();
+
+                if ($sendResult !== true) {
+                    throw new Exception('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
+                }
+
+                // A copy to the sender is a convenience, its delivery never invalidates the message.
+                if ($carbonCopy && $gValidLogin) {
+                    $email->sendCopyEmail();
+                }
+
+                if ($transactionStarted) {
+                    $this->db->endTransaction();
+                    $transactionStarted = false;
+                }
+            } catch (\Throwable $exception) {
+                if ($transactionStarted) {
+                    $this->db->rollback();
+                }
+                throw $exception;
             }
 
             if ($gDebug && PHP_SAPI !== 'cli' && headers_sent()) {
                 $email->isSMTP();
                 $gMessage->showHtmlTextOnly();
-            }
-
-            if ($sendResult !== true) {
-                throw new Exception('SYS_EMAIL_NOT_SEND', array('SYS_RECIPIENT', $sendResult));
             }
         } else {
             if ($messageUuid === '' && $userUuid === '' && isset($recipients[0]) && Uuid::isValid($recipients[0])) {
@@ -275,7 +301,8 @@ class MessageService
             }
         }
 
-        if ($gValidLogin) {
+        // The email branch has already written its history before the mail was handed over.
+        if ($gValidLogin && $messageType === Message::MESSAGE_TYPE_PM) {
             $message->save();
         }
 
