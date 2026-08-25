@@ -1272,13 +1272,44 @@ class Entity
         }
 
         if ($this->valueChanged($columnName, $newValue)) {
-            $this->columnsInfos[$columnName]['previousValue'] = $this->dbColumns[$columnName];
-            $this->dbColumns[$columnName] = $newValue;
-            $this->columnsValueChanged = true;
-            $this->columnsInfos[$columnName]['changed'] = true;
+            if ($this->columnsInfos[$columnName]['changed'] && !$this->insertRecord
+                && !$this->valuesDiffer($columnName, $this->columnsInfos[$columnName]['previousValue'], $newValue)) {
+                // The field is back at the value that the database holds. It is not a change any
+                // more, so it must neither be written nor appear in the change history.
+                $this->dbColumns[$columnName] = $newValue;
+                $this->columnsInfos[$columnName]['changed'] = false;
+                $this->columnsInfos[$columnName]['previousValue'] = null;
+                $this->columnsValueChanged = $this->hasChangedColumns();
+            } else {
+                if (!$this->columnsInfos[$columnName]['changed']) {
+                    // Remember the value that the database holds. A field that is set more than once
+                    // before the save must still report the change from its persisted value and not
+                    // from the intermediate one.
+                    $this->columnsInfos[$columnName]['previousValue'] = $this->dbColumns[$columnName];
+                }
+                $this->dbColumns[$columnName] = $newValue;
+                $this->columnsValueChanged = true;
+                $this->columnsInfos[$columnName]['changed'] = true;
+            }
         }
 
         return true;
+    }
+
+    /**
+     * Check whether at least one column of the object still differs from the value that the
+     * database holds.
+     * @return bool Returns **true** if at least one column is marked as changed.
+     */
+    protected function hasChangedColumns(): bool
+    {
+        foreach ($this->columnsInfos as $columnInfo) {
+            if (!empty($columnInfo['changed'])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1295,7 +1326,23 @@ class Entity
      */
     protected function valueChanged(string $columnName, ?string $newValue): bool
     {
-        $oldValue = isset($this->dbColumns[$columnName]) && !empty($this->dbColumns[$columnName]) ? $this->dbColumns[$columnName] : null;
+        return $this->valuesDiffer($columnName, $this->dbColumns[$columnName] ?? null, $newValue);
+    }
+
+    /**
+     * Check whether a new value differs from a given old value, considering the DB column type.
+     * valueChanged() compares against the value that the object currently holds; a change of the
+     * record has to be reported against the value that the database holds, which is the comparison
+     * this method also allows.
+     *
+     * @param string $columnName the database column name to check
+     * @param mixed $oldValue the value to compare against
+     * @param string|null $newValue the new value to set
+     * @return bool Whether the $newValue can be considered different from $oldValue
+     */
+    protected function valuesDiffer(string $columnName, mixed $oldValue, ?string $newValue): bool
+    {
+        $oldValue = !empty($oldValue) ? $oldValue : null;
 
         // certain data types need special handling to detect changes
         //   * bool: unset/null and 0 mean false
