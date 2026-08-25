@@ -39,6 +39,15 @@ class SelectOptions extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'profile_field_select_option';
+    }
+
+    /**
      * Read all options of the select field with the id $usfId from the database and store them in the internal array $optionValues.
      * The values are stored in the array with their ID as key.
      * If no id is set than no data will be read.

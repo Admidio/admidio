@@ -40,6 +40,15 @@ class Album extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'photo_album';
+    }
+
+    /**
      * Initialize all necessary data of this object.
      * @return void
      * @throws Exception

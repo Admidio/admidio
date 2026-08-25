@@ -34,6 +34,15 @@ class UserRelationType extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'user_relation_type';
+    }
+
+    /**
      * Returns the inverse relation type.
      * @return null|self Returns the inverse relation type
      * @throws Exception

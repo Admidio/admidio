@@ -35,6 +35,15 @@ class MenuEntry extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'menu_entry';
+    }
+
+    /**
      * Deletes the selected menu entries.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred

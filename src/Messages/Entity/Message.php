@@ -56,6 +56,15 @@ class Message extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'message';
+    }
+
+    /**
      * Add an attachment from a path on the filesystem.
      * @param string $path        Path to the attachment
      * @param string $name        Overrides the attachment name
