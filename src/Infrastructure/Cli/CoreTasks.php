@@ -615,6 +615,11 @@ final class CoreTasks
                 self::opt('type', 'Convert the stored value to this type.', 'TYPE', false, false, false, array('raw', 'string', 'int', 'float', 'bool')),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             ));
+        self::task('config:schema', 'configSchema', 'Show the supported administrator-editable preference schema.',
+            'config:schema [NAME] [--format=table|record|json|json-api|csv|md|dokuwiki]',
+            'PREFERENCES', true,
+            array(self::arg('name', 'Optional preference name.', false)),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'record', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))));
         self::task('config:set', 'configSet', 'Validate and store an administrator-editable preference.',
             'config:set NAME VALUE', 'PREFERENCES', true,
             array(self::arg('name', 'Preference name.'), self::arg('value', 'Preference value.')));
@@ -3203,6 +3208,41 @@ final class CoreTasks
         }
 
         CliApplication::writeValue($value, $options);
+        return 0;
+    }
+
+    public static function configSchema(array $arguments, array $options): int
+    {
+        $name = $arguments[0] ?? '';
+
+        if ($name !== '') {
+            $definition = PreferenceDefinitions::definition((string)$name);
+            $definition = array('name' => (string)$name) + $definition;
+            if (isset($definition['values'])) {
+                $definition['values'] = implode(',', $definition['values']);
+            }
+            CliApplication::writeValue($definition, $options, 'record');
+            return 0;
+        }
+
+        $rows = array();
+        foreach (PreferenceDefinitions::supportedNames() as $preferenceName) {
+            $definition = PreferenceDefinitions::definition($preferenceName);
+            $rows[] = array(
+                'name' => $preferenceName,
+                'type' => $definition['type'],
+                'sensitive' => $definition['sensitive'],
+                'minimum' => $definition['minimum'] ?? '',
+                'maximum' => array_key_exists('maximum', $definition) ? ($definition['maximum'] ?? '') : '',
+                'values' => isset($definition['values']) ? implode(',', $definition['values']) : ''
+            );
+        }
+
+        CliApplication::writeRows(
+            $rows,
+            CliApplication::optionString($options, 'format', 'table'),
+            $options
+        );
         return 0;
     }
 
