@@ -562,6 +562,13 @@ final class CoreTasks
         self::task('maintenance:repair-documents', 'repairDocuments', 'Run the native documents/files path repair operation.',
             'maintenance:repair-documents [--yes]', 'CORE', true, array(),
             array(self::opt('yes', 'Confirm the repair.', '', false, false, true)));
+        self::task('maintenance:run', 'maintenanceRun', 'Run the available native maintenance jobs and report each result.',
+            'maintenance:run [--job=categories|documents]... [--yes] [--format=table|json|csv|md|dokuwiki]',
+            'CORE', true, array(), array(
+                self::opt('job', 'Maintenance job to run; repeat to select more than one.', 'JOB', false, true, false, array('categories', 'documents')),
+                self::opt('yes', 'Confirm maintenance execution.', '', false, false, true),
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+            ));
         self::task(
             'maintenance:mode',
             'maintenanceMode',
@@ -3045,6 +3052,48 @@ final class CoreTasks
         (new Maintenance($gDb))->repairDocumentsFilesPath();
         CliApplication::writeSuccess('Document path repair completed.', $options);
         return 0;
+    }
+
+    public static function maintenanceRun(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        CliApplication::confirm('Run the selected Admidio maintenance jobs?', $options);
+        $requested = CliApplication::optionValues($options, 'job');
+        if (count($requested) === 0) {
+            $requested = array('categories', 'documents');
+        }
+        $requested = array_values(array_unique($requested));
+
+        $maintenance = new Maintenance($gDb);
+        $jobs = array(
+            'categories' => static fn (): mixed => $maintenance->reorganizeCategories(),
+            'documents' => static fn (): mixed => $maintenance->repairDocumentsFilesPath()
+        );
+        $rows = array();
+        $failures = 0;
+
+        foreach ($requested as $jobName) {
+            try {
+                $jobs[$jobName]();
+                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => '');
+            } catch (\Throwable $exception) {
+                ++$failures;
+                $rows[] = array(
+                    'job' => $jobName,
+                    'status' => 'failed',
+                    'message' => $exception->getMessage()
+                );
+            }
+        }
+
+        CliApplication::writeRows(
+            $rows,
+            CliApplication::optionString($options, 'format', 'table'),
+            $options
+        );
+
+        return $failures === 0 ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_FAILED;
     }
 
     public static function maintenanceMode(array $arguments, array $options): int
