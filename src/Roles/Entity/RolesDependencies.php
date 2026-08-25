@@ -26,6 +26,15 @@ class RolesDependencies extends Entity
     {
         parent::__construct($database, TBL_ROLE_DEPENDENCIES, 'rld');
     }
+
+    /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'role_dependency';
+    }
    
     /**
      * Deletes the selected record of the table and initializes the class

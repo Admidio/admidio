@@ -55,6 +55,15 @@ class ProfileField extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'profile_field';
+    }
+
+    /**
      * Additional to the parent method visible roles array and flag will be initialized.
      * @throws Exception
      */

@@ -85,6 +85,15 @@ class Organization extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'organization';
+    }
+
+    /**
      * Initialize all necessary data of this object.
      * @return void
      * @throws Exception

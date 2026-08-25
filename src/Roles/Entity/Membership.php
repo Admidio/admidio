@@ -51,6 +51,15 @@ class Membership extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'membership';
+    }
+
+    /**
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method **save** to store the new value to the database. If the unique key
      * column is set to 0, then this record will be a new record and all other columns are marked as changed.

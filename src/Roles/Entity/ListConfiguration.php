@@ -86,6 +86,15 @@ class ListConfiguration extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'list_configuration';
+    }
+
+    /**
      * Add new column to a column array. The number of the column will be the maximum number of the current
      * array plus one. The special fields must be part from the list of allowed columns. Also, the special field
      * usr_uuid could only be added by users with the right to edit all users.

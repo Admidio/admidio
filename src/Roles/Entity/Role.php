@@ -78,6 +78,15 @@ class Role extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'role';
+    }
+
+    /**
      * Set the current role active.
      * Event roles could not be set active.
      * @throws Exception

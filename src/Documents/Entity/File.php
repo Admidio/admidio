@@ -39,6 +39,15 @@ class File extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'file';
+    }
+
+    /**
      * Check if the file extension of the current file format is allowed for upload and the
      * documents and files module.
      * @return bool Return true if the file extension is allowed to be used within Admidio.
