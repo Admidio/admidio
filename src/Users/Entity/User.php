@@ -2384,8 +2384,7 @@ class User extends Entity
      */
     public function readableName(): string
     {
-        return Hooks::apply_filters('user_readable_name', $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME'), $this);
-        //return $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME');
+        return Hooks::applyFilters('user_readable_name', $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME'), $this);
     }
 
     /**
