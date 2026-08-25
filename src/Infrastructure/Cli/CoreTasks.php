@@ -1797,14 +1797,17 @@ final class CoreTasks
     private static function registerProfileFieldTasks(): void
     {
         self::readTask('profile:fields', 'profileFields', 'List profile field definitions.',
-            'profile:fields [--category=CATEGORY] [--format=FORMAT]', 'CONTACTS', true, array(), array(
+            'profile:fields [--category=CATEGORY] [--internal] [--format=FORMAT]', 'CONTACTS', true, array(), array(
                 self::opt('category', 'Profile-field category.', 'CATEGORY'),
+                self::opt('internal', 'Also show the fields and the configuration flags that only a users administrator sees.', '', false, false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
             ));
         self::readTask('profile:field-show', 'profileFieldShow', 'Show a profile field definition.',
-            'profile:field-show FIELD [--format=text|json]', 'CONTACTS', true,
-            array(self::arg('field', 'Profile field UUID/id/internal name.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            'profile:field-show FIELD [--internal] [--format=text|json]', 'CONTACTS', true,
+            array(self::arg('field', 'Profile field UUID/id/internal name.')), array(
+                self::opt('internal', 'Also show the fields and the configuration flags that only a users administrator sees.', '', false, false, true),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+            ));
         $profileFieldOptions = array(
             self::opt('name', 'Field name.', 'NAME'),
             self::opt('category', 'Profile-field category.', 'CATEGORY'),
@@ -1843,9 +1846,10 @@ final class CoreTasks
             'profile:field-move FIELD up|down', 'CONTACTS', true,
             array(self::arg('field', 'Profile field.'), self::arg('direction', 'up or down.')));
         self::readTask('profile:options', 'profileOptions', 'List select options of a profile field.',
-            'profile:options FIELD [--include-obsolete] [--format=FORMAT]', 'CONTACTS', true,
+            'profile:options FIELD [--include-obsolete] [--internal] [--format=FORMAT]', 'CONTACTS', true,
             array(self::arg('field', 'Profile field.')), array(
                 self::opt('include-obsolete', 'Include obsolete options.', '', false, false, true),
+                self::opt('internal', 'Also show the fields and the configuration flags that only a users administrator sees.', '', false, false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
             ));
         self::task('profile:option-add', 'profileOptionAdd', 'Add a profile select option.',
@@ -7490,37 +7494,104 @@ final class CoreTasks
 
     public static function profileFields(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId;
+        global $gProfileFields;
 
-        $params = array($gCurrentOrgId);
-        $categorySql = '';
+        $internal = self::profileMetadataInternal($options);
+
+        $categoryId = 0;
         if (CliApplication::optionExists($options, 'category')) {
-            $category = self::resolveCategory(CliApplication::optionString($options, 'category'), 'USF');
-            $categorySql = ' AND usf_cat_id = ?';
-            $params[] = (int)$category->getValue('cat_id');
+            $categoryId = (int)self::resolveCategory(
+                CliApplication::optionString($options, 'category'),
+                'USF'
+            )->getValue('cat_id');
         }
 
-        $rows = $gDb->queryPrepared(
-            'SELECT usf_id AS id, usf_uuid AS uuid, usf_name_intern AS internal_name,
-                    usf_name AS name, usf_type AS type, usf_cat_id AS category_id,
-                    usf_system AS system, usf_disabled AS disabled, usf_hidden AS hidden,
-                    usf_registration AS registration, usf_required_input AS required_input,
-                    usf_sequence AS sequence, usf_description AS description
-               FROM ' . TBL_USER_FIELDS . '
-         INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = usf_cat_id
-              WHERE (cat_org_id = ? OR cat_org_id IS NULL)' . $categorySql . '
-           ORDER BY cat_sequence, usf_sequence, usf_id',
-            $params
-        )->fetchAll();
+        /*
+         * ProfileFields reads exactly the fields of the current organization, in the order of the
+         * profile page, and answers the visibility question the profile page asks.
+         */
+        $rows = array();
+        foreach ($gProfileFields->getProfileFields() as $nameIntern => $field) {
+            if ($categoryId > 0 && (int)$field->getValue('usf_cat_id') !== $categoryId) {
+                continue;
+            }
+            if (!$internal && !$gProfileFields->isVisible((string)$nameIntern)) {
+                continue;
+            }
+
+            $row = array(
+                'id' => (int)$field->getValue('usf_id'),
+                'uuid' => (string)$field->getValue('usf_uuid'),
+                'internal_name' => (string)$nameIntern,
+                'name' => (string)$field->getValue('usf_name'),
+                'type' => (string)$field->getValue('usf_type'),
+                'category_id' => (int)$field->getValue('usf_cat_id'),
+                'sequence' => (int)$field->getValue('usf_sequence'),
+                'description' => (string)$field->getValue('usf_description', 'database')
+            );
+            if ($internal) {
+                $row['system'] = $field->getValue('usf_system', 'database');
+                $row['disabled'] = $field->getValue('usf_disabled', 'database');
+                $row['hidden'] = $field->getValue('usf_hidden', 'database');
+                $row['registration'] = $field->getValue('usf_registration', 'database');
+                $row['required_input'] = $field->getValue('usf_required_input', 'database');
+            }
+            $rows[] = $row;
+        }
+
         CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
-        return 0;
+        return CliApplication::EXIT_SUCCESS;
+    }
+
+    /**
+     * Whether the configuration of the profile fields was requested and may be shown.
+     *
+     * Without --internal these commands describe the fields the actor sees on a profile page, and
+     * of those only what the page shows as well. The hidden and disabled flags, the registration
+     * setting and the validation rules describe how the installation is configured and belong to
+     * whoever administers the contacts.
+     *
+     * @param array<string,mixed> $options
+     */
+    private static function profileMetadataInternal(array $options): bool
+    {
+        global $gCurrentUser;
+
+        if (!(CliApplication::optionBool($options, 'internal', false) ?? false)) {
+            return false;
+        }
+        if (!$gCurrentUser->isAdministratorUsers()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        return true;
+    }
+
+    /**
+     * Resolve a profile field that the acting user is allowed to know about.
+     */
+    private static function resolveVisibleProfileField(string $reference, bool $internal): ProfileField
+    {
+        global $gProfileFields;
+
+        $field = self::resolveProfileField($reference);
+        if (!$internal && !$gProfileFields->isVisible((string)$field->getValue('usf_name_intern'))) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        return $field;
     }
 
     public static function profileFieldShow(array $arguments, array $options): int
     {
-        $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
-        CliApplication::writeValue(self::profileFieldData($field), $options);
-        return 0;
+        $internal = self::profileMetadataInternal($options);
+        $field = self::resolveVisibleProfileField(
+            CliApplication::requireArgument($arguments, 0, 'field'),
+            $internal
+        );
+
+        CliApplication::writeValue(self::profileFieldData($field, $internal), $options);
+        return CliApplication::EXIT_SUCCESS;
     }
 
     public static function profileFieldAdd(array $arguments, array $options): int
@@ -7582,7 +7653,11 @@ final class CoreTasks
     public static function profileOptions(array $arguments, array $options): int
     {
         global $gDb;
-        $field = self::resolveProfileField(CliApplication::requireArgument($arguments, 0, 'field'));
+
+        $field = self::resolveVisibleProfileField(
+            CliApplication::requireArgument($arguments, 0, 'field'),
+            self::profileMetadataInternal($options)
+        );
         $select = new ProfileSelectOptions($gDb, (int)$field->getValue('usf_id'));
         $rows = array_values($select->getAllOptions(
             CliApplication::optionBool($options, 'include-obsolete', false) ?? false
@@ -10726,15 +10801,22 @@ final class CoreTasks
     /**
      * @return array<string,mixed>
      */
-    private static function profileFieldData(ProfileField $field): array
+    private static function profileFieldData(ProfileField $field, bool $internal): array
     {
-        $data = array();
-        foreach (array(
+        $columns = array(
             'usf_id', 'usf_uuid', 'usf_cat_id', 'usf_name_intern', 'usf_name', 'usf_type',
-            'usf_required_input', 'usf_hidden', 'usf_disabled', 'usf_registration',
-            'usf_default_value', 'usf_regex', 'usf_icon', 'usf_url', 'usf_description',
-            'usf_system', 'usf_sequence'
-        ) as $column) {
+            'usf_icon', 'usf_url', 'usf_description', 'usf_sequence'
+        );
+        if ($internal) {
+            array_push(
+                $columns,
+                'usf_required_input', 'usf_hidden', 'usf_disabled', 'usf_registration',
+                'usf_default_value', 'usf_regex', 'usf_system'
+            );
+        }
+
+        $data = array();
+        foreach ($columns as $column) {
             $data[$column] = $field->getValue($column, 'database');
         }
         return $data;
