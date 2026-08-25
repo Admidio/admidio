@@ -1809,7 +1809,18 @@ final class CliApplication
      */
     private static function displayWidth(string $value): int
     {
-        return mb_strlen($value, 'UTF-8');
+        if (function_exists('mb_strwidth')) {
+            return mb_strwidth($value, 'UTF-8');
+        }
+
+        /*
+         * mbstring is only suggested by composer.json, ext-iconv is required. Counting characters
+         * instead of bytes keeps a table with umlauts aligned; only the double-width East Asian
+         * characters stay wrong without mbstring.
+         */
+        $characters = @iconv_strlen($value, 'UTF-8');
+
+        return $characters === false ? strlen($value) : $characters;
     }
 
     private static function padCell(string $value, int $width): string

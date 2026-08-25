@@ -6762,7 +6762,7 @@ final class CoreTasks
         if (CliApplication::optionExists($options, 'category')) {
             $categoryId = (int)self::resolveCategory(CliApplication::optionString($options, 'category'), 'IVT')->getValue('cat_id');
         }
-        $search = mb_strtolower(CliApplication::optionString($options, 'search'));
+        $search = StringUtils::strToLower(CliApplication::optionString($options, 'search'));
         $rows = array();
 
         /*
@@ -6795,7 +6795,7 @@ final class CoreTasks
             foreach ($items->getItemFields() as $name => $field) {
                 $row[(string)$name] = $items->getValue((string)$name, 'database');
             }
-            if ($search !== '' && !str_contains(mb_strtolower(implode(' ', array_map('strval', $row))), $search)) {
+            if ($search !== '' && !str_contains(StringUtils::strToLower(implode(' ', array_map('strval', $row))), $search)) {
                 continue;
             }
             $rows[] = $row;
@@ -7730,7 +7730,7 @@ final class CoreTasks
         }
 
         $rows = array();
-        $filter = mb_strtolower(CliApplication::optionString($options, 'filter'));
+        $filter = StringUtils::strToLower(CliApplication::optionString($options, 'filter'));
         foreach ($report->listData as $memberData) {
             $row = array();
             foreach (array_values($memberData) as $indexColumn => $value) {
@@ -7767,7 +7767,7 @@ final class CoreTasks
 
             if ($filter !== ''
                 && !str_contains(
-                    mb_strtolower(implode(' ', array_map(
+                    StringUtils::strToLower(implode(' ', array_map(
                         static fn (mixed $value): string => is_scalar($value) ? (string)$value : '',
                         $row
                     ))),
