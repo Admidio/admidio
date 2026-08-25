@@ -128,6 +128,7 @@ try {
      * call will use the default value of true and properly log changes...
      */
     Entity::setLoggingEnabled(false);
+    Entity::setHooksEnabled(false);
 
     // get system user id
     $sql = 'SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'System\' ';

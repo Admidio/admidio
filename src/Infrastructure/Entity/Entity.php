@@ -9,6 +9,9 @@ use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Hooks\Hooks;
+use Admidio\Hooks\ValueObject\EntityChangeSet;
+use Admidio\Hooks\ValueObject\EntityFieldChange;
 use DateTime;
 use Ramsey\Uuid\Uuid;
 use Throwable;
@@ -94,6 +97,14 @@ class Entity
      * Setting this to false will disable logging in all cases, even with the preference set.
      */
     protected static bool $loggingEnabled = true;
+
+    /**
+     * Flag to enable/disable the persistence hooks of the entities.
+     * @var bool If this flag is set (default), every entity that has a hook ID dispatches its
+     * create, update and delete hooks. The installation and the update switch it off, because the
+     * schema and the core are not in a state a plugin could work with while they run.
+     */
+    protected static bool $hooksEnabled = true;
 
     /**
      * Constructor that will create an object of a recordset from the specified table.
@@ -267,6 +278,233 @@ class Entity
         self::$loggingEnabled = $enabled;
     }
 
+
+    /**
+     * Switch the persistence hooks of all entities on or off. The installation and the update
+     * switch them off: they write records of every kind while the schema and the core are still
+     * changing, and a plugin callback has nothing useful to do with that.
+     * @param bool $enabled **false** disables the hooks for the rest of the request.
+     * @return void
+     */
+    public static function setHooksEnabled(bool $enabled): void
+    {
+        self::$hooksEnabled = $enabled;
+    }
+
+    /**
+     * The stable public identifier of this entity in the hook API. It is the first half of the
+     * entity-specific hook names, so an entity with the hook ID **oidc_client** dispatches
+     * **oidc_client_created**, **oidc_client_updated** and **oidc_client_deleted**, next to the
+     * generic **entity_created**, **entity_updated** and **entity_deleted**.
+     *
+     * The identifier is a public API and is deliberately not derived from the PHP class name, so
+     * that a class can be renamed without breaking the plugins that listen to it.
+     *
+     * An entity that returns **null**, which is the default, dispatches nothing at all, the
+     * generic hooks included. That is how an entity opts out, and it is also why a new entity is
+     * silent until someone decides what its public name should be. Sessions, auto logins, the
+     * changelog itself and the OAuth tokens stay silent on purpose: they are written constantly,
+     * they hold infrastructure state or secrets, and a changelog entry that reports the writing of
+     * a changelog entry would not stop.
+     *
+     * @return string|null Returns the hook ID of this entity, or **null** if it has no hooks.
+     */
+    public function getHookId(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * The columns whose value must not be handed to a hook callback: secrets such as a password,
+     * a key or a token, and values that have no meaning outside the record, such as an image. The
+     * change set reports that these columns changed and replaces both values with
+     * EntityChangeSet::REDACTED_VALUE, and it leaves them out of its snapshot.
+     *
+     * This is deliberately not getIgnoredLogColumns(), which lists the columns that are noise in
+     * the change history. Noise and secrets are two different problems and an entity usually has
+     * different columns for each of them.
+     *
+     * @return array Returns the list of database columns whose value must not leave the record.
+     */
+    public function getSensitiveHookColumns(): array
+    {
+        return array();
+    }
+
+    /**
+     * Whether this entity dispatches persistence hooks at all and at least one callback is
+     * registered for the given stage. Building a change set reads the whole record, so nothing of
+     * it is built while nobody listens.
+     * @param string $suffix The stage, e.g. **updating** or **updated**.
+     * @return bool Returns **true** if the stage has to be dispatched.
+     */
+    protected function hasHookListener(string $suffix): bool
+    {
+        $hookId = $this->getHookId();
+
+        if (!self::$hooksEnabled || $hookId === null) {
+            return false;
+        }
+
+        return Hooks::hasAction('entity_' . $suffix) || Hooks::hasAction($hookId . '_' . $suffix);
+    }
+
+    /**
+     * Dispatch one stage of the persistence lifecycle, to the generic hook and to the hook of this
+     * entity. The order nests the two: before the operation the generic hook runs first, after it
+     * and on failure the entity-specific hook runs first, so that a callback of the generic layer
+     * encloses the callbacks of the specific one.
+     * @param string $suffix The stage, e.g. **updating** or **updated**.
+     * @param EntityChangeSet $changeSet What the operation changes or changed.
+     * @param bool $genericFirst **true** before the operation, **false** after it and on failure.
+     * @param bool $catchErrors **true** for the failure stages, where the original failure has to
+     *                          stay the one that Admidio reports.
+     * @return void
+     */
+    protected function dispatchHook(string $suffix, EntityChangeSet $changeSet, bool $genericFirst, bool $catchErrors = false): void
+    {
+        $names = array('entity_' . $suffix, $this->getHookId() . '_' . $suffix);
+
+        if (!$genericFirst) {
+            $names = array_reverse($names);
+        }
+
+        foreach ($names as $name) {
+            if ($catchErrors) {
+                Hooks::doActionCatchErrors($name, $changeSet);
+            } else {
+                Hooks::doAction($name, $changeSet);
+            }
+        }
+    }
+
+    /**
+     * Build the change set of one operation from the change tracking that the object keeps anyway.
+     * @param string $operation One of the EntityChangeSet::OPERATION_... constants.
+     * @param string $operationId Identifies the operation across its stages.
+     * @param array $changedColumns The changed columns as **column => array('oldValue', 'newValue')**.
+     *                              For a deletion this is empty, the snapshot describes the record.
+     * @return EntityChangeSet Returns what the operation changes or changed.
+     */
+    protected function buildChangeSet(string $operation, string $operationId, array $changedColumns): EntityChangeSet
+    {
+        $sensitiveColumns = $this->getSensitiveHookColumns();
+        $technicalColumns = $this->getIgnoredLogColumns();
+        $changes = array();
+
+        foreach ($changedColumns as $column => $values) {
+            if (in_array($column, $sensitiveColumns, true)) {
+                $kind = EntityFieldChange::KIND_REDACTED;
+                $oldValue = ($values['oldValue'] === null) ? null : EntityChangeSet::REDACTED_VALUE;
+                $newValue = ($values['newValue'] === null) ? null : EntityChangeSet::REDACTED_VALUE;
+            } else {
+                $kind = in_array($column, $technicalColumns, true)
+                    ? EntityFieldChange::KIND_TECHNICAL : EntityFieldChange::KIND_BUSINESS;
+                $oldValue = $values['oldValue'];
+                $newValue = $values['newValue'];
+            }
+
+            $changes[$column] = new EntityFieldChange(
+                $column,
+                $oldValue,
+                $newValue,
+                $this->columnsInfos[$column]['type'] ?? '',
+                $kind
+            );
+        }
+
+        // The snapshot is what the database holds. For an update the object already carries the
+        // new values, so the changed columns are put back to the value they are changed from.
+        $snapshot = array();
+        if ($operation !== EntityChangeSet::OPERATION_CREATE) {
+            foreach ($this->dbColumns as $column => $value) {
+                if (in_array($column, $sensitiveColumns, true)) {
+                    continue;
+                }
+                $snapshot[$column] = array_key_exists($column, $changedColumns)
+                    ? $changedColumns[$column]['oldValue'] : $value;
+            }
+        }
+
+        list($id, $uuid) = $this->getHookKey();
+
+        return new EntityChangeSet(
+            (string)$this->getHookId(),
+            static::class,
+            $this->tableName,
+            $this->columnPrefix,
+            $this->keyColumnName,
+            $id,
+            $uuid,
+            $operation,
+            $operationId,
+            $changes,
+            $snapshot
+        );
+    }
+
+    /**
+     * The key of the record as the hooks report it. Before an insert the database has not assigned
+     * the ID yet, so it is null there and known in the matching post-action.
+     * @return array Returns **array($id, $uuid)**, either of them **null** when it does not exist.
+     */
+    protected function getHookKey(): array
+    {
+        $uuidColumn = $this->columnPrefix . '_uuid';
+
+        $id = (isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '')
+            ? $this->dbColumns[$this->keyColumnName] : null;
+        $uuid = (array_key_exists($uuidColumn, $this->dbColumns) && $this->dbColumns[$uuidColumn] !== '')
+            ? (string)$this->dbColumns[$uuidColumn] : null;
+
+        return array($id, $uuid);
+    }
+
+    /**
+     * Let the filters transform a value that is about to be set. It runs before the type handling
+     * and the sanitizing of setValue(), so that everything a filter returns still goes through the
+     * normal checks of the column and nothing can bypass them.
+     *
+     * The key column, the UUID and the creator and editor columns are not filtered: they are the
+     * bookkeeping of the record and not data anyone should rewrite through a hook.
+     *
+     * A callback must not call setValue() on the entity it is filtering for, that would recurse.
+     *
+     * @param string $columnName The database column that is about to be set.
+     * @param mixed $newValue The proposed value.
+     * @return mixed Returns the value after the filters.
+     */
+    protected function applyValueFilters(string $columnName, mixed $newValue): mixed
+    {
+        $hookId = $this->getHookId();
+
+        if (!self::$hooksEnabled || $hookId === null) {
+            return $newValue;
+        }
+
+        $unfiltered = array(
+            $this->keyColumnName,
+            $this->columnPrefix . '_uuid',
+            $this->columnPrefix . '_usr_id_create',
+            $this->columnPrefix . '_timestamp_create',
+            $this->columnPrefix . '_usr_id_change',
+            $this->columnPrefix . '_timestamp_change'
+        );
+
+        if (in_array($columnName, $unfiltered, true)) {
+            return $newValue;
+        }
+
+        $oldValue = $this->dbColumns[$columnName] ?? null;
+
+        foreach (array('entity_value', $hookId . '_value') as $name) {
+            if (Hooks::hasFilter($name)) {
+                $newValue = Hooks::applyFilters($name, $newValue, $this, $columnName, $oldValue);
+            }
+        }
+
+        return $newValue;
+    }
     /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
@@ -418,6 +656,26 @@ class Entity
     public function delete(): bool
     {
         if (array_key_exists($this->keyColumnName, $this->dbColumns) && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
+            // The change set has to be built while the record still exists: clear() below empties
+            // the object, so the snapshot it carries is the only thing a post-delete callback can
+            // read the deleted record from.
+            $changeSet = null;
+            if ($this->hasHookListener('deleting') || $this->hasHookListener('deleted')
+                || $this->hasHookListener('delete_failed')) {
+                $deletedColumns = array();
+                foreach ($this->dbColumns as $column => $value) {
+                    if (str_starts_with($column, $this->columnPrefix . '_')) {
+                        $deletedColumns[$column] = array('oldValue' => $value, 'newValue' => null);
+                    }
+                }
+                $changeSet = $this->buildChangeSet(
+                    EntityChangeSet::OPERATION_DELETE,
+                    (string)Uuid::uuid4(),
+                    $deletedColumns
+                );
+                $this->dispatchHook('deleting', $changeSet, true);
+            }
+
             // Log record deletion, then delete. The deletion of the dependent records that a
             // derived delete() removes beforehand is a change of its own and is not part of this
             // change set.
@@ -427,7 +685,22 @@ class Entity
 
             $sql = 'DELETE FROM ' . $this->tableName . '
                      WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
-            $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
+            try {
+                $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
+            } catch (Throwable $exception) {
+                if ($changeSet !== null) {
+                    $this->dispatchHook('delete_failed', $changeSet, false, true);
+                }
+                throw $exception;
+            }
+
+            $this->clear();
+
+            if ($changeSet !== null) {
+                $this->dispatchHook('deleted', $changeSet, false);
+            }
+
+            return true;
         }
 
         $this->clear();
@@ -874,6 +1147,20 @@ class Entity
      * ```
      * Transactions are counted, so this is also safe when the caller is already within one.
      *
+     * An entity that has a hook ID dispatches its persistence hooks here: **entity_creating** and
+     * **&lt;entity&gt;_creating** before the statement, **&lt;entity&gt;_created** and
+     * **entity_created** after it, and the matching failure hooks when the statement fails. The
+     * pre-hooks run before anything of the object is modified, so a callback that throws to reject
+     * the operation leaves an object the caller can still save.
+     *
+     * Two things about the timing are not yet what they should be, and the transaction-aware
+     * dispatch is what fixes them:
+     *  - the post-hooks fire when the statement ran, not when the enclosing transaction committed,
+     *    so a callback can still describe a change that is rolled back afterwards;
+     *  - a logical operation that saves the same record more than once dispatches once per save.
+     *    User::save() does that for a registration, and events_function.php does it for an event
+     *    whose participation role is created.
+     *
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if a table has columns like **usr_id_create** or **usr_id_change**
      * @return bool If an update or insert into the database was done, then return true, otherwise false.
@@ -916,6 +1203,46 @@ class Entity
         $returnCode = false;
 
         $logChanges = array();
+
+        // The hooks describe the same operation as the changelog, but they also report the
+        // bookkeeping columns and they need the value of the object and not the one that the
+        // PostgreSQL boolean conversion below produces. Nothing of this is collected while no
+        // callback is registered for any stage of this operation.
+        $operation = $this->insertRecord ? EntityChangeSet::OPERATION_CREATE : EntityChangeSet::OPERATION_UPDATE;
+        $hookStages = ($operation === EntityChangeSet::OPERATION_CREATE)
+            ? array('creating', 'created', 'create_failed')
+            : array('updating', 'updated', 'update_failed');
+        $collectHookChanges = false;
+        foreach ($hookStages as $hookStage) {
+            if ($this->hasHookListener($hookStage)) {
+                $collectHookChanges = true;
+                break;
+            }
+        }
+        // Collect them before the loop below, because that loop clears the changed flags as it
+        // builds the statement. A pre-action that vetoes the operation by throwing has to leave
+        // the object exactly as it found it, so that the caller can handle the rejection and save
+        // again.
+        $hookChanges = array();
+        if ($collectHookChanges) {
+            foreach ($this->dbColumns as $key => $value) {
+                if (str_starts_with($key, $this->columnPrefix . '_')
+                    && !$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed']) {
+                    $hookChanges[$key] = array(
+                        'oldValue' => ($operation === EntityChangeSet::OPERATION_CREATE)
+                            ? null : $this->columnsInfos[$key]['previousValue'],
+                        'newValue' => $value
+                    );
+                }
+            }
+        }
+
+        $changeSet = null;
+        if ($collectHookChanges
+            && ($operation === EntityChangeSet::OPERATION_CREATE || count($hookChanges) > 0)) {
+            $changeSet = $this->buildChangeSet($operation, (string)Uuid::uuid4(), $hookChanges);
+            $this->dispatchHook($hookStages[0], $changeSet, true);
+        }
 
         // Loop over all DB fields and add them to the update
         foreach ($this->dbColumns as $key => $value) {
@@ -965,37 +1292,53 @@ class Entity
         // together in the change history.
         $previousChangeSet = LogChanges::startChangeSet();
 
-        if ($this->insertRecord) {
-            // insert record and remember the new id
-            $sql = 'INSERT INTO ' . $this->tableName . '
-                           (' . implode(',', $sqlFieldArray) . ')
-                    VALUES (' . Database::getQmForValues($sqlFieldArray) . ')';
-            if ($this->db->queryPrepared($sql, $queryParams) !== false) {
-                $returnCode = true;
-                if ($this->keyColumnName !== '') {
-                    $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+        try {
+            if ($this->insertRecord) {
+                // insert record and remember the new id
+                $sql = 'INSERT INTO ' . $this->tableName . '
+                               (' . implode(',', $sqlFieldArray) . ')
+                        VALUES (' . Database::getQmForValues($sqlFieldArray) . ')';
+                if ($this->db->queryPrepared($sql, $queryParams) !== false) {
+                    $returnCode = true;
+                    if ($this->keyColumnName !== '') {
+                        $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+                    }
+                    // The result of the log writes is deliberately not evaluated, see the comment
+                    // about transactions in the description of this method.
+                    $this->logCreation();
+                    $this->logModifications($logChanges);
+                    $this->insertRecord = false;
                 }
-                // The result of the log writes is deliberately not evaluated, see the comment
-                // about transactions in the description of this method.
-                $this->logCreation();
-                $this->logModifications($logChanges);
-                $this->insertRecord = false;
+            } else {
+                $sql = 'UPDATE ' . $this->tableName . '
+                           SET ' . implode(', ', $sqlSetArray) . '
+                         WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
+                $queryParams[] = $this->dbColumns[$this->keyColumnName];
+                if ($this->db->queryPrepared($sql, $queryParams) !== false) {
+                    $returnCode = true;
+                    // Log record modification
+                    $this->logModifications($logChanges);
+                }
             }
-        } else {
-            $sql = 'UPDATE ' . $this->tableName . '
-                       SET ' . implode(', ', $sqlSetArray) . '
-                     WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
-            $queryParams[] = $this->dbColumns[$this->keyColumnName];
-            if ($this->db->queryPrepared($sql, $queryParams) !== false) {
-                $returnCode = true;
-                // Log record modification
-                $this->logModifications($logChanges);
+        } catch (Throwable $exception) {
+            if ($changeSet !== null) {
+                // cleanup for whoever prepared something in the pre-action, and the original
+                // failure stays the one that Admidio reports
+                $this->dispatchHook($hookStages[2], $changeSet, false, true);
             }
+            throw $exception;
         }
 
         LogChanges::endChangeSet($previousChangeSet);
 
         $this->columnsValueChanged = false;
+
+        if ($changeSet !== null && $returnCode) {
+            // an insert only learns its ID from the database, so the post-action gets the key that
+            // the pre-action could not know yet
+            list($id, $uuid) = $this->getHookKey();
+            $this->dispatchHook($hookStages[1], $changeSet->withKey($id, $uuid), false);
+        }
 
         return $returnCode;
     }
@@ -1142,6 +1485,9 @@ class Entity
 
         // normalize string values
         $newValue = is_string($newValue) ? trim($newValue) : $newValue;
+
+        // a filter may transform or reject the proposed value, the checks below then run on its result
+        $newValue = $this->applyValueFilters($columnName, $newValue);
 
         if ($checkValue) {
             if (!isset($newValue) || $newValue === '') {
