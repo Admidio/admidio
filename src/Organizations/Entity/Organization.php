@@ -85,6 +85,15 @@ class Organization extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'organization';
+    }
+
+    /**
      * Read the organization that carries the given short name.
      *
      * The short name identifies the organization in the configuration file, in the login and in the

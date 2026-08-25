@@ -48,6 +48,15 @@ class Component extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'component';
+    }
+
+    /**
      * Check version of component in database against the version of the file system.
      * There will be different messages shown if versions aren't equal. If database has minor
      * version than a link to update the database will be shown. If filesystem has minor version

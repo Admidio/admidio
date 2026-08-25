@@ -38,6 +38,15 @@ use Admidio\ProfileFields\Entity\ProfileField;
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'list_column';
+    }
+
+    /**
      * Logs creation of the DB record
      * 
      * @return true Returns **true** if no error occurred

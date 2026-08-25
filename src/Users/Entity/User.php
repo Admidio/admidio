@@ -133,6 +133,24 @@ class User extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'user';
+    }
+
+    /**
+     * @return array Returns the columns whose value must not be handed to a hook callback.
+     * @see Entity::getSensitiveHookColumns()
+     */
+    public function getSensitiveHookColumns(): array
+    {
+        return array('usr_password', 'usr_tfa_secret', 'usr_photo');
+    }
+
+    /**
      * Checks if the current user is allowed to edit a profile field of the user from the parameter.
      * @param User $user User object of the user that should be checked if the current user can view his profile field.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.

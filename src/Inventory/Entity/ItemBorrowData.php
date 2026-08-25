@@ -48,6 +48,15 @@ class ItemBorrowData extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'inventory_item_borrow_data';
+    }
+
+    /**
      * Update the record ID of this entity.
      * This method is used when the record ID is generated outside of this entity,
      * for example, after inserting a new record into the database.
