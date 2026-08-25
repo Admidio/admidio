@@ -27,18 +27,26 @@ if (PHP_SAPI !== 'cli') {
 function admCliBootstrapOption(array $arguments, string $name): string
 {
     $prefix = '--' . $name . '=';
+    $value = '';
 
+    /*
+     * CliApplication keeps the last value of a repeated scalar option until validation rejects the
+     * duplicate. Do the same here so the bootstrap can never use a different host/organization
+     * than the command parser, even for input that is rejected later.
+     */
     for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
         if (str_starts_with($arguments[$index], $prefix)) {
-            return substr($arguments[$index], strlen($prefix));
+            $value = substr($arguments[$index], strlen($prefix));
+            continue;
         }
 
         if ($arguments[$index] === '--' . $name && isset($arguments[$index + 1])) {
-            return $arguments[$index + 1];
+            $value = $arguments[$index + 1];
+            ++$index;
         }
     }
 
-    return '';
+    return $value;
 }
 
 /**
@@ -96,6 +104,25 @@ function admCliBootstrapCommand(array $arguments): string
     }
 
     return '';
+}
+
+foreach (array('host', 'organization') as $bootstrapOption) {
+    $matches = 0;
+    $prefix = '--' . $bootstrapOption . '=';
+
+    for ($index = 1, $count = count($argv); $index < $count; ++$index) {
+        if (str_starts_with($argv[$index], $prefix) || $argv[$index] === '--' . $bootstrapOption) {
+            ++$matches;
+            if ($argv[$index] === '--' . $bootstrapOption) {
+                ++$index;
+            }
+        }
+    }
+
+    if ($matches > 1) {
+        fwrite(STDERR, 'Error: Option --' . $bootstrapOption . ' may only be specified once.' . PHP_EOL);
+        exit(2);
+    }
 }
 
 $cliHost = admCliBootstrapOption($argv, 'host');

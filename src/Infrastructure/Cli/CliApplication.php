@@ -555,9 +555,22 @@ final class CliApplication
             throw new InvalidArgumentException('Too many arguments for command "' . $task['name'] . '".');
         }
 
+        /*
+         * Validate global options through the same contract as task options. A task may redeclare a
+         * global option such as --format in order to narrow its values; in that case the task
+         * definition deliberately wins.
+         *
+         * @var array<string,array<string,mixed>> $optionDefinitions
+         */
+        $optionDefinitions = array();
+        foreach (self::GLOBAL_OPTIONS as $definition) {
+            $optionDefinitions[(string)$definition['name']] = $definition;
+        }
         foreach ($task['options'] as $definition) {
-            $name = (string)$definition['name'];
+            $optionDefinitions[(string)$definition['name']] = $definition;
+        }
 
+        foreach ($optionDefinitions as $name => $definition) {
             if (($definition['required'] ?? false) === true && !self::optionExists($options, $name)) {
                 throw new InvalidArgumentException('Missing required option --' . $name . '.');
             }
