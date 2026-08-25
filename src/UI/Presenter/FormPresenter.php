@@ -1296,6 +1296,9 @@ class FormPresenter
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                          another array with the combination of attributes name and attributes value.
+     *                        - **allowCustomValues** : If set to **true** the validation of the form accepts a value that is
+     *                          not one of the entries above. Set it for a select box whose select2 is created with **tags**,
+     *                          where the user may enter an entry of their own.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
      *                          If you need an additional parameter for the text you can add an array. The first entry
@@ -1326,6 +1329,7 @@ class FormPresenter
             'placeholder' => '',
             'maximumSelectionNumber' => 0,
             'valueAttributes' => '',
+            'allowCustomValues' => false,
             'toggleable' => false
         ), $options));
         $attributes = array('name' => $id);
@@ -2197,6 +2201,10 @@ class FormPresenter
                 // remove html from every input value
                 $validFieldValues[$element['id']] = StringUtils::strStripTags($fieldValues[$element['id']]);
 
+                // a value that the form did not offer must not be accepted, no matter whether the
+                // control submits one value or a list of them
+                $this->validateOfferedValues($element, $validFieldValues[$element['id']]);
+
                 // check value depending on the field type
                 if (!is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {
                     switch ($element['type']) {
@@ -2228,11 +2236,6 @@ class FormPresenter
                                 throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
                             }
                             break;
-                        case 'select':
-                            if (!in_array($fieldValues[$element['id']], array_column($element['values'], 'id'))) {
-                                throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
-                            }
-                            break;
                         case 'url':
                             if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
                                 throw new Exception('SYS_URL_INVALID_CHAR', array($element['label']));
@@ -2248,6 +2251,54 @@ class FormPresenter
             }
         }
         return $validFieldValues;
+    }
+
+    /**
+     * Check the submitted value or values of a control that offers a fixed set of entries against
+     * that set. The set of an element is the one the form was built with, and the form is stored in
+     * the session, so a value that the user was never offered is rejected here even if the browser
+     * submitted it.
+     * @param array $element The form element that should be checked.
+     * @param mixed $value The submitted value, an array for a control that allows several entries.
+     * @return void
+     * @throws Exception SYS_FIELD_INVALID_INPUT
+     */
+    protected function validateOfferedValues(array $element, mixed $value): void
+    {
+        if (!empty($element['allowCustomValues'])) {
+            // the control lets the user enter an entry of their own, e.g. a select2 with tags
+            return;
+        }
+
+        switch ($element['type']) {
+            case 'select':
+            case 'button-group.radio':
+                // the entries were reorganized into an array of id and visible value
+                $offeredValues = array_column($element['values'], 'id');
+                break;
+
+            case 'radio':
+                // the entries were kept as they were given, the key of an entry is its value
+                $offeredValues = array_keys($element['values']);
+                if (!empty($element['showNoValueButton'])) {
+                    $offeredValues[] = '0';
+                }
+                break;
+
+            default:
+                return;
+        }
+
+        // an empty value means that nothing was selected, which the required check has covered
+        foreach ((is_array($value) ? $value : array($value)) as $singleValue) {
+            if ((string)$singleValue === '') {
+                continue;
+            }
+
+            if (!in_array((string)$singleValue, array_map('strval', $offeredValues), true)) {
+                throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
+            }
+        }
     }
 
     /**
