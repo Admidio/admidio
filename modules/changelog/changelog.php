@@ -142,7 +142,7 @@ try {
             $headline = $gL10n->get('SYS_CHANGE_HISTORY_GENERIC2', [$objName, implode(', ', $tableTitles)]);
         }
     }
-    $headline =  Hooks::apply_filters('changelog_headline', $headline);
+    $headline =  Hooks::applyFilters('changelog_headline', $headline);
 
     // add page to navigation history
     $gNavigation->addUrl(CURRENT_URL, $headline);
