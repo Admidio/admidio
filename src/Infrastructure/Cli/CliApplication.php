@@ -391,7 +391,7 @@ final class CliApplication
         $json = json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE) . PHP_EOL;
         $output = self::optionString($options, 'output');
         if ($output !== '') {
-            self::writeNewFile($output, $json);
+            self::writeNewFile($output, $json, false, self::optionBool($options, 'overwrite', false) ?? false);
         } else {
             echo $json;
         }
