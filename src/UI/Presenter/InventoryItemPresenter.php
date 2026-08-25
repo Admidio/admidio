@@ -901,7 +901,10 @@ class InventoryItemPresenter extends PagePresenter
                                 'helpTextId' => $helpId,
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
                                 'defaultValue' => $items->getValue($infNameIntern),
-                                'multiselect' => false
+                                'multiselect' => false,
+                                // the select2 below is created with tags, so the receiver may be a
+                                // name that is not among the users of the organization
+                                'allowCustomValues' => true
                             )
                         );
 
