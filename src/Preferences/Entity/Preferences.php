@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 
 /**
  * @brief Class manages access to database table adm_preferences
@@ -54,13 +55,11 @@ class Preferences extends Entity
             return;
         }
 
-        // NOTE: sso_saml_encryption_key is NOT secret. It holds the id of an entry of adm_sso_keys
-        // (see PreferencesPresenter::createSSOForm()), not the key itself, and stays readable.
-        if (in_array(
-            $this->getValue('prf_name'),
-            array('mail_smtp_password', 'sso_oidc_encryption_key'),
-            true
-        )) {
+        // Sensitivity is part of the canonical core preference definition. Unknown/plugin
+        // preferences keep their existing changelog behavior because their contract is not owned here.
+        $preferenceName = (string)$this->getValue('prf_name');
+        if (PreferenceDefinitions::exists($preferenceName)
+            && PreferenceDefinitions::isSensitive($preferenceName)) {
             $logEntry->setValue('log_value_old', '********');
             $logEntry->setValue('log_value_new', '********');
         }

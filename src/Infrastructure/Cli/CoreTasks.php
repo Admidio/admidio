@@ -52,6 +52,7 @@ use Admidio\Photos\Service\AlbumService;
 use Admidio\Photos\Service\ECardService;
 use Admidio\Photos\Service\PhotoService;
 use Admidio\Photos\ValueObject\ECard;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\ProfileFields\Entity\SelectOptions as ProfileSelectOptions;
@@ -589,27 +590,41 @@ final class CoreTasks
 
     private static function registerConfigTasks(): void
     {
-        self::task('config:list', 'configList', 'List organization preferences.',
-            'config:list [--filter=PATTERN] [--format=table|json|csv|md|dokuwiki]',
+        self::task('config:list', 'configList', 'List administrator-editable organization preferences.',
+            'config:list [--filter=PATTERN] [--include-secrets] [--format=table|json|csv|md|dokuwiki]',
             'PREFERENCES', true, array(), array(
                 self::opt('filter', 'Only include preference names containing this text.', 'PATTERN'),
+                self::opt('include-secrets', 'Include sensitive preference values.', '', false, false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task('config:get', 'configGet', 'Read a preference.',
-            'config:get NAME [--type=raw|string|int|float|bool] [--format=text|json]',
+        self::task('config:get', 'configGet', 'Read an administrator-editable preference.',
+            'config:get NAME [--include-secrets] [--type=raw|string|int|float|bool] [--format=text|json]',
             'PREFERENCES', true,
             array(self::arg('name', 'Preference name.')),
             array(
-                self::opt('type', 'Typed SettingsManager getter.', 'TYPE', false, false, false, array('raw', 'string', 'int', 'float', 'bool')),
+                self::opt('include-secrets', 'Show a sensitive preference value.', '', false, false, true),
+                self::opt('type', 'Convert the stored value to this type.', 'TYPE', false, false, false, array('raw', 'string', 'int', 'float', 'bool')),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
             ));
-        self::task('config:set', 'configSet', 'Store a preference through SettingsManager.',
+        self::task('config:set', 'configSet', 'Validate and store an administrator-editable preference.',
             'config:set NAME VALUE', 'PREFERENCES', true,
             array(self::arg('name', 'Preference name.'), self::arg('value', 'Preference value.')));
-        self::task('config:delete', 'configDelete', 'Delete an organization preference.',
+        self::task('config:delete', 'configDelete', 'Delete a non-core organization preference.',
             'config:delete NAME [--yes]', 'PREFERENCES', true,
-            array(self::arg('name', 'Preference name.')),
+            array(self::arg('name', 'Non-core preference name.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
+        self::task('config:export', 'configExport', 'Export administrator-editable preferences as a versioned JSON document.',
+            'config:export [--include-secrets] [--output=FILE]', 'PREFERENCES', true, array(), array(
+                self::opt('include-secrets', 'Include sensitive preference values. Secret output files are created with restrictive permissions.', '', false, false, true)
+            ));
+        self::task('config:import', 'configImport', 'Validate and import a versioned JSON preferences document.',
+            'config:import FILE [--include-secrets] [--dry-run] [--format=record|json]', 'PREFERENCES', true,
+            array(self::arg('file', 'JSON configuration document.')),
+            array(
+                self::opt('include-secrets', 'Permit sensitive values contained in the document.', '', false, false, true),
+                self::opt('dry-run', 'Validate the complete document without changing preferences.', '', false, false, true),
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json'))
+            ));
     }
 
     private static function registerOrganizationTasks(): void
@@ -3073,18 +3088,23 @@ final class CoreTasks
 
     public static function configList(array $arguments, array $options): int
     {
-        global $gSettingsManager;
-
-        $settings = $gSettingsManager->getAll(true);
-        ksort($settings);
+        $service = new PreferencesService();
+        $settings = $service->getEditablePreferences(
+            CliApplication::optionBool($options, 'include-secrets', false)
+        );
         $filter = CliApplication::optionString($options, 'filter');
         $rows = array();
 
-        foreach ($settings as $name => $value) {
-            if ($filter !== '' && stripos((string)$name, $filter) === false) {
+        foreach ($settings as $name => $entry) {
+            if ($filter !== '' && stripos($name, $filter) === false) {
                 continue;
             }
-            $rows[] = array('name' => $name, 'value' => $value);
+            $rows[] = array(
+                'name' => $name,
+                'value' => $entry['value'],
+                'type' => $entry['type'],
+                'sensitive' => $entry['sensitive']
+            );
         }
 
         CliApplication::writeRows(
@@ -3097,18 +3117,23 @@ final class CoreTasks
 
     public static function configGet(array $arguments, array $options): int
     {
-        global $gSettingsManager;
-
         $name = CliApplication::requireArgument($arguments, 0, 'name');
-        $type = CliApplication::optionString($options, 'type', 'raw');
+        $includeSecrets = CliApplication::optionBool($options, 'include-secrets', false);
+        $entry = (new PreferencesService())->getEditablePreference($name, $includeSecrets);
+        $value = $entry['value'];
 
-        $value = match ($type) {
-            'string' => $gSettingsManager->getString($name),
-            'int' => $gSettingsManager->getInt($name),
-            'float' => $gSettingsManager->getFloat($name),
-            'bool' => $gSettingsManager->getBool($name),
-            default => $gSettingsManager->get($name, true)
-        };
+        if (!$entry['sensitive'] || $includeSecrets) {
+            $type = CliApplication::optionString($options, 'type', 'raw');
+            $value = match ($type) {
+                'int' => filter_var($value, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE),
+                'float' => filter_var($value, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE),
+                'bool' => filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                default => $value
+            };
+            if ($value === null) {
+                throw new InvalidArgumentException('Preference "' . $name . '" cannot be converted to the requested type.');
+            }
+        }
 
         CliApplication::writeValue($value, $options);
         return 0;
@@ -3116,12 +3141,10 @@ final class CoreTasks
 
     public static function configSet(array $arguments, array $options): int
     {
-        global $gSettingsManager;
-
         $name = CliApplication::requireArgument($arguments, 0, 'name');
         $value = CliApplication::requireArgument($arguments, 1, 'value');
 
-        $gSettingsManager->set($name, $value);
+        (new PreferencesService())->setEditablePreference($name, $value);
         self::reloadAllSessions();
 
         CliApplication::writeSuccess('Updated preference ' . $name . '.', $options);
@@ -3133,11 +3156,77 @@ final class CoreTasks
         global $gSettingsManager;
 
         $name = CliApplication::requireArgument($arguments, 0, 'name');
-        CliApplication::confirm('Delete preference "' . $name . '"?', $options);
+        if (PreferenceDefinitions::isSupported($name) || in_array($name, PreferenceDefinitions::internalNames(), true)) {
+            throw new InvalidArgumentException(
+                'Seeded Admidio preferences cannot be deleted. Use config:set to change administrator-editable values.'
+            );
+        }
+
+        CliApplication::confirm('Delete non-core preference "' . $name . '"?', $options);
         $gSettingsManager->del($name);
         self::reloadAllSessions();
 
         CliApplication::writeSuccess('Deleted preference ' . $name . '.', $options);
+        return 0;
+    }
+
+    public static function configExport(array $arguments, array $options): int
+    {
+        $includeSecrets = CliApplication::optionBool($options, 'include-secrets', false);
+        $document = (new PreferencesService())->exportConfiguration($includeSecrets);
+        $json = json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . PHP_EOL;
+        $output = CliApplication::optionString($options, 'output');
+
+        if ($output !== '') {
+            CliApplication::writeNewFile($output, $json, $includeSecrets);
+        } else {
+            CliApplication::writeOutput($json, $options, false);
+        }
+
+        return 0;
+    }
+
+    public static function configImport(array $arguments, array $options): int
+    {
+        $filename = CliApplication::requireArgument($arguments, 0, 'file');
+        if (!is_file($filename) || !is_readable($filename)) {
+            throw new InvalidArgumentException('Configuration file "' . $filename . '" is not readable.');
+        }
+
+        $contents = file_get_contents($filename);
+        if ($contents === false) {
+            throw new RuntimeException('Could not read configuration file "' . $filename . '".');
+        }
+
+        try {
+            $document = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $exception) {
+            throw new InvalidArgumentException('Configuration file is not valid JSON: ' . $exception->getMessage(), 0, $exception);
+        }
+        if (!is_array($document)) {
+            throw new InvalidArgumentException('Configuration document must be a JSON object.');
+        }
+
+        $service = new PreferencesService();
+        $includeSecrets = CliApplication::optionBool($options, 'include-secrets', false);
+        $dryRun = CliApplication::optionBool($options, 'dry-run', false);
+        $normalized = $dryRun
+            ? $service->validateConfigurationImport($document, $includeSecrets)
+            : $service->importConfiguration($document, $includeSecrets);
+
+        if (!$dryRun) {
+            self::reloadAllSessions();
+        }
+
+        CliApplication::writeValue(
+            array(
+                'dry_run' => $dryRun,
+                'validated' => count($normalized),
+                'changed' => $dryRun ? 0 : count($normalized)
+            ),
+            $options,
+            'record'
+        );
         return 0;
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Organizations\Service;
 
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Infrastructure\Exception;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
@@ -120,7 +121,10 @@ class OrganizationService
         ) {
             $gSettingsManager->set(
                 'contacts_suborganization_use_same_members',
-                (int)(bool)$validatedFormValues['contacts_suborganization_use_same_members']
+                PreferenceDefinitions::normalize(
+                    'contacts_suborganization_use_same_members',
+                    $validatedFormValues['contacts_suborganization_use_same_members']
+                )
             );
         }
     }

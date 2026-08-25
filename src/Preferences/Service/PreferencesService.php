@@ -12,7 +12,6 @@ use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Language;
-use Admidio\SSO\Service\OIDCService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -26,6 +25,9 @@ use Admidio\SSO\Service\OIDCService;
  */
 class PreferencesService
 {
+    private const CONFIG_DOCUMENT_SCHEMA = 'admidio-preferences';
+    private const CONFIG_DOCUMENT_VERSION = 1;
+
     /**
      * Registered presenter callbacks by component ID.
      * @var array<int, callable[]>
@@ -355,53 +357,31 @@ class PreferencesService
      */
     public function save(string $panel, array $formData): void
     {
-        global $gL10n, $gSettingsManager, $gCurrentSession, $gDb, $gCurrentOrgId;
+        global $gSettingsManager, $gCurrentSession, $gDb, $gCurrentOrgId;
 
         // check form field input and sanitized it from malicious content
         $preferencesForm = $gCurrentSession->getFormObject($formData['adm_csrf_token']);
         $formValues = $preferencesForm->validate($formData);
 
-        // first check the fields of the submitted form
+        // Adapt presentation-specific values before canonical preference validation.
         switch ($panel) {
-            case 'design':
-                if (!StringUtils::strIsValidFolderName($formData['theme'])
-                    || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme'] . '/index.html')) {
-                    throw new Exception('ORG_INVALID_THEME');
-                }
-                if (!empty($formData['theme_fallback'])) {
-                    if (!StringUtils::strIsValidFolderName($formData['theme_fallback'])
-                        || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme_fallback'] . '/index.html')) {
-                        throw new Exception('ORG_INVALID_THEME_FALLBACK');
-                    }
-                }
-                break;
-
-            case 'security':
-                if (!isset($formData['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login')) {
-                    // if auto login was deactivated than delete all saved logins
-                    $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
-                    $gDb->queryPrepared($sql);
-                }
-                break;
-
-            case 'regional_settings':
-                if (!StringUtils::strIsValidFolderName($formData['system_language'])
-                    || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $formData['system_language'] . '.xml')) {
-                    throw new Exception('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
-                }
-                break;
-
             case 'messages':
-                // get real filename of the template file
+                // The select box uses a readable template name; store the real filename.
                 if ($formData['mail_template'] !== $gSettingsManager->getString('mail_template')) {
-                    $formValues['mail_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $formData['mail_template']);
+                    $formValues['mail_template'] = $this->getTemplateFileName(
+                        ADMIDIO_PATH . FOLDER_DATA . '/mail_templates',
+                        $formData['mail_template']
+                    );
                 }
                 break;
 
             case 'photos':
-                // get real filename of the template file
+                // The select box uses a readable template name; store the real filename.
                 if ($formData['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
-                    $formValues['photo_ecard_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $formData['photo_ecard_template']);
+                    $formValues['photo_ecard_template'] = $this->getTemplateFileName(
+                        ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates',
+                        $formData['photo_ecard_template']
+                    );
                 }
                 break;
 
@@ -422,57 +402,241 @@ class PreferencesService
                     }
                 }
                 break;
-
-            case 'sso': 
-                // empty issuerURL means "Use the default URL from the admidio installation's URL"
-                $issuerURL = trim((string)($formValues['sso_oidc_issuer_url'] ?? ''));
-
-                if ($issuerURL !== '') {
-                    $issuerURL = rtrim($issuerURL, '/');
-                }
-
-                // Do not persist the installation-derived default. An empty setting
-                // allows the issuer URL to follow later changes to ADMIDIO_URL.
-                if ($issuerURL === OIDCService::getDefaultIssuerURL()) {
-                    $issuerURL = '';
-                }
-
-                $formValues['sso_oidc_issuer_url'] = $issuerURL;
-                break;
         }
 
-        // then update the database with the new values
+        // Separate core preferences from plugin/text values. Core values are normalized as one
+        // target set so cross-preference rules see all changes from this panel at once.
+        $corePreferences = array();
 
         foreach ($formValues as $key => $value) {
-            // Sort out elements that are not stored in adm_preferences here
-            if (!in_array($key, array('save', 'adm_csrf_token'))) {
-                if (str_starts_with($key, 'SYSMAIL_')) {
-                    $text = new Text($gDb);
-                    $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
-                    $text->setValue('txt_text', $value);
-                    $text->save();
-                } elseif ($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->getBool('enable_auto_login')) {
-                    // if deactivate auto login than delete all saved logins
-                    $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
-                    $gDb->queryPrepared($sql);
-                    $gSettingsManager->set($key, $value);
-                } elseif (is_string($value) && str_starts_with($value, '["') && str_ends_with($value, '"]')) { // check if the value is a JSON array
-                    // decode JSON array and save it as an array
-                    $value = implode(',', json_decode($value, true));
-                    $gSettingsManager->set($key, $value);
-                } else {
-                    $gSettingsManager->set($key, $value);
-                }
+            if (in_array($key, array('save', 'adm_csrf_token'), true)) {
+                continue;
             }
+
+            if (str_starts_with($key, 'SYSMAIL_')) {
+                $text = new Text($gDb);
+                $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
+                $text->setValue('txt_text', $value);
+                $text->save();
+                continue;
+            }
+
+            if (is_string($value) && str_starts_with($value, '["') && str_ends_with($value, '"]')) {
+                $value = implode(',', json_decode($value, true));
+            }
+
+            if (PreferenceDefinitions::isSupported($key)) {
+                $corePreferences[$key] = $value;
+                continue;
+            }
+
+            // Plugin-specific preferences remain owned by their plugin and are not part of the
+            // canonical core registry.
+            $gSettingsManager->set($key, $value);
         }
 
-        // refresh language if necessary
-        if ($gL10n->getLanguage() !== $gSettingsManager->getString('system_language')) {
-            $gL10n->setLanguage($gSettingsManager->getString('system_language'));
+        if (count($corePreferences) > 0) {
+            $this->persistCorePreferences(PreferenceDefinitions::normalizeValues($corePreferences));
         }
 
         // clean up
         $gCurrentSession->reloadAllSessions();
+    }
+
+    /**
+     * Return the administrator-editable organization preferences with their schema metadata.
+     *
+     * @param bool $includeSecrets Include sensitive values such as the SMTP password.
+     * @return array<string,array{value:string,type:string,sensitive:bool}>
+     * @throws Exception
+     */
+    public function getEditablePreferences(bool $includeSecrets = false): array
+    {
+        global $gSettingsManager;
+
+        $settings = $gSettingsManager->getAll(true);
+        $result = array();
+
+        foreach (PreferenceDefinitions::supportedNames() as $name) {
+            if (!array_key_exists($name, $settings)) {
+                continue;
+            }
+
+            $definition = PreferenceDefinitions::definition($name);
+            if ($definition['sensitive'] && !$includeSecrets) {
+                continue;
+            }
+
+            $result[$name] = array(
+                'value' => (string)$settings[$name],
+                'type' => $definition['type'],
+                'sensitive' => $definition['sensitive']
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Read one administrator-editable preference.
+     *
+     * @return array{value:string,type:string,sensitive:bool}
+     * @throws Exception
+     */
+    public function getEditablePreference(string $name, bool $includeSecrets = false): array
+    {
+        global $gSettingsManager;
+
+        $definition = PreferenceDefinitions::definition($name);
+        if ($definition['sensitive'] && !$includeSecrets) {
+            return array(
+                'value' => '********',
+                'type' => $definition['type'],
+                'sensitive' => true
+            );
+        }
+
+        return array(
+            'value' => $gSettingsManager->get($name, true),
+            'type' => $definition['type'],
+            'sensitive' => $definition['sensitive']
+        );
+    }
+
+    /**
+     * Validate and persist one administrator-editable organization preference.
+     *
+     * @throws Exception
+     */
+    public function setEditablePreference(string $name, mixed $value): string
+    {
+        $normalized = PreferenceDefinitions::normalize($name, $value);
+        $this->persistCorePreferences(array($name => $normalized));
+        return $normalized;
+    }
+
+    /**
+     * Create the versioned configuration document used by headless export/import.
+     * Sensitive settings are omitted unless explicitly requested.
+     *
+     * @return array<string,mixed>
+     * @throws Exception
+     */
+    public function exportConfiguration(bool $includeSecrets = false): array
+    {
+        global $gCurrentOrganization;
+
+        $preferences = array();
+        foreach ($this->getEditablePreferences($includeSecrets) as $name => $entry) {
+            $preferences[$name] = $entry['value'];
+        }
+
+        $document = array(
+            'schema' => self::CONFIG_DOCUMENT_SCHEMA,
+            'version' => self::CONFIG_DOCUMENT_VERSION,
+            'admidioVersion' => defined('ADMIDIO_VERSION') ? ADMIDIO_VERSION : null,
+            'secretsIncluded' => $includeSecrets,
+            'preferences' => $preferences
+        );
+
+        if (isset($gCurrentOrganization) && is_object($gCurrentOrganization)) {
+            $document['organization'] = array(
+                'uuid' => (string)$gCurrentOrganization->getValue('org_uuid'),
+                'shortName' => (string)$gCurrentOrganization->getValue('org_shortname')
+            );
+        }
+
+        return $document;
+    }
+
+    /**
+     * Validate a versioned configuration document without changing state.
+     *
+     * @param array<string,mixed> $document
+     * @return array<string,string> Normalized preference values.
+     */
+    public function validateConfigurationImport(array $document, bool $includeSecrets = false): array
+    {
+        if (($document['schema'] ?? null) !== self::CONFIG_DOCUMENT_SCHEMA) {
+            throw new \InvalidArgumentException('Configuration document has an unsupported schema.');
+        }
+        if (($document['version'] ?? null) !== self::CONFIG_DOCUMENT_VERSION) {
+            throw new \InvalidArgumentException('Configuration document has an unsupported version.');
+        }
+        if (!isset($document['preferences']) || !is_array($document['preferences'])) {
+            throw new \InvalidArgumentException('Configuration document must contain a preferences object.');
+        }
+
+        $values = array();
+        foreach ($document['preferences'] as $name => $value) {
+            if (!is_string($name)) {
+                throw new \InvalidArgumentException('Configuration preference names must be strings.');
+            }
+            if (PreferenceDefinitions::isSensitive($name) && !$includeSecrets) {
+                throw new \InvalidArgumentException(
+                    'Configuration document contains sensitive preference "' . $name
+                    . '". Use --include-secrets to import it explicitly.'
+                );
+            }
+            $values[$name] = $value;
+        }
+
+        $normalized = PreferenceDefinitions::normalizeValues($values);
+        ksort($normalized);
+        return $normalized;
+    }
+
+    /**
+     * Validate and atomically import a versioned configuration document.
+     *
+     * @param array<string,mixed> $document
+     * @return array<string,string> Normalized values that were applied.
+     * @throws Exception
+     */
+    public function importConfiguration(array $document, bool $includeSecrets = false): array
+    {
+        $normalized = $this->validateConfigurationImport($document, $includeSecrets);
+        $this->persistCorePreferences($normalized);
+        return $normalized;
+    }
+
+    /**
+     * Persist already-normalized core preferences and apply side effects shared by web and CLI.
+     *
+     * @param array<string,string> $normalized
+     * @throws Exception
+     */
+    private function persistCorePreferences(array $normalized): void
+    {
+        global $gDb, $gL10n, $gSettingsManager;
+
+        if (count($normalized) === 0) {
+            return;
+        }
+
+        $disableAutoLogin = isset($normalized['enable_auto_login'])
+            && $normalized['enable_auto_login'] === '0'
+            && $gSettingsManager->getBool('enable_auto_login');
+
+        $gDb->startTransaction();
+        try {
+            if ($disableAutoLogin) {
+                $gDb->queryPrepared('DELETE FROM ' . TBL_AUTO_LOGIN);
+            }
+
+            $gSettingsManager->setMulti($normalized);
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            $gSettingsManager->resetAll();
+            throw $exception;
+        }
+
+        if (isset($normalized['system_language'])
+            && isset($gL10n)
+            && $gL10n->getLanguage() !== $normalized['system_language']) {
+            $gL10n->setLanguage($normalized['system_language']);
+        }
     }
 
     /**

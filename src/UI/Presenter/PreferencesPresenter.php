@@ -11,6 +11,7 @@ use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
 use Admidio\SSO\Service\OIDCService;
@@ -54,6 +55,79 @@ class PreferencesPresenter extends PagePresenter
      *             If this parameter is empty, then show the common preferences.
      */
     protected string $preferencesPanelToShow = '';
+
+    /**
+     * Add browser/form validation attributes from the canonical preference definition.
+     * Presentation-only options such as labels, help texts and CSS classes stay at the call site.
+     *
+     * @param array<string,mixed> $presentationOptions
+     * @return array<string,mixed>
+     */
+    private static function preferenceInputOptions(string $name, array $presentationOptions = array()): array
+    {
+        $rules = PreferenceDefinitions::validationRules($name);
+        $validationOptions = self::preferenceRequiredOptions($rules);
+
+        if ($rules['type'] === 'int') {
+            $validationOptions['type'] = 'number';
+            $validationOptions['step'] = 1;
+            if ($rules['minimum'] !== null) {
+                $validationOptions['minNumber'] = $rules['minimum'];
+            }
+            if ($rules['maximum'] !== null) {
+                $validationOptions['maxNumber'] = $rules['maximum'];
+            }
+        }
+        if ($rules['maxLength'] !== null) {
+            $validationOptions['maxLength'] = $rules['maxLength'];
+        }
+
+        return self::mergePreferenceFormOptions($name, $validationOptions, $presentationOptions);
+    }
+
+    /**
+     * Add canonical requiredness to select-box options without moving presentation choices into the domain registry.
+     *
+     * @param array<string,mixed> $presentationOptions
+     * @return array<string,mixed>
+     */
+    private static function preferenceSelectOptions(string $name, array $presentationOptions = array()): array
+    {
+        return self::mergePreferenceFormOptions(
+            $name,
+            self::preferenceRequiredOptions(PreferenceDefinitions::validationRules($name)),
+            $presentationOptions
+        );
+    }
+
+    /**
+     * @param array{required:bool} $rules
+     * @return array<string,mixed>
+     */
+    private static function preferenceRequiredOptions(array $rules): array
+    {
+        return $rules['required']
+            ? array('property' => FormPresenter::FIELD_REQUIRED)
+            : array();
+    }
+
+    /**
+     * @param array<string,mixed> $validationOptions
+     * @param array<string,mixed> $presentationOptions
+     * @return array<string,mixed>
+     */
+    private static function mergePreferenceFormOptions(string $name, array $validationOptions, array $presentationOptions): array
+    {
+        $duplicates = array_intersect_key($presentationOptions, $validationOptions);
+        if (count($duplicates) > 0) {
+            throw new \LogicException(
+                'Preference form options for "' . $name . '" duplicate canonical validation keys: '
+                . implode(', ', array_keys($duplicates)) . '.'
+            );
+        }
+
+        return array_merge($validationOptions, $presentationOptions);
+    }
 
     /**
      * Constructor that initializes the class member parameters
@@ -245,13 +319,13 @@ class PreferencesPresenter extends PagePresenter
             'announcements_per_page',
             $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
             $formValues['announcements_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+            self::preferenceInputOptions('announcements_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10))))
         );
          $formAnnouncements->addInput(
             'announcements_clamp_text_lines',
             $gL10n->get('SYS_CLAMP_TEXT_LINES'),
             $formValues['announcements_clamp_text_lines'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_ANNOUNCEMENT')))
+            self::preferenceInputOptions('announcements_clamp_text_lines', array('helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_ANNOUNCEMENT'))))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ANN')) . '">
             <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
@@ -328,13 +402,13 @@ class PreferencesPresenter extends PagePresenter
             'captcha_width',
             $gL10n->get('SYS_WIDTH') . ' (' . $gL10n->get('ORG_PIXEL') . ')',
             $formValues['captcha_width'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'ORG_CAPTCHA_WIDTH_DESC')
+            self::preferenceInputOptions('captcha_width', array('helpTextId' => 'ORG_CAPTCHA_WIDTH_DESC'))
         );
         $formCaptcha->addInput(
             'captcha_lines_numbers',
             $gL10n->get('ORG_CAPTCHA_LINES_NUMBERS'),
             $formValues['captcha_lines_numbers'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 25, 'step' => 1, 'helpTextId' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC')
+            self::preferenceInputOptions('captcha_lines_numbers', array('helpTextId' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC'))
         );
         $formCaptcha->addInput(
             'captcha_perturbation',
@@ -354,31 +428,31 @@ class PreferencesPresenter extends PagePresenter
             'captcha_background_color',
             $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'),
             $formValues['captcha_background_color'],
-            array('maxLength' => 7, 'class' => 'form-control-small')
+            self::preferenceInputOptions('captcha_background_color', array('class' => 'form-control-small'))
         );
         $formCaptcha->addInput(
             'captcha_text_color',
             $gL10n->get('ORG_CAPTCHA_CHARACTERS_COLOR'),
             $formValues['captcha_text_color'],
-            array('maxLength' => 7, 'class' => 'form-control-small')
+            self::preferenceInputOptions('captcha_text_color', array('class' => 'form-control-small'))
         );
         $formCaptcha->addInput(
             'captcha_line_color',
             $gL10n->get('ORG_CAPTCHA_LINE_COLOR'),
             $formValues['captcha_line_color'],
-            array('maxLength' => 7, 'helpTextId' => array('ORG_CAPTCHA_COLOR_DESC', array('<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>')), 'class' => 'form-control-small')
+            self::preferenceInputOptions('captcha_line_color', array('helpTextId' => array('ORG_CAPTCHA_COLOR_DESC', array('<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>')), 'class' => 'form-control-small'))
         );
         $formCaptcha->addInput(
             'captcha_charset',
             $gL10n->get('ORG_CAPTCHA_SIGNS'),
             $formValues['captcha_charset'],
-            array('maxLength' => 80, 'helpTextId' => 'ORG_CAPTCHA_SIGNS_TEXT')
+            self::preferenceInputOptions('captcha_charset', array('helpTextId' => 'ORG_CAPTCHA_SIGNS_TEXT'))
         );
         $formCaptcha->addInput(
             'captcha_signature',
             $gL10n->get('ORG_CAPTCHA_SIGNATURE'),
             $formValues['captcha_signature'],
-            array('maxLength' => 60, 'helpTextId' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
+            self::preferenceInputOptions('captcha_signature', array('helpTextId' => 'ORG_CAPTCHA_SIGNATURE_TEXT'))
         );
         $html = '<img id="adm_captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
          <a id="adm_captcha_refresh" class="admidio-icon-link" href="javascript:void(0)">
@@ -489,14 +563,14 @@ class PreferencesPresenter extends PagePresenter
             'changelog_default_days',
             $gL10n->get('SYS_CHANGELOG_DEFAULT_DAYS'),
             $formValues['changelog_default_days'] ?? '365',
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_CHANGELOG_DEFAULT_DAYS_DESC')
+            self::preferenceInputOptions('changelog_default_days', array('helpTextId' => 'SYS_CHANGELOG_DEFAULT_DAYS_DESC'))
         );
 
         $formChangelog->addInput(
             'changelog_retention_days',
             $gL10n->get('SYS_CHANGELOG_RETENTION_DAYS'),
             $formValues['changelog_retention_days'] ?? '0',
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_CHANGELOG_RETENTION_DAYS_DESC')
+            self::preferenceInputOptions('changelog_retention_days', array('helpTextId' => 'SYS_CHANGELOG_RETENTION_DAYS_DESC'))
         );
 
         // The purge is not part of the form, it is a separate action that deletes data immediately.
@@ -600,13 +674,13 @@ class PreferencesPresenter extends PagePresenter
             'homepage_logout',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('SYS_VISITORS') . ')',
             $formValues['homepage_logout'],
-            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_VISITORS')
+            self::preferenceInputOptions('homepage_logout', array('helpTextId' => 'ORG_HOMEPAGE_VISITORS'))
         );
         $formCommon->addInput(
             'homepage_login',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('ORG_REGISTERED_USERS') . ')',
             $formValues['homepage_login'],
-            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS')
+            self::preferenceInputOptions('homepage_login', array('helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS'))
         );
         $formCommon->addCheckbox(
             'enable_rss',
@@ -637,13 +711,13 @@ class PreferencesPresenter extends PagePresenter
             'system_url_data_protection',
             $gL10n->get('SYS_DATA_PROTECTION'),
             $formValues['system_url_data_protection'],
-            array('type' => 'url', 'maxLength' => 250, 'helpTextId' => 'SYS_DATA_PROTECTION_DESC')
+            self::preferenceInputOptions('system_url_data_protection', array('type' => 'url', 'helpTextId' => 'SYS_DATA_PROTECTION_DESC'))
         );
         $formCommon->addInput(
             'system_url_imprint',
             $gL10n->get('SYS_IMPRINT'),
             $formValues['system_url_imprint'],
-            array('type' => 'url', 'maxLength' => 250, 'helpTextId' => 'SYS_IMPRINT_DESC')
+            self::preferenceInputOptions('system_url_imprint', array('type' => 'url', 'helpTextId' => 'SYS_IMPRINT_DESC'))
         );
         $formCommon->addCheckbox(
             'system_js_editor_enabled',
@@ -661,7 +735,7 @@ class PreferencesPresenter extends PagePresenter
             'path_for_calculating_disk_usage',
             $gL10n->get('ORG_PATH_FOR_CALCULATING_DISK_USAGE'),
             $formValues['path_for_calculating_disk_usage'],
-            array('maxLength' => 250, 'helpTextId' => 'ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC')
+            self::preferenceInputOptions('path_for_calculating_disk_usage', array('helpTextId' => 'ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC'))
         );
         $formCommon->addSubmitButton(
             'adm_button_save_common',
@@ -858,13 +932,13 @@ class PreferencesPresenter extends PagePresenter
             'theme',
             $gL10n->get('ORG_ADMIDIO_THEME'),
             $themes,
-            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
+            self::preferenceSelectOptions('theme', array('defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC'))
         );
         $formDesign->addSelectBox(
             'theme_fallback',
             $gL10n->get('ORG_ADMIDIO_THEME_FALLBACK'),
             $themes,
-            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC')
+            self::preferenceSelectOptions('theme_fallback', array('defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC'))
         );
         $formDesign->addInput(
             'theme_color_primary',
@@ -912,7 +986,7 @@ class PreferencesPresenter extends PagePresenter
             'theme_logo_file_max_height',
             $gL10n->get('SYS_LOGO_FILE_MAX_HEIGHT'),
             $formValues['theme_logo_file_max_height']??'',
-            array('property' => FormPresenter::FIELD_REQUIRED, 'type' => 'number', 'minNumber' => 40, 'maxNumber' => 200, 'step' => 1,'helpTextId' => 'SYS_LOGO_FILE_MAX_HEIGHT_DESC')
+            self::preferenceInputOptions('theme_logo_file_max_height', array('helpTextId' => 'SYS_LOGO_FILE_MAX_HEIGHT_DESC'))
         );
         $formDesign->addInput(
             'theme_admidio_headline',
@@ -972,7 +1046,7 @@ class PreferencesPresenter extends PagePresenter
             'documents_files_max_upload_size',
             $gL10n->get('SYS_MAXIMUM_FILE_SIZE') . ' (MB)',
             $formValues['documents_files_max_upload_size'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextId' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
+            self::preferenceInputOptions('documents_files_max_upload_size', array('helpTextId' => 'SYS_MAXIMUM_FILE_SIZE_DESC'))
         );
         $formDocumentsFiles->addSubmitButton(
             'adm_button_save_documents_files',
@@ -1063,7 +1137,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_field_history_days',
             $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
             $formValues['inventory_field_history_days'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
+            self::preferenceInputOptions('inventory_field_history_days', array('helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC'))
         );
 
         // general settings
@@ -1091,14 +1165,14 @@ class PreferencesPresenter extends PagePresenter
             'inventory_item_picture_width',
             $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
             $formValues['inventory_item_picture_width'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
+            self::preferenceInputOptions('inventory_item_picture_width')
         );
 
         $formInventory->addInput(
             'inventory_item_picture_height',
             $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
             $formValues['inventory_item_picture_height'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(130, 170)))
+            self::preferenceInputOptions('inventory_item_picture_height', array('helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(130, 170))))
         );
 
         $formInventory->addCheckbox(
@@ -1170,7 +1244,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_decimal_places',
             $gL10n->get('SYS_INVENTORY_DECIMAL_PLACES'),
             $formValues['inventory_decimal_places'],
-            array('type' => 'number','minNumber' => 0, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC')
+            self::preferenceInputOptions('inventory_decimal_places', array('helpTextId' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC'))
         );
 
         $selectBoxEntries = array('date' => $gL10n->get('SYS_DATE'), 'datetime' => $gL10n->get('SYS_DATE') .' & ' .$gL10n->get('SYS_TIME'));
@@ -1220,7 +1294,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_export_filename',
             $gL10n->get('SYS_INVENTORY_FILENAME'),
             $formValues['inventory_export_filename'],
-            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_FILENAME_DESC')
+            self::preferenceInputOptions('inventory_export_filename', array('helpTextId' => 'SYS_INVENTORY_FILENAME_DESC'))
         );
 
         $formInventory->addCheckbox(
@@ -1279,13 +1353,13 @@ class PreferencesPresenter extends PagePresenter
             'mail_sender_email',
             $gL10n->get('SYS_SENDER_EMAIL'),
             $formValues['mail_sender_email'],
-            array('type' => 'email', 'maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
+            self::preferenceInputOptions('mail_sender_email', array('type' => 'email', 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN))))
         );
         $formEmailDispatch->addInput(
             'mail_sender_name',
             $gL10n->get('SYS_SENDER_NAME'),
             $formValues['mail_sender_name'],
-            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
+            self::preferenceInputOptions('mail_sender_name', array('helpTextId' => 'SYS_SENDER_NAME_DESC'))
         );
         $formEmailDispatch->addCheckbox(
             'mail_send_to_all_addresses',
@@ -1319,13 +1393,13 @@ class PreferencesPresenter extends PagePresenter
             'mail_number_recipients',
             $gL10n->get('SYS_NUMBER_RECIPIENTS'),
             $formValues['mail_number_recipients'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC')
+            self::preferenceInputOptions('mail_number_recipients', array('helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC'))
         );
         $formEmailDispatch->addInput(
             'mail_smtp_host',
             $gL10n->get('SYS_SMTP_HOST'),
             $formValues['mail_smtp_host'],
-            array('maxLength' => 50, 'helpTextId' => 'SYS_SMTP_HOST_DESC')
+            self::preferenceInputOptions('mail_smtp_host', array('helpTextId' => 'SYS_SMTP_HOST_DESC'))
         );
         $formEmailDispatch->addCheckbox(
             'mail_smtp_auth',
@@ -1337,7 +1411,7 @@ class PreferencesPresenter extends PagePresenter
             'mail_smtp_port',
             $gL10n->get('SYS_SMTP_PORT'),
             $formValues['mail_smtp_port'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SMTP_PORT_DESC')
+            self::preferenceInputOptions('mail_smtp_port', array('helpTextId' => 'SYS_SMTP_PORT_DESC'))
         );
         $selectBoxEntries = array(
             '' => $gL10n->get('SYS_SMTP_SECURE_NO'),
@@ -1366,13 +1440,13 @@ class PreferencesPresenter extends PagePresenter
             'mail_smtp_user',
             $gL10n->get('SYS_SMTP_USER'),
             $formValues['mail_smtp_user'],
-            array('maxLength' => 100, 'helpTextId' => 'SYS_SMTP_USER_DESC')
+            self::preferenceInputOptions('mail_smtp_user', array('helpTextId' => 'SYS_SMTP_USER_DESC'))
         );
         $formEmailDispatch->addInput(
             'mail_smtp_password',
             $gL10n->get('SYS_SMTP_PASSWORD'),
             $formValues['mail_smtp_password'],
-            array('type' => 'password', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
+            self::preferenceInputOptions('mail_smtp_password', array('type' => 'password', 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC'))
         );
         $html = '<a class="btn btn-secondary admidio-send-csrf-token" id="send_test_mail" href="javascript:void(0);" data-url="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '" data-csrf-token="' . $gCurrentSession->getCsrfToken() . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
@@ -1452,7 +1526,7 @@ class PreferencesPresenter extends PagePresenter
             'events_clamp_text_lines',
             $gL10n->get('SYS_CLAMP_TEXT_LINES', array($gL10n->get('SYS_DESCRIPTION'))),
             $formValues['events_clamp_text_lines'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_DESCRIPTION')))
+            self::preferenceInputOptions('events_clamp_text_lines', array('helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_DESCRIPTION'))))
         );
         $formEvents->addCheckbox(
             'events_ical_export_enabled',
@@ -1670,13 +1744,13 @@ class PreferencesPresenter extends PagePresenter
             'forum_topics_per_page',
             $gL10n->get('SYS_NUMBER_OF_TOPICS_PER_PAGE'),
             $formValues['forum_topics_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+            self::preferenceInputOptions('forum_topics_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10))))
         );
         $formForum->addInput(
             'forum_posts_per_page',
             $gL10n->get('SYS_NUMBER_OF_POSTS_PER_PAGE'),
             $formValues['forum_posts_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(15)))
+            self::preferenceInputOptions('forum_posts_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(15))))
         );
         $formForum->addSubmitButton(
             'adm_button_save_forum',
@@ -1724,7 +1798,7 @@ class PreferencesPresenter extends PagePresenter
             'weblinks_per_page',
             $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
             $formValues['weblinks_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
+            self::preferenceInputOptions('weblinks_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0))))
         );
         $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
         $formWeblinks->addSelectBox(
@@ -1737,7 +1811,7 @@ class PreferencesPresenter extends PagePresenter
             'weblinks_redirect_seconds',
             $gL10n->get('SYS_DISPLAY_REDIRECT'),
             $formValues['weblinks_redirect_seconds'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_DISPLAY_REDIRECT_DESC')
+            self::preferenceInputOptions('weblinks_redirect_seconds', array('helpTextId' => 'SYS_DISPLAY_REDIRECT_DESC'))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'LNK')) . '">
             <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
@@ -1811,7 +1885,7 @@ class PreferencesPresenter extends PagePresenter
             'mail_max_receiver',
             $gL10n->get('SYS_MAX_RECEIVER'),
             $formValues['mail_max_receiver'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_MAX_RECEIVER_DESC')
+            self::preferenceInputOptions('mail_max_receiver', array('helpTextId' => 'SYS_MAX_RECEIVER_DESC'))
         );
         $formMessages->addCheckbox(
             'mail_show_former',
@@ -1823,7 +1897,7 @@ class PreferencesPresenter extends PagePresenter
             'max_email_attachment_size',
             $gL10n->get('SYS_ATTACHMENT_SIZE') . ' (MB)',
             $formValues['max_email_attachment_size'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'step' => 1, 'helpTextId' => 'SYS_ATTACHMENT_SIZE_DESC')
+            self::preferenceInputOptions('max_email_attachment_size', array('helpTextId' => 'SYS_ATTACHMENT_SIZE_DESC'))
         );
         $formMessages->addCheckbox(
             'mail_save_attachments',
@@ -1904,43 +1978,43 @@ class PreferencesPresenter extends PagePresenter
             'photo_albums_per_page',
             $gL10n->get('SYS_NUMBER_OF_ALBUMS_PER_PAGE'),
             $formValues['photo_albums_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(24)))
+            self::preferenceInputOptions('photo_albums_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(24))))
         );
         $formPhotos->addInput(
             'photo_thumbs_page',
             $gL10n->get('SYS_THUMBNAILS_PER_PAGE'),
             $formValues['photo_thumbs_page'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAILS_PER_PAGE_DESC', array(24)))
+            self::preferenceInputOptions('photo_thumbs_page', array('helpTextId' => array('SYS_THUMBNAILS_PER_PAGE_DESC', array(24))))
         );
         $formPhotos->addInput(
             'photo_thumbs_scale',
             $gL10n->get('SYS_THUMBNAIL_SCALING'),
             $formValues['photo_thumbs_scale'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAIL_SCALING_DESC', array(500)))
+            self::preferenceInputOptions('photo_thumbs_scale', array('helpTextId' => array('SYS_THUMBNAIL_SCALING_DESC', array(500))))
         );
         $formPhotos->addInput(
             'photo_show_width',
             $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
             $formValues['photo_show_width'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
+            self::preferenceInputOptions('photo_show_width')
         );
         $formPhotos->addInput(
             'photo_show_height',
             $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
             $formValues['photo_show_height'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1200, 1200)))
+            self::preferenceInputOptions('photo_show_height', array('helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1200, 1200))))
         );
         $formPhotos->addInput(
             'photo_image_text',
             $gL10n->get('SYS_SHOW_WATERMARK'),
             $formValues['photo_image_text'],
-            array('maxLength' => 60, 'helpTextId' => array('SYS_SHOW_WATERMARK_DESC', array('© ' . DOMAIN)))
+            self::preferenceInputOptions('photo_image_text', array('helpTextId' => array('SYS_SHOW_WATERMARK_DESC', array('© ' . DOMAIN))))
         );
         $formPhotos->addInput(
             'photo_image_text_size',
             $gL10n->get('SYS_CAPTION_SIZE'),
             $formValues['photo_image_text_size'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_CAPTION_SIZE_DESC')
+            self::preferenceInputOptions('photo_image_text_size', array('helpTextId' => 'SYS_CAPTION_SIZE_DESC'))
         );
         $formPhotos->addCheckbox(
             'photo_download_enabled',
@@ -1964,7 +2038,7 @@ class PreferencesPresenter extends PagePresenter
             'photo_ecard_scale',
             $gL10n->get('SYS_THUMBNAIL_SCALING'),
             $formValues['photo_ecard_scale'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
+            self::preferenceInputOptions('photo_ecard_scale', array('helpTextId' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500))))
         );
         $formPhotos->addSelectBox(
             'photo_ecard_template',
@@ -2110,7 +2184,7 @@ class PreferencesPresenter extends PagePresenter
             'system_language',
             $gL10n->get('SYS_LANGUAGE'),
             $gL10n->getAvailableLanguages(),
-            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
+            self::preferenceSelectOptions('system_language', array('defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>'))))
         );
         $formRegionalSettings->addSelectBox(
             'default_country',
@@ -2122,19 +2196,19 @@ class PreferencesPresenter extends PagePresenter
             'system_date',
             $gL10n->get('ORG_DATE_FORMAT'),
             $formValues['system_date'],
-            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            self::preferenceInputOptions('system_date', array('helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small'))
         );
         $formRegionalSettings->addInput(
             'system_time',
             $gL10n->get('ORG_TIME_FORMAT'),
             $formValues['system_time'],
-            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            self::preferenceInputOptions('system_time', array('helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small'))
         );
         $formRegionalSettings->addInput(
             'system_currency',
             $gL10n->get('ORG_CURRENCY'),
             $formValues['system_currency'],
-            array('maxLength' => 20, 'helpTextId' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small')
+            self::preferenceInputOptions('system_currency', array('helpTextId' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small'))
         );
         $formRegionalSettings->addSubmitButton(
             'adm_button_save_regional_settings',
@@ -2226,7 +2300,7 @@ class PreferencesPresenter extends PagePresenter
             'logout_minutes',
             $gL10n->get('ORG_AUTOMATIC_LOGOUT_AFTER'),
             $formValues['logout_minutes'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_AUTOMATIC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
+            self::preferenceInputOptions('logout_minutes', array('helpTextId' => array('ORG_AUTOMATIC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME'))))
         );
         $selectBoxEntries = array(
             0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),

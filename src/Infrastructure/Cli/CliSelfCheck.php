@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Infrastructure\Cli;
 
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use ReflectionClass;
 use Throwable;
 
@@ -38,6 +39,7 @@ final class CliSelfCheck
         $problems = array_merge(
             self::checkRegistry(),
             self::checkHelp(),
+            self::checkPreferenceDefinitions(),
             self::checkSources()
         );
 
@@ -246,6 +248,21 @@ final class CliSelfCheck
         }
 
         return $problems;
+    }
+
+    /**
+     * Ensure that every seeded organization preference has an explicit supported/internal
+     * classification. This prevents config:* from silently becoming a raw bypass when the web
+     * preferences surface grows.
+     *
+     * @return array<int,array<string,string>>
+     */
+    private static function checkPreferenceDefinitions(): array
+    {
+        return array_map(
+            static fn (string $message): array => self::problem('preferences', 'PreferenceDefinitions', $message),
+            PreferenceDefinitions::coverageProblems()
+        );
     }
 
     /**
