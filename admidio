@@ -62,9 +62,9 @@ function admCliBootstrapOption(array $arguments, string $name): string
  */
 function admCliBootstrapCommand(array $arguments): string
 {
-    $globalFlags = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite');
+    $globalFlags = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite', 'no-truncate', 'dry-run');
     $globalShortFlags = array('h', 'q', 'y');
-    $globalValueOptions = array('config', 'host', 'organization', 'as', 'format', 'output');
+    $globalValueOptions = array('config', 'host', 'organization', 'as', 'format', 'output', 'width');
 
     for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
         $token = $arguments[$index];

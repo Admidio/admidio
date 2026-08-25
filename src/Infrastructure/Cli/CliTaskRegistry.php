@@ -60,6 +60,7 @@ final class CliTaskRegistry
      *     options:array<int,array<string,mixed>>,
      *     examples:array<int,string>,
      *     unavailableReason:?string,
+     *     supportsDryRun:bool,
      *     core:bool
      * }>
      */
@@ -115,7 +116,8 @@ final class CliTaskRegistry
         ?string $unavailableReason = null,
         string $componentAccess = self::ACCESS_ADMINISTRABLE,
         ?string $aliasOf = null,
-        ?string $requiredRight = null
+        ?string $requiredRight = null,
+        bool $supportsDryRun = false
     ): void {
         self::registerTask(
             $taskName,
@@ -131,6 +133,7 @@ final class CliTaskRegistry
             $options,
             $examples,
             $unavailableReason,
+            $supportsDryRun,
             true
         );
     }
@@ -181,7 +184,8 @@ final class CliTaskRegistry
         array $arguments = array(),
         array $options = array(),
         array $examples = array(),
-        string $componentAccess = self::ACCESS_ADMINISTRABLE
+        string $componentAccess = self::ACCESS_ADMINISTRABLE,
+        bool $supportsDryRun = false
     ): void {
         if (!str_contains($taskName, ':')) {
             throw new InvalidArgumentException('Module CLI task names must use the form module:task.');
@@ -205,6 +209,7 @@ final class CliTaskRegistry
             $options,
             $examples,
             null,
+            $supportsDryRun,
             false
         );
     }
@@ -224,6 +229,7 @@ final class CliTaskRegistry
      *     options:array<int,array<string,mixed>>,
      *     examples:array<int,string>,
      *     unavailableReason:?string,
+     *     supportsDryRun:bool,
      *     core:bool
      * }|null
      */
@@ -247,6 +253,7 @@ final class CliTaskRegistry
      *     options:array<int,array<string,mixed>>,
      *     examples:array<int,string>,
      *     unavailableReason:?string,
+     *     supportsDryRun:bool,
      *     core:bool
      * }>
      */
@@ -296,6 +303,7 @@ final class CliTaskRegistry
         array $options,
         array $examples,
         ?string $unavailableReason,
+        bool $supportsDryRun,
         bool $core
     ): void {
         if (!preg_match('/^[a-z][a-z0-9-]*(?::[a-z][a-z0-9-]*)?$/', $taskName)) {
@@ -395,6 +403,7 @@ final class CliTaskRegistry
             'options' => $options,
             'examples' => $examples,
             'unavailableReason' => $unavailableReason,
+            'supportsDryRun' => $supportsDryRun,
             'core' => $core
         );
     }

@@ -37,6 +37,9 @@ final class CliApplication
     /** @var array<int,array{code:string,message:string}> */
     private static array $jsonApiWarnings = array();
 
+    /** @var array<string,mixed> Options of the help document currently being rendered. */
+    private array $renderOptions = array();
+
     /**
      * Whether every session has to be marked for reload before the process ends.
      */
@@ -48,6 +51,9 @@ final class CliApplication
      * @var array<int,bool>
      */
     private static array $reloadUserSessions = array();
+
+    /** @var array<string,bool> Inline secret options already warned about in this process. */
+    private static array $inlineSecretWarnings = array();
 
     /**
      * Single-letter aliases for the global flags that are typed most often.
@@ -121,6 +127,9 @@ final class CliApplication
             'flag' => true,
             'description' => 'Replace the file selected with --output if it already exists.'
         ),
+        array('name' => 'width', 'value' => 'COLUMNS', 'description' => 'Maximum width of human-readable terminal tables.'),
+        array('name' => 'no-truncate', 'flag' => true, 'description' => 'Do not truncate terminal table columns.'),
+        array('name' => 'dry-run', 'flag' => true, 'description' => 'Validate and report a supported mutation without changing data.'),
         array('name' => 'quiet', 'flag' => true, 'description' => 'Suppress confirmation messages. Requested data and errors are still printed. Short form -q.'),
         array('name' => 'no-interaction', 'flag' => true, 'description' => 'Never ask an interactive question.'),
         array('name' => 'yes', 'flag' => true, 'description' => 'Confirm destructive operations. Short form -y.'),
@@ -430,8 +439,8 @@ final class CliApplication
      */
     private function findCommand(array $argv): array
     {
-        $globalFlags = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite');
-        $globalValueOptions = array('config', 'host', 'organization', 'as', 'format', 'output');
+        $globalFlags = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite', 'no-truncate', 'dry-run');
+        $globalValueOptions = array('config', 'host', 'organization', 'as', 'format', 'output', 'width');
 
         for ($index = 1, $count = count($argv); $index < $count; ++$index) {
             $token = $argv[$index];
@@ -506,7 +515,7 @@ final class CliApplication
     private function parseInput(array $argv, string $command): array
     {
         $task = CliTaskRegistry::get($command);
-        $flagOptions = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite');
+        $flagOptions = array('quiet', 'no-interaction', 'yes', 'help', 'overwrite', 'no-truncate', 'dry-run');
 
         if ($task !== null) {
             foreach ($task['options'] as $definition) {
@@ -615,6 +624,49 @@ final class CliApplication
             if (!in_array($name, $knownOptions, true)) {
                 throw new InvalidArgumentException(
                     'Unknown option "--' . $name . '" for command "' . $task['name'] . '".'
+                );
+            }
+        }
+
+        $taskOptionNames = array_map(
+            static fn (array $definition): string => (string)$definition['name'],
+            $task['options']
+        );
+
+        if (self::optionExists($options, 'as') && !$task['actorRequired']) {
+            throw new InvalidArgumentException(
+                'Command "' . $task['name'] . '" does not use an acting user, so --as is not applicable.'
+            );
+        }
+
+        if (self::optionExists($options, 'yes') && !in_array('yes', $taskOptionNames, true)) {
+            throw new InvalidArgumentException(
+                'Command "' . $task['name'] . '" does not request destructive confirmation, so --yes is not applicable.'
+            );
+        }
+
+        if (self::optionExists($options, 'dry-run') && !($task['supportsDryRun'] ?? false)) {
+            throw new InvalidArgumentException(
+                'Command "' . $task['name'] . '" does not implement --dry-run.'
+            );
+        }
+
+        if (self::optionExists($options, 'width') && self::optionExists($options, 'no-truncate')) {
+            throw new InvalidArgumentException('Use either --width or --no-truncate, not both.');
+        }
+
+        if (self::optionExists($options, 'width')) {
+            $width = self::optionString($options, 'width');
+            if (!preg_match('/^\d+$/', $width) || (int)$width < 20 || (int)$width > 1000) {
+                throw new InvalidArgumentException('--width expects an integer from 20 through 1000.');
+            }
+        }
+
+        if (self::optionExists($options, 'width') || self::optionExists($options, 'no-truncate')) {
+            $format = strtolower(self::optionString($options, 'format', 'text'));
+            if (!in_array($format, array('text', 'table'), true)) {
+                throw new InvalidArgumentException(
+                    '--width and --no-truncate only apply to text/table output.'
                 );
             }
         }
@@ -739,6 +791,7 @@ final class CliApplication
      */
     public function showHelp(array $arguments, array $options): int
     {
+        $this->renderOptions = $options;
         $command = $arguments[0] ?? '';
         $showAll = self::optionBool($options, 'all', false) ?? false;
         $format = strtolower(self::optionString($options, 'format', 'text'));
@@ -817,13 +870,27 @@ final class CliApplication
 
             $rows[] = array(
                 'command' => $name,
-                'alias of' => $task['aliasOf'] ?? '',
-                'available' => $task['unavailableReason'] === null ? 'yes' : 'no',
+                'alias_of' => $task['aliasOf'] ?? '',
+                'available' => $task['unavailableReason'] === null,
                 'description' => $task['description']
             );
         }
 
         $format = strtolower(self::optionString($options, 'format', 'table'));
+
+        if ($format !== 'json') {
+            $displayRows = array();
+            foreach ($rows as $row) {
+                $displayRows[] = array(
+                    'Command' => $row['command'],
+                    'Alias of' => $row['alias_of'],
+                    'Available' => $row['available'] ? 'yes' : 'no',
+                    'Description' => $row['description']
+                );
+            }
+            $rows = $displayRows;
+        }
+
         self::writeRows($rows, $format, $options);
 
         return 0;
@@ -861,7 +928,16 @@ final class CliApplication
 
         $text .= $this->renderAvailability($task['unavailableReason'], $format, $sectionLevel);
         $text .= $this->renderArguments($task['arguments'], $format, $sectionLevel);
-        $text .= $this->renderOptions($task['options'], $format, $sectionLevel);
+        $taskOptions = $task['options'];
+        if (($task['supportsDryRun'] ?? false) === true) {
+            foreach (self::GLOBAL_OPTIONS as $globalOption) {
+                if ($globalOption['name'] === 'dry-run') {
+                    $taskOptions[] = $globalOption;
+                    break;
+                }
+            }
+        }
+        $text .= $this->renderOptions($taskOptions, $format, $sectionLevel);
         $text .= $this->renderExamples($task['examples'], $format, $sectionLevel);
 
         return $text;
@@ -1100,34 +1176,7 @@ final class CliApplication
             return $output . PHP_EOL;
         }
 
-        $widths = array_fill(0, count($headers), 0);
-        foreach ($headers as $index => $header) {
-            $widths[$index] = self::displayWidth($header);
-        }
-
-        foreach ($rows as $row) {
-            foreach ($row as $index => $value) {
-                $widths[$index] = max($widths[$index], self::displayWidth($value));
-            }
-        }
-
-        $output = '';
-        $allRows = array_merge(array($headers), $rows);
-        foreach ($allRows as $rowIndex => $row) {
-            foreach ($row as $index => $value) {
-                $output .= self::padCell($value, $widths[$index] + 2);
-            }
-            $output = rtrim($output) . PHP_EOL;
-
-            if ($rowIndex === 0) {
-                foreach ($widths as $width) {
-                    $output .= str_repeat('-', $width) . '  ';
-                }
-                $output = rtrim($output) . PHP_EOL;
-            }
-        }
-
-        return $output . PHP_EOL;
+        return self::renderPlainTable($headers, $rows, $this->renderOptions);
     }
  
     /**
@@ -1572,8 +1621,27 @@ final class CliApplication
      */
     public static function readSecret(array $options, string $optionName, string $stdinFlag): string
     {
-        if (self::optionBool($options, $stdinFlag, false)) {
+        $stdin = self::optionBool($options, $stdinFlag, false);
+        $inline = self::optionExists($options, $optionName);
+
+        if ($stdin && $inline) {
+            throw new InvalidArgumentException(
+                'Use either --' . $optionName . ' or --' . $stdinFlag . ', not both.'
+            );
+        }
+
+        if ($stdin) {
             return self::readSecretLine();
+        }
+
+        if ($inline && !isset(self::$inlineSecretWarnings[$optionName])) {
+            self::$inlineSecretWarnings[$optionName] = true;
+            self::writeWarning(
+                'CLI_INLINE_SECRET_DEPRECATED',
+                '--' . $optionName . ' is deprecated because command-line values may be stored in shell history '
+                    . 'or exposed through the process list. Use --' . $stdinFlag . ' instead.',
+                $options
+            );
         }
 
         return self::optionString($options, $optionName);
@@ -1706,31 +1774,14 @@ final class CliApplication
                 break;
 
             case 'table':
-                $widths = array_fill(0, count($headers), 0);
-                foreach ($headers as $index => $header) {
-                    $widths[$index] = self::displayWidth($header);
-                }
-                foreach ($rows as $row) {
-                    foreach (array_values($row) as $index => $value) {
-                        $widths[$index] = max($widths[$index], self::displayWidth(self::normalizeCell($value)));
-                    }
-                }
-
-                $output = '';
-                $allRows = array_merge(array(array_combine($headers, $headers)), $rows);
-                foreach ($allRows as $rowIndex => $row) {
-                    $cells = array_values($row);
-                    foreach ($cells as $index => $value) {
-                        $output .= self::padCell(self::normalizeCell($value), $widths[$index] + 2);
-                    }
-                    $output = rtrim($output) . PHP_EOL;
-                    if ($rowIndex === 0) {
-                        foreach ($widths as $width) {
-                            $output .= str_repeat('-', $width) . '  ';
-                        }
-                        $output = rtrim($output) . PHP_EOL;
-                    }
-                }
+                $tableRows = array_map(
+                    static fn (array $row): array => array_map(
+                        static fn (mixed $value): string => self::normalizeCell($value),
+                        array_values($row)
+                    ),
+                    $rows
+                );
+                $output = self::renderPlainTable($headers, $tableRows, $options);
                 break;
 
             default:
@@ -2170,6 +2221,181 @@ final class CliApplication
         }
 
         return $aligned;
+    }
+
+    /**
+     * Render a plain terminal table and constrain it to the requested/detected terminal width.
+     * Redirected output is never truncated unless --width is supplied explicitly, which keeps
+     * generated documentation and machine-captured text complete.
+     *
+     * @param array<int,string> $headers
+     * @param array<int,array<int,string>> $rows
+     * @param array<string,mixed> $options
+     */
+    private static function renderPlainTable(array $headers, array $rows, array $options): string
+    {
+        $widths = array_fill(0, count($headers), 0);
+        foreach ($headers as $index => $header) {
+            $widths[$index] = self::displayWidth($header);
+        }
+        foreach ($rows as $row) {
+            foreach ($row as $index => $value) {
+                $widths[$index] = max($widths[$index], self::displayWidth($value));
+            }
+        }
+
+        $limit = self::terminalTableWidth($options);
+        if ($limit > 0) {
+            $widths = self::fitTableWidths($widths, $headers, $limit);
+        }
+
+        $output = '';
+        $allRows = array_merge(array($headers), $rows);
+        foreach ($allRows as $rowIndex => $row) {
+            foreach ($row as $index => $value) {
+                $cell = self::truncateCell($value, $widths[$index]);
+                $output .= self::padCell($cell, $widths[$index] + 2);
+            }
+            $output = rtrim($output) . PHP_EOL;
+
+            if ($rowIndex === 0) {
+                foreach ($widths as $width) {
+                    $output .= str_repeat('-', $width) . '  ';
+                }
+                $output = rtrim($output) . PHP_EOL;
+            }
+        }
+
+        return $output . PHP_EOL;
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     */
+    private static function terminalTableWidth(array $options): int
+    {
+        if (self::optionBool($options, 'no-truncate', false)) {
+            return 0;
+        }
+
+        $explicit = self::optionString($options, 'width');
+        if ($explicit !== '') {
+            return (int)$explicit;
+        }
+
+        // A file/pipe is data, not an interactive terminal. Preserve it verbatim by default.
+        if (self::optionString($options, 'output') !== ''
+            || !function_exists('stream_isatty')
+            || !@stream_isatty(STDOUT)) {
+            return 0;
+        }
+
+        $columns = getenv('COLUMNS');
+        if (is_string($columns) && preg_match('/^\d+$/', $columns) && (int)$columns >= 20) {
+            return min(1000, (int)$columns);
+        }
+
+        if (PHP_OS_FAMILY !== 'Windows' && function_exists('shell_exec')) {
+            $detected = @shell_exec('tput cols 2>/dev/null');
+            if (is_string($detected) && preg_match('/^\s*(\d+)\s*$/', $detected, $matches)) {
+                return max(20, min(1000, (int)$matches[1]));
+            }
+        }
+
+        return 120;
+    }
+
+    /**
+     * Shrink the widest columns first while keeping every column large enough to remain readable.
+     *
+     * @param array<int,int> $widths
+     * @param array<int,string> $headers
+     * @return array<int,int>
+     */
+    private static function fitTableWidths(array $widths, array $headers, int $limit): array
+    {
+        if (count($widths) === 0) {
+            return $widths;
+        }
+
+        $separatorWidth = max(0, count($widths) - 1) * 2;
+        $available = max(count($widths) * 4, $limit - $separatorWidth);
+        $total = array_sum($widths);
+        if ($total <= $available) {
+            return $widths;
+        }
+
+        $minimums = array();
+        foreach ($widths as $index => $width) {
+            $headerWidth = self::displayWidth($headers[$index] ?? '');
+            $minimums[$index] = min($width, max(4, min(12, $headerWidth)));
+        }
+
+        $over = $total - $available;
+        while ($over > 0) {
+            $candidates = array();
+            foreach ($widths as $index => $width) {
+                if ($width > $minimums[$index]) {
+                    $candidates[] = $index;
+                }
+            }
+
+            if (count($candidates) === 0) {
+                break;
+            }
+
+            $share = max(1, (int)ceil($over / count($candidates)));
+            foreach ($candidates as $index) {
+                $shrink = min($share, $widths[$index] - $minimums[$index], $over);
+                $widths[$index] -= $shrink;
+                $over -= $shrink;
+                if ($over === 0) {
+                    break;
+                }
+            }
+        }
+
+        // Extremely narrow explicit widths may not even fit the readable minimums above. Honor
+        // the user's hard limit by shrinking columns down to one character as a last resort.
+        while ($over > 0) {
+            $changed = false;
+            foreach ($widths as $index => $width) {
+                if ($width <= 1) {
+                    continue;
+                }
+                --$widths[$index];
+                --$over;
+                $changed = true;
+                if ($over === 0) {
+                    break;
+                }
+            }
+            if (!$changed) {
+                break;
+            }
+        }
+
+        return $widths;
+    }
+
+    private static function truncateCell(string $value, int $width): string
+    {
+        if ($width <= 0 || self::displayWidth($value) <= $width) {
+            return $value;
+        }
+
+        if ($width <= 3) {
+            return str_repeat('.', $width);
+        }
+
+        if (function_exists('mb_strimwidth')) {
+            return mb_strimwidth($value, 0, $width, '...', 'UTF-8');
+        }
+
+        // Cutting bytes would split a multi-byte character, see displayWidth().
+        $shortened = @iconv_substr($value, 0, max(0, $width - 3), 'UTF-8');
+
+        return ($shortened === false ? substr($value, 0, max(0, $width - 3)) : $shortened) . '...';
     }
 
     /**

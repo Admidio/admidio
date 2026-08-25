@@ -155,7 +155,8 @@ final class CoreTasks
         ?string $unavailableReason = null,
         string $componentAccess = CliTaskRegistry::ACCESS_ADMINISTRABLE,
         ?string $aliasOf = null,
-        ?string $requiredRight = null
+        ?string $requiredRight = null,
+        bool $supportsDryRun = false
     ): void {
         /*
          * The callback resolves the method only when the command is executed, so a typo would
@@ -181,7 +182,8 @@ final class CoreTasks
             $unavailableReason,
             $componentAccess,
             $aliasOf,
-            $requiredRight
+            $requiredRight,
+            $supportsDryRun
         );
     }
 
@@ -204,7 +206,8 @@ final class CoreTasks
         bool $actorRequired = false,
         array $arguments = array(),
         array $options = array(),
-        string $componentAccess = CliTaskRegistry::ACCESS_ADMINISTRABLE
+        string $componentAccess = CliTaskRegistry::ACCESS_ADMINISTRABLE,
+        bool $supportsDryRun = false
     ): void {
         self::task(
             $name,
@@ -218,7 +221,9 @@ final class CoreTasks
             array(),
             null,
             $componentAccess,
-            $aliasOf
+            $aliasOf,
+            null,
+            $supportsDryRun
         );
     }
 
@@ -636,9 +641,8 @@ final class CoreTasks
             array(self::arg('file', 'JSON configuration document.')),
             array(
                 self::opt('include-secrets', 'Permit sensitive values contained in the document.', '', false, false, true),
-                self::opt('dry-run', 'Validate the complete document without changing preferences.', '', false, false, true),
                 self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json', 'json-api'))
-            ));
+            ), supportsDryRun: true);
     }
 
     private static function registerOrganizationTasks(): void
@@ -751,7 +755,7 @@ final class CoreTasks
             'CONTACTS', true, array(self::arg('file', 'Import file.')),
             array_merge($contactImportOptions, array(
                 self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json', 'json-api'))
-            )), requiredRight: 'usersAdministrator');
+            )), requiredRight: 'usersAdministrator', supportsDryRun: true);
         self::task('user:import-check', 'userImportCheck', 'Validate and preview a contacts import without persisting rows.',
             'user:import-check FILE --group=GROUP [--map=FIELD=COLUMN]... [options] [--format=record|json|json-api]',
             'CONTACTS', true, array(self::arg('file', 'Import file.')),
@@ -1790,7 +1794,7 @@ final class CoreTasks
         );
         self::task('inventory:import', 'inventoryImport', 'Import inventory items from a spreadsheet or delimited file.',
             'inventory:import FILE [options]', 'INVENTORY', true,
-            array(self::arg('file', 'Import file.')), $importOptions);
+            array(self::arg('file', 'Import file.')), $importOptions, supportsDryRun: true);
         self::readTask('inventory:import-check', 'inventoryImportCheck',
             'Preview an inventory import: report the resolved field mapping and the number of items without writing anything.',
             'inventory:import-check FILE [options] [--format=text|json|json-api]', 'INVENTORY', true,
@@ -4010,7 +4014,11 @@ final class CoreTasks
 
     public static function userImport(array $arguments, array $options): int
     {
-        return self::runUserImport($arguments, $options, false);
+        return self::runUserImport(
+            $arguments,
+            $options,
+            CliApplication::optionBool($options, 'dry-run', false)
+        );
     }
 
     public static function userImportCheck(array $arguments, array $options): int
@@ -7661,6 +7669,10 @@ final class CoreTasks
 
     public static function inventoryImport(array $arguments, array $options): int
     {
+        if (CliApplication::optionBool($options, 'dry-run', false)) {
+            return self::inventoryImportCheck($arguments, $options);
+        }
+
         $prepared = self::prepareInventoryImport($arguments, $options);
 
         $formValues = $prepared['mapping'];
