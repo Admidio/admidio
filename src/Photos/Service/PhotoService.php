@@ -70,7 +70,15 @@ class PhotoService
             }
         }
 
-        $photoNumber = (int)$this->album->getValue('pho_quantity') + 1;
+        $this->db->startTransaction();
+        try {
+            $oldQuantity = $this->lockAndReadQuantity();
+        } catch (\Throwable $exception) {
+            $this->db->rollback();
+            throw $exception;
+        }
+        $this->album->setValue('pho_quantity', $oldQuantity);
+        $photoNumber = $oldQuantity + 1;
         $displayFile = $albumFolder . '/' . $photoNumber . '.jpg';
         $thumbnailFile = $albumFolder . '/thumbnails/' . $photoNumber . '.jpg';
         $originalFile = '';
@@ -103,7 +111,11 @@ class PhotoService
 
             $this->album->setValue('pho_quantity', $photoNumber);
             $this->album->save();
+            $this->db->endTransaction();
         } catch (\Throwable $exception) {
+            $this->db->rollback();
+            $this->album->setValue('pho_quantity', $oldQuantity);
+
             foreach (array($displayFile, $thumbnailFile, $originalFile) as $file) {
                 if ($file !== '') {
                     try {
@@ -122,58 +134,100 @@ class PhotoService
     /**
      * Delete a photo and compact the numeric filenames of all following photos.
      *
+     * Files that may change are first moved to a private staging directory. The database row is
+     * locked for the whole operation. If saving/committing fails, every staged file is restored and
+     * the Album object is put back to the locked quantity as well.
+     *
      * @throws Exception
      */
     public function deletePhoto(int $photoNumber): void
     {
         $this->assertEditable();
-        $this->assertPhotoNumber($photoNumber);
 
         $albumFolder = $this->getAlbumFolder();
+        $this->db->startTransaction();
+        try {
+            $oldQuantity = $this->lockAndReadQuantity();
+        } catch (\Throwable $exception) {
+            $this->db->rollback();
+            throw $exception;
+        }
+        $this->album->setValue('pho_quantity', $oldQuantity);
 
-        foreach (array(
-            $albumFolder . '/' . $photoNumber . '.jpg',
-            $albumFolder . '/originals/' . $photoNumber . '.jpg',
-            $albumFolder . '/originals/' . $photoNumber . '.png'
-        ) as $file) {
-            try {
-                FileSystemUtils::deleteFileIfExists($file);
-            } catch (RuntimeException) {
-            }
+        if ($photoNumber < 1 || $photoNumber > $oldQuantity) {
+            $this->db->rollback();
+            throw new Exception('SYS_FILE_NOT_EXIST');
         }
 
-        $newPhotoNumber = $photoNumber;
-        $deleteThumbnails = false;
-        $quantity = (int)$this->album->getValue('pho_quantity');
+        $stagingDirectory = $albumFolder . '/.delete-' . bin2hex(random_bytes(8));
+        if (!mkdir($stagingDirectory, 0700, true) && !is_dir($stagingDirectory)) {
+            $this->db->rollback();
+            throw new RuntimeException('Could not create temporary photo staging directory.');
+        }
 
-        for ($actualPhotoNumber = 1; $actualPhotoNumber <= $quantity; ++$actualPhotoNumber) {
-            if (is_file($albumFolder . '/' . $actualPhotoNumber . '.jpg')) {
-                if ($actualPhotoNumber > $newPhotoNumber) {
-                    $this->moveFileIfExists(
-                        $albumFolder . '/' . $actualPhotoNumber . '.jpg',
-                        $albumFolder . '/' . $newPhotoNumber . '.jpg'
-                    );
-                    $this->moveFileIfExists(
-                        $albumFolder . '/originals/' . $actualPhotoNumber . '.jpg',
-                        $albumFolder . '/originals/' . $newPhotoNumber . '.jpg'
-                    );
-                    $this->moveFileIfExists(
-                        $albumFolder . '/originals/' . $actualPhotoNumber . '.png',
-                        $albumFolder . '/originals/' . $newPhotoNumber . '.png'
-                    );
-                    ++$newPhotoNumber;
+        /** @var array<string,string> $staged original path => backup path */
+        $staged = array();
+        /** @var array<int,string> $created */
+        $created = array();
+
+        try {
+            for ($number = $photoNumber; $number <= $oldQuantity; ++$number) {
+                foreach ($this->photoPaths($albumFolder, $number) as $path) {
+                    if (!is_file($path)) {
+                        continue;
+                    }
+                    $backup = $stagingDirectory . '/' . count($staged);
+                    if (!rename($path, $backup)) {
+                        throw new RuntimeException('Could not stage photo file "' . $path . '".');
+                    }
+                    $staged[$path] = $backup;
                 }
-            } else {
-                $deleteThumbnails = true;
             }
 
-            if ($deleteThumbnails) {
-                $this->deleteThumbnail($actualPhotoNumber);
+            // Compact display and original files. Thumbnails from the deleted point onward are
+            // deliberately invalidated and will be generated again by the normal thumbnail path.
+            for ($number = $photoNumber + 1; $number <= $oldQuantity; ++$number) {
+                foreach (array(
+                    $albumFolder . '/' . $number . '.jpg' => $albumFolder . '/' . ($number - 1) . '.jpg',
+                    $albumFolder . '/originals/' . $number . '.jpg' => $albumFolder . '/originals/' . ($number - 1) . '.jpg',
+                    $albumFolder . '/originals/' . $number . '.png' => $albumFolder . '/originals/' . ($number - 1) . '.png'
+                ) as $source => $target) {
+                    if (!isset($staged[$source])) {
+                        continue;
+                    }
+                    FileSystemUtils::createDirectoryIfNotExists(dirname($target));
+                    if (!copy($staged[$source], $target)) {
+                        throw new RuntimeException('Could not compact photo file "' . $source . '".');
+                    }
+                    $created[] = $target;
+                }
             }
+
+            $this->album->setValue('pho_quantity', $oldQuantity - 1);
+            $this->album->save();
+            $this->db->endTransaction();
+
+            foreach ($staged as $backup) {
+                @unlink($backup);
+            }
+            @rmdir($stagingDirectory);
+        } catch (\Throwable $exception) {
+            $this->db->rollback();
+            $this->album->setValue('pho_quantity', $oldQuantity);
+
+            foreach (array_reverse($created) as $path) {
+                @unlink($path);
+            }
+            foreach ($staged as $original => $backup) {
+                if (is_file($backup)) {
+                    FileSystemUtils::createDirectoryIfNotExists(dirname($original));
+                    @rename($backup, $original);
+                }
+            }
+            @rmdir($stagingDirectory);
+
+            throw $exception;
         }
-
-        $this->album->setValue('pho_quantity', $quantity - 1);
-        $this->album->save();
     }
 
     /**
@@ -330,6 +384,34 @@ class PhotoService
         );
     }
 
+    /**
+     * Lock the album record to serialize quantity-based photo numbering.
+     */
+    private function lockAndReadQuantity(): int
+    {
+        $quantity = $this->db->queryPrepared(
+            'SELECT pho_quantity FROM ' . TBL_PHOTOS . ' WHERE pho_id = ? FOR UPDATE',
+            array((int)$this->album->getValue('pho_id'))
+        )->fetchColumn();
+
+        if ($quantity === false) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        return (int)$quantity;
+    }
+
+    /** @return array<int,string> */
+    private function photoPaths(string $albumFolder, int $photoNumber): array
+    {
+        return array(
+            $albumFolder . '/' . $photoNumber . '.jpg',
+            $albumFolder . '/originals/' . $photoNumber . '.jpg',
+            $albumFolder . '/originals/' . $photoNumber . '.png',
+            $albumFolder . '/thumbnails/' . $photoNumber . '.jpg'
+        );
+    }
+
     private function getAlbumFolder(): string
     {
         return ADMIDIO_PATH . FOLDER_DATA . '/photos/'
@@ -375,18 +457,6 @@ class PhotoService
             FileSystemUtils::deleteFileIfExists(
                 $this->getAlbumFolder() . '/thumbnails/' . $photoNumber . '.jpg'
             );
-        } catch (RuntimeException) {
-        }
-    }
-
-    private function moveFileIfExists(string $source, string $target): void
-    {
-        if (!is_file($source)) {
-            return;
-        }
-
-        try {
-            FileSystemUtils::moveFile($source, $target);
         } catch (RuntimeException) {
         }
     }
