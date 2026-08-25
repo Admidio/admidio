@@ -16,7 +16,7 @@ use Admidio\Users\Entity\User;
  * **Code example**
  * ```
  * // generate html output with available registrations
- * $page = new ModuleContacts('admidio-contacts', $headline);
+ * $page = new ModuleContacts('adm_contacts', $headline);
  * $page->createContentAssignUser();
  * $page->show();
  * ```

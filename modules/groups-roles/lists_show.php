@@ -377,7 +377,7 @@ try {
     }
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-lists-show', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_groups_roles_lists_show', $headline);
     $page->setContentFullWidth();
     $page->setTitle($title);
     $smarty = $page->createSmartyObject();

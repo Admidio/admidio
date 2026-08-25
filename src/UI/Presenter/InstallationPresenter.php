@@ -18,7 +18,7 @@ use Throwable;
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = new InstallationPresenter('admidio-example');
+ * $page = new InstallationPresenter('adm_example');
  * $page->addTemplateFile('update.tpl');
  * $page->setUpdateModus();
  * $page->addHtml('<strong>This is a simple Html page!</strong>');

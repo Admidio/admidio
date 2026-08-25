@@ -60,7 +60,7 @@ try {
     }
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_profile', $headline);
     $page->addTemplateFile('modules/profile.view.tpl');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');

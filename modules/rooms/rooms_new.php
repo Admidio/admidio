@@ -47,7 +47,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-rooms-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_rooms_edit', $headline);
 
     ChangelogService::displayHistoryButton($page, 'rooms', 'rooms', !empty($getRoomUuid), array('uuid' => $getRoomUuid));
 

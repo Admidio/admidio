@@ -28,7 +28,7 @@ try {
     $formValues = $contactsNewForm->validate($_POST);
 
     // create an HTML page object
-    $page = new ModuleContacts('admidio-registration-assign', $gL10n->get('SYS_ASSIGN_REGISTRATION'));
+    $page = new ModuleContacts('adm_contacts_assign', $gL10n->get('SYS_ASSIGN_REGISTRATION'));
     $newUser = new User($gDb, $gProfileFields);
     $newUser->setValue('LAST_NAME', $postLastname);
     $newUser->setValue('FIRST_NAME', $postFirstname);

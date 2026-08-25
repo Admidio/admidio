@@ -97,7 +97,7 @@ try {
     }//function
 
     // create HTML page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-photo-album-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_photos_album_edit', $headline);
 
     ChangelogService::displayHistoryButton($page, 'photos', 'photos', !empty($getPhotoUuid), array('uuid' => $getPhotoUuid));
 

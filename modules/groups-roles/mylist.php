@@ -85,7 +85,7 @@ try {
     }
 
     // create HTML page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-mylist', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_groups_roles_mylist', $headline);
 
     ChangelogService::displayHistoryButton($page, 'lists', 'lists,list_columns', true, array('uuid' => $getListUuid));
 

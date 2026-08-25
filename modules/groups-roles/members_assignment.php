@@ -105,7 +105,7 @@ try {
         }
 
         // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-members-assignement', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_groups_roles_members_assignment', $headline);
 
         if ($getMembersShowAll) {
             $javascriptCode .= '$("#mem_show_all").prop("checked", true);';
