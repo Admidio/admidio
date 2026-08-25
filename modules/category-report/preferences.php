@@ -73,7 +73,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_CONFIGURATIONS'));
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('plg-category-report-preferences', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report_preferences', $headline);
     ChangelogService::displayHistoryButton($page, 'categoryreport', 'category_report');
 
     $javascriptCode = '';

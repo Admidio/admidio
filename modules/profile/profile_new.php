@@ -130,7 +130,7 @@ try {
             $gNavigation->addUrl(CURRENT_URL, $headline);
 
             // create an HTML page object
-            $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-edit', $headline);
+            $page = PagePresenter::withHtmlIDAndHeadline('adm_profile_edit', $headline);
 
             // show a link to view profile field change history
             ChangelogService::displayHistoryButton($page, 'profile', 'users,user_data,user_relations,members', !empty($users[0]['uuid']) && $gCurrentUser->hasRightEditProfile($users[0]['user']), array('uuid' => $users[0]['uuid']));
@@ -413,7 +413,7 @@ try {
             $gNavigation->addUrl(CURRENT_URL, $headline);
 
             // create an HTML page object
-            $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-edit-selection', $headline);
+            $page = PagePresenter::withHtmlIDAndHeadline('adm_profile_edit_selection', $headline);
 
             // create an HTML form
             $form = new FormPresenter(

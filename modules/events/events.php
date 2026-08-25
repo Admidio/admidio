@@ -96,7 +96,7 @@ try {
     }
 
     // create an HTML page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_events', $events->getHeadline($gL10n->get('SYS_EVENTS')));
 
     // data array
     $data = array('headers' => array(), 'rows' => array(), 'column_align' => array(), 'column_width' => array());

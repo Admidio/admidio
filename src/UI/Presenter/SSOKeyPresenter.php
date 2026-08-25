@@ -133,7 +133,7 @@ class SSOKeyPresenter extends PagePresenter
         } else {
             $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_KEY'))));
         }
-        $this->setHtmlID('admidio-saml-client-edit');
+        $this->setHtmlID('adm_sso_key_edit');
 
         ChangelogService::displayHistoryButton($this, 'sso-key', 'sso_keys', !empty($this->keyUUID), array('uuid' => $this->keyUUID));
 

@@ -46,7 +46,7 @@ try {
     }
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-relationtypes-edit', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_userrelations_types_edit', $headline);
     $page->addJavascript('
         function checkRelationTypeNames() {
             $("#adm_button_save").prop("disabled", $("#urt_name").val() === $("#urt_name_inverse").val());

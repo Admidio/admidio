@@ -182,7 +182,7 @@ class SSOClientPresenter extends PagePresenter
         } else {
             $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_CLIENT_SAML'))));
         }
-        $this->setHtmlID('admidio-saml-client-edit');
+        $this->setHtmlID('adm_sso_client_saml_edit');
 
         $roleAccessSet = array();
         if ($this->objectUUID !== '') {
@@ -527,7 +527,7 @@ class SSOClientPresenter extends PagePresenter
         } else {
             $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_CLIENT_OIDC'))));
         }
-        $this->setHtmlID('admidio-oidc-client-edit');
+        $this->setHtmlID('adm_sso_client_oidc_edit');
 
         $allRolesSet = $this->getAvailableRoles();
         if ($this->objectUUID !== '') {
