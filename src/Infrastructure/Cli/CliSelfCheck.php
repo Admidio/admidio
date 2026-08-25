@@ -118,6 +118,7 @@ final class CliSelfCheck
 
             $problems = array_merge($problems, self::checkArguments($name, $task['arguments']));
             $problems = array_merge($problems, self::checkOptions($name, $task['options']));
+            $problems = array_merge($problems, self::checkFormatMetadata($name, $task));
         }
 
         return $problems;
@@ -206,6 +207,59 @@ final class CliSelfCheck
                     'options',
                     $command,
                     'Option "--' . $optionName . '" is a flag but declares a value list.'
+                );
+            }
+        }
+
+        return $problems;
+    }
+
+    /**
+     * JSON API support is an explicit part of a command's declared format contract. The registry
+     * must never infer or repair it after registration: help, validation and callers all need to
+     * see the same metadata that the command author wrote.
+     *
+     * @param array<string,mixed> $task
+     * @return array<int,array<string,string>>
+     */
+    private static function checkFormatMetadata(string $command, array $task): array
+    {
+        $problems = array();
+        $formatOption = null;
+
+        foreach ($task['options'] as $option) {
+            if (($option['name'] ?? '') === 'format') {
+                $formatOption = $option;
+                break;
+            }
+        }
+
+        if ($formatOption === null) {
+            return $problems;
+        }
+
+        $values = is_array($formatOption['values'] ?? null) ? $formatOption['values'] : array();
+        $hasJson = in_array('json', $values, true);
+        $hasJsonApi = in_array('json-api', $values, true);
+
+        if ($hasJson !== $hasJsonApi) {
+            $problems[] = self::problem(
+                'formats',
+                $command,
+                'Structured JSON commands must explicitly declare both "json" and "json-api".'
+            );
+        }
+
+        $usage = (string)($task['usage'] ?? '');
+        if ($hasJsonApi
+            && preg_match('/--format=([^\]\s]+)/', $usage, $matches) === 1
+            && $matches[1] !== 'FORMAT') {
+            $usageFormats = explode('|', $matches[1]);
+            if (!in_array('json-api', $usageFormats, true)) {
+                $problems[] = self::problem(
+                    'formats',
+                    $command,
+                    'The explicit --format list in the usage text omits "json-api".'
                 );
             }
         }

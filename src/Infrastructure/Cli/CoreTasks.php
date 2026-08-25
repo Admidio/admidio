@@ -351,13 +351,13 @@ final class CoreTasks
             'help',
             'help',
             'Show command help. Markdown and native DokuWiki output can be generated from the registry.',
-            'help [COMMAND] [--all] [--format=text|md|dokuwiki|json] [--output=FILE]',
+            'help [COMMAND] [--all] [--format=text|md|dokuwiki|json|json-api] [--output=FILE]',
             null,
             false,
             array(self::arg('command', 'Command whose help should be displayed.', false)),
             array(
                 self::opt('all', 'Render documentation for all registered commands.', '', false, false, true),
-                self::opt('format', 'Help format.', 'FORMAT', false, false, false, array('text', 'md', 'dokuwiki', 'json'))
+                self::opt('format', 'Help format.', 'FORMAT', false, false, false, array('text', 'md', 'dokuwiki', 'json', 'json-api'))
             ),
             array(
                 'admidio help group:adduser',
@@ -369,32 +369,32 @@ final class CoreTasks
             'list',
             'listCommands',
             'List registered CLI commands.',
-            'list [NAMESPACE] [--format=table|json|csv|md|dokuwiki]',
+            'list [NAMESPACE] [--format=table|json|json-api|csv|md|dokuwiki]',
             null,
             false,
             array(self::arg('namespace', 'Optional command namespace.', false)),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki')))
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki')))
         );
         self::task(
             'version',
             'version',
             'Show filesystem and installed database core version.',
-            'version [--format=text|json]',
+            'version [--format=text|json|json-api]',
             null,
             false,
             array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
         self::task(
             'cli:selfcheck',
             'selfCheck',
             'Validate the command line itself: registration, help and the internal consistency of its source. '
                 . 'Needs no acting user. Exits with 3 when a problem is found.',
-            'cli:selfcheck [--format=table|json|csv|md|dokuwiki]',
+            'cli:selfcheck [--format=table|json|json-api|csv|md|dokuwiki]',
             null,
             false,
             array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))),
             array('admidio cli:selfcheck --format=json')
         );
         self::task(
@@ -415,21 +415,21 @@ final class CoreTasks
             'status',
             'status',
             'Show installation, organization and filesystem/database update status. Exits with 3 if the status is not ok.',
-            'status [--format=text|json]',
+            'status [--format=text|json|json-api]',
             null,
             false,
             array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
         self::task(
             'whoami',
             'whoAmI',
             'Show the resolved acting user, organization and effective role rights.',
-            'whoami [--format=text|json]',
+            'whoami [--format=text|json|json-api]',
             null,
             true,
             array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
     }
 
@@ -464,7 +464,7 @@ final class CoreTasks
             self::opt('admin-email', 'Email address of the administrator.', 'EMAIL', true),
             self::opt('admin-password', 'Password of the administrator. Prefer --admin-password-stdin.', 'PASSWORD'),
             self::opt('admin-password-stdin', 'Read the password of the administrator from STDIN. It is the second line if the database password is read from STDIN too.', '', false, false, true),
-            self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+            self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
         );
         $installUsage = '--db-type=TYPE --db-host=HOST --db-name=NAME --db-user=USER --root-url=URL'
             . ' --organization-shortname=NAME --organization-name=NAME --organization-email=EMAIL'
@@ -501,21 +501,21 @@ final class CoreTasks
             'update:check',
             'updateCheck',
             'Check the public Admidio release information used by the preferences update check. Exits with 4 if an update is available.',
-            'update:check [--format=text|json]',
+            'update:check [--format=text|json|json-api]',
             'PREFERENCES',
             true,
             array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
         self::task(
             'system:info',
             'systemInfo',
             'Show Admidio, PHP, database and operating-system information.',
-            'system:info [--format=text|json]',
+            'system:info [--format=text|json|json-api]',
             'PREFERENCES',
             true,
             array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
         self::task(
             'system:phpinfo',
@@ -545,11 +545,11 @@ final class CoreTasks
             'htaccess:status',
             'htaccessStatus',
             'Show whether adm_my_files is protected by an .htaccess file. Exits with 3 if it is unprotected.',
-            'htaccess:status [--format=text|json]',
+            'htaccess:status [--format=text|json|json-api]',
             'PREFERENCES',
             true,
             array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json')))
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
         self::task('htaccess:enable', 'htaccessEnable', 'Protect adm_my_files through the native Htaccess helper.',
             'htaccess:enable', 'PREFERENCES', true);
@@ -563,18 +563,18 @@ final class CoreTasks
             'maintenance:repair-documents [--yes]', 'CORE', true, array(),
             array(self::opt('yes', 'Confirm the repair.', '', false, false, true)));
         self::task('maintenance:run', 'maintenanceRun', 'Run the available native maintenance jobs and report each result.',
-            'maintenance:run [--job=categories|documents]... [--yes] [--format=table|json|csv|md|dokuwiki]',
+            'maintenance:run [--job=categories|documents]... [--yes] [--format=table|json|json-api|csv|md|dokuwiki]',
             'CORE', true, array(), array(
                 self::opt('job', 'Maintenance job to run; repeat to select more than one.', 'JOB', false, true, false, array('categories', 'documents')),
                 self::opt('yes', 'Confirm maintenance execution.', '', false, false, true),
-                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::task(
             'maintenance:mode',
             'maintenanceMode',
             'Enable, disable or query the application-wide maintenance mode.',
             'maintenance:mode [MODE] [--title=TITLE] [--message=MESSAGE] [--retry-after=SECONDS] '
-                . '[--allow-script=SCRIPT]... [--owner=OWNER] [--force] [--format=record|json]',
+                . '[--allow-script=SCRIPT]... [--owner=OWNER] [--force] [--format=record|json|json-api]',
             null,
             false,
             array(self::arg('mode', 'Operation to perform: enable, disable or status. Defaults to status.', false)),
@@ -585,7 +585,7 @@ final class CoreTasks
                 self::opt('allow-script', 'Relative script path that may bypass maintenance mode.', 'SCRIPT', false, true),
                 self::opt('owner', 'Maintenance owner identifier. Defaults to "cli".', 'OWNER'),
                 self::opt('force', 'Disable maintenance mode regardless of its owner.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('record', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('record', 'json', 'json-api'))
             ),
             array(
                 'admidio maintenance:mode',
@@ -600,20 +600,20 @@ final class CoreTasks
     private static function registerConfigTasks(): void
     {
         self::task('config:list', 'configList', 'List administrator-editable organization preferences.',
-            'config:list [--filter=PATTERN] [--include-secrets] [--format=table|json|csv|md|dokuwiki]',
+            'config:list [--filter=PATTERN] [--include-secrets] [--format=table|json|json-api|csv|md|dokuwiki]',
             'PREFERENCES', true, array(), array(
                 self::opt('filter', 'Only include preference names containing this text.', 'PATTERN'),
                 self::opt('include-secrets', 'Include sensitive preference values.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::task('config:get', 'configGet', 'Read an administrator-editable preference.',
-            'config:get NAME [--include-secrets] [--type=raw|string|int|float|bool] [--format=text|json]',
+            'config:get NAME [--include-secrets] [--type=raw|string|int|float|bool] [--format=text|json|json-api]',
             'PREFERENCES', true,
             array(self::arg('name', 'Preference name.')),
             array(
                 self::opt('include-secrets', 'Show a sensitive preference value.', '', false, false, true),
                 self::opt('type', 'Convert the stored value to this type.', 'TYPE', false, false, false, array('raw', 'string', 'int', 'float', 'bool')),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             ));
         self::task('config:set', 'configSet', 'Validate and store an administrator-editable preference.',
             'config:set NAME VALUE', 'PREFERENCES', true,
@@ -627,24 +627,24 @@ final class CoreTasks
                 self::opt('include-secrets', 'Include sensitive preference values. Secret output files are created with restrictive permissions.', '', false, false, true)
             ));
         self::task('config:import', 'configImport', 'Validate and import a versioned JSON preferences document.',
-            'config:import FILE [--include-secrets] [--dry-run] [--format=record|json]', 'PREFERENCES', true,
+            'config:import FILE [--include-secrets] [--dry-run] [--format=record|json|json-api]', 'PREFERENCES', true,
             array(self::arg('file', 'JSON configuration document.')),
             array(
                 self::opt('include-secrets', 'Permit sensitive values contained in the document.', '', false, false, true),
                 self::opt('dry-run', 'Validate the complete document without changing preferences.', '', false, false, true),
-                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json'))
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json', 'json-api'))
             ));
     }
 
     private static function registerOrganizationTasks(): void
     {
         self::task('organization:list', 'organizationList', 'List organizations.',
-            'organization:list [--format=table|json|csv|md|dokuwiki]', 'ORGANIZATIONS', true, array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
+            'organization:list [--format=table|json|json-api|csv|md|dokuwiki]', 'ORGANIZATIONS', true, array(),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))));
         self::task('organization:show', 'organizationShow', 'Show an organization.',
-            'organization:show ORG [--format=text|json]', 'ORGANIZATIONS', true,
+            'organization:show ORG [--format=text|json|json-api]', 'ORGANIZATIONS', true,
             array(self::arg('org', 'Organization UUID, id or unique short name.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $orgOptions = array(
             self::opt('short-name', 'Organization short name.', 'NAME'),
             self::opt('name', 'Organization long name.', 'NAME'),
@@ -683,14 +683,14 @@ final class CoreTasks
                 self::opt('former', 'Include former members.', '', false, false, true),
                 self::opt('limit', 'Maximum number of records.', 'N'),
                 self::opt('offset', 'Result offset.', 'N'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('user:show', 'userShow', 'Show user profile data.',
-            'user:show USER [--memberships] [--relations] [--format=text|json]', 'CONTACTS', true,
+            'user:show USER [--memberships] [--relations] [--format=text|json|json-api]', 'CONTACTS', true,
             array(self::arg('user', 'User UUID, id or unique login name.')), array(
                 self::opt('memberships', 'Include role memberships.', '', false, false, true),
                 self::opt('relations', 'Include user relations.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             ));
         $userWriteOptions = array(
             self::opt('login', 'Login name.', 'LOGIN'),
@@ -742,16 +742,16 @@ final class CoreTasks
             self::opt('worksheet', 'Worksheet name or zero-based worksheet index.', 'SHEET')
         );
         self::task('user:import', 'userImport', 'Import contacts using the same UserImport semantics as the web wizard.',
-            'user:import FILE --group=GROUP [--map=FIELD=COLUMN]... [options] [--format=record|json]',
+            'user:import FILE --group=GROUP [--map=FIELD=COLUMN]... [options] [--format=record|json|json-api]',
             'CONTACTS', true, array(self::arg('file', 'Import file.')),
             array_merge($contactImportOptions, array(
-                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json'))
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json', 'json-api'))
             )), requiredRight: 'usersAdministrator');
         self::task('user:import-check', 'userImportCheck', 'Validate and preview a contacts import without persisting rows.',
-            'user:import-check FILE --group=GROUP [--map=FIELD=COLUMN]... [options] [--format=record|json]',
+            'user:import-check FILE --group=GROUP [--map=FIELD=COLUMN]... [options] [--format=record|json|json-api]',
             'CONTACTS', true, array(self::arg('file', 'Import file.')),
             array_merge($contactImportOptions, array(
-                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json'))
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('record', 'json', 'json-api'))
             )), requiredRight: 'usersAdministrator');
         self::task('user:set-password', 'userSetPassword', 'Set a user password.',
             'user:set-password USER [--password=PASSWORD|--password-stdin]', 'CONTACTS', true,
@@ -770,9 +770,9 @@ final class CoreTasks
         self::alias('user:send-login', 'user:send-password', 'userSendPassword',
             'user:send-login USER', 'CONTACTS', true, array(self::arg('user', 'User.')));
         self::task('user:tfa-status', 'userTfaStatus', 'Show whether two-factor authentication is configured.',
-            'user:tfa-status USER [--format=text|json]', 'CONTACTS', true,
+            'user:tfa-status USER [--format=text|json|json-api]', 'CONTACTS', true,
             array(self::arg('user', 'User.')), array(
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             ));
         self::task(
             'user:tfa-setup',
@@ -816,11 +816,11 @@ final class CoreTasks
     {
         self::readTask('relation-type:list', 'relationTypeList', 'List user relation types.',
             'relation-type:list [--format=FORMAT]', 'CONTACTS', true, array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))));
         self::readTask('relation-type:show', 'relationTypeShow', 'Show a user relation type.',
-            'relation-type:show TYPE [--format=text|json]', 'CONTACTS', true,
+            'relation-type:show TYPE [--format=text|json|json-api]', 'CONTACTS', true,
             array(self::arg('type', 'Relation type UUID or id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $baseTypeOptions = array(
             self::opt('name', 'Relation name.', 'NAME'),
             self::opt('name-male', 'Male-specific name.', 'NAME'),
@@ -851,7 +851,7 @@ final class CoreTasks
             'relation:list [USER] [--type=TYPE] [--format=FORMAT]', 'CONTACTS', true,
             array(self::arg('user', 'Optional user.', false)), array(
                 self::opt('type', 'Relation type.', 'TYPE'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::task('relation:add', 'relationAdd', 'Create a user relation.',
             'relation:add USER1 USER2 TYPE', 'CONTACTS', true,
@@ -866,15 +866,15 @@ final class CoreTasks
     {
         self::task('registration:list', 'registrationList', 'List pending registrations.',
             'registration:list [--format=FORMAT]', 'REGISTRATION', true, array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))));
         self::task('registration:show', 'registrationShow', 'Show a pending registration.',
-            'registration:show USER [--format=text|json]', 'REGISTRATION', true,
+            'registration:show USER [--format=text|json|json-api]', 'REGISTRATION', true,
             array(self::arg('user', 'Registration user UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         self::task('registration:similar', 'registrationSimilar', 'Search native similar-user matches for a registration.',
             'registration:similar USER [--format=FORMAT]', 'REGISTRATION', true,
             array(self::arg('user', 'Registration user.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md'))));
         self::task('registration:confirm', 'registrationConfirm', 'Confirm a registration validation id.',
             'registration:confirm USER VALIDATION_ID', null, false,
             array(self::arg('user', 'Registration user UUID.'), self::arg('validation-id', 'Registration validation id.')));
@@ -912,14 +912,14 @@ final class CoreTasks
             array(), array(
                 self::opt('category', 'Role category.', 'CATEGORY'),
                 self::opt('active', 'Filter rol_valid.', 'BOOL'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('group:show', 'groupShow', 'Show a group/role.',
-            'group:show GROUP [--members] [--permissions] [--format=text|json]', 'GROUPS-ROLES', true,
+            'group:show GROUP [--members] [--permissions] [--format=text|json|json-api]', 'GROUPS-ROLES', true,
             array(self::arg('group', 'Group UUID/id/name.')), array(
                 self::opt('members', 'Include current members.', '', false, false, true),
                 self::opt('permissions', 'Include role permission columns.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             ));
         $roleOptions = array(
             self::opt('category', 'Role category.', 'CATEGORY'),
@@ -959,16 +959,16 @@ final class CoreTasks
             'group:export GROUP [--output=FILE]', 'GROUPS-ROLES', true,
             array(self::arg('group', 'Group.')));
         self::task('group:permissions', 'groupPermissions', 'Show or change native role permission columns.',
-            'group:permissions GROUP [--set=RIGHT=BOOL ...] [--format=text|json]', 'GROUPS-ROLES', true,
+            'group:permissions GROUP [--set=RIGHT=BOOL ...] [--format=text|json|json-api]', 'GROUPS-ROLES', true,
             array(self::arg('group', 'Group.')), array(
                 self::opt('set', 'Set a rol_* permission column.', 'RIGHT=BOOL', false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             ));
         self::task('group:permission-holders', 'groupPermissionHolders',
             'List current-organization roles that grant one native role permission.',
             'group:permission-holders RIGHT [--format=FORMAT]', 'GROUPS-ROLES', true,
             array(self::arg('right', 'Native rol_* permission column.')), array(
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('group:members', 'groupMembers', 'List role memberships.',
             'group:members GROUP [--date=DATE] [--active] [--former] [--future] [--leaders] [--format=FORMAT]',
@@ -978,7 +978,7 @@ final class CoreTasks
                 self::opt('former', 'Show former memberships.', '', false, false, true),
                 self::opt('future', 'Show future memberships.', '', false, false, true),
                 self::opt('leaders', 'Only leaders.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::task('group:adduser', 'groupAddUser', 'Assign a user to a group.',
             'group:adduser GROUP USER [--start=DATE] [--end=DATE] [--leader=BOOL] [--force-period]',
@@ -1007,7 +1007,7 @@ final class CoreTasks
         self::readTask('group:dependencies', 'groupDependencies', 'List parent/child role dependencies.',
             'group:dependencies GROUP [--format=FORMAT]', 'GROUPS-ROLES', true,
             array(self::arg('group', 'Group.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
         self::task('group:adddependency', 'groupAddDependency', 'Add a dependent child role.',
             'group:adddependency GROUP DEPENDENT_GROUP', 'GROUPS-ROLES', true,
             array(self::arg('group', 'Parent group.'), self::arg('dependent-group', 'Dependent child group.')));
@@ -1022,12 +1022,12 @@ final class CoreTasks
         self::readTask('list:list', 'listList', 'List saved member-list configurations.',
             'list:list [--global=BOOL] [--format=FORMAT]', 'GROUPS-ROLES', true, array(), array(
                 self::opt('global', 'Filter global/private lists.', 'BOOL'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('list:show', 'listShow', 'Show a saved member-list configuration.',
-            'list:show LIST [--format=text|json]', 'GROUPS-ROLES', true,
+            'list:show LIST [--format=text|json|json-api]', 'GROUPS-ROLES', true,
             array(self::arg('list', 'List UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $listOptions = array(
             self::opt('name', 'List name.', 'NAME'),
             self::opt('global', 'Make list available organization-wide.', 'BOOL'),
@@ -1075,12 +1075,12 @@ final class CoreTasks
         self::task('permissions:list', 'permissionsList', 'List RolesRights assignments.',
             'permissions:list [--type=RIGHT_TYPE] [--format=FORMAT]', 'CORE', true, array(), array(
                 self::opt('type', 'Roles-right name.', 'RIGHT_TYPE'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::task('permissions:show', 'permissionsShow', 'Show roles assigned to an object right.',
-            'permissions:show RIGHT_TYPE OBJECT_ID [--format=text|json]', 'CORE', true,
+            'permissions:show RIGHT_TYPE OBJECT_ID [--format=text|json|json-api]', 'CORE', true,
             array(self::arg('right-type', 'Roles-right name.'), self::arg('object-id', 'Numeric object id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         foreach (array('set', 'add', 'remove') as $mode) {
             self::task('permissions:' . $mode, 'permissions' . ucfirst($mode),
                 ucfirst($mode) . ' role assignments for an object right.',
@@ -1101,12 +1101,12 @@ final class CoreTasks
             'category:list [--type=ANN|AWA|EVT|FOT|IVT|LNK|ROL|USF] [--format=FORMAT]', 'CATEGORIES', true,
             array(), array(
                 self::opt('type', 'Category type.', 'TYPE', false, false, false, array('ANN', 'AWA', 'EVT', 'FOT', 'IVT', 'LNK', 'ROL', 'USF')),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('category:show', 'categoryShow', 'Show a category.',
-            'category:show CATEGORY [--format=text|json]', 'CATEGORIES', true,
+            'category:show CATEGORY [--format=text|json|json-api]', 'CATEGORIES', true,
             array(self::arg('category', 'Category UUID/id/name.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $categoryOptions = array(
             self::opt('view-role', 'Role allowed to view this category.', 'GROUP', false, true),
             self::opt('edit-role', 'Role allowed to edit this category.', 'GROUP', false, true),
@@ -1134,11 +1134,11 @@ final class CoreTasks
     {
         self::task('menu:list', 'menuList', 'List menu entries.',
             'menu:list [--format=FORMAT]', 'MENU', true, array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
         self::task('menu:show', 'menuShow', 'Show a menu entry.',
-            'menu:show MENU [--format=text|json]', 'MENU', true,
+            'menu:show MENU [--format=text|json|json-api]', 'MENU', true,
             array(self::arg('menu', 'Menu UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $menuOptions = array(
             self::opt('name', 'Menu name.', 'NAME'),
             self::opt('description', 'Description.', 'TEXT'),
@@ -1173,12 +1173,12 @@ final class CoreTasks
                 self::opt('search', 'Headline/description search.', 'TEXT'),
                 self::opt('limit', 'Maximum records.', 'N'),
                 self::opt('offset', 'Result offset.', 'N'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('announcement:show', 'announcementShow', 'Show an announcement.',
-            'announcement:show ANNOUNCEMENT [--format=text|json]', 'ANNOUNCEMENTS', true,
+            'announcement:show ANNOUNCEMENT [--format=text|json|json-api]', 'ANNOUNCEMENTS', true,
             array(self::arg('announcement', 'Announcement UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $annOptions = array(
             self::opt('headline', 'Headline.', 'TEXT'),
             self::opt('category', 'Announcement category.', 'CATEGORY'),
@@ -1218,12 +1218,12 @@ final class CoreTasks
         self::readTask('forum:list', 'forumList', 'List forum topics.',
             'forum:list [--category=CATEGORY] [--format=FORMAT]', 'FORUM', true, array(), array(
                 self::opt('category', 'Forum category.', 'CATEGORY'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::readTask('forum:topic', 'forumTopic', 'Show a forum topic and its posts.',
-            'forum:topic TOPIC [--format=text|json]', 'FORUM', true,
+            'forum:topic TOPIC [--format=text|json|json-api]', 'FORUM', true,
             array(self::arg('topic', 'Topic UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         self::task('forum:topic-add', 'forumTopicAdd', 'Create a forum topic with its first post.',
             'forum:topic-add --category=CATEGORY --title=TEXT (--text=TEXT|--text-file=FILE)',
             'FORUM', true, array(), array(
@@ -1275,12 +1275,12 @@ final class CoreTasks
         self::readTask('link:list', 'linkList', 'List web links.',
             'link:list [--category=CATEGORY] [--format=FORMAT]', 'LINKS', true, array(), array(
                 self::opt('category', 'Link category.', 'CATEGORY'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('link:show', 'linkShow', 'Show a web link.',
-            'link:show LINK [--format=text|json]', 'LINKS', true,
+            'link:show LINK [--format=text|json|json-api]', 'LINKS', true,
             array(self::arg('link', 'Link UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $options = array(
             self::opt('name', 'Link name.', 'NAME'),
             self::opt('url', 'URL.', 'URL'),
@@ -1314,12 +1314,12 @@ final class CoreTasks
                 self::opt('type', 'Message type.', 'TYPE', false, false, false, array('email', 'pm')),
                 self::opt('limit', 'Maximum records.', 'N'),
                 self::opt('offset', 'Result offset.', 'N'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::readTask('message:show', 'messageShow', 'Show a message/conversation entry.',
-            'message:show MESSAGE [--format=text|json]', 'MESSAGES', true,
+            'message:show MESSAGE [--format=text|json|json-api]', 'MESSAGES', true,
             array(self::arg('message', 'Message UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $messageTextOptions = array(
             self::opt('body', 'Message body.', 'TEXT'),
             self::opt('body-file', 'Read body from file.', 'FILE')
@@ -1391,7 +1391,7 @@ final class CoreTasks
         self::readTask('message:list-attachments', 'messageAttachments', 'List attachments of a message.',
             'message:list-attachments MESSAGE [--format=FORMAT]', 'MESSAGES', true,
             array(self::arg('message', 'Message.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
         self::readTask(
             'message:get-attachment',
             'messageGetAttachment',
@@ -1409,7 +1409,7 @@ final class CoreTasks
             'document:list [FOLDER] [--recursive] [--format=FORMAT]', 'DOCUMENTS-FILES', true,
             array(self::arg('folder', 'Folder UUID; empty means root.', false)), array(
                 self::opt('recursive', 'Traverse recursively.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask(
             'document:download',
@@ -1457,9 +1457,9 @@ final class CoreTasks
             array(self::arg('folder', 'Folder UUID.')),
             array(self::opt('yes', 'Confirm recursive deletion.', '', false, false, true)));
         self::readTask('document:permissions', 'documentPermissions', 'Show folder view/upload role assignments.',
-            'document:permissions FOLDER [--format=text|json]', 'DOCUMENTS-FILES', true,
+            'document:permissions FOLDER [--format=text|json|json-api]', 'DOCUMENTS-FILES', true,
             array(self::arg('folder', 'Folder UUID.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         self::task('document:permissions-set', 'documentPermissionsSet', 'Set folder view/upload role assignments.',
             'document:permissions-set FOLDER [--view-role=GROUP ...] [--upload-role=GROUP ...] [--public=BOOL] [--recursive=BOOL]',
             'DOCUMENTS-FILES', true, array(self::arg('folder', 'Folder UUID.')), array(
@@ -1471,7 +1471,7 @@ final class CoreTasks
         self::task('document:unregistered', 'documentUnregistered', 'Find physical folders/files not registered in the database.',
             'document:unregistered [FOLDER] [--format=FORMAT]', 'DOCUMENTS-FILES', true,
             array(self::arg('folder', 'Folder UUID; root if omitted.', false)),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
         self::task('document:register', 'documentRegister', 'Register physical child entries missing from the database.',
             'document:register FOLDER [--recursive]', 'DOCUMENTS-FILES', true,
             array(self::arg('folder', 'Folder UUID.')),
@@ -1483,12 +1483,12 @@ final class CoreTasks
         self::readTask('photo:list', 'photoList', 'List photo albums.',
             'photo:list [--parent=ALBUM] [--format=FORMAT]', 'PHOTOS', true, array(), array(
                 self::opt('parent', 'Parent album or ALL for a root album.', 'ALBUM'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::readTask('photo:album-show', 'photoAlbumShow', 'Show a photo album.',
-            'photo:album-show ALBUM [--format=text|json]', 'PHOTOS', true,
+            'photo:album-show ALBUM [--format=text|json|json-api]', 'PHOTOS', true,
             array(self::arg('album', 'Album UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $albumOptions = array(
             self::opt('name', 'Album name.', 'NAME'),
             self::opt('parent', 'Parent album or ALL for a root album.', 'ALBUM'),
@@ -1530,7 +1530,7 @@ final class CoreTasks
             'photo:album-unlock ALBUM', 'PHOTOS', true, array(self::arg('album', 'Album.')));
         self::readTask('photo:ecard-templates', 'photoEcardTemplates', 'List available e-card templates.',
             'photo:ecard-templates [--format=FORMAT]', 'PHOTOS', true, array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
         self::readTask(
             'photo:album-download',
             'photoAlbumDownload',
@@ -1720,12 +1720,12 @@ final class CoreTasks
                 self::opt('search', 'Search item data.', 'TEXT'),
                 self::opt('category', 'Inventory category.', 'CATEGORY'),
                 self::opt('status', 'Item status.', 'STATUS', false, false, false, array('active', 'retired', 'all')),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::readTask('inventory:show', 'inventoryShow', 'Show an inventory item and its configured field values.',
-            'inventory:show ITEM [--format=text|json]', 'INVENTORY', true,
+            'inventory:show ITEM [--format=text|json|json-api]', 'INVENTORY', true,
             array(self::arg('item', 'Item UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
 
         self::task('inventory:add', 'inventoryAdd', 'Create an inventory item.',
             'inventory:add --field=FIELD=VALUE ...', 'INVENTORY', true,
@@ -1788,9 +1788,9 @@ final class CoreTasks
             array(self::arg('file', 'Import file.')), $importOptions);
         self::readTask('inventory:import-check', 'inventoryImportCheck',
             'Preview an inventory import: report the resolved field mapping and the number of items without writing anything.',
-            'inventory:import-check FILE [options] [--format=text|json]', 'INVENTORY', true,
+            'inventory:import-check FILE [options] [--format=text|json|json-api]', 'INVENTORY', true,
             array(self::arg('file', 'Import file.')), array_merge($importOptions, array(
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             )));
         self::readTask('inventory:export', 'inventoryExport', 'Export inventory items.',
             'inventory:export --format=FORMAT [--output=FILE]', 'INVENTORY', true,
@@ -1801,11 +1801,11 @@ final class CoreTasks
 
         self::readTask('inventory:fields', 'inventoryFields', 'List inventory field definitions.',
             'inventory:fields [--format=FORMAT]', 'INVENTORY', true, array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
         self::readTask('inventory:field-show', 'inventoryFieldShow', 'Show an inventory field definition.',
-            'inventory:field-show FIELD [--format=text|json]', 'INVENTORY', true,
+            'inventory:field-show FIELD [--format=text|json|json-api]', 'INVENTORY', true,
             array(self::arg('field', 'Inventory field UUID/id/internal name.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $inventoryFieldOptions = array(
             self::opt('name', 'Field name.', 'NAME'),
             self::opt('type', 'Field type.', 'TYPE', false, false, false, array(
@@ -1839,7 +1839,7 @@ final class CoreTasks
             'inventory:options FIELD [--include-obsolete] [--format=FORMAT]', 'INVENTORY', true,
             array(self::arg('field', 'Inventory field.')), array(
                 self::opt('include-obsolete', 'Include obsolete options.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::task('inventory:option-add', 'inventoryOptionAdd', 'Add a select option.',
             'inventory:option-add FIELD VALUE', 'INVENTORY', true,
@@ -1865,13 +1865,13 @@ final class CoreTasks
             'profile:fields [--category=CATEGORY] [--internal] [--format=FORMAT]', 'CONTACTS', true, array(), array(
                 self::opt('category', 'Profile-field category.', 'CATEGORY'),
                 self::opt('internal', 'Also show the fields and the configuration flags that only a users administrator sees.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::readTask('profile:field-show', 'profileFieldShow', 'Show a profile field definition.',
-            'profile:field-show FIELD [--internal] [--format=text|json]', 'CONTACTS', true,
+            'profile:field-show FIELD [--internal] [--format=text|json|json-api]', 'CONTACTS', true,
             array(self::arg('field', 'Profile field UUID/id/internal name.')), array(
                 self::opt('internal', 'Also show the fields and the configuration flags that only a users administrator sees.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             ));
         $profileFieldOptions = array(
             self::opt('name', 'Field name.', 'NAME'),
@@ -1915,7 +1915,7 @@ final class CoreTasks
             array(self::arg('field', 'Profile field.')), array(
                 self::opt('include-obsolete', 'Include obsolete options.', '', false, false, true),
                 self::opt('internal', 'Also show the fields and the configuration flags that only a users administrator sees.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::task('profile:option-add', 'profileOptionAdd', 'Add a profile select option.',
             'profile:option-add FIELD VALUE', 'CONTACTS', true,
@@ -1939,11 +1939,11 @@ final class CoreTasks
     {
         self::readTask('category-report:list', 'categoryReportList', 'List category-report configurations.',
             'category-report:list [--format=FORMAT]', 'CATEGORY-REPORT', true, array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
         self::readTask('category-report:show', 'categoryReportShow', 'Show a category-report configuration.',
-            'category-report:show CONFIG [--format=text|json]', 'CATEGORY-REPORT', true,
+            'category-report:show CONFIG [--format=text|json|json-api]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report config UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $reportOptions = array(
             self::opt('name', 'Configuration name.', 'NAME'),
             self::opt('role', 'Restrict report to role/group.', 'GROUP', false, true),
@@ -1975,7 +1975,7 @@ final class CoreTasks
             'CATEGORY-REPORT', true, array(self::arg('config', 'Report config id/name.')), array(
                 self::opt('date', 'Reference date.', 'DATE'),
                 self::opt('filter', 'Only include rows containing text.', 'TEXT'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
     }
 
@@ -1992,12 +1992,12 @@ final class CoreTasks
                 self::opt('action', 'create, change or delete.', 'ACTION', false, false, false, array('create', 'change', 'delete')),
                 self::opt('limit', 'Maximum records.', 'N'),
                 self::opt('offset', 'Result offset.', 'N'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
         self::task('changelog:show', 'changelogShow', 'Show one permitted changelog record.',
-            'changelog:show CHANGE [--format=text|json]', null, true,
+            'changelog:show CHANGE [--format=text|json|json-api]', null, true,
             array(self::arg('change', 'Log change id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
     }
 
     private static function registerPluginTasks(): void
@@ -2006,12 +2006,12 @@ final class CoreTasks
             'plugin:list [--installed] [--updates] [--format=FORMAT]', 'PLUGINS', true, array(), array(
                 self::opt('installed', 'Only installed plugins.', '', false, false, true),
                 self::opt('updates', 'Only plugins with updates.', '', false, false, true),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::task('plugin:show', 'pluginShow', 'Show plugin metadata/state.',
-            'plugin:show PLUGIN [--format=text|json]', 'PLUGINS', true,
+            'plugin:show PLUGIN [--format=text|json|json-api]', 'PLUGINS', true,
             array(self::arg('plugin', 'Plugin name.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         self::task('plugin:install', 'pluginInstall', 'Install a current-interface plugin.',
             'plugin:install PLUGIN [--add-menu=BOOL]', 'PLUGINS', true,
             array(self::arg('plugin', 'Plugin name.')),
@@ -2042,13 +2042,13 @@ final class CoreTasks
             'sso:list [--type=saml|oidc] [--enabled=BOOL] [--format=FORMAT]', 'CORE', true, array(), array(
                 self::opt('type', 'Client type.', 'TYPE', false, false, false, array('saml', 'oidc')),
                 self::opt('enabled', 'Enabled filter.', 'BOOL'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::task('sso:show', 'ssoShow', 'Show an SSO client.',
-            'sso:show CLIENT [--type=saml|oidc] [--format=text|json]', 'CORE', true,
+            'sso:show CLIENT [--type=saml|oidc] [--format=text|json|json-api]', 'CORE', true,
             array(self::arg('client', 'Client UUID/client id.')), array(
                 self::opt('type', 'Disambiguate client type.', 'TYPE', false, false, false, array('saml', 'oidc')),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))
             ));
         $samlOptions = array(
             self::opt('name', 'Client name.', 'NAME'),
@@ -2126,11 +2126,11 @@ final class CoreTasks
             'sso:oidc-discovery',
             'ssoOidcDiscovery',
             'Render OIDC discovery metadata.',
-            'sso:oidc-discovery [--format=json] [--output=FILE]',
+            'sso:oidc-discovery [--format=json|json-api] [--output=FILE]',
             'CORE',
             true,
             array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('json')))
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('json', 'json-api')))
         );
         self::task(
             'sso:saml-metadata',
@@ -2144,12 +2144,12 @@ final class CoreTasks
         self::task('sso:keys', 'ssoKeys', 'List SSO signing/encryption keys.',
             'sso:keys [--active=BOOL] [--format=FORMAT]', 'CORE', true, array(), array(
                 self::opt('active', 'Only active keys.', 'BOOL'),
-                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
         self::task('sso:key-show', 'ssoKeyShow', 'Show SSO key metadata without private key material.',
-            'sso:key-show KEY [--format=text|json]', 'CORE', true,
+            'sso:key-show KEY [--format=text|json|json-api]', 'CORE', true,
             array(self::arg('key', 'Key UUID/id.')),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $keyOptions = array(
             self::opt('name', 'Key name.', 'NAME'),
             self::opt(
@@ -2244,11 +2244,11 @@ final class CoreTasks
     {
         self::task('module:list', 'moduleList', 'List module namespaces represented by registered commands.',
             'module:list [--format=FORMAT]', null, false, array(),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
         self::task('module:tasks', 'moduleTasks', 'List registered tasks, optionally restricted to one namespace.',
             'module:tasks [MODULE] [--format=FORMAT]', null, false,
             array(self::arg('module', 'Optional module namespace.', false)),
-            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'md', 'dokuwiki'))));
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
     }
 
     public static function help(array $arguments, array $options): int
@@ -2267,7 +2267,7 @@ final class CoreTasks
         $statistics = CliSelfCheck::statistics();
         $format = CliApplication::optionString($options, 'format', 'table');
 
-        if ($format === 'json') {
+        if (in_array($format, array('json', 'json-api'), true)) {
             CliApplication::writeValue(
                 array(
                     'ok' => $problems === array(),
@@ -2275,7 +2275,7 @@ final class CoreTasks
                     'problems' => $problems
                 ),
                 $options,
-                'json'
+                $format
             );
 
             return $problems === array()

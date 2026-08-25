@@ -29,6 +29,8 @@ namespace Admidio\Infrastructure;
  */
 class Exception extends \Exception
 {
+    /** Original translation id when the exception was constructed from a language key. */
+    private ?string $translationId = null;
     /**
      * Constructor saves the parameters to the class and will call the parent constructor.
      *
@@ -43,8 +45,10 @@ class Exception extends \Exception
     {
         global $gLogger, $gL10n;
 
-        // if text is a translation-id then translate it
+        // Keep the stable translation id for machine-readable interfaces, while the normal
+        // exception message remains the translated human-readable text.
         if (Language::isTranslationStringId($message)) {
+            $this->translationId = (string)$message;
             $message = $gL10n->get($message, $params);
         }
 
@@ -52,4 +56,12 @@ class Exception extends \Exception
 
         parent::__construct($message);
     }
+    /**
+     * Return the original Admidio translation id, if one was supplied.
+     */
+    public function getTranslationId(): ?string
+    {
+        return $this->translationId;
+    }
+
 }

@@ -26,7 +26,16 @@ use Throwable;
  */
 final class CliApplication
 {
+    private const JSON_API_SCHEMA_VERSION = 1;
+
     private static string $currentCommand = '';
+
+    /** json-api transport state. */
+    private static bool $jsonApiRequested = false;
+    private static bool $jsonApiResultSet = false;
+    private static mixed $jsonApiData = null;
+    /** @var array<int,array{code:string,message:string}> */
+    private static array $jsonApiWarnings = array();
 
     /**
      * Whether every session has to be marked for reload before the process ends.
@@ -104,7 +113,7 @@ final class CliApplication
             'name' => 'format',
             'value' => 'FORMAT',
             'description' => 'Output format where supported.',
-            'values' => array('text', 'table', 'record', 'json', 'csv', 'md', 'dokuwiki')
+            'values' => array('text', 'table', 'record', 'json', 'json-api', 'csv', 'md', 'dokuwiki')
         ),
         array('name' => 'output', 'value' => 'FILE', 'description' => 'Write command output to a file.'),
         array(
@@ -125,6 +134,8 @@ final class CliApplication
      */
     public function run(array $argv): int
     {
+        self::resetJsonApiState(self::wantsJsonApiOutput($argv));
+
         CoreTasks::register();
         $this->loadModuleTasks();
 
@@ -134,11 +145,20 @@ final class CliApplication
         }
 
         $command = $found['command'] !== '' ? $found['command'] : 'help';
-
+        // Record the resolved command before parsing its arguments so json-api validation failures
+        // can still identify the command whose input was rejected.
+        self::$currentCommand = $command;
         $input = $this->parseInput($argv, $command);
 
+        if (self::optionString($input['options'], 'format') === 'json-api') {
+            // A machine protocol must never stop for an interactive prompt.
+            $input['options']['no-interaction'] = true;
+        }
+
         if (self::optionExists($input['options'], 'help') && $command !== 'help') {
-            return $this->showHelp(array($command), $input['options']);
+            $result = $this->showHelp(array($command), $input['options']);
+            self::emitJsonApiSuccess($input['options']);
+            return $result;
         }
 
         $task = CliTaskRegistry::get($command);
@@ -187,8 +207,6 @@ final class CliApplication
             }
         }
 
-        self::$currentCommand = $command;
-
         /*
          * --as is an impersonation switch, not an authentication. Record which command produced a
          * changelog record so an administrator can tell a headless change apart from one the user
@@ -204,7 +222,9 @@ final class CliApplication
             self::flushSessionReload();
         }
 
-        return is_int($result) ? $result : 0;
+        $exitCode = is_int($result) ? $result : 0;
+        self::emitJsonApiSuccess($input['options']);
+        return $exitCode;
     }
 
     public static function currentCommand(): string
@@ -272,10 +292,8 @@ final class CliApplication
     /**
      * Report a failure and return the exit code that describes it.
      *
-     * A calling script could previously not tell a typo apart from a missing right or a database
-     * outage: everything was printed as "Error: ..." and exited with 1. The exception class carries
-     * that distinction, so it is mapped to a dedicated code, and the message is emitted as JSON
-     * when the caller asked for JSON.
+     * Ordinary JSON keeps conventional CLI error handling. Only json-api turns handled failures
+     * into a versioned response document on stdout.
      *
      * @param array<int,string> $argv Raw arguments; the command line may not have been parsed yet.
      */
@@ -290,24 +308,21 @@ final class CliApplication
             default => self::EXIT_ERROR
         };
 
-        // The message of an Admidio exception is already translated by its constructor.
         $message = $exception->getMessage();
 
-        if (self::wantsJsonOutput($argv)) {
-            fwrite(
-                STDERR,
-                json_encode(
-                    array(
-                        'success' => false,
-                        'error' => array(
-                            'message' => $message,
-                            'type' => (new \ReflectionClass($exception))->getShortName(),
-                            'exitCode' => $exitCode
-                        )
-                    ),
-                    JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
-                ) . PHP_EOL
+        if (self::wantsJsonApiOutput($argv)) {
+            $document = array(
+                'schema_version' => self::JSON_API_SCHEMA_VERSION,
+                'command' => self::$currentCommand !== '' ? self::$currentCommand : null,
+                'status' => 'error',
+                'data' => null,
+                'warnings' => self::$jsonApiWarnings,
+                'error' => array(
+                    'code' => self::jsonApiErrorCode($exception),
+                    'message' => $message
+                )
             );
+            echo json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE) . PHP_EOL;
         } else {
             fwrite(STDERR, 'Error: ' . $message . PHP_EOL);
         }
@@ -316,23 +331,90 @@ final class CliApplication
     }
 
     /**
-     * Detect --format=json directly in the raw arguments, because a failure may happen before or
-     * while the command line is parsed.
+     * Detect --format=json-api directly in raw arguments so failures during parsing can still use
+     * the machine protocol once CliApplication itself has been initialized.
      *
      * @param array<int,string> $argv
      */
-    private static function wantsJsonOutput(array $argv): bool
+    private static function wantsJsonApiOutput(array $argv): bool
     {
         for ($index = 1, $count = count($argv); $index < $count; ++$index) {
-            if ($argv[$index] === '--format=json') {
+            if ($argv[$index] === '--format=json-api') {
                 return true;
             }
-            if ($argv[$index] === '--format' && ($argv[$index + 1] ?? '') === 'json') {
+            if ($argv[$index] === '--format' && ($argv[$index + 1] ?? '') === 'json-api') {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private static function resetJsonApiState(bool $requested): void
+    {
+        self::$jsonApiRequested = $requested;
+        self::$jsonApiResultSet = false;
+        self::$jsonApiData = null;
+        self::$jsonApiWarnings = array();
+    }
+
+    private static function setJsonApiResult(mixed $data): void
+    {
+        self::$jsonApiData = $data;
+        self::$jsonApiResultSet = true;
+    }
+
+    /** @param array<string,mixed> $options */
+    private static function emitJsonApiSuccess(array $options): void
+    {
+        if (!self::$jsonApiRequested || self::optionString($options, 'format') !== 'json-api') {
+            return;
+        }
+
+        $document = array(
+            'schema_version' => self::JSON_API_SCHEMA_VERSION,
+            'command' => self::$currentCommand,
+            'status' => 'success',
+            'data' => self::$jsonApiResultSet ? self::$jsonApiData : null,
+            'warnings' => self::$jsonApiWarnings,
+            'error' => null
+        );
+        $json = json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE) . PHP_EOL;
+        $output = self::optionString($options, 'output');
+        if ($output !== '') {
+            self::writeNewFile($output, $json);
+        } else {
+            echo $json;
+        }
+    }
+
+    private static function jsonApiErrorCode(Throwable $exception): string
+    {
+        if ($exception instanceof Exception && $exception->getTranslationId() !== null) {
+            return $exception->getTranslationId();
+        }
+
+        return match (true) {
+            $exception instanceof InvalidArgumentException => 'CLI_INVALID_ARGUMENT',
+            $exception instanceof \PDOException => 'CLI_DATABASE_ERROR',
+            $exception instanceof RuntimeException => 'CLI_OPERATION_FAILED',
+            default => 'CLI_INTERNAL_ERROR'
+        };
+    }
+
+    /**
+     * Emit or collect a non-fatal CLI warning.
+     *
+     * @param array<string,mixed> $options
+     */
+    public static function writeWarning(string $code, string $message, array $options = array()): void
+    {
+        if (self::$jsonApiRequested || self::optionString($options, 'format') === 'json-api') {
+            self::$jsonApiWarnings[] = array('code' => $code, 'message' => $message);
+            return;
+        }
+
+        fwrite(STDERR, 'Warning: ' . $message . PHP_EOL);
     }
 
     /**
@@ -560,6 +642,22 @@ final class CliApplication
             throw new InvalidArgumentException('Too many arguments for command "' . $task['name'] . '".');
         }
 
+        if (self::optionString($options, 'format') === 'json-api') {
+            $formatDefinition = null;
+            foreach ($task['options'] as $definition) {
+                if (($definition['name'] ?? '') === 'format') {
+                    $formatDefinition = $definition;
+                    break;
+                }
+            }
+            if ($formatDefinition === null
+                || !in_array('json-api', $formatDefinition['values'] ?? array(), true)) {
+                throw new InvalidArgumentException(
+                    '--format=json-api is only available for commands that expose structured JSON data.'
+                );
+            }
+        }
+
         /*
          * Validate global options through the same contract as task options. A task may redeclare a
          * global option such as --format in order to narrow its values; in that case the task
@@ -622,10 +720,10 @@ final class CliApplication
             try {
                 require_once $registrationFile;
             } catch (Throwable $exception) {
-                fwrite(
-                    STDERR,
-                    'Warning: the CLI commands of module "' . $module . '" were not registered: '
-                    . $exception->getMessage() . PHP_EOL
+                self::writeWarning(
+                    'CLI_MODULE_REGISTRATION_FAILED',
+                    'The CLI commands of module "' . $module . '" were not registered: '
+                    . $exception->getMessage()
                 );
             } finally {
                 CliTaskRegistry::setModuleContext(null);
@@ -645,11 +743,11 @@ final class CliApplication
         $showAll = self::optionBool($options, 'all', false) ?? false;
         $format = strtolower(self::optionString($options, 'format', 'text'));
 
-        if (!in_array($format, array('text', 'md', 'dokuwiki', 'json'), true)) {
-            throw new InvalidArgumentException('help --format expects text, md, dokuwiki or json.');
+        if (!in_array($format, array('text', 'md', 'dokuwiki', 'json', 'json-api'), true)) {
+            throw new InvalidArgumentException('help --format expects text, md, dokuwiki, json or json-api.');
         }
 
-        if ($format === 'json') {
+        if ($format === 'json' || $format === 'json-api') {
             if ($command !== '') {
                 $task = CliTaskRegistry::get($command);
                 if ($task === null) {
@@ -667,10 +765,14 @@ final class CliApplication
                 );
             }
 
-            self::writeOutput(
-                json_encode($documentation, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL,
-                $options
-            );
+            if ($format === 'json-api') {
+                self::setJsonApiResult($documentation);
+            } else {
+                self::writeOutput(
+                    json_encode($documentation, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL,
+                    $options
+                );
+            }
             return 0;
         }
 
@@ -1527,6 +1629,11 @@ final class CliApplication
             $format = 'table';
         }
 
+        if ($format === 'json-api') {
+            self::setJsonApiResult($rows);
+            return;
+        }
+
         if (count($rows) === 0) {
             self::writeOutput($format === 'json' ? "[]\n" : '', $options);
             return;
@@ -1677,6 +1784,11 @@ final class CliApplication
     public static function writeValue(mixed $value, array $options, string $defaultFormat = 'text'): void
     {
         $format = strtolower(self::optionString($options, 'format', $defaultFormat));
+
+        if ($format === 'json-api') {
+            self::setJsonApiResult($value);
+            return;
+        }
 
         if ($format === 'json') {
             self::writeOutput(
@@ -1977,6 +2089,13 @@ final class CliApplication
      */
     public static function writeSuccess(string $message, array $options, bool $honorOutputFile = true): void
     {
+        if (strtolower(self::optionString($options, 'format')) === 'json-api') {
+            if (!self::$jsonApiResultSet) {
+                self::setJsonApiResult(null);
+            }
+            return;
+        }
+
         /*
          * A caller that asked for JSON has to receive JSON from every command, otherwise a script
          * gets an object from group:add and an English sentence from group:update. The confirmation
@@ -2004,6 +2123,10 @@ final class CliApplication
      */
     public static function writeOutput(string $content, array $options, bool $honorOutputFile = true): void
     {
+        if (self::optionString($options, 'format') === 'json-api') {
+            throw new RuntimeException('This command does not expose structured json-api data.');
+        }
+
         $filename = $honorOutputFile ? self::optionString($options, 'output') : '';
 
         if ($filename !== '') {
