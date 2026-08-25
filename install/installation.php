@@ -123,6 +123,7 @@ try {
      * call will use the default value of true and properly log changes...
      */
     Entity::setLoggingEnabled(false);
+    Entity::setHooksEnabled(false);
 
     // check if adm_my_files has "write" privileges and check some sub folders of adm_my_files
     \Admidio\InstallationUpdate\Service\Installation::checkFolderPermissions();

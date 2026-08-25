@@ -86,6 +86,7 @@ $gL10n = new Language(isset($cliLanguage) && $cliLanguage !== '' ? $cliLanguage 
  * changelog. Beside that the tables of the changelog only exist after the schema was created.
  */
 Entity::setLoggingEnabled(false);
+Entity::setHooksEnabled(false);
 
 $gValidLogin = false;
 $gCurrentUserId = 0;
