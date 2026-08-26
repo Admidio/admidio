@@ -132,4 +132,68 @@ Hooks::addFilter('component_visible', function (bool $visible) use (&$seen) {
 }, 10);
 check('every callback sees the answer of the one before it', ProbeComponent::isVisible('PHOTOS') === false && $seen === array(true, false), json_encode($seen));
 
+// ------------------------------------------------------- the real Component, for one component
+
+/**
+ * isVisible() is static and the CATEGORY-REPORT branch of its switch asks nothing but the settings
+ * and the current user, so the real method can be executed here with those two stubbed. Nothing is
+ * constructed and no other branch is reached.
+ */
+class StubSettings
+{
+    public array $values = array();
+
+    public function getBool(string $name): bool
+    {
+        return (bool)($this->values[$name] ?? false);
+    }
+
+    public function getInt(string $name): int
+    {
+        return (int)($this->values[$name] ?? 0);
+    }
+
+    public function getString(string $name): string
+    {
+        return (string)($this->values[$name] ?? '');
+    }
+
+    public function has(string $name): bool
+    {
+        return array_key_exists($name, $this->values);
+    }
+}
+
+class StubUser
+{
+    public array $rights = array();
+
+    public function checkRolesRight(string $right): bool
+    {
+        return (bool)($this->rights[$right] ?? false);
+    }
+}
+
+function categoryReport(bool $moduleEnabled, bool $hasRight): bool
+{
+    Hooks::reset();
+    $settings = new StubSettings();
+    $settings->values['category_report_module_enabled'] = $moduleEnabled;
+    $user = new StubUser();
+    $user->rights['rol_all_lists_view'] = $hasRight;
+
+    $GLOBALS['gSettingsManager'] = $settings;
+    $GLOBALS['gCurrentUser'] = $user;
+    $GLOBALS['gValidLogin'] = true;
+
+    return \Admidio\Components\Entity\Component::isVisible('CATEGORY-REPORT');
+}
+
+check('the category report is visible when it is switched on and the right is there', categoryReport(true, true));
+check('it is not visible without the right', !categoryReport(true, false));
+check(
+    'and it is not visible when the module is switched off, which is what finding 92 was',
+    !categoryReport(false, true)
+);
+
 exit(testSummary());
