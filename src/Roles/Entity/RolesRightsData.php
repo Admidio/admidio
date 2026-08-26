@@ -49,7 +49,7 @@ class RolesRightsData extends Entity
      */
     public function getHookId(): ?string
     {
-        return 'role_right_data';
+        return 'role_right_assignment';
     }
 
     /**
