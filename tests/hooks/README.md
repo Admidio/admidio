@@ -10,6 +10,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/entity-cascade-delete.php
     php tests/hooks/entity-change-tracking-after.php
     php tests/hooks/readable-name.php
+    php tests/hooks/roles-dependencies-delete.php
     php tests/hooks/change-notification.php
     php tests/hooks/user-valid-default.php
     php tests/hooks/form-built.php
@@ -81,6 +82,11 @@ fixture, so that the test cannot drift from the code it describes.
 `readable-name.php` executes the real `Entity::readableName()` and `Entity::filterReadableName()`
 against `TestRoom` (named) and `TestSession` (unnamed): the generic `entity_readable_name` filter
 always runs, the specific `<hookId>_readable_name` one only for an entity that names itself.
+
+`roles-dependencies-delete.php` executes the real `RolesDependencies`, not a stand-in - its
+constructor takes nothing but a `Database`, so there was no reason to copy it. It overrides
+`delete()` because `adm_role_dependencies` has a composite key, and until finding 96 that override
+never dispatched a hook at all.
 
 These are plain scripts and not PHPUnit cases on purpose - the branch has no test bootstrap yet.
 They are written so that moving them into one is a matter of turning each `check()` into an
