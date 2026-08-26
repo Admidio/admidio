@@ -47,6 +47,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
@@ -351,7 +352,12 @@ try {
 
     $jsonArray['data'] = array();
 
-    while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
+    while ($row = $mglStatement->fetch(PDO::FETCH_ASSOC)) {
+        // Filter the raw row before anything is formatted from it. Nothing here reads a numeric
+        // index, so FETCH_ASSOC keeps the array a plugin sees free of the duplicate numeric keys
+        // FETCH_BOTH would otherwise add.
+        $row = Hooks::applyTypedFilters('list_data', $row, 'contacts');
+
         ++$rowNumber;
         if (($getMembersShowFilter->value < ShowMembers::AllContactsAllOrganizations->value) && $gCurrentUser->isAdministratorUsers()) {
             $columnNumberJson = 3;
@@ -494,10 +500,11 @@ try {
             }
         }
 
+        $userAdministration = Hooks::applyTypedFilters('list_row_actions', $userAdministration, 'contacts', $row);
         $columnValues[(string)$columnNumberJson] = $userAdministration;
 
         // add current row to json array
-        $jsonArray['data'][] = $columnValues;
+        $jsonArray['data'][] = Hooks::applyTypedFilters('list_rendered_data', $columnValues, 'contacts', $row);
     }
 
 // set count of filtered records

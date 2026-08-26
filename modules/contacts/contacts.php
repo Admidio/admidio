@@ -15,6 +15,7 @@
  *                   3  : Show active and inactive contacts for all organizations (only Admin)
  ***********************************************************************************************
  */
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -148,6 +149,17 @@ try {
     }
 
     $columnHeading[] = '&nbsp;';
+
+    // list_columns may relabel a column, but not add or remove one: contacts_data.php still builds
+    // each row by position, and there is no shared list/column pipeline yet to keep the two in step
+    // (see HOOKS_PLAN.md §2.7). A filter that changes the count would misalign every row silently,
+    // so the count is enforced here instead of trusted.
+    $filteredColumnHeading = Hooks::applyTypedFilters('list_columns', $columnHeading, 'contacts');
+    if (count($filteredColumnHeading) !== count($columnHeading)) {
+        throw new \UnexpectedValueException('A list_columns filter for "contacts" changed the number of columns.');
+    }
+    $columnHeading = $filteredColumnHeading;
+
     $columnAlignment = $contactsListConfig->getColumnAlignments();
     if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
         array_unshift($columnAlignment, 'center', 'start', 'start');
