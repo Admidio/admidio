@@ -10,6 +10,7 @@ use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Hooks\Hooks;
+use Admidio\Hooks\Service\EntityHookQueue;
 use Admidio\Hooks\ValueObject\EntityChangeSet;
 use Admidio\Hooks\ValueObject\EntityFieldChange;
 use DateTime;
@@ -386,6 +387,43 @@ class Entity
     }
 
     /**
+     * Dispatch the hooks of an operation that is now really in the database. The queue calls this
+     * at the commit of the outermost transaction, with the operations of one record already put
+     * together, so a plugin sees one event for one logical change and never one for a change that
+     * was rolled back.
+     * @param EntityChangeSet $changeSet What the transaction changed about this record.
+     * @return void
+     */
+    public function dispatchCommittedHook(EntityChangeSet $changeSet): void
+    {
+        $suffix = match ($changeSet->getOperation()) {
+            EntityChangeSet::OPERATION_CREATE => 'created',
+            EntityChangeSet::OPERATION_DELETE => 'deleted',
+            default => 'updated'
+        };
+
+        $this->dispatchHook($suffix, $changeSet, false);
+    }
+
+    /**
+     * Dispatch the failure hooks of an operation whose transaction never reached the database. The
+     * queue calls this on a rollback and at the end of a request that abandoned a transaction, so
+     * that a callback which reserved something in the pre-action can release it again.
+     * @param EntityChangeSet $changeSet What the operation would have changed.
+     * @return void
+     */
+    public function dispatchFailedHook(EntityChangeSet $changeSet): void
+    {
+        $suffix = match ($changeSet->getOperation()) {
+            EntityChangeSet::OPERATION_CREATE => 'create_failed',
+            EntityChangeSet::OPERATION_DELETE => 'delete_failed',
+            default => 'update_failed'
+        };
+
+        $this->dispatchHook($suffix, $changeSet, false, true);
+    }
+
+    /**
      * Build the change set of one operation from the change tracking that the object keeps anyway.
      * @param string $operation One of the EntityChangeSet::OPERATION_... constants.
      * @param string $operationId Identifies the operation across its stages.
@@ -695,8 +733,8 @@ class Entity
             try {
                 $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
             } catch (Throwable $exception) {
-                if ($changeSet !== null) {
-                    $this->dispatchHook('delete_failed', $changeSet, false, true);
+                if ($changeSet !== null && !$this->db->isInTransaction()) {
+                    $this->dispatchFailedHook($changeSet);
                 }
                 throw $exception;
             }
@@ -704,7 +742,7 @@ class Entity
             $this->clear();
 
             if ($changeSet !== null) {
-                $this->dispatchHook('deleted', $changeSet, false);
+                EntityHookQueue::add($this, $changeSet, $this->db);
             }
 
             return true;
@@ -1173,13 +1211,10 @@ class Entity
      * pre-hooks run before anything of the object is modified, so a callback that throws to reject
      * the operation leaves an object the caller can still save.
      *
-     * Two things about the timing are not yet what they should be, and the transaction-aware
-     * dispatch is what fixes them:
-     *  - the post-hooks fire when the statement ran, not when the enclosing transaction committed,
-     *    so a callback can still describe a change that is rolled back afterwards;
-     *  - a logical operation that saves the same record more than once dispatches once per save.
-     *    User::save() does that for a registration, and events_function.php does it for an event
-     *    whose participation role is created.
+     * The post-hooks do not fire here. EntityHookQueue holds them until the outermost transaction
+     * commits, and it reduces the saves of one record within that transaction to the one change
+     * that happened as far as anybody outside can tell. Without an open transaction the statement
+     * is the commit and they fire immediately.
      *
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
      *                                if a table has columns like **usr_id_create** or **usr_id_change**
@@ -1355,10 +1390,11 @@ class Entity
                 }
             }
         } catch (Throwable $exception) {
-            if ($changeSet !== null) {
-                // cleanup for whoever prepared something in the pre-action, and the original
-                // failure stays the one that Admidio reports
-                $this->dispatchHook($hookStages[2], $changeSet, false, true);
+            // cleanup for whoever prepared something in the pre-action, and the original failure
+            // stays the one that Admidio reports. Inside a transaction the database runs the
+            // failure hooks of everything the transaction did, this one included.
+            if ($changeSet !== null && !$this->db->isInTransaction()) {
+                $this->dispatchFailedHook($changeSet);
             }
             throw $exception;
         }
@@ -1371,7 +1407,7 @@ class Entity
             // an insert only learns its ID from the database, so the post-action gets the key that
             // the pre-action could not know yet
             list($id, $uuid) = $this->getHookKey();
-            $this->dispatchHook($hookStages[1], $changeSet->withKey($id, $uuid), false);
+            EntityHookQueue::add($this, $changeSet->withKey($id, $uuid), $this->db);
         }
 
         return $returnCode;
