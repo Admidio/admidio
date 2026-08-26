@@ -211,7 +211,9 @@ class EntityHookQueue
             $first->getOperationId(),
             $changes,
             // the state at the start of the transaction, which is what the change is measured from
-            $first->getSnapshot()
+            $first->getSnapshot(),
+            $second->getCauseHookId() ?? $first->getCauseHookId(),
+            $second->getCauseId() ?? $first->getCauseId()
         );
     }
 }

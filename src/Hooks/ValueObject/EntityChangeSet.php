@@ -58,6 +58,9 @@ final class EntityChangeSet
      * @param array<string,EntityFieldChange> $changes The changed columns, keyed by column name.
      * @param array<string,mixed> $snapshot The values the database held before the operation,
      *                                      empty for a creation, redacted columns withheld.
+     * @param string|null $causeHookId The hook ID of the record whose deletion removed this one,
+     *                                 **null** when the operation was asked for on its own.
+     * @param int|string|null $causeId The key of that record.
      */
     public function __construct(
         private readonly string $hookId,
@@ -70,7 +73,9 @@ final class EntityChangeSet
         private readonly string $operation,
         private readonly string $operationId,
         private readonly array $changes,
-        private readonly array $snapshot
+        private readonly array $snapshot,
+        private readonly ?string $causeHookId = null,
+        private readonly int|string|null $causeId = null
     ) {
     }
 
@@ -246,6 +251,38 @@ final class EntityChangeSet
     }
 
     /**
+     * The record whose deletion removed this one. A membership does not only disappear when it is
+     * ended, it also disappears when the role or the member is deleted, and a consumer usually has
+     * to treat the two differently: the first is news about that membership, the second is a detail
+     * of the news about the role or the person.
+     *
+     * @return string|null Returns the hook ID of the record that caused this operation, or **null**
+     *                     if the operation was asked for on its own.
+     */
+    public function getCauseHookId(): ?string
+    {
+        return $this->causeHookId;
+    }
+
+    /**
+     * @return int|string|null Returns the key of the record that caused this operation.
+     * @see EntityChangeSet#getCauseHookId
+     */
+    public function getCauseId(): int|string|null
+    {
+        return $this->causeId;
+    }
+
+    /**
+     * @return bool Returns **true** if this operation is a consequence of another one.
+     * @see EntityChangeSet#getCauseHookId
+     */
+    public function isCascade(): bool
+    {
+        return $this->causeHookId !== null;
+    }
+
+    /**
      * A copy of this change set that knows the key of the record. Entity::save() uses it after an
      * insert, because the database assigns the ID only when the record is written.
      * @param int|string|null $id The value of the key column.
@@ -265,7 +302,35 @@ final class EntityChangeSet
             $this->operation,
             $this->operationId,
             $this->changes,
-            $this->snapshot
+            $this->snapshot,
+            $this->causeHookId,
+            $this->causeId
+        );
+    }
+
+    /**
+     * A copy of this change set that names the record whose deletion removed this one.
+     * Entity::hookBulkDeletion() uses it for the records that go together with their owner.
+     * @param string|null $causeHookId The hook ID of the record that caused this operation.
+     * @param int|string|null $causeId The key of that record.
+     * @return self Returns a new change set, this one stays unchanged.
+     */
+    public function withCause(?string $causeHookId, int|string|null $causeId): self
+    {
+        return new self(
+            $this->hookId,
+            $this->entityClass,
+            $this->tableName,
+            $this->columnPrefix,
+            $this->keyColumnName,
+            $this->id,
+            $this->uuid,
+            $this->operation,
+            $this->operationId,
+            $this->changes,
+            $this->snapshot,
+            $causeHookId,
+            $causeId
         );
     }
 }

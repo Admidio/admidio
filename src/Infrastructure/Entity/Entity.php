@@ -417,6 +417,91 @@ class Entity
     }
 
     /**
+     * Whether one of the three stages of a deletion has a listener, so that the record has to be
+     * described before it is removed.
+     * @return bool Returns **true** if a deletion of this entity has to be reported.
+     */
+    protected function hasDeletionHookListener(): bool
+    {
+        return $this->hasHookListener('deleting') || $this->hasHookListener('deleted')
+            || $this->hasHookListener('delete_failed');
+    }
+
+    /**
+     * The change set of the deletion of the record this object currently holds. A deletion reports
+     * every column of the own table as a change to **null**, so that hasChanged() and getOldValue()
+     * work the same way as for a create and an update, and the snapshot carries the record that the
+     * post-action can no longer read anywhere else.
+     * @return EntityChangeSet Returns what the deletion removes.
+     */
+    protected function buildDeletionChangeSet(): EntityChangeSet
+    {
+        $deletedColumns = array();
+        foreach ($this->dbColumns as $column => $value) {
+            if (str_starts_with($column, $this->columnPrefix . '_')) {
+                $deletedColumns[$column] = array('oldValue' => $value, 'newValue' => null);
+            }
+        }
+
+        return $this->buildChangeSet(
+            EntityChangeSet::OPERATION_DELETE,
+            (string)Uuid::uuid4(),
+            $deletedColumns
+        );
+    }
+
+    /**
+     * Queue the delete hooks of every record that the given condition selects. It is called by
+     * deleteDependentRecords() right before the records are removed, so that a record which is
+     * deleted together with the record it belongs to is reported like any other deletion. Without
+     * it the bulk DELETE would take those records out of the hook API without a trace, exactly as
+     * it would take them out of the changelog without logBulkDeletion().
+     *
+     * The records are read in one query and the values are put into this object one after the
+     * other, so a caller must not rely on what the object holds afterwards - it is cleared.
+     *
+     * @param string $sqlWhereCondition Condition that selects the records, without the leading
+     *                                  keyword WHERE. It may only use columns of the own table.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @param Entity|null $cause The record whose deletion removes these ones. Every change set
+     *                           names it, so that a listener can tell a membership that was ended
+     *                           from one that disappeared with its role.
+     * @return int Returns the number of deletions that were reported.
+     * @throws Exception
+     */
+    public function hookBulkDeletion(string $sqlWhereCondition, array $queryParams = array(), ?Entity $cause = null): int
+    {
+        if (!$this->hasDeletionHookListener()) {
+            return 0;
+        }
+
+        $sql = 'SELECT * FROM ' . $this->tableName . '
+                 WHERE ' . $sqlWhereCondition;
+        $statement = $this->db->queryPrepared($sql, $queryParams);
+        $reported = 0;
+
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $this->clear();
+            $this->assignRowToColumns($row);
+            $this->newRecord = false;
+            $this->insertRecord = false;
+
+            $changeSet = $this->buildDeletionChangeSet();
+            if ($cause !== null) {
+                list($causeId) = $cause->getHookKey();
+                $changeSet = $changeSet->withCause($cause->getHookId(), $causeId);
+            }
+            $this->dispatchHook('deleting', $changeSet, true);
+            EntityHookQueue::add($this, $changeSet, $this->db);
+            $reported++;
+        }
+
+        $this->clear();
+
+        return $reported;
+    }
+
+    /**
      * Build the change set of one operation from the change tracking that the object keeps anyway.
      * @param string $operation One of the EntityChangeSet::OPERATION_... constants.
      * @param string $operationId Identifies the operation across its stages.
@@ -698,19 +783,8 @@ class Entity
             // the object, so the snapshot it carries is the only thing a post-delete callback can
             // read the deleted record from.
             $changeSet = null;
-            if ($this->hasHookListener('deleting') || $this->hasHookListener('deleted')
-                || $this->hasHookListener('delete_failed')) {
-                $deletedColumns = array();
-                foreach ($this->dbColumns as $column => $value) {
-                    if (str_starts_with($column, $this->columnPrefix . '_')) {
-                        $deletedColumns[$column] = array('oldValue' => $value, 'newValue' => null);
-                    }
-                }
-                $changeSet = $this->buildChangeSet(
-                    EntityChangeSet::OPERATION_DELETE,
-                    (string)Uuid::uuid4(),
-                    $deletedColumns
-                );
+            if ($this->hasDeletionHookListener()) {
+                $changeSet = $this->buildDeletionChangeSet();
                 $this->dispatchHook('deleting', $changeSet, true);
             }
 
@@ -746,9 +820,10 @@ class Entity
     }
 
     /**
-     * Delete all records of a dependent table that belong to this record. Every record is read and
-     * deleted through its own Entity, so that each single deletion is written to the changelog. A
-     * bulk DELETE would remove the records from the audit trail without a trace, see the class
+     * Delete all records of a dependent table that belong to this record. The records are removed
+     * with one DELETE, but every one of them is described before that: logBulkDeletion() writes its
+     * changelog entry and hookBulkDeletion() queues its delete hooks. A plain bulk DELETE would take
+     * the records out of the audit trail and out of the hook API without a trace, see the class
      * documentation of ChangelogService.
      *
      * The identifying columns are named explicitly, because not every table has a single key
@@ -765,6 +840,7 @@ class Entity
     protected function deleteDependentRecords(Entity $object, array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
     {
         $object->logBulkDeletion($identifyingColumns, $sqlWhereCondition, $queryParams);
+        $object->hookBulkDeletion($sqlWhereCondition, $queryParams, $this);
 
         $sql = 'DELETE FROM ' . $object->tableName . '
                  WHERE ' . $sqlWhereCondition;
@@ -1035,19 +1111,7 @@ class Entity
                 $this->insertRecord = false;
 
                 // move data to class column value array
-                foreach ($row as $key => $value) {
-                    if ($this->columnsInfos[$key]['type'] === 'boolean'
-                        || $this->columnsInfos[$key]['type'] === 'tinyint') {
-                        $this->dbColumns[$key] = (bool)$value;
-                    } elseif (($this->columnsInfos[$key]['type'] === 'integer'
-                            || $this->columnsInfos[$key]['type'] === 'smallint')
-                        && $value != '') {
-                        // only convert to int if it's not a null value
-                        $this->dbColumns[$key] = (int)$value;
-                    } else {
-                        $this->dbColumns[$key] = $value;
-                    }
-                }
+                $this->assignRowToColumns($row);
 
                 return true;
             }
@@ -1056,6 +1120,29 @@ class Entity
         }
 
         return false;
+    }
+
+    /**
+     * Move the columns of a database row into the value array of this object and convert them to
+     * the PHP type of their column, so that a boolean column is a bool and an id an int.
+     * @param array $row One row of the table, as the database returned it.
+     * @return void
+     */
+    protected function assignRowToColumns(array $row): void
+    {
+        foreach ($row as $key => $value) {
+            if ($this->columnsInfos[$key]['type'] === 'boolean'
+                || $this->columnsInfos[$key]['type'] === 'tinyint') {
+                $this->dbColumns[$key] = (bool)$value;
+            } elseif (($this->columnsInfos[$key]['type'] === 'integer'
+                    || $this->columnsInfos[$key]['type'] === 'smallint')
+                && $value != '') {
+                // only convert to int if it's not a null value
+                $this->dbColumns[$key] = (int)$value;
+            } else {
+                $this->dbColumns[$key] = $value;
+            }
+        }
     }
 
     /**
