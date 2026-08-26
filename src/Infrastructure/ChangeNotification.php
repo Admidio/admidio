@@ -554,8 +554,8 @@ class ChangeNotification
     }
 
     /**
-     * Tell everybody who is interested that the state of a user changed, once per user and request.
-     * The reasons say which of the three parts of a person changed - **user** for the record itself,
+     * Report everything that happened to one user in this request as one event, once per user. The
+     * reasons say which of the three parts of a person changed - **user** for the record itself,
      * **profile** for a profile field value, **membership** for a role membership - so that a
      * consumer which only cares about one of them can leave early. The counters of the login are not
      * a reason, they are bookkeeping of the record.
@@ -568,9 +568,9 @@ class ChangeNotification
      * @param int $userID The user for whom the action should be dispatched (0 for all).
      * @return void
      */
-    protected function dispatchStateChanges(int $userID = 0): void
+    protected function dispatchCumulatedChanges(int $userID = 0): void
     {
-        if (!Hooks::hasAction('user_state_changed')) {
+        if (!Hooks::hasAction('user_changes_cumulated')) {
             return;
         }
 
@@ -580,7 +580,7 @@ class ChangeNotification
             }
 
             $identity = $this->identity($userdata);
-            Hooks::doAction('user_state_changed', $identity['usr_uuid'], array_keys($userdata['reasons']));
+            Hooks::doAction('user_changes_cumulated', $identity['usr_uuid'], array_keys($userdata['reasons']));
         }
     }
 
@@ -628,7 +628,7 @@ class ChangeNotification
     {
         global $gSettingsManager, $gL10n, $gCurrentUser;
 
-        $this->dispatchStateChanges($userID);
+        $this->dispatchCumulatedChanges($userID);
 
         if ($gSettingsManager->has('system_notifications_profile_changes')
             && $gSettingsManager->getBool('system_notifications_profile_changes')
