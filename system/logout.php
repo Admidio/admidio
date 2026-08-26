@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Hooks\Hooks;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\SSO\Service\SAMLService;
 
@@ -32,6 +33,9 @@ try {
     }
 
     $gValidLogin = false;
+
+    // the user is still known here, which is what a listener needs; afterwards the object is cleared
+    Hooks::doAction('logout', $gCurrentUser);
 
     // remove user from session
     $gCurrentSession->logout();

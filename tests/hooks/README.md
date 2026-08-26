@@ -15,6 +15,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/page-hooks.php
     php tests/hooks/component-hooks.php
     php tests/hooks/translation-hooks.php
+    php tests/hooks/login-hooks.php
 
 Each script prints one line per check and exits non-zero when a check fails.
 
@@ -43,6 +44,12 @@ checkout, so the cache, the fallback to the reference language and the placehold
 only the four path constants of the Admidio bootstrap are defined in the test. The text it uses to
 exercise the fallback is looked up rather than named, so the check keeps working when the translation
 catches up.
+
+`login-hooks.php` is two things at once. The control flow around the hooks is checked through a
+stand-in, because `ModuleLogin::checkLogin()` needs a session, a form, a database and a user; and the
+property that actually matters - that no login hook is ever handed the password - is checked against
+the real source file, which a stand-in could not prove. The one-line dispatch sites in `logout.php` and
+`system/bootstrap/function.php` are not driven by any test.
 
 `component-hooks.php` works the same way as `page-hooks.php`: `Component` reads the settings, the
 current user and the database, so the stand-in carries the two wrappers verbatim. The wrappers are the
