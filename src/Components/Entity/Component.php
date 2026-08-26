@@ -2,6 +2,7 @@
 namespace Admidio\Components\Entity;
 
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Hooks\Hooks;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
@@ -120,12 +121,33 @@ class Component extends Entity
     /**
      * This method checks if the current user is allowed to edit and administrate the component. Therefore,
      * special checks for each component were done.
+     *
+     * The answer passes through the **component_administrable** filter, which receives the answer and
+     * the name of the component. It is the one place that decides who may administrate a module, for
+     * the menu, for the modules themselves and for the CLI, so a plugin that adds a right of its own
+     * changes it here instead of in every module. It has to answer with a **bool**, which
+     * Hooks::applyTypedFilters() enforces: a permission must not be decided by whatever happens to be
+     * truthy. A filter can grant as well as revoke, so a callback that only wants to restrict has to
+     * return the answer it was given unless it means to widen it.
+     *
      * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. GROUPS-ROLES
-     * @return bool Return true if the current user is allowed to view the component
+     * @return bool Return true if the current user is allowed to administrate the component
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException|Exception
      */
     public static function isAdministrable(string $componentName): bool
+    {
+        return Hooks::applyTypedFilters('component_administrable', self::checkAdministrable($componentName), $componentName);
+    }
+
+    /**
+     * The rights of Admidio itself, without the hook. isAdministrable() is the answer everybody uses.
+     * @param string $componentName The name of the component.
+     * @return bool Return true if the current user is allowed to administrate the component
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException|Exception
+     */
+    private static function checkAdministrable(string $componentName): bool
     {
         global $gCurrentUser;
 
@@ -224,12 +246,30 @@ class Component extends Entity
     /**
      * This method checks if the current user is allowed to view the component. Therefore,
      * special checks for each component were done.
+     *
+     * The answer passes through the **component_visible** filter, which receives the answer and the
+     * name of the component. It decides which entries the menu shows, which modules may be opened and
+     * which commands the CLI offers, so it is a permission decision: the filter has to answer with a
+     * **bool** and it can grant as well as revoke. See isAdministrable() for the rest of the contract.
+     *
      * @param string $componentName The name of the component that is stored in the column com_name_intern e.g. GROUPS-ROLES
      * @return bool Return true if the current user is allowed to view the component
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException|Exception
      */
     public static function isVisible(string $componentName): bool
+    {
+        return Hooks::applyTypedFilters('component_visible', self::checkVisible($componentName), $componentName);
+    }
+
+    /**
+     * The rights of Admidio itself, without the hook. isVisible() is the answer everybody uses.
+     * @param string $componentName The name of the component.
+     * @return bool Return true if the current user is allowed to view the component
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException|Exception
+     */
+    private static function checkVisible(string $componentName): bool
     {
         global $gValidLogin, $gCurrentUser, $gSettingsManager, $gDb;
 

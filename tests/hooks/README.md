@@ -13,6 +13,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/user-valid-default.php
     php tests/hooks/form-built.php
     php tests/hooks/page-hooks.php
+    php tests/hooks/component-hooks.php
 
 Each script prints one line per check and exits non-zero when a check fails.
 
@@ -35,6 +36,10 @@ of it is.
 
 `form-built.php` executes the real `FormPresenter`, which needs nothing but the autoloader, so the
 form, the dispatch and `validate()` are all the real ones.
+
+`component-hooks.php` works the same way as `page-hooks.php`: `Component` reads the settings, the
+current user and the database, so the stand-in carries the two wrappers verbatim. The wrappers are the
+whole change - the switch statements below them are untouched.
 
 `page-hooks.php` is like `user-valid-default.php`: `PagePresenter` reads the settings, the
 organization, the language and the session out of the database and cannot be constructed here, so the
