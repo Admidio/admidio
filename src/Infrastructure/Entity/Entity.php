@@ -481,7 +481,15 @@ class Entity
         $deletedColumns = array();
         foreach ($this->dbColumns as $column => $value) {
             if (str_starts_with($column, $this->columnPrefix . '_')) {
-                $deletedColumns[$column] = array('oldValue' => $value, 'newValue' => null);
+                // A caller may set a column - ProfileFields::saveUserData() clears a field before
+                // deciding whether to delete the now-empty record - and dbColumns already holds that
+                // proposed value, not the persisted one. previousValue is what the database still
+                // holds whenever the column has already been changed; only a column nobody touched
+                // can be read from dbColumns directly.
+                $oldValue = empty($this->columnsInfos[$column]['changed'])
+                    ? $value
+                    : $this->columnsInfos[$column]['previousValue'];
+                $deletedColumns[$column] = array('oldValue' => $oldValue, 'newValue' => null);
             }
         }
 
