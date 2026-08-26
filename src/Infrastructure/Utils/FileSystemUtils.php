@@ -78,7 +78,19 @@ final class FileSystemUtils
         'midi' => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-midi', 'viewable' => true),
         'mp3'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/mpeg3', 'viewable' => true),
         'wav'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-midi', 'viewable' => true),
-        'wma'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-ms-wma', 'viewable' => true)
+        'wma'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-ms-wma', 'viewable' => true),
+        'm4a'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/mp4', 'viewable' => true),
+        'm4v'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/x-m4v', 'viewable' => true),
+        'mkv'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/x-matroska', 'viewable' => true),
+        'flac' => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/flac', 'viewable' => true),
+        'ogg'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/ogg', 'viewable' => true),
+        'opus' => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/opus', 'viewable' => true),
+        '7z'   => array('icon' => 'bi-file-earmark-zip-fill', 'mime-type' => 'application/x-7z-compressed', 'viewable' => false),
+        'rar'  => array('icon' => 'bi-file-earmark-zip-fill', 'mime-type' => 'application/vnd.rar', 'viewable' => false),
+        'svg'  => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/svg+xml', 'viewable' => true),
+        'webp' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/webp', 'viewable' => true),
+        'heic' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/heic', 'viewable' => true),
+        'heif' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/heif', 'viewable' => true)
     );
 
     /**
@@ -91,11 +103,12 @@ final class FileSystemUtils
     {
         $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-        if (array_key_exists($fileExtension, self::$iconFileExtension)) {
-            return true;
+        $blocked = array('php', 'php3', 'php4', 'php5', 'phtml', 'phar', 'exe', 'bat', 'cmd', 'sh', 'cgi', 'pl');
+        if (in_array($fileExtension, $blocked, true)) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**

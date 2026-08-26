@@ -110,6 +110,8 @@ class FileUpload
             $("#fileupload").fileupload({
                 url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
                 sequentialUploads: true,
+                maxChunkSize: 10000000,
+                maxFileSize: ' . ($GLOBALS['gSettingsManager']->getInt('documents_files_max_upload_size') * 1024 * 1024) . ',
                 dataType: "json",
                 formData: [{
                     name: "adm_csrf_token",
