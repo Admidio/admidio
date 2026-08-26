@@ -576,22 +576,13 @@ class User extends Entity
 
     /**
      * Deletes the selected user of the table and all the many references in other tables.
-     * Also, a notification that the user was deleted will be sent if notification is enabled.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
      * @throws Exception
      */
     public function delete(): bool
     {
-        global $gChangeNotification;
-
         $usrId = $this->getValue('usr_id');
-
-        // only send notification if a valid user will be deleted
-        if (is_object($gChangeNotification) && $this->getValue('usr_valid')) {
-            // Register all non-empty fields for the notification
-            $gChangeNotification->logUserDeletion($usrId, $this);
-        }
 
         // first delete send messages from the user
         $sql = 'SELECT msg_id FROM ' . TBL_MESSAGES . ' WHERE msg_usr_id_sender = ? -- $usrId';
@@ -811,8 +802,9 @@ class User extends Entity
     /**
      * Changes to user data could be sent as a notification email to a specific role if this
      * function is enabled in the settings. If you want to suppress this logic you can
-     * explicit disable it with this method for this user. So no changes to this user object will
-     * result in a notification email.
+     * explicit disable it with this method for this user. So no change of this user will result in
+     * a notification email, whether it is made through this object or not: save() names the user to
+     * ChangeNotification::suppressUser() as soon as the record has an id.
      * @return void
      */
     public function disableChangeNotification()
@@ -1945,8 +1937,6 @@ class User extends Entity
             $this->columnsValueChanged = true;
         }
 
-        $newRecord = $this->newRecord;
-
         $returnValue = parent::save($updateFingerPrint);
         $usrId = (int)$this->getValue('usr_id'); // if a new user was created get the new id
 
@@ -1967,11 +1957,11 @@ class User extends Entity
             // because he has new data and maybe new rights
             $gCurrentSession->reload($usrId);
         }
-        // The record is a new record, which was just stored to the database
-        // for the first time => record it as a user creation now
-        if ($newRecord && $this->changeNotificationEnabled && is_object($gChangeNotification)) {
-            // Register all non-empty fields for the notification
-            $gChangeNotification->logUserCreation($usrId, $this);
+        // The change notification listens to the hooks of adm_users, adm_user_data and adm_members,
+        // so a user whose notification is switched off has to be named once, now that the record has
+        // an id. Everything else about that user follows from the hooks alone.
+        if (!$this->changeNotificationEnabled && is_object($gChangeNotification)) {
+            $gChangeNotification->suppressUser($usrId);
         }
         LogChanges::endChangeSet($previousChangeSet);
         $this->db->endTransaction();
@@ -2135,19 +2125,9 @@ class User extends Entity
      */
     public function setPassword(string $newPassword, bool $doHashing = true): bool
     {
-        global $gSettingsManager, $gPasswordHashAlgorithm, $gChangeNotification;
+        global $gSettingsManager, $gPasswordHashAlgorithm;
 
         if (!$doHashing) {
-            if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
-                $gChangeNotification->logUserChange(
-                    (int)$this->getValue('usr_id'),
-                    'usr_password',
-                    $this->getValue('usr_password'),
-                    $newPassword,
-                    "MODIFIED",
-                    $this
-                );
-            }
             return parent::setValue('usr_password', $newPassword, false);
         }
 
@@ -2163,16 +2143,6 @@ class User extends Entity
             return false;
         }
 
-        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
-            $gChangeNotification->logUserChange(
-                (int)$this->getValue('usr_id'),
-                'usr_password',
-                $this->getValue('usr_password'),
-                $newPasswordHash,
-                "MODIFIED",
-                $this
-            );
-        }
         if (parent::setValue('usr_password', $newPasswordHash, false)) {
             // for security reasons remove all sessions and auto login of the user
             return $this->invalidateAllOtherLogins();
@@ -2190,18 +2160,6 @@ class User extends Entity
      */
     public function setSecondFactorSecret(string|null $newSecret): bool
     {
-        global $gChangeNotification;
-
-        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
-            $gChangeNotification->logUserChange(
-                (int)$this->getValue('usr_id'),
-                'usr_tfa_secret',
-                $this->getValue('usr_tfa_secret'),
-                $newSecret || 'null',
-                "MODIFIED",
-                $this
-            );
-        }
         if (parent::setValue('usr_tfa_secret', $newSecret, false)) {
             // for security reasons remove all sessions and auto login of the user
             return $this->invalidateAllOtherLogins();
@@ -2249,7 +2207,7 @@ class User extends Entity
      */
     public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
-        global $gSettingsManager, $gChangeNotification;
+        global $gSettingsManager;
 
         // users data from adm_users table
         if (str_starts_with($columnName, 'usr_')) {
@@ -2266,21 +2224,6 @@ class User extends Entity
             // only update if value has changed
             if ($this->getValue($columnName, 'database') == $newValue) {
                 return true;
-            }
-
-            // For new records, do not immediately queue all changes for notification,
-            // as the record might never be saved to the database (e.g. when
-            // doing a check for an existing user)! => For new records,
-            // log the changes only when $this->save is called!
-            if (!$this->newRecord && $this->changeNotificationEnabled && is_object($gChangeNotification)) {
-                $gChangeNotification->logUserChange(
-                    $this->getValue('usr_id'),
-                    $columnName,
-                    (string)$this->getValue($columnName),
-                    (string)$newValue,
-                    "MODIFIED",
-                    $this
-                );
             }
 
             return parent::setValue($columnName, $newValue, $checkValue);
@@ -2330,27 +2273,6 @@ class User extends Entity
             || $this->saveChangesWithoutRights === true
         ) {
             $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
-        }
-
-        // Not all changes are logged. Exceptions:
-        // Fields starting with usr_ (special case above)
-        // Fields that have not changed (check above)
-        // If usr_id is 0 (the user is newly created; this is already documented) (check in logProfileChange)
-
-        if ($returnCode && !$this->newRecord && is_object($gChangeNotification)) {
-            $gChangeNotification->logProfileChange(
-                $this->getValue('usr_id'),
-                $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
-                $columnName, // TODO: is $columnName the internal name or the human-readable?
-                // Old and new values in human-readable version:
-                (string)$oldFieldValue,
-                (string)$this->mProfileFieldsData->getValue($columnName),
-                // Old and new values in raw database:
-                (string)$oldFieldValue_db,
-                (string)$newValue,
-                "MODIFIED",
-                $this
-            );
         }
 
         return $returnCode;
