@@ -23,7 +23,6 @@ final class PreferenceDefinitions
 {
     private const DEFAULT_DOMAIN_COPYRIGHT = 'domain_copyright';
     private const DEFAULT_ADMIDIO_URL = 'admidio_url';
-    private const DEFAULT_OIDC_ISSUER_URL = 'oidc_issuer_url';
 
     private const VALIDATOR_MEMBER_SHARING = 'member_sharing';
     private const VALIDATOR_EVENTS_VIEW = 'events_view';
@@ -97,8 +96,7 @@ final class PreferenceDefinitions
     /** @var array<int,string> */
     private const DEFAULT_PROVIDERS = array(
         self::DEFAULT_DOMAIN_COPYRIGHT,
-        self::DEFAULT_ADMIDIO_URL,
-        self::DEFAULT_OIDC_ISSUER_URL
+        self::DEFAULT_ADMIDIO_URL
     );
 
     /**
@@ -358,7 +356,9 @@ final class PreferenceDefinitions
             'sso_saml_encryption_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_SSO_KEY),
             'sso_saml_persistent_id_secret' => array('default' => '', 'internal' => true, 'sensitive' => true),
             'sso_oidc_enabled' => array('default' => '0', 'type' => 'bool'),
-            'sso_oidc_issuer_url' => array('defaultProvider' => self::DEFAULT_OIDC_ISSUER_URL, 'validator' => self::VALIDATOR_OIDC_ISSUER),
+            // empty means "use the default admidio URL"; do not seed it with the resolved
+            // default, or the installation could never move without invalidating the issuer
+            'sso_oidc_issuer_url' => array('default' => '', 'validator' => self::VALIDATOR_OIDC_ISSUER),
             'sso_oidc_signing_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_OIDC_SIGNING_KEY),
             'sso_oidc_encryption_key' => array('default' => '', 'internal' => true, 'sensitive' => true),
             'sso_oidc_auth_code_lifetime' => array('default' => '600', 'type' => 'int', 'minimum' => 1, 'required' => true),
@@ -746,8 +746,6 @@ final class PreferenceDefinitions
         return match ($provider) {
             self::DEFAULT_DOMAIN_COPYRIGHT => '© ' . self::runtimeConstant('DOMAIN'),
             self::DEFAULT_ADMIDIO_URL => self::runtimeConstant('ADMIDIO_URL'),
-            self::DEFAULT_OIDC_ISSUER_URL => self::runtimeConstant('ADMIDIO_URL')
-                . self::runtimeConstant('FOLDER_MODULES') . '/sso/index.php',
             default => throw new InvalidArgumentException('Unknown preference default provider "' . $provider . '".')
         };
     }
