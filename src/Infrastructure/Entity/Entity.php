@@ -386,6 +386,15 @@ class Entity
      * entity. The order nests the two: before the operation the generic hook runs first, after it
      * and on failure the entity-specific hook runs first, so that a callback of the generic layer
      * encloses the callbacks of the specific one.
+     *
+     * Every stage also hands the callback this object, so it can read fields the change set does not
+     * carry - an unchanged column, a related record - or call a domain method on it, with two
+     * exceptions: **deleted** and **delete_failed** receive **null** instead. By the time either can
+     * fire, delete() has already cleared the object - immediately for a direct failure, later through
+     * the commit/rollback queue for everything else - and a bulk deletion reuses one object for every
+     * row it removes, so it would as often be the wrong record as an empty one. The change set's
+     * snapshot is what those two describe the record from.
+     *
      * @param string $suffix The stage, e.g. **updating** or **updated**.
      * @param EntityChangeSet $changeSet What the operation changes or changed.
      * @param bool $genericFirst **true** before the operation, **false** after it and on failure.
@@ -401,11 +410,13 @@ class Entity
             $names = array_reverse($names);
         }
 
+        $entity = in_array($suffix, array('deleted', 'delete_failed'), true) ? null : $this;
+
         foreach ($names as $name) {
             if ($catchErrors) {
-                Hooks::doActionCatchErrors($name, $changeSet);
+                Hooks::doActionCatchErrors($name, $changeSet, $entity);
             } else {
-                Hooks::doAction($name, $changeSet);
+                Hooks::doAction($name, $changeSet, $entity);
             }
         }
     }

@@ -13,6 +13,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/roles-dependencies-delete.php
     php tests/hooks/registration-accepted.php
     php tests/hooks/list-hooks.php
+    php tests/hooks/entity-hook-object.php
     php tests/hooks/change-notification.php
     php tests/hooks/user-valid-default.php
     php tests/hooks/form-built.php
@@ -89,6 +90,11 @@ always runs, the specific `<hookId>_readable_name` one only for an entity that n
 constructor takes nothing but a `Database`, so there was no reason to copy it. It overrides
 `delete()` because `adm_role_dependencies` has a composite key, and until finding 96 that override
 never dispatched a hook at all.
+
+`entity-hook-object.php` executes the real `Entity` lifecycle against `TestRoom`/`TestBooking`, checking
+what `dispatchHook()` passes as the second argument alongside the change set: the live entity for every
+stage except `deleted` and `delete_failed`, where it is `null` - the object may already be cleared by
+then, and a bulk-deleted dependent record shares one scratch object across every row.
 
 `registration-accepted.php` is different again: `UserRegistration` and `RegistrationService` both
 need a full `ProfileFields`/`User`/settings stack to construct, so this executes the mechanism they
