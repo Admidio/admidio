@@ -290,7 +290,7 @@ class InventoryItemPresenter extends PagePresenter
         }
 
         if ($getCopy) {
-            if ($form->getElements()['INF-CATEGORY']['type'] === 'text') {
+            if ($form->getElement('INF-CATEGORY')['type'] === 'text') {
                 // when copying an item and the user is not allowed to change the category, we cannot create copies
                 $form->addSubmitButton(
                     'adm_button_save',

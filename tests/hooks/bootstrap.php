@@ -10,7 +10,7 @@ define('DB_TYPE', 'mysql');            // the PostgreSQL boolean conversion must
 define('TABLE_PREFIX', 'adm');
 define('DATETIME_NOW', date('Y-m-d H:i:s'));
 $GLOBALS['gCurrentUserId'] = 0;        // no creator/editor columns are stamped
-$GLOBALS['gLogger'] = null;
+$GLOBALS['gLogger'] = new \Psr\Log\NullLogger();   // Admidio logs unguarded in a few places
 
 use Admidio\Infrastructure\Entity\Entity;
 

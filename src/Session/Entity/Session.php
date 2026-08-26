@@ -113,6 +113,10 @@ class Session extends Entity
      */
     public function addFormObject(FormPresenter $form): bool
     {
+        // the form that is stored has to be the one that was rendered, so that validate() judges the
+        // POST against the elements the browser was shown
+        $form->finalize();
+
         if (!array_key_exists($form->getCsrfToken(), $this->mFormObjects)) {
             $this->mFormObjects[$form->getCsrfToken()] = $form;
             return true;
