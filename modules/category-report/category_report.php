@@ -17,6 +17,7 @@
  * config            : the selected configuration
  ***********************************************************************************************
  */
+use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -39,8 +40,8 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    // user must have the permission "rol_all_lists_view"
-    if (!Hooks::applyFilters('category_report_permitted', $gCurrentUser->checkRolesRight('rol_all_lists_view'))) {
+    // user must have the permission "rol_all_lists_view", which is what the component says
+    if (!Component::isVisible('CATEGORY-REPORT')) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
