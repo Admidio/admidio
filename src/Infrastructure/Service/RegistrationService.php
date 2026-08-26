@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Infrastructure\Service;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\SystemMail;
@@ -78,6 +79,13 @@ class RegistrationService
                 $user->assignDefaultRoles();
             }
             $this->db->endTransaction();
+
+            // The merge itself has already committed at this point - the mail below is a separate
+            // concern and its own catch block does not undo it, so the semantic event fires whether
+            // or not the mail succeeds.
+            $this->db->registerAfterCommit(function () use ($user) {
+                Hooks::doAction('user_registration_accepted', $user, UserRegistration::ACCEPTED_BY_ASSIGNMENT);
+            });
 
             if ($gSettingsManager->getBool('system_notifications_enabled')) {
                 // Send mail to the user to confirm the registration or the assignment to the new organization
