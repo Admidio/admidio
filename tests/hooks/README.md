@@ -11,6 +11,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/entity-change-tracking-after.php
     php tests/hooks/readable-name.php
     php tests/hooks/roles-dependencies-delete.php
+    php tests/hooks/registration-accepted.php
     php tests/hooks/change-notification.php
     php tests/hooks/user-valid-default.php
     php tests/hooks/form-built.php
@@ -87,6 +88,14 @@ always runs, the specific `<hookId>_readable_name` one only for an entity that n
 constructor takes nothing but a `Database`, so there was no reason to copy it. It overrides
 `delete()` because `adm_role_dependencies` has a composite key, and until finding 96 that override
 never dispatched a hook at all.
+
+`registration-accepted.php` is different again: `UserRegistration` and `RegistrationService` both
+need a full `ProfileFields`/`User`/settings stack to construct, so this executes the mechanism they
+are built on instead of the methods themselves - `Database::registerAfterCommit()`, inherited by
+`FakeDatabase` unchanged, and the real `UserRegistration::ACCEPTED_BY_APPROVAL` /
+`ACCEPTED_BY_ASSIGNMENT` constants - reproducing the exact transaction nesting of
+`CoreTasks::registrationApprove()`, the one caller that wraps `acceptRegistration()` in a transaction
+of its own.
 
 These are plain scripts and not PHPUnit cases on purpose - the branch has no test bootstrap yet.
 They are written so that moving them into one is a matter of turning each `check()` into an
