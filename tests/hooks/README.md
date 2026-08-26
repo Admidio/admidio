@@ -12,6 +12,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/readable-name.php
     php tests/hooks/roles-dependencies-delete.php
     php tests/hooks/registration-accepted.php
+    php tests/hooks/list-hooks.php
     php tests/hooks/change-notification.php
     php tests/hooks/user-valid-default.php
     php tests/hooks/form-built.php
@@ -96,6 +97,13 @@ are built on instead of the methods themselves - `Database::registerAfterCommit(
 `ACCEPTED_BY_ASSIGNMENT` constants - reproducing the exact transaction nesting of
 `CoreTasks::registrationApprove()`, the one caller that wraps `acceptRegistration()` in a transaction
 of its own.
+
+`list-hooks.php` proves the generic list hooks (`list_columns`, `list_data`, `list_rendered_data`,
+`list_row_actions`, §2.7) on `modules/contacts/contacts.php` and `contacts_data.php`, the first module
+to carry them. Neither file can run here - both need a full database, session and settings stack - so
+the dispatch lines are reproduced verbatim, including the count guard in `contacts.php` that refuses a
+`list_columns` filter which adds or removes a column, since `contacts_data.php` still builds every row
+by position and there is no shared list pipeline yet to keep the two in step.
 
 These are plain scripts and not PHPUnit cases on purpose - the branch has no test bootstrap yet.
 They are written so that moving them into one is a matter of turning each `check()` into an
