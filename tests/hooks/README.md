@@ -14,6 +14,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/registration-accepted.php
     php tests/hooks/list-hooks.php
     php tests/hooks/entity-hook-object.php
+    php tests/hooks/entity-delete-after-clear.php
     php tests/hooks/change-notification.php
     php tests/hooks/user-valid-default.php
     php tests/hooks/form-built.php
@@ -95,6 +96,12 @@ never dispatched a hook at all.
 what `dispatchHook()` passes as the second argument alongside the change set: the live entity for every
 stage except `deleted` and `delete_failed`, where it is `null` - the object may already be cleared by
 then, and a bulk-deleted dependent record shares one scratch object across every row.
+
+`entity-delete-after-clear.php` executes the real `Entity`/`TestRoom`: `setValue()` on a nullable column
+already overwrites `dbColumns` with the cleared value before `delete()` runs - exactly what
+`ProfileFields::saveUserData()` does when a profile field is emptied - so `buildDeletionChangeSet()` has
+to read the true persisted value from `columnsInfos[...]['previousValue']` for a column that was
+touched, and from `dbColumns` for one that was not. The test keeps both paths next to each other.
 
 `registration-accepted.php` is different again: `UserRegistration` and `RegistrationService` both
 need a full `ProfileFields`/`User`/settings stack to construct, so this executes the mechanism they
