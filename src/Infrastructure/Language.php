@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Infrastructure;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 
@@ -248,11 +249,55 @@ class Language
             // Read language folders of the plugins. Maybe there was a new plugin installed.
             $this->addPluginLanguageFolderPaths();
 
-            // no text found then write #undefined text#
-            return '#' . $textId . '#';
+            $text = $this->resolveMissingText($textId);
+
+            if ($text === null) {
+                // no text found then write #undefined text#
+                return '#' . $textId . '#';
+            }
+        }
+
+        // The filter runs on every text and after the cache, because it is the only one of the
+        // translation hooks that may depend on more than the text id and the language - the page
+        // that is being built, or who is looking at it. It is skipped entirely while nobody listens,
+        // which is one array lookup per text.
+        if (Hooks::hasFilter('translation_text')) {
+            $text = Hooks::applyTypedFilters('translation_text', $text, $textId, $this->language);
         }
 
         return self::prepareTextPlaceholders($text, $params);
+    }
+
+    /**
+     * Ask the **translation_missing** resolver for a text that neither the language of the
+     * installation nor the reference language has, so that a plugin can supply the texts of its own
+     * without shipping an XML file for every language.
+     *
+     * The answer is put into the text cache, which lives in the session, so it is asked once per text
+     * and session and not once per request. A plugin whose texts change - because it was switched off,
+     * or because someone edited them - tells Admidio the same way the profile fields do, with
+     * Session::reloadAllSessions(); the next request of every session then rebuilds this object and
+     * its cache.
+     *
+     * When nobody has an answer, **translation_unresolved** is dispatched as a diagnostic. It is a
+     * diagnostic and must not be able to break the page, so it is dispatched with
+     * doActionCatchErrors().
+     *
+     * @param string $textId Unique text id of the text that was not found.
+     * @return string|null Returns the text, or **null** if nobody has one.
+     */
+    private function resolveMissingText(string $textId): ?string
+    {
+        $text = Hooks::resolve('translation_missing', null, $textId, $this->language);
+
+        if (is_string($text)) {
+            $this->textCache[$textId] = $text;
+            return $text;
+        }
+
+        Hooks::doActionCatchErrors('translation_unresolved', $textId, $this->language);
+
+        return null;
     }
 
     /**
@@ -414,7 +459,18 @@ class Language
                 // if text id wasn't found than search for it in reference language
                 try {
                     // search for text id in every \SimpleXMLElement (language file) of the object array
-                    return $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, $this::REFERENCE_LANGUAGE, $textId);
+                    $text = $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, $this::REFERENCE_LANGUAGE, $textId);
+
+                    // The text exists, but not in the language that was asked for. This is the only
+                    // place that knows it: searchLanguageText() writes the text into the cache without
+                    // its provenance, so every later request of the session is answered from the cache
+                    // and cannot tell the two apart. Once per text and session is what a translator
+                    // needs to collect what is missing.
+                    if ($this->language !== $this::REFERENCE_LANGUAGE) {
+                        Hooks::doActionCatchErrors('translation_fallback_used', $textId, $this->language, $this::REFERENCE_LANGUAGE);
+                    }
+
+                    return $text;
                 } catch (\OutOfBoundsException $exception) {
                     throw new \OutOfBoundsException($exception->getMessage());
                 }
