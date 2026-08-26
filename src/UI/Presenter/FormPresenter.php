@@ -114,6 +114,13 @@ class FormPresenter
     protected bool $finalized = false;
 
     /**
+     * The element types whose offered entries validate() checks the submitted value against. Only
+     * these are handed to the **form_select_options** filter, because only for these does taking an
+     * entry away also mean that it is not accepted any more.
+     */
+    protected const TYPES_WITH_OFFERED_VALUES = array('select', 'radio', 'button-group.radio');
+
+    /**
      * Constructor creates the form element
      * @param string $id ID of the form
      * @param string $action Action attribute of the form
@@ -2067,6 +2074,48 @@ class FormPresenter
         $this->finalized = true;
 
         Hooks::doAction('form_built', $this);
+
+        // after form_built, so that a select which a callback has just added is filtered as well
+        $this->filterOfferedValues();
+    }
+
+    /**
+     * Let the **form_select_options** filter change the entries that a select box, a radio group or a
+     * button group offers. It is called once per form, at the end of finalize(), and only for the
+     * element types whose entries validate() enforces - taking an entry away here also means that a
+     * request which submits it is refused, which is the whole point of the hook.
+     *
+     * The callback is handed the entries, the ID of the element, its type and the form. The entries
+     * have the shape the element type uses and must keep it: a **select** and a **button-group.radio**
+     * carry a list of **array('id' => ..., 'value' => ...)**, a **radio** an array of value to label.
+     * The filter has to answer with an array.
+     *
+     * An element that was built with **allowCustomValues** - the borrower of an inventory item is the
+     * one in the core - is filtered like any other, but its entries are not enforced, because that
+     * control deliberately accepts an entry the user typed.
+     *
+     * @return void
+     */
+    protected function filterOfferedValues(): void
+    {
+        if (!Hooks::hasFilter('form_select_options')) {
+            return;
+        }
+
+        foreach ($this->elements as $elementId => $element) {
+            if (!in_array($element['type'] ?? '', self::TYPES_WITH_OFFERED_VALUES, true)
+                || !array_key_exists('values', $element)) {
+                continue;
+            }
+
+            $this->elements[$elementId]['values'] = Hooks::applyTypedFilters(
+                'form_select_options',
+                $element['values'],
+                $elementId,
+                $element['type'],
+                $this
+            );
+        }
     }
 
     /**
@@ -2274,6 +2323,11 @@ class FormPresenter
     public function validate(array $fieldValues, bool $editSelection = false): array
     {
         global $gSettingsManager;
+
+        // the POST is judged against the finished form. A form that comes out of the session was
+        // finished before it was stored; one that is validated right after it was built is finished
+        // here, so that both are judged against the same elements.
+        $this->finalize();
 
         $validFieldValues = array();
         $selectedFields = array();
