@@ -12,6 +12,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/change-notification.php
     php tests/hooks/user-valid-default.php
     php tests/hooks/form-built.php
+    php tests/hooks/page-hooks.php
 
 Each script prints one line per check and exits non-zero when a check fails.
 
@@ -34,6 +35,11 @@ of it is.
 
 `form-built.php` executes the real `FormPresenter`, which needs nothing but the autoloader, so the
 form, the dispatch and `validate()` are all the real ones.
+
+`page-hooks.php` is like `user-valid-default.php`: `PagePresenter` reads the settings, the
+organization, the language and the session out of the database and cannot be constructed here, so the
+stand-in carries `setHtmlID()` and the head of `show()` verbatim over the real `Hooks` engine. The
+constructor-then-setter order it reproduces is the whole point - it is what finding 91 was.
 
 `user-valid-default.php` is a mixture of the two. The real `User` cannot be instantiated without a
 `ProfileFields` object and a database, so its constructor and its `clear()` are carried in the test

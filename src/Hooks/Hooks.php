@@ -246,6 +246,39 @@ final class Hooks
     }
 
     /**
+     * Pass a value through the filter and insist that what comes back still has the type of what
+     * went in. The value the dispatch site starts with defines the contract, so a filter of a
+     * **bool** has to answer with a **bool** and one of an **array** with an **array**.
+     *
+     * A wrongly typed result is a mistake in the callback, and at the sites where the result decides
+     * a permission, the recipients of a mail or the claims of a token it must not be coerced into
+     * something that happens to be truthy. The exception names the hook and the callback that is at
+     * fault, because the dispatch site is never the one that caused it.
+     *
+     * @param string $name Name of the hook.
+     * @param mixed $value The value that should be filtered. Its type is the required type.
+     * @param mixed ...$args Further arguments that the callbacks receive after the value.
+     * @return mixed Returns the value after the last callback.
+     */
+    public static function applyTypedFilters(string $name, mixed $value, mixed ...$args): mixed
+    {
+        $expectedType = get_debug_type($value);
+
+        foreach (self::getRegistrations(self::TYPE_FILTER, $name) as $registration) {
+            $value = self::call($registration, array($value, ...$args));
+
+            if (get_debug_type($value) !== $expectedType) {
+                throw new \UnexpectedValueException(
+                    'The callback "' . $registration['key'] . '" of the hook "' . $name . '" returned '
+                    . get_debug_type($value) . ' instead of ' . $expectedType . '.'
+                );
+            }
+        }
+
+        return $value;
+    }
+
+    /**
      * Ask the registered callbacks of the resolver for an answer until one of them has one.
      * @param string $name Name of the hook.
      * @param mixed $default The value that is returned if no callback has an answer.

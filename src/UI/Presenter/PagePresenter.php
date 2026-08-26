@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\UI\Presenter;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\MenuNode;
@@ -548,13 +549,29 @@ class PagePresenter
 
 
     /**
-     * Set the HTML ID of the current HTML page.
+     * Set the HTML ID of the current HTML page. It is written into the **id** attribute of the body
+     * element and it is the stable name of the page for the **page_before_render** hook.
+     *
+     * The value is handed to the template here, the same way setHeadline() does it: the basic
+     * variables are assigned in the constructor, and every caller sets the ID afterwards.
      * @param string $htmlID The HTML ID of the current page.
      * @return void
      */
     public function setHtmlID(string $htmlID): void
     {
         $this->id = $htmlID;
+
+        if (isset($this->smarty)) {
+            $this->smarty->assign('id', $this->id);
+        }
+    }
+
+    /**
+     * @return string Returns the HTML ID of the page, its stable name in the page hooks.
+     */
+    public function getHtmlID(): string
+    {
+        return $this->id;
     }
 
     /** If set to true, then a page without a header menu and sidebar menu will be created.
@@ -606,6 +623,17 @@ class PagePresenter
     public function show(): void
     {
         global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation;
+
+        // The page is finished. The two texts that name it can still be changed, and
+        // page_before_render is the last point at which anything can be added to it; everything the
+        // three of them touch is handed to the template below, so nothing has to be assigned twice.
+        $this->title = Hooks::applyTypedFilters('page_title', $this->title, $this);
+        $this->headline = Hooks::applyTypedFilters('page_headline', $this->headline, $this);
+        Hooks::doAction('page_before_render', $this);
+
+        $this->smarty->assign('id', $this->id);
+        $this->smarty->assign('title', $this->title);
+        $this->smarty->assign('headline', $this->headline);
 
         $hasPreviousUrl = false;
 
