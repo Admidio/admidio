@@ -9,12 +9,16 @@
  ***********************************************************************************************
  */
 
+use Admidio\Hooks\Hooks;
 use Admidio\Preferences\ValueObject\SettingsManager;
 
 try {
     require_once(__DIR__ . '/common.php');
 
     $gValidLogin = false;
+
+    // the user is still known here, which is what a listener needs; afterwards the object is cleared
+    Hooks::doAction('logout', $gCurrentUser);
 
     // remove user from session
     $gCurrentSession->logout();
