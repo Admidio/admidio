@@ -10,6 +10,7 @@ require __DIR__ . '/bootstrap.php';
 
 use Admidio\Hooks\Hooks;
 use Admidio\Hooks\Service\EntityHookQueue;
+use Admidio\Hooks\ValueObject\EntityChangeSet;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
@@ -551,6 +552,39 @@ $field = new TestProfileField($db, 3);
 $field->delete();
 
 check('deleting a profile field is not a change of the people who had a value in it', $notification->collected() === array());
+
+// Three users, of whom only two ever filled the field in. Deleting it must describe two rows, not
+// three: hookBulkDeletion() reads the rows that exist, and a profile field that was never filled in
+// has no row at all.
+$db = newDatabase();
+$withValue = array();
+foreach (array('a', 'b', 'c') as $index => $loginName) {
+    $person = aUser($db, $loginName);
+    if ($index < 2) {
+        $value = new TestUserData($db);
+        $value->setValue('usd_usr_id', $person->getValue('usr_id'));
+        $value->setValue('usd_usf_id', 3);
+        $value->setValue('usd_value', '1980-07-0' . ($index + 1));
+        $value->save();
+        $withValue[] = (int)$person->getValue('usr_id');
+    }
+}
+
+$notification = newNotification();
+$deletions = array();
+Hooks::addAction('user_data_deleted', function (EntityChangeSet $cs) use (&$deletions) {
+    $deletions[] = (int)$cs->getOldValue('usd_usr_id');
+});
+
+$field = new TestProfileField($db, 3);
+$field->delete();
+
+check(
+    'only the users who had a value in the field are described at all',
+    $deletions === $withValue,
+    implode(',', $deletions) . ' of 3 users'
+);
+check('and none of them gets a notification', $notification->collected() === array());
 
 $db = newDatabase();
 $user = aUser($db);
