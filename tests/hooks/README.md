@@ -10,6 +10,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/entity-cascade-delete.php
     php tests/hooks/entity-change-tracking-after.php
     php tests/hooks/change-notification.php
+    php tests/hooks/user-valid-default.php
 
 Each script prints one line per check and exits non-zero when a check fails.
 
@@ -29,6 +30,12 @@ the entity subclasses carry the hook ID, the sensitive columns and the ignored c
 `User`, `UserData` and `Membership`; `$gProfileFields`, `$gSettingsManager` and `$gL10n` are stubs at the
 top of the file, because the mail is not what is being tested - what the listener hears and what it makes
 of it is.
+
+`user-valid-default.php` is a mixture of the two. The real `User` cannot be instantiated without a
+`ProfileFields` object and a database, so its constructor and its `clear()` are carried in the test
+reduced to the two lines that touch `usr_valid`; everything below them is the real `Entity`, and the
+checks are about which columns end up marked as changed, which `Entity` alone decides. The last check
+pins the defect of finding 86 by keeping the previous `clear()` next to the current one.
 
 `entity-change-tracking-after.php` is different: it extracts the change-tracking block of
 `Entity::setValue()` and its comparison methods verbatim from the source and runs them against a

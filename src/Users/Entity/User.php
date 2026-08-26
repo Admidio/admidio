@@ -134,6 +134,27 @@ class User extends Entity
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
+
+        if ($this->newRecord) {
+            $this->initializeNewRecord();
+        }
+    }
+
+    /**
+     * The values a user record gets because it is being created. An account is active; the one
+     * exception is a registration, which sets **usr_valid** itself in UserRegistration::save() and
+     * is activated later by UserRegistration::acceptRegistration().
+     *
+     * This deliberately does not happen in clear(). clear() is also the step that empties the object
+     * before an existing record is read into it, and a value that is set there stays marked as
+     * changed, so every user that was read from the database carried a pending change of
+     * **usr_valid** that nobody asked for; see finding 86.
+     * @return void
+     * @throws Exception
+     */
+    protected function initializeNewRecord(): void
+    {
+        $this->setValue('usr_valid', 1);
     }
 
     /**
@@ -574,10 +595,6 @@ class User extends Entity
     public function clear(): void
     {
         parent::clear();
-
-        // new user should be valid (except registration)
-        $this->setValue('usr_valid', 1);
-        $this->columnsValueChanged = false;
 
         if (isset($this->mProfileFieldsData)) {
             // data of all profile fields will be deleted, the internal structure will not be destroyed
@@ -2324,7 +2341,7 @@ class User extends Entity
 
     /**
      * Retrieve the list of database fields that are ignored for the changelog.
-     * For the users table, we also ignore usr_valid, usr_*_login, etc.
+     * For the users table, we also ignore the login counters, the password reset token, etc.
      *
      * @return array Returns the list of database columns to be ignored for logging.
      */
@@ -2339,7 +2356,6 @@ class User extends Entity
         $ignored[] = 'usr_number_login';
         $ignored[] = 'usr_date_invalid';
         $ignored[] = 'usr_number_invalid';
-        $ignored[] = 'usr_valid';
         return $ignored;
     }
 

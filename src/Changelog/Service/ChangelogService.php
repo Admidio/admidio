@@ -698,6 +698,7 @@ class ChangelogService {
             'usr_photo' =>                 'SYS_PROFILE_PHOTO',
             'usr_login_name' =>            'SYS_USERNAME',
             'usr_uuid' =>                  'SYS_UNIQUE_ID',
+            'usr_valid' =>                 array('name' => 'SYS_ACCOUNT_ACTIVATED', 'type' => 'BOOL'),
             'usr_timestamp_change' =>      'SYS_CHANGED_AT',
             'usr_usr_id_change' =>         'SYS_CHANGED_BY',
             'usr_usr_id_create' =>         'SYS_CREATED_AT',
