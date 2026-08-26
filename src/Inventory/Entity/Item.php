@@ -168,7 +168,7 @@ class Item extends Entity
             $itemName = (string)$this->mItemsData->getValue('ITEMNAME', 'database');
         }
 
-        return $itemName;
+        return $this->filterReadableName($itemName);
     }
 
     /**

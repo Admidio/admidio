@@ -19,7 +19,6 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Changelog\Entity\LogChanges;
-use Admidio\Hooks\Hooks;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\QRServerProvider;
 
@@ -2336,7 +2335,7 @@ class User extends Entity
      */
     public function readableName(): string
     {
-        return Hooks::applyFilters('user_readable_name', $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME'), $this);
+        return $this->filterReadableName($this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME'));
     }
 
     /**
