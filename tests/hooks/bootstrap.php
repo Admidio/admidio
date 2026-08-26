@@ -17,6 +17,17 @@ use Admidio\Infrastructure\Entity\Entity;
 // the changelog needs settings and tables of its own and is not what these tests are about
 Entity::setLoggingEnabled(false);
 
+// Language::get() logs its lookup time; the helper lives in the Admidio bootstrap, which needs a
+// configuration and a database. This is the whole of it, copied from system/bootstrap/function.php.
+if (!function_exists('getExecutionTime')) {
+    function getExecutionTime(float $startTime): string
+    {
+        $stopTime = microtime(true);
+
+        return number_format(($stopTime - $startTime) * 1000, 6, '.', '') . ' ms';
+    }
+}
+
 $GLOBALS['adm_test_failures'] = 0;
 
 function check(string $name, bool $ok, string $detail = ''): void
