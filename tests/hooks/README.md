@@ -7,6 +7,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/entity-lifecycle-2.php
     php tests/hooks/entity-value-filter.php
     php tests/hooks/entity-transactions.php
+    php tests/hooks/entity-cascade-delete.php
     php tests/hooks/entity-change-tracking-after.php
 
 Each script prints one line per check and exits non-zero when a check fails.
