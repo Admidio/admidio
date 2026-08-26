@@ -36,6 +36,17 @@ class ListExportTest extends DatabaseTestCase
      */
     private array $writtenFiles = array();
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // createExportFile() writes here; a fresh checkout has not created it yet
+        $tempPath = ADMIDIO_PATH . FOLDER_TEMP_DATA;
+        if (!is_dir($tempPath) && !mkdir($tempPath, 0775, true) && !is_dir($tempPath)) {
+            throw new \RuntimeException('Could not create the regression-test temporary directory.');
+        }
+    }
+
     protected function tearDown(): void
     {
         foreach ($this->writtenFiles as $path) {
