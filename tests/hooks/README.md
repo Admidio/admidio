@@ -9,6 +9,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/entity-transactions.php
     php tests/hooks/entity-cascade-delete.php
     php tests/hooks/entity-change-tracking-after.php
+    php tests/hooks/readable-name.php
     php tests/hooks/change-notification.php
     php tests/hooks/user-valid-default.php
     php tests/hooks/form-built.php
@@ -76,6 +77,10 @@ pins the defect of finding 86 by keeping the previous `clear()` next to the curr
 `entity-change-tracking-after.php` is different: it extracts the change-tracking block of
 `Entity::setValue()` and its comparison methods verbatim from the source and runs them against a
 fixture, so that the test cannot drift from the code it describes.
+
+`readable-name.php` executes the real `Entity::readableName()` and `Entity::filterReadableName()`
+against `TestRoom` (named) and `TestSession` (unnamed): the generic `entity_readable_name` filter
+always runs, the specific `<hookId>_readable_name` one only for an entity that names itself.
 
 These are plain scripts and not PHPUnit cases on purpose - the branch has no test bootstrap yet.
 They are written so that moving them into one is a matter of turning each `check()` into an
