@@ -112,9 +112,16 @@ try {
     $columnCount = count($report->headerData);
 
     // define title (html) and headline
-    $title = Hooks::applyFilters('category_report_title', $gL10n->get('SYS_CATEGORY_REPORT'), $report);
-    $headline = Hooks::applyFilters('category_report_headline', $gL10n->get('SYS_CATEGORY_REPORT'), $report);
+    // Both are handed to the page below and read back filtered through getFilteredTitle() /
+    // getFilteredHeadline() (page_title / page_headline), because the export filename and the PDF
+    // header need the filtered text too and neither of them reaches PagePresenter::show().
     $subHeadline = $config[$report->getConfiguration()]['name'];
+
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report');
+    $page->setTitle($gL10n->get('SYS_CATEGORY_REPORT'));
+    $page->setHeadline($gL10n->get('SYS_CATEGORY_REPORT'));
+    $title = $page->getFilteredTitle();
+    $headline = $page->getFilteredHeadline();
 
     $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . $headline . '-' . $subHeadline;
 
@@ -123,14 +130,11 @@ try {
     }
 
     if ($getMode !== 'csv') {
-        $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report');
         $smarty = $page->createSmartyObject();
         $smarty->assign('l10n', $gL10n);
         if ($getMode === 'print') {
             $page->setContentFullWidth();
             $page->setPrintMode();
-            $page->setTitle($title);
-            $page->setHeadline($headline);
             $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
             $smarty->assign('classTable', $classTable);
         } elseif ($getMode === 'pdf') {
@@ -173,8 +177,6 @@ try {
         } elseif ($getMode === 'html') {
             // create html page object
             $page->setContentFullWidth();
-            $page->setTitle($title);
-            $page->setHeadline($headline);
 
             $page->addJavascript(
                 '

@@ -104,6 +104,13 @@ class PagePresenter
      * @var bool The Flag that will be responsible for a back button with the url to the previous page will be shown.
      */
     protected bool $showBackLink = false;
+    /**
+     * @var bool Whether page_title and page_headline have already been dispatched. A caller that
+     * needs the filtered text before show() runs - to build an export filename or an embedded
+     * document's title, for example - asks through getFilteredTitle()/getFilteredHeadline() instead
+     * of reading the raw text, and show() then finds the work already done instead of doing it again.
+     */
+    protected bool $textFiltered = false;
 
     /**
      * Static method which will return an instance of the PagePresenter. The HTML ID of the page will be set and
@@ -507,6 +514,46 @@ class PagePresenter
     }
 
     /**
+     * Dispatch page_title and page_headline exactly once, however many times this is called and
+     * whether it runs before or after show(): the same guarantee finalize() gives a form's elements.
+     * @return void
+     */
+    private function filterText(): void
+    {
+        if ($this->textFiltered) {
+            return;
+        }
+        $this->textFiltered = true;
+
+        $this->title = Hooks::applyTypedFilters('page_title', $this->title, $this);
+        $this->headline = Hooks::applyTypedFilters('page_headline', $this->headline, $this);
+    }
+
+    /**
+     * Returns the title of the page after page_title has run. Call this instead of getTitle() when
+     * the filtered text is needed before show() - to build an export filename or the title of an
+     * embedded document, for example.
+     * @return string Returns the filtered title of the HTML page.
+     */
+    public function getFilteredTitle(): string
+    {
+        $this->filterText();
+
+        return $this->title;
+    }
+
+    /**
+     * Returns the headline of the page after page_headline has run. See getFilteredTitle().
+     * @return string Returns the filtered headline of the HTML page.
+     */
+    public function getFilteredHeadline(): string
+    {
+        $this->filterText();
+
+        return $this->headline;
+    }
+
+    /**
      * If this method is called than the backlink to the previous page will not be shown.
      */
     public function hideBackLink(): void
@@ -627,8 +674,7 @@ class PagePresenter
         // The page is finished. The two texts that name it can still be changed, and
         // page_before_render is the last point at which anything can be added to it; everything the
         // three of them touch is handed to the template below, so nothing has to be assigned twice.
-        $this->title = Hooks::applyTypedFilters('page_title', $this->title, $this);
-        $this->headline = Hooks::applyTypedFilters('page_headline', $this->headline, $this);
+        $this->filterText();
         Hooks::doAction('page_before_render', $this);
 
         $this->smarty->assign('id', $this->id);
