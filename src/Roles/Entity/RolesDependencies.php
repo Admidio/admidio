@@ -50,12 +50,19 @@ class RolesDependencies extends Entity
         if (array_key_exists('rld_rol_id_parent', $this->dbColumns) && $this->dbColumns['rld_rol_id_parent'] !== '' &&
             array_key_exists('rld_rol_id_child', $this->dbColumns) && $this->dbColumns['rld_rol_id_child'] !== ''
         ) {
-            // Log record deletion, then delete
+            // The composite key means this cannot go through the base Entity::delete(), so the
+            // change set is logged and reported to the persistence hooks by hand, the same way it
+            // does it for itself - hookBulkDeletion() reads $this->dbColumns before clearing them,
+            // so the two ids are captured first.
+            $parentId = $this->dbColumns['rld_rol_id_parent'];
+            $childId = $this->dbColumns['rld_rol_id_child'];
+
             $this->logDeletion();
+            $this->hookBulkDeletion('rld_rol_id_parent = ? AND rld_rol_id_child = ?', array($parentId, $childId));
             $sql = 'DELETE FROM '.$this->tableName.'
-                     WHERE rld_rol_id_parent = ? -- $this->dbColumns[\'rld_rol_id_parent\']
-                     AND rld_rol_id_child = ? -- $this->dbColumns[\'rld_rol_id_child\']';
-            $this->db->queryPrepared($sql, array($this->dbColumns['rld_rol_id_parent'], $this->dbColumns['rld_rol_id_child']));
+                     WHERE rld_rol_id_parent = ? -- $parentId
+                     AND rld_rol_id_child = ? -- $childId';
+            $this->db->queryPrepared($sql, array($parentId, $childId));
         }
 
         $this->clear();
