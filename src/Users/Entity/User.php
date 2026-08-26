@@ -1984,13 +1984,6 @@ class User extends Entity
         LogChanges::endChangeSet($previousChangeSet);
         $this->db->endTransaction();
 
-        // After the transaction of this method, so that a creation that was rolled back here is not
-        // reported. A transaction of the caller still encloses it, so this is not yet the commit
-        // boundary that a committed-change hook needs.
-        if ($newRecord) {
-            Hooks::doAction('user_created', $this, $gCurrentUser);
-        }
-
         return $returnValue;
     }
 
