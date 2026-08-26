@@ -352,10 +352,10 @@ try {
 
     $jsonArray['data'] = array();
 
-    while ($row = $mglStatement->fetch(PDO::FETCH_ASSOC)) {
-        // Filter the raw row before anything is formatted from it. Nothing here reads a numeric
-        // index, so FETCH_ASSOC keeps the array a plugin sees free of the duplicate numeric keys
-        // FETCH_BOTH would otherwise add.
+    while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
+        // Filter the raw row before anything is formatted from it. FETCH_BOTH is kept, not FETCH_ASSOC:
+        // the list-configuration loop below reads $row[$ColumnNumberSql] by numeric position, so a
+        // plugin sees the same duplicated numeric/string keys the rest of this function always has.
         $row = Hooks::applyTypedFilters('list_data', $row, 'contacts');
 
         ++$rowNumber;
