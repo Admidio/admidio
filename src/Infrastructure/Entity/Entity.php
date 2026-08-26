@@ -253,16 +253,40 @@ class Entity
     public function readableName(): string
     {
         if (array_key_exists($this->columnPrefix . '_name', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix . '_name'] ?? '';
+            $name = $this->dbColumns[$this->columnPrefix . '_name'] ?? '';
         } elseif (array_key_exists($this->columnPrefix . '_title', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix . '_title'] ?? '';
+            $name = $this->dbColumns[$this->columnPrefix . '_title'] ?? '';
         } elseif (array_key_exists($this->columnPrefix . '_headline', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix . '_headline'] ?? '';
+            $name = $this->dbColumns[$this->columnPrefix . '_headline'] ?? '';
         } elseif (array_key_exists($this->columnPrefix . '_text', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix . '_text'] ?? '';
+            $name = $this->dbColumns[$this->columnPrefix . '_text'] ?? '';
         } else {
-            return $this->dbColumns[$this->keyColumnName] ?? '';
+            $name = $this->dbColumns[$this->keyColumnName] ?? '';
         }
+
+        return $this->filterReadableName($name);
+    }
+
+    /**
+     * Pass the result of readableName() through entity_readable_name and, for an entity that names
+     * itself for the persistence hooks (see getHookId()), through <hookId>_readable_name as well.
+     * A subclass that overrides readableName() calls this on its own return value instead of
+     * dispatching the filter itself, so that one name reaches every entity regardless of how its
+     * readable name is built.
+     *
+     * @param string $name The readable name before filtering.
+     * @return string The readable name after both filters.
+     */
+    protected function filterReadableName(string $name): string
+    {
+        $name = Hooks::applyFilters('entity_readable_name', $name, $this);
+
+        $hookId = $this->getHookId();
+        if ($hookId !== null) {
+            $name = Hooks::applyFilters($hookId . '_readable_name', $name, $this);
+        }
+
+        return $name;
     }
 
     /**

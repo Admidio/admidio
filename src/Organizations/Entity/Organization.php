@@ -1023,9 +1023,11 @@ class Organization extends Entity
     public function readableName(): string
     {
         if (array_key_exists($this->columnPrefix.'_longname', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_longname'];
+            $name = $this->dbColumns[$this->columnPrefix.'_longname'];
         } else {
-            return $this->dbColumns[$this->keyColumnName];
+            $name = $this->dbColumns[$this->keyColumnName];
         }
+
+        return $this->filterReadableName($name);
     }
 }
