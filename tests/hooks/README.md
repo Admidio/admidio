@@ -6,13 +6,18 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/entity-lifecycle.php
     php tests/hooks/entity-lifecycle-2.php
     php tests/hooks/entity-value-filter.php
+    php tests/hooks/entity-transactions.php
     php tests/hooks/entity-change-tracking-after.php
 
 Each script prints one line per check and exits non-zero when a check fails.
 
-`entity-lifecycle*.php` and `entity-value-filter.php` execute the real `Entity::save()` and
-`Entity::delete()`. `FakeDatabase` is a `Database` subclass over an in-memory SQLite connection that
-overrides the three methods `Entity` uses, so the rows are really written, read back and deleted.
+`entity-lifecycle*.php`, `entity-value-filter.php` and `entity-transactions.php` execute the real
+`Entity::save()` and `Entity::delete()`. `FakeDatabase` is a `Database` subclass over an in-memory
+SQLite connection that
+overrides the four methods `Entity` uses plus the transaction handling, so the rows are really
+written, read back, committed, rolled back and deleted. `BufferedStatement` exists because the SQLite
+driver of PDO answers `rowCount()` with 0 for a SELECT, which is the number `Entity::readData()`
+decides on.
 The changelog is switched off in `bootstrap.php`, it needs settings and tables of its own and is not
 what these tests are about.
 

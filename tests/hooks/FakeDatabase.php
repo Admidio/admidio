@@ -22,7 +22,10 @@ class FakeDatabase extends Database
 
     public function __construct()
     {
-        $this->sqlite = new PDO('sqlite::memory:', null, null, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        $this->sqlite = new PDO('sqlite::memory:', null, null, array(
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_STATEMENT_CLASS => array(BufferedStatement::class, array())
+        ));
     }
 
     /**
@@ -65,6 +68,46 @@ class FakeDatabase extends Database
     public function lastInsertId(): int
     {
         return (int)$this->sqlite->lastInsertId();
+    }
+
+    public function startTransaction(): bool
+    {
+        if ($this->transactions > 0) {
+            ++$this->transactions;
+            return true;
+        }
+
+        $this->sqlite->beginTransaction();
+        $this->transactions = 1;
+        return true;
+    }
+
+    public function endTransaction(): bool
+    {
+        if ($this->transactions === 0) {
+            return true;
+        }
+        if ($this->transactions > 1) {
+            --$this->transactions;
+            return true;
+        }
+
+        $this->sqlite->commit();
+        $this->transactions = 0;
+        $this->runAfterCommitCallbacks();
+        return true;
+    }
+
+    public function rollback(): bool
+    {
+        if ($this->transactions === 0) {
+            return false;
+        }
+
+        $this->sqlite->rollBack();
+        $this->transactions = 0;
+        $this->runAfterRollbackCallbacks();
+        return true;
     }
 
     /**
