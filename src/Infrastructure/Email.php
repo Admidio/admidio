@@ -2,6 +2,7 @@
 
 namespace Admidio\Infrastructure;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -663,16 +664,53 @@ class Email extends PHPMailer
      */
     public function sendEmail(): bool
     {
-        global $gSettingsManager, $gCurrentOrganization, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n, $gDisableEmailSending;
-
-        $errorMessage = '';
-        $errorRecipients = array();
+        global $gDisableEmailSending;
 
         // If email sending is disabled in the config.php than don't send emails.
         // This should only be used for demo systems so the email UI should still be there.
         if (isset($gDisableEmailSending) && $gDisableEmailSending) {
             return true;
         }
+
+        // The recipients are decided here, once, before anything is sent, so that a callback which
+        // removes an address removes it from every package the delivery splits the mail into. It has
+        // to answer with an array of the same shape: one entry per recipient with the keys email,
+        // name, firstname and surname.
+        $this->emRecipientsArray = Hooks::applyTypedFilters('email_recipients', $this->emRecipientsArray, $this->Subject);
+        $recipientCount = count($this->emRecipientsArray);
+
+        try {
+            $this->deliver();
+        } catch (\Throwable $exception) {
+            Hooks::doActionCatchErrors('email_failed', $this->Subject, $recipientCount, $exception->getMessage());
+
+            throw $exception;
+        }
+
+        Hooks::doActionCatchErrors('email_sent', $this->Subject, $recipientCount);
+
+        return true;
+    }
+
+    /**
+     * Hand the message to PHPMailer, in as many packages as the configured number of recipients per
+     * mail requires.
+     *
+     * The two diagnostics of sendEmail() are given the subject, the number of recipients and, for a
+     * failure, the error - never this object. PHPMailer keeps the SMTP user name and password in
+     * public properties, so a callback that was handed the message would be handed the credentials of
+     * the installation with it.
+     *
+     * @return void
+     * @throws \Admidio\Infrastructure\Exception|Exception
+     */
+    private function deliver(): void
+    {
+        global $gSettingsManager, $gCurrentOrganization, $gLogger, $gDebug, $gValidLogin, $gCurrentUser, $gL10n;
+
+        $errorMessage = '';
+        $errorRecipients = array();
+
         // If sending mode is "SINGLE" every E-mail is sent on its own, so we do not need to check anything else here
         if ($this->sendingMode == Email::SENDINGMODE_SINGLE) {
             foreach ($this->emRecipientsArray as $recipient) {
@@ -779,8 +817,6 @@ class Email extends PHPMailer
         // initialize recipient addresses so same email could be sent to other recipients
         $this->emRecipientsNames = array();
         $this->clearAddresses();
-
-        return true;
     }
 
     /**
