@@ -3,6 +3,7 @@
  * Enough of the Admidio runtime to execute the real Entity lifecycle against SQLite.
  */
 require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/BufferedStatement.php';
 require __DIR__ . '/FakeDatabase.php';
 
 define('DB_TYPE', 'mysql');            // the PostgreSQL boolean conversion must stay out of the way
