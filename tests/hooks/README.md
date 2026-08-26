@@ -14,6 +14,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/form-built.php
     php tests/hooks/page-hooks.php
     php tests/hooks/component-hooks.php
+    php tests/hooks/translation-hooks.php
 
 Each script prints one line per check and exits non-zero when a check fails.
 
@@ -36,6 +37,12 @@ of it is.
 
 `form-built.php` executes the real `FormPresenter`, which needs nothing but the autoloader, so the
 form, the dispatch and `validate()` are all the real ones.
+
+`translation-hooks.php` executes the real `Language` against the real `languages/*.xml` of this
+checkout, so the cache, the fallback to the reference language and the placeholders are the real ones;
+only the four path constants of the Admidio bootstrap are defined in the test. The text it uses to
+exercise the fallback is looked up rather than named, so the check keeps working when the translation
+catches up.
 
 `component-hooks.php` works the same way as `page-hooks.php`: `Component` reads the settings, the
 current user and the database, so the stand-in carries the two wrappers verbatim. The wrappers are the
