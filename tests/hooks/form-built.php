@@ -132,4 +132,134 @@ $restored = unserialize(serialize($form));
 $restored->getElements();
 check('but one that was stored unfinished still gets its chance', $dispatched === 1, (string)$dispatched);
 
+// ------------------------------------------------------------------ form_select_options
+
+/** A form with the three element types whose entries validate() enforces. */
+function aFormWithChoices(): FormPresenter
+{
+    Hooks::reset();
+    $form = new FormPresenter('adm_choices_form', 'form.tpl', 'index.php');
+    $form->addSelectBox('role', 'Role', array(1 => 'Choir', 2 => 'Board', 3 => 'Youth'));
+    $form->addRadioButton('gender', 'Gender', array('f' => 'female', 'm' => 'male'));
+    $form->addInput('note', 'Note', '');
+
+    return $form;
+}
+
+function offeredIds(FormPresenter $form, string $elementId): string
+{
+    // getElements() finishes the form, getElement() deliberately does not
+    $element = $form->getElements()[$elementId];
+    $values = $element['values'];
+    // a select carries a list of id/value pairs, a radio an array of value to label
+    $ids = ($element['type'] === 'select') ? array_column($values, 'id') : array_keys($values);
+
+    return implode(',', $ids);
+}
+
+$form = aFormWithChoices();
+check(
+    'without a filter the entries are the ones the form was given',
+    offeredIds($form, 'role') === ',1,2,3',
+    offeredIds($form, 'role')
+);
+
+// --------------------------------------------------------------------- a filter can take one away
+
+$form = aFormWithChoices();
+Hooks::addFilter('form_select_options', function (array $values, string $elementId, string $type) {
+    if ($elementId !== 'role') {
+        return $values;
+    }
+
+    return array_values(array_filter($values, function (array $entry) {
+        return (string)$entry['id'] !== '2';
+    }));
+});
+
+check('a filter can remove an entry of a select', offeredIds($form, 'role') === ',1,3', offeredIds($form, 'role'));
+check('and leaves the other elements alone', offeredIds($form, 'gender') === 'f,m', offeredIds($form, 'gender'));
+
+// ------------------------------------------------------------- and the removal is enforced on POST
+
+$accepted = $form->validate(array('adm_csrf_token' => $form->getCsrfToken(), 'role' => '1', 'gender' => 'f', 'note' => ''));
+check('an entry that is still offered is accepted', ($accepted['role'] ?? null) == 1, var_export($accepted['role'] ?? null, true));
+
+$rejected = false;
+try {
+    $form->validate(array('adm_csrf_token' => $form->getCsrfToken(), 'role' => '2', 'gender' => 'f', 'note' => ''));
+} catch (\Throwable $exception) {
+    $rejected = true;
+}
+check('the entry the filter removed is refused, not only hidden', $rejected);
+
+// --------------------------------------------------------------------------------- a radio group
+
+$form = aFormWithChoices();
+Hooks::addFilter('form_select_options', function (array $values, string $elementId) {
+    if ($elementId !== 'gender') {
+        return $values;
+    }
+    unset($values['m']);
+
+    return $values;
+});
+check('a radio group keeps its own shape', offeredIds($form, 'gender') === 'f', offeredIds($form, 'gender'));
+
+$rejected = false;
+try {
+    $form->validate(array('adm_csrf_token' => $form->getCsrfToken(), 'role' => '1', 'gender' => 'm', 'note' => ''));
+} catch (\Throwable $exception) {
+    $rejected = true;
+}
+check('and its removed entry is refused too', $rejected);
+
+// ----------------------------------------------------------------- only the enforced types are asked
+
+$form = aFormWithChoices();
+$asked = array();
+Hooks::addFilter('form_select_options', function (array $values, string $elementId, string $type) use (&$asked) {
+    $asked[] = $elementId . ':' . $type;
+    return $values;
+});
+$form->finalize();
+check(
+    'the filter is asked for the selects and radios only, never for a text field',
+    $asked === array('role:select', 'gender:radio'),
+    implode(' ', $asked)
+);
+
+// ------------------------------------------------------------------ it runs after form_built
+
+$form = aFormWithChoices();
+$order = array();
+Hooks::addAction('form_built', function (FormPresenter $built) use (&$order) {
+    $order[] = 'built';
+    $built->addSelectBox('room', 'Room', array(7 => 'Hall'));
+});
+Hooks::addFilter('form_select_options', function (array $values, string $elementId) use (&$order) {
+    $order[] = 'options:' . $elementId;
+    return $values;
+});
+$form->finalize();
+check(
+    'a select that form_built added is filtered as well',
+    $order === array('built', 'options:role', 'options:gender', 'options:room'),
+    implode(' ', $order)
+);
+
+// -------------------------------------------------------------------- the answer has to be an array
+
+$form = aFormWithChoices();
+Hooks::addFilter('form_select_options', function () {
+    return 'not an array';
+});
+$refused = false;
+try {
+    $form->finalize();
+} catch (\Throwable $exception) {
+    $refused = str_contains($exception->getMessage(), 'returned string instead of array');
+}
+check('a filter that does not answer with an array is refused', $refused);
+
 exit(testSummary());
