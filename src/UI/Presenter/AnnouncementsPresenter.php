@@ -71,7 +71,7 @@ class AnnouncementsPresenter extends PagePresenter
     /**
      * Create content that is used on several pages and could be called in other methods. It will
      * create a functions menu and a filter navbar.
-     * @param string $view Name of the view that should be created. This could be 'cards' or 'list'.
+     * @param string $view Name of the view that should be created. This should be 'cards'.
      * @return void
      * @throws Exception
      */
@@ -276,39 +276,6 @@ class AnnouncementsPresenter extends PagePresenter
         $gCurrentSession->addFormObject($form);
     }
 
-    /**
-     * Read all available forum topics from the database and an HTML list with all topics.
-     * @param int $offset Offset of the first record that should be returned.
-     * @throws Exception
-     * @throws \DateMalformedStringException
-     */
-    public function createList(int $offset = 0): void
-    {
-        global $gL10n, $gSettingsManager, $gDb;
-
-        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'cards', 'cat_uuid' => $this->categoryUUID));
-
-        $this->prepareData($offset);
-        $categoryService = new ForumService($gDb, $this->categoryUUID);
-
-        $this->setHtmlID('adm_forum_cards');
-        $this->createSharedHeader('list');
-
-        if (count($this->categories->getVisibleCategories()) > 1) {
-            $this->smarty->assign('showCategories', true);
-        } else {
-            $this->smarty->assign('showCategories', false);
-        }
-
-        $this->smarty->assign('list', $this->templateData);
-        $this->smarty->assign('l10n', $gL10n);
-        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->getTopicCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
-        try {
-            $this->pageContent .= $this->smarty->fetch('modules/forum.list.tpl');
-        } catch (\Smarty\Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-    }
 
     /**
      * @param int $offset Offset of the first record that should be returned.
