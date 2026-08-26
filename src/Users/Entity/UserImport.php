@@ -122,6 +122,7 @@ class UserImport extends User
             } elseif ($this->importMode === self::USER_IMPORT_DUPLICATE) {
                 // save as new user
                 $this->clear();
+                $this->initializeNewRecord();
             }
         }
 
@@ -152,6 +153,7 @@ class UserImport extends User
                 } elseif ($this->importMode === self::USER_IMPORT_DUPLICATE) {
                     // save as new user
                     $this->clear();
+                    $this->initializeNewRecord();
                 }
             }
         }

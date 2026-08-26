@@ -210,6 +210,7 @@
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_A_TO_Z">A to Z</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
+  <string name="SYS_ACCOUNT_ACTIVATED">Account activated</string>
   <string name="SYS_ACTIVATE_ROLE">Activate role</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">If you re-activate the role #VAR1_BOLD#, the role members are assigned again with permissions and the role is selectable in all lists.\n\nDo you want to re-activate the roles?</string>
   <string name="SYS_ACTIVE_CONTACTS">Active contacts</string>
