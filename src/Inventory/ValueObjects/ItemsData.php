@@ -1173,22 +1173,31 @@ class ItemsData
 
         $item = new Item($this->mDb, $this, $this->mItemId);
 
-        // delete all item data. The values are logged before they are removed, a plain DELETE would
-        // take them out of the change history without a trace.
+        // delete all item data. The values are logged and reported to the persistence hooks before
+        // they are removed, a plain DELETE would take them out of the change history and out of the
+        // hook API without a trace - the same reason Entity::deleteDependentRecords() calls both.
+        // This class is not an Entity subclass, so it calls logBulkDeletion() and hookBulkDeletion()
+        // itself instead of going through that helper.
         $itemData = new ItemData($this->mDb, $this);
         $itemData->logBulkDeletion(array('ind_id'), 'ind_ini_id = ?', array($this->mItemId));
+        $itemData->hookBulkDeletion('ind_ini_id = ?', array($this->mItemId), $item);
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
 
         // delete all item borrow data
         $itemBorrowData = new ItemBorrowData($this->mDb, $this);
         $itemBorrowData->logBulkDeletion(array('inb_id'), 'inb_ini_id = ?', array($this->mItemId));
+        $itemBorrowData->hookBulkDeletion('inb_ini_id = ?', array($this->mItemId), $item);
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
         $this->mDb->queryPrepared($sql, array($this->mItemId));
 
         // Log and delete the item itself last. The change history shows a change with the record it
         // is about, and it recognizes that record as the entry that a deletion logs last.
+        // hookBulkDeletion() is used instead of $item->delete() so that the exact WHERE condition -
+        // including the organization guard - is the one that decides what is actually deleted; it
+        // dispatches the same inventory_item_deleting / inventory_item_deleted as delete() would.
         $item->logDeletion();
+        $item->hookBulkDeletion('ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL)', array($this->mItemId, $this->organizationId));
 
         $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
         $this->mDb->queryPrepared($sql, array($this->mItemId, $this->organizationId));
