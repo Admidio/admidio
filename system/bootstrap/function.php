@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -31,6 +32,10 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
 function handleException(Throwable $e, bool $jsonResponse = false, bool $inlineResponse = false): void
 {
     global $gDebug, $gMessage, $gHtmlPurifierFilter;
+
+    // The request ends here. A listener may report the exception, but it must not be able to replace
+    // it with one of its own, so this is a doActionCatchErrors() site.
+    Hooks::doActionCatchErrors('exception_terminating', $e, $jsonResponse);
 
     $message = $gHtmlPurifierFilter->purify($e->getMessage());
 
