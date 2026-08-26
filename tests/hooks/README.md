@@ -11,6 +11,7 @@ Run them with the PHP CLI, they need nothing but `vendor/`:
     php tests/hooks/entity-change-tracking-after.php
     php tests/hooks/change-notification.php
     php tests/hooks/user-valid-default.php
+    php tests/hooks/form-built.php
 
 Each script prints one line per check and exits non-zero when a check fails.
 
@@ -30,6 +31,9 @@ the entity subclasses carry the hook ID, the sensitive columns and the ignored c
 `User`, `UserData` and `Membership`; `$gProfileFields`, `$gSettingsManager` and `$gL10n` are stubs at the
 top of the file, because the mail is not what is being tested - what the listener hears and what it makes
 of it is.
+
+`form-built.php` executes the real `FormPresenter`, which needs nothing but the autoloader, so the
+form, the dispatch and `validate()` are all the real ones.
 
 `user-valid-default.php` is a mixture of the two. The real `User` cannot be instantiated without a
 `ProfileFields` object and a database, so its constructor and its `clear()` are carried in the test
