@@ -18,6 +18,7 @@ class ProbePage
     protected string $id = '';
     protected string $title = '';
     protected string $headline = '';
+    protected bool $textFiltered = false;
     public array $assigned = array();
 
     public function __construct()
@@ -50,11 +51,33 @@ class ProbePage
         $this->headline = $headline;
     }
 
+    /**
+     * filterText(), as it is after the patch: page_title and page_headline run exactly once,
+     * however many times this is called and whether it runs before or after show().
+     */
+    public function filterText(): void
+    {
+        if ($this->textFiltered) {
+            return;
+        }
+        $this->textFiltered = true;
+
+        $this->title = Hooks::applyTypedFilters('page_title', $this->title, $this);
+        $this->headline = Hooks::applyTypedFilters('page_headline', $this->headline, $this);
+    }
+
+    /** getFilteredHeadline(), as it is after the patch: for a caller that needs it before show(). */
+    public function getFilteredHeadline(): string
+    {
+        $this->filterText();
+
+        return $this->headline;
+    }
+
     /** the head of show(), as it is after the patch */
     public function show(): void
     {
-        $this->title = Hooks::applyTypedFilters('page_title', $this->title, $this);
-        $this->headline = Hooks::applyTypedFilters('page_headline', $this->headline, $this);
+        $this->filterText();
         Hooks::doAction('page_before_render', $this);
 
         $this->assigned['id'] = $this->id;
@@ -117,6 +140,22 @@ $page->show();
 check('page_title filters the title', $page->assigned['title'] === 'Admidio - Contacts | Example Club', $page->assigned['title']);
 // the headline filter above only answers 'Our contacts' because it was handed the page and asked it
 check('page_headline filters the headline and is handed the page', $page->assigned['headline'] === 'Our contacts', $page->assigned['headline']);
+
+// --------------------------------------- getFilteredHeadline() runs the filter exactly once, either side of show()
+
+$page = aPage();
+$calls = 0;
+Hooks::addFilter('page_headline', function (string $headline) use (&$calls) {
+    $calls++;
+    return $headline;
+});
+$first = $page->getFilteredHeadline();
+$second = $page->getFilteredHeadline();
+check('a caller can read the filtered headline before show()', $first === 'Contacts', $first);
+check('asking twice does not filter twice', $calls === 1, (string) $calls);
+$page->show();
+check('show() finds the work already done', $calls === 1, (string) $calls);
+check('and the page renders with the same value', $page->assigned['headline'] === $second, $page->assigned['headline']);
 
 // ------------------------------------------------------------------ the filters run in priority order
 
