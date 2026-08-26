@@ -289,7 +289,8 @@ class Component extends Entity
                 break;
 
             case 'CATEGORY-REPORT':
-                if ($gCurrentUser->checkRolesRight('rol_all_lists_view')) {
+                if ($gSettingsManager->getBool('category_report_module_enabled')
+                && $gCurrentUser->checkRolesRight('rol_all_lists_view')) {
                     return true;
                 }
                 break;
