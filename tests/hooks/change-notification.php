@@ -571,14 +571,14 @@ $notification->suppressUser(1);
 
 check('a suppressed user gets no notification', !$notification->reportable(1));
 
-// ------------------------------------------------------------------------------ user_state_changed
+// ------------------------------------------------------------------------------ user_changes_cumulated
 
 $db = newDatabase();
 $user = aUser($db);
 $notification = newNotification();
 
 $states = array();
-Hooks::addAction('user_state_changed', function (?string $uuid, array $reasons) use (&$states) {
+Hooks::addAction('user_changes_cumulated', function (?string $uuid, array $reasons) use (&$states) {
     $states[] = ($uuid ?? '') . ':' . implode(',', $reasons);
 });
 
@@ -603,7 +603,7 @@ $db = newDatabase();
 $user = aUser($db);
 $notification = newNotification();
 $states = array();
-Hooks::addAction('user_state_changed', function (?string $uuid, array $reasons) use (&$states) {
+Hooks::addAction('user_changes_cumulated', function (?string $uuid, array $reasons) use (&$states) {
     $states[] = ($uuid ?? '') . ':' . implode(',', $reasons);
 });
 $user->setValue('usr_number_login', 7);
@@ -611,6 +611,6 @@ $user->setValue('usr_actual_login', '2026-08-26 10:00:00');
 $user->save();
 $notification->shutdown();
 
-check('a login is not a state change', $states === array(), implode(' ', $states));
+check('a login is not a change of the user', $states === array(), implode(' ', $states));
 
 exit(testSummary());
