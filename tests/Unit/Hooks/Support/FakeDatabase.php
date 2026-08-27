@@ -1,5 +1,5 @@
 <?php
-namespace Admidio\Tests\Hooks;
+namespace Admidio\Tests\Unit\Hooks\Support;
 
 use Admidio\Infrastructure\Database;
 use PDO;
@@ -26,6 +26,26 @@ class FakeDatabase extends Database
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_STATEMENT_CLASS => array(BufferedStatement::class, array())
         ));
+    }
+
+    /**
+     * A table with the columns that Admidio entities normally have, in the shape createTable()
+     * expects: the ID, UUID, name, secret and the four creator/editor bookkeeping columns.
+     * @param string $prefix Column prefix of the table, e.g. **room**.
+     * @return array<string,array>
+     */
+    public static function columnDefinition(string $prefix): array
+    {
+        return array(
+            $prefix . '_id' => array('type' => 'integer', 'null' => false, 'key' => true, 'serial' => true, 'default' => null),
+            $prefix . '_uuid' => array('type' => 'varchar(36)', 'null' => false, 'key' => false, 'serial' => false, 'default' => null),
+            $prefix . '_name' => array('type' => 'varchar(255)', 'null' => true, 'key' => false, 'serial' => false, 'default' => null),
+            $prefix . '_secret' => array('type' => 'varchar(255)', 'null' => true, 'key' => false, 'serial' => false, 'default' => null),
+            $prefix . '_usr_id_create' => array('type' => 'integer', 'null' => true, 'key' => false, 'serial' => false, 'default' => null),
+            $prefix . '_timestamp_create' => array('type' => 'timestamp', 'null' => true, 'key' => false, 'serial' => false, 'default' => null),
+            $prefix . '_usr_id_change' => array('type' => 'integer', 'null' => true, 'key' => false, 'serial' => false, 'default' => null),
+            $prefix . '_timestamp_change' => array('type' => 'timestamp', 'null' => true, 'key' => false, 'serial' => false, 'default' => null)
+        );
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace Admidio\Tests\Hooks;
+namespace Admidio\Tests\Unit\Hooks\Support;
 
 use PDO;
 use PDOStatement;
@@ -7,7 +7,7 @@ use PDOStatement;
 /**
  * A PDOStatement that answers rowCount() for a SELECT.
  *
- * The SQLite driver of PDO returns 0 there, it only counts the rows an INSERT, UPDATE or DELETE
+ * The SQLite driver of PDO answers 0 there, it only counts the rows an INSERT, UPDATE or DELETE
  * touched. Entity::readData() decides whether it found its record by exactly that number, so
  * without this the real code would take the not-found branch for every record that is read back.
  * The rows of a SELECT are therefore buffered on execute() and served from that buffer.

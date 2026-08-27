@@ -1,6 +1,12 @@
 <?php
-// Harness around the change-tracking part of Entity::setValue() as it now stands in the working tree,
-// extracted verbatim so the test cannot drift from the code.
+namespace Admidio\Tests\Unit\Hooks\Support;
+
+use DateTime;
+
+/**
+ * Harness around the change-tracking part of Entity::setValue() as it stands in the working tree,
+ * extracted verbatim so the test cannot drift from the code.
+ */
 class EntityChangeTrackingFixed
 {
     public array $dbColumns = [];
