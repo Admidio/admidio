@@ -4,7 +4,6 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
-use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
@@ -226,37 +225,6 @@ final class UpdateStepsCode
     }
 
     /**
-     * This method will check if there are overview plugins available and if yes, it will try to install them.
-     * Because we added the new column com_overview_plugin to the components table before, we need to reload the
-     * database columns before we can check if the plugin is an overview plugin or not.
-     * @return void
-     * @throws Exception
-     */
-    public static function updateStep51InstallOverviewPlugins(): void
-    {
-        global $gDb;
-
-        // because we added the new column com_overview_plugin to the components table before, we need to reload the database columns
-        $gDb->initializeTableColumnProperties();
-
-        $pluginManager = new PluginManager();
-        $plugins = $pluginManager->getAvailablePlugins();
-
-        foreach ($plugins as $plugin) {
-            // check, if the plugin has an interface, if not, scip it
-            if (!isset($plugin['interface']) || $plugin['interface'] == null) {
-                continue;
-            }
-            // check if the plugin is an overview plugin, if so, install it
-            $instance = $plugin['interface']::getInstance();
-            if ($instance->isAdmidioPlugin()) {
-                // Install the overview plugin
-                $instance->doInstall();
-            }
-        }
-    }
-
-    /**
      * Move the built-in plugins onto the new plugin runtime.
      *
      * The previous runtime identified a plugin by its translated display name and stored an
@@ -294,36 +262,6 @@ final class UpdateStepsCode
                 PluginInstaller::removeMenuEntries(PluginRegistry::getComponentId($id));
             }
         }
-    }
-
-    /**
-     * Give every organization a row for every preference of every plugin.
-     *
-     * Until now a plugin wrote its preferences with the settings manager of the organization the
-     * administrator happened to be in, so every other organization had none. Reading one of them
-     * there answered a registered default instead of a stored value, which is not what a
-     * preference is.
-     *
-     * @throws Exception
-     */
-    public static function updateStep51SeedPluginPreferences(): void
-    {
-        $pluginManager = new PluginManager();
-        $names = array();
-
-        foreach ($pluginManager->getAvailablePlugins() as $plugin) {
-            if (!isset($plugin['interface']) || $plugin['interface'] === null) {
-                continue;
-            }
-
-            // reading the metadata registers the definitions of the plugin
-            $instance = $plugin['interface']::getInstance();
-            if ($instance->isInstalled()) {
-                $names = array_merge($names, $instance->getPreferenceNames());
-            }
-        }
-
-        PreferencesService::seedDefaults(array_values(array_unique($names)));
     }
 
     /**

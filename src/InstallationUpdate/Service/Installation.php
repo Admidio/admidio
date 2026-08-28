@@ -6,7 +6,6 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
-use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PasswordUtils;
@@ -910,29 +909,12 @@ class Installation
     }
 
     /**
-     * Install all overview plugins that are delivered with Admidio.
+     * Install the plugins that are delivered with Admidio.
      * @return void
      * @throws Exception
      */
     private static function installPlugins(): void
     {
-        $pluginManager = new PluginManager();
-        $plugins = $pluginManager->getAvailablePlugins();
-
-        foreach ($plugins as $plugin) {
-            // check, if the plugin has an interface, if not, scip it
-            if (!isset($plugin['interface']) || $plugin['interface'] == null) {
-                continue;
-            }
-            // check if the plugin is an overview plugin, if so, install it
-            $instance = $plugin['interface']::getInstance();
-            if ($instance->isAdmidioPlugin()) {
-                // Install the overview plugin
-                $instance->doInstall();
-            }
-        }
-
-        // A plugin of the new format has no interface, so it is installed through its own installer.
         foreach (self::DEFAULT_PLUGINS as $id) {
             $plugin = PluginRegistry::get($id);
             if ($plugin !== null && $plugin->isValid() && !PluginRegistry::isInstalled($id)) {
