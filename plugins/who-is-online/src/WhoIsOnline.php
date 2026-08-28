@@ -92,25 +92,28 @@ final class WhoIsOnline
     {
         return $plugin->renderTemplate($page, 'plugin.who-is-online.tpl', array(
             'name' => $plugin->id,
-            'message' => self::getText()
+            'message' => self::getText($plugin)
         ));
     }
 
     /**
      * Who is on the website right now, as one readable sentence.
+     * @param Plugin $plugin
      * @return string
      * @throws Exception
      */
-    private static function getText(): string
+    private static function getText(Plugin $plugin): string
     {
-        global $gCurrentOrgId, $gDb, $gL10n, $gValidLogin, $gCurrentUserId, $gSettingsManager;
+        global $gCurrentOrgId, $gDb, $gL10n, $gValidLogin, $gCurrentUserId;
+
+        $config = $plugin->getSettingValues();
 
         // Find the user IDs of all sessions between the reference time and now.
         $refDate = (new DateTime())
-            ->sub(new DateInterval('PT' . $gSettingsManager->getInt('who_is_online_time_still_active') . 'M'))
+            ->sub(new DateInterval('PT' . $config['who_is_online_time_still_active'] . 'M'))
             ->format('Y-m-d H:i:s');
-        $showVisitors = $gSettingsManager->getBool('who_is_online_show_visitors');
-        $showMembersToVisitors = $gSettingsManager->getInt('who_is_online_show_members_to_visitors');
+        $showVisitors = (bool)$config['who_is_online_show_visitors'];
+        $showMembersToVisitors = (int)$config['who_is_online_show_members_to_visitors'];
 
         $sql = 'SELECT ses_usr_id, usr_uuid, usr_login_name
             FROM ' . TBL_SESSIONS . '
@@ -123,7 +126,7 @@ final class WhoIsOnline
             $sql .= '
             AND ses_usr_id IS NOT NULL';
         }
-        if (!$gSettingsManager->getBool('who_is_online_show_self') && $gValidLogin) {
+        if (!$config['who_is_online_show_self'] && $gValidLogin) {
             $sql .= '
             AND ses_usr_id <> ? -- $gCurrentUserId';
             $queryParams[] = $gCurrentUserId;
@@ -164,7 +167,7 @@ final class WhoIsOnline
             $allVisibleOnlineUsers[] = $gL10n->get('PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS', array($countVisitors));
         }
 
-        $textOnlineVisitors = $gSettingsManager->getBool('who_is_online_show_users_side_by_side')
+        $textOnlineVisitors = $config['who_is_online_show_users_side_by_side']
             ? implode(', ', $allVisibleOnlineUsers)
             : '<br />' . implode('<br />', $allVisibleOnlineUsers);
 

@@ -8,6 +8,7 @@
 namespace Admidio\Tests\Unit\Plugins;
 
 use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Tests\Unit\Plugins\Support\PluginSettingsDouble;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
 
 final class PluginTest extends PluginTestCase
@@ -49,7 +50,7 @@ final class PluginTest extends PluginTestCase
     {
         $plugin = Plugin::read(self::fixturePath('hello'));
 
-        $this->assertSame(array('hello_greeting', 'hello_shout'), array_keys($plugin->settings));
+        $this->assertSame(array('hello_greeting', 'hello_shout', 'hello_repeat', 'hello_names'), array_keys($plugin->settings));
         $this->assertSame('Hello', $plugin->settings['hello_greeting']['default']);
         $this->assertFalse($plugin->settings['hello_shout']['default']);
         $this->assertSame('boolean', $plugin->settings['hello_shout']['type']);
@@ -197,6 +198,64 @@ final class PluginTest extends PluginTestCase
             ADMIDIO_URL . '/plugins/dependent/plugin.php',
             Plugin::read(self::fixturePath('dependent'))->getUrl(),
             'a plugin without pages keeps the entry file as its menu URL'
+        );
+    }
+
+    /**
+     * @testdox A setting is read in the type the manifest declares for it
+     */
+    public function testSettingValuesAreTyped(): void
+    {
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array(
+            'hello_greeting' => 'Moin',
+            'hello_shout' => '1',
+            'hello_repeat' => '7',
+            'hello_names' => 'Ada,Grace'
+        ));
+
+        $this->assertSame(
+            array(
+                'hello_greeting' => 'Moin',
+                'hello_shout' => true,
+                'hello_repeat' => 7,
+                'hello_names' => array('Ada', 'Grace')
+            ),
+            Plugin::read(self::fixturePath('hello'))->getSettingValues()
+        );
+    }
+
+    /**
+     * @testdox A setting this organization has no row for answers the declared default
+     */
+    public function testSettingValuesFallBackToTheDeclaredDefault(): void
+    {
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array('hello_greeting' => 'Moin'));
+
+        $this->assertSame(
+            array(
+                'hello_greeting' => 'Moin',
+                'hello_shout' => false,
+                'hello_repeat' => 3,
+                'hello_names' => array()
+            ),
+            Plugin::read(self::fixturePath('hello'))->getSettingValues(),
+            'registering a preference does not give it a row, so reading one must not fail'
+        );
+    }
+
+    /**
+     * @testdox A list whose entries carry keys of their own reads them from its companion preference
+     */
+    public function testSettingValuesReadListKeys(): void
+    {
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array(
+            'hello_names' => 'Ada,Grace',
+            'hello_names_keys' => '3,5'
+        ));
+
+        $this->assertSame(
+            array(3 => 'Ada', 5 => 'Grace'),
+            Plugin::read(self::fixturePath('hello'))->getSettingValues()['hello_names']
         );
     }
 }
