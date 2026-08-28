@@ -1,10 +1,8 @@
 <?php
-namespace RandomPhoto\classes\Service;
+namespace AdmidioPlugin\RandomPhoto\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use RandomPhoto\classes\RandomPhoto;
-use ReflectionException;
 
 /**
  * @copyright The Admidio Team
@@ -29,18 +27,16 @@ final class UpdateStepsCode
 
     /**
      * Retrieve previous settings from config file and update the database settings accordingly.
-     * @throws Exception|ReflectionException
+     * @throws Exception
      */
     public static function updateStep10RetrievePreviousSettings()
     {
         // $gL10n is needed to get the localized rank names from the config file
         global $gL10n, $gSettingsManager;
 
-        $pluginRandomPhoto = RandomPhoto::getInstance();
-        $configValues = $pluginRandomPhoto::getPluginConfig();
 
         // check if there is a config.php file with previous settings in the random_photo plugin folder
-        $configFile = dirname(__DIR__, 4) . '/adm_plugins/random_photo/config.php';
+        $configFile = ADMIDIO_PATH . '/adm_plugins/random_photo/config.php';
         if (file_exists($configFile)) {
             // include the config file to get the previous settings
             include $configFile;

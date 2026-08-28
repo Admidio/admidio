@@ -48,6 +48,20 @@ final class BuiltInPluginsTest extends PluginTestCase
                     'birthday_sort_sql'
                 )
             ),
+            'random-photo' => array(
+                'random-photo',
+                'AdmidioPlugin\\RandomPhoto\\',
+                array(
+                    'random_photo_plugin_enabled',
+                    'random_photo_overview_sequence',
+                    'random_photo_max_char_per_word',
+                    'random_photo_max_width',
+                    'random_photo_max_height',
+                    'random_photo_albums',
+                    'random_photo_album_photo_number',
+                    'random_photo_show_album_link'
+                )
+            ),
             'who-is-online' => array(
                 'who-is-online',
                 'AdmidioPlugin\\WhoIsOnline\\',

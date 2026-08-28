@@ -1,0 +1,64 @@
+{
+    "name": "PLG_RANDOM_PHOTO_PLUGIN_NAME",
+    "description": "PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-image-fill",
+    "requires": {
+        "admidio": ">=5.1",
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "AdmidioPlugin\\RandomPhoto\\": "src/"
+    },
+    "settings": {
+        "random_photo_plugin_enabled": {
+            "type": "enum",
+            "default": "1",
+            "values": ["0", "1", "2"],
+            "label": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC"
+        },
+        "random_photo_overview_sequence": {
+            "type": "integer",
+            "default": 4
+        },
+        "random_photo_max_char_per_word": {
+            "type": "integer",
+            "default": 0,
+            "label": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC"
+        },
+        "random_photo_max_width": {
+            "type": "integer",
+            "default": 0,
+            "label": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC"
+        },
+        "random_photo_max_height": {
+            "type": "integer",
+            "default": 0,
+            "label": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC"
+        },
+        "random_photo_albums": {
+            "type": "integer",
+            "default": 0,
+            "label": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC"
+        },
+        "random_photo_album_photo_number": {
+            "type": "integer",
+            "default": 0,
+            "label": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC"
+        },
+        "random_photo_show_album_link": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK",
+            "description": "PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC"
+        }
+    }
+}
