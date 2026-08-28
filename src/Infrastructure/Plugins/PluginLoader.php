@@ -193,9 +193,7 @@ final class PluginLoader
              */
             CliTaskRegistry::setPluginContext($plugin->id);
             try {
-                // Not include_once: the guard above is the authoritative one, and it can be
-                // released again by reset().
-                include $plugin->getEntryFile();
+                self::includeEntryFile($plugin->getEntryFile());
             } finally {
                 CliTaskRegistry::setPluginContext(null);
             }
@@ -206,6 +204,25 @@ final class PluginLoader
         }
 
         return true;
+    }
+
+    /**
+     * Include the entry file of a plugin in a scope of its own.
+     *
+     * Top-level code in an included file runs in the scope of whatever included it, so an entry file
+     * that assigns a variable would otherwise overwrite a local of load(). The closure gives the
+     * plugin an empty scope; globals, functions and classes are unaffected.
+     *
+     * Not include_once: the caller's own guard is the authoritative one, and it can be released
+     * again by reset().
+     * @param string $file
+     * @return void
+     */
+    private static function includeEntryFile(string $file): void
+    {
+        (static function () use ($file): void {
+            include $file;
+        })();
     }
 
     /**

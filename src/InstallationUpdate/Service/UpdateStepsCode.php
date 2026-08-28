@@ -2,7 +2,10 @@
 
 namespace Admidio\InstallationUpdate\Service;
 
+use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -249,6 +252,46 @@ final class UpdateStepsCode
             if ($instance->isAdmidioPlugin()) {
                 // Install the overview plugin
                 $instance->doInstall();
+            }
+        }
+    }
+
+    /**
+     * Move the built-in plugins onto the new plugin runtime.
+     *
+     * The previous runtime identified a plugin by its translated display name and stored an
+     * uppercased com_name_intern; the registry identifies a plugin by its directory and nothing
+     * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
+     * again with everything it already has - its version, its preferences and its data.
+     *
+     * A built-in plugin that has no component row at all is installed here, and the menu entry of a
+     * plugin that only contributes a widget is removed, because the file it pointed at is gone.
+     * @return void
+     * @throws Exception
+     */
+    public static function updateStep51ConvertBuiltInPlugins(): void
+    {
+        PluginRegistry::reset();
+
+        foreach (Installation::DEFAULT_PLUGINS as $id) {
+            $plugin = PluginRegistry::get($id);
+            if ($plugin === null || !$plugin->isValid()) {
+                // The plugin is still on the previous runtime, or it is not shipped any more.
+                continue;
+            }
+
+            if (!PluginRegistry::isInstalled($id)) {
+                PluginInstaller::install($plugin);
+                continue;
+            }
+
+            // The plugin keeps its component row and every setting an administrator made. What it
+            // needs is a row for the preferences the new format adds - loading it registers them.
+            PluginLoader::load($plugin);
+            PreferencesService::seedDefaults(PluginInstaller::getPreferenceNames($plugin));
+
+            if (!$plugin->hasPages()) {
+                PluginInstaller::removeMenuEntries(PluginRegistry::getComponentId($id));
             }
         }
     }

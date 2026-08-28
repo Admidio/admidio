@@ -5,7 +5,9 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
@@ -35,6 +37,17 @@ use UnexpectedValueException;
  */
 class Installation
 {
+    /**
+     * The plugins a new Admidio installation gets. Everything else below plugins/ - the example
+     * plugin, anything an administrator added - is installed from the plugin administration.
+     * The update uses the same list to move an existing installation onto the new plugin runtime.
+     * @var array<int,string>
+     */
+    public const DEFAULT_PLUGINS = array(
+        'announcement-list', 'birthday', 'calendar', 'event-list', 'latest-documents-files',
+        'login-form', 'random-photo', 'who-is-online'
+    );
+
     /**
      * Checks whether the minimum requirements for PHP and MySQL have been met.
      * @param Database $database Object of the database that should be checked. A connection should be established.
@@ -916,6 +929,14 @@ class Installation
             if ($instance->isAdmidioPlugin()) {
                 // Install the overview plugin
                 $instance->doInstall();
+            }
+        }
+
+        // A plugin of the new format has no interface, so it is installed through its own installer.
+        foreach (self::DEFAULT_PLUGINS as $id) {
+            $plugin = PluginRegistry::get($id);
+            if ($plugin !== null && $plugin->isValid() && !PluginRegistry::isInstalled($id)) {
+                PluginInstaller::install($plugin);
             }
         }
     }

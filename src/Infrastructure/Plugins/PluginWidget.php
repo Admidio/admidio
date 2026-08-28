@@ -250,11 +250,8 @@ final class PluginWidget
     }
 
     /**
-     * Render a template of a plugin for the overview page.
-     *
-     * The template is fetched through the Smarty object of the page, so the template directories of
-     * the theme and its fallback are already registered and a theme can override the template of a
-     * plugin.
+     * Render a template of a plugin for the overview page. This is Plugin::renderTemplate() written
+     * the way the hook example reads.
      * @param PagePresenter $page
      * @param Plugin $plugin
      * @param string $template File name of the template, e.g. **plugin.birthday.tpl**.
@@ -264,17 +261,6 @@ final class PluginWidget
      */
     public static function render(PagePresenter $page, Plugin $plugin, string $template, array $variables = array()): string
     {
-        $smarty = $page->getSmartyTemplate();
-
-        $templates = $plugin->getDirectory(Plugin::DIR_TEMPLATES);
-        if ($templates !== null) {
-            $smarty->addTemplateDir($templates);
-        }
-
-        foreach ($variables as $name => $value) {
-            $smarty->assign($name, $value);
-        }
-
-        return $smarty->fetch($template);
+        return $plugin->renderTemplate($page, $template, $variables);
     }
 }

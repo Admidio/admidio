@@ -2,6 +2,8 @@
 
 namespace Admidio\Infrastructure\Plugins;
 
+use Admidio\UI\Presenter\PagePresenter;
+
 /**
  * One plugin as it exists on disk.
  *
@@ -299,6 +301,35 @@ final class Plugin
         }
 
         return PluginPages::getUrl($this, $page);
+    }
+
+    /**
+     * Render a template of this plugin through the Smarty object of a page.
+     *
+     * The template is fetched through the page, so the template directories of the theme and its
+     * fallback are already in place and a theme can override the template of a plugin by putting a
+     * file of the same name into **themes/&lt;theme&gt;/templates/plugins/&lt;plugin ID&gt;/**.
+     * @param PagePresenter $page The page the output belongs to. The preferences page is one, so a
+     *                            preference panel renders its template exactly like a widget does.
+     * @param string $template File name of the template, e.g. **plugin.birthday.tpl**.
+     * @param array<string,mixed> $variables Variables the template should receive.
+     * @return string
+     * @throws \Smarty\Exception
+     */
+    public function renderTemplate(PagePresenter $page, string $template, array $variables = array()): string
+    {
+        $smarty = $page->getSmartyTemplate();
+
+        $templates = $this->getDirectory(self::DIR_TEMPLATES);
+        if ($templates !== null) {
+            $smarty->addTemplateDir($templates);
+        }
+
+        foreach ($variables as $name => $value) {
+            $smarty->assign($name, $value);
+        }
+
+        return $smarty->fetch($template);
     }
 
     /**

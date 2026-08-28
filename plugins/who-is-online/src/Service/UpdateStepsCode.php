@@ -1,12 +1,16 @@
 <?php
-namespace WhoIsOnline\classes\Service;
+
+namespace AdmidioPlugin\WhoIsOnline\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use WhoIsOnline\classes\WhoIsOnline;
-use ReflectionException;
 
 /**
+ * The update steps of the who-is-online plugin.
+ *
+ * PluginInstaller finds this class through the first autoload prefix of the manifest plus
+ * **Service\**, and db_scripts/update_x_y.xml names the methods it runs.
+ *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
@@ -29,18 +33,14 @@ final class UpdateStepsCode
 
     /**
      * Retrieve previous settings from config file and update the database settings accordingly.
-     * @throws Exception|ReflectionException
+     * @throws Exception
      */
     public static function updateStep10RetrievePreviousSettings()
     {
-        // $gL10n is needed to get the localized rank names from the config file
-        global $gL10n, $gSettingsManager;
+        global $gSettingsManager;
 
-        $pluginWhoIsOnline = WhoIsOnline::getInstance();
-        $configValues = $pluginWhoIsOnline::getPluginConfig();
-
-        // check if there is a config.php file with previous settings in the rwho-is-online plugin folder
-        $configFile = dirname(__DIR__, 4) . '/adm_plugins/who-is-online/config.php';
+        // check if there is a config.php file with previous settings in the who-is-online plugin folder
+        $configFile = ADMIDIO_PATH . '/adm_plugins/who-is-online/config.php';
         if (file_exists($configFile)) {
             // include the config file to get the previous settings
             include $configFile;

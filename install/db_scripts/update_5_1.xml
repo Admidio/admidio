@@ -212,5 +212,7 @@
     <step id="1210" database="mysql">ALTER TABLE %PREFIX%_oidc_session_participants MODIFY COLUMN osp_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step id="1220" database="mysql">ALTER TABLE %PREFIX%_saml_logout_transactions MODIFY COLUMN slt_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step id="1230" database="mysql">ALTER TABLE %PREFIX%_saml_session_participants MODIFY COLUMN ssp_authn_instant timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1240">UPDATE %PREFIX%_components SET com_name_intern = LOWER(com_name_intern) WHERE com_type = 'PLUGIN'</step>
+    <step id="1250">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
     <step>stop</step>
 </update>
