@@ -43,7 +43,9 @@ final class PluginInstaller
      * Install a plugin: run its installation SQL, create its component record, give its
      * preferences a row in every organization and add its menu entry.
      * @param Plugin $plugin
-     * @param bool $addMenuEntry Whether the plugin should get a menu entry below "Extensions".
+     * @param bool $addMenuEntry Whether the plugin should get a menu entry below "Extensions". A
+     *                           plugin without a page never gets one, because there would be
+     *                           nothing for the entry to link to.
      * @return void
      * @throws Exception
      */
@@ -82,7 +84,8 @@ final class PluginInstaller
 
         PluginPages::publish($plugin);
 
-        if ($addMenuEntry) {
+        // A plugin that only brings a widget or a hook has nothing a menu entry could point at.
+        if ($addMenuEntry && $plugin->hasPages()) {
             self::addMenuEntry($plugin, (int)$component->getValue('com_id'));
         }
     }
@@ -312,7 +315,7 @@ final class PluginInstaller
      * @return void
      * @throws Exception
      */
-    private static function removeMenuEntries(int $componentId): void
+    public static function removeMenuEntries(int $componentId): void
     {
         global $gDb;
 
