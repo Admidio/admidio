@@ -1,16 +1,19 @@
 <?php
 
-namespace EventList\classes;
+namespace AdmidioPlugin\EventList;
 
 use Admidio\Events\Entity\Event;
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginWidget;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
+use AdmidioPlugin\EventList\Presenter\EventListPreferencesPresenter;
 
-use InvalidArgumentException;
 use Exception;
-use Throwable;
 
 /**
  ***********************************************************************************************
@@ -24,50 +27,121 @@ use Throwable;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-class EventList extends PluginAbstract
+final class EventList
 {
-    /** 
-     * Get the plugin configuration
-     * @return array Returns the plugin configuration
-     */
-    public static function getPluginConfig() : array
-    {
-        global $gCurrentUser;
-
-        // get the plugin config from the parent class
-        $config = parent::getPluginConfig();
-
-        // if the key equals 'event_list_displayed_categories' and the value is still the default value, retrieve the categories from the database
-        if (array_key_exists('event_list_displayed_categories', $config) && $config['event_list_displayed_categories']['value'] === self::$defaultConfig['event_list_displayed_categories']['value']) {
-            $config['event_list_displayed_categories']['value'] = $gCurrentUser->getAllVisibleCategories('EVT');
-        }
-        return $config;
-    }
-    
     /**
-     * Get the plugin configuration values
-     * @return array Returns the plugin configuration values
+     * The directory of this plugin, which is its only identity.
      */
-    public static function getPluginConfigValues() : array
+    public const PLUGIN_ID = 'event-list';
+
+    /**
+     * Where the widget is placed on the overview page as long as nobody moved it.
+     */
+    public const DEFAULT_SEQUENCE = 7;
+
+    /**
+     * The value a category list has as long as nobody narrowed it down: every visible category.
+     */
+    private const ALL_CATEGORIES = array('All');
+
+    /**
+     * Announce the widget and the preferences panel. This is what plugin.php calls.
+     * @return void
+     */
+    public static function register(): void
+    {
+        $plugin = PluginRegistry::get(self::PLUGIN_ID);
+        if ($plugin === null) {
+            return;
+        }
+
+        PluginWidget::register($plugin, array(self::class, 'renderWidget'), array(
+            'sequence' => self::DEFAULT_SEQUENCE
+        ));
+
+        Hooks::addFilter(
+            PluginPanel::HOOK,
+            static function (array $panels) use ($plugin): array {
+                global $gL10n;
+
+                $panels[] = array(
+                    'id' => PluginPanel::normalizeId($plugin->id),
+                    'title' => $gL10n->get($plugin->name),
+                    'icon' => $plugin->icon,
+                    'group' => PluginPanel::GROUP_OVERVIEW,
+                    'sequence' => self::DEFAULT_SEQUENCE,
+                    'create' => array(EventListPreferencesPresenter::class, 'createForm')
+                );
+
+                return $panels;
+            },
+            PluginPanel::DEFAULT_SEQUENCE,
+            1,
+            $plugin->id
+        );
+    }
+
+    /**
+     * The settings of the plugin, with the category list resolved.
+     *
+     * A category list that nobody narrowed down holds the sentinel "All", which means every category
+     * the current user may see and is turned into the actual category IDs here.
+     * @param Plugin $plugin
+     * @return array<string,mixed>
+     * @throws Exception
+     */
+    public static function getConfig(Plugin $plugin): array
     {
         global $gCurrentUser;
 
-        // get the plugin config values from the parent class
-        $config = parent::getPluginConfigValues();
+        $config = $plugin->getSettingValues();
 
-        // if the key equals 'event_list_displayed_categories' and the value is still the default value, retrieve the categories from the database
-        if (array_key_exists('event_list_displayed_categories', $config) && $config['event_list_displayed_categories'] === self::$defaultConfig['event_list_displayed_categories']['value']) {
+        if (($config['event_list_displayed_categories'] ?? null) === self::ALL_CATEGORIES) {
             $config['event_list_displayed_categories'] = $gCurrentUser->getAllVisibleCategories('EVT');
         }
 
         return $config;
     }
 
-    private static function getEventsData() : array
+    /**
+     * Build the widget of the overview page. Whether it is shown at all was decided before this is
+     * called, by the preference **event_list_plugin_enabled**.
+     * @param PagePresenter $page
+     * @param Plugin $plugin
+     * @return string
+     * @throws Exception|\Smarty\Exception
+     */
+    public static function renderWidget(PagePresenter $page, Plugin $plugin): string
+    {
+        global $gSettingsManager, $gL10n, $gValidLogin;
+
+        $variables = array('name' => $plugin->id, 'message' => '', 'events' => array());
+        $module = $gSettingsManager->getInt('events_module_enabled');
+
+        if ($module === 0) {
+            $variables['message'] = $gL10n->get('SYS_MODULE_DISABLED');
+        } elseif ($module === 1 || ($module === 2 && $gValidLogin)) {
+            $eventsArray = self::getEventsData(self::getConfig($plugin));
+            if (!empty($eventsArray)) {
+                $variables['events'] = $eventsArray;
+            } else {
+                $variables['message'] = $gL10n->get('SYS_NO_ENTRIES');
+            }
+        } else {
+            $variables['message'] = $gL10n->get('PLG_EVENT_LIST_NO_ENTRIES_VISITORS');
+        }
+
+        return $plugin->renderTemplate($page, 'plugin.event-list.tpl', $variables);
+    }
+
+    /**
+     * @param array<string,mixed> $config
+     * @return array<int,array<string,mixed>>
+     * @throws Exception
+     */
+    private static function getEventsData(array $config) : array
     {
         global $gSettingsManager, $gCurrentUser, $gDb, $gL10n;
-
-        $config = self::getPluginConfigValues();
 
         if (!is_array($config['event_list_displayed_categories']) || empty($config['event_list_displayed_categories'])) {
             $plgSqlCategories = '';
@@ -145,57 +219,5 @@ class EventList extends PluginAbstract
             }
         }
         return $eventsArray;
-    }
-
-    /**
-     * @param PagePresenter $page
-     * @throws InvalidArgumentException
-     * @throws Exception
-     * @return bool
-     */
-    public static function doRender($page = null) : bool
-    {
-        global $gSettingsManager, $gL10n, $gValidLogin;
-
-        // show the event list
-        try {
-            $rootPath = dirname(__DIR__, 3);
-            $pluginFolder = basename(self::$pluginPath);
-
-            require_once($rootPath . '/system/common.php');
-
-            $eventListPlugin = new Overview($pluginFolder);
-
-            // check if the plugin is installed
-            if (!self::isInstalled()) {
-                throw new InvalidArgumentException($gL10n->get('SYS_PLUGIN_NOT_INSTALLED'));
-            }
-
-            if ($gSettingsManager->getInt('events_module_enabled') > 0) {
-                if (($gSettingsManager->getInt('events_module_enabled') === 1 || ($gSettingsManager->getInt('events_module_enabled') === 2 && $gValidLogin)) &&
-                    ($gSettingsManager->getInt('event_list_plugin_enabled') === 1 || ($gSettingsManager->getInt('event_list_plugin_enabled') === 2 && $gValidLogin))) {
-                    $eventsArray = self::getEventsData();
-                    if (!empty($eventsArray)) {
-                        $eventListPlugin->assignTemplateVariable('events', $eventsArray);
-                    } else {
-                        $eventListPlugin->assignTemplateVariable('message',$gL10n->get('SYS_NO_ENTRIES'));
-                    }
-                } else {
-                    $eventListPlugin->assignTemplateVariable('message',$gL10n->get('PLG_EVENT_LIST_NO_ENTRIES_VISITORS'));
-                }
-            } else {
-                $eventListPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
-            }
-            
-            if (isset($page)) {
-                echo $eventListPlugin->html('plugin.event-list.tpl');
-            } else {
-                $eventListPlugin->showHtmlPage('plugin.event-list.tpl');
-            }
-        } catch (Throwable $e) {
-            echo $e->getMessage();
-        }
-
-        return true;
     }
 }
