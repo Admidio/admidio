@@ -28,6 +28,19 @@ final class BuiltInPluginsTest extends PluginTestCase
     public static function convertedPlugins(): array
     {
         return array(
+            'announcement-list' => array(
+                'announcement-list',
+                'AdmidioPlugin\\AnnouncementList\\',
+                array(
+                    'announcement_list_plugin_enabled',
+                    'announcement_list_overview_sequence',
+                    'announcement_list_announcements_count',
+                    'announcement_list_show_preview_chars',
+                    'announcement_list_show_full_description',
+                    'announcement_list_chars_before_linebreak',
+                    'announcement_list_displayed_categories'
+                )
+            ),
             'birthday' => array(
                 'birthday',
                 'AdmidioPlugin\\Birthday\\',
