@@ -28,6 +28,26 @@ final class BuiltInPluginsTest extends PluginTestCase
     public static function convertedPlugins(): array
     {
         return array(
+            'birthday' => array(
+                'birthday',
+                'AdmidioPlugin\\Birthday\\',
+                array(
+                    'birthday_plugin_enabled',
+                    'birthday_overview_sequence',
+                    'birthday_show_names_extern',
+                    'birthday_show_names',
+                    'birthday_show_age',
+                    'birthday_show_age_salutation',
+                    'birthday_show_notice_none',
+                    'birthday_show_past',
+                    'birthday_show_future',
+                    'birthday_show_display_limit',
+                    'birthday_show_email_extern',
+                    'birthday_roles_view_plugin',
+                    'birthday_roles_sql',
+                    'birthday_sort_sql'
+                )
+            ),
             'who-is-online' => array(
                 'who-is-online',
                 'AdmidioPlugin\\WhoIsOnline\\',
