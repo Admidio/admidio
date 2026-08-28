@@ -10,22 +10,6 @@
     </div>
 {/if}
 
-{if not $modulePagesWritable}
-    <div class="alert alert-warning" id="adm_plugins_not_writable">
-        <i class="bi bi-exclamation-triangle-fill"></i> {$l10n->get('SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE')}
-    </div>
-{/if}
-
-<form {foreach $attributes as $attribute}
-        {$attribute@key}="{$attribute}"
-    {/foreach}>
-
-    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['plugin_module_pages']}
-    {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_plugins']}
-    <div class="form-alert" style="display: none;">&nbsp;</div>
-</form>
-
 <!-- for big screens: Table -->
 <div class="d-none d-md-block">
     <div class="table-responsive" id="adm_plugins_table">

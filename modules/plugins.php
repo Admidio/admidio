@@ -10,7 +10,6 @@
  *  Parameters:
  *
  *  mode     : list      - (default) Show the list of all plugins with their state
- *             save      - Save the settings of the plugin administration
  *             install   - Install a plugin
  *             enable    - Enable a plugin for the current organization
  *             disable   - Disable a plugin for the current organization
@@ -23,7 +22,6 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
-use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\PluginsPresenter;
@@ -33,17 +31,17 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'save', 'install', 'enable', 'disable', 'update', 'uninstall')));
+        'validValues' => array('list', 'install', 'enable', 'disable', 'update', 'uninstall')));
 
     // check rights to use this module
     if (!$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    // Every mode but the list and the settings works on one plugin, addressed by its ID.
+    // Every mode but the list works on one plugin, addressed by its ID.
     $getPluginId = '';
     $plugin = null;
-    if (!in_array($getMode, array('list', 'save'), true)) {
+    if ($getMode !== 'list') {
         $getPluginId = admFuncVariableIsValid($_GET, 'plugin', 'string', array('requireValue' => true));
         $plugin = PluginRegistry::get($getPluginId);
     }
@@ -55,20 +53,6 @@ try {
             $page->createList();
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-puzzle-fill');
             $page->show();
-            break;
-
-        case 'save':
-            $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-            $formValues = $form->validate($_POST);
-
-            PluginPages::setAllowed(!empty($formValues[PluginPages::SETTING]));
-
-            // The setting changes which pages are published, so the list is read again.
-            echo json_encode(array(
-                'status' => 'success',
-                'message' => $gL10n->get('SYS_SAVE_DATA'),
-                'url' => ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'
-            ));
             break;
 
         case 'install':

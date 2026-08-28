@@ -1280,9 +1280,9 @@
   <string name="SYS_PLUGIN_LOAD_FAILED">These plugins could not be loaded and are therefore inactive:</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Here you can manage the plugins of Admidio. Plugins are additional modules that can be installed to extend the functionality of Admidio. You can install, update or remove plugins.</string>
-  <string name="SYS_PLUGIN_MODULE_PAGES">Plugin pages under the module address</string>
-  <string name="SYS_PLUGIN_MODULE_PAGES_DESC">A page of a plugin can always be reached under the address of the plugin itself. If this option is enabled, Admidio additionally creates a page under the usual module address, so that a plugin page has the same kind of address as a module of Admidio. To do so Admidio writes files into its own program directory. Leave the option disabled if the installation should not be changed, for example because it is managed with Git or runs in a container.</string>
-  <string name="SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE">The module directory cannot be written, so plugin pages cannot be published under the module address.</string>
+  <string name="SYS_PLUGIN_MODULE_PAGES">Short web addresses for plugin pages</string>
+  <string name="SYS_PLUGIN_MODULE_PAGES_DESC">Some plugins bring pages of their own. Such a page can always be opened at an address like plugins/calendar/list.php.\n\nIf this option is switched on, the same page can also be opened at the shorter modules/calendar/list.php, so that it looks like a normal Admidio module. To do that, Admidio creates small files in its own modules folder and deletes them again when you switch the option off.\n\nLeave the option switched off if Admidio should never write anything into its program folder, for example because you manage the installation with Git or run it in a container. Everything keeps working, the pages simply keep their longer address.</string>
+  <string name="SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE">Admidio is not allowed to write into its own modules folder, so this option cannot be switched on. Pages of plugins keep their longer address and everything else keeps working.</string>
   <string name="SYS_PLUGIN_NAME_MISSING">No plugin name specified.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">The plugin is not installed.</string>
   <string name="SYS_PLUGIN_ORPHANED">Plugins whose files are missing</string>

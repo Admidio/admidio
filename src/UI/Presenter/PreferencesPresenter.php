@@ -16,6 +16,7 @@ use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
 use Admidio\SSO\Service\OIDCService;
 
+use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginPanel;
 use Admidio\Infrastructure\Plugins\PluginWidget;
 
@@ -741,6 +742,21 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_IMPRINT'),
             $formValues['system_url_imprint'],
             self::preferenceInputOptions('system_url_imprint', array('type' => 'url', 'helpTextId' => 'SYS_IMPRINT_DESC'))
+        );
+        /*
+         * Publishing writes into the program directory, which a read-only deployment cannot do.
+         * That is a supported situation, so the option is shown but says why it cannot be used.
+         */
+        $modulePagesWritable = PluginPages::isWritable();
+        $formCommon->addCheckbox(
+            PluginPages::SETTING,
+            $gL10n->get('SYS_PLUGIN_MODULE_PAGES'),
+            PluginPages::isAllowed(),
+            array(
+                'helpTextId' => $modulePagesWritable
+                    ? 'SYS_PLUGIN_MODULE_PAGES_DESC' : 'SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE',
+                'property' => $modulePagesWritable ? FormPresenter::FIELD_DEFAULT : FormPresenter::FIELD_DISABLED
+            )
         );
         $formCommon->addCheckbox(
             'system_js_editor_enabled',

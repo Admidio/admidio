@@ -106,8 +106,6 @@ class PluginsPresenter extends PagePresenter
             }
         ');
 
-        $this->createSettingsForm();
-
         $this->smarty->assign('list', $this->getGroups());
         $this->smarty->assign('failures', PluginLoader::getFailures());
         $this->smarty->assign('l10n', $gL10n);
@@ -117,48 +115,6 @@ class PluginsPresenter extends PagePresenter
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
-    }
-
-    /**
-     * Build the form with the settings of the plugin administration and assign it to the template.
-     * @return void
-     * @throws Exception
-     */
-    private function createSettingsForm(): void
-    {
-        global $gL10n, $gCurrentSession;
-
-        $form = new FormPresenter(
-            'adm_plugins_form_settings',
-            'modules/plugins.list.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'save')),
-            $this,
-            // The page is a list and the form is one checkbox above it, so it must not take focus.
-            array('setFocus' => false)
-        );
-        $form->addCheckbox(
-            PluginPages::SETTING,
-            $gL10n->get('SYS_PLUGIN_MODULE_PAGES'),
-            PluginPages::isAllowed(),
-            array(
-                'helpTextId' => 'SYS_PLUGIN_MODULE_PAGES_DESC',
-                // A read-only deployment cannot publish, and that is a supported situation.
-                'property' => PluginPages::isWritable() ? FormPresenter::FIELD_DEFAULT : FormPresenter::FIELD_DISABLED
-            )
-        );
-        $form->addSubmitButton(
-            'adm_button_save_plugins',
-            $gL10n->get('SYS_SAVE'),
-            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
-        );
-
-        $form->addToSmarty($this->smarty);
-        $gCurrentSession->addFormObject($form);
-
-        // addToSmarty() only assigns the elements; the AJAX submit has to be bound here.
-        $this->addJavascript('$("#adm_plugins_form_settings").submit(formSubmit);', true);
-
-        $this->smarty->assign('modulePagesWritable', PluginPages::isWritable());
     }
 
     /**
