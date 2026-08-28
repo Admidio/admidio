@@ -564,7 +564,7 @@ class EventSaveService
                 $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
-                $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
+                $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_LEADERS);
                 // role members are allowed to send mail to this role
                 $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_NOBODY);
                 $role->setValue('rol_max_members', (int)$event->getValue('dat_max_members'));
@@ -597,7 +597,7 @@ class EventSaveService
                     // these are the default settings for an event role
                     $role->setValue('rol_cat_id', (int)$row['cat_id']);
                     // role members are allowed to view lists
-                    $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT);
+                    $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_LEADERS);
                     // role members are allowed to send mail to this role
                     $role->setValue('rol_mail_this_role', ($formValues['event_right_send_mail']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_NOBODY);
                     $role->setValue('rol_leader_rights', Role::ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participants

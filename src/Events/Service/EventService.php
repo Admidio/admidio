@@ -196,7 +196,7 @@ class EventService
      * Export matching events as iCal and send the file to the browser.
      * @throws Exception
      */
-    public function exportICal(string $eventUUID = '', string $categoryUUID = '', string $dateFrom = '', string $dateTo = ''): void
+    public function exportICal(string $eventUUID = '', string $categoryUUID = '', string $dateFrom = '', string $dateTo = '', bool $inline = false): void
     {
         global $gCurrentOrganization, $gSettingsManager;
 
@@ -214,22 +214,24 @@ class EventService
             $event = new Event($this->database);
             $event->readDataByUuid($eventUUID);
 
-            $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database')) . '.ics';
+            $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database'));
             $events->setParameter('dat_uuid', $eventUUID);
         } else {
-            $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname')) . '.ics';
+            $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname'));
             $events->setDateRange($dateFrom, $dateTo);
 
             if ($categoryUUID !== '') {
                 $calendar = new Category($this->database);
                 $events->setParameter('cat_uuid', $categoryUUID);
                 $calendar->readDataByUuid($categoryUUID);
-                $filename .= '-' . $calendar->getValue('cat_name');
+                $filename .= '-' . FileSystemUtils::getSanitizedPathEntry($calendar->getValue('cat_name'));
             }
         }
 
+        $contentDisposition = $inline ? 'inline' : 'attachment';
+
         header('Content-Type: text/calendar; charset=utf-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: ' . $contentDisposition . '; filename="' . $filename . '.ics"');
 
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');

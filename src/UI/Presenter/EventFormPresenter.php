@@ -209,8 +209,8 @@ class EventFormPresenter extends PagePresenter
             if ((int)$event->getValue('dat_rol_id') > 0) {
                 $eventParticipationPossible = true;
                 $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
-                $flagDateRightListView = (bool)$role->getValue('rol_view_memberships');
-                $flagDateRightSendMail = (bool)$role->getValue('rol_mail_this_role');
+                $flagDateRightListView = (int)$role->getValue('rol_view_memberships') === Role::VIEW_ROLE_MEMBERS;
+                $flagDateRightSendMail = (int)$role->getValue('rol_mail_this_role') === Role::VIEW_ROLE_MEMBERS;
             }
 
             // check if current user is assigned to this event

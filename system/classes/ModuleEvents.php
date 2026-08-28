@@ -7,6 +7,7 @@ use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\Service\EventRecurrenceICalEventFactory;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 
 /**
  * @brief This class reads event recordset from database
@@ -659,14 +660,9 @@ class ModuleEvents extends Modules
         }
 
         // Create date object and format date_from in English format and system format and push to date range array
-        $objDateFrom = DateTime::createFromFormat('Y-m-d', $dateRangeStart);
+        $objDateFrom = DateTimeUtils::parseDate($dateRangeStart);
 
-        if ($objDateFrom === false) {
-            // check if date_from has system format
-            $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $dateRangeStart);
-        }
-
-        if ($objDateFrom === false) {
+        if ($objDateFrom === null) {
             return false;
         }
 
@@ -674,14 +670,9 @@ class ModuleEvents extends Modules
         $this->setParameter('dateStartFormatAdmidio', $objDateFrom->format($gSettingsManager->getString('system_date')));
 
         // Create date object and format date_to in English format and system format and push to date range array
-        $objDateTo = DateTime::createFromFormat('Y-m-d', $dateRangeEnd);
+        $objDateTo = DateTimeUtils::parseDate($dateRangeEnd);
 
-        if ($objDateTo === false) {
-            // check if date_from  has system format
-            $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $dateRangeEnd);
-        }
-
-        if ($objDateTo === false) {
+        if ($objDateTo === null) {
             return false;
         }
 

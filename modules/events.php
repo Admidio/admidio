@@ -24,6 +24,7 @@
  *             save         : save event form data
  *             delete       : delete or cancel an event
  *             export       : export event data in iCal format
+ *             subscribe    : subscribe event data in iCal format
  *             recurrence_scope_form: show modal form to choose recurrence edit/delete scope
  *             participation_form: show the modal form to edit participation details
  *             participate  : user attends to the event
@@ -54,7 +55,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe')));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
@@ -68,9 +69,9 @@ try {
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', $gValidLogin ? array('defaultValue' => $gCurrentUser->getValue('usr_uuid')) : array());
 
     // check if module is active
-    if ((int)$gSettingsManager->get('events_module_enabled') === 0) {
+    if ($gSettingsManager->getInt('events_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ((int)$gSettingsManager->get('events_module_enabled') === 2) {
+    } elseif ($gSettingsManager->getInt('events_module_enabled') === 2) {
         // module only for valid Users
         require(__DIR__ . '/../system/login_valid.php');
     }
@@ -143,8 +144,9 @@ try {
             break;
 
         case 'export':
+        case 'subscribe':
             $eventService = new EventService($gDb);
-            $eventService->exportICal($getEventUuid, $getCatUuid, $getDateFrom, $getDateTo);
+            $eventService->exportICal($getEventUuid, $getCatUuid, $getDateFrom, $getDateTo, $getMode === 'subscribe');
             break;
 
         case 'delete':
@@ -179,6 +181,6 @@ try {
         $gMessage->showInModalWindow();
         handleException($e);
     } else {
-        handleException($e, in_array($getMode, array('save', 'delete', 'export', 'participate', 'participate_cancel', 'participate_maybe'), true));
+        handleException($e, in_array($getMode, array('save', 'delete', 'export', 'subscribe', 'participate', 'participate_cancel', 'participate_maybe'), true));
     }
 }

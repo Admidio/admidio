@@ -103,7 +103,7 @@ class EventListPresenter extends PagePresenter
         if ($outputMode === 'html') {
             $page->assignSmartyVariable('classTable', 'table table-condensed table-hover');
 
-            if ($gSettingsManager->getBool('enable_rss') && (int)$gSettingsManager->get('events_module_enabled') === 1) {
+            if ($gSettingsManager->getBool('enable_rss') && $gSettingsManager->getInt('events_module_enabled') === 1) {
                 $page->addRssFile(ADMIDIO_URL . '/rss/events.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'), $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_EVENTS'))));
             }
 
@@ -142,7 +142,7 @@ class EventListPresenter extends PagePresenter
                             }
                         }
                     );
-                    $(".admidio-event-approval").show();
+                $(".admidio-event-approval").show();
                 });
             ', true);
 
@@ -170,6 +170,10 @@ class EventListPresenter extends PagePresenter
                     ($getDateFrom !== '' ? $param['date_from'] = $getDateFrom : '');
                     ($getDateTo !== '' ? $param['date_to'] = $getDateTo : '');
 
+                    $param['mode'] = 'subscribe';
+                    $page->addPageFunctionsMenuItem('menu_item_event_subscribe', $gL10n->get('SYS_SUBSCRIBE'), str_replace(array('http://', 'https://'), 'webcal://', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $param)), 'bi-calendar-plus');
+
+                    $param['mode'] = 'export';
                     $page->addPageFunctionsMenuItem('menu_item_event_ical', $gL10n->get('SYS_DOWNLOAD_ICAL'), SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $param), 'bi-download');
                 }
 
@@ -227,26 +231,28 @@ class EventListPresenter extends PagePresenter
                         $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left');
                         $compactTable->disableColumnsSort(array(6));
                         $compactTable->setColumnsNotHideResponsive(array(6));
+                        $data['column_width'] = array('', '', '', '', '', '');
                         break;
                     case 'room':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
                         $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left', 'left');
                         $compactTable->disableColumnsSort(array(7));
                         $compactTable->setColumnsNotHideResponsive(array(7));
+                        $data['column_width'] = array('', '', '', '', '', '', '');
                         break;
                     case 'participants':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
                         $columnAlign = array('center', 'left', 'left', 'left', 'left');
                         $compactTable->disableColumnsSort(array(5));
                         $compactTable->setColumnsNotHideResponsive(array(5));
-                        $data['column_width'] = array('', '', '', '35%');
+                        $data['column_width'] = array('', '', '', '35%', '');
                         break;
                     case 'description':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_CALENDAR'));
                         $columnAlign = array('center', 'left', 'left', 'left', 'left');
                         $compactTable->disableColumnsSort(array(5));
                         $compactTable->setColumnsNotHideResponsive(array(5));
-                        $data['column_width'] = array('', '', '', '35%');
+                        $data['column_width'] = array('', '', '', '35%', '');
                         break;
                 }
 
