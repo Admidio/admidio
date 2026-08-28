@@ -236,6 +236,25 @@ final class PluginPagesTest extends PluginTestCase
     }
 
     /**
+     * @testdox An installation whose preference has no row yet is answered from the registered default
+     *
+     * Registering a preference does not create its row - that happens when the installation is
+     * updated or the preference is saved for the first time. Reading it anyway made SettingsManager
+     * refuse the name, and every request logged a plugin failure.
+     */
+    public function testMissingPreferenceRow(): void
+    {
+        $settings = new PluginPagesSettingsDouble(null);
+        $GLOBALS['gSettingsManager'] = $settings;
+        PluginRegistry::setInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
+
+        $this->assertFalse(PluginPages::isAllowed());
+        $this->assertSame(array(), PluginPages::reconcile());
+        $this->assertSame(array(), $settings->values, 'a plain request must not write a preference');
+        $this->assertFalse(PluginPages::isPublished('hello'));
+    }
+
+    /**
      * @testdox Syncing removes the stubs of a plugin whose files are gone
      */
     public function testSyncRemovesOrphanedStubs(): void
@@ -306,14 +325,20 @@ final class PluginPagesSettingsDouble
     /** @var array<string,string> */
     public array $values = array();
 
-    public function __construct(bool $allowed)
+    /**
+     * @param bool|null $allowed The stored value of the preference, or **null** for an installation
+     *                           that has no row for it yet.
+     */
+    public function __construct(?bool $allowed)
     {
-        $this->values[PluginPages::SETTING] = $allowed ? '1' : '0';
+        if ($allowed !== null) {
+            $this->values[PluginPages::SETTING] = $allowed ? '1' : '0';
+        }
     }
 
     public function getBool(string $name, bool $update = false): bool
     {
-        return ($this->values[$name] ?? '0') === '1';
+        return $this->get($name) === '1';
     }
 
     public function has(string $name, bool $update = false): bool
@@ -321,9 +346,17 @@ final class PluginPagesSettingsDouble
         return array_key_exists($name, $this->values);
     }
 
+    /**
+     * Registering a preference does not create its row, so the real SettingsManager refuses a name
+     * it has no value for. The double has to do the same, or it hides exactly that mistake.
+     */
     public function get(string $name, bool $update = false): string
     {
-        return $this->values[$name] ?? '';
+        if (!array_key_exists($name, $this->values)) {
+            throw new \RuntimeException('Settings name "' . $name . '" does not exist!');
+        }
+
+        return $this->values[$name];
     }
 
     public function set(string $name, $value, bool $update = true): bool
