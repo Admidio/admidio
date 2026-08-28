@@ -220,6 +220,28 @@ final class PluginPagesTest extends PluginTestCase
     }
 
     /**
+     * @testdox Saving the preference publishes or removes the stubs right away
+     *
+     * The plugin administration writes the preference and expects to show the result, so the sync
+     * has to run at once instead of on the next request.
+     */
+    public function testSetAllowedAppliesImmediately(): void
+    {
+        PluginRegistry::setInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
+        $GLOBALS['gSettingsManager'] = new PluginPagesSettingsDouble(false);
+
+        $this->assertSame(array('hello' => 'published'), PluginPages::setAllowed(true));
+        $this->assertTrue(PluginPages::isAllowed());
+        $this->assertTrue(PluginPages::isPublished('hello'));
+
+        $this->assertSame(array(), PluginPages::setAllowed(true), 'nothing changed, so nothing is synced again');
+
+        $this->assertSame(array('hello' => 'unpublished'), PluginPages::setAllowed(false));
+        $this->assertFalse(PluginPages::isAllowed());
+        $this->assertFalse(PluginPages::isPublished('hello'));
+    }
+
+    /**
      * @testdox An obstacle is reported once and not retried on every request
      */
     public function testReconcileDoesNotRetryAnObstacle(): void

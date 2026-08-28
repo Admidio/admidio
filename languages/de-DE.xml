@@ -1253,7 +1253,6 @@
   <string name="SYS_PLUGIN_MANAGER">Plugin-Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Hier können Sie die Plugins von Admidio verwalten. Plugins sind zusätzliche Module, die installiert werden können, um die Funktionalität von Admidio zu erweitern. Sie können Plugins installieren, aktualisieren oder entfernen.</string>
   <string name="SYS_PLUGIN_NAME_MISSING">Kein Plugin-Name angegeben.</string>
-  <string name="SYS_PLUGIN_NO_INTERFACE">Das Plugin hat keine Schnittstelle.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Das Plugin ist nicht installiert.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin-Einstellungen</string>
   <string name="SYS_PLUGIN_UNINSTALL">Plugin deinstallieren</string>

@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Overview and maintenance of all menus
+ * Administration of the plugins of this Admidio installation
  *
  * @copyright The Admidio Team
  * @see http://www.admidio.org/
@@ -9,119 +9,127 @@
  *
  *  Parameters:
  *
- *  mode     : list     - (default) Show page with a list of all menu entries
- *             edit     - Show form to create or edit a menu entry
- *             save     - Save the data of the form
- *             delete   - Delete menu entry
- *             sequence - Change sequence for parameter men_id
- * uuid      : UUID of the menu entry that should be edited
- * direction : Direction to change the sequence of the menu entry
+ *  mode     : list      - (default) Show the list of all plugins with their state
+ *             save      - Save the settings of the plugin administration
+ *             install   - Install a plugin
+ *             enable    - Enable a plugin for the current organization
+ *             disable   - Disable a plugin for the current organization
+ *             update    - Run the update scripts of a plugin
+ *             uninstall - Uninstall a plugin
+ *  plugin   : ID of the plugin, which is the name of its directory below plugins/
+ *  data     : uninstall - also run db_scripts/uninstall.sql and destroy the data of the plugin
  ***********************************************************************************************
  */
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginPages;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
-use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\UI\Presenter\PluginsPresenter;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'install', 'uninstall', 'update', 'sequence')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
+        'validValues' => array('list', 'save', 'install', 'enable', 'disable', 'update', 'uninstall')));
 
     // check rights to use this module
     if (!$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
+    // Every mode but the list and the settings works on one plugin, addressed by its ID.
+    $getPluginId = '';
+    $plugin = null;
+    if (!in_array($getMode, array('list', 'save'), true)) {
+        $getPluginId = admFuncVariableIsValid($_GET, 'plugin', 'string', array('requireValue' => true));
+        $plugin = PluginRegistry::get($getPluginId);
+    }
+
     switch ($getMode) {
         case 'list':
-            // create html page object
+            // create an HTML page object
             $page = new PluginsPresenter();
             $page->createList();
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-puzzle-fill');
             $page->show();
             break;
 
-        case 'install':
-            // install plugin
-            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
-            $pluginName =  admFuncVariableIsValid($_POST, 'name', 'string', array('requireValue' => true));
-            
-            if (!empty($pluginName)) {
-                $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByName($pluginName);
-                if ($plugin) {
-                    $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
+        case 'save':
+            $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $formValues = $form->validate($_POST);
 
-                    if ($interface != null) {
-                        if (!$interface->checkDependencies()) {
-                            throw new RuntimeException('Missing dependencies for ' . $pluginName . ' plugin');
-                        }
+            PluginPages::setAllowed(!empty($formValues[PluginPages::SETTING]));
 
-                        $interface->doInstall();
-                    }
-                }
-                $gNavigation->deleteLastUrl();
-                echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_INSTALLED')));
-            } else {
-                throw new Exception('SYS_PLUGIN_NAME_MISSING');
-            }
+            // The setting changes which pages are published, so the list is read again.
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $gL10n->get('SYS_SAVE_DATA'),
+                'url' => ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'
+            ));
             break;
 
-        case 'uninstall':
-            // uninstall plugin
+        case 'install':
+            // check the CSRF token of the form against the session token
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
-            $pluginName =  admFuncVariableIsValid($_POST, 'name', 'string', array('requireValue' => true));
 
-            if (!empty($pluginName)) {
-                $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByName($pluginName);
-                if ($plugin) {
-                    $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
-
-                    if ($interface != null) {
-                        $interface->doUninstall();
-                    }
-                }
-                $gNavigation->deleteLastUrl();
-                echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UNINSTALLED')));
-            } else {
-                throw new Exception('SYS_PLUGIN_NAME_MISSING');
+            if ($plugin === null) {
+                throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
             }
+            PluginInstaller::install($plugin);
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_INSTALLED')));
+            break;
+
+        case 'enable':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            if ($plugin === null) {
+                throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
+            }
+            PluginInstaller::setEnabled($plugin, true);
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_ENABLED')));
+            break;
+
+        case 'disable':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            if ($plugin === null) {
+                throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
+            }
+            PluginInstaller::setEnabled($plugin, false);
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_DISABLED')));
             break;
 
         case 'update':
-            // update plugin
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
-            $pluginName =  admFuncVariableIsValid($_POST, 'name', 'string', array('requireValue' => true));
 
-            if (!empty($pluginName)) {
-                $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByName($pluginName);
-                if ($plugin) {
-                    $interface = $plugin instanceof PluginAbstract ? $plugin::getInstance() : null;
-
-                    if ($interface != null) {
-                        $interface->doUpdate();
-                    }
-                }
-                $gNavigation->deleteLastUrl();
-                echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UPDATED')));
-            } else {
-                throw new Exception('SYS_PLUGIN_NAME_MISSING');
+            if ($plugin === null) {
+                throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
             }
+            PluginInstaller::update($plugin);
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UPDATED')));
             break;
 
-        default:
-            throw new Exception('SYS_UNKNOWN_MODE');
+        case 'uninstall':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $getRemoveData = admFuncVariableIsValid($_GET, 'data', 'bool', array('defaultValue' => false));
+
+            if ($plugin === null && !PluginRegistry::isInstalled($getPluginId)) {
+                throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
+            }
+
+            /*
+             * The ID keeps the cleanup of an orphan working: its files are gone, so there is no
+             * plugin left to pass, but its component row and its enabled flag are still there.
+             * Such a plugin also has no uninstall.sql any more, so its data cannot be destroyed.
+             */
+            PluginInstaller::uninstall($plugin ?? $getPluginId, $plugin !== null && $getRemoveData);
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UNINSTALLED')));
+            break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('save', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, ($getMode ?? 'list') !== 'list');
 }
