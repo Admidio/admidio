@@ -99,11 +99,29 @@ final class PluginPages
      */
     public static function isAllowed(): bool
     {
+        return self::readFlag(self::SETTING);
+    }
+
+    /**
+     * Read one of the two flags of this class.
+     *
+     * Registering a preference does not give it a row; that happens when the installation is
+     * updated or when the preference is saved for the first time. Until then SettingsManager::get()
+     * would refuse the name, so the registered default is the answer.
+     * @param string $name
+     * @return bool
+     */
+    private static function readFlag(string $name): bool
+    {
         global $gSettingsManager;
 
         self::registerPreference();
 
-        return isset($gSettingsManager) && $gSettingsManager->getBool(self::SETTING);
+        if (!isset($gSettingsManager) || !$gSettingsManager->has($name)) {
+            return (string)(PreferenceDefinitions::all()[$name]['default'] ?? '0') === '1';
+        }
+
+        return $gSettingsManager->getBool($name);
     }
 
     /**
@@ -130,15 +148,14 @@ final class PluginPages
     {
         global $gSettingsManager;
 
-        self::registerPreference();
-
         if (!isset($gSettingsManager)) {
             return array();
         }
 
-        $wanted = $gSettingsManager->getBool(self::SETTING);
-        if ($gSettingsManager->has(self::SETTING_APPLIED)
-            && $gSettingsManager->getBool(self::SETTING_APPLIED) === $wanted) {
+        $wanted = self::readFlag(self::SETTING);
+        if (self::readFlag(self::SETTING_APPLIED) === $wanted) {
+            // Nothing changed. On an installation that has neither preference yet, both are false,
+            // so a plain request writes nothing.
             return array();
         }
 
