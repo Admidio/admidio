@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Users\Entity\User;
@@ -24,13 +25,14 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'function.php') {
  * If **jsonResponse** is set to true, then the error message will be returned as JSON object.
  * @param Throwable $e The exception that should be handled
  * @param bool $jsonResponse (optional) If set to true than the error message will be returned as JSON object
+ * @param bool $inlineResponse (optional) If set to true than the error message will be returned as inline HTML without header and footer
  * @return void
  */
-function handleException(Throwable $e, bool $jsonResponse = false): void
+function handleException(Throwable $e, bool $jsonResponse = false, bool $inlineResponse = false): void
 {
-    global $gDebug, $gMessage;
+    global $gDebug, $gMessage, $gHtmlPurifierFilter;
 
-    $message = $e->getMessage();
+    $message = $gHtmlPurifierFilter->purify($e->getMessage());
 
     if ($gDebug) {
         $message .= ' in ' . $e->getFile() . ', in line ' . $e->getLine() . '<br /><br />Stacktrace:<br />' . $e->getTraceAsString();
@@ -41,9 +43,12 @@ function handleException(Throwable $e, bool $jsonResponse = false): void
     } else {
         if (isset($gMessage)) {
             try {
+                if ($inlineResponse) {
+                    $gMessage->showHtmlTextOnly();
+                }
                 $gMessage->show($message);
             } catch (Throwable $exceptionMessage) {
-                echo $exceptionMessage->getMessage();
+                echo $gHtmlPurifierFilter->purify($exceptionMessage);
             }
         } else {
             echo $message;
@@ -310,7 +315,7 @@ function admFuncGeneratePagination(string $baseUrl, int $itemsCount, int $itemsP
  */
 function admFuncVariableIsValid(array $array, string $variableName, string $datatype, array $options = array()): mixed
 {
-    global $gSettingsManager;
+    global $gSettingsManager, $gHtmlPurifierFilter;
 
     // create an array with all options
     $optionsDefault = array('defaultValue' => null, 'requireValue' => false, 'validValues' => null, 'directOutput' => null);
@@ -371,16 +376,8 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
             break;
 
         case 'date':
-            // check if date is a valid Admidio date format
-            $objAdmidioDate = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
-
-            if (!$objAdmidioDate) {
-                // check if date has english format
-                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $value);
-
-                if (!$objEnglishDate) {
-                    throw new Exception('The date parameter "' . $variableName . '" has an invalid date format!');
-                }
+            if (DateTimeUtils::parseDate($value) === null) {
+                throw new Exception('The date parameter "' . $variableName . '" has an invalid date format!');
             }
             break;
 
@@ -417,13 +414,7 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
 
         case 'html':
             // check HTML string vor invalid tags and scripts
-            $config = HTMLPurifier_Config::createDefault();
-            $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
-            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
-            $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
-
-            $filter = new HTMLPurifier($config);
-            $value = $filter->purify($value);
+            $value = $gHtmlPurifierFilter->purify($value);
             break;
 
         case 'uuid':

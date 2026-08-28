@@ -9,11 +9,15 @@ use Admidio\Infrastructure\SystemMail;
 use Admidio\Messages\Entity\Message;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Roles\Entity\ListColumns;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Changelog\Entity\LogChanges;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\QRServerProvider;
@@ -677,19 +681,6 @@ class User extends Entity
                             SET usr_usr_id_change = NULL
                             WHERE usr_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
-                          WHERE lsc_lst_id IN (SELECT lst_id
-                                                 FROM ' . TBL_LISTS . '
-                                                WHERE lst_usr_id = ' . $usrId . '
-                                                AND lst_global = false)';
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
-                          WHERE lst_global = false
-                          AND lst_usr_id = ' . $usrId;
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MEMBERS . '
-                          WHERE mem_usr_id = ' . $usrId;
-
         $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
                           WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'];
 
@@ -758,16 +749,48 @@ class User extends Entity
         $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
                           WHERE ses_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
-                          WHERE usd_usr_id = ' . $usrId;
-
         $this->db->startTransaction();
+
+        // Deleting a user is one action of the user, so everything that is removed together with
+        // the user belongs into one change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
 
         foreach ($sqlQueries as $sqlQuery) {
             $this->db->query($sqlQuery); // TODO add more params
         }
 
+        // The columns of a list must be removed before the list itself, they are selected through it.
+        $this->deleteDependentRecords(
+            new ListColumns($this->db),
+            array('lsc_id'),
+            'lsc_lst_id IN (SELECT lst_id FROM ' . TBL_LISTS . ' WHERE lst_usr_id = ? AND lst_global = false)',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new ListConfiguration($this->db),
+            array('lst_id'),
+            'lst_global = false AND lst_usr_id = ?',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new Membership($this->db),
+            array('mem_id'),
+            'mem_usr_id = ?',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new UserData($this->db),
+            array('usd_id'),
+            'usd_usr_id = ?',
+            array($usrId)
+        );
+
         $returnValue = parent::delete();
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->db->endTransaction();
 
@@ -1556,11 +1579,12 @@ class User extends Entity
         return $this->checkRolesRight('rol_inventory_admin');
     }
 
-    /* This method checks if the current user is allowed to see the inventory.
+    /**
+     * This method checks if the current user is allowed to see the inventory.
      * @return bool Return **true** if the user is admin of the module otherwise **false**
      * @throws Exception
      */
-    public function isAllowedToSeeInventory() : bool
+    public function isAllowedToViewInventory() : bool
     {
         global $gSettingsManager;
         $allowedRoles = explode(',', $gSettingsManager->get('inventory_visible_for'));
@@ -1676,6 +1700,16 @@ class User extends Entity
         }
 
         return false;
+    }
+
+    /**
+     * This method checks if the current user is allowed to view all user profile.
+     * @return bool Return **true** if the user is allowed to view all user profile otherwise **false**
+     * @throws Exception
+     */
+    public function isAllowedToViewUsers() : bool
+    {
+        return $this->checkRolesRight('rol_all_lists_view');
     }
 
     /**
@@ -1881,6 +1915,11 @@ class User extends Entity
 
         $this->db->startTransaction();
 
+        // The user record and the records of its profile fields are saved one by one, but they are
+        // one single change of the user. Open a change set around all of them, so that the change
+        // history can show the profile fields that one save has modified together.
+        $previousChangeSet = LogChanges::startChangeSet();
+
         // if new user then set create id and the uuid
         $updateCreateUserId = false;
         if ($usrId === 0) {
@@ -1924,6 +1963,7 @@ class User extends Entity
             $gChangeNotification->logUserCreation($usrId, $this);
         }
 
+        LogChanges::endChangeSet($previousChangeSet);
         $this->db->endTransaction();
 
         return $returnValue;
@@ -2249,9 +2289,9 @@ class User extends Entity
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE') {
-            $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $newValue);
+            $date = DateTimeUtils::parseDate($newValue);
 
-            if ($date !== false) {
+            if ($date !== null) {
                 $newValue = $date->format('Y-m-d');
             }
         } elseif (
@@ -2370,12 +2410,12 @@ class User extends Entity
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry)
+    protected function adjustLogEntry(LogChanges $logEntry): void
     {
-        if ($logEntry->getValue('log_field') == 'usr_password') {
+        if (in_array($logEntry->getValue('log_field'), array('usr_password', 'usr_tfa_secret'))) {
             $logEntry->setValue('log_value_old', '********');
             $logEntry->setValue('log_value_new', '********');
-        } elseif ($logEntry->getValue('log_field') == 'usr_photo') {
+        } elseif ($logEntry->getValue('log_field') === 'usr_photo') {
             $logEntry->setValue('log_value_old', '[...]');
             $logEntry->setValue('log_value_new', '[...]');
         }

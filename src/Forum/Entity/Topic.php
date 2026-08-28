@@ -58,16 +58,25 @@ class Topic extends Entity
     {
         $this->db->startTransaction();
 
+        // Deleting a topic is one action of the user, so the topic and its posts belong into one
+        // change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
+
         // delete reference to first post
         $this->setValue('fot_fop_id_first_post', 0);
         $this->save();
 
         // Delete all available posts to this forum entry
-        $sql = 'DELETE FROM ' . TBL_FORUM_POSTS . '
-                      WHERE fop_fot_id = ? -- $this->getValue(\'fot_id\')';
-        $this->db->queryPrepared($sql, array((int)$this->getValue('fot_id')));
+        $this->deleteDependentRecords(
+            new Post($this->db),
+            array('fop_id'),
+            'fop_fot_id = ?',
+            array((int)$this->getValue('fot_id'))
+        );
 
         $return = parent::delete();
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->db->endTransaction();
 

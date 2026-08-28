@@ -18,10 +18,9 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Image;
-use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\Photos\Service\PhotoService;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -42,96 +41,6 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    /**
-     * Delete a thumbnail
-     * @param Album $photoAlbum Reference to object of the relevant album
-     * @param int $picNr No. of the image whose thumbnail is to be deleted
-     */
-    function deleteThumbnail(Album $photoAlbum, int $picNr)
-    {
-        // Assemble folder path
-        $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id') . '/thumbnails/' . $picNr . '.jpg';
-        try {
-            FileSystemUtils::deleteFileIfExists($photoPath);
-        } catch (RuntimeException $exception) {
-            $GLOBALS['gLogger']->error('Could not delete file!', array('filePath' => $photoPath));
-            // TODO
-        }
-    }
-
-    /**
-     * Delete the photo from the filesystem and update number of photos in database.
-     * @param Album $photoAlbum
-     * @param int $picNr
-     */
-    function deletePhoto(Album $photoAlbum, int $picNr)
-    {
-        // get album folder path
-        $albumPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id');
-
-        // delete photos
-        try {
-            FileSystemUtils::deleteFileIfExists($albumPath . '/' . $picNr . '.jpg');
-            FileSystemUtils::deleteFileIfExists($albumPath . '/originals/' . $picNr . '.jpg');
-            FileSystemUtils::deleteFileIfExists($albumPath . '/originals/' . $picNr . '.png');
-        } catch (RuntimeException $exception) {
-            $GLOBALS['gLogger']->error(
-                'Could not delete file!',
-                array('filePaths' => array(
-                    $albumPath . '/' . $picNr . '.jpg',
-                    $albumPath . '/originals/' . $picNr . '.jpg',
-                    $albumPath . '/originals/' . $picNr . '.png'
-                ))
-            );
-            // TODO
-        }
-
-        // Rename the remaining images and delete thumbnails
-        $newPicNr = $picNr;
-        $thumbnailDelete = false;
-
-        for ($actPicNr = 1; $actPicNr <= (int)$photoAlbum->getValue('pho_quantity'); ++$actPicNr) {
-            if (is_file($albumPath . '/' . $actPicNr . '.jpg')) {
-                if ($actPicNr > $newPicNr) {
-                    try {
-                        FileSystemUtils::moveFile($albumPath . '/' . $actPicNr . '.jpg', $albumPath . '/' . $newPicNr . '.jpg');
-                        FileSystemUtils::moveFile($albumPath . '/originals/' . $actPicNr . '.jpg', $albumPath . '/originals/' . $newPicNr . '.jpg');
-                        FileSystemUtils::moveFile($albumPath . '/originals/' . $actPicNr . '.png', $albumPath . '/originals/' . $newPicNr . '.png');
-                    } catch (RuntimeException $exception) {
-                        $GLOBALS['gLogger']->error(
-                            'Could not move file!',
-                            array(
-                                'from' => array(
-                                    $albumPath . '/' . $actPicNr . '.jpg',
-                                    $albumPath . '/originals/' . $actPicNr . '.jpg',
-                                    $albumPath . '/originals/' . $actPicNr . '.png'
-                                ),
-                                'to' => array(
-                                    $albumPath . '/' . $newPicNr . '.jpg',
-                                    $albumPath . '/originals/' . $newPicNr . '.jpg',
-                                    $albumPath . '/originals/' . $newPicNr . '.png'
-                                )
-                            )
-                        );
-                        // TODO
-                    }
-                    ++$newPicNr;
-                }
-            } else {
-                $thumbnailDelete = true;
-            }
-
-            if ($thumbnailDelete) {
-                // Delete all thumbnails starting from the deleted image
-                deleteThumbnail($photoAlbum, $actPicNr);
-            }
-        }//for
-
-        // change quantity of images within the album
-        $photoAlbum->setValue('pho_quantity', (int)$photoAlbum->getValue('pho_quantity') - 1);
-        $photoAlbum->save();
-    }
-
     // create photo album object
     $photoAlbum = new Album($gDb);
     $photoAlbum->readDataByUuid($getPhotoUuid);
@@ -147,22 +56,14 @@ try {
     // Rotate the photo by 90°
     if ($getMode === 'rotate') {
         if ($getDirection !== '') {
-            deleteThumbnail($photoAlbum, $getPhotoNr);
-
-            // get album folder path with image file name
-            $photoPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id') . '/' . $getPhotoNr . '.jpg';
-
-            // rotate image
-            $image = new Image($photoPath);
-            $image->rotate($getDirection);
-            $image->delete();
+            (new PhotoService($gDb, $photoAlbum))->rotatePhoto($getPhotoNr, $getDirection);
         }
 
         echo 'done';
         exit();
     } // delete photo from filesystem and update photo album
     elseif ($getMode === 'delete') {
-        deletePhoto($photoAlbum, $getPhotoNr);
+        (new PhotoService($gDb, $photoAlbum))->deletePhoto($getPhotoNr);
 
         $_SESSION['photo_album'] = $photoAlbum;
 

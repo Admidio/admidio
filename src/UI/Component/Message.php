@@ -76,7 +76,7 @@ class Message
     /**
      * If this is set to true than the message will be shown with html of the bootstrap modal window.
      */
-    public function showInModalWindow()
+    public function showInModalWindow(): void
     {
         $this->includeThemeBody = false;
         $this->inline = true;
@@ -89,7 +89,7 @@ class Message
      * @param string $url   The full url to which the user should be directed.
      * @param int $timer Optional a timer in millisecond after the user will be automatically redirected to the $url.
      */
-    public function setForwardUrl(string $url, int $timer = 0)
+    public function setForwardUrl(string $url, int $timer = 0): void
     {
         $this->forwardMode = true;
         $this->url = $url;
@@ -103,7 +103,7 @@ class Message
      * @param string $urlYesButton The full url to which the user should be directed if he chooses **yes**.
      * @deprecated 5.0.0:5.1.0 Method "setYesNoButton" is deprecated, use modal "admidio-messagebox" instead.
      */
-    public function setYesNoButton(string $urlYesButton)
+    public function setYesNoButton(string $urlYesButton): void
     {
         $this->url = $urlYesButton;
         $this->showYesNoButtons = true;
@@ -118,16 +118,20 @@ class Message
      * @param string $headline Optional a headline for the message. Default will be SYS_NOTE.
      * @throws Exception
      */
-    public function show(string $content, string $headline = '')
+    public function show(string $content, string $headline = ''): void
     {
-        global $gDb, $gL10n, $page;
+        global $gDb, $gL10n, $page, $gHtmlPurifierFilter;
 
         // first perform a rollback in database if there is an open transaction
         $gDb->rollback();
 
+        $content = $gHtmlPurifierFilter->purify($content);
+
         // Set caption, if it was not set explicitly before
         if ($headline === '') {
             $headline = $gL10n->get('SYS_NOTE');
+        } else {
+            $headline = $gHtmlPurifierFilter->purify($headline);
         }
 
         if (!$this->inline) {
@@ -159,7 +163,6 @@ class Message
                 );
             }
         }
-
         if ($this->showTextOnly) {
             // show the pure message text without any html
             echo strip_tags($content);
@@ -194,7 +197,7 @@ class Message
      * If this will be set then only the text message will be shown.
      * If this message contains html elements then these will also be shown in the output.
      */
-    public function showHtmlTextOnly()
+    public function showHtmlTextOnly(): void
     {
         $this->showHtmlTextOnly = true;
     }
@@ -203,7 +206,7 @@ class Message
      * If set no theme files will be integrated in the page.
      * This setting is useful if the message should be loaded in a small window.
      */
-    public function hideThemeBody()
+    public function hideThemeBody(): void
     {
         $this->includeThemeBody = false;
     }
@@ -212,7 +215,7 @@ class Message
      * If this will be set then no html elements will be shown in the output,
      * only pure text. This is useful if you have a script that is used in ajax mode.
      */
-    public function showTextOnly()
+    public function showTextOnly(): void
     {
         $this->showTextOnly = true;
     }

@@ -643,7 +643,7 @@ class Database
             }
         } elseif ($this->engine === self::PDO_ENGINE_PGSQL) {
             $sql = 'SELECT column_name, column_default, is_nullable, data_type,
-                           (SELECT \'YES\' from information_schema.key_column_usage kcu
+                           (SELECT DISTINCT \'YES\' from information_schema.key_column_usage kcu
                              WHERE kcu.table_name  = c.table_name
                                and kcu.column_name = c.column_name ) as key
                       FROM information_schema.columns c

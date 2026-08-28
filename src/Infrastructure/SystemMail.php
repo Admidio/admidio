@@ -77,7 +77,7 @@ class SystemMail extends Email
             ));
         }
 
-        $mailSrcText = (string) $this->smTextObject->getValue('txt_text');
+        $mailSrcText = (string) $this->smTextObject->getValue('txt_text', 'database');
 
         if ($mailSrcText !== '') {
             // use unix line feeds in mail

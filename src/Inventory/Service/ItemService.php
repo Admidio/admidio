@@ -138,7 +138,7 @@ class ItemService
      */
     public function save(bool $multiEdit = false): void
     {
-        global $gCurrentSession, $gL10n, $gSettingsManager;
+        global $gCurrentSession;
 
         // check if the current user is authorized to edit the item
         if (!$this->isEditable()) {
@@ -148,6 +148,25 @@ class ItemService
         // check form field input and sanitized it from malicious content
         $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $itemFieldsEditForm->validate($_POST, $multiEdit);
+
+        $this->saveData($formValues, $multiEdit);
+    }
+
+    /**
+     * Save already validated inventory item data.
+     *
+     * @param array $formValues Validated item values.
+     * @param bool $multiEdit If true, only provided values are changed.
+     * @throws Exception
+     */
+    public function saveData(array $formValues, bool $multiEdit = false): void
+    {
+        global $gL10n, $gSettingsManager;
+
+        // check if the current user is authorized to edit the item
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         $startIdx = 1;
         if ($this->postCopyField > 0) {
@@ -197,10 +216,12 @@ class ItemService
                         // Write value from field to the item class object
                         $this->itemRessource->setValue($infNameIntern, $formValues[$postKey]);
                     }
-                } elseif ($itemField->getValue('inf_type') === 'CHECKBOX' && !$multiEdit) {
-                    // Set value to '0' for unchecked checkboxes
-                    $this->itemRessource->setValue($itemField->getValue('inf_name_intern'), '0');
                 }
+                // NOTE: Unchecked checkboxes must NOT be set to '0' here. A field that is missing
+                // in the form values was not part of the submitted form at all - the borrow form
+                // for example only contains the borrow fields - and its value must stay unchanged.
+                // FormPresenter::validate() already adds the value '0' for every checkbox that
+                // belongs to the submitted form and was not checked by the user.
             }
 
             // save item data
@@ -214,6 +235,140 @@ class ItemService
 
         // Send notification to all users
         $this->itemRessource->sendNotification();
+    }
+
+
+    /**
+     * Return the currently stored item picture in a headless-friendly representation.
+     *
+     * @return array{content:string,filename:string,mimeType:string}
+     * @throws Exception
+     */
+    public function getItemPictureData(): array
+    {
+        global $gSettingsManager;
+
+        $item = new Item($this->db, $this->itemRessource, $this->itemRessource->getItemId());
+        $filename = 'inventory-item-' . $item->getValue('ini_uuid') . '.jpg';
+
+        if ($gSettingsManager->getInt('inventory_item_picture_storage') === 0
+            && (string)$item->getValue('ini_picture') !== '') {
+            return array(
+                'content' => (string)$item->getValue('ini_picture'),
+                'filename' => $filename,
+                'mimeType' => 'image/jpeg'
+            );
+        }
+
+        $picturePath = ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures/'
+            . $this->itemRessource->getItemId() . '.jpg';
+
+        if ($gSettingsManager->getInt('inventory_item_picture_storage') === 0 || !is_file($picturePath)) {
+            $picturePath = getThemedFile('/images/inventory-item-picture.png');
+            $filename = basename($picturePath);
+        }
+
+        if (!is_file($picturePath) || !is_readable($picturePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        $content = file_get_contents($picturePath);
+        if ($content === false) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        return array(
+            'content' => $content,
+            'filename' => $filename,
+            'mimeType' => FileSystemUtils::getFileMimeType($picturePath)
+        );
+    }
+
+    /**
+     * Validate, scale and immediately store an item picture from a local file.
+     *
+     * Unlike uploadItemPicture()/saveItemPicture(), this method does not use temporary session state and is
+     * therefore suitable for headless callers.
+     *
+     * @throws Exception
+     */
+    public function saveItemPictureFromFile(string $sourcePath): void
+    {
+        global $gSettingsManager, $gLogger;
+
+        if (!$this->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        if (!is_file($sourcePath) || !is_readable($sourcePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        $imageProperties = getimagesize($sourcePath);
+        if ($imageProperties === false || !in_array($imageProperties['mime'], array('image/jpeg', 'image/png'), true)) {
+            throw new Exception('SYS_PHOTO_FORMAT_INVALID');
+        }
+
+        $imageDimensions = $imageProperties[0] * $imageProperties[1];
+        if ($imageDimensions > SystemInfoUtils::getProcessableImageSize()) {
+            throw new Exception(
+                'SYS_PHOTO_RESOLUTION_TO_LARGE',
+                array(round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2))
+            );
+        }
+
+        $itemImage = new Image($sourcePath);
+        $itemImage->setImageType('jpeg');
+        $temporaryFile = '';
+
+        try {
+            if ($gSettingsManager->getInt('inventory_item_picture_storage') === 1) {
+                $directory = ADMIDIO_PATH . FOLDER_DATA . '/inventory_item_pictures';
+
+                try {
+                    FileSystemUtils::createDirectoryIfNotExists($directory);
+                } catch (RuntimeException $exception) {
+                    throw new Exception('SYS_FOLDER_NOT_WRITABLE', array(FOLDER_DATA . '/inventory_item_pictures'));
+                }
+
+                $itemImage->scale(
+                    $gSettingsManager->getInt('inventory_item_picture_width'),
+                    $gSettingsManager->getInt('inventory_item_picture_height')
+                );
+
+                if (!$itemImage->copyToFile(
+                    null,
+                    $directory . '/' . $this->itemRessource->getItemId() . '.jpg'
+                )) {
+                    throw new Exception('SYS_PHOTO_PROCESSING_ERROR');
+                }
+            } else {
+                $itemImage->scale(130, 170);
+                $temporaryFile = tempnam(ADMIDIO_PATH . FOLDER_TEMP_DATA, 'inventory-picture-');
+                if ($temporaryFile === false || !$itemImage->copyToFile(null, $temporaryFile)) {
+                    throw new Exception('SYS_PHOTO_PROCESSING_ERROR');
+                }
+
+                $imageData = file_get_contents($temporaryFile);
+                if ($imageData === false) {
+                    throw new Exception('SYS_PHOTO_PROCESSING_ERROR');
+                }
+
+                $item = new Item($this->db, $this->itemRessource, $this->itemRessource->getItemId());
+                $item->setValue('ini_picture', $imageData);
+                $item->save();
+            }
+        } finally {
+            $itemImage->delete();
+
+            if ($temporaryFile !== '' && is_file($temporaryFile)) {
+                try {
+                    FileSystemUtils::deleteFileIfExists($temporaryFile);
+                } catch (RuntimeException $exception) {
+                    $gLogger->error('Could not delete file!', array('filePath' => $temporaryFile));
+                }
+            }
+        }
     }
 
     /**

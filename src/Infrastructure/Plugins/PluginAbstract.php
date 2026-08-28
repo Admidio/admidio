@@ -3,6 +3,7 @@
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Preferences\Service\PreferencesService;
+use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Menu\Entity\MenuEntry;
@@ -216,7 +217,39 @@ abstract class PluginAbstract implements PluginInterface
             self::$dependencies = $configData['dependencies'] ?? array();
             self::$defaultConfig = $configData['defaultConfig'] ?? array();
             self::$metadata = $configData;
+
+            self::registerDefaultConfig();
         }
+    }
+
+    /**
+     * Make the default values of the plugin known to the settings manager. The preferences of a
+     * plugin have no row in adm_preferences until they are saved for the first time, so without
+     * this registration the rest of Admidio would not see them at all: a plugin cannot add its
+     * preferences to install/db_scripts/preferences.php.
+     *
+     * @return void
+     * @throws Exception
+     */
+    private static function registerDefaultConfig(): void
+    {
+        $defaults = array();
+
+        foreach (self::$defaultConfig as $key => $configuration) {
+            if (!array_key_exists('value', $configuration)) {
+                continue;
+            }
+
+            $value = $configuration['value'];
+            // Preferences are stored as strings, so a boolean default has to be converted the same
+            // way SettingsManager::set() would store it.
+            if (is_bool($value)) {
+                $value = $value ? '1' : '0';
+            }
+            $defaults[$key] = $value;
+        }
+
+        SettingsManager::registerDefaults($defaults);
     }
 
     /**
@@ -473,6 +506,30 @@ abstract class PluginAbstract implements PluginInterface
             return $pluginConfig[$sequenceKey]['value'] ?? 0;
         }
         return 0;
+    }
+
+    /**
+     * Set the sequence of the plugin in the overview.
+     *
+     * @return bool Returns true if the plugin defines an overview sequence setting.
+     */
+    public static function setPluginSequence(int $sequence): bool
+    {
+        global $gSettingsManager;
+
+        $sequenceSuffix = '_overview_sequence';
+        $sequenceKeys = array_filter(array_keys(self::$defaultConfig), function($key) use ($sequenceSuffix) {
+            return substr($key, -strlen($sequenceSuffix)) === $sequenceSuffix;
+        });
+
+        if (empty($sequenceKeys)) {
+            return false;
+        }
+
+        $sequenceKey = array_values($sequenceKeys)[0];
+        $gSettingsManager->set($sequenceKey, $sequence);
+
+        return true;
     }
 
     /**

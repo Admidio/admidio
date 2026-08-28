@@ -74,47 +74,38 @@ class ItemBorrowData extends Entity
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(),
-            ['inb_id', 'inb_ini_id']/* ,
-            ($this->newRecord)?[$this->columnPrefix.'_text']:[] */
-        );
+        return array_merge(parent::getIgnoredLogColumns(), ['inb_id', 'inb_ini_id']);
     }
 
     /**
-     * Adjust the changelog entry for this db record: Add the first forum post as a related object
+     * Logs creation of the DB record -> The borrow data of an item has no own life cycle, the
+     * borrowing itself is logged as the modification of the borrow date and the last receiver
+     * immediately after the record was created.
+     *
+     * @return bool Returns **true** if no error occurred
+     */
+    public function logCreation(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Adjust the changelog entry for this db record.
+     *
+     * The borrow data does not have its own page, so the item is displayed as record name and
+     * linked via its id, exactly like a membership is displayed with the user it belongs to.
+     *
      * @param LogChanges $logEntry The log entry to adjust
      * @return void
      * @throws Exception
      */
     protected function adjustLogEntry(LogChanges $logEntry): void
     {
-        global $gDb;
+        $itemID = (int)$this->getValue('inb_ini_id');
+        $item = new Item($this->db, $this->mItemsData, $itemID);
 
-        $itemID = $this->getValue('inb_ini_id');
-        $item = new Item($gDb, $this->mItemsData, $itemID);
-        $itemUUID = $item->getValue('ini_uuid');
-        $itemName = $item->readableName();
-
-        $itemDateNew = $logEntry->getValue('log_value_new');
-        $itemDateOld = $logEntry->getValue('log_value_old');
-
-        if ($logEntry->getValue('log_field') === 'inb_borrow_date') {
-            $infNameIntern = 'BORROW_DATE';
-        } else {
-            $infNameIntern = 'RETURN_DATE';
-        }
-
-        // remove seconds from datetime fields
-        if (!empty($itemDateNew) && str_contains($itemDateNew, ' ')) {
-            $itemDateNew = substr($itemDateNew, 0, 16);
-        }
-        if (!empty($itemDateOld) && str_contains($itemDateNew, ' ')) {
-            $itemDateOld = substr($itemDateOld, 0, 16);
-        }
-
-        $logEntry->setValue('log_value_new', $this->mItemsData->getHtmlValue($infNameIntern, $itemDateNew));
-        $logEntry->setValue('log_value_old', $this->mItemsData->getHtmlValue($infNameIntern, $itemDateOld));
-        $logEntry->setValue('log_record_name', $itemName);
-        $logEntry->setValue('log_record_uuid', $itemUUID);
+        $logEntry->setValue('log_record_name', $item->readableName());
+        $logEntry->setValue('log_record_uuid', $item->getValue('ini_uuid'));
+        $logEntry->setLogLinkID($itemID);
     }
 }

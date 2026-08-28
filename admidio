@@ -1,0 +1,165 @@
+#!/usr/bin/env php
+<?php
+/**
+ ***********************************************************************************************
+ * Native Admidio command-line administration utility.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+if (PHP_SAPI !== 'cli') {
+    fwrite(STDERR, "The Admidio CLI may only be executed from the command line.\n");
+    exit(1);
+}
+
+/**
+ * Read one option needed before the Admidio autoloader/bootstrap is available.
+ *
+ * --host and --organization have to be known before adm_my_files/config.php is loaded, which is
+ * long before the class autoloader exists. This small parser therefore cannot live in
+ * CliApplication; the duplication with its option handling is intentional.
+ *
+ * @param array<int,string> $arguments
+ */
+function admCliBootstrapOption(array $arguments, string $name): string
+{
+    $prefix = '--' . $name . '=';
+
+    for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
+        if (str_starts_with($arguments[$index], $prefix)) {
+            return substr($arguments[$index], strlen($prefix));
+        }
+
+        if ($arguments[$index] === '--' . $name && isset($arguments[$index + 1])) {
+            return $arguments[$index + 1];
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Read the name of the command out of the arguments.
+ *
+ * The command decides which bootstrap can be used, so it has to be known before the registry
+ * exists. Only the first token that is neither an option nor the value of an option is taken; a
+ * misspelled command is reported later by CliApplication, which knows every command. The tokens
+ * are read exactly like CliApplication::findCommand() reads them, short flags included, so both
+ * arrive at the same command.
+ *
+ * @param array<int,string> $arguments
+ */
+function admCliBootstrapCommand(array $arguments): string
+{
+    $globalFlags = array('quiet', 'no-interaction', 'yes', 'help');
+    $globalShortFlags = array('h', 'q', 'y');
+    $globalValueOptions = array('host', 'organization', 'as', 'format', 'output');
+
+    for ($index = 1, $count = count($arguments); $index < $count; ++$index) {
+        $token = $arguments[$index];
+
+        if ($token === '--') {
+            return $arguments[$index + 1] ?? '';
+        }
+
+        // Short flags may precede the command just like their long forms.
+        if (!str_starts_with($token, '--') && str_starts_with($token, '-') && strlen($token) > 1) {
+            if (in_array(substr($token, 1), $globalShortFlags, true)) {
+                continue;
+            }
+
+            return '';
+        }
+
+        if (!str_starts_with($token, '--')) {
+            return $token;
+        }
+
+        $optionName = substr($token, 2);
+        if (str_contains($optionName, '=')) {
+            continue;
+        }
+
+        if (in_array($optionName, $globalFlags, true)) {
+            continue;
+        }
+
+        if (in_array($optionName, $globalValueOptions, true)) {
+            ++$index;
+            continue;
+        }
+
+        return '';
+    }
+
+    return '';
+}
+
+$cliHost = admCliBootstrapOption($argv, 'host');
+$cliOrganization = admCliBootstrapOption($argv, 'organization');
+$cliCommand = admCliBootstrapCommand($argv);
+
+/*
+ * Maintenance mode has to be inspectable and revocable while the database is unavailable, so its
+ * command reads the configuration file but opens no database connection.
+ */
+$cliSkipDatabase = $cliCommand === 'maintenance:mode';
+
+/*
+ * An installation has no configuration file and no database yet, so its commands need a bootstrap
+ * that creates neither. Everything the constants are derived from is read from the command line
+ * there, and the commands check that their options match what was bootstrapped.
+ */
+$installationCommands = array('install:check', 'install:run');
+
+/*
+ * The commands that only describe the command line have to work on an Admidio that is not installed
+ * yet, otherwise install:run could not even be looked up before it is used.
+ */
+$documentationCommands = array('', 'help', 'list', 'completion', 'cli:selfcheck');
+
+$installationBootstrap = in_array($cliCommand, $installationCommands, true)
+    || (in_array($cliCommand, $documentationCommands, true) && !is_file(__DIR__ . '/adm_my_files/config.php'));
+
+try {
+    if (in_array($cliCommand, $installationCommands, true)) {
+        /*
+         * Ask for the values that the command line does not contain. This happens here and not in
+         * the command, because the table prefix and the time zone are needed to build the table
+         * names and the timestamps of the installation, which Admidio does while it is bootstrapping.
+         */
+        if (!in_array('--help', $argv, true) && !in_array('-h', $argv, true)) {
+            require __DIR__ . '/vendor/autoload.php';
+            $argv = Admidio\Infrastructure\Cli\CliInstallationInput::complete($argv, __DIR__);
+        }
+
+        $cliRootUrl = admCliBootstrapOption($argv, 'root-url');
+        $cliLanguage = admCliBootstrapOption($argv, 'language');
+        $cliTablePrefix = admCliBootstrapOption($argv, 'table-prefix');
+        $cliDbType = admCliBootstrapOption($argv, 'db-type');
+        $cliTimezone = admCliBootstrapOption($argv, 'timezone');
+    }
+
+    if ($installationBootstrap) {
+        require __DIR__ . '/system/bootstrap/cli-installation.php';
+    } else {
+        require __DIR__ . '/system/bootstrap/cli.php';
+    }
+
+    $application = new Admidio\Infrastructure\Cli\CliApplication();
+    exit($application->run($argv));
+} catch (Throwable $exception) {
+    /*
+     * The bootstrap itself can fail, for example when config.php is missing, and then the class is
+     * not available to classify the failure. Fall back to the plain message in that case.
+     */
+    if (class_exists(Admidio\Infrastructure\Cli\CliApplication::class, false)) {
+        exit(Admidio\Infrastructure\Cli\CliApplication::handleThrowable($exception, $argv));
+    }
+
+    fwrite(STDERR, 'Error: ' . $exception->getMessage() . PHP_EOL);
+    exit(1);
+}

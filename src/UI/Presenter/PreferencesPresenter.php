@@ -13,6 +13,7 @@ use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
+use Admidio\SSO\Service\OIDCService;
 
 use Admidio\Infrastructure\Plugins\PluginManager;
 
@@ -189,7 +190,7 @@ class PreferencesPresenter extends PagePresenter
                         'icon'     => $entry['icon']    ?? 'bi-puzzle',
                         'subcards' => $entry['subcards'] ?? false,
                     ],
-                    \Admidio\Preferences\Service\PreferencesService::getOverviewPluginPanels()
+                    PreferencesService::getOverviewPluginPanels()
                 )
             ),
 
@@ -205,7 +206,7 @@ class PreferencesPresenter extends PagePresenter
                         'icon'     => $entry['icon']    ?? 'bi-puzzle',
                         'subcards' => $entry['subcards'] ?? false,
                     ],
-                    \Admidio\Preferences\Service\PreferencesService::getPluginPanels()
+                    PreferencesService::getPluginPanels()
                 )
             )
         );
@@ -484,52 +485,84 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['changelog_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_ENABLE_CHANGELOG_DESC')
         );
 
-        $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], ChangelogService::getTableLabel());
-        // $selectedTables = explode(',', $formValues['changelog_tables']??'');
-        $formChangelog->addCustomContent(
-            'changelog_tables',
-            $gL10n->get('SYS_LOGGED_TABLES'),
-            $gL10n->get('SYS_LOGGED_TABLES_DESC'),
-            array(
-                'tables' => array(
-                    array(
-                        'title' => $gL10n->get('SYS_HEADER_USER_ROLE_DATA'),
-                        'id' => 'user_role_data',
-                        'tables' => array('users', 'user_data', 'members', 'user_relations', 'roles', 'role_dependencies', 'category_report')
-                    ),
-                    array(
-                        'title' => $gL10n->get('SYS_HEADER_USER_ROLE_SETTINGS'),
-                        'id' => 'user_role_settings',
-                        'tables' => array('user_fields', 'user_field_select_options', 'user_relation_types', 'roles_rights', 'roles_rights_data')
-                    ),
-                    array(
-                        'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
-                        'id' => 'content_modules',
-                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'links', 'others')
-                    ),
-                    array(
-                        'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
-                        'id' => 'preferences',
-                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories', 'saml_clients', 'oidc_clients', 'sso_keys')
-                    )
-                )
-            )
+        $formChangelog->addInput(
+            'changelog_default_days',
+            $gL10n->get('SYS_CHANGELOG_DEFAULT_DAYS'),
+            $formValues['changelog_default_days'] ?? '365',
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_CHANGELOG_DEFAULT_DAYS_DESC')
         );
 
-        foreach ($tablesMap as $tableName => $tableLabel) {
-            $formChangelog->addCheckbox(
-                'changelog_table_' . $tableName,
-                "$tableLabel ($tableName)",
-                $formValues['changelog_table_' . $tableName] ?? false
+        $formChangelog->addInput(
+            'changelog_retention_days',
+            $gL10n->get('SYS_CHANGELOG_RETENTION_DAYS'),
+            $formValues['changelog_retention_days'] ?? '0',
+            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_CHANGELOG_RETENTION_DAYS_DESC')
+        );
+
+        // The purge is not part of the form, it is a separate action that deletes data immediately.
+        $formChangelog->addCustomContent(
+            'changelog_purge',
+            '',
+            '<a id="adm_link_changelog_purge" href="#adm_link_changelog_purge" class="btn btn-secondary">
+                <i class="bi bi-trash"></i>' . $gL10n->get('SYS_CHANGELOG_PURGE') . '</a>
+             <div id="adm_changelog_purge_result" class="form-text"></div>'
+        );
+
+        // The change history is configured in areas, but the preferences store one flag per
+        // database table. An area whose tables are only partly logged therefore starts in the
+        // state "mixed" and leaves those flags untouched until the user switches it on or off.
+        $sections = array();
+        foreach (ChangelogService::getAreaSections() as $sectionId => $sectionLabel) {
+            $sections[$sectionId] = array(
+                'id' => 'adm_changelog_section_' . $sectionId,
+                'title' => ($sectionLabel === '' ? '' : $gL10n->get($sectionLabel)),
+                'areas' => array()
             );
         }
 
-        // $formChangelog->addCheckbox(
-        //     'changelog_allow_deletion',
-        //     $gL10n->get('SYS_LOG_ALLOW_DELETION'),
-        //     (bool)($formValues['changelog_allow_deletion']??false),
-        //     array('helpTextId' => 'SYS_LOG_ALLOW_DELETION_DESC')
-        // );
+        foreach (ChangelogService::getVisibleAreas() as $areaId => $area) {
+            $loggedTables = 0;
+            foreach ($area['tables'] as $tableName) {
+                if (!empty($formValues['changelog_table_' . $tableName])) {
+                    $loggedTables++;
+                }
+            }
+
+            if ($loggedTables === 0) {
+                $areaState = 'off';
+            } elseif ($loggedTables === count($area['tables'])) {
+                $areaState = 'on';
+            } else {
+                $areaState = 'mixed';
+            }
+
+            $elementId = 'changelog_area_' . $areaId;
+            $formChangelog->addCheckbox(
+                $elementId,
+                $gL10n->translateIfTranslationStrId($area['label']),
+                $areaState !== 'off',
+                array('value' => ($areaState === 'mixed' ? 'mixed' : '1'), 'state' => $areaState)
+            );
+
+            if (!isset($sections[$area['section']])) {
+                $sections[$area['section']] = array(
+                    'id' => 'adm_changelog_section_' . $area['section'],
+                    'title' => '',
+                    'areas' => array()
+                );
+            }
+            $sections[$area['section']]['areas'][] = $elementId;
+        }
+
+        // A section without a single area of an enabled module is not displayed at all.
+        $formChangelog->addCustomContent(
+            'changelog_areas',
+            $gL10n->get('SYS_LOGGED_AREAS'),
+            $gL10n->get('SYS_LOGGED_AREAS_DESC'),
+            array('sections' => array_filter($sections, function (array $section) {
+                return count($section['areas']) > 0;
+            }))
+        );
 
         $formChangelog->addSubmitButton(
             'adm_button_save_changelog',
@@ -761,12 +794,6 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_CONTACTS_PER_PAGE'),
             $selectBoxEntries,
             array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(25)))
-        );
-        $formContacts->addInput(
-            'contacts_field_history_days',
-            $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
-            $formValues['contacts_field_history_days'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
         );
         $formContacts->addCheckbox(
             'contacts_show_all',
@@ -1091,7 +1118,7 @@ class PreferencesPresenter extends PagePresenter
         $formInventory->addCheckbox(
             'inventory_system_field_names_editable',
             $gL10n->get('SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT'),
-            $formValues['inventory_system_field_names_editable'],
+            (bool) $formValues['inventory_system_field_names_editable'],
             array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
         );
 
@@ -1099,7 +1126,7 @@ class PreferencesPresenter extends PagePresenter
             $formInventory->addCheckbox(
                 'inventory_allow_keeper_edit',
                 $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
-                $formValues['inventory_allow_keeper_edit'],
+                (bool) $formValues['inventory_allow_keeper_edit'],
                 array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
             );
 
@@ -2381,17 +2408,17 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_SSO_OIDC_ENABLED_DESC')
         );
 
-        if (empty($formValues['sso_oidc_issuer_url'])) {
-            $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
-        }
-        if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
-            $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
-        }
+        // An empty IssuerURL indicates the use of the default admidio base URL
+        // Leave the input box exmpty, but show the default value as 
+        // placeholder/hint and copy that value when the copy icon is clicked!
+        $defaultIssuerURL = OIDCService::getDefaultIssuerURL();
         $formSSO->addInput(
             'sso_oidc_issuer_url',
             $gL10n->get('SYS_SSO_OIDC_ISSUER_URL'),
             (string)$formValues['sso_oidc_issuer_url'],
-            array('class' => 'copy-container if-oidc-enabled', 'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
+            array('class' => 'copy-container if-oidc-enabled', 
+                  'placeholder' => $defaultIssuerURL,
+                  'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
         );
 
         $keyService = new KeyService($gDb);
@@ -2884,6 +2911,65 @@ class PreferencesPresenter extends PagePresenter
                     $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_check", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(htmlVersion) {
                         versionInfoContainer.html(htmlVersion);
                     });
+                });
+
+                // The purge deletes with the retention period that is stored in the preferences and
+                // not with the one that is currently shown in the form. As long as the two differ,
+                // the button is disabled: a period that was raised but not saved yet would otherwise
+                // delete far more than the value on the screen suggests.
+                function updateChangelogPurgeState() {
+                    var retentionInput = panelContainer.find("#changelog_retention_days");
+                    if (retentionInput.length === 0) {
+                        return;
+                    }
+
+                    var unsavedPeriod = (retentionInput.val() !== retentionInput.prop("defaultValue"));
+                    panelContainer.find("#adm_link_changelog_purge")
+                        .toggleClass("disabled", unsavedPeriod)
+                        .attr("aria-disabled", unsavedPeriod ? "true" : "false");
+                    panelContainer.find("#adm_changelog_purge_result")
+                        .text(unsavedPeriod ? "' . $gL10n->get('SYS_CHANGELOG_PURGE_SAVE_FIRST') . '" : "");
+                }
+
+                panelContainer.off("input", "#changelog_retention_days")
+                    .on("input", "#changelog_retention_days", updateChangelogPurgeState);
+                updateChangelogPurgeState();
+
+                // Delete the entries of the change history that are older than the retention period
+                panelContainer.off("click", "#adm_link_changelog_purge").on("click", "#adm_link_changelog_purge", function(event) {
+                    event.preventDefault();
+                    if ($(this).hasClass("disabled")) {
+                        return;
+                    }
+                    if (!confirm("' . $gL10n->get('SYS_CHANGELOG_PURGE_CONFIRM') . '")) {
+                        return;
+                    }
+                    var resultContainer = panelContainer.find("#adm_changelog_purge_result");
+                    resultContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>");
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=changelog_purge", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(resultText) {
+                        resultContainer.text(resultText);
+                    });
+                });
+
+                // The area checkboxes of the change history have three states. An area whose tables
+                // are only partly logged starts out indeterminate and keeps that state until it is
+                // clicked, so a configuration that the area cannot represent is never overwritten.
+                function applyChangelogAreaState(areaCheckbox, state) {
+                    areaCheckbox.data("state", state);
+                    areaCheckbox.prop("indeterminate", state === "mixed");
+                    areaCheckbox.prop("checked", state !== "off");
+                    areaCheckbox.val(state === "mixed" ? "mixed" : "1");
+                }
+
+                panelContainer.find("input[data-changelog-area]").each(function() {
+                    applyChangelogAreaState($(this), $(this).data("state"));
+                });
+
+                panelContainer.off("click", "input[data-changelog-area]").on("click", "input[data-changelog-area]", function() {
+                    var areaCheckbox = $(this);
+                    // Only an area that was mixed to begin with can be set back to mixed.
+                    var states = (areaCheckbox.data("initialState") === "mixed") ? ["mixed", "on", "off"] : ["off", "on"];
+                    applyChangelogAreaState(areaCheckbox, states[(states.indexOf(areaCheckbox.data("state")) + 1) % states.length]);
                 });
 
                 // Verzeichnis-Schutz prüfen

@@ -23,6 +23,10 @@ try {
 
     $getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
 
+    if ($gDisableFileUpload) {
+        throw new Exception('File upload disabled in global config file!');
+    }
+
     // check if a file was really uploaded
     if (!file_exists($_FILES['upload']['tmp_name']) || !is_uploaded_file($_FILES['upload']['tmp_name'])) {
         throw new Exception('SYS_FILE_NOT_EXIST');

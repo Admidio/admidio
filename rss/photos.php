@@ -30,11 +30,10 @@ try {
     }
 
     // check if the module is enabled and disallow access if it's disabled
-    if ((int)$gSettingsManager->get('photo_module_enabled') === 0) {
+    if ($gSettingsManager->getInt('photo_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ((int)$gSettingsManager->get('photo_module_enabled') === 2) {
-        // only logged-in users can access the module
-        require(__DIR__ . '/../../system/login_valid.php');
+    } elseif ($gSettingsManager->getInt('photo_module_enabled') === 2 && !$gValidLogin) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     if ($getOrganization !== '') {

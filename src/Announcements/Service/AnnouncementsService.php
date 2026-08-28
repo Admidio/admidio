@@ -30,15 +30,21 @@ class AnnouncementsService
      * @var string UUID of the category for which the announcements should be filtered.
      */
     protected string $categoryUUID = '';
+    /**
+     * @var string UUID of the announcement that should be filtered.
+     */
+    protected string $announcementUUID = '';
 
     /**
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $categoryUUID UUID of the category for which the announcements should be filtered.
+     * @param string $announcementUUID UUID of the announcement that should be filtered.
      */
-    public function __construct(Database $database, string $categoryUUID = '')
+    public function __construct(Database $database, string $categoryUUID = '', string $announcementUUID = '')
     {
         $this->db = $database;
         $this->categoryUUID = $categoryUUID;
+        $this->announcementUUID = $announcementUUID;
     }
 
     /**
@@ -52,13 +58,22 @@ class AnnouncementsService
 
         $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
 
+        $sqlConditions = '';
+        $queryParameters = $visibleCategoryIDs;
+
+        if ($this->announcementUUID !== '') {
+            $sqlConditions .= ' AND ann_uuid = ?';
+            $queryParameters[] = $this->announcementUUID;
+        }
+
         $sql = 'SELECT COUNT(*) AS count
                   FROM ' . TBL_ANNOUNCEMENTS . '
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = ann_cat_id
-                 WHERE cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ') ';
+                 WHERE cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ')
+                       ' . $sqlConditions;
 
-        $pdoStatement = $this->db->queryPrepared($sql, $visibleCategoryIDs);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParameters);
 
         return (int)$pdoStatement->fetchColumn();
     }
@@ -107,6 +122,11 @@ class AnnouncementsService
         if ($this->categoryUUID !== '') {
             $sqlConditions .= ' AND cat_uuid = ?';
             $sqlQueryParameters[] = $this->categoryUUID;
+        }
+
+        if ($this->announcementUUID !== '') {
+            $sqlConditions .= ' AND ann_uuid = ?';
+            $sqlQueryParameters[] = $this->announcementUUID;
         }
 
         // Check if limit was set
@@ -166,6 +186,12 @@ class AnnouncementsService
      */
     public function rssFeed(string $organizationShortName): void
     {
+        header('Content-type: application/xml');
+        echo $this->getRssFeedContent($organizationShortName);
+    }
+
+    public function getRssFeedContent(string $organizationShortName): string
+    {
         global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gL10n, $gCurrentOrgId;
 
         // Check if RSS is active...
@@ -207,7 +233,7 @@ class AnnouncementsService
         }
 
         $gCurrentUser->setOrganization($gCurrentOrgId);
-        $rss->getRssFeed();
+        return $rss->getRssFeedContent();
     }
 
     /**

@@ -39,7 +39,7 @@ try {
             $oidcService = new OIDCService($gDb, $gCurrentUser);
             $oidcService->setupService();
         } catch (Exception $e) {
-            echo json_encode(['error' => 'OIDC service setup failed: ' . $e->getMessage()]);
+            echo json_encode(['error' => 'OIDC service setup failed: ' . $gHtmlPurifierFilter->purify($e->getMessage())]);
             exit;
         }
 
@@ -77,7 +77,7 @@ try {
             }
 
         } catch (Throwable $e) {
-            echo json_encode(['error' => 'OIDC Error in Admidio: ' . $e->getMessage()]);
+            echo json_encode(['error' => 'OIDC Error in Admidio: ' . $gHtmlPurifierFilter->purify($e->getMessage())]);
             exit;
         }
 
@@ -106,7 +106,7 @@ try {
 
 
 } catch (Throwable $e) {
-    echo $e->getMessage();
+    handleException($e, true);
 }
 
 exit;

@@ -2,6 +2,7 @@
 
 namespace Admidio\Preferences\Service;
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -10,6 +11,7 @@ use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Language;
+use Admidio\SSO\Service\OIDCService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -226,8 +228,53 @@ class PreferencesService
     }
 
     /**
-     * check availability of update information and if connected
-     * read available Admidio versions from server (text file)
+     * Read the available Admidio versions and determine the update state.
+     *
+     * @return array{stableVersion:string,betaVersion:string,betaRelease:string,versionUpdate:int}
+     */
+    public function getUpdateInformation(): array
+    {
+        $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
+        $updateInfo = @file_get_contents($updateInfoUrl);
+
+        if ($updateInfo === false) {
+            return array(
+                'stableVersion' => 'n/a',
+                'betaVersion' => 'n/a',
+                'betaRelease' => '',
+                'versionUpdate' => 99
+            );
+        }
+
+        $stableVersion = $this->getUpdateVersion($updateInfo, 'Version=');
+        $betaVersion = $this->getUpdateVersion($updateInfo, 'Beta-Version=');
+        $betaRelease = $this->getUpdateVersion($updateInfo, 'Beta-Release=');
+
+        if ($stableVersion === '') {
+            $stableVersion = 'n/a';
+        }
+
+        if ($betaVersion === '') {
+            $betaVersion = 'n/a';
+            $betaRelease = '';
+        }
+
+        return array(
+            'stableVersion' => $stableVersion,
+            'betaVersion' => $betaVersion,
+            'betaRelease' => $betaRelease,
+            'versionUpdate' => $this->checkVersion(
+                ADMIDIO_VERSION,
+                $stableVersion,
+                $betaVersion,
+                $betaRelease,
+                ADMIDIO_VERSION_BETA
+            )
+        );
+    }
+
+    /**
+     * check availability of update information and render it for the preferences UI.
      * @return string Returns the HTML of the update check
      * @throws Exception
      */
@@ -236,44 +283,13 @@ class PreferencesService
         global $gL10n;
         $html = '';
 
-        // check availability of update information and if connected
-        // read available Admidio versions from server (text file)
-        // First select the method (CURL preferred)
-        $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
-        if (@file_get_contents($updateInfoUrl) === false) {
-            // Admidio Versionen nicht auslesbar
-            $stableVersion = 'n/a';
-            $betaVersion = 'n/a';
-            $betaRelease = '';
+        $updateInformation = $this->getUpdateInformation();
+        $stableVersion = $updateInformation['stableVersion'];
+        $betaVersion = $updateInformation['betaVersion'];
+        $betaRelease = $updateInformation['betaRelease'];
+        $versionUpdate = $updateInformation['versionUpdate'];
 
-            $versionUpdate = 99;
-        } else {
-            $updateInfo = file_get_contents($updateInfoUrl);
-
-            // Admidio versions passed from server
-            $stableVersion = $this->getUpdateVersion($updateInfo, 'Version=');
-            $betaVersion = $this->getUpdateVersion($updateInfo, 'Beta-Version=');
-            $betaRelease = $this->getUpdateVersion($updateInfo, 'Beta-Release=');
-
-            // No stable version available (actually impossible)
-            if ($stableVersion === '') {
-                $stableVersion = 'n/a';
-            }
-
-            // No beat version available
-            if ($betaVersion === '') {
-                $betaVersion = 'n/a';
-                $betaRelease = '';
-            }
-
-            // check for update
-            $versionUpdate = $this->checkVersion(ADMIDIO_VERSION, $stableVersion, $betaVersion, $betaRelease, ADMIDIO_VERSION_BETA);
-        }
-
-        // Only continues in display mode, otherwise the current update state can be
-        // queried in the $versionUpdate variable.
         // $versionUpdate (0 = No update, 1 = New stable version, 2 = New beta version, 3 = New stable + beta version, 99 = No connection)
-        // show update result
         if ($versionUpdate === 1) {
             $versionsText = $gL10n->get('SYS_NEW_VERSION_AVAILABLE');
         } elseif ($versionUpdate === 2) {
@@ -374,13 +390,39 @@ class PreferencesService
                 }
                 break;
 
-            case 'sso':
-                if (empty($formData['sso_oidc_issuer_url'])) {
-                    $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+            case 'changelog':
+                // The form offers one checkbox per area, the preferences store one flag per
+                // database table. An area that is still in its mixed state was not touched by the
+                // user, so the flags of its tables have to be left exactly as they are.
+                foreach (ChangelogService::getVisibleAreas() as $areaId => $area) {
+                    $areaValue = $formValues['changelog_area_' . $areaId] ?? 'mixed';
+                    unset($formValues['changelog_area_' . $areaId]);
+
+                    if ($areaValue !== '1' && $areaValue !== '0') {
+                        continue;
+                    }
+
+                    foreach ($area['tables'] as $tableName) {
+                        $formValues['changelog_table_' . $tableName] = $areaValue;
+                    }
                 }
-                if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
-                    $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
+                break;
+
+            case 'sso': 
+                // empty issuerURL means "Use the default URL from the admidio installation's URL"
+                $issuerURL = trim((string)($formValues['sso_oidc_issuer_url'] ?? ''));
+
+                if ($issuerURL !== '') {
+                    $issuerURL = rtrim($issuerURL, '/');
                 }
+
+                // Do not persist the installation-derived default. An empty setting
+                // allows the issuer URL to follow later changes to ADMIDIO_URL.
+                if ($issuerURL === OIDCService::getDefaultIssuerURL()) {
+                    $issuerURL = '';
+                }
+
+                $formValues['sso_oidc_issuer_url'] = $issuerURL;
                 break;
         }
 

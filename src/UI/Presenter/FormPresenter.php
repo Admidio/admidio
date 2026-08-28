@@ -10,12 +10,13 @@ use DateTime;
 use PDO;
 use Ramsey\Uuid\Uuid;
 use Securimage;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 use SimpleXMLElement;
 use Smarty\Smarty;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 
 /**
  * @brief Creates an Admidio specific form
@@ -754,13 +755,12 @@ class FormPresenter
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
-            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
+            $datetime = DateTimeUtils::parseDateTime($value);
 
-            // now add a date and a time field to the form
             $attributes['dateValue'] = null;
             $attributes['timeValue'] = null;
 
-            if ($datetime) {
+            if ($datetime !== null) {
                 $attributes['dateValue'] = $datetime->format('Y-m-d');
                 $attributes['timeValue'] = $datetime->format('H:i');
             }
@@ -780,9 +780,11 @@ class FormPresenter
             $optionsTime['type'] = 'time';
             $this->elements[$id . '_time'] = $optionsTime;
         } elseif ($optionsAll['type'] === 'date') {
-            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
-            if (!empty($value) && is_object($datetime))
+            $datetime = DateTimeUtils::parseDate($value);
+
+            if ($value !== '' && $datetime !== null) {
                 $value = $datetime->format('Y-m-d');
+            }
             $attributes['pattern'] = '\d{4}-\d{2}-\d{2}';
         } elseif ($optionsAll['type'] === 'time') {
             $datetime = DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);
@@ -2177,10 +2179,13 @@ class FormPresenter
                     throw new Exception('SYS_FIELD_EMPTY', array($element['label']));
                 }
             } elseif (isset($element['property']) && $element['property'] === $this::FIELD_DISABLED) {
-                // no value should be set if a field is marked as disabled
-                if (isset($fieldValues[$element['id']])) {
-                    unset($fieldValues[$element['id']]);
-                }
+                // No value should be set if a field is marked as disabled. The browser does not
+                // submit a disabled control at all, so there is nothing the user could have
+                // entered. Continue with the next element instead of only dropping the value:
+                // the checkbox default below would otherwise store '0' for a disabled checkbox
+                // and thereby clear a value the user was never able to change.
+                unset($fieldValues[$element['id']]);
+                continue;
             }
 
             // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
@@ -2199,17 +2204,10 @@ class FormPresenter
                             $this->validateCaptcha($fieldValues[$element['id']]);
                             break;
                         case 'date':
-                            // check if date is a valid Admidio date format
-                            $objAdmidioDate = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $fieldValues[$element['id']]);
-
-                            if (!$objAdmidioDate) {
-                                // check if date has english format
-                                $objEnglishDate = DateTime::createFromFormat('Y-m-d', $fieldValues[$element['id']]);
-
-                                if (!$objEnglishDate) {
-                                    throw new Exception('The date "' . $element['label'] . '" has an invalid date format!');
-                                }
+                            if (DateTimeUtils::parseDate($fieldValues[$element['id']]) === null) {
+                                throw new Exception('The date "' . $element['label'] . '" has an invalid date format!');
                             }
+                            break;
                         case 'editor':
                             // check html string vor invalid tags and scripts
                             $config = HTMLPurifier_Config::createDefault();

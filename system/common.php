@@ -1,6 +1,7 @@
 <?php
 
 use Admidio\Application\Navigation;
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
@@ -63,6 +64,13 @@ try {
     exit();
 }
 
+// check HTML string for invalid tags and scripts
+$gHtmlPurifierConfig = HTMLPurifier_Config::createDefault();
+$gHtmlPurifierConfig->set('HTML.Doctype', 'HTML 4.01 Transitional');
+$gHtmlPurifierConfig->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+$gHtmlPurifierConfig->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+
+$gHtmlPurifierFilter = new HTMLPurifier($gHtmlPurifierConfig);
 
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables
@@ -156,6 +164,9 @@ if (array_key_exists('gCurrentSession', $_SESSION)
 
     // delete old entries in session table
     $gCurrentSession->tableCleanup($gSettingsManager->getInt('logout_minutes'));
+
+    // delete the entries of the change history that are older than the configured retention period
+    ChangelogService::purgeOldEntriesIfDue();
 }
 
 // Check if reduced layout should be shown

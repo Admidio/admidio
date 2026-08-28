@@ -72,26 +72,66 @@ class ImportService
             $formValues,
             'import_enclosure',
             'string',
-            array('validValues' => array('', 'AUTO', '"', '\|'))
+            array('validValues' => array('', 'AUTO', '"', '\''))
         );
-
         $postWorksheet = admFuncVariableIsValid($formValues, 'import_sheet', 'string');
 
-        $importfile = $_FILES['userfile']['tmp_name'][0];
-        if (strlen($importfile) === 0) {
+        $importFile = $_FILES['userfile']['tmp_name'][0];
+        if (strlen($importFile) === 0) {
             $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', array($gL10n->get('SYS_FILE'))));
             // => EXIT
         } elseif ($_FILES['userfile']['error'][0] === UPLOAD_ERR_INI_SIZE) {
-            // check the filesize against the server settings
             $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', array(ini_get('upload_max_filesize'))));
             // => EXIT
-        } elseif (!file_exists($importfile) || !is_uploaded_file($importfile)) {
-            // check if a file was really uploaded
+        } elseif (!file_exists($importFile) || !is_uploaded_file($importFile)) {
             $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
             // => EXIT
         }
 
-        switch ($postImportFormat) {
+        try {
+            $_SESSION['import_data'] = $this->readImportFileData(
+                $importFile,
+                $postImportFormat,
+                $postImportCoding,
+                $postSeparator,
+                $postEnclosure,
+                $postWorksheet
+            );
+        } catch (\Throwable $exception) {
+            $gMessage->show($exception->getMessage());
+            // => EXIT
+        }
+    }
+
+    /**
+     * Read an inventory import file without relying on HTTP upload or session state.
+     *
+     * @param string $importFile Path to the import file.
+     * @param string $format AUTO, XLSX, XLS, ODS, CSV or HTML.
+     * @param string $encoding CSV input encoding. Empty means UTF-8.
+     * @param string $separator CSV delimiter. Empty means reader default.
+     * @param string $enclosure CSV enclosure. AUTO means reader default.
+     * @param string $worksheet Worksheet name or zero-based worksheet index.
+     * @return array<int,array<int,mixed>>
+     * @throws Exception
+     */
+    public function readImportFileData(
+        string $importFile,
+        string $format = 'AUTO',
+        string $encoding = '',
+        string $separator = '',
+        string $enclosure = 'AUTO',
+        string $worksheet = ''
+    ): array {
+        if (!is_file($importFile) || !is_readable($importFile)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        if (!in_array($format, array('AUTO', 'XLSX', 'XLS', 'ODS', 'CSV', 'HTML'), true)) {
+            throw new \InvalidArgumentException('Invalid inventory import format.');
+        }
+
+        switch ($format) {
             case 'XLSX':
                 $reader = new Xlsx();
                 break;
@@ -106,19 +146,22 @@ class ImportService
 
             case 'CSV':
                 $reader = new Csv();
-                if ($postImportCoding === 'GUESS') {
-                    $postImportCoding = Csv::guessEncoding($importfile);
-                } elseif ($postImportCoding === '') {
-                    $postImportCoding = 'UTF-8';
+                if ($encoding === 'GUESS') {
+                    $encoding = Csv::guessEncoding($importFile);
+                } elseif ($encoding === '') {
+                    $encoding = 'UTF-8';
                 }
-                $reader->setInputEncoding($postImportCoding);
+                $reader->setInputEncoding($encoding);
 
-                if ($postSeparator != '') {
-                    $reader->setDelimiter($postSeparator);
+                if ($separator !== '') {
+                    if ($separator === '\t') {
+                        $separator = "\t";
+                    }
+                    $reader->setDelimiter($separator);
                 }
 
-                if ($postEnclosure != 'AUTO') {
-                    $reader->setEnclosure($postEnclosure);
+                if ($enclosure !== 'AUTO') {
+                    $reader->setEnclosure($enclosure);
                 }
                 break;
 
@@ -128,35 +171,24 @@ class ImportService
 
             case 'AUTO':
             default:
-                $reader = IOFactory::createReaderForFile($importfile);
+                $reader = IOFactory::createReaderForFile($importFile);
                 break;
         }
 
-        // TODO: Better error handling if file cannot be loaded (phpSpreadsheet apparently does not always use exceptions)
-        if (isset($reader) and !is_null($reader)) {
-            try {
-                $spreadsheet = $reader->load($importfile);
-                // Read specified sheet (passed as argument/param)
-                if (is_numeric($postWorksheet)) {
-                    $sheet = $spreadsheet->getSheet($postWorksheet);
-                } elseif (!empty($postWorksheet)) {
-                    $sheet = $spreadsheet->getSheetByName($postWorksheet);
-                } else {
-                    $sheet = $spreadsheet->getActiveSheet();
-                }
-
-                if (empty($sheet)) {
-                    $gMessage->show($gL10n->get('SYS_IMPORT_SHEET_NOT_EXISTS', array($postWorksheet)));
-                    // => EXIT
-                } else {
-                    // read data to array without any format
-                    $_SESSION['import_data'] = $sheet->toArray(null, true, false);
-                }
-            } catch (\PhpOffice\PhpSpreadsheet\Exception|Exception $e) {
-                $gMessage->show($e->getMessage());
-                // => EXIT
-            }
+        $spreadsheet = $reader->load($importFile);
+        if ($worksheet !== '' && is_numeric($worksheet)) {
+            $sheet = $spreadsheet->getSheet((int)$worksheet);
+        } elseif ($worksheet !== '') {
+            $sheet = $spreadsheet->getSheetByName($worksheet);
+        } else {
+            $sheet = $spreadsheet->getActiveSheet();
         }
+
+        if ($sheet === null) {
+            throw new Exception('SYS_IMPORT_SHEET_NOT_EXISTS', array($worksheet));
+        }
+
+        return $sheet->toArray(null, true, false);
     }
 
     /**
@@ -167,17 +199,36 @@ class ImportService
      */
     public function importItems(): array
     {
-        global $gL10n, $gDb, $gCurrentOrgId, $gSettingsManager, $gCurrentSession;
-        // check form field input and sanitized it from malicious content
+        global $gCurrentSession;
+
+        // check form field input and sanitize it from malicious content
         $itemFieldsImportForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $itemFieldsImportForm->validate($_POST);
 
         $_SESSION['import_csv_request'] = $formValues;
 
+        return $this->importData($_SESSION['import_data'], $formValues);
+    }
+
+    /**
+     * Import inventory data that has already been read and mapped.
+     *
+     * The mapping array uses inventory field IDs as keys and zero-based source
+     * column indexes as values. Set first_row to skip a header row.
+     *
+     * @param array<int,array<int,mixed>> $importData
+     * @param array<int|string,mixed> $formValues
+     * @return array{success:string,message:string}
+     * @throws Exception
+     */
+    public function importData(array $importData, array $formValues): array
+    {
+        global $gL10n, $gDb, $gCurrentOrgId, $gSettingsManager;
+
         $returnMessage = array();
 
         // go through each line from the file one by one and create the user in the DB
-        $line = reset($_SESSION['import_data']);
+        $line = reset($importData);
         $firstRowTitle = array_key_exists('first_row', $formValues);
         $startRow = 0;
         $importItemFields = array();
@@ -189,15 +240,30 @@ class ImportService
             }
         }
 
+        $itemDefinitions = new ItemsData($gDb, $gCurrentOrgId);
+        foreach ($itemDefinitions->getItemFields() as $itemField) {
+            $internalName = (string)$itemField->getValue('inf_name_intern');
+            if ($gSettingsManager->getBool('inventory_items_disable_borrowing')
+                && in_array($internalName, $itemDefinitions->borrowFieldNames, true)) {
+                continue;
+            }
+
+            if ((int)$itemField->getValue('inf_required_input') === 1
+                && !array_key_exists((int)$itemField->getValue('inf_id'), $importItemFields)
+                && !array_key_exists((string)$itemField->getValue('inf_id'), $importItemFields)) {
+                throw new Exception('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name')));
+            }
+        }
+
         if ($firstRowTitle) {
             // skip first line, because here are the column names
-            $line = next($_SESSION['import_data']);
+            $line = next($importData);
             $startRow = 1;
         }
 
         $assignedFieldColumn = array();
 
-        for ($i = $startRow, $iMax = count($_SESSION['import_data']); $i < $iMax; ++$i) {
+        for ($i = $startRow, $iMax = count($importData); $i < $iMax; ++$i) {
             $row = array();
             foreach ($line as $columnKey => $columnValue) {
                 if (empty($columnValue)) {
@@ -211,7 +277,7 @@ class ImportService
                 }
             }
             $assignedFieldColumn[] = $row;
-            $line = next($_SESSION['import_data']);
+            $line = next($importData);
         }
 
         // cleanup the assigned field column array
@@ -269,6 +335,7 @@ class ImportService
 
         foreach ($assignedFieldColumn as $row => $values) {
             $itemData = array();
+            $itemFormValues = array();
             foreach ($items->getItemFields() as $fields) {
                 $val = '';
                 $infId = $fields->getValue('inf_id');
@@ -439,7 +506,7 @@ class ImportService
                         $val = $values[$infId];
                     }
                 }
-                $_POST['INF-' . $infNameIntern] = $val;
+                $itemFormValues['INF-' . $infNameIntern] = $val;
                 $itemData[] = array($items->getItemFields()[$infNameIntern]->getValue('inf_name') => array('oldValue' => "", 'newValue' => $val));
             }
 
@@ -448,14 +515,12 @@ class ImportService
             if (count($assignedFieldColumn) > 0) {
 
                 $itemModule = new ItemService($gDb, '', 0, 1, true);
-                $itemModule->save();
+                $itemModule->saveData($itemFormValues);
 
                 $importSuccess = true;
             }
         }
 
-        // cleanup the post data after the import
-        unset($_POST);
 
         // Send notification to all users
         $items->sendNotification($importedItemData);

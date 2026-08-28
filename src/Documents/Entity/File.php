@@ -307,7 +307,7 @@ class File extends Entity
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
+    protected function adjustLogEntry(LogChanges $logEntry): void {
         $folEntry = new Folder($this->db, $this->getValue('fil_fol_id'));
         $logEntry->setLogRelated($folEntry->getValue('fol_uuid'), $folEntry->getValue('fol_name'));
     }

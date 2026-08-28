@@ -108,6 +108,18 @@ class PluginManager
         return null;
     }
 
+    public function getPluginByComponentName(string $componentName) : ?PluginAbstract
+    {
+        $plugins = $this->getAvailablePlugins();
+        foreach ($plugins as $plugin) {
+            $plugin['interface'] = $plugin['interface'] !== null ? $plugin['interface']::getInstance() : null;
+            if ($plugin['interface'] instanceof PluginAbstract && strtoupper(basename($plugin['interface']->getComponentName())) === $componentName) {
+                return $plugin['interface'];
+            }
+        }
+        return null;
+    }
+
     public function getMetadataByComponentId(int $componentId) : ?array
     {
         $plugin = $this->getPluginById($componentId);

@@ -2,6 +2,7 @@
 namespace Admidio\Roles\Entity;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
@@ -263,29 +264,43 @@ class Role extends Entity
 
         $this->db->startTransaction();
 
-        $sql = 'DELETE FROM ' . TBL_ROLE_DEPENDENCIES . '
-                 WHERE rld_rol_id_parent = ? -- $rolId
-                    OR rld_rol_id_child  = ? -- $rolId';
-        $this->db->queryPrepared($sql, array($rolId, $rolId));
+        // Deleting a role is one action of the user, so the role and everything that is removed
+        // together with it belong into one change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
 
-        $sql = 'DELETE FROM ' . TBL_MEMBERS . '
-                 WHERE mem_rol_id = ? -- $rolId';
-        $this->db->queryPrepared($sql, array($rolId));
+        $this->deleteDependentRecords(
+            new RolesDependencies($this->db),
+            array('rld_rol_id_parent', 'rld_rol_id_child'),
+            'rld_rol_id_parent = ? OR rld_rol_id_child = ?',
+            array($rolId, $rolId)
+        );
+
+        $this->deleteDependentRecords(
+            new Membership($this->db),
+            array('mem_id'),
+            'mem_rol_id = ?',
+            array($rolId)
+        );
 
         $sql = 'UPDATE ' . TBL_EVENTS . '
                    SET dat_rol_id = NULL
                  WHERE dat_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
 
-        $sql = 'DELETE FROM ' . TBL_ROLES_RIGHTS_DATA . '
-                 WHERE rrd_rol_id = ? -- $rolId';
-        $this->db->queryPrepared($sql, array($rolId));
+        $this->deleteDependentRecords(
+            new RolesRightsData($this->db),
+            array('rrd_id'),
+            'rrd_rol_id = ?',
+            array($rolId)
+        );
 
         $sql = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
                  WHERE msr_rol_id = ? -- $rolId';
         $this->db->queryPrepared($sql, array($rolId));
 
         $return = parent::delete();
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         if (isset($gCurrentSession)) {
             // all active users must renew their user data because maybe their
@@ -415,18 +430,24 @@ class Role extends Entity
      * This method checks if the current user is allowed to view this role. Therefore,
      * the view properties of the role will be checked. If it's an event role than
      * we also check if the user is a member of the roles that could participate at the event.
+     * Roles of other organizations are not visible if the category is organization dependent.
      * @return bool Return true if the current user is allowed to view this role
      * @throws Exception
      */
     public function isVisible(): bool
     {
-        global $gCurrentUser, $gValidLogin;
+        global $gCurrentUser, $gValidLogin, $gCurrentOrgId;
 
         if (!$gValidLogin) {
             return false;
         }
 
         $rolId = (int)$this->getValue('rol_id');
+
+        // check if the role belongs to the current organization
+        if ((int)$this->getValue('cat_org_id') !== $gCurrentOrgId && $this->getValue('cat_org_id') > 0) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         if ($this->type !== Role::ROLE_EVENT) {
             return $gCurrentUser->hasRightViewRole($rolId);
@@ -691,7 +712,9 @@ class Role extends Entity
         }
 
         // reload session of that user because of changes to the assigned roles and rights
-        $gCurrentSession->reload($userId);
+        if (isset($gCurrentSession)) {
+            $gCurrentSession->reload($userId);
+        }
 
         $this->db->endTransaction();
     }
@@ -855,7 +878,9 @@ class Role extends Entity
 
             // all active users must renew their user data because maybe their
             // rights have been changed if they were members of this role
-            $gCurrentSession->reloadAllSessions();
+            if (isset($gCurrentSession)) {
+                $gCurrentSession->reloadAllSessions();
+            }
         } else {
             throw new Exception('Role ' . $this->getValue('rol_name') . ' is a system role and could not be set inactive!');
         }

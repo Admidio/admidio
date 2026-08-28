@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Components\Entity;
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
@@ -244,6 +245,18 @@ class Component extends Entity
                 }
                 break;
 
+            case 'CHANGELOG':
+                // The change history is visible as soon as the user may read the log of at least
+                // one database table, which is not restricted to administrators: the administrator
+                // of a single module may read the log of that module, and every user may read the
+                // history of his/her own profile. getReadableTables() is the same method the
+                // module itself uses, and it also evaluates changelog_module_enabled, so the menu
+                // entry disappears when the changelog is switched off or limited to administrators.
+                if ($gValidLogin && count(ChangelogService::getReadableTables($gCurrentUser)) > 0) {
+                    return true;
+                }
+                break;
+
             case 'EVENTS':
                 if ($gSettingsManager->getInt('events_module_enabled') === 1
                 || ($gSettingsManager->getInt('events_module_enabled') === 2 && $gValidLogin)) {
@@ -269,7 +282,7 @@ class Component extends Entity
                 || ($gSettingsManager->getInt('inventory_module_enabled') === 2 && $gValidLogin)
                 || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())
                 || ($gSettingsManager->getInt('inventory_module_enabled') === 4 && ($gCurrentUser->isAdministratorInventory() || InventoryPresenter::isCurrentUserKeeper()))
-                || ($gSettingsManager->getInt('inventory_module_enabled') === 5 && $gCurrentUser->isAllowedToSeeInventory())) {
+                || ($gSettingsManager->getInt('inventory_module_enabled') === 5 && $gCurrentUser->isAllowedToViewInventory())) {
                     return true;
                 }
                 break;
@@ -334,7 +347,7 @@ class Component extends Entity
             default:
                 // check if the component is a plugin and it is visible
                 $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByName($componentName);
+                $plugin = $pluginManager->getPluginByComponentName($componentName);
                 if ($plugin) {
                     return ($plugin instanceof PluginAbstract) ? $plugin::getInstance()->isVisible() : false;
                 }

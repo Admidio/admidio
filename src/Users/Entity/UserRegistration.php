@@ -106,7 +106,9 @@ class UserRegistration extends User
         $this->db->endTransaction();
 
         // update registration count in menu
-        $gMenu->initialize();
+        if (isset($gMenu)) {
+            $gMenu->initialize();
+        }
 
         // only send mail if systemmails are enabled
         if ($gSettingsManager->getBool('system_notifications_enabled')
@@ -185,7 +187,9 @@ class UserRegistration extends User
         $this->db->endTransaction();
 
         // update registration count in menu
-        $gMenu->initialize();
+        if (isset($gMenu)) {
+            $gMenu->initialize();
+        }
 
         return $return;
     }

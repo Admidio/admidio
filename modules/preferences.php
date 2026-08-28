@@ -20,6 +20,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Exception;
@@ -35,7 +36,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check')
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check', 'changelog_purge')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
 
@@ -69,6 +70,14 @@ try {
             $preferencesUI = new PreferencesPresenter('adm_preferences_form');
             $methodName = 'create' . str_replace('_', '', ucwords($getPanel, '_')) . 'Form';
             echo $preferencesUI->{$methodName}();
+            break;
+
+        // delete the entries of the change history that are older than the retention period
+        case 'changelog_purge':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $deletedEntries = ChangelogService::purgeOldEntries();
+            echo $gL10n->get('SYS_CHANGELOG_PURGE_RESULT', array($deletedEntries));
             break;
 
         // set directory protection, write htaccess

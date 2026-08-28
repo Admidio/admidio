@@ -13,6 +13,11 @@
  * id...............: If set only show the change history of that database record
  * uuid             : If set only show the change history of that database record
  * related_id       : If set only show the change history of objects related to that id (e.g. membership of a role/group)
+ * group_changes    : Show the entries that were written by the same change as one row that can be
+ *                    expanded. Active by default, see filter_submitted.
+ * filter_submitted : Marks a request that comes from the filter form. Only then does a missing
+ *                    group_changes mean that the checkbox was unticked and not that the request
+ *                    simply does not carry the parameter.
  * filter_date_from : is set to actual date,
  *                    if no date information is delivered
  * filter_date_to   : is set to 31.12.9999,
@@ -22,6 +27,7 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Language;
 use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
@@ -38,38 +44,32 @@ require(__DIR__ . '/../../system/login_valid.php');
 
 try {
 
-    // calculate default date from which the profile fields history should be shown
-    $filterDateFrom = DateTime::createFromFormat('Y-m-d', DATE_NOW);
-    $filterDateFrom->modify('-' . $gSettingsManager->getInt('contacts_field_history_days') . ' day');
+    // calculate default date from which the history should be shown
+    $filterDateFrom = ChangelogService::getDefaultFilterDateFrom();
 
 
     // Initialize and check the parameters
     $getTable = admFuncVariableIsValid($_GET, 'table','string');
     $getTables = ($getTable !== null && $getTable != "") ? array_map('trim', explode(",", $getTable)) : [];
-    $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'string');
+    $getUuid = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getId = admFuncVariableIsValid($_GET, 'id', 'int');
     $getRelatedId = admFuncVariableIsValid($_GET, 'related_id', 'string');
+    // A checkbox that is not ticked is not submitted at all, so the hidden filter_submitted tells
+    // the two cases apart: without it the request does not come from the filter form and grouping
+    // is used, with it a missing group_changes means that the user has unticked the checkbox.
+    $filterSubmitted = admFuncVariableIsValid($_GET, 'filter_submitted', 'bool', array('defaultValue' => false));
+    $getGroupChanges = admFuncVariableIsValid($_GET, 'group_changes', 'bool', array('defaultValue' => !$filterSubmitted));
     $getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', array('defaultValue' => $filterDateFrom->format($gSettingsManager->getString('system_date'))));
     $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', array('defaultValue' => DATE_NOW));
 
-    $haveID = !empty($getId) || !empty($getUuid);
-
-    // named array of permission flag (true/false/"user-specific" per table)
-    $tablesPermitted = ChangelogService::getPermittedTables($gCurrentUser);
-    if ($gSettingsManager->getInt('changelog_module_enabled') == 0) {
+    if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
-    if ($gSettingsManager->getInt('changelog_module_enabled') == 2 && !$gCurrentUser->isAdministrator()) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
-    $accessAll = $gCurrentUser->isAdministrator() ||
-        (!empty($getTables) && empty(array_diff($getTables, $tablesPermitted)));
 
-    // create a user object. Will fill it later if we encounter a user id
+    // create a user object. Will be filled if the log of one particular user is requested.
     $user = new User($gDb, $gProfileFields);
-    $userUuid = null;
     // User log contains at most four tables: User, user_data, user_relations and members -> they have many more permissions than other tables!
-    $isUserLog = (!empty($getTables) && empty(array_diff($getTables, ['users', 'user_data', 'user_relations', 'members'])));
+    $isUserLog = ChangelogService::isUserHistory($getTables);
     if ($isUserLog) {
         if (!empty($getUuid)) {
             $user->readDataByUuid($getUuid);
@@ -77,22 +77,19 @@ try {
             $user->readDataById($getId);
         }
         if (!$user->isNewRecord()) {
-            $userUuid = $user->getValue('usr_uuid');
+            // Address the user by uuid from here on: for the user_data table the record id is the
+            // id of the data row and not of the user, so filtering by id would match the log
+            // entries of a different user.
+            $getUuid = $user->getValue('usr_uuid');
+            $getId = 0;
         }
     }
 
-    // Access permissions:
-    // Special case: Access to profile history on a per-user basis: Either admin or at least edit user rights are required, or explicit access to the desired user:
-    if (!$accessAll &&
-            !(!empty($getTables) && empty(array_diff($getTables, $tablesPermitted))) &&
-            $isUserLog) {
-        // If a user UUID is given, we need access to that particular user
-        // if no UUID is given, isAdministratorUsers permissions are required
-        if (($userUuid === '' && !$gCurrentUser->isAdministratorUsers())
-            || ($userUuid !== '' && !$gCurrentUser->hasRightEditProfile($user))) {
-//                throw new Exception('SYS_NO_RIGHTS');
-                $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-       }
+    // All view permissions are evaluated in one place. An empty list means no access at all.
+    $subject = $user->isNewRecord() ? null : $user;
+    $readableTables = ChangelogService::getReadableTables($gCurrentUser, $getTables, $subject);
+    if (count($readableTables) === 0) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
 
@@ -104,7 +101,7 @@ try {
     //  *
     $tableTitles = array_map([ChangelogService::class, 'getTableLabel'], $getTables);
     // set headline of the script
-    if ($isUserLog && $haveID) {
+    if ($isUserLog && (!empty($getId) || !empty($getUuid))) {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->readableName()));
     } elseif ($isUserLog) {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY_USERDATA');
@@ -148,28 +145,10 @@ try {
     // add page to navigation history
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
-    // add page to navigation history
-    $gNavigation->addUrl(CURRENT_URL, $headline);
-
-    // filter_date_from and filter_date_to can have different formats
-    // now we try to get a default format for intern use and html output
-    $objDateFrom = DateTime::createFromFormat('Y-m-d', $getDateFrom);
-    if ($objDateFrom === false) {
-        // check if date has system format
-        $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateFrom);
-        if ($objDateFrom === false) {
-            $objDateFrom = DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
-        }
-    }
-
-    $objDateTo = DateTime::createFromFormat('Y-m-d', $getDateTo);
-    if ($objDateTo === false) {
-        // check if date has system format
-        $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $getDateTo);
-        if ($objDateTo === false) {
-            $objDateTo = DateTime::createFromFormat($gSettingsManager->getString('system_date'), '1970-01-01');
-        }
-    }
+    // filter_date_from and filter_date_to can use the internal ISO format
+    // or the configured Admidio date format.
+    $objDateFrom = DateTimeUtils::parseDate($getDateFrom, '1970-01-01');
+    $objDateTo = DateTimeUtils::parseDate($getDateTo, DATE_NOW);
 
     // DateTo should be greater than DateFrom
     if ($objDateFrom > $objDateTo) {
@@ -195,7 +174,6 @@ try {
     }
     // If none of the related-to values is set, hide the related_to column
     $showRelatedColumn = true;
-    $noShowRelatedTables = ['user_fields', 'user_field_select_options', 'users', 'user_data'];
 
 
     $form = new FormPresenter(
@@ -211,10 +189,21 @@ try {
     $form->addInput('uuid', '', $getUuid, array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('id', '', $getId, array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('related_id', '', $getRelatedId, array('property' => FormPresenter::FIELD_HIDDEN));
+    $form->addInput('filter_submitted', '', '1', array('property' => FormPresenter::FIELD_HIDDEN));
     $form->addInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, array('type' => 'date', 'maxLength' => 10));
     $form->addInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, array('type' => 'date', 'maxLength' => 10));
+    // If the box is unticked, the table shows one row per logged entry instead.
+    $form->addCheckbox('group_changes', $gL10n->get('SYS_CHANGELOG_GROUP_CHANGES'), $getGroupChanges);
     $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
     $form->addToHtmlPage();
+
+    // Switching between the grouped and the single entry view reloads the page, so that the table
+    // is built for the right kind of rows.
+    $page->addJavascript('
+        $("#group_changes").change(function() {
+            $("#adm_navbar_filter_form").submit();
+        });
+    ', true);
 
     $table = new DataTables($page, 'adm_history_table');
 
@@ -230,19 +219,19 @@ try {
     $columnHeading = array();
     $columnHeading[] = $gL10n->get('SYS_ABR_NO');
 
-    // $table->setDatatablesOrderColumns(array(array(8, 'desc')));
     if ($showTableColumn) {
-        $columnHeading[] = $gL10n->get('SYS_TABLE');
+        $columnHeading[] = $gL10n->get('SYS_DATA_AREA');
     }
     $columnHeading[] = $gL10n->get('SYS_NAME');
     if ($showRelatedColumn) {
         $columnHeading[] = $gL10n->get('SYS_RELATED_TO');
     }
     $columnHeading[] = $gL10n->get('SYS_FIELD');
-    $columnHeading[] = $gL10n->get('SYS_NEW_VALUE');
+    // The order of the value columns must match the order in which changelog_data.php writes them.
     $columnHeading[] = $gL10n->get('SYS_PREVIOUS_VALUE');
-    $columnHeading[] = $gL10n->get('SYS_EDITED_BY');
-    $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
+    $columnHeading[] = $gL10n->get('SYS_NEW_VALUE');
+    $columnHeading[] = $gL10n->get('SYS_CHANGED_BY');
+    $columnHeading[] = $gL10n->get('SYS_DATE_MODIFIED');
 
     $page->assignSmartyVariable('headers', $columnHeading);
 
@@ -252,16 +241,81 @@ try {
         'id' => $getId,
         'related_id' => $getRelatedId,
         'filter_date_from' => $getDateFrom,
-        'filter_date_to' => $getDateTo
+        'filter_date_to' => $getDateTo,
+        'group_changes' => (int)$getGroupChanges
     );
 
     $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog_data.php', $filterFields));
 //    $table->setColumnAlignByArray($columnAlignment);
-    $table->disableColumnsSort(array(1, count($columnHeading)));// disable sort in last column
+    // Only the running number cannot be sorted. All other columns are sorted server-side, see the
+    // whitelist $orderColumns in changelog_data.php, which must stay in sync with the columns here.
+    $table->disableColumnsSort(array(1));
+    // sort by the date of the change (last column), newest first
+    $table->setOrderColumns(array(array(count($columnHeading), 'desc')));
     $table->setColumnsNotHideResponsive(array(count($columnHeading)));
     // $table->setDatatablesRowsPerPage($gSettingsManager->getInt('contacts_per_page'));
-    $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
+    // The changelog is not bounded in size, so it must not offer to read all entries at once.
+    // The largest selectable page length matches the limit enforced in changelog_data.php.
+    $table->setRowsPerPageMenuEntries(array(10 => '10', 25 => '25', 50 => '50', 100 => '100', 500 => '500', 1000 => '1000'));
+    $table->disableShowAllEntries();
+    $table->setMessageIfNoRowsFound('SYS_CHANGE_HISTORY_NO_ENTRIES');
     $table->createJavascript(0, count($columnHeading));
+
+    // A row that stands for a change of several fields can be expanded. The entries of that change
+    // are requested from the same script and are inserted as one additional row below it. They are
+    // deliberately not built with the child rows of DataTables, because the responsive extension of
+    // the table already uses those for the columns it hides on small screens.
+    $detailsUrl = SecurityUtils::encodeUrl(
+        ADMIDIO_URL . FOLDER_MODULES . '/changelog/changelog_data.php',
+        array_merge($filterFields, array('draw' => 1, 'start' => 0, 'length' => 1000))
+    );
+
+    $page->addJavascript('
+        $("#adm_history_table tbody").on("click", "a.adm-changelog-details", function(event) {
+            event.preventDefault();
+
+            var link = $(this);
+            var icon = link.find("i");
+            var row = link.closest("tr");
+
+            if (row.next("tr.adm-changelog-detail-row").length > 0) {
+                row.next("tr.adm-changelog-detail-row").remove();
+                icon.removeClass("bi-chevron-down").addClass("bi-chevron-right");
+                return;
+            }
+
+            icon.removeClass("bi-chevron-right").addClass("bi-chevron-down");
+            row.after("<tr class=\"adm-changelog-detail-row\"><td class=\"p-0\" colspan=\"' . count($columnHeading) . '\"></td></tr>");
+
+            var cell = row.next("tr.adm-changelog-detail-row").children("td");
+            cell.html("<div class=\"adm-changelog-details-table\"><i class=\"spinner-border spinner-border-sm\"></i></div>");
+
+            $.getJSON("' . $detailsUrl . '&change_uuid=" + encodeURIComponent(link.data("change-uuid")), function(json) {
+                if (json.error) {
+                    cell.html("<div class=\"adm-changelog-details-table\"></div>").children("div").text(json.error);
+                    return;
+                }
+
+                // The script decides which value columns this change needs and sends the headings
+                // along with the rows, so there is nothing to interpret here.
+                var html = "<div class=\"adm-changelog-details-table table-responsive\">"
+                    + "<table class=\"table table-sm mb-0\"><thead><tr>";
+                $.each(json.columns, function(index, heading) {
+                    html += "<th>" + heading + "</th>";
+                });
+                html += "</tr></thead><tbody>";
+
+                $.each(json.data, function(index, entry) {
+                    html += "<tr>";
+                    $.each(entry, function(cellIndex, cell) {
+                        html += "<td>" + cell + "</td>";
+                    });
+                    html += "</tr>";
+                });
+                cell.html(html + "</tbody></table></div>");
+            });
+        });
+    ', true);
 
 
 

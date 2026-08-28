@@ -22,7 +22,7 @@ final class DateTimeUtils
      * @param string|null $fallbackDate Optional fallback date in ISO format (Y-m-d)
      * @return DateTime|null
      */
-    public static function parseDate(string $date, ?string $fallbackDate = null): ?DateTime
+    public static function parseDate(string $date, ?string $fallbackDate = null): ?DateTime 
     {
         global $gSettingsManager;
 
@@ -69,7 +69,7 @@ final class DateTimeUtils
      * @param string|null $fallbackDateTime Optional fallback date and time
      * @return DateTime|null
      */
-    public static function parseDateTime(string $dateTime, ?string $fallbackDateTime = null): ?DateTime
+    public static function parseDateTime(string $dateTime, ?string $fallbackDateTime = null): ?DateTime 
     {
         global $gSettingsManager;
 
@@ -108,7 +108,7 @@ final class DateTimeUtils
      * @param string $date   Date value
      * @return DateTime|null
      */
-    private static function createDateFromFormat(string $format, string $date): ?DateTime
+    private static function createDateFromFormat(string $format, string $date): ?DateTime 
     {
         $dateObject = DateTime::createFromFormat($format, $date);
 

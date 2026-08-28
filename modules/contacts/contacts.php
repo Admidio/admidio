@@ -40,11 +40,11 @@ try {
     $contactsListConfig = new ListConfiguration($gDb, $gSettingsManager->getInt('contacts_list_configuration'));
     $_SESSION['contacts_list_configuration'] = $contactsListConfig;
 
-    // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
+    // Set a link to display all users or only members
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-contacts', $headline);
     $page->setContentFullWidth();
 
-    if ($gCurrentUser->isAdministratorUsers()) {
+    if ($gCurrentUser->isAdministratorUsers() || $gCurrentUser->isAllowedToViewUsers()) {
         $page->addJavascript('
             $("#menu_item_contacts_create_contact").attr("href", "javascript:void(0);");
             $("#menu_item_contacts_create_contact").attr("data-href", "' . ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_new.php");
