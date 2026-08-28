@@ -1,0 +1,27 @@
+{
+    "name": "Hello",
+    "description": "The smallest plugin that still uses every convention.",
+    "version": "1.2.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-emoji-smile",
+    "requires": {
+        "admidio": ">=5.0",
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "AdmidioPlugin\\Hello\\": "src/"
+    },
+    "settings": {
+        "hello_greeting": {
+            "type": "string",
+            "default": "Hello",
+            "label": "Greeting"
+        },
+        "hello_shout": {
+            "type": "boolean",
+            "default": false,
+            "label": "Shout"
+        }
+    }
+}
