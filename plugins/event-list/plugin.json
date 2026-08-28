@@ -1,0 +1,64 @@
+{
+    "name": "PLG_EVENT_LIST_PLUGIN_NAME",
+    "description": "PLG_EVENT_LIST_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-calendar-week-fill",
+    "requires": {
+        "admidio": ">=5.1",
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "AdmidioPlugin\\EventList\\": "src/"
+    },
+    "settings": {
+        "event_list_plugin_enabled": {
+            "type": "enum",
+            "default": "1",
+            "values": ["0", "1", "2"],
+            "label": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC"
+        },
+        "event_list_overview_sequence": {
+            "type": "integer",
+            "default": 7
+        },
+        "event_list_events_count": {
+            "type": "integer",
+            "default": 2,
+            "label": "PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT",
+            "description": "PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC"
+        },
+        "event_list_show_event_date_end": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END",
+            "description": "PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC"
+        },
+        "event_list_show_preview_chars": {
+            "type": "integer",
+            "default": 70,
+            "label": "PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS",
+            "description": "PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC"
+        },
+        "event_list_show_full_description": {
+            "type": "boolean",
+            "default": false,
+            "label": "PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION",
+            "description": "PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC"
+        },
+        "event_list_chars_before_linebreak": {
+            "type": "integer",
+            "default": 0,
+            "label": "PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK",
+            "description": "PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC"
+        },
+        "event_list_displayed_categories": {
+            "type": "array",
+            "default": ["All"],
+            "label": "PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES",
+            "description": "PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC"
+        }
+    }
+}

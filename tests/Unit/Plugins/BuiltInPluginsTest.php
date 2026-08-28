@@ -61,6 +61,20 @@ final class BuiltInPluginsTest extends PluginTestCase
                     'birthday_sort_sql'
                 )
             ),
+            'event-list' => array(
+                'event-list',
+                'AdmidioPlugin\\EventList\\',
+                array(
+                    'event_list_plugin_enabled',
+                    'event_list_overview_sequence',
+                    'event_list_events_count',
+                    'event_list_show_event_date_end',
+                    'event_list_show_preview_chars',
+                    'event_list_show_full_description',
+                    'event_list_chars_before_linebreak',
+                    'event_list_displayed_categories'
+                )
+            ),
             'random-photo' => array(
                 'random-photo',
                 'AdmidioPlugin\\RandomPhoto\\',
