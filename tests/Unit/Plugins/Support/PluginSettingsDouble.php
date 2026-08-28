@@ -43,6 +43,11 @@ final class PluginSettingsDouble
         return (int)$this->get($name);
     }
 
+    public function getString(string $name, bool $update = false): string
+    {
+        return $this->get($name);
+    }
+
     public function set(string $name, $value, bool $update = true): bool
     {
         $this->values[$name] = (string)$value;
