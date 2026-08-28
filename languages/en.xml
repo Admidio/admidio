@@ -614,7 +614,6 @@
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
   <string name="SYS_EDIT_WEBLINK">Edit web link</string>
   <string name="SYS_EDIT_WEBLINKS">Edit web links</string>
-  <string name="SYS_EDITED_BY">Last edited by</string>
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Email Administrator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">The profile data of the user #VAR1# #VAR2# (login: #VAR3#) was changed by #VAR4#.</string>
@@ -992,7 +991,6 @@
   <string name="SYS_LOCK_ALBUM_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
   <string name="SYS_LOCKED">Locked</string>
   <string name="SYS_LOG">Log</string>
-  <string name="SYS_LOG_RECORDS_HIDDEN">Some or all changelog entries have been hidden due to insufficient user permissions to access them.</string>
   <string name="SYS_LOGGED_AREAS">Logged areas</string>
   <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>
   <string name="SYS_LOGIN">Sign in</string>
@@ -1283,7 +1281,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Previous picture</string>
   <string name="SYS_PREVIOUS_VALUE">Previous value</string>
   <string name="SYS_PRINT_PREVIEW">Print preview</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Private message could not be sent to #VAR1_BOLD#.\n\nFollowing error has occurred:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Private message has been send to #VAR1_BOLD#.</string>
   <string name="SYS_PRIVATE_MESSAGES">Private messages</string>
   <string name="SYS_PRNG">Pseudo-random number generator</string>
@@ -1346,12 +1343,8 @@
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_RECURRENCE_COUNT">Number of occurrences</string>
   <string name="SYS_RECURRENCE_COUNT_DESC">Maximum number of occurrences to create when the recurrence ends after a number.</string>
-  <string name="SYS_RECURRENCE_DELETE_SERIES">Delete entire series</string>
-  <string name="SYS_RECURRENCE_DELETE_SERIES_CONFIRM">Do you want to cancel the entire series from today on?</string>
-  <string name="SYS_RECURRENCE_DELETE_SERIES_NOT_SUPPORTED">Deleting an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS">Only this date</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
-  <string name="SYS_RECURRENCE_EDIT_SERIES">Edit entire series</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END">Ends</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1360,7 +1353,6 @@
   <string name="SYS_RECURRENCE_END_ON_DATE">On date</string>
   <string name="SYS_RECURRENCE_INTERVAL">Interval</string>
   <string name="SYS_RECURRENCE_INTERVAL_DESC">Defines the distance between occurrences, for example every 2 weeks.</string>
-  <string name="SYS_RECURRENCE_NEW_EVENTS_ONLY">Recurring events can currently only be created for new events.</string>
   <string name="SYS_RECURRENCE_NOT_FOUND">The recurrence rule for this event could not be found.</string>
   <string name="SYS_RECURRENCE_ORIGINAL_BEGIN">Original occurrence date</string>
   <string name="SYS_RECURRENCE_PART_OF_SERIES">Part of a series</string>
