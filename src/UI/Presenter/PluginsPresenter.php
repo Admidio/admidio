@@ -2,23 +2,29 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Presenter\PagePresenter;
-use Admidio\Infrastructure\Plugins\PluginManager;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginLoader;
+use Admidio\Infrastructure\Plugins\PluginPages;
+use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+
 /**
- * @brief Class with methods to display the module pages.
+ * @brief The plugin administration.
  *
- * This class adds some functions that are used in the plugins module to keep the
- * code easy to read and short
+ * The page lists every plugin the installation knows - the directories below **plugins/** and the
+ * plugins that are only left in the database because their files were deleted - grouped by the six
+ * states of the PluginRegistry, and offers the operations of the PluginInstaller for each of them.
+ *
+ * A broken plugin is listed with the reason it is broken. That reason comes from the manifest reader
+ * and from Plugin::checkRequirements(), which answer in English for a developer and not in a
+ * translated message for a member, so it is shown as the diagnostic it is.
  *
  * **Code example**
  * ```
- * // generate html output with available registrations
- * $page = new PluginsPresenter('adm_plugins', $headline);
- * $page->createEditForm();
+ * $page = new PluginsPresenter();
+ * $page->createList();
  * $page->show();
  * ```
  * @copyright The Admidio Team
@@ -27,10 +33,22 @@ use Admidio\Infrastructure\Language;
  */
 class PluginsPresenter extends PagePresenter
 {
-    protected array $templateData = array();
+    /**
+     * The groups of the list, in the order they are shown, as state => language string ID of the
+     * heading. A state with no plugin in it is dropped before the list is rendered.
+     */
+    private const GROUPS = array(
+        PluginRegistry::STATE_ENABLED => 'SYS_ENABLED',
+        PluginRegistry::STATE_UPDATE => 'SYS_UPDATE_AVAILABLE',
+        PluginRegistry::STATE_DISABLED => 'SYS_DISABLED',
+        PluginRegistry::STATE_AVAILABLE => 'SYS_EXTENSIONS_AVAILABLE',
+        PluginRegistry::STATE_BROKEN => 'SYS_PLUGIN_BROKEN',
+        PluginRegistry::STATE_ORPHANED => 'SYS_PLUGIN_ORPHANED'
+    );
 
     /**
-     * Create the list of plugins.
+     * Create the list of all plugins with the operations that each of them allows.
+     * @return void
      * @throws Exception
      */
     public function createList(): void
@@ -41,88 +59,59 @@ class PluginsPresenter extends PagePresenter
         $this->setHeadline($gL10n->get('SYS_PLUGIN_MANAGER'));
         $this->setContentFullWidth();
 
-        $this->prepareData();
-
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this));
             });
-            ', true
-        );
+        ', true);
 
+        /*
+         * Installing, enabling, updating and uninstalling all change what the other rows may offer,
+         * so the page is reloaded instead of one row being patched.
+         */
         $this->addJavascript('
-            function callPluginAction(url, csrfToken, pluginName) {
-                $.post(url, {
-                    "adm_csrf_token": csrfToken,
-                    "name": pluginName
-                }, function(data) {
+            function callPluginAction(url, csrfToken) {
+                $.post(url, { "adm_csrf_token": csrfToken }, function(data) {
                     const messageText = $("#adm_status_message");
-            
-                    var returnStatus = "error";
-                    var returnMessage = "";
-            
+                    let returnStatus = "error";
+                    let returnMessage = "";
+
                     try {
                         const returnData = JSON.parse(data);
-            
                         returnStatus = returnData.status;
-            
                         if (typeof returnData.message !== "undefined") {
                             returnMessage = returnData.message;
                         }
                     } catch (e) {
-                        // fallback for old implementation without JSON response
-                        if (data === "done") {
-                            returnStatus = "success";
-                        } else {
-                            returnMessage = data;
-                        }
+                        returnMessage = data;
                     }
-            
+
                     if (returnStatus === "success") {
-                        if (returnMessage !== "") {
-                            messageText.html(
-                                "<div class=\"alert alert-success\">" +
-                                "<i class=\"bi bi-check-lg\"></i> " +
-                                returnMessage +
-                                "</div>"
-                            );
-                        }
+                        messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i> "
+                            + returnMessage + "</div>");
                     } else {
                         if (returnMessage.length === 0) {
                             returnMessage = "Error: Undefined error occurred!";
                         }
-            
-                        messageText.html(
-                            "<div class=\"alert alert-danger\">" +
-                            "<i class=\"bi bi-exclamation-circle-fill\"></i> " +
-                            returnMessage +
-                            "</div>"
-                        );
+                        messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i> "
+                            + returnMessage + "</div>");
                     }
-                    
+
                     setTimeout(function() {
-                            $("#adm_modal").modal("hide");
-                            $("#adm_modal_messagebox").modal("hide");
-                            location.reload();
-                        }, 2000);
+                        $("#adm_modal").modal("hide");
+                        $("#adm_modal_messagebox").modal("hide");
+                        location.reload();
+                    }, 2000);
                 });
-            }
-            
-            function callPluginInstall(url, csrfToken, pluginName) {
-                callPluginAction(url, csrfToken, pluginName);
-            }
-            
-            function callPluginUpdate(url, csrfToken, pluginName) {
-                callPluginAction(url, csrfToken, pluginName);
-            }
-            
-            function callPluginUninstall(url, csrfToken, pluginName) {
-                callPluginAction(url, csrfToken, pluginName);
             }
         ');
 
-        $this->smarty->assign('list', $this->templateData);
+        $this->createSettingsForm();
+
+        $this->smarty->assign('list', $this->getGroups());
+        $this->smarty->assign('failures', PluginLoader::getFailures());
         $this->smarty->assign('l10n', $gL10n);
+
         try {
             $this->pageContent .= $this->smarty->fetch('modules/plugins.list.tpl');
         } catch (\Smarty\Exception $e) {
@@ -131,154 +120,276 @@ class PluginsPresenter extends PagePresenter
     }
 
     /**
-     * Read all available forum topics from the database and create a Bootstrap card for each topic.
-     * @param int $offset Offset of the first record that should be returned.
+     * Build the form with the settings of the plugin administration and assign it to the template.
+     * @return void
      * @throws Exception
-     * @throws \DateMalformedStringException
      */
-    public function createCards(): void
+    private function createSettingsForm(): void
     {
-        global $gL10n;
+        global $gL10n, $gCurrentSession;
 
-        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'cards'));
+        $form = new FormPresenter(
+            'adm_plugins_form_settings',
+            'modules/plugins.list.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'save')),
+            $this,
+            // The page is a list and the form is one checkbox above it, so it must not take focus.
+            array('setFocus' => false)
+        );
+        $form->addCheckbox(
+            PluginPages::SETTING,
+            $gL10n->get('SYS_PLUGIN_MODULE_PAGES'),
+            PluginPages::isAllowed(),
+            array(
+                'helpTextId' => 'SYS_PLUGIN_MODULE_PAGES_DESC',
+                // A read-only deployment cannot publish, and that is a supported situation.
+                'property' => PluginPages::isWritable() ? FormPresenter::FIELD_DEFAULT : FormPresenter::FIELD_DISABLED
+            )
+        );
+        $form->addSubmitButton(
+            'adm_button_save_plugins',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
 
-        $this->setHtmlID('adm_plugins');
-        $this->setHeadline($gL10n->get('SYS_PLUGIN_MANAGER'));
-        
-        $this->prepareData();
+        $form->addToSmarty($this->smarty);
+        $gCurrentSession->addFormObject($form);
 
-        $this->smarty->assign('cards', $this->templateData);
-        $this->smarty->assign('l10n', $gL10n);
-        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, count($this->templateData), 10, 0));
+        // addToSmarty() only assigns the elements; the AJAX submit has to be bound here.
+        $this->addJavascript('$("#adm_plugins_form_settings").submit(formSubmit);', true);
 
-        try {
-            $this->pageContent .= $this->smarty->fetch('modules/plugins.cards.tpl');
-        } catch (\Smarty\Exception $e) {
-            throw new Exception($e->getMessage());
-        }
+        $this->smarty->assign('modulePagesWritable', PluginPages::isWritable());
     }
 
     /**
-     * @param int $offset Offset of the first record that should be returned.
-     * @throws \DateMalformedStringException
+     * The plugins of every state that has one, with everything the template shows for them.
+     * @return array<string,array{id: string, name: string, entries: array<int,array<string,mixed>>}>
      * @throws Exception
      */
-    public function prepareData(): void
+    private function getGroups(): array
     {
+        global $gL10n;
+
+        $groups = array();
+        foreach (self::GROUPS as $state => $headline) {
+            $groups[$state] = array('id' => $state, 'name' => $gL10n->get($headline), 'entries' => array());
+        }
+
+        foreach ($this->getPluginIds() as $id) {
+            $plugin = PluginRegistry::get($id);
+            $state = PluginRegistry::getState($plugin ?? $id);
+            $groups[$state]['entries'][] = $this->getEntry($id, $plugin, $state);
+        }
+
+        return array_filter($groups, static fn(array $group): bool => $group['entries'] !== array());
+    }
+
+    /**
+     * The IDs of every plugin the installation knows: the directories below plugins/ and the
+     * plugins that are only left in the database because their files were deleted.
+     * @return array<int,string>
+     * @throws Exception
+     */
+    private function getPluginIds(): array
+    {
+        $ids = array_unique(array_merge(
+            array_keys(PluginRegistry::all()),
+            array_keys(PluginRegistry::getInstallations())
+        ));
+        sort($ids);
+
+        return $ids;
+    }
+
+    /**
+     * One row of the list.
+     * @param string $id ID of the plugin.
+     * @param Plugin|null $plugin The plugin, or **null** for an orphan whose files are gone.
+     * @param string $state One of the PluginRegistry STATE_* constants.
+     * @return array<string,mixed>
+     * @throws Exception
+     */
+    private function getEntry(string $id, ?Plugin $plugin, string $state): array
+    {
+        $homepage = $plugin?->homepage ?? '';
+
+        return array(
+            'id' => $id,
+            'uuid' => $id,
+            'name' => $plugin === null ? $id : Language::translateIfTranslationStrId($plugin->name),
+            'description' => $plugin === null ? '' : Language::translateIfTranslationStrId($plugin->description),
+            'icon' => $plugin?->icon ?? '',
+            'author' => $plugin?->author ?? '',
+            'url' => $homepage === '' ? '' : $homepage,
+            'urlHost' => $homepage === '' ? '' : (string)(parse_url($homepage, PHP_URL_HOST) ?? $homepage),
+            'version' => $plugin?->version ?? '',
+            'installedVersion' => PluginRegistry::getInstalledVersion($id),
+            'versionState' => $this->getVersionState($id, $plugin, $state),
+            'diagnostics' => $this->getDiagnostics($plugin, $state),
+            'actions' => $this->getActions($id, $plugin, $state)
+        );
+    }
+
+    /**
+     * How the installed version of a plugin relates to the version its files declare.
+     *
+     * The registry has already answered this in the state, so the list must not compare the two
+     * version strings again: a plugin whose files are gone has no declared version to compare with,
+     * and one whose manifest is broken may have none either.
+     * @param string $id ID of the plugin.
+     * @param Plugin|null $plugin The plugin, or **null** for an orphan whose files are gone.
+     * @param string $state One of the PluginRegistry STATE_* constants.
+     * @return string **not_installed**, **update**, **current** or **unknown**.
+     * @throws Exception
+     */
+    private function getVersionState(string $id, ?Plugin $plugin, string $state): string
+    {
+        if (!PluginRegistry::isInstalled($id)) {
+            return 'not_installed';
+        }
+        if ($state === PluginRegistry::STATE_UPDATE) {
+            return 'update';
+        }
+        if ($plugin === null || $plugin->version === '') {
+            return 'unknown';
+        }
+
+        return 'current';
+    }
+
+    /**
+     * Why a plugin cannot be used, or why its pages are not published.
+     *
+     * These are developer diagnostics in English, not translated messages, because they name a
+     * malformed manifest, an unmet version constraint or a directory that cannot be written.
+     * @param Plugin|null $plugin
+     * @param string $state One of the PluginRegistry STATE_* constants.
+     * @return array<int,string>
+     * @throws Exception
+     */
+    private function getDiagnostics(?Plugin $plugin, string $state): array
+    {
+        if ($plugin === null) {
+            return array();
+        }
+
+        $diagnostics = array();
+        if ($plugin->error !== null) {
+            $diagnostics[] = $plugin->error;
+        }
+        $diagnostics = array_merge($diagnostics, $plugin->checkRequirements(PluginRegistry::getEnabledVersions()));
+
+        /*
+         * The pages of an installed plugin may be blocked although the administrator allowed them.
+         * A broken plugin is not asked: it already reported why it cannot be used at all.
+         */
+        if ($state !== PluginRegistry::STATE_BROKEN && PluginPages::isAllowed() && $plugin->hasPages()
+            && PluginRegistry::isInstalled($plugin->id) && !PluginPages::isPublished($plugin)) {
+            $obstacle = PluginPages::getObstacle($plugin);
+            if ($obstacle !== null) {
+                $diagnostics[] = $obstacle;
+            }
+        }
+
+        return $diagnostics;
+    }
+
+    /**
+     * The operations a plugin allows in its current state.
+     * @param string $id ID of the plugin.
+     * @param Plugin|null $plugin The plugin, or **null** for an orphan whose files are gone.
+     * @param string $state One of the PluginRegistry STATE_* constants.
+     * @return array<int,array<string,string>>
+     * @throws Exception
+     */
+    private function getActions(string $id, ?Plugin $plugin, string $state): array
+    {
+        global $gL10n;
+
+        $actions = array();
+
+        if ($state === PluginRegistry::STATE_AVAILABLE) {
+            $actions[] = $this->action($id, 'install', 'bi bi-download', 'SYS_PLUGIN_INSTALL', 'SYS_WANT_INSTALL_PLUGIN');
+            return $actions;
+        }
+
+        if (!PluginRegistry::isInstalled($id)) {
+            // A broken plugin that was never installed has nothing to operate on.
+            return $actions;
+        }
+
+        if ($state === PluginRegistry::STATE_ENABLED && $plugin !== null) {
+            $panel = PluginPanel::get(PluginPanel::normalizeId($plugin->id));
+            if ($panel !== null) {
+                $actions[] = array(
+                    'url' => SecurityUtils::encodeUrl(
+                        ADMIDIO_URL . FOLDER_MODULES . '/preferences.php',
+                        array('panel' => $panel['id'])
+                    ),
+                    'icon' => 'bi bi-gear',
+                    'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
+                );
+            }
+        }
+
+        if ($state === PluginRegistry::STATE_UPDATE) {
+            $actions[] = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
+        }
+
+        if ($state === PluginRegistry::STATE_ENABLED) {
+            $actions[] = $this->action($id, 'disable', 'bi bi-toggle-off', 'SYS_PLUGIN_DISABLE', 'SYS_WANT_DISABLE_PLUGIN');
+        } elseif ($state === PluginRegistry::STATE_DISABLED) {
+            $actions[] = $this->action($id, 'enable', 'bi bi-toggle-on', 'SYS_PLUGIN_ENABLE', 'SYS_WANT_ENABLE_PLUGIN');
+        }
+
+        $actions[] = $this->action($id, 'uninstall', 'bi bi-trash', 'SYS_PLUGIN_UNINSTALL', 'SYS_WANT_UNINSTALL_PLUGIN');
+
+        // Destroying the data of a plugin is a separate decision and never the default.
+        if ($plugin !== null) {
+            $actions[] = $this->action(
+                $id,
+                'uninstall',
+                'bi bi-trash-fill',
+                'SYS_PLUGIN_UNINSTALL_DATA',
+                'SYS_WANT_UNINSTALL_PLUGIN_DATA',
+                array('data' => '1')
+            );
+        }
+
+        return $actions;
+    }
+
+    /**
+     * One operation of the list, as a confirmed POST to this module.
+     * @param string $id ID of the plugin.
+     * @param string $mode Mode of modules/plugins.php that performs the operation.
+     * @param string $icon
+     * @param string $tooltip Language string ID of the tooltip.
+     * @param string $message Language string ID of the confirmation question.
+     * @param array<string,string> $parameters Further URL parameters of the operation.
+     * @return array<string,string>
+     * @throws Exception
+     */
+    private function action(
+        string $id,
+        string $mode,
+        string $icon,
+        string $tooltip,
+        string $message,
+        array $parameters = array()
+    ): array {
         global $gL10n, $gCurrentSession;
-        $pluginManager = new PluginManager();
-        $plugins = $pluginManager->getAvailablePlugins();
-        $templateRowPluginParent['overview'] = array('id' => 'overview_plugins', 'name' => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'), 'entries' => array());
-        $templateRowPluginParent['plugins'] = array('id' => 'plugins', 'name' => $gL10n->get('SYS_EXTENSIONS'), 'entries' => array());
-        $templateRowPluginParent['available'] = array('id' => 'plugins_available', 'name' => $gL10n->get('SYS_EXTENSIONS_AVAILABLE'), 'entries' => array());
-        foreach($plugins as $pluginName => $values) {
-            $templateRow = array();
-            $interface = $values['interface'] instanceof PluginAbstract ? $values['interface']::getInstance() : null;
 
-            if ($interface != null) {
-                $templateRow['id'] = ($interface->getComponentId() !== 0) ? $interface->getComponentId() : $pluginName;
-                $templateRow['uuid'] = $templateRow['id'];
-                $templateRow['name'] = Language::translateIfTranslationStrId($interface->getName());
-                $templateRow['description'] = Language::translateIfTranslationStrId($interface->getMetadata()['description'] ?? '');
-                $templateRow['icon'] = $interface->getMetadata()['icon'] ?? '';
-                $templateRow['url'] = $interface->getMetadata()['url'] ? '<a href="' . $interface->getMetadata()['url'] . '" target="_blank" data-bs-toggle="tooltip" title="' . $interface->getMetadata()['url'] . '" style="display:inline-flex;"><i class="bi bi-link-45deg"></i>' . parse_url($interface->getMetadata()['url'])['host'] . '</a>' : '';
-                $templateRow['author'] = $interface->getMetadata()['author'] ?? '';
-                $templateRow['version'] = $interface->getMetadata()['version'] ?? '';
-                $templateRow['installedVersion'] = $interface->getVersion() !== '0.0.0' ? $interface->getVersion() : '';
+        $url = SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
+            array_merge(array('mode' => $mode, 'plugin' => $id), $parameters)
+        );
 
-                // add actions for the plugin
-                if ($interface->isInstalled()) {
-                    // add showPreferences action
-                    // if there is a custom defined preferences file in the metadata then use this file
-                    if (isset($interface->getMetadata()['preferencesFile']) && !empty($interface->getMetadata()['preferencesFile'])) {
-                        // check, if the file starts with a / or \\ indicating an absolute path, if so we don't need to add a directory separator
-                        if (str_starts_with($interface->getMetadata()['preferencesFile'], '/') || str_starts_with($interface->getMetadata()['preferencesFile'], '\\')) {
-                            $url = ADMIDIO_URL . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $interface->getComponentName() . $interface->getMetadata()['preferencesFile'];
-                        } else {
-                            $url = ADMIDIO_URL . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $interface->getComponentName() . DIRECTORY_SEPARATOR . $interface->getMetadata()['preferencesFile'];
-                        }
-                        $templateRow['actions'][] = array(
-                            'url' => $url,
-                            'icon' => 'bi bi-gear',
-                            'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
-                        );
-                    } else {
-                        // else use the preferences panel based on the plugin name
-                        $templateRow['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($interface->getName())))))),
-                            'icon' => 'bi bi-gear',
-                            'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
-                        );
-                    }
-
-                    // add update action if an update is available
-                    if ($interface->isUpdateAvailable()) {
-                        $templateRow['actions'][] = array(
-                            'dataHref' => 'callPluginUpdate(\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'update')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . addslashes($pluginName) . '\')',
-                            'dataMessage' => $gL10n->get('SYS_WANT_UPDATE_PLUGIN', array($pluginName)),
-                            'icon' => 'bi bi-arrow-clockwise',
-                            'tooltip' => $gL10n->get('SYS_PLUGIN_UPDATE')
-                        );
-                    }
-                    if (!$interface->isAdmidioPlugin()) {
-                        // add uninstall action
-                        $templateRow['actions'][] = array(
-                            'dataHref' => 'callPluginUninstall(\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'uninstall')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . addslashes($pluginName) . '\')',
-                            'dataMessage' => $gL10n->get('SYS_WANT_UNINSTALL_PLUGIN', array($pluginName)),
-                            'icon' => 'bi bi-trash',
-                            'tooltip' => $gL10n->get('SYS_PLUGIN_UNINSTALL')
-                        );
-                    }
-                } else {
-                    // add install action
-                    $templateRow['actions'][] = array(
-                        'dataHref' => 'callPluginInstall(\'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'install')) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . addslashes($pluginName) . '\')',
-                        'dataMessage' => $gL10n->get('SYS_WANT_INSTALL_PLUGIN', array($pluginName)),
-                        'icon' => 'bi bi-download',
-                        'tooltip' => $gL10n->get('SYS_PLUGIN_INSTALL')
-                    );
-                }
-            } else {
-                // if the plugin does not implement the PluginInterface then we cannot show it
-                $templateRow['id'] = $pluginName;
-                $templateRow['name'] = $pluginName;
-                $templateRow['description'] = $gL10n->get('SYS_PLUGIN_NO_INTERFACE');
-                $templateRow['icon'] = '';
-                $templateRow['url'] = '';
-                $templateRow['author'] = '';
-                $templateRow['version'] = '';
-                $templateRow['installedVersion'] = '';
-            }
-
-            if ($interface !== null && $interface->isOverviewPlugin()) {
-                // add the plugin to the overview plugins
-                // for overview plugins here is a sequence number that is used to sort the plugins on the overview page
-                $sequence = $interface->getPluginSequence();
-                $desiredSequence = $sequence;
-                if (isset($templateRowPluginParent['overview']['entries'][$desiredSequence])) {
-                    $desiredSequence++;
-                    while (isset($templateRowPluginParent['overview']['entries'][$desiredSequence])) {
-                        $desiredSequence++;
-                    }
-                }
-                $templateRowPluginParent['overview']['entries'][$desiredSequence] = $templateRow;
-                ksort($templateRowPluginParent['overview']['entries']);
-            } elseif ($interface !== null && $interface->isInstalled()) {
-                // add the plugin to the normal plugins
-                $templateRowPluginParent['plugins']['entries'][] = $templateRow;
-            } else {
-                // add the plugin to the available plugins
-                $templateRowPluginParent['available']['entries'][] = $templateRow;
-            }
-        }
-        
-        // remove empty categories
-        foreach ($templateRowPluginParent as $key => $value) {
-            if (empty($value['entries'])) {
-                unset($templateRowPluginParent[$key]);
-            }
-        }
-
-        $this->templateData = $templateRowPluginParent;
+        return array(
+            'dataHref' => 'callPluginAction(\'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+            'dataMessage' => $gL10n->get($message, array($id)),
+            'icon' => $icon,
+            'tooltip' => $gL10n->get($tooltip)
+        );
     }
 }
