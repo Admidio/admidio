@@ -104,7 +104,7 @@ class EventListPresenter extends PagePresenter
             $page->assignSmartyVariable('classTable', 'table table-condensed table-hover');
 
             if ($gSettingsManager->getBool('enable_rss') && $gSettingsManager->getInt('events_module_enabled') === 1) {
-                $page->addRssFile(ADMIDIO_URL . '/rss/events.php?organization_short_name=' . $gCurrentOrganization->getValue('org_shortname'), $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_EVENTS'))));
+                $page->addRssFile(ADMIDIO_URL . '/rss/events.php?organization=' . $gCurrentOrganization->getValue('org_shortname'), $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_EVENTS'))));
             }
 
             $page->addJavascript('
