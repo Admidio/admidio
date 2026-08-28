@@ -24,8 +24,9 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Language;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
-use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
@@ -2021,38 +2022,40 @@ final class CoreTasks
 
     private static function registerPluginTasks(): void
     {
-        self::task('plugin:list', 'pluginList', 'List discovered plugins and installation/update state.',
-            'plugin:list [--installed] [--updates] [--format=FORMAT]', 'PLUGINS', true, array(), array(
+        self::task('plugin:list', 'pluginList', 'List the plugins and their state.',
+            'plugin:list [--state=STATE] [--installed] [--updates] [--format=FORMAT]', 'PLUGINS', true, array(), array(
+                self::opt('state', 'Only plugins in that state.', 'STATE', false, false, false, array(
+                    PluginRegistry::STATE_AVAILABLE,
+                    PluginRegistry::STATE_DISABLED,
+                    PluginRegistry::STATE_ENABLED,
+                    PluginRegistry::STATE_UPDATE,
+                    PluginRegistry::STATE_BROKEN,
+                    PluginRegistry::STATE_ORPHANED
+                )),
                 self::opt('installed', 'Only installed plugins.', '', false, false, true),
                 self::opt('updates', 'Only plugins with updates.', '', false, false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
-        self::task('plugin:show', 'pluginShow', 'Show plugin metadata/state.',
+        self::task('plugin:show', 'pluginShow', 'Show the manifest and the state of a plugin.',
             'plugin:show PLUGIN [--format=text|json|json-api]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin name.')),
+            array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
-        self::task('plugin:install', 'pluginInstall', 'Install a current-interface plugin.',
+        self::task('plugin:install', 'pluginInstall', 'Install a plugin.',
             'plugin:install PLUGIN [--add-menu=BOOL]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin name.')),
+            array(self::arg('plugin', 'Plugin ID.')),
             array(self::opt('add-menu', 'Add plugin menu entry.', 'BOOL')));
-        self::task('plugin:update', 'pluginUpdate', 'Run a plugin update.',
-            'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin name.')));
-        self::task('plugin:remove', 'pluginRemove', 'Uninstall a current-interface plugin.',
-            'plugin:remove PLUGIN [--remove-menu=BOOL] [--yes]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin name.')), array(
-                self::opt('remove-menu', 'Remove plugin menu entry.', 'BOOL'),
+        self::task('plugin:enable', 'pluginEnable', 'Enable an installed plugin for the current organization.',
+            'plugin:enable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
+        self::task('plugin:disable', 'pluginDisable', 'Disable a plugin for the current organization, keeping its data.',
+            'plugin:disable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
+        self::task('plugin:update', 'pluginUpdate', 'Run the update scripts of a plugin.',
+            'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
+        self::task('plugin:remove', 'pluginRemove', 'Uninstall a plugin, optionally with its data.',
+            'plugin:remove PLUGIN [--remove-data] [--yes]', 'PLUGINS', true,
+            array(self::arg('plugin', 'Plugin ID. The ID of an orphaned plugin whose files are gone is accepted too.')), array(
+                self::opt('remove-data', 'Also run db_scripts/uninstall.sql and destroy the data of the plugin.', '', false, false, true),
                 self::opt('yes', 'Confirm uninstall.', '', false, false, true)
             ));
-        self::task(
-            'plugin:move',
-            'pluginMove',
-            'Move plugin ordering.',
-            'plugin:move PLUGIN up|down',
-            'PLUGINS',
-            true,
-            array(self::arg('plugin', 'Plugin name.'), self::arg('direction', 'up or down.'))
-        );
-
     }
 
     private static function registerSsoTasks(): void
@@ -8543,38 +8546,32 @@ final class CoreTasks
 
     public static function pluginList(array $arguments, array $options): int
     {
+        $state = CliApplication::optionString($options, 'state', '');
         $rows = array();
-        foreach ((new PluginManager())->getAvailablePlugins() as $folder => $pluginData) {
-            $interface = $pluginData['interface'] ?? null;
-            if ($interface === null) {
-                $row = array(
-                    'plugin' => $folder,
-                    'name' => $folder,
-                    'installed' => false,
-                    'installed_version' => '',
-                    'available_version' => '',
-                    'update_available' => false,
-                    'interface' => false
-                );
-            } else {
-                /** @var PluginAbstract $plugin */
-                $plugin = $interface::getInstance();
-                $metadata = $plugin::getMetadata();
-                $row = array(
-                    'plugin' => $folder,
-                    'name' => $plugin::getName(),
-                    'installed' => $plugin::isInstalled(),
-                    'installed_version' => $plugin::getVersion(),
-                    'available_version' => (string)($metadata['version'] ?? ''),
-                    'update_available' => $plugin::isUpdateAvailable(),
-                    'interface' => true
-                );
-            }
 
-            if (CliApplication::optionBool($options, 'installed', false) === true && !$row['installed']) {
+        foreach (self::pluginIds() as $id) {
+            $plugin = PluginRegistry::get($id);
+            $rowState = PluginRegistry::getState($plugin ?? $id);
+            $installed = PluginRegistry::isInstalled($id);
+
+            $row = array(
+                'plugin' => $id,
+                'name' => $plugin?->name ?? $id,
+                'state' => $rowState,
+                'version' => $plugin?->version ?? '',
+                'installed_version' => PluginRegistry::getInstalledVersion($id),
+                'installed' => $installed,
+                'enabled' => $installed && PluginRegistry::isEnabled($id)
+            );
+
+            if ($state !== '' && $rowState !== $state) {
                 continue;
             }
-            if (CliApplication::optionBool($options, 'updates', false) === true && !$row['update_available']) {
+            if (CliApplication::optionBool($options, 'installed', false) === true && !$installed) {
+                continue;
+            }
+            if (CliApplication::optionBool($options, 'updates', false) === true
+                && $rowState !== PluginRegistry::STATE_UPDATE) {
                 continue;
             }
             $rows[] = $row;
@@ -8590,16 +8587,43 @@ final class CoreTasks
 
     public static function pluginShow(array $arguments, array $options): int
     {
-        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+        $id = CliApplication::requireArgument($arguments, 0, 'plugin');
+        $plugin = PluginRegistry::get($id);
+
+        if ($plugin === null) {
+            if (!PluginRegistry::isInstalled($id)) {
+                throw new InvalidArgumentException('Plugin "' . $id . '" was not found.');
+            }
+
+            // An orphaned plugin has nothing left but its database row.
+            CliApplication::writeValue(array(
+                'plugin' => $id,
+                'state' => PluginRegistry::STATE_ORPHANED,
+                'component_id' => PluginRegistry::getComponentId($id),
+                'installed_version' => PluginRegistry::getInstalledVersion($id)
+            ), $options);
+            return 0;
+        }
+
         $data = array(
-            'name' => $plugin::getName(),
-            'component_name' => $plugin::getComponentName(),
-            'component_id' => $plugin::getComponentId(),
-            'installed' => $plugin::isInstalled(),
-            'activated' => $plugin::isActivated(),
-            'installed_version' => $plugin::getVersion(),
-            'update_available' => $plugin::isUpdateAvailable(),
-            'metadata' => $plugin::getMetadata()
+            'plugin' => $plugin->id,
+            'name' => $plugin->name,
+            'description' => $plugin->description,
+            'state' => PluginRegistry::getState($plugin),
+            'version' => $plugin->version,
+            'installed_version' => PluginRegistry::getInstalledVersion($plugin->id),
+            'component_id' => PluginRegistry::getComponentId($plugin->id),
+            'enabled' => PluginRegistry::isEnabled($plugin->id),
+            'author' => $plugin->author,
+            'url' => $plugin->homepage,
+            'icon' => $plugin->icon,
+            'path' => $plugin->path,
+            'page_url' => $plugin->hasPages() ? $plugin->getUrl() : '',
+            'pages' => $plugin->getPages(),
+            'settings' => array_keys($plugin->settings),
+            // The manifest error and the unmet requirements are developer diagnostics in English.
+            'error' => $plugin->error ?? '',
+            'requirement_problems' => $plugin->checkRequirements(PluginRegistry::getEnabledVersions())
         );
         CliApplication::writeValue($data, $options);
         return 0;
@@ -8608,60 +8632,54 @@ final class CoreTasks
     public static function pluginInstall(array $arguments, array $options): int
     {
         $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        $addMenu = CliApplication::optionBool($options, 'add-menu', true) ?? true;
-        if (!$plugin::doInstall($addMenu)) {
-            throw new RuntimeException('Plugin is already installed or could not be installed.');
-        }
+        PluginInstaller::install($plugin, CliApplication::optionBool($options, 'add-menu', true) ?? true);
         CliApplication::writeSuccess('Plugin installed.', $options);
+        return 0;
+    }
+
+    public static function pluginEnable(array $arguments, array $options): int
+    {
+        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+        PluginInstaller::setEnabled($plugin, true);
+        CliApplication::writeSuccess('Plugin enabled.', $options);
+        return 0;
+    }
+
+    public static function pluginDisable(array $arguments, array $options): int
+    {
+        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+        PluginInstaller::setEnabled($plugin, false);
+        CliApplication::writeSuccess('Plugin disabled.', $options);
         return 0;
     }
 
     public static function pluginUpdate(array $arguments, array $options): int
     {
         $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        if (!$plugin::isInstalled()) {
-            throw new RuntimeException('Plugin is not installed.');
-        }
-        if (!$plugin::doUpdate()) {
-            throw new RuntimeException('Plugin update was not performed.');
-        }
+        PluginInstaller::update($plugin);
         CliApplication::writeSuccess('Plugin updated.', $options);
         return 0;
     }
 
     public static function pluginRemove(array $arguments, array $options): int
     {
-        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        if (!$plugin::isInstalled()) {
-            throw new RuntimeException('Plugin is not installed.');
+        $id = CliApplication::requireArgument($arguments, 0, 'plugin');
+        $plugin = PluginRegistry::get($id);
+
+        if ($plugin === null && !PluginRegistry::isInstalled($id)) {
+            throw new InvalidArgumentException('Plugin "' . $id . '" was not found.');
         }
 
-        CliApplication::confirm('Uninstall plugin "' . $plugin::getName() . '"?', $options);
-        $removeMenu = CliApplication::optionBool($options, 'remove-menu', true) ?? true;
-        if (!$plugin::doUninstall($removeMenu)) {
-            throw new RuntimeException('Plugin uninstall was not performed.');
-        }
+        $removeData = CliApplication::optionBool($options, 'remove-data', false) === true;
+        CliApplication::confirm(
+            'Uninstall plugin "' . ($plugin?->name ?? $id) . '"'
+                . ($removeData ? ' and destroy its data' : '') . '?',
+            $options
+        );
+
+        // The ID keeps the orphan case working: the files are gone, but the row is not.
+        PluginInstaller::uninstall($plugin ?? $id, $removeData);
         CliApplication::writeSuccess('Plugin removed.', $options);
-        return 0;
-    }
-
-    public static function pluginMove(array $arguments, array $options): int
-    {
-        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        $direction = self::direction(CliApplication::requireArgument($arguments, 1, 'direction'));
-
-        if (!$plugin::isInstalled()) {
-            throw new RuntimeException('Plugin is not installed.');
-        }
-
-        $sequence = $plugin::getPluginSequence();
-        $newSequence = $direction === 'up' ? max(1, $sequence - 1) : $sequence + 1;
-
-        if (!$plugin::setPluginSequence($newSequence)) {
-            throw new RuntimeException('Plugin sequence could not be updated.');
-        }
-
-        CliApplication::writeSuccess('Plugin moved.', $options);
         return 0;
     }
 
@@ -11289,20 +11307,41 @@ final class CoreTasks
         $selectOptions->setSequence($sequence);
     }
 
-    private static function resolvePlugin(string $reference): PluginAbstract
+    /**
+     * A plugin by its ID, which is the name of its directory below plugins/ and its only identity.
+     * @param string $reference
+     * @return Plugin
+     * @throws Exception
+     */
+    private static function resolvePlugin(string $reference): Plugin
     {
-        $manager = new PluginManager();
-        $plugin = $manager->getPluginByName($reference);
+        $plugin = PluginRegistry::get($reference);
         if ($plugin === null) {
-            $plugin = $manager->getPluginByComponentName(strtoupper($reference));
+            throw new InvalidArgumentException('Plugin "' . $reference . '" was not found.');
         }
-        if ($plugin === null && ctype_digit($reference)) {
-            $plugin = $manager->getPluginById((int)$reference);
+        if (!$plugin->isValid()) {
+            throw new InvalidArgumentException('Plugin "' . $reference . '" is broken: ' . $plugin->error);
         }
-        if ($plugin === null) {
-            throw new InvalidArgumentException('Plugin "' . $reference . '" was not found or has no current PluginAbstract interface.');
-        }
+
         return $plugin;
+    }
+
+    /**
+     * The IDs of every plugin the installation knows: the directories below plugins/ and the
+     * plugins that are only left in the database because their files were deleted.
+     * @return array<int,string>
+     * @throws Exception
+     */
+    private static function pluginIds(): array
+    {
+        $ids = array_merge(
+            array_keys(PluginRegistry::all()),
+            array_keys(PluginRegistry::getInstallations())
+        );
+        $ids = array_unique($ids);
+        sort($ids);
+
+        return $ids;
     }
 
     /**
