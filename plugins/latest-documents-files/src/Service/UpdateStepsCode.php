@@ -1,10 +1,8 @@
 <?php
-namespace LatestDocumentsFiles\classes\Service;
+namespace AdmidioPlugin\LatestDocumentsFiles\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use LatestDocumentsFiles\classes\LatestDocumentsFiles;
-use ReflectionException;
 
 /**
  * @copyright The Admidio Team
@@ -29,17 +27,15 @@ final class UpdateStepsCode
 
     /**
      * Retrieve previous settings from config file and update the database settings accordingly.
-     * @throws Exception|ReflectionException
+     * @throws Exception
      */
     public static function updateStep10RetrievePreviousSettings()
     {
         global  $gSettingsManager;
 
-        $pluginLatestDocumentsFiles = LatestDocumentsFiles::getInstance();
-        $configValues = $pluginLatestDocumentsFiles::getPluginConfig();
 
         // check if there is a config.php file with previous settings in the latest-documents-files plugin folder
-        $configFile = dirname(__DIR__, 4) . '/adm_plugins/latest-documents-files/config.php';
+        $configFile = ADMIDIO_PATH . '/adm_plugins/latest-documents-files/config.php';
         if (file_exists($configFile)) {
             // include the config file to get the previous settings
             include $configFile;

@@ -1,16 +1,19 @@
 <?php
 
-namespace LatestDocumentsFiles\classes;
+namespace AdmidioPlugin\LatestDocumentsFiles;
 
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
-use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Hooks\Hooks;
+use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginWidget;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
+use AdmidioPlugin\LatestDocumentsFiles\Presenter\LatestDocumentsFilesPreferencesPresenter;
 
-use InvalidArgumentException;
 use Exception;
-use Throwable;
 
 /**
  ***********************************************************************************************
@@ -23,17 +26,104 @@ use Throwable;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-class LatestDocumentsFiles extends PluginAbstract
+final class LatestDocumentsFiles
 {
     /**
-     * Get the documents & files data
-     * @return array Returns the documents & files data
+     * The directory of this plugin, which is its only identity.
      */
-    private static function getDocumentsFilesData() : array
+    public const PLUGIN_ID = 'latest-documents-files';
+
+    /**
+     * Where the widget is placed on the overview page as long as nobody moved it.
+     */
+    public const DEFAULT_SEQUENCE = 5;
+
+    /**
+     * Announce the widget and the preferences panel. This is what plugin.php calls.
+     * @return void
+     */
+    public static function register(): void
+    {
+        $plugin = PluginRegistry::get(self::PLUGIN_ID);
+        if ($plugin === null) {
+            return;
+        }
+
+        /*
+         * The position of this plugin is stored under latest_documents_overview_sequence, without
+         * the "files" the rest of its preferences carry. The name is kept as it is, because an
+         * installation that has it would otherwise lose the position it chose.
+         */
+        PluginWidget::register($plugin, array(self::class, 'renderWidget'), array(
+            'sequence' => self::DEFAULT_SEQUENCE,
+            'sequencePreference' => 'latest_documents_overview_sequence'
+        ));
+
+        Hooks::addFilter(
+            PluginPanel::HOOK,
+            static function (array $panels) use ($plugin): array {
+                global $gL10n;
+
+                $panels[] = array(
+                    'id' => PluginPanel::normalizeId($plugin->id),
+                    'title' => $gL10n->get($plugin->name),
+                    'icon' => $plugin->icon,
+                    'group' => PluginPanel::GROUP_OVERVIEW,
+                    'sequence' => self::DEFAULT_SEQUENCE,
+                    'create' => array(LatestDocumentsFilesPreferencesPresenter::class, 'createForm')
+                );
+
+                return $panels;
+            },
+            PluginPanel::DEFAULT_SEQUENCE,
+            1,
+            $plugin->id
+        );
+    }
+
+    /**
+     * Build the widget of the overview page. Whether it is shown at all was decided before this is
+     * called, by the preference **latest_documents_files_plugin_enabled**.
+     * @param PagePresenter $page
+     * @param Plugin $plugin
+     * @return string
+     * @throws Exception|\Smarty\Exception
+     */
+    public static function renderWidget(PagePresenter $page, Plugin $plugin): string
+    {
+        global $gSettingsManager, $gL10n, $gValidLogin;
+
+        $variables = array('name' => $plugin->id, 'message' => '', 'documentsFiles' => array());
+        $module = $gSettingsManager->getInt('documents_files_module_enabled');
+
+        if ($module === 0) {
+            $variables['message'] = $gL10n->get('SYS_MODULE_DISABLED');
+        } elseif ($module === 1 || ($module === 2 && $gValidLogin)) {
+            $documentsFilesArray = self::getDocumentsFilesData($plugin->getSettingValues());
+            if (!empty($documentsFilesArray)) {
+                $variables['documentsFiles'] = $documentsFilesArray;
+            } elseif ($gValidLogin) {
+                $variables['message'] = $gL10n->get('PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE');
+            } else {
+                $variables['message'] = $gL10n->get('SYS_FOLDER_NO_FILES_VISITOR');
+            }
+        } else {
+            $variables['message'] = $gL10n->get('SYS_FOLDER_NO_FILES_VISITOR');
+        }
+
+        return $plugin->renderTemplate($page, 'plugin.latest-documents-files.tpl', $variables);
+    }
+
+    /**
+     * Get the documents & files data
+     * @param array<string,mixed> $config
+     * @return array Returns the documents & files data
+     * @throws Exception
+     */
+    private static function getDocumentsFilesData(array $config) : array
     {
         global $gValidLogin, $gCurrentOrgId, $gDb, $gL10n, $gProfileFields;
 
-        $config = self::getPluginConfigValues();
         $documentsFilesArray = array();
         $countVisibleDownloads = 0;
         $sqlCondition = '';
@@ -103,61 +193,5 @@ class LatestDocumentsFiles extends PluginAbstract
         }
 
         return $documentsFilesArray;
-    }
-
-    /**
-     * @param PagePresenter $page
-     * @throws InvalidArgumentException
-     * @throws Exception
-     * @return bool
-     */
-    public static function doRender($page = null) : bool
-    {
-        global $gSettingsManager, $gL10n, $gValidLogin;
-
-        // show the latest documents & files list
-        try {
-            $rootPath = dirname(__DIR__, 3);
-            $pluginFolder = basename(self::$pluginPath);
-
-            require_once($rootPath . '/system/common.php');
-
-            $latestDocumentsFilesPlugin = new Overview($pluginFolder);
-
-            // check if the plugin is installed
-            if (!self::isInstalled()) {
-                throw new InvalidArgumentException($gL10n->get('SYS_PLUGIN_NOT_INSTALLED'));
-            }
-
-            if ($gSettingsManager->getInt('documents_files_module_enabled') > 0) {
-                if (($gSettingsManager->getInt('documents_files_module_enabled') === 1 || ($gSettingsManager->getInt('documents_files_module_enabled') === 2 && $gValidLogin)) &&
-                    ($gSettingsManager->getInt('latest_documents_files_plugin_enabled') === 1 || ($gSettingsManager->getInt('latest_documents_files_plugin_enabled') === 2 && $gValidLogin))) {
-                    $documentsFilesArray = self::getDocumentsFilesData();
-                    if (!empty($documentsFilesArray)) {
-                        $latestDocumentsFilesPlugin->assignTemplateVariable('documentsFiles', $documentsFilesArray);
-                    } else {
-                        if ($gValidLogin) {
-                            $latestDocumentsFilesPlugin->assignTemplateVariable('message', $gL10n->get('PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE'));
-                        } else {
-                            $latestDocumentsFilesPlugin->assignTemplateVariable('message', $gL10n->get('SYS_FOLDER_NO_FILES_VISITOR'));
-                        }
-                    }
-                } else {
-                    $latestDocumentsFilesPlugin->assignTemplateVariable('message',$gL10n->get('SYS_FOLDER_NO_FILES_VISITOR'));
-                }
-            } else {
-                $latestDocumentsFilesPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
-            }
-            
-            if (isset($page)) {
-                echo $latestDocumentsFilesPlugin->html('plugin.latest-documents-files.tpl');
-            } else {
-                $latestDocumentsFilesPlugin->showHtmlPage('plugin.latest-documents-files.tpl');
-            }
-        } catch (Throwable $e) {
-            echo $e->getMessage();
-        }
-
-        return true;
     }
 }
