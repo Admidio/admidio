@@ -105,9 +105,10 @@ final class PluginPages
     /**
      * Read one of the two flags of this class.
      *
-     * Registering a preference does not give it a row; that happens when the installation is
-     * updated or when the preference is saved for the first time. Until then SettingsManager::get()
-     * would refuse the name, so the registered default is the answer.
+     * Both are ordinary core preferences, so an installation gets its rows from the installer or
+     * from the next Update::updateOrgPreferences(). Between deploying this code and running that
+     * update the rows do not exist yet, and SettingsManager::get() refuses a name it has no value
+     * for, so the declared default answers until then.
      * @param string $name
      * @return bool
      */
@@ -115,24 +116,11 @@ final class PluginPages
     {
         global $gSettingsManager;
 
-        self::registerPreference();
-
         if (!isset($gSettingsManager) || !$gSettingsManager->has($name)) {
             return (string)(PreferenceDefinitions::all()[$name]['default'] ?? '0') === '1';
         }
 
         return $gSettingsManager->getBool($name);
-    }
-
-    /**
-     * Register the preference. It belongs to the plugin subsystem rather than to one plugin, so it
-     * is registered whenever the subsystem is used, and registering it again is a no-op.
-     * @return void
-     */
-    public static function registerPreference(): void
-    {
-        PreferenceDefinitions::register(self::SETTING, array('default' => '0', 'type' => 'bool'));
-        PreferenceDefinitions::register(self::SETTING_APPLIED, array('default' => '0', 'type' => 'bool', 'internal' => true));
     }
 
     /**

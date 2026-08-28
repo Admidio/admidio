@@ -551,8 +551,17 @@ class PreferencesService
             );
         }
 
+        /*
+         * A preference that was added after the last update of this installation has no row yet -
+         * updateOrgPreferences() writes it, and until then the declared default is what the
+         * installation actually behaves like. Reporting that is more useful than refusing the name.
+         */
+        $value = $gSettingsManager->has($name, true)
+            ? $gSettingsManager->get($name)
+            : (string)PreferenceDefinitions::defaults()[$name];
+
         return array(
-            'value' => $gSettingsManager->get($name, true),
+            'value' => $value,
             'type' => $definition['type'],
             'sensitive' => $definition['sensitive']
         );

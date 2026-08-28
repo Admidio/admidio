@@ -85,7 +85,6 @@ final class PluginLoader
         self::$done = true;
 
         try {
-            PluginPages::registerPreference();
             $plugins = PluginRegistry::getLoadable();
         } catch (Throwable $exception) {
             self::report('', 'The plugins could not be determined: ' . $exception->getMessage());
