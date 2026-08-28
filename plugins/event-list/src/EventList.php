@@ -194,7 +194,7 @@ final class EventList
                 }
 
                 // show preview text
-                if ($config['event_list_show_full_description'] === 1) {
+                if ($config['event_list_show_full_description']) {
                     $plgNewDescription = $plgEvent->getValue('dat_description');
                 } elseif ($config['event_list_show_preview_chars'] > 0) {
                     // remove all html tags except some format tags
