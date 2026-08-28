@@ -16,7 +16,6 @@ use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
 use Admidio\SSO\Service\OIDCService;
 
-use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Plugins\PluginPanel;
 use Admidio\Infrastructure\Plugins\PluginWidget;
 
@@ -172,46 +171,12 @@ class PreferencesPresenter extends PagePresenter
         parent::__construct();
     }
 
-    public function __call(string $name, array $arguments)
-    {
-        // check if the method exists in the PreferencePresanter class
-        if (method_exists($this, $name)) {
-            return call_user_func_array([$this, $name], $arguments);
-        } else {
-            // Look through every plugin you registered during init()
-            foreach (PreferencesService::getPluginPresenters() as $comId => $callbacks) {
-                foreach ($callbacks as $callback) {
-                    // We only stored array callbacks for static methods
-                    if (is_array($callback)
-                        && isset($callback[1])
-                        && $callback[1] === $name
-                        && is_callable($callback)
-                    ) {
-                        // forward all args (usually none) to the real presenter
-                        $arguments = array_merge(array($this->getSmartyTemplate()), $arguments);
-                        return call_user_func_array($callback, $arguments);
-                    }
-                }
-            }
-        }
-
-        // If we get here, there was no presenter registered under that name:
-        throw new \BadMethodCallException(
-            "Call to undefined method " . static::class . "::$name()"
-        );
-    }
-
     /**
      * @throws Exception
      */
     private function initialize(): void
     {
         global $gL10n;
-        $pluginManager = new PluginManager();
-        foreach ($pluginManager->getInstalledPlugins() as $pluginClass) {
-            $pluginClass::getInstance();
-            $pluginClass::initPreferencePanelCallback();
-        }
 
         $this->preferenceTabs = array(
             // === 1) System ===
@@ -282,20 +247,14 @@ class PreferencesPresenter extends PagePresenter
             array(
                 'key'    => 'overview_extensions',
                 'label'  => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'),
-                'panels' => self::pluginPanels(
-                    PreferencesService::getOverviewPluginPanels(),
-                    PluginPanel::GROUP_OVERVIEW
-                )
+                'panels' => self::pluginPanels(PluginPanel::GROUP_OVERVIEW)
             ),
 
             // === 7) Extensions ===
             array(
                 'key'    => 'extensions',
                 'label'  => $gL10n->get('SYS_EXTENSIONS'),
-                'panels' => self::pluginPanels(
-                    PreferencesService::getPluginPanels(),
-                    PluginPanel::GROUP_EXTENSIONS
-                )
+                'panels' => self::pluginPanels(PluginPanel::GROUP_EXTENSIONS)
             )
         );
     }
@@ -303,18 +262,15 @@ class PreferencesPresenter extends PagePresenter
     /**
      * The panels of one of the two extension tabs.
      *
-     * A plugin declares its panel with the PluginPanel hook. The panels that the legacy plugin
-     * runtime registered in the PreferencesService are still added, so that both kinds of plugin
-     * are shown while the built-in plugins are being converted.
-     * @param array<int,array<string,mixed>> $legacyPanels
+     * A plugin declares its panel with the PluginPanel hook.
      * @param string $group One of the PluginPanel GROUP_* constants.
      * @return array<int,array{id: string, title: string, icon: string, subcards: bool}>
      */
-    private static function pluginPanels(array $legacyPanels, string $group): array
+    private static function pluginPanels(string $group): array
     {
         $panels = array();
 
-        foreach (array_merge($legacyPanels, PluginPanel::inGroup($group)) as $panel) {
+        foreach (PluginPanel::inGroup($group) as $panel) {
             $panels[] = array(
                 'id'       => $panel['id'],
                 'title'    => $panel['title'],
@@ -341,8 +297,13 @@ class PreferencesPresenter extends PagePresenter
     {
         $method = 'create' . str_replace('_', '', ucwords($panel, '_')) . 'Form';
 
-        if (!method_exists($this, $method) && PluginPanel::get($panel) !== null) {
-            return PluginPanel::create($panel, $this);
+        if (!method_exists($this, $method)) {
+            if (PluginPanel::get($panel) !== null) {
+                return PluginPanel::create($panel, $this);
+            }
+
+            // The panel is a request parameter, so a name nobody declared is an invalid page view.
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
         return $this->{$method}();
@@ -823,7 +784,7 @@ class PreferencesPresenter extends PagePresenter
 
         // A widget whose plugin does not store its position cannot be ordered in this form.
         $overviewPlugins = array_values(array_filter(
-            array_merge($this->legacyOverviewPlugins(), $this->overviewWidgets()),
+            $this->overviewWidgets(),
             static fn(array $overviewPlugin): bool => $overviewPlugin['sequence']['key'] !== ''
         ));
 
@@ -899,43 +860,6 @@ class PreferencesPresenter extends PagePresenter
         }
 
         return $widgets;
-    }
-
-    /**
-     * The overview plugins of the previous plugin runtime, for the overview form. This is the code
-     * the form was built from before plugins declared a widget; it goes away with that runtime.
-     * @return array<int,array{id: string, name: string, icon: string, enabled: bool, sequence: array{key: string, value: int}}>
-     * @throws Exception
-     */
-    private function legacyOverviewPlugins(): array
-    {
-        $pluginManager = new PluginManager();
-        $overviewPlugins = array();
-
-        foreach ($pluginManager->getOverviewPlugins() as $sequence => $plugin) {
-            $pluginInstance = $plugin['interface']::getInstance();
-            $pluginConfig = $pluginInstance->getPluginConfig();
-
-            // find the plugin sequence key
-            $sequenceKey = '';
-            $enabled = false;
-            foreach ($pluginConfig as $pluginConfigKey => $pluginConfigValue) {
-                if (str_ends_with($pluginConfigKey, '_overview_sequence')) {
-                    $sequenceKey = $pluginConfigKey;
-                } elseif (str_ends_with($pluginConfigKey, '_enabled')) {
-                    $enabled = !(($pluginConfigValue['value'] === 0));
-                }
-            }
-            $overviewPlugins[] = array(
-                'id' => (string)$plugin['id'],
-                'name' => Language::translateIfTranslationStrId($pluginInstance->getName()),
-                'icon' => $pluginInstance->getIcon(),
-                'enabled' => $enabled,
-                'sequence' => array('key' => $sequenceKey, 'value' => (int)$sequence)
-            );
-        }
-
-        return $overviewPlugins;
     }
 
     /**

@@ -10,7 +10,6 @@
  */
 
 use Admidio\UI\Presenter\PagePresenter;
-use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Infrastructure\Plugins\PluginWidget;
 
 try {
@@ -31,20 +30,7 @@ try {
     $page = PagePresenter::withHtmlIDAndHeadline('adm_overview', $headline);
     $page->setContentFullWidth();
 
-    // get all overview plugins and add them to the template
-    $pluginManager = new PluginManager();
-    $plugins = $pluginManager->getOverviewPlugins();
-
-    $overviewPlugins = array();
-    foreach ($plugins as $plugin) {
-        $overviewPlugins[] =  array(
-            'id' => $plugin['id'],
-            'name' => $plugin['name'],
-            'file' => basename($plugin['file'])
-        );
-    }
-    $page->assignSmartyVariable('overviewPlugins', $overviewPlugins);
-    // Plugins of the new format contribute a widget instead of a file the overview has to include.
+    // A plugin contributes a widget to the overview through the overview_widgets filter.
     $page->assignSmartyVariable('overviewWidgets', PluginWidget::collect($page));
     $page->addTemplateFile('system/overview.tpl');
 
