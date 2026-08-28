@@ -6,6 +6,7 @@ use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Menu\ValueObject\Menu;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
@@ -303,3 +304,6 @@ if ($gValidLogin) {
 } else {
     $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
 }
+
+// the plugins of this organization extend the fully initialized request, and only then
+PluginLoader::loadEnabled();
