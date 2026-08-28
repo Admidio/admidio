@@ -115,6 +115,7 @@ class DatabaseDateTimeEdit
             $diff = $firstDateTime->diff($relativeDateTime);
 
             $days = random_int($minDaysLimit, $maxDaysLimit);
+            $daysRelative = $days + $diff->days;
 
             $newDateTime = $this->addDaysToDateTime(DATETIME_NOW, $days, $pastPeriod);
             $newDateTimeRelative = $this->addDaysToDateTime(DATETIME_NOW, $daysRelative, $pastPeriod);
@@ -124,7 +125,7 @@ class DatabaseDateTimeEdit
                                , ' . $columnNameRelative . ' = ?
                            WHERE ' . $columnName . ' = ? ';
 
-            $this->db->queryPrepared($sqlUpdate, array($newDateTime->format('Y-m-d H:i:s'), $newDateTimeRelative->format('Y-m-d H:i:s'), $row[$columnName]));
+            $this->db->queryPrepared($sqlUpdate, array($newDateTime, $newDateTimeRelative, $row[$columnName]));
         }
     }
 }
