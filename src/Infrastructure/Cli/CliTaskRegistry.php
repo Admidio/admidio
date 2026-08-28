@@ -81,11 +81,20 @@ final class CliTaskRegistry
     private static array $coreNamespaces = array();
 
     /**
-     * Directory name of the module whose cli.php is currently being loaded, or null outside of that.
+     * Directory name of the module or plugin whose registrations are currently being loaded, or
+     * null outside of that.
      *
      * @var string|null
      */
     private static ?string $moduleContext = null;
+
+    /**
+     * Whether the current context is a module or a plugin. Both own the command namespace named
+     * after their directory; the kind only appears in the error message.
+     *
+     * @var string
+     */
+    private static string $moduleContextKind = 'Module';
 
     /**
      * Announce which module's cli.php is being loaded, so its registrations can be restricted to
@@ -94,6 +103,17 @@ final class CliTaskRegistry
     public static function setModuleContext(?string $module): void
     {
         self::$moduleContext = $module;
+        self::$moduleContextKind = 'Module';
+    }
+
+    /**
+     * Announce which plugin's entry file is being loaded. A plugin owns the command namespace named
+     * after its directory, exactly like a module.
+     */
+    public static function setPluginContext(?string $plugin): void
+    {
+        self::$moduleContext = $plugin;
+        self::$moduleContextKind = 'Plugin';
     }
 
     /**
@@ -342,10 +362,12 @@ final class CliTaskRegistry
                 if ($singular !== self::$moduleContext) {
                     $ownNamespaces[] = $singular;
                 }
+                // A plugin directory may use hyphens, which a command namespace cannot.
+                $ownNamespaces[] = str_replace('-', '', self::$moduleContext);
 
                 if (!in_array($namespace, $ownNamespaces, true)) {
                     throw new InvalidArgumentException(
-                        'Module "' . self::$moduleContext . '" may only register commands of the "'
+                        self::$moduleContextKind . ' "' . self::$moduleContext . '" may only register commands of the "'
                         . implode(':" or "', $ownNamespaces) . ':" namespace, but tried to register "'
                         . $taskName . '".'
                     );
