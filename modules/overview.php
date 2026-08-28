@@ -11,6 +11,7 @@
 
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\PluginWidget;
 
 try {
     // if the config file doesn't exist, then show the installation dialog
@@ -43,6 +44,8 @@ try {
         );
     }
     $page->assignSmartyVariable('overviewPlugins', $overviewPlugins);
+    // Plugins of the new format contribute a widget instead of a file the overview has to include.
+    $page->assignSmartyVariable('overviewWidgets', PluginWidget::collect($page));
     $page->addTemplateFile('system/overview.tpl');
 
     $page->show();
