@@ -285,6 +285,19 @@ final class Plugin
     }
 
     /**
+     * Whether the plugin should get a menu entry below "Extensions" when it is installed.
+     *
+     * A plugin with a page gets one, because that is where the entry would lead. A plugin whose
+     * pages are not destinations - the calendar answers one month of itself for its own buttons -
+     * says **"menu": false** in its manifest and is left out of the menu.
+     * @return bool
+     */
+    public function wantsMenuEntry(): bool
+    {
+        return $this->hasPages() && ($this->manifest['menu'] ?? true) !== false;
+    }
+
+    /**
      * URL of a page of this plugin, in whichever form is currently live - see PluginPages.
      *
      * Without a page the URL a menu entry should use is returned: the **index.php** of the plugin if

@@ -1,16 +1,19 @@
 <?php
 
-namespace Calendar\classes;
+namespace AdmidioPlugin\Calendar;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginWidget;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Service\RolesService;
+use Admidio\UI\Presenter\PagePresenter;
+use AdmidioPlugin\Calendar\Presenter\CalendarPreferencesPresenter;
 
-use InvalidArgumentException;
 use Exception;
-use Throwable;
 use DateTime;
 
 /**
@@ -26,7 +29,7 @@ use DateTime;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-class Calendar extends PluginAbstract
+final class Calendar
 {
     private static bool $calendarShowNames = false;
     private static array $months = array();
@@ -39,57 +42,121 @@ class Calendar extends PluginAbstract
     private static array $pluginConfig = array();
 
     /**
-     * Get the plugin configuration
-     * @return array Returns the plugin configuration
+     * The directory of this plugin, which is its only identity.
      */
-    public static function getPluginConfig() : array
+    public const PLUGIN_ID = 'calendar';
+
+    /**
+     * Where the widget is placed on the overview page as long as nobody moved it.
+     */
+    public const DEFAULT_SEQUENCE = 3;
+
+    /**
+     * The value a category or role list has as long as nobody narrowed it down.
+     */
+    private const ALL = array('All');
+
+    /**
+     * Announce the widget and the preferences panel. This is what plugin.php calls.
+     * @return void
+     */
+    public static function register(): void
+    {
+        $plugin = PluginRegistry::get(self::PLUGIN_ID);
+        if ($plugin === null) {
+            return;
+        }
+
+        PluginWidget::register($plugin, array(self::class, 'renderWidget'), array(
+            'sequence' => self::DEFAULT_SEQUENCE
+        ));
+
+        Hooks::addFilter(
+            PluginPanel::HOOK,
+            static function (array $panels) use ($plugin): array {
+                global $gL10n;
+
+                $panels[] = array(
+                    'id' => PluginPanel::normalizeId($plugin->id),
+                    'title' => $gL10n->get($plugin->name),
+                    'icon' => $plugin->icon,
+                    'group' => PluginPanel::GROUP_OVERVIEW,
+                    'sequence' => self::DEFAULT_SEQUENCE,
+                    'create' => array(CalendarPreferencesPresenter::class, 'createForm')
+                );
+
+                return $panels;
+            },
+            PluginPanel::DEFAULT_SEQUENCE,
+            1,
+            $plugin->id
+        );
+    }
+
+    /**
+     * The settings of the plugin, with the category and the two role lists resolved.
+     *
+     * A list that nobody narrowed down holds the sentinel "All", which means everything the current
+     * user may see and is turned into the actual IDs here.
+     * @param Plugin $plugin
+     * @return array<string,mixed>
+     * @throws Exception
+     */
+    public static function getConfig(Plugin $plugin): array
     {
         global $gCurrentUser;
 
-        // get the plugin config from the parent class
-        $config = parent::getPluginConfig();
+        $config = $plugin->getSettingValues();
 
-        // if the key equals 'calendar_show_categories' and the value is still the default value, retrieve the roles from the database
-        if (array_key_exists('calendar_show_categories', $config) && $config['calendar_show_categories']['value'] === self::$defaultConfig['calendar_show_categories']['value']) {
-            $config['calendar_show_categories']['value'] = $gCurrentUser->getAllVisibleCategories('EVT');
+        if (($config['calendar_show_categories'] ?? null) === self::ALL) {
+            $config['calendar_show_categories'] = $gCurrentUser->getAllVisibleCategories('EVT');
+        }
+        foreach (array('calendar_roles_view_plugin', 'calendar_roles_sql') as $key) {
+            if (($config[$key] ?? null) === self::ALL) {
+                $config[$key] = self::getAvailableRoles(1, true);
+            }
         }
 
-        // if the key equals 'calendar_roles_view_plugin' and the value is still the default value, retrieve the roles from the database
-        if (array_key_exists('calendar_roles_view_plugin', $config) && $config['calendar_roles_view_plugin']['value'] === self::$defaultConfig['calendar_roles_view_plugin']['value']) {
-            $config['calendar_roles_view_plugin']['value'] = self::getAvailableRoles(1, true);
-        }
-        // if the key equals 'calendar_roles_sql' and the value is still the default value, retrieve the roles from the database
-        if (array_key_exists('calendar_roles_sql', $config) && $config['calendar_roles_sql']['value'] === self::$defaultConfig['calendar_roles_sql']['value']) {
-            $config['calendar_roles_sql']['value'] = self::getAvailableRoles(1, true);
-        }
         return $config;
     }
 
     /**
-     * Get the plugin configuration values
-     * @return array Returns the plugin configuration values
+     * Build the widget of the overview page, and the fragment that the month buttons of the calendar
+     * request. Whether it is shown at all was decided before this is called, by the preference
+     * **calendar_plugin_enabled**.
+     * @param PagePresenter $page
+     * @param Plugin $plugin
+     * @param string $dateId Month and year the calendar should show, as **mmyyyy**. Empty for the
+     *                       month the visitor last looked at, or the current one.
+     * @return string
+     * @throws Exception|\Smarty\Exception
      */
-    public static function getPluginConfigValues() : array
+    public static function renderWidget(PagePresenter $page, Plugin $plugin, string $dateId = ''): string
     {
-        global $gCurrentUser;
+        global $gSettingsManager, $gL10n;
 
-        // get the plugin config values from the parent class
-        $config = parent::getPluginConfigValues();
+        $variables = array('name' => $plugin->id, 'message' => '');
 
-        // if the key equals 'calendar_show_categories' and the value is still the default value, retrieve the roles from the database
-        if (array_key_exists('calendar_show_categories', $config) && $config['calendar_show_categories'] === self::$defaultConfig['calendar_show_categories']['value']) {
-            $config['calendar_show_categories'] = $gCurrentUser->getAllVisibleCategories('EVT');
-        }
-        // if the key equals 'calendar_roles_view_plugin' and the value is still the default value, retrieve the roles from the database
-        if (array_key_exists('calendar_roles_view_plugin', $config) && $config['calendar_roles_view_plugin'] === self::$defaultConfig['calendar_roles_view_plugin']['value']) {
-            $config['calendar_roles_view_plugin'] = self::getAvailableRoles(1, true);
-        }
-        // if the key equals 'calendar_roles_sql' and the value is still the default value, retrieve the roles from the database
-        if (array_key_exists('calendar_roles_sql', $config) && $config['calendar_roles_sql'] === self::$defaultConfig['calendar_roles_sql']['value']) {
-            $config['calendar_roles_sql'] = self::getAvailableRoles(1, true);
+        if ($gSettingsManager->getInt('events_module_enabled') === 0
+            || $gSettingsManager->getInt('announcements_module_enabled') === 0) {
+            $variables['message'] = $gL10n->get('SYS_MODULE_DISABLED');
+
+            return $plugin->renderTemplate($page, 'plugin.calendar.tpl', $variables);
         }
 
-        return $config;
+        self::initParams(array('date_id' => $dateId));
+        self::$pluginConfig = self::getConfig($plugin);
+        $tableContent = self::getCalendarsData();
+
+        $variables['calendarUrl'] = $plugin->getUrl('index.php');
+        $variables['monthYearHeadline'] = self::$months[(int) self::$currentMonth - 1] . ' ' . self::$currentYear;
+        $variables['monthYear'] = self::$currentMonth . self::$currentYear;
+        $variables['currentMonthYear'] = date('mY');
+        $variables['dateIdLastMonth'] = date('mY', mktime(0, 0, 0, (int)self::$currentMonth - 1, 1, (int)self::$currentYear));
+        $variables['dateIdNextMonth'] = date('mY', mktime(0, 0, 0, (int)self::$currentMonth + 1, 1, (int)self::$currentYear));
+        $variables['tableContent'] = $tableContent;
+
+        return $plugin->renderTemplate($page, 'plugin.calendar.tpl', $variables);
     }
 
     /**
@@ -293,7 +360,6 @@ class Calendar extends PluginAbstract
     {
         global $gSettingsManager, $gCurrentUser, $gDb, $gL10n, $gProfileFields, $gValidLogin, $gDbType, $gCurrentOrgId;
 
-        self::$pluginConfig = self::getPluginConfigValues();
 
         // check if only members of configured roles could view birthday
         if ($gValidLogin) {
@@ -531,61 +597,6 @@ class Calendar extends PluginAbstract
         }
 
         self::$lastDayCurrentMonth = (int)date('t', mktime(0, 0, 0, self::$currentMonth, 1, self::$currentYear));
-
-        return true;
-    }
-
-    /**
-     * @param PagePresenter $page
-     * @throws InvalidArgumentException
-     * @throws Exception
-     * @return bool
-     */
-    public static function doRender($page = null) : bool
-    {
-        global $gSettingsManager, $gL10n, $gValidLogin;
-
-        // show the announcement list
-        try {
-            $rootPath = dirname(__DIR__, 3);
-            $pluginFolder = basename(self::$pluginPath);
-
-            require_once($rootPath . '/system/common.php');
-
-            $calendarPlugin = new Overview($pluginFolder);
-            // check if the plugin is installed
-            if (!self::isInstalled()) {
-                throw new InvalidArgumentException($gL10n->get('SYS_PLUGIN_NOT_INSTALLED'));
-            }
-            if ($gSettingsManager->getInt('events_module_enabled') > 0 && $gSettingsManager->getInt('announcements_module_enabled') > 0) {
-                if ($gSettingsManager->getInt('calendar_plugin_enabled') === 1 || ($gSettingsManager->getInt('calendar_plugin_enabled') === 2 && $gValidLogin)) {
-
-                    $tableContent = self::getCalendarsData();
-
-                    header('Content-Type: text/html; charset=utf-8');
-
-                    $calendarPlugin->assignTemplateVariable('pluginFolder', $pluginFolder);
-                    $calendarPlugin->assignTemplateVariable('monthYearHeadline', self::$months[(int) self::$currentMonth - 1] . ' ' . self::$currentYear);
-                    $calendarPlugin->assignTemplateVariable('monthYear', self::$currentMonth . self::$currentYear);
-                    $calendarPlugin->assignTemplateVariable('currentMonthYear', date('mY'));
-                    $calendarPlugin->assignTemplateVariable('dateIdLastMonth', date('mY', mktime(0, 0, 0, self::$currentMonth - 1, 1, self::$currentYear)));
-                    $calendarPlugin->assignTemplateVariable('dateIdNextMonth', date('mY', mktime(0, 0, 0, self::$currentMonth + 1, 1, self::$currentYear)));
-                    $calendarPlugin->assignTemplateVariable('tableContent', $tableContent);
-                } else {
-                    $calendarPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_ENTRIES_VISITORS'));
-                }
-            } else {
-                $calendarPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
-            }
-
-            if (isset($page) || self::$getDatId) {
-                echo $calendarPlugin->html('plugin.calendar.tpl');
-            } else {
-                $calendarPlugin->showHtmlPage('plugin.calendar.tpl');
-            }
-        } catch (Throwable $e) {
-            echo $e->getMessage();
-        }
 
         return true;
     }
