@@ -6,6 +6,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Email;
@@ -294,9 +295,14 @@ class PreferencesService
         $betaRelease = $updateInformation['betaRelease'];
         $versionUpdate = $updateInformation['versionUpdate'];
 
-        // a version that the update server doesn't provide is displayed as "n/a"
-        $stableVersionText = ($stableVersion === '') ? 'n/a' : $stableVersion;
-        $betaVersionText = ($betaVersion === '') ? 'n/a' : $betaVersion;
+        /*
+         * A version that the update server doesn't provide is displayed as "n/a". The values are
+         * read from a file on the Admidio server and are encoded here, so that the HTML below
+         * cannot be manipulated through that file.
+         */
+        $stableVersionText = SecurityUtils::encodeHTML(($stableVersion === '') ? 'n/a' : $stableVersion);
+        $betaVersionText = SecurityUtils::encodeHTML(($betaVersion === '') ? 'n/a' : $betaVersion);
+        $betaReleaseText = SecurityUtils::encodeHTML($betaRelease);
 
         // $versionUpdate (0 = No update, 1 = New stable version, 2 = New beta version, 3 = New stable + beta version, 99 = No connection)
         if ($versionUpdate === 1) {
@@ -329,7 +335,7 @@ class PreferencesService
         if ($versionUpdate !== 99 && $betaVersion !== '') {
             $html .= '
                 <a class="icon-link" href="' . ADMIDIO_HOMEPAGE . 'intern/adm_program/modules/announcements/announcements.php?cat_uuid=e2be424d-dd72-4c01-99ad-f8f91ec8830f" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
-                '<i class="bi bi-link"></i>' . $betaVersionText . ' Beta ' . $betaRelease . '
+                '<i class="bi bi-link"></i>' . $betaVersionText . ' Beta ' . $betaReleaseText . '
                 </a>';
         } else {
             $html .= $betaVersionText;
