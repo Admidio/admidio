@@ -1,16 +1,19 @@
 <?php
 
-namespace AnnouncementList\classes;
+namespace AdmidioPlugin\AnnouncementList;
 
 use Admidio\Announcements\Entity\Announcement;
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginWidget;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
+use AdmidioPlugin\AnnouncementList\Presenter\AnnouncementListPreferencesPresenter;
 
-use InvalidArgumentException;
 use Exception;
-use Throwable;
 
 /**
  ***********************************************************************************************
@@ -24,50 +27,121 @@ use Throwable;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-class AnnouncementList extends PluginAbstract
+final class AnnouncementList
 {
-    /** 
-     * Get the plugin configuration
-     * @return array Returns the plugin configuration
-     */
-    public static function getPluginConfig() : array
-    {
-        global $gCurrentUser;
-
-        // get the plugin config from the parent class
-        $config = parent::getPluginConfig();
-
-        // if the key equals 'announcement_list_displayed_categories' and the value is still the default value, retrieve the categories from the database
-        if (array_key_exists('announcement_list_displayed_categories', $config) && $config['announcement_list_displayed_categories']['value'] === self::$defaultConfig['announcement_list_displayed_categories']['value']) {
-            $config['announcement_list_displayed_categories']['value'] = $gCurrentUser->getAllVisibleCategories('ANN');
-        }
-        return $config;
-    }
-    
     /**
-     * Get the plugin configuration values
-     * @return array Returns the plugin configuration values
+     * The directory of this plugin, which is its only identity.
      */
-    public static function getPluginConfigValues() : array
+    public const PLUGIN_ID = 'announcement-list';
+
+    /**
+     * Where the widget is placed on the overview page as long as nobody moved it.
+     */
+    public const DEFAULT_SEQUENCE = 6;
+
+    /**
+     * The value a category list has as long as nobody narrowed it down: every visible category.
+     */
+    private const ALL_CATEGORIES = array('All');
+
+    /**
+     * Announce the widget and the preferences panel. This is what plugin.php calls.
+     * @return void
+     */
+    public static function register(): void
+    {
+        $plugin = PluginRegistry::get(self::PLUGIN_ID);
+        if ($plugin === null) {
+            return;
+        }
+
+        PluginWidget::register($plugin, array(self::class, 'renderWidget'), array(
+            'sequence' => self::DEFAULT_SEQUENCE
+        ));
+
+        Hooks::addFilter(
+            PluginPanel::HOOK,
+            static function (array $panels) use ($plugin): array {
+                global $gL10n;
+
+                $panels[] = array(
+                    'id' => PluginPanel::normalizeId($plugin->id),
+                    'title' => $gL10n->get($plugin->name),
+                    'icon' => $plugin->icon,
+                    'group' => PluginPanel::GROUP_OVERVIEW,
+                    'sequence' => self::DEFAULT_SEQUENCE,
+                    'create' => array(AnnouncementListPreferencesPresenter::class, 'createForm')
+                );
+
+                return $panels;
+            },
+            PluginPanel::DEFAULT_SEQUENCE,
+            1,
+            $plugin->id
+        );
+    }
+
+    /**
+     * The settings of the plugin, with the category list resolved.
+     *
+     * A category list that nobody narrowed down holds the sentinel "All", which means every category
+     * the current user may see and is turned into the actual category IDs here.
+     * @param Plugin $plugin
+     * @return array<string,mixed>
+     * @throws Exception
+     */
+    public static function getConfig(Plugin $plugin): array
     {
         global $gCurrentUser;
 
-        // get the plugin config values from the parent class
-        $config = parent::getPluginConfigValues();
+        $config = $plugin->getSettingValues();
 
-        // if the key equals 'announcement_list_displayed_categories' and the value is still the default value, retrieve the categories from the database
-        if (array_key_exists('announcement_list_displayed_categories', $config) && $config['announcement_list_displayed_categories'] === self::$defaultConfig['announcement_list_displayed_categories']['value']) {
+        if (($config['announcement_list_displayed_categories'] ?? null) === self::ALL_CATEGORIES) {
             $config['announcement_list_displayed_categories'] = $gCurrentUser->getAllVisibleCategories('ANN');
         }
 
         return $config;
     }
 
-    private static function getAnnouncementsData() : array
+    /**
+     * Build the widget of the overview page. Whether it is shown at all was decided before this is
+     * called, by the preference **announcement_list_plugin_enabled**.
+     * @param PagePresenter $page
+     * @param Plugin $plugin
+     * @return string
+     * @throws Exception|\Smarty\Exception
+     */
+    public static function renderWidget(PagePresenter $page, Plugin $plugin): string
+    {
+        global $gSettingsManager, $gL10n, $gValidLogin;
+
+        $variables = array('name' => $plugin->id, 'message' => '', 'announcements' => array());
+        $module = $gSettingsManager->getInt('announcements_module_enabled');
+
+        if ($module === 0) {
+            $variables['message'] = $gL10n->get('SYS_MODULE_DISABLED');
+        } elseif ($module === 1 || ($module === 2 && $gValidLogin)) {
+            $announcementArray = self::getAnnouncementsData(self::getConfig($plugin));
+            if (!empty($announcementArray)) {
+                $variables['announcements'] = $announcementArray;
+            } else {
+                $variables['message'] = $gL10n->get('SYS_NO_ENTRIES');
+            }
+        } else {
+            $variables['message'] = $gL10n->get('PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS');
+        }
+
+        return $plugin->renderTemplate($page, 'plugin.announcement-list.tpl', $variables);
+    }
+
+    /**
+     * @param array<string,mixed> $config
+     * @return array<int,array<string,mixed>>
+     * @throws Exception
+     */
+    private static function getAnnouncementsData(array $config) : array
     {
         global $gSettingsManager, $gCurrentUser, $gDb, $gL10n;
-
-        $config = self::getPluginConfigValues();
 
         if (!is_array($config['announcement_list_displayed_categories']) || empty($config['announcement_list_displayed_categories'])) {
             $plgSqlCategories = '';
@@ -144,57 +218,5 @@ class AnnouncementList extends PluginAbstract
             }
         }
         return $announcementArray;
-    }
-
-    /**
-     * @param PagePresenter $page
-     * @throws InvalidArgumentException
-     * @throws Exception
-     * @return bool
-     */
-    public static function doRender($page = null) : bool
-    {
-        global $gSettingsManager, $gL10n, $gValidLogin;
-
-        // show the announcement list
-        try {
-            $rootPath = dirname(__DIR__, 3);
-            $pluginFolder = basename(self::$pluginPath);
-
-            require_once($rootPath . '/system/common.php');
-
-            $announcementListPlugin = new Overview($pluginFolder);
-
-            // check if the plugin is installed
-            if (!self::isInstalled()) {
-                throw new InvalidArgumentException($gL10n->get('SYS_PLUGIN_NOT_INSTALLED'));
-            }
-
-            if ($gSettingsManager->getInt('announcements_module_enabled') > 0) {
-                if (($gSettingsManager->getInt('announcements_module_enabled') === 1 || ($gSettingsManager->getInt('announcements_module_enabled') === 2 && $gValidLogin)) &&
-                    ($gSettingsManager->getInt('announcement_list_plugin_enabled') === 1 || ($gSettingsManager->getInt('announcement_list_plugin_enabled') === 2 && $gValidLogin))) {
-                    $announcementArray = self::getAnnouncementsData();
-                    if (!empty($announcementArray)) {
-                        $announcementListPlugin->assignTemplateVariable('announcements', $announcementArray);
-                    } else {
-                        $announcementListPlugin->assignTemplateVariable('message',$gL10n->get('SYS_NO_ENTRIES'));
-                    }
-                } else {
-                    $announcementListPlugin->assignTemplateVariable('message',$gL10n->get('PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS'));
-                }
-            } else {
-                $announcementListPlugin->assignTemplateVariable('message', $gL10n->get('SYS_MODULE_DISABLED'));
-            }
-
-            if (isset($page)) {
-                echo $announcementListPlugin->html('plugin.announcement-list.tpl');
-            } else {
-                $announcementListPlugin->showHtmlPage('plugin.announcement-list.tpl');
-            }
-        } catch (Throwable $e) {
-            echo $e->getMessage();
-        }
-
-        return true;
     }
 }
