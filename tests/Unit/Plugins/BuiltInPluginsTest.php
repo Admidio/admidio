@@ -75,6 +75,19 @@ final class BuiltInPluginsTest extends PluginTestCase
                     'event_list_displayed_categories'
                 )
             ),
+            'latest-documents-files' => array(
+                'latest-documents-files',
+                'AdmidioPlugin\\LatestDocumentsFiles\\',
+                array(
+                    'latest_documents_files_plugin_enabled',
+                    // Not latest_documents_files_overview_sequence: the name the plugin has always
+                    // stored its position under is kept, so no installation loses it.
+                    'latest_documents_overview_sequence',
+                    'latest_documents_files_files_count',
+                    'latest_documents_files_show_upload_timestamp',
+                    'latest_documents_files_max_chars_filename'
+                )
+            ),
             'random-photo' => array(
                 'random-photo',
                 'AdmidioPlugin\\RandomPhoto\\',
