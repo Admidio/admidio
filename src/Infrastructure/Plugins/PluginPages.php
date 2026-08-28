@@ -103,24 +103,6 @@ final class PluginPages
     }
 
     /**
-     * Decide whether Admidio may publish plugin pages below modules/, and apply the decision at
-     * once instead of leaving it to the next request.
-     * @param bool $allowed
-     * @return array<string,string> The report of syncAll(), or an empty array if nothing changed.
-     * @throws Exception
-     */
-    public static function setAllowed(bool $allowed): array
-    {
-        global $gSettingsManager;
-
-        $gSettingsManager->set(self::SETTING, $allowed ? '1' : '0');
-
-        // reconcile() compares the preference with the applied one, so this is the same single sync
-        // that the next request would have run - the administrator just sees the result right away.
-        return self::reconcile();
-    }
-
-    /**
      * Read one of the two flags of this class.
      *
      * Both are ordinary core preferences, so an installation gets its rows from the installer or
