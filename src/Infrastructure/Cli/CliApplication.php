@@ -5,6 +5,7 @@ use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Users\Entity\User;
 use InvalidArgumentException;
@@ -147,6 +148,7 @@ final class CliApplication
 
         CoreTasks::register();
         $this->loadModuleTasks();
+        $this->loadPlugins();
 
         $found = $this->findCommand($argv);
         if ($found['error'] !== null) {
@@ -749,6 +751,22 @@ final class CliApplication
                 }
             }
         }
+    }
+
+    /**
+     * Load the plugins that are enabled for this organization, so that a plugin can register its
+     * own commands before the command line is parsed.
+     *
+     * A lightweight installation or help bootstrap deliberately has no database and therefore
+     * cannot know which plugins are installed; it keeps the core and module commands.
+     */
+    private function loadPlugins(): void
+    {
+        if (!isset($GLOBALS['gDb'])) {
+            return;
+        }
+
+        PluginLoader::loadEnabled();
     }
 
     /**
