@@ -85,6 +85,7 @@ final class PluginLoader
         self::$done = true;
 
         try {
+            self::registerEnabledFlags();
             $plugins = PluginRegistry::getLoadable();
         } catch (Throwable $exception) {
             self::report('', 'The plugins could not be determined: ' . $exception->getMessage());
@@ -105,6 +106,27 @@ final class PluginLoader
         self::guardPluginScript();
 
         Hooks::doAction('plugins_loaded', self::$loaded);
+    }
+
+    /**
+     * Make **plugin_&lt;id&gt;_enabled** a known preference for every installed plugin.
+     *
+     * The flag belongs to Admidio and not to the plugin, so it cannot be registered by loading the
+     * plugin: a disabled plugin is never loaded, its name would stay unknown to the preference
+     * registry, and the administrator could not enable it again - neither in the preferences nor
+     * through **config:set**. A plugin whose files are gone is skipped, because there is nothing
+     * left to enable; the plugin administration removes such a row as an orphan.
+     * @return void
+     * @throws Exception
+     */
+    private static function registerEnabledFlags(): void
+    {
+        foreach (array_keys(PluginRegistry::getInstallations()) as $id) {
+            $plugin = PluginRegistry::get((string)$id);
+            if ($plugin !== null && Plugin::isValidId($plugin->id)) {
+                PreferenceDefinitions::register($plugin->getEnabledSettingName(), array('default' => '1', 'type' => 'bool'));
+            }
+        }
     }
 
     /**
@@ -315,15 +337,14 @@ final class PluginLoader
     }
 
     /**
-     * Register the preferences of the plugin, and the preference that enables it, so that they
-     * behave like core preferences from here on.
+     * Register the preferences that the manifest of the plugin declares, so that they behave like
+     * core preferences from here on. The flag that enables the plugin is not one of them; it is
+     * Admidio's own and is registered by registerEnabledFlags().
      * @param Plugin $plugin
      * @return void
      */
     private static function registerSettings(Plugin $plugin): void
     {
-        PreferenceDefinitions::register($plugin->getEnabledSettingName(), array('default' => '1', 'type' => 'bool'));
-
         foreach ($plugin->settings as $name => $definition) {
             $default = $definition['default'];
             if (is_bool($default)) {

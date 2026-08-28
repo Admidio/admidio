@@ -32,6 +32,7 @@ final class PluginLoaderTest extends PluginTestCase
     protected function tearDown(): void
     {
         Hooks::reset();
+        unset($GLOBALS['gSettingsManager']);
         if ($this->script === null) {
             unset($_SERVER['SCRIPT_FILENAME']);
         } else {
@@ -67,19 +68,42 @@ final class PluginLoaderTest extends PluginTestCase
     }
 
     /**
-     * @testdox The settings of a plugin and the preference that enables it become known preferences
+     * @testdox The settings that the manifest declares become known preferences
      */
     public function testSettingsAreRegistered(): void
     {
         PluginLoader::load(PluginRegistry::get('hello'));
 
         $registered = PreferenceDefinitions::all();
-        $this->assertArrayHasKey('plugin_hello_enabled', $registered);
-        $this->assertSame('bool', $registered['plugin_hello_enabled']['type']);
-        $this->assertSame('1', $registered['plugin_hello_enabled']['default']);
         $this->assertSame(array('default' => 'Hello', 'type' => 'string'), $registered['hello_greeting']);
         $this->assertSame(array('default' => '0', 'type' => 'bool'), $registered['hello_shout'],
             'the manifest may spell the type as "boolean"');
+    }
+
+    /**
+     * @testdox The preference that enables a plugin is registered for every installed plugin
+     */
+    public function testEnabledFlagIsRegisteredForEveryInstalledPlugin(): void
+    {
+        PluginRegistry::setInstallations(array(
+            'hello' => array('comId' => 1, 'version' => '1.2.0'),
+            'no-entry' => array('comId' => 2, 'version' => '1.0.0')
+        ));
+        // "hello" is installed but switched off here, and "no-entry" cannot be loaded at all.
+        $GLOBALS['gSettingsManager'] = new PluginLoaderSettingsDouble(array('plugin_hello_enabled' => '0'));
+
+        PluginLoader::loadEnabled();
+
+        $this->assertFalse(PluginLoader::isLoaded('hello'));
+        $this->assertFalse(PluginLoader::isLoaded('no-entry'));
+
+        $registered = PreferenceDefinitions::all();
+        foreach (array('plugin_hello_enabled', 'plugin_no_entry_enabled') as $name) {
+            $this->assertArrayHasKey($name, $registered,
+                'a plugin that is not loaded must still be enableable again');
+            $this->assertSame('bool', $registered[$name]['type']);
+            $this->assertSame('1', $registered[$name]['default']);
+        }
     }
 
     /**
@@ -211,5 +235,45 @@ final class PluginLoaderTest extends PluginTestCase
 
         $this->assertFalse(class_exists('AdmidioPlugin\\Hello\\DoesNotExist'));
         $this->assertFalse(class_exists('AdmidioPlugin\\Elsewhere\\Greeter'));
+    }
+}
+
+/**
+ * Answers the preferences the loader reads. The real SettingsManager needs a database, and like it
+ * this double refuses a name it has no row for: registering a preference does not create it.
+ */
+final class PluginLoaderSettingsDouble
+{
+    /**
+     * @param array<string,string> $values The preferences this organization actually has a row for.
+     */
+    public function __construct(private array $values = array())
+    {
+    }
+
+    public function getBool(string $name, bool $update = false): bool
+    {
+        return $this->get($name) === '1';
+    }
+
+    public function has(string $name, bool $update = false): bool
+    {
+        return array_key_exists($name, $this->values);
+    }
+
+    public function get(string $name, bool $update = false): string
+    {
+        if (!array_key_exists($name, $this->values)) {
+            throw new \RuntimeException('Settings name "' . $name . '" does not exist!');
+        }
+
+        return $this->values[$name];
+    }
+
+    public function set(string $name, $value, bool $update = true): bool
+    {
+        $this->values[$name] = (string)$value;
+
+        return true;
     }
 }
