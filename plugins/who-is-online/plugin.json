@@ -1,0 +1,59 @@
+{
+    "name": "PLG_WHO_IS_ONLINE_PLUGIN_NAME",
+    "description": "PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-building-fill-check",
+    "requires": {
+        "admidio": ">=5.1",
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "AdmidioPlugin\\WhoIsOnline\\": "src/"
+    },
+    "settings": {
+        "who_is_online_plugin_enabled": {
+            "type": "enum",
+            "default": "1",
+            "values": ["0", "1", "2"],
+            "label": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC"
+        },
+        "who_is_online_overview_sequence": {
+            "type": "integer",
+            "default": 8
+        },
+        "who_is_online_time_still_active": {
+            "type": "integer",
+            "default": 10,
+            "label": "PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE",
+            "description": "PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC"
+        },
+        "who_is_online_show_visitors": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS",
+            "description": "PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC"
+        },
+        "who_is_online_show_members_to_visitors": {
+            "type": "enum",
+            "default": "2",
+            "values": ["0", "1", "2"],
+            "label": "PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS",
+            "description": "PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC"
+        },
+        "who_is_online_show_self": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF",
+            "description": "PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC"
+        },
+        "who_is_online_show_users_side_by_side": {
+            "type": "boolean",
+            "default": false,
+            "label": "PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE",
+            "description": "PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC"
+        }
+    }
+}
