@@ -427,6 +427,17 @@ final class Plugin
     }
 
     /**
+     * The name of the preference that decides who may see this plugin, with the ACCESS_* values of
+     * PluginWidget. It is a convention a plugin follows by declaring the preference; a plugin that
+     * declares none is visible to everybody the moment it is enabled.
+     * @return string
+     */
+    public function getAccessSettingName(): string
+    {
+        return str_replace('-', '_', $this->id) . '_plugin_enabled';
+    }
+
+    /**
      * Check the requirements of the manifest against the running system.
      * @param array<string,string> $installedPlugins Version of every installed and enabled plugin,
      *                                               as pluginId => version, to resolve plugin

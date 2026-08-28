@@ -7,8 +7,8 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
-use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginWidget;
 use Admidio\UI\Presenter\InventoryPresenter;
 
 /**
@@ -237,6 +237,17 @@ class Component extends Entity
                         return true;
                     }
                     break;
+
+                default:
+                    /*
+                     * A plugin is administrated by an organization administrator, the same right
+                     * that governs the plugin manager itself. A plugin that wants a right of its
+                     * own does not add a case here; it answers the component_administrable filter.
+                     */
+                    if (PluginRegistry::get($componentName) !== null && $gCurrentUser->isAdministrator()) {
+                        return true;
+                    }
+                    break;
             }
         }
 
@@ -395,11 +406,22 @@ class Component extends Entity
                 break;
 
             default:
-                // check if the component is a plugin and it is visible
-                $pluginManager = new PluginManager();
-                $plugin = $pluginManager->getPluginByComponentName($componentName);
-                if ($plugin) {
-                    return ($plugin instanceof PluginAbstract) ? $plugin::getInstance()->isVisible() : false;
+                /*
+                 * Everything that is not a component of Admidio itself is a plugin, whose
+                 * com_name_intern is its ID. This answer is needed for every menu node of every
+                 * request, so it reads the cached discovery of the registry and never loads or
+                 * instantiates a plugin.
+                 */
+                $plugin = PluginRegistry::get($componentName);
+                if ($plugin !== null && PluginRegistry::isEnabled($componentName)) {
+                    /*
+                     * A plugin that follows the Admidio convention expresses who may see it in an
+                     * access preference of its own, and one that declares none is visible as soon
+                     * as it is enabled. The preference is asked for by name rather than through the
+                     * widget declaration of the plugin, because the answer must not depend on
+                     * whether the plugin happens to be loaded in this request.
+                     */
+                    return PluginWidget::isVisible($plugin->getAccessSettingName());
                 }
                 break;
         }

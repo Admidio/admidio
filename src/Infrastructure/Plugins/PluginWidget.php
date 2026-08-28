@@ -113,7 +113,7 @@ final class PluginWidget
             'name' => (string)($options['name'] ?? Language::translateIfTranslationStrId($plugin->name)),
             'icon' => (string)($options['icon'] ?? $plugin->icon),
             'sequencePreference' => (string)($options['sequencePreference'] ?? $name . '_overview_sequence'),
-            'enabledPreference' => (string)($options['enabledPreference'] ?? $name . '_plugin_enabled'),
+            'enabledPreference' => (string)($options['enabledPreference'] ?? $plugin->getAccessSettingName()),
             'sequence' => (int)($options['sequence'] ?? self::DEFAULT_SEQUENCE)
         );
 
