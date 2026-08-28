@@ -304,6 +304,68 @@ final class Plugin
     }
 
     /**
+     * The current value of every preference the manifest declares, as name => value.
+     *
+     * A value is cast to the type the manifest gives it, so a plugin reads its settings in the shape
+     * it declared them instead of casting at every call site. A preference this organization has no
+     * row for answers the declared default, so a plugin can be read before its preferences are
+     * seeded - during its own installation, for instance.
+     *
+     * This asks the database and is therefore not part of reading a plugin; discovery stays a
+     * directory scan and a json_decode.
+     * @return array<string,mixed>
+     * @throws \Admidio\Infrastructure\Exception
+     */
+    public function getSettingValues(): array
+    {
+        global $gSettingsManager;
+
+        $values = array();
+
+        foreach ($this->settings as $name => $definition) {
+            if (!isset($gSettingsManager) || !$gSettingsManager->has($name)) {
+                $values[$name] = $definition['default'];
+                continue;
+            }
+
+            $values[$name] = match ($definition['type']) {
+                'int', 'integer' => $gSettingsManager->getInt($name),
+                'bool', 'boolean' => $gSettingsManager->getBool($name),
+                'array' => self::readArraySetting($name),
+                default => $gSettingsManager->getString($name)
+            };
+        }
+
+        return $values;
+    }
+
+    /**
+     * Read a preference that holds a list.
+     *
+     * A list is stored as one comma-separated string. A list whose entries need keys of their own -
+     * the ranks of the login form - stores them in a second preference **&lt;name&gt;_keys**, and the
+     * two are zipped back together here.
+     * @param string $name
+     * @return array<int|string,string>
+     * @throws \Admidio\Infrastructure\Exception
+     */
+    private static function readArraySetting(string $name): array
+    {
+        global $gSettingsManager;
+
+        $value = $gSettingsManager->getString($name);
+        if ($value === '') {
+            return array();
+        }
+
+        if ($gSettingsManager->has($name . '_keys')) {
+            return array_combine(explode(',', $gSettingsManager->getString($name . '_keys')), explode(',', $value));
+        }
+
+        return explode(',', $value);
+    }
+
+    /**
      * Render a template of this plugin through the Smarty object of a page.
      *
      * The template is fetched through the page, so the template directories of the theme and its

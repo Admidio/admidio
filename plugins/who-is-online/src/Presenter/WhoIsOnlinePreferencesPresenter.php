@@ -44,10 +44,11 @@ final class WhoIsOnlinePreferencesPresenter
      */
     public static function createForm(PreferencesPresenter $page): string
     {
-        global $gL10n, $gCurrentSession, $gSettingsManager;
+        global $gL10n, $gCurrentSession;
 
         $plugin = PluginRegistry::requireEnabled(WhoIsOnline::PLUGIN_ID);
         $settings = $plugin->settings;
+        $values = $plugin->getSettingValues();
 
         $form = new FormPresenter(
             'adm_preferences_form_who_is_online',
@@ -69,7 +70,7 @@ final class WhoIsOnlinePreferencesPresenter
                 '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER')
             ),
             array(
-                'defaultValue' => $gSettingsManager->getString('who_is_online_plugin_enabled'),
+                'defaultValue' => $values['who_is_online_plugin_enabled'],
                 'showContextDependentFirstEntry' => false,
                 'helpTextId' => $settings['who_is_online_plugin_enabled']['description']
             )
@@ -77,7 +78,7 @@ final class WhoIsOnlinePreferencesPresenter
         $form->addInput(
             'who_is_online_time_still_active',
             Language::translateIfTranslationStrId($settings['who_is_online_time_still_active']['label']),
-            $gSettingsManager->getInt('who_is_online_time_still_active'),
+            $values['who_is_online_time_still_active'],
             array(
                 'type' => 'number',
                 'minNumber' => 0,
@@ -88,7 +89,7 @@ final class WhoIsOnlinePreferencesPresenter
         $form->addCheckbox(
             'who_is_online_show_visitors',
             Language::translateIfTranslationStrId($settings['who_is_online_show_visitors']['label']),
-            $gSettingsManager->getBool('who_is_online_show_visitors'),
+            $values['who_is_online_show_visitors'],
             array('helpTextId' => $settings['who_is_online_show_visitors']['description'])
         );
         $form->addSelectBox(
@@ -100,7 +101,7 @@ final class WhoIsOnlinePreferencesPresenter
                 '2' => $gL10n->get('PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3')
             ),
             array(
-                'defaultValue' => $gSettingsManager->getString('who_is_online_show_members_to_visitors'),
+                'defaultValue' => $values['who_is_online_show_members_to_visitors'],
                 'showContextDependentFirstEntry' => false,
                 'helpTextId' => $settings['who_is_online_show_members_to_visitors']['description']
             )
@@ -108,13 +109,13 @@ final class WhoIsOnlinePreferencesPresenter
         $form->addCheckbox(
             'who_is_online_show_self',
             Language::translateIfTranslationStrId($settings['who_is_online_show_self']['label']),
-            $gSettingsManager->getBool('who_is_online_show_self'),
+            $values['who_is_online_show_self'],
             array('helpTextId' => $settings['who_is_online_show_self']['description'])
         );
         $form->addCheckbox(
             'who_is_online_show_users_side_by_side',
             Language::translateIfTranslationStrId($settings['who_is_online_show_users_side_by_side']['label']),
-            $gSettingsManager->getBool('who_is_online_show_users_side_by_side'),
+            $values['who_is_online_show_users_side_by_side'],
             array('helpTextId' => $settings['who_is_online_show_users_side_by_side']['description'])
         );
         $form->addSubmitButton(

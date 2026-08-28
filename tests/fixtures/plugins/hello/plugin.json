@@ -22,6 +22,16 @@
             "type": "boolean",
             "default": false,
             "label": "Shout"
+        },
+        "hello_repeat": {
+            "type": "integer",
+            "default": 3,
+            "label": "Repeat"
+        },
+        "hello_names": {
+            "type": "array",
+            "default": [],
+            "label": "Names"
         }
     }
 }
