@@ -88,6 +88,21 @@ final class BuiltInPluginsTest extends PluginTestCase
                     'latest_documents_files_max_chars_filename'
                 )
             ),
+            'login-form' => array(
+                'login-form',
+                'AdmidioPlugin\\LoginForm\\',
+                array(
+                    'login_form_plugin_enabled',
+                    'login_form_overview_sequence',
+                    'login_form_show_register_link',
+                    'login_form_show_email_link',
+                    'login_form_show_logout_link',
+                    'login_form_enable_ranks',
+                    'login_form_ranks',
+                    // The ranks are a list with keys of their own; the keys live in this companion.
+                    'login_form_ranks_keys'
+                )
+            ),
             'random-photo' => array(
                 'random-photo',
                 'AdmidioPlugin\\RandomPhoto\\',
