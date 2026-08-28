@@ -128,7 +128,7 @@ final class CliApplication
             'description' => 'Replace the file selected with --output if it already exists.'
         ),
         array('name' => 'width', 'value' => 'COLUMNS', 'description' => 'Maximum width of human-readable terminal tables.'),
-        array('name' => 'no-truncate', 'flag' => true, 'description' => 'Do not truncate terminal table columns.'),
+        array('name' => 'no-truncate', 'flag' => true, 'description' => 'Do not fit terminal table columns to the terminal width.'),
         array('name' => 'dry-run', 'flag' => true, 'description' => 'Validate and report a supported mutation without changing data.'),
         array('name' => 'quiet', 'flag' => true, 'description' => 'Suppress confirmation messages. Requested data and errors are still printed. Short form -q.'),
         array('name' => 'no-interaction', 'flag' => true, 'description' => 'Never ask an interactive question.'),
@@ -2245,8 +2245,8 @@ final class CliApplication
 
     /**
      * Render a plain terminal table and constrain it to the requested/detected terminal width.
-     * Redirected output is never truncated unless --width is supplied explicitly, which keeps
-     * generated documentation and machine-captured text complete.
+     * Redirected output is never wrapped unless --width is supplied explicitly, which keeps
+     * generated documentation and machine-captured text on one line per row.
      *
      * @param array<int,string> $headers
      * @param array<int,array<int,string>> $rows
@@ -2266,27 +2266,52 @@ final class CliApplication
 
         $limit = self::terminalTableWidth($options);
         if ($limit > 0) {
-            $widths = self::fitTableWidths($widths, $headers, $limit);
+            $widths = self::fitTableWidths($widths, $limit);
         }
 
         $output = '';
         $allRows = array_merge(array($headers), $rows);
         foreach ($allRows as $rowIndex => $row) {
-            foreach ($row as $index => $value) {
-                $cell = self::truncateCell($value, $widths[$index]);
-                $output .= self::padCell($cell, $widths[$index] + 2);
-            }
-            $output = rtrim($output) . PHP_EOL;
+            $output .= self::renderTableRow($row, $widths);
 
             if ($rowIndex === 0) {
+                $separator = '';
                 foreach ($widths as $width) {
-                    $output .= str_repeat('-', $width) . '  ';
+                    $separator .= str_repeat('-', $width) . '  ';
                 }
-                $output = rtrim($output) . PHP_EOL;
+                $output .= rtrim($separator) . PHP_EOL;
             }
         }
 
         return $output . PHP_EOL;
+    }
+
+    /**
+     * Render one row of a plain terminal table. A value that is wider than its column is wrapped
+     * into continuation lines that keep the column alignment instead of being cut off.
+     *
+     * @param array<int,string> $row
+     * @param array<int,int> $widths
+     */
+    private static function renderTableRow(array $row, array $widths): string
+    {
+        $lines = array();
+        $height = 1;
+        foreach ($row as $index => $value) {
+            $lines[$index] = self::wrapCell($value, $widths[$index] ?? 0);
+            $height = max($height, count($lines[$index]));
+        }
+
+        $output = '';
+        for ($line = 0; $line < $height; ++$line) {
+            $text = '';
+            foreach ($lines as $index => $cell) {
+                $text .= self::padCell($cell[$line] ?? '', $widths[$index] + 2);
+            }
+            $output .= rtrim($text) . PHP_EOL;
+        }
+
+        return $output;
     }
 
     /**
@@ -2326,96 +2351,146 @@ final class CliApplication
     }
 
     /**
-     * Shrink the widest columns first while keeping every column large enough to remain readable.
+     * Take the space away from the widest column and level it down to the width of the next widest
+     * one, so a column that is already narrower than its fair share keeps its full width. The
+     * command names of "admidio list" therefore stay complete while the descriptions wrap.
      *
      * @param array<int,int> $widths
-     * @param array<int,string> $headers
      * @return array<int,int>
      */
-    private static function fitTableWidths(array $widths, array $headers, int $limit): array
+    private static function fitTableWidths(array $widths, int $limit): array
     {
         if (count($widths) === 0) {
             return $widths;
         }
 
         $separatorWidth = max(0, count($widths) - 1) * 2;
-        $available = max(count($widths) * 4, $limit - $separatorWidth);
-        $total = array_sum($widths);
-        if ($total <= $available) {
+        $available = max(count($widths), $limit - $separatorWidth);
+        if (array_sum($widths) <= $available) {
             return $widths;
         }
 
-        $minimums = array();
+        // Largest width every column may still use. One character per column always fits, because
+        // $available is never smaller than the number of columns.
+        $cap = 1;
+        $low = 1;
+        $high = max($widths);
+        while ($low <= $high) {
+            $candidate = intdiv($low + $high, 2);
+            $total = 0;
+            foreach ($widths as $width) {
+                $total += min($width, $candidate);
+            }
+
+            if ($total <= $available) {
+                $cap = $candidate;
+                $low = $candidate + 1;
+            } else {
+                $high = $candidate - 1;
+            }
+        }
+
+        $natural = $widths;
         foreach ($widths as $index => $width) {
-            $headerWidth = self::displayWidth($headers[$index] ?? '');
-            $minimums[$index] = min($width, max(4, min(12, $headerWidth)));
+            $widths[$index] = min($width, $cap);
         }
 
-        $over = $total - $available;
-        while ($over > 0) {
-            $candidates = array();
-            foreach ($widths as $index => $width) {
-                if ($width > $minimums[$index]) {
-                    $candidates[] = $index;
-                }
-            }
-
-            if (count($candidates) === 0) {
+        /*
+         * The cap is an integer, so it usually leaves a few unused columns. Hand them out one by
+         * one to the columns that were actually capped; fewer are left over than there are capped
+         * columns, so a single pass is enough.
+         */
+        $remaining = $available - array_sum($widths);
+        foreach ($widths as $index => $width) {
+            if ($remaining <= 0) {
                 break;
             }
 
-            $share = max(1, (int)ceil($over / count($candidates)));
-            foreach ($candidates as $index) {
-                $shrink = min($share, $widths[$index] - $minimums[$index], $over);
-                $widths[$index] -= $shrink;
-                $over -= $shrink;
-                if ($over === 0) {
-                    break;
-                }
-            }
-        }
-
-        // Extremely narrow explicit widths may not even fit the readable minimums above. Honor
-        // the user's hard limit by shrinking columns down to one character as a last resort.
-        while ($over > 0) {
-            $changed = false;
-            foreach ($widths as $index => $width) {
-                if ($width <= 1) {
-                    continue;
-                }
-                --$widths[$index];
-                --$over;
-                $changed = true;
-                if ($over === 0) {
-                    break;
-                }
-            }
-            if (!$changed) {
-                break;
+            if ($width < $natural[$index]) {
+                ++$widths[$index];
+                --$remaining;
             }
         }
 
         return $widths;
     }
 
-    private static function truncateCell(string $value, int $width): string
+    /**
+     * Split a value into the lines it needs at the given column width. Words stay intact where
+     * possible; a word that is wider than the whole column is broken, so nothing is ever lost.
+     *
+     * @return array<int,string>
+     */
+    private static function wrapCell(string $value, int $width): array
     {
         if ($width <= 0 || self::displayWidth($value) <= $width) {
-            return $value;
+            return array($value);
         }
 
-        if ($width <= 3) {
-            return str_repeat('.', $width);
+        $words = preg_split('/\s+/u', trim($value), -1, PREG_SPLIT_NO_EMPTY);
+        if ($words === false) {
+            return array($value);
         }
 
-        if (function_exists('mb_strimwidth')) {
-            return mb_strimwidth($value, 0, $width, '...', 'UTF-8');
+        $lines = array();
+        $current = '';
+        foreach ($words as $word) {
+            $candidate = $current === '' ? $word : $current . ' ' . $word;
+            if (self::displayWidth($candidate) <= $width) {
+                $current = $candidate;
+                continue;
+            }
+
+            if ($current !== '') {
+                $lines[] = $current;
+                $current = '';
+            }
+
+            // A URL or a long identifier can be wider than the whole column on its own.
+            while (self::displayWidth($word) > $width) {
+                list($head, $rest) = self::splitAtWidth($word, $width);
+                if ($head === '') {
+                    break;
+                }
+
+                $lines[] = $head;
+                $word = $rest;
+            }
+
+            $current = $word;
         }
 
-        // Cutting bytes would split a multi-byte character, see displayWidth().
-        $shortened = @iconv_substr($value, 0, max(0, $width - 3), 'UTF-8');
+        if ($current !== '') {
+            $lines[] = $current;
+        }
 
-        return ($shortened === false ? substr($value, 0, max(0, $width - 3)) : $shortened) . '...';
+        return count($lines) === 0 ? array('') : $lines;
+    }
+
+    /**
+     * Cut a value after the given number of terminal columns without splitting a character.
+     *
+     * @return array{0:string,1:string} The part that fits and the remainder.
+     */
+    private static function splitAtWidth(string $value, int $width): array
+    {
+        $characters = preg_split('//u', $value, -1, PREG_SPLIT_NO_EMPTY);
+        if ($characters === false) {
+            return array($value, '');
+        }
+
+        $used = 0;
+        foreach ($characters as $position => $character) {
+            $used += self::displayWidth($character);
+            if ($used > $width) {
+                return array(
+                    implode('', array_slice($characters, 0, $position)),
+                    implode('', array_slice($characters, $position))
+                );
+            }
+        }
+
+        return array($value, '');
     }
 
     /**
