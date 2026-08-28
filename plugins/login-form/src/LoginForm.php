@@ -1,17 +1,19 @@
 <?php
 
-namespace LoginForm\classes;
+namespace AdmidioPlugin\LoginForm;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Language;
-use Admidio\Infrastructure\Plugins\Overview;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
+use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginWidget;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
-use InvalidArgumentException;
+use AdmidioPlugin\LoginForm\Presenter\LoginFormPreferencesPresenter;
 use Exception;
-use Throwable;
 
 /**
  ***********************************************************************************************
@@ -26,10 +28,104 @@ use Throwable;
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
-class LoginForm extends PluginAbstract
+final class LoginForm
 {
+    /**
+     * The directory of this plugin, which is its only identity.
+     */
+    public const PLUGIN_ID = 'login-form';
+
+    /**
+     * Where the widget is placed on the overview page as long as nobody moved it.
+     */
+    public const DEFAULT_SEQUENCE = 1;
+
+    /**
+     * The settings of the plugin in the request that is being rendered.
+     * @var array<string,mixed>
+     */
     private static array $pluginConfig = array();
 
+    /**
+     * Announce the widget and the preferences panel. This is what plugin.php calls.
+     * @return void
+     */
+    public static function register(): void
+    {
+        $plugin = PluginRegistry::get(self::PLUGIN_ID);
+        if ($plugin === null) {
+            return;
+        }
+
+        PluginWidget::register($plugin, array(self::class, 'renderWidget'), array(
+            'sequence' => self::DEFAULT_SEQUENCE
+        ));
+
+        Hooks::addFilter(
+            PluginPanel::HOOK,
+            static function (array $panels) use ($plugin): array {
+                global $gL10n;
+
+                $panels[] = array(
+                    'id' => PluginPanel::normalizeId($plugin->id),
+                    'title' => $gL10n->get($plugin->name),
+                    'icon' => $plugin->icon,
+                    'group' => PluginPanel::GROUP_OVERVIEW,
+                    'sequence' => self::DEFAULT_SEQUENCE,
+                    'create' => array(LoginFormPreferencesPresenter::class, 'createForm')
+                );
+
+                return $panels;
+            },
+            PluginPanel::DEFAULT_SEQUENCE,
+            1,
+            $plugin->id
+        );
+    }
+
+    /**
+     * Build the widget of the overview page: the data of the current user when somebody is logged
+     * in, and the login form itself when nobody is. Whether it is shown at all was decided before
+     * this is called, by the preference **login_form_plugin_enabled**.
+     * @param PagePresenter $page
+     * @param Plugin $plugin
+     * @return string
+     * @throws Exception|\Smarty\Exception
+     */
+    public static function renderWidget(PagePresenter $page, Plugin $plugin): string
+    {
+        global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gValidLogin;
+
+        self::$pluginConfig = $plugin->getSettingValues();
+
+        if (!$gValidLogin) {
+            $form = self::createLoginForm($page);
+            $form->addToSmarty($page->getSmartyTemplate());
+            $gCurrentSession->addFormObject($form);
+
+            return $plugin->renderTemplate($page, 'plugin.login-form.edit.tpl', array(
+                'name' => $plugin->id,
+                'showRegisterLink' => self::$pluginConfig['login_form_show_register_link']
+            ));
+        }
+
+        $loginData = self::getLoginData();
+
+        return $plugin->renderTemplate($page, 'plugin.login-form.view.tpl', array(
+            'name' => $plugin->id,
+            'userUUID' => $gCurrentUser->getValue('usr_uuid'),
+            'userName' => $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
+            'loginActiveSince' => $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')),
+            'lastLogin' => $loginData['lastLogin'],
+            'numberOfLogins' => $gCurrentUser->getValue('usr_number_login') . $loginData['htmlUserRank'],
+            'showLogoutLink' => self::$pluginConfig['login_form_show_logout_link']
+        ));
+    }
+
+    /**
+     * @return array<string,string>
+     * @throws Exception
+     */
     private static function getLoginData() : array
     {
         global $gCurrentUser;
@@ -113,7 +209,7 @@ class LoginForm extends PluginAbstract
 
         $form = new FormPresenter(
             'adm_plugin_login_form',
-            ADMIDIO_PATH . FOLDER_PLUGINS . '/LoginForm/templates/plugin.login-form.edit.tpl',
+            'plugin.login-form.edit.tpl',
             ADMIDIO_URL . FOLDER_SYSTEM . '/login.php?mode=check',
             $formPage,
             array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
@@ -164,71 +260,5 @@ class LoginForm extends PluginAbstract
         $form->addSubmitButton('plg_btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => 'bi-box-arrow-in-right'));
 
         return $form;
-    }
-
-    /**
-     * @param PagePresenter $page
-     * @throws InvalidArgumentException
-     * @throws Exception
-     * @return bool
-     */
-    public static function doRender($page = null) : bool
-    {
-        global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gValidLogin, $gL10n;
-
-        // show the latest documents & files list
-        try {
-            $rootPath = dirname(__DIR__, 3);
-            $pluginFolder = basename(self::$pluginPath);
-
-            require_once($rootPath . '/system/common.php');
-
-            $loginFormPlugin = new Overview($pluginFolder);
-            self::$pluginConfig = self::getPluginConfigValues();
-
-            // check if the plugin is enabled
-            if (self::$pluginConfig['login_form_plugin_enabled'] === 1 || ($gValidLogin && self::$pluginConfig['login_form_plugin_enabled'] === 2 && $gValidLogin)) {
-                if ($gValidLogin) {
-                    $loginData = self::getLoginData();
-                    $loginFormPlugin->assignTemplateVariable('userUUID', $gCurrentUser->getValue('usr_uuid'));
-                    $loginFormPlugin->assignTemplateVariable('userName', $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'));
-                    $loginFormPlugin->assignTemplateVariable('loginActiveSince', $gCurrentSession->getValue('ses_begin', $gSettingsManager->getString('system_time')));
-                    $loginFormPlugin->assignTemplateVariable('lastLogin', $loginData['lastLogin']);
-                    $loginFormPlugin->assignTemplateVariable('numberOfLogins', $gCurrentUser->getValue('usr_number_login') . $loginData['htmlUserRank']);
-                    $loginFormPlugin->assignTemplateVariable('showLogoutLink', self::$pluginConfig['login_form_show_logout_link']);
-
-                    if (isset($page)) {
-                        echo $loginFormPlugin->html('plugin.login-form.view.tpl');
-                    } else {
-                        $loginFormPlugin->showHtmlPage('plugin.login-form.view.tpl');
-                    }
-                } else {
-                    $formPage = $loginFormPlugin->getPage();
-                    $form = self::createLoginForm($formPage);
-                    if (isset($page)) {
-                        $smarty = $loginFormPlugin->createSmartyObject();
-                        $smarty->assign('settings', $gSettingsManager);
-                        $smarty->assign('showRegisterLink', self::$pluginConfig['login_form_show_register_link']);
-                        $form->addToSmarty($smarty);
-                        $gCurrentSession->addFormObject($form);
-                        echo $smarty->fetch('plugin.login-form.edit.tpl');
-                    } else {
-                        $_SESSION['login_forward_url_post'] = '1'; // Force a reload of the entire page, especially if it was loaded from an iframe.
-                        $form->addToHtmlPage();
-                        $gCurrentSession->addFormObject($form);
-                        $formPage->assignSmartyVariable('settings', $gSettingsManager);
-                        $formPage->assignSmartyVariable('showRegisterLink', self::$pluginConfig['login_form_show_register_link']);
-                        $formPage->show();
-                    }
-                }
-            } else {
-                throw new InvalidArgumentException($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-            }
-                
-        } catch (Throwable $e) {
-            echo $e->getMessage();
-        }
-
-        return true;
     }
 }
