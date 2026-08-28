@@ -456,7 +456,7 @@ final class UpdateStepsCode
             PluginLoader::load($plugin);
             PreferencesService::seedDefaults(PluginInstaller::getPreferenceNames($plugin));
 
-            if (!$plugin->hasPages()) {
+            if (!$plugin->wantsMenuEntry()) {
                 PluginInstaller::removeMenuEntries(PluginRegistry::getComponentId($id));
             }
         }

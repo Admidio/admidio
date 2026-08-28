@@ -44,8 +44,8 @@ final class PluginInstaller
      * preferences a row in every organization and add its menu entry.
      * @param Plugin $plugin
      * @param bool $addMenuEntry Whether the plugin should get a menu entry below "Extensions". A
-     *                           plugin without a page never gets one, because there would be
-     *                           nothing for the entry to link to.
+     *                           plugin without a page, and one whose manifest says "menu": false,
+     *                           never gets one - see Plugin::wantsMenuEntry().
      * @return void
      * @throws Exception
      */
@@ -85,7 +85,7 @@ final class PluginInstaller
         PluginPages::publish($plugin);
 
         // A plugin that only brings a widget or a hook has nothing a menu entry could point at.
-        if ($addMenuEntry && $plugin->hasPages()) {
+        if ($addMenuEntry && $plugin->wantsMenuEntry()) {
             self::addMenuEntry($plugin, (int)$component->getValue('com_id'));
         }
     }

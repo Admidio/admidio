@@ -1,0 +1,84 @@
+{
+    "name": "PLG_CALENDAR_PLUGIN_NAME",
+    "description": "PLG_CALENDAR_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-calendar-week-fill",
+    "menu": false,
+    "requires": {
+        "admidio": ">=5.1",
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "AdmidioPlugin\\Calendar\\": "src/"
+    },
+    "settings": {
+        "calendar_plugin_enabled": {
+            "type": "enum",
+            "default": "1",
+            "values": ["0", "1", "2"],
+            "label": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC"
+        },
+        "calendar_overview_sequence": {
+            "type": "integer",
+            "default": 3
+        },
+        "calendar_show_events": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_CALENDAR_PREFERENCES_SHOW_EVENTS",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC"
+        },
+        "calendar_show_birthdays": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC"
+        },
+        "calendar_show_birthdays_to_guests": {
+            "type": "boolean",
+            "default": false,
+            "label": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC"
+        },
+        "calendar_show_birthday_icon": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC"
+        },
+        "calendar_show_birthday_names": {
+            "type": "enum",
+            "default": "1",
+            "values": ["0", "1", "2", "3"],
+            "label": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC"
+        },
+        "calendar_show_categories": {
+            "type": "array",
+            "default": ["All"],
+            "label": "PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC"
+        },
+        "calendar_show_categories_names": {
+            "type": "boolean",
+            "default": false,
+            "label": "PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES",
+            "description": "PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC"
+        },
+        "calendar_roles_view_plugin": {
+            "type": "array",
+            "default": ["All"],
+            "label": "PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN",
+            "description": "PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC"
+        },
+        "calendar_roles_sql": {
+            "type": "array",
+            "default": ["All"],
+            "label": "PLG_CALENDAR_PREFERENCES_ROLES_SQL",
+            "description": "PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC"
+        }
+    }
+}
