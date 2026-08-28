@@ -115,17 +115,18 @@ class DatabaseDateTimeEdit
             $diff = $firstDateTime->diff($relativeDateTime);
 
             $days = random_int($minDaysLimit, $maxDaysLimit);
-            $daysRelative = $days + $diff->days;
 
-            $newDateTime = $this->addDaysToDateTime($row[$columnName], $days, $pastPeriod);
-            $newDateTimeRelative = $this->addDaysToDateTime($row[$columnNameRelative], $daysRelative, $pastPeriod);
+            $baseDateTime = DateTime::createFromFormat('Y-m-d H:i:s', DATE_NOW . ' ' . $firstDateTime->format('H:i:s'));
+            $daysOffset = new \DateInterval('P' . $days . 'D');
+            $newDateTime = $pastPeriod ? (clone $baseDateTime)->sub($daysOffset) : (clone $baseDateTime)->add($daysOffset);
+            $newDateTimeRelative = (clone $newDateTime)->add($diff);
 
             $sqlUpdate = 'UPDATE ' . $tableName . '
                              SET ' . $columnName . ' = ?
                                , ' . $columnNameRelative . ' = ?
                            WHERE ' . $columnName . ' = ? ';
 
-            $this->db->queryPrepared($sqlUpdate, array($newDateTime, $newDateTimeRelative, $row[$columnName]));
+            $this->db->queryPrepared($sqlUpdate, array($newDateTime->format('Y-m-d H:i:s'), $newDateTimeRelative->format('Y-m-d H:i:s'), $row[$columnName]));
         }
     }
 }
