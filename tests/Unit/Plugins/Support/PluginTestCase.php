@@ -16,6 +16,21 @@ use Psr\Log\NullLogger;
  */
 abstract class PluginTestCase extends AdmidioTestCase
 {
+    /**
+     * The request globals the plugin classes read. A test may put a double in place; the whole
+     * suite runs in one process, so what was there before has to come back - a global a test leaves
+     * behind is read by code that runs long after it, and ChangeNotification::shutdown() reads
+     * gSettingsManager when PHP ends.
+     * @var array<int,string>
+     */
+    private const REQUEST_GLOBALS = array('gSettingsManager', 'gValidLogin');
+
+    /**
+     * The values of REQUEST_GLOBALS before the test, as name => array{0: bool, 1: mixed}.
+     * @var array<string,array{0: bool, 1: mixed}>
+     */
+    private array $globals = array();
+
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -43,6 +58,10 @@ abstract class PluginTestCase extends AdmidioTestCase
     {
         parent::setUp();
 
+        foreach (self::REQUEST_GLOBALS as $name) {
+            $this->globals[$name] = array(array_key_exists($name, $GLOBALS), $GLOBALS[$name] ?? null);
+        }
+
         PluginRegistry::setPluginsPath(self::fixturePath(''));
         PluginRegistry::setInstallations(array());
         PluginLoader::reset();
@@ -54,6 +73,14 @@ abstract class PluginTestCase extends AdmidioTestCase
 
     protected function tearDown(): void
     {
+        foreach ($this->globals as $name => $previous) {
+            if ($previous[0]) {
+                $GLOBALS[$name] = $previous[1];
+            } else {
+                unset($GLOBALS[$name]);
+            }
+        }
+
         PluginRegistry::setPluginsPath(null);
         PluginRegistry::setInstallations(null);
         PluginRegistry::reset();

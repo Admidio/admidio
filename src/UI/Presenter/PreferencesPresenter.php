@@ -17,6 +17,8 @@ use Admidio\SSO\Service\KeyService;
 use Admidio\SSO\Service\OIDCService;
 
 use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginWidget;
 
 use RuntimeException;
 
@@ -280,15 +282,9 @@ class PreferencesPresenter extends PagePresenter
             array(
                 'key'    => 'overview_extensions',
                 'label'  => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'),
-                // load in all plugin panels that are registered in the PreferencesService
-                'panels' => array_map(
-                    fn(array $entry) => [
-                        'id'       => $entry['id'],
-                        'title'    => $entry['title'],
-                        'icon'     => $entry['icon']    ?? 'bi-puzzle',
-                        'subcards' => $entry['subcards'] ?? false,
-                    ],
-                    PreferencesService::getOverviewPluginPanels()
+                'panels' => self::pluginPanels(
+                    PreferencesService::getOverviewPluginPanels(),
+                    PluginPanel::GROUP_OVERVIEW
                 )
             ),
 
@@ -296,18 +292,60 @@ class PreferencesPresenter extends PagePresenter
             array(
                 'key'    => 'extensions',
                 'label'  => $gL10n->get('SYS_EXTENSIONS'),
-                // load in all plugin panels that are registered in the PreferencesService
-                'panels' => array_map(
-                    fn(array $entry) => [
-                        'id'       => $entry['id'],
-                        'title'    => $entry['title'],
-                        'icon'     => $entry['icon']    ?? 'bi-puzzle',
-                        'subcards' => $entry['subcards'] ?? false,
-                    ],
-                    PreferencesService::getPluginPanels()
+                'panels' => self::pluginPanels(
+                    PreferencesService::getPluginPanels(),
+                    PluginPanel::GROUP_EXTENSIONS
                 )
             )
         );
+    }
+
+    /**
+     * The panels of one of the two extension tabs.
+     *
+     * A plugin declares its panel with the PluginPanel hook. The panels that the legacy plugin
+     * runtime registered in the PreferencesService are still added, so that both kinds of plugin
+     * are shown while the built-in plugins are being converted.
+     * @param array<int,array<string,mixed>> $legacyPanels
+     * @param string $group One of the PluginPanel GROUP_* constants.
+     * @return array<int,array{id: string, title: string, icon: string, subcards: bool}>
+     */
+    private static function pluginPanels(array $legacyPanels, string $group): array
+    {
+        $panels = array();
+
+        foreach (array_merge($legacyPanels, PluginPanel::inGroup($group)) as $panel) {
+            $panels[] = array(
+                'id'       => $panel['id'],
+                'title'    => $panel['title'],
+                'icon'     => $panel['icon'] ?? 'bi-puzzle',
+                'subcards' => $panel['subcards'] ?? false
+            );
+        }
+
+        return $panels;
+    }
+
+    /**
+     * Build the HTML of one preferences panel. This is what the page requests once the
+     * administrator opens a panel.
+     *
+     * A panel of the core is a method of this class, named after it - the panel **email_dispatch**
+     * is createEmailDispatchForm(). Every other panel was declared by a plugin and is built by that
+     * plugin. The core is asked first, so that a plugin cannot take a panel of the core over.
+     * @param string $panel ID of the panel.
+     * @return string
+     * @throws Exception
+     */
+    public function createPanel(string $panel): string
+    {
+        $method = 'create' . str_replace('_', '', ucwords($panel, '_')) . 'Form';
+
+        if (!method_exists($this, $method) && PluginPanel::get($panel) !== null) {
+            return PluginPanel::create($panel, $this);
+        }
+
+        return $this->{$method}();
     }
 
     /**
@@ -783,32 +821,20 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n, $gCurrentSession;
 
-        // get all overview plugins and add them to the template
-        $pluginManager = new PluginManager();
-        $plugins = $pluginManager->getOverviewPlugins();
+        // A widget whose plugin does not store its position cannot be ordered in this form.
+        $overviewPlugins = array_values(array_filter(
+            array_merge($this->legacyOverviewPlugins(), $this->overviewWidgets()),
+            static fn(array $overviewPlugin): bool => $overviewPlugin['sequence']['key'] !== ''
+        ));
 
-        $overviewPlugins = array();
-        foreach ($plugins as $sequence => $plugin) {
-            $pluginInstance = $plugin['interface']::getInstance();
-            $pluginConfig = $pluginInstance->getPluginConfig();
-
-            // find the plugin sequence key
-            $sequenceKey = '';
-            $enabled = false;
-            foreach ($pluginConfig as $pluginConfigKey => $pluginConfigValue) {
-                if (str_ends_with($pluginConfigKey, '_overview_sequence')) {
-                    $sequenceKey = $pluginConfigKey;
-                } elseif (str_ends_with($pluginConfigKey, '_enabled')) {
-                    $enabled = !(($pluginConfigValue['value'] === 0));
-                }
-            }
-            $overviewPlugins[] =  array(
-                'id' => $plugin['id'],
-                'name' => Language::translateIfTranslationStrId($pluginInstance->getName()),
-                'icon' => $pluginInstance->getIcon(),
-                'enabled' => $enabled,
-                'sequence' => array('key' => $sequenceKey, 'value' => $sequence)
-            );
+        // The position the visitor sees is the position the form has to offer, so the widgets are
+        // ordered here and then numbered from one - which is what the page does again as soon as the
+        // administrator drags a card.
+        usort($overviewPlugins, static function (array $first, array $second): int {
+            return array($first['sequence']['value'], $first['id']) <=> array($second['sequence']['value'], $second['id']);
+        });
+        foreach ($overviewPlugins as $position => $overviewPlugin) {
+            $overviewPlugins[$position]['sequence']['value'] = $position + 1;
         }
 
         $formOverview = new FormPresenter(
@@ -845,6 +871,71 @@ class PreferencesPresenter extends PagePresenter
         $formOverview->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formOverview);
         return $smarty->fetch('preferences/preferences.overview.tpl');
+    }
+
+    /**
+     * The overview widgets that the loaded plugins declared, for the overview form.
+     *
+     * A declaration exists whether the widget is visible in this request or not, so a widget an
+     * administrator switched off is listed here as well and can be switched on again.
+     * @return array<int,array{id: string, name: string, icon: string, enabled: bool, sequence: array{key: string, value: int}}>
+     * @throws Exception
+     */
+    private function overviewWidgets(): array
+    {
+        $widgets = array();
+
+        foreach (PluginWidget::getDeclarations() as $declaration) {
+            $widgets[] = array(
+                'id' => $declaration['id'],
+                'name' => $declaration['name'],
+                'icon' => $declaration['icon'],
+                'enabled' => PluginWidget::getAccess($declaration['enabledPreference']) !== PluginWidget::ACCESS_NOBODY,
+                'sequence' => array(
+                    'key' => $declaration['sequencePreference'],
+                    'value' => PluginWidget::getSequence($declaration['sequencePreference'], $declaration['sequence'])
+                )
+            );
+        }
+
+        return $widgets;
+    }
+
+    /**
+     * The overview plugins of the previous plugin runtime, for the overview form. This is the code
+     * the form was built from before plugins declared a widget; it goes away with that runtime.
+     * @return array<int,array{id: string, name: string, icon: string, enabled: bool, sequence: array{key: string, value: int}}>
+     * @throws Exception
+     */
+    private function legacyOverviewPlugins(): array
+    {
+        $pluginManager = new PluginManager();
+        $overviewPlugins = array();
+
+        foreach ($pluginManager->getOverviewPlugins() as $sequence => $plugin) {
+            $pluginInstance = $plugin['interface']::getInstance();
+            $pluginConfig = $pluginInstance->getPluginConfig();
+
+            // find the plugin sequence key
+            $sequenceKey = '';
+            $enabled = false;
+            foreach ($pluginConfig as $pluginConfigKey => $pluginConfigValue) {
+                if (str_ends_with($pluginConfigKey, '_overview_sequence')) {
+                    $sequenceKey = $pluginConfigKey;
+                } elseif (str_ends_with($pluginConfigKey, '_enabled')) {
+                    $enabled = !(($pluginConfigValue['value'] === 0));
+                }
+            }
+            $overviewPlugins[] = array(
+                'id' => (string)$plugin['id'],
+                'name' => Language::translateIfTranslationStrId($pluginInstance->getName()),
+                'icon' => $pluginInstance->getIcon(),
+                'enabled' => $enabled,
+                'sequence' => array('key' => $sequenceKey, 'value' => (int)$sequence)
+            );
+        }
+
+        return $overviewPlugins;
     }
 
     /**

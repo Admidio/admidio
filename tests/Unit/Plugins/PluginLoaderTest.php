@@ -11,6 +11,7 @@ use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Preferences\Service\PreferenceDefinitions;
+use Admidio\Tests\Unit\Plugins\Support\PluginSettingsDouble;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
 
 final class PluginLoaderTest extends PluginTestCase
@@ -32,7 +33,6 @@ final class PluginLoaderTest extends PluginTestCase
     protected function tearDown(): void
     {
         Hooks::reset();
-        unset($GLOBALS['gSettingsManager']);
         if ($this->script === null) {
             unset($_SERVER['SCRIPT_FILENAME']);
         } else {
@@ -90,7 +90,7 @@ final class PluginLoaderTest extends PluginTestCase
             'no-entry' => array('comId' => 2, 'version' => '1.0.0')
         ));
         // "hello" is installed but switched off here, and "no-entry" cannot be loaded at all.
-        $GLOBALS['gSettingsManager'] = new PluginLoaderSettingsDouble(array('plugin_hello_enabled' => '0'));
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array('plugin_hello_enabled' => '0'));
 
         PluginLoader::loadEnabled();
 
@@ -235,45 +235,5 @@ final class PluginLoaderTest extends PluginTestCase
 
         $this->assertFalse(class_exists('AdmidioPlugin\\Hello\\DoesNotExist'));
         $this->assertFalse(class_exists('AdmidioPlugin\\Elsewhere\\Greeter'));
-    }
-}
-
-/**
- * Answers the preferences the loader reads. The real SettingsManager needs a database, and like it
- * this double refuses a name it has no row for: registering a preference does not create it.
- */
-final class PluginLoaderSettingsDouble
-{
-    /**
-     * @param array<string,string> $values The preferences this organization actually has a row for.
-     */
-    public function __construct(private array $values = array())
-    {
-    }
-
-    public function getBool(string $name, bool $update = false): bool
-    {
-        return $this->get($name) === '1';
-    }
-
-    public function has(string $name, bool $update = false): bool
-    {
-        return array_key_exists($name, $this->values);
-    }
-
-    public function get(string $name, bool $update = false): string
-    {
-        if (!array_key_exists($name, $this->values)) {
-            throw new \RuntimeException('Settings name "' . $name . '" does not exist!');
-        }
-
-        return $this->values[$name];
-    }
-
-    public function set(string $name, $value, bool $update = true): bool
-    {
-        $this->values[$name] = (string)$value;
-
-        return true;
     }
 }
