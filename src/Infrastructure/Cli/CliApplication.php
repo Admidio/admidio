@@ -870,8 +870,6 @@ final class CliApplication
 
             $rows[] = array(
                 'command' => $name,
-                'alias_of' => $task['aliasOf'] ?? '',
-                'available' => $task['unavailableReason'] === null,
                 'description' => $task['description']
             );
         }
@@ -883,8 +881,6 @@ final class CliApplication
             foreach ($rows as $row) {
                 $displayRows[] = array(
                     'Command' => $row['command'],
-                    'Alias of' => $row['alias_of'],
-                    'Available' => $row['available'] ? 'yes' : 'no',
                     'Description' => $row['description']
                 );
             }
