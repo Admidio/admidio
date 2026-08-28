@@ -9,6 +9,12 @@ use Admidio\Components\Entity\Component;
 use Admidio\Documents\Entity\File as DocumentFile;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Documents\Service\DocumentsService;
+use Admidio\Events\Entity\Event;
+use Admidio\Events\Entity\Room;
+use Admidio\Events\Repository\EventRecurrenceRepository;
+use Admidio\Events\Service\EventService;
+use Admidio\Events\ValueObject\EventRecurrenceRule;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
@@ -115,6 +121,8 @@ final class CoreTasks
         self::registerMessageTasks();
         self::registerDocumentTasks();
         self::registerPhotoTasks();
+        self::registerEventTasks();
+        self::registerRoomTasks();
         self::registerInventoryTasks();
         self::registerProfileFieldTasks();
         self::registerCategoryReportTasks();
@@ -1539,6 +1547,102 @@ final class CoreTasks
                     . '--message="Best wishes!" --as=admin'
             )
         );
+    }
+
+    private static function registerEventTasks(): void
+    {
+        self::readTask('event:list', 'eventList', 'List events.',
+            'event:list [--calendar=CATEGORY] [--date-from=DATE] [--date-to=DATE] [--state=actual|old|all] [--format=FORMAT]',
+            'EVENTS', true, array(), array(
+                self::opt('calendar', 'Event category/calendar.', 'CATEGORY'),
+                self::opt('date-from', 'Start date.', 'DATE'),
+                self::opt('date-to', 'End date.', 'DATE'),
+                self::opt('state', 'Restrict to upcoming or past events.', 'STATE', false, false, false, array('actual', 'old', 'all')),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))
+            ));
+        self::readTask('event:show', 'eventShow', 'Show an event.',
+            'event:show EVENT [--format=text|json]', 'EVENTS', true,
+            array(self::arg('event', 'Event UUID/id.')),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+
+        $eventOptions = self::eventOptions();
+        self::task('event:add', 'eventAdd', 'Create an event.',
+            'event:add --headline=TEXT --from=DATETIME --calendar=CATEGORY [--repeat=FREQUENCY] [options]',
+            'EVENTS', true, array(), array_replace($eventOptions, array(
+                0 => self::opt('headline', 'Event title.', 'TEXT', true),
+                1 => self::opt('from', 'Event start date/time (YYYY-MM-DDTHH:MM).', 'DATETIME', true),
+                3 => self::opt('calendar', 'Event category/calendar.', 'CATEGORY', true)
+            )));
+        self::task('event:update', 'eventUpdate', 'Update an event.',
+            'event:update EVENT [--recurrence-scope=this|series] [options]', 'EVENTS', true,
+            array(self::arg('event', 'Event.')), $eventOptions);
+        self::task('event:copy', 'eventCopy', 'Copy an event.',
+            'event:copy EVENT [--repeat=FREQUENCY] [options]', 'EVENTS', true,
+            array(self::arg('event', 'Source event.')), $eventOptions);
+        self::task('event:delete', 'eventDelete', 'Delete an event or cancel a recurring event occurrence.',
+            'event:delete EVENT [--recurrence-scope=this|series] [--yes]', 'EVENTS', true,
+            array(self::arg('event', 'Event.')), array(
+                self::opt('recurrence-scope', 'Scope for recurring events.', 'SCOPE', false, false, false, array('this', 'series')),
+                self::opt('yes', 'Confirm deletion.', '', false, false, true)
+            ));
+        self::task('event:participate', 'eventParticipation', 'Set participation to yes.',
+            'event:participate EVENT [USER] [--guests=N] [--comment=TEXT]', 'EVENTS',
+            true, array(self::arg('event', 'Event.'), self::arg('user', 'User; defaults to actor.', false)), array(
+                self::opt('guests', 'Number of additional guests.', 'N'),
+                self::opt('comment', 'Participation comment.', 'TEXT')
+            ), array(), null, CliTaskRegistry::ACCESS_VISIBLE);
+        self::task('event:cancel', 'eventParticipation', 'Set participation to no.',
+            'event:cancel EVENT [USER] [--comment=TEXT]', 'EVENTS',
+            true, array(self::arg('event', 'Event.'), self::arg('user', 'User; defaults to actor.', false)),
+            array(self::opt('comment', 'Participation comment.', 'TEXT')),
+            array(), null, CliTaskRegistry::ACCESS_VISIBLE);
+        self::task('event:maybe', 'eventParticipation', 'Set participation to maybe.',
+            'event:maybe EVENT [USER] [--comment=TEXT]', 'EVENTS',
+            true, array(self::arg('event', 'Event.'), self::arg('user', 'User; defaults to actor.', false)),
+            array(self::opt('comment', 'Participation comment.', 'TEXT')),
+            array(), null, CliTaskRegistry::ACCESS_VISIBLE);
+        self::readTask('event:participants', 'eventParticipants', 'List event participants.',
+            'event:participants EVENT [--format=FORMAT]', 'EVENTS', true,
+            array(self::arg('event', 'Event.')),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
+        self::readTask('event:export', 'eventExport', 'Export an event as iCalendar.',
+            'event:export EVENT [--output=FILE]', 'EVENTS', true,
+            array(self::arg('event', 'Event.')));
+        self::readTask('event:export-calendar', 'eventExportCalendar', 'Export an event range/calendar as iCalendar.',
+            'event:export-calendar [--calendar=CATEGORY] [--date-from=DATE] [--date-to=DATE] [--output=FILE]',
+            'EVENTS', true, array(), array(
+                self::opt('calendar', 'Event calendar/category.', 'CATEGORY'),
+                self::opt('date-from', 'Start date.', 'DATE'),
+                self::opt('date-to', 'End date.', 'DATE')
+            ));
+    }
+
+    private static function registerRoomTasks(): void
+    {
+        self::readTask('room:list', 'roomList', 'List rooms.',
+            'room:list [--format=FORMAT]', 'ROOMS', true, array(),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'csv', 'md', 'dokuwiki'))));
+        self::readTask('room:show', 'roomShow', 'Show a room.',
+            'room:show ROOM [--format=text|json]', 'ROOMS', true,
+            array(self::arg('room', 'Room UUID/id.')),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))));
+
+        $roomOptions = array(
+            self::opt('name', 'Room name.', 'NAME'),
+            self::opt('capacity', 'Normal capacity.', 'N'),
+            self::opt('overhang', 'Additional overhang capacity.', 'N'),
+            self::opt('description', 'Room description.', 'TEXT')
+        );
+        self::task('room:add', 'roomAdd', 'Create a room.',
+            'room:add NAME [--capacity=N] [--overhang=N] [--description=TEXT]', 'ROOMS', true,
+            array(self::arg('name', 'Room name.')), $roomOptions);
+        self::task('room:update', 'roomUpdate', 'Update a room.',
+            'room:update ROOM [options]', 'ROOMS', true,
+            array(self::arg('room', 'Room.')), $roomOptions);
+        self::task('room:delete', 'roomDelete', 'Delete an unused room.',
+            'room:delete ROOM [--yes]', 'ROOMS', true,
+            array(self::arg('room', 'Room.')),
+            array(self::opt('yes', 'Confirm deletion.', '', false, false, true)));
     }
 
     private static function registerInventoryTasks(): void
@@ -6136,6 +6240,377 @@ final class CoreTasks
         return 0;
     }
 
+    public static function eventList(array $arguments, array $options): int
+    {
+        global $gCurrentOrgId, $gDb;
+
+        $where = array('(cat.cat_org_id = ? OR cat.cat_org_id IS NULL)');
+        $params = array($gCurrentOrgId);
+
+        if (CliApplication::optionExists($options, 'calendar')) {
+            $category = self::resolveCategory(CliApplication::optionString($options, 'calendar'), 'EVT');
+            $where[] = 'dat.dat_cat_id = ?';
+            $params[] = (int)$category->getValue('cat_id');
+        }
+        if (CliApplication::optionExists($options, 'date-from')) {
+            $date = CliApplication::optionString($options, 'date-from');
+            self::validateDate($date, '--date-from');
+            $where[] = 'dat.dat_end >= ?';
+            $params[] = $date . ' 00:00:00';
+        }
+        if (CliApplication::optionExists($options, 'date-to')) {
+            $date = CliApplication::optionString($options, 'date-to');
+            self::validateDate($date, '--date-to');
+            $where[] = 'dat.dat_begin <= ?';
+            $params[] = $date . ' 23:59:59';
+        }
+
+        $state = CliApplication::optionString($options, 'state', 'actual');
+        if ($state === 'actual') {
+            $where[] = 'dat.dat_end >= ?';
+            $params[] = DATETIME_NOW;
+        } elseif ($state === 'old') {
+            $where[] = 'dat.dat_end < ?';
+            $params[] = DATETIME_NOW;
+        }
+
+        $format = CliApplication::optionString($options, 'format', 'table');
+        if (!self::restrictToVisibleCategories('EVT', 'dat.dat_cat_id', $where, $params)) {
+            CliApplication::writeRows(array(), $format, $options);
+            return 0;
+        }
+
+        $where[] = '(dat.dat_recurrence_status IS NULL OR dat.dat_recurrence_status <> ?)';
+        $params[] = 'cancelled';
+
+        $rows = $gDb->queryPrepared(
+            'SELECT dat.dat_id AS id, dat.dat_uuid AS uuid, dat.dat_headline AS headline,
+                    dat.dat_begin AS begin, dat.dat_end AS end, dat.dat_all_day AS all_day,
+                    cat.cat_name AS calendar, dat.dat_location AS location,
+                    dat.dat_evr_id AS recurrence_id,
+                    dat.dat_recurrence_status AS recurrence_status
+               FROM ' . TBL_EVENTS . ' dat
+         INNER JOIN ' . TBL_CATEGORIES . ' cat ON cat.cat_id = dat.dat_cat_id
+              WHERE ' . implode(' AND ', $where) . '
+           ORDER BY dat.dat_begin',
+            $params
+        )->fetchAll();
+
+        foreach ($rows as &$row) {
+            $row['calendar'] = Language::translateIfTranslationStrId((string)$row['calendar']);
+        }
+        unset($row);
+
+        CliApplication::writeRows($rows, $format, $options);
+        return 0;
+    }
+
+    public static function eventShow(array $arguments, array $options): int
+    {
+        $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
+        if (!$event->isVisible()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        CliApplication::writeValue(self::eventData($event), $options);
+        return 0;
+    }
+
+    public static function eventAdd(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $event = new Event($gDb);
+        $formValues = self::buildEventFormValues($event, $options, true);
+        $savedEvent = (new EventService($gDb))->saveData('', $formValues);
+
+        CliApplication::writeValue(self::eventData($savedEvent), $options);
+        return 0;
+    }
+
+    public static function eventUpdate(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
+        if (!$event->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $formValues = self::buildEventFormValues($event, $options, false);
+        $savedEvent = (new EventService($gDb))->saveData(
+            (string)$event->getValue('dat_uuid'),
+            $formValues,
+            '',
+            false,
+            CliApplication::optionString($options, 'recurrence-scope', 'this')
+        );
+
+        CliApplication::writeValue(self::eventData($savedEvent), $options);
+        return 0;
+    }
+
+    public static function eventCopy(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
+        if (!$event->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $formValues = self::buildEventFormValues($event, $options, false);
+        $savedEvent = (new EventService($gDb))->saveData(
+            (string)$event->getValue('dat_uuid'),
+            $formValues,
+            '',
+            true
+        );
+
+        CliApplication::writeValue(self::eventData($savedEvent), $options);
+        return 0;
+    }
+
+    public static function eventDelete(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
+        if (!$event->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        CliApplication::confirm('Delete event "' . $event->getValue('dat_headline') . '"?', $options);
+        (new EventService($gDb))->deleteData(
+            (string)$event->getValue('dat_uuid'),
+            CliApplication::optionString($options, 'recurrence-scope', 'this')
+        );
+
+        CliApplication::writeSuccess('Event deleted.', $options);
+        return 0;
+    }
+
+    public static function eventParticipation(array $arguments, array $options): int
+    {
+        global $gCurrentUser, $gCurrentUserId, $gDb, $gSettingsManager;
+
+        $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
+        if ((int)$event->getValue('dat_rol_id') === 0) {
+            throw new InvalidArgumentException('Participation is not enabled for this event.');
+        }
+
+        $user = isset($arguments[1]) ? CliApplication::resolveUser($arguments[1]) : $gCurrentUser;
+        $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
+        if ((int)$user->getValue('usr_id') !== $gCurrentUserId
+            && !$gCurrentUser->isAdministrator()
+            && !$participants->isLeader($gCurrentUserId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        if ((int)$user->getValue('usr_id') === $gCurrentUserId && !$event->allowedToParticipate() && !$event->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $membership = new Membership($gDb);
+        $membership->readDataByColumns(array(
+            'mem_rol_id' => (int)$event->getValue('dat_rol_id'),
+            'mem_usr_id' => (int)$user->getValue('usr_id')
+        ));
+        if (CliApplication::optionExists($options, 'comment')) {
+            if (!(bool)$event->getValue('dat_allow_comments') && !$event->isEditable()) {
+                throw new InvalidArgumentException('Comments are disabled for this event.');
+            }
+            $membership->setValue('mem_comment', CliApplication::optionString($options, 'comment'));
+        }
+        if (CliApplication::optionExists($options, 'guests')) {
+            if (!(bool)$event->getValue('dat_additional_guests') && !$event->isEditable()) {
+                throw new InvalidArgumentException('Additional guests are disabled for this event.');
+            }
+            $membership->setValue('mem_count_guests', max(0, CliApplication::optionInt($options, 'guests', 0) ?? 0));
+        }
+        if ($membership->isNewRecord()) {
+            $membership->setValue('mem_begin', DATE_NOW);
+        }
+        $membership->save();
+
+        $command = CliApplication::currentCommand();
+        if ($command === 'event:participate') {
+            if (!$event->possibleToParticipate() && !$participants->isLeader($gCurrentUserId)) {
+                throw new Exception('SYS_PARTICIPATE_NO_RIGHTS');
+            }
+            $membership->startMembership(
+                (int)$event->getValue('dat_rol_id'),
+                (int)$user->getValue('usr_id'),
+                null,
+                Participants::PARTICIPATION_YES
+            );
+        } elseif ($command === 'event:maybe') {
+            if (!$event->possibleToParticipate() && !$participants->isLeader($gCurrentUserId)) {
+                throw new Exception('SYS_PARTICIPATE_NO_RIGHTS');
+            }
+            $membership->startMembership(
+                (int)$event->getValue('dat_rol_id'),
+                (int)$user->getValue('usr_id'),
+                null,
+                Participants::PARTICIPATION_MAYBE
+            );
+        } else {
+            if ($gSettingsManager->getBool('events_save_cancellations')) {
+                $membership->startMembership(
+                    (int)$event->getValue('dat_rol_id'),
+                    (int)$user->getValue('usr_id'),
+                    null,
+                    Participants::PARTICIPATION_NO
+                );
+            } else {
+                $membership->deleteMembership((int)$event->getValue('dat_rol_id'), (int)$user->getValue('usr_id'));
+            }
+        }
+
+        self::reloadUserSessions((int)$user->getValue('usr_id'));
+        CliApplication::writeSuccess('Event participation updated.', $options);
+        return 0;
+    }
+
+    public static function eventParticipants(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
+        if (!$event->isVisible()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        if ((int)$event->getValue('dat_rol_id') === 0) {
+            CliApplication::writeRows(array(), CliApplication::optionString($options, 'format', 'table'), $options);
+            return 0;
+        }
+
+        $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
+        $rows = array();
+        foreach ($participants->getParticipantsArray() as $participant) {
+            $rows[] = $participant;
+        }
+
+        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        return 0;
+    }
+
+    public static function eventExport(array $arguments, array $options): int
+    {
+        global $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
+            throw new Exception('SYS_ICAL_DISABLED');
+        }
+
+        $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
+        if (!$event->isVisible()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $events = new \ModuleEvents();
+        $events->setParameter('dat_uuid', (string)$event->getValue('dat_uuid'));
+
+        CliApplication::writeOutput((string)$events->getICalContent(), $options);
+        return 0;
+    }
+
+    public static function eventExportCalendar(array $arguments, array $options): int
+    {
+        global $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
+            throw new Exception('SYS_ICAL_DISABLED');
+        }
+
+        $dateFrom = CliApplication::optionString($options, 'date-from', date('Y-m-d', strtotime('-6 months')));
+        $dateTo = CliApplication::optionString($options, 'date-to', DATE_MAX);
+        self::validateDate($dateFrom, '--date-from');
+        self::validateDate($dateTo, '--date-to');
+
+        if ($dateFrom > $dateTo) {
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
+        }
+
+        $events = new \ModuleEvents();
+        $events->setDateRange($dateFrom, $dateTo);
+
+        if (CliApplication::optionExists($options, 'calendar')) {
+            $category = self::resolveCategory(CliApplication::optionString($options, 'calendar'), 'EVT');
+            $events->setParameter('cat_uuid', (string)$category->getValue('cat_uuid'));
+        }
+
+        CliApplication::writeOutput((string)$events->getICalContent(), $options);
+        return 0;
+    }
+
+    public static function roomList(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $rows = $gDb->queryPrepared(
+            'SELECT room_id AS id, room_uuid AS uuid, room_name AS name,
+                    room_capacity AS capacity, room_overhang AS overhang, room_description AS description
+               FROM ' . TBL_ROOMS . '
+           ORDER BY room_name'
+        )->fetchAll();
+
+        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        return 0;
+    }
+
+    public static function roomShow(array $arguments, array $options): int
+    {
+        $room = self::resolveRoom(CliApplication::requireArgument($arguments, 0, 'room'));
+        CliApplication::writeValue(self::roomData($room), $options);
+        return 0;
+    }
+
+    public static function roomAdd(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $room = new Room($gDb);
+        $room->setValue('room_name', CliApplication::requireArgument($arguments, 0, 'name'));
+        self::applyRoomOptions($room, $options);
+        $room->save();
+
+        CliApplication::writeValue(self::roomData($room), $options);
+        return 0;
+    }
+
+    public static function roomUpdate(array $arguments, array $options): int
+    {
+        $room = self::resolveRoom(CliApplication::requireArgument($arguments, 0, 'room'));
+        if (CliApplication::optionExists($options, 'name')) {
+            $room->setValue('room_name', CliApplication::optionString($options, 'name'));
+        }
+        self::applyRoomOptions($room, $options);
+        $room->save();
+
+        CliApplication::writeSuccess('Room updated.', $options);
+        return 0;
+    }
+
+    public static function roomDelete(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $room = self::resolveRoom(CliApplication::requireArgument($arguments, 0, 'room'));
+        $used = (int)$gDb->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_EVENTS . ' WHERE dat_room_id = ?',
+            array((int)$room->getValue('room_id'))
+        )->fetchColumn();
+        if ($used > 0) {
+            throw new InvalidArgumentException('The room is used by one or more events.');
+        }
+
+        CliApplication::confirm('Delete room "' . $room->getValue('room_name') . '"?', $options);
+        $room->delete();
+
+        CliApplication::writeSuccess('Room deleted.', $options);
+        return 0;
+    }
+
     public static function inventoryList(array $arguments, array $options): int
     {
         global $gDb, $gCurrentOrgId;
@@ -8696,8 +9171,8 @@ final class CoreTasks
             $where = 'cat_id = ?';
             $params[] = (int)$reference;
         } else {
-            $where = '(cat_uuid = ? OR cat_name = ?)';
-            array_push($params, $reference, $reference);
+            $where = '(cat_uuid = ? OR cat_name = ? OR cat_name_intern = ?)';
+            array_push($params, $reference, $reference, $reference);
         }
         $where .= ' AND (cat_org_id = ? OR cat_org_id IS NULL)';
         $params[] = $gCurrentOrgId;
@@ -8711,6 +9186,24 @@ final class CoreTasks
             $gDb->queryPrepared('SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE ' . $where, $params)
                 ->fetchAll(PDO::FETCH_COLUMN)
         )));
+
+        if (count($ids) === 0 && !ctype_digit($reference)) {
+            $translatedRows = $gDb->queryPrepared(
+                'SELECT cat_id, cat_name
+                   FROM ' . TBL_CATEGORIES . '
+                  WHERE (cat_org_id = ? OR cat_org_id IS NULL)'
+                    . ($requiredType !== '' ? ' AND cat_type = ?' : ''),
+                $requiredType !== '' ? array($gCurrentOrgId, $requiredType) : array($gCurrentOrgId)
+            )->fetchAll();
+
+            foreach ($translatedRows as $row) {
+                if (strcasecmp(Language::translateIfTranslationStrId((string)$row['cat_name']), $reference) === 0) {
+                    $ids[] = (int)$row['cat_id'];
+                }
+            }
+            $ids = array_values(array_unique($ids));
+        }
+
         if (count($ids) !== 1) {
             throw new InvalidArgumentException(
                 count($ids) === 0
@@ -8977,6 +9470,411 @@ final class CoreTasks
         array_push($params, ...$visibleCategories);
 
         return true;
+    }
+
+    private static function resolveEvent(string $reference): Event
+    {
+        global $gDb;
+
+        $id = CliApplication::resolveId(TBL_EVENTS, 'dat_id', 'dat_uuid', $reference, 'event');
+        return new Event($gDb, $id);
+    }
+
+    /**
+     * @return array<int,array<string,mixed>>
+     */
+    private static function eventOptions(): array
+    {
+        return array(
+            self::opt('headline', 'Event title.', 'TEXT'),
+            self::opt('from', 'Event start date/time (YYYY-MM-DDTHH:MM).', 'DATETIME'),
+            self::opt('to', 'Event end date/time (YYYY-MM-DDTHH:MM).', 'DATETIME'),
+            self::opt('calendar', 'Event category/calendar.', 'CATEGORY'),
+            self::opt('location', 'Event location.', 'TEXT'),
+            self::opt('country', 'Two-letter country code.', 'COUNTRY'),
+            self::opt('room', 'Room UUID/id/name; empty value clears the room.', 'ROOM'),
+            self::opt('all-day', 'All-day event flag.', 'BOOL'),
+            self::opt('highlight', 'Highlight event flag.', 'BOOL'),
+            self::opt('participation', 'Enable participation.', 'BOOL'),
+            self::opt('participation-role', 'Group allowed to participate.', 'GROUP', false, true),
+            self::opt('participate-self', 'Assign the acting user as event leader.', 'BOOL'),
+            self::opt('allow-comments', 'Allow participation comments.', 'BOOL'),
+            self::opt('allow-guests', 'Allow additional guests.', 'BOOL'),
+            self::opt('max-members', 'Maximum number of participants.', 'N'),
+            self::opt('deadline', 'Participation deadline (YYYY-MM-DDTHH:MM), empty value clears it.', 'DATETIME'),
+            self::opt('participants-visible', 'Participants may view the participants list.', 'BOOL'),
+            self::opt('participants-mail', 'Participants may send mail to the event role.', 'BOOL'),
+            self::opt('description', 'Event description.', 'TEXT'),
+            self::opt('description-file', 'Read event description from a file.', 'FILE'),
+            self::opt('repeat', 'Recurrence frequency.', 'FREQUENCY', false, false, false, array('none', 'daily', 'weekly', 'monthly', 'yearly')),
+            self::opt('interval', 'Recurrence interval, e.g. 2 for every second week.', 'N'),
+            self::opt('weekday', 'Weekly recurrence weekday.', 'DAY', false, true, false, EventRecurrenceRule::WEEKDAYS),
+            self::opt('ends', 'Recurrence end mode.', 'END', false, false, false, array('never', 'count', 'until')),
+            self::opt('count', 'Recurrence occurrence count.', 'N'),
+            self::opt('until', 'Recurrence end date (YYYY-MM-DD).', 'DATE'),
+            self::opt('recurrence-scope', 'Scope for editing recurring events.', 'SCOPE', false, false, false, array('this', 'series'))
+        );
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private static function eventData(Event $event): array
+    {
+        return array(
+            'id' => (int)$event->getValue('dat_id'),
+            'uuid' => (string)$event->getValue('dat_uuid'),
+            'calendar_id' => (int)$event->getValue('dat_cat_id'),
+            'participation_role_id' => (int)$event->getValue('dat_rol_id'),
+            'room_id' => (int)$event->getValue('dat_room_id'),
+            'recurrence_id' => (int)$event->getValue('dat_evr_id'),
+            'recurrence_status' => $event->getValue('dat_recurrence_status', 'database'),
+            'recurrence_original_begin' => $event->getValue('dat_recurrence_original_begin', 'Y-m-d H:i:s'),
+            'headline' => $event->getValue('dat_headline', 'database'),
+            'begin' => $event->getValue('dat_begin', 'Y-m-d H:i:s'),
+            'end' => $event->getValue('dat_end', 'Y-m-d H:i:s'),
+            'all_day' => (bool)$event->getValue('dat_all_day'),
+            'description' => $event->getValue('dat_description', 'database'),
+            'location' => $event->getValue('dat_location', 'database'),
+            'country' => $event->getValue('dat_country', 'database'),
+            'deadline' => $event->getValue('dat_deadline', 'Y-m-d H:i:s'),
+            'max_members' => (int)$event->getValue('dat_max_members'),
+            'allow_comments' => (bool)$event->getValue('dat_allow_comments'),
+            'additional_guests' => (bool)$event->getValue('dat_additional_guests')
+        );
+    }
+
+    /**
+     * Build the same data array that the current event FormPresenter passes to EventService.
+     *
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
+    private static function buildEventFormValues(Event $event, array $options, bool $new): array
+    {
+        global $gCurrentUser, $gDb, $gSettingsManager;
+
+        $participationRoleId = $new ? 0 : (int)$event->getValue('dat_rol_id');
+        $participationPossible = $participationRoleId > 0;
+
+        if ($new) {
+            $formValues = array(
+                'dat_headline' => '',
+                'dat_location' => '',
+                'dat_country' => null,
+                'dat_room_id' => 0,
+                'dat_all_day' => 0,
+                'event_from' => '',
+                'event_from_time' => '',
+                'event_to' => '',
+                'event_to_time' => '',
+                'cat_uuid' => '',
+                'dat_highlight' => 0,
+                'event_participation_possible' => 0,
+                'adm_event_participation_right' => array(),
+                'event_current_user_assigned' => 1,
+                'dat_allow_comments' => 0,
+                'dat_additional_guests' => 0,
+                'dat_max_members' => 0,
+                'event_deadline' => '',
+                'event_deadline_time' => '',
+                'event_right_list_view' => 0,
+                'event_right_send_mail' => 0,
+                'dat_description' => '',
+                'event_recurrence_frequency' => 'none',
+                'event_recurrence_interval' => 1,
+                'event_recurrence_weekdays' => array(),
+                'event_recurrence_end_type' => EventRecurrenceRule::END_TYPE_NEVER,
+                'event_recurrence_count' => '',
+                'event_recurrence_until' => ''
+            );
+        } else {
+            $begin = (string)$event->getValue('dat_begin', 'Y-m-d H:i');
+            $end = (string)$event->getValue('dat_end', 'Y-m-d H:i');
+            $deadline = (string)$event->getValue('dat_deadline', 'Y-m-d H:i');
+
+            $calendarUuid = (string)$gDb->queryPrepared(
+                'SELECT cat_uuid FROM ' . TBL_CATEGORIES . ' WHERE cat_id = ?',
+                array((int)$event->getValue('dat_cat_id'))
+            )->fetchColumn();
+            if ($calendarUuid === '') {
+                throw new InvalidArgumentException('The event calendar could not be resolved.');
+            }
+
+            $rightEventParticipation = new RolesRights($gDb, 'event_participation', (int)$event->getValue('dat_id'));
+
+            $rightListView = false;
+            $rightSendMail = false;
+            if ($participationRoleId > 0) {
+                $participationRole = new Role($gDb, $participationRoleId);
+                $rightListView = $participationRole->getValue('rol_view_memberships') === Role::VIEW_ROLE_MEMBERS;
+                $rightSendMail = $participationRole->getValue('rol_mail_this_role') === Role::VIEW_ROLE_MEMBERS;
+            }
+
+            $formValues = array(
+                'dat_headline' => (string)$event->getValue('dat_headline', 'database'),
+                'dat_location' => (string)$event->getValue('dat_location', 'database'),
+                'dat_country' => $event->getValue('dat_country', 'database'),
+                'dat_room_id' => (int)$event->getValue('dat_room_id'),
+                'dat_all_day' => (int)(bool)$event->getValue('dat_all_day'),
+                'event_from' => substr($begin, 0, 10),
+                'event_from_time' => substr($begin, 11, 5),
+                'event_to' => substr($end, 0, 10),
+                'event_to_time' => substr($end, 11, 5),
+                'cat_uuid' => $calendarUuid,
+                'dat_highlight' => (int)(bool)$event->getValue('dat_highlight'),
+                'event_participation_possible' => (int)$participationPossible,
+                'adm_event_participation_right' => $rightEventParticipation->getRolesIds(),
+                'event_current_user_assigned' => (int)(
+                    $participationRoleId > 0 && $gCurrentUser->isLeaderOfRole($participationRoleId)
+                ),
+                'dat_allow_comments' => (int)(bool)$event->getValue('dat_allow_comments'),
+                'dat_additional_guests' => (int)(bool)$event->getValue('dat_additional_guests'),
+                'dat_max_members' => (int)$event->getValue('dat_max_members'),
+                'event_deadline' => $deadline === '' ? '' : substr($deadline, 0, 10),
+                'event_deadline_time' => $deadline === '' ? '' : substr($deadline, 11, 5),
+                'event_right_list_view' => (int)$rightListView,
+                'event_right_send_mail' => (int)$rightSendMail,
+                'dat_description' => (string)$event->getValue('dat_description', 'database'),
+                'event_recurrence_frequency' => 'none',
+                'event_recurrence_interval' => 1,
+                'event_recurrence_weekdays' => array(),
+                'event_recurrence_end_type' => EventRecurrenceRule::END_TYPE_NEVER,
+                'event_recurrence_count' => '',
+                'event_recurrence_until' => ''
+            );
+
+            self::applyExistingRecurrenceValues($event, $formValues);
+        }
+
+        if (CliApplication::optionExists($options, 'headline')) {
+            $formValues['dat_headline'] = CliApplication::optionString($options, 'headline');
+        }
+        if (trim((string)$formValues['dat_headline']) === '') {
+            throw new InvalidArgumentException('--headline must not be empty.');
+        }
+
+        if (CliApplication::optionExists($options, 'from')) {
+            [$formValues['event_from'], $formValues['event_from_time']] =
+                self::splitEventDateTime(CliApplication::optionString($options, 'from'), '--from');
+        }
+        if ((string)$formValues['event_from'] === '') {
+            throw new InvalidArgumentException('--from is required.');
+        }
+
+        if (CliApplication::optionExists($options, 'to')) {
+            [$formValues['event_to'], $formValues['event_to_time']] =
+                self::splitEventDateTime(CliApplication::optionString($options, 'to'), '--to');
+        } elseif ($new) {
+            $formValues['event_to'] = $formValues['event_from'];
+            $formValues['event_to_time'] = $formValues['event_from_time'];
+        }
+
+        if (CliApplication::optionExists($options, 'calendar')) {
+            $calendar = self::resolveCategory(CliApplication::optionString($options, 'calendar'), 'EVT');
+            $formValues['cat_uuid'] = (string)$calendar->getValue('cat_uuid');
+        }
+        if ((string)$formValues['cat_uuid'] === '') {
+            throw new InvalidArgumentException('--calendar is required.');
+        }
+
+        foreach (array('location' => 'dat_location', 'country' => 'dat_country') as $option => $field) {
+            if (CliApplication::optionExists($options, $option)) {
+                $formValues[$field] = CliApplication::optionString($options, $option);
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'room')) {
+            if (!$gSettingsManager->getBool('events_rooms_enabled')) {
+                throw new InvalidArgumentException('Rooms are disabled for events.');
+            }
+
+            $room = CliApplication::optionString($options, 'room');
+            $formValues['dat_room_id'] = $room === '' || $room === '0'
+                ? 0
+                : (int)self::resolveRoom($room)->getValue('room_id');
+        }
+
+        foreach (array(
+            'all-day' => 'dat_all_day',
+            'highlight' => 'dat_highlight',
+            'participation' => 'event_participation_possible',
+            'participate-self' => 'event_current_user_assigned',
+            'allow-comments' => 'dat_allow_comments',
+            'allow-guests' => 'dat_additional_guests',
+            'participants-visible' => 'event_right_list_view',
+            'participants-mail' => 'event_right_send_mail'
+        ) as $option => $field) {
+            if (CliApplication::optionExists($options, $option)) {
+                $formValues[$field] = (int)(CliApplication::optionBool($options, $option, false) ?? false);
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'max-members')) {
+            $maxMembers = CliApplication::optionInt($options, 'max-members');
+            if ($maxMembers === null || $maxMembers < 0) {
+                throw new InvalidArgumentException('--max-members must be a non-negative integer.');
+            }
+            $formValues['dat_max_members'] = $maxMembers;
+        }
+
+        if (CliApplication::optionExists($options, 'participation-role')) {
+            $formValues['adm_event_participation_right'] = self::resolveRoleIds(
+                CliApplication::optionValues($options, 'participation-role')
+            );
+        }
+
+        if (empty($formValues['event_participation_possible'])) {
+            $formValues['adm_event_participation_right'] = array();
+        }
+
+        if (CliApplication::optionExists($options, 'deadline')) {
+            $deadline = CliApplication::optionString($options, 'deadline');
+            if ($deadline === '') {
+                $formValues['event_deadline'] = '';
+                $formValues['event_deadline_time'] = '';
+            } else {
+                [$formValues['event_deadline'], $formValues['event_deadline_time']] =
+                    self::splitEventDateTime($deadline, '--deadline');
+            }
+        }
+
+        if (CliApplication::optionExists($options, 'description')
+            || CliApplication::optionExists($options, 'description-file')) {
+            $formValues['dat_description'] = self::readTextOption($options, 'description', 'description-file');
+        }
+
+        self::applyRecurrenceOptions($formValues, $options);
+
+        return $formValues;
+    }
+
+    /**
+     * @param array<string,mixed> $formValues
+     * @param array<string,mixed> $options
+     */
+    private static function applyRecurrenceOptions(array &$formValues, array $options): void
+    {
+        if (CliApplication::optionExists($options, 'repeat')) {
+            $formValues['event_recurrence_frequency'] = CliApplication::optionString($options, 'repeat');
+        }
+        if (CliApplication::optionExists($options, 'interval')) {
+            $interval = CliApplication::optionInt($options, 'interval');
+            if ($interval === null || $interval < 1) {
+                throw new InvalidArgumentException('--interval must be greater than or equal to 1.');
+            }
+            $formValues['event_recurrence_interval'] = $interval;
+        }
+        if (CliApplication::optionExists($options, 'weekday')) {
+            $formValues['event_recurrence_weekdays'] = CliApplication::optionValues($options, 'weekday');
+        }
+        if (CliApplication::optionExists($options, 'ends')) {
+            $formValues['event_recurrence_end_type'] = CliApplication::optionString($options, 'ends');
+        }
+        if (CliApplication::optionExists($options, 'count')) {
+            $count = CliApplication::optionInt($options, 'count');
+            if ($count === null || $count < 1) {
+                throw new InvalidArgumentException('--count must be greater than or equal to 1.');
+            }
+            $formValues['event_recurrence_count'] = $count;
+        }
+        if (CliApplication::optionExists($options, 'until')) {
+            $until = CliApplication::optionString($options, 'until');
+            self::validateDate($until, '--until');
+            $formValues['event_recurrence_until'] = $until;
+        }
+    }
+
+    /**
+     * @param array<string,mixed> $formValues
+     */
+    private static function applyExistingRecurrenceValues(Event $event, array &$formValues): void
+    {
+        global $gDb;
+
+        $recurrenceId = (int)$event->getValue('dat_evr_id');
+        $repository = new EventRecurrenceRepository($gDb);
+        $recurrence = $recurrenceId > 0
+            ? $repository->readById($recurrenceId)
+            : $repository->readByMasterEventId((int)$event->getValue('dat_id'));
+
+        if ($recurrence === null) {
+            return;
+        }
+
+        $rule = $repository->toRule($recurrence);
+        $formValues['event_recurrence_frequency'] = $rule->getFrequency();
+        $formValues['event_recurrence_interval'] = $rule->getInterval();
+        $formValues['event_recurrence_weekdays'] = $rule->getByDay();
+        $formValues['event_recurrence_end_type'] = $rule->getEndType();
+        $formValues['event_recurrence_count'] = $rule->getCount() ?? '';
+        $formValues['event_recurrence_until'] = $rule->getUntil()?->format('Y-m-d') ?? '';
+    }
+
+    /**
+     * @return array{0:string,1:string}
+     */
+    private static function splitEventDateTime(string $value, string $label): array
+    {
+        $normalized = CliApplication::validateDateTime($value, $label);
+        return array(substr($normalized, 0, 10), substr($normalized, 11, 5));
+    }
+
+    private static function resolveRoom(string $reference): Room
+    {
+        global $gDb;
+
+        if (ctype_digit($reference)) {
+            $rows = $gDb->queryPrepared(
+                'SELECT room_id FROM ' . TBL_ROOMS . ' WHERE room_id = ?',
+                array((int)$reference)
+            )->fetchAll(PDO::FETCH_COLUMN);
+        } else {
+            $rows = $gDb->queryPrepared(
+                'SELECT room_id FROM ' . TBL_ROOMS . ' WHERE room_uuid = ? OR room_name = ?',
+                array($reference, $reference)
+            )->fetchAll(PDO::FETCH_COLUMN);
+        }
+
+        $ids = array_values(array_unique(array_map('intval', $rows)));
+        if (count($ids) !== 1) {
+            throw new InvalidArgumentException(
+                count($ids) === 0 ? 'Room was not found.' : 'Room name is ambiguous; use UUID or id.'
+            );
+        }
+
+        return new Room($gDb, $ids[0]);
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private static function roomData(Room $room): array
+    {
+        return array(
+            'id' => (int)$room->getValue('room_id'),
+            'uuid' => (string)$room->getValue('room_uuid'),
+            'name' => $room->getValue('room_name', 'database'),
+            'description' => $room->getValue('room_description', 'database'),
+            'capacity' => (int)$room->getValue('room_capacity'),
+            'overhang' => (int)$room->getValue('room_overhang')
+        );
+    }
+
+    private static function applyRoomOptions(Room $room, array $options): void
+    {
+        if (CliApplication::optionExists($options, 'description')) {
+            $room->setValue('room_description', CliApplication::optionString($options, 'description'));
+        }
+        foreach (array('capacity' => 'room_capacity', 'overhang' => 'room_overhang') as $option => $column) {
+            if (CliApplication::optionExists($options, $option)) {
+                $value = CliApplication::optionString($options, $option);
+                if ($value === '' || !ctype_digit($value)) {
+                    throw new InvalidArgumentException('--' . $option . ' must be a non-negative integer.');
+                }
+                $room->setValue($column, (int)$value);
+            }
+        }
     }
 
     private static function resolveAnnouncement(string $reference): Announcement

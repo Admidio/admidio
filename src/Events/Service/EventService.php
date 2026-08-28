@@ -34,11 +34,20 @@ class EventService
      */
     public function deleteEvent(string $eventUUID, string $recurrenceScope = 'this'): void
     {
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+        $this->deleteData($eventUUID, $recurrenceScope);
+    }
+
+    /**
+     * Delete a single event or cancel recurring event instances without depending on an HTTP request.
+     * @throws Exception
+     */
+    public function deleteData(string $eventUUID, string $recurrenceScope = 'this'): void
+    {
         if ($eventUUID === '') {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
-
-        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
         $event = new Event($this->database);
         if (!$event->readDataByUuid($eventUUID)) {
@@ -190,6 +199,18 @@ class EventService
         $eventSaveService = new EventSaveService($this->database);
 
         return $eventSaveService->saveEvent($eventUUID, $copy, $recurrenceScope);
+    }
+
+    /**
+     * Save already validated event values without depending on a session or HTTP form request.
+     * @param array<string,mixed> $formValues
+     * @throws Exception
+     */
+    public function saveData(string $eventUUID, array $formValues, string $userUUID = '', bool $copy = false, string $recurrenceScope = 'this'): Event
+    {
+        $eventSaveService = new EventSaveService($this->database);
+
+        return $eventSaveService->saveData($eventUUID, $formValues, $userUUID, $copy, $recurrenceScope);
     }
 
     /**

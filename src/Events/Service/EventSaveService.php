@@ -39,7 +39,33 @@ class EventSaveService
      */
     public function saveEvent(string $eventUUID = '', bool $copy = false, string $recurrenceScope = 'this'): array
     {
-        global $gCurrentSession, $gCurrentUser, $gDb, $gL10n, $gNavigation, $gProfileFields, $gSettingsManager, $gTimezone, $gValidLogin;
+        global $gCurrentSession, $gNavigation;
+
+        // save the country only together with the location
+        if (strlen((string)($_POST['dat_location'] ?? '')) === 0) {
+            $_POST['dat_country'] = null;
+        }
+
+        // check form field input and sanitized it from malicious content
+        $eventEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+        $formValues = $eventEditForm->validate($_POST);
+
+        $this->saveData($eventUUID, $formValues, '', $copy, $recurrenceScope);
+
+        $gNavigation->deleteLastUrl();
+
+        return array('status' => 'success', 'url' => $gNavigation->getUrl());
+    }
+
+    /**
+     * Create or edit an event from already validated event values.
+     * This method must not depend on a session, HTTP request or FormPresenter object so CLI tasks can reuse it.
+     * @param array<string,mixed> $formValues
+     * @throws Exception
+     */
+    public function saveData(string $eventUUID, array $formValues, string $userUUID = '', bool $copy = false, string $recurrenceScope = 'this'): Event
+    {
+        global $gCurrentUser, $gDb, $gL10n, $gProfileFields, $gSettingsManager, $gTimezone, $gValidLogin;
 
         $originalEventUuid = '';
 
@@ -59,7 +85,15 @@ class EventSaveService
         }
 
         $user = new User($this->database, $gProfileFields);
-        if ($gValidLogin) {
+        if ($userUUID !== '') {
+            if ($gValidLogin
+                && $userUUID !== (string)$gCurrentUser->getValue('usr_uuid')
+                && !$gCurrentUser->isAdministrator()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
+            $user->readDataByUuid($userUUID);
+        } elseif ($gValidLogin) {
             // Event edit forms use "current user assigned" semantics. Do not allow a crafted user_uuid
             // parameter to assign or unassign another user while saving events or recurrence instances.
             $user->readDataByUuid($gCurrentUser->getValue('usr_uuid'));
@@ -74,15 +108,9 @@ class EventSaveService
         }
 
         // Create a new event or edit an existing event
-
-        // save the country only together with the location
-        if (strlen($_POST['dat_location']) === 0) {
-            $_POST['dat_country'] = null;
+        if (strlen((string)($formValues['dat_location'] ?? '')) === 0) {
+            $formValues['dat_country'] = null;
         }
-
-        // check form field input and sanitized it from malicious content
-        $eventEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        $formValues = $eventEditForm->validate($_POST);
 
         if ($formValues['event_participation_possible'] == 1
             && (!isset($formValues['adm_event_participation_right']) || array_count_values($formValues['adm_event_participation_right']) == 0)) {
@@ -93,7 +121,9 @@ class EventSaveService
         $calendar->readDataByUuid($formValues['cat_uuid']);
         $formValues['dat_cat_id'] = $calendar->getValue('cat_id');
 
-        if ($formValues['dat_all_day'] === '1') {
+        $isAllDay = (string)$formValues['dat_all_day'] === '1';
+
+        if ($isAllDay) {
             $formValues['event_from_time'] = '00:00';
             $formValues['event_to_time'] = '00:00';
         }
@@ -187,7 +217,7 @@ class EventSaveService
         $recurrenceOccurrences = array();
         $eventTimezone = $gTimezone;
         $deadlineOffsetSeconds = null;
-        $recurrenceOriginalBegin = (string)$event->getValue('dat_recurrence_original_begin', 'database');
+        $recurrenceOriginalBegin = (string)$event->getValue('dat_recurrence_original_begin', 'Y-m-d H:i:s');
         if ($recurrenceOriginalBegin === '') {
             $recurrenceOriginalBegin = (string)$event->getValue('dat_begin', 'Y-m-d H:i:s');
         }
@@ -200,7 +230,7 @@ class EventSaveService
             $recurrenceBeginDateTime = DateTimeImmutable::createFromMutable($startDateTime);
             $recurrenceEndDateTime = DateTimeImmutable::createFromMutable($endDateTime);
 
-            if ($formValues['dat_all_day'] === '1') {
+            if ($isAllDay) {
                 $recurrenceEndDateTime = $recurrenceEndDateTime->setTime(23, 59, 59);
             }
 
@@ -217,7 +247,7 @@ class EventSaveService
                 $recurrenceEndDateTime,
                 $recurrenceRule,
                 $eventTimezone,
-                $formValues['dat_all_day'] === '1'
+                $isAllDay
             );
 
             if (count($recurrenceOccurrences) > EventOccurrenceGenerator::MAX_NEVER_OCCURRENCES) {
@@ -230,7 +260,7 @@ class EventSaveService
         // ------------------------------------------------
 
         $roomCheckEndDateTime = clone $endDateTime;
-        if ($formValues['dat_all_day'] === '1') {
+        if ($isAllDay) {
             $roomCheckEndDateTime->setTime(23, 59, 59);
         }
 
@@ -281,9 +311,7 @@ class EventSaveService
                 $user
             );
 
-            $gNavigation->deleteLastUrl();
-
-            return array('status' => 'success', 'url' => $gNavigation->getUrl());
+            return $event;
         }
 
         // write form values into the event object
@@ -339,10 +367,8 @@ class EventSaveService
         }
 
         $gDb->endTransaction();
-        $gNavigation->deleteLastUrl();
 
-        return array('status' => 'success', 'url' => $gNavigation->getUrl());
-
+        return $event;
     }
 
     /**
