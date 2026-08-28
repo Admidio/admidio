@@ -68,8 +68,7 @@ try {
         // Returns the HTML of the requested form
         case 'html_form':
             $preferencesUI = new PreferencesPresenter('adm_preferences_form');
-            $methodName = 'create' . str_replace('_', '', ucwords($getPanel, '_')) . 'Form';
-            echo $preferencesUI->{$methodName}();
+            echo $preferencesUI->createPanel($getPanel);
             break;
 
         // delete the entries of the change history that are older than the retention period
