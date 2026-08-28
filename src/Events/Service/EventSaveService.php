@@ -320,9 +320,9 @@ class EventSaveService
 
             $recurrenceRepository = new EventRecurrenceRepository($gDb);
             $recurrence = $recurrenceRepository->save((int)$event->getValue('dat_id'), $recurrenceRule, $eventTimezone, $generatedUntil);
-            $recurrenceId = (int)$recurrence->getValue('rer_id');
+            $recurrenceId = (int)$recurrence->getValue('evr_id');
 
-            $event->setValue('dat_rer_id', $recurrenceId);
+            $event->setValue('dat_evr_id', $recurrenceId);
             $event->save();
 
             foreach ($recurrenceOccurrences as $occurrence) {
@@ -458,8 +458,8 @@ class EventSaveService
         );
 
         if ($ignoredRecurrenceId !== null) {
-            $sql .= ' AND (dat_rer_id IS NULL
-                        OR dat_rer_id <> ?
+            $sql .= ' AND (dat_evr_id IS NULL
+                        OR dat_evr_id <> ?
                         OR dat_recurrence_status IS NULL
                         OR dat_recurrence_status NOT IN (?, ?))';
             $queryParams[] = $ignoredRecurrenceId;
@@ -655,7 +655,7 @@ class EventSaveService
         $event->setValue('dat_begin', $occurrence->getBegin()->format('Y-m-d H:i'));
         $event->setValue('dat_end', $occurrence->getEnd()->format('Y-m-d H:i'));
         $event->setValue('dat_deadline', $deadlineOffsetSeconds === null ? null : $occurrence->getBegin()->modify('-' . $deadlineOffsetSeconds . ' seconds')->format('Y-m-d H:i'));
-        $event->setValue('dat_rer_id', $recurrenceId);
+        $event->setValue('dat_evr_id', $recurrenceId);
         $event->setValue('dat_recurrence_original_begin', $occurrence->getBegin()->format('Y-m-d H:i:s'));
         $event->setValue('dat_recurrence_status', 'generated');
     }
@@ -675,7 +675,7 @@ class EventSaveService
 
         $event->setValue('dat_begin', $begin->format('Y-m-d H:i'));
         $event->setValue('dat_end', $end->format('Y-m-d H:i'));
-        $event->setValue('dat_rer_id', $recurrenceId);
+        $event->setValue('dat_evr_id', $recurrenceId);
         $event->setValue('dat_recurrence_original_begin', $begin->format('Y-m-d H:i:s'));
         $event->setValue('dat_recurrence_status', 'master');
         $event->setValue('dat_recurrence_scope', 'series');
@@ -693,7 +693,7 @@ class EventSaveService
         $manualStatuses = array();
         $sql = 'SELECT dat_recurrence_original_begin, dat_recurrence_status
                   FROM ' . TBL_EVENTS . '
-                 WHERE dat_rer_id = ?
+                 WHERE dat_evr_id = ?
                    AND dat_begin >= ?
                    AND dat_recurrence_status IN (?, ?)';
         $eventStatement = $gDb->queryPrepared($sql, array($recurrenceId, $seriesUpdateFrom, 'modified', 'cancelled'));
@@ -715,7 +715,7 @@ class EventSaveService
 
         $sql = 'SELECT dat_id
                   FROM ' . TBL_EVENTS . '
-                 WHERE dat_rer_id = ?
+                 WHERE dat_evr_id = ?
                    AND dat_recurrence_original_begin = ?
                    AND dat_begin >= ?
                    AND dat_recurrence_status = ?';
@@ -762,7 +762,7 @@ class EventSaveService
             throw new Exception('SYS_RECURRENCE_NOT_FOUND');
         }
 
-        $masterEventId = (int)$recurrence->getValue('rer_dat_id_master');
+        $masterEventId = (int)$recurrence->getValue('evr_dat_id_master');
         if ($masterEventId <= 0) {
             throw new Exception('SYS_RECURRENCE_NOT_FOUND');
         }
@@ -837,7 +837,7 @@ class EventSaveService
                      , dat_recurrence_scope  = ?
                      , dat_usr_id_change     = ?
                      , dat_timestamp_change  = ?
-                 WHERE dat_rer_id = ?
+                 WHERE dat_evr_id = ?
                    AND dat_begin >= ?
                    AND dat_recurrence_status = ?' . $processedCondition;
         $gDb->queryPrepared($sql, $cancelParams);
@@ -855,19 +855,19 @@ class EventSaveService
     {
         $recurrenceStatus = (string)$event->getValue('dat_recurrence_status', 'database');
 
-        return (int)$event->getValue('dat_rer_id') > 0
+        return (int)$event->getValue('dat_evr_id') > 0
             || in_array($recurrenceStatus, array('master', 'generated', 'modified'), true);
     }
 
     /**
-     * Return the recurrence id of an event, also if the event is the master and has no dat_rer_id yet.
+     * Return the recurrence id of an event, also if the event is the master and has no dat_evr_id yet.
      * @throws Exception
      */
     private function getEventRecurrenceId(Event $event): int
     {
         global $gDb;
 
-        $recurrenceId = (int)$event->getValue('dat_rer_id');
+        $recurrenceId = (int)$event->getValue('dat_evr_id');
         if ($recurrenceId > 0) {
             return $recurrenceId;
         }
@@ -875,7 +875,7 @@ class EventSaveService
         $recurrenceRepository = new EventRecurrenceRepository($gDb);
         $recurrence = $recurrenceRepository->readByMasterEventId((int)$event->getValue('dat_id'));
 
-        return $recurrence === null ? 0 : (int)$recurrence->getValue('rer_id');
+        return $recurrence === null ? 0 : (int)$recurrence->getValue('evr_id');
     }
 
     /**
@@ -892,7 +892,7 @@ class EventSaveService
         }
 
         $recurrence = new \Admidio\Events\Entity\EventRecurrence($gDb, $recurrenceId);
-        $masterEventId = (int)$recurrence->getValue('rer_dat_id_master');
+        $masterEventId = (int)$recurrence->getValue('evr_dat_id_master');
         if ($masterEventId > 0 && $masterEventId !== (int)$event->getValue('dat_id')) {
             $masterEvent = new Event($gDb, $masterEventId);
             if (!$masterEvent->isEditable()) {
@@ -909,7 +909,7 @@ class EventSaveService
                      , dat_recurrence_scope  = ?
                      , dat_usr_id_change     = ?
                      , dat_timestamp_change  = ?
-                 WHERE (dat_rer_id = ? OR dat_id = ?)
+                 WHERE (dat_evr_id = ? OR dat_id = ?)
                    AND dat_begin >= ?
                    AND dat_recurrence_status IN (?, ?, ?)';
         $gDb->queryPrepared($sql, array(
@@ -927,7 +927,7 @@ class EventSaveService
 
         // There is no dedicated active flag yet. Limit the rule to the current generation horizon
         // so later series management can treat the recurrence as stopped without deleting history.
-        $recurrence->setValue('rer_generated_until', DATETIME_NOW);
+        $recurrence->setValue('evr_generated_until', DATETIME_NOW);
         $recurrence->save();
 
         $gDb->endTransaction();

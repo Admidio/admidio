@@ -2,6 +2,8 @@
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Events\Entity\Event;
+use Admidio\Events\Entity\EventRecurrence;
+use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\Service\EventRecurrenceICalEventFactory;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
@@ -299,7 +301,7 @@ class ModuleEvents extends Modules
         $cancelledRecurrenceOriginalBegins = $this->readICalCancelledRecurrenceOriginalBegins(array_keys($recurrences));
 
         foreach ($events['recordset'] as $eventRecord) {
-            $recurrenceId = (int)($eventRecord['dat_rer_id'] ?? 0);
+            $recurrenceId = (int)($eventRecord['dat_evr_id'] ?? 0);
             $recurrenceStatus = (string)($eventRecord['dat_recurrence_status'] ?? '');
 
             if ($recurrenceId > 0 && isset($recurrences[$recurrenceId]) && !isset($exportedRecurrenceIds[$recurrenceId])) {
@@ -440,7 +442,7 @@ class ModuleEvents extends Modules
 
         $recurrenceIds = array();
         foreach ($eventRecords as $eventRecord) {
-            $recurrenceId = (int)($eventRecord['dat_rer_id'] ?? 0);
+            $recurrenceId = (int)($eventRecord['dat_evr_id'] ?? 0);
             if ($recurrenceId > 0) {
                 $recurrenceIds[$recurrenceId] = $recurrenceId;
             }
@@ -450,18 +452,21 @@ class ModuleEvents extends Modules
             return array();
         }
 
-        $sql = 'SELECT dat.*, rer.rer_id, rer.rer_rrule
-                  FROM ' . TBL_EVENT_RECURRENCES . ' AS rer
+        $sql = 'SELECT dat.*, evr.*
+                  FROM ' . TBL_EVENT_RECURRENCES . ' AS evr
             INNER JOIN ' . TBL_EVENTS . ' AS dat
-                    ON dat.dat_id = rer.rer_dat_id_master
-                 WHERE rer.rer_id IN (' . Database::getQmForValues($recurrenceIds) . ')';
+                    ON dat.dat_id = evr.evr_dat_id_master
+                 WHERE evr.evr_id IN (' . Database::getQmForValues($recurrenceIds) . ')';
         $statement = $gDb->queryPrepared($sql, array_values($recurrenceIds));
 
+        $recurrenceRepository = new EventRecurrenceRepository($gDb);
         $recurrences = array();
         while ($row = $statement->fetch()) {
-            $recurrences[(int)$row['rer_id']] = array(
+            $recurrence = new EventRecurrence($gDb);
+            $recurrence->setArray($row);
+            $recurrences[(int)$row['evr_id']] = array(
                 'masterRecord' => $row,
-                'rrule' => (string)$row['rer_rrule']
+                'rrule' => $recurrenceRepository->toRule($recurrence)->toRRule()
             );
         }
 
@@ -482,9 +487,9 @@ class ModuleEvents extends Modules
             return array();
         }
 
-        $sql = 'SELECT dat_rer_id, dat_recurrence_original_begin, dat_all_day
+        $sql = 'SELECT dat_evr_id, dat_recurrence_original_begin, dat_all_day
                   FROM ' . TBL_EVENTS . '
-                 WHERE dat_rer_id IN (' . Database::getQmForValues($recurrenceIds) . ')
+                 WHERE dat_evr_id IN (' . Database::getQmForValues($recurrenceIds) . ')
                    AND dat_recurrence_status = ?
                    AND dat_recurrence_original_begin IS NOT NULL
                    AND dat_recurrence_original_begin <> ?';
@@ -492,7 +497,7 @@ class ModuleEvents extends Modules
 
         $cancelledOriginalBegins = array();
         while ($row = $statement->fetch()) {
-            $recurrenceId = (int)$row['dat_rer_id'];
+            $recurrenceId = (int)$row['dat_evr_id'];
             $cancelledOriginalBegins[$recurrenceId][] = $this->createICalRecurrenceDateValue(
                 (string)$row['dat_recurrence_original_begin'],
                 (bool)$row['dat_all_day']

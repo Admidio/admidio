@@ -265,8 +265,8 @@ class EventListPresenter extends PagePresenter
             $recurrenceEventUuidsById = array();
 
             foreach ($eventsResult['recordset'] as $row) {
-                if ((int)$row['dat_rer_id'] > 0) {
-                    $recurrenceEventUuidsById[(int)$row['dat_rer_id']][] = $row['dat_uuid'];
+                if ((int)$row['dat_evr_id'] > 0) {
+                    $recurrenceEventUuidsById[(int)$row['dat_evr_id']][] = $row['dat_uuid'];
                 }
             }
 
@@ -919,7 +919,7 @@ class EventListPresenter extends PagePresenter
             return $gL10n->get('SYS_RECURRENCE_REPEATS');
         }
 
-        if ((int)$event->getValue('dat_rer_id') > 0 || in_array($recurrenceStatus, array('generated', 'modified'), true)) {
+        if ((int)$event->getValue('dat_evr_id') > 0 || in_array($recurrenceStatus, array('generated', 'modified'), true)) {
             return $gL10n->get('SYS_RECURRENCE_PART_OF_SERIES');
         }
 

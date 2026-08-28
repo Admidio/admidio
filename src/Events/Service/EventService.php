@@ -246,17 +246,17 @@ class EventService
     {
         $recurrenceStatus = (string)$event->getValue('dat_recurrence_status', 'database');
 
-        return (int)$event->getValue('dat_rer_id') > 0
+        return (int)$event->getValue('dat_evr_id') > 0
             || in_array($recurrenceStatus, array('master', 'generated', 'modified'), true);
     }
 
     /**
-     * Return the recurrence id of an event, also if the event is the master and has no dat_rer_id yet.
+     * Return the recurrence id of an event, also if the event is the master and has no dat_evr_id yet.
      * @throws Exception
      */
     private function getEventRecurrenceId(Event $event): int
     {
-        $recurrenceId = (int)$event->getValue('dat_rer_id');
+        $recurrenceId = (int)$event->getValue('dat_evr_id');
         if ($recurrenceId > 0) {
             return $recurrenceId;
         }
@@ -264,7 +264,7 @@ class EventService
         $recurrenceRepository = new EventRecurrenceRepository($this->database);
         $recurrence = $recurrenceRepository->readByMasterEventId((int)$event->getValue('dat_id'));
 
-        return $recurrence === null ? 0 : (int)$recurrence->getValue('rer_id');
+        return $recurrence === null ? 0 : (int)$recurrence->getValue('evr_id');
     }
 
     /**
@@ -281,7 +281,7 @@ class EventService
         }
 
         $recurrence = new EventRecurrence($this->database, $recurrenceId);
-        $masterEventId = (int)$recurrence->getValue('rer_dat_id_master');
+        $masterEventId = (int)$recurrence->getValue('evr_dat_id_master');
         if ($masterEventId > 0 && $masterEventId !== (int)$event->getValue('dat_id')) {
             $masterEvent = new Event($this->database, $masterEventId);
             if (!$masterEvent->isEditable()) {
@@ -298,7 +298,7 @@ class EventService
                      , dat_recurrence_scope  = ?
                      , dat_usr_id_change     = ?
                      , dat_timestamp_change  = ?
-                 WHERE (dat_rer_id = ? OR dat_id = ?)
+                 WHERE (dat_evr_id = ? OR dat_id = ?)
                    AND dat_begin >= ?
                    AND dat_recurrence_status IN (?, ?, ?)';
         $this->database->queryPrepared($sql, array(
@@ -316,7 +316,7 @@ class EventService
 
         // There is no dedicated active flag yet. Limit the rule to the current generation horizon
         // so later series management can treat the recurrence as stopped without deleting history.
-        $recurrence->setValue('rer_generated_until', DATETIME_NOW);
+        $recurrence->setValue('evr_generated_until', DATETIME_NOW);
         $recurrence->save();
 
         $this->database->endTransaction();

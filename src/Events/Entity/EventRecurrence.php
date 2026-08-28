@@ -23,7 +23,7 @@ class EventRecurrence extends Entity
      */
     public function __construct(Database $database, int $recurrenceId = 0)
     {
-        parent::__construct($database, TBL_EVENT_RECURRENCES, 'rer', $recurrenceId);
+        parent::__construct($database, TBL_EVENT_RECURRENCES, 'evr', $recurrenceId);
     }
 
     /**
@@ -39,6 +39,6 @@ class EventRecurrence extends Entity
             return false;
         }
 
-        return $this->readDataByColumns(array('rer_dat_id_master' => $masterEventId));
+        return $this->readDataByColumns(array('evr_dat_id_master' => $masterEventId));
     }
 }

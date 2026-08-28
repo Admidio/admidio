@@ -459,7 +459,7 @@ class ChangelogService {
             'dat_max_members' =>           'SYS_MAX_PARTICIPANTS',
             'dat_allow_comments' =>        array('name' => 'SYS_ALLOW_USER_COMMENTS', 'type' => 'BOOL'),
             'dat_additional_guests' =>     array('name' => 'SYS_ALLOW_ADDITIONAL_GUESTS', 'type' => 'BOOL'),
-            'dat_rer_id' =>                array('name' => 'SYS_RECURRENCE_RULE', 'type' => 'RECURRENCE_RULE'),
+            'dat_evr_id' =>                array('name' => 'SYS_RECURRENCE_RULE', 'type' => 'RECURRENCE_RULE'),
             'dat_recurrence_original_begin' => array('name' => 'SYS_RECURRENCE_ORIGINAL_BEGIN', 'type' => 'DATETIME'),
             'dat_recurrence_status' =>     array('name' => 'SYS_RECURRENCE_STATUS', 'type' => 'CUSTOM_LIST', 'entries' => array('master' => $gL10n->get('SYS_RECURRENCE_STATUS_MASTER'), 'generated' => $gL10n->get('SYS_RECURRENCE_STATUS_GENERATED'), 'modified' => $gL10n->get('SYS_RECURRENCE_STATUS_MODIFIED'), 'cancelled' => $gL10n->get('SYS_RECURRENCE_STATUS_CANCELLED'))),
             'dat_recurrence_scope' =>      array('name' => 'SYS_RECURRENCE_SCOPE', 'type' => 'CUSTOM_LIST', 'entries' => array('this' => $gL10n->get('SYS_RECURRENCE_SCOPE_THIS'), 'series' => $gL10n->get('SYS_RECURRENCE_SCOPE_SERIES'))),
@@ -805,9 +805,9 @@ class ChangelogService {
             return $value;
         }
 
-        $sql = 'SELECT rer_frequency, rer_interval, rer_byday, rer_end_type, rer_until, rer_count
+        $sql = 'SELECT evr_frequency, evr_interval, evr_byday, evr_end_type, evr_until, evr_count
                   FROM ' . TBL_EVENT_RECURRENCES . '
-                 WHERE rer_id = ?';
+                 WHERE evr_id = ?';
         $recurrenceStatement = $gDb->queryPrepared($sql, array((int)$value));
         $recurrence = $recurrenceStatement->fetch();
 
@@ -832,22 +832,22 @@ class ChangelogService {
         );
 
         $summary = array();
-        $summary[] = $frequencies[(string)$recurrence['rer_frequency']] ?? (string)$recurrence['rer_frequency'];
-        $summary[] = $gL10n->get('SYS_RECURRENCE_INTERVAL') . ': ' . (int)$recurrence['rer_interval'];
+        $summary[] = $frequencies[(string)$recurrence['evr_frequency']] ?? (string)$recurrence['evr_frequency'];
+        $summary[] = $gL10n->get('SYS_RECURRENCE_INTERVAL') . ': ' . (int)$recurrence['evr_interval'];
 
-        if ((string)$recurrence['rer_byday'] !== '') {
+        if ((string)$recurrence['evr_byday'] !== '') {
             $byDay = array();
-            foreach (explode(',', (string)$recurrence['rer_byday']) as $day) {
+            foreach (explode(',', (string)$recurrence['evr_byday']) as $day) {
                 $byDay[] = $weekdays[$day] ?? $day;
             }
             $summary[] = $gL10n->get('SYS_RECURRENCE_WEEKDAYS') . ': ' . implode(', ', $byDay);
         }
 
-        if ((string)$recurrence['rer_end_type'] === 'count') {
-            $summary[] = $gL10n->get('SYS_RECURRENCE_END') . ': ' . $gL10n->get('SYS_RECURRENCE_END_AFTER_COUNT') . ' (' . (int)$recurrence['rer_count'] . ')';
-        } elseif ((string)$recurrence['rer_end_type'] === 'until') {
-            $until = DateTime::createFromFormat('Y-m-d H:i:s', (string)$recurrence['rer_until']);
-            $untilValue = $until instanceof DateTime ? $until->format($gSettingsManager->getString('system_date')) : (string)$recurrence['rer_until'];
+        if ((string)$recurrence['evr_end_type'] === 'count') {
+            $summary[] = $gL10n->get('SYS_RECURRENCE_END') . ': ' . $gL10n->get('SYS_RECURRENCE_END_AFTER_COUNT') . ' (' . (int)$recurrence['evr_count'] . ')';
+        } elseif ((string)$recurrence['evr_end_type'] === 'until') {
+            $until = DateTime::createFromFormat('Y-m-d H:i:s', (string)$recurrence['evr_until']);
+            $untilValue = $until instanceof DateTime ? $until->format($gSettingsManager->getString('system_date')) : (string)$recurrence['evr_until'];
             $summary[] = $gL10n->get('SYS_RECURRENCE_END') . ': ' . $gL10n->get('SYS_RECURRENCE_END_ON_DATE') . ' ' . $untilValue;
         } else {
             $summary[] = $gL10n->get('SYS_RECURRENCE_END') . ': ' . $gL10n->get('SYS_RECURRENCE_END_NEVER');

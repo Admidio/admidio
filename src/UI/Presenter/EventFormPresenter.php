@@ -46,7 +46,7 @@ class EventFormPresenter extends PagePresenter
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $recurrenceId = (int)$event->getValue('dat_rer_id');
+        $recurrenceId = (int)$event->getValue('dat_evr_id');
         $recurrenceStatus = (string)$event->getValue('dat_recurrence_status', 'database');
         if ($recurrenceId === 0 && $recurrenceStatus !== 'master') {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
@@ -62,7 +62,7 @@ class EventFormPresenter extends PagePresenter
             if ($recurrenceId > 0) {
                 $statement = $gDb->queryPrepared('SELECT dat_uuid
                        FROM ' . TBL_EVENTS . '
-                      WHERE dat_rer_id = ?', [$recurrenceId]);
+                      WHERE dat_evr_id = ?', [$recurrenceId]);
                 $eventUuids = [];
                 while ($row = $statement->fetch()) {
                     $eventUuids[] = $row['dat_uuid'];
@@ -218,8 +218,8 @@ class EventFormPresenter extends PagePresenter
 
             $recurrenceRepository = new EventRecurrenceRepository($gDb);
             $recurrence = null;
-            if ((int)$event->getValue('dat_rer_id') > 0) {
-                $recurrence = $recurrenceRepository->readById((int)$event->getValue('dat_rer_id'));
+            if ((int)$event->getValue('dat_evr_id') > 0) {
+                $recurrence = $recurrenceRepository->readById((int)$event->getValue('dat_evr_id'));
             }
             if ($recurrence === null) {
                 $recurrence = $recurrenceRepository->readByMasterEventId((int)$event->getValue('dat_id'));

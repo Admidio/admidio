@@ -36,7 +36,7 @@ class EventRecurrenceRepository
         }
 
         $recurrence = new EventRecurrence($this->database);
-        $recurrence->setValue('rer_dat_id_master', $masterEventId);
+        $recurrence->setValue('evr_dat_id_master', $masterEventId);
         $this->writeRuleToEntity($recurrence, $rule, $timezone, $generatedUntil);
         $recurrence->save();
 
@@ -132,36 +132,36 @@ class EventRecurrenceRepository
     public function toRule(EventRecurrence $recurrence): EventRecurrenceRule
     {
         $until = null;
-        if ((string)$recurrence->getValue('rer_until', 'database') !== '') {
+        if ((string)$recurrence->getValue('evr_until', 'database') !== '') {
             $timezone = null;
-            if ((string)$recurrence->getValue('rer_timezone', 'database') !== '') {
-                $timezone = new DateTimeZone($recurrence->getValue('rer_timezone', 'database'));
+            if ((string)$recurrence->getValue('evr_timezone', 'database') !== '') {
+                $timezone = new DateTimeZone($recurrence->getValue('evr_timezone', 'database'));
             }
-            $until = new DateTimeImmutable($recurrence->getValue('rer_until', 'Y-m-d H:i:s'), $timezone);
+            $until = new DateTimeImmutable($recurrence->getValue('evr_until', 'Y-m-d H:i:s'), $timezone);
         }
 
         $byDay = array();
-        if ((string)$recurrence->getValue('rer_byday', 'database') !== '') {
-            $byDay = explode(',', $recurrence->getValue('rer_byday', 'database'));
+        if ((string)$recurrence->getValue('evr_byday', 'database') !== '') {
+            $byDay = explode(',', $recurrence->getValue('evr_byday', 'database'));
         }
 
         $byMonthDay = null;
-        if ((string)$recurrence->getValue('rer_bymonthday', 'database') !== '') {
-            $byMonthDay = (int)$recurrence->getValue('rer_bymonthday');
+        if ((string)$recurrence->getValue('evr_bymonthday', 'database') !== '') {
+            $byMonthDay = (int)$recurrence->getValue('evr_bymonthday');
         }
 
         $count = null;
-        if ((string)$recurrence->getValue('rer_count', 'database') !== '') {
-            $count = (int)$recurrence->getValue('rer_count');
+        if ((string)$recurrence->getValue('evr_count', 'database') !== '') {
+            $count = (int)$recurrence->getValue('evr_count');
         }
 
         return new EventRecurrenceRule(
-            $recurrence->getValue('rer_frequency', 'database'),
-            (int)$recurrence->getValue('rer_interval'),
+            $recurrence->getValue('evr_frequency', 'database'),
+            (int)$recurrence->getValue('evr_interval'),
             $byDay,
             $byMonthDay,
-            $recurrence->getValue('rer_monthly_mode', 'database') ?: null,
-            $recurrence->getValue('rer_end_type', 'database'),
+            $recurrence->getValue('evr_monthly_mode', 'database') ?: null,
+            $recurrence->getValue('evr_end_type', 'database'),
             $until,
             $count
         );
@@ -177,16 +177,15 @@ class EventRecurrenceRepository
         ?string $timezone = null,
         ?DateTimeImmutable $generatedUntil = null
     ): void {
-        $recurrence->setValue('rer_frequency', $rule->getFrequency());
-        $recurrence->setValue('rer_interval', $rule->getInterval());
-        $recurrence->setValue('rer_byday', count($rule->getByDay()) > 0 ? implode(',', $rule->getByDay()) : null);
-        $recurrence->setValue('rer_bymonthday', $rule->getByMonthDay());
-        $recurrence->setValue('rer_monthly_mode', $rule->getMonthlyMode());
-        $recurrence->setValue('rer_end_type', $rule->getEndType());
-        $recurrence->setValue('rer_until', $rule->getUntil()?->format('Y-m-d H:i:s'));
-        $recurrence->setValue('rer_count', $rule->getCount());
-        $recurrence->setValue('rer_timezone', $timezone);
-        $recurrence->setValue('rer_rrule', $rule->toRRule());
-        $recurrence->setValue('rer_generated_until', $generatedUntil?->format('Y-m-d H:i:s'));
+        $recurrence->setValue('evr_frequency', $rule->getFrequency());
+        $recurrence->setValue('evr_interval', $rule->getInterval());
+        $recurrence->setValue('evr_byday', count($rule->getByDay()) > 0 ? implode(',', $rule->getByDay()) : null);
+        $recurrence->setValue('evr_bymonthday', $rule->getByMonthDay());
+        $recurrence->setValue('evr_monthly_mode', $rule->getMonthlyMode());
+        $recurrence->setValue('evr_end_type', $rule->getEndType());
+        $recurrence->setValue('evr_until', $rule->getUntil()?->format('Y-m-d H:i:s'));
+        $recurrence->setValue('evr_count', $rule->getCount());
+        $recurrence->setValue('evr_timezone', $timezone);
+        $recurrence->setValue('evr_generated_until', $generatedUntil?->format('Y-m-d H:i:s'));
     }
 }
