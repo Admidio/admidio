@@ -203,32 +203,45 @@ class PreferencesService
     }
 
     /**
-     * Function to determine the update version
-     * @param string $updateInfo
-     * @param string $search
-     * @return string
+     * Parse the update information of the Admidio server into its key/value pairs.
+     *
+     * The file holds one "name=value" pair per line. Keys are compared exactly, so a new key can
+     * be added to the file without colliding with the name of an existing one.
+     *
+     * @param string $updateInfo Content of the update information file.
+     * @return array<string,string> Named array with the value of every key of the file.
      */
-    function getUpdateVersion(string $updateInfo, string $search): string
+    private function parseUpdateInformation(string $updateInfo): array
     {
-        // Variablen festlegen
-        $i = 0;
-        $pointer = '';
-        $updateVersion = '';
-        $currentVersionStart = strpos($updateInfo, $search);
-        $adding = strlen($search) - 1;
-
-        // Version auslesen
-        while ($pointer !== "\n") {
-            ++$i;
-            $updateVersion .= $pointer;
-            $pointer = $updateInfo[$currentVersionStart + $adding + $i];
+        // a UTF-8 BOM would otherwise become part of the first key
+        if (str_starts_with($updateInfo, "\xEF\xBB\xBF")) {
+            $updateInfo = substr($updateInfo, 3);
         }
 
-        return trim($updateVersion, "\n\r");
+        $information = array();
+
+        foreach (preg_split('/\R/', $updateInfo) as $line) {
+            if (!str_contains($line, '=')) {
+                continue;
+            }
+
+            list($name, $value) = explode('=', $line, 2);
+            $name = trim($name);
+
+            // the first occurrence wins, so a duplicate line cannot override the published value
+            if ($name !== '' && !array_key_exists($name, $information)) {
+                $information[$name] = trim($value);
+            }
+        }
+
+        return $information;
     }
 
     /**
      * Read the available Admidio versions and determine the update state.
+     *
+     * A version that the update server does not provide is returned as an empty string. How an
+     * unknown version should be presented is up to the caller.
      *
      * @return array{stableVersion:string,betaVersion:string,betaRelease:string,versionUpdate:int}
      */
@@ -239,25 +252,17 @@ class PreferencesService
 
         if ($updateInfo === false) {
             return array(
-                'stableVersion' => 'n/a',
-                'betaVersion' => 'n/a',
+                'stableVersion' => '',
+                'betaVersion' => '',
                 'betaRelease' => '',
                 'versionUpdate' => 99
             );
         }
 
-        $stableVersion = $this->getUpdateVersion($updateInfo, 'Version=');
-        $betaVersion = $this->getUpdateVersion($updateInfo, 'Beta-Version=');
-        $betaRelease = $this->getUpdateVersion($updateInfo, 'Beta-Release=');
-
-        if ($stableVersion === '') {
-            $stableVersion = 'n/a';
-        }
-
-        if ($betaVersion === '') {
-            $betaVersion = 'n/a';
-            $betaRelease = '';
-        }
+        $information = $this->parseUpdateInformation($updateInfo);
+        $stableVersion = $information['Version'] ?? '';
+        $betaVersion = $information['Beta-Version'] ?? '';
+        $betaRelease = $information['Beta-Release'] ?? '';
 
         return array(
             'stableVersion' => $stableVersion,
@@ -289,6 +294,10 @@ class PreferencesService
         $betaRelease = $updateInformation['betaRelease'];
         $versionUpdate = $updateInformation['versionUpdate'];
 
+        // a version that the update server doesn't provide is displayed as "n/a"
+        $stableVersionText = ($stableVersion === '') ? 'n/a' : $stableVersion;
+        $betaVersionText = ($betaVersion === '') ? 'n/a' : $betaVersion;
+
         // $versionUpdate (0 = No update, 1 = New stable version, 2 = New beta version, 3 = New stable + beta version, 99 = No connection)
         if ($versionUpdate === 1) {
             $versionsText = $gL10n->get('SYS_NEW_VERSION_AVAILABLE');
@@ -312,18 +321,18 @@ class PreferencesService
         <p>' . $gL10n->get('SYS_INSTALLED') . ':&nbsp;' . ADMIDIO_VERSION_TEXT . '</p>
         <p>' . $gL10n->get('SYS_AVAILABLE') . ':&nbsp;
             <a class="icon-link" href="' . ADMIDIO_HOMEPAGE . 'download.php" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
-            '<i class="bi bi-link"></i>' . $stableVersion . '
+            '<i class="bi bi-link"></i>' . $stableVersionText . '
             </a>
             <br />
             ' . $gL10n->get('SYS_AVAILABLE_BETA') . ': &nbsp;';
 
-        if ($versionUpdate !== 99 && $betaVersion !== 'n/a') {
+        if ($versionUpdate !== 99 && $betaVersion !== '') {
             $html .= '
                 <a class="icon-link" href="' . ADMIDIO_HOMEPAGE . 'intern/adm_program/modules/announcements/announcements.php?cat_uuid=e2be424d-dd72-4c01-99ad-f8f91ec8830f" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
-                '<i class="bi bi-link"></i>' . $betaVersion . ' Beta ' . $betaRelease . '
+                '<i class="bi bi-link"></i>' . $betaVersionText . ' Beta ' . $betaRelease . '
                 </a>';
         } else {
-            $html .= $betaVersion;
+            $html .= $betaVersionText;
         }
         $html .= '
         </p>

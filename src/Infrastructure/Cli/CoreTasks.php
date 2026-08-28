@@ -2592,10 +2592,12 @@ final class CoreTasks
 
         $format = CliApplication::optionString($options, 'format', 'text');
         if ($format === 'text') {
+            // a version that the update server doesn't provide is displayed as "n/a"
             CliApplication::writeOutput(
-                'Stable version: ' . $data['stableVersion'] . PHP_EOL
-                . 'Beta version:   ' . $data['betaVersion']
-                . ($data['betaRelease'] !== '' ? '-Beta.' . $data['betaRelease'] : '') . PHP_EOL
+                'Stable version: ' . ($data['stableVersion'] !== '' ? $data['stableVersion'] : 'n/a') . PHP_EOL
+                . 'Beta version:   ' . ($data['betaVersion'] !== ''
+                    ? $data['betaVersion'] . ($data['betaRelease'] !== '' ? '-Beta.' . $data['betaRelease'] : '')
+                    : 'n/a') . PHP_EOL
                 . 'Update state:   ' . $data['versionUpdate'] . PHP_EOL,
                 $options
             );
