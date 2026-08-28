@@ -78,6 +78,15 @@ final class PluginTest extends PluginTestCase
     }
 
     /**
+     * @testdox The preference that decides who sees a plugin is derived from its ID
+     */
+    public function testAccessSettingName(): void
+    {
+        $this->assertSame('hello_plugin_enabled', Plugin::read(self::fixturePath('hello'))->getAccessSettingName());
+        $this->assertSame('no_entry_plugin_enabled', Plugin::read(self::fixturePath('no-entry'))->getAccessSettingName());
+    }
+
+    /**
      * @testdox Reading a broken plugin reports the problem instead of throwing
      * @dataProvider brokenPlugins
      */
