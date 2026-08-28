@@ -61,6 +61,23 @@ final class BuiltInPluginsTest extends PluginTestCase
                     'birthday_sort_sql'
                 )
             ),
+            'calendar' => array(
+                'calendar',
+                'AdmidioPlugin\\Calendar\\',
+                array(
+                    'calendar_plugin_enabled',
+                    'calendar_overview_sequence',
+                    'calendar_show_events',
+                    'calendar_show_birthdays',
+                    'calendar_show_birthdays_to_guests',
+                    'calendar_show_birthday_icon',
+                    'calendar_show_birthday_names',
+                    'calendar_show_categories',
+                    'calendar_show_categories_names',
+                    'calendar_roles_view_plugin',
+                    'calendar_roles_sql'
+                )
+            ),
             'event-list' => array(
                 'event-list',
                 'AdmidioPlugin\\EventList\\',
