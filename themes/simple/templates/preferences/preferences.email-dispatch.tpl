@@ -1,9 +1,18 @@
 <script type="text/javascript">
     $(function(){
         var fieldsToHideOnSingleMode = "#mail_recipients_with_roles_group, #mail_into_to_group, #mail_number_recipients_group";
+        var oauthFields = "#mail_smtp_oauth_token_url_group, #mail_smtp_oauth_client_id_group, #mail_smtp_oauth_client_secret_group, #mail_smtp_oauth_scope_group, #mail_smtp_oauth_grant_type_group, #mail_smtp_oauth_refresh_token_group, #mail_smtp_oauth_user_group";
+        function toggleOAuthFields() {
+            if($("#mail_smtp_oauth_enabled").is(":checked")) {
+                $(oauthFields).slideDown("slow");
+            } else {
+                $(oauthFields).slideUp("slow");
+            }
+        }
         if($("#mail_sending_mode").val() == 1) {
             $(fieldsToHideOnSingleMode).hide();
         }
+        toggleOAuthFields();
         $("#mail_sending_mode").on("change", function() {
             if($("#mail_sending_mode").val() == 1) {
                 $(fieldsToHideOnSingleMode).slideUp("slow");
@@ -11,6 +20,7 @@
                 $(fieldsToHideOnSingleMode).slideDown("slow");
             }
         });
+        $("#mail_smtp_oauth_enabled").on("change", toggleOAuthFields);
     });
 </script>
 
@@ -35,6 +45,14 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_authentication_type']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_user']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_password']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_smtp_oauth_enabled']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_token_url']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_client_id']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_client_secret']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_scope']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_oauth_grant_type']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_refresh_token']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_user']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['send_test_email']}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_email_dispatch']}
     <div class="form-alert" style="display: none;">&nbsp;</div>

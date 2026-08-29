@@ -118,6 +118,14 @@ $defaultOrgPreferences = array(
     'mail_smtp_authentication_type' => '',
     'mail_smtp_user' => '',
     'mail_smtp_password' => '',
+    'mail_smtp_oauth_enabled' => '0',
+    'mail_smtp_oauth_token_url' => '',
+    'mail_smtp_oauth_client_id' => '',
+    'mail_smtp_oauth_client_secret' => '',
+    'mail_smtp_oauth_scope' => '',
+    'mail_smtp_oauth_grant_type' => 'client_credentials',
+    'mail_smtp_oauth_refresh_token' => '',
+    'mail_smtp_oauth_user' => '',
 
     // System notifications
     'system_notifications_enabled' => '1',

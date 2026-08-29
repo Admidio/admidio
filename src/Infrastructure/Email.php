@@ -138,6 +138,27 @@ class Email extends PHPMailer
             $this->Username = $gSettingsManager->getString('mail_smtp_user');
             $this->Password = $gSettingsManager->getString('mail_smtp_password');
 
+            if ($gSettingsManager->getBool('mail_smtp_oauth_enabled')) {
+                $oauthUser = $gSettingsManager->getString('mail_smtp_oauth_user');
+                if ($oauthUser === '') {
+                    $oauthUser = $this->Username;
+                }
+
+                $this->SMTPAuth = true;
+                $this->AuthType = 'XOAUTH2';
+                $this->Username = $oauthUser;
+                $this->Password = '';
+                $this->setOAuth(new SmtpOAuthTokenProvider(
+                    $gSettingsManager->getString('mail_smtp_oauth_token_url'),
+                    $gSettingsManager->getString('mail_smtp_oauth_client_id'),
+                    $gSettingsManager->getString('mail_smtp_oauth_client_secret'),
+                    $gSettingsManager->getString('mail_smtp_oauth_scope'),
+                    $gSettingsManager->getString('mail_smtp_oauth_grant_type'),
+                    $gSettingsManager->getString('mail_smtp_oauth_refresh_token'),
+                    $oauthUser
+                ));
+            }
+
             if ($gDebug) {
                 $this->setDebugMode();
             }
@@ -414,9 +435,17 @@ class Email extends PHPMailer
         global $gLogger;
 
         $this->SMTPDebug = SMTP::DEBUG_SERVER;
+        $redactOAuthToken = static function (string $message): string {
+            return (string) preg_replace(
+                '/(AUTH XOAUTH2(?:\s+|$)|OAuth TOKEN(?:\s*:\s*|\s+))\S+/i',
+                '$1[redacted]',
+                $message
+            );
+        };
 
         if ($outputGlobalVar) {
-            $this->Debugoutput = function ($str, $level) {
+            $this->Debugoutput = static function ($str, $level) use ($redactOAuthToken) {
+                $str = $redactOAuthToken($str);
                 if (isset($GLOBALS['phpmailer_output_debug'])) {
                     $GLOBALS['phpmailer_output_debug'] .= $level . ': ' . $str . '<br />';
                 } else {
@@ -424,7 +453,9 @@ class Email extends PHPMailer
                 }
             };
         } else {
-            $this->Debugoutput = $gLogger;
+            $this->Debugoutput = static function ($str, $level) use ($gLogger, $redactOAuthToken) {
+                $gLogger->debug(rtrim($redactOAuthToken($str), "\r\n"));
+            };
         }
     }
 
@@ -821,4 +852,3 @@ class Email extends PHPMailer
         return false;
     }
 }
-

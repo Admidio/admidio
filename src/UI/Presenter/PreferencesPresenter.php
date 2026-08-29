@@ -1374,6 +1374,57 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_smtp_password'],
             array('type' => 'password', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
         );
+        $formEmailDispatch->addCheckbox(
+            'mail_smtp_oauth_enabled',
+            $gL10n->get('SYS_SMTP_OAUTH_ENABLED'),
+            (bool) $formValues['mail_smtp_oauth_enabled'],
+            array('helpTextId' => 'SYS_SMTP_OAUTH_ENABLED_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_token_url',
+            $gL10n->get('SYS_SMTP_OAUTH_TOKEN_URL'),
+            $formValues['mail_smtp_oauth_token_url'],
+            array('type' => 'url', 'maxLength' => 255, 'helpTextId' => 'SYS_SMTP_OAUTH_TOKEN_URL_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_client_id',
+            $gL10n->get('SYS_SMTP_OAUTH_CLIENT_ID'),
+            $formValues['mail_smtp_oauth_client_id'],
+            array('maxLength' => 255, 'helpTextId' => 'SYS_SMTP_OAUTH_CLIENT_ID_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_client_secret',
+            $gL10n->get('SYS_SMTP_OAUTH_CLIENT_SECRET'),
+            $formValues['mail_smtp_oauth_client_secret'],
+            array('type' => 'password', 'maxLength' => 255, 'helpTextId' => 'SYS_SMTP_OAUTH_CLIENT_SECRET_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_scope',
+            $gL10n->get('SYS_SMTP_OAUTH_SCOPE'),
+            $formValues['mail_smtp_oauth_scope'],
+            array('maxLength' => 500, 'helpTextId' => 'SYS_SMTP_OAUTH_SCOPE_DESC')
+        );
+        $formEmailDispatch->addSelectBox(
+            'mail_smtp_oauth_grant_type',
+            $gL10n->get('SYS_SMTP_OAUTH_GRANT_TYPE'),
+            array(
+                'client_credentials' => $gL10n->get('SYS_SMTP_OAUTH_GRANT_CLIENT_CREDENTIALS'),
+                'refresh_token' => $gL10n->get('SYS_SMTP_OAUTH_GRANT_REFRESH_TOKEN')
+            ),
+            array('defaultValue' => $formValues['mail_smtp_oauth_grant_type'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SMTP_OAUTH_GRANT_TYPE_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_refresh_token',
+            $gL10n->get('SYS_SMTP_OAUTH_REFRESH_TOKEN'),
+            $formValues['mail_smtp_oauth_refresh_token'],
+            array('type' => 'password', 'maxLength' => 2000, 'helpTextId' => 'SYS_SMTP_OAUTH_REFRESH_TOKEN_DESC')
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_user',
+            $gL10n->get('SYS_SMTP_OAUTH_USER'),
+            $formValues['mail_smtp_oauth_user'],
+            array('type' => 'email', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_OAUTH_USER_DESC')
+        );
         $html = '<a class="btn btn-secondary admidio-send-csrf-token" id="send_test_mail" href="javascript:void(0);" data-url="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '" data-csrf-token="' . $gCurrentSession->getCsrfToken() . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));

@@ -111,7 +111,8 @@ final class StringUtils
         // "ecard_message" => ckeditor-variable
         $specialKeys = array(
             'ecard_message', 'ann_description', 'dat_description', 'fop_text', 'lnk_description',
-            'msg_body', 'plugin_CKEditor', 'room_description', 'usf_description', 'mail_smtp_password'
+            'msg_body', 'plugin_CKEditor', 'room_description', 'usf_description', 'mail_smtp_password',
+            'mail_smtp_oauth_client_secret', 'mail_smtp_oauth_refresh_token'
         );
 
         foreach ($srcArray as $key => $value) {

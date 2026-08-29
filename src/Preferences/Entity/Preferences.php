@@ -58,7 +58,12 @@ class Preferences extends Entity
         // (see PreferencesPresenter::createSSOForm()), not the key itself, and stays readable.
         if (in_array(
             $this->getValue('prf_name'),
-            array('mail_smtp_password', 'sso_oidc_encryption_key'),
+            array(
+                'mail_smtp_password',
+                'mail_smtp_oauth_client_secret',
+                'mail_smtp_oauth_refresh_token',
+                'sso_oidc_encryption_key'
+            ),
             true
         )) {
             $logEntry->setValue('log_value_old', '********');
