@@ -1283,7 +1283,6 @@
   <string name="SYS_PLUGIN_MODULE_PAGES">Short web addresses for plugin pages</string>
   <string name="SYS_PLUGIN_MODULE_PAGES_DESC">Some plugins bring pages of their own. Such a page can always be opened at an address like plugins/calendar/list.php.\n\nIf this option is switched on, the same page can also be opened at the shorter modules/calendar/list.php, so that it looks like a normal Admidio module. To do that, Admidio creates small files in its own modules folder and deletes them again when you switch the option off.\n\nLeave the option switched off if Admidio should never write anything into its program folder, for example because you manage the installation with Git or run it in a container. Everything keeps working, the pages simply keep their longer address.</string>
   <string name="SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE">Admidio is not allowed to write into its own modules folder, so this option cannot be switched on. Pages of plugins keep their longer address and everything else keeps working.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">No plugin name specified.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">The plugin is not installed.</string>
   <string name="SYS_PLUGIN_ORPHANED">Plugins whose files are missing</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin preferences</string>

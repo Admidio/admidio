@@ -1228,7 +1228,6 @@
   <string name="SYS_PLUGIN_INSTALL">Installer plugin</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Her kan du administrere Admidios plugins. Plugins er yderligere moduler, der kan installeres for at udvide funktionaliteten af Admidio. Du kan installere, opdatere eller fjerne plugins.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">Intet plugin-navn specificeret.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Plugin\'et er ikke installeret.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin-præferencer</string>
   <string name="SYS_PLUGIN_UNINSTALL">Afinstaller pluginet</string>

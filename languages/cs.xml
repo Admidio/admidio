@@ -1228,7 +1228,6 @@
   <string name="SYS_PLUGIN_INSTALL">Instalovat rozříření</string>
   <string name="SYS_PLUGIN_MANAGER">Správce rozšíření</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Zde můžete spravovat doplňky systému Admidio. Doplňky jsou přídavné moduly, které lze nainstalovat pro rozšíření funkcí systému. Doplňky můžete instalovat, aktualizovat nebo odebírat.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">No plugin name specified.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Doplněk není nainstalován.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Předvolby doplňku</string>
   <string name="SYS_PLUGIN_UNINSTALL">Odinstalovat doplněk</string>
