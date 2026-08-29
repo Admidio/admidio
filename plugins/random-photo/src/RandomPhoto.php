@@ -2,14 +2,11 @@
 
 namespace AdmidioPlugin\RandomPhoto;
 
-use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Plugins\Plugin;
-use Admidio\Infrastructure\Plugins\PluginPanel;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Plugins\PluginWidget;
 use Admidio\Photos\Entity\Album;
 use Admidio\UI\Presenter\PagePresenter;
-use AdmidioPlugin\RandomPhoto\Presenter\RandomPhotoPreferencesPresenter;
 
 use Exception;
 
@@ -38,7 +35,8 @@ final class RandomPhoto
     public const DEFAULT_SEQUENCE = 4;
 
     /**
-     * Announce the widget and the preferences panel. This is what plugin.php calls.
+     * Announce the widget. This is what plugin.php calls. The preferences panel is generated from
+     * the manifest, so the plugin declares none of its own.
      * @return void
      */
     public static function register(): void
@@ -51,26 +49,6 @@ final class RandomPhoto
         PluginWidget::register($plugin, array(self::class, 'renderWidget'), array(
             'sequence' => self::DEFAULT_SEQUENCE
         ));
-
-        Hooks::addFilter(
-            PluginPanel::HOOK,
-            static function (array $panels) use ($plugin): array {
-                global $gL10n;
-
-                $panels[] = array(
-                    'id' => PluginPanel::normalizeId($plugin->id),
-                    'title' => $gL10n->get($plugin->name),
-                    'icon' => $plugin->icon,
-                    'sequence' => self::DEFAULT_SEQUENCE,
-                    'create' => array(RandomPhotoPreferencesPresenter::class, 'createForm')
-                );
-
-                return $panels;
-            },
-            PluginPanel::DEFAULT_SEQUENCE,
-            1,
-            $plugin->id
-        );
     }
 
     /**

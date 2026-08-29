@@ -267,6 +267,8 @@ final class BuiltInPluginsTest extends PluginTestCase
         foreach ($plugin->settings as $setting) {
             $used[] = $setting['label'];
             $used[] = $setting['description'];
+            // The name an enum gives one of its values is a language key like any other.
+            $used = array_merge($used, array_values($setting['valueLabels']));
         }
         foreach ($this->sourceFiles($plugin) as $file) {
             preg_match_all('/PLG_[A-Z0-9_]+/', (string)file_get_contents($file), $matches);

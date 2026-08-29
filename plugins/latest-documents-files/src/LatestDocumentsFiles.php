@@ -4,14 +4,11 @@ namespace AdmidioPlugin\LatestDocumentsFiles;
 
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
-use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Plugins\Plugin;
-use Admidio\Infrastructure\Plugins\PluginPanel;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Plugins\PluginWidget;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
-use AdmidioPlugin\LatestDocumentsFiles\Presenter\LatestDocumentsFilesPreferencesPresenter;
 
 use Exception;
 
@@ -39,7 +36,8 @@ final class LatestDocumentsFiles
     public const DEFAULT_SEQUENCE = 5;
 
     /**
-     * Announce the widget and the preferences panel. This is what plugin.php calls.
+     * Announce the widget. This is what plugin.php calls. The preferences panel is generated from
+     * the manifest, so the plugin declares none of its own.
      * @return void
      */
     public static function register(): void
@@ -58,26 +56,6 @@ final class LatestDocumentsFiles
             'sequence' => self::DEFAULT_SEQUENCE,
             'sequencePreference' => 'latest_documents_overview_sequence'
         ));
-
-        Hooks::addFilter(
-            PluginPanel::HOOK,
-            static function (array $panels) use ($plugin): array {
-                global $gL10n;
-
-                $panels[] = array(
-                    'id' => PluginPanel::normalizeId($plugin->id),
-                    'title' => $gL10n->get($plugin->name),
-                    'icon' => $plugin->icon,
-                    'sequence' => self::DEFAULT_SEQUENCE,
-                    'create' => array(LatestDocumentsFilesPreferencesPresenter::class, 'createForm')
-                );
-
-                return $panels;
-            },
-            PluginPanel::DEFAULT_SEQUENCE,
-            1,
-            $plugin->id
-        );
     }
 
     /**

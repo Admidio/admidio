@@ -13,13 +13,18 @@
         "AdmidioPlugin\\RandomPhoto\\": "src/"
     },
     "preferences": {
-        "section": "overview_extensions"
+        "section": "overview_extensions",
+        "sequence": 4
     },
     "settings": {
         "random_photo_plugin_enabled": {
             "type": "enum",
             "default": "1",
-            "values": ["0", "1", "2"],
+            "values": {
+                "0": "SYS_DISABLED",
+                "1": "SYS_ENABLED",
+                "2": "ORG_ONLY_FOR_REGISTERED_USER"
+            },
             "label": "ORG_ACCESS_TO_PLUGIN",
             "description": "ORG_ACCESS_TO_PLUGIN_DESC"
         },
@@ -30,30 +35,40 @@
         "random_photo_max_char_per_word": {
             "type": "integer",
             "default": 0,
+            "min": 0,
+            "step": 1,
             "label": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC"
         },
         "random_photo_max_width": {
             "type": "integer",
             "default": 0,
+            "min": 0,
+            "step": 1,
             "label": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC"
         },
         "random_photo_max_height": {
             "type": "integer",
             "default": 0,
+            "min": 0,
+            "step": 1,
             "label": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC"
         },
         "random_photo_albums": {
             "type": "integer",
             "default": 0,
+            "min": 0,
+            "step": 1,
             "label": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC"
         },
         "random_photo_album_photo_number": {
             "type": "integer",
             "default": 0,
+            "min": 0,
+            "step": 1,
             "label": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER",
             "description": "PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC"
         },

@@ -59,6 +59,16 @@ final class PluginSettingsPresenter
         );
 
         foreach ($plugin->settings as $name => $definition) {
+            /*
+             * A preference the plugin owns is not necessarily one this form edits. The position of
+             * an overview widget belongs to the overview preferences, and a plugin may keep state
+             * of its own in a preference that nobody is meant to type into. Both are declared
+             * without a label, which is also what makes them impossible to put in a form.
+             */
+            if ($definition['label'] === '') {
+                continue;
+            }
+
             self::addControl($form, $name, $definition, $values[$name] ?? $definition['default']);
         }
 
