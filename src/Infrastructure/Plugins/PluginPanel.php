@@ -4,6 +4,8 @@ namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
+use Admidio\UI\Presenter\PluginSettingsPresenter;
 use Admidio\UI\Presenter\PreferencesPresenter;
 
 /**
@@ -112,6 +114,8 @@ final class PluginPanel
             );
         }
 
+        self::addGeneratedPanels();
+
         /*
          * Two panels may claim the same position, so the ID decides between them. Without that the
          * order would depend on the order the plugins happened to be loaded in.
@@ -121,6 +125,38 @@ final class PluginPanel
         });
 
         return self::$panels;
+    }
+
+    /**
+     * Give every loaded plugin that declared settings but no panel a panel built from its manifest.
+     *
+     * A plugin declares each setting with a type, a label and a description, which is everything a
+     * form needs, so a plugin that wants nothing more should not have to write a presenter to make
+     * its settings reachable. A plugin that did declare a panel keeps it: the generated one is only
+     * added where none exists.
+     * @return void
+     */
+    private static function addGeneratedPanels(): void
+    {
+        $declared = array_column(self::$panels, 'id');
+
+        foreach (PluginLoader::getLoaded() as $plugin) {
+            $id = self::normalizeId($plugin->id);
+            if ($id === '' || $plugin->settings === array() || in_array($id, $declared, true)) {
+                continue;
+            }
+
+            self::$panels[] = array(
+                'id' => $id,
+                'title' => Language::translateIfTranslationStrId($plugin->name),
+                'icon' => $plugin->icon === '' ? 'bi-puzzle' : $plugin->icon,
+                'group' => self::GROUP_EXTENSIONS,
+                'sequence' => self::DEFAULT_SEQUENCE,
+                'subcards' => false,
+                'create' => static fn(PreferencesPresenter $presenter): string
+                    => PluginSettingsPresenter::createForm($plugin, $id, $presenter)
+            );
+        }
     }
 
     /**
