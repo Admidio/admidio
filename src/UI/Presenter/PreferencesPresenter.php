@@ -182,101 +182,127 @@ class PreferencesPresenter extends PagePresenter
         $this->preferenceTabs = array(
             // === 1) System ===
             array(
-                'key'    => 'system',
+                'key'    => PluginPanel::SECTION_SYSTEM,
                 'label'  => $gL10n->get('SYS_SYSTEM'),
                 'panels' => array(
-                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
-                    array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false),
-                    array('id'=>'overview',             'title'=>$gL10n->get('SYS_OVERVIEW'),               'icon'=>'bi-house-door-fill',               'subcards'=>false),
-                    array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
-                    array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
-                    array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
+                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true,  'sequence'=>10),
+                    array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'overview',             'title'=>$gL10n->get('SYS_OVERVIEW'),               'icon'=>'bi-house-door-fill',               'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false, 'sequence'=>40),
+                    array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false, 'sequence'=>50),
+                    array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false, 'sequence'=>60),
                 ),
             ),
 
             // === 2) Login and Security ===
             array(
-                'key'    => 'login_security',
+                'key'    => PluginPanel::SECTION_LOGIN_SECURITY,
                 'label'  =>  $gL10n->get('SYS_LOGIN') . ' & ' . $gL10n->get('SYS_SECURITY'),
                 'panels' => array(
-                    array('id'=>'security',             'title'=>$gL10n->get('SYS_SECURITY'),               'icon'=>'bi-shield-fill',                   'subcards'=>false),
-                    array('id'=>'registration',         'title'=>$gL10n->get('SYS_REGISTRATION'),           'icon'=>'bi-card-checklist',                'subcards'=>false),
-                    array('id'=>'captcha',              'title'=>$gL10n->get('SYS_CAPTCHA'),                'icon'=>'bi-fonts',                         'subcards'=>false),
-                    array('id'=>'sso',                  'title'=>$gL10n->get('SYS_SSO'),                    'icon'=>'bi-key',                           'subcards'=>false),
+                    array('id'=>'security',             'title'=>$gL10n->get('SYS_SECURITY'),               'icon'=>'bi-shield-fill',                   'subcards'=>false, 'sequence'=>10),
+                    array('id'=>'registration',         'title'=>$gL10n->get('SYS_REGISTRATION'),           'icon'=>'bi-card-checklist',                'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'captcha',              'title'=>$gL10n->get('SYS_CAPTCHA'),                'icon'=>'bi-fonts',                         'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'sso',                  'title'=>$gL10n->get('SYS_SSO'),                    'icon'=>'bi-key',                           'subcards'=>false, 'sequence'=>40),
                 )
             ),
 
             // === 3) User Management ===
             array(
-                'key'    => 'user_management',
+                'key'    => PluginPanel::SECTION_USER_MANAGEMENT,
                 'label'  => $gL10n->get('SYS_USERS'),
                 'panels' => array(
-                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
-                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
-                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
-                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
+                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false, 'sequence'=>10),
+                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false, 'sequence'=>40),
                 )
             ),
 
             // === 4) Communication ===
             array(
-                'key'    => 'communication',
+                'key'    => PluginPanel::SECTION_COMMUNICATION,
                 'label'  => $gL10n->get('SYS_COMMUNICATION'),
                 'panels' => array(
-                    array('id'=>'system_notifications', 'title'=>$gL10n->get('SYS_SYSTEM_MAILS'),           'icon'=>'bi-broadcast-pin',                 'subcards'=>false),
-                    array('id'=>'email_dispatch',       'title'=>$gL10n->get('SYS_MAIL_DISPATCH'),          'icon'=>'bi-envelope-open-fill',            'subcards'=>false),
-                    array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),               'icon'=>'bi-envelope-fill',                 'subcards'=>false),
-                    array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),          'icon'=>'bi-newspaper',                     'subcards'=>false),
-                    array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                  'icon'=>'bi-chat-dots-fill',                'subcards'=>false),
+                    array('id'=>'system_notifications', 'title'=>$gL10n->get('SYS_SYSTEM_MAILS'),           'icon'=>'bi-broadcast-pin',                 'subcards'=>false, 'sequence'=>10),
+                    array('id'=>'email_dispatch',       'title'=>$gL10n->get('SYS_MAIL_DISPATCH'),          'icon'=>'bi-envelope-open-fill',            'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),               'icon'=>'bi-envelope-fill',                 'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),          'icon'=>'bi-newspaper',                     'subcards'=>false, 'sequence'=>40),
+                    array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                  'icon'=>'bi-chat-dots-fill',                'subcards'=>false, 'sequence'=>50),
                 )
             ),
 
             // === 5) Contents ===
             array(
-                'key'    => 'content_management',
+                'key'    => PluginPanel::SECTION_CONTENT,
                 'label'  => $gL10n->get('SYS_CONTENTS'),
                 'panels' => array(
-                    array('id'=>'events',               'title'=>$gL10n->get('SYS_EVENTS'),                 'icon'=>'bi-calendar-week-fill',            'subcards'=>false),
-                    array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false),
-                    array('id'=>'inventory',            'title'=>$gL10n->get('SYS_INVENTORY'),              'icon'=>'bi-box-seam-fill',                 'subcards'=>false),
-                    array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
-                    array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
+                    array('id'=>'events',               'title'=>$gL10n->get('SYS_EVENTS'),                 'icon'=>'bi-calendar-week-fill',            'subcards'=>false, 'sequence'=>10),
+                    array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'inventory',            'title'=>$gL10n->get('SYS_INVENTORY'),              'icon'=>'bi-box-seam-fill',                 'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false, 'sequence'=>40),
+                    array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false, 'sequence'=>50),
                 )
             ),
 
             // === 6) Overview Extensions ===
             array(
-                'key'    => 'overview_extensions',
+                'key'    => PluginPanel::SECTION_OVERVIEW,
                 'label'  => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'),
-                'panels' => self::pluginPanels(PluginPanel::GROUP_OVERVIEW)
+                'panels' => array()
             ),
 
             // === 7) Extensions ===
             array(
-                'key'    => 'extensions',
+                'key'    => PluginPanel::SECTION_DEFAULT,
                 'label'  => $gL10n->get('SYS_EXTENSIONS'),
-                'panels' => self::pluginPanels(PluginPanel::GROUP_EXTENSIONS)
+                'panels' => array()
             )
         );
+
+        $this->addPluginPanels();
     }
 
     /**
-     * The panels of one of the two extension tabs.
+     * Put the panels the plugins declared into the tab each of them named.
      *
-     * A plugin declares its panel with the PluginPanel hook.
-     * @param string $group One of the PluginPanel GROUP_* constants.
-     * @return array<int,array{id: string, title: string, icon: string, subcards: bool}>
+     * Every tab can receive them, not only the two that carry no core panels: a module that used to
+     * be part of the core stays in its own tab once it becomes a plugin. That is also why the core
+     * panels carry a sequence - a converted module has to be able to take the place it had, instead
+     * of being appended after the panels that are still core.
+     * @return void
      */
-    private static function pluginPanels(string $group): array
+    private function addPluginPanels(): void
+    {
+        foreach ($this->preferenceTabs as $index => $tab) {
+            $panels = array_merge($tab['panels'], self::pluginPanels($tab['key']));
+
+            usort($panels, static function (array $first, array $second): int {
+                return array($first['sequence'], $first['id']) <=> array($second['sequence'], $second['id']);
+            });
+
+            $this->preferenceTabs[$index]['panels'] = $panels;
+        }
+    }
+
+    /**
+     * The panels the plugins declared for one tab.
+     *
+     * A plugin names the tab in its manifest, and declares the panel itself with the PluginPanel
+     * hook unless its settings form is generated.
+     * @param string $section One of the PluginPanel SECTION_* constants.
+     * @return array<int,array{id: string, title: string, icon: string, subcards: bool, sequence: int}>
+     */
+    private static function pluginPanels(string $section): array
     {
         $panels = array();
 
-        foreach (PluginPanel::inGroup($group) as $panel) {
+        foreach (PluginPanel::inSection($section) as $panel) {
             $panels[] = array(
                 'id'       => $panel['id'],
                 'title'    => $panel['title'],
                 'icon'     => $panel['icon'] ?? 'bi-puzzle',
-                'subcards' => $panel['subcards'] ?? false
+                'subcards' => $panel['subcards'] ?? false,
+                'sequence' => $panel['sequence'] ?? PluginPanel::DEFAULT_SEQUENCE
             );
         }
 

@@ -12,6 +12,9 @@
     "autoload": {
         "AdmidioPlugin\\LoginForm\\": "src/"
     },
+    "preferences": {
+        "section": "overview_extensions"
+    },
     "settings": {
         "login_form_plugin_enabled": {
             "type": "enum",

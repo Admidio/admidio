@@ -129,6 +129,15 @@ final class Plugin
     public readonly array $requires;
 
     /**
+     * Where the settings of this plugin appear in the Admidio preferences: **section** names one of
+     * the preference tabs and **sequence** places the panel inside it. A section the manifest does
+     * not declare is an empty string and a sequence it does not declare is **null**, because what a
+     * missing one falls back to is decided by PluginPanel, which knows the tabs.
+     * @var array{section: string, sequence: int|null}
+     */
+    public readonly array $preferences;
+
+    /**
      * Why the plugin cannot be used, or **null** if the manifest is sound. This is an English
      * diagnostic for the administrator, not a translated user message.
      */
@@ -161,6 +170,7 @@ final class Plugin
         $this->autoload = $autoload;
         $this->settings = $settings;
         $this->requires = $requires;
+        $this->preferences = self::readPreferences($manifest);
         $this->error = $error;
     }
 
@@ -685,6 +695,25 @@ final class Plugin
         }
 
         return null;
+    }
+
+    /**
+     * Read where the plugin wants its settings shown.
+     *
+     * Only the shape is checked here. Whether the named section exists is PluginPanel's decision,
+     * because the sections are the tabs of the preferences page and a manifest that names one that
+     * is gone must land in the general tab rather than make the plugin unreadable.
+     * @param array<string,mixed> $manifest
+     * @return array{section: string, sequence: int|null}
+     */
+    private static function readPreferences(array $manifest): array
+    {
+        $declared = is_array($manifest['preferences'] ?? null) ? $manifest['preferences'] : array();
+
+        return array(
+            'section' => is_string($declared['section'] ?? null) ? $declared['section'] : '',
+            'sequence' => is_numeric($declared['sequence'] ?? null) ? (int)$declared['sequence'] : null
+        );
     }
 
     /**
