@@ -128,7 +128,7 @@ final class CalendarPreferencesPresenter
             array('helpTextId' => $settings['calendar_show_categories_names']['description'])
         );
 
-        $selectBoxEntries = $pluginCalendar instanceof Calendar ? $pluginCalendar::getAvailableRoles() : array();
+        $selectBoxEntries = Calendar::getAvailableRoles();
 
         $formCalendar->addSelectBox(
             'calendar_roles_view_plugin',
