@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="PLG_HELLO_WORLD_ADDRESS">Address the visitor by</string>
+  <string name="PLG_HELLO_WORLD_ADDRESS_DESC">How a logged-in visitor is named in the greeting. A visitor who is not logged in is greeted without a name.</string>
+  <string name="PLG_HELLO_WORLD_ADDRESS_FIRST_NAME">First name</string>
+  <string name="PLG_HELLO_WORLD_ADDRESS_FULL_NAME">First and last name</string>
+  <string name="PLG_HELLO_WORLD_ADDRESS_LOGIN_NAME">Username</string>
   <string name="PLG_HELLO_WORLD_DECORATE_HEADLINE">Show the greeting in every headline</string>
   <string name="PLG_HELLO_WORLD_DECORATE_HEADLINE_DESC">If this is enabled, the greeting is appended to the headline of every page. This is only meant to show that a plugin can change what Admidio produces.</string>
-  <string name="PLG_HELLO_WORLD_DESCRIPTION">An example plugin that shows the smallest useful Admidio plugin: a manifest, an entry file that registers a hook, one page, one class, its own preferences and its own language file.</string>
+  <string name="PLG_HELLO_WORLD_DESCRIPTION">An example plugin that shows every convention in one place: a manifest, an entry file that registers a hook, one page, one class, its own preferences and its own language file. A plugin needs none of that beyond the manifest and the entry file.</string>
   <string name="PLG_HELLO_WORLD_GREETING">Greeting</string>
   <string name="PLG_HELLO_WORLD_GREETING_DESC">The text the plugin greets with.</string>
   <string name="PLG_HELLO_WORLD_NAME">Hello World</string>
