@@ -2693,13 +2693,26 @@ final class CoreTasks
 
         /** @var array<string,mixed> $data */
         $data = $service->getUpdateInformation();
+        $versionUpdate = (int) $data['versionUpdate'];
+
+        /*
+         * 99 does not describe a version but a failed request. The command could not determine
+         * anything, so it must not report a result.
+         */
+        if ($versionUpdate === 99) {
+            throw new RuntimeException(
+                'The Admidio update information could not be read from ' . ADMIDIO_HOMEPAGE . 'update.txt.'
+            );
+        }
 
         $format = CliApplication::optionString($options, 'format', 'text');
         if ($format === 'text') {
+            // a version that the update server doesn't provide is displayed as "n/a"
             CliApplication::writeOutput(
-                'Stable version: ' . $data['stableVersion'] . PHP_EOL
-                . 'Beta version:   ' . $data['betaVersion']
-                . ($data['betaRelease'] !== '' ? '-Beta.' . $data['betaRelease'] : '') . PHP_EOL
+                'Stable version: ' . ($data['stableVersion'] !== '' ? $data['stableVersion'] : 'n/a') . PHP_EOL
+                . 'Beta version:   ' . ($data['betaVersion'] !== ''
+                    ? $data['betaVersion'] . ($data['betaRelease'] !== '' ? '-Beta.' . $data['betaRelease'] : '')
+                    : 'n/a') . PHP_EOL
                 . 'Update state:   ' . $data['versionUpdate'] . PHP_EOL,
                 $options
             );
@@ -2707,9 +2720,10 @@ final class CoreTasks
             CliApplication::writeValue($data, $options, $format);
         }
 
-        return (int)$data['versionUpdate'] === 99
-            ? CliApplication::EXIT_UPDATE_AVAILABLE
-            : CliApplication::EXIT_SUCCESS;
+        // 0 = up to date, 1 = new stable version, 2 = new beta version, 3 = both
+        return $versionUpdate === 0
+            ? CliApplication::EXIT_SUCCESS
+            : CliApplication::EXIT_UPDATE_AVAILABLE;
     }
 
     public static function systemInfo(array $arguments, array $options): int
