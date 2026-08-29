@@ -8,7 +8,9 @@ namespace Admidio\Tests\Unit\Plugins;
 
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
 use Admidio\UI\Presenter\PreferencesPresenter;
 use ReflectionClass;
@@ -80,6 +82,49 @@ final class PluginPanelTest extends PluginTestCase
         $this->assertSame(0, $built, 'declaring a panel does not build it');
         $this->assertSame('<form id="hello"></form>', PluginPanel::create('hello', $this->presenter()));
         $this->assertSame(1, $built);
+    }
+
+    /**
+     * @testdox A loaded plugin that declared settings but no panel gets one from its manifest
+     *
+     * Every setting is declared with a type, a label and a description, so a plugin that wants
+     * nothing more should not have to write a presenter to make its settings reachable.
+     */
+    public function testSettingsWithoutAPanelGetAGeneratedOne(): void
+    {
+        PluginLoader::load(PluginRegistry::get('hello'));
+
+        $panel = PluginPanel::get('hello');
+
+        $this->assertNotNull($panel, 'the plugin declares settings, so it gets a panel');
+        $this->assertSame('Hello', $panel['title']);
+        $this->assertSame('bi-emoji-smile', $panel['icon']);
+        $this->assertSame(PluginPanel::GROUP_EXTENSIONS, $panel['group']);
+        $this->assertIsCallable($panel['create']);
+    }
+
+    /**
+     * @testdox A plugin that declared a panel itself keeps it instead of getting a generated one
+     */
+    public function testDeclaredPanelWinsOverTheGeneratedOne(): void
+    {
+        $this->declare(array('id' => 'hello', 'title' => 'Written by hand', 'create' => static fn(): string => '<form></form>'));
+        PluginLoader::load(PluginRegistry::get('hello'));
+
+        $panels = array_filter(PluginPanel::collect(), static fn(array $panel): bool => $panel['id'] === 'hello');
+
+        $this->assertCount(1, $panels, 'the plugin must not end up with two panels');
+        $this->assertSame('Written by hand', array_values($panels)[0]['title']);
+    }
+
+    /**
+     * @testdox A plugin without settings gets no generated panel
+     */
+    public function testNoSettingsMeansNoGeneratedPanel(): void
+    {
+        PluginLoader::load(PluginRegistry::get('no-entry'));
+
+        $this->assertNull(PluginPanel::get('no_entry'));
     }
 
     /**
