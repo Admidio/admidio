@@ -241,8 +241,12 @@ class PluginsPresenter extends PagePresenter
     {
         global $gL10n;
 
-        // An uninstalled plugin has nothing to switch, and an orphan has no files left to load.
-        if ($plugin === null || !$plugin->isValid() || !PluginRegistry::isInstalled($id)) {
+        /*
+         * An orphan has no files left to load and a broken plugin cannot be loaded, so neither has
+         * a switch. Everything else has one, whether or not it has been prepared in the database:
+         * switching on a plugin that is only on disk is what prepares it.
+         */
+        if ($plugin === null || !$plugin->isValid()) {
             return null;
         }
 
@@ -336,15 +340,8 @@ class PluginsPresenter extends PagePresenter
 
         $actions = array();
 
-        if ($state === PluginRegistry::STATE_AVAILABLE) {
-            // Installing means registering a plugin that is already on disk, so this adds, it does
-            // not download.
-            $actions[] = $this->action($id, 'install', 'bi bi-plus-circle-fill', 'SYS_PLUGIN_INSTALL', 'SYS_WANT_INSTALL_PLUGIN');
-            return $actions;
-        }
-
         if (!PluginRegistry::isInstalled($id)) {
-            // A broken plugin that was never installed has nothing to operate on.
+            // A plugin that is only on disk has nothing to operate on but its switch.
             return $actions;
         }
 
