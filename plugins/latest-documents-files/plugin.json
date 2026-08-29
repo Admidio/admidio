@@ -13,13 +13,18 @@
         "AdmidioPlugin\\LatestDocumentsFiles\\": "src/"
     },
     "preferences": {
-        "section": "overview_extensions"
+        "section": "overview_extensions",
+        "sequence": 5
     },
     "settings": {
         "latest_documents_files_plugin_enabled": {
             "type": "enum",
             "default": "1",
-            "values": ["0", "1", "2"],
+            "values": {
+                "0": "SYS_DISABLED",
+                "1": "SYS_ENABLED",
+                "2": "ORG_ONLY_FOR_REGISTERED_USER"
+            },
             "label": "ORG_ACCESS_TO_PLUGIN",
             "description": "ORG_ACCESS_TO_PLUGIN_DESC"
         },
@@ -30,6 +35,9 @@
         "latest_documents_files_files_count": {
             "type": "integer",
             "default": 5,
+            "min": 0,
+            "max": 20,
+            "step": 1,
             "label": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT",
             "description": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC"
         },
@@ -42,6 +50,8 @@
         "latest_documents_files_max_chars_filename": {
             "type": "integer",
             "default": 0,
+            "min": 0,
+            "step": 1,
             "label": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME",
             "description": "PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC"
         }

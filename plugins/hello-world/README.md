@@ -38,6 +38,10 @@ may be language keys, which is what this plugin uses. Everything else is optiona
   to build the settings form by itself, so a plugin only writes a preferences presenter when it
   wants more than the manifest can express.
 
+  A setting **without** a `label` is not put into that form. A preference the plugin owns is not
+  necessarily one this form edits — the position of an overview widget is edited in the overview
+  preferences, and a plugin may keep state of its own that nobody is meant to type into.
+
   An `enum` lists its permitted values, and may instead name them so that the generated form has
   something readable to show:
 
