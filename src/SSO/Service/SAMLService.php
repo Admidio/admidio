@@ -1145,7 +1145,7 @@ class SAMLService extends SSOService {
      */
     private function handleIncomingLogoutResponse(LogoutResponse $response): void
     {
-        global $gLogger;
+        global $gCurrentOrgId, $gLogger;
 
         $transactionToken = (string) $response->getRelayState();
 
