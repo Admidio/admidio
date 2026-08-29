@@ -750,6 +750,10 @@ class ChangelogService {
             'dat_max_members' =>           'SYS_MAX_PARTICIPANTS',
             'dat_allow_comments' =>        array('name' => 'SYS_ALLOW_USER_COMMENTS', 'type' => 'BOOL'),
             'dat_additional_guests' =>     array('name' => 'SYS_ALLOW_ADDITIONAL_GUESTS', 'type' => 'BOOL'),
+            'dat_evr_id' =>                array('name' => 'SYS_RECURRENCE_RULE', 'type' => 'RECURRENCE_RULE'),
+            'dat_recurrence_original_begin' => array('name' => 'SYS_RECURRENCE_ORIGINAL_BEGIN', 'type' => 'DATETIME'),
+            'dat_recurrence_status' =>     array('name' => 'SYS_RECURRENCE_STATUS', 'type' => 'CUSTOM_LIST', 'entries' => array('master' => $gL10n->get('SYS_RECURRENCE_STATUS_MASTER'), 'generated' => $gL10n->get('SYS_RECURRENCE_STATUS_GENERATED'), 'modified' => $gL10n->get('SYS_RECURRENCE_STATUS_MODIFIED'), 'cancelled' => $gL10n->get('SYS_CANCELLED'))),
+            'dat_recurrence_scope' =>      array('name' => 'SYS_RECURRENCE_SCOPE', 'type' => 'CUSTOM_LIST', 'entries' => array('this' => $gL10n->get('SYS_ONLY_THIS_DATE'), 'series' => $gL10n->get('SYS_ENTIRE_SERIES'))),
 
             'rol_name' =>                  'SYS_NAME',
             'rol_description' =>           'SYS_DESCRIPTION',
@@ -1007,7 +1011,7 @@ class ChangelogService {
                 case 'category_report' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php'); break;
                 case 'events' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events/events_new.php', array('dat_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events.php', array('mode' => 'edit', 'dat_uuid' => $uuid)); break;
                 case 'files' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/documents-files.php', array('mode' => 'download', 'file_uuid' => $uuid)); break;
                 case 'folders' :
@@ -1089,6 +1093,69 @@ class ChangelogService {
         } else {
             return $text;
         }
+    }
+
+    /**
+     * Format a recurrence rule id as a readable recurrence summary.
+     * @throws Exception
+     */
+    private static function formatRecurrenceRuleValue(string $value): string
+    {
+        global $gDb, $gL10n, $gSettingsManager;
+
+        if (!ctype_digit($value)) {
+            return $value;
+        }
+
+        $sql = 'SELECT evr_frequency, evr_interval, evr_byday, evr_end_type, evr_until, evr_count
+                  FROM ' . TBL_EVENT_RECURRENCES . '
+                 WHERE evr_id = ?';
+        $recurrenceStatement = $gDb->queryPrepared($sql, array((int)$value));
+        $recurrence = $recurrenceStatement->fetch();
+
+        if (!$recurrence) {
+            return $gL10n->get('SYS_RECURRENCE_RULE_VAR', array($value));
+        }
+
+        $frequencies = array(
+            'daily' => $gL10n->get('SYS_DAILY'),
+            'weekly' => $gL10n->get('SYS_WEEKLY'),
+            'monthly' => $gL10n->get('SYS_MONTHLY'),
+            'yearly' => $gL10n->get('SYS_ANNUALLY')
+        );
+        $weekdays = array(
+            'MO' => $gL10n->get('SYS_MONDAY'),
+            'TU' => $gL10n->get('SYS_TUESDAY'),
+            'WE' => $gL10n->get('SYS_WEDNESDAY'),
+            'TH' => $gL10n->get('SYS_THURSDAY'),
+            'FR' => $gL10n->get('SYS_FRIDAY'),
+            'SA' => $gL10n->get('SYS_SATURDAY'),
+            'SU' => $gL10n->get('SYS_SUNDAY')
+        );
+
+        $summary = array();
+        $summary[] = $frequencies[(string)$recurrence['evr_frequency']] ?? (string)$recurrence['evr_frequency'];
+        $summary[] = $gL10n->get('SYS_INTERVAL') . ': ' . (int)$recurrence['evr_interval'];
+
+        if ((string)$recurrence['evr_byday'] !== '') {
+            $byDay = array();
+            foreach (explode(',', (string)$recurrence['evr_byday']) as $day) {
+                $byDay[] = $weekdays[$day] ?? $day;
+            }
+            $summary[] = $gL10n->get('SYS_WEEKDAYS') . ': ' . implode(', ', $byDay);
+        }
+
+        if ((string)$recurrence['evr_end_type'] === 'count') {
+            $summary[] = $gL10n->get('SYS_ENDS') . ': ' . $gL10n->get('SYS_AFTER_NUMBER_OF_OCCURRENCES') . ' (' . (int)$recurrence['evr_count'] . ')';
+        } elseif ((string)$recurrence['evr_end_type'] === 'until') {
+            $until = DateTime::createFromFormat('Y-m-d H:i:s', (string)$recurrence['evr_until']);
+            $untilValue = $until instanceof DateTime ? $until->format($gSettingsManager->getString('system_date')) : (string)$recurrence['evr_until'];
+            $summary[] = $gL10n->get('SYS_ENDS') . ': ' . $gL10n->get('SYS_ON_DATE') . ' ' . $untilValue;
+        } else {
+            $summary[] = $gL10n->get('SYS_ENDS') . ': ' . $gL10n->get('SYS_NEVER');
+        }
+
+        return implode('; ', $summary);
     }
 
     /**
@@ -1252,6 +1319,9 @@ class ChangelogService {
                 case 'ROOM':
                     $obj = new Room($gDb, $value);
                     $htmlValue = self::createLink(Language::translateIfTranslationStrId($obj->readableName()), 'rooms', $obj->getValue('room_id'), $obj->getValue('room_uuid'));
+                    break;
+                case 'RECURRENCE_RULE':
+                    $htmlValue = self::formatRecurrenceRuleValue((string)$value);
                     break;
                 case 'COUNTRY':
                     $htmlValue = $gL10n->getCountryName($value);

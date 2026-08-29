@@ -131,7 +131,7 @@ class EventList extends PluginAbstract
                         $plgNewDescription = substr($plgNewDescription, 0, strrpos($plgNewDescription, ' ')) . '
                             <a class="admidio-icon-link" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MORE') . '"
                                 href="' . SecurityUtils::encodeUrl(
-                                ADMIDIO_URL . FOLDER_MODULES . '/events/events.php',
+                                ADMIDIO_URL . FOLDER_MODULES . '/events.php',
                                     array('view' => 'detail', 'dat_uuid' => $plgEvent->getValue('dat_uuid'))
                                 ) . '">»</a>';
                 }

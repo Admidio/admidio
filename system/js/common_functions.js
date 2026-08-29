@@ -69,6 +69,10 @@ function showHideMoreText(element, butonTexts) {
  * @returns {boolean}                   True if the tbody element is empty, false otherwise.
  */
 function isTbodyEmpty(tbodyElement) {
+    if (!tbodyElement) {
+        return false;
+    }
+
     rows = tbodyElement.querySelectorAll("tr");
     count = 0;
 
@@ -258,6 +262,9 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken, callback
             if (msg) {
                 $modalMsg.html('<div class="alert alert-success"><i class="bi bi-check-lg"></i> '+msg+'</div>');
                 setTimeout(function(){
+                    if (document.activeElement) {
+                        document.activeElement.blur();
+                    }
                     $("#adm_modal, #adm_modal_messagebox").modal("hide");
 
                     // fade out each if no custom callback is set
@@ -269,6 +276,9 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken, callback
                     }
                 }, 1500);
             } else {
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
                 $("#adm_modal, #adm_modal_messagebox").modal("hide");
                 // fade out each if no custom callback is set
                 if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {

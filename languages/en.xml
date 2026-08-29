@@ -241,6 +241,7 @@
   <string name="SYS_ADMINISTRATOR">Administrator</string>
   <string name="SYS_ADMINISTRATORS">Administrators</string>
   <string name="SYS_ADMINISTRATORS_DESC">These roles are administrators of the Documents and Files module and therefore have access to all folders and files. They can upload and download files and assign access rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
+  <string name="SYS_AFTER_NUMBER_OF_OCCURRENCES">After number of occurrences</string>
   <string name="SYS_ALBUM">Album</string>
   <string name="SYS_ALBUM_CHANGED_TITLE">A photo album was changed at #VAR1#</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Album contains no photos.</string>
@@ -310,6 +311,7 @@
   <string name="SYS_CANCEL_EVENT">You canceled the participation for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Delete relationship</string>
+  <string name="SYS_CANCELLED">Cancelled</string>
   <string name="SYS_CANT_DELETE_ROLE">You can not delete the role #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Capacity</string>
   <string name="SYS_CAPTCHA">Captcha</string>
@@ -463,6 +465,7 @@
   <string name="SYS_CURRENT_PROFILE_PICTURE">Current profile picture</string>
   <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Current role memberships</string>
   <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your #VAR1#profile#VAR2#.</string>
+  <string name="SYS_DAILY">Daily</string>
   <string name="SYS_DATA_AREA">Data area</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">If this option is enabled, the data (Events, announcements, web links ...) in this category will also appear on the websites of the following organizations:\n#VAR1_BOLD#</string>
   <string name="SYS_DATA_MULTI_ORGA">Data visible to multiple organizations</string>
@@ -613,7 +616,6 @@
   <string name="SYS_EDIT_VAR">Edit #VAR1#</string>
   <string name="SYS_EDIT_WEBLINK">Edit web link</string>
   <string name="SYS_EDIT_WEBLINKS">Edit web links</string>
-  <string name="SYS_EDITED_BY">Last edited by</string>
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Email Administrator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">The profile data of the user #VAR1# #VAR2# (login: #VAR3#) was changed by #VAR4#.</string>
@@ -659,9 +661,12 @@
   <string name="SYS_ENABLED">Enabled</string>
   <string name="SYS_ENCODING_GUESS">Try to detect the encoding</string>
   <string name="SYS_END" description="End of a date">End</string>
+  <string name="SYS_END_DATE">End date</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Would you like to end membership of user #VAR1# in #VAR2#?</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER_OK">The membership of user #VAR1_BOLD# at #VAR2_BOLD# was finished successfully!</string>
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">The memberships of the selected users at #VAR1_BOLD# were finished successfully!</string>
+  <string name="SYS_ENDS">Ends</string>
+  <string name="SYS_ENTIRE_SERIES">Entire series</string>
   <string name="SYS_ENTRY">Entry</string>
   <string name="SYS_ERROR">Error</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is stored as default configuration for the module #VAR1# in this organization and cannot be deleted. Set another configuration to the default configuration in the module settings and try to delete this configuration afterwards.</string>
@@ -811,6 +816,7 @@
   <string name="SYS_INSTALLED_VERSION">Installed version</string>
   <string name="SYS_INTERNAL_NAME">Internal name</string>
   <string name="SYS_INTERNAL_NAME_DESC">The internal name is used to uniquely access this data object. This is not relevant for program use. In development, however, this name must always be used to identify the field, e.g. to address with getValue (). The internal name is automatically filled when creating a data record.</string>
+  <string name="SYS_INTERVAL">Interval</string>
   <string name="SYS_INTO_TO">Recipients need to be listed in the TO field instead of the BCC field</string>
   <string name="SYS_INTO_TO_DESC">All recipients will be listed in the TO field if set accordingly and an email will be received by multiple person. Thus each recipient will see the name and email address of the other recipients. In addition each recipient can reply to all. (Default: deactivated)</string>
   <string name="SYS_INVALID_ICON_NAME">The entered icon name does not correspond to the expected syntax. An icon name of Bootstrap Icons should only contain characters a-z, numbers and a hyphen.</string>
@@ -991,7 +997,6 @@
   <string name="SYS_LOCK_ALBUM_DESC">Locked albums can not be viewed by visitors or members, e.g. you can lock an album as long as all images are uploading.</string>
   <string name="SYS_LOCKED">Locked</string>
   <string name="SYS_LOG">Log</string>
-  <string name="SYS_LOG_RECORDS_HIDDEN">Some or all changelog entries have been hidden due to insufficient user permissions to access them.</string>
   <string name="SYS_LOGGED_AREAS">Logged areas</string>
   <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>
   <string name="SYS_LOGIN">Sign in</string>
@@ -1102,6 +1107,7 @@
   <string name="SYS_MYLIST_CONDITION_DESC">Here you can define conditions for each field in your list. This will further restrict the determined members of the selected role with your conditions.</string>
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Short name</string>
+  <string name="SYS_NEVER">Never</string>
   <string name="SYS_NEW_BETA_AVAILABLE">A new beta version is available!</string>
   <string name="SYS_NEW_BOTH_AVAILABLE">A new stable version and a new beta version are available!</string>
   <string name="SYS_NEW_MESSAGE_RECEIVED">New message received</string>
@@ -1131,6 +1137,7 @@
   <string name="SYS_NO_PERMISSIONS_ASSIGNED">No permissions have been assigned.</string>
   <string name="SYS_NO_PICTURE_SELECTED">No picture file selected.</string>
   <string name="SYS_NO_QUOTATION">No quotation</string>
+  <string name="SYS_NO_RECURRENCE">No recurrence</string>
   <string name="SYS_NO_RIGHTS">You do not have the required permission to perform this action.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">You do not have the right to view the list of the selected roles.</string>
   <string name="SYS_NO_ROLE_GIVEN">No role has been specified.</string>
@@ -1169,6 +1176,8 @@
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is 0, all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is "All", all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_LOGINS">Number of logins</string>
+  <string name="SYS_NUMBER_OF_OCCURRENCES">Number of occurrences</string>
+  <string name="SYS_NUMBER_OF_OCCURRENCES_DESC">Maximum number of occurrences to create when the recurrence ends after a number.</string>
   <string name="SYS_NUMBER_OF_POSTS_PER_PAGE">Number of posts per page</string>
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Number of topics per page</string>
   <string name="SYS_NUMBER_RECIPIENTS">Number of recipients</string>
@@ -1177,10 +1186,12 @@
   <string name="SYS_OFF">Off</string>
   <string name="SYS_OK">OK</string>
   <string name="SYS_ON">On</string>
+  <string name="SYS_ON_DATE">On date</string>
   <string name="SYS_ONE_TIME">One time</string>
   <string name="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION">Membership management</string>
   <string name="SYS_ONLY_AT_REGISTRATION_AND_OWN_PROFILE">Only at registration and own profile</string>
   <string name="SYS_ONLY_SET_BY_MOTHER_ORGANIZATION">This preference can only be set by the parent organization.</string>
+  <string name="SYS_ONLY_THIS_DATE">Only this date</string>
   <string name="SYS_OPERATING_SYSTEM">Operating system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
@@ -1199,6 +1210,7 @@
   <string name="SYS_PARENT_ALBUM_DESC">One album can be part of another album. Please select a parent album from the selection list. If you want to display the album on the highest level then select #VAR1_BOLD#.</string>
   <string name="SYS_PARENT_ORGANIZATION">Parent organization</string>
   <string name="SYS_PARENT_ORGANIZATION_DESC">Define parent organization here. Parent organizations are able to create events and announcements for example which will be displayed in selected (child) organization.</string>
+  <string name="SYS_PART_OF_SERIES">Part of a series</string>
   <string name="SYS_PARTICIPANTS">Members</string>
   <string name="SYS_PARTICIPANTS_LIMIT">Limited number of participants</string>
   <string name="SYS_PARTICIPATE">Participate</string>
@@ -1281,7 +1293,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Previous picture</string>
   <string name="SYS_PREVIOUS_VALUE">Previous value</string>
   <string name="SYS_PRINT_PREVIEW">Print preview</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Private message could not be sent to #VAR1_BOLD#.\n\nFollowing error has occurred:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Private message has been send to #VAR1_BOLD#.</string>
   <string name="SYS_PRIVATE_MESSAGES">Private messages</string>
   <string name="SYS_PRNG">Pseudo-random number generator</string>
@@ -1305,6 +1316,24 @@
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail recipient</string>
+  <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
+  <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
+  <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
+  <string name="SYS_RECURRENCE_FREQUENCY_DESC">Defines whether and how often this event repeats. Choose no recurrence for a normal single event.</string>
+  <string name="SYS_RECURRENCE_INTERVAL_DESC">Defines the distance between occurrences, for example every 2 weeks.</string>
+  <string name="SYS_RECURRENCE_NOT_FOUND">The recurrence rule for this event could not be found.</string>
+  <string name="SYS_RECURRENCE_ORIGINAL_BEGIN">Original occurrence date</string>
+  <string name="SYS_RECURRENCE_ROOM_RESERVED">Selected room is already in use for the following dates: #VAR1#.</string>
+  <string name="SYS_RECURRENCE_RULE">Recurrence rule</string>
+  <string name="SYS_RECURRENCE_RULE_VAR">Recurrence rule #VAR1#</string>
+  <string name="SYS_RECURRENCE_SCOPE">Recurrence scope</string>
+  <string name="SYS_RECURRENCE_STATUS">Recurrence status</string>
+  <string name="SYS_RECURRENCE_STATUS_GENERATED">Generated occurrence</string>
+  <string name="SYS_RECURRENCE_STATUS_MASTER">Master event</string>
+  <string name="SYS_RECURRENCE_STATUS_MODIFIED">Modified occurrence</string>
+  <string name="SYS_RECURRENCE_TOO_MANY_OCCURRENCES">Too many occurrences would be created. Please limit the series to at most #VAR1# occurrences.</string>
+  <string name="SYS_RECURRENCE_UNTIL_DESC">Last date on which occurrences may be created when the recurrence ends on a date.</string>
+  <string name="SYS_RECURRENCE_WEEKDAYS_DESC">For weekly recurrences, select the weekdays on which occurrences should be created.</string>
   <string name="SYS_REDIRECT">Redirect</string>
   <string name="SYS_REDIRECT_DESC">You are leaving the website of #VAR1_BOLD# and will be redirected automatically to #VAR3# in #VAR2# seconds.\n\nIf the automatic redirection is not working please click #VAR4#here#VAR5#!</string>
   <string name="SYS_REDIRECT_URL_INVALID">The specified redirect URL is not valid.</string>
@@ -1343,6 +1372,7 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
+  <string name="SYS_REPEATS">Repeats</string>
   <string name="SYS_REPLACE">Replace</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
@@ -1813,6 +1843,8 @@
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Wednesday</string>
   <string name="SYS_WEEKDAY">Weekday</string>
+  <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Worksheet (index or name)</string>
   <string name="SYS_WRITE_EMAIL">Write e-mail</string>

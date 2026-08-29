@@ -2,6 +2,9 @@
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Events\Entity\Event;
+use Admidio\Events\Entity\EventRecurrence;
+use Admidio\Events\Repository\EventRecurrenceRepository;
+use Admidio\Events\Service\EventRecurrenceICalEventFactory;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
@@ -288,61 +291,238 @@ class ModuleEvents extends Modules
         global $gTimezone, $gDb;
 
         $iCalEvents = array();
+        $iCalEventUids = array();
+        $iCalEventRecurrenceProperties = array();
+        $exportedRecurrenceIds = array();
         $iCalMinDateTime = '';
         $iCalMaxDateTime = '';
         $timeZone = new DateTimeZone($gTimezone);
         $events = $this->getDataSet();
+        $recurrences = $this->readICalRecurrences($events['recordset']);
+        $cancelledRecurrenceOriginalBegins = $this->readICalCancelledRecurrenceOriginalBegins(array_keys($recurrences));
 
         foreach ($events['recordset'] as $eventRecord) {
-            $event = new Event($gDb);
-            $event->setArray($eventRecord);
+            $recurrenceId = (int)($eventRecord['dat_evr_id'] ?? 0);
+            $recurrenceStatus = (string)($eventRecord['dat_recurrence_status'] ?? '');
 
-            if ($iCalMinDateTime === '') {
-                $iCalMinDateTime = $event->getValue('dat_begin', 'Y-m-d H:i:s');
-            }
-            $iCalMaxDateTime = $event->getValue('dat_end', 'Y-m-d H:i:s');
+            if ($recurrenceId > 0 && isset($recurrences[$recurrenceId]) && !isset($exportedRecurrenceIds[$recurrenceId])) {
+                $masterRecord = $recurrences[$recurrenceId]['masterRecord'];
+                $masterUid = (string)$masterRecord['dat_uuid'];
+                $masterEvent = $this->createICalEvent($masterRecord, $masterUid);
+                $iCalEventKey = $masterUid . '|';
 
-            $iCalEvent = new Eluceo\iCal\Domain\Entity\Event(new Eluceo\iCal\Domain\ValueObject\UniqueIdentifier($eventRecord['dat_uuid']));
-            $iCalEvent->setSummary($eventRecord['dat_headline']);
-            $iCalEvent->setDescription((string) $eventRecord['dat_description']);
-            $iCalEvent->setLocation(new \Eluceo\iCal\Domain\ValueObject\Location((string) $eventRecord['dat_location']));
-
-            if ((string) $eventRecord['dat_timestamp_change'] === '') {
-                $iCalEvent->touch(new Eluceo\iCal\Domain\ValueObject\Timestamp(new DateTimeImmutable($event->getValue('dat_timestamp_create', 'Y-m-d H:i:s'))));
-            }  else {
-                $iCalEvent->touch(new Eluceo\iCal\Domain\ValueObject\Timestamp(new DateTimeImmutable($event->getValue('dat_timestamp_change', 'Y-m-d H:i:s'))));
-            }
-
-            if ($eventRecord['dat_all_day'] === true) {
-                if ($event->getValue('dat_begin', 'Y-m-d') === $event->getValue('dat_end', 'Y-m-d')) {
-                    $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\SingleDay(
-                        new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d')))
-                    ));
-                } else {
-                    $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\MultiDay(
-                        new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d'))),
-                        new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_end', 'Y-m-d')))
-                    ));
+                if ($masterUid !== '' && !isset($iCalEventUids[$iCalEventKey])) {
+                    $iCalEventUids[$iCalEventKey] = true;
+                    $this->updateICalDateRange($masterRecord, $iCalMinDateTime, $iCalMaxDateTime);
+                    $iCalEventRecurrenceProperties[spl_object_hash($masterEvent)] = array(
+                        'rrule' => $recurrences[$recurrenceId]['rrule'],
+                        'exdates' => $cancelledRecurrenceOriginalBegins[$recurrenceId] ?? array()
+                    );
+                    $iCalEvents[] = $masterEvent;
                 }
-            } else {
-                $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\TimeSpan(
-                    new \Eluceo\iCal\Domain\ValueObject\DateTime(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d H:i:s')), false),
-                    new \Eluceo\iCal\Domain\ValueObject\DateTime(new DateTimeImmutable($event->getValue('dat_end', 'Y-m-d H:i:s')), false)
-                ));
+
+                $exportedRecurrenceIds[$recurrenceId] = true;
+            }
+
+            if ($recurrenceId > 0 && $recurrenceStatus === 'generated') {
+                continue;
+            }
+
+            $iCalUid = (string) $eventRecord['dat_uuid'];
+            $recurrenceProperties = array();
+
+            $recurrenceOriginalBegin = (string)($eventRecord['dat_recurrence_original_begin'] ?? '');
+            if ($recurrenceId > 0 && $recurrenceStatus === 'modified' && isset($recurrences[$recurrenceId]) && $recurrenceOriginalBegin !== '') {
+                $iCalUid = (string)$recurrences[$recurrenceId]['masterRecord']['dat_uuid'];
+                $recurrenceProperties['recurrenceId'] = $this->createICalRecurrenceDateValue(
+                    $recurrenceOriginalBegin,
+                    (bool)$eventRecord['dat_all_day']
+                );
+            }
+
+            $iCalEventKey = $iCalUid . '|' . ($recurrenceProperties['recurrenceId']['dateTime'] ?? $recurrenceProperties['recurrenceId']['date'] ?? '');
+            if ($iCalUid === '' || isset($iCalEventUids[$iCalEventKey])) {
+                continue;
+            }
+            $iCalEventUids[$iCalEventKey] = true;
+
+            $iCalEvent = $this->createICalEvent($eventRecord, $iCalUid);
+            $this->updateICalDateRange($eventRecord, $iCalMinDateTime, $iCalMaxDateTime);
+
+            if (count($recurrenceProperties) > 0) {
+                $iCalEventRecurrenceProperties[spl_object_hash($iCalEvent)] = $recurrenceProperties;
             }
 
             $iCalEvents[] = $iCalEvent;
         }
 
         $calendar = new Eluceo\iCal\Domain\Entity\Calendar($iCalEvents);
-        $calendar->addTimeZone(Eluceo\iCal\Domain\Entity\TimeZone::createFromPhpDateTimeZone(
-            $timeZone,
-            new DateTimeImmutable($iCalMinDateTime, $timeZone),
-            new DateTimeImmutable($iCalMaxDateTime, $timeZone))
-        );
+        if (count($iCalEvents) > 0) {
+            $calendar->addTimeZone(Eluceo\iCal\Domain\Entity\TimeZone::createFromPhpDateTimeZone(
+                $timeZone,
+                new DateTimeImmutable($iCalMinDateTime, $timeZone),
+                new DateTimeImmutable($iCalMaxDateTime, $timeZone))
+            );
+        }
 
-        $componentFactory = new Eluceo\iCal\Presentation\Factory\CalendarFactory();
+        $componentFactory = new Eluceo\iCal\Presentation\Factory\CalendarFactory(new EventRecurrenceICalEventFactory($iCalEventRecurrenceProperties));
         return $componentFactory->createCalendar($calendar);
+    }
+
+    /**
+     * Create an iCal event object from an event database record.
+     * @param array<string,mixed> $eventRecord
+     * @throws DateMalformedStringException
+     */
+    private function createICalEvent(array $eventRecord, string $iCalUid): Eluceo\iCal\Domain\Entity\Event
+    {
+        global $gDb;
+
+        $event = new Event($gDb);
+        $event->setArray($eventRecord);
+
+        $iCalEvent = new Eluceo\iCal\Domain\Entity\Event(new Eluceo\iCal\Domain\ValueObject\UniqueIdentifier($iCalUid));
+        $iCalEvent->setSummary($eventRecord['dat_headline']);
+        $iCalEvent->setDescription((string) $eventRecord['dat_description']);
+        $iCalEvent->setLocation(new \Eluceo\iCal\Domain\ValueObject\Location((string) $eventRecord['dat_location']));
+
+        if ((string) $eventRecord['dat_timestamp_change'] === '') {
+            $iCalEvent->touch(new Eluceo\iCal\Domain\ValueObject\Timestamp(new DateTimeImmutable($event->getValue('dat_timestamp_create', 'Y-m-d H:i:s'))));
+        } else {
+            $iCalEvent->touch(new Eluceo\iCal\Domain\ValueObject\Timestamp(new DateTimeImmutable($event->getValue('dat_timestamp_change', 'Y-m-d H:i:s'))));
+        }
+
+        if ((bool)$eventRecord['dat_all_day']) {
+            if ($event->getValue('dat_begin', 'Y-m-d') === $event->getValue('dat_end', 'Y-m-d')) {
+                $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\SingleDay(
+                    new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d')))
+                ));
+            } else {
+                $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\MultiDay(
+                    new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d'))),
+                    new \Eluceo\iCal\Domain\ValueObject\Date(new DateTimeImmutable($event->getValue('dat_end', 'Y-m-d')))
+                ));
+            }
+        } else {
+            $iCalEvent->setOccurrence(new \Eluceo\iCal\Domain\ValueObject\TimeSpan(
+                new \Eluceo\iCal\Domain\ValueObject\DateTime(new DateTimeImmutable($event->getValue('dat_begin', 'Y-m-d H:i:s')), false),
+                new \Eluceo\iCal\Domain\ValueObject\DateTime(new DateTimeImmutable($event->getValue('dat_end', 'Y-m-d H:i:s')), false)
+            ));
+        }
+
+        return $iCalEvent;
+    }
+
+    /**
+     * Update the exported calendar timezone range.
+     * @param array<string,mixed> $eventRecord
+     */
+    private function updateICalDateRange(array $eventRecord, string &$iCalMinDateTime, string &$iCalMaxDateTime): void
+    {
+        $eventBegin = (string)$eventRecord['dat_begin'];
+        $eventEnd = (string)$eventRecord['dat_end'];
+
+        if ($iCalMinDateTime === '' || $eventBegin < $iCalMinDateTime) {
+            $iCalMinDateTime = $eventBegin;
+        }
+
+        if ($iCalMaxDateTime === '' || $eventEnd > $iCalMaxDateTime) {
+            $iCalMaxDateTime = $eventEnd;
+        }
+    }
+
+    /**
+     * Read recurrence rules for all recurring events included in the iCal dataset.
+     * @param array<int,array<string,mixed>> $eventRecords
+     * @return array<int,array<string,mixed>>
+     * @throws Exception
+     */
+    private function readICalRecurrences(array $eventRecords): array
+    {
+        global $gDb;
+
+        $recurrenceIds = array();
+        foreach ($eventRecords as $eventRecord) {
+            $recurrenceId = (int)($eventRecord['dat_evr_id'] ?? 0);
+            if ($recurrenceId > 0) {
+                $recurrenceIds[$recurrenceId] = $recurrenceId;
+            }
+        }
+
+        if (count($recurrenceIds) === 0) {
+            return array();
+        }
+
+        $sql = 'SELECT dat.*, evr.*
+                  FROM ' . TBL_EVENT_RECURRENCES . ' AS evr
+            INNER JOIN ' . TBL_EVENTS . ' AS dat
+                    ON dat.dat_id = evr.evr_dat_id_master
+                 WHERE evr.evr_id IN (' . Database::getQmForValues($recurrenceIds) . ')';
+        $statement = $gDb->queryPrepared($sql, array_values($recurrenceIds));
+
+        $recurrenceRepository = new EventRecurrenceRepository($gDb);
+        $recurrences = array();
+        while ($row = $statement->fetch()) {
+            $recurrence = new EventRecurrence($gDb);
+            $recurrence->setArray($row);
+            $recurrences[(int)$row['evr_id']] = array(
+                'masterRecord' => $row,
+                'rrule' => $recurrenceRepository->toRule($recurrence)->toRRule()
+            );
+        }
+
+        return $recurrences;
+    }
+
+    /**
+     * Read cancelled recurrence dates so RRULE exports don't show cancelled instances again.
+     * @param array<int,int> $recurrenceIds
+     * @return array<int,array<int,array<string,mixed>>>
+     * @throws Exception
+     */
+    private function readICalCancelledRecurrenceOriginalBegins(array $recurrenceIds): array
+    {
+        global $gDb;
+
+        if (count($recurrenceIds) === 0) {
+            return array();
+        }
+
+        $sql = 'SELECT dat_evr_id, dat_recurrence_original_begin, dat_all_day
+                  FROM ' . TBL_EVENTS . '
+                 WHERE dat_evr_id IN (' . Database::getQmForValues($recurrenceIds) . ')
+                   AND dat_recurrence_status = ?
+                   AND dat_recurrence_original_begin IS NOT NULL
+                   AND dat_recurrence_original_begin <> ?';
+        $statement = $gDb->queryPrepared($sql, array_merge(array_values($recurrenceIds), array('cancelled', '')));
+
+        $cancelledOriginalBegins = array();
+        while ($row = $statement->fetch()) {
+            $recurrenceId = (int)$row['dat_evr_id'];
+            $cancelledOriginalBegins[$recurrenceId][] = $this->createICalRecurrenceDateValue(
+                (string)$row['dat_recurrence_original_begin'],
+                (bool)$row['dat_all_day']
+            );
+        }
+
+        return $cancelledOriginalBegins;
+    }
+
+    /**
+     * Create a normalized date value for RECURRENCE-ID and EXDATE.
+     * @return array<string,mixed>
+     * @throws DateMalformedStringException
+     */
+    private function createICalRecurrenceDateValue(string $dateTime, bool $allDay): array
+    {
+        $recurrenceDate = new DateTimeImmutable($dateTime);
+
+        return array(
+            'allDay' => $allDay,
+            'timezone' => '',
+            'date' => $recurrenceDate->format('Ymd'),
+            'dateTime' => $recurrenceDate->format('Ymd\THis')
+        );
     }
 
     /**
@@ -356,6 +536,9 @@ class ModuleEvents extends Modules
 
         $sqlConditions = '';
         $params = array();
+
+        $sqlConditions .= ' AND (dat_recurrence_status IS NULL OR dat_recurrence_status <> ?) ';
+        $params[] = 'cancelled';
 
         // In case calendar UUID was permitted and user has rights
         if (!empty($this->getParameter('cat_uuid'))) {
@@ -453,7 +636,7 @@ class ModuleEvents extends Modules
 
         if ($dateRangeStart === '') {
             $dateStart = '1970-01-01';
-            $dateEnd   = (date('Y') + 10) . '-12-31';
+            $dateEnd   = ((int) date('Y') + 10) . '-12-31';
 
             // set date_from and date_to regard to current mode
             switch ($this->mode) {

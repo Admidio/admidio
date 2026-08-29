@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--Phrases only in installation-->
-    <string name="SYS_SUBSCRIBE">Abonnieren</string>
   <string name="INS_ADDIDIONAL_DATA">Zusätzliche Daten</string>
   <string name="INS_ADDRESS_LIST">Adressliste</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einer Administratorin oder einem Administrator durchgeführt werden. Geben Sie an dieser Stelle bitte die Zugangsdaten einer Administratorin oder eines Administrators ein.</string>
@@ -1671,6 +1670,7 @@
   <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
   <string name="SYS_STREET">Straße</string>
   <string name="SYS_SUBJECT">Betreff</string>
+  <string name="SYS_SUBSCRIBE">Abonnieren</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS">Unterorganisationen</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Unterorganisationen können Profildaten von Kontakten gemeinsam nutzen. In einigen Modulen (Ankündigungen, Veranstaltungen) ist es möglich, Einträge aus der Hauptorganisation in den Unterorganisationen anzuzeigen. Die Verwaltung einer Unterorganisation ist völlig eigenständig und kann mit einem eigenen Rechtekonzept versehen werden. Weitere Informationen finden Sie im #VAR1#Admidio Wiki#VAR2#.</string>
   <string name="SYS_SUNDAY">Sonntag</string>

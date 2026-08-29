@@ -68,5 +68,44 @@
     <step id="600">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description) VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CHANGELOG'), 2, %UUID%, false, 6, true, 'changelog', '/modules/changelog/changelog.php', 'clock-history', 'SYS_CHANGE_HISTORY', 'SYS_CHANGE_HISTORY_DESC')</step>
     <step id="610">ALTER TABLE %PREFIX%_log_changes ADD COLUMN log_change_uuid varchar(36)</step>
     <step id="620">CREATE INDEX %PREFIX%_idx_log_change_uuid ON %PREFIX%_log_changes (log_change_uuid)</step>
+    <step id="630">CREATE TABLE %PREFIX%_event_recurrences
+        (
+        evr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+        evr_uuid                    varchar(36)         NOT NULL,
+        evr_dat_id_master           integer unsigned    NOT NULL,
+        evr_frequency               varchar(20)         NOT NULL,
+        evr_interval                integer             NOT NULL    DEFAULT 1,
+        evr_byday                   varchar(50),
+        evr_bymonthday              integer,
+        evr_monthly_mode            varchar(20),
+        evr_end_type                varchar(20)         NOT NULL    DEFAULT 'never',
+        evr_until                   timestamp           NULL        DEFAULT NULL,
+        evr_count                   integer,
+        evr_timezone                varchar(100),
+        evr_generated_until         timestamp           NULL        DEFAULT NULL,
+        evr_usr_id_create           integer unsigned,
+        evr_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+        evr_usr_id_change           integer unsigned,
+        evr_timestamp_change        timestamp           NULL        DEFAULT NULL,
+        PRIMARY KEY (evr_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="640">CREATE UNIQUE INDEX %PREFIX%_idx_evr_uuid ON %PREFIX%_event_recurrences (evr_uuid)</step>
+    <step id="650">CREATE INDEX %PREFIX%_idx_evr_dat_id_master ON %PREFIX%_event_recurrences (evr_dat_id_master)</step>
+    <step id="660">CREATE INDEX %PREFIX%_idx_evr_generated_until ON %PREFIX%_event_recurrences (evr_generated_until)</step>
+    <step id="670">ALTER TABLE %PREFIX%_events ADD COLUMN dat_evr_id integer unsigned</step>
+    <step id="680">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_original_begin timestamp NULL DEFAULT NULL</step>
+    <step id="690">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_status varchar(20)</step>
+    <step id="700">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_scope varchar(20)</step>
+    <step id="710">CREATE INDEX %PREFIX%_idx_dat_evr_original_begin ON %PREFIX%_events (dat_evr_id, dat_recurrence_original_begin)</step>
+    <step id="720">CREATE INDEX %PREFIX%_idx_dat_recurrence_status ON %PREFIX%_events (dat_recurrence_status)</step>
+    <step id="730">ALTER TABLE %PREFIX%_events ADD CONSTRAINT %PREFIX%_fk_dat_evr FOREIGN KEY (dat_evr_id) REFERENCES %PREFIX%_event_recurrences (evr_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="740">ALTER TABLE %PREFIX%_event_recurrences
+        ADD CONSTRAINT %PREFIX%_fk_evr_dat_master  FOREIGN KEY (evr_dat_id_master)  REFERENCES %PREFIX%_events (dat_id)              ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_evr_usr_create  FOREIGN KEY (evr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_evr_usr_change  FOREIGN KEY (evr_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="750">UPDATE %PREFIX%_menu SET men_url = '/modules/events.php' WHERE men_name_intern = 'events'</step>
     <step>stop</step>
 </update>
