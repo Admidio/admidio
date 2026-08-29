@@ -35,7 +35,7 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'settings', 'settings_save', 'install', 'enable', 'disable', 'update', 'uninstall')));
+        'validValues' => array('list', 'settings', 'settings_save', 'enable', 'disable', 'update', 'uninstall')));
     // Everything but the list and the settings dialog answers with JSON.
     $isAjax = !in_array($getMode, array('list', 'settings'), true);
 
@@ -87,24 +87,13 @@ try {
             ));
             break;
 
-        case 'install':
-            // check the CSRF token of the form against the session token
-            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
-
-            if ($plugin === null) {
-                throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
-            }
-            PluginInstaller::install($plugin);
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_INSTALLED')));
-            break;
-
         case 'enable':
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
             if ($plugin === null) {
                 throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
             }
-            PluginInstaller::setEnabled($plugin, true);
+            PluginInstaller::enable($plugin);
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_ENABLED')));
             break;
 
@@ -114,7 +103,7 @@ try {
             if ($plugin === null) {
                 throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
             }
-            PluginInstaller::setEnabled($plugin, false);
+            PluginInstaller::disable($plugin);
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_DISABLED')));
             break;
 

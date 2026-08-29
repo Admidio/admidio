@@ -1275,8 +1275,6 @@
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
   <string name="SYS_PLUGIN_ENABLED">Plugin successfully enabled.</string>
-  <string name="SYS_PLUGIN_INSTALL">Install plugin</string>
-  <string name="SYS_PLUGIN_INSTALLED">Plugin successfully installed.</string>
   <string name="SYS_PLUGIN_LOAD_FAILED">These plugins could not be loaded and are therefore inactive:</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Here you can manage the plugins of Admidio. Plugins are additional modules that can be installed to extend the functionality of Admidio. You can install, update or remove plugins.</string>
@@ -1940,7 +1938,6 @@
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="SYS_WANT_DISABLE_PLUGIN">Do you want to disable the plugin #VAR1_BOLD#? It keeps its settings and its data.</string>
   <string name="SYS_WANT_ENABLE_PLUGIN">Do you want to enable the plugin #VAR1_BOLD#?</string>
-  <string name="SYS_WANT_INSTALL_PLUGIN">Do you want to install the plugin #VAR1_BOLD#?</string>
   <string name="SYS_WANT_UNINSTALL_PLUGIN">Do you want to uninstall the plugin #VAR1_BOLD#? Its data is kept.</string>
   <string name="SYS_WANT_UNINSTALL_PLUGIN_DATA">Do you want to uninstall the plugin #VAR1_BOLD# and irrevocably delete all its data?</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>

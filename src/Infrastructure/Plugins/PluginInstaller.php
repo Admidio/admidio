@@ -161,14 +161,35 @@ final class PluginInstaller
     }
 
     /**
-     * Enable or disable a plugin for the current organization. The plugin keeps everything it has;
-     * only the decision whether it is loaded changes.
+     * Enable a plugin for the current organization, preparing it first if that has not happened yet.
+     *
+     * Whether a plugin has a component record and preference rows is not a state an administrator
+     * has any reason to think about: to them a plugin on disk is available and one they switched on
+     * is enabled. So the first organization that enables a plugin is what installs it, and every
+     * organization after that only flips its own preference.
      * @param Plugin $plugin
-     * @param bool $enabled
      * @return void
      * @throws Exception
      */
-    public static function setEnabled(Plugin $plugin, bool $enabled): void
+    public static function enable(Plugin $plugin): void
+    {
+        global $gSettingsManager;
+
+        if (!PluginRegistry::isInstalled($plugin->id)) {
+            self::install($plugin);
+        }
+
+        $gSettingsManager->set($plugin->getEnabledSettingName(), '1');
+    }
+
+    /**
+     * Disable a plugin for the current organization. It keeps its files, its data and every setting
+     * it has; only the decision whether it is loaded changes.
+     * @param Plugin $plugin
+     * @return void
+     * @throws Exception
+     */
+    public static function disable(Plugin $plugin): void
     {
         global $gSettingsManager;
 
@@ -176,7 +197,7 @@ final class PluginInstaller
             throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($plugin->id));
         }
 
-        $gSettingsManager->set($plugin->getEnabledSettingName(), $enabled ? '1' : '0');
+        $gSettingsManager->set($plugin->getEnabledSettingName(), '0');
     }
 
     /**

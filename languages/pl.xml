@@ -1236,7 +1236,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio wymaga #VAR1# lub wyższej</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Wybierz opcję</string>
-  <string name="SYS_PLUGIN_INSTALL">Zainstaluj wtyczkę</string>
   <string name="SYS_PLUGIN_MANAGER">Menedżer wtyczek</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Tutaj możesz zarządzać wtyczkami Admidio. Wtyczki są dodatkowymi modułami, które można instalować w celu rozszerzenia funkcjonalności Admidio. Możesz je instalować, aktualizować lub usuwać.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Wtyczka nie jest zainstalowana.</string>

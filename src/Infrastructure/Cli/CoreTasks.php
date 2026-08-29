@@ -2040,11 +2040,7 @@ final class CoreTasks
             'plugin:show PLUGIN [--format=text|json|json-api]', 'PLUGINS', true,
             array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
-        self::task('plugin:install', 'pluginInstall', 'Install a plugin.',
-            'plugin:install PLUGIN [--add-menu=BOOL]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin ID.')),
-            array(self::opt('add-menu', 'Add plugin menu entry.', 'BOOL')));
-        self::task('plugin:enable', 'pluginEnable', 'Enable an installed plugin for the current organization.',
+        self::task('plugin:enable', 'pluginEnable', 'Enable a plugin for the current organization, preparing it if that has not happened yet.',
             'plugin:enable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:disable', 'pluginDisable', 'Disable a plugin for the current organization, keeping its data.',
             'plugin:disable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
@@ -8629,18 +8625,10 @@ final class CoreTasks
         return 0;
     }
 
-    public static function pluginInstall(array $arguments, array $options): int
-    {
-        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        PluginInstaller::install($plugin, CliApplication::optionBool($options, 'add-menu', true) ?? true);
-        CliApplication::writeSuccess('Plugin installed.', $options);
-        return 0;
-    }
-
     public static function pluginEnable(array $arguments, array $options): int
     {
         $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        PluginInstaller::setEnabled($plugin, true);
+        PluginInstaller::enable($plugin);
         CliApplication::writeSuccess('Plugin enabled.', $options);
         return 0;
     }
@@ -8648,7 +8636,7 @@ final class CoreTasks
     public static function pluginDisable(array $arguments, array $options): int
     {
         $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        PluginInstaller::setEnabled($plugin, false);
+        PluginInstaller::disable($plugin);
         CliApplication::writeSuccess('Plugin disabled.', $options);
         return 0;
     }

@@ -1236,7 +1236,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Az Admidio-hoz #VAR1# vagy újabb verzió szükséges</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Válasszon lehetőséget</string>
-  <string name="SYS_PLUGIN_INSTALL">Bővítmény telepítése</string>
   <string name="SYS_PLUGIN_MANAGER">Bővítménykezelő</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Itt kezelheti az Admidio bővítményeit. A bővítmények olyan kiegészítő modulok, amelyek telepítésével bővítheti az Admidio funkcióit. Itt telepítheti, frissítheti vagy eltávolíthatja a bővítményeket.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">A bővítmény nincs telepítve.</string>

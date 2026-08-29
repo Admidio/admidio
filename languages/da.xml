@@ -1225,7 +1225,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio kræver #VAR1# eller højere</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Vælg</string>
-  <string name="SYS_PLUGIN_INSTALL">Installer plugin</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Her kan du administrere Admidios plugins. Plugins er yderligere moduler, der kan installeres for at udvide funktionaliteten af Admidio. Du kan installere, opdatere eller fjerne plugins.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Plugin\'et er ikke installeret.</string>
