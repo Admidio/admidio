@@ -292,7 +292,7 @@ class EventListPresenter extends PagePresenter
                 $eventEditUrlParams = array('mode' => 'edit', 'dat_uuid' => $eventUUID);
                 if ($recurrenceBadge !== '') {
                     $eventDeleteMessage = $gL10n->get('SYS_RECURRENCE_DELETE_THIS_CONFIRM', array($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . $dateHeadline));
-                    $eventDeleteLabel = $gL10n->get('SYS_RECURRENCE_DELETE_THIS');
+                    $eventDeleteLabel = $gL10n->get('SYS_ONLY_THIS_DATE');
                     $eventDeleteUrlParams['recurrence_scope'] = 'this';
                     $eventEditUrlParams['recurrence_scope'] = 'this';
                 }
@@ -922,11 +922,11 @@ class EventListPresenter extends PagePresenter
         $recurrenceStatus = (string)$event->getValue('dat_recurrence_status', 'database');
 
         if ($recurrenceStatus === 'master') {
-            return $gL10n->get('SYS_RECURRENCE_REPEATS');
+            return $gL10n->get('SYS_REPEATS');
         }
 
         if ((int)$event->getValue('dat_evr_id') > 0 || in_array($recurrenceStatus, array('generated', 'modified'), true)) {
-            return $gL10n->get('SYS_RECURRENCE_PART_OF_SERIES');
+            return $gL10n->get('SYS_PART_OF_SERIES');
         }
 
         return '';

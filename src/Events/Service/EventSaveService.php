@@ -395,7 +395,7 @@ class EventSaveService
 
         $interval = (int)($formValues['event_recurrence_interval'] ?? 1);
         if ($interval < 1) {
-            throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_RECURRENCE_INTERVAL'));
+            throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_INTERVAL'));
         }
 
         $byDay = array();
@@ -417,7 +417,7 @@ class EventSaveService
             EventRecurrenceRule::END_TYPE_COUNT,
             EventRecurrenceRule::END_TYPE_UNTIL
         ), true)) {
-            throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_RECURRENCE_END'));
+            throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_ENDS'));
         }
 
         $until = null;
@@ -426,7 +426,7 @@ class EventSaveService
         if ($endType === EventRecurrenceRule::END_TYPE_COUNT) {
             $count = (int)($formValues['event_recurrence_count'] ?? 0);
             if ($count < 1) {
-                throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_RECURRENCE_COUNT'));
+                throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_NUMBER_OF_OCCURRENCES'));
             }
             if ($count > EventOccurrenceGenerator::MAX_NEVER_OCCURRENCES) {
                 throw new Exception('SYS_RECURRENCE_TOO_MANY_OCCURRENCES', array(EventOccurrenceGenerator::MAX_NEVER_OCCURRENCES));
@@ -435,7 +435,7 @@ class EventSaveService
             $untilDate = (string)($formValues['event_recurrence_until'] ?? '');
             $until = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $untilDate . ' 23:59:59');
             if (!$until) {
-                throw new Exception('SYS_DATE_INVALID', array('SYS_RECURRENCE_UNTIL', 'YYYY-MM-DD'));
+                throw new Exception('SYS_DATE_INVALID', array('SYS_END_DATE', 'YYYY-MM-DD'));
             }
 
             if ($until < DateTimeImmutable::createFromMutable($startDateTime)->setTime(0, 0)) {

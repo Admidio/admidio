@@ -85,8 +85,8 @@ class EventFormPresenter extends PagePresenter
                 <p>' . $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ' . SecurityUtils::encodeHTML($event->getValue('dat_headline')) . '</p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick="' . $thisOnClick . '">' . $gL10n->get('SYS_RECURRENCE_SCOPE_THIS') . '</button>
-                <button class="btn btn-primary" onclick="' . $seriesOnClick . '">' . $gL10n->get('SYS_RECURRENCE_SCOPE_SERIES') . '</button>
+                <button class="btn btn-primary" onclick="' . $thisOnClick . '">' . $gL10n->get('SYS_ONLY_THIS_DATE') . '</button>
+                <button class="btn btn-primary" onclick="' . $seriesOnClick . '">' . $gL10n->get('SYS_ENTIRE_SERIES') . '</button>
                 <button class="btn btn-secondary" data-bs-dismiss="modal">' . $gL10n->get('SYS_CANCEL') . '</button>
                 <div id="adm_status_message" class="mt-4 w-100"></div>
             </div>';
@@ -453,11 +453,11 @@ class EventFormPresenter extends PagePresenter
 
         if ($showRecurrenceFields) {
             $form->addSelectBox('event_recurrence_frequency', $gL10n->get('SYS_REPEAT'), ['none' => 'SYS_NO_RECURRENCE', EventRecurrenceRule::FREQUENCY_DAILY => 'SYS_DAILY', EventRecurrenceRule::FREQUENCY_WEEKLY => 'SYS_WEEKLY', EventRecurrenceRule::FREQUENCY_MONTHLY => 'SYS_MONTHLY', EventRecurrenceRule::FREQUENCY_YEARLY => 'SYS_ANNUALLY'], ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $recurrenceFrequency, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_FREQUENCY_DESC']);
-            $form->addInput('event_recurrence_interval', $gL10n->get('SYS_RECURRENCE_INTERVAL'), (string)$recurrenceInterval, ['type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_RECURRENCE_INTERVAL_DESC']);
-            $form->addSelectBox('event_recurrence_weekdays', $gL10n->get('SYS_WEEKDAY'), ['MO' => 'SYS_MONDAY', 'TU' => 'SYS_TUESDAY', 'WE' => 'SYS_WEDNESDAY', 'TH' => 'SYS_THURSDAY', 'FR' => 'SYS_FRIDAY', 'SA' => 'SYS_SATURDAY', 'SU' => 'SYS_SUNDAY'], ['defaultValue' => $recurrenceWeekdays, 'multiselect' => true, 'showContextDependentFirstEntry' => false, 'placeholder' => $gL10n->get('SYS_RECURRENCE_WEEKDAYS'), 'helpTextId' => 'SYS_RECURRENCE_WEEKDAYS_DESC']);
-            $form->addSelectBox('event_recurrence_end_type', $gL10n->get('SYS_RECURRENCE_END'), [EventRecurrenceRule::END_TYPE_NEVER => 'SYS_RECURRENCE_END_NEVER', EventRecurrenceRule::END_TYPE_COUNT => 'SYS_RECURRENCE_END_AFTER_COUNT', EventRecurrenceRule::END_TYPE_UNTIL => 'SYS_RECURRENCE_END_ON_DATE'], ['defaultValue' => $recurrenceEndType, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_END_DESC']);
-            $form->addInput('event_recurrence_count', $gL10n->get('SYS_RECURRENCE_COUNT'), (string)$recurrenceCount, ['type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_RECURRENCE_COUNT_DESC']);
-            $form->addInput('event_recurrence_until', $gL10n->get('SYS_RECURRENCE_UNTIL'), $recurrenceUntil, ['type' => 'date', 'helpTextId' => 'SYS_RECURRENCE_UNTIL_DESC']);
+            $form->addInput('event_recurrence_interval', $gL10n->get('SYS_INTERVAL'), (string)$recurrenceInterval, ['type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_RECURRENCE_INTERVAL_DESC']);
+            $form->addSelectBox('event_recurrence_weekdays', $gL10n->get('SYS_WEEKDAY'), ['MO' => 'SYS_MONDAY', 'TU' => 'SYS_TUESDAY', 'WE' => 'SYS_WEDNESDAY', 'TH' => 'SYS_THURSDAY', 'FR' => 'SYS_FRIDAY', 'SA' => 'SYS_SATURDAY', 'SU' => 'SYS_SUNDAY'], ['defaultValue' => $recurrenceWeekdays, 'multiselect' => true, 'showContextDependentFirstEntry' => false, 'placeholder' => $gL10n->get('SYS_WEEKDAYS'), 'helpTextId' => 'SYS_RECURRENCE_WEEKDAYS_DESC']);
+            $form->addSelectBox('event_recurrence_end_type', $gL10n->get('SYS_ENDS'), [EventRecurrenceRule::END_TYPE_NEVER => 'SYS_NEVER', EventRecurrenceRule::END_TYPE_COUNT => 'SYS_AFTER_NUMBER_OF_OCCURRENCES', EventRecurrenceRule::END_TYPE_UNTIL => 'SYS_ON_DATE'], ['defaultValue' => $recurrenceEndType, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_END_DESC']);
+            $form->addInput('event_recurrence_count', $gL10n->get('SYS_NUMBER_OF_OCCURRENCES'), (string)$recurrenceCount, ['type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_NUMBER_OF_OCCURRENCES_DESC']);
+            $form->addInput('event_recurrence_until', $gL10n->get('SYS_END_DATE'), $recurrenceUntil, ['type' => 'date', 'helpTextId' => 'SYS_RECURRENCE_UNTIL_DESC']);
         }
 
         $form->addCheckbox('dat_highlight', $gL10n->get('SYS_HIGHLIGHT_EVENT'), (bool)$event->getValue('dat_highlight'));
