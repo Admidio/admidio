@@ -12,6 +12,10 @@
     "autoload": {
         "AdmidioPlugin\\Hello\\": "src/"
     },
+    "preferences": {
+        "section": "content_management",
+        "sequence": 30
+    },
     "settings": {
         "hello_greeting": {
             "type": "string",

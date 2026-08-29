@@ -12,6 +12,9 @@
     "autoload": {
         "AdmidioPlugin\\WhoIsOnline\\": "src/"
     },
+    "preferences": {
+        "section": "overview_extensions"
+    },
     "settings": {
         "who_is_online_plugin_enabled": {
             "type": "enum",

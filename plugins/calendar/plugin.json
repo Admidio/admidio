@@ -13,6 +13,9 @@
     "autoload": {
         "AdmidioPlugin\\Calendar\\": "src/"
     },
+    "preferences": {
+        "section": "overview_extensions"
+    },
     "settings": {
         "calendar_plugin_enabled": {
             "type": "enum",
