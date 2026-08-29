@@ -2046,12 +2046,10 @@ final class CoreTasks
             'plugin:disable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:update', 'pluginUpdate', 'Run the update scripts of a plugin.',
             'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
-        self::task('plugin:remove', 'pluginRemove', 'Uninstall a plugin, optionally with its data.',
-            'plugin:remove PLUGIN [--remove-data] [--yes]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin ID. The ID of an orphaned plugin whose files are gone is accepted too.')), array(
-                self::opt('remove-data', 'Also run db_scripts/uninstall.sql and destroy the data of the plugin.', '', false, false, true),
-                self::opt('yes', 'Confirm uninstall.', '', false, false, true)
-            ));
+        self::task('plugin:remove', 'pluginRemove', 'Remove a plugin from every organization, with its data and its files.',
+            'plugin:remove PLUGIN [--yes]', 'PLUGINS', true,
+            array(self::arg('plugin', 'Plugin ID. The ID of an orphaned plugin whose files are gone is accepted too.')),
+            array(self::opt('yes', 'Confirm the removal.', '', false, false, true)));
     }
 
     private static function registerSsoTasks(): void
@@ -8658,16 +8656,22 @@ final class CoreTasks
             throw new InvalidArgumentException('Plugin "' . $id . '" was not found.');
         }
 
-        $removeData = CliApplication::optionBool($options, 'remove-data', false) === true;
+        $organizations = PluginRegistry::getEnabledOrganizations($id);
         CliApplication::confirm(
-            'Uninstall plugin "' . ($plugin?->name ?? $id) . '"'
-                . ($removeData ? ' and destroy its data' : '') . '?',
+            'Remove plugin "' . ($plugin?->name ?? $id) . '"'
+                . ($organizations === array()
+                    ? ''
+                    : ', still enabled in ' . implode(', ', $organizations) . ',')
+                . ' from every organization, destroying its data and deleting its files?',
             $options
         );
 
         // The ID keeps the orphan case working: the files are gone, but the row is not.
-        PluginInstaller::uninstall($plugin ?? $id, $removeData);
-        CliApplication::writeSuccess('Plugin removed.', $options);
+        $filesDeleted = PluginInstaller::remove($plugin ?? $id);
+        CliApplication::writeSuccess(
+            $filesDeleted ? 'Plugin removed.' : 'Plugin removed, but its directory could not be deleted.',
+            $options
+        );
         return 0;
     }
 

@@ -241,7 +241,7 @@ final class UpdateStepsCode
     {
         PluginRegistry::reset();
 
-        foreach (Installation::DEFAULT_PLUGINS as $id) {
+        foreach (PluginRegistry::BUILT_IN as $id) {
             $plugin = PluginRegistry::get($id);
             if ($plugin === null || !$plugin->isValid()) {
                 // The plugin is still on the previous runtime, or it is not shipped any more.

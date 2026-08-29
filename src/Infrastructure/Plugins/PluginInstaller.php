@@ -6,6 +6,7 @@ use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Preferences\Service\PreferencesService;
 use RuntimeException;
@@ -123,41 +124,90 @@ final class PluginInstaller
     }
 
     /**
-     * Uninstall a plugin: remove its menu entry, its preferences and its component record.
+     * Remove a plugin completely: its menu entries, its pages, its preferences in every
+     * organization, its data, its component record and its files.
+     *
+     * This is the destructive operation of the plugin lifecycle and the only one there is. Disabling
+     * a plugin preserves everything; removing it keeps nothing, so db_scripts/uninstall.sql always
+     * runs - the files are gone afterwards, and data no code can ever read again is worse than no
+     * data at all.
+     *
+     * Removing is an operation on the installation, not on one organization: the schema and the
+     * files are shared, so it takes the plugin away from every organization at once. The caller has
+     * to have made that clear before it gets here.
+     *
+     * A plugin of the Admidio distribution is refused, because the next core update would put its
+     * files back and quietly undo the decision.
      * @param Plugin|string $plugin The plugin, or the ID of a plugin whose files are already gone.
-     * @param bool $removeData Whether db_scripts/uninstall.sql should run as well. This destroys
-     *                         the data of the plugin and is therefore never the default.
-     * @return void
+     * @return bool Whether the directory of the plugin could be deleted. A deployment that keeps
+     *              plugins/ read-only still gets everything else removed, so the plugin comes back
+     *              as available rather than staying half-removed.
      * @throws Exception
      */
-    public static function uninstall(Plugin|string $plugin, bool $removeData = false): void
+    public static function remove(Plugin|string $plugin): bool
     {
         global $gDb;
 
         $id = $plugin instanceof Plugin ? $plugin->id : $plugin;
-        $componentId = PluginRegistry::getComponentId($id);
-        if ($componentId === 0) {
-            throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($id));
+
+        if (PluginRegistry::isBuiltIn($id)) {
+            throw new Exception('SYS_PLUGIN_REMOVE_BUILT_IN', array($id));
         }
 
+        $componentId = PluginRegistry::getComponentId($id);
+
         PluginPages::unpublish($plugin);
-        self::removeMenuEntries($componentId);
+
+        if ($componentId > 0) {
+            self::removeMenuEntries($componentId);
+        }
 
         if ($plugin instanceof Plugin) {
-            PreferencesService::removePreferences(self::getPreferenceNames($plugin));
-            if ($removeData) {
+            if ($componentId > 0) {
                 self::executeSqlFile($plugin, 'uninstall.sql');
             }
+            PreferencesService::removePreferences(self::getPreferenceNames($plugin));
         } else {
             // The files are gone, so the only preference whose name is still known is the one that
             // Admidio owns itself.
             PreferencesService::removePreferences(array('plugin_' . str_replace('-', '_', $id) . '_enabled'));
         }
 
-        $component = new Component($gDb, $componentId);
-        $component->delete();
+        if ($componentId > 0) {
+            $component = new Component($gDb, $componentId);
+            $component->delete();
+        }
+
+        $deleted = $plugin instanceof Plugin ? self::deleteDirectory($plugin) : true;
 
         PluginRegistry::reset();
+
+        return $deleted;
+    }
+
+    /**
+     * Delete the directory of a plugin.
+     * @param Plugin $plugin
+     * @return bool **false** if the directory is still there, which is what a read-only deployment
+     *              of plugins/ produces. That is not an error: everything the database held is gone
+     *              either way, and the administrator is told that the files remain.
+     */
+    private static function deleteDirectory(Plugin $plugin): bool
+    {
+        global $gLogger;
+
+        try {
+            FileSystemUtils::deleteDirectoryIfExists($plugin->path, true);
+        } catch (\Throwable $exception) {
+            $gLogger->warning(
+                'The directory of the plugin "' . $plugin->id . '" could not be deleted.',
+                array('path' => $plugin->path, 'error' => $exception->getMessage())
+            );
+
+            return false;
+        }
+
+        return !is_dir($plugin->path);
     }
 
     /**

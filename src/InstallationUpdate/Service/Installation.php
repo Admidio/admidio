@@ -37,17 +37,6 @@ use UnexpectedValueException;
 class Installation
 {
     /**
-     * The plugins a new Admidio installation gets. Everything else below plugins/ - the example
-     * plugin, anything an administrator added - is installed from the plugin administration.
-     * The update uses the same list to move an existing installation onto the new plugin runtime.
-     * @var array<int,string>
-     */
-    public const DEFAULT_PLUGINS = array(
-        'announcement-list', 'birthday', 'calendar', 'event-list', 'latest-documents-files',
-        'login-form', 'random-photo', 'who-is-online'
-    );
-
-    /**
      * Checks whether the minimum requirements for PHP and MySQL have been met.
      * @param Database $database Object of the database that should be checked. A connection should be established.
      * @return string Returns an error text if the database doesn't meet the necessary requirements.
@@ -915,7 +904,7 @@ class Installation
      */
     private static function installPlugins(): void
     {
-        foreach (self::DEFAULT_PLUGINS as $id) {
+        foreach (PluginRegistry::BUILT_IN as $id) {
             $plugin = PluginRegistry::get($id);
             if ($plugin !== null && $plugin->isValid() && !PluginRegistry::isInstalled($id)) {
                 PluginInstaller::install($plugin);
