@@ -16,10 +16,9 @@
         <table id="adm_table_plugins" class="table table-condensed table-hover" style="max-width: 100%;">
             <thead>
                 <tr>
+                    <th style="width: 1%;">&nbsp;</th> {* the enabled switch *}
                     <th>{$l10n->get('SYS_NAME')}</th>
                     <th>{$l10n->get('SYS_DESCRIPTION')}</th>
-                    <th>{$l10n->get('SYS_AUTHOR')}</th>
-                    <th>{$l10n->get('SYS_WEBSITE')}</th>
                     <th>{$l10n->get('SYS_PLUGIN_VERSION')}</th>
                     <th>{$l10n->get('SYS_INSTALLED_VERSION')}</th>
                     <th>&nbsp;</th> {* actions *}
@@ -28,7 +27,7 @@
             {foreach $list as $pluginNode}
                 <tbody>
                     <tr class="admidio-group-heading">
-                        <td id="adm_plugin_group_{$pluginNode.id}" colspan="7">
+                        <td id="adm_plugin_group_{$pluginNode.id}" colspan="6">
                             <a id="adm_plugin_caret_{$pluginNode.id}" class="admidio-icon-link admidio-open-close-caret" data-target="adm_plugin_entries_{$pluginNode.id}">
                                 <i class="bi bi-caret-down-fill"></i>
                             </a> {$pluginNode.name}
@@ -38,21 +37,25 @@
                 <tbody id="adm_plugin_entries_{$pluginNode.id}">
                     {foreach $pluginNode.entries as $pluginEntry}
                         <tr id="adm_plugin_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
+                            {* The switch shows the state the plugin is in and flips it when clicked. *}
+                            <td class="text-center">
+                                {if $pluginEntry.toggle}
+                                    <a class="admidio-messagebox {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                       data-buttons="yes-no" data-message="{$pluginEntry.toggle.dataMessage}"
+                                       data-href="{$pluginEntry.toggle.dataHref}"
+                                       data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip}"
+                                       aria-label="{$pluginEntry.toggle.label}">
+                                        <i class="{$pluginEntry.toggle.icon} fs-5"></i></a>
+                                {/if}
+                            </td>
                             <td>{if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}</td>
                             <td>
                                 {$pluginEntry.description}
+                                {include 'modules/plugins.author.tpl' data=$pluginEntry}
                                 {* Developer diagnostics in English, not a translated message. *}
                                 {foreach $pluginEntry.diagnostics as $diagnostic}
                                     <div class="text-danger"><small><code>{$diagnostic}</code></small></div>
                                 {/foreach}
-                            </td>
-                            <td>{$pluginEntry.author}</td>
-                            <td>
-                                {if $pluginEntry.url neq ''}
-                                    <a href="{$pluginEntry.url}" target="_blank" rel="noopener noreferrer"
-                                       data-bs-toggle="tooltip" title="{$pluginEntry.url}" style="display:inline-flex;">
-                                        <i class="bi bi-link-45deg"></i>{$pluginEntry.urlHost}</a>
-                                {/if}
                             </td>
                             <td>{$pluginEntry.version}</td>
                             <td data-bs-toggle="tooltip"
@@ -90,11 +93,18 @@
                 {foreach $pluginNode.entries as $pluginEntry}
                     <div class="card admidio-accordion-field-group" id="adm_plugin_card_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
                         <div class="card-header">
+                            {if $pluginEntry.toggle}
+                                <a class="admidio-messagebox {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                   data-buttons="yes-no" data-message="{$pluginEntry.toggle.dataMessage}"
+                                   data-href="{$pluginEntry.toggle.dataHref}"
+                                   aria-label="{$pluginEntry.toggle.label}">
+                                    <i class="{$pluginEntry.toggle.icon}"></i></a>
+                            {/if}
                             {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}
                             <div class="dropdown float-end d-flex">
                                 <a class="admidio-icon-link" href="#" role="button" id="adm_dropdown_menu_button_{$pluginEntry.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
-                                {if count($pluginEntry.actions) > 0 || $pluginEntry.url neq ''}
+                                {if count($pluginEntry.actions) > 0}
                                     <ul class="dropdown-menu" aria-labelledby="adm_dropdown_menu_button_{$pluginEntry.id}">
                                         {foreach $pluginEntry.actions as $actionItem}
                                             <li>
@@ -104,16 +114,6 @@
                                                     <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
                                             </li>
                                         {/foreach}
-                                        {if $pluginEntry.url neq ''}
-                                            {if count($pluginEntry.actions) > 0}
-                                                <li><hr class="dropdown-divider"></li>
-                                            {/if}
-                                            <li style="padding: 0 var(--bs-dropdown-item-padding-x);">{$l10n->get('SYS_WEBSITE')}:</li>
-                                            <li class="dropdown-item">
-                                                <a href="{$pluginEntry.url}" target="_blank" rel="noopener noreferrer">
-                                                    <i class="bi bi-link-45deg"></i>{$pluginEntry.urlHost}</a>
-                                            </li>
-                                        {/if}
                                     </ul>
                                 {/if}
                             </div>
@@ -122,13 +122,10 @@
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_description">
                                 <strong>{$l10n->get('SYS_DESCRIPTION')}:</strong>
                                 <p>{$pluginEntry.description}</p>
+                                {include 'modules/plugins.author.tpl' data=$pluginEntry}
                                 {foreach $pluginEntry.diagnostics as $diagnostic}
                                     <p class="text-danger"><small><code>{$diagnostic}</code></small></p>
                                 {/foreach}
-                            </div>
-                            <div id="adm_plugin_card_entry_{$pluginEntry.id}_author">
-                                <strong>{$l10n->get('SYS_AUTHOR')}:</strong>
-                                <p>{$pluginEntry.author}</p>
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_version">
                                 <strong>{$l10n->get('SYS_PLUGIN_VERSION')}:</strong>

@@ -176,13 +176,46 @@ class PluginsPresenter extends PagePresenter
             'description' => $plugin === null ? '' : Language::translateIfTranslationStrId($plugin->description),
             'icon' => $plugin?->icon ?? '',
             'author' => $plugin?->author ?? '',
-            'url' => $homepage === '' ? '' : $homepage,
+            'url' => $homepage,
             'urlHost' => $homepage === '' ? '' : (string)(parse_url($homepage, PHP_URL_HOST) ?? $homepage),
             'version' => $plugin?->version ?? '',
             'installedVersion' => PluginRegistry::getInstalledVersion($id),
             'versionState' => $this->getVersionState($id, $plugin, $state),
+            'toggle' => $this->getStateToggle($id, $plugin, $state),
             'diagnostics' => $this->getDiagnostics($plugin, $state),
             'actions' => $this->getActions($id, $plugin, $state)
+        );
+    }
+
+    /**
+     * The switch of the state column, which shows whether the plugin is enabled and flips it.
+     *
+     * It shows the state the plugin is in, not the operation a click performs, so that the column
+     * can be read at a glance like a row of switches.
+     * @param string $id ID of the plugin.
+     * @param Plugin|null $plugin The plugin, or **null** for an orphan whose files are gone.
+     * @param string $state One of the PluginRegistry STATE_* constants.
+     * @return array<string,string>|null **null** for a plugin that cannot be enabled at all.
+     * @throws Exception
+     */
+    private function getStateToggle(string $id, ?Plugin $plugin, string $state): ?array
+    {
+        global $gL10n;
+
+        // An uninstalled plugin has nothing to switch, and an orphan has no files left to load.
+        if ($plugin === null || !$plugin->isValid() || !PluginRegistry::isInstalled($id)) {
+            return null;
+        }
+
+        $enabled = PluginRegistry::isEnabled($id);
+
+        return array(
+            'icon' => $enabled ? 'bi bi-toggle-on' : 'bi bi-toggle-off',
+            'class' => $enabled ? 'text-success' : 'text-secondary',
+            'label' => $gL10n->get($enabled ? 'SYS_ENABLED' : 'SYS_DISABLED'),
+            'tooltip' => $gL10n->get($enabled ? 'SYS_PLUGIN_DISABLE' : 'SYS_PLUGIN_ENABLE'),
+            'dataMessage' => $gL10n->get($enabled ? 'SYS_WANT_DISABLE_PLUGIN' : 'SYS_WANT_ENABLE_PLUGIN', array($id)),
+            'dataHref' => $this->actionScript($id, $enabled ? 'disable' : 'enable')
         );
     }
 
@@ -265,7 +298,9 @@ class PluginsPresenter extends PagePresenter
         $actions = array();
 
         if ($state === PluginRegistry::STATE_AVAILABLE) {
-            $actions[] = $this->action($id, 'install', 'bi bi-download', 'SYS_PLUGIN_INSTALL', 'SYS_WANT_INSTALL_PLUGIN');
+            // Installing means registering a plugin that is already on disk, so this adds, it does
+            // not download.
+            $actions[] = $this->action($id, 'install', 'bi bi-plus-circle-fill', 'SYS_PLUGIN_INSTALL', 'SYS_WANT_INSTALL_PLUGIN');
             return $actions;
         }
 
@@ -275,12 +310,12 @@ class PluginsPresenter extends PagePresenter
         }
 
         if ($state === PluginRegistry::STATE_ENABLED && $plugin !== null) {
-            $panel = PluginPanel::get(PluginPanel::normalizeId($plugin->id));
-            if ($panel !== null) {
+            $panel = $this->getSettingsPanelId($plugin);
+            if ($panel !== '') {
                 $actions[] = array(
                     'url' => SecurityUtils::encodeUrl(
                         ADMIDIO_URL . FOLDER_MODULES . '/preferences.php',
-                        array('panel' => $panel['id'])
+                        array('panel' => $panel)
                     ),
                     'icon' => 'bi bi-gear',
                     'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
@@ -292,20 +327,16 @@ class PluginsPresenter extends PagePresenter
             $actions[] = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
         }
 
-        if ($state === PluginRegistry::STATE_ENABLED) {
-            $actions[] = $this->action($id, 'disable', 'bi bi-toggle-off', 'SYS_PLUGIN_DISABLE', 'SYS_WANT_DISABLE_PLUGIN');
-        } elseif ($state === PluginRegistry::STATE_DISABLED) {
-            $actions[] = $this->action($id, 'enable', 'bi bi-toggle-on', 'SYS_PLUGIN_ENABLE', 'SYS_WANT_ENABLE_PLUGIN');
-        }
-
-        $actions[] = $this->action($id, 'uninstall', 'bi bi-trash', 'SYS_PLUGIN_UNINSTALL', 'SYS_WANT_UNINSTALL_PLUGIN');
+        // Uninstalling only removes the registration of the plugin; the trash can is the operation
+        // next to it, which destroys the data as well.
+        $actions[] = $this->action($id, 'uninstall', 'bi bi-x-circle', 'SYS_PLUGIN_UNINSTALL', 'SYS_WANT_UNINSTALL_PLUGIN');
 
         // Destroying the data of a plugin is a separate decision and never the default.
         if ($plugin !== null) {
             $actions[] = $this->action(
                 $id,
                 'uninstall',
-                'bi bi-trash-fill',
+                'bi bi-trash',
                 'SYS_PLUGIN_UNINSTALL_DATA',
                 'SYS_WANT_UNINSTALL_PLUGIN_DATA',
                 array('data' => '1')
@@ -313,6 +344,21 @@ class PluginsPresenter extends PagePresenter
         }
 
         return $actions;
+    }
+
+    /**
+     * The preferences panel that holds the settings of a plugin, or an empty string if it has none.
+     *
+     * A plugin that registered a panel of its own is asked for it by the ID the panel convention
+     * derives from the plugin ID.
+     * @param Plugin $plugin
+     * @return string
+     */
+    private function getSettingsPanelId(Plugin $plugin): string
+    {
+        $id = PluginPanel::normalizeId($plugin->id);
+
+        return PluginPanel::get($id) === null ? '' : $id;
     }
 
     /**
@@ -334,18 +380,33 @@ class PluginsPresenter extends PagePresenter
         string $message,
         array $parameters = array()
     ): array {
-        global $gL10n, $gCurrentSession;
+        global $gL10n;
+
+        return array(
+            'dataHref' => $this->actionScript($id, $mode, $parameters),
+            'dataMessage' => $gL10n->get($message, array($id)),
+            'icon' => $icon,
+            'tooltip' => $gL10n->get($tooltip)
+        );
+    }
+
+    /**
+     * The JavaScript call that performs one operation, for the data-href of a confirmed link.
+     * @param string $id ID of the plugin.
+     * @param string $mode Mode of modules/plugins.php that performs the operation.
+     * @param array<string,string> $parameters Further URL parameters of the operation.
+     * @return string
+     * @throws Exception
+     */
+    private function actionScript(string $id, string $mode, array $parameters = array()): string
+    {
+        global $gCurrentSession;
 
         $url = SecurityUtils::encodeUrl(
             ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
             array_merge(array('mode' => $mode, 'plugin' => $id), $parameters)
         );
 
-        return array(
-            'dataHref' => 'callPluginAction(\'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-            'dataMessage' => $gL10n->get($message, array($id)),
-            'icon' => $icon,
-            'tooltip' => $gL10n->get($tooltip)
-        );
+        return 'callPluginAction(\'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
     }
 }
