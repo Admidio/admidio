@@ -121,6 +121,10 @@ final class PluginSettingsPresenter
             case 'int':
             case 'integer':
                 $options['type'] = 'number';
+                // A bound the manifest does not declare stays null, which addInput() drops again.
+                $options['minNumber'] = $definition['min'] ?? null;
+                $options['maxNumber'] = $definition['max'] ?? null;
+                $options['step'] = $definition['step'] ?? null;
                 $form->addInput($name, $label, (string)$value, $options);
                 break;
 
