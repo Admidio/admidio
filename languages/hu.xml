@@ -1239,7 +1239,6 @@
   <string name="SYS_PLUGIN_INSTALL">Bővítmény telepítése</string>
   <string name="SYS_PLUGIN_MANAGER">Bővítménykezelő</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Itt kezelheti az Admidio bővítményeit. A bővítmények olyan kiegészítő modulok, amelyek telepítésével bővítheti az Admidio funkcióit. Itt telepítheti, frissítheti vagy eltávolíthatja a bővítményeket.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">Nincs megadva plugin-név.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">A bővítmény nincs telepítve.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Bővítmény beállításai</string>
   <string name="SYS_PLUGIN_UNINSTALL">Bővítmény eltávolítása</string>
