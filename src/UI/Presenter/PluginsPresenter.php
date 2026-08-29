@@ -340,11 +340,6 @@ class PluginsPresenter extends PagePresenter
 
         $actions = array();
 
-        if (!PluginRegistry::isInstalled($id)) {
-            // A plugin that is only on disk has nothing to operate on but its switch.
-            return $actions;
-        }
-
         if ($state === PluginRegistry::STATE_ENABLED && $plugin !== null
             && $this->getSettingsPanelId($plugin) !== '') {
             // The settings open in a dialog, so that the administrator keeps their place in the list.
@@ -363,19 +358,26 @@ class PluginsPresenter extends PagePresenter
             $actions[] = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
         }
 
-        // Uninstalling only removes the registration of the plugin; the trash can is the operation
-        // next to it, which destroys the data as well.
-        $actions[] = $this->action($id, 'uninstall', 'bi bi-x-circle', 'SYS_PLUGIN_UNINSTALL', 'SYS_WANT_UNINSTALL_PLUGIN');
+        /*
+         * A plugin of the Admidio distribution has no remove action at all: its files come back with
+         * the next core update, so offering to delete them would promise something Admidio cannot
+         * keep. Disabling is what takes such a plugin out of use.
+         */
+        if (!PluginRegistry::isBuiltIn($id)) {
+            /*
+             * Removing reaches every organization, so the question names the ones that are still
+             * using the plugin - including those this administrator does not administrate.
+             */
+            $organizations = PluginRegistry::getEnabledOrganizations($id);
 
-        // Destroying the data of a plugin is a separate decision and never the default.
-        if ($plugin !== null) {
             $actions[] = $this->action(
                 $id,
-                'uninstall',
+                'remove',
                 'bi bi-trash',
-                'SYS_PLUGIN_UNINSTALL_DATA',
-                'SYS_WANT_UNINSTALL_PLUGIN_DATA',
-                array('data' => '1')
+                'SYS_PLUGIN_REMOVE',
+                $organizations === array() ? 'SYS_WANT_REMOVE_PLUGIN' : 'SYS_WANT_REMOVE_PLUGIN_ENABLED_IN',
+                array(),
+                $organizations === array() ? array($id) : array($id, implode(', ', $organizations))
             );
         }
 
@@ -405,6 +407,8 @@ class PluginsPresenter extends PagePresenter
      * @param string $tooltip Language string ID of the tooltip.
      * @param string $message Language string ID of the confirmation question.
      * @param array<string,string> $parameters Further URL parameters of the operation.
+     * @param array<int,string>|null $messageVariables What the confirmation question interpolates,
+     *                                                 defaulting to the plugin ID alone.
      * @return array<string,string>
      * @throws Exception
      */
@@ -414,13 +418,14 @@ class PluginsPresenter extends PagePresenter
         string $icon,
         string $tooltip,
         string $message,
-        array $parameters = array()
+        array $parameters = array(),
+        ?array $messageVariables = null
     ): array {
         global $gL10n;
 
         return array(
             'dataHref' => $this->actionScript($id, $mode, $parameters),
-            'dataMessage' => $gL10n->get($message, array($id)),
+            'dataMessage' => $gL10n->get($message, $messageVariables ?? array($id)),
             'icon' => $icon,
             'tooltip' => $gL10n->get($tooltip)
         );
