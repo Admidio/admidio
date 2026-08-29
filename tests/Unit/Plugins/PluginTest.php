@@ -84,6 +84,31 @@ final class PluginTest extends PluginTestCase
     }
 
     /**
+     * @testdox A manifest may name the preferences tab its settings appear in
+     */
+    public function testPreferencesSectionIsRead(): void
+    {
+        $plugin = Plugin::read(self::fixturePath('hello'));
+
+        $this->assertSame('content_management', $plugin->preferences['section']);
+        $this->assertSame(30, $plugin->preferences['sequence']);
+    }
+
+    /**
+     * @testdox A manifest that names no preferences tab leaves the choice to PluginPanel
+     *
+     * The descriptor only reads what the manifest says. Which tab a plugin ends up in when it names
+     * none is not a property of the plugin, it is a property of the preferences page.
+     */
+    public function testPreferencesSectionIsOptional(): void
+    {
+        $plugin = Plugin::read(self::fixturePath('no-entry'));
+
+        $this->assertSame('', $plugin->preferences['section']);
+        $this->assertNull($plugin->preferences['sequence']);
+    }
+
+    /**
      * @testdox An enum may name its values, and is still validated against the values themselves
      *
      * The names of "0", "1" and "2" survive json_decode(), which is the whole reason the manifest is

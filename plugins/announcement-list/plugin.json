@@ -12,6 +12,9 @@
     "autoload": {
         "AdmidioPlugin\\AnnouncementList\\": "src/"
     },
+    "preferences": {
+        "section": "overview_extensions"
+    },
     "settings": {
         "announcement_list_plugin_enabled": {
             "type": "enum",

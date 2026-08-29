@@ -12,6 +12,9 @@
     "autoload": {
         "AdmidioPlugin\\Birthday\\": "src/"
     },
+    "preferences": {
+        "section": "overview_extensions"
+    },
     "settings": {
         "birthday_plugin_enabled": {
             "type": "enum",

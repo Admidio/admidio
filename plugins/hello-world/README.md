@@ -53,6 +53,18 @@ may be language keys, which is what this plugin uses. Everything else is optiona
   "hello_world_repeat": { "type": "integer", "default": 3, "min": 0, "max": 20, "step": 1 }
   ```
 
+* `preferences` — where the settings of the plugin appear in the Admidio preferences. `section`
+  names one of the tabs and `sequence` places the panel inside it:
+
+  ```json
+  "preferences": { "section": "overview_extensions", "sequence": 20 }
+  ```
+
+  The tabs are `system`, `login_security`, `user_management`, `communication`, `content_management`,
+  `overview_extensions` and `extensions`. A plugin is not restricted to the last two: a module that
+  used to be part of the Admidio core keeps its own tab once it becomes a plugin. A plugin that
+  names no section, or one that no longer exists, lands in `extensions`.
+
 ## The entry file
 
 `plugin.php` registers what the plugin contributes and returns nothing. There is no plugin class, no

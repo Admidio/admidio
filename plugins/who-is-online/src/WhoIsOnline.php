@@ -67,7 +67,6 @@ final class WhoIsOnline
                     'id' => PluginPanel::normalizeId($plugin->id),
                     'title' => $gL10n->get($plugin->name),
                     'icon' => $plugin->icon,
-                    'group' => PluginPanel::GROUP_OVERVIEW,
                     'sequence' => self::DEFAULT_SEQUENCE,
                     'create' => array(WhoIsOnlinePreferencesPresenter::class, 'createForm')
                 );

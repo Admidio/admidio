@@ -12,6 +12,9 @@
     "autoload": {
         "AdmidioPlugin\\EventList\\": "src/"
     },
+    "preferences": {
+        "section": "overview_extensions"
+    },
     "settings": {
         "event_list_plugin_enabled": {
             "type": "enum",

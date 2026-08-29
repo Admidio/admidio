@@ -68,7 +68,6 @@ final class LatestDocumentsFiles
                     'id' => PluginPanel::normalizeId($plugin->id),
                     'title' => $gL10n->get($plugin->name),
                     'icon' => $plugin->icon,
-                    'group' => PluginPanel::GROUP_OVERVIEW,
                     'sequence' => self::DEFAULT_SEQUENCE,
                     'create' => array(LatestDocumentsFilesPreferencesPresenter::class, 'createForm')
                 );
