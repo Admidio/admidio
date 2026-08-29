@@ -35,7 +35,7 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'settings', 'settings_save', 'enable', 'disable', 'update', 'uninstall')));
+        'validValues' => array('list', 'settings', 'settings_save', 'enable', 'disable', 'update', 'remove')));
     // Everything but the list and the settings dialog answers with JSON.
     $isAjax = !in_array($getMode, array('list', 'settings'), true);
 
@@ -117,22 +117,22 @@ try {
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UPDATED')));
             break;
 
-        case 'uninstall':
+        case 'remove':
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $getRemoveData = admFuncVariableIsValid($_GET, 'data', 'bool', array('defaultValue' => false));
-
             if ($plugin === null && !PluginRegistry::isInstalled($getPluginId)) {
-                throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
+                throw new Exception('SYS_PLUGIN_NOT_FOUND', array($getPluginId));
             }
 
             /*
              * The ID keeps the cleanup of an orphan working: its files are gone, so there is no
              * plugin left to pass, but its component row and its enabled flag are still there.
-             * Such a plugin also has no uninstall.sql any more, so its data cannot be destroyed.
              */
-            PluginInstaller::uninstall($plugin ?? $getPluginId, $plugin !== null && $getRemoveData);
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UNINSTALLED')));
+            $filesDeleted = PluginInstaller::remove($plugin ?? $getPluginId);
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $gL10n->get($filesDeleted ? 'SYS_PLUGIN_REMOVED' : 'SYS_PLUGIN_REMOVED_FILES_KEPT')
+            ));
             break;
     }
 } catch (Throwable $e) {

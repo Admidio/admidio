@@ -54,6 +54,20 @@ final class PluginRegistry
     public const COMPONENT_TYPE = 'PLUGIN';
 
     /**
+     * The plugins Admidio ships with. A new installation gets them, the 5.1 update converts them,
+     * and the plugin administration refuses to delete them: their files belong to the Admidio
+     * distribution, so the next core update would put back what the administrator deleted.
+     *
+     * Everything else below plugins/ - the example plugin, anything an administrator added - is an
+     * ordinary plugin that can be removed.
+     * @var array<int,string>
+     */
+    public const BUILT_IN = array(
+        'announcement-list', 'birthday', 'calendar', 'event-list', 'latest-documents-files',
+        'login-form', 'random-photo', 'who-is-online'
+    );
+
+    /**
      * All plugins that were found on disk, as pluginId => Plugin, sorted by ID.
      * @var array<string,Plugin>|null
      */
@@ -167,6 +181,16 @@ final class PluginRegistry
     }
 
     /**
+     * Whether a plugin is part of the Admidio distribution rather than something that was added.
+     * @param string $id
+     * @return bool
+     */
+    public static function isBuiltIn(string $id): bool
+    {
+        return in_array($id, self::BUILT_IN, true);
+    }
+
+    /**
      * The installed version of a plugin, or an empty string if it is not installed.
      * @param string $id
      * @return string
@@ -207,6 +231,44 @@ final class PluginRegistry
         $name = $plugin->getEnabledSettingName();
 
         return !isset($gSettingsManager) || !$gSettingsManager->has($name) || $gSettingsManager->getBool($name);
+    }
+
+    /**
+     * The organizations a plugin is currently enabled in, as a list of their long names.
+     *
+     * Removing a plugin is an operation on the whole installation, so the administrator has to be
+     * told which organizations it is taken away from - including the ones they do not administrate
+     * themselves.
+     *
+     * The rule is the one isEnabled() applies to the current organization: an installed plugin
+     * counts as enabled unless an organization has decided against it. A plugin that is not
+     * installed is enabled nowhere.
+     * @param string $id
+     * @return array<int,string> Ordered by name, empty if the plugin is enabled nowhere.
+     * @throws Exception
+     */
+    public static function getEnabledOrganizations(string $id): array
+    {
+        global $gDb;
+
+        if (!self::isInstalled($id)) {
+            return array();
+        }
+
+        $preferenceName = 'plugin_' . str_replace('-', '_', $id) . '_enabled';
+
+        $sql = 'SELECT org_longname
+                  FROM ' . TBL_ORGANIZATIONS . '
+             LEFT JOIN ' . TBL_PREFERENCES . '
+                    ON prf_org_id = org_id
+                   AND prf_name = ? -- $preferenceName
+                 WHERE prf_value IS NULL
+                    OR prf_value = \'1\'
+              ORDER BY org_longname';
+
+        $statement = $gDb->queryPrepared($sql, array($preferenceName));
+
+        return array_map(strval(...), $statement->fetchAll(\PDO::FETCH_COLUMN));
     }
 
     /**
