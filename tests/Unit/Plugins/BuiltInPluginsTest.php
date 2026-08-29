@@ -151,6 +151,42 @@ final class BuiltInPluginsTest extends PluginTestCase
     }
 
     /**
+     * @testdox It is one of the plugins Admidio ships, and therefore cannot be removed
+     * @dataProvider convertedPlugins
+     * @param array<int,string> $preferences
+     */
+    public function testIsBuiltIn(string $id, string $namespace, array $preferences): void
+    {
+        $this->assertTrue(PluginRegistry::isBuiltIn($id));
+    }
+
+    /**
+     * @testdox The list of shipped plugins is exactly the plugins that are shipped
+     *
+     * The list decides which plugins the plugin administration refuses to delete, so a plugin added
+     * to or dropped from the distribution without the list following it would either become
+     * deletable - and come back with the next core update - or become undeletable for no reason.
+     */
+    public function testBuiltInListMatchesTheProvider(): void
+    {
+        $expected = array_keys(self::convertedPlugins());
+        sort($expected);
+
+        $actual = PluginRegistry::BUILT_IN;
+        sort($actual);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @testdox The example plugin is not one of them, so it can be removed
+     */
+    public function testExamplePluginIsNotBuiltIn(): void
+    {
+        $this->assertFalse(PluginRegistry::isBuiltIn('hello-world'));
+    }
+
+    /**
      * @testdox The converted plugin is a valid plugin of the current format
      * @dataProvider convertedPlugins
      * @param array<int,string> $preferences
