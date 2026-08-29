@@ -32,6 +32,18 @@
             "type": "array",
             "default": [],
             "label": "Names"
+        },
+        "hello_volume": {
+            "type": "enum",
+            "default": "1",
+            "values": {"0": "Quiet", "1": "Normal", "2": "Loud"},
+            "label": "Volume"
+        },
+        "hello_order": {
+            "type": "enum",
+            "default": "ASC",
+            "values": ["ASC", "DESC"],
+            "label": "Order"
         }
     }
 }

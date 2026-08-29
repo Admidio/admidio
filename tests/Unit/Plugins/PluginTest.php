@@ -50,10 +50,35 @@ final class PluginTest extends PluginTestCase
     {
         $plugin = Plugin::read(self::fixturePath('hello'));
 
-        $this->assertSame(array('hello_greeting', 'hello_shout', 'hello_repeat', 'hello_names'), array_keys($plugin->settings));
+        $this->assertSame(
+            array('hello_greeting', 'hello_shout', 'hello_repeat', 'hello_names', 'hello_volume', 'hello_order'),
+            array_keys($plugin->settings)
+        );
         $this->assertSame('Hello', $plugin->settings['hello_greeting']['default']);
         $this->assertFalse($plugin->settings['hello_shout']['default']);
         $this->assertSame('boolean', $plugin->settings['hello_shout']['type']);
+    }
+
+    /**
+     * @testdox An enum may name its values, and is still validated against the values themselves
+     *
+     * The names of "0", "1" and "2" survive json_decode(), which is the whole reason the manifest is
+     * read a second time: with associative arrays such an object is indistinguishable from the list
+     * ["0", "1", "2"].
+     */
+    public function testEnumValuesMayBeNamed(): void
+    {
+        $settings = Plugin::read(self::fixturePath('hello'))->settings;
+
+        $this->assertSame(array('0', '1', '2'), $settings['hello_volume']['values']);
+        $this->assertSame(
+            array('0' => 'Quiet', '1' => 'Normal', '2' => 'Loud'),
+            $settings['hello_volume']['valueLabels']
+        );
+
+        // A plain list stays a plain list and has nothing to name the values with.
+        $this->assertSame(array('ASC', 'DESC'), $settings['hello_order']['values']);
+        $this->assertSame(array(), $settings['hello_order']['valueLabels']);
     }
 
     /**
@@ -227,7 +252,9 @@ final class PluginTest extends PluginTestCase
                 'hello_greeting' => 'Moin',
                 'hello_shout' => true,
                 'hello_repeat' => 7,
-                'hello_names' => array('Ada', 'Grace')
+                'hello_names' => array('Ada', 'Grace'),
+                'hello_volume' => '1',
+                'hello_order' => 'ASC'
             ),
             Plugin::read(self::fixturePath('hello'))->getSettingValues()
         );
@@ -245,7 +272,9 @@ final class PluginTest extends PluginTestCase
                 'hello_greeting' => 'Moin',
                 'hello_shout' => false,
                 'hello_repeat' => 3,
-                'hello_names' => array()
+                'hello_names' => array(),
+                'hello_volume' => '1',
+                'hello_order' => 'ASC'
             ),
             Plugin::read(self::fixturePath('hello'))->getSettingValues(),
             'registering a preference does not give it a row, so reading one must not fail'

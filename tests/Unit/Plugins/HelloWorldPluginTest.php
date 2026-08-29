@@ -28,7 +28,7 @@ final class HelloWorldPluginTest extends PluginTestCase
         $this->assertNull($plugin->error);
         $this->assertSame('hello-world', $plugin->id);
         $this->assertSame('PLG_HELLO_WORLD_NAME', $plugin->name);
-        $this->assertSame('1.0.0', $plugin->version);
+        $this->assertSame('1.1.0', $plugin->version);
         $this->assertSame(array(), $plugin->checkRequirements());
     }
 
@@ -51,10 +51,20 @@ final class HelloWorldPluginTest extends PluginTestCase
         $plugin = $this->example();
 
         $this->assertSame(
-            array('hello_world_greeting', 'hello_world_decorate_headline'),
+            array('hello_world_greeting', 'hello_world_address', 'hello_world_decorate_headline'),
             array_keys($plugin->settings)
         );
         $this->assertSame('plugin_hello_world_enabled', $plugin->getEnabledSettingName());
+
+        // The example shows both forms an enum may declare its values in.
+        $this->assertSame(
+            array('first_name', 'full_name', 'login_name'),
+            $plugin->settings['hello_world_address']['values']
+        );
+        $this->assertSame(
+            'PLG_HELLO_WORLD_ADDRESS_FIRST_NAME',
+            $plugin->settings['hello_world_address']['valueLabels']['first_name']
+        );
 
         foreach (array_merge(array($plugin->getEnabledSettingName()), array_keys($plugin->settings)) as $name) {
             $this->assertMatchesRegularExpression('/^[a-z0-9](_?[a-z0-9])*$/', $name,
@@ -93,6 +103,8 @@ final class HelloWorldPluginTest extends PluginTestCase
         foreach ($plugin->settings as $setting) {
             $used[] = $setting['label'];
             $used[] = $setting['description'];
+            // The names an enum gives its values are language keys just like the label.
+            $used = array_merge($used, array_values($setting['valueLabels']));
         }
         foreach (array('/plugin.php', '/src/Greeting.php', '/modules/index.php', '/templates/plugin.hello-world.tpl') as $file) {
             preg_match_all('/PLG_HELLO_WORLD_[A-Z_]+/', (string)file_get_contents($plugin->path . $file), $matches);
