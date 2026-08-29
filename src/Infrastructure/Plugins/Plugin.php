@@ -622,7 +622,10 @@ final class Plugin
                 'values' => $values,
                 'valueLabels' => $labels,
                 'label' => (string)($definition['label'] ?? ''),
-                'description' => (string)($definition['description'] ?? '')
+                'description' => (string)($definition['description'] ?? ''),
+                'min' => self::readSettingBound($definition['min'] ?? null),
+                'max' => self::readSettingBound($definition['max'] ?? null),
+                'step' => self::readSettingBound($definition['step'] ?? null)
             );
         }
 
@@ -659,6 +662,29 @@ final class Plugin
         }
 
         return array(array_map(static fn(mixed $value): string => (string)$value, array_values($declared)), array());
+    }
+
+    /**
+     * One numeric bound of a setting - **min**, **max** or **step**.
+     *
+     * A bound only restricts what a generated form offers; the value itself is validated as its
+     * declared type either way. A bound the manifest states as text is accepted, because JSON
+     * written by hand quotes numbers more often than not.
+     * @param mixed $declared The bound as the manifest declares it.
+     * @return int|float|null **null** when the manifest declares none or declares something that is
+     *                        not a number.
+     */
+    private static function readSettingBound(mixed $declared): int|float|null
+    {
+        if (is_int($declared) || is_float($declared)) {
+            return $declared;
+        }
+
+        if (is_string($declared) && is_numeric($declared)) {
+            return str_contains($declared, '.') ? (float)$declared : (int)$declared;
+        }
+
+        return null;
     }
 
     /**

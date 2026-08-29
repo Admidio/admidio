@@ -51,12 +51,36 @@ final class PluginTest extends PluginTestCase
         $plugin = Plugin::read(self::fixturePath('hello'));
 
         $this->assertSame(
-            array('hello_greeting', 'hello_shout', 'hello_repeat', 'hello_names', 'hello_volume', 'hello_order'),
+            array('hello_greeting', 'hello_shout', 'hello_repeat', 'hello_delay', 'hello_names', 'hello_volume', 'hello_order'),
             array_keys($plugin->settings)
         );
         $this->assertSame('Hello', $plugin->settings['hello_greeting']['default']);
         $this->assertFalse($plugin->settings['hello_shout']['default']);
         $this->assertSame('boolean', $plugin->settings['hello_shout']['type']);
+    }
+
+    /**
+     * @testdox A numeric setting may declare the bounds a generated form offers
+     */
+    public function testSettingBoundsAreRead(): void
+    {
+        $settings = Plugin::read(self::fixturePath('hello'))->settings;
+
+        $this->assertSame(0, $settings['hello_repeat']['min']);
+        $this->assertSame(20, $settings['hello_repeat']['max']);
+        $this->assertSame(1, $settings['hello_repeat']['step']);
+
+        // A bound the manifest quotes is still a number, because hand-written JSON often quotes one.
+        $this->assertSame(1, $settings['hello_delay']['min']);
+        $this->assertSame(60, $settings['hello_delay']['max']);
+
+        // A bound that is not a number at all is dropped, so the form simply offers no step.
+        $this->assertNull($settings['hello_delay']['step']);
+
+        // A setting that declares no bound has none, rather than a zero the form would enforce.
+        $this->assertNull($settings['hello_greeting']['min']);
+        $this->assertNull($settings['hello_greeting']['max']);
+        $this->assertNull($settings['hello_greeting']['step']);
     }
 
     /**
@@ -252,6 +276,7 @@ final class PluginTest extends PluginTestCase
                 'hello_greeting' => 'Moin',
                 'hello_shout' => true,
                 'hello_repeat' => 7,
+                'hello_delay' => 5,
                 'hello_names' => array('Ada', 'Grace'),
                 'hello_volume' => '1',
                 'hello_order' => 'ASC'
@@ -272,6 +297,7 @@ final class PluginTest extends PluginTestCase
                 'hello_greeting' => 'Moin',
                 'hello_shout' => false,
                 'hello_repeat' => 3,
+                'hello_delay' => 5,
                 'hello_names' => array(),
                 'hello_volume' => '1',
                 'hello_order' => 'ASC'
