@@ -1228,7 +1228,6 @@
   <string name="SYS_PLUGIN_INSTALL">Instalați pluginul</string>
   <string name="SYS_PLUGIN_MANAGER">Manager de plugin</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Aici puteți gestiona pluginurile Admidio. Pluginurile sunt module suplimentare care pot fi instalate pentru a extinde funcționalitatea Admidio. Puteți instala, actualiza sau elimina pluginuri.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">Nu a fost specificat niciun nume de plugin.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Acest plugin nu este instalat</string>
   <string name="SYS_PLUGIN_PREFERENCES">Preferințe plugin</string>
   <string name="SYS_PLUGIN_UNINSTALL">Dezinstalare plugin</string>
