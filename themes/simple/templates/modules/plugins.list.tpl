@@ -59,14 +59,12 @@
                             </td>
                             <td>{$pluginEntry.version}</td>
                             <td data-bs-toggle="tooltip"
-                                {if $pluginEntry.versionState === 'not_installed'}
-                                    style="color: var(--bs-danger);"
-                                {elseif $pluginEntry.versionState === 'update'}
+                                {if $pluginEntry.versionState === 'update'}
                                     style="color: var(--bs-warning);" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
                                 {elseif $pluginEntry.versionState === 'current'}
                                     style="color: var(--bs-success);" title="{$l10n->get('SYS_UP_TO_DATE')}"
                                 {/if}
-                                >{if $pluginEntry.versionState === 'not_installed'}{$l10n->get('SYS_NOT_INSTALLED')}{else}{$pluginEntry.installedVersion}{/if}</td>
+                                >{if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}</td>
                             <td class="text-end">
                                 {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
                             </td>
@@ -136,7 +134,7 @@
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_installed_version">
                                 <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong>
                                 {if $pluginEntry.versionState === 'not_installed'}
-                                    <p><span style="color: var(--bs-danger);">{$l10n->get('SYS_NOT_INSTALLED')}</span></p>
+                                    <p>&ndash;</p>
                                 {elseif $pluginEntry.versionState === 'update'}
                                     <p><span style="color: var(--bs-warning);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</span></p>
                                 {elseif $pluginEntry.versionState === 'current'}
