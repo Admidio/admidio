@@ -34,13 +34,12 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 class PluginsPresenter extends PagePresenter
 {
     /**
-     * The groups of the list, in the order they are shown, as state => language string ID of the
-     * heading. A state with no plugin in it is dropped before the list is rendered.
+     * The groups of the list, in the order they are shown, as group ID => language string ID of the
+     * heading. A group with no plugin in it is dropped before the list is rendered.
      */
     private const GROUPS = array(
         PluginRegistry::STATE_ENABLED => 'SYS_ENABLED',
         PluginRegistry::STATE_UPDATE => 'SYS_UPDATE_AVAILABLE',
-        PluginRegistry::STATE_DISABLED => 'SYS_DISABLED',
         PluginRegistry::STATE_AVAILABLE => 'SYS_EXTENSIONS_AVAILABLE',
         PluginRegistry::STATE_BROKEN => 'SYS_PLUGIN_BROKEN',
         PluginRegistry::STATE_ORPHANED => 'SYS_PLUGIN_ORPHANED'
@@ -173,10 +172,24 @@ class PluginsPresenter extends PagePresenter
         foreach ($this->getPluginIds() as $id) {
             $plugin = PluginRegistry::get($id);
             $state = PluginRegistry::getState($plugin ?? $id);
-            $groups[$state]['entries'][] = $this->getEntry($id, $plugin, $state);
+            $groups[self::groupOf($state)]['entries'][] = $this->getEntry($id, $plugin, $state);
         }
 
         return array_filter($groups, static fn(array $group): bool => $group['entries'] !== array());
+    }
+
+    /**
+     * The group of the list a plugin in this state is shown in.
+     *
+     * A plugin that was never prepared in the database and one that is prepared but switched off are
+     * the same thing to an administrator: it is there and it is not running. Whether Admidio already
+     * holds rows for it is a detail of how enabling works, not a state anybody chose.
+     * @param string $state One of the PluginRegistry STATE_* constants.
+     * @return string The key of one of the GROUPS.
+     */
+    private static function groupOf(string $state): string
+    {
+        return $state === PluginRegistry::STATE_DISABLED ? PluginRegistry::STATE_AVAILABLE : $state;
     }
 
     /**
