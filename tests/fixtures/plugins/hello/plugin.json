@@ -26,7 +26,18 @@
         "hello_repeat": {
             "type": "integer",
             "default": 3,
+            "min": 0,
+            "max": 20,
+            "step": 1,
             "label": "Repeat"
+        },
+        "hello_delay": {
+            "type": "integer",
+            "default": 5,
+            "min": "1",
+            "max": "60",
+            "step": "often",
+            "label": "Delay"
         },
         "hello_names": {
             "type": "array",

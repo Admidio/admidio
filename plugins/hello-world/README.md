@@ -46,6 +46,13 @@ may be language keys, which is what this plugin uses. Everything else is optiona
   "values": {"first_name": "PLG_HELLO_WORLD_ADDRESS_FIRST_NAME", "full_name": "…"}
   ```
 
+  An `integer` may bound what the generated form offers with `min`, `max` and `step`. The value is
+  stored as an integer either way; a bound only restricts the input field.
+
+  ```json
+  "hello_world_repeat": { "type": "integer", "default": 3, "min": 0, "max": 20, "step": 1 }
+  ```
+
 ## The entry file
 
 `plugin.php` registers what the plugin contributes and returns nothing. There is no plugin class, no
