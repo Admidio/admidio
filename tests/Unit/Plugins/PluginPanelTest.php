@@ -50,7 +50,7 @@ final class PluginPanelTest extends PluginTestCase
             'id' => 'who_is_online',
             'title' => 'Who is online',
             'icon' => 'bi-building-fill-check',
-            'group' => PluginPanel::GROUP_OVERVIEW,
+            'section' => PluginPanel::SECTION_OVERVIEW,
             'sequence' => 8,
             'create' => static fn(): string => '<form></form>'
         ));
@@ -60,7 +60,7 @@ final class PluginPanelTest extends PluginTestCase
         $this->assertNotNull($panel);
         $this->assertSame('Who is online', $panel['title']);
         $this->assertSame('bi-building-fill-check', $panel['icon']);
-        $this->assertSame(PluginPanel::GROUP_OVERVIEW, $panel['group']);
+        $this->assertSame(PluginPanel::SECTION_OVERVIEW, $panel['section']);
         $this->assertSame(8, $panel['sequence']);
         $this->assertFalse($panel['subcards']);
     }
@@ -99,7 +99,8 @@ final class PluginPanelTest extends PluginTestCase
         $this->assertNotNull($panel, 'the plugin declares settings, so it gets a panel');
         $this->assertSame('Hello', $panel['title']);
         $this->assertSame('bi-emoji-smile', $panel['icon']);
-        $this->assertSame(PluginPanel::GROUP_EXTENSIONS, $panel['group']);
+        $this->assertSame(PluginPanel::SECTION_CONTENT, $panel['section'], 'the manifest names the tab');
+        $this->assertSame(30, $panel['sequence'], 'and where in it the panel sits');
         $this->assertIsCallable($panel['create']);
     }
 
@@ -156,26 +157,67 @@ final class PluginPanelTest extends PluginTestCase
     }
 
     /**
-     * @testdox Each of the two extension tabs gets the panels that belong to it
+     * @testdox Every tab gets the panels that named it
      */
-    public function testPanelsAreGrouped(): void
+    public function testPanelsAreGroupedBySection(): void
     {
         $this->declare(
-            array('id' => 'birthday', 'group' => PluginPanel::GROUP_OVERVIEW, 'create' => static fn(): string => ''),
-            array('id' => 'inventory', 'group' => PluginPanel::GROUP_EXTENSIONS, 'create' => static fn(): string => ''),
+            array('id' => 'birthday', 'section' => PluginPanel::SECTION_OVERVIEW, 'create' => static fn(): string => ''),
+            array('id' => 'inventory', 'section' => PluginPanel::SECTION_CONTENT, 'create' => static fn(): string => ''),
             // A panel that names no tab, or names one that does not exist, belongs to the plugins.
             array('id' => 'plain', 'create' => static fn(): string => ''),
-            array('id' => 'nonsense', 'group' => 'somewhere_else', 'create' => static fn(): string => '')
+            array('id' => 'nonsense', 'section' => 'somewhere_else', 'create' => static fn(): string => '')
         );
 
         $this->assertSame(
             array('birthday'),
-            array_column(PluginPanel::inGroup(PluginPanel::GROUP_OVERVIEW), 'id')
+            array_column(PluginPanel::inSection(PluginPanel::SECTION_OVERVIEW), 'id')
         );
         $this->assertSame(
-            array('inventory', 'nonsense', 'plain'),
-            array_column(PluginPanel::inGroup(PluginPanel::GROUP_EXTENSIONS), 'id')
+            array('inventory'),
+            array_column(PluginPanel::inSection(PluginPanel::SECTION_CONTENT), 'id'),
+            'a plugin reaches a tab that carries core panels too'
         );
+        $this->assertSame(
+            array('nonsense', 'plain'),
+            array_column(PluginPanel::inSection(PluginPanel::SECTION_DEFAULT), 'id')
+        );
+    }
+
+    /**
+     * @testdox A panel that names no section takes the one from the manifest of its plugin
+     *
+     * This is what the built-in plugins rely on: they build their form themselves, so they declare
+     * a panel, but the tab it belongs in is stated once, in the manifest.
+     */
+    public function testDeclaredPanelTakesTheSectionFromTheManifest(): void
+    {
+        PluginLoader::load(PluginRegistry::get('hello'));
+        $this->declare(array('id' => 'hello', 'create' => static fn(): string => ''));
+
+        $panel = PluginPanel::get('hello');
+
+        $this->assertSame(PluginPanel::SECTION_CONTENT, $panel['section']);
+        $this->assertSame(30, $panel['sequence']);
+    }
+
+    /**
+     * @testdox A panel that names a section itself keeps it, whatever the manifest says
+     */
+    public function testDeclaredSectionWinsOverTheManifest(): void
+    {
+        PluginLoader::load(PluginRegistry::get('hello'));
+        $this->declare(array(
+            'id' => 'hello',
+            'section' => PluginPanel::SECTION_SYSTEM,
+            'sequence' => 5,
+            'create' => static fn(): string => ''
+        ));
+
+        $panel = PluginPanel::get('hello');
+
+        $this->assertSame(PluginPanel::SECTION_SYSTEM, $panel['section']);
+        $this->assertSame(5, $panel['sequence']);
     }
 
     /**

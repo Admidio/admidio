@@ -323,6 +323,8 @@ final class BuiltInPluginsTest extends PluginTestCase
             $panel = PluginPanel::get(PluginPanel::normalizeId($id));
             $this->assertNotNull($panel, $id . ' declares no preferences panel');
             $this->assertTrue(is_callable($panel['create']));
+            $this->assertSame(PluginPanel::SECTION_OVERVIEW, $panel['section'],
+                'the manifest puts the panel in the tab of the overview extensions');
         } finally {
             Hooks::reset();
             PluginWidget::reset();

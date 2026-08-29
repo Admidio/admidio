@@ -12,6 +12,9 @@
     "autoload": {
         "AdmidioPlugin\\LatestDocumentsFiles\\": "src/"
     },
+    "preferences": {
+        "section": "overview_extensions"
+    },
     "settings": {
         "latest_documents_files_plugin_enabled": {
             "type": "enum",

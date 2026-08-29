@@ -12,6 +12,9 @@
     "autoload": {
         "AdmidioPlugin\\RandomPhoto\\": "src/"
     },
+    "preferences": {
+        "section": "overview_extensions"
+    },
     "settings": {
         "random_photo_plugin_enabled": {
             "type": "enum",
