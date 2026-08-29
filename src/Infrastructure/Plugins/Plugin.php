@@ -188,11 +188,21 @@ final class Plugin
                 'The manifest ' . self::MANIFEST_FILE . ' is missing.');
         }
 
-        $manifest = json_decode((string)file_get_contents($manifestFile), true);
+        $raw = (string)file_get_contents($manifestFile);
+        $manifest = json_decode($raw, true);
         if (!is_array($manifest)) {
             return new self($id, $path, array(), array(), array(), $empty,
                 'The manifest ' . self::MANIFEST_FILE . ' is not a valid JSON object.');
         }
+
+        /*
+         * The permitted values of an enum may be a plain list or an object that names each value,
+         * and after json_decode() with associative arrays the two are indistinguishable as soon as
+         * the names are "0", "1", "2" - which is the most common enum there is. Decoding a second
+         * time keeps objects as objects, and it only happens for a manifest that declares values
+         * at all, so ordinary discovery still decodes each manifest once.
+         */
+        $typed = str_contains($raw, '"values"') ? json_decode($raw, false) : null;
 
         if (!is_file($path . '/' . self::ENTRY_FILE)) {
             return new self($id, $path, $manifest, array(), array(), $empty,
@@ -207,7 +217,7 @@ final class Plugin
         $error = null;
         $autoload = self::readAutoload($path, $manifest, $error);
 
-        return new self($id, $path, $manifest, $autoload, self::readSettings($manifest), self::readRequires($manifest), $error);
+        return new self($id, $path, $manifest, $autoload, self::readSettings($manifest, $typed), self::readRequires($manifest), $error);
     }
 
     /**
@@ -583,9 +593,12 @@ final class Plugin
     /**
      * Read the preference definitions of the manifest.
      * @param array<string,mixed> $manifest
+     * @param object|null $typed The same manifest decoded into objects, so that an enum whose
+     *                           values are named can be told from one that only lists them. May be
+     *                           **null** when the manifest declares no values at all.
      * @return array<string,array<string,mixed>>
      */
-    private static function readSettings(array $manifest): array
+    private static function readSettings(array $manifest, ?object $typed = null): array
     {
         $declared = $manifest['settings'] ?? array();
         if (!is_array($declared)) {
@@ -597,16 +610,55 @@ final class Plugin
             if (!is_string($name) || !is_array($definition) || !array_key_exists('default', $definition)) {
                 continue;
             }
+
+            [$values, $labels] = self::readSettingValues(
+                $definition['values'] ?? null,
+                $typed?->settings?->{$name}?->values ?? null
+            );
+
             $settings[$name] = array(
                 'type' => (string)($definition['type'] ?? 'string'),
                 'default' => $definition['default'],
-                'values' => is_array($definition['values'] ?? null) ? $definition['values'] : array(),
+                'values' => $values,
+                'valueLabels' => $labels,
                 'label' => (string)($definition['label'] ?? ''),
                 'description' => (string)($definition['description'] ?? '')
             );
         }
 
         return $settings;
+    }
+
+    /**
+     * The permitted values of one setting, and the name each of them is shown under.
+     *
+     * The manifest may list the values, which is enough to validate them:
+     * **"values": ["ASC", "DESC"]**. It may instead name them, which additionally lets a generated
+     * settings form label them: **"values": {"ASC": "PLG_X_ASCENDING", "DESC": "PLG_X_DESCENDING"}**.
+     * A name is a language string ID or plain text, exactly like **label**.
+     * @param mixed $declared The values as the associative decoding produced them.
+     * @param mixed $typed The same values from the object decoding, an object for the named form.
+     * @return array{0: array<int,string>, 1: array<string,string>} The permitted values, and the
+     *                                                              names, which are empty for the
+     *                                                              plain list.
+     */
+    private static function readSettingValues(mixed $declared, mixed $typed): array
+    {
+        if (is_object($typed)) {
+            $labels = array();
+            foreach (get_object_vars($typed) as $value => $label) {
+                $labels[(string)$value] = (string)$label;
+            }
+
+            // A numeric key comes back from array_keys() as an int, but a permitted value is text.
+            return array(array_map(strval(...), array_keys($labels)), $labels);
+        }
+
+        if (!is_array($declared)) {
+            return array(array(), array());
+        }
+
+        return array(array_map(static fn(mixed $value): string => (string)$value, array_values($declared)), array());
     }
 
     /**

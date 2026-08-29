@@ -2,6 +2,7 @@
 
 namespace AdmidioPlugin\HelloWorld;
 
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\UI\Presenter\PagePresenter;
 
 /**
@@ -19,21 +20,43 @@ use Admidio\UI\Presenter\PagePresenter;
 final class Greeting
 {
     /**
-     * The greeting, as the administrator configured it. The preferences of a plugin are ordinary
-     * Admidio preferences from the moment the plugin is loaded, so they are read like any other.
+     * The directory of the plugin, which is its ID and its only identity.
+     */
+    public const PLUGIN_ID = 'hello-world';
+
+    /**
+     * The greeting, as the administrator configured it.
+     *
+     * The settings are read through the plugin and not through $gSettingsManager, which is what a
+     * plugin should do: registering a setting does not create its row, so a version that adds one
+     * has no stored value for it until the administrator updates the plugin. getSettingValues()
+     * answers the default the manifest declares until then, in the type the manifest declares,
+     * while $gSettingsManager->getString() would throw for a name it has no row for.
      * @return string
      */
     public static function getText(): string
     {
-        global $gSettingsManager, $gCurrentUser, $gValidLogin, $gL10n;
+        global $gCurrentUser, $gValidLogin, $gL10n;
+
+        $plugin = PluginRegistry::get(self::PLUGIN_ID);
+        if ($plugin === null) {
+            return '';
+        }
+        $settings = $plugin->getSettingValues();
 
         // The language files of a plugin are added to the search path when it is loaded, so its own
         // keys are read with $gL10n->get() like every other string.
-        $name = $gValidLogin
-            ? (string)$gCurrentUser->getValue('FIRST_NAME')
-            : $gL10n->get('PLG_HELLO_WORLD_VISITOR');
+        if (!$gValidLogin) {
+            $name = $gL10n->get('PLG_HELLO_WORLD_VISITOR');
+        } else {
+            $name = match ($settings['hello_world_address'] ?? '') {
+                'full_name' => $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
+                'login_name' => $gCurrentUser->getValue('usr_login_name'),
+                default => $gCurrentUser->getValue('FIRST_NAME')
+            };
+        }
 
-        return $gSettingsManager->getString('hello_world_greeting') . ', ' . $name . '!';
+        return (string)($settings['hello_world_greeting'] ?? '') . ', ' . (string)$name . '!';
     }
 
     /**
@@ -45,9 +68,8 @@ final class Greeting
      */
     public static function decorateHeadline(string $headline, PagePresenter $page): string
     {
-        global $gSettingsManager;
-
-        if (!$gSettingsManager->getBool('hello_world_decorate_headline')) {
+        $plugin = PluginRegistry::get(self::PLUGIN_ID);
+        if ($plugin === null || !($plugin->getSettingValues()['hello_world_decorate_headline'] ?? false)) {
             return $headline;
         }
 
