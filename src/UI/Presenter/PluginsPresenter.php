@@ -118,6 +118,45 @@ class PluginsPresenter extends PagePresenter
     }
 
     /**
+     * The settings panel of one plugin, wrapped as the content of a dialog.
+     *
+     * The panel itself is the very same one the preferences page shows - the plugin builds it, or it
+     * is generated from the manifest - so a plugin never has to know that its settings can also be
+     * opened from here.
+     * @param Plugin $plugin
+     * @return string The HTML of the dialog content.
+     * @throws Exception
+     */
+    public function createSettings(Plugin $plugin): string
+    {
+        global $gL10n;
+
+        $panel = $this->getSettingsPanelId($plugin);
+        if ($panel === '') {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $this->smarty->assign('pluginName', Language::translateIfTranslationStrId($plugin->name));
+        $this->smarty->assign('pluginPanelBody', PluginPanel::create($panel, new PreferencesPresenter($panel)));
+        /*
+         * The form of the panel posts to the preferences page, which answers with the address of
+         * the preferences page and would take the administrator away from the plugin list. Saving
+         * through this module instead keeps them where they were.
+         */
+        $this->smarty->assign('pluginSaveUrl', SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
+            array('mode' => 'settings_save', 'plugin' => $plugin->id)
+        ));
+        $this->smarty->assign('l10n', $gL10n);
+
+        try {
+            return $this->smarty->fetch('modules/plugins.settings.tpl');
+        } catch (\Smarty\Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    /**
      * The plugins of every state that has one, with everything the template shows for them.
      * @return array<string,array{id: string, name: string, entries: array<int,array<string,mixed>>}>
      * @throws Exception
@@ -309,18 +348,18 @@ class PluginsPresenter extends PagePresenter
             return $actions;
         }
 
-        if ($state === PluginRegistry::STATE_ENABLED && $plugin !== null) {
-            $panel = $this->getSettingsPanelId($plugin);
-            if ($panel !== '') {
-                $actions[] = array(
-                    'url' => SecurityUtils::encodeUrl(
-                        ADMIDIO_URL . FOLDER_MODULES . '/preferences.php',
-                        array('panel' => $panel)
-                    ),
-                    'icon' => 'bi bi-gear',
-                    'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
-                );
-            }
+        if ($state === PluginRegistry::STATE_ENABLED && $plugin !== null
+            && $this->getSettingsPanelId($plugin) !== '') {
+            // The settings open in a dialog, so that the administrator keeps their place in the list.
+            $actions[] = array(
+                'popup' => true,
+                'dataHref' => SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
+                    array('mode' => 'settings', 'plugin' => $id)
+                ),
+                'icon' => 'bi bi-gear',
+                'tooltip' => $gL10n->get('SYS_PLUGIN_PREFERENCES')
+            );
         }
 
         if ($state === PluginRegistry::STATE_UPDATE) {
