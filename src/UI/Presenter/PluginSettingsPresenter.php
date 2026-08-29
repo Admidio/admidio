@@ -103,12 +103,15 @@ final class PluginSettingsPresenter
 
             case 'enum':
                 /*
-                 * The manifest declares the permitted values but no names for them, so the values
-                 * are their own labels. A plugin that wants readable names registers its own panel.
+                 * A manifest that names its values gets those names in the select box; one that
+                 * only lists them shows the values themselves, because there is nothing better.
                  */
+                $labels = $definition['valueLabels'] ?? array();
                 $entries = array();
                 foreach ($definition['values'] as $entry) {
-                    $entries[(string)$entry] = (string)$entry;
+                    $entry = (string)$entry;
+                    $entries[$entry] = isset($labels[$entry])
+                        ? Language::translateIfTranslationStrId($labels[$entry]) : $entry;
                 }
                 $options['defaultValue'] = (string)$value;
                 $options['showContextDependentFirstEntry'] = false;

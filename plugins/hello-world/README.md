@@ -1,7 +1,12 @@
 # Hello World — the example Admidio plugin
 
-The smallest plugin that still uses every convention. Copy this directory, rename it, and you have a
-working plugin.
+Every convention in one place, so that each of them can be copied on its own. Copy this directory,
+rename it, and you have a working plugin.
+
+This is **not** the smallest useful plugin. That one is two files — a `plugin.json` naming the plugin
+and a `plugin.php` registering a hook — with no class, no settings, no page and no language file.
+Everything below the manifest and the entry file is here because it has to be shown somewhere, not
+because a plugin needs it.
 
 ```text
 plugins/hello-world/
@@ -28,7 +33,18 @@ may be language keys, which is what this plugin uses. Everything else is optiona
   belongs to the core, and the directory has to stay inside the plugin.
 * `settings` — the preferences the plugin owns. They become ordinary Admidio preferences when the
   plugin is loaded, get a row in every organization when it is installed and are removed again when
-  it is uninstalled.
+  it is uninstalled. Each one declares a `type` (`string`, `boolean`, `integer`, `enum` or `array`),
+  a `default`, and a `label` and `description` that may be language keys. That is enough for Admidio
+  to build the settings form by itself, so a plugin only writes a preferences presenter when it
+  wants more than the manifest can express.
+
+  An `enum` lists its permitted values, and may instead name them so that the generated form has
+  something readable to show:
+
+  ```json
+  "values": ["ASC", "DESC"]
+  "values": {"first_name": "PLG_HELLO_WORLD_ADDRESS_FIRST_NAME", "full_name": "…"}
+  ```
 
 ## The entry file
 
