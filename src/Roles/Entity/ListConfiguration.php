@@ -1104,6 +1104,32 @@ class ListConfiguration extends Entity
     }
 
     /**
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out
+     * of the table. If the SQL find more than one record the method returns **false**. Per default all columns of the
+     * default table will be read and stored in the object. Only lists of the current organization will be read.
+     * If the list belongs to another organization than an exception will be thrown.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByUuid
+     * @see Entity#readDataByColumns
+     * @see Entity#readDataById
+     */
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
+    {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
+            // check if list belongs to this organization
+            if ($this->getValue('lst_org_id') > 0 && $this->getValue('lst_org_id') !== $GLOBALS['gCurrentOrgId']) {
+                throw new Exception('List ' . $this->getValue('lst_uuid') . ' belongs to another organization.');
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Reads a record out of the table in the database selected by the unique uuid column in the table.
      * The name of the column must have the syntax table_prefix, underscore and uuid. E.g., usr_uuid.
      * Per default, all columns of the default table will be read and stored in the object.

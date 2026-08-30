@@ -141,6 +141,32 @@ class Announcement extends Entity
     }
 
     /**
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out
+     * of the table. If the SQL find more than one record the method returns **false**. Per default all columns of the
+     * default table will be read and stored in the object. Only announcements of the current organization will be read.
+     * If the announcement belongs to another organization than an exception will be thrown.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByUuid
+     * @see Entity#readDataByColumns
+     * @see Entity#readDataById
+     */
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
+    {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
+            // check if announcement belongs to this organization
+            if ($this->getValue('cat_org_id') > 0 && $this->getValue('cat_org_id') !== $GLOBALS['gCurrentOrgId']) {
+                throw new Exception('Announcement ' . $this->getValue('ann_uuid') . ' belongs to another organization.');
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
      * If the table has columns for creator or editor than these column with their timestamp will be updated.

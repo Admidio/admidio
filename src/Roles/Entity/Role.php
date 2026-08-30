@@ -468,10 +468,11 @@ class Role extends Entity
     }
 
     /**
-     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
-     * If the SQL find more than one record the method returns **false**.
-     * Per default all columns of the default table will be read and stored in the object.
-     * If one record is found than the type of the role (ROLE_GROUP or ROLE_EVENT) is set.
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out
+     * of the table. If the SQL find more than one record the method returns **false**. Per default all columns of the
+     * default table will be read and stored in the object. Only roles of the current organization will be read.
+     * If the role belongs to another organization than an exception will be thrown. If one record is found than the
+     * type of the role (ROLE_GROUP or ROLE_EVENT) is set.
      * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
@@ -483,6 +484,11 @@ class Role extends Entity
     protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
+            // check if role belongs to this organization
+            if ($this->getValue('cat_org_id') > 0 && $this->getValue('cat_org_id') !== $GLOBALS['gCurrentOrgId']) {
+                throw new Exception('Role ' . $this->getValue('rol_uuid') . ' belongs to another organization.');
+            }
+
             if ($this->getValue('cat_name_intern') === 'EVENTS') {
                 $this->setType(Role::ROLE_EVENT);
             } else {

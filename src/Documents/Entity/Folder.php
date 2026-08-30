@@ -704,6 +704,11 @@ class Folder extends Entity
             $this->folderViewRolesObject = new RolesRights($this->db, 'folder_view', $folId);
             $this->folderUploadRolesObject = new RolesRights($this->db, 'folder_upload', $folId);
 
+            // check if folder belongs to this organization
+            if ($this->getValue('fol_org_id') > 0 && $this->getValue('fol_org_id') !== $GLOBALS['gCurrentOrgId']) {
+                throw new Exception('Folder ' . $this->getValue('fol_uuid') . ' belongs to another organization.');
+            }
+
             return true;
         }
 
