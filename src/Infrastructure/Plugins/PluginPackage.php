@@ -88,12 +88,14 @@ final class PluginPackage
      * list is deliberately short: a plugin author who keeps something unusual in the directory
      * should not find it silently missing from the archive.
      *
-     * **tests** is excluded because Admidio runs the tests of every plugin that is present, so a
-     * distributed one would run in installations that have nothing to do with developing it.
+     * **tests** and the PHPUnit configuration beside it are excluded because Admidio runs the tests
+     * of every plugin that is present, so a distributed one would run in installations that have
+     * nothing to do with developing it.
      * @var array<int,string>
      */
     public const EXCLUDED = array(
-        '.git', '.svn', '.hg', 'node_modules', 'vendor', 'tests',
+        '.git', '.svn', '.hg', 'node_modules', 'vendor',
+        'tests', 'phpunit.xml', 'phpunit.xml.dist', '.phpunit.result.cache',
         '.DS_Store', 'Thumbs.db', '.gitignore', '.gitattributes'
     );
 
