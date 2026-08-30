@@ -26,6 +26,7 @@ use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginPackage;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\Maintenance;
@@ -2046,6 +2047,10 @@ final class CoreTasks
             'plugin:disable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:update', 'pluginUpdate', 'Run the update scripts of a plugin.',
             'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
+        self::task('plugin:archive', 'pluginArchive', 'Build the distributable ZIP archive of a plugin.',
+            'plugin:archive PLUGIN [--output=DIR]', 'PLUGINS', true,
+            array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')),
+            array(self::opt('output', 'Directory the archive is written to. Default: the current directory.', 'DIR')));
         self::task('plugin:remove', 'pluginRemove', 'Remove a plugin from every organization, with its data and its files.',
             'plugin:remove PLUGIN [--yes]', 'PLUGINS', true,
             array(self::arg('plugin', 'Plugin ID. The ID of an orphaned plugin whose files are gone is accepted too.')),
@@ -8647,6 +8652,24 @@ final class CoreTasks
         return 0;
     }
 
+
+    public static function pluginArchive(array $arguments, array $options): int
+    {
+        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+
+        $directory = CliApplication::optionString($options, 'output', '');
+        if ($directory === '') {
+            $directory = (string)getcwd();
+        }
+
+        $archive = PluginPackage::create($plugin, $directory);
+
+        CliApplication::writeSuccess(
+            'Archive written: ' . $archive . ' (' . number_format(filesize($archive)) . ' bytes).',
+            $options
+        );
+        return 0;
+    }
     public static function pluginRemove(array $arguments, array $options): int
     {
         $id = CliApplication::requireArgument($arguments, 0, 'plugin');

@@ -80,6 +80,107 @@ final class PluginPackage
         return $id;
     }
 
+
+    /**
+     * Everything that belongs to working on a plugin rather than to the plugin.
+     *
+     * A directory whose name matches is skipped whole; a file whose name matches is left out. The
+     * list is deliberately short: a plugin author who keeps something unusual in the directory
+     * should not find it silently missing from the archive.
+     * @var array<int,string>
+     */
+    public const EXCLUDED = array(
+        '.git', '.svn', '.hg', 'node_modules', 'vendor',
+        '.DS_Store', 'Thumbs.db', '.gitignore', '.gitattributes'
+    );
+
+    /**
+     * Build the archive that distributes a plugin.
+     *
+     * The archive is what an administrator uploads and what the plugin store serves, so it is
+     * checked with the very gate the installer uses before it is handed back. A plugin that packages
+     * cleanly will install.
+     * @param Plugin $plugin The plugin to package. It has to be readable and valid.
+     * @param string $directory Absolute path of the directory the archive is written to.
+     * @return string Absolute path of the archive.
+     * @throws Exception
+     */
+    public static function create(Plugin $plugin, string $directory): string
+    {
+        if (!$plugin->isValid()) {
+            throw new Exception('SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST', array((string)$plugin->error));
+        }
+
+        if (!is_dir($directory) || !is_writable($directory)) {
+            throw new Exception('SYS_PLUGIN_ARCHIVE_NOT_WRITABLE', array($directory));
+        }
+
+        $archivePath = rtrim(str_replace('\\', '/', $directory), '/')
+            . '/' . $plugin->id . '-' . $plugin->version . '.zip';
+
+        /*
+         * The file list is taken before the archive is created, so an archive written into the
+         * plugin's own directory cannot end up inside itself.
+         */
+        $files = self::collectFiles($plugin->path);
+        if ($files === array()) {
+            throw new Exception('SYS_PLUGIN_PACKAGE_EMPTY');
+        }
+
+        $archive = new ZipArchive();
+        if ($archive->open($archivePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            throw new Exception('SYS_PLUGIN_ARCHIVE_NOT_WRITABLE', array($directory));
+        }
+
+        foreach ($files as $relative => $absolute) {
+            $archive->addFile($absolute, $plugin->id . '/' . $relative);
+        }
+
+        if ($archive->close() !== true) {
+            throw new Exception('SYS_PLUGIN_ARCHIVE_NOT_WRITABLE', array($directory));
+        }
+
+        // The archive has to pass the gate it will be installed through.
+        self::inspect($archivePath);
+
+        return $archivePath;
+    }
+
+    /**
+     * Every file of a plugin directory that belongs in its archive, as relative path => absolute
+     * path, in a stable order.
+     * @param string $directory
+     * @return array<string,string>
+     */
+    private static function collectFiles(string $directory): array
+    {
+        $root = rtrim(str_replace('\\', '/', $directory), '/');
+        $files = array();
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveCallbackFilterIterator(
+                new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS),
+                static function (\SplFileInfo $entry): bool {
+                    return !in_array($entry->getFilename(), self::EXCLUDED, true);
+                }
+            )
+        );
+
+        foreach ($iterator as $entry) {
+            if (!$entry->isFile()) {
+                continue;
+            }
+
+            $absolute = str_replace('\\', '/', $entry->getPathname());
+            $files[substr($absolute, strlen($root) + 1)] = $absolute;
+        }
+
+        // A stable order makes two archives of the same source comparable.
+        ksort($files);
+
+        return $files;
+    }
+
     /**
      * Read an archive and answer which plugin it holds, without extracting anything.
      *

@@ -1273,6 +1273,7 @@
   <string name="SYS_PLUGIN_ADD_DESC">Install a plugin from a file you have, or from the plugins published for Admidio.</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# is already installed. Choose "Replace the installed plugin" to install this file over it.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
+  <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Faulty plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
