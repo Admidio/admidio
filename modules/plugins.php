@@ -24,6 +24,7 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginPackage;
 use Admidio\Infrastructure\Plugins\PluginPanel;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -35,19 +36,23 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'settings', 'settings_save', 'enable', 'disable', 'update', 'remove')));
+        'validValues' => array('list', 'add', 'settings', 'settings_save', 'upload', 'enable', 'disable', 'update', 'remove')));
     // Everything but the list and the settings dialog answers with JSON.
-    $isAjax = !in_array($getMode, array('list', 'settings'), true);
+    $isAjax = !in_array($getMode, array('list', 'add', 'settings'), true);
 
     // check rights to use this module
     if (!$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    // Every mode but the list works on one plugin, addressed by its ID.
+    /*
+     * Most modes work on one plugin, addressed by its ID. The list does not, and neither do the two
+     * modes that add a plugin: the page offers every plugin there is, and the upload learns which
+     * plugin it holds by reading the archive.
+     */
     $getPluginId = '';
     $plugin = null;
-    if ($getMode !== 'list') {
+    if (!in_array($getMode, array('list', 'add', 'upload'), true)) {
         $getPluginId = admFuncVariableIsValid($_GET, 'plugin', 'string', array('requireValue' => true));
         $plugin = PluginRegistry::get($getPluginId);
     }
@@ -59,6 +64,40 @@ try {
             $page->createList();
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-puzzle-fill');
             $page->show();
+            break;
+
+        case 'add':
+            // create an HTML page object
+            $page = new PluginsPresenter();
+            $page->createAddPage();
+            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
+            $page->show();
+            break;
+
+        case 'upload':
+            // check the CSRF token of the form against the session token
+            $uploadForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $formValues = $uploadForm->validate($_POST);
+
+            $uploadedFile = $_FILES['userfile']['tmp_name'][0] ?? '';
+            if ($uploadedFile === '') {
+                throw new Exception('SYS_FIELD_EMPTY', array('SYS_FILE'));
+            }
+            if (($_FILES['userfile']['error'][0] ?? 0) === UPLOAD_ERR_INI_SIZE) {
+                throw new Exception('SYS_PLUGIN_PACKAGE_TOO_LARGE');
+            }
+            if (!is_uploaded_file($uploadedFile)) {
+                throw new Exception('SYS_FILE_NOT_EXIST');
+            }
+
+            $installedId = PluginPackage::install($uploadedFile, !empty($formValues['plugin_replace']));
+
+            $gNavigation->deleteLastUrl();
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $gL10n->get('SYS_PLUGIN_PACKAGE_INSTALLED', array($installedId)),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php')
+            ));
             break;
 
         case 'settings':
