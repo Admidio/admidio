@@ -83,6 +83,79 @@ final class PluginTest extends PluginTestCase
         $this->assertNull($settings['hello_greeting']['step']);
     }
 
+
+    /**
+     * @testdox A module the plugin needs is reported when it is switched off
+     */
+    public function testDisabledModuleIsReported(): void
+    {
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array(
+            'documents_files_module_enabled' => '0'
+        ));
+
+        $this->assertSame(
+            array('documents-files'),
+            Plugin::read(self::fixturePath('needs-module'))->getDisabledModules()
+        );
+    }
+
+    /**
+     * @testdox A module the plugin needs is not reported when it is switched on
+     */
+    public function testEnabledModuleIsNotReported(): void
+    {
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array(
+            'documents_files_module_enabled' => '1'
+        ));
+
+        $this->assertSame(array(), Plugin::read(self::fixturePath('needs-module'))->getDisabledModules());
+    }
+
+    /**
+     * @testdox A module this installation does not have is not reported
+     *
+     * A manifest naming a module Admidio does not know says nothing about this installation, so it
+     * is ignored rather than reported as switched off.
+     */
+    public function testUnknownModuleIsNotReported(): void
+    {
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array());
+
+        $this->assertSame(array(), Plugin::read(self::fixturePath('needs-module'))->getDisabledModules());
+    }
+
+    /**
+     * @testdox The two modules whose preference was never renamed are still found
+     *
+     * photos and messages are switched by photo_module_enabled and mail_module_enabled. Deriving the
+     * preference from the name alone would look at preferences that do not exist, and a plugin whose
+     * module is off would silently look fine.
+     * @dataProvider renamedModules
+     */
+    public function testModulesWithARenamedPreferenceAreFound(string $module, string $preference): void
+    {
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array($preference => '0'));
+
+        $plugin = Plugin::read(self::fixturePath('needs-module'));
+
+        $reflection = new \ReflectionMethod(Plugin::class, 'getModulePreference');
+        $reflection->setAccessible(true);
+
+        $this->assertSame($preference, $reflection->invoke(null, $module));
+        $this->assertNotNull($plugin);
+    }
+
+    /**
+     * The modules whose preference does not follow from their name.
+     * @return array<string,array<int,string>>
+     */
+    public static function renamedModules(): array
+    {
+        return array(
+            'photos' => array('photos', 'photo_module_enabled'),
+            'messages' => array('messages', 'mail_module_enabled')
+        );
+    }
     /**
      * @testdox A manifest may name the preferences tab its settings appear in
      */

@@ -8,7 +8,8 @@
     "menu": false,
     "requires": {
         "admidio": ">=5.1",
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "modules": ["announcements", "events"]
     },
     "autoload": {
         "AdmidioPlugin\\Calendar\\": "src/"

@@ -55,6 +55,10 @@
                             <td>
                                 {$pluginEntry.description}
                                 {include 'modules/plugins.author.tpl' data=$pluginEntry}
+                                {* Nothing is wrong with the plugin here, so this is not a diagnostic. *}
+                                {foreach $pluginEntry.notes as $note}
+                                    <div class="text-warning-emphasis"><small><i class="bi bi-info-circle"></i> {$note}</small></div>
+                                {/foreach}
                                 {* Developer diagnostics in English, not a translated message. *}
                                 {foreach $pluginEntry.diagnostics as $diagnostic}
                                     <div class="text-danger"><small><code>{$diagnostic}</code></small></div>
@@ -126,6 +130,9 @@
                                 <strong>{$l10n->get('SYS_DESCRIPTION')}:</strong>
                                 <p>{$pluginEntry.description}</p>
                                 {include 'modules/plugins.author.tpl' data=$pluginEntry}
+                                {foreach $pluginEntry.notes as $note}
+                                    <p class="text-warning-emphasis"><small><i class="bi bi-info-circle"></i> {$note}</small></p>
+                                {/foreach}
                                 {foreach $pluginEntry.diagnostics as $diagnostic}
                                     <p class="text-danger"><small><code>{$diagnostic}</code></small></p>
                                 {/foreach}

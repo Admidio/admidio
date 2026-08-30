@@ -7,7 +7,8 @@
     "icon": "bi-box-arrow-in-right",
     "requires": {
         "admidio": ">=5.1",
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "modules": ["messages", "registration"]
     },
     "autoload": {
         "AdmidioPlugin\\LoginForm\\": "src/"
