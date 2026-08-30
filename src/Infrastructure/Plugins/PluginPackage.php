@@ -87,10 +87,13 @@ final class PluginPackage
      * A directory whose name matches is skipped whole; a file whose name matches is left out. The
      * list is deliberately short: a plugin author who keeps something unusual in the directory
      * should not find it silently missing from the archive.
+     *
+     * **tests** is excluded because Admidio runs the tests of every plugin that is present, so a
+     * distributed one would run in installations that have nothing to do with developing it.
      * @var array<int,string>
      */
     public const EXCLUDED = array(
-        '.git', '.svn', '.hg', 'node_modules', 'vendor',
+        '.git', '.svn', '.hg', 'node_modules', 'vendor', 'tests',
         '.DS_Store', 'Thumbs.db', '.gitignore', '.gitattributes'
     );
 
