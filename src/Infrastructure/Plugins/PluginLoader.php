@@ -340,10 +340,14 @@ final class PluginLoader
     /**
      * Add the language directory of the plugin to the language search path, so that the language
      * keys of the plugin can be read with $gL10n->get() like any other string.
+     *
+     * Loading a plugin does this, but the plugin administration needs it for plugins that are not
+     * loaded: it lists every plugin there is, and the name and description of a plugin that has not
+     * been enabled are language keys of a file nothing has read yet.
      * @param Plugin $plugin
      * @return void
      */
-    private static function registerLanguages(Plugin $plugin): void
+    public static function registerLanguages(Plugin $plugin): void
     {
         global $gL10n;
 

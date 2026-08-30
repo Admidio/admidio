@@ -295,6 +295,16 @@ class PluginsPresenter extends PagePresenter
     {
         $homepage = $plugin?->homepage ?? '';
 
+        /*
+         * The name and the description of a plugin are usually keys of the plugin's own language
+         * file, and that file is only on the search path once the plugin has been loaded. This list
+         * shows plugins that are not loaded - available, disabled, waiting for an update - so it has
+         * to put their language file there itself, or it would print the raw keys.
+         */
+        if ($plugin !== null) {
+            PluginLoader::registerLanguages($plugin);
+        }
+
         return array(
             'id' => $id,
             'uuid' => $id,
