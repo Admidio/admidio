@@ -50,6 +50,12 @@ abstract class PluginTestCase extends AdmidioTestCase
         if (!defined('ADMIDIO_VERSION')) {
             define('ADMIDIO_VERSION', '5.1.0');
         }
+        if (!defined('FOLDER_DATA')) {
+            define('FOLDER_DATA', '/adm_my_files');
+        }
+        if (!defined('ADMIDIO_HOMEPAGE')) {
+            define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
+        }
 
         $GLOBALS['gLogger'] = $GLOBALS['gLogger'] ?? new NullLogger();
     }
