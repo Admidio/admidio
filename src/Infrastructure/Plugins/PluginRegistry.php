@@ -154,7 +154,7 @@ final class PluginRegistry
         }
 
         self::$installations = array();
-        $sql = 'SELECT com_id, com_name_intern, com_version
+        $sql = 'SELECT com_id, com_uuid, com_name_intern, com_version
                   FROM ' . TBL_COMPONENTS . '
                  WHERE com_type = ?';
         $statement = $gDb->queryPrepared($sql, array(self::COMPONENT_TYPE));
@@ -162,6 +162,7 @@ final class PluginRegistry
         while ($row = $statement->fetch()) {
             self::$installations[(string)$row['com_name_intern']] = array(
                 'comId' => (int)$row['com_id'],
+                'uuid' => (string)$row['com_uuid'],
                 'version' => (string)$row['com_version']
             );
         }
@@ -210,6 +211,21 @@ final class PluginRegistry
     public static function getComponentId(string $id): int
     {
         return self::getInstallations()[$id]['comId'] ?? 0;
+    }
+
+    /**
+     * The UUID of the component record that holds an installed plugin, or an empty string when the
+     * plugin has no record yet.
+     *
+     * It is what the changelog relates a plugin's settings to, so that the history of one plugin can
+     * be read on its own.
+     * @param string $id
+     * @return string
+     * @throws Exception
+     */
+    public static function getComponentUuid(string $id): string
+    {
+        return self::getInstallations()[$id]['uuid'] ?? '';
     }
 
     /**

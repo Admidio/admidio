@@ -230,6 +230,34 @@ final class UpdateStepsCode
      * The previous runtime identified a plugin by its translated display name and stored an
      * uppercased com_name_intern; the registry identifies a plugin by its directory and nothing
      * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
+
+    /**
+     * Give every component a UUID.
+     *
+     * The column is added empty, so the rows that already exist need one before the unique index can
+     * be created. A component is what records an installed plugin, so its UUID is what the changelog
+     * relates a plugin's settings to.
+     * @throws Exception
+     */
+    public static function updateStep51AddComponentUuid(): void
+    {
+        $statement = self::$db->queryPrepared('SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_uuid IS NULL');
+
+        while ($row = $statement->fetch()) {
+            $sql = 'UPDATE ' . TBL_COMPONENTS . ' SET com_uuid = ? -- $uuid
+                     WHERE com_id = ? -- $row[\'com_id\']';
+            self::$db->queryPrepared($sql, array(Uuid::uuid4(), $row['com_id']));
+        }
+
+        self::$db->initializeTableColumnProperties();
+    }
+
+    /**
+     * Move the built-in plugins onto the new plugin runtime.
+     *
+     * The previous runtime identified a plugin by its translated display name and stored an
+     * uppercased com_name_intern; the registry identifies a plugin by its directory and nothing
+     * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
      * again with everything it already has - its version, its preferences and its data.
      *
      * A built-in plugin that has no component row at all is installed here, and the menu entry of a

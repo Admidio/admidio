@@ -210,6 +210,13 @@
     <step id="1220" database="mysql">ALTER TABLE %PREFIX%_saml_logout_transactions MODIFY COLUMN slt_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step id="1230" database="mysql">ALTER TABLE %PREFIX%_saml_session_participants MODIFY COLUMN ssp_authn_instant timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step id="1240">UPDATE %PREFIX%_components SET com_name_intern = LOWER(com_name_intern) WHERE com_type = 'PLUGIN'</step>
-    <step id="1250">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
+    <!--
+        com_uuid has to exist before ConvertBuiltInPlugins runs: it may install a plugin that was
+        never installed before, which creates a Component row and therefore needs the column.
+    -->
+    <step id="1250">ALTER TABLE %PREFIX%_components ADD COLUMN com_uuid varchar(36)</step>
+    <step id="1260">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
+    <step id="1270">UpdateStepsCode::updateStep51AddComponentUuid</step>
+    <step id="1280">CREATE UNIQUE INDEX %PREFIX%_idx_com_uuid ON %PREFIX%_components (com_uuid)</step>
     <step>stop</step>
 </update>
