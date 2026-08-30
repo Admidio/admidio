@@ -558,27 +558,27 @@ class Installation
 
         // create all modules components
         $sql = 'INSERT INTO ' . TBL_COMPONENTS . '
-                       (com_type, com_name, com_name_intern, com_version, com_beta)
-                VALUES (\'MODULE\', \'SYS_ANNOUNCEMENTS\',   \'ANNOUNCEMENTS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_CATEGORIES\',      \'CATEGORIES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_CATEGORY_REPORT\', \'CATEGORY-REPORT\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_CHANGE_HISTORY\',  \'CHANGELOG\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_EVENTS\',          \'EVENTS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_DOCUMENTS_FILES\', \'DOCUMENTS-FILES\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_INVENTORY\',        \'INVENTORY\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_FORUM\',           \'FORUM\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_WEBLINKS\',        \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_GROUPS_ROLES\',    \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_CONTACTS\',        \'CONTACTS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_MESSAGES\',        \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_MENU\',            \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_ORGANIZATION\',    \'ORGANIZATIONS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_PHOTOS\',          \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_SETTINGS\',        \'PREFERENCES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_PROFILE\',         \'PROFILE\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_REGISTRATION\',    \'REGISTRATION\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_ROOM_MANAGEMENT\', \'ROOMS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_PLUGIN_MANAGER\',  \'PLUGINS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
+                       (com_uuid, com_type, com_name, com_name_intern, com_version, com_beta)
+                VALUES (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_ANNOUNCEMENTS\',   \'ANNOUNCEMENTS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_CATEGORIES\',      \'CATEGORIES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_CATEGORY_REPORT\', \'CATEGORY-REPORT\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_CHANGE_HISTORY\',  \'CHANGELOG\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_EVENTS\',          \'EVENTS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_DOCUMENTS_FILES\', \'DOCUMENTS-FILES\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_INVENTORY\',        \'INVENTORY\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_FORUM\',           \'FORUM\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_WEBLINKS\',        \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_GROUPS_ROLES\',    \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_CONTACTS\',        \'CONTACTS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_MESSAGES\',        \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_MENU\',            \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_ORGANIZATION\',    \'ORGANIZATIONS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_PHOTOS\',          \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_SETTINGS\',        \'PREFERENCES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_PROFILE\',         \'PROFILE\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_REGISTRATION\',    \'REGISTRATION\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_ROOM_MANAGEMENT\', \'ROOMS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_PLUGIN_MANAGER\',  \'PLUGINS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
         $db->query($sql); // TODO add more params
     }
 
