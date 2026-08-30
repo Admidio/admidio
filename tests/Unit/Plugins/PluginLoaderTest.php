@@ -42,6 +42,39 @@ final class PluginLoaderTest extends PluginTestCase
         parent::tearDown();
     }
 
+
+    /**
+     * @testdox The language file of a plugin can be registered without loading the plugin
+     *
+     * The plugin administration lists plugins that are not loaded, and the name and description it
+     * shows for them are keys of their own language file. Without this it prints the raw keys.
+     */
+    public function testLanguagesCanBeRegisteredWithoutLoading(): void
+    {
+        $plugin = PluginRegistry::get('hello');
+        $this->assertNotNull($plugin);
+
+        PluginLoader::registerLanguages($plugin);
+
+        $this->assertSame(array(), PluginLoader::getLoaded(), 'the plugin must not have been loaded');
+        $this->assertContains(
+            $plugin->getDirectory(Plugin::DIR_LANGUAGES),
+            $GLOBALS['gL10n']->folderPaths
+        );
+    }
+
+    /**
+     * @testdox A plugin without a language directory registers nothing
+     */
+    public function testPluginWithoutLanguagesRegistersNothing(): void
+    {
+        $plugin = PluginRegistry::get('no-entry');
+        $this->assertNotNull($plugin);
+
+        PluginLoader::registerLanguages($plugin);
+
+        $this->assertSame(array(), $GLOBALS['gL10n']->folderPaths);
+    }
     /**
      * @testdox The entry file runs once, its classes resolve and its hooks are registered
      */
