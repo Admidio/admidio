@@ -71,7 +71,7 @@ final class PluginRegistryTest extends PluginTestCase
         $plugins = PluginRegistry::all();
 
         $this->assertSame(
-            array('broken-json', 'core-namespace', 'dependent', 'escaping', 'hello', 'no-entry'),
+            array('broken-json', 'core-namespace', 'dependent', 'escaping', 'hello', 'needs-module', 'no-entry'),
             array_keys($plugins)
         );
         $this->assertSame(0, $GLOBALS['helloPluginEntryFileRuns']);
