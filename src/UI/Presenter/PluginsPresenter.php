@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\UI\Presenter;
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Plugin;
@@ -8,7 +9,9 @@ use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginPanel;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\DataTables;
 
 /**
  * @brief The plugin administration.
@@ -73,46 +76,13 @@ class PluginsPresenter extends PagePresenter
             });
         ', true);
 
+        $this->addActionJavascript();
+
         /*
-         * Installing, enabling, updating and uninstalling all change what the other rows may offer,
-         * so the page is reloaded instead of one row being patched.
+         * The settings of a plugin, the flag that enables it and its menu entries are all ordinary
+         * records, so they are already in the changelog. This is the way in.
          */
-        $this->addJavascript('
-            function callPluginAction(url, csrfToken) {
-                $.post(url, { "adm_csrf_token": csrfToken }, function(data) {
-                    const messageText = $("#adm_status_message");
-                    let returnStatus = "error";
-                    let returnMessage = "";
-
-                    try {
-                        const returnData = JSON.parse(data);
-                        returnStatus = returnData.status;
-                        if (typeof returnData.message !== "undefined") {
-                            returnMessage = returnData.message;
-                        }
-                    } catch (e) {
-                        returnMessage = data;
-                    }
-
-                    if (returnStatus === "success") {
-                        messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i> "
-                            + returnMessage + "</div>");
-                    } else {
-                        if (returnMessage.length === 0) {
-                            returnMessage = "Error: Undefined error occurred!";
-                        }
-                        messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i> "
-                            + returnMessage + "</div>");
-                    }
-
-                    setTimeout(function() {
-                        $("#adm_modal").modal("hide");
-                        $("#adm_modal_messagebox").modal("hide");
-                        location.reload();
-                    }, 2000);
-                });
-            }
-        ');
+        ChangelogService::displayHistoryButton($this, 'plugins', array('preferences', 'menu'));
 
         $this->smarty->assign('list', $this->getGroups());
         $this->smarty->assign('failures', PluginLoader::getFailures());
@@ -141,6 +111,14 @@ class PluginsPresenter extends PagePresenter
 
         $this->setHtmlID('adm_plugins_add');
         $this->setHeadline($gL10n->get('SYS_PLUGIN_ADD'));
+
+        // The add page is reached from the plugin manager and has to lead back to it.
+        $this->addPageFunctionsMenuItem(
+            'plugin_add_back',
+            $gL10n->get('SYS_BACK'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'),
+            'bi-arrow-left-circle-fill'
+        );
 
         $form = new FormPresenter(
             'adm_plugin_upload_form',
@@ -179,6 +157,55 @@ class PluginsPresenter extends PagePresenter
             $gL10n->get('SYS_PLUGIN_INSTALL_FROM_FILE'),
             array('icon' => 'bi-upload', 'class' => 'offset-sm-3')
         );
+
+        $this->addActionJavascript();
+
+        /*
+         * The catalogue is read from the cache, so this costs nothing on most requests. When it
+         * cannot be read the panel says so and offers a refresh instead of showing an empty table
+         * that looks like a store with nothing in it.
+         */
+        $store = array();
+        foreach (PluginStore::getPlugins() as $entry) {
+            $name = Language::translateIfTranslationStrId((string)($entry['name'] ?? $entry['id']));
+
+            $row = array(
+                'id' => (string)$entry['id'],
+                'name' => $name,
+                'description' => self::getStoreDescription($entry),
+                'author' => (string)($entry['author'] ?? ''),
+                'url' => (string)($entry['url'] ?? ''),
+                'icon' => (string)($entry['icon'] ?? 'bi-puzzle'),
+                'version' => (string)$entry['release']['version'],
+                'installed' => (bool)$entry['installed'],
+                'installedVersion' => (string)$entry['installedVersion']
+            );
+
+            // A plugin this installation already has is shown, but there is nothing to do to it here
+            // - the plugin manager is where it is enabled, configured and removed.
+            if (!$row['installed']) {
+                // The same action shape the plugin list uses, so list.functions.tpl renders it.
+                $row['actions'] = array(array(
+                    'dataHref' => $this->actionScript((string)$entry['id'], 'store_install'),
+                    'dataMessage' => $gL10n->get('SYS_WANT_INSTALL_FROM_STORE', array($name)),
+                    'icon' => 'bi bi-plus-circle-fill',
+                    'tooltip' => $gL10n->get('SYS_PLUGIN_STORE_INSTALL')
+                ));
+            }
+
+            $store[] = $row;
+        }
+
+        if ($store !== array()) {
+            $dataTables = new DataTables($this, 'adm_plugin_store_table');
+            $dataTables->disableColumnsSort(array(3));
+            $dataTables->createJavascript(count($store), 4);
+        }
+
+        $this->smarty->assign('store', $store);
+        $this->smarty->assign('storeError', PluginStore::getError());
+        $this->smarty->assign('storeUrl', PluginStore::getUrl());
+        $this->smarty->assign('storeRefreshHref', $this->actionScript('', 'store_refresh'));
 
         /*
          * addToHtmlPage() renders the template into the page and binds the Admidio form submit,
@@ -281,6 +308,54 @@ class PluginsPresenter extends PagePresenter
         sort($ids);
 
         return $ids;
+    }
+
+    /**
+     * The JavaScript that performs one operation of the plugin manager and reloads the page.
+     *
+     * Installing, enabling, updating and removing all change what the other rows may offer, so
+     * the page is reloaded rather than one row being patched. Both pages of the module use it.
+     * @return void
+     * @throws Exception
+     */
+    private function addActionJavascript(): void
+    {
+        $this->addJavascript('
+            function callPluginAction(url, csrfToken) {
+                $.post(url, { "adm_csrf_token": csrfToken }, function(data) {
+                    const messageText = $("#adm_status_message");
+                    let returnStatus = "error";
+                    let returnMessage = "";
+
+                    try {
+                        const returnData = JSON.parse(data);
+                        returnStatus = returnData.status;
+                        if (typeof returnData.message !== "undefined") {
+                            returnMessage = returnData.message;
+                        }
+                    } catch (e) {
+                        returnMessage = data;
+                    }
+
+                    if (returnStatus === "success") {
+                        messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i> "
+                            + returnMessage + "</div>");
+                    } else {
+                        if (returnMessage.length === 0) {
+                            returnMessage = "Error: Undefined error occurred!";
+                        }
+                        messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i> "
+                            + returnMessage + "</div>");
+                    }
+
+                    setTimeout(function() {
+                        $("#adm_modal").modal("hide");
+                        $("#adm_modal_messagebox").modal("hide");
+                        location.reload();
+                    }, 2000);
+                });
+            }
+        ');
     }
 
     /**
@@ -451,16 +526,48 @@ class PluginsPresenter extends PagePresenter
             );
         }
 
-        if ($state === PluginRegistry::STATE_UPDATE) {
+        /*
+         * There are two reasons a plugin can need updating - its files are newer than its
+         * database, or the store offers newer files - and an administrator should not have to
+         * know which. One action covers both, and the route does whatever is actually needed.
+         */
+        if ($state === PluginRegistry::STATE_UPDATE
+            || (PluginRegistry::isInstalled($id) && PluginStore::getNewerRelease($id) !== null)) {
             $actions[] = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
         }
 
+
+        /*
+         * The history of this one plugin. Its settings name the component record of the plugin as
+         * their related object, so the changelog can be filtered down to it.
+         */
+        $componentUuid = PluginRegistry::getComponentUuid($id);
+        if ($componentUuid !== '') {
+            $history = ChangelogService::displayHistoryButtonTable(
+                array('preferences', 'menu'),
+                true,
+                array('related_id' => $componentUuid)
+            );
+            if ($history !== array()) {
+                $actions[] = $history;
+            }
+        }
         /*
          * A plugin of the Admidio distribution has no remove action at all: its files come back with
          * the next core update, so offering to delete them would promise something Admidio cannot
          * keep. Disabling is what takes such a plugin out of use.
          */
-        if (!PluginRegistry::isBuiltIn($id)) {
+        if (PluginRegistry::isBuiltIn($id)) {
+            /*
+             * An icon that is simply absent tells nobody why. This one does nothing when it is
+             * clicked; it is there so that the tooltip can say what is going on.
+             */
+            $actions[] = array(
+                'url' => 'javascript:void(0);',
+                'icon' => 'bi bi-shield-lock',
+                'tooltip' => $gL10n->get('SYS_PLUGIN_BUILT_IN')
+            );
+        } else {
             /*
              * Removing reaches every organization, so the question names the ones that are still
              * using the plugin - including those this administrator does not administrate.
@@ -481,6 +588,34 @@ class PluginsPresenter extends PagePresenter
         return $actions;
     }
 
+
+    /**
+     * The description of a catalogue entry, in the language of this installation.
+     *
+     * The catalogue may give a description as one text or as a text per language, because the
+     * plugins published for Admidio are described by their authors and not every author writes
+     * every language. English is the fallback, then whatever is there.
+     * @param array<string,mixed> $entry
+     * @return string
+     */
+    private static function getStoreDescription(array $entry): string
+    {
+        global $gL10n;
+
+        $description = $entry['description'] ?? '';
+
+        if (is_string($description)) {
+            return Language::translateIfTranslationStrId($description);
+        }
+
+        if (!is_array($description) || $description === array()) {
+            return '';
+        }
+
+        $language = isset($gL10n) ? $gL10n->getLanguage() : 'en';
+
+        return (string)($description[$language] ?? $description['en'] ?? reset($description));
+    }
     /**
      * The preferences panel that holds the settings of a plugin, or an empty string if it has none.
      *
