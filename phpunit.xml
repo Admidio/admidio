@@ -8,12 +8,16 @@
     <testsuites>
         <testsuite name="Unit Tests">
             <directory>tests/Unit</directory>
+            <!-- A plugin keeps its tests beside its code, split like the core suites. -->
+            <directory>plugins/*/tests/Unit</directory>
         </testsuite>
         <testsuite name="Integration Tests">
             <directory>tests/Integration</directory>
+            <directory>plugins/*/tests/Integration</directory>
         </testsuite>
         <testsuite name="CLI Tests">
             <directory>tests/Cli</directory>
+            <directory>plugins/*/tests/Cli</directory>
         </testsuite>
     </testsuites>
 
