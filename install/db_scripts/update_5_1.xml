@@ -224,6 +224,13 @@
     <step id="1340">ALTER TABLE %PREFIX%_texts ADD COLUMN txt_custom_text text NULL</step>
     <step id="1350">UPDATE %PREFIX%_texts SET txt_custom_text = txt_text WHERE txt_custom_text IS NULL AND txt_name IN ('SYSMAIL_REGISTRATION_CONFIRMATION', 'SYSMAIL_REGISTRATION_NEW', 'SYSMAIL_REGISTRATION_APPROVED', 'SYSMAIL_REGISTRATION_REFUSED', 'SYSMAIL_LOGIN_INFORMATION', 'SYSMAIL_PASSWORD_RESET') AND txt_text NOT IN ('SYS_SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR', 'SYS_SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_LOGIN_INFORMATION', 'SYS_SYSMAIL_PASSWORD_RESET')</step>
     <step id="1360">UPDATE %PREFIX%_components SET com_name_intern = LOWER(com_name_intern) WHERE com_type = 'PLUGIN'</step>
-    <step id="1370">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
+    <!--
+        com_uuid has to exist before ConvertBuiltInPlugins runs: it may install a plugin that was
+        never installed before, which creates a Component row and therefore needs the column.
+    -->
+    <step id="1370">ALTER TABLE %PREFIX%_components ADD COLUMN com_uuid varchar(36)</step>
+    <step id="1380">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
+    <step id="1390">UpdateStepsCode::updateStep51AddComponentUuid</step>
+    <step id="1400">CREATE UNIQUE INDEX %PREFIX%_idx_com_uuid ON %PREFIX%_components (com_uuid)</step>
     <step>stop</step>
 </update>
