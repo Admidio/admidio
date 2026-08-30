@@ -34,6 +34,33 @@ final class PluginRegistryTest extends PluginTestCase
 
         $this->assertSame('', PluginRegistry::getComponentUuid('hello'));
     }
+
+    /**
+     * @testdox A preference a plugin declares is traced back to that plugin
+     *
+     * This is what lets a changelog entry name the plugin it belongs to, and the plugin
+     * administration link to the history of one plugin rather than of every setting there is.
+     */
+    public function testSettingIsTracedToItsPlugin(): void
+    {
+        $this->assertSame('hello', PluginRegistry::getOwnerOfSetting('hello_greeting')?->id);
+    }
+
+    /**
+     * @testdox The flag that enables a plugin belongs to it too
+     */
+    public function testEnabledFlagIsTracedToItsPlugin(): void
+    {
+        $this->assertSame('hello', PluginRegistry::getOwnerOfSetting('plugin_hello_enabled')?->id);
+    }
+
+    /**
+     * @testdox A preference no plugin declares belongs to no plugin
+     */
+    public function testCorePreferenceHasNoPluginOwner(): void
+    {
+        $this->assertNull(PluginRegistry::getOwnerOfSetting('documents_files_module_enabled'));
+    }
     /**
      * @testdox Every directory is discovered, sorted and without executing any plugin code
      */
