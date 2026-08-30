@@ -58,8 +58,8 @@ try {
         $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
 
         if ($postUserUuidList !== '') {
-            $postUserUuidList = explode(',', $postUserUuidList);
-            foreach ($postUserUuidList as $key => $userUuid) {
+            $userUuidListArray = explode(',', $postUserUuidList);
+            foreach ($userUuidListArray as $key => $userUuid) {
                 if (!Uuid::isValid($userUuid)) {
                     throw new Exception('SYS_INVALID_PAGE_VIEW');
                 }
