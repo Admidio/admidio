@@ -58,6 +58,15 @@ class PluginsPresenter extends PagePresenter
         $this->setHeadline($gL10n->get('SYS_PLUGIN_MANAGER'));
         $this->setContentFullWidth();
 
+        // Adding a plugin is a different question from managing the ones that are here, so it has a
+        // page of its own rather than a panel above the list.
+        $this->addPageFunctionsMenuItem(
+            'plugin_add',
+            $gL10n->get('SYS_PLUGIN_ADD'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'add')),
+            'bi-plus-circle-fill'
+        );
+
         $this->addJavascript('
             $(".admidio-open-close-caret").click(function() {
                 showHideBlock($(this));
@@ -114,6 +123,71 @@ class PluginsPresenter extends PagePresenter
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    /**
+     * The page that adds a plugin the installation does not have yet.
+     *
+     * Uploading a file and choosing from the plugins published for Admidio are two answers to the
+     * same question, so they are two panels of one page rather than two entries in a menu: an
+     * administrator who wants a plugin should not have to know which of the two holds it before they
+     * have looked.
+     * @return void
+     * @throws Exception
+     */
+    public function createAddPage(): void
+    {
+        global $gL10n, $gCurrentSession;
+
+        $this->setHtmlID('adm_plugins_add');
+        $this->setHeadline($gL10n->get('SYS_PLUGIN_ADD'));
+
+        $form = new FormPresenter(
+            'adm_plugin_upload_form',
+            'modules/plugins.add.tpl',
+            SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
+                array('mode' => 'upload')
+            ),
+            $this,
+            array('enableFileUpload' => true)
+        );
+
+        $form->addFileUpload(
+            'userfile',
+            $gL10n->get('SYS_CHOOSE_FILE'),
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'allowedMimeTypes' => array('application/zip', 'application/x-zip-compressed'),
+                'helpTextId' => 'SYS_PLUGIN_INSTALL_FROM_FILE_DESC'
+            )
+        );
+
+        /*
+         * Replacing is off unless it is asked for, because an archive that happens to carry the ID
+         * of an installed plugin would otherwise overwrite it without anybody deciding to.
+         */
+        $form->addCheckbox(
+            'plugin_replace',
+            $gL10n->get('SYS_PLUGIN_PACKAGE_REPLACE'),
+            false,
+            array('helpTextId' => 'SYS_PLUGIN_PACKAGE_REPLACE_DESC')
+        );
+
+        $form->addSubmitButton(
+            'adm_button_upload_plugin',
+            $gL10n->get('SYS_PLUGIN_INSTALL_FROM_FILE'),
+            array('icon' => 'bi-upload', 'class' => 'offset-sm-3')
+        );
+
+        /*
+         * addToHtmlPage() renders the template into the page and binds the Admidio form submit,
+         * which posts the form as FormData - so the file actually reaches the server - and expects
+         * the JSON that mode=upload answers with.
+         */
+        $this->smarty->assign('l10n', $gL10n);
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
     }
 
     /**
