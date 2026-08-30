@@ -48,11 +48,13 @@ try {
         )
     );
 
-    if ($postListUuid !== '') {
-        $recipients = array_values(array_filter(
-            explode(',', $postUserUuidList),
-            static fn (string $uuid): bool => Uuid::isValid($uuid)
-        ));
+    if ($postUserUuidList !== '') {
+        $recipients = explode(',', $postUserUuidList);
+        foreach ($recipients as $key => $userUuid) {
+            if (!Uuid::isValid($userUuid)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+        }
     }
 
     if ($getMsgType === Message::MESSAGE_TYPE_PM
