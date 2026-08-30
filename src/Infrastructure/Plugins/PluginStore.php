@@ -76,21 +76,23 @@ final class PluginStore
     }
 
     /**
-     * The plugins of the catalogue that can be installed into this Admidio, newest release first.
+     * The plugins of the catalogue that this Admidio could run, whether or not it has them.
      *
-     * A plugin that is already on disk is left out: the store is where a plugin is found, and the
-     * plugin manager is where the plugins that are here are managed.
+     * A plugin that is already on disk stays in the list and is marked, rather than disappearing:
+     * seeing that the store knows a plugin and that this installation already has it is more useful
+     * than a list that silently omits half of what was published.
      * @return array<int,array<string,mixed>> Each entry is the catalogue entry with the single
-     *                                        **release** that applies to this Admidio resolved.
+     *                                        **release** that applies to this Admidio resolved, plus
+     *                                        **installed** and **installedVersion**.
      * @throws Exception
      */
-    public static function getAvailable(): array
+    public static function getPlugins(): array
     {
-        $available = array();
+        $plugins = array();
 
         foreach (self::read()['plugins'] ?? array() as $entry) {
             $id = (string)($entry['id'] ?? '');
-            if (!Plugin::isValidId($id) || PluginRegistry::get($id) !== null) {
+            if (!Plugin::isValidId($id)) {
                 continue;
             }
 
@@ -99,13 +101,180 @@ final class PluginStore
                 continue;
             }
 
+            $plugin = PluginRegistry::get($id);
+
             $entry['release'] = $release;
-            $available[] = $entry;
+            $entry['installed'] = $plugin !== null;
+            $entry['installedVersion'] = $plugin?->version ?? '';
+            $plugins[] = $entry;
         }
 
-        return $available;
+        return $plugins;
     }
 
+    /**
+     * Fetch the archive of one catalogue entry and install it.
+     *
+     * The archive is downloaded to a temporary file and handed to the same validated extraction an
+     * uploaded file goes through, so nothing the catalogue says is trusted beyond where to look: the
+     * ID, the version and the contents are all read out of the archive itself.
+     * @param string $id ID of the plugin, as the catalogue names it.
+     * @return string The ID of the plugin that was installed.
+     * @throws Exception
+     */
+    public static function install(string $id): string
+    {
+        $entry = null;
+        foreach (self::getPlugins() as $candidate) {
+            if ((string)$candidate['id'] === $id) {
+                $entry = $candidate;
+                break;
+            }
+        }
+
+        if ($entry === null) {
+            throw new Exception('SYS_PLUGIN_STORE_NOT_OFFERED', array($id));
+        }
+
+        // Refused before the download, not after it: there is no point fetching an archive that the
+        // extraction is going to turn away, and "already installed" is the honest reason.
+        if ($entry['installed']) {
+            throw new Exception('SYS_PLUGIN_ALREADY_EXISTS', array($id));
+        }
+
+        $archive = self::downloadRelease($entry['release']);
+
+        try {
+            return PluginPackage::install($archive);
+        } finally {
+            @unlink($archive);
+        }
+    }
+
+
+    /**
+     * The release the catalogue offers for an installed plugin, if it is newer than the files.
+     *
+     * This is what makes updating one action for the administrator: the plugin manager asks whether
+     * newer files exist, and does not have to know or explain where the plugin originally came from.
+     * @param string $id
+     * @return array<string,mixed>|null The release, or **null** if the catalogue has nothing newer -
+     *                                  including when there is no catalogue at all.
+     */
+    public static function getNewerRelease(string $id): ?array
+    {
+        $plugin = PluginRegistry::get($id);
+        if ($plugin === null || !$plugin->isValid()) {
+            return null;
+        }
+
+        foreach (self::getPlugins() as $entry) {
+            if ((string)$entry['id'] !== $id) {
+                continue;
+            }
+
+            $offered = (string)$entry['release']['version'];
+
+            return version_compare($offered, $plugin->version, '>') ? $entry['release'] : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Replace the files of an installed plugin with a newer release from the catalogue.
+     *
+     * Only the files change here. Whatever the new version needs done to the database is the update
+     * scripts' job, and PluginInstaller runs those afterwards - the same ones it would run for a
+     * plugin whose files somebody replaced by hand.
+     * @param string $id
+     * @return string The version that was put in place.
+     * @throws Exception
+     */
+    public static function updateFiles(string $id): string
+    {
+        $release = self::getNewerRelease($id);
+        if ($release === null) {
+            throw new Exception('SYS_PLUGIN_STORE_NOTHING_NEWER', array($id));
+        }
+
+        $archive = self::downloadRelease($release);
+
+        try {
+            PluginPackage::install($archive, true);
+        } finally {
+            @unlink($archive);
+        }
+
+        return (string)$release['version'];
+    }
+    /**
+     * Download the archive of a release to a temporary file.
+     * @param array<string,mixed> $release
+     * @return string Absolute path of the downloaded file.
+     * @throws Exception
+     */
+    private static function downloadRelease(array $release): string
+    {
+        $source = self::resolveDownload((string)($release['download'] ?? ''));
+
+        $context = stream_context_create(array(
+            'http' => array('timeout' => self::TIMEOUT_SECONDS, 'follow_location' => 1),
+            'https' => array('timeout' => self::TIMEOUT_SECONDS, 'follow_location' => 1)
+        ));
+
+        $body = @file_get_contents($source, false, $context);
+        if ($body === false || $body === '') {
+            throw new Exception('SYS_PLUGIN_STORE_DOWNLOAD_FAILED', array($source));
+        }
+
+        $file = sys_get_temp_dir() . '/admidio-plugin-download-' . uniqid('', true) . '.zip';
+        if (@file_put_contents($file, $body) === false) {
+            throw new Exception('SYS_PLUGIN_PACKAGE_NOT_EXTRACTED');
+        }
+
+        return $file;
+    }
+
+    /**
+     * Where the archive of a release is actually read from.
+     *
+     * A published catalogue always names an address. A catalogue a developer configured may instead
+     * name a file inside the Admidio directory, so that a plugin can be tried out without publishing
+     * it anywhere - but only that one may, because a catalogue on a host somebody else controls must
+     * never be able to point the installer at a local file.
+     * @param string $download The download as the catalogue states it.
+     * @return string
+     * @throws Exception
+     */
+    private static function resolveDownload(string $download): string
+    {
+        if ($download === '') {
+            throw new Exception('SYS_PLUGIN_STORE_DOWNLOAD_FAILED', array($download));
+        }
+
+        if (preg_match('#^https?://#i', $download) === 1) {
+            return $download;
+        }
+
+        if (!self::isDeveloperCatalogue()) {
+            throw new Exception('SYS_PLUGIN_STORE_DOWNLOAD_NOT_A_URL', array($download));
+        }
+
+        // A relative path belongs to the installation, so it is resolved against it and has to stay
+        // inside it - a developer catalogue is trusted, but not to reach out of the installation.
+        $path = $download;
+        if (!preg_match('#^([A-Za-z]:|/)#', $path)) {
+            $path = ADMIDIO_PATH . '/' . ltrim($path, '/');
+        }
+
+        $resolved = realpath($path);
+        if ($resolved === false) {
+            throw new Exception('SYS_PLUGIN_STORE_DOWNLOAD_FAILED', array($download));
+        }
+
+        return $resolved;
+    }
     /**
      * The newest release of a catalogue entry this Admidio satisfies, or **null** if there is none.
      *
@@ -211,10 +380,19 @@ final class PluginStore
             'https' => array('timeout' => self::TIMEOUT_SECONDS, 'follow_location' => 1)
         ));
 
+        /*
+         * The read is suppressed because an unreachable catalogue is a state, not an error - but the
+         * reason PHP gives is the only thing that distinguishes a host that is down from a path the
+         * web server may not read, so it is kept and reported.
+         */
+        $before = error_get_last();
         $body = @file_get_contents($url, false, $context);
 
         if ($body === false || $body === '') {
-            self::$error = 'The catalogue at ' . $url . ' could not be read.';
+            $reason = error_get_last();
+            self::$error = 'The catalogue at ' . $url . ' could not be read.'
+                . ($reason !== null && $reason !== $before ? ' ' . $reason['message'] : '');
+
             return null;
         }
 
@@ -240,10 +418,33 @@ final class PluginStore
         }
 
         if (!empty($gDebug) && isset($gPluginStoreUrl) && is_string($gPluginStoreUrl) && $gPluginStoreUrl !== '') {
-            return $gPluginStoreUrl;
+            return self::resolveLocation($gPluginStoreUrl);
         }
 
         return ADMIDIO_HOMEPAGE . 'plugins.json';
+    }
+
+    /**
+     * Where a configured address or path actually points.
+     *
+     * A path is taken to be relative to the Admidio directory unless it is absolute, so that a
+     * catalogue kept inside the installation is named the same way wherever that installation runs.
+     * That matters more than it looks: an Admidio in a container sees its own path, not the one the
+     * person editing config.php sees, and a path from the host would simply not exist inside it.
+     * @param string $location A web address, an absolute path, or a path inside the installation.
+     * @return string
+     */
+    private static function resolveLocation(string $location): string
+    {
+        if (preg_match('#^[a-z][a-z0-9+.-]*://#i', $location) === 1) {
+            return $location;
+        }
+
+        if (preg_match('#^([A-Za-z]:|/)#', $location) === 1) {
+            return $location;
+        }
+
+        return ADMIDIO_PATH . '/' . ltrim($location, '/');
     }
 
     /**
