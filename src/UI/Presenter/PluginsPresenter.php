@@ -78,12 +78,6 @@ class PluginsPresenter extends PagePresenter
 
         $this->addActionJavascript();
 
-        /*
-         * The settings of a plugin, the flag that enables it and its menu entries are all ordinary
-         * records, so they are already in the changelog. This is the way in.
-         */
-        ChangelogService::displayHistoryButton($this, 'plugins', array('preferences', 'menu'));
-
         $this->smarty->assign('list', $this->getGroups());
         $this->smarty->assign('failures', PluginLoader::getFailures());
         $this->smarty->assign('l10n', $gL10n);
@@ -463,6 +457,10 @@ class PluginsPresenter extends PagePresenter
 
     /**
      * Why a plugin cannot be used, or why its pages are not published.
+
+
+    /**
+     * Why a plugin cannot be used, or why its pages are not published.
      *
      * These are developer diagnostics in English, not translated messages, because they name a
      * malformed manifest, an unmet version constraint or a directory that cannot be written.
@@ -538,13 +536,14 @@ class PluginsPresenter extends PagePresenter
 
 
         /*
-         * The history of this one plugin. Its settings name the component record of the plugin as
-         * their related object, so the changelog can be filtered down to it.
+         * The history of this one plugin. Its component record, its settings and its menu entries
+         * all name that record as their related object, so the changelog can be filtered down to it -
+         * installing, enabling, configuring and removing the plugin in one list.
          */
         $componentUuid = PluginRegistry::getComponentUuid($id);
         if ($componentUuid !== '') {
             $history = ChangelogService::displayHistoryButtonTable(
-                array('preferences', 'menu'),
+                array('components', 'preferences', 'menu'),
                 true,
                 array('related_id' => $componentUuid)
             );
