@@ -1274,6 +1274,7 @@
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# is already installed. Choose "Replace the installed plugin" to install this file over it.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_BROKEN">Faulty plugins</string>
+  <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1310,8 +1311,18 @@
   <string name="SYS_PLUGIN_REMOVED_FILES_KEPT">The plugin was removed, but its folder could not be deleted, because Admidio is not allowed to write into the plugins folder. The plugin is listed as available again. Delete its folder on the server to remove it completely.</string>
   <string name="SYS_PLUGIN_REMOVE_BUILT_IN">The plugin #VAR1# is part of Admidio and cannot be removed. Disable it instead.</string>
   <string name="SYS_PLUGIN_STORE">Plugins for Admidio</string>
+  <string name="SYS_PLUGIN_STORE_DOWNLOAD_FAILED">The plugin could not be downloaded from #VAR1#.</string>
+  <string name="SYS_PLUGIN_STORE_DOWNLOAD_NOT_A_URL">The catalogue gives #VAR1# as the download, which is not a web address. Only a catalogue you configured yourself may name a file on this server.</string>
+  <string name="SYS_PLUGIN_STORE_EMPTY">No plugins are published for this version of Admidio yet.</string>
+  <string name="SYS_PLUGIN_STORE_INSTALL">Install this plugin</string>
+  <string name="SYS_PLUGIN_STORE_NOTHING_NEWER">No newer version of the plugin #VAR1# is published.</string>
+  <string name="SYS_PLUGIN_STORE_NOT_OFFERED">The plugin #VAR1# is not offered for this version of Admidio.</string>
+  <string name="SYS_PLUGIN_STORE_REFRESH">Refresh</string>
+  <string name="SYS_PLUGIN_STORE_REFRESHED">The list of plugins was refreshed.</string>
+  <string name="SYS_PLUGIN_STORE_UNAVAILABLE">The list of plugins published for Admidio could not be read. Uploading a plugin from a file still works.</string>
   <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
   <string name="SYS_PLUGIN_UPDATED">Plugin successfully updated.</string>
+  <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Plugin version</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portrait</string>
@@ -1961,6 +1972,7 @@
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="SYS_WANT_DISABLE_PLUGIN">Do you want to disable the plugin #VAR1_BOLD#? It keeps its settings and its data.</string>
   <string name="SYS_WANT_ENABLE_PLUGIN">Do you want to enable the plugin #VAR1_BOLD#?</string>
+  <string name="SYS_WANT_INSTALL_FROM_STORE">Do you want to install the plugin #VAR1_BOLD#?\n\nIt is downloaded and added, but not switched on. You enable it afterwards in the plugin manager.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Do you want to remove the plugin #VAR1_BOLD#?\n\nThis applies to every organization of this installation. All data of the plugin is irrevocably deleted and its files are deleted from the server. Disable the plugin instead if you only want to stop using it.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Do you want to remove the plugin #VAR1_BOLD#?\n\nIt is still enabled in these organizations: #VAR2_BOLD#.\n\nRemoving applies to every organization of this installation. All data of the plugin is irrevocably deleted and its files are deleted from the server. Disable the plugin instead if you only want to stop using it.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>

@@ -27,6 +27,7 @@ use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginPackage;
 use Admidio\Infrastructure\Plugins\PluginPanel;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\UI\Presenter\PluginsPresenter;
@@ -36,7 +37,7 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'add', 'settings', 'settings_save', 'upload', 'enable', 'disable', 'update', 'remove')));
+        'validValues' => array('list', 'add', 'settings', 'settings_save', 'upload', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove')));
     // Everything but the list and the settings dialog answers with JSON.
     $isAjax = !in_array($getMode, array('list', 'add', 'settings'), true);
 
@@ -52,7 +53,7 @@ try {
      */
     $getPluginId = '';
     $plugin = null;
-    if (!in_array($getMode, array('list', 'add', 'upload'), true)) {
+    if (!in_array($getMode, array('list', 'add', 'upload', 'store_refresh'), true)) {
         $getPluginId = admFuncVariableIsValid($_GET, 'plugin', 'string', array('requireValue' => true));
         $plugin = PluginRegistry::get($getPluginId);
     }
@@ -98,6 +99,29 @@ try {
                 'message' => $gL10n->get('SYS_PLUGIN_PACKAGE_INSTALLED', array($installedId)),
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php')
             ));
+            break;
+
+        case 'store_install':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $installedId = PluginStore::install($getPluginId);
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $gL10n->get('SYS_PLUGIN_PACKAGE_INSTALLED', array($installedId))
+            ));
+            break;
+
+        case 'store_refresh':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            PluginStore::refresh();
+            $storeError = PluginStore::getError();
+            if ($storeError !== null) {
+                // The diagnostic is English, like the one a broken plugin produces.
+                throw new Exception($storeError);
+            }
+
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_STORE_REFRESHED')));
             break;
 
         case 'settings':
@@ -152,8 +176,24 @@ try {
             if ($plugin === null) {
                 throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
             }
+
+            /*
+             * Updating is one action whatever the plugin needs. Where newer files are published they
+             * are fetched first; then the update scripts run, which is all that is needed for a
+             * plugin whose files were replaced by hand. The administrator is told what happened, not
+             * which of the two it was.
+             */
+            if (PluginStore::getNewerRelease($getPluginId) !== null) {
+                PluginStore::updateFiles($getPluginId);
+                PluginRegistry::reset();
+                $plugin = PluginRegistry::get($getPluginId);
+            }
+
             PluginInstaller::update($plugin);
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_UPDATED')));
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $gL10n->get('SYS_PLUGIN_UPDATED_TO', array($plugin->version))
+            ));
             break;
 
         case 'remove':

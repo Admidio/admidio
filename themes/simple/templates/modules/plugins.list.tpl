@@ -17,7 +17,7 @@
             <thead>
                 <tr>
                     <th style="width: 1%;">&nbsp;</th> {* the enabled switch *}
-                    <th>{$l10n->get('SYS_NAME')}</th>
+                    <th style="width: 20%; white-space: nowrap;">{$l10n->get('SYS_NAME')}</th>
                     <th>{$l10n->get('SYS_DESCRIPTION')}</th>
                     <th>{$l10n->get('SYS_PLUGIN_VERSION')}</th>
                     <th>{$l10n->get('SYS_INSTALLED_VERSION')}</th>
@@ -48,7 +48,10 @@
                                         <i class="{$pluginEntry.toggle.icon} fs-5"></i></a>
                                 {/if}
                             </td>
-                            <td>{if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}</td>
+                            <td style="white-space: nowrap;">
+                                {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if}
+                                <strong>{$pluginEntry.name}</strong>
+                            </td>
                             <td>
                                 {$pluginEntry.description}
                                 {include 'modules/plugins.author.tpl' data=$pluginEntry}
