@@ -10,9 +10,9 @@ use Psr\Log\NullLogger;
 /**
  * Base class for the plugin tests.
  *
- * The plugin classes read a handful of bare global constants of the Admidio bootstrap. Every
- * definition is guarded, because composer test:all loads all test suites in one process and the
- * database-backed bootstrap defines the same constants.
+ * The plugin classes read a handful of bare global constants of the Admidio bootstrap. They come
+ * from tests/constants.php, which the database-backed bootstrap uses as well: composer test:all
+ * loads all test suites in one process, and a constant is decided by whoever defines it first.
  */
 abstract class PluginTestCase extends AdmidioTestCase
 {
@@ -35,27 +35,7 @@ abstract class PluginTestCase extends AdmidioTestCase
     {
         parent::setUpBeforeClass();
 
-        if (!defined('ADMIDIO_PATH')) {
-            define('ADMIDIO_PATH', dirname(__DIR__, 4));
-        }
-        if (!defined('ADMIDIO_URL')) {
-            define('ADMIDIO_URL', 'https://example.org/admidio');
-        }
-        if (!defined('FOLDER_PLUGINS')) {
-            define('FOLDER_PLUGINS', '/plugins');
-        }
-        if (!defined('FOLDER_MODULES')) {
-            define('FOLDER_MODULES', '/modules');
-        }
-        if (!defined('ADMIDIO_VERSION')) {
-            define('ADMIDIO_VERSION', '5.1.0');
-        }
-        if (!defined('FOLDER_DATA')) {
-            define('FOLDER_DATA', '/adm_my_files');
-        }
-        if (!defined('ADMIDIO_HOMEPAGE')) {
-            define('ADMIDIO_HOMEPAGE', 'https://www.admidio.org/');
-        }
+        require_once dirname(__DIR__, 3) . '/constants.php';
 
         $GLOBALS['gLogger'] = $GLOBALS['gLogger'] ?? new NullLogger();
     }
