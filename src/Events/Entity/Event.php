@@ -335,6 +335,32 @@ class Event extends Entity
     }
 
     /**
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out
+     * of the table. If the SQL find more than one record the method returns **false**. Per default all columns of the
+     * default table will be read and stored in the object. Only events of the current organization will be read.
+     * If the event belongs to another organization than an exception will be thrown.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByUuid
+     * @see Entity#readDataByColumns
+     * @see Entity#readDataById
+     */
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
+    {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
+            // check if event belongs to this organization
+            if ($this->getValue('cat_org_id') > 0 && $this->getValue('cat_org_id') !== $GLOBALS['gCurrentOrgId']) {
+                throw new Exception('Event ' . $this->getValue('dat_uuid') . ' belongs to another organization.');
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Read an event that has the given role has stored as participant role.
      * @param int $roleId ID of the participants role of the event.
      * @throws Exception
