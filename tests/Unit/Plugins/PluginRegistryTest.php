@@ -12,6 +12,28 @@ use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
 
 final class PluginRegistryTest extends PluginTestCase
 {
+
+    /**
+     * @testdox The component record of an installed plugin has a UUID the changelog can relate to
+     */
+    public function testComponentUuidIsRead(): void
+    {
+        PluginRegistry::setInstallations(array(
+            'hello' => array('comId' => 2, 'uuid' => 'b784156e-0461-417d-bf67-affd3b9e2f14', 'version' => '1.2.0')
+        ));
+
+        $this->assertSame('b784156e-0461-417d-bf67-affd3b9e2f14', PluginRegistry::getComponentUuid('hello'));
+    }
+
+    /**
+     * @testdox A plugin with no component record has no UUID, and is not linked to
+     */
+    public function testUninstalledPluginHasNoComponentUuid(): void
+    {
+        PluginRegistry::setInstallations(array());
+
+        $this->assertSame('', PluginRegistry::getComponentUuid('hello'));
+    }
     /**
      * @testdox Every directory is discovered, sorted and without executing any plugin code
      */
