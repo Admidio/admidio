@@ -2,6 +2,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Plugin;
@@ -388,6 +389,7 @@ class PluginsPresenter extends PagePresenter
             'versionState' => $this->getVersionState($id, $plugin, $state),
             'toggle' => $this->getStateToggle($id, $plugin, $state),
             'diagnostics' => $this->getDiagnostics($plugin, $state),
+            'notes' => $this->getNotes($plugin),
             'actions' => $this->getActions($id, $plugin, $state)
         );
     }
@@ -458,6 +460,40 @@ class PluginsPresenter extends PagePresenter
     /**
      * Why a plugin cannot be used, or why its pages are not published.
 
+    /**
+     * What an administrator should know about a plugin that is working as intended.
+     *
+     * These are not diagnostics: nothing is wrong with the plugin. A plugin whose module is switched
+     * off is installed, enabled and correct, it simply has nothing to show - which looks like a
+     * broken plugin unless somebody says so.
+     * @param Plugin|null $plugin
+     * @return array<int,string> Translated messages, empty when there is nothing to say.
+     * @throws Exception
+     */
+    private function getNotes(?Plugin $plugin): array
+    {
+        global $gL10n, $gDb;
+
+        if ($plugin === null) {
+            return array();
+        }
+
+        $notes = array();
+
+        foreach ($plugin->getDisabledModules() as $module) {
+            /*
+             * The component of a module carries its name as a language key, so the note names the
+             * module the way the rest of Admidio does rather than by its directory.
+             */
+            $component = new Component($gDb);
+            $found = $component->readDataByColumns(array('com_name_intern' => strtoupper($module)));
+            $name = $found ? Language::translateIfTranslationStrId((string)$component->getValue('com_name')) : $module;
+
+            $notes[] = $gL10n->get('SYS_PLUGIN_MODULE_DISABLED', array($name));
+        }
+
+        return $notes;
+    }
 
     /**
      * Why a plugin cannot be used, or why its pages are not published.

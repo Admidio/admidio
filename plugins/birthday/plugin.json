@@ -7,7 +7,8 @@
     "icon": "bi-cake2",
     "requires": {
         "admidio": ">=5.1",
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "modules": ["events"]
     },
     "autoload": {
         "AdmidioPlugin\\Birthday\\": "src/"

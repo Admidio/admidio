@@ -500,6 +500,58 @@ final class Plugin
     }
 
     /**
+     * The Admidio modules this plugin needs, that are switched off.
+     *
+     * Deliberately not part of checkRequirements(): an unmet requirement there makes a plugin broken
+     * and uninstallable, and a switched-off module is neither the plugin's fault nor permanent. The
+     * plugin is fine, it simply has nothing to show until the module is switched on again - so this
+     * is something to tell the administrator, not something to refuse.
+     * @return array<int,string> The module names, empty when everything the plugin needs is on.
+     * @throws \Admidio\Infrastructure\Exception
+     */
+    public function getDisabledModules(): array
+    {
+        global $gSettingsManager;
+
+        if (!isset($gSettingsManager)) {
+            return array();
+        }
+
+        $disabled = array();
+
+        foreach ($this->requires['modules'] as $module) {
+            $preference = self::getModulePreference($module);
+
+            if ($gSettingsManager->has($preference) && $gSettingsManager->getInt($preference) === 0) {
+                $disabled[] = $module;
+            }
+        }
+
+        return $disabled;
+    }
+
+    /**
+     * The preference that switches a module on and off.
+     *
+     * A module is named in a manifest the way Admidio names it - the way its component is called, so
+     * "documents-files" and not the preference behind it. The preference is usually that name with
+     * the hyphens replaced, but two of them were never renamed when their module was, and a manifest
+     * author has no way of knowing that. Keeping the exceptions here means the manifest stays
+     * readable and nothing has to be guessed at the call site.
+     * @param string $module
+     * @return string
+     */
+    private static function getModulePreference(string $module): string
+    {
+        $exceptions = array(
+            'photos' => 'photo_module_enabled',
+            'messages' => 'mail_module_enabled'
+        );
+
+        return $exceptions[$module] ?? str_replace('-', '_', $module) . '_module_enabled';
+    }
+
+    /**
      * Check a version against a constraint. A constraint is a space separated list of terms that
      * all have to match, e.g. **>=5.1 <6.0**. A term is an operator (**>=**, **>**, **<=**, **<**,
      * **=**, **!=**) followed by a version; a term without an operator means **>=**.
@@ -732,6 +784,13 @@ final class Plugin
             }
         }
 
+        $modules = array();
+        foreach ((array)($declared['modules'] ?? array()) as $module) {
+            if (is_string($module) && $module !== '') {
+                $modules[] = $module;
+            }
+        }
+
         $plugins = array();
         foreach ((array)($declared['plugins'] ?? array()) as $pluginId => $constraint) {
             if (is_string($pluginId) && self::isValidId($pluginId)) {
@@ -743,7 +802,8 @@ final class Plugin
             'admidio' => is_string($declared['admidio'] ?? null) ? $declared['admidio'] : '',
             'php' => is_string($declared['php'] ?? null) ? $declared['php'] : '',
             'extensions' => $extensions,
-            'plugins' => $plugins
+            'plugins' => $plugins,
+            'modules' => $modules
         );
     }
 }
