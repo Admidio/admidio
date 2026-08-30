@@ -10,6 +10,7 @@
 namespace Admidio\Tests\Unit\Plugins;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginPackage;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
@@ -319,6 +320,169 @@ final class PluginPackageTest extends PluginTestCase
         PluginPackage::install($this->archive($entries));
     }
 
+
+    /**
+     * @testdox A plugin directory becomes an archive named after the plugin and its version
+     */
+    public function testArchiveIsBuilt(): void
+    {
+        $source = $this->plugin('hello-store', '2.1.0', array(
+            'src/Greeter.php' => self::ENTRY,
+            'languages/en.xml' => '<?xml version="1.0"?><resources></resources>'
+        ));
+        $out = $this->makeDirectory('out');
+
+        $archive = PluginPackage::create($source, $out);
+
+        // create() answers a path with forward slashes, whatever the platform hands it.
+        $this->assertSame(str_replace(DIRECTORY_SEPARATOR, '/', $out) . '/hello-store-2.1.0.zip', $archive);
+        $this->assertFileExists($archive);
+    }
+
+    /**
+     * @testdox The archive holds everything under one directory named as the plugin
+     */
+    public function testArchiveHasTheExpectedLayout(): void
+    {
+        $source = $this->plugin('hello-store', '1.0.0', array(
+            'src/Greeter.php' => self::ENTRY,
+            'templates/plugin.hello-store.tpl' => 'x'
+        ));
+
+        $this->assertSame(
+            array(
+                'hello-store/plugin.json',
+                'hello-store/plugin.php',
+                'hello-store/src/Greeter.php',
+                'hello-store/templates/plugin.hello-store.tpl'
+            ),
+            $this->entriesOf(PluginPackage::create($source, $this->makeDirectory('out')))
+        );
+    }
+
+    /**
+     * @testdox What belongs to working on a plugin is left out of its archive
+     */
+    public function testDevelopmentFilesAreExcluded(): void
+    {
+        $source = $this->plugin('hello-store', '1.0.0', array(
+            '.git/config' => 'x',
+            '.gitignore' => 'x',
+            'node_modules/left-pad/index.js' => 'x',
+            '.DS_Store' => 'x',
+            'src/Greeter.php' => self::ENTRY
+        ));
+
+        $this->assertSame(
+            array('hello-store/plugin.json', 'hello-store/plugin.php', 'hello-store/src/Greeter.php'),
+            $this->entriesOf(PluginPackage::create($source, $this->makeDirectory('out')))
+        );
+    }
+
+    /**
+     * @testdox An archive that was just built installs
+     *
+     * The packager checks its own output with the gate the installer uses, so a plugin that packages
+     * cleanly cannot fail to install for a reason the author could have been told about.
+     */
+    public function testBuiltArchiveInstalls(): void
+    {
+        $source = $this->plugin('hello-store', '3.0.0', array('src/Greeter.php' => self::ENTRY));
+        $archive = PluginPackage::create($source, $this->makeDirectory('out'));
+
+        // Install it into a plugins directory that does not have it.
+        $this->pluginsPath = $this->makeDirectory('plugins-target');
+        PluginRegistry::setPluginsPath($this->pluginsPath);
+        PluginRegistry::setInstallations(array());
+        PluginRegistry::reset();
+
+        $this->assertSame('hello-store', PluginPackage::install($archive));
+        $this->assertFileExists($this->pluginsPath . '/hello-store/src/Greeter.php');
+    }
+
+    /**
+     * @testdox A broken plugin is not packaged
+     */
+    public function testBrokenPluginIsNotPackaged(): void
+    {
+        $directory = $this->makeDirectory('broken') . '/hello-store';
+        mkdir($directory, 0o700, true);
+        file_put_contents($directory . '/plugin.json', '{"name": "Hello", oh dear');
+        file_put_contents($directory . '/plugin.php', self::ENTRY);
+
+        $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST');
+
+        PluginPackage::create(Plugin::read($directory), $this->makeDirectory('out'));
+    }
+
+    /**
+     * @testdox An archive cannot be written to a directory that is not there
+     */
+    public function testMissingOutputDirectoryIsRefused(): void
+    {
+        $source = $this->plugin('hello-store', '1.0.0', array());
+
+        $this->expectExceptionMessage('SYS_PLUGIN_ARCHIVE_NOT_WRITABLE');
+
+        PluginPackage::create($source, $this->temporaryPath('no-such-directory'));
+    }
+
+    /**
+     * Write a plugin directory and read it back as a Plugin.
+     * @param string $id
+     * @param string $version
+     * @param array<string,string> $files Further files, as relative path => content.
+     * @return Plugin
+     */
+    private function plugin(string $id, string $version, array $files): Plugin
+    {
+        $directory = $this->makeDirectory('source') . '/' . $id;
+        mkdir($directory, 0o700, true);
+
+        file_put_contents($directory . '/plugin.json', '{"name": "Hello store", "version": "' . $version . '"}');
+        file_put_contents($directory . '/plugin.php', self::ENTRY);
+
+        foreach ($files as $relative => $content) {
+            $path = $directory . '/' . $relative;
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path), 0o700, true);
+            }
+            file_put_contents($path, $content);
+        }
+
+        return Plugin::read($directory);
+    }
+
+    /**
+     * The entries of an archive, sorted.
+     * @param string $archivePath
+     * @return array<int,string>
+     */
+    private function entriesOf(string $archivePath): array
+    {
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open($archivePath) === true);
+
+        $entries = array();
+        for ($index = 0; $index < $zip->numFiles; ++$index) {
+            $entries[] = $zip->statIndex($index)['name'];
+        }
+        $zip->close();
+
+        sort($entries);
+
+        return $entries;
+    }
+
+    /**
+     * A path in the temporary directory that nothing has created.
+     * @param string $purpose
+     * @return string
+     */
+    private function temporaryPath(string $purpose): string
+    {
+        return rtrim(sys_get_temp_dir(), '/\\') . '/admidio-test-' . $purpose . '-' . uniqid('', true);
+    }
     /**
      * Build a real ZIP file from name => content and return its path.
      * @param array<string,string> $entries
