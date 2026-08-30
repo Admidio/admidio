@@ -68,6 +68,12 @@ final class PluginRegistry
     );
 
     /**
+     * Which plugin owns which preference, as name => plugin ID, or **null** while nothing has asked.
+     * @var array<string,string>|null
+     */
+    private static ?array $settingOwners = null;
+
+    /**
      * All plugins that were found on disk, as pluginId => Plugin, sorted by ID.
      * @var array<string,Plugin>|null
      */
@@ -189,6 +195,37 @@ final class PluginRegistry
     public static function isBuiltIn(string $id): bool
     {
         return in_array($id, self::BUILT_IN, true);
+    }
+
+    /**
+     * The plugin that owns a preference, or **null** if no plugin declares it.
+     *
+     * A plugin's settings are ordinary Admidio preferences, so a change to one is already written to
+     * the changelog. What was missing was the connection back: this is what lets a log entry name the
+     * plugin it belongs to, and the plugin administration link to a plugin's own history.
+     * @param string $name Name of the preference.
+     * @return Plugin|null
+     */
+    public static function getOwnerOfSetting(string $name): ?Plugin
+    {
+        if (self::$settingOwners === null) {
+            self::$settingOwners = array();
+
+            foreach (self::all() as $plugin) {
+                if (!$plugin->isValid()) {
+                    continue;
+                }
+
+                // The flag Admidio owns itself counts as the plugin's too: enabling a plugin is one
+                // of the things somebody reading its history wants to see.
+                self::$settingOwners[$plugin->getEnabledSettingName()] = $plugin->id;
+                foreach (array_keys($plugin->settings) as $setting) {
+                    self::$settingOwners[$setting] = $plugin->id;
+                }
+            }
+        }
+
+        return isset(self::$settingOwners[$name]) ? self::get(self::$settingOwners[$name]) : null;
     }
 
     /**
@@ -429,6 +466,7 @@ final class PluginRegistry
     {
         self::$plugins = null;
         self::$installations = null;
+        self::$settingOwners = null;
     }
 
     /**
@@ -442,6 +480,7 @@ final class PluginRegistry
     {
         self::$pluginsPath = $path === null ? null : rtrim(str_replace('\\', '/', $path), '/');
         self::$plugins = null;
+        self::$settingOwners = null;
     }
 
     /**
