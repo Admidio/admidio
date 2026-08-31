@@ -234,6 +234,49 @@ final class PluginPackageTest extends PluginTestCase
     }
 
     /**
+     * @testdox An archive can be read without installing anything
+     */
+    public function testArchiveIsDescribedWithoutBeingInstalled(): void
+    {
+        $archive = $this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store", "description": "A store plugin.",'
+                . ' "version": "2.1.0", "author": "Admidio Team", "icon": "bi-emoji-smile",'
+                . ' "settings": {"hello_store_greeting": {"type": "string", "default": "Hi"}}}',
+            'hello-store/plugin.php' => self::ENTRY,
+            'hello-store/modules/index.php' => self::ENTRY
+        ));
+
+        $plugin = PluginPackage::describe($archive);
+
+        $this->assertSame('hello-store', $plugin->id);
+        $this->assertSame('Hello store', $plugin->name);
+        $this->assertSame('A store plugin.', $plugin->description);
+        $this->assertSame('2.1.0', $plugin->version);
+        $this->assertSame('Admidio Team', $plugin->author);
+        $this->assertSame(array('hello_store_greeting'), array_keys($plugin->settings));
+
+        // Nothing was put in place, and nothing was left in the system temporary directory either.
+        $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store');
+        $this->assertDirectoryDoesNotExist($plugin->path);
+    }
+
+    /**
+     * @testdox An archive that could not be installed cannot be described either
+     *
+     * describe() goes through the very gate install() goes through, which is what makes it worth
+     * running before an installation: an archive it accepts is one that will install.
+     */
+    public function testBrokenArchiveIsNotDescribed(): void
+    {
+        $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST');
+
+        PluginPackage::describe($this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store"}',
+            'hello-store/plugin.php' => self::ENTRY
+        )));
+    }
+
+    /**
      * @testdox A file that is not a ZIP archive is refused
      */
     public function testNonArchiveIsRefused(): void
