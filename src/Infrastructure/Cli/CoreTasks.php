@@ -2033,6 +2033,10 @@ final class CoreTasks
             'plugin:show PLUGIN [--format=text|json|json-api]', 'PLUGINS', true,
             array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
+        self::task('plugin:inspect', 'pluginInspect', 'Show what a plugin archive holds, without installing it.',
+            'plugin:inspect FILE [--format=text|json|json-api]', 'PLUGINS', true,
+            array(self::arg('file', 'ZIP archive of a plugin.')),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         self::task('plugin:enable', 'pluginEnable', 'Enable a plugin for the current organization, preparing it if that has not happened yet.',
             'plugin:enable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:disable', 'pluginDisable', 'Disable a plugin for the current organization, keeping its data.',
@@ -8617,6 +8621,33 @@ final class CoreTasks
             'requirement_problems' => $plugin->checkRequirements(PluginRegistry::getEnabledVersions())
         );
         CliApplication::writeValue($data, $options);
+        return 0;
+    }
+
+    public static function pluginInspect(array $arguments, array $options): int
+    {
+        $plugin = PluginPackage::describe(CliApplication::requireArgument($arguments, 0, 'file'));
+        $installed = PluginRegistry::get($plugin->id);
+
+        /*
+         * Everything here comes out of the manifest, because that is all an archive that was not
+         * installed can be asked about - PluginPackage::describe() reads it and keeps no files. The
+         * name and the description are therefore printed as written: they are usually keys of the
+         * plugin's own language file, and that file is still inside the archive.
+         */
+        CliApplication::writeValue(array(
+            'plugin' => $plugin->id,
+            'name' => $plugin->name,
+            'description' => $plugin->description,
+            'version' => $plugin->version,
+            'installed_version' => $installed?->version ?? '',
+            'author' => $plugin->author,
+            'url' => $plugin->homepage,
+            'icon' => $plugin->icon,
+            'settings' => array_keys($plugin->settings),
+            // The unmet requirements are developer diagnostics in English.
+            'requirement_problems' => $plugin->checkRequirements(PluginRegistry::getEnabledVersions())
+        ), $options);
         return 0;
     }
 
