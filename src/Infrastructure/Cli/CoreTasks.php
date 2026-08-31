@@ -4203,7 +4203,7 @@ final class CoreTasks
     {
         $role = self::resolveGroup(CliApplication::requireArgument($arguments, 0, 'group'));
         $name = array_key_exists('name', $options)
-            ? CliApplication::optionString($options, 'name')
+            ? self::requireTextOption($options, 'name')
             : (string)$role->getValue('rol_name');
         $categoryId = (int)$role->getValue('rol_cat_id');
         if (array_key_exists('category', $options)) {
@@ -4879,7 +4879,7 @@ final class CoreTasks
         }
 
         $name = CliApplication::optionExists($options, 'name')
-            ? CliApplication::optionString($options, 'name')
+            ? self::requireTextOption($options, 'name')
             : (string)$category->getValue('cat_name', 'database');
 
         self::setCategoryOrganizationScope($category, $options, false);
@@ -5127,7 +5127,7 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
         $copy = new Announcement($gDb);
-        $copy->setValue('ann_headline', array_key_exists('headline', $options) ? CliApplication::optionString($options, 'headline') : (string)$source->getValue('ann_headline', 'database'));
+        $copy->setValue('ann_headline', array_key_exists('headline', $options) ? self::requireTextOption($options, 'headline') : (string)$source->getValue('ann_headline', 'database'));
         $copy->setValue('ann_description', (string)$source->getValue('ann_description', 'database'));
         if (array_key_exists('category', $options)) {
             $copy->setValue('ann_cat_id', (int)self::resolveCategory(CliApplication::optionString($options, 'category'), 'ANN')->getValue('cat_id'));
@@ -5234,7 +5234,7 @@ final class CoreTasks
         $topic = new Topic($gDb);
         $category = self::resolveCategory(CliApplication::optionString($options, 'category'), 'FOT');
         $topic->setValue('fot_cat_id', (int)$category->getValue('cat_id'));
-        $topic->setValue('fot_title', CliApplication::optionString($options, 'title'));
+        $topic->setValue('fot_title', self::requireTextOption($options, 'title'));
         $topic->setValue('fop_text', CliApplication::optionString($options, 'text'));
         if ($topic->save()) {
             $topic->sendNotification();
@@ -5253,7 +5253,7 @@ final class CoreTasks
             $topic->setValue('fot_cat_id', (int)self::resolveCategory(CliApplication::optionString($options, 'category'), 'FOT')->getValue('cat_id'));
         }
         if (array_key_exists('title', $options)) {
-            $topic->setValue('fot_title', CliApplication::optionString($options, 'title'));
+            $topic->setValue('fot_title', self::requireTextOption($options, 'title'));
         }
         if ($topic->save()) {
             $topic->sendNotification();
@@ -6429,13 +6429,26 @@ final class CoreTasks
 
         $user = isset($arguments[1]) ? CliApplication::resolveUser($arguments[1]) : $gCurrentUser;
         $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
+        $isLeader = $participants->isLeader($gCurrentUserId);
         if ((int)$user->getValue('usr_id') !== $gCurrentUserId
             && !$gCurrentUser->isAdministrator()
-            && !$participants->isLeader($gCurrentUserId)) {
+            && !$isLeader) {
             throw new Exception('SYS_NO_RIGHTS');
         }
         if ((int)$user->getValue('usr_id') === $gCurrentUserId && !$event->allowedToParticipate() && !$event->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $command = CliApplication::currentCommand();
+
+        /*
+         * The deadline and the participant limit are answered from the state before anything is
+         * written, the way EventService::changeParticipation() does it. Saving the membership
+         * first makes the user a participant, and possibleToParticipate() then answers for
+         * somebody who is already signed up: the limit would never refuse anybody.
+         */
+        if ($command !== 'event:cancel' && !$event->possibleToParticipate() && !$isLeader) {
+            throw new Exception('SYS_PARTICIPATE_NO_RIGHTS');
         }
 
         $membership = new Membership($gDb);
@@ -6453,18 +6466,24 @@ final class CoreTasks
             if (!(bool)$event->getValue('dat_additional_guests') && !$event->isEditable()) {
                 throw new InvalidArgumentException('Additional guests are disabled for this event.');
             }
-            $membership->setValue('mem_count_guests', max(0, CliApplication::optionInt($options, 'guests', 0) ?? 0));
+
+            $guests = max(0, CliApplication::optionInt($options, 'guests', 0) ?? 0);
+            $maxMembers = (int)$event->getValue('dat_max_members');
+
+            // the guests count towards the limit, so the same condition as in the event module applies
+            if ($maxMembers > 0
+                && $participants->getCount() + ($guests - (int)$membership->getValue('mem_count_guests')) >= $maxMembers) {
+                throw new Exception('SYS_ROLE_MAX_MEMBERS', array($event->getValue('dat_headline')));
+            }
+
+            $membership->setValue('mem_count_guests', $guests);
         }
         if ($membership->isNewRecord()) {
             $membership->setValue('mem_begin', DATE_NOW);
         }
         $membership->save();
 
-        $command = CliApplication::currentCommand();
         if ($command === 'event:participate') {
-            if (!$event->possibleToParticipate() && !$participants->isLeader($gCurrentUserId)) {
-                throw new Exception('SYS_PARTICIPATE_NO_RIGHTS');
-            }
             $membership->startMembership(
                 (int)$event->getValue('dat_rol_id'),
                 (int)$user->getValue('usr_id'),
@@ -6472,9 +6491,6 @@ final class CoreTasks
                 Participants::PARTICIPATION_YES
             );
         } elseif ($command === 'event:maybe') {
-            if (!$event->possibleToParticipate() && !$participants->isLeader($gCurrentUserId)) {
-                throw new Exception('SYS_PARTICIPATE_NO_RIGHTS');
-            }
             $membership->startMembership(
                 (int)$event->getValue('dat_rol_id'),
                 (int)$user->getValue('usr_id'),
@@ -6512,9 +6528,25 @@ final class CoreTasks
             return 0;
         }
 
+        /*
+         * Participants::getParticipantsArray() answers the columns the participant list of the
+         * module shows. The comment and the number of guests that event:participate writes are
+         * not among them, so they are read here and the command can report what it stored.
+         */
+        $additional = $gDb->queryPrepared(
+            'SELECT mem_usr_id, mem_comment, mem_count_guests
+               FROM ' . TBL_MEMBERS . '
+              WHERE mem_rol_id = ?
+                AND mem_begin <= ?
+                AND mem_end    > ?',
+            array((int)$event->getValue('dat_rol_id'), DATE_NOW, DATE_NOW)
+        )->fetchAll(PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
+
         $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
         $rows = array();
-        foreach ($participants->getParticipantsArray() as $participant) {
+        foreach ($participants->getParticipantsArray() as $usrId => $participant) {
+            $participant['comment'] = (string)($additional[$usrId]['mem_comment'] ?? '');
+            $participant['count_guests'] = (int)($additional[$usrId]['mem_count_guests'] ?? 0);
             $rows[] = $participant;
         }
 
@@ -6610,7 +6642,7 @@ final class CoreTasks
     {
         $room = self::resolveRoom(CliApplication::requireArgument($arguments, 0, 'room'));
         if (CliApplication::optionExists($options, 'name')) {
-            $room->setValue('room_name', CliApplication::optionString($options, 'name'));
+            $room->setValue('room_name', self::requireTextOption($options, 'name'));
         }
         self::applyRoomOptions($room, $options);
         $room->save();
@@ -6629,7 +6661,7 @@ final class CoreTasks
             array((int)$room->getValue('room_id'))
         )->fetchColumn();
         if ($used > 0) {
-            throw new InvalidArgumentException('The room is used by one or more events.');
+            throw new Exception('SYS_ROOM_COULD_NOT_BE_DELETED');
         }
 
         CliApplication::confirm('Delete room "' . $room->getValue('room_name') . '"?', $options);
@@ -8625,7 +8657,7 @@ final class CoreTasks
     private static function applyRelationTypeOptions(UserRelationType $type, array $options): void
     {
         $fallbackName = CliApplication::optionExists($options, 'name')
-            ? CliApplication::optionString($options, 'name')
+            ? self::requireTextOption($options, 'name')
             : (string)$type->getValue('urt_name', 'database');
 
         if (CliApplication::optionExists($options, 'name')) {
@@ -8659,7 +8691,7 @@ final class CoreTasks
         bool $new
     ): void {
         $fallbackName = CliApplication::optionExists($options, 'inverse-name')
-            ? CliApplication::optionString($options, 'inverse-name')
+            ? self::requireTextOption($options, 'inverse-name')
             : (string)$type->getValue('urt_name', 'database');
 
         if (CliApplication::optionExists($options, 'inverse-name')) {
@@ -9420,8 +9452,10 @@ final class CoreTasks
     private static function applyMenuOptions(MenuEntry $menu, array $options, bool $new): void
     {
         global $gDb;
+        if (CliApplication::optionExists($options, 'name')) {
+            $menu->setValue('men_name', self::requireTextOption($options, 'name'));
+        }
         foreach (array(
-            'name' => 'men_name',
             'description' => 'men_description',
             'url' => 'men_url',
             'icon' => 'men_icon'
@@ -9921,7 +9955,7 @@ final class CoreTasks
     private static function applyAnnouncementOptions(Announcement $announcement, array $options, bool $new): void
     {
         if (CliApplication::optionExists($options, 'headline')) {
-            $announcement->setValue('ann_headline', CliApplication::optionString($options, 'headline'));
+            $announcement->setValue('ann_headline', self::requireTextOption($options, 'headline'));
         } elseif ($new) {
             throw new InvalidArgumentException('--headline is required.');
         }
@@ -10940,7 +10974,7 @@ final class CoreTasks
     private static function categoryReportFormValues(array $options, array $values): array
     {
         if (CliApplication::optionExists($options, 'name')) {
-            $values['name'] = CliApplication::optionString($options, 'name');
+            $values['name'] = self::requireTextOption($options, 'name');
         }
 
         if (CliApplication::optionExists($options, 'role')) {
@@ -11288,6 +11322,26 @@ final class CoreTasks
         }
 
         return $values;
+    }
+
+    /**
+     * Read an option that replaces a required text and refuse an empty value.
+     *
+     * An option that is not given leaves the stored value alone, but one that is given has to
+     * carry a value: the column behind it is NOT NULL or its edit form marks it required, so an
+     * empty value would leave a record that no list and no reference can name any more.
+     *
+     * @param array<string,mixed> $options
+     */
+    private static function requireTextOption(array $options, string $name): string
+    {
+        $value = CliApplication::optionString($options, $name);
+
+        if (trim($value) === '') {
+            throw new InvalidArgumentException('--' . $name . ' must not be empty.');
+        }
+
+        return $value;
     }
 
     /**

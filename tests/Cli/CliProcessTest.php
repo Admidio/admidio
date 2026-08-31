@@ -682,6 +682,285 @@ class CliProcessTest extends DatabaseTestCase
     }
 
     /**
+     * An option that is not given leaves the stored value alone, so an option that is given has to
+     * carry one. The columns behind these options are NOT NULL, or their edit form marks the field
+     * required, and an empty value leaves a record that no list and no reference can name any more.
+     *
+     * @testdox A required name cannot be cleared through the option that sets it
+     */
+    public function testARequiredNameCannotBeClearedThroughItsOption(): void
+    {
+        $suffix = bin2hex(random_bytes(5));
+        $roomUuid = '';
+        $categoryUuid = '';
+        $groupCategoryUuid = '';
+        $groupUuid = '';
+        $announcementUuid = '';
+        $menuUuid = '';
+
+        try {
+            $room = $this->adminCliJson(array('room:add', 'CLI named room ' . $suffix, '--capacity=4'));
+            $roomUuid = (string)$room['uuid'];
+
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'ANN',
+                'CLI named category ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid()
+            ));
+            $categoryUuid = (string)$category['uuid'];
+
+            $groupCategory = $this->adminCliJson(array('category:add', 'ROL', 'CLI named roles ' . $suffix));
+            $groupCategoryUuid = (string)$groupCategory['uuid'];
+            $group = $this->adminCliJson(array(
+                'group:add',
+                'CLI named group ' . $suffix,
+                '--category=' . $groupCategoryUuid
+            ));
+            $groupUuid = (string)$group['uuid'];
+
+            $announcement = $this->adminCliJson(array(
+                'announcement:add',
+                '--headline=CLI named announcement ' . $suffix,
+                '--category=' . $categoryUuid,
+                '--description=body-' . $suffix
+            ));
+            $announcementUuid = (string)$announcement['uuid'];
+
+            $menu = $this->adminCliJson(array(
+                'menu:add',
+                'CLI named entry ' . $suffix,
+                '--url=/modules/overview.php'
+            ));
+            $menuUuid = (string)$menu['uuid'];
+
+            foreach (array(
+                array('room:update', $roomUuid, '--name='),
+                array('category:update', $categoryUuid, '--name='),
+                array('group:update', $groupUuid, '--name='),
+                array('announcement:update', $announcementUuid, '--headline='),
+                array('menu:update', $menuUuid, '--name=')
+            ) as $command) {
+                $this->adminCliFails($command, 2, 'must not be empty');
+            }
+
+            // a value made of nothing but spaces is no name either
+            $this->adminCliFails(array('room:update', $roomUuid, '--name=   '), 2, 'must not be empty');
+
+            // none of the refused commands wrote anything
+            $this->assertSame(
+                'CLI named room ' . $suffix,
+                $this->adminCliJson(array('room:show', $roomUuid))['name']
+            );
+            $this->assertSame(
+                'CLI named category ' . $suffix,
+                $this->adminCliJson(array('category:show', $categoryUuid))['name']
+            );
+            $this->assertSame(
+                'CLI named announcement ' . $suffix,
+                $this->adminCliJson(array('announcement:show', $announcementUuid))['headline']
+            );
+
+            // and a name that is really given still replaces the stored one
+            $this->adminCliOk(array('room:update', $roomUuid, '--name=CLI renamed room ' . $suffix));
+            $this->assertSame(
+                'CLI renamed room ' . $suffix,
+                $this->adminCliJson(array('room:show', $roomUuid))['name']
+            );
+        } finally {
+            if ($menuUuid !== '') {
+                $this->adminCliCleanup(array('menu:delete', $menuUuid, '--yes'));
+            }
+            if ($announcementUuid !== '') {
+                $this->adminCliCleanup(array('announcement:delete', $announcementUuid, '--yes'));
+            }
+            if ($groupUuid !== '') {
+                $this->adminCliCleanup(array('group:delete', $groupUuid, '--yes'));
+            }
+            if ($groupCategoryUuid !== '') {
+                $this->adminCliCleanup(array('category:delete', $groupCategoryUuid, '--yes'));
+            }
+            if ($categoryUuid !== '') {
+                $this->adminCliCleanup(array('category:delete', $categoryUuid, '--yes'));
+            }
+            if ($roomUuid !== '') {
+                $this->adminCliCleanup(array('room:delete', $roomUuid, '--yes'));
+            }
+        }
+    }
+
+    /**
+     * @testdox A room that an event still uses is not deleted
+     */
+    public function testARoomThatAnEventUsesIsNotDeleted(): void
+    {
+        $suffix = bin2hex(random_bytes(5));
+        $roomsProcess = $this->runCli(array('--as=admin', 'config:get', 'events_rooms_enabled'));
+        $this->assertSame(0, $roomsProcess->getExitCode(), $roomsProcess->getErrorOutput());
+        $roomsEnabled = trim($roomsProcess->getOutput());
+        $categoryUuid = '';
+        $eventUuid = '';
+        $roomUuid = '';
+
+        try {
+            $this->adminCliOk(array('config:set', 'events_rooms_enabled', '1'));
+
+            $created = $this->adminCliJson(array('room:add', 'CLI booked room ' . $suffix, '--capacity=8'));
+            $roomUuid = (string)$created['uuid'];
+
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'EVT',
+                'CLI calendar ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid()
+            ));
+            $categoryUuid = (string)$category['uuid'];
+
+            $event = $this->adminCliJson(array(
+                'event:add',
+                '--headline=CLI room event ' . $suffix,
+                '--from=2030-09-01T18:00',
+                '--to=2030-09-01T20:00',
+                '--calendar=' . $categoryUuid,
+                '--room=' . $roomUuid,
+                '--participate-self=0'
+            ));
+            $eventUuid = (string)$event['uuid'];
+            $this->assertSame((int)$created['id'], (int)$event['room_id']);
+
+            $this->adminCliFails(array('room:delete', $roomUuid, '--yes'), 5, 'still assigned to at least one event');
+
+            // once the event is gone the room can be deleted
+            $this->adminCliOk(array('event:delete', $eventUuid, '--yes'));
+            $eventUuid = '';
+
+            $this->adminCliOk(array('room:delete', $roomUuid, '--yes'));
+            $roomUuid = '';
+        } finally {
+            if ($eventUuid !== '') {
+                $this->adminCliCleanup(array('event:delete', $eventUuid, '--yes'));
+            }
+            if ($roomUuid !== '') {
+                $this->adminCliCleanup(array('room:delete', $roomUuid, '--yes'));
+            }
+            if ($categoryUuid !== '') {
+                $this->adminCliCleanup(array('category:delete', $categoryUuid, '--yes'));
+            }
+            $this->adminCliCleanup(array('config:set', 'events_rooms_enabled', $roomsEnabled));
+        }
+    }
+
+    /**
+     * The participant limit is the reason event:participate exists next to group:adduser. It has to
+     * be answered from the state before the membership is written: a membership saved first makes
+     * the user a participant of the event, and Event::possibleToParticipate() then answers for
+     * somebody who is already signed up and never refuses anybody.
+     *
+     * @testdox The participant limit of an event is enforced by the CLI
+     */
+    public function testEventParticipationRespectsTheParticipantLimit(): void
+    {
+        $suffix = bin2hex(random_bytes(5));
+        $groupCategoryUuid = '';
+        $groupUuid = '';
+        $categoryUuid = '';
+        $eventUuid = '';
+        $guest = 'cli-evt-' . $suffix;
+        $guestCreated = false;
+
+        try {
+            $groupCategory = $this->adminCliJson(array('category:add', 'ROL', 'CLI event roles ' . $suffix));
+            $groupCategoryUuid = (string)$groupCategory['uuid'];
+            $group = $this->adminCliJson(array(
+                'group:add',
+                'CLI event group ' . $suffix,
+                '--category=' . $groupCategoryUuid
+            ));
+            $groupUuid = (string)$group['uuid'];
+
+            $this->adminCliOk(array(
+                'user:add',
+                '--login=' . $guest,
+                '--field=FIRST_NAME=CLI',
+                '--field=LAST_NAME=Guest',
+                '--group=' . $groupUuid
+            ));
+            $guestCreated = true;
+            $this->adminCliOk(array('group:adduser', $groupUuid, 'admin'));
+
+            // the roles that may participate have to be allowed to see the calendar of the event
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'EVT',
+                'CLI calendar ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid(),
+                '--view-role=' . $groupUuid
+            ));
+            $categoryUuid = (string)$category['uuid'];
+
+            // nobody is made a leader of the participation role, so the limit applies to everybody
+            $event = $this->adminCliJson(array(
+                'event:add',
+                '--headline=CLI limited event ' . $suffix,
+                '--from=2030-10-01T18:00',
+                '--to=2030-10-01T20:00',
+                '--calendar=' . $categoryUuid,
+                '--participation=1',
+                '--participation-role=' . $groupUuid,
+                '--participate-self=0',
+                '--allow-guests=1',
+                '--allow-comments=1',
+                '--max-members=1'
+            ));
+            $eventUuid = (string)$event['uuid'];
+            $this->assertGreaterThan(0, (int)$event['participation_role_id']);
+
+            // the first participant fits into the event
+            $this->adminCliOk(array('event:participate', $eventUuid, 'admin', '--comment=first-' . $suffix));
+
+            $participants = $this->adminCliJson(array('event:participants', $eventUuid));
+            $this->assertSame(array('first-' . $suffix), array_column($participants, 'comment'));
+
+            // the second one does not, and nothing of the refused sign-up is written
+            $this->adminCliFails(
+                array('--as=' . $guest, 'event:participate', $eventUuid, '--comment=second-' . $suffix),
+                5,
+                'right to sign up'
+            );
+
+            $participants = $this->adminCliJson(array('event:participants', $eventUuid));
+            $this->assertCount(1, $participants);
+            $this->assertSame(array('first-' . $suffix), array_column($participants, 'comment'));
+
+            // a guest of the first participant fills the event just as a second participant does
+            $this->adminCliFails(
+                array('event:participate', $eventUuid, 'admin', '--guests=1'),
+                5,
+                'exceed predefined limit'
+            );
+
+            $participants = $this->adminCliJson(array('event:participants', $eventUuid));
+            $this->assertSame(array(0), array_column($participants, 'count_guests'));
+        } finally {
+            if ($eventUuid !== '') {
+                $this->adminCliCleanup(array('event:delete', $eventUuid, '--yes'));
+            }
+            if ($categoryUuid !== '') {
+                $this->adminCliCleanup(array('category:delete', $categoryUuid, '--yes'));
+            }
+            if ($guestCreated) {
+                $this->adminCliCleanup(array('user:delete', $guest, '--yes'));
+            }
+            if ($groupUuid !== '') {
+                $this->adminCliCleanup(array('group:delete', $groupUuid, '--yes'));
+            }
+            if ($groupCategoryUuid !== '') {
+                $this->adminCliCleanup(array('category:delete', $groupCategoryUuid, '--yes'));
+            }
+        }
+    }
+
+    /**
      * Run a command as the test administrator and assert a zero exit status.
      *
      * @param array<int,string> $command
@@ -749,6 +1028,29 @@ class CliProcessTest extends DatabaseTestCase
 
         $this->fail('The production installation did not expose an administrator role through group:list.');
         return '';
+    }
+
+    /**
+     * Run a command that has to be refused and assert its exit status and its message.
+     * A command that starts with --as= brings its own acting user, everything else runs as the
+     * administrator.
+     *
+     * @param array<int,string> $command
+     */
+    private function adminCliFails(array $command, int $exitCode, string $message): void
+    {
+        if (!str_starts_with($command[0], '--as=')) {
+            $command = array_merge(array('--as=admin'), $command);
+        }
+
+        $process = $this->runCli($command);
+
+        $this->assertSame(
+            $exitCode,
+            $process->getExitCode(),
+            'Output: ' . $process->getOutput() . PHP_EOL . 'Errors: ' . $process->getErrorOutput()
+        );
+        $this->assertStringContainsString($message, $process->getErrorOutput());
     }
 
     /**
