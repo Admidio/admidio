@@ -177,19 +177,7 @@ try {
                 throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
             }
 
-            /*
-             * Updating is one action whatever the plugin needs. Where newer files are published they
-             * are fetched first; then the update scripts run, which is all that is needed for a
-             * plugin whose files were replaced by hand. The administrator is told what happened, not
-             * which of the two it was.
-             */
-            if (PluginStore::getNewerRelease($getPluginId) !== null) {
-                PluginStore::updateFiles($getPluginId);
-                PluginRegistry::reset();
-                $plugin = PluginRegistry::get($getPluginId);
-            }
-
-            PluginInstaller::update($plugin);
+            $plugin = PluginInstaller::updateWithNewerFiles($plugin);
             echo json_encode(array(
                 'status' => 'success',
                 'message' => $gL10n->get('SYS_PLUGIN_UPDATED_TO', array($plugin->version))
