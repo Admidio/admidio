@@ -26,6 +26,7 @@ use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPackage;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Service\RegistrationService;
@@ -8546,7 +8547,7 @@ final class CoreTasks
 
             $row = array(
                 'plugin' => $id,
-                'name' => $plugin?->name ?? $id,
+                'name' => $plugin === null ? $id : self::pluginText($plugin, $plugin->name, $options),
                 'state' => $rowState,
                 'version' => $plugin?->version ?? '',
                 'installed_version' => PluginRegistry::getInstalledVersion($id),
@@ -8597,8 +8598,8 @@ final class CoreTasks
 
         $data = array(
             'plugin' => $plugin->id,
-            'name' => $plugin->name,
-            'description' => $plugin->description,
+            'name' => self::pluginText($plugin, $plugin->name, $options),
+            'description' => self::pluginText($plugin, $plugin->description, $options),
             'state' => PluginRegistry::getState($plugin),
             'version' => $plugin->version,
             'installed_version' => PluginRegistry::getInstalledVersion($plugin->id),
@@ -11330,6 +11331,27 @@ final class CoreTasks
         }
 
         return $plugin;
+    }
+
+    /**
+     * The name or the description of a plugin, as the caller wants to read it.
+     *
+     * Both are usually keys of the plugin's own language file, and that file is only on the search
+     * path once the plugin has been loaded - the plugin commands list plugins that are not, so they
+     * put it there themselves like the plugin administration does. A script asked for the value the
+     * manifest holds, a terminal for the text the web interface shows.
+     *
+     * @param array<string,mixed> $options
+     */
+    private static function pluginText(Plugin $plugin, string $value, array $options): string
+    {
+        if ($value === '' || CliApplication::isMachineFormat($options)) {
+            return $value;
+        }
+
+        PluginLoader::registerLanguages($plugin);
+
+        return Language::translateIfTranslationStrId($value);
     }
 
     /**
