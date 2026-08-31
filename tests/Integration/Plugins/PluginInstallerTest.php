@@ -21,10 +21,16 @@ use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\FilesystemTestCase;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
+use ZipArchive;
 
 class PluginInstallerTest extends FilesystemTestCase
 {
@@ -80,6 +86,11 @@ class PluginInstallerTest extends FilesystemTestCase
         PluginRegistry::reset();
         PluginPages::setModulesPath(null);
         PluginLoader::reset();
+
+        // A case that published a release points the store at its own catalogue and its own cache.
+        PluginStore::setUrl(null);
+        PluginStore::setCacheFile(null);
+        PluginStore::reset();
 
         // the entry file of the fixture registers this filter every time it is included
         Hooks::reset('hello_greeting');
@@ -459,6 +470,54 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that an update fetches what the store publishes
+     *
+     * This is the one action the administrator performs, in the web interface and on the command
+     * line alike: where the store has newer files they are put in place first, and the update
+     * scripts then run against them.
+     *
+     * @testdox Updating a plugin puts the newer files of the store in place and then runs the scripts
+     */
+    public function testUpdateFetchesTheNewerFilesFromTheStore(): void
+    {
+        PluginInstaller::enable($this->plugin());
+        $componentId = (int)$this->component()['com_id'];
+
+        $this->publishRelease('1.4.0');
+
+        $updated = PluginInstaller::updateWithNewerFiles($this->plugin());
+
+        $this->assertSame('1.4.0', $updated->version);
+        $this->assertSame($componentId, (int)$this->component()['com_id']);
+        $this->assertSame('1.4.0', $this->component()['com_version']);
+        $this->assertSame('1.4.0', PluginRegistry::getInstalledVersion(self::PLUGIN_ID));
+        $this->assertSame(PluginRegistry::STATE_ENABLED, PluginRegistry::getState(self::PLUGIN_ID));
+
+        // The files are the ones of the release, not the ones that were there.
+        $this->assertFileExists($this->pluginsPath . '/' . self::PLUGIN_ID . '/from-the-release.php');
+    }
+
+    /**
+     * Test that an update without a published release is the update it always was
+     *
+     * @testdox Updating a plugin the store has nothing newer for runs its update scripts alone
+     */
+    public function testUpdateWithoutANewerReleaseOnlyRunsTheScripts(): void
+    {
+        PluginInstaller::enable($this->plugin());
+
+        // The store offers exactly what is installed, so there is nothing to fetch.
+        $this->publishRelease(self::PLUGIN_VERSION);
+        $this->writeManifestVersion('1.3.0');
+
+        $updated = PluginInstaller::updateWithNewerFiles($this->plugin());
+
+        $this->assertSame('1.3.0', $updated->version);
+        $this->assertSame('1.3.0', $this->component()['com_version']);
+        $this->assertFileDoesNotExist($this->pluginsPath . '/' . self::PLUGIN_ID . '/from-the-release.php');
+    }
+
+    /**
      * Test that removing takes everything away
      *
      * @testdox Removing a plugin takes its files, its component, its menu entry and its preferences
@@ -562,6 +621,89 @@ class PluginInstallerTest extends FilesystemTestCase
         PluginInstaller::remove($plugin);
 
         $this->assertDirectoryDoesNotExist($target);
+    }
+
+    /**
+     * Publish the plugin under test as a release of a catalogue this test controls.
+     *
+     * The archive holds the plugin as it is now, at the given version and with one file that only
+     * that release has, so that a test can tell files that were fetched from files that were there.
+     * The catalogue is a file on disk, which the store reads exactly as it reads a published one.
+     * @param string $version
+     * @return string Absolute path of the archive the catalogue offers.
+     */
+    private function publishRelease(string $version): string
+    {
+        $directory = $this->createIsolatedDirectory('plugin-release');
+
+        FileSystemUtils::copyDirectory(
+            $this->pluginsPath . '/' . self::PLUGIN_ID,
+            $directory . '/' . self::PLUGIN_ID
+        );
+
+        $manifest = json_decode(
+            (string)file_get_contents($directory . '/' . self::PLUGIN_ID . '/plugin.json'),
+            true
+        );
+        $manifest['version'] = $version;
+        file_put_contents(
+            $directory . '/' . self::PLUGIN_ID . '/plugin.json',
+            json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
+        file_put_contents($directory . '/' . self::PLUGIN_ID . '/from-the-release.php', "<?php\n");
+
+        $archive = $directory . '/' . self::PLUGIN_ID . '-' . $version . '.zip';
+        $zip = new ZipArchive();
+        if ($zip->open($archive, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            throw new RuntimeException('Could not write the release archive ' . $archive . '.');
+        }
+        foreach (self::filesBelow($directory . '/' . self::PLUGIN_ID) as $relative => $absolute) {
+            $zip->addFile($absolute, self::PLUGIN_ID . '/' . $relative);
+        }
+        $zip->close();
+
+        $catalogue = $directory . '/plugins.json';
+        file_put_contents($catalogue, (string)json_encode(array(
+            'format' => PluginStore::FORMAT,
+            'plugins' => array(array(
+                'id' => self::PLUGIN_ID,
+                'name' => 'Hello',
+                'releases' => array(array(
+                    'version' => $version,
+                    'requires' => array('admidio' => '>=5.0'),
+                    'download' => $archive
+                ))
+            ))
+        )));
+
+        // The cache never reaches adm_my_files, and the catalogue is read from this file alone.
+        PluginStore::setCacheFile($directory . '/cache.json');
+        PluginStore::setUrl($catalogue);
+        PluginStore::reset();
+
+        return $archive;
+    }
+
+    /**
+     * Every file below a directory, by its path relative to it.
+     * @param string $directory
+     * @return array<string,string>
+     */
+    private static function filesBelow(string $directory): array
+    {
+        $files = array();
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $relative = substr(str_replace('\\', '/', $file->getPathname()), strlen($directory) + 1);
+                $files[$relative] = $file->getPathname();
+            }
+        }
+
+        return $files;
     }
 
     /**

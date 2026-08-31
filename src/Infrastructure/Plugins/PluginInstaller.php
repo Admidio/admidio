@@ -124,6 +124,37 @@ final class PluginInstaller
     }
 
     /**
+     * Update a plugin, replacing its files first where the store publishes something newer.
+     *
+     * Updating is one action whatever the plugin needs. Where newer files are published they are
+     * fetched, and then the update scripts run - which is all that is needed for a plugin whose
+     * files somebody replaced by hand. The administrator is told what happened, not which of the
+     * two it was, so the web interface and the command line must not differ about it.
+     * @param Plugin $plugin
+     * @return Plugin The plugin as it is afterwards. That is a different instance than the one
+     *                passed in when the files were replaced, and it carries the new version.
+     * @throws Exception
+     */
+    public static function updateWithNewerFiles(Plugin $plugin): Plugin
+    {
+        if (PluginStore::getNewerRelease($plugin->id) !== null) {
+            PluginStore::updateFiles($plugin->id);
+            PluginRegistry::reset();
+
+            $updated = PluginRegistry::get($plugin->id);
+            if ($updated === null) {
+                throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($plugin->id));
+            }
+
+            $plugin = $updated;
+        }
+
+        self::update($plugin);
+
+        return $plugin;
+    }
+
+    /**
      * Remove a plugin completely: its menu entries, its pages, its preferences in every
      * organization, its data, its component record and its files.
      *

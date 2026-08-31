@@ -2037,7 +2037,7 @@ final class CoreTasks
             'plugin:enable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:disable', 'pluginDisable', 'Disable a plugin for the current organization, keeping its data.',
             'plugin:disable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
-        self::task('plugin:update', 'pluginUpdate', 'Run the update scripts of a plugin.',
+        self::task('plugin:update', 'pluginUpdate', 'Update a plugin, fetching newer files where the store publishes them.',
             'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:archive', 'pluginArchive', 'Build the distributable ZIP archive of a plugin.',
             'plugin:archive PLUGIN [--output=DIR]', 'PLUGINS', true,
@@ -8639,8 +8639,8 @@ final class CoreTasks
     public static function pluginUpdate(array $arguments, array $options): int
     {
         $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        PluginInstaller::update($plugin);
-        CliApplication::writeSuccess('Plugin updated.', $options);
+        $plugin = PluginInstaller::updateWithNewerFiles($plugin);
+        CliApplication::writeSuccess('Plugin updated to version ' . $plugin->version . '.', $options);
         return 0;
     }
 
