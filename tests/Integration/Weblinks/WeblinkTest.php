@@ -139,7 +139,7 @@ class WeblinkTest extends DatabaseTestCase
 
         $linkId = $this->createWeblink($adminUser, $org['org_id'], $category['cat_id'], 'Readable', 'https://example.org/');
 
-        $link = new Weblink($this->getDatabase(), $linkId);
+        $link = $this->withOrganization($org['org_id'], fn () => new Weblink($this->getDatabase(), $linkId));
         $this->assertEquals('Readable', $link->getValue('lnk_name'));
         $this->assertEquals($category['cat_id'], (int) $link->getValue('lnk_cat_id'));
 

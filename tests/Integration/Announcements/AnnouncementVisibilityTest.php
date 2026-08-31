@@ -10,6 +10,7 @@
 namespace Admidio\Tests\Integration\Announcements;
 
 use Admidio\Announcements\Entity\Announcement;
+use Admidio\Infrastructure\Exception;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
@@ -308,6 +309,11 @@ class AnnouncementVisibilityTest extends DatabaseTestCase
 
         // the administrator of the other organization does not reach the category
         $this->assertNotContains($category['cat_id'], $otherUser->getAllVisibleCategories('ANN'));
-        $this->assertFalse($this->askAs($otherUser, $orgB['org_id'], $annId, 'isVisible'));
+
+        // and the entity refuses to read a record of another organization at all, so the
+        // question about its visibility is never reached
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('belongs to another organization');
+        $this->askAs($otherUser, $orgB['org_id'], $annId, 'isVisible');
     }
 }

@@ -283,6 +283,35 @@ class AdmidioTestFixture
     }
 
     /**
+     * Read an existing role in the organization it belongs to
+     *
+     * Role::readData() refuses a role of another organization, and the tests that call this
+     * fixture create their own organization without making it the current one.
+     *
+     * @param int $rolId Role ID
+     * @return Role
+     */
+    private function readRole(int $rolId): Role
+    {
+        $sql = 'SELECT cat_org_id
+                  FROM ' . TBL_ROLES . '
+            INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                 WHERE rol_id = ?';
+        $orgId = (int) $this->gDb->queryPrepared($sql, [$rolId])->fetchColumn();
+
+        $previousOrgId = $GLOBALS['gCurrentOrgId'];
+        if ($orgId > 0) {
+            $GLOBALS['gCurrentOrgId'] = $orgId;
+        }
+
+        try {
+            return new Role($this->gDb, $rolId);
+        } finally {
+            $GLOBALS['gCurrentOrgId'] = $previousOrgId;
+        }
+    }
+
+    /**
      * Set the rol_valid flag of an existing role
      *
      * @param int $rolId Role ID
@@ -291,7 +320,7 @@ class AdmidioTestFixture
      */
     public function setRoleValidity(int $rolId, bool $valid): void
     {
-        $role = new Role($this->gDb, $rolId);
+        $role = $this->readRole($rolId);
         $role->saveChangesWithoutRights();
         $role->setValue('rol_valid', $valid ? 1 : 0);
         $role->save();
@@ -414,7 +443,7 @@ class AdmidioTestFixture
      */
     public function deleteRole(int $rolId): bool
     {
-        $role = new Role($this->gDb, $rolId);
+        $role = $this->readRole($rolId);
         if ($role->getValue('rol_id')) {
             $role->delete();
             return true;
