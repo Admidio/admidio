@@ -80,6 +80,32 @@ final class PluginPackage
         return $id;
     }
 
+    /**
+     * Read what an archive holds, without installing anything.
+     *
+     * The archive goes through the very gate install() puts it through - it is inspected, extracted
+     * to a temporary directory of its own and its manifest is verified - and what came out is handed
+     * back instead of being moved into place. An archive that describes cleanly will install.
+     *
+     * What comes back describes the manifest and nothing else. The **path** of the plugin is that
+     * temporary directory, which is gone by then, so everything that reads the directory -
+     * getDirectory(), getPages(), hasPages() - answers as it would for a plugin that is not there.
+     * @param string $archivePath Absolute path of the ZIP archive.
+     * @return Plugin The plugin the archive holds, read from its manifest.
+     * @throws Exception
+     */
+    public static function describe(string $archivePath): Plugin
+    {
+        $id = self::inspect($archivePath);
+        $temporary = self::extractToTemporaryDirectory($archivePath, $id);
+
+        try {
+            return self::verifyExtractedPlugin($temporary . '/' . $id, $id);
+        } finally {
+            self::deleteQuietly($temporary);
+        }
+    }
+
 
     /**
      * Everything that belongs to working on a plugin rather than to the plugin.
@@ -356,10 +382,10 @@ final class PluginPackage
      * agree, because the directory name is the identity the rest of Admidio uses.
      * @param string $directory The extracted plugin directory.
      * @param string $id The ID the archive claimed.
-     * @return void
+     * @return Plugin The plugin the manifest describes.
      * @throws Exception
      */
-    private static function verifyExtractedPlugin(string $directory, string $id): void
+    private static function verifyExtractedPlugin(string $directory, string $id): Plugin
     {
         if (!is_dir($directory)) {
             throw new Exception('SYS_PLUGIN_PACKAGE_NOT_EXTRACTED');
@@ -374,6 +400,8 @@ final class PluginPackage
         if ($plugin->id !== $id) {
             throw new Exception('SYS_PLUGIN_PACKAGE_INVALID_ID', array($plugin->id));
         }
+
+        return $plugin;
     }
 
     /**
