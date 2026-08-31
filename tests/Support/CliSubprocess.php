@@ -35,7 +35,7 @@ trait CliSubprocess
      *
      * @throws \Admidio\Infrastructure\Exception
      */
-    protected function cliConfigurationFile(): string
+    protected static function cliConfigurationFile(): string
     {
         if (self::$cliConfigurationFile !== '') {
             return self::$cliConfigurationFile;
@@ -43,16 +43,8 @@ trait CliSubprocess
 
         $config = admidioTestDatabaseConfig();
 
-        if ($config['engine'] === 'mariadb') {
-            $dbType = Database::DB_TYPE_MARIADB;
-        } elseif ($config['engine'] === 'postgres') {
-            $dbType = Database::DB_TYPE_PGSQL;
-        } else {
-            $dbType = Database::DB_TYPE_MYSQL;
-        }
-
         $installationConfig = InstallationConfig::fromArray(array(
-            'dbType' => $dbType,
+            'dbType' => self::cliDatabaseType($config),
             'dbHost' => $config['host'],
             'dbPort' => $config['port'],
             'dbName' => $config['database'],
@@ -73,24 +65,50 @@ trait CliSubprocess
     }
 
     /**
+     * The Admidio name of the database system the test database runs on.
+     *
+     * @param array<string,mixed> $config Description of the test database
+     */
+    protected static function cliDatabaseType(array $config): string
+    {
+        if ($config['engine'] === 'mariadb') {
+            return Database::DB_TYPE_MARIADB;
+        }
+        if ($config['engine'] === 'postgres') {
+            return Database::DB_TYPE_PGSQL;
+        }
+
+        return Database::DB_TYPE_MYSQL;
+    }
+
+    /**
      * Run ./admidio with the given arguments and wait for it to finish.
      *
      * @param array<int,string> $arguments Everything behind the name of the program
      * @param string|null $configurationFile Configuration to use instead of the one of the test database
+     * @param string|null $input What the command reads from STDIN, for the options that take a secret
+     * @param int $timeout Seconds the command may take. An installation needs more than a query does.
      */
-    protected function runCli(array $arguments, ?string $configurationFile = null): Process
-    {
+    protected static function runCli(
+        array $arguments,
+        ?string $configurationFile = null,
+        ?string $input = null,
+        int $timeout = 120
+    ): Process {
         $command = array_merge(
             array(
                 PHP_BINARY,
                 ADMIDIO_PATH . '/admidio',
-                '--config=' . ($configurationFile ?? $this->cliConfigurationFile())
+                '--config=' . ($configurationFile ?? self::cliConfigurationFile())
             ),
             $arguments
         );
 
         $process = new Process($command, ADMIDIO_PATH);
-        $process->setTimeout(120);
+        $process->setTimeout($timeout);
+        if ($input !== null) {
+            $process->setInput($input);
+        }
         $process->run();
 
         return $process;

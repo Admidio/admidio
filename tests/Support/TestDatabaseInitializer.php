@@ -58,8 +58,11 @@ class TestDatabaseInitializer
         // regressions and makes tests depend on whatever a previous run left behind.
         echo "  Installing Admidio production setup...\n";
 
-        // Drop all existing tables to start fresh
-        self::dropAllTables($database, $config);
+        // Drop the tables of the installation that is replaced to start fresh
+        $dropped = self::dropTables($database, $config);
+        if ($dropped > 0) {
+            echo "  ✓ Dropped $dropped existing tables\n";
+        }
 
         // Create installation configuration from environment
         $installConfig = InstallationConfig::fromArray([
@@ -111,9 +114,16 @@ class TestDatabaseInitializer
     }
 
     /**
-     * Drop all tables in database
+     * Drop every Admidio table of one table prefix
+     *
+     * The test database is shared, so only the tables of the installation that is replaced are
+     * dropped. A second installation under a prefix of its own stays untouched, and so does
+     * anything in the database that has nothing to do with Admidio.
+     *
+     * @param string $prefix Table prefix of the installation, the prefix of the fixture by default.
+     * @return int Returns the number of dropped tables.
      */
-    private static function dropAllTables(Database $database, array $config): void
+    public static function dropTables(Database $database, array $config, string $prefix = TABLE_PREFIX): int
     {
         $postgres = $config['engine'] === 'postgres';
 
@@ -138,7 +148,7 @@ class TestDatabaseInitializer
             $count = 0;
             foreach ($tables as $tableName) {
                 // Never delete unrelated tables just because they share a dedicated test database.
-                if (!str_starts_with((string)$tableName, TABLE_PREFIX . '_')) {
+                if (!str_starts_with((string)$tableName, $prefix . '_')) {
                     continue;
                 }
 
@@ -160,11 +170,11 @@ class TestDatabaseInitializer
                 $database->queryPrepared('SET FOREIGN_KEY_CHECKS = 1');
             }
 
-            if ($count > 0) {
-                echo "  ✓ Dropped $count existing tables\n";
-            }
+            return $count;
         } catch (\Exception $e) {
             // If we can't drop tables, installation will fail anyway
         }
+
+        return 0;
     }
 }
