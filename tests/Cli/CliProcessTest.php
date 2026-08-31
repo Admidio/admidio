@@ -682,6 +682,60 @@ class CliProcessTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Room mutations are committed by real CLI processes
+     */
+    public function testRoomLifecycleAcrossIndependentProcesses(): void
+    {
+        $suffix = bin2hex(random_bytes(5));
+        $roomUuid = '';
+
+        try {
+            $created = $this->adminCliJson(array(
+                'room:add',
+                'CLI room ' . $suffix,
+                '--capacity=12',
+                '--overhang=3',
+                '--description=created-' . $suffix
+            ));
+            $roomUuid = (string)$created['uuid'];
+
+            $this->assertSame('CLI room ' . $suffix, $created['name']);
+            $this->assertSame(12, (int)$created['capacity']);
+            $this->assertSame(3, (int)$created['overhang']);
+
+            $shown = $this->adminCliJson(array('room:show', $roomUuid));
+            $this->assertSame('created-' . $suffix, $shown['description']);
+
+            $this->adminCliOk(array(
+                'room:update',
+                $roomUuid,
+                '--name=CLI room updated ' . $suffix,
+                '--capacity=20',
+                '--description=updated-' . $suffix
+            ));
+
+            $shown = $this->adminCliJson(array('room:show', $roomUuid));
+            $this->assertSame('CLI room updated ' . $suffix, $shown['name']);
+            $this->assertSame(20, (int)$shown['capacity']);
+            $this->assertSame('updated-' . $suffix, $shown['description']);
+
+            // the room is listed by name, so it can be addressed without its UUID
+            $rooms = $this->adminCliJson(array('room:list'));
+            $this->assertContains('CLI room updated ' . $suffix, array_column($rooms, 'name'));
+
+            $this->adminCliOk(array('room:delete', $roomUuid, '--yes'));
+            $roomUuid = '';
+
+            $rooms = $this->adminCliJson(array('room:list'));
+            $this->assertNotContains('CLI room updated ' . $suffix, array_column($rooms, 'name'));
+        } finally {
+            if ($roomUuid !== '') {
+                $this->adminCliCleanup(array('room:delete', $roomUuid, '--yes'));
+            }
+        }
+    }
+
+    /**
      * An option that is not given leaves the stored value alone, so an option that is given has to
      * carry one. The columns behind these options are NOT NULL, or their edit form marks the field
      * required, and an empty value leaves a record that no list and no reference can name any more.
@@ -847,6 +901,155 @@ class CliProcessTest extends DatabaseTestCase
                 $this->adminCliCleanup(array('category:delete', $categoryUuid, '--yes'));
             }
             $this->adminCliCleanup(array('config:set', 'events_rooms_enabled', $roomsEnabled));
+        }
+    }
+
+    /**
+     * @testdox Event mutations are committed by real CLI processes
+     */
+    public function testEventLifecycleAcrossIndependentProcesses(): void
+    {
+        $suffix = bin2hex(random_bytes(5));
+        $categoryUuid = '';
+        $eventUuid = '';
+
+        try {
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'EVT',
+                'CLI calendar ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid()
+            ));
+            $categoryUuid = (string)$category['uuid'];
+
+            $created = $this->adminCliJson(array(
+                'event:add',
+                '--headline=CLI event ' . $suffix,
+                '--from=2030-07-01T18:00',
+                '--to=2030-07-01T20:30',
+                '--calendar=' . $categoryUuid,
+                '--location=Main hall',
+                '--description=created-' . $suffix,
+                '--participate-self=0'
+            ));
+            $eventUuid = (string)$created['uuid'];
+
+            $this->assertSame('2030-07-01 18:00:00', $created['begin']);
+            $this->assertSame('2030-07-01 20:30:00', $created['end']);
+
+            $shown = $this->adminCliJson(array('event:show', $eventUuid));
+            $this->assertSame('CLI event ' . $suffix, $shown['headline']);
+            $this->assertSame('Main hall', $shown['location']);
+            $this->assertSame('created-' . $suffix, $shown['description']);
+
+            $this->adminCliOk(array(
+                'event:update',
+                $eventUuid,
+                '--headline=CLI event updated ' . $suffix,
+                '--location=Side room'
+            ));
+
+            $shown = $this->adminCliJson(array('event:show', $eventUuid));
+            $this->assertSame('CLI event updated ' . $suffix, $shown['headline']);
+            $this->assertSame('Side room', $shown['location']);
+
+            $rows = $this->adminCliJson(array('event:list', '--calendar=' . $categoryUuid));
+            $this->assertSame(array('CLI event updated ' . $suffix), array_column($rows, 'headline'));
+
+            // the iCalendar export answers on stdout, so the process writes no file of its own
+            $export = $this->runCli(array('--as=admin', 'event:export', $eventUuid));
+            $this->assertSame(0, $export->getExitCode(), $export->getErrorOutput());
+            $this->assertStringContainsString('BEGIN:VCALENDAR', $export->getOutput());
+            $this->assertStringContainsString('SUMMARY:CLI event updated ' . $suffix, $export->getOutput());
+
+            $this->adminCliOk(array('event:delete', $eventUuid, '--yes'));
+            $eventUuid = '';
+
+            $rows = $this->adminCliJson(array('event:list', '--calendar=' . $categoryUuid));
+            $this->assertSame(array(), $rows);
+        } finally {
+            if ($eventUuid !== '') {
+                $this->adminCliCleanup(array('event:delete', $eventUuid, '--yes'));
+            }
+            if ($categoryUuid !== '') {
+                $this->adminCliCleanup(array('category:delete', $categoryUuid, '--yes'));
+            }
+        }
+    }
+
+    /**
+     * @testdox A recurring event generates its occurrences, and the series is edited and removed as a whole
+     */
+    public function testRecurringEventSeriesAcrossIndependentProcesses(): void
+    {
+        $suffix = bin2hex(random_bytes(5));
+        $categoryUuid = '';
+        $masterUuid = '';
+
+        try {
+            $category = $this->adminCliJson(array(
+                'category:add',
+                'EVT',
+                'CLI calendar ' . $suffix,
+                '--view-role=' . $this->administratorRoleUuid()
+            ));
+            $categoryUuid = (string)$category['uuid'];
+
+            // 2030-08-05 is a Monday, so the master itself is the first occurrence of the series
+            $master = $this->adminCliJson(array(
+                'event:add',
+                '--headline=CLI series ' . $suffix,
+                '--from=2030-08-05T18:00',
+                '--to=2030-08-05T19:00',
+                '--calendar=' . $categoryUuid,
+                '--repeat=weekly',
+                '--weekday=MO',
+                '--ends=count',
+                '--count=4',
+                '--participate-self=0'
+            ));
+            $masterUuid = (string)$master['uuid'];
+
+            $this->assertSame('master', $master['recurrence_status']);
+            $this->assertGreaterThan(0, (int)$master['recurrence_id']);
+
+            $rows = $this->adminCliJson(array('event:list', '--calendar=' . $categoryUuid));
+            $this->assertCount(4, $rows);
+            $this->assertSame(
+                array('master', 'generated', 'generated', 'generated'),
+                array_column($rows, 'recurrence_status')
+            );
+            $this->assertSame(
+                array('2030-08-05 18:00:00', '2030-08-12 18:00:00', '2030-08-19 18:00:00', '2030-08-26 18:00:00'),
+                array_column($rows, 'begin')
+            );
+
+            // editing the series reaches every occurrence
+            $this->adminCliOk(array(
+                'event:update',
+                $masterUuid,
+                '--headline=CLI series renamed ' . $suffix,
+                '--recurrence-scope=series'
+            ));
+
+            $rows = $this->adminCliJson(array('event:list', '--calendar=' . $categoryUuid));
+            $this->assertSame(
+                array_fill(0, 4, 'CLI series renamed ' . $suffix),
+                array_column($rows, 'headline')
+            );
+
+            $this->adminCliOk(array('event:delete', $masterUuid, '--recurrence-scope=series', '--yes'));
+            $masterUuid = '';
+
+            $rows = $this->adminCliJson(array('event:list', '--calendar=' . $categoryUuid));
+            $this->assertSame(array(), $rows);
+        } finally {
+            if ($masterUuid !== '') {
+                $this->adminCliCleanup(array('event:delete', $masterUuid, '--recurrence-scope=series', '--yes'));
+            }
+            if ($categoryUuid !== '') {
+                $this->adminCliCleanup(array('category:delete', $categoryUuid, '--yes'));
+            }
         }
     }
 

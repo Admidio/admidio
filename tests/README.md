@@ -47,18 +47,18 @@ dedicated test tree and its source-controlled marker is present.
 
 ## What the suite contains
 
-396 tests in 46 files:
+447 tests in 57 files:
 
 | Suite | Files | Tests | Needs a database |
 |-------|-------|-------|------------------|
-| `tests/Unit` | 1 | 8 | no |
-| `tests/Integration` | 40 | 351 | yes |
-| `tests/Cli` | 5 | 37 | yes |
+| `tests/Unit` | 1 | 6 | no |
+| `tests/Integration` | 51 | 387 | yes |
+| `tests/Cli` | 5 | 54 | yes |
 
 ```
 tests/
 ├── Unit/                    # Fast unit tests (no DB)
-├── Integration/             # Database integration tests, one directory per domain (22 of them)
+├── Integration/             # Database integration tests, one directory per domain (25 of them)
 ├── Cli/                     # Command line and installation tests
 ├── Support/                 # Test infrastructure
 │   ├── AdmidioTestCase.php           # Base test class and the custom assertions
@@ -288,7 +288,7 @@ once it is fixed, which is the point.
 
 ## Performance
 
-Whole suite, 396 tests, measured on one developer machine:
+Whole suite, 447 tests, measured on one developer machine:
 
 | Where | Engine | Time |
 |-------|--------|------|
