@@ -2068,9 +2068,8 @@ final class CoreTasks
         self::task('plugin:update', 'pluginUpdate', 'Update a plugin, fetching newer files where the store publishes them.',
             'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:archive', 'pluginArchive', 'Build the distributable ZIP archive of a plugin.',
-            'plugin:archive PLUGIN [--output=DIR]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')),
-            array(self::opt('output', 'Directory the archive is written to. Default: the current directory.', 'DIR')));
+            'plugin:archive PLUGIN [--output=FILE] [--overwrite]', 'PLUGINS', true,
+            array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')));
         self::task('plugin:remove', 'pluginRemove', 'Remove a plugin from every organization, with its data and its files.',
             'plugin:remove PLUGIN [--yes]', 'PLUGINS', true,
             array(self::arg('plugin', 'Plugin ID. The ID of an orphaned plugin whose files are gone is accepted too.')),
@@ -8836,16 +8835,38 @@ final class CoreTasks
     {
         $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
 
-        $directory = CliApplication::optionString($options, 'output', '');
-        if ($directory === '') {
-            $directory = (string)getcwd();
+        /*
+         * The archive is published like every other file a command writes: the global --output names
+         * the file, or the directory it goes into, and --overwrite decides whether an existing one
+         * may be replaced. It is built beside nothing else first, because the packager names the
+         * file after the plugin and its version, and only then moved to where it was asked for.
+         */
+        $target = CliApplication::resolveOutputPath(
+            $options,
+            $plugin->id . '-' . $plugin->version . '.zip'
+        );
+
+        $directory = rtrim(str_replace('\\', '/', sys_get_temp_dir()), '/')
+            . '/admidio-plugin-archive-' . uniqid('', true);
+        if (!@mkdir($directory, 0o700, true) && !is_dir($directory)) {
+            throw new RuntimeException('Could not create the temporary directory ' . $directory . '.');
         }
 
-        $archive = PluginPackage::create($plugin, $directory);
+        try {
+            $archive = PluginPackage::create($plugin, $directory);
+            CliApplication::copyToNewFile($archive, $target, false, self::overwriteRequested($options));
+        } finally {
+            foreach ((array)glob($directory . '/*') as $leftover) {
+                @unlink((string)$leftover);
+            }
+            @rmdir($directory);
+        }
 
+        // The confirmation belongs on the terminal, not into the file the archive was written to.
         CliApplication::writeSuccess(
-            'Archive written: ' . $archive . ' (' . number_format(filesize($archive)) . ' bytes).',
-            $options
+            'Archive written: ' . $target . ' (' . number_format((int)filesize($target)) . ' bytes).',
+            $options,
+            false
         );
         return 0;
     }
