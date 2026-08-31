@@ -281,7 +281,7 @@ final class PluginPagesTest extends PluginTestCase
      */
     public function testRequirePage(): void
     {
-        PluginRegistry::setInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
+        $this->setEnabledInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
 
         PluginRegistry::requirePage('hello', 'list.php');
         $this->assertSame(array('list.php'), $GLOBALS['helloPageRuns']);
