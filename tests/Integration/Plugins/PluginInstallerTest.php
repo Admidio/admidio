@@ -22,6 +22,7 @@ use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\FilesystemTestCase;
 
@@ -257,14 +258,12 @@ class PluginInstallerTest extends FilesystemTestCase
         $preferences = $this->preferences($second['org_id'], $plugin);
         $this->assertSame('Hello', $preferences['hello_greeting']);
 
-        // only the settings of the manifest are seeded. The preference that enables a plugin is
-        // written by enabling it, so an organization that never did has no row and is not enabled.
-        $this->assertArrayNotHasKey($plugin->getEnabledSettingName(), $preferences);
+        // The plugin was added to this installation, so it is off until an organization asks for
+        // it. The row is there, because nothing but a preference enables a plugin.
+        $this->assertSame('0', $preferences[$plugin->getEnabledSettingName()]);
 
-        // An installed plugin counts as enabled wherever an organization has not decided against
-        // it, so the organization that was never asked appears here as well.
         $this->assertSame(
-            array('Second Organization', 'Test Organization'),
+            array('Test Organization'),
             PluginRegistry::getEnabledOrganizations(self::PLUGIN_ID)
         );
 
@@ -279,6 +278,31 @@ class PluginInstallerTest extends FilesystemTestCase
                 ->queryPrepared($sql, array(PluginRegistry::COMPONENT_TYPE, self::PLUGIN_ID))
                 ->fetchColumn()
         );
+    }
+
+    /**
+     * Test that a plugin of the Admidio distribution does not have to be switched on
+     *
+     * @testdox A plugin of the Admidio distribution is enabled in an organization that never asked
+     */
+    public function testABuiltInPluginIsEnabledWithoutBeingAskedFor(): void
+    {
+        /*
+         * An organization is created with exactly the registered defaults - the installation seeds
+         * them, and so does OrganizationService::create() for one that is added later. What they
+         * say about a plugin is therefore what an organization that was never asked gets.
+         */
+        PluginLoader::load($this->plugin());
+        $defaults = PreferenceDefinitions::defaults();
+
+        // the plugin under test was added to this installation, so it is off
+        $this->assertSame('0', $defaults[$this->plugin()->getEnabledSettingName()]);
+
+        // and the plugins of the distribution, which the test database was installed with, are on
+        foreach (PluginRegistry::BUILT_IN as $id) {
+            $name = 'plugin_' . str_replace('-', '_', $id) . '_enabled';
+            $this->assertSame('1', $defaults[$name], $name . ' does not enable the plugin.');
+        }
     }
 
     /**

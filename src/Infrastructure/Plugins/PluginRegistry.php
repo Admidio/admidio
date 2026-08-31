@@ -268,6 +268,11 @@ final class PluginRegistry
     /**
      * Whether the plugin is enabled for the current organization. An unusable or uninstalled
      * plugin is never enabled, whatever the preference says.
+     *
+     * Enabling a plugin is an explicit decision of an organization, so nothing but a preference
+     * that says so enables it. Every organization has one: PluginLoader registers the preference
+     * with the default that belongs to the plugin, and installing it as well as creating an
+     * organization writes the registered defaults.
      * @param string $id
      * @return bool
      * @throws Exception
@@ -283,7 +288,7 @@ final class PluginRegistry
 
         $name = $plugin->getEnabledSettingName();
 
-        return !isset($gSettingsManager) || !$gSettingsManager->has($name) || $gSettingsManager->getBool($name);
+        return isset($gSettingsManager) && $gSettingsManager->has($name) && $gSettingsManager->getBool($name);
     }
 
     /**
@@ -293,9 +298,8 @@ final class PluginRegistry
      * told which organizations it is taken away from - including the ones they do not administrate
      * themselves.
      *
-     * The rule is the one isEnabled() applies to the current organization: an installed plugin
-     * counts as enabled unless an organization has decided against it. A plugin that is not
-     * installed is enabled nowhere.
+     * The rule is the one isEnabled() applies to the current organization: an organization has the
+     * plugin where its preference says so. A plugin that is not installed is enabled nowhere.
      * @param string $id
      * @return array<int,string> Ordered by name, empty if the plugin is enabled nowhere.
      * @throws Exception
@@ -312,11 +316,10 @@ final class PluginRegistry
 
         $sql = 'SELECT org_longname
                   FROM ' . TBL_ORGANIZATIONS . '
-             LEFT JOIN ' . TBL_PREFERENCES . '
+            INNER JOIN ' . TBL_PREFERENCES . '
                     ON prf_org_id = org_id
                    AND prf_name = ? -- $preferenceName
-                 WHERE prf_value IS NULL
-                    OR prf_value = \'1\'
+                 WHERE prf_value = \'1\'
               ORDER BY org_longname';
 
         $statement = $gDb->queryPrepared($sql, array($preferenceName));

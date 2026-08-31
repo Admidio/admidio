@@ -77,6 +77,27 @@ abstract class PluginTestCase extends AdmidioTestCase
     }
 
     /**
+     * Mark plugins as installed and switched on for the organization of this test.
+     *
+     * Installing a plugin and enabling it are two decisions, and nothing but the preference
+     * plugin_<id>_enabled enables one, so a test that wants a plugin active has to say so. The
+     * settings double it puts in place is restored by tearDown() like every other global.
+     *
+     * @param array<string,array{comId:int,version:string}> $installations
+     */
+    protected function setEnabledInstallations(array $installations): void
+    {
+        PluginRegistry::setInstallations($installations);
+
+        $values = array();
+        foreach (array_keys($installations) as $id) {
+            $values['plugin_' . str_replace('-', '_', (string)$id) . '_enabled'] = '1';
+        }
+
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble($values);
+    }
+
+    /**
      * Absolute path of a fixture plugin directory, or of the fixture plugins directory itself.
      */
     protected static function fixturePath(string $plugin): string
