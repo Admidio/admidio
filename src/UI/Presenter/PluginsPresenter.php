@@ -167,7 +167,7 @@ class PluginsPresenter extends PagePresenter
             $row = array(
                 'id' => (string)$entry['id'],
                 'name' => $name,
-                'description' => self::getStoreDescription($entry),
+                'description' => Language::translateIfTranslationStrId(PluginStore::getDescription($entry)),
                 'author' => (string)($entry['author'] ?? ''),
                 'url' => (string)($entry['url'] ?? ''),
                 'icon' => (string)($entry['icon'] ?? 'bi-puzzle'),
@@ -624,33 +624,6 @@ class PluginsPresenter extends PagePresenter
     }
 
 
-    /**
-     * The description of a catalogue entry, in the language of this installation.
-     *
-     * The catalogue may give a description as one text or as a text per language, because the
-     * plugins published for Admidio are described by their authors and not every author writes
-     * every language. English is the fallback, then whatever is there.
-     * @param array<string,mixed> $entry
-     * @return string
-     */
-    private static function getStoreDescription(array $entry): string
-    {
-        global $gL10n;
-
-        $description = $entry['description'] ?? '';
-
-        if (is_string($description)) {
-            return Language::translateIfTranslationStrId($description);
-        }
-
-        if (!is_array($description) || $description === array()) {
-            return '';
-        }
-
-        $language = isset($gL10n) ? $gL10n->getLanguage() : 'en';
-
-        return (string)($description[$language] ?? $description['en'] ?? reset($description));
-    }
     /**
      * The preferences panel that holds the settings of a plugin, or an empty string if it has none.
      *
