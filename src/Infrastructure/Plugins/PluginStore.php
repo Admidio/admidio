@@ -113,6 +113,53 @@ final class PluginStore
     }
 
     /**
+     * One entry of the catalogue, with the release that applies to this Admidio resolved.
+     * @param string $id ID of the plugin, as the catalogue names it.
+     * @return array<string,mixed>|null **null** when the catalogue offers no such plugin - including
+     *                                  when it offers it only for another Admidio version.
+     * @throws Exception
+     */
+    public static function getEntry(string $id): ?array
+    {
+        foreach (self::getPlugins() as $entry) {
+            if ((string)$entry['id'] === $id) {
+                return $entry;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * The description of a catalogue entry, in the language of this installation.
+     *
+     * The catalogue may give a description as one text or as a text per language, because the
+     * plugins published for Admidio are described by their authors and not every author writes
+     * every language. English is the fallback, then whatever is there. What comes back may still be
+     * a language string ID, which is how a plugin that carries its own language file names it.
+     * @param array<string,mixed> $entry
+     * @return string
+     */
+    public static function getDescription(array $entry): string
+    {
+        global $gL10n;
+
+        $description = $entry['description'] ?? '';
+
+        if (is_string($description)) {
+            return $description;
+        }
+
+        if (!is_array($description) || $description === array()) {
+            return '';
+        }
+
+        $language = isset($gL10n) ? $gL10n->getLanguage() : 'en';
+
+        return (string)($description[$language] ?? $description['en'] ?? reset($description));
+    }
+
+    /**
      * Fetch the archive of one catalogue entry and install it.
      *
      * The archive is downloaded to a temporary file and handed to the same validated extraction an
@@ -124,13 +171,7 @@ final class PluginStore
      */
     public static function install(string $id): string
     {
-        $entry = null;
-        foreach (self::getPlugins() as $candidate) {
-            if ((string)$candidate['id'] === $id) {
-                $entry = $candidate;
-                break;
-            }
-        }
+        $entry = self::getEntry($id);
 
         if ($entry === null) {
             throw new Exception('SYS_PLUGIN_STORE_NOT_OFFERED', array($id));
@@ -168,17 +209,14 @@ final class PluginStore
             return null;
         }
 
-        foreach (self::getPlugins() as $entry) {
-            if ((string)$entry['id'] !== $id) {
-                continue;
-            }
-
-            $offered = (string)$entry['release']['version'];
-
-            return version_compare($offered, $plugin->version, '>') ? $entry['release'] : null;
+        $entry = self::getEntry($id);
+        if ($entry === null) {
+            return null;
         }
 
-        return null;
+        $offered = (string)$entry['release']['version'];
+
+        return version_compare($offered, $plugin->version, '>') ? $entry['release'] : null;
     }
 
     /**

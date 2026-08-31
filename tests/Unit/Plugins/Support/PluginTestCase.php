@@ -109,7 +109,7 @@ abstract class PluginTestCase extends AdmidioTestCase
 }
 
 /**
- * Answers the two Language methods the plugin classes reach for. get() returns the key, so an
+ * Answers the few Language methods the plugin classes reach for. get() returns the key, so an
  * assertion can name the language string the code is expected to use.
  */
 final class PluginTestLanguage
@@ -117,12 +117,27 @@ final class PluginTestLanguage
     /** @var array<int,string> */
     public array $folderPaths = array();
 
+    /** The language of the installation, which a case may change to read a translated text. */
+    private string $language = 'en';
+
     /**
      * @param array<int,string> $params
      */
     public function get(string $textId, array $params = array()): string
     {
         return $textId;
+    }
+
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): bool
+    {
+        $this->language = $language;
+
+        return true;
     }
 
     public function addLanguageFolderPath(string $path): bool

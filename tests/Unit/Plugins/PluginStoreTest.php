@@ -515,6 +515,83 @@ final class PluginStoreTest extends PluginTestCase
         $this->assertSame('2.0.0', PluginRegistry::get('store-plugin')?->version);
         $this->assertFileDoesNotExist($plugins . '/store-plugin/dropped-in-2.php');
     }
+
+    /**
+     * @testdox One entry of the catalogue can be asked for by ID
+     */
+    public function testEntryIsFoundById(): void
+    {
+        $this->catalogue(array(
+            $this->entry('dummy-plugin', array(
+                array('version' => '1.0.0', 'requires' => array('admidio' => '>=5.1'), 'download' => 'https://example.org/d.zip')
+            )),
+            $this->entry('other-plugin', array(
+                array('version' => '3.0.0', 'requires' => array('admidio' => '>=5.1'), 'download' => 'https://example.org/o.zip')
+            ))
+        ));
+
+        $entry = PluginStore::getEntry('other-plugin');
+
+        $this->assertNotNull($entry);
+        $this->assertSame('other-plugin', $entry['id']);
+        $this->assertSame('3.0.0', $entry['release']['version']);
+    }
+
+    /**
+     * @testdox A plugin the catalogue offers only for another Admidio is not an entry either
+     */
+    public function testEntryForAnotherAdmidioIsNotFound(): void
+    {
+        $this->catalogue(array(
+            $this->entry('old-plugin', array(
+                array('version' => '4.0.4', 'requires' => array('admidio' => '>=5.0 <5.1'), 'download' => 'https://example.org/d.zip')
+            ))
+        ));
+
+        $this->assertNull(PluginStore::getEntry('old-plugin'));
+        $this->assertNull(PluginStore::getEntry('never-published'));
+    }
+
+    /**
+     * @testdox A description given per language is read in the language of the installation
+     */
+    public function testDescriptionIsReadInTheLanguageOfTheInstallation(): void
+    {
+        $entry = array('description' => array('en' => 'In English.', 'de' => 'Auf Deutsch.'));
+
+        $this->assertSame('In English.', PluginStore::getDescription($entry));
+
+        $GLOBALS['gL10n']->setLanguage('de');
+        $this->assertSame('Auf Deutsch.', PluginStore::getDescription($entry));
+    }
+
+    /**
+     * @testdox A description in a language the installation does not use falls back to English
+     */
+    public function testDescriptionFallsBackToEnglish(): void
+    {
+        $this->assertSame(
+            'In English.',
+            PluginStore::getDescription(array('description' => array('fr' => 'En français.', 'en' => 'In English.')))
+        );
+
+        // Not even English: whatever the author did write is better than nothing.
+        $this->assertSame(
+            'En français.',
+            PluginStore::getDescription(array('description' => array('fr' => 'En français.')))
+        );
+    }
+
+    /**
+     * @testdox A description given as one text is that text, and a missing one is empty
+     */
+    public function testDescriptionOfASingleTextAndOfNone(): void
+    {
+        $this->assertSame('One text.', PluginStore::getDescription(array('description' => 'One text.')));
+        $this->assertSame('', PluginStore::getDescription(array()));
+        $this->assertSame('', PluginStore::getDescription(array('description' => array())));
+    }
+
     /**
      * One catalogue entry, with only what the store needs.
      * @param string $id

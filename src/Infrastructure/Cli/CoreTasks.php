@@ -29,6 +29,7 @@ use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPackage;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
@@ -2033,10 +2034,33 @@ final class CoreTasks
             'plugin:show PLUGIN [--format=text|json|json-api]', 'PLUGINS', true,
             array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
+        self::task('plugin:install', 'pluginInstall', 'Install a plugin from the store or from an archive file.',
+            'plugin:install SOURCE [--replace]', 'PLUGINS', true,
+            array(self::arg('source', 'Plugin ID the store offers, or the path of a ZIP archive.')),
+            array(self::opt(
+                'replace',
+                'Overwrite a plugin of the same ID that is already there. Only an archive may.',
+                '',
+                false,
+                false,
+                true
+            )));
         self::task('plugin:inspect', 'pluginInspect', 'Show what a plugin archive holds, without installing it.',
             'plugin:inspect FILE [--format=text|json|json-api]', 'PLUGINS', true,
             array(self::arg('file', 'ZIP archive of a plugin.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
+        self::task('plugin:store-list', 'pluginStoreList', 'List the plugins the store publishes for this Admidio.',
+            'plugin:store-list [--available] [--updates] [--format=FORMAT]', 'PLUGINS', true, array(), array(
+                self::opt('available', 'Only plugins this installation does not have yet.', '', false, false, true),
+                self::opt('updates', 'Only installed plugins the store publishes something newer for.', '', false, false, true),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
+            ));
+        self::task('plugin:store-show', 'pluginStoreShow', 'Show what the store publishes for one plugin.',
+            'plugin:store-show PLUGIN [--format=text|json|json-api]', 'PLUGINS', true,
+            array(self::arg('plugin', 'Plugin ID, as the store names it.')),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
+        self::task('plugin:store-refresh', 'pluginStoreRefresh', 'Fetch the plugin catalogue now instead of waiting for the cache to expire.',
+            'plugin:store-refresh', 'PLUGINS', true);
         self::task('plugin:enable', 'pluginEnable', 'Enable a plugin for the current organization, preparing it if that has not happened yet.',
             'plugin:enable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:disable', 'pluginDisable', 'Disable a plugin for the current organization, keeping its data.',
@@ -8624,6 +8648,51 @@ final class CoreTasks
         return 0;
     }
 
+    public static function pluginInstall(array $arguments, array $options): int
+    {
+        $source = CliApplication::requireArgument($arguments, 0, 'source');
+        $replace = CliApplication::optionBool($options, 'replace', false) === true;
+
+        /*
+         * A plugin ID has neither a separator nor a dot in it, so anything that is not one names a
+         * file, and an ID that also exists as a file in the working directory is that file. This is
+         * how one command covers both ways of naming a plugin without guessing wrongly about the
+         * common case, and a mistyped path is reported as an unreadable archive rather than as a
+         * plugin the store does not offer.
+         */
+        if (Plugin::isValidId($source) && !is_file($source)) {
+            if ($replace) {
+                throw new InvalidArgumentException(
+                    '--replace applies to an archive file. A plugin the store offers is updated with plugin:update.'
+                );
+            }
+
+            /*
+             * PluginStore::install() refuses this too, but with the answer the web interface gives:
+             * that there is a box to tick to install the file over it. On the command line the way
+             * on is a different command, so the reason is given here.
+             */
+            if (PluginRegistry::get($source) !== null) {
+                throw new InvalidArgumentException(
+                    'Plugin "' . $source . '" is already installed. plugin:update fetches a newer release.'
+                );
+            }
+
+            self::requirePluginStore();
+            $id = PluginStore::install($source);
+        } else {
+            $id = PluginPackage::install($source, $replace);
+        }
+
+        $plugin = PluginRegistry::get($id);
+        CliApplication::writeSuccess(
+            'Plugin "' . $id . '"' . ($plugin === null ? '' : ' ' . $plugin->version)
+                . ' installed. Enable it with plugin:enable ' . $id . '.',
+            $options
+        );
+        return 0;
+    }
+
     public static function pluginInspect(array $arguments, array $options): int
     {
         $plugin = PluginPackage::describe(CliApplication::requireArgument($arguments, 0, 'file'));
@@ -8648,6 +8717,93 @@ final class CoreTasks
             // The unmet requirements are developer diagnostics in English.
             'requirement_problems' => $plugin->checkRequirements(PluginRegistry::getEnabledVersions())
         ), $options);
+        return 0;
+    }
+
+    public static function pluginStoreList(array $arguments, array $options): int
+    {
+        self::requirePluginStore();
+        $entries = PluginStore::getPlugins();
+
+        $rows = array();
+        foreach ($entries as $entry) {
+            $installed = (bool)$entry['installed'];
+            $offered = (string)$entry['release']['version'];
+            $installedVersion = (string)$entry['installedVersion'];
+            $update = $installed && version_compare($offered, $installedVersion, '>');
+
+            if (CliApplication::optionBool($options, 'available', false) === true && $installed) {
+                continue;
+            }
+            if (CliApplication::optionBool($options, 'updates', false) === true && !$update) {
+                continue;
+            }
+
+            $rows[] = array(
+                'plugin' => (string)$entry['id'],
+                'name' => self::pluginText(null, (string)($entry['name'] ?? $entry['id']), $options),
+                'version' => $offered,
+                'installed_version' => $installedVersion,
+                'installed' => $installed,
+                'update' => $update,
+                'author' => (string)($entry['author'] ?? '')
+            );
+        }
+
+        CliApplication::writeRows(
+            $rows,
+            CliApplication::optionString($options, 'format', 'table'),
+            $options
+        );
+        return 0;
+    }
+
+    public static function pluginStoreShow(array $arguments, array $options): int
+    {
+        $id = CliApplication::requireArgument($arguments, 0, 'plugin');
+
+        self::requirePluginStore();
+        $entry = PluginStore::getEntry($id);
+
+        if ($entry === null) {
+            throw new Exception('SYS_PLUGIN_STORE_NOT_OFFERED', array($id));
+        }
+
+        $release = (array)$entry['release'];
+        $versions = array();
+        foreach ((array)($entry['releases'] ?? array()) as $published) {
+            if (is_array($published) && isset($published['version'])) {
+                $versions[] = (string)$published['version'];
+            }
+        }
+
+        CliApplication::writeValue(array(
+            'plugin' => (string)$entry['id'],
+            'name' => self::pluginText(null, (string)($entry['name'] ?? $entry['id']), $options),
+            'description' => self::pluginText(null, PluginStore::getDescription($entry), $options),
+            'version' => (string)$release['version'],
+            'installed_version' => (string)$entry['installedVersion'],
+            'installed' => (bool)$entry['installed'],
+            'author' => (string)($entry['author'] ?? ''),
+            'url' => (string)($entry['url'] ?? ''),
+            'download' => (string)($release['download'] ?? ''),
+            'requires' => (array)($release['requires'] ?? array()),
+            // Every version the catalogue publishes, not only the one this Admidio may have.
+            'published_versions' => $versions
+        ), $options);
+        return 0;
+    }
+
+    public static function pluginStoreRefresh(array $arguments, array $options): int
+    {
+        PluginStore::refresh();
+        self::requirePluginStore();
+
+        CliApplication::writeSuccess(
+            'Plugin catalogue refreshed from ' . PluginStore::getUrl() . ': '
+                . count(PluginStore::getPlugins()) . ' plugins for this Admidio.',
+            $options
+        );
         return 0;
     }
 
@@ -11372,17 +11528,43 @@ final class CoreTasks
      * put it there themselves like the plugin administration does. A script asked for the value the
      * manifest holds, a terminal for the text the web interface shows.
      *
+     * @param Plugin|null $plugin The plugin the text belongs to, or **null** for a text of the
+     *                            store: a plugin this installation does not have has no language
+     *                            file here, so there is nothing to put on the search path.
      * @param array<string,mixed> $options
      */
-    private static function pluginText(Plugin $plugin, string $value, array $options): string
+    private static function pluginText(?Plugin $plugin, string $value, array $options): string
     {
         if ($value === '' || CliApplication::isMachineFormat($options)) {
             return $value;
         }
 
-        PluginLoader::registerLanguages($plugin);
+        if ($plugin !== null) {
+            PluginLoader::registerLanguages($plugin);
+        }
 
         return Language::translateIfTranslationStrId($value);
+    }
+
+    /**
+     * Read the plugin catalogue, and fail if it could not be read.
+     *
+     * PluginStore answers with an empty catalogue whether nothing is published or the host is
+     * unreachable, because a page must never fail over the store. A command must: a listing that
+     * silently prints nothing says that no plugin is published, and "not offered" says that nobody
+     * published this one, when in truth nobody could ask.
+     *
+     * @throws Exception
+     */
+    private static function requirePluginStore(): void
+    {
+        PluginStore::read();
+        $error = PluginStore::getError();
+
+        if ($error !== null) {
+            // The diagnostic names a host or a file, like the one a broken plugin gives, and is English.
+            throw new Exception($error);
+        }
     }
 
     /**
