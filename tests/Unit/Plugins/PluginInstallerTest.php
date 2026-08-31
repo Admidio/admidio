@@ -2,9 +2,10 @@
 /**
  * The lifecycle operations.
  *
- * Almost every path of PluginInstaller needs a database and cannot run here. The refusal to remove
- * a plugin of the Admidio distribution can: it is decided before anything is touched, which is the
- * point of it - the guard has to hold even when the rest of the operation would fail.
+ * Almost every path of PluginInstaller needs a database and cannot run here; they are covered by
+ * tests/Integration/Plugins/PluginInstallerTest.php. The refusal to remove a plugin of the Admidio
+ * distribution can: it is decided before anything is touched, which is the point of it - the guard
+ * has to hold even when the rest of the operation would fail.
  */
 
 namespace Admidio\Tests\Unit\Plugins;
