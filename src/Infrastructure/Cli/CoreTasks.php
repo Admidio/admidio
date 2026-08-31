@@ -8667,12 +8667,12 @@ final class CoreTasks
             }
 
             /*
-             * PluginStore::install() refuses this too, but with the answer the web interface gives:
-             * that there is a box to tick to install the file over it. On the command line the way
-             * on is a different command, so the reason is given here.
+             * The store refuses this too, but it can only say that the plugin is there. Which
+             * command does what the caller wanted is something only this front end knows, so the
+             * refusal is worded here rather than in a language string every front end shares.
              */
             if (PluginRegistry::get($source) !== null) {
-                throw new InvalidArgumentException(
+                throw new Exception(
                     'Plugin "' . $source . '" is already installed. plugin:update fetches a newer release.'
                 );
             }
@@ -8680,6 +8680,17 @@ final class CoreTasks
             self::requirePluginStore();
             $id = PluginStore::install($source);
         } else {
+            /*
+             * Reading the archive first costs one pass over its directory and no extraction, and it
+             * buys the refusal the name of the flag that would have allowed it.
+             */
+            $inArchive = PluginPackage::inspect($source);
+            if (!$replace && PluginRegistry::get($inArchive) !== null) {
+                throw new Exception(
+                    'Plugin "' . $inArchive . '" is already installed. Pass --replace to install this file over it.'
+                );
+            }
+
             $id = PluginPackage::install($source, $replace);
         }
 
