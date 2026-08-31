@@ -16,7 +16,8 @@ use Throwable;
  *
  * 1. its **autoload** mappings become resolvable classes;
  * 2. its **languages/** directory is added to the language search path;
- * 3. its **settings** are registered as ordinary Admidio preferences;
+ * 3. its **settings** and the preference that enables it are registered as ordinary Admidio
+ *    preferences;
  * 4. its **plugin.php** is included once.
  *
  * The entry file does not have to return anything, implement anything or extend anything. It runs
@@ -111,8 +112,8 @@ final class PluginLoader
     /**
      * Make **plugin_&lt;id&gt;_enabled** a known preference for every installed plugin.
      *
-     * The flag belongs to Admidio and not to the plugin, so it cannot be registered by loading the
-     * plugin: a disabled plugin is never loaded, its name would stay unknown to the preference
+     * The flag belongs to Admidio and not to the plugin, so it cannot only be registered by loading
+     * the plugin: a disabled plugin is never loaded, its name would stay unknown to the preference
      * registry, and the administrator could not enable it again - neither in the preferences nor
      * through **config:set**. A plugin whose files are gone is skipped, because there is nothing
      * left to enable; the plugin administration removes such a row as an orphan.
@@ -124,9 +125,29 @@ final class PluginLoader
         foreach (array_keys(PluginRegistry::getInstallations()) as $id) {
             $plugin = PluginRegistry::get((string)$id);
             if ($plugin !== null && Plugin::isValidId($plugin->id)) {
-                PreferenceDefinitions::register($plugin->getEnabledSettingName(), array('default' => '1', 'type' => 'bool'));
+                self::registerEnabledFlag($plugin);
             }
         }
+    }
+
+    /**
+     * Register the preference that enables one plugin.
+     *
+     * A preference only reaches an organization if it is registered: installing a plugin seeds the
+     * registered defaults into every organization, and an organization that is created later is
+     * seeded with them as well. The default is therefore the whole rule. A plugin of the Admidio
+     * distribution is on unless an organization switches it off, because the administrator never
+     * asked for it and would not know to. A plugin that somebody added is off until an organization
+     * switches it on, because installing it is the decision of one organization and not of all.
+     * @param Plugin $plugin
+     * @return void
+     */
+    private static function registerEnabledFlag(Plugin $plugin): void
+    {
+        PreferenceDefinitions::register($plugin->getEnabledSettingName(), array(
+            'default' => PluginRegistry::isBuiltIn($plugin->id) ? '1' : '0',
+            'type' => 'bool'
+        ));
     }
 
     /**
@@ -183,6 +204,7 @@ final class PluginLoader
         try {
             self::registerClasses($plugin);
             self::registerLanguages($plugin);
+            self::registerEnabledFlag($plugin);
             self::registerSettings($plugin);
 
             self::$loaded[$plugin->id] = $plugin;
