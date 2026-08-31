@@ -212,10 +212,12 @@ class ObjectRightsTest extends DatabaseTestCase
         $GLOBALS['gCurrentSession'] = $session;
 
         try {
-            $entity = new Role($db, $role['rol_id']);
-            $entity->saveChangesWithoutRights();
-            $entity->setValue('rol_weblinks', 1);
-            $entity->save();
+            $this->withOrganization($org['org_id'], function () use ($db, $role) {
+                $entity = new Role($db, $role['rol_id']);
+                $entity->saveChangesWithoutRights();
+                $entity->setValue('rol_weblinks', 1);
+                $entity->save();
+            });
         } finally {
             $GLOBALS['gCurrentSession'] = $previousSession;
         }

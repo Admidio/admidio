@@ -11,6 +11,7 @@
 
 namespace Admidio\Tests\Integration\Photos;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Photos\Entity\Album;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
@@ -211,9 +212,13 @@ class AlbumTest extends DatabaseTestCase
 
         $albumId = $this->createAlbum($adminA, $orgA['org_id'], 'Org A Album');
 
-        // the album belongs to org A, so even a photo administrator of org B does not see it
+        // the album belongs to org A, so even a photo administrator of org B does not reach it:
+        // the entity already refuses to read a record of another organization
         $this->assertTrue($this->askAs($adminA, $orgA['org_id'], $albumId, 'isVisible'));
-        $this->assertFalse($this->askAs($adminB, $orgB['org_id'], $albumId, 'isVisible'));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('belongs to another organization');
+        $this->askAs($adminB, $orgB['org_id'], $albumId, 'isVisible');
     }
 
     /**

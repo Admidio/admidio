@@ -158,7 +158,7 @@ class EventTest extends DatabaseTestCase
             '2030-03-01 21:00:00'
         );
 
-        $event = new Event($this->getDatabase(), $eventId);
+        $event = $this->withOrganization($org['org_id'], fn () => new Event($this->getDatabase(), $eventId));
         $this->assertEquals('Board Meeting', $event->getValue('dat_headline'));
         $this->assertEquals($category['cat_id'], (int) $event->getValue('dat_cat_id'));
 
@@ -195,8 +195,8 @@ class EventTest extends DatabaseTestCase
             '2020-01-01 12:00:00'
         );
 
-        $future = new Event($this->getDatabase(), $futureId);
-        $past = new Event($this->getDatabase(), $pastId);
+        $future = $this->withOrganization($org['org_id'], fn () => new Event($this->getDatabase(), $futureId));
+        $past = $this->withOrganization($org['org_id'], fn () => new Event($this->getDatabase(), $pastId));
 
         // without an explicit deadline the begin of the event counts
         $this->assertFalse($future->deadlineExceeded());
