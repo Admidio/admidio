@@ -99,15 +99,22 @@ final class PluginRegistryTest extends PluginTestCase
     }
 
     /**
-     * @testdox An installed plugin is enabled unless the organization decided otherwise
+     * @testdox An installed plugin is enabled where the organization switched it on
      */
-    public function testInstalledPluginIsEnabledByDefault(): void
+    public function testInstalledPluginIsEnabledWhereItIsSwitchedOn(): void
     {
         PluginRegistry::setInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
 
         $this->assertTrue(PluginRegistry::isInstalled('hello'));
         $this->assertSame(7, PluginRegistry::getComponentId('hello'));
         $this->assertSame('1.2.0', PluginRegistry::getInstalledVersion('hello'));
+
+        // installing a plugin is a decision of the installation, enabling it one of the organization
+        $this->assertFalse(PluginRegistry::isEnabled('hello'));
+        $this->assertSame(PluginRegistry::STATE_DISABLED, PluginRegistry::getState('hello'));
+
+        $this->setEnabledInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
+
         $this->assertTrue(PluginRegistry::isEnabled('hello'));
         $this->assertSame(PluginRegistry::STATE_ENABLED, PluginRegistry::getState('hello'));
     }
@@ -141,7 +148,7 @@ final class PluginRegistryTest extends PluginTestCase
         $this->assertSame(PluginRegistry::STATE_BROKEN, PluginRegistry::getState('dependent'),
             'dependent requires hello, which is not installed');
 
-        PluginRegistry::setInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
+        $this->setEnabledInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
 
         $this->assertSame(PluginRegistry::STATE_AVAILABLE, PluginRegistry::getState('dependent'));
     }
@@ -151,7 +158,7 @@ final class PluginRegistryTest extends PluginTestCase
      */
     public function testLoadableSelection(): void
     {
-        PluginRegistry::setInstallations(array(
+        $this->setEnabledInstallations(array(
             'hello' => array('comId' => 7, 'version' => '1.2.0'),
             'broken-json' => array('comId' => 8, 'version' => '1.0.0'),
             'no-entry' => array('comId' => 9, 'version' => '1.0.0')
@@ -165,7 +172,7 @@ final class PluginRegistryTest extends PluginTestCase
      */
     public function testDependencyOrder(): void
     {
-        PluginRegistry::setInstallations(array(
+        $this->setEnabledInstallations(array(
             'dependent' => array('comId' => 1, 'version' => '1.0.0'),
             'hello' => array('comId' => 2, 'version' => '1.2.0')
         ));

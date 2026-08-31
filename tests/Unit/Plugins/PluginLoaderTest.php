@@ -135,7 +135,8 @@ final class PluginLoaderTest extends PluginTestCase
             $this->assertArrayHasKey($name, $registered,
                 'a plugin that is not loaded must still be enableable again');
             $this->assertSame('bool', $registered[$name]['type']);
-            $this->assertSame('1', $registered[$name]['default']);
+            $this->assertSame('0', $registered[$name]['default'],
+                'a plugin that somebody added is off until an organization switches it on');
         }
     }
 
@@ -155,7 +156,7 @@ final class PluginLoaderTest extends PluginTestCase
      */
     public function testLoadEnabled(): void
     {
-        PluginRegistry::setInstallations(array(
+        $this->setEnabledInstallations(array(
             'dependent' => array('comId' => 1, 'version' => '1.0.0'),
             'hello' => array('comId' => 2, 'version' => '1.2.0')
         ));
@@ -176,7 +177,7 @@ final class PluginLoaderTest extends PluginTestCase
      */
     public function testLoadEnabledRunsOnce(): void
     {
-        PluginRegistry::setInstallations(array('hello' => array('comId' => 2, 'version' => '1.2.0')));
+        $this->setEnabledInstallations(array('hello' => array('comId' => 2, 'version' => '1.2.0')));
 
         PluginLoader::loadEnabled();
         PluginLoader::loadEnabled();
@@ -202,7 +203,7 @@ final class PluginLoaderTest extends PluginTestCase
      */
     public function testDirectPageRequestIsAllowed(): void
     {
-        PluginRegistry::setInstallations(array('hello' => array('comId' => 2, 'version' => '1.2.0')));
+        $this->setEnabledInstallations(array('hello' => array('comId' => 2, 'version' => '1.2.0')));
         $_SERVER['SCRIPT_FILENAME'] = self::fixturePath('hello') . '/modules/list.php';
 
         PluginLoader::loadEnabled();
@@ -227,7 +228,7 @@ final class PluginLoaderTest extends PluginTestCase
      */
     public function testOnlyPagesAreEntryPoints(string $relativePath): void
     {
-        PluginRegistry::setInstallations(array('hello' => array('comId' => 2, 'version' => '1.2.0')));
+        $this->setEnabledInstallations(array('hello' => array('comId' => 2, 'version' => '1.2.0')));
         $_SERVER['SCRIPT_FILENAME'] = self::fixturePath('hello') . $relativePath;
 
         $this->expectExceptionMessage('SYS_INVALID_PAGE_VIEW');
@@ -251,7 +252,7 @@ final class PluginLoaderTest extends PluginTestCase
      */
     public function testRequestOutsideThePluginsDirectory(): void
     {
-        PluginRegistry::setInstallations(array('hello' => array('comId' => 2, 'version' => '1.2.0')));
+        $this->setEnabledInstallations(array('hello' => array('comId' => 2, 'version' => '1.2.0')));
         $_SERVER['SCRIPT_FILENAME'] = ADMIDIO_PATH . '/modules/announcements.php';
 
         PluginLoader::loadEnabled();
