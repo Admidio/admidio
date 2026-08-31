@@ -93,7 +93,7 @@ class CliTaskRegistryTest extends AdmidioTestCase
         $names = array_keys(CliTaskRegistry::getAll());
 
         // these describe the command line or the installation itself and carry no area
-        $withoutArea = array('help', 'list', 'completion', 'status', 'version');
+        $withoutArea = array('help', 'list', 'completion', 'status', 'version', 'whoami');
 
         foreach ($names as $name) {
             if (in_array($name, $withoutArea, true)) {
