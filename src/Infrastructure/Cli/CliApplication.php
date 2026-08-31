@@ -1884,7 +1884,13 @@ final class CliApplication
         }
 
         if (is_array($value)) {
-            self::writeRows(array($value), $format, $options);
+            /*
+             * A single record is read down the screen, not across it, so "text" means the
+             * field/value layout here where writeRows() takes it to mean a table. A record of two
+             * dozen fields squeezed into one table row is unreadable in every terminal, and
+             * plugin:show is the widest of them.
+             */
+            self::writeRows(array($value), $format === 'text' ? 'record' : $format, $options);
             return;
         }
 
