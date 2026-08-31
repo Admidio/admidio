@@ -36,10 +36,11 @@ class CliTaskRegistryTest extends AdmidioTestCase
 
         $this->assertNotEmpty($tasks);
 
-        // one command from each corner of the application. The event and the room commands were
-        // taken out of the core command line and are not registered by CoreTasks::register() until
-        // the events module supplies them again, so they are not part of this list.
-        foreach (array('user:show', 'group:list', 'category:list', 'message:list', 'maintenance:mode', 'cli:selfcheck') as $expected) {
+        // one command from each corner of the application
+        foreach (array(
+            'user:show', 'group:list', 'category:list', 'message:list',
+            'event:list', 'room:list', 'maintenance:mode', 'cli:selfcheck'
+        ) as $expected) {
             $this->assertArrayHasKey($expected, $tasks, $expected . ' should be a registered command.');
         }
     }
