@@ -198,7 +198,7 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         return $this->getFieldMappingCatchall();
     }
 
-    protected function adjustLogEntry(LogChanges $logEntry)
+    protected function adjustLogEntry(LogChanges $logEntry) :void
     {
         if ($logEntry->getValue('log_field') == $this->columnPrefix . '_client_secret') {
             $logEntry->setValue('log_value_old', '********');
